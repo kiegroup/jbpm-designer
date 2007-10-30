@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   width="40"
+   height="40"
+   version="1.0">
+  <defs></defs>
+  <oryx:magnets>
+  	<oryx:magnet oryx:cx="1" oryx:cy="16" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="16" oryx:cy="1" oryx:anchors="top" />
+  	<oryx:magnet oryx:cx="31" oryx:cy="16" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="16" oryx:cy="31" oryx:anchors="bottom" />
+  </oryx:magnets>
+  <g pointer-events="fill">
+    <path fill="white" stroke-width="1" stroke="black" d="M 1,16 L 16,1 L 31,16 L 16,31 L 1,16" />
+    	<g id="none"></g>
+    	<g id="exclusive_databased">
+    		<path d="M 11.5 9.5 L 14.5 9.5 L 20.5 22.5 L 17.5 22.5 L 11.5 9.5" fill="black" stroke="black" stroke-width="1" />
+		<path d="M 11.5 22.5 L 17.5 9.5 L 20.5 9.5 L 14.5 22.5 L 11.5 22.5" fill="black" stroke="black" stroke-width="1" />
+    	</g>
+    	<g id="exclusive_eventbased">
+		<circle cx="16" cy="16" r="8" stroke="black" fill="none" stroke-width="0.5"/>
+		<circle cx="16" cy="16" r="9" stroke="black" fill="none" stroke-width="0.5"/>
+		<polygon stroke="black" fill="black" stroke-width="1" points="16,10 18,13 21.5,13 19.5,16 21.5,19 18,19 16,22 14,19 10.5,19 12.5,16 10.5,13 14,13" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
+	</g>
+    	<g id="or">
+    		<circle cx="16" cy="16" r="7.5" stroke="black" fill="none" stroke-width="2.5"/>
+	</g>
+    	<g id="complex">
+    		<path fill="white" stroke-width="3" stroke="black" d="	M 8.5,16 L 23.5,16 M 16,8.5 L 16,23.5 M 10.5,10.5 L 21.5,21.5 M 10.5,21.5 L 21.5,10.5" />
+	</g>
+    	<g id="and">
+    		<path fill="white" stroke-width="3" stroke="black" d="	M 8.5,16 L 23.5,16 M 16,8.5 L 16,23.5" />
+	</g>
+  </g>
+</svg>

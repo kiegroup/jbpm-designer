@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+
+	<target name='examples' depends='build'>
+
+		<copy todir='build'>
+			<fileset file="editor.xhtml"/>
+			<fileset file="server.php"/>
+		</copy>
+		<copy todir='build/css'>
+			<fileset dir='src/css'/>
+		</copy>
+		<echo>Copied example files into build destination</echo>
+
+	</target>
+
+    <target name="build-plugins">
+
+		<copy todir='build/Plugins'>
+			<fileset dir="src/scripts/Plugins"/>
+		</copy>
+		<echo>Copied plugins into build destination</echo>
+
+	</target>
+
+    <target name="build-stencilsets">
+
+		<copy todir='build/stencilsets'>
+			<fileset dir="data/stencilsets"/>
+		</copy>
+		<echo>Copied stencilsets into build destination</echo>
+
+	</target>
+
+    <target name="build" depends="build-plugins, build-stencilsets">
+
+        <mkdir dir="build"/>
+		<copy todir='build' file='src/scripts/Core/config.js' />
+		<concat destfile='build/oryx.debug.js'>
+			<filelist id="coresourcefiles" dir="src">
+				<file name='scripts/oryx.js' />
+				<file name='scripts/Core/SVG/editpathhandler.js' />
+				<file name='scripts/Core/SVG/minmaxpathhandler.js' />
+				<file name='scripts/Core/SVG/pointspathhandler.js' />
+				<file name='scripts/Core/SVG/svgmarker.js' />
+				<file name='scripts/Core/SVG/svgshape.js' />
+				<file name='scripts/Core/SVG/label.js' />
+				<file name='scripts/Core/Math/math.js' />
+				<file name='scripts/Core/StencilSet/stencil.js' />
+				<file name='scripts/Core/StencilSet/property.js' />
+				<file name='scripts/Core/StencilSet/propertyitem.js' />
+				<file name='scripts/Core/StencilSet/rules.js' />
+				<file name='scripts/Core/StencilSet/stencilset.js' />
+				<file name='scripts/Core/StencilSet/stencilsets.js' />
+				<file name='scripts/Core/bounds.js' />
+				<file name='scripts/Core/uiobject.js' />
+				<file name='scripts/Core/abstractshape.js' />
+				<file name='scripts/Core/canvas.js' />
+				<file name='scripts/Core/main.js' />
+				<file name='scripts/Core/svgDrag.js' />
+				<file name='scripts/Core/shape.js' />
+				<file name='scripts/Core/Controls/control.js' />
+				<file name='scripts/Core/Controls/docker.js' />
+				<file name='scripts/Core/Controls/magnet.js' />
+				<file name='scripts/Core/node.js' />
+				<file name='scripts/Core/edge.js' />
+			</filelist>
+		</concat>
+		<echo>Concatenated source files into oryx.js</echo>
+
+		<copy todir='build/lib'>
+			<fileset dir='lib' includes='**/*'/>
+		</copy>
+		<copy todir='build/shared'>
+			<fileset dir='shared' includes='**/*.js'/>
+		</copy>
+		<echo>Copied dependencies into library destination</echo>
+		<copy todir='build/images'>
+			<fileset dir='src/images' includes='**/*.png'/>
+		</copy>
+		<echo>Copied images into oryx build destination</echo>
+
+    </target>
+
+	<target name='compress'>
+
+		<tempfile property="compress.temp" destDir="build"/>
+
+		<java dir="build" jar="lib/custom_rhino.jar" fork="true"
+			failonerror="true" output='${compress.temp}'>
+			<arg value="-c"/>
+			<arg file='build/oryx.debug.js'/>
+		</java>
+		<echo>Using ${compress.temp} for compression</echo>
+
+		<concat destfile='build/oryx.js'>
+			<fileset file="etc/license"/>
+			<fileset file="${compress.temp}"/>
+		</concat>
+		<delete file='${compress.temp}'/>
+		<echo>Compressed Oryx into build destination</echo>
+
+	</target>
+
+	<target name="run-example" depends='examples'>
+		<exec spawn='true'
+			executable="/Applications/Firefox.app/Contents/MacOS/firefox">
+		<arg value="/Users/martin/Documents/workspace/oryx/oryx/build/editor.xhtml"/>
+		</exec>
+	</target>
+
+    <target name="dist" depends='build'>
+        <mkdir dir="dist"/>
+    </target>
+
+    <target name="all" depends="build, examples, dist, compress" />
+</project>

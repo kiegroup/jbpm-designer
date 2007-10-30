@@ -1,0 +1,156 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 0.8em;
+	color: black;
+	background-color: white;
+	}
+
+#head {
+	margin: 40px 0px 10px 0px;
+	padding: 17px 0px 0px 20px;
+	height: 15px;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px 0px;
+	line-height: 11px;
+	background-color: #eee;
+	}
+
+#nav {
+	position: relative;
+	float:left;
+	top: 10px;
+	left: 0;
+	width: 250px;
+	padding: 10px 0;
+	line-height: 20px;
+	overflow: hidden;
+	}
+
+.entry {
+	margin: 20px 20px 20px 260px;
+	padding: 10px;
+	}
+
+.hidden {
+    display: none;
+    }
+
+.actions {
+    position: absolute;
+    right: 0;
+    margin-right: 30px;
+    }
+
+#edit-entry {
+	margin: 20px 20px 20px 200px;
+	padding: 10px;
+	}
+
+.active {
+    background-color: #eee;
+    }
+
+#nav ul {
+    margin-top: 0;
+    list-style-type: none;
+    font-size: 1.05em;
+    font-weight: 600;
+    }
+
+#nav ul li {
+    margin-bottom: 0.2em;
+    text-align: right;
+	white-space: nowrap;
+    }
+
+h1 {
+	margin: 0px 0px 15px 0px;
+	padding: 0px;
+	font-size: 1.2em;
+	font-weight: 900;
+	}
+
+h2 {
+	margin: 0px 0px 15px 0px;
+	padding: 0px;
+	font-size: 1.2em;
+	font-weight: 900;
+    border-bottom: solid 1px black;
+    }
+	
+a {
+    color: #B32701;
+    text-decoration: none;
+    }
+
+a:hover {
+    color: #B32701;
+    background-color: #E78030;
+    text-decoration: underline;
+    }
+
+a:visited {
+    color: #B32701;
+    }
+ 
+#edit-entry label {
+    float:left;
+    clear:both;
+    display:block;
+    width:120px;
+    margin-bottom:15px;
+    padding:2px;
+    }
+    
+#edit-entry textarea {
+    font-size:1.2em;
+    }
+    
+#edit-entry input, textarea, select, form a {
+    float:left;
+    display:block;
+    width:500px;
+    border: 1px solid #333;
+    margin-bottom:15px;
+    padding:2px;
+    }
+    
+#edit-entry input[type="hidden"]{
+    display:none;
+    }
+    
+.form-button, form a {
+    float:left;
+    margin-left:170px !important;
+    width:100px;
+    text-align:center;
+    }
+    
+#edit-entry form a {
+    color: black;
+    height: 17px;
+    padding-top: 4px;
+    }
+    
+#edit-entry form a:hover {
+    color: #000;
+    background-color: #eee;
+    text-decoration: none;
+    }
+    
+/*clearing all floats and fix Firefox and IE backgroundcolor-bug */
+div.clearer {
+    clear:both;
+    font-size:1px;
+    line-height:1px;
+    display:block;
+    height:1px;
+    }
+	
+#propwindow {
+	border:2px outset #c0c0c0;
+	background-color:#c0c0c0;
+	}

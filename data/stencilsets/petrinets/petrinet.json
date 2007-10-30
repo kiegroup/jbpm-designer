@@ -1,0 +1,182 @@
+{
+	"title":"Petrinet",
+	"namespace":"http://b3mn.org/stencilset/petrinet#",
+	"description":"This is the Petri net specification.",
+ 	"stencils" : [
+  		{
+			"type": "node",
+			"id":"Diagram",
+			"title":"Diagram",
+			"groups":["Petri net"],
+			"description":"A Diagram",
+			"view":"node.diagram.svg",
+			"icon":"new_diagram.png",
+			"roles": [
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"20",
+					"wrapLines":true
+				}
+			]
+		},
+ 		{
+			"type": "node",
+			"id":"Transition",
+			"title":"Transition",
+			"groups":["Petri net"],
+			"description":"A transition",
+			"view":"node.transition.svg",
+			"icon":"new_transition.png",
+			"roles": [
+				"from_transition",
+				"to_transition",
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"20",
+					"wrapLines":true
+				}
+			]
+		},
+ 		{
+			"type": "node",
+			"id":"EmptyTransition",
+			"title":"Empty Transition",
+			"groups":["Petri net"],
+			"description":"An empty transition",
+			"view":"node.transition.empty.svg",
+			"icon":"new_transition_empty.png",
+			"roles": [
+				"from_transition",
+				"to_transition",
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"20",
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Place",
+			"title":"Place",
+			"groups":["Petri net"],
+			"description":"A place.",
+			"view":"node.place.svg",
+			"icon":"new_place.png",
+			"intersectionType":"ellipse",			
+			"roles": [
+				"from_place",
+				"to_place",
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":""
+				},
+				{
+					"id":"isMarked",
+					"type":"Boolean",
+					"title":"isMarked",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"marke"
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Flow",
+			"title":"Flow",
+			"description":"",
+			"groups":["Petri net"],
+			"view":"connection.flow.svg",
+			"icon":"new_flow.png",
+			"roles": [
+				"flowobj",
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"Label",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":""
+				}
+			]
+		},
+	],	
+	"rules": {
+		"connectionRules": [
+			{
+				"role":"Flow",
+				"connects": [
+					{
+						"from":"from_transition",
+						"to":["to_place"]
+					},
+					{
+						"from":"from_place",
+						"to":["to_transition"]
+					}
+				]
+			}	
+		],
+		"containmentRules": [
+			{
+				"role":"Diagram",
+				"contains": [
+					"fromtoall"
+				]
+			},
+		]
+	}
+}

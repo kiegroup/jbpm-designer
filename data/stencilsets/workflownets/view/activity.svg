@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   version="1.1">
+   <oryx:magnets>
+  	 <oryx:magnet oryx:cx="41" oryx:cy="56" />
+  	 <oryx:magnet oryx:cx="2" oryx:cy="56"/>
+     <oryx:magnet oryx:cx="80" oryx:cy="56"/>
+   </oryx:magnets>
+   <g oryx:minimumSize="50 50" oryx:maximumSize="200 200">
+    <rect id="color" oryx:anchors="top bottom left right" x="1" y="16" 
+     width="80" height="80" stroke="black" fill="#D3DEFF" stroke-width="2"/>
+  	<path id="external" oryx:anchors="top right" fill="#D3DEFF" stroke="black" 
+  	 d="M61 1 h20 v12 h-20 v-12 m20 0 l-10 6 l-10 -6" />
+	<path id="user" oryx:anchors="top right" fill="#D3DEFF" stroke="black" 
+	 d="M71 1 v6 h-2 l5 6 l5 -6 h-2 v-6 h-6" />
+	<g id="time">
+		<circle oryx:anchors="top right" fill="#D3DEFF" stroke="black" 
+		 cx="75" cy="7" r="6" />
+		<path oryx:anchors="top right" fill="none" stroke="black" 
+		 d="M75 1 v2 M81 7 h-2 M75 13 v-2 M69 7 h2 M75 7 l3 -2 M75 7 l-5 -3" />
+	</g>
+	<path id="explicitorsplit" oryx:resize="horizontal vertical" 
+	 stroke-linejoin="bevel" oryx:anchors="top bottom right" fill="none" 
+	 stroke="black" d="M66 16 v80 l15 -40 z" />
+	<path id="andsplit" oryx:resize="horizontal vertical" 
+	 stroke-linejoin="bevel" oryx:anchors="top bottom right" fill="none" 
+	 stroke="black" d="M81 16 l-15 40 l15 40 m-15 0 v-80" />
+	<path id="andorsplit" oryx:resize="horizontal vertical" 
+	 stroke-linejoin="bevel" oryx:anchors="top bottom right" fill="none" 
+	 stroke="black" d="M66 16 v80 m0 -26.666 h15 m-15 -26.666 h15" />
+	<path id="explicitorjoin" oryx:resize="horizontal vertical" 
+	 stroke-linejoin="bevel" oryx:anchors="top bottom left" fill="none" 
+	 stroke="black" d="M16 16 l-15 40 l15 40 z" />
+	<path id="andjoin" oryx:resize="horizontal vertical" stroke-linejoin="bevel"
+	 oryx:anchors="top bottom left" fill="none" stroke="black" 
+	 d="M1 16 l15 40 l-15 40 M16 16 v80" />
+	<text id="caption" x="41" y="56" oryx:align="middle center"></text>
+   </g>
+</svg>
