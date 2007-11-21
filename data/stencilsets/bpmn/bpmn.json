@@ -223,7 +223,7 @@
 					"type":"String",
 					"title":"ActivityType",
 					"value":"Task",
-					"description":"The Type of Acitivity.",
+					"description":"The Type of Activity.",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -378,7 +378,7 @@
 						{
 							"id":"c2",
 							"title":"c2",
-							"value":"Standart",
+							"value":"Standard",
 							"refToView":"loop"
 						},
 						{
@@ -799,7 +799,7 @@
 					"type":"String",
 					"title":"ActivityType",
 					"value":"Sub-Process",
-					"description":"The Type of Acitivity.",
+					"description":"The Type of Activity.",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -954,7 +954,7 @@
 						{
 							"id":"c2",
 							"title":"c2",
-							"value":"Standart",
+							"value":"Standard",
 							"refToView":"loop"
 						},
 						{
