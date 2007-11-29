@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   width="102"
+   height="82"
+   version="1.0">
+  <defs></defs>
+  <oryx:magnets>
+  	<oryx:magnet oryx:cx="0" oryx:cy="50" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="150" oryx:cy="100" oryx:anchors="bottom" />
+  	<oryx:magnet oryx:cx="300" oryx:cy="50" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="150" oryx:cy="0" oryx:anchors="top" />
+  	<oryx:magnet oryx:cx="150" oryx:cy="50" oryx:default="yes" />
+  </oryx:magnets>
+  <g pointer-events="fill">
+    <rect id="handlerrect" oryx:resize="vertical horizontal" x="0" y="0" width="300" height="100" rx="8" ry="8" stroke="black" stroke-width="1" fill="white" />    
+	
+	<circle oryx:anchors="right" cx="284" cy="50" r="10" stroke="black" fill="none" stroke-width="1" />
+    <path oryx:anchors="right" d="	M 284 40 L 284 43.5
+    		M 289 41 L 287.5 44
+    		M 293 45 L 290 46.5
+    		M 294 50 L 291 50
+    		M 293 55 L 290 53.5
+    		M 289 59 L 287.5 56
+    		M 284 60 L 284 57
+    		M 279 59 L 280.5 56
+    		M 275 55 L 278 53.5
+    		M 274 50 L 277 50
+    		M 275 45 L 278 46.5
+    		M 279 41 L 280.5 44
+    		M 286 43 L 284 50 L 288 50" fill="none" stroke="black" />
+  </g>
+</svg> 
