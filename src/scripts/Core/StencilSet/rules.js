@@ -701,8 +701,8 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 
 		if(max) {
 			return !args.targetShape.getIncomingShapes().all(function(cs) {
-				if(cs.getStencil().id() === args.edgeStencil.id() && 
-				   (args.edgeShape) ? cs !== args.edgeShape : true) {
+				if((cs.getStencil().id() === args.edgeStencil.id()) && 
+				   ((args.edgeShape) ? cs !== args.edgeShape : true)) {
 					max--;
 					return (max > 0) ? true : false;
 				} else {
