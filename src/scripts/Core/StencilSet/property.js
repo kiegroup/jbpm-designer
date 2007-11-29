@@ -56,6 +56,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 		this._stencil = stencil;
 
 		this._items = new Hash();
+		this._complexItems = new Hash();
 
 		//init all values
 		if(!jsonProp.id) {
@@ -145,7 +146,17 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 			} else {
 				throw "ORYX.Core.StencilSet.Property(construct): No property items defined."
 			}
+		// extended by Kerstin (start)
+		} else if(jsonProp.type === ORYX.CONFIG.TYPE_COMPLEX) {
+			if(jsonProp.complexItems && jsonProp.complexItems instanceof Array) {
+				jsonProp.complexItems.each((function(jsonComplexItem) {
+					this._complexItems[jsonComplexItem.id] = new ORYX.Core.StencilSet.ComplexPropertyItem(jsonComplexItem, namespace, this);
+				}).bind(this));
+			} else {
+				throw "ORYX.Core.StencilSet.Property(construct): No complex property items defined."
+			}
 		}
+		// extended by Kerstin (end)
 	},
 
 	/**
@@ -320,5 +331,15 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 		return this._item[value];
 	},
 
-	toString: function() { return "Property " + this.title() + " (" + this.id() + ")"; }
+	toString: function() { return "Property " + this.title() + " (" + this.id() + ")"; },
+
+	// extended by Kerstin (start)
+	complexItems: function() {
+		return this._complexItems.values();
+	},
+	
+	complexItem: function(value) {
+		return this._complexItems[value];
+	}
+	// extended by Kerstin (end)
 });
