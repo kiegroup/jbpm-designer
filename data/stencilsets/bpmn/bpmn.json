@@ -775,6 +775,18 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"acttext",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
