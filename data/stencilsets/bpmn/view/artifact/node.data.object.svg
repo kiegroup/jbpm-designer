@@ -15,7 +15,7 @@
   	<oryx:magnet oryx:cx="20" oryx:cy="30" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill">
-    <polygon id="frame" stroke="black" fill="white" stroke-width="1" points="0,0 0,60 40,60 40,10 30,0 30,10 40,10 30,0" />
+    <polygon oryx:resize="vertical horizontal" id="frame" stroke="black" fill="white" stroke-width="1" points="0,0 0,60 40,60 40,10 30,0 30,10 40,10 30,0" />
     <text font-size="14" id="text" x="20" y="30" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>

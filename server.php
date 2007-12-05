@@ -184,7 +184,7 @@ function template($body) {
         <script src="lib/ext-1.0/ColorField.js" type="text/javascript" />
         <style media="screen" type="text/css">
 			@import url("lib/ext-1.0/resources/css/ext-all.css");
-			@import url("lib/ext-1.0/resources/css/ytheme-grey.css");
+			@import url("lib/ext-1.0/resources/css/ytheme-gray.css");
 		</style>
 
 				

@@ -709,7 +709,7 @@
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
-					"value":"#ffffff",
+					"value":"#ffffcc",
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -1170,7 +1170,7 @@
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
-					"value":"#ffffff",
+					"value":"#ffffcc",
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -2579,7 +2579,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
 				}
 			]
