@@ -10,7 +10,7 @@
 
 		<copy todir='build'>
 			<fileset file="editor.xhtml"/>
-			<fileset file="server.php"/>
+			<fileset file="*.php"/>
 		</copy>
 		<copy todir='build/css'>
 			<fileset dir='src/css'/>
@@ -25,6 +25,10 @@
 			<fileset dir="src/scripts/Plugins"/>
 		</copy>
 		<echo>Copied plugins into build destination</echo>
+		<copy todir='build/xslt'>
+			<fileset dir="src/xslt"/>
+		</copy>
+		<echo>Copied XSL stylesheets into build destination</echo>
 
 	</target>
 
