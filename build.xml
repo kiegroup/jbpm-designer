@@ -111,16 +111,17 @@
 
 	</target>
 
-	<target name="run-example" depends='examples'>
-		<exec spawn='true'
-			executable="/Applications/Firefox.app/Contents/MacOS/firefox">
-		<arg value="/Users/martin/Documents/workspace/oryx/oryx/build/editor.xhtml"/>
-		</exec>
-	</target>
-
-    <target name="dist" depends='build'>
+    <target name="dist">
         <mkdir dir="dist"/>
+
+		<war destfile="dist/oryx.war" webxml="etc/web.xml">
+
+			<fileset dir="build"/>
+			<!--
+			<classes dir="bin"/>
+			-->
+		</war>
     </target>
 
-    <target name="all" depends="build, examples, dist, compress" />
+    <target name="all" depends="build, examples, compress, dist" />
 </project>
