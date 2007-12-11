@@ -41,7 +41,13 @@
 
 	</target>
 
-    <target name="build" depends="build-plugins, build-stencilsets">
+	<target name="build-server">
+        <mkdir dir="build/classes"/>
+		<javac srcdir="server/src" destdir="build/classes"
+			classpath="lib/servlet-api.jar" debug="on"/>
+	</target>
+
+    <target name="build" depends="build-plugins, build-stencilsets, build-server">
 
         <mkdir dir="build"/>
 		<copy todir='build' file='src/scripts/Core/config.js' />
@@ -102,25 +108,39 @@
 		</java>
 		<echo>Using ${compress.temp} for compression</echo>
 
+		<echo>Compressing Oryx into build destination</echo>
 		<concat destfile='build/oryx.js'>
 			<fileset file="etc/license"/>
 			<fileset file="${compress.temp}"/>
 		</concat>
+
 		<delete file='${compress.temp}'/>
-		<echo>Compressed Oryx into build destination</echo>
 
 	</target>
 
     <target name="dist">
         <mkdir dir="dist"/>
 
+		<echo>Creating zip for offline or php use, and online war file.</echo>
+
+		<zip destfile="dist/oryx.zip">
+			<fileset dir="build">
+				<exclude name="*.php"/>
+				<exclude name="classes/"/>
+			</fileset>
+
+		</zip>
+
 		<war destfile="dist/oryx.war" webxml="etc/web.xml">
 
-			<fileset dir="build"/>
-			<!--
-			<classes dir="bin"/>
-			-->
+			<fileset dir="build">
+				<exclude name="classes/"/>
+			</fileset>
+
+			<classes dir="build/classes"/>
+
 		</war>
+
     </target>
 
     <target name="all" depends="build, examples, compress, dist" />
