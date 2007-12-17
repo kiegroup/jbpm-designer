@@ -382,7 +382,7 @@ var DataManager = {
 			
 			// preserve namespace?
 			if(!preserveNamespace) 
-				result += ' xmlns="' + (node.namespaceURI ? node.namespaceURI : XMLNS.XHTML) + '"';
+				result += ' xmlns="' + (node.namespaceURI ? node.namespaceURI : XMLNS.XHTML) + '" xmlns:oryx="http://oryx-editor.org"';
 			
 			// add all attributes.
 			
