@@ -2,8 +2,8 @@
 <project>
 
     <target name="clean">
-        <delete dir="build"/>
         <delete dir="dist"/>
+        <delete dir="build"/>
     </target>
 
 	<target name='examples' depends='build'>
@@ -43,13 +43,29 @@
 
 	<target name="build-server">
         <mkdir dir="build/classes"/>
-		<javac srcdir="server/src" destdir="build/classes"
-			classpath="lib/servlet-api.jar" debug="on"/>
+		<javac srcdir="server/src" destdir="build/classes" debug="on">
+			<classpath>
+				<fileset dir="lib">
+					<include name="mysql-connector-java-5.1.5-bin.jar"/>
+					<include name="batik-*.jar"/>
+					<include name="fop.jar"/>
+					<include name="avalon-framework-4.2.0.jar"/>
+					<include name="commons-logging-1.1.1.jar"/>
+					<include name="commons-io-1.1.jar"/>
+					<include name="serializer-2.7.0.jar"/>
+					<include name="xalan-2.7.0.jar"/>
+					<include name="xercesImpl-2.7.1.jar"/>
+					<include name="xml-apis-1.3.02.jar"/>
+					<include name="xmlgraphics-commons-1.1.jar"/>
+					<include name="servlet-api.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
 	</target>
 
     <target name="build" depends="build-plugins, build-stencilsets, build-server">
 
-        <mkdir dir="build"/>
+        <mkdir dir="build/tmp"/>
 		<copy todir='build' file='src/scripts/Core/config.js' />
 		<concat destfile='build/oryx.debug.js'>
 			<filelist id="coresourcefiles" dir="src">
@@ -132,6 +148,22 @@
 		</zip>
 
 		<war destfile="dist/oryx.war" webxml="etc/web.xml">
+
+			<lib dir="lib">
+				<include name="mysql-connector-java-5.1.5-bin.jar"/>
+				<include name="batik-*.jar"/>
+				<include name="js.jar"/>
+				<include name="fop.jar"/>
+				<include name="pdf-transcoder.jar"/>
+				<include name="commons-logging-1.1.1.jar"/>
+				<include name="commons-io-1.1.jar"/>
+				<include name="serializer-2.7.0.jar"/>
+				<include name="xalan-2.6.0.jar"/>
+				<include name="xerces-2.5.0.jar"/>
+				<include name="xml-apis.jar"/>
+				<include name="xml-apis-ext.jar"/>
+				<include name="xmlgraphics-commons-1.1.jar"/>
+			</lib>
 
 			<fileset dir="build">
 				<exclude name="classes/"/>

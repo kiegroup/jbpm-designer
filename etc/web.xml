@@ -12,9 +12,19 @@
 		<servlet-class>org.oryxeditor.server.SimpleStorageServlet</servlet-class>
 	</servlet>
 
+	<servlet>
+		<display-name>Alternatives Renderer</display-name>
+		<servlet-name>AlternativesRenderer</servlet-name>
+		<servlet-class>org.oryxeditor.server.AlternativesRenderer</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>SimpleStorageServlet</servlet-name>
 		<url-pattern>/server</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AlternativesRenderer</servlet-name>
+		<url-pattern>/alt</url-pattern>
 	</servlet-mapping>
 
 	<!--
@@ -45,6 +55,6 @@
 	-->
 
 	<welcome-file-list>
-		<welcome-file>editor.xhtml</welcome-file>
+		<welcome-file>/server</welcome-file>
 	</welcome-file-list>
 </web-app>
