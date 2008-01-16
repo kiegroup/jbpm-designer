@@ -4762,49 +4762,49 @@
 							"id":"none",
 							"title":"c1",
 							"value":"None",
-							"refToView":""
+							"refToView":"none"
 						},
 						{
 							"id":"cancel",
 							"title":"c1",
 							"value":"Cancel",
-							"refToView":""
+							"refToView":"cancel"
 						},
 						{
 							"id":"compensation",
 							"title":"c1",
 							"value":"Compensation",
-							"refToView":""
+							"refToView":"compensation"
 						},
 						{
 							"id":"error",
 							"title":"c1",
 							"value":"Error",
-							"refToView":""
+							"refToView":"error"
 						},
 						{
 							"id":"link",
 							"title":"c1",
 							"value":"Link",
-							"refToView":""
+							"refToView":"link"
 						},
 						{
 							"id":"message",
 							"title":"c1",
 							"value":"Message",
-							"refToView":""
+							"refToView":"message"
 						},
 						{
 							"id":"multiple",
 							"title":"c1",
 							"value":"Multiple",
-							"refToView":""
+							"refToView":"multiple"
 						},
 						{
 							"id":"terminate",
 							"title":"c1",
 							"value":"Terminate",
-							"refToView":""
+							"refToView":"terminate"
 						}
 					]
 				},
