@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 /**
  * Copyright (c) 2007 Martin Czuchra.
  * 
@@ -39,19 +43,21 @@ public class SimpleStorageServlet extends HttpServlet {
     // serialization id.
     private static final long serialVersionUID = -5801302483240001557L;
 
-    // database connection configuration
-    // TODO put this into a configuration file.
-    private static final String username = "oryx";
-    private static final String password = "";
-    private static final String url = "jdbc:mysql://localhost/oryx";
-    private final String connector = "com.mysql.jdbc.Driver";
-
+    private static Configuration config = null;
     private Connection database = null;
     private String currentResource = null;
 
     private void prepare(HttpServletRequest req, HttpServletResponse res)
 	    throws InstantiationException, IllegalAccessException,
-	    ClassNotFoundException, SQLException {
+	    ClassNotFoundException, SQLException, ConfigurationException {
+
+	if (SimpleStorageServlet.config == null)
+	    SimpleStorageServlet.config = new PropertiesConfiguration("database.properties");
+
+	String connector = SimpleStorageServlet.config.getString("db.connector");
+	String url = SimpleStorageServlet.config.getString("db.url");
+	String username = SimpleStorageServlet.config.getString("db.username");
+	String password = SimpleStorageServlet.config.getString("db.password");
 
 	Class.forName(connector).newInstance();
 	this.database = DriverManager.getConnection(url, username, password);
@@ -105,7 +111,7 @@ public class SimpleStorageServlet extends HttpServlet {
 
     protected void storeResource(HttpServletRequest req, HttpServletResponse res)
 	    throws SQLException {
-	
+
 	String data = req.getParameter("data");
 
 	PreparedStatement stmt = database
@@ -320,11 +326,10 @@ public class SimpleStorageServlet extends HttpServlet {
 	    e.printStackTrace();
 	    return;
 	}
-	
 
 	System.out.println(exception);
 	exception.printStackTrace();
-	
+
 	res.setContentType("text/html");
 
 	out
