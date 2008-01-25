@@ -41,13 +41,13 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	 * Constructor
 	 */
 	construct: function(jsonStencil, namespace, source, stencilSet) {
-		arguments.callee.$.construct.apply(this, arguments);
+		arguments.callee.$.construct.apply(this, arguments); // super();
 
-		//check parameters
-		if(!jsonStencil) { throw "ORYX.Core.StencilSet.Stencil(construct): Parameter 'jsonStencil' is not defined."; }
-		if(!namespace) { throw "ORYX.Core.StencilSet.Stencil(construct): Parameter 'namespace' is not defined."; }
-		if(!source) { throw "ORYX.Core.StencilSet.Stencil(construct): Parameter 'source' is not defined."; }
-		if(!stencilSet) { throw "ORYX.Core.StencilSet.Stencil(construct): Parameter 'stencilSet' is not defined."; }
+		// check arguments and set defaults.
+		if(!jsonStencil) throw "Stencilset seems corrupt.";
+		if(!namespace) throw "Stencil does not provide namespace.";
+		if(!source) throw "Stencil does not provide SVG source.";
+		if(!stencilSet) throw "Fatal internal error loading stencilset.";
 		
 		this._source = source;
 		this._jsonStencil = jsonStencil;
@@ -57,23 +57,22 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 		this._view;
 		this._properties = new Hash();
 
-		//init all JSON values
-		if(!this._jsonStencil.type || !(this._jsonStencil.type === "edge" || this._jsonStencil.type === "node")) {
-			throw "ORYX.Core.StencilSet.Stencil(construct): Type is not defined.";
-		}
-		if(!this._jsonStencil.id || this._jsonStencil.id === "") {
-			throw "ORYX.Core.StencilSet.Stencil(construct): Id is not defined.";
-		}
-		if(!this._jsonStencil.title || this._jsonStencil.title === "") {
-			throw "ORYX.Core.StencilSet.Stencil(construct): Title is not defined.";
-		}
+		// check stencil consistency and set defaults.
+		with(this._jsonStencil) {
+			
+			if(!type) throw "Stencil does not provide type.";
+			if((type != "edge") && (type != "node"))
+				throw "Stencil type must be 'edge' or 'node'.";
+			if(!id || id == "") throw "Stencil does not provide valid id.";
+			if(!title || title == "")
+				throw "Stencil does not provide title";
+			if(!description) { description = ""; };
+			if(!groups) { groups = []; }
+			if(!roles) { roles = []; }
 
-		if(!this._jsonStencil.description) { this._jsonStencil.description = ""; };
-		if(!this._jsonStencil.groups) { this._jsonStencil.groups = []; }
-		if(!this._jsonStencil.roles) { this._jsonStencil.roles = []; }
-		
-		//add id of stencil to its roles
-		this._jsonStencil.roles.push(this._jsonStencil.id);
+			// add id of stencil to its roles
+			roles.push(id);
+		}
 
 		//prepend namespace to each role
 		this._jsonStencil.roles.each((function(role, index) {

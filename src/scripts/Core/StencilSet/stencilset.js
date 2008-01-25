@@ -103,38 +103,59 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 		return this._source;
 	},
 
-	_init: function(response) {
-		//CALLING EVAL, because prototype's paresJSON method does not work, 
-		// if the JSON file contains functions as values.
-		//this._jsonObject = response.responseText.parseJSON(true);
+	__handleStencilset: function(response) {
+		
 		try {
+			// using eval instead of prototype's parsing,
+			// since there are functions in this JSON.
 			eval("this._jsonObject =" + response.responseText);
 		} catch (e) {
-			throw "ORYX.Core.StencilSet.StencilSet(_init): Response is not a JSON Object.";
+			throw "Stenciset corrupt: "+e;
 		}
 		
-		if(!this._jsonObject) { throw "ORYX.Core.StencilSet.StencilSet(_init): Response is not a JSON object.";}
-				
-		if(!this._jsonObject.namespace ||  
-		   this._jsonObject.namespace === "") {
-			throw "ORYX.Core.StencilSet.StencilSet(_init): Namespace of stencil set is not defined.";
-		}
-		
-		if(!this._jsonObject.namespace.endsWith("#")) {
-			this._jsonObject.namespace = this._jsonObject.namespace + "#";
-		}
-		
-		if(!this._jsonObject.title) { this._jsonObject.title = ""; }
-		
-		if(!this._jsonObject.description) { this._jsonObject.description = ""; }
+		// assert it was parsed.
+		if(!this._jsonObject) {
+			throw "Error evaluating stencilset. It may be corrupt.";}
+
+		with(this._jsonObject) {
 			
-		//init stencils
-		if(this._jsonObject.stencils && this._jsonObject.stencils instanceof Array) {
-			$A(this._jsonObject.stencils).each((function(stencil) {
-				var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this);
-				this._stencils[oStencil.id()] = oStencil;
-			}).bind(this));
+			// assert there is a namespace.
+			if(!namespace || namespace === "")
+				throw "Namespace definition missing in stencilset.";
+
+			if(!(stencils instanceof Array)) throw "Stencilset corrupt.";
+
+			// assert namespace ends with '#'.
+			if(!namespace.endsWith("#"))
+				namespace = namespace + "#";
+
+			// assert title and description are strings.
+			if(!title) title = "";
+			if(!description) description = "";
 		}
+	},
+	
+	/**
+	 * This method is called when the HTTP request to get the requested stencil
+	 * set succeeds. The response is supposed to be a JSON representation
+	 * according to the stencil set specification.
+	 * @param {Object} response The JSON representation according to the
+	 * 			stencil set specification.
+	 */
+	_init: function(response) {
+
+		// init and check consistency.
+		this.__handleStencilset(response);
+		
+		// init each stencil
+		$A(this._jsonObject.stencils).each((function(stencil) {
+
+			// instantiate normally.
+			var oStencil = new ORYX.Core.StencilSet.Stencil(
+				stencil, this.namespace(), this._baseUrl, this);
+			this._stencils[oStencil.id()] = oStencil;
+
+		}).bind(this));
 	},
 
 	_cancelInit: function(response) {
