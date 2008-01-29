@@ -157,7 +157,6 @@
 		<war destfile="dist/oryx.war" webxml="etc/web.xml">
 
 			<lib dir="lib">
-				<include name="mysql-connector-java-5.1.5-bin.jar"/>
 				<include name="batik-*.jar"/>
 				<include name="js.jar"/>
 				<include name="fop.jar"/>
@@ -169,6 +168,11 @@
 				<include name="xml-apis.jar"/>
 				<include name="xml-apis-ext.jar"/>
 				<include name="xmlgraphics-commons-1.1.jar"/>
+				
+				<!-- database connectors. consider moving this to users responsibility -->
+				<include name="mysql-connector-java-5.1.5-bin.jar"/>
+				<include name="postgresql-8.3dev-602.jdbc4.jar"/>
+
 			</lib>
 
 			<fileset dir="build">
