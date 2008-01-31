@@ -1,12 +1,18 @@
 package org.oryxeditor.server;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +33,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be included in
+ * The above copyrigh¤t notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -42,6 +48,7 @@ public class SimpleStorageServlet extends HttpServlet {
 
     // serialization id.
     private static final long serialVersionUID = -5801302483240001557L;
+    private static final boolean DEBUG = true;
 
     private static Configuration config = null;
     private Connection database = null;
@@ -52,9 +59,11 @@ public class SimpleStorageServlet extends HttpServlet {
 	    ClassNotFoundException, SQLException, ConfigurationException {
 
 	if (SimpleStorageServlet.config == null)
-	    SimpleStorageServlet.config = new PropertiesConfiguration("database.properties");
+	    SimpleStorageServlet.config = new PropertiesConfiguration(
+		    "database.properties");
 
-	String connector = SimpleStorageServlet.config.getString("db.connector");
+	String connector = SimpleStorageServlet.config
+		.getString("db.connector");
 	String url = SimpleStorageServlet.config.getString("db.url");
 	String username = SimpleStorageServlet.config.getString("db.username");
 	String password = SimpleStorageServlet.config.getString("db.password");
@@ -77,10 +86,15 @@ public class SimpleStorageServlet extends HttpServlet {
 		this.storeResource(req, res);
 
 	    } else if (this.currentResource == null)
+
 		this.showProcessList(req, res);
 
-	    else
-		this.showResource(req, res);
+	    else {
+
+		String stencilsetURL = req.getParameter("stencilset");
+		this.showResource(req, res, stencilsetURL);
+
+	    }
 
 	} catch (Exception e) {
 
@@ -136,8 +150,8 @@ public class SimpleStorageServlet extends HttpServlet {
 	}
     }
 
-    public void showResource(HttpServletRequest req, HttpServletResponse res)
-	    throws SQLException {
+    public void showResource(HttpServletRequest req, HttpServletResponse res,
+	    String stencilsetURL) throws SQLException {
 
 	res.setContentType("application/xhtml+xml");
 
@@ -157,7 +171,8 @@ public class SimpleStorageServlet extends HttpServlet {
 	else {
 
 	    result = "<div class=\"-oryx-canvas\" id=\"oryx-canvas123\" style=\"width:1200px; height:600px;\">";
-	    result += "<a href=\"./stencilsets/bpmn/bpmn.json\" rel=\"oryx-stencilset\"></a>";
+	    result += "<a href=\"" + stencilsetURL
+		    + "\" rel=\"oryx-stencilset\"></a>";
 	    result += "<span class=\"oryx-mode\">writeable</span>";
 	    result += "<span class=\"oryx-mode\">fullscreen</span>";
 	    result += "</div>";
@@ -217,7 +232,9 @@ public class SimpleStorageServlet extends HttpServlet {
 		.println("<script src=\"shared/datamanager.js\" type=\"text/javascript\" />");
 
 	out.println("<!-- oryx editor -->");
-	out.println("<script src=\"oryx.js\" type=\"text/javascript\" />");
+	out.println("<script src=\""
+		+ (SimpleStorageServlet.DEBUG ? "oryx.debug.js" : "oryx.js")
+		+ "\" type=\"text/javascript\" />");
 	out
 		.println("<link rel=\"Stylesheet\" media=\"screen\" href=\"css/theme_norm.css\" type=\"text/css\" />");
 
@@ -232,8 +249,8 @@ public class SimpleStorageServlet extends HttpServlet {
 	out
 		.println("<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />");
 
-	out
-		.println("<meta name=\"oryx.type\" content=\"http://b3mn.org/stencilset/bpmn#BPMNDiagram\" />");
+	// out.println("<meta name=\"oryx.type\"
+	// content=\"http://b3mn.org/stencilset/bpmn#BPMNDiagram\" />");
 
 	out.println("</head>");
 
@@ -245,8 +262,72 @@ public class SimpleStorageServlet extends HttpServlet {
 	out.println("</html>");
     }
 
+    /**
+     * Returns a map of all available stencil sets, which means, all currently
+     * installed stencil sets. It therefore traverses all subfolders of the
+     * stencil sets folder and regards each JSON file within them as a valid
+     * stencil set. All files ending with ".json" are considered JSON files.
+     * 
+     * @return a map of all available stencilsets (name => url).
+     */
+    private Map<String, URL> getAvailableStencilsets(URL base) {
+
+	// TODO make stencilsets folder configurable.
+	// TODO make webapp name be found dynamically.
+	String webappName = "/oryx";
+	String stencilsetPath = this.getServletContext().getRealPath("/")
+		+ File.separator + "stencilsets" + File.separator;
+	Map<String, URL> stencilsets = new HashMap<String, URL>();
+	File dir = new File(stencilsetPath);
+
+	// if dir is not a directory
+	if (!(dir.isDirectory()))
+	    return stencilsets;
+
+	// for each folder within...
+	for (File contained : dir.listFiles()) {
+	    if (!(contained.isDirectory()))
+		continue;
+
+	    // find the included json files.
+	    for (File jsonFile : contained.listFiles(new FilenameFilter() {
+		public boolean accept(File dir, String name) {
+		    return name.endsWith(".json");
+		}
+	    })) {
+
+		try {
+
+		    // construct url for the stencilset
+		    URL location = new URL(base.getProtocol(), base.getHost(),
+			    base.getPort(), webappName + "/stencilsets/"
+				    + contained.getName() + "/"
+				    + jsonFile.getName());
+
+		    String name = this.lookupStencilsetName(jsonFile.getName(),
+			    location);
+
+		    // put it in the map
+		    stencilsets.put(name, location);
+
+		} catch (MalformedURLException e) {
+
+		    // if there is a problem, ignore this stencil set.
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }
+	}
+
+	return stencilsets;
+    }
+
+    private String lookupStencilsetName(String name, URL location) {
+	return name.substring(0, name.length() - 5);
+    }
+
     public void showProcessList(HttpServletRequest req, HttpServletResponse res)
-	    throws SQLException {
+	    throws SQLException, MalformedURLException {
 
 	PreparedStatement stmt = database
 		.prepareStatement("SELECT ID, Name FROM sites");
@@ -283,6 +364,21 @@ public class SimpleStorageServlet extends HttpServlet {
 		.println("<img src='./images/crystal/empty.png' style='float: clear;' width='128' height='128'/><br/>");
 	out.println("<input type='text' name='resource' value='' />");
 	out.println("<input type='submit' value='Add'/>");
+
+	// get available stencil sets.
+	URL base = new URL(req.getRequestURL().toString());
+	Map<String, URL> stencilsets = getAvailableStencilsets(base);
+
+	out.println("<select name=\"stencilset\" size=\"1\">");
+
+	for (String name : stencilsets.keySet()) {
+	    URL url = stencilsets.get(name);
+	    out.println("<option value=\"" + url.toString() + "\">");
+	    out.println(name);
+	    out.println("</option>");
+	}
+	out.println("</select>");
+
 	out.println("</form>");
 	out.println("</p>");
 
@@ -314,7 +410,6 @@ public class SimpleStorageServlet extends HttpServlet {
 	out.println("</div>");
 	out.println("</body>");
 	out.println("</html>");
-
     }
 
     public void showError(Exception exception, HttpServletResponse res) {

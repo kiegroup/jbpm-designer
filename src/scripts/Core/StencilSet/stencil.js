@@ -168,13 +168,6 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	id: function() {
 		return this._jsonStencil.id;
 	},
-	
-	/**
-	 * Returns the namespace with id, divided by a character hash.
-	 */
-	nsid: function() {
-		return this._namespace + this._jsonStencil.id;
-	},
 
 	title: function() {
 		return this._jsonStencil.title;

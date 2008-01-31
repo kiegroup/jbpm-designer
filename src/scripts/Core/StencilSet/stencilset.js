@@ -86,6 +86,12 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
             return stencil._jsonStencil.mayBeRoot
         });
         
+		// if there is none, just guess the first.
+		if (!rootStencil) {
+			ORYX.Log.warn("Did not find any stencil that may be root. Taking a guess.");
+			rootStencil = this._stencils.values()[0];
+		}
+		
         // return its id.
         return rootStencil.id();
     },

@@ -11,6 +11,7 @@
 			"description":"A BPMN Diagram.",
 			"view":"diagram/node.diagram.svg",
 			"icon":"new_diagram.png",
+			mayBeRoot: true,
 			"roles": [
 				"fromtoall"
 			],
@@ -4674,6 +4675,29 @@
 			"description":"An event without outgoing edges.",
 			"view":"endevent/node.event.end.svg",
 			"icon":"new_event_end.png",
+			"repositoryEntries": [
+
+				{ name:   "End Event",
+				  groups: ["End Events"],
+				  icon:   "new_event_end.png",
+				  properties: { result: "None" }},
+
+				{ name: "End Cancel Event",
+				  groups: ["End Events"],
+				  icon:"new_cancelevent.png",
+				  properties: { result: "Cancel" }},
+
+				{	"name": "End Compensation Event",
+					"groups": ["End Events"],
+					"icon":"new_compensationevent.png",
+					"properties": {"result": "Compensation"}},
+
+				{	"name": "End Message Event",
+					"groups": ["End Events"],
+					"icon":"new_messageevent.png",
+					"properties": {
+						"result": "Message"}}
+			],
 			"roles":[
 				"sequence_end",
 				"messageflow_start",
@@ -4758,55 +4782,14 @@
 					"optional":false,
 					"refToView":"",
 					"items": [
-						{
-							"id":"none",
-							"title":"c1",
-							"value":"None",
-							"refToView":"none"
-						},
-						{
-							"id":"cancel",
-							"title":"c1",
-							"value":"Cancel",
-							"refToView":"cancel"
-						},
-						{
-							"id":"compensation",
-							"title":"c1",
-							"value":"Compensation",
-							"refToView":"compensation"
-						},
-						{
-							"id":"error",
-							"title":"c1",
-							"value":"Error",
-							"refToView":"error"
-						},
-						{
-							"id":"link",
-							"title":"c1",
-							"value":"Link",
-							"refToView":"link"
-						},
-						{
-							"id":"message",
-							"title":"c1",
-							"value":"Message",
-							"refToView":"message"
-						},
-						{
-							"id":"multiple",
-							"title":"c1",
-							"value":"Multiple",
-							"refToView":"multiple"
-						},
-						{
-							"id":"terminate",
-							"title":"c1",
-							"value":"Terminate",
-							"refToView":"terminate"
-						}
-					]
+						{ id: "none",         title: "c1", value: "None",         refToView: "none" },
+						{ id: "cancel",       title: "c1", value: "Cancel",       refToView: "cancel"},
+						{ id: "compensation", title: "c1", value: "Compensation", refToView: "compensation"},
+						{ id: "error",        title: "c1", value: "Error",        refToView: "error"},
+						{ id: "link",         title: "c1", value: "Link",         refToView: "link"},
+						{ id: "message",      title: "c1", value: "Message",      refToView: "message"},
+						{ id: "multiple",     title: "c1", value: "Multiple",     refToView: "multiple"},
+						{ id: "terminate",    title: "c1", value: "Terminate",    refToView: "terminate"}]
 				},
 				{
 					"id":"message",
