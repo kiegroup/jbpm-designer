@@ -85,32 +85,19 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 		//make id unique by prepending namespace of stencil set
 		this._jsonStencil.id = namespace + this._jsonStencil.id;
 
-		//add image path to icon
-		if(this._jsonStencil.icon && this._jsonStencil.icon.indexOf("://") === -1) {
-			this._jsonStencil.icon = source + "icons/" + this._jsonStencil.icon;
-		} else {
-			this._jsonStencil.icon = "";
-		}
+		this.postProcessProperties();
 		
-		//init properties
-		if(this._jsonStencil.properties && this._jsonStencil.properties instanceof Array) {
-			this._jsonStencil.properties.each((function(prop) {
-				var oProp = new ORYX.Core.StencilSet.Property(prop, namespace, this);
-				this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
-			}).bind(this));
-		}
-		
-		//init serialize callback
+		// init serialize callback
 		if(!this._jsonStencil.serialize) {
 			this._jsonStencil.serialize = function(shape, data) { return data;};
 		}
 		
-		//init deserialize callback
+		// init deserialize callback
 		if(!this._jsonStencil.deserialize) {
 			this._jsonStencil.deserialize = function(shape, data) { return data;};
 		}
 		
-		//init layout callback
+		// init layout callback
 		if(!this._jsonStencil.layout) {
 			this._jsonStencil.layout = function(shape) { return true; };
 		}
@@ -140,6 +127,24 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 			});
 	},
 
+	postProcessProperties: function() {
+
+		// add image path to icon
+		if(this._jsonStencil.icon && this._jsonStencil.icon.indexOf("://") === -1) {
+			this._jsonStencil.icon = this._source + "icons/" + this._jsonStencil.icon;
+		} else {
+			this._jsonStencil.icon = "";
+		}
+		
+		// init properties
+		if(this._jsonStencil.properties && this._jsonStencil.properties instanceof Array) {
+			this._jsonStencil.properties.each((function(prop) {
+				var oProp = new ORYX.Core.StencilSet.Property(prop, this._namespace, this);
+				this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
+			}).bind(this));
+		}
+	},
+
 	/**
 	 * @param {ORYX.Core.StencilSet.Stencil} stencil
 	 * @return {Boolean} True, if stencil has the same namespace and type.
@@ -163,6 +168,13 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	id: function() {
 		return this._jsonStencil.id;
 	},
+	
+	/**
+	 * Returns the namespace with id, divided by a character hash.
+	 */
+	nsid: function() {
+		return this._namespace + this._jsonStencil.id;
+	},
 
 	title: function() {
 		return this._jsonStencil.title;
@@ -182,6 +194,15 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 
 	icon: function() {
 		return this._jsonStencil.icon;
+	},
+	
+	hasMultipleRepositoryEntries: function() {
+		return (this.getRepositoryEntries().length > 0);
+	},
+	
+	getRepositoryEntries: function() {
+		return (this._jsonStencil.repositoryEntries) ?
+			$A(this._jsonStencil.repositoryEntries) : $A([]);
 	},
 	
 	properties: function() {
