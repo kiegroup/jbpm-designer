@@ -87,6 +87,7 @@
 				<file name='scripts/Core/StencilSet/stencil.js' />
 				<file name='scripts/Core/StencilSet/property.js' />
 				<file name='scripts/Core/StencilSet/propertyitem.js' />
+				<file name='scripts/Core/StencilSet/complexpropertyitem.js' />
 				<file name='scripts/Core/StencilSet/rules.js' />
 				<file name='scripts/Core/StencilSet/stencilset.js' />
 				<file name='scripts/Core/StencilSet/stencilsets.js' />
@@ -143,9 +144,9 @@
 
     <target name="dist">
         <mkdir dir="dist"/>
-
+		
+		<!--
 		<echo>Creating zip for offline or php use, and online war file.</echo>
-
 		<zip destfile="dist/oryx.zip">
 			<fileset dir="build">
 				<exclude name="*.php"/>
@@ -153,7 +154,9 @@
 			</fileset>
 
 		</zip>
-
+		-->
+		
+		<echo>Creating web application archive.</echo>
 		<war destfile="dist/oryx.war" webxml="etc/web.xml">
 
 			<lib dir="lib">
@@ -171,7 +174,7 @@
 				
 				<!-- database connectors. consider moving this to users responsibility -->
 				<include name="mysql-connector-java-5.1.5-bin.jar"/>
-				<include name="postgresql-8.3dev-602.jdbc4.jar"/>
+				<!-- <include name="postgresql-8.3dev-602.jdbc3.jar"/> -->
 
 			</lib>
 
