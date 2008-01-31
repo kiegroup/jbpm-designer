@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="server/src" kind="src"/>
-	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
-	<classpathentry path="lib/batik-transcoder.jar" kind="lib"/>
-	<classpathentry path="lib/fop.jar" kind="lib"/>
-	<classpathentry path="lib/commons-configuration-1.5.jar" kind="lib"/>
-	<classpathentry path="lib/commons-collections-3.2.jar" kind="lib"/>
-	<classpathentry path="lib/commons-lang-2.3.jar" kind="lib"/>
-	<classpathentry path="lib/commons-logging-1.1.1.jar" kind="lib"/>
-	<classpathentry path="server/bin" kind="output"/>
+	<classpathentry kind="src" path="server/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/batik-transcoder.jar"/>
+	<classpathentry kind="lib" path="lib/fop.jar"/>
+	<classpathentry kind="lib" path="lib/commons-configuration-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="output" path="server/bin"/>
 </classpath>
