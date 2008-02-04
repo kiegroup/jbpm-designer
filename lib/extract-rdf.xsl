@@ -30,7 +30,7 @@
     </xsl:variable>
 
     <rdf:RDF>
-      <rdf:Description rdf:about="">
+      <rdf:Description rdf:about="{$baseUriNoFragment}">
         <admin:generatorAgent rdf:resource="http://purl.org/NET/erdf/extract"/>
       </rdf:Description>
 
