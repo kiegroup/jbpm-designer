@@ -248,6 +248,7 @@ public class SimpleStorageServlet extends HttpServlet {
 		.println("<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />");
 	out
 		.println("<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />");
+	out.println("<base href=\"" + req.getRequestURL() + "\" />");
 
 	// out.println("<meta name=\"oryx.type\"
 	// content=\"http://b3mn.org/stencilset/bpmn#BPMNDiagram\" />");
