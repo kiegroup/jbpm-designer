@@ -314,9 +314,12 @@
                 <xsl:when test="string-length($resource) &gt; 0">
                   <xsl:attribute name="rdf:resource">
                       <xsl:choose>
-                        <xsl:when test="starts-with($resource, '#')">
-                          <xsl:value-of select="concat($baseUriNoFragment, $resource)"/>
-                        </xsl:when>
+                          <xsl:when test="starts-with($resource, '#')">
+                            <xsl:value-of select="concat($baseUriNoFragment, $resource)"/>
+                          </xsl:when>
+                          <xsl:when test="starts-with($resource, '.')">
+                            <xsl:value-of select="concat($baseUriNoFragment, substring-after($resource, '.'))"/>
+                          </xsl:when>
                         <xsl:otherwise>
                           <xsl:value-of select="$resource"/>
                         </xsl:otherwise>
