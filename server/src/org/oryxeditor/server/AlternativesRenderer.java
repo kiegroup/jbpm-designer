@@ -20,7 +20,7 @@ public class AlternativesRenderer extends HttpServlet {
 
     private static final long serialVersionUID = 8526319871562210085L;
 
-    private String basefilename;
+    private String baseFilename;
     private String inFile;
     private String outFile;
 
@@ -30,12 +30,12 @@ public class AlternativesRenderer extends HttpServlet {
 	String data = req.getParameter("data");
 	String format = req.getParameter("format");
 
-	String tmpFolder = this.getServletContext().getRealPath("/")
-		+ File.separator + "tmp" + File.separator;
+	String tmpPath = this.getServletContext().getRealPath("/")
+	+ File.separator + "tmp" + File.separator;
 
-	this.basefilename = String.valueOf(System.currentTimeMillis());
-	this.inFile = tmpFolder + this.basefilename + ".svg";
-	this.outFile = tmpFolder + this.basefilename + ".pdf";
+	this.baseFilename = String.valueOf(System.currentTimeMillis());
+	this.inFile = tmpPath + this.baseFilename + ".svg";
+	this.outFile = tmpPath + this.baseFilename + ".pdf";
 
 	System.out.println(inFile);
 
@@ -46,7 +46,7 @@ public class AlternativesRenderer extends HttpServlet {
 	    out.write(data);
 	    out.close();
 	    makePDF();
-	    res.getOutputStream().print("./tmp/" + this.basefilename + ".pdf");
+	    res.getOutputStream().print("./tmp/" + this.baseFilename + ".pdf");
 
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block

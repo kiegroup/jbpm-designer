@@ -248,17 +248,25 @@ public class SimpleStorageServlet extends HttpServlet {
 		.println("<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />");
 	out
 		.println("<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />");
-	out.println("<base href=\"" + req.getRequestURL() + "\" />");
 
-	// out.println("<meta name=\"oryx.type\"
-	// content=\"http://b3mn.org/stencilset/bpmn#BPMNDiagram\" />");
+	// providing a base is essential for the layouter plugin, as the
+	// underlying rdf parser does not allow relative urls, and the
+	// extract-rdf xsl script by Ian Davis doesn't respect xml:base but the
+	// html base element. However, ehen providing a base, fragments refering
+	// to fetched svg files break, since they now all refer to the base
+	// element's href attribute. Latter makes the arrowheads disappear. To
+	// fix this, the layouter plugin currently adds a base element before
+	// sending the current data back to the server.
+	// out.println("<base href=\"" + req.getRequestURL() + "\" />");
 
 	out.println("</head>");
 
-	out.println("<body>");
+	out.println("<body><div class='processdata' style='display:none'>");
 
 	out.println(resource);
 
+	out.println("</div>");
+	out.println("<div class='processdata'></div>");
 	out.println("</body>");
 	out.println("</html>");
     }
