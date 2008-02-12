@@ -1,0 +1,608 @@
+{
+	"title":"EPC",
+	"namespace":"http://b3mn.org/stencilset/epc#",
+	"description":"This is a Event-driven Process Chain specification.",
+ 	"stencils" : [
+  		{
+			"type": "node",
+			"id":"Diagram",
+			"title":"Diagram",
+			"groups":[ "Diagram" ],
+			"description":"A Diagram",
+			"view":"node.diagram.svg",
+			"icon":"new_diagram.png",
+			"roles": [ "diagram" ],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this diagram",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"diagramtext",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"version",
+					"type":"String",
+					"title":"Version",
+					"value":"",
+					"description":"The version number of the diagram",
+					"readonly":false,
+					"optional":true,
+					"length":"8"
+				},
+				{
+					"id":"author",
+					"type":"String",
+					"title":"Author",
+					"value":"",
+					"description":"Holds the name of the author of the diagram",
+					"readonly":false,
+					"optional":true,
+					"length":"32"
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+ 		{
+			"type": "node",
+			"id":"Event",
+			"title":"Event",
+			"groups":[ "EPC" ],
+			"description":"An Event",
+			"view":"node.event.svg",
+			"icon":"new_event.png",
+			"roles": [
+				"event",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this Event",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"commonness",
+					"type":"String",
+					"title":"Commonness",
+					"value":"",
+					"description":"Commonness of this Event",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"commonnesstext",
+					"length":"16",
+					"wrapLines":true
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+			{
+			"type": "node",
+			"id":"Function",
+			"title":"Function",
+			"groups":[ "EPC" ],
+			"description":"A Function",
+			"view":"node.function.svg",
+			"icon":"new_function.png",
+			"roles": [
+				"function",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this Function",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"time",
+					"type":"String",
+					"title":"Execution Time",
+					"value":"",
+					"description":"Duration of the Function's Execution",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"timetext",
+					"length":"12",
+					"wrapLines":true
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"AndConnector",
+			"title":"AND Connector",
+			"groups":[ "EPC" ],
+			"description":"A AND Connector",
+			"view":"node.and.svg",
+			"icon":"new_and.png",
+			"intersectionType":"ellipse",			
+			"roles": [
+				"andConnector",
+				"connector",
+				"all"
+			],
+			"properties": []
+		},
+			{
+			"type": "node",
+			"id":"XorConnector",
+			"title":"XOR Connector",
+			"groups":[ "EPC" ],
+			"description":"A XOR Connector",
+			"view":"node.xor.svg",
+			"icon":"new_xor.png",
+			"intersectionType":"ellipse",
+			"roles": [
+				"orXorConnector",
+				"connector",
+				"all"
+			],
+			"properties": []
+		},
+			{
+			"type": "node",
+			"id":"OrConnector",
+			"title":"OR Connector",
+			"groups":[ "EPC" ],
+			"description":"A OR Connector",
+			"view":"node.or.svg",
+			"icon":"new_or.png",
+			"intersectionType":"ellipse",
+			"roles": [
+				"orXorConnector",
+				"connector",
+				"all"
+			],
+			"properties": []
+		},
+		{
+			"type": "edge",
+			"id":"ControlFlow",
+			"title":"Control Flow",
+			"description":"A Controlflow Edge",
+			"groups":[ "EPC" ],
+			"view":"connection.flow.svg",
+			"icon":"new_flow.png",
+			"roles": [
+				"epcEdge",
+				"all"
+			],
+			"properties": [
+							{
+					"id":"probability",
+					"type":"String",
+					"title":"Probability",
+					"value":"",
+					"description":"The Probability of this execution path",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"8"
+				},
+			]
+		},
+		{
+			"type": "node",
+			"id":"ProcessInterface",
+			"title":"Process Interface",
+			"groups":[ "extended EPC" ],
+			"description":"A Process Interface",
+			"view":"node.pInterface.svg",
+			"icon":"new_pInterface.png",
+			"roles": [
+				"interface",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this Process Interface",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"refuri",
+					"type":"String",
+					"title":"URI",
+					"value":"",
+					"description":"The URI of the referenced process",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"128",
+					"wrapLines":true
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Organization",
+			"title":"Organization",
+			"groups":[ "extended EPC" ],
+			"description":"A Organizational Unit",
+			"view":"node.organization.svg",
+			"icon":"new_organization.png",
+			"roles": [
+				"InRelWithF",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this Organization",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Position",
+			"title":"Position",
+			"groups":[ "extended EPC" ],
+			"description":"A Position",
+			"view":"node.position.svg",
+			"icon":"new_position.png",
+			"roles": [
+				"InRelWithF",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this Position",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Data",
+			"title":"Data",
+			"groups":[ "extended EPC" ],
+			"description":"A Data Object",
+			"view":"node.data.svg",
+			"icon":"new_data.png",
+			"roles": [
+				"InRelWithF",
+				"InRelWithE",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this Data Object",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"System",
+			"title":"System",
+			"groups":[ "extended EPC" ],
+			"description":"A System / Application",
+			"view":"node.system.svg",
+			"icon":"new_system.png",
+			"roles": [
+				"InRelWithF",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"The title of this System",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"32",
+					"wrapLines":true
+				},
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Relation",
+			"title":"Relation",
+			"description":"A Relation Edge",
+			"groups":[ "extended EPC" ],
+			"view":"connection.relation.svg",
+			"icon":"new_relation.png",
+			"roles": [
+				"relationEdge",
+				"all"
+			],
+			"properties": [
+				{
+					"id":"description",
+					"type":"String",
+					"title":"Description",
+					"value":"",
+					"description":"A short Description",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"informationflow",
+					"type":"Choice",
+					"title":"Information Flow",
+					"value":"False",
+					"description":"Is this relation a information flow?",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"False",
+							"refToView":"none"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"True",
+							"refToView":"infFlow"
+						}
+					]
+				}
+			]
+		}
+	],
+	"rules": {
+		"connectionRules": [
+			{
+				"role":"epcEdge",
+				"connects": [
+					{
+						"from":"event",
+						"to":["function", "connector", "interface" ]
+					},
+					{
+						"from":"function",
+						"to":["event", "connector", "interface" ]
+					},
+					{
+						"from":"connector",
+						"to":["event", "function", "connector"]
+					},
+					{
+						"from":"interface",
+						"to":["function", "event"]
+					}
+				]
+			},
+			{
+				"role":"relationEdge",
+				"connects": [
+					{
+						"from":"event",
+						"to":["InRelWithE"]
+					},
+					{
+						"from":"function",
+						"to":["InRelWithF"]
+					},
+					{
+						"from":"InRelWithE",
+						"to":["event"]
+					},
+					{
+						"from":"InRelWithF",
+						"to":["function"]
+					}
+				]
+			}
+		],
+		"cardinalityRules": [
+			{
+				"role":"event",
+				"incomingEdges": [
+                	{
+                    	"role": "edge",
+                     	"maximum":1,
+                     	"minimum":0
+                    }
+                ],
+                "outgoingEdges": [
+                 	{
+                		"role": "edge",
+                    	"maximum":1,
+                     	"minimum":0
+              		}
+               	]
+			},
+			{
+				"role":"function",
+				"incomingEdges": [
+           			{
+                    	"role": "edge",
+                        "maximum":1,
+                   		"minimum":1
+                	}
+                ],
+                  	"outgoingEdges": [
+                     {
+                      	"role": "edge",
+                      	"maximum":1,
+                      	"minimum":0
+                  	}
+           		]
+			},
+			{
+				"role":"connector",
+				"incomingEdges": [
+           			{
+                    	"role": "edge",
+                        "maximum":2,
+                   		"minimum":1
+                	}
+                ],
+                  	"outgoingEdges": [
+                     {
+                      	"role": "edge",
+                      	"maximum":2,
+                      	"minimum":1
+                  	}
+           		]
+			}
+		],
+		"containmentRules": [
+			{
+				"role":"diagram",
+				"contains": [
+					"all"
+				]
+			}
+		]
+	}
+}
