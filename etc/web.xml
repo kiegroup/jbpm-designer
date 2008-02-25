@@ -1,60 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-	id="oryx" version="2.4">
-	
-	<display-name>Oryx Editor</display-name>
-
-	<servlet>
-		<display-name>Oryx Simple Storage Servlet</display-name>
-		<servlet-name>SimpleStorageServlet</servlet-name>
-		<servlet-class>org.oryxeditor.server.SimpleStorageServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<display-name>Alternatives Renderer</display-name>
-		<servlet-name>AlternativesRenderer</servlet-name>
-		<servlet-class>org.oryxeditor.server.AlternativesRenderer</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>SimpleStorageServlet</servlet-name>
-		<url-pattern>/server</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AlternativesRenderer</servlet-name>
-		<url-pattern>/alt</url-pattern>
-	</servlet-mapping>
-
-	<!--
-	<servlet>
-		<display-name>
-		Axis Admin Servlet</display-name>
-		<servlet-name>AdminServlet</servlet-name>
-		<servlet-class>
-		org.apache.axis.transport.http.AdminServlet</servlet-class>
-		<load-on-startup>100</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/servlet/AxisServlet</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>*.jws</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/services/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AdminServlet</servlet-name>
-		<url-pattern>/servlet/AdminServlet</url-pattern>
-	</servlet-mapping>
-	-->
-
-	<welcome-file-list>
-		<welcome-file>/server</welcome-file>
-	</welcome-file-list>
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+ id="oryx" version="2.4">
+    
+    <display-name>
+        Oryx Editor
+    </display-name>
+    
+    <servlet>
+        <display-name>
+            Oryx OpenID Authentication Servlet
+        </display-name>
+        <servlet-name>
+            AuthServlet
+        </servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.auth.OpenIDAuthenticationServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>
+            AuthServlet
+        </servlet-name>
+        <url-pattern>
+            /consumer
+        </url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <display-name>
+            Oryx Legacy File Download Servlet
+        </display-name>
+        <servlet-name>
+            DownloadServlet
+        </servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.MultiDownloader
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>
+            DownloadServlet
+        </servlet-name>
+        <url-pattern>
+            /download
+        </url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <display-name>
+            Oryx Simple Storage Servlet
+        </display-name>
+        <servlet-name>
+            SimpleStorageServlet
+        </servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.SimpleStorageServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>
+            SimpleStorageServlet
+        </servlet-name>
+        <url-pattern>
+            /server
+        </url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <display-name>
+            Alternatives Renderer
+        </display-name>
+        <servlet-name>
+            AlternativesRenderer
+        </servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.AlternativesRenderer
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>
+            AlternativesRenderer
+        </servlet-name>
+        <url-pattern>
+            /alt
+        </url-pattern>
+    </servlet-mapping>
+    
+    <welcome-file-list>
+        <welcome-file>
+            /server
+        </welcome-file>
+    </welcome-file-list>
+    
+    <jsp-config>
+        <taglib>
+            <taglib-uri>
+                http://java.sun.com/jstl/core
+            </taglib-uri>
+            <taglib-location>
+                /WEB-INF/c.tld
+            </taglib-location>
+        </taglib>
+    </jsp-config>
+    
 </web-app>
