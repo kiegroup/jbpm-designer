@@ -200,6 +200,10 @@
                 <include name="xml-apis-ext.jar"/>
                 <include name="xmlgraphics-commons-1.1.jar"/>
                 
+                <!-- jsp and servlet development dependencies -->
+                <include name="jstl.jar"/>
+                <include name="standard.jar"/>
+                
                 <!-- needed for openid authentication -->
                 <include name="openid4java.jar"/>
                 <include name="openxri-*.jar"/>
@@ -217,8 +221,8 @@
             </lib>
             
             <fileset dir="build">
-              <exclude name="classes/"/>
-              <exclude name="*.php"/>
+                <exclude name="classes/"/>
+                <exclude name="*.php"/>
             </fileset>
             
             <classes dir="build/classes"/>
