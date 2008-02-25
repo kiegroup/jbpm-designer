@@ -33,7 +33,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyrigh¤t notice and this permission notice shall be included in
+ * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -261,7 +261,7 @@ public class SimpleStorageServlet extends HttpServlet {
 
 	out.println("</head>");
 
-	out.println("<body><div class='processdata' style='display:none'>");
+	out.println("<body style=\"overflow:hidden;\"><div class='processdata' style='display:none'>");
 
 	out.println(resource);
 
@@ -371,8 +371,8 @@ public class SimpleStorageServlet extends HttpServlet {
 	out.println("Create a new process:<br/>");
 	out
 		.println("<img src='./images/crystal/empty.png' style='float: clear;' width='128' height='128'/><br/>");
+	out.println("<input type='submit' value='Add' />");
 	out.println("<input type='text' name='resource' value='' />");
-	out.println("<input type='submit' value='Add'/>");
 
 	// get available stencil sets.
 	URL base = new URL(req.getRequestURL().toString());
