@@ -1,0 +1,8 @@
+development:
+  database: poem
+  adapter: postgresql
+  username: poem
+  host: localhost
+  encoding: utf8
+  password:
+  error_level: notice

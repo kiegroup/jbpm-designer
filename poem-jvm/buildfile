@@ -1,0 +1,46 @@
+require 'rubygems'
+require 'buildr'
+require 'yaml'
+
+VERSION_NUMBER = "1.0"
+repositories.remote << 'http://www.ibiblio.org/maven2/'
+
+POEM_JARS = [
+  'org.hibernate:hibernate-annotations:jar:3.3.0.ga',
+  'org.hibernate:hibernate-commons-annotations:jar:3.3.0.ga',
+  'postgresql:postgresql:jar:8.2-507.jdbc3'
+].map{|pom| transitive(pom)}
+
+install artifact('javax.transaction:jta:jar:1.0.1B').from(file('shared/jta-1_0_1B-classes.jar'))
+
+define 'poem' do
+  project.version = VERSION_NUMBER
+  project.group = 'org.b3mn'
+  manifest['Implementation-Vendor'] = 'http://bpt.hpi.uni-potsdam.de'
+    
+  desc 'Backend'
+  define 'backend' do
+    compile.with POEM_JARS
+    package(:war).with :libs => POEM_JARS
+  end
+end
+
+task 'clean-postgres' do
+  shared = %Q{-h #{db_config['host']} #{db_config['database']}}
+  puts %x{dropdb #{shared}}
+  puts %x{createdb -E utf8 -O #{db_config['username']} #{shared}}
+end
+
+task 'migrate' do
+  require 'active_record'
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
+  ActiveRecord::Base.establish_connection(db_config)
+  ActiveRecord::Migrator.migrate(
+    File.join(File.dirname(__FILE__), 'backend', 'src', 'main', 'migration'), 
+    ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+  )
+end
+
+def db_config
+  YAML.load_file(File.join(File.dirname(__FILE__),'shared', 'database.yml'))[$POEM_ENV || 'development']
+end
