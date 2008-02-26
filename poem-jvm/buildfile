@@ -5,32 +5,40 @@ require 'yaml'
 VERSION_NUMBER = "1.0"
 repositories.remote << 'http://www.ibiblio.org/maven2/'
 
+# Using maven2 repos, please check http://www.mvnrepository.com/
 POEM_JARS = [
   'org.hibernate:hibernate-annotations:jar:3.3.0.ga',
   'org.hibernate:hibernate-commons-annotations:jar:3.3.0.ga',
   'postgresql:postgresql:jar:8.2-507.jdbc3'
 ].map{|pom| transitive(pom)}
 
+# Sun does not allow this. So the jar needs to be self-installed
+# Please remove shared/jta-1_0_1B-classes.jar from oryx svn asap
 install artifact('javax.transaction:jta:jar:1.0.1B').from(file('shared/jta-1_0_1B-classes.jar'))
 
+# the project definition
 define 'poem' do
   project.version = VERSION_NUMBER
   project.group = 'org.b3mn'
   manifest['Implementation-Vendor'] = 'http://bpt.hpi.uni-potsdam.de'
-    
-  desc 'Backend'
+  
+  # the subprojects
+  desc 'Backend Implementation'
   define 'backend' do
     compile.with POEM_JARS
     package(:war).with :libs => POEM_JARS
   end
+
 end
 
+# This tasks nukes the postgres, ensure createdb and dropdb to be in path
 task 'clean-postgres' do
   shared = %Q{-h #{db_config['host']} #{db_config['database']}}
   puts %x{dropdb #{shared}}
   puts %x{createdb -E utf8 -O #{db_config['username']} #{shared}}
 end
 
+# This task calls migrate, just "buildr clean-postgres migrate" will do
 task 'migrate' do
   require 'active_record'
   ActiveRecord::Base.logger = Logger.new(STDOUT)
@@ -41,6 +49,7 @@ task 'migrate' do
   )
 end
 
+# Helper to read the config, notice hibernate has it's own config (go generate!)
 def db_config
   YAML.load_file(File.join(File.dirname(__FILE__),'shared', 'database.yml'))[$POEM_ENV || 'development']
 end
