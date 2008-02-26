@@ -182,7 +182,7 @@ public class MultiDownloader extends HttpServlet {
 	    // of the file into the appropriate string variables.
 
 	    String name = req.getParameter("file");
-	    String content = req.getParameter("content");
+	    String content = req.getParameter("download");
 
 	    // prepare headers, with empty mimetype (as download.php does), and
 	    // send the content of the file back to the user.
