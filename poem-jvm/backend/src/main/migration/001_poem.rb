@@ -9,39 +9,31 @@ class Poem < ActiveRecord::Migration
       insert into "identity" (id, uri) values (0, ''); -- anon
     }
     
-    create_table 'content' do |t|
-      t.column :mime_type,  :text, :null => false
-      t.column :language,   :text, :null => false, :default => 'en_US'
-      t.column :content,    :xml, :null => false
-    end
-    
-    execute %q{
-      alter table "content" alter column mime_type set storage main;
-      alter table "content" alter column language set storage main;
-      alter table "content" alter column content set storage main;
-    }
-    
     create_table 'representation' do |t|
       t.column :ident_id,   :integer, :null => false
-      t.column :content_id, :integer, :null => false
+      t.column :mime_type,  :text, :null => false
+      t.column :language,   :text, :null => false, :default => 'en_US'
       
       t.column :title,      :text, :null => false, :default  => ''
       t.column :summary,    :text, :null => false, :default  => ''
       t.column :created,    'timestamp with time zone', :null => false
       t.column :updated,    'timestamp with time zone', :null => false
+      
+      t.column :content,    :xml, :null => false
     end
     
     execute %q{
+      alter table "representation" alter column mime_type set storage main;
+      alter table "representation" alter column language set storage main;
       alter table "representation" alter column title set storage main;
       alter table "representation" alter column summary set storage main;
       
       alter table "representation" add foreign key(ident_id) references "identity";
-      alter table "representation" add foreign key(content_id) references "content";
     }
     
     create_table 'link' do |t|
-      t.column :content_id, :integer, :null => false
-      t.column :href,       :text,    :null => false
+      t.column :rep_id,     :integer, :null => false
+      t.column :href_id,    :integer, :null => false
       t.column :rel,        :text
       t.column :type,       :text
       t.column :title,      :text
@@ -49,26 +41,26 @@ class Poem < ActiveRecord::Migration
     
     execute %q{
       alter table "link" alter column rel set storage main;
-      alter table "link" alter column href set storage main;
       alter table "link" alter column type set storage main;
       alter table "link" alter column title set storage main;
       
-      alter table "link" add foreign key(content_id) references "content";
+      alter table "link" add foreign key(rep_id) references "representation" on delete cascade;
+      alter table "link" add foreign key(href_id) references "identity";
     }
     
     create_table 'category' do |t|
-      t.column :content_id, :integer, :null => false
-      t.column :context,    :text
+      t.column :rep_id,     :integer, :null => false
+      t.column :context_id, :integer
       t.column :scheme,     :text
       t.column :term,       :text, :null => false
     end
     
     execute %q{
-      alter table "category" alter column context set storage main;
       alter table "category" alter column scheme set storage main;
       alter table "category" alter column term set storage main;
       
-      alter table "category" add foreign key(content_id) references "content";
+      alter table "category" add foreign key(rep_id) references "representation" on delete cascade;
+      alter table "category" add foreign key(context_id) references "identity"
     }
     
     create_table 'structure', :id => false do |t|
@@ -93,7 +85,7 @@ class Poem < ActiveRecord::Migration
       t.column :object,     :text, :null => false
       t.column :object_descend, :boolean, :null => false, :default => true
       
-      t.column :mime_type,  :text, :null => false
+      t.column :rel_type,   :text, :null => false
       t.column :scheme,     :text, :null => false
       t.column :term,       :text, :null => false
     end
@@ -119,7 +111,7 @@ class Poem < ActiveRecord::Migration
                 subject_name.uri    as subject_name,
                 object_name.id      as object_id,
                 object_name.uri     as object_name,
-                mime_type,
+                rel_type,
                 scheme,
                 term
         from    "interaction" as access,
