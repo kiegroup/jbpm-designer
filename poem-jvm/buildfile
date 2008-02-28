@@ -9,8 +9,14 @@ repositories.remote << 'http://www.ibiblio.org/maven2/'
 POEM_JARS = [
   'org.hibernate:hibernate-annotations:jar:3.3.0.ga',
   'org.hibernate:hibernate-commons-annotations:jar:3.3.0.ga',
-  'postgresql:postgresql:jar:8.2-507.jdbc3'
+  'postgresql:postgresql:jar:8.2-507.jdbc3',
+  'javax.servlet:servlet-api:jar:2.4'
 ].map{|pom| transitive(pom)}
+
+# No transitive dependencies
+POEM_JARS += [
+  'org.jruby:jruby-complete:jar:1.1RC2'
+]
 
 # Sun does not allow this. So the jar needs to be self-installed
 # Please remove shared/jta-1_0_1B-classes.jar from oryx svn asap
