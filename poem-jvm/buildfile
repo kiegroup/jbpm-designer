@@ -40,8 +40,11 @@ end
 # This tasks nukes the postgres, ensure createdb and dropdb to be in path
 task 'clean-postgres' do
   shared = %Q{-h #{db_config['host']} #{db_config['database']}}
-  puts %x{dropdb #{shared}}
-  puts %x{createdb -E utf8 -O #{db_config['username']} #{shared}}
+  user = "-U #{db_config['superuser']}" if db_config['superuser']
+  puts "dropdb #{user} #{shared}"
+  puts %x{dropdb #{user} #{shared}}
+  puts "createdb -E utf8 -O #{db_config['username']} #{user} #{shared}"
+  puts %x{createdb -E utf8 -O #{db_config['username']} #{user} #{shared}}
 end
 
 # This task calls migrate, just "buildr clean-postgres migrate" will do
