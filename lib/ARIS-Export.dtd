@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT AML (Group)>
+
+<!ELEMENT CxnDef (AttrDef*)>
+<!ATTLIST CxnDef
+	ToObjDef.IdRef IDREF #REQUIRED
+>
+
+<!ELEMENT ObjDef (AttrDef*, CxnDef*)>
+<!ATTLIST ObjDef
+	ObjDef.ID ID #REQUIRED
+	TypeNum NMTOKEN #REQUIRED
+	LinkedModels.IdRefs IDREFS #IMPLIED
+>
+<!ELEMENT AttrValue (#PCDATA)>
+<!ATTLIST AttrValue
+	LocaleId NMTOKEN #REQUIRED
+>
+<!ELEMENT AttrDef (AttrValue+)>
+<!ATTLIST AttrDef
+	AttrDef.ID ID #IMPLIED
+	AttrDef.Type NMTOKEN #REQUIRED
+>
+<!ELEMENT ObjOcc (CxnOcc*, AttrOcc*)>
+<!ATTLIST ObjOcc
+	ObjOcc.ID ID #REQUIRED
+	ObjDef.IdRef IDREF #REQUIRED
+	SymbolNum NMTOKEN #REQUIRED
+>
+
+<!ELEMENT AttrOcc EMPTY>
+<!ATTLIST AttrOcc
+	AttrOcc.ID ID #IMPLIED
+	AttrTypeNum NMTOKEN #REQUIRED
+>
+<!ELEMENT CxnOcc (AttrOcc*)>
+<!ATTLIST CxnOcc
+	ToObjOcc.IdRef IDREF #REQUIRED
+>
+<!ELEMENT Model (AttrDef*, ObjOcc*)>
+<!ATTLIST Model
+	Model.ID ID #REQUIRED
+	Model.Type NMTOKEN #REQUIRED
+>
