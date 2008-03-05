@@ -87,6 +87,26 @@
             /alt
         </url-pattern>
     </servlet-mapping>
+	
+	<servlet>
+        <display-name>
+            Oryx EPC Upload Servlet
+        </display-name>
+        <servlet-name>
+            EPCUpload
+        </servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.EPCUpload
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>
+            EPCUpload
+        </servlet-name>
+        <url-pattern>
+            /epc-upload
+        </url-pattern>
+    </servlet-mapping>
     
     <welcome-file-list>
         <welcome-file>
