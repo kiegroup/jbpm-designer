@@ -39,6 +39,18 @@
             org.oryxeditor.server.MultiDownloader
         </servlet-class>
     </servlet>
+    
+    <servlet>
+		<display-name>Oryx BPMN to PNML Export</display-name>
+		<servlet-name>ExportServlet</servlet-name>
+		<servlet-class>org.oryxeditor.server.ExportServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportServlet</servlet-name>
+		<url-pattern>/pnml</url-pattern>
+	</servlet-mapping>
+    
+    
     <servlet-mapping>
         <servlet-name>
             DownloadServlet

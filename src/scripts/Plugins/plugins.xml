@@ -25,6 +25,9 @@
 		<plugin source="addstencilset.js" name="ORYX.Plugins.AddStencilSet" />			
 		<plugin source="loading.js" name="ORYX.Plugins.Loading" />
 
+<!-- plugin for PNML export and deployment -->
+		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport" />		
+
 <!--	<optional-plugin>
 			<condition required-stencilsets="epc.json" mode="all" />	
 			<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport" />
