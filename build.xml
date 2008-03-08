@@ -10,6 +10,7 @@
         
         <copy todir='build'>
             <fileset file="editor.xhtml"/>
+            <fileset file="*.htm"/>
             <fileset file="*.php"/>
         </copy>
         <copy todir='build/css'>
@@ -136,6 +137,7 @@
         </echo>
         <copy todir='build/images'>
             <fileset dir='src/images' includes='**/*.png'/>
+            <fileset dir='src/images' includes='**/*.gif'/>
         </copy>
         <echo>
             Copied images into oryx build destination

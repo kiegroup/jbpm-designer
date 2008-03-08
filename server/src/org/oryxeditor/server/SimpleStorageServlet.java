@@ -48,7 +48,7 @@ public class SimpleStorageServlet extends HttpServlet {
 
     // serialization id.
     private static final long serialVersionUID = -5801302483240001557L;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private static Configuration config = null;
     private Connection database = null;
@@ -211,17 +211,17 @@ public class SimpleStorageServlet extends HttpServlet {
 	out
 		.println("<script src=\"lib/path_parser.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-1.0/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.0.2/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-1.0/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-1.0/ext-all-debug.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.0.2/ext-all.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-1.0/ColorField.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.0.2/color-field.js\" type=\"text/javascript\" />");
 	out.println("<style media=\"screen\" type=\"text/css\">");
-	out.println("@import url(\"lib/ext-1.0/resources/css/ext-all.css\");");
+	out.println("@import url(\"lib/ext-2.0.2/resources/css/ext-all.css\");");
 	out
-		.println("@import url(\"lib/ext-1.0/resources/css/ytheme-gray.css\");");
+		.println("@import url(\"lib/ext-2.0.2/resources/css/xtheme-gray.css\");");
 	out.println("</style>");
 
 	out
@@ -371,7 +371,6 @@ public class SimpleStorageServlet extends HttpServlet {
 	out.println("Create a new process:<br/>");
 	out
 		.println("<img src='./images/crystal/empty.png' style='float: clear;' width='128' height='128'/><br/>");
-	out.println("<input type='submit' value='Add' />");
 	out.println("<input type='text' name='resource' value='' />");
 
 	// get available stencil sets.
@@ -387,6 +386,7 @@ public class SimpleStorageServlet extends HttpServlet {
 	    out.println("</option>");
 	}
 	out.println("</select>");
+	out.println("<input type='submit' value='Add' />");
 
 	out.println("</form>");
 	out.println("</p>");
