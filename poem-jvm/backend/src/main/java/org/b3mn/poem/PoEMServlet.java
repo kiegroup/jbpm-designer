@@ -24,7 +24,7 @@ public class PoEMServlet extends HttpServlet {
 	private final Ruby ruby;
 	
 	public PoEMServlet() {
-		loadPaths.add("/opt/local/Tomcat6/webapps/poem-backend-1.0/WEB-INF/classes/jruby");
+		loadPaths.add("jruby");
 		ruby = JavaEmbedUtils.initialize(loadPaths, classCache);
 	}
 
