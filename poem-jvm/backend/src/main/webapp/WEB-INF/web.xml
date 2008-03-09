@@ -14,7 +14,7 @@
 	
     <servlet-mapping>
         <servlet-name>PoEMServlet</servlet-name>
-        <url-pattern>/poem</url-pattern>
+        <url-pattern>/poem/*</url-pattern>
     </servlet-mapping>
 
 </web-app>

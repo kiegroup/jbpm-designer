@@ -14,6 +14,7 @@ import org.jruby.RubyClass;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.util.ClassCache;
+import org.jruby.runtime.Block;
 
 public class PoEMServlet extends HttpServlet {
 	private static final long serialVersionUID = -9128262564769832181L;
@@ -23,23 +24,23 @@ public class PoEMServlet extends HttpServlet {
 	private final Ruby ruby;
 	
 	public PoEMServlet() {
-		//loadPaths.add(".");
-		loadPaths.add("/jruby");
-		//loadPaths.add("/Users/sixtus/src/new-poem/webapps/ROOT/WEB-INF/classes");
+		loadPaths.add("/opt/local/Tomcat6/webapps/poem-backend-1.0/WEB-INF/classes/jruby");
 		ruby = JavaEmbedUtils.initialize(loadPaths, classCache);
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//HttpOutput httpOutput = new HttpOutput(response);
-		//RubyIO stdin = new RubyIO(ruby, request.getInputStream());
-		//RubyIO output = new RubyIO(ruby, httpOutput);
-		
+		ruby.getLoadService().require("dispatcher");
+		RubyClass dispatcher = ruby.getClass("Dispatcher");
+
+		System.out.println("rufe Ruby::Dispatcher");
 		IRubyObject[] args = {JavaEmbedUtils.javaToRuby(ruby, request), JavaEmbedUtils.javaToRuby(ruby, response)};
-		//ruby.getLoadService().require("poem/dispatcher");
-		//RubyClass dispatcher = (RubyClass) ruby.getClass("Dispatcher");
-		//dispatcher.callMethod(ruby.getCurrentContext(), "dispatch", args);
+		IRubyObject[] damn_java_hack = {};
+		IRubyObject instance = dispatcher.newInstance(damn_java_hack, Block.NULL_BLOCK);
+		instance.callMethod(dispatcher.getRuntime().getCurrentContext(), "dispatch", args);
+		System.out.println("Ruby::Dispatcher fertig");
+	
 	}
 
 }

@@ -19,7 +19,8 @@ class Poem < ActiveRecord::Migration
       t.column :created,    'timestamp with time zone', :null => false
       t.column :updated,    'timestamp with time zone', :null => false
       
-      t.column :content,    :xml, :null => false
+      t.column :content,    :xml,  :null => false
+      t.column :type,		:text, :null => false, :default => 'undefined'
     end
     
     execute %q{
@@ -29,6 +30,8 @@ class Poem < ActiveRecord::Migration
       alter table "representation" alter column summary set storage main;
       
       alter table "representation" add foreign key(ident_id) references "identity";
+      alter table "representation" alter column created set default now();
+      alter table "representation" alter column updated set default now();
     }
     
     create_table 'link' do |t|
@@ -85,7 +88,6 @@ class Poem < ActiveRecord::Migration
       t.column :object,     :text, :null => false
       t.column :object_descend, :boolean, :null => false, :default => true
       
-      t.column :rel_type,   :text, :null => false
       t.column :scheme,     :text, :null => false
       t.column :term,       :text, :null => false
     end
@@ -103,24 +105,39 @@ class Poem < ActiveRecord::Migration
       create index object_idx   on "interaction"(object);
     }
     
+    
+    create_table 'plugin', :id => false do |t|
+      t.column :rel,		:text, :null => false
+      t.column :scheme,		:text, :null => false
+      t.column :term,		:text, :null => false
+    end
+    
+    execute %q{
+      alter table "plugin" alter column rel set storage main;
+      alter table "plugin" alter column scheme set storage main;
+      alter table "plugin" alter column term set storage main; 
+      create index rel_idx on "plugin"(rel);
+    }
+    
     execute %q{
       create view access as
-        select  context_name.id     as context_id,
-                context_name.uri    as context_name,
-                subject_name.id     as subject_id,
+        select  subject_name.id     as subject_id,
                 subject_name.uri    as subject_name,
                 object_name.id      as object_id,
                 object_name.uri     as object_name,
-                rel_type,
-                scheme,
-                term
+                access.scheme		as access_scheme,	
+                access.term			as access_term,
+                plugin.rel			as plugin_relation,
+                plugin.scheme		as scheme,
+                plugin.term			as term
         from    "interaction" as access,
                 "structure"   as context,
                 "identity"    as context_name,
                 "structure"   as subject_axis,
                 "identity"    as subject_name,
                 "structure"   as object_axis,
-                "identity"    as object_name
+                "identity"    as object_name,
+                "plugin"	  as plugin
         where   access.object = context.hierarchy
             and context.ident_id = context_name.id
             and (     access.subject = subject_axis.hierarchy
