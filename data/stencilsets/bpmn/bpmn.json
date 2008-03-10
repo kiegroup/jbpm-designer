@@ -4,17 +4,16 @@
 	"description":"This is the BPMN stencil set specification.",
  	"stencils" : [
  		{
-			"type": "node",
-			"id":"BPMNDiagram",
-			"title":"BPMN-Diagram",
-			"groups":["Diagram"],
-			"description":"A BPMN Diagram.",
-			"view":"diagram/node.diagram.svg",
-			"icon":"new_diagram.png",
-			mayBeRoot: true,
-			"roles": [
-				"fromtoall"
-			],
+			"type":				"node",
+			"id":				"BPMNDiagram",
+			"title":			"BPMN-Diagram",
+			"groups":			["Diagram"],
+			"description":		"A BPMN Diagram.",
+			"view":				"diagram/node.diagram.svg",
+			"icon":				"new_diagram.png",
+			"mayBeRoot":	true,
+			"hide":				true,
+			"roles":			["fromtoall"],
 			"properties": [
 				{
 					"id":"id",
@@ -723,7 +722,7 @@
  		{
 			"type": "node",
 			"id":"Subprocess",
-			"title":"Subprocess",
+			"title":"Sub-Process",
 			"groups":["Activities"],
 			"description":"An subprocess.",
 			"view":"activity/node.subprocess.svg",
@@ -1125,15 +1124,33 @@
 					"refToView":"compensation"
 				},
 				{
-					"id":"subProcessType",
-					"type":"String",
-					"title":"subProcessType",
-					"value":"Reference",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":"50"
+					id: "subProcessType",
+					type: "Choice",
+					title: "subProcessType",
+					value: "Embedded",
+					description: "SubProcessType is an attribute that defines whether the Sub-Process details are embedded within the higher level Process or refers to another, re-usable Process. The default is Embedded.",
+					optional: false,
+					refToView: "",
+					items: [
+						{
+							id: "choice1",
+							title:"embedded",
+							value:"Embedded",
+							refToView: "None"
+						},
+						{
+							id: "choice2",
+							title: "independent",
+							value: "Independent",
+							refToView: "None"
+						},
+						{
+							id: "choice3",
+							title: "reference",
+							value: "Reference",
+							refToView: "None"
+						}
+					]
 				},
 				{
 					"id":"isATransaction",
@@ -5775,7 +5792,7 @@
 			{
 				"role":"BPMNDiagram",
 				"contains": [
-					"Pool"
+					"Pool", "tc"
 				]
 			},
 			{
@@ -5807,6 +5824,9 @@
 				"contains": [
 					"TextAnnotation"
 				]
+			}, {
+				role: "Subprocess",
+				contains: ["tc"]
 			}
 		],
 //		canConnect: function(args) { 
