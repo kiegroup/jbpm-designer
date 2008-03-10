@@ -1,6 +1,7 @@
 package org.b3mn.poem;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Representation {
@@ -11,9 +12,10 @@ public class Representation {
     private String mime_type;
     private String language;
     private String title;
+    private String type;
     private String summary;
-    private String created;
-    private String updated;
+    private Date created;
+    private Date updated;
     private String content;
     
 	public int getIdent_id() {
@@ -26,10 +28,10 @@ public class Representation {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getCreated() {
+	public Date getCreated() {
 		return created;
 	}
-	public void setCreated(String created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 	public int getId() {
@@ -68,10 +70,16 @@ public class Representation {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getUpdated() {
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public Date getUpdated() {
 		return updated;
 	}
-	public void setUpdated(String updated) {
+	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
 	

@@ -28,9 +28,8 @@ public class PoEMServlet extends HttpServlet {
 		ruby = JavaEmbedUtils.initialize(loadPaths, classCache);
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void dispatch(HttpServletRequest request, HttpServletResponse response) 
+		throws ServletException, IOException {
 		ruby.getLoadService().require("dispatcher");
 		RubyClass dispatcher = ruby.getClass("Dispatcher");
 
@@ -39,8 +38,30 @@ public class PoEMServlet extends HttpServlet {
 		IRubyObject[] damn_java_hack = {};
 		IRubyObject instance = dispatcher.newInstance(damn_java_hack, Block.NULL_BLOCK);
 		instance.callMethod(dispatcher.getRuntime().getCurrentContext(), "dispatch", args);
-		System.out.println("Ruby::Dispatcher fertig");
 	
+	}
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+		dispatch(request,response);
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+		dispatch(request,response);
+	}
+	
+	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+		dispatch(request,response);
+	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+		dispatch(request,response);
 	}
 
 }

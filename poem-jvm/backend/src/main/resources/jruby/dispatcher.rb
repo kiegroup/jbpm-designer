@@ -1,5 +1,7 @@
 require 'java'
 require 'handler'
+require 'info_handler'
+
 include_class 'org.b3mn.poem.Identity'
 include_class 'org.b3mn.poem.Access'
 
@@ -26,7 +28,7 @@ Handlers['self']['owner'] = Proc.new do |interaction|
 end
 
 Handlers['info']['read'] = Proc.new do |interaction|
-  Handler::DirectoryReadHandler.new.handleRequest(interaction)
+  Handler::InfoHander.new.handleRequest(interaction)
 end
 
 class Dispatcher

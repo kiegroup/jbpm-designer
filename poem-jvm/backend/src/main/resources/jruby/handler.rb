@@ -28,20 +28,11 @@ include_class 'org.b3mn.poem.Representation'
         send "do#{interaction.request.getMethod.capitalize}", interaction
       end
     end
-    
-    class DirectoryReadHandler < DefaultHandler
-      @@map_date = 
-      { 'today'             => %Q{and r.updated >= current_date},
-        'last_seven_days'   => %Q{and r.updated >= current_date-integer '7'},
-        'last_thirty_days'  => %Q{and r.updated >= current_date-integer '30' and r.updated < current_date-integer '7'},
-        'this_year'         => %Q{and extract(year from r.updated) = extract(year from current_date) and r.updated < current_date-integer '30'}}
-      def doGet(interaction)
-      end
-    end
   
     class ModelReadHandler < DefaultHandler
       def doGet(interaction)
         representation = interaction.object.read
+        interaction.response.setStatus(200)
         out = interaction.response.getWriter
         
         out.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
@@ -95,7 +86,14 @@ include_class 'org.b3mn.poem.Representation'
       def doPut(interaction)
         doPost(interaction)
       end
+      
       def doPost(interaction)
+        representation = interaction.object.read
+        interaction.params.each do |key, value|
+          representation.send "set#{key.capitalize}", value
+        end
+        interaction.object.update(representation)
+        interaction.response.setStatus(200)
       end
     end
   

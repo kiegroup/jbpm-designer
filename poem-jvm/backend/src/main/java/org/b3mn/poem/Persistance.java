@@ -23,4 +23,8 @@ public class Persistance {
 		 session.beginTransaction();
 		 return session;
 	 }
+	 
+	 public static void commit() {
+		 sessionFactory.getCurrentSession().getTransaction().commit();
+	 }
 }

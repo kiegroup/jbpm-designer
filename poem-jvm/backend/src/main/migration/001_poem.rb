@@ -19,8 +19,8 @@ class Poem < ActiveRecord::Migration
       t.column :created,    'timestamp with time zone', :null => false
       t.column :updated,    'timestamp with time zone', :null => false
       
-      t.column :content,    :xml,  :null => false
-      t.column :type,		:text, :null => false, :default => 'undefined'
+      t.column :content,    :text, :null => false
+      t.column :type,		    :text, :null => false, :default => 'undefined'
     end
     
     execute %q{

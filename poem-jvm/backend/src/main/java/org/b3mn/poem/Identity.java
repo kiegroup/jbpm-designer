@@ -3,7 +3,8 @@ package org.b3mn.poem;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Iterator;
-
+import java.util.Date;
+import org.hibernate.HibernateException;
 @Entity
 public class Identity {
 
@@ -33,7 +34,7 @@ public class Identity {
 	
 	@SuppressWarnings("unchecked")
 	public static List<Access> subject(String openid) {
-		return Persistance.getSession().
+		return (List<Access>) Persistance.getSession().
 		createSQLQuery("select {access.*} from {access} where subject_name=?")
 		.addEntity("access", Access.class)
 	    .setString(0, openid).list();
@@ -55,7 +56,7 @@ public class Identity {
 		.setString("subject", openId)
 	    .setString("object", this.getUri())
 	    .setString("relation", rel).list();
-		
+		Persistance.commit();
 		Iterator<Access> rights = access.iterator();
 		Access writer = new Access(); 
 		Access reader = new Access();
@@ -86,16 +87,25 @@ public class Identity {
 	    .setLong("ident_id", this.id).uniqueResult();
 	}
 	
+	public void update(Representation rep) {
+		try {
+		Date date = new Date(System.currentTimeMillis());
+		rep.setUpdated(date);
+		Persistance.getSession().flush();
+		Persistance.commit();
+		}
+		catch(HibernateException ex) {
+			System.err.println(ex.getMessage());
+		}
+	}
+	
 	/*public static Representation create() {
-		// insert tralala stored procedure by hagen
-	}
-
+	// insert tralala stored procedure by hagen
+		Persistance.getSession().
+		createSQLQuery();
+	}*/
 	
-	public Representation update(Representation rep) {
-		// update representation values rep where rep.ident=i.id and i.id=this.id
-	}
-	
-	public void delete() {
+	/*public void delete() {
 		// delete Identity on cascade
 	}*/
 }
