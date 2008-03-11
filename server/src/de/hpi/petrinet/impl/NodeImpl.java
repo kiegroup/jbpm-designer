@@ -17,7 +17,7 @@ public abstract class NodeImpl implements Node {
 	}
 
 	public void setId(String label) {
-		this.id = label;
+		this.id = label.replace("#", "");
 	}
 
 	public List<FlowRelationship> getIncomingFlowRelationships() {

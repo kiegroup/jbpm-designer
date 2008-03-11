@@ -2,9 +2,9 @@
 		
 		<!-- plugin for PNML export and deployment -->
 
-<!--	<optional-plugin>
+<!--			<optional-plugin>
 			<condition required-stencilsets="epc.json" mode="all" />	
 			<plugin />
 		</optional-plugin>
-		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport" />		
--->	</plugins>		<properties>		<property group="File" index="1" />		<property group="Edit" index="2" />		</properties>	</config>
+-->		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport" />		
+	</plugins>		<properties>		<property group="File" index="1" />		<property group="Edit" index="2" />		</properties>	</config>
