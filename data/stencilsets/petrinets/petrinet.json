@@ -23,10 +23,81 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"text",
-					"length":"20",
+					"refToView":"",
+					"length":"",
 					"wrapLines":true
-				}
+				},
+				{
+					"id":"engine",
+					"type":"Boolean",
+					"title":"For engine",
+					"value":"false",
+					"description":".",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"version",
+					"type":"String",
+					"title":"Version",
+					"value":"",
+					"description":"This defines the Version number of the Diagram.",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"author",
+					"type":"String",
+					"title":"Author",
+					"value":"",
+					"description":"This holds the name of the author of the Diagram.",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"language",
+					"type":"String",
+					"title":"Language",
+					"value":"English",
+					"description":"This holds the name of the language in which text is written.",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"creationdate",
+					"type":"Date",
+					"title":"CreationDate",
+					"value":"10/07/07",
+					"description":"This defines the date on which the Diagram was created.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				},
+				{
+					"id":"modificationdate",
+					"type":"Date",
+					"title":"ModificationDate",
+					"value":"10/07/07",
+					"description":"This defines the date on which the Diagram was last modified.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"The modeler may add optional text documentation about the Diagram.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},				
 			]
 		},
  		{
@@ -38,11 +109,20 @@
 			"view":"node.transition.svg",
 			"icon":"new_transition.png",
 			"roles": [
-				"from_transition",
-				"to_transition",
+				"transition",
 				"fromtoall"
 			],
 			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},			
 				{
 					"id":"title",
 					"type":"String",
@@ -53,9 +133,82 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
-				}
+				},
+				{
+					"id":"firetype",
+					"type":"Choice",
+					"title":"Fire type",
+					"value":"Automatic",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"automatic",
+							"title":"c1",
+							"value":"Automatic",
+							"refToView":""
+						},
+						{
+							"id":"manual",
+							"title":"c2",
+							"value":"Manual",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"href",
+					"type":"String",
+					"title":"Href",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"omodel",
+					"type":"String",
+					"title":"Output model",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"oform",
+					"type":"String",
+					"title":"Output form",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"guard",
+					"type":"String",
+					"title":"Guard",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}															
 			]
 		},
  		{
@@ -67,11 +220,20 @@
 			"view":"node.transition.empty.svg",
 			"icon":"new_transition_empty.png",
 			"roles": [
-				"from_transition",
-				"to_transition",
+				"transition",
 				"fromtoall"
 			],
 			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},			
 				{
 					"id":"title",
 					"type":"String",
@@ -82,11 +244,167 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
-				}
+				},
+				{
+					"id":"firetype",
+					"type":"String",
+					"title":"Fire type",
+					"value":"Automatic",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+				},			
+				{
+					"id":"href",
+					"type":"String",
+					"title":"Href",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"omodel",
+					"type":"String",
+					"title":"Output model",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"oform",
+					"type":"String",
+					"title":"Output form",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"guard",
+					"type":"String",
+					"title":"Guard",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}					
 			]
 		},
+ 		{
+			"type": "node",
+			"id":"VerticalEmptyTransition",
+			"title":"Empty Transition",
+			"groups":["Petri net"],
+			"description":"An empty transition",
+			"view":"node.transition.emptyV.svg",
+			"icon":"new_transition_emptyV.png",
+			"roles": [
+				"transition",
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},			
+				{
+					"id":"title",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"firetype",
+					"type":"String",
+					"title":"Fire type",
+					"value":"Automatic",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+				},			
+				{
+					"id":"href",
+					"type":"String",
+					"title":"Href",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"omodel",
+					"type":"String",
+					"title":"Output model",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"oform",
+					"type":"String",
+					"title":"Output form",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"guard",
+					"type":"String",
+					"title":"Guard",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}						
+			]			
+		},		
 		{
 			"type": "node",
 			"id":"Place",
@@ -97,11 +415,20 @@
 			"icon":"new_place.png",
 			"intersectionType":"ellipse",			
 			"roles": [
-				"from_place",
-				"to_place",
+				"place",
 				"fromtoall"
 			],
 			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},			
 				{
 					"id":"title",
 					"type":"String",
@@ -115,34 +442,230 @@
 					"length":""
 				},
 				{
-					"id":"isMarked",
+					"id":"external",
 					"type":"Boolean",
-					"title":"isMarked",
-					"value":false,
+					"title":"External",
+					"value":"false",
 					"description":"",
 					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"exttype",
+					"type":"Choice",
+					"title":"External type",
+					"value":"Push",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"push",
+							"title":"c1",
+							"value":"Push",
+							"refToView":""
+						},
+						{
+							"id":"pull",
+							"title":"c2",
+							"value":"Pull",
+							"refToView":""
+						}
+					]
+				},				
+				{
+					"id":"href",
+					"type":"String",
+					"title":"Href",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"locatornames",
+					"type":"String",
+					"title":"Locator Names",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"locatortypes",
+					"type":"String",
+					"title":"Locator Types",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"locatorexpr",
+					"type":"String",
+					"title":"Locator Expressions",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},					
+							
+
+			]
+		},
+		{
+			"type": "node",
+			"id":"Mark",
+			"title":"Mark",
+			"groups":["Petri net"],
+			"description":"A mark.",
+			"view":"node.mark.svg",
+			"icon":"new_mark.png",
+			"intersectionType":"ellipse",			
+			"roles": [
+				"mark"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
 					"optional":false,
-					"refToView":"marke"
+					"length":"50"
+				},		
+				{
+					"id":"text",
+					"type":"String",
+					"title":"Text",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Label",
+			"title":"Label",
+			"groups":["Petri net"],
+			"description":"A text node. Can be attached to marks.",
+			"view":"node.text.svg",
+			"icon":"new_annotation.png",
+			"roles": [
+				"text_node",
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},					
+				{
+					"id":"label",
+					"type":"String",
+					"title":"Label",
+					"value":"[]",
+					"description":"allowed: (a,new)/[new,a]/a",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"40",
+					"wrapLines":true
 				}
 			]
 		},
 		{
 			"type": "edge",
-			"id":"Flow",
-			"title":"Flow",
+			"id":"Arc",
+			"title":"Arc",
 			"description":"",
 			"groups":["Petri net"],
 			"view":"connection.flow.svg",
-			"icon":"new_flow.png",
+			"icon":"new_flow_normal.png",
 			"roles": [
-				"flowobj",
 				"fromtoall"
 			],
 			"properties": [
 				{
-					"id":"Label",
+					"id":"id",
 					"type":"String",
-					"title":"Title",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},					
+				{
+					"id":"label",
+					"type":"String",
+					"title":"Label",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":""
+				},
+				{
+					"id":"transformation",
+					"type":"String",
+					"title":"Transformation href",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}								
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Description",
+			"title":"Description",
+			"description":"line for a description",
+			"groups":["Petri net"],
+			"view":"connection.annotation.svg",
+			"icon":"new_flow_annotation.png",
+			"roles": [
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},					
+				{
+					"id":"label",
+					"type":"String",
+					"title":"value",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -157,17 +680,30 @@
 	"rules": {
 		"connectionRules": [
 			{
-				"role":"Flow",
+				"role":"Arc",
 				"connects": [
 					{
-						"from":"from_transition",
-						"to":["to_place"]
+						"from":"transition",
+						"to":["place"]
 					},
 					{
-						"from":"from_place",
-						"to":["to_transition"]
-					}
+						"from":"place",
+						"to":["transition"]
+					},
 				]
+			},
+			{
+				"role":"Description",
+				"connects": [
+					{
+						"from":"mark",
+						"to":["text_node"]
+					},
+					{
+						"from":"text_node",
+						"to":["mark"]
+					},	
+				]				
 			}	
 		],
 		"containmentRules": [
@@ -176,6 +712,12 @@
 				"contains": [
 					"fromtoall"
 				]
+			},
+			{
+				"role":"place",
+				"contains": [
+					"mark"
+				]	
 			},
 		]
 	}

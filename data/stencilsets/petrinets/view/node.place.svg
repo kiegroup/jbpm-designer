@@ -2,13 +2,12 @@
 <svg
    xmlns="http://www.w3.org/2000/svg"
    xmlns:vibe="http://b3mn.org/vibe/"
+   xmlns:oryx="http://www.b3mn.org/oryx"
    width="40"
    height="40"
    version="1.1">
-  <g>
-    <circle cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1"/>
-    
-    <circle id="marke" cx="16" cy="16" r="10" stroke="black" fill="black" stroke-width="1"/>
-    <text id="text" x="16" y="16" vibe:defaultPosition="middleRight"></text>
+  <g pointer-events="fill" oryx:minimumSize="32 32">
+  	<circle oryx:resize="vertical horizontal" cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1"/>
+ 	<text font-size="12" id="text" x="28" y="4" stroke="black"></text>
   </g>
 </svg>
