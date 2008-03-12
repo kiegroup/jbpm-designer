@@ -18,10 +18,7 @@ public class Representation {
     private Date created;
     private Date updated;
     private String content;
-    
-	public int getIdent_id() {
-		return ident_id;
-	}
+ 
     
     public String getContent() {
 		return content;
@@ -41,11 +38,11 @@ public class Representation {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getIdent_Id() {
-		return id;
+	public int getIdent_id() {
+		return ident_id;
 	}
-	public void setIdent_Id(int id) {
-		this.id = id;
+	public void setIdent_id(int ident_id) {
+		this.ident_id = ident_id;
 	}
 	public String getLanguage() {
 		return language;

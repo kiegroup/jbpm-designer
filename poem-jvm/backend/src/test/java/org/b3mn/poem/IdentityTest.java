@@ -3,7 +3,7 @@ package org.b3mn.poem;
 import static org.junit.Assert.*;
 
 import java.util.List;
-
+import java.util.Date;
 import org.junit.Test;
 
 public class IdentityTest {
@@ -27,6 +27,12 @@ public class IdentityTest {
 		String new_Term = access.getAccess_term();
 
 		assertEquals(term, new_Term);
+	}
+	
+	@Test public void getModels() {
+		String openid = "http://ole.myopenid.com/";
+		List<Representation> models = Identity.instance(openid).getModels("bpmn", new Date(0), new Date(109,0,1));
+		assertEquals(7,models.size());
 	}
 
 }

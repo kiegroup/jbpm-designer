@@ -1,3 +1,4 @@
+
 require 'java'
 require 'handler'
 require 'info_handler'
@@ -17,7 +18,7 @@ class Dispatcher
       
     openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid")
     uri = request.getPathInfo
-    if(getRelation(uri) == 'model')
+    if(getRelation(uri) == '/model')
       handler = Handler::CollectionHandler.new
       handler.handleRequest(Interaction.new(Identity.instance(openid), nil, getParams(request), request, response))
     else

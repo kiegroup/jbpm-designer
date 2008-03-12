@@ -127,6 +127,7 @@ class Poem < ActiveRecord::Migration
                 subject_name.uri    as subject_name,
                 object_name.id      as object_id,
                 object_name.uri     as object_name,
+                access.id           as access_id,
                 access.scheme		    as access_scheme,	
                 access.term			    as access_term,
                 plugin.rel			    as plugin_relation,

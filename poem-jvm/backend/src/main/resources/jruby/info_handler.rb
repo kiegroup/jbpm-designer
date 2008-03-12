@@ -1,5 +1,13 @@
-require 'handler'
-#require 'activesupport'
+module Projection
+  def self.project(obj, keys)
+    output = {}
+    keys.each do |key|
+      method = "get#{key.capitalize}"
+      output[key.downcase] = obj.send(method).to_s if obj.respond_to?(method)
+    end
+    return output
+  end
+end
 
 module Handler
   class CollectionHandler < DefaultHandler
@@ -14,7 +22,7 @@ module Handler
         if interaction.params['to']
           to = Time.parse(interaction.params['to'])
         else
-          to = Time.now
+          to = Time.now+100000
         end
         
         if interaction.params['type']
@@ -24,19 +32,32 @@ module Handler
         end
         
         models = interaction.subject.getModels(type, from, to)
+        out = interaction.response.getWriter
         #TODO: Each representation and access to json inda response
+        output = []
         models.each do |model|
-          Identity.instance(model.getIdent_id).getAccess
+          info = Projection.project(model, %w{Title Summary Updated Created Type})
+          access = []
+          Identity.instance(model.getIdent_id).getAccess.each do |right|
+            access << Projection.project(right, %w{Subject Predicate Url})
+          end
+          output << {'info'=>info,'access'=>access}
         end
+        
+        out.print(ActiveSupport::JSON.encode(output))
       end
     end
 
   class InfoHandler < DefaultHandler
+    require 'rubygems'
+    require 'activesupport'
       def doGet(interaction)
         #TODO: Write Response as json
         interaction.response.setStatus(200)
+        representation = interaction.object.read
         out = interaction.response.getWriter
-        #out.print(ActiveSupport::Json.encode(interaction.object.read))
+        output = Projection.project(representation, %w{Title Summary Updated Created Type})
+        out.print(ActiveSupport::JSON.encode(output))
       end
       
       def doPut(interaction)

@@ -14,6 +14,7 @@ public class Access implements Serializable {
     private String object_name;
     private String access_scheme;	
     private String access_term;
+    private long access_id;
     private String plugin_relation;
     private String scheme;
     private String term;
@@ -44,6 +45,9 @@ public class Access implements Serializable {
 	}
 	public long getSubject_id() {
 		return subject_id;
+	}
+	public long getAccess_id() {
+		return access_id;
 	}
 	public String getSubject_name() {
 		return subject_name;
@@ -84,9 +88,22 @@ public class Access implements Serializable {
 	public void setTerm(String term) {
 		this.term = term;
 	}
+	public void setAccess_id(long access_id) {
+		this.access_id = access_id;
+	}
+	public String getUrl() {
+		return this.getObject_name() + "?id=" +  this.getAccess_id();
+	}
+	public String getSubject() {
+		return this.getContext_name();
+	}
+	public String getPredicate() {
+		return this.getAccess_term();
+	}
 	
 	public int hashCode() {
 		int result = 0;
+		result+= access_id;
 		result+= context_id;
 		result+= context_name.hashCode();
 		result+= subject_id;

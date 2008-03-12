@@ -32,6 +32,14 @@ public class Identity {
 			.uniqueResult();
 	}
 	
+	public static Identity instance(long id) {
+		return (Identity) Persistance.getSession().
+			createSQLQuery("select {identity.*} FROM {identity} where id=:id")
+			.addEntity("identity", Identity.class)
+			.setLong("id", id)
+			.uniqueResult();
+	}
+	
 	/*public static Identity instance(String uri, String type, Identity owner) {
 
 	}*/
@@ -39,10 +47,10 @@ public class Identity {
 	@SuppressWarnings("unchecked")
 	public List<Representation> getModels(String type, Date from, Date to) {
 		return (List<Representation>) Persistance.getSession().
-		createSQLQuery("select {representation.*} from access as a, identity as i,{representation} as r" +
-					"where a.subject_name=:subject" +
-					"and r.type like :type and r.updated>=:from and r.updated <=:to" +
-					"and i.id=a.object_id and i.id=r.ident_id")
+		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r" +
+					" where a.subject_name=:subject" +
+					" and r.type like :type and r.updated >= :from and r.updated <= :to" +
+					" and i.id=a.object_id and i.id=r.ident_id")
 		.addEntity("representation", Representation.class)
 	    .setString("subject", this.getUri())
 	    .setString("type", type)
