@@ -1,8 +1,8 @@
 require 'handler'
-require 'activesupport'
+#require 'activesupport'
 
-  module Handler
-    class CollectionHandler < DefaultHandler
+module Handler
+  class CollectionHandler < DefaultHandler
 
       def doGet(interaction)
         if interaction.params['from']
@@ -31,27 +31,22 @@ require 'activesupport'
       end
     end
 
-    class InfoHandler < DefaultHandler
+  class InfoHandler < DefaultHandler
       def doGet(interaction)
         #TODO: Write Response as json
         interaction.response.setStatus(200)
         out = interaction.response.getWriter
-        out.print(ActiveSupport::Json.encode(interaction.object.read))
+        #out.print(ActiveSupport::Json.encode(interaction.object.read))
       end
-    end
-
-    class InfoWriteHandler < InfoHandler
+      
       def doPut(interaction)
-          representation = interaction.object.read
-          interaction.params.each do |key, value|
-            representation.send "set#{key.capitalize}", value
-          end
-          representation.update
-          interaction.response.setStatus(200)
+        representation = interaction.object.read
+        interaction.params.each do |key, value|
+          representation.send "set#{key.capitalize}", value
         end
+        representation.update
+        interaction.response.setStatus(200)
       end
     end
 
-
-  end
 end

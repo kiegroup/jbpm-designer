@@ -21,7 +21,7 @@ public class IdentityTest {
 	}
 	
 	@Test public void access() {
-		String term = "owner", openid = "http://ole.myopenid.com/", uri = "/data/model/10", rel="self";
+		String term = "owner", openid = "http://ole.myopenid.com/", uri = "/data/model/10", rel="/self";
 		Identity model = Identity.instance(uri);
 		Access access = model.access(openid,rel);
 		String new_Term = access.getAccess_term();

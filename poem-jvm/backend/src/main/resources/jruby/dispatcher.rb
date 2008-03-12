@@ -7,50 +7,41 @@ include_class 'org.b3mn.poem.Access'
 
 Interaction = Struct.new :subject, :object, :params, :request, :response
 
-Handlers = Hash.new do |handler, relation|
-  handler[relation] = Hash.new do |relations, term|
-    schemes[term] = Proc.new do |interaction|
-      PoEM::Handler::DefaultHandler.new.handleRequest(interaction)
-    end
-  end
-end
-
-Handlers['self']['read'] = Proc.new do |interaction|
-  Handler::ModelReadHandler.new.handleRequest(interaction)
-end
-Handlers['self']['write'] = Proc.new do |interaction|
-  Handler::ModelWriteHandler.new.handleRequest(interaction)
-end
-Handlers['self']['owner'] = Proc.new do |interaction|
-  Handler::ModelWriteHandler.new.handleRequest(interaction)
-end
-
-Handlers['info']['read'] = Proc.new do |interaction|
-  Handler::InfoHandler.new.handleRequest(interaction)
-end
-Handlers['info']['write'] = Proc.new do |interaction|
-  Handler::InfoWriteHandler.new.handleRequest(interaction)
-end
-Handlers['info']['access'] = Proc.new do |interaction|
-  Handler::InfoWriteHandler.new.handleRequest(interaction)
-end
-
-Handlers['model'][''] = Proc.new do |interaction|
-  Handler::CollectionHandler.new.handleRequest(interaction)
-end
-
 class Dispatcher
   def dispatch(request,response)
-
+    rights = {
+      'read' => ['Get'],
+      'write' => ['Get', 'Put'],
+      'owner' => ['Get', 'Post', 'Put', 'Delete']
+    }
+      
     openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid")
     uri = request.getPathInfo
     if(getRelation(uri) == 'model')
-      handler = Handlers['model']['']
-      handler.call(Interaction.new(Identity.instance(openid), nil, getParams(request), request, response))
+      handler = Handler::CollectionHandler.new
+      handler.handleRequest(Interaction.new(Identity.instance(openid), nil, getParams(request), request, response))
     else
-      servlet = Identity.instance(getObjectPath(uri)).access(openid, getRelation(uri))
-      handler = Handlers[servlet.getPlugin_relation][servlet.getAccess_term]
-      handler.call(Interaction.new(Identity.instance(openid), Identity.instance(uri), getParams(request), request, response))
+      access = Identity.instance(getObjectPath(uri)).access(openid, getRelation(uri))
+      unless access.nil?
+        if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
+          if (Handler.constants.include?(access.getTerm))
+            handler = Handler.module_eval("#{access.getTerm}").new
+            handler.handleRequest(Interaction.new(Identity.instance(openid), Identity.instance(getObjectPath(uri)), getParams(request), request, response))
+          else
+            response.setStatus(501)
+            out = response.getWriter
+            out.println("Handler does not exist!")
+          end
+        else
+          response.setStatus(403)
+          out = response.getWriter
+          out.println("Forbidden!")
+        end
+      else
+        response.setStatus(404)
+        out = response.getWriter
+        out.println("Unknown Relation!")
+      end
     end
   end
   

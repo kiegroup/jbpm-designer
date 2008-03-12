@@ -109,13 +109,13 @@ class Testdata < ActiveRecord::Migration
     
     execute %q{
       insert into "plugin"(rel, scheme, term)
-      	select 'self', 'ruby', 'ModelHandler';
+      	select '/self', 'ruby', 'ModelHandler';
       insert into "plugin"(rel, scheme, term)
-      	select 'info', 'ruby', 'ModelInfoHandler';
+      	select '/info', 'ruby', 'ModelInfoHandler';
       insert into "plugin"(rel, scheme, term)
-        select 'access', 'ruby', 'ModelAccessHander';
+        select '/access', 'ruby', 'ModelAccessHander';
       insert into "plugin"(rel, scheme, term)
-        select 'info;access', 'ruby', 'ModelMetaHandler';
+        select '/info;access', 'ruby', 'ModelMetaHandler';
       	
     }
 

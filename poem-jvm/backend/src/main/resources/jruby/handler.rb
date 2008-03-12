@@ -29,7 +29,7 @@ include_class 'org.b3mn.poem.Representation'
       end
     end
   
-    class ModelReadHandler < DefaultHandler
+    class ModelHandler < DefaultHandler
       def doGet(interaction)
         representation = interaction.object.read
         interaction.response.setStatus(200)
@@ -80,9 +80,7 @@ include_class 'org.b3mn.poem.Representation'
         out.println("</body>\n")
       	out.println("</html>\n")
       end
-    end
-    
-    class ModelWriteHandler < ModelReadHandler
+      
       def doPut(interaction)
         doPost(interaction)
       end
