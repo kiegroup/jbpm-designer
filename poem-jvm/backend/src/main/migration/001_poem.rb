@@ -121,15 +121,17 @@ class Poem < ActiveRecord::Migration
     
     execute %q{
       create view access as
-        select  subject_name.id     as subject_id,
+        select  context_name.id     as context_id,
+                context_name.uri    as context_name,
+                subject_name.id     as subject_id,
                 subject_name.uri    as subject_name,
                 object_name.id      as object_id,
                 object_name.uri     as object_name,
-                access.scheme		as access_scheme,	
-                access.term			as access_term,
-                plugin.rel			as plugin_relation,
-                plugin.scheme		as scheme,
-                plugin.term			as term
+                access.scheme		    as access_scheme,	
+                access.term			    as access_term,
+                plugin.rel			    as plugin_relation,
+                plugin.scheme		    as scheme,
+                plugin.term			    as term
         from    "interaction" as access,
                 "structure"   as context,
                 "identity"    as context_name,
@@ -137,8 +139,8 @@ class Poem < ActiveRecord::Migration
                 "identity"    as subject_name,
                 "structure"   as object_axis,
                 "identity"    as object_name,
-                "plugin"	  as plugin
-        where   access.object = context.hierarchy
+                "plugin"	    as plugin
+        where   access.subject = context.hierarchy
             and context.ident_id = context_name.id
             and (     access.subject = subject_axis.hierarchy
                   or  (access.subject_descend and subject_axis.hierarchy like access.subject || '_%'))

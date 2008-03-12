@@ -104,14 +104,19 @@ class Testdata < ActiveRecord::Migration
       	from identity where uri = '/data/model/10';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
         select id, 'bpmn', 'Secret Process', 'How to rule the world', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
-    	from identity where uri = '/data/model/internal/1';
+    	from identity where uri = '/data/model/11';
     }
     
     execute %q{
       insert into "plugin"(rel, scheme, term)
       	select 'self', 'ruby', 'ModelHandler';
       insert into "plugin"(rel, scheme, term)
-      	select 'info', 'ruby', 'ModelMetaHandler';
+      	select 'info', 'ruby', 'ModelInfoHandler';
+      insert into "plugin"(rel, scheme, term)
+        select 'access', 'ruby', 'ModelAccessHander';
+      insert into "plugin"(rel, scheme, term)
+        select 'info;access', 'ruby', 'ModelMetaHandler';
+      	
     }
 
  

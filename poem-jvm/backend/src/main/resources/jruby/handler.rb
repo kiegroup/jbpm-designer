@@ -89,10 +89,8 @@ include_class 'org.b3mn.poem.Representation'
       
       def doPost(interaction)
         representation = interaction.object.read
-        interaction.params.each do |key, value|
-          representation.send "set#{key.capitalize}", value
-        end
-        interaction.object.update(representation)
+        representation.setContent(params[data])
+        representation.update
         interaction.response.setStatus(200)
       end
     end

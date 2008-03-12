@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Date;
-import org.hibernate.HibernateException;
+
 @Entity
 public class Identity {
 
@@ -32,20 +32,33 @@ public class Identity {
 			.uniqueResult();
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static List<Access> subject(String openid) {
-		return (List<Access>) Persistance.getSession().
-		createSQLQuery("select {access.*} from {access} where subject_name=?")
-		.addEntity("access", Access.class)
-	    .setString(0, openid).list();
-	}
+	/*public static Identity instance(String uri, String type, Identity owner) {
+
+	}*/
 	
 	@SuppressWarnings("unchecked")
-	public static List<Access> object(String uri) {
+	public List<Representation> getModels(String type, Date from, Date to) {
+		return (List<Representation>) Persistance.getSession().
+		createSQLQuery("select {representation.*} from access as a, identity as i,{representation} as r" +
+					"where a.subject_name=:subject" +
+					"and r.type like :type and r.updated>=:from and r.updated <=:to" +
+					"and i.id=a.object_id and i.id=r.ident_id")
+		.addEntity("representation", Representation.class)
+	    .setString("subject", this.getUri())
+	    .setString("type", type)
+	    .setDate("from", from)
+	    .setDate("to", to)
+	    .list();
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Access> getAccess() {
 		return (List<Access>) Persistance.getSession().
-		createSQLQuery("select {access.*} from {access} where object_name=?")
+		createSQLQuery("select DISTINCT ON(context_name) {access.*} from {access} where object_name=?")
 		.addEntity("access", Access.class)
-	    .setString(0, uri).list();
+	    .setString(0, this.getUri()).list();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -86,24 +99,6 @@ public class Identity {
 		.addEntity("representation", Representation.class)
 	    .setLong("ident_id", this.id).uniqueResult();
 	}
-	
-	public void update(Representation rep) {
-		try {
-		Date date = new Date(System.currentTimeMillis());
-		rep.setUpdated(date);
-		Persistance.getSession().flush();
-		Persistance.commit();
-		}
-		catch(HibernateException ex) {
-			System.err.println(ex.getMessage());
-		}
-	}
-	
-	/*public static Representation create() {
-	// insert tralala stored procedure by hagen
-		Persistance.getSession().
-		createSQLQuery();
-	}*/
 	
 	/*public void delete() {
 		// delete Identity on cascade

@@ -5,7 +5,9 @@ import java.io.Serializable;
 public class Access implements Serializable {
 	
 	private static final long serialVersionUID = 2216329517850461299L;
-	
+
+    private long context_id;
+    private String context_name;
     private long subject_id;
     private String subject_name;
     private long object_id;
@@ -21,6 +23,12 @@ public class Access implements Serializable {
 	}
 	public String getAccess_term() {
 		return access_term;
+	}
+	public long getContext_id() {
+		return context_id;
+	}
+	public String getContext_name() {
+		return context_name;
 	}
 	public long getObject_id() {
 		return object_id;
@@ -55,6 +63,12 @@ public class Access implements Serializable {
 	public void setObject_name(String object_name) {
 		this.object_name = object_name;
 	}
+	public void setContext_id(long context_id) {
+		this.context_id = context_id;
+	}
+	public void setContext_name(String context_name) {
+		this.context_name = context_name;
+	}
 	public void setAccess_scheme(String access_scheme) {
 		this.access_scheme = access_scheme;
 	}
@@ -73,6 +87,8 @@ public class Access implements Serializable {
 	
 	public int hashCode() {
 		int result = 0;
+		result+= context_id;
+		result+= context_name.hashCode();
 		result+= subject_id;
 		result+= subject_name.hashCode();
 		result+= object_id;

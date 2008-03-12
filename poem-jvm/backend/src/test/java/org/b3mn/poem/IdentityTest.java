@@ -2,7 +2,7 @@ package org.b3mn.poem;
 
 import static org.junit.Assert.*;
 
-import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -14,25 +14,10 @@ public class IdentityTest {
 		assertEquals(Identity.instance(test).getUri(), test);
 	}
 	
-	@Test public void subject() {
-		String openid = "http://ole.myopenid.com/";
-		Iterator<Access> access = Identity.subject(openid).iterator();
-		while(access.hasNext()) {
-			Access item = access.next();
-			System.err.println(item.getObject_name());
-			assertEquals(item.getSubject_name(), openid);
-		}
-	}
-	
-	@Test public void object() {
+	@Test public void getAcccess() {
 		String uri = "/data/model/10";
-		String openid = "http://ole.myopenid.com/";
-		Iterator<Access> access = Identity.object(uri).iterator();
-		while(access.hasNext()) {
-			Access item = access.next();
-			if(item.getAccess_term().equalsIgnoreCase("owner"))
-				assertEquals(item.getSubject_name(), openid);
-		}
+		List<Access> access = Identity.instance(uri).getAccess();
+		assertEquals(2, access.size());
 	}
 	
 	@Test public void access() {
@@ -43,6 +28,5 @@ public class IdentityTest {
 
 		assertEquals(term, new_Term);
 	}
-
 
 }
