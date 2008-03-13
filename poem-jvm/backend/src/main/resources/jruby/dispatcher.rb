@@ -1,4 +1,3 @@
-
 require 'java'
 require 'handler'
 require 'info_handler'
@@ -18,16 +17,16 @@ class Dispatcher
       
     openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid")
     uri = request.getPathInfo
-    if(getRelation(uri) == '/model')
+    if(Helper.getRelation(uri) == '/model')
       handler = Handler::CollectionHandler.new
-      handler.handleRequest(Interaction.new(Identity.instance(openid), nil, getParams(request), request, response))
+      handler.handleRequest(Interaction.new(Identity.instance(openid), nil, Helper.getParams(request), request, response))
     else
-      access = Identity.instance(getObjectPath(uri)).access(openid, getRelation(uri))
+      access = Identity.instance(Helper.getObjectPath(uri)).access(openid, Helper.getRelation(uri))
       unless access.nil?
         if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
           if (Handler.constants.include?(access.getTerm))
             handler = Handler.module_eval("#{access.getTerm}").new
-            handler.handleRequest(Interaction.new(Identity.instance(openid), Identity.instance(getObjectPath(uri)), getParams(request), request, response))
+            handler.handleRequest(Interaction.new(Identity.instance(openid), Identity.instance(Helper.getObjectPath(uri)), Helper.getParams(request), request, response))
           else
             response.setStatus(501)
             out = response.getWriter
@@ -45,8 +44,18 @@ class Dispatcher
       end
     end
   end
+end
+module Helper
+  def self.toHash(obj, keys)
+    output = {}
+    keys.each do |key|
+      method = "get#{key.capitalize}"
+      output[key.downcase] = obj.send(method).to_s if obj.respond_to?(method)
+    end
+    return output
+  end
   
-  def getParams(request)
+  def self.getParams(request)
     params = {}
     request.getParameterNames.each do |key|
       params[key] = request.getParameter(key)
@@ -54,11 +63,11 @@ class Dispatcher
     return params
   end
   
-  def getObjectPath(uri)
+  def self.getObjectPath(uri)
     return uri.gsub(/(\/[^\/]+\/?)$/, "")
   end
   
-  def getRelation(uri)
+  def self.getRelation(uri)
     return uri.match(/(\/[^\/]+\/*)$/).to_s.gsub(/\/*$/, "")
   end
   

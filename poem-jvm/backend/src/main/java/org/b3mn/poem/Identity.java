@@ -101,6 +101,12 @@ public class Identity {
 
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<String> getRelations() {
+		return (List<String>)Persistance.getSession().
+		createSQLQuery("select rel from plugin").list();
+	}
+	
 	public Representation read() {
 		return (Representation)Persistance.getSession().
 		createSQLQuery("select {representation.*} from {representation} where ident_id = :ident_id")

@@ -1,14 +1,3 @@
-module Projection
-  def self.project(obj, keys)
-    output = {}
-    keys.each do |key|
-      method = "get#{key.capitalize}"
-      output[key.downcase] = obj.send(method).to_s if obj.respond_to?(method)
-    end
-    return output
-  end
-end
-
 module Handler
   class CollectionHandler < DefaultHandler
 
@@ -22,7 +11,7 @@ module Handler
         if interaction.params['to']
           to = Time.parse(interaction.params['to'])
         else
-          to = Time.now+100000
+          to = Time.now
         end
         
         if interaction.params['type']
@@ -36,12 +25,17 @@ module Handler
         #TODO: Each representation and access to json inda response
         output = []
         models.each do |model|
-          info = Projection.project(model, %w{Title Summary Updated Created Type})
-          access = []
-          Identity.instance(model.getIdent_id).getAccess.each do |right|
-            access << Projection.project(right, %w{Subject Predicate Url})
+          model_identity = Identity.instance(model.getIdent_id)
+          uris = []
+          interaction.subject.getRelations.each do |rel|
+            uris << @@hostname + model_identity.getUri + rel
           end
-          output << {'info'=>info,'access'=>access}
+          info = Helper.toHash(model, %w{Title Summary Updated Created Type})
+          access = []
+          model_identity.getAccess.each do |right|
+            access << Helper.toHash(right, %w{Subject Predicate Url})
+          end
+          output << {'uris'=>uris, 'info'=>info,'access'=>access}
         end
         
         out.print(ActiveSupport::JSON.encode(output))
@@ -56,7 +50,7 @@ module Handler
         interaction.response.setStatus(200)
         representation = interaction.object.read
         out = interaction.response.getWriter
-        output = Projection.project(representation, %w{Title Summary Updated Created Type})
+        output = Helper.toHash(representation, %w{Title Summary Updated Created Type})
         out.print(ActiveSupport::JSON.encode(output))
       end
       

@@ -92,7 +92,7 @@ public class Access implements Serializable {
 		this.access_id = access_id;
 	}
 	public String getUrl() {
-		return this.getObject_name() + "?id=" +  this.getAccess_id();
+		return this.getObject_name() + "/access?id=" +  this.getAccess_id();
 	}
 	public String getSubject() {
 		return this.getContext_name();
