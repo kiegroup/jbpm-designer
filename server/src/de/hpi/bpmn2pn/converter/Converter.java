@@ -61,12 +61,9 @@ public abstract class Converter {
 		createStartPlaces(net, c);
 		handleSequenceFlows(net, c);
 		handleMessageFlows(net, c);
-		try
-		{
+		try {
 			handleDataObjects(net, c);
-		}
-		catch(DataObjectNoInitStateException donis)
-		{
+		} catch(DataObjectNoInitStateException donis) {
 			
 		}
 		// create transitions
@@ -274,16 +271,22 @@ public abstract class Converter {
 	protected void handleSubProcess(PetriNet net, SubProcess process, ConversionContext c) {
 		SubProcessPlaces pl = c.getSubprocessPlaces(process);
 		
+		
+		// TODO start-place and -transition have same name
 		Transition startT = addTauTransition(net, "start"+process.getId());
 		pl.startP = addPlace(net, "start"+process.getId());
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(process)), startT);
 		addFlowRelationship(net, startT, pl.startP);
 		
-		pl.endP = addPlace(net, "end"+process.getId());
 		Transition endT = addTauTransition(net, "end"+process.getId());
+		pl.endP = addPlace(net, "end"+process.getId());	
 		addFlowRelationship(net, pl.endP, endT);
-		addFlowRelationship(net, endT, c.map.get(getOutgoingSequenceFlow(process)));
 		
+//		Transition connectorT = addTauTransition(net, "end_connector"+process.getId());
+//		addFlowRelationship(net, pl.endP, connectorT);
+		
+		addFlowRelationship(net, endT, c.map.get(getOutgoingSequenceFlow(process)));
+					
 		handleMessageFlow(net, process, startT, endT, c);
 		
 		// exception handling
@@ -304,12 +307,16 @@ public abstract class Converter {
 
 	// assumption: exactly one output edge
 	protected void handleStartEvent(PetriNet net, StartEvent event, ConversionContext c) {
+		// TODO fix this little hack
 		Container process = event.getProcess();
+		if (process == null) {
+			process = event.getParent();
+		}
 		Place p = c.getSubprocessPlaces(process).startP;
 		Transition t = addLabeledTransition(net, event.getId(), event.getLabel());
 		handleMessageFlow(net, event, t, t, c);
 		addFlowRelationship(net, p, t);
-		addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(event)));
+ 		addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(event)));
 		if (c.ancestorHasExcpH)
 			handleExceptions(net, event, t, c);
 	}
@@ -329,10 +336,15 @@ public abstract class Converter {
 	
 	// assumption: exactly one input edge
 	protected void handleEndEvent(PetriNet net, EndEvent event, ConversionContext c) {
+		Container process = event.getProcess();
+		if (process == null) {
+			process = event.getParent();
+		}
+		
 		Transition t = addLabeledTransition(net, event.getId(), event.getLabel());
 		handleMessageFlow(net, event, t, t, c);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(event)), t);
-		Place p = c.getSubprocessPlaces(event.getProcess()).endP;
+		Place p = c.getSubprocessPlaces(process).endP;
 		if (p == null)
 			p = addPlace(net, "end"+event.getId());
 		addFlowRelationship(net, t, p);

@@ -19,14 +19,14 @@ public abstract class NodeImpl implements Node {
 	}
 
 	public void setId(String label) {
-/*		label = label.replace("#","");
+		label = label.replace("#","");
 		if (this instanceof Place) {
 			label = "place_" + label; 
 		} else if (this instanceof Transition) {
 			label = "transition_" + label;
 		}
-*/		
-		this.id = label;//.replace("#", "");
+		
+		this.id = label;
 	}
 
 	public List<FlowRelationship> getIncomingFlowRelationships() {
