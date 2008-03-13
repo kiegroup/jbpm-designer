@@ -62,208 +62,230 @@ import de.hpi.bpmn.XOREventBasedGateway;
 /**
  * main method: loadBPMN()
  * 
- * remark: bidirectional associations are interpreted as two separate associations
+ * remark: bidirectional associations are interpreted as two separate
+ * associations
  * 
  * @author gero.decker
- *
+ * 
  */
 public class BPMNRDFImporter {
-	
+
 	protected Document doc;
 	protected BPMNFactory factory;
-	
+
 	protected class ImportContext {
 		BPMNDiagram diagram;
-		Map<String,de.hpi.bpmn.DiagramObject> objects; // key = resource id, value = diagram object
-		Map<String,de.hpi.bpmn.DiagramObject> connections; // key = to resource id, value = from node
-		Map<de.hpi.bpmn.Node,String> parentRelationships; // key = child node, value = parent resource id
+		Map<String, de.hpi.bpmn.DiagramObject> objects; // key = resource id,
+		// value = diagram
+		// object
+		Map<String, de.hpi.bpmn.DiagramObject> connections; // key = to resource
+		// id, value = from
+		// node
+		Map<de.hpi.bpmn.Node, String> parentRelationships; // key = child node,
+		// value = parent
+		// resource id
 	}
-	
+
 	public BPMNRDFImporter(Document doc) {
 		this.doc = doc;
 	}
-	
+
 	public BPMNDiagram loadBPMN() {
 		Node root = getRootNode(doc);
-		if (root == null) return null;
-		
+		if (root == null)
+			return null;
+
 		// TODO: find out the type of BPMN
 		factory = new BPMNFactory(); // for the moment: assume plain BPMN
-		
+
 		ImportContext c = new ImportContext();
 		c.diagram = factory.createBPMNDiagram();
-//		Map map = new HashMap();		
+		// Map map = new HashMap();
 		c.objects = new HashMap(); // key = resource id, value = node
-		c.connections = new HashMap(); // key = to resource id, value = from node
+		c.connections = new HashMap(); // key = to resource id, value = from
+		// node
 		c.parentRelationships = new HashMap();
-		
+
 		List<Node> edges = new ArrayList();
-		
+
 		// handle nodes
-		for (Node node=root.getFirstChild(); node.getNextSibling() != null; node=node.getNextSibling()) {
-			if (node instanceof Text) continue;
-			
-			String type = getType(node);
-			if (type == null) continue;
-			
-			if (type.equals("BPMNDiagram")) {
-				handleDiagram(node, c);
-			} else if (type.equals("Pool")) {
-				addPool(node, c);
-			} else if (type.equals("Lane")) {
-				addLane(node, c);
-			} else if (type.equals("Task")) {
-				addTask(node, c);
-			} else if (type.equals("Subprocess")) {
-				addSubProcess(node, c);
-				
-			} else if (type.equals("StartEvent")) {
-				addStartPlainEvent(node, c);
-			} else if (type.equals("StartMessageEvent")) {
-				addStartMessageEvent(node, c);
-			} else if (type.equals("StartTimerEvent")) {
-				addStartTimerEvent(node, c);
-			} else if (type.equals("StartRuleEvent")) {
-				addStartRuleEvent(node, c);
-			} else if (type.equals("StartLinkEvent")) {
-				addStartLinkEvent(node, c);
-			} else if (type.equals("StartMultipleEvent")) {
-				addStartMultipleEvent(node, c);
-				
-			} else if (type.equals("IntermediateEvent")) {
-				addIntermediatePlainEvent(node, c);
-			} else if (type.equals("IntermediateMessageEvent")) {
-				addIntermediateMessageEvent(node, c);
-			} else if (type.equals("IntermediateErrorEvent")) {
-				addIntermediateErrorEvent(node, c);
-			} else if (type.equals("IntermediateTimerEvent")) {
-				addIntermediateTimerEvent(node, c);
-			} else if (type.equals("IntermediateCancelEvent")) {
-				addIntermediateCancelEvent(node, c);
-			} else if (type.equals("IntermediateCompensationEvent")) {
-				addIntermediateCompensationEvent(node, c);
-			} else if (type.equals("IntermediateRuleEvent")) {
-				addIntermediateRuleEvent(node, c);
-			} else if (type.equals("IntermediateLinkEvent")) {
-				addIntermediateLinkEvent(node, c);
-			} else if (type.equals("IntermediateMultipleEvent")) {
-				addIntermediateMultipleEvent(node, c);
-				
-			// TODO: talk to Martin regarding other end events...
-			} else if (type.equals("EndEvent")) {
-				String result = getContent(getChild(node, "result"));
-				if (result.equals("None")) {
-					addEndPlainEvent(node, c);
-				} else if (result.equals("Cancel")) {
-					addEndCancelEvent(node, c);
-				} else if (result.equals("Compensation")) {
-					addEndCompensationEvent(node, c);
-				} else if (result.equals("Message")) {
-					addEndMessageEvent(node, c);
+		if (root.hasChildNodes()) {
+			Node node = root.getFirstChild();
+			while ((node = node.getNextSibling()) != null) {
+				if (node instanceof Text)
+					continue;
+
+				String type = getType(node);
+				if (type == null)
+					continue;
+
+				if (type.equals("BPMNDiagram")) {
+					handleDiagram(node, c);
+				} else if (type.equals("Pool")) {
+					addPool(node, c);
+				} else if (type.equals("Lane")) {
+					addLane(node, c);
+				} else if (type.equals("Task")) {
+					addTask(node, c);
+				} else if (type.equals("Subprocess")) {
+					addSubProcess(node, c);
+
+				} else if (type.equals("StartEvent")) {
+					addStartPlainEvent(node, c);
+				} else if (type.equals("StartMessageEvent")) {
+					addStartMessageEvent(node, c);
+				} else if (type.equals("StartTimerEvent")) {
+					addStartTimerEvent(node, c);
+				} else if (type.equals("StartRuleEvent")) {
+					addStartRuleEvent(node, c);
+				} else if (type.equals("StartLinkEvent")) {
+					addStartLinkEvent(node, c);
+				} else if (type.equals("StartMultipleEvent")) {
+					addStartMultipleEvent(node, c);
+
+				} else if (type.equals("IntermediateEvent")) {
+					addIntermediatePlainEvent(node, c);
+				} else if (type.equals("IntermediateMessageEvent")) {
+					addIntermediateMessageEvent(node, c);
+				} else if (type.equals("IntermediateErrorEvent")) {
+					addIntermediateErrorEvent(node, c);
+				} else if (type.equals("IntermediateTimerEvent")) {
+					addIntermediateTimerEvent(node, c);
+				} else if (type.equals("IntermediateCancelEvent")) {
+					addIntermediateCancelEvent(node, c);
+				} else if (type.equals("IntermediateCompensationEvent")) {
+					addIntermediateCompensationEvent(node, c);
+				} else if (type.equals("IntermediateRuleEvent")) {
+					addIntermediateRuleEvent(node, c);
+				} else if (type.equals("IntermediateLinkEvent")) {
+					addIntermediateLinkEvent(node, c);
+				} else if (type.equals("IntermediateMultipleEvent")) {
+					addIntermediateMultipleEvent(node, c);
+
+					// TODO: talk to Martin regarding other end events...
+				} else if (type.equals("EndEvent")) {
+					String result = getContent(getChild(node, "result"));
+					if (result.equals("None")) {
+						addEndPlainEvent(node, c);
+					} else if (result.equals("Cancel")) {
+						addEndCancelEvent(node, c);
+					} else if (result.equals("Compensation")) {
+						addEndCompensationEvent(node, c);
+					} else if (result.equals("Message")) {
+						addEndMessageEvent(node, c);
+					}
+
+				} else if (type.equals("Exclusive_Databased_Gateway")) {
+					addXORDataBasedGateway(node, c);
+				} else if (type.equals("Exclusive_Eventbased_Gateway")) {
+					addXOREventBasedGateway(node, c);
+				} else if (type.equals("AND_Gateway")) {
+					addANDGateway(node, c);
+				} else if (type.equals("Complex_Gateway")) {
+					addComplexGateway(node, c);
+				} else if (type.equals("OR_Gateway")) {
+					addORGateway(node, c);
+
+				} else if (type.equals("DataObject")) {
+					addDataObject(node, c);
+				} else if (type.equals("TextAnnotation")) {
+					addTextAnnotation(node, c);
+
+				} else if (type.equals("SequenceFlow")) {
+					edges.add(node);
+				} else if (type.equals("MessageFlow")) {
+					edges.add(node);
+				} else if (type.equals("DefaultFlow")) {
+					edges.add(node);
+				} else if (type.equals("ConditionalFlow")) {
+					edges.add(node);
+				} else if (type.equals("Association_Unidirectional")) {
+					edges.add(node);
+				} else if (type.equals("Association_Bidirectional")) {
+					edges.add(node);
+				} else if (type.equals("Association_Undirected")) {
+					edges.add(node);
+					// } else if (type.equals("Association_Unidirectional")) {
+					// addAssociation_Unidirectional(diagram, node, map);
+					// } else if (type.equals("Association_Undirected")) {
+					// addAssociation_Undirected(diagram, node, map);
 				}
-				
-			} else if (type.equals("Exclusive_Databased_Gateway")) {
-				addXORDataBasedGateway(node, c);
-			} else if (type.equals("Exclusive_Eventbased_Gateway")) {
-				addXOREventBasedGateway(node, c);
-			} else if (type.equals("AND_Gateway")) {
-				addANDGateway(node, c);
-			} else if (type.equals("Complex_Gateway")) {
-				addComplexGateway(node, c);
-			} else if (type.equals("OR_Gateway")) {
-				addORGateway(node, c);
-				
-			} else if (type.equals("DataObject")) {
-				addDataObject(node, c);
-			} else if (type.equals("TextAnnotation")) {
-				addTextAnnotation(node, c);
-				
-			} else if (type.equals("SequenceFlow")) {
-				edges.add(node);
-			} else if (type.equals("MessageFlow")) {
-				edges.add(node);
-			} else if (type.equals("DefaultFlow")) {
-				edges.add(node);
-			} else if (type.equals("ConditionalFlow")) {
-				edges.add(node);
-			} else if (type.equals("Association_Unidirectional")) {
-				edges.add(node);
-			} else if (type.equals("Association_Bidirectional")) {
-				edges.add(node);
-			} else if (type.equals("Association_Undirected")) {
-				edges.add(node);
-//			} else if (type.equals("Association_Unidirectional")) {
-//				addAssociation_Unidirectional(diagram, node, map);
-//			} else if (type.equals("Association_Undirected")) {
-//				addAssociation_Undirected(diagram, node, map);
 			}
 		}
-		
+
 		// handle edges (except undirected associations)
-		for (Node node: edges) {
-			String type = getType(node);
+		for (Node edgeNode : edges) {
+			String type = getType(edgeNode);
 			if (type.equals("SequenceFlow")) {
-				addSequenceFlow(node, c);
+				addSequenceFlow(edgeNode, c);
 			} else if (type.equals("MessageFlow")) {
-				addMessageFlow(node, c);
+				addMessageFlow(edgeNode, c);
 			} else if (type.equals("DefaultFlow")) {
-				addDefaultFlow(node, c);
+				addDefaultFlow(edgeNode, c);
 			} else if (type.equals("ConditionalFlow")) {
-				addConditionalFlow(node, c);
+				addConditionalFlow(edgeNode, c);
 			} else if (type.equals("Association_Unidirectional")) {
-				addAssociation(node, c);
+				addAssociation(edgeNode, c);
 			} else if (type.equals("Association_Bidirectional")) {
-				addBidirectionalAssociation(node, c);
+				addBidirectionalAssociation(edgeNode, c);
 			}
 		}
-		
+
 		// handle undirected associations
-		for (Node node: edges) {
-			String type = getType(node);
+		for (Node edgeNode : edges) {
+			String type = getType(edgeNode);
 			if (type.equals("Association_Undirected")) {
-				addUndirectedAssociation(node, c);
+				addUndirectedAssociation(edgeNode, c);
 			}
 		}
-		
+
 		// handle intermediate events
 		attachIntermediateEvents(c);
-		
+
 		// handle parent relationships
 		setupParentRelationships(c);
-		
+
 		c.diagram.identifyProcesses();
 		return c.diagram;
 	}
-	
+
 	protected void attachIntermediateEvents(ImportContext c) {
-		for (de.hpi.bpmn.Node node: c.diagram.getChildNodes()) {
+		for (de.hpi.bpmn.Node node : c.diagram.getChildNodes()) {
 			if (node instanceof IntermediateEvent) {
-				de.hpi.bpmn.DiagramObject source = c.connections.get(node.getResourceId());
+				de.hpi.bpmn.DiagramObject source = c.connections.get(node
+						.getResourceId());
 				if (source instanceof Activity)
-					((IntermediateEvent)node).setActivity((Activity)source);
+					((IntermediateEvent) node).setActivity((Activity) source);
 			}
 		}
 	}
 
 	protected void setupParentRelationships(ImportContext c) {
-		for (Entry<de.hpi.bpmn.Node,String> entry: c.parentRelationships.entrySet()) {
+		for (Entry<de.hpi.bpmn.Node, String> entry : c.parentRelationships
+				.entrySet()) {
 			de.hpi.bpmn.Node child = entry.getKey();
 			de.hpi.bpmn.DiagramObject parent = c.objects.get(entry.getValue());
 			if (parent instanceof Container)
-				child.setParent((Container)parent);
+				child.setParent((Container) parent);
 		}
 	}
 
 	protected void handleDiagram(Node node, ImportContext c) {
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			// TODO: add further attributes...
-			if (attribute.equals("title")) {
-				c.diagram.setTitle(getContent(n));
-//			} else {
-//				handleStandardAttributes(attribute, n, pool, c, "Name");
+		if (node.hasChildNodes()) {
+
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				if (attribute.equals("title")) {
+					c.diagram.setTitle(getContent(n));
+					// } else {
+					// handleStandardAttributes(attribute, n, pool, c, "Name");
+				}
 			}
 		}
 	}
@@ -273,32 +295,40 @@ public class BPMNRDFImporter {
 		pool.setResourceId(getResourceId(node));
 		pool.setParent(c.diagram);
 		c.objects.put(pool.getResourceId(), pool);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			// TODO: add further attributes...
-			if (attribute.equals("poolId")) {
-				pool.setId(getContent(n));
-			} else {
-				handleStandardAttributes(attribute, n, pool, c, "Name");
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				if (attribute.equals("poolId")) {
+					pool.setId(getContent(n));
+				} else {
+					handleStandardAttributes(attribute, n, pool, c, "Name");
+				}
 			}
 		}
 		if (pool.getId() == null)
 			pool.setId(pool.getResourceId());
 	}
 
-	protected boolean handleStandardAttributes(String attribute, Node n, de.hpi.bpmn.DiagramObject node, ImportContext c, String label) {
+	protected boolean handleStandardAttributes(String attribute, Node n,
+			de.hpi.bpmn.DiagramObject node, ImportContext c, String label) {
 		if (attribute.equals("id")) {
 			node.setId(getContent(n));
 		} else if (attribute.equals("outgoing")) {
-			c.connections.put(getResourceId(getAttributeValue(n, "rdf:resource")), node);
+			c.connections.put(
+					getResourceId(getAttributeValue(n, "rdf:resource")), node);
 		} else if (node instanceof de.hpi.bpmn.Node) {
 			if (attribute.equals("parent")) {
-				c.parentRelationships.put((de.hpi.bpmn.Node)node, getResourceId(getAttributeValue(n, "rdf:resource")));
+				c.parentRelationships.put((de.hpi.bpmn.Node) node,
+						getResourceId(getAttributeValue(n, "rdf:resource")));
 			} else if (attribute.equals(label)) {
-				((de.hpi.bpmn.Node)node).setLabel(getContent(n));
+				((de.hpi.bpmn.Node) node).setLabel(getContent(n));
 			}
 		} else {
 			return false;
@@ -310,18 +340,25 @@ public class BPMNRDFImporter {
 		Lane lane = factory.createLane();
 		lane.setResourceId(getResourceId(node));
 		c.objects.put(lane.getResourceId(), lane);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			// TODO: add further attributes...
-//			if (attribute.equals("poolId")) {
-//				pool.setId(getContent(n));
-//			} else {
+
+		if (node.hasChildNodes()) {
+
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				// if (attribute.equals("poolId")) {
+				// pool.setId(getContent(n));
+				// } else {
 				handleStandardAttributes(attribute, n, lane, c, "Name");
-//			}
+				// }
+			}
 		}
+
 		if (lane.getId() == null)
 			lane.setId(lane.getResourceId());
 	}
@@ -331,17 +368,22 @@ public class BPMNRDFImporter {
 		task.setResourceId(getResourceId(node));
 		task.setParent(c.diagram);
 		c.objects.put(task.getResourceId(), task);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			// TODO: add further attributes...
-//			if (attribute.equals("poolId")) {
-//				pool.setId(getContent(n));
-//			} else {
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				// if (attribute.equals("poolId")) {
+				// pool.setId(getContent(n));
+				// } else {
 				handleStandardAttributes(attribute, n, task, c, "name");
-//			}
+				// }
+			}
 		}
 		if (task.getId() == null)
 			task.setId(task.getResourceId());
@@ -352,21 +394,27 @@ public class BPMNRDFImporter {
 		sp.setResourceId(getResourceId(node));
 		sp.setParent(c.diagram);
 		c.objects.put(sp.getResourceId(), sp);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			// TODO: add further attributes...
-			if (attribute.equals("isadhoc")) {
-				String adHocValue = getContent(n);
-				if (adHocValue != null && adHocValue.equals("true")) {
-					sp.setAdhoc(true);					
+
+		if (node.hasChildNodes()) {
+
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				if (attribute.equals("isadhoc")) {
+					String adHocValue = getContent(n);
+					if (adHocValue != null && adHocValue.equals("true")) {
+						sp.setAdhoc(true);
+					} else {
+						sp.setAdhoc(false);
+					}
 				} else {
-					sp.setAdhoc(false);
+					handleStandardAttributes(attribute, n, sp, c, "name");
 				}
-			} else {
-				handleStandardAttributes(attribute, n, sp, c, "name");
 			}
 		}
 		if (sp.getId() == null)
@@ -419,7 +467,8 @@ public class BPMNRDFImporter {
 	}
 
 	protected void addIntermediateCompensationEvent(Node node, ImportContext c) {
-		IntermediateCompensationEvent event = factory.createIntermediateCompensationEvent();
+		IntermediateCompensationEvent event = factory
+				.createIntermediateCompensationEvent();
 		handleEvent(node, event, c, "target");
 	}
 
@@ -434,12 +483,14 @@ public class BPMNRDFImporter {
 	}
 
 	protected void addIntermediateMultipleEvent(Node node, ImportContext c) {
-		IntermediateMultipleEvent event = factory.createIntermediateMultipleEvent();
+		IntermediateMultipleEvent event = factory
+				.createIntermediateMultipleEvent();
 		handleEvent(node, event, c, "triggers");
 	}
 
 	protected void addIntermediateMessageEvent(Node node, ImportContext c) {
-		IntermediateMessageEvent event = factory.createIntermediateMessageEvent();
+		IntermediateMessageEvent event = factory
+				.createIntermediateMessageEvent();
 		handleEvent(node, event, c, "message");
 	}
 
@@ -452,7 +503,7 @@ public class BPMNRDFImporter {
 		EndPlainEvent event = factory.createEndPlainEvent();
 		handleEvent(node, event, c, "documentation");
 	}
-	
+
 	protected void addEndCancelEvent(Node node, ImportContext c) {
 		EndCancelEvent event = factory.createEndCancelEvent();
 		handleEvent(node, event, c, "documentation");
@@ -488,16 +539,22 @@ public class BPMNRDFImporter {
 		handleEvent(node, event, c, "results");
 	}
 
-	protected void handleEvent(Node node, Event event, ImportContext c, String label) {
+	protected void handleEvent(Node node, Event event, ImportContext c,
+			String label) {
 		event.setResourceId(getResourceId(node));
 		event.setParent(c.diagram);
 		c.objects.put(event.getResourceId(), event);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			handleStandardAttributes(attribute, n, event, c, label);
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				handleStandardAttributes(attribute, n, event, c, label);
+			}
 		}
 		if (event.getId() == null)
 			event.setId(event.getResourceId());
@@ -532,11 +589,17 @@ public class BPMNRDFImporter {
 		gateway.setResourceId(getResourceId(node));
 		gateway.setParent(c.diagram);
 		c.objects.put(gateway.getResourceId(), gateway);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			handleStandardAttributes(attribute, n, gateway, c, "Documentation");
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+				handleStandardAttributes(attribute, n, gateway, c,
+						"Documentation");
+			}
 		}
 		if (gateway.getId() == null)
 			gateway.setId(gateway.getResourceId());
@@ -547,16 +610,21 @@ public class BPMNRDFImporter {
 		obj.setResourceId(getResourceId(node));
 		c.diagram.getDataObjects().add(obj);
 		c.objects.put(obj.getResourceId(), obj);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			// TODO: add further attributes...
-			if (attribute.equals("state")) {
-				obj.setState(getContent(n));
-			} else {
-				handleStandardAttributes(attribute, n, obj, c, "name");
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				if (attribute.equals("state")) {
+					obj.setState(getContent(n));
+				} else {
+					handleStandardAttributes(attribute, n, obj, c, "name");
+				}
 			}
 		}
 		if (obj.getId() == null)
@@ -568,17 +636,22 @@ public class BPMNRDFImporter {
 		ta.setResourceId(getResourceId(node));
 		ta.setParent(c.diagram);
 		c.objects.put(ta.getResourceId(), ta);
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			// TODO: add further attributes...
-//			if (attribute.equals("state")) {
-//				obj.setState(getContent(n));
-//			} else {
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				// if (attribute.equals("state")) {
+				// obj.setState(getContent(n));
+				// } else {
 				handleStandardAttributes(attribute, n, ta, c, "text");
-//			}
+				// }
+			}
 		}
 		if (ta.getId() == null)
 			ta.setId(ta.getResourceId());
@@ -619,7 +692,7 @@ public class BPMNRDFImporter {
 		Association ass = factory.createAssociation();
 		c.diagram.getEdges().add(ass);
 		setConnections(ass, node, c);
-		
+
 		Association ass2 = factory.createAssociation();
 		c.diagram.getEdges().add(ass);
 		ass2.setId(ass.getId());
@@ -638,32 +711,38 @@ public class BPMNRDFImporter {
 		edge.setResourceId(getResourceId(node));
 		c.objects.put(edge.getResourceId(), edge);
 		edge.setSource(c.connections.get(edge.getResourceId()));
-		
-		for (Node n=node.getFirstChild(); n.getNextSibling() != null; n=n.getNextSibling()) {
-			if (n instanceof Text) continue;
-			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
-			
-			if (attribute.equals("id")) {
-				edge.setId(getContent(n));
-			} else if (attribute.equals("outgoing")) {
-				if (edge.getTarget() == null)
-					edge.setTarget(c.objects.get(getResourceId(getAttributeValue(n, "rdf:resource"))));
-				else
-					c.connections.put(getResourceId(getAttributeValue(n, "rdf:resource")), edge);
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				if (attribute.equals("id")) {
+					edge.setId(getContent(n));
+				} else if (attribute.equals("outgoing")) {
+					if (edge.getTarget() == null)
+						edge.setTarget(c.objects
+								.get(getResourceId(getAttributeValue(n,
+										"rdf:resource"))));
+					else
+						c.connections.put(getResourceId(getAttributeValue(n,
+								"rdf:resource")), edge);
+				}
 			}
 		}
 		if (edge.getId() == null)
 			edge.setId(edge.getResourceId());
 	}
 
-	
-
 	protected String getContent(Node node) {
 		if (node != null && node.hasChildNodes())
 			return node.getFirstChild().getNodeValue();
 		return null;
 	}
-	
+
 	private String getAttributeValue(Node node, String attribute) {
 		Node item = node.getAttributes().getNamedItem(attribute);
 		if (item != null)
@@ -675,11 +754,11 @@ public class BPMNRDFImporter {
 	protected String getType(Node node) {
 		String type = getContent(getChild(node, "type"));
 		if (type != null)
-			return type.substring(type.indexOf('#')+1);
+			return type.substring(type.indexOf('#') + 1);
 		else
 			return null;
 	}
-	
+
 	protected String getResourceId(Node node) {
 		Node item = node.getAttributes().getNamedItem("rdf:about");
 		if (item != null)
@@ -687,7 +766,7 @@ public class BPMNRDFImporter {
 		else
 			return null;
 	}
-	
+
 	protected String getResourceId(String id) {
 		return id.substring(id.indexOf('#'));
 	}
