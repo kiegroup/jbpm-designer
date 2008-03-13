@@ -1104,7 +1104,7 @@
 					]
 				},
 				{
-					"id":"isAdHoc",
+					"id":"isadhoc",
 					"type":"Boolean",
 					"title":"isAdHoc",
 					"value":false,

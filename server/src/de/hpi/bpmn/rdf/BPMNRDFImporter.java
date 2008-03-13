@@ -358,7 +358,7 @@ public class BPMNRDFImporter {
 			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
 			
 			// TODO: add further attributes...
-			if (attribute.equals("isAdHoc")) {
+			if (attribute.equals("isadhoc")) {
 				String adHocValue = getContent(n);
 				if (adHocValue != null && adHocValue.equals("true")) {
 					sp.setAdhoc(true);					
