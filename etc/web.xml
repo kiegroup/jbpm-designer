@@ -27,7 +27,27 @@
             /consumer
         </url-pattern>
     </servlet-mapping>
-    
+
+    <servlet>
+        <display-name>
+            Oryx Process Repository
+        </display-name>
+        <servlet-name>
+            Repository
+        </servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.RepositoryProvider
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>
+            Repository
+        </servlet-name>
+        <url-pattern>
+            /repository
+        </url-pattern>
+    </servlet-mapping>
+	
     <servlet>
         <display-name>
             Oryx Legacy File Download Servlet
