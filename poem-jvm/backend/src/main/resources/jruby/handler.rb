@@ -1,8 +1,6 @@
 include_class 'org.b3mn.poem.Representation'
   module Handler
     class DefaultHandler
-      @@hostname = 'http://' + `hostname`.chomp + ':8080'
-      
       def doGet(interaction)
         interaction.response.setStatus(403)
         out = interaction.response.getWriter
@@ -47,24 +45,24 @@ include_class 'org.b3mn.poem.Representation'
       	out.println("<title>" + representation.getTitle + " - Oryx</title>\n")
       	
       	out.println("<!-- libraries -->\n")
-      	out.println("<script src=\"" + @@hostname + "/lib/prototype-1.5.1_rc3.js\" type=\"text/javascript\" />\n")
-      	out.println("<script src=\"" + @@hostname + "/lib/path_parser.js\" type=\"text/javascript\" />\n")
-      	out.println("<script src=\"" + @@hostname + "/lib/ext-1.0/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />\n")
-      	out.println("<script src=\"" + @@hostname + "/lib/ext-1.0/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />\n")
-      	out.println("<script src=\"" + @@hostname + "/lib/ext-1.0/ext-all-debug.js\" type=\"text/javascript\" />\n")
-      	out.println("<script src=\"" + @@hostname + "/lib/ext-1.0/ColorField.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/lib/prototype-1.5.1_rc3.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/lib/path_parser.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/lib/ext-1.0/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/lib/ext-1.0/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/lib/ext-1.0/ext-all-debug.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/lib/ext-1.0/ColorField.js\" type=\"text/javascript\" />\n")
       	out.println("<style media=\"screen\" type=\"text/css\">\n")
-      	out.println("@import url(\"" + @@hostname + "/lib/ext-1.0/resources/css/ext-all.css\");\n")
-      	out.println("@import url(\"" + @@hostname + "/lib/ext-1.0/resources/css/ytheme-gray.css\");\n")
+      	out.println("@import url(\"" + interaction.hostname + "/lib/ext-1.0/resources/css/ext-all.css\");\n")
+      	out.println("@import url(\"" + interaction.hostname + "/lib/ext-1.0/resources/css/ytheme-gray.css\");\n")
       	out.println("</style>\n")
 
-      	out.println("<script src=\"" + @@hostname + "/shared/kickstart.js\" type=\"text/javascript\" />\n")
-      	out.println("<script src=\"" + @@hostname + "/shared/erdfparser.js\" type=\"text/javascript\" />\n")
-      	out.println("<script src=\"" + @@hostname + "/shared/datamanager.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/shared/kickstart.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/shared/erdfparser.js\" type=\"text/javascript\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/shared/datamanager.js\" type=\"text/javascript\" />\n")
 
       	out.println("<!-- oryx editor -->\n")
-      	out.println("<script src=\"" + @@hostname + "/oryx.js\" type=\"text/javascript\" />\n")
-      	out.println("<link rel=\"Stylesheet\" media=\"screen\" href=\"" + @@hostname + "/css/theme_norm.css\" type=\"text/css\" />\n")
+      	out.println("<script src=\"" + interaction.hostname + "/oryx.js\" type=\"text/javascript\" />\n")
+      	out.println("<link rel=\"Stylesheet\" media=\"screen\" href=\"" + interaction.hostname + "/css/theme_norm.css\" type=\"text/css\" />\n")
 
       	out.println("<!-- erdf schemas -->\n")
       	out.println("<link rel=\"schema.dc\" href=\"http://purl.org/dc/elements/1.1/\" />\n")

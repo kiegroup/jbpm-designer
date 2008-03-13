@@ -110,12 +110,14 @@ class Poem < ActiveRecord::Migration
       t.column :rel,		:text, :null => false
       t.column :scheme,		:text, :null => false
       t.column :term,		:text, :null => false
+      t.column :title, :text, :null => false
     end
     
     execute %q{
       alter table "plugin" alter column rel set storage main;
       alter table "plugin" alter column scheme set storage main;
       alter table "plugin" alter column term set storage main; 
+      alter table "plugin" alter column title set storage main;
       create index rel_idx on "plugin"(rel);
     }
     

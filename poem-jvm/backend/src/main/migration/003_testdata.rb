@@ -108,14 +108,14 @@ class Testdata < ActiveRecord::Migration
     }
     
     execute %q{
-      insert into "plugin"(rel, scheme, term)
-      	select '/self', 'ruby', 'ModelHandler';
-      insert into "plugin"(rel, scheme, term)
-      	select '/info', 'ruby', 'InfoHandler';
-      insert into "plugin"(rel, scheme, term)
-        select '/access', 'ruby', 'AccessHander';
-      insert into "plugin"(rel, scheme, term)
-        select '/info;access', 'ruby', 'MetaHandler';
+      insert into "plugin"(rel, scheme, term, title)
+      	select '/self', 'ruby', 'ModelHandler', 'Oryx Editor';
+      insert into "plugin"(rel, scheme, term, title)
+      	select '/info', 'ruby', 'InfoHandler', 'edit info';
+      insert into "plugin"(rel, scheme, term, title)
+        select '/access', 'ruby', 'AccessHander', 'edit access';
+      insert into "plugin"(rel, scheme, term, title)
+        select '/info-access', 'ruby', 'MetaHandler', 'About';
       	
     }
 

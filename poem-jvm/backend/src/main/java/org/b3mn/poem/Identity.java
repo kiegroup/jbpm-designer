@@ -79,8 +79,8 @@ public class Identity {
 	    .setString("relation", rel).list();
 		Persistance.commit();
 		Iterator<Access> rights = access.iterator();
-		Access writer = new Access(); 
-		Access reader = new Access();
+		Access writer = null; 
+		Access reader = null;
 		if(rights.hasNext()) {
 			while(rights.hasNext()) {
 				Access item = rights.next();
@@ -102,9 +102,11 @@ public class Identity {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> getRelations() {
-		return (List<String>)Persistance.getSession().
-		createSQLQuery("select rel from plugin").list();
+	public List<Plugin> getServlets() {
+		return (List<Plugin>)Persistance.getSession().
+		createSQLQuery("select {plugin.*} from {plugin}")
+		.addEntity("plugin", Plugin.class)
+		.list();
 	}
 	
 	public Representation read() {
