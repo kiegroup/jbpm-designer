@@ -84,7 +84,7 @@ module Helper
     info['self_uri'] = interaction.hostname + model.getUri + '/self'
     access_rights = []
     model.getAccess.each do |right|
-      access_rights << toHash(right, %w{Subject Predicate Url})
+      access_rights << toHash(right, %w{Subject Predicate Uri})
     end
     access = {'access_rights' => access_rights, 'edit_uri' => interaction.hostname + model.getUri + '/access'}
     output = {'uris'=>uris, 'info'=>info,'access'=>access}

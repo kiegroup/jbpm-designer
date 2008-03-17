@@ -91,7 +91,7 @@ public class Access implements Serializable {
 	public void setAccess_id(long access_id) {
 		this.access_id = access_id;
 	}
-	public String getUrl() {
+	public String getUri() {
 		return this.getObject_name() + "/access?id=" +  this.getAccess_id();
 	}
 	public String getSubject() {
