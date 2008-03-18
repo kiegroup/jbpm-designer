@@ -7,10 +7,11 @@ public class SubProcess extends Activity implements Container {
 	
 	protected List<Node> childNodes;
 	protected boolean adhoc;
+	protected boolean parallelOrdering;  
 
 	public List<Node> getChildNodes() {
 		if (childNodes == null)
-			childNodes = new ArrayList();
+			childNodes = new ArrayList<Node>();
 		return childNodes;
 	}
 
@@ -20,6 +21,14 @@ public class SubProcess extends Activity implements Container {
 
 	public void setAdhoc(boolean adhoc) {
 		this.adhoc = adhoc;
+	}
+
+	public boolean isParallelOrdering() {
+		return parallelOrdering;
+	}
+
+	public void setParallelOrdering(boolean parallelOrdering) {
+		this.parallelOrdering = parallelOrdering;
 	}
 	
 }

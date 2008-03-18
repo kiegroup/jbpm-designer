@@ -4,6 +4,7 @@ import de.hpi.PTnet.PTNet;
 import de.hpi.PTnet.impl.PTNetFactoryImpl;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
+import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
 

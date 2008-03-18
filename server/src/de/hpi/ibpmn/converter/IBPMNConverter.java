@@ -7,6 +7,7 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.Pool;
 import de.hpi.bpmn2pn.converter.Converter;
+import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.ibpmn.Interaction;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.interactionnet.Role;

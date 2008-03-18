@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.hpi.PTnet.impl.PTNetFactoryImpl;
-import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
@@ -17,6 +16,7 @@ import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.Task;
+import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;

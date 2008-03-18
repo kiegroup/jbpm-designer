@@ -412,6 +412,17 @@ public class BPMNRDFImporter {
 					} else {
 						sp.setAdhoc(false);
 					}
+				}
+				// TODO rename MI_Ordering in stencil set or new Adhoc-Ordering?
+				// TODO missing completion condition concept
+				else if (attribute.equals("MI_Ordering")) {
+					// standard case is sequential ordering
+					String ordering = getContent(n);
+					if (ordering.equals("Parallel")) {
+						sp.setParallelOrdering(true);
+					} else {
+						sp.setParallelOrdering(false);
+					}
 				} else {
 					handleStandardAttributes(attribute, n, sp, c, "name");
 				}
