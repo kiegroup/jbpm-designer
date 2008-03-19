@@ -8,6 +8,15 @@ public class SubProcess extends Activity implements Container {
 	protected List<Node> childNodes;
 	protected boolean adhoc;
 	protected boolean parallelOrdering;  
+	protected String completionCondition; 
+
+	public String getCompletionCondition() {
+		return completionCondition;
+	}
+
+	public void setCompletionCondition(String completionCondition) {
+		this.completionCondition = completionCondition;
+	}
 
 	public List<Node> getChildNodes() {
 		if (childNodes == null)

@@ -92,6 +92,7 @@ public class ExecConverter extends Converter {
 	}
 
 	// TODO: Data dependencies
+	// TODO missing completion condition concept
 	protected void handleSubProcessAdHoc(PetriNet net, SubProcess process,
 			ConversionContext c) {
 		SubProcessPlaces pl = c.getSubprocessPlaces(process);
@@ -116,11 +117,11 @@ public class ExecConverter extends Converter {
 				+ process.getId());
 		Place ccStatus = addPlace(net, "ad-hoc_ccStatus_" + process.getId());
 		Transition ccCheck = addLabeledTransition(net, "ad-hoc_ccCheck_"
-				+ process.getId(), "ad-hoc_ccCheck");
-		Transition finalize = addLabeledTransition(net, "ad-hoc_finalize_"
-				+ process.getId(), "ad-hoc_finalize");
-		Transition resume = addLabeledTransition(net, "ad-hoc_resume_"
-				+ process.getId(), "ad-hoc_resume");
+				+ process.getId(), "ad-hoc_cc=" + process.getCompletionCondition());
+		Transition finalize = addTauTransition(net, "ad-hoc_finalize_"
+				+ process.getId());
+		Transition resume = addTauTransition(net, "ad-hoc_resume_"
+				+ process.getId());
 		addFlowRelationship(net, updatedState, ccCheck);
 		addFlowRelationship(net, execState, ccCheck);
 		addFlowRelationship(net, ccCheck, execState);
@@ -156,12 +157,13 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, startT, enabled);
 				addFlowRelationship(net, enabled, exTask.startT);
 				addFlowRelationship(net, enableStarting, exTask.startT);
+				addFlowRelationship(net, exTask.startT, enableStarting);
 				addFlowRelationship(net, enableFinishing, exTask.endT);
 				addFlowRelationship(net, exTask.endT, executed);
 				addFlowRelationship(net, exTask.endT, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
-				// finishing construct(finalize with skip, finish and abort)
+				// finishing construct(finalize with skip, finish, abort and leave_suspend)
 				Place enableFinalize = addPlace(net,
 						"ad-hoc_enable_finalize_task_" + exTask.getId());
 				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_"
@@ -171,6 +173,7 @@ public class ExecConverter extends Converter {
 				Transition finish = addTauTransition(net, "ad-hoc_finish_task_"
 						+ exTask.getId());
 				Transition abort = addTauTransition(net, "ad-hoc_abort_task_" + exTask.getId());
+				Transition leaveSuspended = addTauTransition(net, "ad-hoc_leave_suspended_task_" + exTask.getId());
 				
 				addFlowRelationship(net, finalize, enableFinalize);
 				
@@ -185,7 +188,11 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, enableFinalize, abort);
 				addFlowRelationship(net, exTask.running, abort);
 				addFlowRelationship(net, abort, taskFinalized);
-								
+					
+				addFlowRelationship(net, enableFinalize,  leaveSuspended);
+				addFlowRelationship(net, exTask.suspended,  leaveSuspended);
+				addFlowRelationship(net,  leaveSuspended, taskFinalized);
+				
 				addFlowRelationship(net, taskFinalized, endT);	
 			}
 		}else if (process.isParallelOrdering() && !abortWhenFinalize) {
@@ -227,7 +234,6 @@ public class ExecConverter extends Converter {
 						+ exTask.getId());
 				Transition finish = addTauTransition(net, "ad-hoc_finish_task_"
 						+ exTask.getId());
-				Transition abort = addTauTransition(net, "ad-hoc_abort_task_" + exTask.getId());
 				
 				addFlowRelationship(net, finalize, enableFinalize);
 				

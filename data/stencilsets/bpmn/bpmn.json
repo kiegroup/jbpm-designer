@@ -1114,6 +1114,41 @@
 					"refToView":"adhoc"
 				},
 				{
+					"id":"AdHocOrdering",
+					"type":"Choice",
+					"title":"AdHocOrdering",
+					"value":"Sequential",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"Sequential",
+							"refToView":"Sequential"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"Parallel",
+							"refToView":"Parallel"
+						}
+					]
+				},
+				{
+					"id":"AdHocCompletionCondition",
+					"type":"String",
+					"title":"AdHocCompletionCondition",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
 					"id":"isCompensation",
 					"type":"Boolean",
 					"title":"isCompensation",

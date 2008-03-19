@@ -413,9 +413,7 @@ public class BPMNRDFImporter {
 						sp.setAdhoc(false);
 					}
 				}
-				// TODO rename MI_Ordering in stencil set or new Adhoc-Ordering?
-				// TODO missing completion condition concept
-				else if (attribute.equals("MI_Ordering")) {
+				else if (attribute.equals("AdHocOrdering")) {
 					// standard case is sequential ordering
 					String ordering = getContent(n);
 					if (ordering.equals("Parallel")) {
@@ -423,6 +421,8 @@ public class BPMNRDFImporter {
 					} else {
 						sp.setParallelOrdering(false);
 					}
+				} else if (attribute.equals("AdHocCompletionCondition")) {
+					sp.setCompletionCondition(getContent(n));					
 				} else {
 					handleStandardAttributes(attribute, n, sp, c, "name");
 				}
