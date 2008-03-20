@@ -17,6 +17,7 @@ import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.impl.ExecPNFactoryImpl;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.Transition;
 
 public class ExecConverter extends Converter {
@@ -30,8 +31,7 @@ public class ExecConverter extends Converter {
 		this.modelURL = modelURL;
 		this.taskMap = new ArrayList<ExecTask>();
 	}
-
-
+		
 	@Override
 	protected void handleDiagram(PetriNet net, ConversionContext c) {
 		((ExecPetriNet) net).setName(diagram.getTitle());
@@ -104,6 +104,7 @@ public class ExecConverter extends Converter {
 		Transition defaultEndT = addTauTransition(net, "ad-hoc_defaultEnd_"
 				+ process.getId());
 		Place execState = addPlace(net, "ad-hoc_execState_" + process.getId());
+		
 		addFlowRelationship(net, pl.startP, startT);
 		addFlowRelationship(net, startT, execState);
 		addFlowRelationship(net, execState, defaultEndT);
@@ -113,15 +114,15 @@ public class ExecConverter extends Converter {
 
 		
 		// standard completion condition check
-		Place updatedState = addPlace(net, "ad-hoc_updatedState_"
-				+ process.getId());
+		Place updatedState = addPlace(net, "ad-hoc_updatedState_" + process.getId());
 		Place ccStatus = addPlace(net, "ad-hoc_ccStatus_" + process.getId());
-		Transition ccCheck = addLabeledTransition(net, "ad-hoc_ccCheck_"
-				+ process.getId(), "ad-hoc_cc=" + process.getCompletionCondition());
-		Transition finalize = addTauTransition(net, "ad-hoc_finalize_"
-				+ process.getId());
-		Transition resume = addTauTransition(net, "ad-hoc_resume_"
-				+ process.getId());
+		// TODO: make AutomaticTransition with functionality to evaluate completion condition
+		Transition ccCheck = addLabeledTransition(net, "ad-hoc_ccCheck_" + process.getId(),
+				"ad-hoc_cc=" + process.getCompletionCondition());
+		// TODO: make Tau when guards work
+		Transition finalize = addLabeledTransition(net, "ad-hoc_finalize_" + process.getId(), "ad-hoc_finalize");
+		// TODO: make Tau when guards work
+		Transition resume = addLabeledTransition(net, "ad-hoc_resume_" + process.getId(), "ad-hoc_resume");
 		addFlowRelationship(net, updatedState, ccCheck);
 		addFlowRelationship(net, execState, ccCheck);
 		addFlowRelationship(net, ccCheck, execState);

@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import de.hpi.execpn.AutomaticTransition;
 import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.FormTransition;
 import de.hpi.petrinet.FlowRelationship;
@@ -47,6 +48,10 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 					.createElement("model"));
 			model.setAttribute("href", ((FormTransition) transition)
 					.getModelURL());
+		}else if (transition instanceof AutomaticTransition){
+			// TODO: What about guards?
+			Element fire = (Element) ts.appendChild(doc.createElement("fire"));
+			fire.setAttribute("type", "automatic");
 		}
 
 		// get incoming places out of petri net model
