@@ -31,6 +31,7 @@
         <mapping class="org.b3mn.poem.Identity"/>
         <mapping class="org.b3mn.poem.Representation"/>
         <mapping class="org.b3mn.poem.Plugin"/>
+		<mapping class="org.b3mn.poem.Interaction"/>
 		<mapping resource="Access.hbm.xml"/>		
     </session-factory>
 

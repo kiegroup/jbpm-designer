@@ -33,5 +33,27 @@ public class IdentityTest {
 		List<Representation> models = Identity.instance(openid).getModels("bpmn", new Date(0), new Date(109,0,1));
 		assertEquals(7,models.size());
 	}
+	
+	@Test public void getHierarchy() {
+		String hierarchy = "U133";
+		assertEquals(hierarchy, Identity.instance("http://ole.myopenid.com/").getHierarchy());
+	}
+	
+	@Test public void createAndDeleteInteraction() {
+		Identity subject = Identity.instance("http://ole.myopenid.com/");
+		Identity object =  Identity.instance("/data/model/7");
+		String term = "write";
+		if(!Interaction.exist(subject.getHierarchy(), object.getHierarchy(), term)) {
+			Interaction right = new Interaction();
+		    right.setSubject(subject.getHierarchy());
+		    right.setObject(object.getHierarchy());
+		    right.setScheme("http://b3mn.org/http");
+		    right.setTerm(term);
+		    right.save();
+		    assertEquals(term, object.access(subject.getUri(), "/self").getAccess_term());
+		    right.delete();
+		}
+	    
+	}
 
 }

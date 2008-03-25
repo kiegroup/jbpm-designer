@@ -116,6 +116,13 @@ public class Identity {
 	    .setLong("ident_id", this.id).uniqueResult();
 	}
 	
+	public String getHierarchy() {
+		return Persistance.getSession().
+		createSQLQuery("select structure.hierarchy from identity, structure " +
+						"where identity.id = :id and identity.id = structure.ident_id").
+		setLong("id", this.id).uniqueResult().toString();
+	}
+	
 	/*public void delete() {
 		// delete Identity on cascade
 	}*/

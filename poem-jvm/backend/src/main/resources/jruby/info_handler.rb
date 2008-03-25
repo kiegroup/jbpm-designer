@@ -1,6 +1,9 @@
 module Handler
   require 'rubygems'
   require 'activesupport'
+  
+  include_class 'org.b3mn.poem.Interaction'
+  
   class CollectionHandler < DefaultHandler
     def doGet(interaction)
        if interaction.params['from']
@@ -27,28 +30,23 @@ module Handler
        models.each do |model|
          output << Helper.getModelInfo(interaction, Identity.instance(model.getIdent_id))
        end
-       out = interaction.response.getWriter
-       out.print(ActiveSupport::JSON.encode(output))
+       Helper.jsonResponse(interaction.response, output))
     end
   end
   
   class MetaHandler < DefaultHandler
     def doGet(interaction)
-      output = Helper.getModelInfo(interaction)
-      out = interaction.response.getWriter
-      out.print(ActiveSupport::JSON.encode(output))
+      Helper.jsonResponse(interaction.response, Helper.getModelInfo(interaction, representation))
     end
   end
   
   class InfoHandler < DefaultHandler
     def doGet(interaction)
-      interaction.response.setStatus(200)
       representation = interaction.object.read
-      out = interaction.response.getWriter
       output = Helper.toHash(representation, %w{Title Summary Updated Created Type})
       output['edit_uri'] = interaction.hostname + interaction.object.getUri + '/info'
       output['self_uri'] = interaction.hostname + interaction.object.getUri + '/self'
-      out.print(ActiveSupport::JSON.encode(output))
+      Helper.jsonResponse(interaction.response, output)
     end
       
     def doPut(interaction)
@@ -56,20 +54,43 @@ module Handler
       interaction.params.each do |key, value|
         representation.send "set#{key.capitalize}", value
       end
-      representation.update
-      interaction.response.setStatus(200)
+      representation.update 
+      Helper.jsonResponse(interaction.response, Helper.getModelInfo(interaction, representation))
     end
   end
 
   class AccessHandler < DefaultHandler
     def doPost(interaction)
-      
+      subject = Identity.instance(interaction.params.subject).getHierarchy
+      object = interaction['object'].getHierarchy
+      term = interaction.params.predicate
+      unless Interaction.exist(subject, object, term)
+        right = new Interaction
+        right.setSubject(subject)
+        right.setObject(object)
+        right.setScheme('http://b3mn.org/http')
+        right.setTerm(term)
+        right.save()
+      end
+    end
+    
+    def doDelete(interaction)
+      # Attentation! HTTP-Server interaction vs HibernateClass Interaction.
+      Interaction.getInteraction(interaction.params[id].to_i).delete
+      interaction.response.setStatus(200)
     end
   end
 
 end
 
 module Helper
+  
+  def self.jsonResponse(response, output)
+    response.setStatus(200)
+    out = response.getWriter
+    out.print(ActiveSupport::JSON.encode(output))
+  end
+  
   def self.getModelInfo(interaction, model = nil)
     model = interaction.object if model.nil?
     uris = []

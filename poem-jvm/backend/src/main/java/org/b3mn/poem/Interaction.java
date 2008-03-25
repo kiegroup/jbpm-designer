@@ -5,8 +5,8 @@ import javax.persistence.*;
 @Entity
 public class Interaction {
 	
-	@Id
-	private int id;
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private long id;
 	private String subject;
 	private boolean subject_descend;
    	private String object;
@@ -14,11 +14,8 @@ public class Interaction {
    	private String scheme;
    	private String term;
 
-   	public int getId() {
+   	public long getId() {
 	   	return id;
-   	}
-   	public void setId(int id) {
-	   	this.id = id;
    	}
    	public String getObject() {
 	   	return object;
@@ -55,6 +52,30 @@ public class Interaction {
 	}
 	public void setTerm(String term) {
 		this.term = term;
+	}
+	public void delete() {
+		Persistance.getSession().delete(this);
+	}
+	public long save() {
+		long id = 0;
+		Persistance.getSession().save(this);
+		return id;
+	}
+	public static Interaction getInteraction(long id) {
+		return (Interaction) Persistance.getSession().
+		createSQLQuery("select {interaction.*} from {interaction} where id = :id").
+		addEntity("interaction", Interaction.class).
+		setLong("id", id).uniqueResult();
+	}
+	public static boolean exist(String subject, String object, String term) {
+		if(Persistance.getSession().
+		   createSQLQuery("select * from interaction where subject = :subject " +
+		   "and object = :object and term = :term").
+		   setString("subject", subject).
+		   setString("object", object).
+		   setString("term", term) == null)
+			return false;
+		else return true;
 	}
 
 
