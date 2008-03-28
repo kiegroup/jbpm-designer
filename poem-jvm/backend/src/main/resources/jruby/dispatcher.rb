@@ -26,9 +26,6 @@ class Dispatcher
       unless access.nil?
         if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
           if (Handler.constants.include?(access.getTerm))
-            puts access.getAccess_term
-            puts access.getPlugin_relation
-            puts access.getTerm
             handler = Handler.module_eval("#{access.getTerm}").new
             handler.handleRequest(ServerInteraction.new(Identity.instance(openid), Identity.instance(Helper.getObjectPath(uri)), Helper.getParams(request), request, response, hostname))
           else

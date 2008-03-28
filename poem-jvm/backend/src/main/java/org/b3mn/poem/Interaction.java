@@ -10,7 +10,9 @@ public class Interaction {
 	private String subject;
 	private boolean subject_descend;
    	private String object;
+   	private boolean object_self;
    	private boolean object_descend;
+   	private boolean object_restrict_to_parent;
    	private String scheme;
    	private String term;
 
@@ -53,6 +55,21 @@ public class Interaction {
 	public void setTerm(String term) {
 		this.term = term;
 	}
+	public String getPredicate() {
+		return term;
+	}
+	public boolean isObject_self() {
+		return object_self;
+	}
+	public void setObject_self(boolean object_self) {
+		this.object_self = object_self;
+	}
+	public boolean isObject_restrict_to_parent() {
+		return object_restrict_to_parent;
+	}
+	public void setObject_restrict_to_parent(boolean object_restrict_to_parent) {
+		this.object_restrict_to_parent = object_restrict_to_parent;
+	}
 	public void delete() {
 		Persistance.getSession().delete(this);
 	}
@@ -61,22 +78,32 @@ public class Interaction {
 		Persistance.getSession().save(this);
 		return id;
 	}
+	public String getUri() {
+		return "/access?id=" +  this.getId();
+	}
 	public static Interaction getInteraction(long id) {
 		return (Interaction) Persistance.getSession().
 		createSQLQuery("select {interaction.*} from {interaction} where id = :id").
 		addEntity("interaction", Interaction.class).
 		setLong("id", id).uniqueResult();
 	}
-	public static boolean exist(String subject, String object, String term) {
-		if(Persistance.getSession().
-		   createSQLQuery("select * from interaction where subject = :subject " +
+	public static Interaction exist(String subject, String object, String term) {
+		Interaction right = (Interaction)Persistance.getSession().
+		   createSQLQuery("select {interaction.*} from {interaction} where subject = :subject " +
 		   "and object = :object and term = :term").
+		   addEntity("interaction", Interaction.class).
 		   setString("subject", subject).
 		   setString("object", object).
-		   setString("term", term) == null)
-			return false;
+		   setString("term", term).uniqueResult();
+		if(right == null)
+			return null;
+		else return right;
+	}
+	public static boolean exist(long id) {
+		if((Interaction)Persistance.getSession().
+		   createSQLQuery("select {interaction.*} from {interaction} where id = :id").
+		   addEntity("interaction", Interaction.class).
+		   setLong("id", id).uniqueResult() == null) return false;
 		else return true;
 	}
-
-
 }

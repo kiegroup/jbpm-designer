@@ -8,20 +8,15 @@ import org.junit.Test;
 
 public class IdentityTest {
 	
-	@Test public void instanciate() {
-		String test = "openid";
-		
-		assertEquals(Identity.instance(test).getUri(), test);
-	}
 	
 	@Test public void getAcccess() {
 		String uri = "/data/model/10";
 		List<Access> access = Identity.instance(uri).getAccess();
-		assertEquals(2, access.size());
+		assertEquals(3, access.size());
 	}
 	
 	@Test public void access() {
-		String term = "read", openid = "http://ole.myopenid.com/", uri = "/data/model/2", rel="/self";
+		String term = "owner", openid = "http://ole.myopenid.com/", uri = "/data/model/9", rel="/self";
 		Identity model = Identity.instance(uri);
 		Access access = model.access(openid,rel);
 		String new_Term = access.getAccess_term();
@@ -35,25 +30,37 @@ public class IdentityTest {
 	}
 	
 	@Test public void getHierarchy() {
-		String hierarchy = "U133";
-		assertEquals(hierarchy, Identity.instance("http://ole.myopenid.com/").getHierarchy());
+		String hierarchy = "U26";
+		assertEquals(hierarchy, Identity.instance("http://ole.myopenid.com/").getModelHierarchy());
 	}
 	
 	@Test public void createAndDeleteInteraction() {
-		Identity subject = Identity.instance("http://ole.myopenid.com/");
-		Identity object =  Identity.instance("/data/model/7");
+		Identity subject = Identity.instance("http://hagen.myopenid.com/");
+		Identity object =  Identity.instance("/data/model/9");
 		String term = "write";
-		if(!Interaction.exist(subject.getHierarchy(), object.getHierarchy(), term)) {
+		if(Interaction.exist(subject.getUserHierarchy(), object.getModelHierarchy(), term) == null) {
 			Interaction right = new Interaction();
-		    right.setSubject(subject.getHierarchy());
-		    right.setObject(object.getHierarchy());
+		    right.setSubject(subject.getUserHierarchy());
+		    right.setObject(object.getModelHierarchy());
 		    right.setScheme("http://b3mn.org/http");
 		    right.setTerm(term);
+		    right.setObject_self(true);
 		    right.save();
 		    assertEquals(term, object.access(subject.getUri(), "/self").getAccess_term());
 		    right.delete();
 		}
-	    
+	}
+	
+	@Test public void newModel() {
+		Identity owner = Identity.instance("http://ole.myopenid.com/");
+		String title = "New Process";
+		String type = "bpmn";
+		String mime_type = "application/xhtml+xml";
+		String language = "US_en";
+		String summary = "JUnit Test Process";
+		String content = "<div id=\"oryxcanvas\" class=\"-oryx-canvas\"><span class=\"oryx-mode\">writeable</span><span class=\"oryx-mode\">fullscreen</span><a rel=\"oryx-stencilset\" href=\"/files/stencilsets/bpmn/bpmn.json\"/></div>";
+		Identity identity = Identity.newModel(owner, title, type, mime_type, language, summary, content);
+		assertEquals(identity.read().getTitle(),title);
 	}
 
 }

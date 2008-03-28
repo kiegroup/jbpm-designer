@@ -1,15 +1,16 @@
 package org.b3mn.poem;
 
 import javax.persistence.*;
+
 import org.hibernate.HibernateException;
 import java.util.Date;
 
 @Entity
 public class Representation {
 	
-	@Id
-    private int id;
-	private int ident_id;
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private long id;
+	private long ident_id;
     private String mime_type;
     private String language;
     private String title;
@@ -32,16 +33,16 @@ public class Representation {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-	public int getIdent_id() {
+	public long getIdent_id() {
 		return ident_id;
 	}
-	public void setIdent_id(int ident_id) {
+	public void setIdent_id(long ident_id) {
 		this.ident_id = ident_id;
 	}
 	public String getLanguage() {
@@ -93,8 +94,13 @@ public class Representation {
 		}
 	}
 	
-	/*public static Representation instance(Identity model) {
-	// insert tralala
-	}*/
+	public static Representation instance(Identity model) {
+		Representation representation = new Representation();
+		representation.setIdent_id(model.getId());
+		representation.setCreated(new Date(System.currentTimeMillis()));
+		representation.setUpdated(new Date(System.currentTimeMillis()));
+		return representation;
+		
+	}
 	
 }

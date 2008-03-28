@@ -1,6 +1,9 @@
 package org.b3mn.poem;
 
 import javax.persistence.*;
+
+import org.hibernate.HibernateException;
+
 import java.util.List;
 import java.util.Iterator;
 import java.util.Date;
@@ -8,14 +11,14 @@ import java.util.Date;
 @Entity
 public class Identity {
 
-	@Id
-	private long id;
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
 	private String uri;
 	
-	public long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getUri() {
@@ -26,29 +29,53 @@ public class Identity {
 	}
 	public static Identity instance(String uri) {
 		return (Identity) Persistance.getSession().
-			createSQLQuery("select {identity.*} FROM identity(?)")
+			createSQLQuery("select {identity.*} FROM {identity} where uri=?")
 			.addEntity("identity", Identity.class)
 			.setString(0, uri)
 			.uniqueResult();
 	}
 	
-	public static Identity instance(long id) {
+	public static Identity instance(int id) {
 		return (Identity) Persistance.getSession().
 			createSQLQuery("select {identity.*} FROM {identity} where id=:id")
 			.addEntity("identity", Identity.class)
-			.setLong("id", id)
+			.setInteger("id", id)
 			.uniqueResult();
 	}
 	
-	/*public static Identity instance(String uri, String type, Identity owner) {
-
-	}*/
+	public static Identity newModel(Identity owner, String title, String type, String mime_type, String language, String summary, String content) {
+			
+			Identity identity = (Identity) Persistance.getSession().
+			createSQLQuery("select {identity.*} from identity(?)")
+			.addEntity("identity", Identity.class).setString(0, "/data/model/").uniqueResult();
+			try {
+				identity.setUri("/data/model/" + identity.getId());
+				Persistance.getSession().flush();
+				Persistance.commit();
+				}
+			catch(HibernateException ex) {
+				System.err.println(ex.getMessage());
+			}
+			
+			Structure.instance(identity.getId(), owner.getUserHierarchy());
+			
+			Representation representation = Representation.instance(identity);
+			representation.setType(type);
+			representation.setTitle(title);
+			representation.setSummary(summary);
+			representation.setLanguage(language);
+			representation.setMime_type(mime_type);
+			representation.setContent(content);
+			Persistance.getSession().save(representation);
+			return identity;
+			
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Representation> getModels(String type, Date from, Date to) {
 		return (List<Representation>) Persistance.getSession().
 		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r" +
-					" where a.subject_name=:subject" +
+					" where (a.subject_name=:subject or a.subject_name='public')" +
 					" and r.type like :type and r.updated >= :from and r.updated <= :to" +
 					" and i.id=a.object_id and i.id=r.ident_id")
 		.addEntity("representation", Representation.class)
@@ -72,7 +99,7 @@ public class Identity {
 	@SuppressWarnings("unchecked")
 	public Access access(String openId, String rel) {
 		List<Access> access = Persistance.getSession().
-		createSQLQuery("select {access.*} from {access} where subject_name = :subject and object_name = :object and plugin_relation = :relation")
+		createSQLQuery("select {access.*} from {access} where (subject_name = :subject or subject_name = 'public') and object_name = :object and plugin_relation = :relation")
 		.addEntity("access", Access.class)
 		.setString("subject", openId)
 	    .setString("object", this.getUri())
@@ -113,14 +140,21 @@ public class Identity {
 		return (Representation)Persistance.getSession().
 		createSQLQuery("select {representation.*} from {representation} where ident_id = :ident_id")
 		.addEntity("representation", Representation.class)
-	    .setLong("ident_id", this.id).uniqueResult();
+	    .setInteger("ident_id", this.id).uniqueResult();
 	}
 	
-	public String getHierarchy() {
+	public String getModelHierarchy() {
 		return Persistance.getSession().
 		createSQLQuery("select structure.hierarchy from identity, structure " +
 						"where identity.id = :id and identity.id = structure.ident_id").
-		setLong("id", this.id).uniqueResult().toString();
+		setInteger("id", this.id).uniqueResult().toString();
+	}
+	public String getUserHierarchy() {
+		return Persistance.getSession().
+		createSQLQuery("select structure.hierarchy from identity, structure " +
+						"where identity.id = :id and identity.id = structure.ident_id " +
+						"and structure.hierarchy like 'U2_%'").
+		setInteger("id", this.id).uniqueResult().toString();
 	}
 	
 	/*public void delete() {

@@ -9,9 +9,31 @@ class Helper < ActiveRecord::Migration
         declare
           result "identity";
         begin
-          select * into result from "identity" where uri = openid;
+          select * into result 
+          from "identity" 
+          where uri = openid;
+          
           if not found then
             insert into "identity"(uri) values(openid) returning * into result;
+          end if;
+          
+          return result;
+        end;
+      $pgsql$ language plpgsql;
+    }
+    
+    execute %q{
+      create function ensure_descendant(root_hierarchy text, target integer) returns "structure" as $pgsql$
+        declare
+          result "structure";
+        begin
+          select * into result
+          from "structure"
+          where hierarchy like root_hierarchy || '%'
+                          and ident_id = target;
+          
+          if not found then
+            insert into "structure"(hierarchy, ident_id) values(next_child_position(root_hierarchy), target) returning * into result;
           end if;
           
           return result;
@@ -156,34 +178,51 @@ class Helper < ActiveRecord::Migration
         child_position(hierarchy)
       $ruby$ language plruby immutable;
       
-      create function next_child_position(parent_hier text) returns text as $sql$
-        select $1 || encode_position(coalesce(max(child_position(hierarchy))+1,0)) from structure where parent(hierarchy) = $1;
+      create function next_child_position(hierarchy text) returns text as $sql$
+        select $1 || encode_position(coalesce(max(child_position(hierarchy))+1,0)) from "structure" where parent(hierarchy) = $1;
       $sql$ language sql;
       
       create index poem_parent on structure(parent(hierarchy));
       create index poem_childpos on structure(child_position(hierarchy));
     }
     
+
+    
     execute %q{
-      create function ensure_descendant(root_hierarchy text, target identity) returns structure as $pgsql$
-        declare
-          result structure;
-        begin
-          select  * 
-          into    result
-          from    structure
-          where   hierarchy like root_hierarchy || '%'
-              and identity = target.id;
-          
-          if not found then
-            insert into structure(hierarchy, identity)
-              select next_child_position(root_hierarchy), target.id
-              returning * into result;
-          end if;
-          
-          return result;
-        end;
-      $pgsql$ language plpgsql;
+      create or replace view access as
+        select  context_name.id     as context_id,
+                context_name.uri    as context_name,
+                subject_name.id     as subject_id,
+                subject_name.uri    as subject_name,
+                object_name.id      as object_id,
+                object_name.uri     as object_name,
+                access.id           as access_id,
+                access.scheme		    as access_scheme,	
+                access.term			    as access_term,
+                plugin.rel			    as plugin_relation,
+                plugin.scheme		    as scheme,
+                plugin.term			    as term
+        from    "interaction" as access,
+                "structure"   as context,
+                "identity"    as context_name,
+                "structure"   as subject_axis,
+                "identity"    as subject_name,
+                "structure"   as object_axis,
+                "identity"    as object_name,
+                "plugin"	    as plugin
+        where   access.subject = context.hierarchy
+            and context.ident_id = context_name.id
+            and (     access.subject = subject_axis.hierarchy
+                  or  (access.subject_descend and subject_axis.hierarchy like access.subject || '_%')
+                )
+            and (
+              ((not access.object_restrict_to_parent) and access.object_self and access.object = object_axis.hierarchy)
+              or  ((not access.object_restrict_to_parent) and access.object_descend and object_axis.hierarchy like access.object || '_%')
+              or ((access.object_restrict_to_parent and access.object_self) and object_axis.hierarchy = subject_axis.hierarchy)
+              or ((access.object_restrict_to_parent and access.object_descend) and parent(object_axis.hierarchy) = subject_axis.hierarchy)
+            )
+            and subject_axis.ident_id = subject_name.id
+            and object_axis.ident_id = object_name.id;
     }
   end
 
