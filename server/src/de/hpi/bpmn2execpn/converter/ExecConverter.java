@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.SubProcess;
@@ -15,9 +14,9 @@ import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.impl.ExecPNFactoryImpl;
+import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
-import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.Transition;
 
 public class ExecConverter extends Converter {
@@ -81,7 +80,7 @@ public class ExecConverter extends Converter {
 		for (IntermediateEvent event : task.getAttachedEvents())
 			handleAttachedIntermediateEventForTask(net, event, c);
 	}
-
+	
 	@Override
 	protected void handleSubProcess(PetriNet net, SubProcess process,
 			ConversionContext c) {

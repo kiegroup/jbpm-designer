@@ -65,6 +65,9 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			}
 		}
 
+		/*
+		 * Should be done by the engine by now 
+		 * 
 		if (incomingPlaces.size() > 1) {
 			Element guard = (Element) ts.appendChild(doc.createElement("guard"));
 
@@ -79,7 +82,7 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 						+ second.getId() + "." + caseIdName);
 			}
 		}
-
+		 */
 		return tnode;
 	}
 
@@ -91,7 +94,9 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		Node n1node = pnode.appendChild(doc.createElement("name"));
 		addContentElement(doc, n1node, "value", place.getId());
 		addContentElement(doc, n1node, "text", place.getId());
-
+/*
+ * handled by engine
+ 
 		// standard locator for case_id
 		Element ts = (Element) pnode.appendChild(doc
 				.createElement("toolspecific"));
@@ -102,7 +107,7 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		addContentElement(doc, locator, "name", caseIdName);
 		addContentElement(doc, locator, "type", caseIdXSDType);
 		addContentElement(doc, locator, "expr", caseIdXPathExpression);
-
+*/
 		return pnode;
 	}
 
