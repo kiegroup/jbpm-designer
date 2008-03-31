@@ -2,8 +2,6 @@ package org.b3mn.poem;
 
 import javax.persistence.*;
 
-import org.hibernate.HibernateException;
-
 import java.util.List;
 import java.util.Iterator;
 import java.util.Date;
@@ -63,6 +61,31 @@ public class Identity {
 			Persistance.getSession().save(representation);
 			return identity;
 			
+	}
+	
+	public static Identity ensureSubject(String openid) {
+		
+		Identity userroot = instance("ownership");
+		Identity identity = (Identity) Persistance.getSession().
+		createSQLQuery("select {identity.*} from identity(?)")
+		.addEntity("identity", Identity.class).
+		setString(0, openid).uniqueResult();
+		
+		Structure.instance(identity.getId(), userroot.getUserHierarchy());
+		
+		return identity;	
+	}
+	
+	public static Identity newUser(String openid, String hierarchy) {
+
+		Identity identity = (Identity) Persistance.getSession().
+		createSQLQuery("select {identity.*} from identity(?)")
+		.addEntity("identity", Identity.class).
+		setString(0, openid).uniqueResult();
+		
+		Structure.instance(identity.getId(), hierarchy);
+		
+		return identity;	
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -152,7 +175,6 @@ public class Identity {
 	}
 	
 	public void delete() {
-		// delete Identity on cascade
 		Persistance.getSession().delete(this);
 	}
 }

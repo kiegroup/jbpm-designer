@@ -26,14 +26,14 @@ class Dispatcher
     uri = request.getPathInfo
     if(Helper.getRelation(uri) == '/model')
       handler = Handler::CollectionHandler.new
-      handler.handleRequest(ServerInteraction.new(Identity.instance(openid), nil, Helper.getParams(request), request, response, hostname))
+      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname))
     else
       access = Identity.instance(Helper.getObjectPath(uri)).access(openid, Helper.getRelation(uri))
       unless access.nil?
         if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
           if (Handler.constants.include?(access.getTerm))
             handler = Handler.module_eval("#{access.getTerm}").new
-            handler.handleRequest(ServerInteraction.new(Identity.instance(openid), Identity.instance(Helper.getObjectPath(uri)), Helper.getParams(request), request, response, hostname))
+            handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), Identity.instance(Helper.getObjectPath(uri)), Helper.getParams(request), request, response, hostname))
           else
             response.setStatus(501)
             out = response.getWriter
