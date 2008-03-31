@@ -26,7 +26,7 @@ public class IdentityTest {
 	@Test public void getModels() {
 		String openid = "http://ole.myopenid.com/";
 		List<Representation> models = Identity.instance(openid).getModels("bpmn", new Date(0), new Date(109,0,1));
-		assertEquals(7,models.size());
+		assertEquals("bpmn",models.get(0).getType());
 	}
 	
 	@Test public void getHierarchy() {

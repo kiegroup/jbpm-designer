@@ -1,6 +1,12 @@
 require 'java'
-require 'handler'
+
+require 'encoding'
+
+require 'helper'
+require 'default_handler'
 require 'info_handler'
+require 'model_handler'
+require 'collection_handler'
 
 include_class 'org.b3mn.poem.Identity'
 include_class 'org.b3mn.poem.Access'
@@ -46,32 +52,6 @@ class Dispatcher
     end
   end
 end
-module Helper
-  def self.toHash(obj, keys)
-    output = {}
-    keys.each do |key|
-      method = "get#{key.capitalize}"
-      output[key.downcase] = obj.send(method).to_s if obj.respond_to?(method)
-    end
-    return output
-  end
-  
-  def self.getParams(request)
-    params = {}
-    request.getParameterNames.each do |key|
-      params[key] = request.getParameter(key)
-    end
-    return params
-  end
-  
-  def self.getObjectPath(uri)
-    return uri.gsub(/(\/[^\/]+\/?)$/, "")
-  end
-  
-  def self.getRelation(uri)
-    return uri.match(/(\/[^\/]+\/*)$/).to_s.gsub(/\/*$/, "")
-  end
-  
-end
+
 
 
