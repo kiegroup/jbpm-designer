@@ -26,7 +26,7 @@ module Handler
 
   class AccessHandler < DefaultHandler
     def doPost(interaction)
-      subject = Identity.instance(interaction.params.subject).getHierarchy
+      subject = Identity.ensureSubject(interaction.params.subject).getUserHierarchy
       object = interaction['object'].getHierarchy
       term = interaction.params.predicate
       right = Interaction.exist(subject, object, term)
