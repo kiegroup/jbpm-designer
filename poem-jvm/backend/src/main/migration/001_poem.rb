@@ -29,7 +29,7 @@ class Poem < ActiveRecord::Migration
       alter table "representation" alter column title set storage main;
       alter table "representation" alter column summary set storage main;
       
-      alter table "representation" add foreign key(ident_id) references "identity";
+      alter table "representation" add foreign key(ident_id) references "identity" on delete cascade;
       alter table "representation" alter column created set default now();
       alter table "representation" alter column updated set default now();
     }
@@ -43,7 +43,7 @@ class Poem < ActiveRecord::Migration
     execute %q{
       alter table "structure" alter column hierarchy set storage main;
       alter table "structure" add primary key(hierarchy);
-      alter table "structure" add foreign key(ident_id) references "identity";
+      alter table "structure" add foreign key(ident_id) references "identity" on delete cascade;
     }
     
     create_table 'interaction' do |t|
@@ -65,8 +65,8 @@ class Poem < ActiveRecord::Migration
       alter table "interaction" alter column scheme set storage main;
       alter table "interaction" alter column term set storage main;
       
-      alter table "interaction" add foreign key(subject) references "structure";
-      alter table "interaction" add foreign key(object) references "structure";
+      alter table "interaction" add foreign key(subject) references "structure" on delete cascade;
+      alter table "interaction" add foreign key(object) references "structure" on delete cascade;
       
       create index subject_idx  on "interaction"(subject);
       create index object_idx   on "interaction"(object);

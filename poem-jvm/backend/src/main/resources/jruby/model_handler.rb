@@ -61,5 +61,10 @@ module Handler
       representation.update
       interaction.response.setStatus(200)
     end
+    
+    def doDelete(interaction)
+      interaction.object.delete
+      interaction.response.setStatus(200)
+    end
   end
 end

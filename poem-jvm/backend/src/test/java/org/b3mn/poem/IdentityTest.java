@@ -51,7 +51,7 @@ public class IdentityTest {
 		}
 	}
 	
-	@Test public void newModel() {
+	@Test public void newModelandDeleteModel() {
 		Identity owner = Identity.instance("http://ole.myopenid.com/");
 		String title = "New Process";
 		String type = "bpmn";
@@ -61,6 +61,7 @@ public class IdentityTest {
 		String content = "<div id=\"oryxcanvas\" class=\"-oryx-canvas\"><span class=\"oryx-mode\">writeable</span><span class=\"oryx-mode\">fullscreen</span><a rel=\"oryx-stencilset\" href=\"/files/stencilsets/bpmn/bpmn.json\"/></div>";
 		Identity identity = Identity.newModel(owner, title, type, mime_type, language, summary, content);
 		assertEquals(identity.read().getTitle(),title);
+		identity.delete();
 	}
 
 }

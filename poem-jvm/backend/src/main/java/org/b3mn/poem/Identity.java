@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 public class Identity {
-
+        
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private String uri;
@@ -48,14 +48,8 @@ public class Identity {
 			Identity identity = (Identity) Persistance.getSession().
 			createSQLQuery("select {identity.*} from identity(?)")
 			.addEntity("identity", Identity.class).setString(0, "/data/model/").uniqueResult();
-			try {
-				identity.setUri("/data/model/" + identity.getId());
-				Persistance.getSession().flush();
-				Persistance.commit();
-				}
-			catch(HibernateException ex) {
-				System.err.println(ex.getMessage());
-			}
+			identity.setUri("/data/model/" + identity.getId());
+			Persistance.getSession().save(identity);
 			
 			Structure.instance(identity.getId(), owner.getUserHierarchy());
 			
@@ -157,7 +151,8 @@ public class Identity {
 		setInteger("id", this.id).uniqueResult().toString();
 	}
 	
-	/*public void delete() {
+	public void delete() {
 		// delete Identity on cascade
-	}*/
+		Persistance.getSession().delete(this);
+	}
 }
