@@ -7,6 +7,7 @@ public class LabeledTransitionImpl extends NodeImpl implements
 		LabeledTransition {
 	
 	protected String label;
+	protected String action;
 
 	public String getLabel() {
 		return label;
@@ -25,6 +26,14 @@ public class LabeledTransitionImpl extends NodeImpl implements
 	
 	public String toString() {
 		return getId()+"("+getLabel()+")";
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 
 }

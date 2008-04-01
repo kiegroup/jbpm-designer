@@ -65,16 +65,24 @@ public class Worklist extends HttpServlet {
 					String case_id = "";
 					String transition_id = "";
 					String transition_name = "";
+					String action = "";
 					for (int j=0; j < curCase.getChildNodes().getLength(); j++) {
 						if (curCase.getChildNodes().item(j).getNodeName().equals("case_id")) {
 							case_id = curCase.getChildNodes().item(j).getTextContent();
 						} else if (curCase.getChildNodes().item(j).getNodeName().equals("transition_id")) {
-							transition_id = "<a target=\"form_frame\" href=\"http://localhost:3000/transition/" + curCase.getChildNodes().item(j).getTextContent() + "\">open task</a>";
+							transition_id = curCase.getChildNodes().item(j).getTextContent();
 						} else if (curCase.getChildNodes().item(j).getNodeName().equals("transition_name")) {
 							transition_name = curCase.getChildNodes().item(j).getTextContent();
+						} else if (curCase.getChildNodes().item(j).getNodeName().equals("action")) {
+							action = curCase.getChildNodes().item(j).getTextContent();
 						}
 					}
-					jsData.add("['"+case_id+"','"+transition_id+"','"+transition_name+"']");
+					jsData.add("['"
+							+case_id+"','"
+							+transition_id+"','"
+							+transition_name
+							+"','<a target=\"form_frame\" href=\"http://localhost:3000/transition/" 
+							+ transition_id + "\">" + (action.equals("") ? "default" : action) +"</a>']");
 				}
 				
 				jsString = StringUtils.join(jsData, ", ");
@@ -83,37 +91,9 @@ public class Worklist extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			String bla = 
-			 "Ext.onReady(function(){\n" + 
-			 "    var myData = [ " + jsString + " ];\n" + 
-
-			 "    // create the data store\n" + 
-			 "    var store = new Ext.data.SimpleStore({\n" + 
-			 "        fields: [ {name: 'case_id'}, {name: 'transition_id'}, {name: 'transition_name'} ]\n" + 
-			 "    });\n" + 
-			 "    store.loadData(myData);\n" + 
-
-			 "    // create the Grid\n" + 
-			 "    var grid = new Ext.grid.GridPanel({\n" + 
-			 "        store: store,\n" + 
-			 "        columns: [ {id:'case_id', header: \"case_id\", sortable: true, dataIndex: 'case_id'},\n" +
-			 "{ header: \"Link to form\", sortable: true, dataIndex: 'transition_id'},\n" +
-			 "{ header: \"transition_name\", sortable: true, dataIndex: 'transition_name'},\n" +
-			 " ],\n" + 
-			 "        height:350,\n" + 
-			 "        width:380,\n" + 
-			 "        title:'Worklist'\n" + 
-			 "    });\n" + 
-
-			 "    grid.render('worklist-grid');\n" + 
-
-			 "    grid.getSelectionModel().selectFirstRow();\n" + 
-			 "});";
-
-			
-			
 			PrintWriter out = resp.getWriter();
 			
+			// mysteriously, this doesn't work if using xhtml ...???!
 /*			out.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:ext=\"http://b3mn.org/2007/ext\">");
 */
@@ -122,7 +102,9 @@ public class Worklist extends HttpServlet {
 			out.println("<script src=\"lib/ext-2.0.2/adapter/ext/ext-base.js\" type=\"text/javascript\" ></script>");			
 			out.println("<script src=\"lib/ext-2.0.2/ext-all-debug.js\" type=\"text/javascript\" ></script>");			
 
-			out.println("<script type=\"text/javascript\">" + bla + "</script>");
+			// define data for grid and load model code from external file
+			out.println("<script type=\"text/javascript\">Ext.grid.dummyData = [" +	jsString + " ]</script>");
+			out.println("<script type=\"text/javascript\" src=\"Plugins/worklistGrid.js\"></script>");
 
 			out.println("<style type=\"text/css\">\n" +
 					"@import url(\"lib/ext-2.0.2/resources/css/ext-all.css\");\n" +
@@ -131,7 +113,7 @@ public class Worklist extends HttpServlet {
 
 			out.println("</head>");
 
-			out.println("<body><table><tr colspan=2><td align=\"center\"><h3>Extreme Universal Worklist <span style=\"font-size: 40px\">2.0</span></h3></td></tr>" +
+			out.println("<body><table><tr colspan=2><td align=\"center\"><span style=\"font-size: 40px\">Universal Worklist</span></td></tr>" +
 					"<tr>" +
 					"<td width=500 valign=\"top\"><div id=\"worklist-grid\"></div></td>" +
 					"<td><iframe name=\"form_frame\" width=500 height=600 src=\"about:blank\" /></td>" +

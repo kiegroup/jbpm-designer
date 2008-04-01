@@ -48,23 +48,32 @@ public class ExecConverter extends Converter {
 		exTask.setId(task.getId());
 		exTask.setLabel(task.getLabel());
 		
-		exTask.startT = addLabeledTransition(net, "start_" + task.getId(), "start_"
-				+ task.getId());
+		// start Transition
+		LabeledTransition startT = addLabeledTransition(net, "start_" + task.getId(), task.getId());
+		startT.setAction("start");
+		exTask.startT = startT;
+		
 		exTask.running = addPlace(net, "running_" + task.getId());
-		exTask.endT = addLabeledTransition(net, "end_" + task.getId(), "end_"
-				+ task.getId());
-		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)),
-				exTask.startT);
-		addFlowRelationship(net, exTask.endT, c.map
-				.get(getOutgoingSequenceFlow(task)));
+		
+		// end Transition
+		LabeledTransition endT = addLabeledTransition(net, "end_" + task.getId(), task.getId());
+		endT.setAction("end");
+		exTask.endT = endT;
+		
+		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.startT);
+		addFlowRelationship(net, exTask.endT, c.map.get(getOutgoingSequenceFlow(task)));
 		addFlowRelationship(net, exTask.startT, exTask.running);
 		addFlowRelationship(net, exTask.running, exTask.endT);
 
-		//construct for suspend/resume
-		exTask.suspend = addLabeledTransition(net, "suspend_" + task.getId(),
-				"suspend_" + task.getId());
-		exTask.resume = addLabeledTransition(net, "resume_" + task.getId(),
-				"resume_" + task.getId());
+		// suspend/resume
+		LabeledTransition suspendT = addLabeledTransition(net, "suspend_" + task.getId(), task.getId());
+		suspendT.setAction("suspend");
+		exTask.suspend = suspendT;
+		
+		LabeledTransition resumeT = addLabeledTransition(net, "resume_" + task.getId(), task.getId());
+		resumeT.setAction("resume");
+		exTask.resume = resumeT;
+		
 		exTask.suspended = addPlace(net, "suspended_" + task.getId());
 		addFlowRelationship(net, exTask.running, exTask.suspend);
 		addFlowRelationship(net, exTask.suspend, exTask.suspended);
@@ -97,11 +106,9 @@ public class ExecConverter extends Converter {
 		SubProcessPlaces pl = c.getSubprocessPlaces(process);
 
 		// start and end transitions
-		Transition startT = addTauTransition(net, "ad-hoc_start_"
-				+ process.getId());
+		Transition startT = addTauTransition(net, "ad-hoc_start_" + process.getId());
 		Transition endT = addTauTransition(net, "ad-hoc_end_" + process.getId());
-		Transition defaultEndT = addTauTransition(net, "ad-hoc_defaultEnd_"
-				+ process.getId());
+		Transition defaultEndT = addTauTransition(net, "ad-hoc_defaultEnd_" + process.getId());
 		Place execState = addPlace(net, "ad-hoc_execState_" + process.getId());
 		
 		addFlowRelationship(net, pl.startP, startT);
@@ -116,12 +123,13 @@ public class ExecConverter extends Converter {
 		Place updatedState = addPlace(net, "ad-hoc_updatedState_" + process.getId());
 		Place ccStatus = addPlace(net, "ad-hoc_ccStatus_" + process.getId());
 		// TODO: make AutomaticTransition with functionality to evaluate completion condition
-		Transition ccCheck = addLabeledTransition(net, "ad-hoc_ccCheck_" + process.getId(),
-				"ad-hoc_cc=" + process.getCompletionCondition());
+		//Transition ccCheck = addLabeledTransition(net, "ad-hoc_ccCheck_" + process.getId(), "ad-hoc_cc_" + process.getCompletionCondition());
+		Transition ccCheck = addTauTransition(net, "ad-hoc_ccCheck_" + process.getId());
 		// TODO: make Tau when guards work
 		Transition finalize = addLabeledTransition(net, "ad-hoc_finalize_" + process.getId(), "ad-hoc_finalize");
 		// TODO: make Tau when guards work
-		Transition resume = addLabeledTransition(net, "ad-hoc_resume_" + process.getId(), "ad-hoc_resume");
+		//Transition resume = addLabeledTransition(net, "ad-hoc_resume_" + process.getId(), "ad-hoc_resume");
+		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
 		addFlowRelationship(net, updatedState, ccCheck);
 		addFlowRelationship(net, execState, ccCheck);
 		addFlowRelationship(net, ccCheck, execState);
@@ -164,14 +172,10 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, executed, defaultEndT);
 
 				// finishing construct(finalize with skip, finish, abort and leave_suspend)
-				Place enableFinalize = addPlace(net,
-						"ad-hoc_enable_finalize_task_" + exTask.getId());
-				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_"
-						+ exTask.getId());
-				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"
-						+ exTask.getId());
-				Transition finish = addTauTransition(net, "ad-hoc_finish_task_"
-						+ exTask.getId());
+				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
+				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
+				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
+				Transition finish = addTauTransition(net, "ad-hoc_finish_task_"	+ exTask.getId());
 				Transition abort = addTauTransition(net, "ad-hoc_abort_task_" + exTask.getId());
 				Transition leaveSuspended = addTauTransition(net, "ad-hoc_leave_suspended_task_" + exTask.getId());
 				
@@ -213,10 +217,8 @@ public class ExecConverter extends Converter {
 //			 task specific constructs
 			for (ExecTask exTask : taskMap) {
 				// execution(enabledP, executedP, connections in between)
-				Place enabled = addPlace(net, "ad-hoc_task_enabled_"
-						+ exTask.getId());
-				Place executed = addPlace(net, "ad-hoc_task_executed_"
-						+ exTask.getId());
+				Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
+				Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
 				addFlowRelationship(net, startT, enabled);
 				addFlowRelationship(net, enabled, exTask.startT);
 				addFlowRelationship(net, synch, exTask.startT);
@@ -226,14 +228,10 @@ public class ExecConverter extends Converter {
 
 
 				// finishing construct(finalize with skip, finish and abort)
-				Place enableFinalize = addPlace(net,
-						"ad-hoc_enable_finalize_task_" + exTask.getId());
-				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_"
-						+ exTask.getId());
-				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"
-						+ exTask.getId());
-				Transition finish = addTauTransition(net, "ad-hoc_finish_task_"
-						+ exTask.getId());
+				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
+				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
+				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
+				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
 				
 				addFlowRelationship(net, finalize, enableFinalize);
 				

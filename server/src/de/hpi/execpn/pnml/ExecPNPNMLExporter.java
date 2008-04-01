@@ -11,6 +11,7 @@ import de.hpi.execpn.AutomaticTransition;
 import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.FormTransition;
 import de.hpi.petrinet.FlowRelationship;
+import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
@@ -42,16 +43,22 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		ts.setAttribute("tool", toolTitle);
 		ts.setAttribute("version", toolVersion);
 		if (transition instanceof FormTransition) {
-			Element output = (Element) ts.appendChild(doc
-					.createElement("output"));
-			Element model = (Element) output.appendChild(doc
-					.createElement("model"));
-			model.setAttribute("href", ((FormTransition) transition)
-					.getModelURL());
-		}else if (transition instanceof AutomaticTransition){
+			Element output = (Element) ts.appendChild(doc.createElement("output"));
+			Element model = (Element) output.appendChild(doc.createElement("model"));
+			model.setAttribute("href", ((FormTransition) transition).getModelURL());
+		} else if (transition instanceof AutomaticTransition){
 			// TODO: What about guards?
 			Element fire = (Element) ts.appendChild(doc.createElement("fire"));
 			fire.setAttribute("type", "automatic");
+		} 
+		
+		if (transition instanceof LabeledTransition) {
+			LabeledTransition l = (LabeledTransition)transition;
+			if (l.getAction() != null) {
+				Element output = (Element) ts.appendChild(doc.createElement("worklist"));
+				output.setAttribute("task", l.getLabel());
+				output.setAttribute("action", l.getAction());
+			}
 		}
 
 		// get incoming places out of petri net model

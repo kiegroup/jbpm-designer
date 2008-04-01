@@ -290,8 +290,7 @@ public abstract class Converter {
 			process = event.getParent();
 		}
 		Place p = c.getSubprocessPlaces(process).startP;
-		Transition t = addLabeledTransition(net, event.getId(), event
-				.getLabel());
+		Transition t = addLabeledTransition(net, event.getId(), event.getLabel());
 		handleMessageFlow(net, event, t, t, c);
 		addFlowRelationship(net, p, t);
 		addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(event)));
@@ -315,15 +314,13 @@ public abstract class Converter {
 	}
 
 	// assumption: exactly one input edge
-	protected void handleEndEvent(PetriNet net, EndEvent event,
-			ConversionContext c) {
+	protected void handleEndEvent(PetriNet net, EndEvent event,	ConversionContext c) {
 		Container process = event.getProcess();
 		if (process == null) {
 			process = event.getParent();
 		}
 
-		Transition t = addLabeledTransition(net, event.getId(), event
-				.getLabel());
+		Transition t = addLabeledTransition(net, event.getId(), event.getLabel());
 		handleMessageFlow(net, event, t, t, c);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(event)), t);
 		Place p = c.getSubprocessPlaces(process).endP;
@@ -449,8 +446,7 @@ public abstract class Converter {
 	// assumption: exactly one output edge
 	protected void handleAttachedIntermediateEventForSubProcess(PetriNet net,
 			IntermediateEvent event, ConversionContext c) {
-		Transition t = addLabeledTransition(net, event.getId(), event
-				.getLabel());
+		Transition t = addTauTransition(net, event.getId());
 		handleMessageFlow(net, event, t, t, c);
 
 		SubProcessPlaces pl = c.getSubprocessPlaces((SubProcess) event
@@ -472,8 +468,7 @@ public abstract class Converter {
 	// assumption: exactly one output edge
 	protected void handleAttachedIntermediateEventForTask(PetriNet net,
 			IntermediateEvent event, ConversionContext c) {
-		Transition t = addLabeledTransition(net, event.getId(), event
-				.getLabel());
+		Transition t = addTauTransition(net, event.getId());
 		handleMessageFlow(net, event, t, t, c);
 		Place p = c.map.get(getIncomingSequenceFlow(event.getActivity()));
 		addFlowRelationship(net, p, t);
@@ -537,8 +532,7 @@ public abstract class Converter {
 		return t;
 	}
 
-	public LabeledTransition addLabeledTransition(PetriNet net, String id,
-			String label) {
+	public LabeledTransition addLabeledTransition(PetriNet net, String id, String label) {
 		LabeledTransition t = pnfactory.createLabeledTransition();
 		t.setId(id);
 		t.setLabel(label);
