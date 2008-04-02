@@ -31,7 +31,7 @@ module Helper
   end
   
   def self.getModelInfo(interaction, model = nil)
-    model = interaction.object if model.nil?
+    model ||= interaction.object
     uris = []
     interaction.subject.getServlets.each do |servlet|
       unless ['/info', '/access', '/self'].include?(servlet.getRel)
