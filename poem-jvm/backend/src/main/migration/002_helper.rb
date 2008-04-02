@@ -184,8 +184,7 @@ class Helper < ActiveRecord::Migration
         select $1 || encode_position(coalesce(max(child_position(hierarchy))+1,0)) from "structure" where parent(hierarchy) = $1;
       $sql$ language sql;
       
-      create index poem_parent on structure(parent(hierarchy));
-      create index poem_childpos on structure(child_position(hierarchy));
+      create index poem_position on structure(parent(hierarchy), child_position(hierarchy));
     }
     
 
