@@ -27,6 +27,8 @@ class Helper < ActiveRecord::Migration
         declare
           result "structure";
         begin
+          lock structure;
+          
           select * into result
           from "structure"
           where hierarchy like root_hierarchy || '%'
