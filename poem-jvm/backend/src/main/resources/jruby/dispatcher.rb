@@ -7,6 +7,7 @@ require 'default_handler'
 require 'info_handler'
 require 'model_handler'
 require 'collection_handler'
+require 'new_model_handler'
 
 include_class 'org.b3mn.poem.Identity'
 include_class 'org.b3mn.poem.Access'
@@ -27,6 +28,9 @@ class Dispatcher
     if(Helper.getRelation(uri) == '/model')
       handler = Handler::CollectionHandler.new
       handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname))
+    elsif(Helper.getRelation(uri) == '/new')
+      handler = Handler::NewModelHandler.new
+      handler.handleRequest(ServerInteraction.new(nil, nil, Helper.getParams(request), request, response, hostname))
     else
       access = Identity.instance(Helper.getObjectPath(uri)).access(openid, Helper.getRelation(uri))
       unless access.nil?
