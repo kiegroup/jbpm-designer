@@ -18,12 +18,14 @@ import de.hpi.petrinet.Transition;
 import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
 
 public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
-	private static final String toolTitle = "Petri Net Engine";
-	private static final String toolVersion = "1.0";
-	private static final String caseIdName = "case_id";
-	private static final String caseIdXSDType = "xsd:integer";
-	private static final String caseIdXPathExpression = "/data/case_id";
 
+	private ToolspecificPNMLHelper tsHelper;
+
+	
+	public ExecPNPNMLExporter() {
+		tsHelper = new ToolspecificPNMLHelper();
+	}
+	
 	@Override
 	protected void handlePetriNetAttributes(Document doc, Element node,
 			PetriNet net) {
@@ -37,27 +39,19 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 	protected Element appendTransition(Document doc, Node netnode,
 			Transition transition) {
 		Element tnode = super.appendTransition(doc, netnode, transition);
-		
-		Element ts = (Element) tnode.appendChild(doc
-				.createElement("toolspecific"));
-		ts.setAttribute("tool", toolTitle);
-		ts.setAttribute("version", toolVersion);
+		Element ts = tsHelper.addToolspecificElement(doc, tnode);
+
 		if (transition instanceof FormTransition) {
-			Element output = (Element) ts.appendChild(doc.createElement("output"));
-			Element model = (Element) output.appendChild(doc.createElement("model"));
-			model.setAttribute("href", ((FormTransition) transition).getModelURL());
+			tsHelper.addModelReference(doc, ts, ((FormTransition) transition).getModelURL());
 		} else if (transition instanceof AutomaticTransition){
 			// TODO: What about guards?
-			Element fire = (Element) ts.appendChild(doc.createElement("fire"));
-			fire.setAttribute("type", "automatic");
+			tsHelper.setFireTypeAutomatic(doc, ts, true);			
 		} 
 		
 		if (transition instanceof LabeledTransition) {
 			LabeledTransition l = (LabeledTransition)transition;
 			if (l.getAction() != null) {
-				Element output = (Element) ts.appendChild(doc.createElement("worklist"));
-				output.setAttribute("task", l.getLabel());
-				output.setAttribute("action", l.getAction());
+				tsHelper.setTaskAndAction(doc, ts, l.getLabel(), l.getAction());
 			}
 		}
 
@@ -71,25 +65,6 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 				incomingPlaces.add(incomingPlace);
 			}
 		}
-
-		/*
-		 * Should be done by the engine by now 
-		 * 
-		if (incomingPlaces.size() > 1) {
-			Element guard = (Element) ts.appendChild(doc.createElement("guard"));
-
-			for (int i = 0; i < incomingPlaces.size() - 1; i++) {
-				Place first = incomingPlaces.get(i);
-				Place second = incomingPlaces.get(i + 1);
-
-				addContentElement(doc, guard, "expr", 
-						first.getId()
-						+ "." + caseIdName
-						+ " == "
-						+ second.getId() + "." + caseIdName);
-			}
-		}
-		 */
 		return tnode;
 	}
 
@@ -101,20 +76,6 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		Node n1node = pnode.appendChild(doc.createElement("name"));
 		addContentElement(doc, n1node, "value", place.getId());
 		addContentElement(doc, n1node, "text", place.getId());
-/*
- * handled by engine
- 
-		// standard locator for case_id
-		Element ts = (Element) pnode.appendChild(doc
-				.createElement("toolspecific"));
-		ts.setAttribute("tool", toolTitle);
-		ts.setAttribute("version", toolVersion);
-		Element locator = (Element) ts
-				.appendChild(doc.createElement("locator"));
-		addContentElement(doc, locator, "name", caseIdName);
-		addContentElement(doc, locator, "type", caseIdXSDType);
-		addContentElement(doc, locator, "expr", caseIdXPathExpression);
-*/
 		return pnode;
 	}
 

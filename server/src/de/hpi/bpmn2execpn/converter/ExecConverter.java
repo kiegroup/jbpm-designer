@@ -23,12 +23,12 @@ public class ExecConverter extends Converter {
 
 	private static final boolean abortWhenFinalize = true;
 	protected String modelURL;
-	private List<ExecTask> taskMap;
+	private List<ExecTask> taskList;
 
 	public ExecConverter(BPMNDiagram diagram, String modelURL) {
 		super(diagram, new ExecPNFactoryImpl(modelURL));
 		this.modelURL = modelURL;
-		this.taskMap = new ArrayList<ExecTask>();
+		this.taskList = new ArrayList<ExecTask>();
 	}
 		
 	@Override
@@ -80,7 +80,7 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, exTask.suspended, exTask.resume);
 		addFlowRelationship(net, exTask.resume, exTask.running);
 
-		taskMap.add(exTask);
+		taskList.add(exTask);
 		
 		handleMessageFlow(net, task, exTask.startT, exTask.endT, c);
 		if (c.ancestorHasExcpH)
@@ -156,7 +156,7 @@ public class ExecConverter extends Converter {
 			addFlowRelationship(net, ccStatus, finalize); // guard expression: ccStatus == true
 			
 			// task specific constructs
-			for (ExecTask exTask : taskMap) {
+			for (ExecTask exTask : taskList) {
 				// execution(enabledP, executedP, connections in between)
 				Place enabled = addPlace(net, "ad-hoc_task_enabled_"
 						+ exTask.getId());
@@ -215,7 +215,7 @@ public class ExecConverter extends Converter {
 			addFlowRelationship(net, ccStatus, finalize); // guard expression: ccStatus == true
 
 //			 task specific constructs
-			for (ExecTask exTask : taskMap) {
+			for (ExecTask exTask : taskList) {
 				// execution(enabledP, executedP, connections in between)
 				Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
 				Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
