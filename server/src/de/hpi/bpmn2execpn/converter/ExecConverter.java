@@ -55,10 +55,13 @@ public class ExecConverter extends Converter {
 		
 		exTask.running = addPlace(net, "running_" + task.getId());
 		
-		// skip Transition
-		LabeledTransition skipT = addLabeledTransition(net, "skip_" + task.getId(), task.getLabel());
-		skipT.setAction("skip");
-		exTask.skip = skipT;
+		if (task.isSkipable()) {
+			// skip Transition
+			exTask.setSkipable(true);
+			LabeledTransition skipT = addLabeledTransition(net, "skip_" + task.getId(), task.getLabel());
+			skipT.setAction("skip");
+			exTask.skip = skipT;
+		}
 		
 		// end Transition
 		LabeledTransition endT = addLabeledTransition(net, "end_" + task.getId(), task.getLabel());
@@ -68,9 +71,11 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.startT);
 		addFlowRelationship(net, exTask.endT, c.map.get(getOutgoingSequenceFlow(task)));
 		
-		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.skip);
-		addFlowRelationship(net, exTask.skip, c.map.get(getOutgoingSequenceFlow(task)));
-		
+		if (task.isSkipable()) {
+			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.skip);
+			addFlowRelationship(net, exTask.skip, c.map.get(getOutgoingSequenceFlow(task)));
+		}		
+
 		addFlowRelationship(net, exTask.startT, exTask.running);
 		addFlowRelationship(net, exTask.running, exTask.endT);
 
@@ -173,18 +178,21 @@ public class ExecConverter extends Converter {
 						+ exTask.getId());
 				addFlowRelationship(net, startT, enabled);
 				addFlowRelationship(net, enabled, exTask.startT);
-				addFlowRelationship(net, enabled, exTask.skip);
 				addFlowRelationship(net, enableStarting, exTask.startT);
-				addFlowRelationship(net, enableStarting, exTask.skip);
 				addFlowRelationship(net, exTask.startT, enableStarting);
-				addFlowRelationship(net, exTask.skip, enableStarting);
 				addFlowRelationship(net, enableFinishing, exTask.endT);
 				addFlowRelationship(net, exTask.endT, executed);		
 				addFlowRelationship(net, exTask.endT, updatedState);
-				addFlowRelationship(net, exTask.skip, executed);		
-				addFlowRelationship(net, exTask.skip, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
+				if (exTask.isSkipable()) {
+					addFlowRelationship(net, enabled, exTask.skip);
+					addFlowRelationship(net, enableStarting, exTask.skip);
+					addFlowRelationship(net, exTask.skip, enableStarting);
+					addFlowRelationship(net, exTask.skip, executed);
+					addFlowRelationship(net, exTask.skip, updatedState);
+				}
+				
 				// finishing construct(finalize with skip, finish, abort and leave_suspend)
 				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
 				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
@@ -236,14 +244,16 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, startT, enabled);
 				addFlowRelationship(net, enabled, exTask.startT);
 				addFlowRelationship(net, synch, exTask.startT);
-				addFlowRelationship(net, enabled, exTask.skip);
-				addFlowRelationship(net, synch, exTask.skip);
 				addFlowRelationship(net, exTask.endT, executed);
 				addFlowRelationship(net, exTask.endT, updatedState);
-				addFlowRelationship(net, exTask.skip, executed);
-				addFlowRelationship(net, exTask.skip, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
+				if (exTask.isSkipable()) {
+					addFlowRelationship(net, exTask.skip, executed);
+					addFlowRelationship(net, exTask.skip, updatedState);
+					addFlowRelationship(net, enabled, exTask.skip);
+					addFlowRelationship(net, synch, exTask.skip);
+				}
 
 				// finishing construct(finalize with skip, finish and abort)
 				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());

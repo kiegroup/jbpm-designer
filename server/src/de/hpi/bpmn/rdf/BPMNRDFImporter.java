@@ -374,8 +374,16 @@ public class BPMNRDFImporter {
 			while ((n = n.getNextSibling()) != null) {
 				if (n instanceof Text)
 					continue;
-				String attribute = n.getNodeName().substring(
-						n.getNodeName().indexOf(':') + 1);
+				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
+
+				if (attribute.equals("isskipable")) {
+					String adHocValue = getContent(n);
+					if (adHocValue != null && adHocValue.equals("true")) {
+						task.setSkipable(true);
+					} else {
+						task.setSkipable(false);
+					}
+				}
 
 				// TODO: add further attributes...
 				// if (attribute.equals("poolId")) {
@@ -383,6 +391,8 @@ public class BPMNRDFImporter {
 				// } else {
 				handleStandardAttributes(attribute, n, task, c, "name");
 				// }
+				
+
 			}
 		}
 		if (task.getId() == null)

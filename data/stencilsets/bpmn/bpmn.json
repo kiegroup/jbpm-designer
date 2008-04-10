@@ -716,7 +716,16 @@
 					"refToView":"taskrect",
 					"fill":true,
 					"stroke":false
-				}
+				},
+				{
+					"id":"isskipable",
+					"type":"Boolean",
+					"title":"isSkipable",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false
+				}				
 			]
 		},
  		{
