@@ -16,6 +16,8 @@ public abstract class Node extends DiagramObject {
 	}
 
 	public void setLabel(String label) {
+		if (label != null)
+			label = label.replace("\n", "_").replace(" ", "_");
 		this.label = label;
 	}
 

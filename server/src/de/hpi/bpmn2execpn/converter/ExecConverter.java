@@ -49,28 +49,37 @@ public class ExecConverter extends Converter {
 		exTask.setLabel(task.getLabel());
 		
 		// start Transition
-		LabeledTransition startT = addLabeledTransition(net, "start_" + task.getId(), task.getId());
+		LabeledTransition startT = addLabeledTransition(net, "start_" + task.getId(), task.getLabel());
 		startT.setAction("start");
 		exTask.startT = startT;
 		
 		exTask.running = addPlace(net, "running_" + task.getId());
 		
+		// skip Transition
+		LabeledTransition skipT = addLabeledTransition(net, "skip_" + task.getId(), task.getLabel());
+		skipT.setAction("skip");
+		exTask.skip = skipT;
+		
 		// end Transition
-		LabeledTransition endT = addLabeledTransition(net, "end_" + task.getId(), task.getId());
+		LabeledTransition endT = addLabeledTransition(net, "end_" + task.getId(), task.getLabel());
 		endT.setAction("end");
 		exTask.endT = endT;
 		
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.startT);
 		addFlowRelationship(net, exTask.endT, c.map.get(getOutgoingSequenceFlow(task)));
+		
+		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.skip);
+		addFlowRelationship(net, exTask.skip, c.map.get(getOutgoingSequenceFlow(task)));
+		
 		addFlowRelationship(net, exTask.startT, exTask.running);
 		addFlowRelationship(net, exTask.running, exTask.endT);
 
 		// suspend/resume
-		LabeledTransition suspendT = addLabeledTransition(net, "suspend_" + task.getId(), task.getId());
+		LabeledTransition suspendT = addLabeledTransition(net, "suspend_" + task.getId(), task.getLabel());
 		suspendT.setAction("suspend");
 		exTask.suspend = suspendT;
 		
-		LabeledTransition resumeT = addLabeledTransition(net, "resume_" + task.getId(), task.getId());
+		LabeledTransition resumeT = addLabeledTransition(net, "resume_" + task.getId(), task.getLabel());
 		resumeT.setAction("resume");
 		exTask.resume = resumeT;
 		

@@ -70,21 +70,14 @@ public class ExportServlet extends HttpServlet {
 			
 			String rdf = req.getParameter("data");
 
-			DocumentBuilderFactory factory = DocumentBuilderFactory
-					.newInstance();
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-
-			Document document = builder.parse(new ByteArrayInputStream(rdf
-					.getBytes()));
-
+			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
 			BPMNRDFImporter importer = new BPMNRDFImporter(document);
-
 			BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
 
 			// URL only for testing purposes...
-			PetriNet net = new ExecConverter(diagram,
-					defaultModelURL)
-					.convert();
+			PetriNet net = new ExecConverter(diagram, defaultModelURL).convert();
 			Document pnmlDoc = builder.newDocument();
 
 			ExecPNPNMLExporter exp = new ExecPNPNMLExporter();
@@ -108,10 +101,12 @@ public class ExportServlet extends HttpServlet {
 			serial2.serialize(pnmlDoc.getDocumentElement());
 
 			URL url_engine = new URL(engineURL);
-			HttpURLConnection connection_engine = (HttpURLConnection) url_engine
-					.openConnection();
+			HttpURLConnection connection_engine = (HttpURLConnection) url_engine.openConnection();
 			connection_engine.setRequestMethod("POST");
-
+			
+			String encoding = new sun.misc.BASE64Encoder().encode("testuser:".getBytes());
+			connection_engine.setRequestProperty ("Authorization", "Basic " + encoding);
+			
 			connection_engine.setUseCaches(false);
 			connection_engine.setDoInput(true);
 			connection_engine.setDoOutput(true);
@@ -139,7 +134,7 @@ public class ExportServlet extends HttpServlet {
 			if (connection_engine.getResponseCode() == 200) {
 				res.getWriter().println("Deployment to Engine <a href=\"" + engineURL + "\" target=\"_blank\">" + engineURL +"</a> successful.");
 			} else {
-				res.getWriter().println("Deployment to Engine <a href=\"" + engineURL + "\" target=\"_blank\">" + engineURL +"</a> <b>failed</b>!");
+				res.getWriter().println("Deployment to Engine <a href=\"" + engineURL + "\" target=\"_blank\">" + engineURL +"</a> <b>failed (HTTP: "+connection_engine.getResponseCode()+")</b>!");
 			}
 
 			

@@ -159,28 +159,6 @@
             /epc-upload
         </url-pattern>
     </servlet-mapping>
-    
-    <servlet>
-        <display-name>
-            Worklist
-        </display-name>
-        <servlet-name>
-            Worklist
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.Worklist
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>
-            Worklist
-        </servlet-name>
-        <url-pattern>
-            /worklist
-        </url-pattern>
-    </servlet-mapping>
-    
-    
     <welcome-file-list>
         <welcome-file>
             /server
