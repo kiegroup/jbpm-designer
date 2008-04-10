@@ -173,11 +173,16 @@ public class ExecConverter extends Converter {
 						+ exTask.getId());
 				addFlowRelationship(net, startT, enabled);
 				addFlowRelationship(net, enabled, exTask.startT);
+				addFlowRelationship(net, enabled, exTask.skip);
 				addFlowRelationship(net, enableStarting, exTask.startT);
+				addFlowRelationship(net, enableStarting, exTask.skip);
 				addFlowRelationship(net, exTask.startT, enableStarting);
+				addFlowRelationship(net, exTask.skip, enableStarting);
 				addFlowRelationship(net, enableFinishing, exTask.endT);
-				addFlowRelationship(net, exTask.endT, executed);
+				addFlowRelationship(net, exTask.endT, executed);		
 				addFlowRelationship(net, exTask.endT, updatedState);
+				addFlowRelationship(net, exTask.skip, executed);		
+				addFlowRelationship(net, exTask.skip, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
 				// finishing construct(finalize with skip, finish, abort and leave_suspend)
@@ -231,8 +236,12 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, startT, enabled);
 				addFlowRelationship(net, enabled, exTask.startT);
 				addFlowRelationship(net, synch, exTask.startT);
+				addFlowRelationship(net, enabled, exTask.skip);
+				addFlowRelationship(net, synch, exTask.skip);
 				addFlowRelationship(net, exTask.endT, executed);
 				addFlowRelationship(net, exTask.endT, updatedState);
+				addFlowRelationship(net, exTask.skip, executed);
+				addFlowRelationship(net, exTask.skip, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
 
