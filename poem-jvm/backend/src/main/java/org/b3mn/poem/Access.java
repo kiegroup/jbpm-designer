@@ -95,7 +95,7 @@ public class Access implements Serializable {
 		return this.getObject_name() + "/access?id=" +  this.getAccess_id();
 	}
 	public String getSubject() {
-		return (this.context_name == "ownership") ? this.getSubject_name() : this.getContext_name();
+		return (this.context_name.equals("ownership")) ? this.getSubject_name() : this.getContext_name();
 	}
 	public String getPredicate() {
 		return this.getAccess_term();

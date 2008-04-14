@@ -8,6 +8,7 @@ require 'info_handler'
 require 'model_handler'
 require 'collection_handler'
 require 'new_model_handler'
+require 'repository_handler'
 
 include_class 'org.b3mn.poem.Identity'
 include_class 'org.b3mn.poem.Access'
@@ -16,23 +17,31 @@ ServerInteraction = Struct.new :subject, :object, :params, :request, :response, 
 
 class Dispatcher
   def dispatch(request,response)
-    hostname = 'http://' + `hostname`.chomp + ':8080'
+    hostname = 'http://' + `hostname`.chomp + ':8080/poem-backend-1.0/poem'
     rights = {
       'read' => ['Get'],
       'write' => ['Get', 'Put'],
       'owner' => ['Get', 'Post', 'Put', 'Delete']
     }
-      
+    puts '======= NEW REQUEST =========='
+    puts request.getMethod.capitalize
     openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid")
     uri = request.getPathInfo
-    if(Helper.getRelation(uri) == '/model')
+    if(Helper.getRelation(uri) == '/repository')
+      handler = Handler::RepositoryHandler.new
+      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid),nil, nil, request, response, hostname))
+    elsif(Helper.getRelation(uri) == '/model_types')
+      handler = Handler::TypeHandler.new
+      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, nil, request, response, hostname))
+    elsif(Helper.getRelation(uri) == '/model')
       handler = Handler::CollectionHandler.new
       handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname))
     elsif(Helper.getRelation(uri) == '/new')
       handler = Handler::NewModelHandler.new
       handler.handleRequest(ServerInteraction.new(nil, nil, Helper.getParams(request), request, response, hostname))
     else
-      access = Identity.instance(Helper.getObjectPath(uri)).access(openid, Helper.getRelation(uri))
+      scope = Identity.instance(Helper.getObjectPath(uri))
+      access = scope.access(openid, Helper.getRelation(uri)) unless scope.nil?
       unless access.nil?
         if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
           if (Handler.constants.include?(access.getTerm))

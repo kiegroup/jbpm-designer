@@ -2,6 +2,8 @@ package org.b3mn.poem;
 
 import javax.persistence.*;
 
+import org.hibernate.Session;
+
 import java.util.List;
 import java.util.Iterator;
 import java.util.Date;
@@ -26,30 +28,33 @@ public class Identity {
 		this.uri = uri;
 	}
 	public static Identity instance(String uri) {
-		return (Identity) Persistance.getSession().
+		Identity identity = (Identity) Persistance.getSession().
 			createSQLQuery("select {identity.*} FROM {identity} where uri=?")
 			.addEntity("identity", Identity.class)
 			.setString(0, uri)
 			.uniqueResult();
+		Persistance.commit();
+		return identity;
 	}
 	
 	public static Identity instance(int id) {
-		return (Identity) Persistance.getSession().
+		Identity identity =  (Identity) Persistance.getSession().
 			createSQLQuery("select {identity.*} FROM {identity} where id=:id")
 			.addEntity("identity", Identity.class)
 			.setInteger("id", id)
 			.uniqueResult();
+		Persistance.commit();
+		return identity;
 	}
 	
 	public static Identity newModel(Identity owner, String title, String type, String mime_type, String language, String summary, String content) {
-			
-			Identity identity = (Identity) Persistance.getSession().
+			Session session = Persistance.getSession();
+			Identity identity = (Identity) session.
 			createSQLQuery("select {identity.*} from identity(?)")
 			.addEntity("identity", Identity.class).setString(0, "/data/model/").uniqueResult();
 			identity.setUri("/data/model/" + identity.getId());
-			Persistance.getSession().save(identity);
 			
-			Structure.instance(identity.getId(), owner.getUserHierarchy());
+			session.save(identity);
 			
 			Representation representation = Representation.instance(identity);
 			representation.setType(type);
@@ -58,7 +63,11 @@ public class Identity {
 			representation.setLanguage(language);
 			representation.setMime_type(mime_type);
 			representation.setContent(content);
-			Persistance.getSession().save(representation);
+			session.save(representation);
+			
+			Structure.instance(identity.getId(), owner.getUserHierarchy());
+			
+			Persistance.commit();
 			return identity;
 			
 	}
@@ -70,7 +79,7 @@ public class Identity {
 		createSQLQuery("select {identity.*} from identity(?)")
 		.addEntity("identity", Identity.class).
 		setString(0, openid).uniqueResult();
-		
+		Persistance.commit();
 		Structure.instance(identity.getId(), userroot.getUserHierarchy());
 		
 		return identity;	
@@ -82,7 +91,7 @@ public class Identity {
 		createSQLQuery("select {identity.*} from identity(?)")
 		.addEntity("identity", Identity.class).
 		setString(0, openid).uniqueResult();
-		
+		Persistance.commit();
 		Structure.instance(identity.getId(), hierarchy);
 		
 		return identity;	
@@ -90,7 +99,7 @@ public class Identity {
 	
 	@SuppressWarnings("unchecked")
 	public List<Representation> getModels(String type, Date from, Date to) {
-		return (List<Representation>) Persistance.getSession().
+		List<Representation> list = (List<Representation>) Persistance.getSession().
 		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r" +
 					" where (a.subject_name=:subject or a.subject_name='public')" +
 					" and r.type like :type and r.updated >= :from and r.updated <= :to" +
@@ -101,16 +110,20 @@ public class Identity {
 	    .setDate("from", from)
 	    .setDate("to", to)
 	    .list();
+		Persistance.commit();
+		return list;
 	}
 	
 	
 	
 	@SuppressWarnings("unchecked")
 	public List<Access> getAccess() {
-		return (List<Access>) Persistance.getSession().
+		List<Access> list =  (List<Access>) Persistance.getSession().
 		createSQLQuery("select DISTINCT ON(context_name) {access.*} from {access} where object_name=?")
 		.addEntity("access", Access.class)
 	    .setString(0, this.getUri()).list();
+		Persistance.commit();
+		return list;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -147,34 +160,43 @@ public class Identity {
 	
 	@SuppressWarnings("unchecked")
 	public List<Plugin> getServlets() {
-		return (List<Plugin>)Persistance.getSession().
+		List<Plugin> list =  (List<Plugin>)Persistance.getSession().
 		createSQLQuery("select {plugin.*} from {plugin}")
 		.addEntity("plugin", Plugin.class)
 		.list();
+		Persistance.commit();
+		return list;
 	}
 	
 	public Representation read() {
-		return (Representation)Persistance.getSession().
+		Representation rep = (Representation)Persistance.getSession().
 		createSQLQuery("select {representation.*} from {representation} where ident_id = :ident_id")
 		.addEntity("representation", Representation.class)
 	    .setInteger("ident_id", this.id).uniqueResult();
+		Persistance.commit();
+		return rep;
 	}
 	
 	public String getModelHierarchy() {
-		return Persistance.getSession().
+		String hier = Persistance.getSession().
 		createSQLQuery("select structure.hierarchy from identity, structure " +
 						"where identity.id = :id and identity.id = structure.ident_id").
 		setInteger("id", this.id).uniqueResult().toString();
+		Persistance.commit();
+		return hier;
 	}
 	public String getUserHierarchy() {
-		return Persistance.getSession().
+		String hier =  Persistance.getSession().
 		createSQLQuery("select structure.hierarchy from identity, structure " +
 						"where identity.id = :id and identity.id = structure.ident_id " +
-						"and structure.hierarchy like 'U2_%'").
+						"and structure.hierarchy like 'U2%'").
 		setInteger("id", this.id).uniqueResult().toString();
+		Persistance.commit();
+		return hier;
 	}
 	
 	public void delete() {
 		Persistance.getSession().delete(this);
+		Persistance.commit();
 	}
 }

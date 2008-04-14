@@ -29,9 +29,14 @@ public class IdentityTest {
 		assertEquals("bpmn",models.get(0).getType());
 	}
 	
-	@Test public void getHierarchy() {
+	@Test public void userHierarchy() {
 		String hierarchy = "U26";
-		assertEquals(hierarchy, Identity.instance("http://ole.myopenid.com/").getModelHierarchy());
+		assertEquals(hierarchy, Identity.instance("http://ole.myopenid.com/").getUserHierarchy());
+	}
+	
+	@Test public void ensureUser() {
+		String hierarchy = "U26";
+		assertEquals(hierarchy, Identity.ensureSubject("http://ole.myopenid.com/").getUserHierarchy());
 	}
 	
 	@Test public void createAndDeleteInteraction() {

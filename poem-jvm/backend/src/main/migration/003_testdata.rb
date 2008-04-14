@@ -74,34 +74,34 @@ class Testdata < ActiveRecord::Migration
     
     execute %q{
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'bpmn', 'MyProcess', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'bpmn', 'MyProcess', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/1';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'bpmn', 'Example', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'bpmn', 'Example', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/2';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'bpmn', 'New Process', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'bpmn', 'New Process', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/3';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'bpmn', 'Brot kaufen', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'bpmn', 'Brot kaufen', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/4';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'bpmn', 'Amazon', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'bpmn', 'Amazon', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/5';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'bpmn', 'Fachstudie', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'bpmn', 'Fachstudie', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/6';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'bpmn', 'Elaboration', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'bpmn', 'Elaboration', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/7';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'epc', 'Test', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'epc', 'Test', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/8';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'epc', 'TheAnyProcess', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'epc', 'TheAnyProcess', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/9';
       insert into "representation"(ident_id, type, title, summary, mime_type, content)
-        select id, 'epc', 'Some Process', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/files/stencilsets/bpmn/bpmn.json"/></div>'
+        select id, 'epc', 'Some Process', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/10';
     }
     

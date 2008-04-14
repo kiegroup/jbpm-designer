@@ -82,10 +82,12 @@ public class Interaction {
 		return "/access?id=" +  this.getId();
 	}
 	public static Interaction getInteraction(long id) {
-		return (Interaction) Persistance.getSession().
+		Interaction inter = (Interaction) Persistance.getSession().
 		createSQLQuery("select {interaction.*} from {interaction} where id = :id").
 		addEntity("interaction", Interaction.class).
 		setLong("id", id).uniqueResult();
+		Persistance.commit();
+		return inter;
 	}
 	public static Interaction exist(String subject, String object, String term) {
 		Interaction right = (Interaction)Persistance.getSession().
@@ -95,15 +97,19 @@ public class Interaction {
 		   setString("subject", subject).
 		   setString("object", object).
 		   setString("term", term).uniqueResult();
+		Persistance.commit();
 		if(right == null)
 			return null;
 		else return right;
 	}
 	public static boolean exist(long id) {
-		if((Interaction)Persistance.getSession().
+		
+		Interaction inter = (Interaction)Persistance.getSession().
 		   createSQLQuery("select {interaction.*} from {interaction} where id = :id").
 		   addEntity("interaction", Interaction.class).
-		   setLong("id", id).uniqueResult() == null) return false;
+		   setLong("id", id).uniqueResult();
+		Persistance.commit();
+		if(inter == null) return false;
 		else return true;
 	}
 }

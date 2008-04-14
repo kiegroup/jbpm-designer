@@ -17,6 +17,7 @@ module Handler
     def doPut(interaction)
       representation = interaction.object.read
       interaction.params.each do |key, value|
+        puts 'key: ' + key + ', value: ' + value
         representation.send "set#{key.capitalize}", value
       end
       representation.update 

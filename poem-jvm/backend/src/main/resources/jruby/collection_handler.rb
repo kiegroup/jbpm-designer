@@ -4,6 +4,7 @@ module Handler
        if interaction.params['from']
          from = Time.parse(interaction.params['from'])
        else 
+         p Time.methods.sort
          from = Time.parse("01-01-1970")
        end
        

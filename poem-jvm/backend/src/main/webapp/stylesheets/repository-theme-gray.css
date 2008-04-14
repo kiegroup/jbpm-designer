@@ -1,0 +1,14 @@
+.panel-title-bg {
+	background-image: url(/ext/resources/images/gray/panel/white-top-bottom.gif);
+	background-repeat: repeat-x;
+	border-bottom: 1px solid #D0D0D0;
+	color: #333;
+}
+
+.panel {
+	font-family: tahoma,arial,verdana,sans-serif;
+	font-size: 11px;
+	
+	border: 1px solid #D0D0D0;
+	background-color: #fff;
+}

@@ -24,6 +24,7 @@ public class Persistance {
 		 return session;
 	 }
 	 
+	 
 	 public static void commit() {
 		 sessionFactory.getCurrentSession().getTransaction().commit();
 	 }

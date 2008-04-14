@@ -1,0 +1,156 @@
+body, td, input, select, textarea {
+	font-size: 10pt;
+	font-family: "Lucida Grande", Arial;
+	line-height: 150%;	
+}
+
+/* headlines ******************************************************************
+ * syntax <h1> [<a href="...">]HEADLINE [<small>SUBLINE</small>][</a>]</h1> | <h2> ... <h4>
+ * description: displays headlines, allows for sublines and linking. Do not use other levels than h1 to h4
+ * hint: when to use h1 to h4?
+ */
+h1, h2, h3, h4 {
+	font-family: Trebuchet MS, Times, serif;
+	margin-left: 15px;
+	margin-right: 15px;
+	
+	border-bottom: 1px solid #666;
+	clear: left;
+}
+
+h1 {font-size: 20pt;} h1 small {font-size: 12pt;}
+h2 {font-size: 18pt;} h2 small {font-size: 10pt;}
+h3 {font-size: 16pt;} h3 small {font-size: 9pt;}
+h4 {font-size: 14pt;} h4 small {font-size: 9pt;}
+
+h1, h2 {
+	color: #fc8f05;
+}
+
+h1, h3 {
+	font-variant: small-caps;
+	letter-spacing: 1pt;
+}
+
+h2, h4 {
+	font-weight: normal;
+}
+
+h1 small, h2 small, h3 small, h4 small {
+	display: block;
+	text-transform: uppercase;
+	display: block;
+	font-weight: normal;
+	font-family: Times, serif;
+	color: #888;
+	padding: 5px 1em 5px 10px;
+}
+
+/* paragraphs *****************************************************************
+ * syntax: <p> TEXT [<img .. />, <span .. />, <br/>] </p>
+ * description: displays text in praragraphs, assigns indenting, spacing etc for optimal readability
+ */
+p {
+	margin: 25px;
+}
+
+p a {
+	color: #fc8f05;
+	text-decoration: none;
+}
+
+p a:hover{
+	text-decoration: underline;
+}
+
+/* text styles ****************************************************************
+ * syntax: <TAG class="STYLE [STYLE [STYLE [...]]]" .../>
+ * description: stylizes text within tags, for inline styling, use TAG = span. multiple styles can be assigned (separated by <space>)
+ * styles:
+ *  - strike (inline and block)
+ *  - center (block)
+ * use HTML tags fo following styles:
+ *  - bold => <strong>BOLD TEXT</strong>
+ *  - italics => <em>italics text </em>
+ */
+
+.center {
+	text-align: center;
+}
+
+.strike {
+	text-decoration: line-through;
+}
+
+
+/* images *********************************************************************
+ * syntax: <div class="img [SIZE]"><img src="..." alt="ALTERNATIVE IMAGE TEXT" [title="IMAGE TITLE"]/>[<span>CAPTION</span>]</div>
+ * description: wraps an image into a frame and positions it on the page. 
+ *              FOLLOWING contents will wrap around. DON'T OMIT THE ALT-ATTRIBUTE!
+ * possible image sizes, consider possible up-scaling of images:
+ *  - small ~ 120px/15% wide
+ *  - medium ~ 240px/30% wide
+ *  - half => image's optical width is half of the page ~ 360px/45% wide
+ *  - full => image is scaled to full page width ~ 720px/90% wide
+ */
+
+div.img, div.image {
+	clear: left;
+	float: left;
+	margin: 5px 15px 15px 25px;
+	padding: 5px;
+	border: 1px solid #888;
+	width: 25%;
+}
+
+div.small {width: 15%;}
+div.medium {width: 30%;}
+div.half {width:45%;}
+div.full {width:740px; margin: 15px auto; float: none;}
+
+div.img img, div.image img {
+	width: 100%;
+	max-width: 750px;
+}
+
+div.img span, div.image span {
+	max-width: 100%;
+	display: block;
+	color: #888;
+	font-style: italic;
+	margin-top: 5px;
+	font-size: 9pt;
+	line-height: 130%;
+}
+
+/* quotes *********************************************************************
+ * syntax: <blockquote [cite="URI"]> QUOTE [<span> AUTHOR/SRC </span>]<blockquote>
+ * description: highlights a quote, FOLLOWING content wraps around the quote
+ */
+blockquote {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-style: italic;
+	max-width: 30%;
+	background: url(/images/style/typo/close-quote.gif) no-repeat right bottom;
+	
+	padding-left: 18px;
+	padding-right: 18px;
+	text-indent: -18px;
+	float: right;
+	padding-bottom: 8px;
+	color: #888;
+	
+	margin: 3px 25px 10px 10px;
+}
+
+blockquote:first-letter {
+	background: url(/images/style/typo/open-quote.gif) no-repeat left top;
+	padding-left: 18px;
+}
+
+blockquote span {
+	display: block;
+	text-align: right;
+	margin: 5px 10px 0px 0px;
+	font-size: 8pt;
+}

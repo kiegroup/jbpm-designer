@@ -1,8 +1,6 @@
 package org.b3mn.poem;
 
 import javax.persistence.*;
-
-import org.hibernate.HibernateException;
 import java.util.Date;
 
 @Entity
@@ -83,15 +81,12 @@ public class Representation {
 	}
 	
 	public void update() {
-		try {
+
 		Date date = new Date(System.currentTimeMillis());
 		this.setUpdated(date);
 		Persistance.getSession().flush();
 		Persistance.commit();
-		}
-		catch(HibernateException ex) {
-			System.err.println(ex.getMessage());
-		}
+
 	}
 	
 	public static Representation instance(Identity model) {

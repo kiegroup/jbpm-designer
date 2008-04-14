@@ -1,0 +1,10 @@
+#header {
+	background-image: url(/images/style/header_bg.orange.gif);
+}
+
+#openid_label {
+
+	margin-top: 20px;
+	background-image: url(/images/style/tooltip_bg.gif);
+	filter: alpha(opacity = 80);
+}
