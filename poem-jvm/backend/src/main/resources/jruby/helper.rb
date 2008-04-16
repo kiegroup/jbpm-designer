@@ -34,7 +34,7 @@ module Helper
     model ||= interaction.object
     uris = []
     interaction.subject.getServlets.each do |servlet|
-      unless ['/info', '/access', '/self'].include?(servlet.getRel)
+      unless ['/access', '/info'].include?(servlet.getRel)
         uris << { 'href' => interaction.hostname + model.getUri + servlet.getRel,
                   'title' => servlet.getTitle }
       end 
@@ -42,6 +42,7 @@ module Helper
     info = toHash(model.read, %w{Title Summary Updated Created Type})
     info['edit_uri'] = interaction.hostname + model.getUri + '/info'
     info['self_uri'] = interaction.hostname + model.getUri + '/self'
+    info['meta_uri'] = interaction.hostname + model.getUri + '/info-access'
     access_rights = []
     model.getAccess.each do |right|
       access_rights << toHash(right, %w{Subject Predicate Uri})

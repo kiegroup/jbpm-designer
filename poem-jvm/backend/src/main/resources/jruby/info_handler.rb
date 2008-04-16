@@ -11,17 +11,19 @@ module Handler
       output = Helper.toHash(representation, %w{Title Summary Updated Created Type})
       output['edit_uri'] = interaction.hostname + interaction.object.getUri + '/info'
       output['self_uri'] = interaction.hostname + interaction.object.getUri + '/self'
+      output['meta_uri'] = interaction.hostname + interaction.object.getUri + '/info-access'
       Helper.jsonResponse(interaction.response, output)
     end
       
-    def doPut(interaction)
+    def doPost(interaction)
       representation = interaction.object.read
+      puts '==== PARAMS ===='
       interaction.params.each do |key, value|
         puts 'key: ' + key + ', value: ' + value
         representation.send "set#{key.capitalize}", value
       end
       representation.update 
-      Helper.jsonResponse(interaction.response, Helper.getModelInfo(interaction, representation))
+      Helper.jsonResponse(interaction.response, Helper.getModelInfo(interaction, interaction.object))
     end
   end
 

@@ -173,7 +173,6 @@ public class Identity {
 		createSQLQuery("select {representation.*} from {representation} where ident_id = :ident_id")
 		.addEntity("representation", Representation.class)
 	    .setInteger("ident_id", this.id).uniqueResult();
-		Persistance.commit();
 		return rep;
 	}
 	

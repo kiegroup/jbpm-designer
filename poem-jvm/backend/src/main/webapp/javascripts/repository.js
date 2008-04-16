@@ -449,7 +449,7 @@ Repository.app = {
 		Ext.Ajax.request({
 			method: "GET",
 //TODO get the correct url from the model (should be info-access somehow)			
-			url: this.models[url],
+			url: old_model.info.meta_uri,
 			success: function(response, options){
                 json = Ext.util.JSON.decode(response.responseText);
 				
@@ -476,11 +476,13 @@ Repository.app = {
 	},
 	
 	deleteModel: function(item, url) {
-        var model = this.models[url];
-		if (window.confirm("Are you sure you want to delete this model?\n\n  " + model.title + "\n\nThis cannot be undone.")) {
+        ORYX.Log.debug("DeleteUrl:%0",this.models[url]);
+		var model = this.models[url];
+		console.log(model);
+		if (window.confirm("Are you sure you want to delete this model?\n\n  " + model.info.title + "\n\nThis cannot be undone.")) {
 			// hide the container, delete it later
 			$(item).style.display = "none";
-			
+			ORYX.Log.debug("DeleteUrl:%0",model.info.self_uri);
 			Ext.Ajax.request({
 				method: "DELETE",
 				url: model.info.self_uri,

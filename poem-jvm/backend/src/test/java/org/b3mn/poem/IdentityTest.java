@@ -32,6 +32,7 @@ public class IdentityTest {
 	@Test public void userHierarchy() {
 		String hierarchy = "U26";
 		assertEquals(hierarchy, Identity.instance("http://ole.myopenid.com/").getUserHierarchy());
+		assertEquals("U2", Identity.instance("ownership").getUserHierarchy());
 	}
 	
 	@Test public void ensureUser() {
