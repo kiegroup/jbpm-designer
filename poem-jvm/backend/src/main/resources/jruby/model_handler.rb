@@ -4,6 +4,8 @@ module Handler
       representation = interaction.object.read
       interaction.response.setStatus(200)
       out = interaction.response.getWriter
+      interaction.response.setContentType "application/xhtml+xml"
+      
       oryx_path = '/oryx/'
     	out.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
     	out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\"")
