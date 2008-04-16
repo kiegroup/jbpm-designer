@@ -15,7 +15,7 @@ import de.hpi.nunet.Transition;
 
 
 public class TransitionImpl extends NodeImpl implements Transition {
-
+	
 	/**
 	 * 
 	 * @return true if outgoing flow connection has a "new" assigned, else false

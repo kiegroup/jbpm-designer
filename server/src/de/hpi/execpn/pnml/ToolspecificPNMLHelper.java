@@ -56,4 +56,22 @@ public class ToolspecificPNMLHelper {
 		worklist.setAttribute("task", task);
 		worklist.setAttribute("action", action);
 	}
+	
+	void addLocator(Document doc, Element parent, Locator loc){
+		Element locator = (Element)parent.appendChild(doc.createElement("locator"));
+		Element nameEl = (Element)locator.appendChild(doc.createElement("name"));
+		nameEl.setTextContent(loc.getName());
+		Element typeEl = (Element)locator.appendChild(doc.createElement("type"));
+		typeEl.setTextContent(loc.getDatatype());
+		Element exprEl = (Element)locator.appendChild(doc.createElement("expr"));
+		exprEl.setTextContent(loc.getXpath());
+	}
+
+	
+	void setGuard(Document doc, Element parent, String guardText) {
+		Element guard = (Element)parent.appendChild(doc.createElement("guard"));
+		Element expr = (Element)guard.appendChild(doc.createElement("expr"));
+		expr.setTextContent(guardText);
+	}
+
 }

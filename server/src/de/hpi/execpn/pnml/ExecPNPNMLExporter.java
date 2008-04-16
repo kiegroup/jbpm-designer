@@ -54,7 +54,11 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 				tsHelper.setTaskAndAction(doc, ts, l.getLabel(), l.getAction());
 			}
 		}
-
+		
+		if (transition.getGuard() != null) {
+			tsHelper.setGuard(doc, ts, transition.getGuard());
+		}
+		
 		// get incoming places out of petri net model
 		List<FlowRelationship> incomingArcs = transition
 				.getIncomingFlowRelationships();
@@ -76,6 +80,13 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		Node n1node = pnode.appendChild(doc.createElement("name"));
 		addContentElement(doc, n1node, "value", place.getId());
 		addContentElement(doc, n1node, "text", place.getId());
+		
+		Element ts = tsHelper.addToolspecificElement(doc, pnode);
+
+		for (Locator loc : place.getLocators()) {
+			tsHelper.addLocator(doc, ts, loc);			
+		}
+		
 		return pnode;
 	}
 

@@ -112,7 +112,7 @@ public class Worklist extends HttpServlet {
 						}
 					}
 					jsData.add("['" + case_id + "','" + transition_id + "','" + transition_name
-							+ "','<a target=\"form_frame\" href=\"" + config.getString("pnengine.url") + "/transition/" + transition_id
+							+ "','<a target=\"form_frame\" href=\"" + config.getString("pnengine.url") + "/transitions/" + transition_id
 							+ "\">" + (action.equals("") ? "default" : action) + "</a>']");
 				}
 

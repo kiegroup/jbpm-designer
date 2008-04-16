@@ -65,7 +65,7 @@ public class ExportServlet extends HttpServlet {
 	    		config = new PropertiesConfiguration("pnengine.properties");
 	    	}
 	    	String postVariable = config.getString("pnengine.post_variable");
-	    	String engineURL = config.getString("pnengine.url") + "/view";
+	    	String engineURL = config.getString("pnengine.url") + "/petrinets";
 	    	String defaultModelURL = config.getString("pnengine.default_model_url");
 			
 			String rdf = req.getParameter("data");

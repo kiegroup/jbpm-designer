@@ -1,6 +1,9 @@
 package de.hpi.petrinet;
 
 import java.util.List;
+import java.util.Vector;
+
+import de.hpi.execpn.pnml.Locator;
 
 public interface Node {
 	
@@ -11,8 +14,12 @@ public interface Node {
 	List<FlowRelationship> getIncomingFlowRelationships();
 
 	List<FlowRelationship> getOutgoingFlowRelationships();
-	
-	
-	boolean isSimilarTo(Node node);
+	String getGuard();
+	void setGuard(String guard);
 
+	boolean isSimilarTo(Node node);
+	
+	Vector<Locator> getLocators();
+	void addLocator(Locator locator);
+	
 }

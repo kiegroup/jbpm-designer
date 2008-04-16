@@ -2,7 +2,9 @@ package de.hpi.petrinet.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
+import de.hpi.execpn.pnml.Locator;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.Place;
@@ -13,6 +15,8 @@ public abstract class NodeImpl implements Node {
 	protected String id;
 	private List<FlowRelationship> incomingFlowRelationships;
 	private List<FlowRelationship> outgoingFlowRelationships;
+	private String guard;
+	private Vector<Locator> locators = new Vector<Locator>();
 
 	public String getId() {
 		return id;
@@ -45,4 +49,20 @@ public abstract class NodeImpl implements Node {
 		return getId();
 	}
 
+	public String getGuard() {
+		return guard;
+	}
+
+	public void setGuard(String guard) {
+		this.guard = guard;
+	}
+
+	public Vector<Locator> getLocators() {
+		return locators;
+	}
+
+	public void addLocator(Locator locator) {
+		this.locators.add(locator);
+	}
+	
 }
