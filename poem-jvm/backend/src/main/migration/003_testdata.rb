@@ -111,7 +111,7 @@ class Testdata < ActiveRecord::Migration
       insert into "plugin"(rel, scheme, term, title)
       	select '/info', 'ruby', 'InfoHandler', 'edit info';
       insert into "plugin"(rel, scheme, term, title)
-        select '/access', 'ruby', 'AccessHander', 'edit access';
+        select '/access', 'ruby', 'AccessHandler', 'edit access';
       insert into "plugin"(rel, scheme, term, title)
         select '/info-access', 'ruby', 'MetaHandler', 'About';
     }

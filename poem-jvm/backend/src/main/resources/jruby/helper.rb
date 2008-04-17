@@ -45,7 +45,9 @@ module Helper
     info['meta_uri'] = interaction.hostname + model.getUri + '/info-access'
     access_rights = []
     model.getAccess.each do |right|
-      access_rights << toHash(right, %w{Subject Predicate Uri})
+      item = toHash(right, %w{Subject Predicate})
+      item['uri'] = interaction.hostname + right.getUri
+      access_rights << item
     end
     access = {'access_rights' => access_rights, 'edit_uri' => interaction.hostname + model.getUri + '/access'}
     output = {'uris'=>uris, 'info'=>info,'access'=>access}

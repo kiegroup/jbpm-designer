@@ -228,7 +228,7 @@ ModelProperties.app = {
 
 		Ext.Ajax.request({
 			method: "DELETE",
-			url: ModelProperties.app.current_model.access.access_rights[index].edit_uri,
+			url: ModelProperties.app.current_model.access.access_rights[index].uri,
 			success: function(response, options) {
 				ModelProperties.app.current_model.access.access_rights.splice(i,1);
 				if (typeof success == typeof function() {}) {

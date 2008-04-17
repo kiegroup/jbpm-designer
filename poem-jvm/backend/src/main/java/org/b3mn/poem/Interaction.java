@@ -72,6 +72,7 @@ public class Interaction {
 	}
 	public void delete() {
 		Persistance.getSession().delete(this);
+		Persistance.commit();
 	}
 	public long save() {
 		long id = 0;
@@ -102,14 +103,14 @@ public class Interaction {
 			return null;
 		else return right;
 	}
-	public static boolean exist(long id) {
+	public static Interaction exist(long id) {
 		
-		Interaction inter = (Interaction)Persistance.getSession().
+		Interaction right = (Interaction)Persistance.getSession().
 		   createSQLQuery("select {interaction.*} from {interaction} where id = :id").
 		   addEntity("interaction", Interaction.class).
 		   setLong("id", id).uniqueResult();
 		Persistance.commit();
-		if(inter == null) return false;
-		else return true;
+		if(right == null) return null;
+		else return right;
 	}
 }
