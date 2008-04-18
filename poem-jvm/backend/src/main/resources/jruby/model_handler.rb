@@ -52,14 +52,15 @@ module Handler
 
     def doPut(interaction)
       representation = interaction.object.read
-      representation.setContent(params[data])
+      representation.setContent(interaction.params['data'])
       representation.update
       interaction.response.setStatus(200)
     end
 
     def doPost(interaction)
       representation = interaction.object.read
-      representation.setContent(params[data])
+      puts interaction.params['data']
+      representation.setContent(interaction.params['data'])
       representation.update
       interaction.response.setStatus(200)
     end
