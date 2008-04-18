@@ -1,5 +1,5 @@
-Ext.BLANK_IMAGE_URL = 'lib/ext-2.0.2/resources/images/default/s.gif';
-Ext.onReady(function(){
+
+function initWorklistGrid(){
 
 var xg = Ext.grid;  
 
@@ -26,16 +26,18 @@ var grid = new xg.GridPanel({
 	],
 
 	view: new Ext.grid.GroupingView({
-	         forceFit:true,
+//	         forceFit:true,
 	         groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Activities" : "Activity"]})'
 			}),
-         frame:true,
-         width: 700,
-         height: 450,
-         collapsible: true,
-         animCollapse: false,
+//         frame:true,
+//         width: 700,
+//         height: 450,
+         collapsible: false,
+//         animCollapse: false,
+    	 autoScroll: true,
          title: 'Worklist',
          iconCls: 'icon-grid',
          renderTo: 'worklist-grid'
    });
- });
+ 
+ };

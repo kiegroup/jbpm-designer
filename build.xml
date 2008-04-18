@@ -219,7 +219,6 @@
                 <!-- database connectors. consider moving this to users responsibility -->
                 <include name="mysql-connector-java-5.1.5-bin.jar"/>
                 <!-- <include name="postgresql-8.3dev-602.jdbc3.jar"/> -->
-                
             </lib>
             
             <fileset dir="build">
@@ -231,6 +230,7 @@
             
         </war>
         
+    	<copy todir='/opt/local/share/java/tomcat5/webapps' file='dist/oryx.war' />
     </target>
     
     <target name="all" depends="build, examples, compress, dist"/>

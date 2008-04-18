@@ -130,30 +130,35 @@ public class Worklist extends HttpServlet {
 			 */
 			out.println("<html><head>");
 			out.println("<title>Worklist</title>");
-			out.println("<script src=\"lib/ext-2.0.2/adapter/ext/ext-base.js\" type=\"text/javascript\" ></script>");
-			out.println("<script src=\"lib/ext-2.0.2/ext-all-debug.js\" type=\"text/javascript\" ></script>");
+			out.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/adapter/ext/ext-base.js\"></script>");
+			out.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/adapter/yui/yui-utilities.js\"></script>");
+			out.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\"></script>");
+			out.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/ext-all-debug.js\"></script>");
 
-/*			out.println("<script src=\"lib/ext-2.0.2/adapter/yui/yui-utilities.js\" type=\"text/javascript\" ></script>");
-			out.println("<script src=\"lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" ></script>");
-			out.println("<script type=\"text/javascript\" src=\"Plugins/worklistlayout.js\"></script>");
-*/			
 			// define data for grid and load model code from external file
 			out.println("<script type=\"text/javascript\">Ext.grid.dummyData = [" + jsString + " ]</script>");
 			out.println("<script type=\"text/javascript\" src=\"Plugins/worklistGrid.js\"></script>");
+
+			out.println("<script type=\"text/javascript\" src=\"Plugins/worklistlayout.js\"></script>");
+			
 
 			out.println("<style type=\"text/css\">\n" + "@import url(\"lib/ext-2.0.2/resources/css/ext-all.css\");\n"
 					+ "@import url(\"lib/ext-2.0.2/resources/css/xtheme-gray.css\");\n" + "</style>\n");
 			out.println("</head>");
 
 			out.println("<body>" +
-/*					"<div id='west-div'></div>" +
-					"<div id='northeast-div'>" +
+/*					"<div id=\"test-container\">" +
 					"<div id=\"worklist-grid\"></div>" +
-					"</div>" +
-					"<div id='southeast-div'>" +
-					"<iframe id='southeast_iframe' frameborder=0 scrolling='auto' style='border:0px none;' src='www.google.de'></iframe>" +
+					"<div id=\"center\"></div>" +
 					"</div>" +
 */					"" +
+/*					"<div id='west-div' style='border:1px solid black;'></div>" +
+					"<div id=\"north-grid\" style='border:1px solid black;'></div>" +
+					"<div id='worklist-div'>" +
+					"<iframe id='southeast_iframe' frameborder=1 scrolling='auto' style='border:0px none;' src='http://www.google.de'></iframe>" +
+					"</div>" +
+*/
+/*					"" +
 					"<table><tr colspan=2><td align=\"center\">" +
 					"<span style=\"font-size: 40px\">Universal Worklist</span>" +
 					"</td></tr>"
@@ -161,7 +166,7 @@ public class Worklist extends HttpServlet {
 					+ "<td width=500 valign=\"top\"><div id=\"worklist-grid\"></div></td>"
 					+ "<td><iframe name=\"form_frame\" width=500 height=600 src=\"about:blank\" /></td>"
 					+ "</tr></table>" +
-							"</body>");
+*/							"</body>");
 
 			out.println("</html>");
 		} 
