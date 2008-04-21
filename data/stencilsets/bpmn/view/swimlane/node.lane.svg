@@ -9,7 +9,7 @@
    version="1.0">
   <defs></defs>
   <g pointer-events="fill" >
-    <rect id="frame" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" stroke-width="1" fill="white" />
+    <rect id="frame" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" stroke-width="1" fill="white" opacity=".3" />
     <text x="10" y="125" oryx:rotate="270" font-size="14" id="text_v" oryx:align="middle center" oryx:anchors="left" fill="black" stroke="black"></text>
   </g>
 </svg>
