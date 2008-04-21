@@ -2,7 +2,7 @@
 Ext.BLANK_IMAGE_URL = 'lib/ext-2.0.2/resources/images/default/s.gif';
 
 function loadStoreForCase(val) {
-	Ext.store2.proxy.conn.url = 'http://localhost:8080/oryx/engineproxy?url=http://localhost:3000/cases/' + val;
+	Ext.store2.proxy.conn.url = '/oryx/engineproxy?url=http://localhost:3000/cases/' + val;
 	Ext.store2.reload();
 	Ext.getCmp('top-panel').setTitle('Case List for Case #' + val);
 	Ext.task_grid.render();
@@ -11,11 +11,10 @@ function loadStoreForCase(val) {
 Ext.onReady(function() {
 var xg = Ext.grid;
 
-var tb = new Ext.Toolbar();
-tb.add(new Ext.Button({text: 'Testknoepfchen'}));
+Ext.button_toolbar = new Ext.Toolbar({width:'100%', height:'100%', autoFit: true});
 
 var store = new Ext.data.Store({
-    url: 'http://localhost:8080/oryx/engineproxy?url=http://localhost:3000/cases',
+    url: '/oryx/engineproxy?url=http://localhost:3000/cases',
 
     reader: new Ext.data.XmlReader({
            record: 'task',
@@ -27,7 +26,7 @@ var store = new Ext.data.Store({
 });
 
 var store2 = new Ext.data.Store({
-    url: 'http://localhost:8080/oryx/engineproxy?url=http://localhost:3000/cases/217',
+    url: '/oryx/engineproxy?url=http://localhost:3000/cases/217',
 
     reader: new Ext.data.XmlReader({
            record: 'task',
@@ -98,6 +97,8 @@ Ext.viewport = new Ext.Viewport({
 			                collapsible: true,
 			                margins:'35 0 5 5',
 			                cmargins:'35 5 5 5',
+			                width: '100%',
+			                height: '100%',
 			                items: Ext.case_grid                
 			                
 			                },{
@@ -126,7 +127,8 @@ Ext.viewport = new Ext.Viewport({
 			                layout:'accordion',
 			                layoutConfig:{
 			                    animate:true
-			                }}
+			                }
+			                }
 			               ]
                 
                 },
@@ -150,6 +152,16 @@ Ext.viewport = new Ext.Viewport({
 							
 			                },
 			                {
+			                region:'button_toolbar',
+			                id:'toolbar-panel',
+			                split:false,
+			                height:30,
+			                width: '100%',
+			                margins:'35 0 5 5',
+			                cmargins:'35 5 5 5',
+			                items: Ext.button_toolbar
+			                },
+			                {
 			                region:'bottom',
 			                id:'bottom-panel',
 			                title:'Task Execution',
@@ -166,7 +178,14 @@ Ext.viewport = new Ext.Viewport({
         
         store.load();        
         store2.load();
-        
         Ext.store = store;
-        Ext.store2 = store2;        
+        Ext.store2 = store2;     
+        
+        Ext.button_toolbar.add(new Ext.Button({text: 'allocate'}));
+        Ext.button_toolbar.add(new Ext.Button({text: 'submit'}));
+        Ext.button_toolbar.add(new Ext.Button({text: 'suspend'}));
+        Ext.button_toolbar.add(new Ext.Button({text: 'resume'}));
+        Ext.button_toolbar.add(new Ext.Button({text: 'delegate'}));
+        Ext.button_toolbar.add(new Ext.Button({text: 'review'}));
+           
 });
