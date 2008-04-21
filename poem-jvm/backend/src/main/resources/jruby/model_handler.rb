@@ -1,5 +1,6 @@
 module Handler
   class ModelHandler < DefaultHandler
+    include_class 'org.b3mn.poem.Persistance'
     def doGet(interaction)
       representation = interaction.object.read
       interaction.response.setStatus(200)
@@ -48,6 +49,7 @@ module Handler
     	out.println("<div class='processdata'></div>")
     	out.println("</body>")
     	out.println("</html>")
+    	Persistance.commit
     end
 
     def doPut(interaction)

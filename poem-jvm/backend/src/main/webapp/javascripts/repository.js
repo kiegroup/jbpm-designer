@@ -27,7 +27,7 @@ window.onbeforeunload = function() {
 }
 
 // reference local blank image
-Ext.BLANK_IMAGE_URL = '/poem-backend-1.0/poem/ext/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = '/poem-backend-1.0/ext/resources/images/default/s.gif';
 
 // create namespace
 Ext.namespace('Repository');

@@ -30,7 +30,6 @@ public class Structure {
 		setInteger("id", owner_id).
 		uniqueResult();
 		
-		//Persistance.commit();
 		return structure;
 	}
 	

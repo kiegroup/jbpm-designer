@@ -79,9 +79,8 @@ public class Identity {
 		createSQLQuery("select {identity.*} from identity(?)")
 		.addEntity("identity", Identity.class).
 		setString(0, openid).uniqueResult();
-		Persistance.commit();
 		Structure.instance(identity.getId(), userroot.getUserHierarchy());
-		
+		Persistance.commit();
 		return identity;	
 	}
 	
@@ -91,9 +90,8 @@ public class Identity {
 		createSQLQuery("select {identity.*} from identity(?)")
 		.addEntity("identity", Identity.class).
 		setString(0, openid).uniqueResult();
-		Persistance.commit();
 		Structure.instance(identity.getId(), hierarchy);
-		
+		Persistance.commit();
 		return identity;	
 	}
 	

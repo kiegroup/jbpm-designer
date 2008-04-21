@@ -29,7 +29,7 @@ class Dispatcher
     uri = request.getPathInfo
     if(Helper.getRelation(uri) == '/repository')
       handler = Handler::RepositoryHandler.new
-      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid),nil, nil, request, response, hostname))
+      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, nil, request, response, hostname))
     elsif(Helper.getRelation(uri) == '/model_types')
       handler = Handler::TypeHandler.new
       handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, nil, request, response, hostname))
