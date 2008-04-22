@@ -322,11 +322,22 @@ ORYX.Core.Bounds = Clazz.extend({
 	 */
 	center: function() {
 		return {
-			x: (this.a.x + this.b.x)/2.0, 
-			y: (this.a.y + this.b.y)/2.0
+			x: this.a.x + ((this.b.x - this.a.x)/2.0), 
+			y: this.a.y + ((this.b.y - this.a.y)/2.0)
 		};
 	},
+
 	
+	/**
+	 * @return {Point} The center point of this bounds.
+	 */
+	midPoint: function() {
+		return {
+			x: (this.b.x - this.a.x)/2.0, 
+			y: (this.b.y - this.a.y)/2.0
+		};
+	},
+		
 	/**
 	 * Moves the center point of this bounds to the new position.
 	 * @param p {Point} 
