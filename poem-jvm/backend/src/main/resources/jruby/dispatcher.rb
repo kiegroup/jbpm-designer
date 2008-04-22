@@ -43,7 +43,6 @@ class Dispatcher
       scope = Identity.instance(Helper.getObjectPath(uri))
       access = scope.access(openid, Helper.getRelation(uri)) unless scope.nil?
       unless access.nil?
-        puts access.getTerm + 'and' + access.getAccess_term
         if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
           if (Handler.constants.include?(access.getTerm))
             handler = Handler.module_eval("#{access.getTerm}").new

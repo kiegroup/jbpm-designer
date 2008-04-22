@@ -75,9 +75,9 @@ public class Interaction {
 		Persistance.commit();
 	}
 	public long save() {
-		long id = 0;
 		Persistance.getSession().save(this);
-		return id;
+		Persistance.commit();
+		return this.getId();
 	}
 	public String getUri() {
 		return "/access?id=" +  this.getId();
