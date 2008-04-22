@@ -272,9 +272,9 @@ Repository.app = {
 		}
 				
 		var panels = []; // clone the panels that are currently loaded in order to update them
-		for (var i=0; i < this.model_panels.length; i++) {
-			if (this.model_panels[i].panel._loaded) {
-				panels.push(this.model_panels[i]);
+		for (var i=0; i < Repository.app.model_panels.length; i++) {
+			if (Repository.app.model_panels[i].panel._loaded) {
+				panels.push(Repository.app.model_panels[i]);
 			}
 		};
 		
@@ -475,7 +475,14 @@ Repository.app = {
 
 		ORYX.Log.debug("Create new Model:%0",modeltype);
 		
-		var modelTypeObj	= Repository.app.model_types.find(function(el){ return el.id == modeltype })
+		var modelTypeObj;
+		
+		Repository.app.model_types.each(function(el){ 
+			if( el.id == modeltype ){
+				modelTypeObj = el
+			} 
+		});
+		
 		var stencilSetURI	= modelTypeObj ? modelTypeObj.uri : null;
 		
 		// If the server has sends not uri value, take the bpmn stencilset
@@ -942,7 +949,6 @@ Repository.render = {
                         text: 'processes by type',
 						id: "tree_node_processes_by_type",
                         expanded: true,
-                        iconCls: "no-icon",
 						children: [{
                             text: "show all",
                         	iconCls: "no-icon",
