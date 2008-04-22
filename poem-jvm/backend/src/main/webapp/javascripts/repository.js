@@ -595,7 +595,7 @@ Repository.app = {
 	
 	filterModelsByModelType: function(modeltype_id) {
 		//alert("Filter models by type: " + modeltype_id);
-		this.filter = {type: modeltype_id};
+		this.filter = modeltype_id ? {type: modeltype_id} : {};
 		this.updatePanels();
 	},
 	
@@ -908,7 +908,7 @@ Repository.render = {
 					
 					
                     expanded: true,
-                    children: [{
+                    children: [/*{
                         text: 'all processes',
                         leaf: false,
                         expanded: true,
@@ -938,12 +938,21 @@ Repository.render = {
 								}
 							}
                         }]
-                    }, {
+                    }, */{
                         text: 'processes by type',
 						id: "tree_node_processes_by_type",
                         expanded: true,
                         iconCls: "no-icon",
-						children: []
+						children: [{
+                            text: "show all",
+                        	iconCls: "no-icon",
+                            leaf: true,
+							listeners: {
+								click: function() {
+									Repository.app.filterModelsByModelType();
+								}
+							}
+                        }]
                     }]
                 }),
                 rootVisible: false
