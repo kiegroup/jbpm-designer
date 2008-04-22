@@ -53,4 +53,50 @@ module Helper
     output = {'uris'=>uris, 'info'=>info,'access'=>access}
   end
   
+  def self.getOryxModel(representation)
+    oryx_path = '/oryx/'
+  	model = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+  	model << "<html xmlns=\"http://www.w3.org/1999/xhtml\"\n"
+  	model << "xmlns:b3mn=\"http://b3mn.org/2007/b3mn\"\n"
+  	model << "xmlns:ext=\"http://b3mn.org/2007/ext\"\n"
+  	model << "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"
+  	model << "xmlns:atom=\"http://b3mn.org/2007/atom+xhtml\">\n"
+  	model << "<head profile=\"http://purl.org/NET/erdf/profile\">\n"
+  	model << "<title>" + representation['title'] + " - Oryx</title>\n"
+  	model << "<!-- libraries -->\n"
+  	model << "<script src=\"" + oryx_path + "lib/prototype-1.5.1_rc3.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "lib/path_parser.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "lib/ext-2.0.2/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "lib/ext-2.0.2/ext-all.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "lib/ext-2.0.2/color-field.js\" type=\"text/javascript\" />\n"
+  	model << "<style media=\"screen\" type=\"text/css\">\n"
+  	model << "@import url(\"" + oryx_path + "lib/ext-2.0.2/resources/css/ext-all.css\");\n"
+  	model << "@import url(\"" + oryx_path + "lib/ext-2.0.2/resources/css/xtheme-gray.css\");\n"
+  	model << "</style>\n"
+
+  	model << "<script src=\"" + oryx_path + "shared/kickstart.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "shared/erdfparser.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "shared/datamanager.js\" type=\"text/javascript\" />\n"
+  	model << "<!-- oryx editor -->\n"
+  	model << "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
+  	model << "<link rel=\"Stylesheet\" media=\"screen\" href=\"" + oryx_path + "css/theme_norm.css\" type=\"text/css\" />\n"
+
+  	model << "<!-- erdf schemas -->\n"
+  	model << "<link rel=\"schema.dc\" href=\"http://purl.org/dc/elements/1.1/\" />\n"
+  	model << "<link rel=\"schema.dcTerms\" href=\"http://purl.org/dc/terms/\" />\n"
+  	model << "<link rel=\"schema.b3mn\" href=\"http://b3mn.org\" />\n"
+  	model << "<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />\n"
+  	model << "<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />\n"
+  	model << "</head>\n"
+  	
+  	model << "<body style=\"overflow:hidden;\"><div class='processdata' style='display:none'>\n"
+  	model << representation['content']
+  	model << "\n"
+  	model << "</div>\n"
+  	model << "<div class='processdata'></div>\n"
+  	model << "</body>\n"
+  	model << "</html>"
+  end
+  
 end

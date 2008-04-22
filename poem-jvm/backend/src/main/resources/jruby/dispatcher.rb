@@ -18,27 +18,25 @@ ServerInteraction = Struct.new :subject, :object, :params, :request, :response, 
 class Dispatcher
   def dispatch(request,response)
     hostname = 'http://' + request.getServerName + ':' + request.getServerPort.to_s + request.getContextPath +  request.getServletPath
+    puts request.getMethod.capitalize + ': ' + hostname + request.getPathInfo
     rights = {
       'read' => ['Get'],
       'write' => ['Get', 'Put'],
       'owner' => ['Get', 'Post', 'Put', 'Delete']
     }
-    puts '======= NEW REQUEST =========='
-    puts request.getMethod.capitalize + ': ' + hostname + request.getPathInfo
-    openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid")
+    relations = {
+      '/repository' => 'RepositoryHandler',
+      '/model_types' => 'TypeHandler',
+      '/model' => 'CollectionHandler',
+      '/new' => 'NewModelHandler'
+    }
+    
+    openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid") || 'public'
     uri = request.getPathInfo
-    if(Helper.getRelation(uri) == '/repository')
-      handler = Handler::RepositoryHandler.new
-      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, nil, request, response, hostname))
-    elsif(Helper.getRelation(uri) == '/model_types')
-      handler = Handler::TypeHandler.new
-      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, nil, request, response, hostname))
-    elsif(Helper.getRelation(uri) == '/model')
-      handler = Handler::CollectionHandler.new
-      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname))
-    elsif(Helper.getRelation(uri) == '/new')
-      handler = Handler::NewModelHandler.new
-      handler.handleRequest(ServerInteraction.new(nil, nil, Helper.getParams(request), request, response, hostname))
+   
+    if(handler_name = relations[Helper.getRelation(uri)])
+      handler = Handler.module_eval("#{handler_name}").new
+      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname))    
     else
       scope = Identity.instance(Helper.getObjectPath(uri))
       access = scope.access(openid, Helper.getRelation(uri)) unless scope.nil?
@@ -63,7 +61,6 @@ class Dispatcher
         out.println("Unknown Relation!")
       end
     end
-    puts '====== REQUEST FINISHED ======'
   end
 end
 

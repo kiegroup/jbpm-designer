@@ -33,7 +33,6 @@ public class PoEMServlet extends HttpServlet {
 		ruby.getLoadService().require("dispatcher");
 		RubyClass dispatcher = ruby.getClass("Dispatcher");
 
-		System.out.println("rufe Ruby::Dispatcher");
 		IRubyObject[] args = {JavaEmbedUtils.javaToRuby(ruby, request), JavaEmbedUtils.javaToRuby(ruby, response)};
 		IRubyObject[] damn_java_hack = {};
 		IRubyObject instance = dispatcher.newInstance(damn_java_hack, Block.NULL_BLOCK);

@@ -39,10 +39,10 @@ module Handler
       
       output = ActiveSupport::JSON.encode(
       [
-          {:id => "bpmn", :title => "BPMN", :description => "Business Process Model Notation", :icon_url => "/poem-backend-1.0/images/silk/flag_orange.png"},
-          {:id => "petrinet", :title => "Petri Net", :description => "Petri Net", :icon_url => "/poem-backend-1.0/images/silk/flag_green.png"},
-          {:id => "epc", :title => "EPC", :description => "Event-Driven Process Chain", :icon_url => "/poem-backend-1.0/images/silk/flag_red.png"},
-          {:id => "workflow", :title => "Workflow Net", :description => "Workflow Net", :icon_url => "/poem-backend-1.0/images/silk/flag_blue.png"}
+          {:id => "bpmn", :title => "BPMN", :description => "Business Process Model Notation", :uri => "/stencilsets/bpmn/bpmn.json", :icon_url => "/poem-backend-1.0/images/silk/flag_orange.png"},
+          {:id => "petrinet", :title => "Petri Net", :description => "Petri Net", :uri => "/stencilsets/petrinets/petrinet.json", :icon_url => "/poem-backend-1.0/images/silk/flag_green.png"},
+          {:id => "epc", :title => "EPC", :description => "Event-Driven Process Chain", :uri => "/stencilsets/epc/epc.json", :icon_url => "/poem-backend-1.0/images/silk/flag_red.png"},
+          {:id => "workflow", :title => "Workflow Net", :description => "Workflow Net", :uri => "/stencilsets/workflownets/workflownets.json", :icon_url => "/poem-backend-1.0/images/silk/flag_blue.png"}
       ])
       out.print(output);
 

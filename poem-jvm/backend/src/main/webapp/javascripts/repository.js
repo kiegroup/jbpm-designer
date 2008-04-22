@@ -488,7 +488,7 @@ Repository.app = {
 		// If the server has sends not uri value, take the bpmn stencilset
 		stencilSetURI		= stencilSetURI ? stencilSetURI : '/stencilsets/bpmn/bpmn.json';
 		
-		var url = './new' + '?stencilset=\'' + stencilSetURI + '\'';
+		var url = './new' + '?stencilset=' + stencilSetURI;
 
 		var editor = window.open( url );
 		window.setTimeout(
