@@ -207,8 +207,8 @@ Repository.app = {
 	preloadPanels: function() {
 		
 		var panels = []; // clone the panels array
-		for (var i=0; i < this.model_panels.length; i++) {
-			panels[i] = this.model_panels[i];
+		for (var i=0; i < Repository.app.model_panels.length; i++) {
+			panels[i] = Repository.app.model_panels[i];
 		};
 		
 		var models_loaded_total = 0;
@@ -472,7 +472,25 @@ Repository.app = {
     },
 	
 	createModel: function(modeltype) {
-		alert("createModel: " + modeltype)
+
+		ORYX.Log.debug("Create new Model:%0",modeltype);
+		
+		var modelTypeObj	= Repository.app.model_types.find(function(el){ return el.id == modeltype })
+		var stencilSetURI	= modelTypeObj ? modelTypeObj.uri : null;
+		
+		// If the server has sends not uri value, take the bpmn stencilset
+		stencilSetURI		= stencilSetURI ? stencilSetURI : '/stencilsets/bpmn/bpmn.json';
+		
+		var url = './new' + '?stencilset=\'' + stencilSetURI + '\'';
+
+		var editor = window.open( url );
+		window.setTimeout(
+			function() {
+				if(!editor || !editor.opener || editor.closed) {
+					Ext.MessageBox.alert("Editor not started.", "The editor does not seem to be started yet. Please check, whether you have a popup blocker enabled and disable it or allow popups for this site. We will never display any commercials on this site.").setIcon(Ext.MessageBox.QUESTION)
+				}
+			}, 5000);
+		
 	},
 	
 	deleteModel: function(item, url) {
