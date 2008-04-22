@@ -17,14 +17,14 @@ ServerInteraction = Struct.new :subject, :object, :params, :request, :response, 
 
 class Dispatcher
   def dispatch(request,response)
-    hostname = 'http://' + `hostname`.chomp + ':8080/poem-backend-1.0/poem'
+    hostname = 'http://' + request.getServerName + ':' + request.getServerPort.to_s + request.getContextPath +  request.getServletPath
     rights = {
       'read' => ['Get'],
       'write' => ['Get', 'Put'],
       'owner' => ['Get', 'Post', 'Put', 'Delete']
     }
     puts '======= NEW REQUEST =========='
-    puts request.getMethod.capitalize + ': ' + request.getPathInfo
+    puts request.getMethod.capitalize + ': ' + hostname + request.getPathInfo
     openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid")
     uri = request.getPathInfo
     if(Helper.getRelation(uri) == '/repository')
@@ -64,6 +64,7 @@ class Dispatcher
         out.println("Unknown Relation!")
       end
     end
+    puts '====== REQUEST FINISHED ======'
   end
 end
 
