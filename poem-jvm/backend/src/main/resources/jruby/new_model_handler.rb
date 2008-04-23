@@ -16,12 +16,17 @@ module Handler
       interaction.response.setStatus(200)
     	interaction.response.setContentType "application/xhtml+xml"
     end
-  end
-  
-  def doPost(interaction)
-    identity = Identity.newModel(interaction.subject.getUri, interaction.params['title'], interaction.params['type'], 'application/xhtml+xml', 'en_US', interaction.params['summary'], interaction.params['data']);
-    interaction.response.addHeader('Location', identity.getUri)
-    interaction.response.setStatus(201)
-  end
-  
+    
+    def doPost(interaction)
+      title = interaction.params['title'] || 'New Process'
+      type = interaction.params['type'] || 'bpmn'
+      mime_type = interaction.params['mime_type'] || 'application/xhtml+xml'
+      language = interaction.params['language'] || 'en_US'
+      summary = interaction.params['summary'] || 'is new'
+
+      identity = Identity.newModel(interaction.subject, title, type, mime_type, language, summary, interaction.params['data']);
+      interaction.response.addHeader('Location', interaction.hostname + identity.getUri + '/self')
+      interaction.response.setStatus(201)
+    end
+  end  
 end

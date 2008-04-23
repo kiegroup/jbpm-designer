@@ -5,12 +5,10 @@ module Handler
       representation = interaction.object.read
     	Persistance.commit
       model = {'title' => representation.getTitle, 'content' => representation.getContent}
-      
-    	out = interaction.response.getWriter
-    	out.print(Helper.getOryxModel(model))
-    	
       interaction.response.setStatus(200)
     	interaction.response.setContentType "application/xhtml+xml"
+    	out = interaction.response.getWriter
+    	out.print(Helper.getOryxModel(model))
     end
 
     def doPut(interaction)

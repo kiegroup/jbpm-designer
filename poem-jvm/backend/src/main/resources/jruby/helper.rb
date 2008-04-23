@@ -64,7 +64,7 @@ module Helper
   	model << "<head profile=\"http://purl.org/NET/erdf/profile\">\n"
   	model << "<title>" + representation['title'] + " - Oryx</title>\n"
   	model << "<!-- libraries -->\n"
-  	model << "<script src=\"" + oryx_path + "lib/prototype-1.5.1_rc3.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "lib/prototype-1.5.1.js\" type=\"text/javascript\" />\n"
   	model << "<script src=\"" + oryx_path + "lib/path_parser.js\" type=\"text/javascript\" />\n"
   	model << "<script src=\"" + oryx_path + "lib/ext-2.0.2/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />\n"
   	model << "<script src=\"" + oryx_path + "lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />\n"
