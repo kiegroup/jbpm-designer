@@ -15,7 +15,7 @@ var ORYX_LOGLEVEL_INFO = 3;
 var ORYX_LOGLEVEL_WARN = 2;
 var ORYX_LOGLEVEL_ERROR = 1;
 var ORYX_LOGLEVEL_FATAL = 0;
-var ORYX_LOGLEVEL = ORYX_LOGLEVEL_TRACE;
+var ORYX_LOGLEVEL = ORYX_LOGLEVEL_FATAL;
 
 ORYX = {
 	/**
@@ -25,7 +25,7 @@ ORYX = {
 	
 		__appenders: [
 			{ append: function(message) {
-				console.log(message); }}
+				alert(message); }}
 		],
 	
 		trace: function() {	if(ORYX_LOGLEVEL >= ORYX_LOGLEVEL_TRACE)
