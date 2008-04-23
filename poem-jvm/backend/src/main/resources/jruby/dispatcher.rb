@@ -31,7 +31,7 @@ class Dispatcher
       '/new' => 'NewModelHandler'
     }
     
-    openid = 'http://ole.myopenid.com/'# request.getSession.getAttributes("openid") || 'public'
+    openid = 'https://openid.hpi.uni-potsdam.de/user/ole.eckermann'# request.getSession.getAttributes("openid") || 'public'
     uri = request.getPathInfo
    
     if(handler_name = relations[Helper.getRelation(uri)])

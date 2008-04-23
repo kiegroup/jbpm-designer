@@ -12,11 +12,11 @@ public class IdentityTest {
 	@Test public void getAcccess() {
 		String uri = "/data/model/10";
 		List<Access> access = Identity.instance(uri).getAccess();
-		assertEquals(3, access.size());
+		assertEquals(1, access.size());
 	}
 	
 	@Test public void access() {
-		String term = "owner", openid = "http://ole.myopenid.com/", uri = "/data/model/9", rel="/self";
+		String term = "owner", openid = "https://openid.hpi.uni-potsdam.de/user/ole.eckermann", uri = "/data/model/9", rel="/self";
 		Identity model = Identity.instance(uri);
 		Access access = model.access(openid,rel);
 		String new_Term = access.getAccess_term();
@@ -24,24 +24,24 @@ public class IdentityTest {
 	}
 	
 	@Test public void getModels() {
-		String openid = "http://ole.myopenid.com/";
+		String openid = "https://openid.hpi.uni-potsdam.de/user/ole.eckermann";
 		List<Representation> models = Identity.instance(openid).getModels("bpmn", new Date(0), new Date(109,0,1));
 		assertEquals("bpmn",models.get(0).getType());
 	}
 	
 	@Test public void userHierarchy() {
-		String hierarchy = "U26";
-		assertEquals(hierarchy, Identity.instance("http://ole.myopenid.com/").getUserHierarchy());
+		String hierarchy = "U25";
+		assertEquals(hierarchy, Identity.instance("https://openid.hpi.uni-potsdam.de/user/ole.eckermann").getUserHierarchy());
 		assertEquals("U2", Identity.instance("ownership").getUserHierarchy());
 	}
 	
 	@Test public void ensureUser() {
-		String hierarchy = "U26";
-		assertEquals(hierarchy, Identity.ensureSubject("http://ole.myopenid.com/").getUserHierarchy());
+		String hierarchy = "U25";
+		assertEquals(hierarchy, Identity.ensureSubject("https://openid.hpi.uni-potsdam.de/user/ole.eckermann").getUserHierarchy());
 	}
 	
 	@Test public void createAndDeleteInteraction() {
-		Identity subject = Identity.instance("http://hagen.myopenid.com/");
+		Identity subject = Identity.instance("https://openid.hpi.uni-potsdam.de/user/hagen.overdick");
 		Identity object =  Identity.instance("/data/model/9");
 		String term = "write";
 		if(Interaction.exist(subject.getUserHierarchy(), object.getModelHierarchy(), term) == null) {
@@ -58,7 +58,7 @@ public class IdentityTest {
 	}
 	
 	@Test public void newModelandDeleteModel() {
-		Identity owner = Identity.instance("http://ole.myopenid.com/");
+		Identity owner = Identity.instance("https://openid.hpi.uni-potsdam.de/user/ole.eckermann");
 		String title = "New Process";
 		String type = "bpmn";
 		String mime_type = "application/xhtml+xml";
