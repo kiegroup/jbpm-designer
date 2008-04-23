@@ -1,0 +1,186 @@
+{
+	"title":"Let's Dance",
+	"namespace":"http://b3mn.org/stencilset/letsdance#",
+	"description":"Simple stencil set for Let's dance diagrams.",
+	"stencils": [
+		{
+			"type":			"node",
+			"id":			"Diagram",
+			"title":		"Diagram",	
+			"groups":		["Diagram"],
+			"description":	"Let's Dance Diagram",
+			"view":			"node.diagram.svg",
+			"icon":			"diagram.png",
+			"roles":		[]
+		},
+		{
+			"type":			"node",
+			"id":			"complexInteraction",
+			"title":		"Complex Interaction",	
+			"groups":		["Interaction"],
+			"description":	"Representation of a complex Interaction in Let's Dance",
+			"view":			"node.complexinteraction.svg",
+			"icon":			"node.complexinteraction.png",
+			"roles":		["interaction"],
+			"properties": [
+				{
+					"id":		"guardCondition",
+					"type":		"String",
+					"title":	"Guard Condition",
+					"value":	"",
+					"description":"",
+					"readonly":	false,
+					"optional":	true,
+					"length":	"",
+					"refToView":"guardConditionText",
+					"wrapLines":false
+				},
+				{
+					"id":		"showGuardCondition",
+					"type":		"Boolean",
+					"title":	"Show Condition",
+					"value": 	false,
+					"description":"",
+					"optional":	false,
+					"refToView": [
+								"guardConditionText",
+								"guardConditionBorder"
+					]
+				},
+			]
+		},
+		{
+			"type":			"node",
+			"id":			"simpleInteraction",
+			"title":		"Elementary Interaction",	
+			"groups":		["Interaction"],
+			"description":	"",
+			"view":			"node.elementaryinteraction.svg",
+			"icon":			"node.elementaryinteraction.png",
+			"roles":		["interaction"],
+			"properties": [
+				{
+					"id":	"messageType",
+					"type":	"String",
+					"title":"Message Type",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"refToView":"messageType",
+					"wrapLines":false
+				},
+				{
+					"id":		"senderText",
+					"type":		"String",
+					"title":	"Sender Text",
+					"value":	"A(a)",
+					"description":"",
+					"readonly":	false,
+					"optional":	true,
+					"length":	"",
+					"refToView":"senderText",
+					"wrapLines":false
+				},
+				{
+					"id":		"receiverText",
+					"type":		"String",
+					"title":	"Receiver Text",
+					"value":	"B(b)",
+					"description":"",
+					"readonly":	false,
+					"optional":	true,
+					"length":	"",
+					"refToView":"receiverText",
+					"wrapLines":false
+				},
+				{
+					"id":			"senderColor",
+					"type":			"Color",
+					"title":		"Sender Color",
+					"value":		"#ffffff",
+					"description":	"",
+					"readonly":		false,
+					"optional":		true,
+					"refToView":	"sender",
+					"fill":			true,
+					"stroke":		false
+				},
+				{
+					"id":		"receiverColor",
+					"type":		"Color",
+					"title":	"Receiver Color",
+					"value":		"#ffffff",
+					"description":"",
+					"readonly":	false,
+					"optional":	true,
+					"refToView":"receiver",
+					"fill":		true,
+					"stroke":	false
+				}
+			]
+		},
+		{
+			"type":			"edge",
+			"id":			"Precedes",
+			"title":		"Precedes",	
+			"groups":		["Relationship"],
+			"description":	"A precedes edges",
+			"view":			"edge.precedes.svg",
+			"icon":			"edge.precedes.png",
+			"roles":		["controlflow"]
+		},
+		{
+			"type":			"edge",
+			"id":			"Inhibits",
+			"title":		"Inhibits",	
+			"groups":		["Relationship"],
+			"description":	"An inhibits edges",
+			"view":			"edge.inhibits.svg",
+			"icon":			"edge.inhibits.png",
+			"roles":		["controlflow"]
+		},
+		{
+			"type":			"edge",
+			"id":			"WeakPrecedes",
+			"title":		"WeakPrecedes",	
+			"groups":		["Relationship"],
+			"description":	"A weak precedes edges",
+			"view":			"edge.weakprecedes.svg",
+			"icon":			"edge.weakprecedes.png",
+			"roles":		["controlflow"]
+		}
+		
+		
+		
+	],
+	"rules":{
+		"connectionRules": [
+			{
+				"role": 	"controlflow",
+				"connects": [
+					{
+						"from": "interaction",
+						"to":	"interaction"
+					}
+				],
+			}
+		],
+		"containmentRules":	[
+			{
+				"role":		"Diagram",
+				"contains": [
+							"interaction"
+				]
+			},
+			{
+				"role":		"complexInteraction",
+				"contains": [
+							"interaction"
+				]
+			}
+		]
+		
+	}
+}
