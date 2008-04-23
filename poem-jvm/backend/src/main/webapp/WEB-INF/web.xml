@@ -16,5 +16,28 @@
         <servlet-name>PoEMServlet</servlet-name>
         <url-pattern>/poem/*</url-pattern>
     </servlet-mapping>
+	
+	<!-- Registering OpenID Consumer Servlet for Authentication -->
+	<servlet>
+        <display-name>Oryx OpenID Authentication Servlet</display-name>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>org.oryxeditor.server.auth.OpenIDAuthenticationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/consumer</url-pattern>
+    </servlet-mapping>
+
+	<!-- Load jstl, needed for OpenID Authentication -->
+    <jsp-config>
+        <taglib>
+            <taglib-uri>
+                http://java.sun.com/jstl/core
+            </taglib-uri>
+            <taglib-location>
+                /WEB-INF/c.tld
+            </taglib-location>
+        </taglib>
+    </jsp-config>
 
 </web-app>
