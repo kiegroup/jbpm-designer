@@ -7,6 +7,7 @@ module Handler
       ext_path = '/poem-backend-1.0/ext/'
       
       interaction.response.setStatus(200)
+      interaction.response.setContentType("text/html")
       out = interaction.response.getWriter
       
       out.println('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">')
