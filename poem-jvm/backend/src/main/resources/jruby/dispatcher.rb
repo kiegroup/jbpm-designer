@@ -12,6 +12,7 @@ require 'repository_handler'
 
 include_class 'org.b3mn.poem.Identity'
 include_class 'org.b3mn.poem.Access'
+include_class 'org.oryxeditor.server.auth.OpenIDAuthenticationServlet'
 
 ServerInteraction = Struct.new :subject, :object, :params, :request, :response, :hostname
 
@@ -31,9 +32,9 @@ class Dispatcher
       '/new' => 'NewModelHandler'
     }
     
-    openid = 'https://openid.hpi.uni-potsdam.de/user/ole.eckermann'# request.getSession.getAttributes("openid") || 'public'
+    openid = request.getSession.getAttribute(OpenIDAuthenticationServlet::OPENID_SESSION_IDENTIFIER) || 'public'
     uri = request.getPathInfo
-   
+
     if(handler_name = relations[Helper.getRelation(uri)])
       handler = Handler.module_eval("#{handler_name}").new
       handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname))    
