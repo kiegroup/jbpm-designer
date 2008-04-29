@@ -11,6 +11,7 @@
 			"description":"A Diagram",
 			"view":"node.diagram.svg",
 			"icon":"new_diagram.png",
+			"mayBeRoot": true,
 			"roles": [
 			],
 			"properties": [

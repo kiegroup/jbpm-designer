@@ -58,7 +58,7 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 		this._properties = new Hash();
 
 		// check stencil consistency and set defaults.
-		with(this._jsonStencil) {
+		/*with(this._jsonStencil) {
 			
 			if(!type) throw "Stencil does not provide type.";
 			if((type != "edge") && (type != "node"))
@@ -72,7 +72,25 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 
 			// add id of stencil to its roles
 			roles.push(id);
+		}*/
+		
+		//init all JSON values
+		if(!this._jsonStencil.type || !(this._jsonStencil.type === "edge" || this._jsonStencil.type === "node")) {
+			throw "ORYX.Core.StencilSet.Stencil(construct): Type is not defined.";
 		}
+		if(!this._jsonStencil.id || this._jsonStencil.id === "") {
+			throw "ORYX.Core.StencilSet.Stencil(construct): Id is not defined.";
+		}
+		if(!this._jsonStencil.title || this._jsonStencil.title === "") {
+			throw "ORYX.Core.StencilSet.Stencil(construct): Title is not defined.";
+		}
+
+		if(!this._jsonStencil.description) { this._jsonStencil.description = ""; };
+		if(!this._jsonStencil.groups) { this._jsonStencil.groups = []; }
+		if(!this._jsonStencil.roles) { this._jsonStencil.roles = []; }
+		
+		//add id of stencil to its roles
+		this._jsonStencil.roles.push(this._jsonStencil.id);
 
 		//prepend namespace to each role
 		this._jsonStencil.roles.each((function(role, index) {

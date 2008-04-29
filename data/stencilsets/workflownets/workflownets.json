@@ -10,6 +10,7 @@
 			"description":"",
 			"view":"diagram.svg",
 			"icon":"diagram.png",
+			"mayBeRoot": true,
 			"roles": [
 			],
 			"properties": [
