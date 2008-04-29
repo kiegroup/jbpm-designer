@@ -46,7 +46,7 @@ public class AlternativesRenderer extends HttpServlet {
 	    out.write(data);
 	    out.close();
 	    makePDF();
-	    res.getOutputStream().print("./tmp/" + this.baseFilename + ".pdf");
+	    res.getOutputStream().print("/oryx/tmp/" + this.baseFilename + ".pdf");
 
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
