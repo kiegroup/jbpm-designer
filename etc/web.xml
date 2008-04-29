@@ -127,7 +127,7 @@
             AlternativesRenderer
         </servlet-name>
         <url-pattern>
-            /alt
+            /pdf
         </url-pattern>
     </servlet-mapping>
 	
