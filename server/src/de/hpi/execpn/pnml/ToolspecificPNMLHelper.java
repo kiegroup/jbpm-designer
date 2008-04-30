@@ -36,16 +36,6 @@ public class ToolspecificPNMLHelper {
 		model.setAttribute("href", modelURL);
 	}
 	
-	void setFireTypeAutomatic(Document doc, Element parent, Boolean automatic){
-		Element fire;
-		if (!hasChildWithName(parent, "fire")){
-			fire = (Element) parent.appendChild(doc.createElement("fire"));
-		}else{
-			fire =  (Element) parent.getElementsByTagName("fire").item(0);
-		}
-		fire.setAttribute("type", "automatic");
-	}
-	
 	void setTaskAndAction(Document doc, Element parent, String task, String action){
 		Element worklist;
 		if (!hasChildWithName(parent, "worklist")){

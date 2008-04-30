@@ -3,6 +3,7 @@ package de.hpi.execpn.pnml;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,6 +15,7 @@ import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.Transition;
 import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
 
@@ -43,10 +45,11 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 
 		if (transition instanceof FormTransition) {
 			tsHelper.addModelReference(doc, ts, ((FormTransition) transition).getModelURL());
-		} else if (transition instanceof AutomaticTransition){
+			tnode.setAttribute("type", "receive");
+		} else /*if (transition instanceof TauTransition)*/{
 			// TODO: What about guards?
-			tsHelper.setFireTypeAutomatic(doc, ts, true);			
-		} 
+			tnode.setAttribute("type", "automatic");
+		}
 		
 		if (transition instanceof LabeledTransition) {
 			LabeledTransition l = (LabeledTransition)transition;
@@ -60,8 +63,7 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		}
 		
 		// get incoming places out of petri net model
-		List<FlowRelationship> incomingArcs = transition
-				.getIncomingFlowRelationships();
+		List<FlowRelationship> incomingArcs = transition.getIncomingFlowRelationships();
 		List<Place> incomingPlaces = new ArrayList<Place>();
 		for (FlowRelationship arc : incomingArcs) {
 			if (arc.getSource() instanceof Place) {

@@ -1,14 +1,14 @@
 package de.hpi.bpmn;
 
 public class Task extends Activity {
-	protected boolean skipable;
+	protected boolean skippable;
 
-	public boolean isSkipable() {
-		return skipable;
+	public boolean isSkippable() {
+		return skippable;
 	}
 
-	public void setSkipable(boolean skipable) {
-		this.skipable = skipable;
+	public void setSkippable(boolean skippable) {
+		this.skippable = skippable;
 	}
 
 }

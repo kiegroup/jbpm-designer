@@ -58,9 +58,9 @@ public class ExecConverter extends Converter {
 		
 		exTask.running = addPlace(net, "running_" + task.getId());
 		
-		if (task.isSkipable()) {
+		if (task.isSkippable()) {
 			// skip Transition
-			exTask.setSkipable(true);
+			exTask.setSkippable(true);
 			LabeledTransition skipT = addLabeledTransition(net, "skip_" + task.getId(), task.getLabel());
 			skipT.setAction("skip");
 			exTask.skip = skipT;
@@ -96,7 +96,7 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, exTask.finish, exTask.autofinish);
 		addFlowRelationship(net, exTask.autofinish, c.map.get(getOutgoingSequenceFlow(task)));
 
-		if (task.isSkipable()) {
+		if (task.isSkippable()) {
 			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.skip);
 			addFlowRelationship(net, exTask.skip, c.map.get(getOutgoingSequenceFlow(task)));
 		}		
@@ -221,7 +221,7 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, exTask.review, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
-				if (exTask.isSkipable()) {
+				if (exTask.isSkippable()) {
 					addFlowRelationship(net, enabled, exTask.skip);
 					addFlowRelationship(net, enableStarting, exTask.skip);
 					addFlowRelationship(net, exTask.skip, enableStarting);
@@ -286,7 +286,7 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, exTask.autofinish, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
-				if (exTask.isSkipable()) {
+				if (exTask.isSkippable()) {
 					addFlowRelationship(net, exTask.skip, executed);
 					addFlowRelationship(net, exTask.skip, updatedState);
 					addFlowRelationship(net, enabled, exTask.skip);

@@ -130,7 +130,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
 						self.document.title +
 						"</h4><a href=\"" +
 						absolutepath +
-						"</body></html>"].join('\r\n')), '_blank', "resizable=yes,width=420,height=100,toolbar=0,scrollbars=yes");
+						"</body></html>"].join('\r\n')), '_blank', "resizable=yes,width=400,height=150,toolbar=0,scrollbars=yes");
 					}
 				}
 			});

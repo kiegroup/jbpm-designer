@@ -1,14 +1,15 @@
 
 Ext.BLANK_IMAGE_URL = 'lib/ext-2.0.2/resources/images/default/s.gif';
+Ext.engine_url = 'http://localhost:3000/';
+
 
 function loadStoreForCase(val) {
-	Ext.store2.proxy.conn.url = '/oryx/engineproxy?url=http://localhost:3000/cases/' + val;
+	Ext.store2.proxy.conn.url = '/oryx/engineproxy?url=' + Ext.engine_url + 'cases/' + val;	
 	Ext.store2.reload();
 	Ext.getCmp('top-panel').setTitle('Case List for Case #' + val);
 	Ext.task_grid.render();
 }
 
-Ext.engine_url = 'http://localhost:3000/';
 
 Ext.onReady(function() {
 var xg = Ext.grid;
@@ -36,7 +37,7 @@ Ext.store2 = new Ext.data.GroupingStore({
            id: 'transition_name',
            totalRecords: '@total'
        }, [
-           'transition_id', 'transition_name' , 'action', 'case_id'
+           'transition_id', 'transition_name' , 'action', 'case_id', 'attractivity', 'pending_time'
        ])
 });
 
@@ -58,7 +59,9 @@ Ext.task_grid = new xg.GridPanel({
 								store: Ext.store2,							
 								columns: [ 
 //									{id: 'transition_id', header: 'transition id', sortable: true, dataIndex: 'transition_id', renderer: transitionLinkRenderer},
-									{header: 'transition name', sortable: true, dataIndex: 'transition_name'}
+									{header: 'transition name', sortable: true, dataIndex: 'transition_name'},
+									{header: 'attractivity', sortable: true, dataIndex: 'attractivity', renderer: attractivityRenderer},
+									{header: 'pending_time', sortable: true, dataIndex: 'pending_time'}
 //									,
 //									{header: 'action', sortable: true, dataIndex: 'action'}
 								],
@@ -80,8 +83,16 @@ function caseLinkRenderer(value) {
 	return String.format('<a href="javascript:loadStoreForCase({0})">Case {0}</a>', value); 
 }
 
+function floattorgb(val) {
+	return parseInt(parseFloat(val)*2.55);
+}
+
+function attractivityRenderer(value) {
+	return '<span style="color: rgb(' + (255 - floattorgb(value)) + ','+floattorgb(value)+', 0);">' + value + '</span>'; 
+}
 
 function taskOnClick(blub) {
+	Ext.spawnBtn.setDisabled(true);
 	Ext.allocateBtn.setDisabled(true);
 	Ext.submitBtn.setDisabled(true);
 	Ext.suspendBtn.setDisabled(true);
@@ -135,6 +146,10 @@ function taskOnClick(blub) {
 				  Ext.skipBtn.transition_id = rec.data.transition_id;
 				  Ext.skipBtn.setDisabled(false);
 				  break
+				case '':
+				  Ext.spawnBtn.transition_id = rec.data.transition_id;
+				  Ext.spawnBtn.setDisabled(false);
+				  break
 				  }
 			}
 		});
@@ -155,14 +170,6 @@ function buttonOnClick(blub) {
 
 Ext.viewport = new Ext.Viewport({
             layout:'border',
-            buttons: [{
-          text: "OK",
-          id: "buttonOK",
-          type: "submit",
-          handler: function() {
-              Ext.msg.alert('test','blub');
-           }
-       }],
             items:[{
                 region:'west',
                 id:'west-panel',
@@ -185,9 +192,14 @@ Ext.viewport = new Ext.Viewport({
 			                margins:'35 0 5 5',
 			                cmargins:'35 5 5 5',
 			                width: '100%',
-			                height: '100%',
-			                items: Ext.case_grid                
-			                
+			                height: '100%',			                
+			                buttons: [
+			                	new Ext.Button({id: 'reload_cases', text: 'Reload', onClick: function() {
+			                		Ext.store.reload();
+									Ext.case_grid.render();											                	
+			                	}})
+			                ],
+			                items: Ext.case_grid
 			                },{
 			                region:'west2',
 			                id:'west2-panel',
@@ -266,16 +278,16 @@ Ext.viewport = new Ext.Viewport({
         Ext.store.load();        
         Ext.store2.load();
         
+        Ext.spawnBtn = new Ext.Button({id: 'spawn', text: 'spawn', onClick: buttonOnClick});
         Ext.allocateBtn = new Ext.Button({id: 'allocate', text: 'allocate', onClick: buttonOnClick});
-        Ext.allocateBtn.setDisabled(true);
         Ext.submitBtn = new Ext.Button({id: 'submit', text: 'submit', onClick: buttonOnClick});
-        Ext.submitBtn.setDisabled(true);
         Ext.suspendBtn = new Ext.Button({id: 'suspend', text: 'suspend', onClick: buttonOnClick});
         Ext.resumeBtn = new Ext.Button({id: 'resume', text: 'resume', onClick: buttonOnClick});
         Ext.delegateBtn = new Ext.Button({id: 'delegate', text: 'delegate', onClick: buttonOnClick});
         Ext.reviewBtn = new Ext.Button({id: 'review', text: 'review', onClick: buttonOnClick});
         Ext.skipBtn = new Ext.Button({id: 'skip', text: 'skip', onClick: buttonOnClick});
         
+        Ext.button_toolbar.add(Ext.spawnBtn);
         Ext.button_toolbar.add(Ext.allocateBtn);
         Ext.button_toolbar.add(Ext.submitBtn);
         Ext.button_toolbar.add(Ext.suspendBtn);
