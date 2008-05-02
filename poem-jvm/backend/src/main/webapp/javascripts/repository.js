@@ -805,7 +805,7 @@ Repository.render = {
 			
 			dateFormat: function(string) {
 				var d = string.match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/)
-				var date = new Date(d[1], d[2], d[3], d[4], d[5], d[6]);
+				var date = new Date(d[1], d[2]-1, d[3], d[4], d[5], d[6]);
 				
 				return date.toLocaleDateString() + " - " + date.toLocaleTimeString()
 			}
