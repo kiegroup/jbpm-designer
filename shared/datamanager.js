@@ -439,7 +439,7 @@ var DataManager = {
 			// object is literal
 			DataManager.graft(XMLNS.XHTML, element, [
 				'span', {'class': (triple.predicate.prefix + "-" +
-					triple.predicate.name)}, triple.object.value
+					triple.predicate.name)}, triple.object.value.escapeHTML()
 			]);
 			
 		else {
