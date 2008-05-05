@@ -78,7 +78,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 */
 	checkEPC: function(){	
 		
-		this.facade.raiseEvent({type:'loading.enable'});
+		this.facade.raiseEvent({type:'loading.enable', text:'Checking model'});
 		
 		var checkResult = this.doSyntaxCheck();
 		var errorsArray = checkResult[0];
@@ -121,7 +121,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 */
 	exportEPC: function(){
 
-		this.facade.raiseEvent({type:'loading.enable'});
+		this.facade.raiseEvent({type:'loading.enable', text:'Exporting model'});
 		var xmlSerializer = new XMLSerializer();
 		var index = location.href.lastIndexOf("/");
 
