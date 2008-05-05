@@ -41,6 +41,18 @@ Ext.store2 = new Ext.data.GroupingStore({
        ])
 });
 
+Ext.store3 = new Ext.data.GroupingStore({
+    url: '/oryx/engineproxy?url=' + Ext.engine_url + 'cases/0',
+	groupField: 'transition_id',
+	sortInfo: {field: 'transition_id', direction: 'ASC'},
+    reader: new Ext.data.XmlReader({
+           record: 'task',
+           id: 'transition_id',
+           totalRecords: '@total'
+       }, [
+           'transition_id', 'transition_name' , 'action', 'case_id', 'attractivity', 'pending_time'
+       ])
+});
 
 Ext.case_grid = new Ext.grid.GridPanel({
 						        store: Ext.store,
@@ -75,8 +87,25 @@ Ext.task_grid = new xg.GridPanel({
 									 onClick: taskOnClick
 							   });				        
 
+Ext.spawn_grid = new Ext.grid.GridPanel({
+						        store: Ext.store3,
+						        columns: [
+						            {header: "process", dataIndex: 'transition_id', sortable: true, renderer: spawnLinkRenderer}
+						        ],
+						        width: '100%',
+						        height: 400,
+				                viewConfig: {
+										        forceFit: true,
+										        autoFit:true
+										    }
+						        });
+
 function transitionLinkRenderer(value){
 	return String.format('<a href="' + Ext.engine_url + '/transitions/{0}" target="form_frame">DO</a>', value);
+}
+
+function spawnLinkRenderer(value){
+	return String.format('<a href="' + Ext.engine_url + '/transitions/{0}" target="form_frame">net #{0}</a>', value);
 }
 
 function caseLinkRenderer(value) {
@@ -212,7 +241,7 @@ Ext.viewport = new Ext.Viewport({
 			                layoutConfig:{
 			                    animate:true
 			                },
-			                html: '<a href="javascript:loadStoreForCase(2)">blub</a>' 
+			                html: 'leer' 
 			                
 			                
 			                },{
@@ -227,6 +256,24 @@ Ext.viewport = new Ext.Viewport({
 			                layoutConfig:{
 			                    animate:true
 			                }
+			                },
+			                {
+			                region:'west4',
+			                id:'west4-panel',
+			                title:'Spawn Processes',
+			                split:true,
+			                collapsible: true,
+			                margins:'35 0 5 5',
+			                cmargins:'35 5 5 5',
+			                width: '100%',
+			                height: '100%',			                
+			                buttons: [
+			                	new Ext.Button({id: 'reload_spawns', text: 'Reload', onClick: function() {
+			                		Ext.store3.reload();
+									Ext.spawn_grid.render();											                	
+			                	}})
+			                ],
+			                items: Ext.spawn_grid
 			                }
 			               ]
                 
@@ -247,8 +294,6 @@ Ext.viewport = new Ext.Viewport({
 			                margins:'35 0 5 5',
 			                cmargins:'35 5 5 5',
 			                items: Ext.task_grid
-
-							
 			                },
 			                {
 			                region:'button_toolbar',
@@ -277,6 +322,7 @@ Ext.viewport = new Ext.Viewport({
         
         Ext.store.load();        
         Ext.store2.load();
+        Ext.store3.load();
         
         Ext.spawnBtn = new Ext.Button({id: 'spawn', text: 'spawn', onClick: buttonOnClick});
         Ext.allocateBtn = new Ext.Button({id: 'allocate', text: 'allocate', onClick: buttonOnClick});

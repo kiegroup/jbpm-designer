@@ -320,7 +320,7 @@ public abstract class Converter {
 			process = event.getParent();
 		}
 
-		Transition t = addLabeledTransition(net, event.getId(), event.getLabel());
+		Transition t = addTauTransition(net, event.getId());
 		handleMessageFlow(net, event, t, t, c);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(event)), t);
 		Place p = c.getSubprocessPlaces(process).endP;
