@@ -25,6 +25,7 @@
 require 'java'
 
 require 'encoding'
+require 'cgi'
 
 require 'helper'
 require 'default_handler'

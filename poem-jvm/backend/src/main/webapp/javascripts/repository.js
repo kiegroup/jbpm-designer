@@ -719,7 +719,7 @@ Repository.render = {
 		'<tpl for="info">',
 	        '<h3>',
 				'<a href="#start-modeling" onclick="Repository.app.startModel(\'{[parent.item_id]}\',\'{[parent.info.edit_uri]}\'); return false;">',
-					'{title:htmlEncode} ({type:htmlEncode})',
+					'{title} ({type})',
 				'</a>',
 			'</h3>',
 	        '<p class="description">{summary:htmlEncode}</p>',

@@ -34,7 +34,8 @@ module Helper
   def self.getParams(request)
     params = {}
     request.getParameterNames.each do |key|
-      params[key] = request.getParameter(key)
+      value = (CGI.escapeHTML(request.getParameter(key)) unless key == 'data') || request.getParameter(key)
+      params[key] = value
     end
     return params
   end
