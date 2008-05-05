@@ -47,7 +47,7 @@ class Dispatcher
     puts request.getMethod.capitalize + ': ' + hostname + request.getPathInfo
     rights = {
       'read' => ['Get'],
-      'write' => ['Get', 'Put'],
+      'write' => ['Get', 'Post'],
       'owner' => ['Get', 'Post', 'Put', 'Delete']
     }
     relations = {
