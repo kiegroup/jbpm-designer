@@ -119,7 +119,6 @@ module Helper
   	model << representation['content']
   	model << "\n"
   	model << "</div>\n"
-  	model << "<div class='processdata'></div>\n"
   	model << "</body>\n"
   	model << "</html>"
   end
