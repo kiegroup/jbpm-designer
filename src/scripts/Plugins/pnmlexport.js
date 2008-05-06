@@ -24,6 +24,18 @@
 if (!ORYX.Plugins) 
     ORYX.Plugins = new Object();
 
+function gup( name )
+{
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
+
 ORYX.Plugins.Pnmlexport = Clazz.extend({
 
     facade: undefined,
@@ -107,13 +119,16 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
 			var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
 			serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
 			
+			var diagramTitle = gup('resource');
+			
 			// Send the request to the server.
 			new Ajax.Request(ORYX.CONFIG.PNML_EXPORT_URL, {
 				method: 'POST',
 				asynchronous: false,
 				parameters: {
 					resource: resource,
-					data: serialized_rdf
+					data: serialized_rdf,
+					title: diagramTitle
 				},
 				onSuccess: function(request){
 					var pnmlfile = request.responseText;

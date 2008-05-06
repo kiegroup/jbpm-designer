@@ -31,6 +31,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2execpn.converter.ExecConverter;
+import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.pnml.ExecPNPNMLExporter;
 import de.hpi.petrinet.PetriNet;
 
@@ -75,6 +76,7 @@ public class ExportServlet extends HttpServlet {
 		String defaultModelURL = config.getString("pnengine.default_model_url");
 
 		String rdf = req.getParameter("data");
+		String diagramTitle = req.getParameter("title");
 
 		DocumentBuilder builder;
 		BPMNDiagram diagram;
@@ -86,15 +88,16 @@ public class ExportServlet extends HttpServlet {
 			diagram = (BPMNDiagram) importer.loadBPMN();
 
 			// URL only for testing purposes...
-			PetriNet net = new ExecConverter(diagram, defaultModelURL).convert();
+			PetriNet net = new ExecConverter(diagram, defaultModelURL).convert();			
+			ExecPetriNet execnet = (ExecPetriNet)net;
 			Document pnmlDoc = builder.newDocument();
 
 			ExecPNPNMLExporter exp = new ExecPNPNMLExporter();
-			exp.savePetriNet(pnmlDoc, net);
+			execnet.setName(diagramTitle);
+			exp.savePetriNet(pnmlDoc, execnet);
 
 			String basefilename = String.valueOf(System.currentTimeMillis());
-			String tmpPNMLFile = this.getServletContext().getRealPath("/") + "tmp" + File.separator + basefilename
-					+ ".pnml";
+			String tmpPNMLFile = this.getServletContext().getRealPath("/") + "tmp" + File.separator + basefilename + ".pnml";
 			BufferedWriter out = new BufferedWriter(new FileWriter(tmpPNMLFile));
 
 			OutputFormat format = new OutputFormat(pnmlDoc);

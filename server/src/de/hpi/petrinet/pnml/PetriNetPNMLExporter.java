@@ -17,6 +17,7 @@ public class PetriNetPNMLExporter {
 	public void savePetriNet(Document doc, PetriNet net) {
 		Node root = doc.appendChild(doc.createElement("pnml"));
 		Element netnode = (Element)root.appendChild(doc.createElement("net"));
+		
 		handlePetriNetAttributes(doc, netnode, net);
 
 		for (Iterator<Place> it=net.getPlaces().iterator(); it.hasNext(); ) {

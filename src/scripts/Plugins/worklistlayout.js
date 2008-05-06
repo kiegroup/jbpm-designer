@@ -4,6 +4,8 @@ Ext.engine_url = 'http://localhost:3000/';
 
 
 function loadStoreForCase(val) {
+	Ext.task_grid.loadMask.msg = "Loading tasks for Case #"+val +"...";							
+	
 	Ext.store2.proxy.conn.url = '/oryx/engineproxy?url=' + Ext.engine_url + 'cases/' + val;	
 	Ext.store2.reload();
 	Ext.getCmp('top-panel').setTitle('Case List for Case #' + val);
@@ -24,7 +26,7 @@ Ext.store = new Ext.data.Store({
            id: 'case_id',
            totalRecords: '@total'
        }, [
-           'case_id'           
+           'case_id' , 'net_name'        
        ])
 });
 
@@ -50,17 +52,19 @@ Ext.store3 = new Ext.data.GroupingStore({
            id: 'transition_id',
            totalRecords: '@total'
        }, [
-           'transition_id', 'transition_name' , 'action', 'case_id', 'attractivity', 'pending_time'
+           'transition_id', 'net_name'
        ])
 });
 
 Ext.case_grid = new Ext.grid.GridPanel({
 						        store: Ext.store,
 						        columns: [
-						            {header: "case_id", dataIndex: 'case_id', sortable: true, renderer: caseLinkRenderer}
+						            {header: "case_id", dataIndex: 'case_id', sortable: true, renderer: caseLinkRenderer},
+						            {header: "name", dataIndex: 'net_name', sortable: true}
 						        ],
 						        width: '100%',
 						        height: 400,
+						        loadMask : {msg:"Loading cases..."},
 				                viewConfig: {
 										        forceFit: true,
 										        autoFit:true
@@ -77,6 +81,7 @@ Ext.task_grid = new xg.GridPanel({
 //									,
 //									{header: 'action', sortable: true, dataIndex: 'action'}
 								],
+						        loadMask : {msg:"Loading tasks..."},							
 				                viewConfig: {
 										        forceFit: true,
 										        autoFit:true
@@ -90,10 +95,12 @@ Ext.task_grid = new xg.GridPanel({
 Ext.spawn_grid = new Ext.grid.GridPanel({
 						        store: Ext.store3,
 						        columns: [
-						            {header: "process", dataIndex: 'transition_id', sortable: true, renderer: spawnLinkRenderer}
+						            {header: "id", dataIndex: 'transition_id', sortable: true, renderer: spawnLinkRenderer},
+						            {header: "name", dataIndex: 'net_name', sortable: true}
 						        ],
 						        width: '100%',
 						        height: 400,
+						        loadMask : {msg:"Loading deployed petrinets..."},
 				                viewConfig: {
 										        forceFit: true,
 										        autoFit:true
@@ -105,11 +112,11 @@ function transitionLinkRenderer(value){
 }
 
 function spawnLinkRenderer(value){
-	return String.format('<a href="' + Ext.engine_url + '/transitions/{0}" target="form_frame">net #{0}</a>', value);
+	return String.format('<a href="' + Ext.engine_url + '/transitions/{0}" target="form_frame">{0}</a>', value);
 }
 
 function caseLinkRenderer(value) {
-	return String.format('<a href="javascript:loadStoreForCase({0})">Case {0}</a>', value); 
+	return String.format('<a href="javascript:loadStoreForCase({0})">{0}</a>', value); 
 }
 
 function floattorgb(val) {
@@ -130,6 +137,8 @@ function taskOnClick(blub) {
 	Ext.reviewBtn.setDisabled(true);
 	Ext.skipBtn.setDisabled(true);
 	
+	Ext.task_grid.loadMask.msg = "Loading actions for selected task...";							
+	Ext.task_grid.loadMask.show();
 	
 	Ext.actionsStore = new Ext.data.Store({
 	    url: '/oryx/engineproxy?url=' + Ext.engine_url + 'cases/'+Ext.task_grid.selModel.getSelected().data.case_id,
@@ -182,6 +191,9 @@ function taskOnClick(blub) {
 				  }
 			}
 		});
+		
+		Ext.task_grid.loadMask.hide();
+		
 	}, this);
 	
 	Ext.actionsStore.load();
