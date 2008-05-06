@@ -55,6 +55,8 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         this._complexItems = new Hash();
         
         jsonProp.id = jsonProp.id || ORYX.Log.error("ORYX.Core.StencilSet.Property(construct): Id is not defined.");
+		jsonProp.id = jsonProp.id.toLowerCase();
+		
         if (!jsonProp.type) {
             ORYX.Log.info("Type is not defined for stencil '%0', id '%1'. Falling back to 'String'.", stencil, jsonProp.id);
             jsonProp.type = "string";
