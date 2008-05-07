@@ -22,9 +22,11 @@
  **/
 //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
+/*
 window.onbeforeunload = function() {
 	return "sure to quit?"
 }
+*/
 
 // reference local blank image
 Ext.BLANK_IMAGE_URL = '/poem-backend-1.0/ext/resources/images/default/s.gif';
