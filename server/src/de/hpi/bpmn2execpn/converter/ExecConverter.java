@@ -5,6 +5,8 @@ import java.util.List;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.DataObject;
+import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
@@ -28,12 +30,12 @@ public class ExecConverter extends Converter {
 	private static final String baseXsltURL = "http://localhost:3000/examples/contextPlace/";
 	private static final String copyXsltURL = baseXsltURL + "copy_xslt.xsl";
 	private static final String extractDataURL = baseXsltURL + "extract_processdata.xsl";
-	protected String modelURL;
+	protected String standardModel;
 	private List<ExecTask> taskList;
 
 	public ExecConverter(BPMNDiagram diagram, String modelURL) {
 		super(diagram, new ExecPNFactoryImpl(modelURL));
-		this.modelURL = modelURL;
+		this.standardModel = modelURL;
 		this.taskList = new ArrayList<ExecTask>();
 	}
 		
@@ -55,11 +57,26 @@ public class ExecConverter extends Converter {
 		exTask.setLabel(task.getLabel());
 		
 		// create proper model, form and bindings
-		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId());
-		String model = "";
-		String form = "";
-		String bindings = "";
+		String model = null;
+		String form = null;
+		String bindings = null;
 		
+		// TODO interrogate all incoming data objects for task and create model
+		List<Edge> edges = task.getIncomingEdges();
+		for (Edge edge : edges) {
+			if (edge.getSource() instanceof DataObject) {
+				DataObject partmodelObject = (DataObject)edge.getSource();
+				// TODO getContentXML() has to be implemented
+				// XMLDocument doc = partmodelObject.getContentXML();
+				// TODO iterate contentModel and add nonconflicting nodes
+				// for (...next()) for (...hasChild()) add+hasChild()
+			}
+		}
+		
+		// TODO with model create formular and bindings
+		
+		
+		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId());
 		exTask.pl_running = addPlace(net, "pl_running_" + task.getId());
 		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId());
 		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId());

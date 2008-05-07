@@ -73,8 +73,10 @@ public class ExportServlet extends HttpServlet {
 		}
 		String postVariable = config.getString("pnengine.post_variable");
 		String engineURL = config.getString("pnengine.url") + "/petrinets";
-		String defaultModelURL = config.getString("pnengine.default_model_url");
-
+		String modelURL = config.getString("pnengine.default_model_url");
+		String formURL = null;
+		String bindingsURL = null;
+		
 		String rdf = req.getParameter("data");
 		String diagramTitle = req.getParameter("title");
 
@@ -88,7 +90,7 @@ public class ExportServlet extends HttpServlet {
 			diagram = (BPMNDiagram) importer.loadBPMN();
 
 			// URL only for testing purposes...
-			PetriNet net = new ExecConverter(diagram, defaultModelURL).convert();			
+			PetriNet net = new ExecConverter(diagram, modelURL).convert();			
 			ExecPetriNet execnet = (ExecPetriNet)net;
 			Document pnmlDoc = builder.newDocument();
 
@@ -98,13 +100,13 @@ public class ExportServlet extends HttpServlet {
 
 			String basefilename = String.valueOf(System.currentTimeMillis());
 			String tmpPNMLFile = this.getServletContext().getRealPath("/") + "tmp" + File.separator + basefilename + ".pnml";
-			BufferedWriter out = new BufferedWriter(new FileWriter(tmpPNMLFile));
+			BufferedWriter out1 = new BufferedWriter(new FileWriter(tmpPNMLFile));
 
 			OutputFormat format = new OutputFormat(pnmlDoc);
-			XMLSerializer serial = new XMLSerializer(out, format);
+			XMLSerializer serial = new XMLSerializer(out1, format);
 			serial.asDOMSerializer();
 			serial.serialize(pnmlDoc.getDocumentElement());
-			out.close();
+			out1.close();
 
 			StringWriter stringOut = new StringWriter();
 			XMLSerializer serial2 = new XMLSerializer(stringOut, format);
