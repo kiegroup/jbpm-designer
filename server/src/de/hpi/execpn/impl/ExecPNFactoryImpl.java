@@ -41,6 +41,10 @@ public class ExecPNFactoryImpl extends PetriNetFactoryImpl {
 		return new ExecFlowRelationshipImpl();
 	}
 	
+	public FormTransition createFormTransition() {
+		return new FormTransitionImpl();
+	}
+	
 	@Override
 	public PetriNet createPetriNet() {
 		return new ExecPetriNetImpl();
