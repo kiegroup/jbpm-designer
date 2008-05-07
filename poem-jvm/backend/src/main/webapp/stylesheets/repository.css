@@ -122,8 +122,8 @@ body, td, input, textarea {
  * login area for the repository
  */
 
-.oryx_repository_header {
-	background: url(../../images/style/header_bg.small.gif) repeat-x center top;
+#oryx_repository_header {
+	background: url(../images/style/header_bg.small.gif) repeat-x center top;
 	height:30px;
 	position:absolute;
 	width:100%;
@@ -151,7 +151,7 @@ body, td, input, textarea {
 }
 
 #openid_login input.text {
-	background:#FFFFFF url(../../images/style/openid_login_bg.gif) no-repeat scroll 5px 50%;
+	background:#FFFFFF url(../images/style/openid_login_bg.gif) no-repeat scroll 5px 50%;
 	border:1px solid #AA0000;
 	padding-left:25px;
 	width:200px;

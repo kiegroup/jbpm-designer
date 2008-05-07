@@ -648,18 +648,18 @@ Repository.render = {
 			'<div id="oryx_repository_header">',
 				'<img src="/poem-backend-1.0/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>',
 		
-				'<tpl if="this.isAnonymousUser(current_user)">',
-// disabled tooltip					'<form action="#" method="post" id="openid_login" onmouseover="$(\'openid_label\').style.display=\'block\';" onmouseout="$(\'openid_label\').style.display=\'none\';">',
-					'<form action="#" method="post" id="openid_login">',
+				'<tpl if="this.isAnonymousUser(current_user) || this.isPublic(current_user)">',
+// disabled tooltip					'<form action="consumer" method="post" id="openid_login" onmouseover="$(\'openid_label\').style.display=\'block\';" onmouseout="$(\'openid_label\').style.display=\'none\';">',
+					'<form action="consumer" method="post" id="openid_login">',
 						'<div>',
-							'<input type="text" name="openid" id="openid_login_openid" class="text gray" value="your.openid.net" onblur="if(this.value.replace(/^\s+/, \'\').replace(/\s+$/, \'\').length==0) {this.value=\'your.openid.net\'; this.className+=\' gray\';}" onfocus="this.className = this.className.replace(/ gray/ig, \'\'); if(this.value==\'your.openid.net\') this.value=\'\';" />',
+							'<input type="text" name="openid_identifier" id="openid_login_openid" class="text gray" value="your.openid.net" onblur="if(this.value.replace(/^\s+/, \'\').replace(/\s+$/, \'\').length==0) {this.value=\'your.openid.net\'; this.className+=\' gray\';}" onfocus="this.className = this.className.replace(/ gray/ig, \'\'); if(this.value==\'your.openid.net\') this.value=\'\';" />',
 							'<input type="submit" class="button" value="login"/>',
 //	disabled tooltip						'<label id="openid_label" for="openid_login_openid">Enter your <a href="http://openid.net">open id</a> to log in.<br/> Don\'t have one? <a href="/Oryx/OpenID" class="twikiLink">Get one!</a></label>',
 						'</div>',
 					'</form>',
 				'</tpl>',
 				
-				'<tpl if="!this.isAnonymousUser(current_user)">',
+				'<tpl if="!this.isAnonymousUser(current_user) && !this.isPublic(current_user)">',
 					'<form action="#" method="post" id="openid_login">',
 						'<div>',
 							'<input type="text" name="openid" id="openid_login_openid" class="text logged_id" value="{current_user}" disabled="disabled" />',
@@ -676,6 +676,10 @@ Repository.render = {
 					ORYX.Log.debug("current user: >%0<", user);
 					// local function, due to scope
 					return Repository.app.isAnonymousUser(user);
+				},
+				
+				isPublic: function(user){
+					return user == "public"
 				}
 			}		
 		);
