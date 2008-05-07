@@ -46,15 +46,28 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		if (transition instanceof FormTransition) {
 			tsHelper.addModelReference(doc, ts, ((FormTransition) transition).getModelURL());
 			tnode.setAttribute("type", "receive");
-		} else /*if (transition instanceof TauTransition)*/{
+		} else /*if (transition instanceof AutomaticTransition)*/{
 			// TODO: What about guards?
 			tnode.setAttribute("type", "automatic");
 		}
 		
 		if (transition instanceof LabeledTransition) {
-			LabeledTransition l = (LabeledTransition)transition;
-			if (l.getAction() != null) {
-				tsHelper.setTaskAndAction(doc, ts, l.getLabel(), l.getAction());
+			LabeledTransition lTrans = (LabeledTransition) transition;
+			if (lTrans.getAction() != null) {
+				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
+			}
+		}
+		
+		if (transition instanceof AutomaticTransition) {
+			AutomaticTransition auto = (AutomaticTransition) transition;
+			tsHelper.setFireTypeManual(doc, ts, auto.isManuallyTriggered());
+			if (auto.getXsltURL() != null) {
+				tsHelper.setFireXsltURL(doc, ts, auto.getXsltURL());
+			}
+			if (auto.isManuallyTriggered()){
+				tnode.setAttribute("type", "receive");
+			}else{
+				tnode.setAttribute("type", "automatic");
 			}
 		}
 		
@@ -90,6 +103,11 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		}
 		
 		return pnode;
+	}
+	
+	@override
+	protected Element appendFlowRelationship(Document doc, Node netnode, FlowRelationship rel) {
+		
 	}
 
 }

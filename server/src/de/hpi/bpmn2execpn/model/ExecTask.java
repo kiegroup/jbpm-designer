@@ -10,8 +10,8 @@ import de.hpi.petrinet.Transition;
 // *****************************
 public class ExecTask extends Task {
 
-	public Transition allocate, submit, suspend, resume, skip, review, delegate, autofinish;
-	public Place running, suspended, finish;
+	public Transition tr_enable, tr_allocate, tr_submit, tr_suspend, tr_resume, tr_skip, tr_review, tr_delegate, tr_autofinish, tr_done;
+	public Place pl_ready, pl_running, pl_suspended, pl_deciding, pl_complete, pl_context;
 
 }
 

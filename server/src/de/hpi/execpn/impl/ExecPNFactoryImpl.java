@@ -1,5 +1,6 @@
 package de.hpi.execpn.impl;
 
+import de.hpi.execpn.AutomaticTransition;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.TauTransition;
@@ -24,6 +25,13 @@ public class ExecPNFactoryImpl extends PetriNetFactoryImpl {
 
 	@Override
 	public TauTransition createTauTransition() {
+		AutomaticTransition tau = new AutomaticTransitionImpl();
+		tau.setManuallyTriggered(false);
+		tau.setXsltURL(null);
+		return tau;
+	}
+	
+	public AutomaticTransition createAutomaticTransition(){
 		return new AutomaticTransitionImpl();
 	}
 

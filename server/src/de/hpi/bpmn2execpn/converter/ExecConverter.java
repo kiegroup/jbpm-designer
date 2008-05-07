@@ -12,6 +12,7 @@ import de.hpi.bpmn2execpn.model.ExecTask;
 import de.hpi.bpmn2pn.converter.Converter;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
+import de.hpi.execpn.AutomaticTransition;
 import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.impl.ExecPNFactoryImpl;
 import de.hpi.execpn.pnml.Locator;
@@ -24,6 +25,7 @@ import de.hpi.petrinet.Transition;
 public class ExecConverter extends Converter {
 
 	private static final boolean abortWhenFinalize = true;
+	private static final String copyXsltURL = "http://localhost:3000/examples/contextPlace/copy_xslt.xsl";
 	protected String modelURL;
 	private List<ExecTask> taskList;
 
@@ -50,88 +52,87 @@ public class ExecConverter extends Converter {
 		exTask.setId(task.getId());
 		exTask.setLabel(task.getLabel());
 		
-		// allocate Transition
-		LabeledTransition allocate = addLabeledTransition(net, "allocate_" + task.getId(), task.getLabel());
-		allocate.setAction("allocate");
-		exTask.allocate = allocate;
-		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.allocate);
+		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId());
+		exTask.pl_running = addPlace(net, "pl_running_" + task.getId());
+		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId());
+		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId());
+		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId());
+		exTask.pl_context = addPlace(net, "pl_context_" + task.getId());
+		// TODO: integrate context place
 		
-		exTask.running = addPlace(net, "running_" + task.getId());
+		// ready transition
+		exTask.tr_enable = addTauTransition(net, "tr_enable_" + task.getId());
+		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.tr_enable);
+		addFlowRelationship(net, exTask.tr_enable, exTask.pl_ready);
+		
+		// allocate Transition
+		exTask.tr_allocate = addAutomaticTransition(net, "tr_allocate_" + task.getId(), task.getLabel(), "allocate", copyXsltURL, true);
+		addFlowRelationship(net, exTask.pl_ready, exTask.tr_allocate);
+		addFlowRelationship(net, exTask.tr_allocate, exTask.pl_running);
 		
 		if (task.isSkippable()) {
 			// skip Transition
 			exTask.setSkippable(true);
-			LabeledTransition skipT = addLabeledTransition(net, "skip_" + task.getId(), task.getLabel());
-			skipT.setAction("skip");
-			exTask.skip = skipT;
+			exTask.tr_skip = addAutomaticTransition(net, "tr_skip_" + task.getId(), task.getLabel(), "skip", copyXsltURL, true);
+			addFlowRelationship(net, exTask.pl_ready, exTask.tr_skip);
+			addFlowRelationship(net, exTask.tr_skip, exTask.pl_complete);
 		}
 		
 		// submit Transition
-		LabeledTransition submit = addLabeledTransition(net, "submit_" + task.getId(), task.getLabel());
+		LabeledTransition submit = addLabeledTransition(net, "tr_submit_" + task.getId(), task.getLabel());
+		// TODO: FormTransition -> Form erstellen/angeben
 		submit.setAction("submit");
-		exTask.submit = submit;
+		exTask.tr_submit = submit;
+		addFlowRelationship(net, exTask.pl_running, exTask.tr_submit);
+		addFlowRelationship(net, exTask.tr_submit, exTask.pl_deciding);
 		
 		// delegate Transition
-		LabeledTransition delegate = addLabeledTransition(net, "delegate_" + task.getId(), task.getLabel());
+		LabeledTransition delegate = addLabeledTransition(net, "tr_delegate_" + task.getId(), task.getLabel());
+		// TODO: FormTransition -> Form erstellen/angeben
 		delegate.setAction("delegate");
-		exTask.delegate = delegate;
-
-		
-		exTask.finish = addPlace(net, "finish_" + task.getId());
-		addFlowRelationship(net, exTask.submit, exTask.finish);
-		addFlowRelationship(net, exTask.finish, exTask.delegate);
-		addFlowRelationship(net, exTask.delegate, exTask.running);
+		exTask.tr_delegate = delegate;
+		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_delegate);
+		addFlowRelationship(net, exTask.tr_delegate, exTask.pl_running);
 		
 		// review Transition
-		LabeledTransition review = addLabeledTransition(net, "review_" + task.getId(), task.getLabel());
+		LabeledTransition review = addLabeledTransition(net, "tr_review_" + task.getId(), task.getLabel());
+		// TODO: FormTransition -> Form erstellen/angeben
 		review.setAction("review");
-		exTask.review = review;
-
-		addFlowRelationship(net, exTask.finish, exTask.review);
-		addFlowRelationship(net, exTask.review, c.map.get(getOutgoingSequenceFlow(task)));
+		exTask.tr_review = review;
+		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_review);
+		addFlowRelationship(net, exTask.tr_review, exTask.pl_complete);
 
 		// autofinish Transition
-		TauTransition autofinish = addTauTransition(net, "autofinish_" + task.getId());
-		exTask.autofinish = autofinish;
-		addFlowRelationship(net, exTask.finish, exTask.autofinish);
-		addFlowRelationship(net, exTask.autofinish, c.map.get(getOutgoingSequenceFlow(task)));
-
-		if (task.isSkippable()) {
-			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.skip);
-			addFlowRelationship(net, exTask.skip, c.map.get(getOutgoingSequenceFlow(task)));
-		}		
-
-		addFlowRelationship(net, exTask.allocate, exTask.running);
-		addFlowRelationship(net, exTask.running, exTask.submit);
+		exTask.tr_autofinish = addTauTransition(net, "tr_autofinish_" + task.getId());
+		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_autofinish);
+		addFlowRelationship(net, exTask.tr_autofinish, exTask.pl_complete);
 
 		// suspend/resume
-		LabeledTransition suspendT = addLabeledTransition(net, "suspend_" + task.getId(), task.getLabel());
-		suspendT.setAction("suspend");
-		exTask.suspend = suspendT;
+		exTask.tr_suspend = addAutomaticTransition(net, "tr_suspend_" + task.getId(), task.getLabel(), "suspend", copyXsltURL, true);
+		addFlowRelationship(net, exTask.pl_running, exTask.tr_suspend);
+		addFlowRelationship(net, exTask.tr_suspend, exTask.pl_suspended);
 		
-		LabeledTransition resumeT = addLabeledTransition(net, "resume_" + task.getId(), task.getLabel());
-		resumeT.setAction("resume");
-		exTask.resume = resumeT;
+		exTask.tr_resume = addAutomaticTransition(net, "tr_resume_" + task.getId(), task.getLabel(), "resume", copyXsltURL, true);
+		addFlowRelationship(net, exTask.pl_suspended, exTask.tr_resume);
+		addFlowRelationship(net, exTask.tr_resume, exTask.pl_running);
 		
-		exTask.suspended = addPlace(net, "suspended_" + task.getId());
-		addFlowRelationship(net, exTask.running, exTask.suspend);
-		addFlowRelationship(net, exTask.suspend, exTask.suspended);
-		addFlowRelationship(net, exTask.suspended, exTask.resume);
-		addFlowRelationship(net, exTask.resume, exTask.running);
+		// done transition
+		exTask.tr_done = addTauTransition(net, "tr_done_" + task.getId());
+		addFlowRelationship(net, exTask.pl_complete, exTask.tr_done);
+		addFlowRelationship(net, exTask.tr_done, c.map.get(getOutgoingSequenceFlow(task)));
+		
+		exTask.tr_delegate.setGuard(exTask.pl_deciding.getId() + ".isDelegated == 'true'");
+		exTask.tr_review.setGuard(exTask.pl_deciding.getId() + ".isDelegated != 'true' && " + exTask.pl_deciding.getId() + ".isReviewed == 'true'");
+		exTask.tr_autofinish.setGuard(exTask.pl_deciding.getId() + ".isDelegated != 'true' && " + exTask.pl_deciding.getId() + ".isReviewed != 'true'");
 
-		
-		exTask.delegate.setGuard(exTask.finish.getId() + ".isDelegated == 'true'");
-		exTask.review.setGuard(exTask.finish.getId() + ".isDelegated != 'true' && " + exTask.finish.getId() + ".isReviewed == 'true'");
-		exTask.autofinish.setGuard(exTask.finish.getId() + ".isDelegated != 'true' && " + exTask.finish.getId() + ".isReviewed != 'true'");
-
-		exTask.finish.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isdelegated"));
-		exTask.finish.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isreviewed"));
+		exTask.pl_deciding.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isdelegated"));
+		exTask.pl_deciding.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isreviewed"));
 		
 		taskList.add(exTask);
 		
-		handleMessageFlow(net, task, exTask.allocate, exTask.submit, c);
+		handleMessageFlow(net, task, exTask.tr_allocate, exTask.tr_submit, c);
 		if (c.ancestorHasExcpH)
-			handleExceptions(net, task, exTask.submit, c);
+			handleExceptions(net, task, exTask.tr_submit, c);
 
 		for (IntermediateEvent event : task.getAttachedEvents())
 			handleAttachedIntermediateEventForTask(net, event, c);
@@ -210,23 +211,23 @@ public class ExecConverter extends Converter {
 				Place executed = addPlace(net, "ad-hoc_task_executed_"
 						+ exTask.getId());
 				addFlowRelationship(net, startT, enabled);
-				addFlowRelationship(net, enabled, exTask.allocate);
-				addFlowRelationship(net, enableStarting, exTask.allocate);
-				addFlowRelationship(net, exTask.allocate, enableStarting);
-				addFlowRelationship(net, enableFinishing, exTask.autofinish);
-				addFlowRelationship(net, exTask.autofinish, executed);		
-				addFlowRelationship(net, exTask.autofinish, updatedState);
-				addFlowRelationship(net, enableFinishing, exTask.review);
-				addFlowRelationship(net, exTask.review, executed);		
-				addFlowRelationship(net, exTask.review, updatedState);
+				addFlowRelationship(net, enabled, exTask.tr_allocate);
+				addFlowRelationship(net, enableStarting, exTask.tr_allocate);
+				addFlowRelationship(net, exTask.tr_allocate, enableStarting);
+				addFlowRelationship(net, enableFinishing, exTask.tr_autofinish);
+				addFlowRelationship(net, exTask.tr_autofinish, executed);		
+				addFlowRelationship(net, exTask.tr_autofinish, updatedState);
+				addFlowRelationship(net, enableFinishing, exTask.tr_review);
+				addFlowRelationship(net, exTask.tr_review, executed);		
+				addFlowRelationship(net, exTask.tr_review, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
 				if (exTask.isSkippable()) {
-					addFlowRelationship(net, enabled, exTask.skip);
-					addFlowRelationship(net, enableStarting, exTask.skip);
-					addFlowRelationship(net, exTask.skip, enableStarting);
-					addFlowRelationship(net, exTask.skip, executed);
-					addFlowRelationship(net, exTask.skip, updatedState);
+					addFlowRelationship(net, enabled, exTask.tr_skip);
+					addFlowRelationship(net, enableStarting, exTask.tr_skip);
+					addFlowRelationship(net, exTask.tr_skip, enableStarting);
+					addFlowRelationship(net, exTask.tr_skip, executed);
+					addFlowRelationship(net, exTask.tr_skip, updatedState);
 				}
 				
 				// finishing construct(finalize with skip, finish, abort and leave_suspend)
@@ -248,11 +249,11 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, finish, taskFinalized);
 				
 				addFlowRelationship(net, enableFinalize, abort);
-				addFlowRelationship(net, exTask.running, abort);
+				addFlowRelationship(net, exTask.pl_running, abort);
 				addFlowRelationship(net, abort, taskFinalized);
 					
 				addFlowRelationship(net, enableFinalize,  leaveSuspended);
-				addFlowRelationship(net, exTask.suspended,  leaveSuspended);
+				addFlowRelationship(net, exTask.pl_suspended,  leaveSuspended);
 				addFlowRelationship(net,  leaveSuspended, taskFinalized);
 				
 				addFlowRelationship(net, taskFinalized, endT);	
@@ -278,19 +279,19 @@ public class ExecConverter extends Converter {
 				Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
 				Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
 				addFlowRelationship(net, startT, enabled);
-				addFlowRelationship(net, enabled, exTask.allocate);
-				addFlowRelationship(net, synch, exTask.allocate);
-				addFlowRelationship(net, exTask.review, executed);
-				addFlowRelationship(net, exTask.review, updatedState);
-				addFlowRelationship(net, exTask.autofinish, executed);
-				addFlowRelationship(net, exTask.autofinish, updatedState);
+				addFlowRelationship(net, enabled, exTask.tr_allocate);
+				addFlowRelationship(net, synch, exTask.tr_allocate);
+				addFlowRelationship(net, exTask.tr_review, executed);
+				addFlowRelationship(net, exTask.tr_review, updatedState);
+				addFlowRelationship(net, exTask.tr_autofinish, executed);
+				addFlowRelationship(net, exTask.tr_autofinish, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
 				if (exTask.isSkippable()) {
-					addFlowRelationship(net, exTask.skip, executed);
-					addFlowRelationship(net, exTask.skip, updatedState);
-					addFlowRelationship(net, enabled, exTask.skip);
-					addFlowRelationship(net, synch, exTask.skip);
+					addFlowRelationship(net, exTask.tr_skip, executed);
+					addFlowRelationship(net, exTask.tr_skip, updatedState);
+					addFlowRelationship(net, enabled, exTask.tr_skip);
+					addFlowRelationship(net, synch, exTask.tr_skip);
 				}
 
 				// finishing construct(finalize with skip, finish and abort)
@@ -312,5 +313,16 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, taskFinalized, endT);	
 			}
 		}
+	}
+	
+	public AutomaticTransition addAutomaticTransition(PetriNet net, String id, String label, String action, String xsltURL, boolean triggerManually) {
+		AutomaticTransition t =((ExecPNFactoryImpl) pnfactory).createAutomaticTransition();
+		t.setId(id);
+		t.setLabel(label);
+		t.setAction(action);
+		t.setXsltURL(xsltURL);
+		t.setManuallyTriggered(triggerManually);
+		net.getTransitions().add(t);
+		return t;
 	}
 }

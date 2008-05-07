@@ -64,4 +64,27 @@ public class ToolspecificPNMLHelper {
 		expr.setTextContent(guardText);
 	}
 
+	void setFireTypeManual(Document doc, Element parent, boolean triggerManually) {
+		Element fire = (Element)parent.appendChild(doc.createElement("fire"));
+		if (triggerManually){
+			fire.setAttribute("type", "manual");
+		}else{
+			fire.setAttribute("type", "automatic");
+		}
+	}
+	
+	void setFireXsltURL(Document doc, Element parent, String url) {
+		Element fire;
+		if (!hasChildWithName(parent, "fire")){	
+			fire = (Element) parent.appendChild(doc.createElement("fire"));
+		}else{
+			fire =  (Element) parent.getElementsByTagName("fire").item(0);
+		}
+		fire.setAttribute("href", url);
+	}
+	
+	void setArcTransformationURL(Document doc, Element parent, String url) {
+		trans = (Element) parent.appendChild(doc.createElement("transformation"));
+		trans.setAttribute("href", url);
+	}
 }
