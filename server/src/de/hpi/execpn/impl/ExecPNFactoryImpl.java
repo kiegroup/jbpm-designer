@@ -1,6 +1,7 @@
 package de.hpi.execpn.impl;
 
 import de.hpi.execpn.AutomaticTransition;
+import de.hpi.execpn.ExecFlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.TauTransition;
@@ -36,8 +37,8 @@ public class ExecPNFactoryImpl extends PetriNetFactoryImpl {
 		return new AutomaticTransitionImpl();
 	}
 
-	public FormTransition createFormTransition() {
-		return new FormTransitionImpl();
+	public ExecFlowRelationship createExecFlowRelationship(){
+		return new ExecFlowRelationshipImpl();
 	}
 	
 	@Override

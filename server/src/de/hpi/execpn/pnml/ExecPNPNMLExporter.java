@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import de.hpi.execpn.AutomaticTransition;
+import de.hpi.execpn.ExecFlowRelationship;
 import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.FormTransition;
 import de.hpi.petrinet.FlowRelationship;
@@ -42,7 +43,11 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			Transition transition) {
 		Element tnode = super.appendTransition(doc, netnode, transition);
 		Element ts = tsHelper.addToolspecificElement(doc, tnode);
-
+		
+		Node n1node = tnode.appendChild(doc.createElement("name"));
+		addContentElement(doc, n1node, "value", transition.getId());
+		addContentElement(doc, n1node, "text", transition.getId());
+		
 		if (transition instanceof FormTransition) {
 			tsHelper.addModelReference(doc, ts, ((FormTransition) transition).getModelURL());
 			tnode.setAttribute("type", "receive");
@@ -105,4 +110,14 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		return pnode;
 	}
 	
+	@Override
+	protected Element appendFlowRelationship(Document doc, Node netnode, FlowRelationship rel) {
+		Element fnode = super.appendFlowRelationship(doc, netnode, rel);
+		if (rel instanceof ExecFlowRelationship){
+			Element ts = tsHelper.addToolspecificElement(doc, fnode);
+			tsHelper.setArcTransformationURL(doc, ts,((ExecFlowRelationship)rel).getTransformationURL());
+		}
+		return fnode;
+	}
+
 }

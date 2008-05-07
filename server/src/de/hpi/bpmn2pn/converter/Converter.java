@@ -129,7 +129,7 @@ public abstract class Converter {
 	// as one place
 	protected void handleMessageFlows(PetriNet net, ConversionContext c) {
 		// get all flows
-		List<MessageFlow> allFlows = new ArrayList();
+		List<MessageFlow> allFlows = new ArrayList<MessageFlow>();
 		for (Edge edge : diagram.getEdges()) {
 			if (edge instanceof MessageFlow)
 				allFlows.add((MessageFlow) edge);
@@ -538,7 +538,11 @@ public abstract class Converter {
 	public LabeledTransition addLabeledTransition(PetriNet net, String id, String label) {
 		LabeledTransition t = pnfactory.createLabeledTransition();
 		t.setId(id);
-		t.setLabel(label);
+		if (label != null){
+			t.setLabel(label);
+		}else{
+			t.setLabel(id);
+		}
 		net.getTransitions().add(t);
 		return t;
 	}
