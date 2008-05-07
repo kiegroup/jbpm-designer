@@ -40,7 +40,6 @@ public abstract class Converter {
 	protected BPMNDiagram diagram;
 	protected PetriNetFactory pnfactory;
 
-	//2 Factories unschön
 	public Converter(BPMNDiagram diagram, PetriNetFactory pnfactory) {
 		this.diagram = diagram;
 		this.pnfactory = pnfactory;
