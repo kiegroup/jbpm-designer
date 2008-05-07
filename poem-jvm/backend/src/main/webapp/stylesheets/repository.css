@@ -119,6 +119,39 @@ body, td, input, textarea {
 
 
 /*******************************************************************
+ * login area for the repository
+ */
+
+.oryx_repository_header {
+	background: url(../../images/style/header_bg.small.gif) repeat-x center top;
+	height:30px;
+	position:absolute;
+	width:100%;
+}
+
+#openid_login input {
+	font-size:12px;
+	margin:0px 1px;
+	padding:1px;
+	width:40px;
+}
+
+#openid_login input.button {
+	background-color:transparent;
+	border-width:0px;
+	color:#AA0000;
+	cursor:pointer;
+	font-weight:bold;
+}
+
+#openid_login input.text {
+	background:#FFFFFF url(../../images/style/openid_login_bg.gif) no-repeat scroll 5px 50%;
+	border:1px solid #AA0000;
+	padding-left:25px;
+	width:200px;
+}
+
+/*******************************************************************
  * some ext extensions
  */
 
