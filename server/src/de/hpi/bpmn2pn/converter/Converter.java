@@ -31,6 +31,8 @@ import de.hpi.petrinet.PetriNetFactory;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.Transition;
+import de.hpi.execpn.impl.ExecPNFactoryImpl;
+import de.hpi.execpn.FormTransition;
 
 // TODO: handle termination events, throwing exceptions
 public abstract class Converter {
@@ -38,6 +40,7 @@ public abstract class Converter {
 	protected BPMNDiagram diagram;
 	protected PetriNetFactory pnfactory;
 
+	//2 Factories unschön
 	public Converter(BPMNDiagram diagram, PetriNetFactory pnfactory) {
 		this.diagram = diagram;
 		this.pnfactory = pnfactory;
@@ -540,6 +543,17 @@ public abstract class Converter {
 		return t;
 	}
 
+	public FormTransition addFormTransition(PetriNet net, String id, String label, String model, String form, String bindings) {
+		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
+		t.setId(id);
+		t.setLabel(label);
+		t.setFormURL(form);
+		t.setBindingsURL(bindings);
+		t.setModelURL(model);
+		net.getTransitions().add(t);
+		return t;
+	}
+	
 	public FlowRelationship addFlowRelationship(PetriNet net,
 			de.hpi.petrinet.Node source, de.hpi.petrinet.Node target) {
 		if (source == null || target == null)

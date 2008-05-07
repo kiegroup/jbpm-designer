@@ -7,5 +7,4 @@ public interface LabeledTransition extends Transition {
 	
 	void setLabel(String label);
 	void setAction(String action);
-
 }

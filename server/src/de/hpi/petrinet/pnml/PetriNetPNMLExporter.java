@@ -11,6 +11,7 @@ import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
+import de.hpi.execpn.FormTransition;
 
 public class PetriNetPNMLExporter {
 
@@ -49,10 +50,32 @@ public class PetriNetPNMLExporter {
 	protected Element appendTransition(Document doc, Node netnode, Transition transition) {
 		Element tnode = (Element)netnode.appendChild(doc.createElement("transition"));
 		tnode.setAttribute("id", transition.getId());
+		if (transition instanceof FormTransition)
+			tnode.setAttribute("type", "receive");
 		if (transition instanceof LabeledTransition) {
 			Node n1node = tnode.appendChild(doc.createElement("name"));
 			addContentElement(doc, n1node, "value", ((LabeledTransition)transition).getLabel());
 			addContentElement(doc, n1node, "text", ((LabeledTransition)transition).getLabel());
+			Node toolspecific = tnode.appendChild(doc.createElement("toolspecific"));
+			((Element)toolspecific).setAttribute("tool", "Petri Net Engine");
+			((Element)toolspecific).setAttribute("version", "1.0");
+			if (transition.getGuard() != null)
+				addContentElement(doc, toolspecific, "guard", transition.getGuard());
+			if (transition instanceof FormTransition){
+				Node output = toolspecific.appendChild(doc.createElement("output"));
+				if (((FormTransition)transition).getModelURL() != null){
+					Node form = output.appendChild(doc.createElement("model"));
+					((Element)form).setAttribute("href", ((FormTransition)transition).getFormURL());
+				}
+				if (((FormTransition)transition).getFormURL() != null){
+					Node form = output.appendChild(doc.createElement("form"));
+					((Element)form).setAttribute("href", ((FormTransition)transition).getFormURL());
+				}
+				if (((FormTransition)transition).getBindingsURL() != null){
+					Node bindings = output.appendChild(doc.createElement("bindings"));
+					((Element)bindings).setAttribute("href", ((FormTransition)transition).getBindingsURL());
+				}
+			}
 		}
 		
 		return tnode;

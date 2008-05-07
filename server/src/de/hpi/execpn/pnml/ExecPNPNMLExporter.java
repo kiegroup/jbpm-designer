@@ -105,9 +105,4 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		return pnode;
 	}
 	
-	@override
-	protected Element appendFlowRelationship(Document doc, Node netnode, FlowRelationship rel) {
-		
-	}
-
 }

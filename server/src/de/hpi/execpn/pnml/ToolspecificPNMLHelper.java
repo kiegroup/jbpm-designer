@@ -84,7 +84,7 @@ public class ToolspecificPNMLHelper {
 	}
 	
 	void setArcTransformationURL(Document doc, Element parent, String url) {
-		trans = (Element) parent.appendChild(doc.createElement("transformation"));
+		Element trans = (Element) parent.appendChild(doc.createElement("transformation"));
 		trans.setAttribute("href", url);
 	}
 }

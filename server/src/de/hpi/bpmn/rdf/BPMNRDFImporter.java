@@ -384,6 +384,14 @@ public class BPMNRDFImporter {
 						task.setSkippable(false);
 					}
 				}
+				if (attribute.equals("form")) {
+					String form = getContent(n);
+					if (form != null && form.equals("true")) {
+						task.setForm(form);
+					} else {
+						task.setForm(null);
+					}
+				}
 
 				// TODO: add further attributes...
 				// if (attribute.equals("poolId")) {

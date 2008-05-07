@@ -14,6 +14,7 @@ import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.execpn.AutomaticTransition;
 import de.hpi.execpn.ExecPetriNet;
+import de.hpi.execpn.FormTransition;
 import de.hpi.execpn.impl.ExecPNFactoryImpl;
 import de.hpi.execpn.pnml.Locator;
 import de.hpi.petrinet.LabeledTransition;
@@ -52,7 +53,12 @@ public class ExecConverter extends Converter {
 		exTask.setId(task.getId());
 		exTask.setLabel(task.getLabel());
 		
+		// create proper model, form and bindings
 		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId());
+		String model = "";
+		String form = "";
+		String bindings = "";
+		
 		exTask.pl_running = addPlace(net, "pl_running_" + task.getId());
 		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId());
 		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId());
@@ -79,7 +85,7 @@ public class ExecConverter extends Converter {
 		}
 		
 		// submit Transition
-		LabeledTransition submit = addLabeledTransition(net, "tr_submit_" + task.getId(), task.getLabel());
+		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(),model,form,bindings);
 		// TODO: FormTransition -> Form erstellen/angeben
 		submit.setAction("submit");
 		exTask.tr_submit = submit;
@@ -87,17 +93,19 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, exTask.tr_submit, exTask.pl_deciding);
 		
 		// delegate Transition
-		LabeledTransition delegate = addLabeledTransition(net, "tr_delegate_" + task.getId(), task.getLabel());
+		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), task.getLabel(),model,form,bindings);
 		// TODO: FormTransition -> Form erstellen/angeben
 		delegate.setAction("delegate");
+		delegate.setGuard("plFinish.isDelegated == true");
 		exTask.tr_delegate = delegate;
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_delegate);
 		addFlowRelationship(net, exTask.tr_delegate, exTask.pl_running);
 		
 		// review Transition
-		LabeledTransition review = addLabeledTransition(net, "tr_review_" + task.getId(), task.getLabel());
+		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), task.getLabel(),model,form,bindings);
 		// TODO: FormTransition -> Form erstellen/angeben
 		review.setAction("review");
+		review.setGuard("(plFinish.owner != '') &amp;&amp; (plFinish.isReviewed == true) &amp;&amp; (plFinish.isDelegated == false) &amp;&amp; (plFinish.wantToReview == true)");
 		exTask.tr_review = review;
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_review);
 		addFlowRelationship(net, exTask.tr_review, exTask.pl_complete);
@@ -106,7 +114,8 @@ public class ExecConverter extends Converter {
 		exTask.tr_autofinish = addTauTransition(net, "tr_autofinish_" + task.getId());
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_autofinish);
 		addFlowRelationship(net, exTask.tr_autofinish, exTask.pl_complete);
-
+		exTask.tr_autofinish.setGuard("((plFinish.owner == '') || (plFinish.isReviewed == false) || (plFinish.wantToReview == false)) &amp;&amp; (plFinish.isDelegated == false)");
+		
 		// suspend/resume
 		exTask.tr_suspend = addAutomaticTransition(net, "tr_suspend_" + task.getId(), task.getLabel(), "suspend", copyXsltURL, true);
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_suspend);
