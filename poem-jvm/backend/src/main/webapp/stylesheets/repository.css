@@ -157,6 +157,11 @@ body, td, input, textarea {
 	width:200px;
 }
 
+#openid_login input.text.logged_id {
+	background-color:#F1F1F1;
+	color:#333333;
+}
+
 /*******************************************************************
  * some ext extensions
  */

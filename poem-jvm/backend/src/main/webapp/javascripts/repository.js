@@ -649,7 +649,7 @@ Repository.render = {
 				'<img src="/poem-backend-1.0/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>',
 		
 				'<tpl if="this.isAnonymousUser(current_user) || this.isPublic(current_user)">',
-// disabled tooltip					'<form action="consumer" method="post" id="openid_login" onmouseover="$(\'openid_label\').style.display=\'block\';" onmouseout="$(\'openid_label\').style.display=\'none\';">',
+// disabled tooltip					'<form action="/poem-backend-1.0/consumer" method="post" id="openid_login" onmouseover="$(\'openid_label\').style.display=\'block\';" onmouseout="$(\'openid_label\').style.display=\'none\';">',
 					'<form action="consumer" method="post" id="openid_login">',
 						'<div>',
 							'<input type="text" name="openid_identifier" id="openid_login_openid" class="text gray" value="your.openid.net" onblur="if(this.value.replace(/^\s+/, \'\').replace(/\s+$/, \'\').length==0) {this.value=\'your.openid.net\'; this.className+=\' gray\';}" onfocus="this.className = this.className.replace(/ gray/ig, \'\'); if(this.value==\'your.openid.net\') this.value=\'\';" />',
@@ -660,7 +660,7 @@ Repository.render = {
 				'</tpl>',
 				
 				'<tpl if="!this.isAnonymousUser(current_user) && !this.isPublic(current_user)">',
-					'<form action="#" method="post" id="openid_login">',
+					'<form action="/poem-backend-1.0/logout.jsp" method="post" id="openid_login">',
 						'<div>',
 							'<input type="text" name="openid" id="openid_login_openid" class="text logged_id" value="{current_user}" disabled="disabled" />',
 							'<input type="submit" class="button" value="logout"/>',
