@@ -129,6 +129,12 @@ body, td, input, textarea {
 	width:100%;
 }
 
+#openid_login {
+	position:absolute;
+	right:10px;
+	top:5px;	
+}
+
 #openid_login input {
 	font-size:12px;
 	margin:0px 1px;
