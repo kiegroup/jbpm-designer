@@ -7,4 +7,4 @@
 			<plugin />
 		</optional-plugin>
 -->		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport" />		
-	</plugins>		<properties>		<property group="File" index="1" />		<property group="Edit" index="2" />		</properties>	</config>
+		<plugin source="simplepnmlexport.js" name="ORYX.Plugins.SimplePnmlexport" />			</plugins>		<properties>		<property group="File" index="1" />		<property group="Edit" index="2" />		</properties>	</config>

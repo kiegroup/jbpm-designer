@@ -81,6 +81,15 @@
 		<url-pattern>/pnml</url-pattern>
 	</servlet-mapping>
     
+    <servlet>
+		<display-name>Oryx BPMN to PNML Export - unexecutable</display-name>
+		<servlet-name>SimplePNMLExporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.SimplePNMLExporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SimplePNMLExporter</servlet-name>
+		<url-pattern>/simplepnmlexporter</url-pattern>
+	</servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>
