@@ -230,7 +230,6 @@
             
         </war>
     	
-    	<copy todir='C:/Philipp/Programme/Tomcat-6.0.16/webapps' file= 'dist/oryx.war'/>
     </target>
     
     <target name="all" depends="build, examples, compress, dist"/>
