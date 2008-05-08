@@ -545,17 +545,6 @@ public abstract class Converter {
 		net.getTransitions().add(t);
 		return t;
 	}
-
-	public FormTransition addFormTransition(PetriNet net, String id, String label, String model, String form, String bindings) {
-		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
-		t.setId(id);
-		t.setLabel(label);
-		t.setFormURL(form);
-		t.setBindingsURL(bindings);
-		t.setModelURL(model);
-		net.getTransitions().add(t);
-		return t;
-	}
 	
 	public FlowRelationship addFlowRelationship(PetriNet net,
 			de.hpi.petrinet.Node source, de.hpi.petrinet.Node target) {

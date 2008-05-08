@@ -2,10 +2,12 @@ package de.hpi.bpmn2execpn.converter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
+import de.hpi.bpmn.ExecDataObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.SubProcess;
@@ -24,6 +26,11 @@ import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 
+import javax.xml.parsers.*; 
+import org.w3c.dom.*;
+import org.w3c.dom.ls.*;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+
 public class ExecConverter extends Converter {
 
 	private static final boolean abortWhenFinalize = true;
@@ -31,12 +38,17 @@ public class ExecConverter extends Converter {
 	private static final String copyXsltURL = baseXsltURL + "copy_xslt.xsl";
 	private static final String extractDataURL = baseXsltURL + "extract_processdata.xsl";
 	protected String standardModel;
+	protected String baseFileName;
 	private List<ExecTask> taskList;
 
 	public ExecConverter(BPMNDiagram diagram, String modelURL) {
 		super(diagram, new ExecPNFactoryImpl(modelURL));
 		this.standardModel = modelURL;
 		this.taskList = new ArrayList<ExecTask>();
+	}
+	
+	public void setBaseFileName(String basefilename) {
+		this.baseFileName = basefilename;
 	}
 		
 	@Override
@@ -60,21 +72,73 @@ public class ExecConverter extends Converter {
 		String model = null;
 		String form = null;
 		String bindings = null;
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance (  ) ; 
 		
-		// TODO interrogate all incoming data objects for task and create model
-		List<Edge> edges = task.getIncomingEdges();
-		for (Edge edge : edges) {
-			if (edge.getSource() instanceof DataObject) {
-				DataObject partmodelObject = (DataObject)edge.getSource();
-				// TODO getContentXML() has to be implemented
-				// XMLDocument doc = partmodelObject.getContentXML();
-				// TODO iterate contentModel and add nonconflicting nodes
-				// for (...next()) for (...hasChild()) add+hasChild()
+		try {
+			DocumentBuilder parser = factory.newDocumentBuilder (  ) ; 
+		
+			Document modelDoc = parser.newDocument();
+			Element dataEl = modelDoc.createElement("data");
+			Node data = modelDoc.appendChild(dataEl);
+			Node metaData = data.appendChild(modelDoc.createElement("metadata"));
+			Node processData = data.appendChild(modelDoc.createElement("processdata"));			
+			
+			// create MetaData Layout for Task model
+			// (take attention to the fact, that the attributes are again defined in the engine)
+			Node startTime 		= metaData.appendChild(modelDoc.createElement("startTime"));
+			Node endTime 		= metaData.appendChild(modelDoc.createElement("endTime"));
+			Node status 		= metaData.appendChild(modelDoc.createElement("status"));
+			Node owner 			= metaData.appendChild(modelDoc.createElement("owner"));
+			Node isDelegated 	= metaData.appendChild(modelDoc.createElement("isDelegated"));
+			Node reviewRequested = metaData.appendChild(modelDoc.createElement("reviewRequested"));
+			Node firstOwner 	= metaData.appendChild(modelDoc.createElement("firstOwner"));
+			Node actions 		= metaData.appendChild(modelDoc.createElement("actions"));
+			
+			// create MetaData Layout Actions, that will be logged --> here not regarded
+			
+			// interrogate all incoming data objects for task and create model
+			List<Edge> edges = task.getIncomingEdges();
+			for (Edge edge : edges) {
+				if (edge.getSource() instanceof ExecDataObject) {
+					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
+					// TODO getContentXML() has to be implemented
+					String modelXML = dataObject.getModel();
+					StringBufferInputStream in = new StringBufferInputStream(modelXML);
+					try {
+						Document doc = parser.parse(in);
+						Node dataObjectId = processData.appendChild(modelDoc.createElement(dataObject.getId()));
+						Node dataTagOfDataModel = modelDoc.getDocumentElement().getFirstChild();
+						Node child = dataTagOfDataModel.getFirstChild();
+						while ((child = child.getNextSibling()) != null)
+							dataObjectId.appendChild(child.cloneNode(true));
+					} catch (Exception io) {
+						io.printStackTrace();
+					}
+				}
 			}
+			
+			// persist model and deliver URL
+			try {
+				DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+				DOMImplementationLS implLS = (DOMImplementationLS)registry.getDOMImplementation("LS");
+				
+				LSSerializer dom3Writer = implLS.createLSSerializer();
+				LSOutput output=implLS.createLSOutput();
+				OutputStream outputStream = new FileOutputStream(new File(this.baseFileName+"_"+ task.getId() +"_model"+".xml"));
+				output.setByteStream(outputStream);
+				dom3Writer.write(modelDoc,output);
+			} catch (Exception e) {
+				System.out.println("Model could not be persisted");
+				e.printStackTrace();
+			}
+			
+			// TODO with model create formular and bindings
+			
+			// TODO persist form and bindings and save URL
+			
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
 		}
-		
-		// TODO with model create formular and bindings
-		
 		
 		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId());
 		exTask.pl_running = addPlace(net, "pl_running_" + task.getId());
@@ -82,14 +146,18 @@ public class ExecConverter extends Converter {
 		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId());
 		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId());
 		
+		// TODO generate locators for places
+		//exTask.pl_ready.addLocator(new Locator());
+		
+		
 		exTask.pl_context = addPlace(net, "pl_context_" + task.getId());
 
 		String rolename = task.getRolename();
 		
 		// TODO: integrate context place
-
 		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isdelegated"));
 		exTask.pl_context.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isreviewed"));
+		
 		
 		//enable transition
 		//TODO: read/write to context place
@@ -118,7 +186,6 @@ public class ExecConverter extends Converter {
 		
 		// submit Transition
 		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(), model, form, bindings);
-		// TODO: FormTransition -> Form erstellen/angeben
 		submit.setAction("submit");
 		exTask.tr_submit = submit;
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_submit);
@@ -129,7 +196,6 @@ public class ExecConverter extends Converter {
 		
 		// delegate Transition
 		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), task.getLabel(),model,form,bindings);
-		// TODO: FormTransition -> Form erstellen/angeben
 		delegate.setAction("delegate");
 		delegate.setGuard(exTask.pl_deciding.getId() + ".isDelegated == 'true'");
 		exTask.tr_delegate = delegate;
@@ -141,7 +207,6 @@ public class ExecConverter extends Converter {
 		
 		// review Transition
 		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), task.getLabel(),model,form,bindings);
-		// TODO: FormTransition -> Form erstellen/angeben
 		review.setAction("review");
 		review.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".isReviewed == 'true'");
 		exTask.tr_review = review;
@@ -380,5 +445,16 @@ public class ExecConverter extends Converter {
 		rel.setTransformationURL(xsltURL);
 		net.getFlowRelationships().add(rel);
 		return rel;
+	}
+	
+	public FormTransition addFormTransition(PetriNet net, String id, String label, String model, String form, String bindings) {
+		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
+		t.setId(id);
+		t.setLabel(label);
+		t.setFormURL(form);
+		t.setBindingsURL(bindings);
+		t.setModelURL(model);
+		net.getTransitions().add(t);
+		return t;
 	}
 }

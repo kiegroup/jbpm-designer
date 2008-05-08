@@ -89,18 +89,20 @@ public class ExportServlet extends HttpServlet {
 			BPMNRDFImporter importer = new BPMNRDFImporter(document);
 			diagram = (BPMNDiagram) importer.loadBPMN();
 
-			// URL only for testing purposes...
-			PetriNet net = new ExecConverter(diagram, modelURL).convert();			
-			ExecPetriNet execnet = (ExecPetriNet)net;
-			Document pnmlDoc = builder.newDocument();
-
-			ExecPNPNMLExporter exp = new ExecPNPNMLExporter();
-			execnet.setName(diagramTitle);
-			exp.savePetriNet(pnmlDoc, execnet);
-
 			String basefilename = String.valueOf(System.currentTimeMillis());
 			String tmpPNMLFile = this.getServletContext().getRealPath("/") + "tmp" + File.separator + basefilename + ".pnml";
 			BufferedWriter out1 = new BufferedWriter(new FileWriter(tmpPNMLFile));
+			
+			// URL only for testing purposes...
+			ExecConverter converter = new ExecConverter(diagram, modelURL);
+			converter.setBaseFileName(this.getServletContext().getRealPath("/") + "tmp" + File.separator + basefilename);
+			PetriNet net = converter.convert();		
+			ExecPetriNet execnet = (ExecPetriNet)net;
+			Document pnmlDoc = builder.newDocument();
+			
+			ExecPNPNMLExporter exp = new ExecPNPNMLExporter();
+			execnet.setName(diagramTitle);
+			exp.savePetriNet(pnmlDoc, execnet);
 
 			OutputFormat format = new OutputFormat(pnmlDoc);
 			XMLSerializer serial = new XMLSerializer(out1, format);

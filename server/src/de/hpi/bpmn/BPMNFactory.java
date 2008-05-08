@@ -143,6 +143,10 @@ public class BPMNFactory {
 	public DataObject createDataObject() {
 		return new DataObject();
 	}
+	
+	public ExecDataObject createExecDataObject() {
+		return new ExecDataObject();
+	}
 
 	public TextAnnotation createTextAnnotation() {
 		return new TextAnnotation();

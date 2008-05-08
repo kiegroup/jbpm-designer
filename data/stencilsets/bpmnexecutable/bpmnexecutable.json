@@ -2803,6 +2803,17 @@
 					"refToView":"frame",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"datamodel",
+					"type":"String",
+					"title":"DataModel",
+					"value":"<data>\n</data>",
+					"description":"Do not change DataModel Structure if unsure",
+					"readonly":false,
+					"optional":false,
+					"length":undefined,
+					"wrapLines":true
 				}
 			]
 		},

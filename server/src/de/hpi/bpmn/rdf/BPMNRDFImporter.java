@@ -19,6 +19,7 @@ import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.ConditionalFlow;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DataObject;
+import de.hpi.bpmn.ExecDataObject;
 import de.hpi.bpmn.DefaultFlow;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndCancelEvent;
@@ -645,7 +646,7 @@ public class BPMNRDFImporter {
 	}
 
 	protected void addDataObject(Node node, ImportContext c) {
-		DataObject obj = factory.createDataObject();
+		ExecDataObject obj = factory.createExecDataObject();
 		obj.setResourceId(getResourceId(node));
 		c.diagram.getDataObjects().add(obj);
 		c.objects.put(obj.getResourceId(), obj);
@@ -657,15 +658,18 @@ public class BPMNRDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(
 						n.getNodeName().indexOf(':') + 1);
-
+				boolean test = attribute.equals("datamodel");
 				// TODO: add further attributes...
 				if (attribute.equals("state")) {
-					obj.setState(getContent(n));
+					obj.setState(getContent(n)); }
+				else if (attribute.equals("datamodel")) {
+					obj.setModel(getContent(n));
 				} else {
 					handleStandardAttributes(attribute, n, obj, c, "name");
 				}
 			}
 		}
+		
 		if (obj.getId() == null)
 			obj.setId(obj.getResourceId());
 	}
