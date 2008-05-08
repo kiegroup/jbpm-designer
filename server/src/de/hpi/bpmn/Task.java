@@ -24,39 +24,7 @@ public class Task extends Activity {
 	public void setRolename(String rolename) {
 		this.rolename = rolename;
 	}
-	
-	public String hasRightInitProcess() {
-		return rightInitProcess;
-	}
-	
-	public void setRightInitProcess(String rightInitProcess) {
-		this.rightInitProcess = rightInitProcess;
-	}
-	
-	public String hasRightExecuteTask() {
-		return rightExecuteTask;
-	}
-	
-	public void setRightExecuteTask(String rightExecuteTask) {
-		this.rightExecuteTask = rightExecuteTask;
-	}
-	
-	public String hasRightSkipTask() {
-		return rightSkipTask;
-	}
-	
-	public void setRightSkipTask(String rightSkipTask) {
-		this.rightSkipTask = rightSkipTask;
-	}
-	
-	public String hasRightDelegateTask() {
-		return rightDelegateTask;
-	}
-	
-	public void setRightDelegateTask(String rightDelegateTask) {
-		this.rightDelegateTask = rightDelegateTask;
-	}
-	
+
 	public String getForm() {
 		return form;
 	}

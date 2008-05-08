@@ -69,35 +69,6 @@ public class ToolspecificPNMLHelper {
 		role.setTextContent(roleText);
 	}
 	
-	void setRoles(Document doc, Element parent, String rolename, String rightInitProcess, String rightExecuteTask,
-				  String rightSkipTask, String rightDelegateTask) {
-		Element role = (Element)parent.appendChild(doc.createElement("role"));
-		role.setTextContent(rolename);
-		
-		Element initProcess = (Element)role.appendChild(doc.createElement("initProcess"));
-		initProcess.setTextContent(rightInitProcess);
-		
-		Element trAllocate = (Element)role.appendChild(doc.createElement("trAllocate"));
-		trAllocate.setTextContent(rightExecuteTask);
-		
-		Element trSuspend = (Element)role.appendChild(doc.createElement("trSuspend"));
-		trSuspend.setTextContent(rightExecuteTask);
-		
-		Element trResume = (Element)role.appendChild(doc.createElement("trResume"));
-		trResume.setTextContent(rightExecuteTask);
-		
-		Element trSubmit = (Element)role.appendChild(doc.createElement("trSubmit"));
-		trSubmit.setTextContent(rightExecuteTask);
-		
-		Element trDelegate = (Element)role.appendChild(doc.createElement("trDelegate"));
-		trDelegate.setTextContent(rightDelegateTask);
-		
-		Element trReview = (Element)role.appendChild(doc.createElement("trReview"));
-		trReview.setTextContent(rightDelegateTask);
-		
-		Element trSkip = (Element)role.appendChild(doc.createElement("trSkip"));
-		trSkip.setTextContent(rightSkipTask);		
-	}
 	
 	void setFireTypeManual(Document doc, Element parent, boolean triggerManually) {
 		Element fire = (Element)parent.appendChild(doc.createElement("fire"));
