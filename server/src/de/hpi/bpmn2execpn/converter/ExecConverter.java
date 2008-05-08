@@ -148,7 +148,7 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, exTask.tr_done, exTask.pl_complete);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_done);
 		addExecFlowRelationship(net, exTask.tr_done, exTask.pl_context, baseXsltURL + "context_done.xsl");
-		exTask.tr_finish.setGuard("((plFinish.owner == '') || (plFinish.isReviewed == false) || (plFinish.wantToReview == false)) &amp;&amp; (plFinish.isDelegated == false)");
+		exTask.tr_done.setGuard("((plFinish.owner == '') || (plFinish.isReviewed == false) || (plFinish.wantToReview == false)) &amp;&amp; (plFinish.isDelegated == false)");
 		
 		// suspend/resume
 		exTask.tr_suspend = addAutomaticTransition(net, "tr_suspend_" + task.getId(), task.getLabel(), "suspend", copyXsltURL, true);

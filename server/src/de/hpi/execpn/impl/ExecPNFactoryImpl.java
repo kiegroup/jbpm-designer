@@ -6,7 +6,6 @@ import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.impl.PetriNetFactoryImpl;
-import de.hpi.execpn.FormTransition;
 
 public class ExecPNFactoryImpl extends PetriNetFactoryImpl {
 
