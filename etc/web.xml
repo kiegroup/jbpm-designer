@@ -1,210 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
- id="oryx" version="2.4">
-    
-    <display-name>
-        Oryx Editor
-    </display-name>
-    
-    <servlet>
-        <display-name>
-            Oryx OpenID Authentication Servlet
-        </display-name>
-        <servlet-name>
-            AuthServlet
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.auth.OpenIDAuthenticationServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>
-            AuthServlet
-        </servlet-name>
-        <url-pattern>
-            /consumer
-        </url-pattern>
-    </servlet-mapping>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	id="oryx" version="2.4">
 
-    <servlet>
-        <display-name>
-            Oryx Process Repository
-        </display-name>
-        <servlet-name>
-            Repository
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.RepositoryProvider
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>
-            Repository
-        </servlet-name>
-        <url-pattern>
-            /repository
-        </url-pattern>
-    </servlet-mapping>
-	
-    <servlet>
-        <display-name>
-            Oryx Legacy File Download Servlet
-        </display-name>
-        <servlet-name>
-            DownloadServlet
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.MultiDownloader
-        </servlet-class>
-    </servlet>
+	<display-name>Oryx Editor</display-name>
 
-<servlet>
-  <servlet-name>EngineProxy</servlet-name>
-  <servlet-class>org.oryxeditor.server.EngineProxy</servlet-class>
-</servlet>
+	<servlet>
+		<display-name>Oryx OpenID Authentication Servlet</display-name>
+		<servlet-name>AuthServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.auth.OpenIDAuthenticationServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AuthServlet</servlet-name>
+		<url-pattern>/consumer</url-pattern>
+	</servlet-mapping>
 
-<servlet-mapping>
-  <servlet-name>EngineProxy</servlet-name>
-  <url-pattern>/engineproxy</url-pattern>
-</servlet-mapping>
+	<servlet>
+		<display-name>Oryx Process Repository</display-name>
+		<servlet-name>Repository</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.RepositoryProvider
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Repository</servlet-name>
+		<url-pattern>/repository</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>Oryx Legacy File Download Servlet</display-name>
+		<servlet-name>DownloadServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.MultiDownloader
+		</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>EngineProxy</servlet-name>
+		<servlet-class>org.oryxeditor.server.EngineProxy</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>EngineProxy</servlet-name>
+		<url-pattern>/engineproxy</url-pattern>
+	</servlet-mapping>
 
 
-    <servlet>
+	<servlet>
 		<display-name>Oryx BPMN to PNML Export</display-name>
 		<servlet-name>ExportServlet</servlet-name>
-		<servlet-class>org.oryxeditor.server.ExportServlet</servlet-class>
+		<servlet-class>
+			org.oryxeditor.server.ExportServlet
+		</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ExportServlet</servlet-name>
 		<url-pattern>/pnml</url-pattern>
 	</servlet-mapping>
-    
-    <servlet>
-		<display-name>Oryx BPMN to PNML Export - unexecutable</display-name>
+
+	<servlet>
+		<display-name>
+			Oryx BPMN to PNML Export - unexecutable
+		</display-name>
 		<servlet-name>SimplePNMLExporter</servlet-name>
-		<servlet-class>org.oryxeditor.server.SimplePNMLExporter</servlet-class>
+		<servlet-class>
+			org.oryxeditor.server.SimplePNMLExporter
+		</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>SimplePNMLExporter</servlet-name>
 		<url-pattern>/simplepnmlexporter</url-pattern>
 	</servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>
-            DownloadServlet
-        </servlet-name>
-        <url-pattern>
-            /download
-        </url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <display-name>
-            Oryx Simple Storage Servlet
-        </display-name>
-        <servlet-name>
-            SimpleStorageServlet
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.SimpleStorageServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>
-            SimpleStorageServlet
-        </servlet-name>
-        <url-pattern>
-            /server
-        </url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <display-name>
-            Alternatives Renderer
-        </display-name>
-        <servlet-name>
-            AlternativesRenderer
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.AlternativesRenderer
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>
-            AlternativesRenderer
-        </servlet-name>
-        <url-pattern>
-            /pdf
-        </url-pattern>
-    </servlet-mapping>
-	
-    <servlet>
-        <display-name>
-            Worklist
-        </display-name>
-        <servlet-name>
-            Worklist
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.Worklist
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>
-            Worklist
-        </servlet-name>
-        <url-pattern>
-            /worklist
-        </url-pattern>
-    </servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>DownloadServlet</servlet-name>
+		<url-pattern>/download</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
-        <display-name>
-            Oryx EPC Upload Servlet
-        </display-name>
-        <servlet-name>
-            EPCUpload
-        </servlet-name>
-        <servlet-class>
-            org.oryxeditor.server.EPCUpload
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>
-            EPCUpload
-        </servlet-name>
-        <url-pattern>
-            /epc-upload
-        </url-pattern>
-    </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>
-            /server
-        </welcome-file>
-    </welcome-file-list>
-    
-    <jsp-config>
-        <taglib>
-            <taglib-uri>
-                http://java.sun.com/jstl/core
-            </taglib-uri>
-            <taglib-location>
-                /WEB-INF/c.tld
-            </taglib-location>
-        </taglib>
-    </jsp-config>
-	
+		<display-name>Oryx Simple Storage Servlet</display-name>
+		<servlet-name>SimpleStorageServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.SimpleStorageServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SimpleStorageServlet</servlet-name>
+		<url-pattern>/server</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>Alternatives Renderer</display-name>
+		<servlet-name>AlternativesRenderer</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.AlternativesRenderer
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AlternativesRenderer</servlet-name>
+		<url-pattern>/pdf</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>Worklist</display-name>
+		<servlet-name>Worklist</servlet-name>
+		<servlet-class>org.oryxeditor.server.Worklist</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Worklist</servlet-name>
+		<url-pattern>/worklist</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>Oryx EPC Upload Servlet</display-name>
+		<servlet-name>EPCUpload</servlet-name>
+		<servlet-class>org.oryxeditor.server.EPCUpload</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EPCUpload</servlet-name>
+		<url-pattern>/epc-upload</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>Automatic Layouter Servlet</display-name>
+		<servlet-name>AutoLayouter</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.AutoLayouterServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AutoLayouter</servlet-name>
+		<url-pattern>/layouter</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>/server</welcome-file>
+	</welcome-file-list>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
+			<taglib-location>/WEB-INF/c.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
 	<!--
-	jBoss' default mapping is to "image/svg", which causes the client not to
-	parse the SVG content as XML. However, the Oryx Editor client relies on
-	that behaviour. The mimetype as per W3C specification must be
-	"image/svg+xml". See http://www.w3.org/TR/SVG/intro.html#MIMEType.
+		jBoss' default mapping is to "image/svg", which causes the client not to
+		parse the SVG content as XML. However, the Oryx Editor client relies on
+		that behaviour. The mimetype as per W3C specification must be
+		"image/svg+xml". See http://www.w3.org/TR/SVG/intro.html#MIMEType.
 	-->
 	<mime-mapping>
 		<extension>svg</extension>
 		<mime-type>image/svg+xml</mime-type>
 	</mime-mapping>
-    
+
 </web-app>

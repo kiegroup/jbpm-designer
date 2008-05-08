@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcTerms="http://purl.org/dc/terms/"
+  xmlns:b3mn="http://b3mn.org"
+  xmlns:oryx="http://oryx-editor.org/"
+  xmlns:raziel="http://raziel.org/"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xml:base="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis">
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis">
+    <dc:title></dc:title>
+    <raziel:self rdf:resource="http://b3mn.hpi.uni-potsdam.de/process/1/self" />
+    <raziel:collection rdf:resource="http://b3mn.hpi.uni-potsdam.de/process/1/collection" />
+    <oryx:type>http://b3mn.org/stencilset/bpmn#BPMNDiagram</oryx:type>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#oryxcanvas">
+    <rdf:type rdf:resource="http://oryx-editor.org/canvas" />
+    <oryx:mode>writeable</oryx:mode>
+    <oryx:mode>fullscreen</oryx:mode>
+    <oryx:stencilset rdf:resource="http://b3mn.hpi.uni-potsdam.de/data/stencilsets/bpmn/bpmn.json" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource0" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource2" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource3" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource5" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource7" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource4" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource6" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource15" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource8" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource10" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource11" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource12" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource13" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource14" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource16" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource33" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource34" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource17" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource18" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource19" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource20" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource21" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource22" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource23" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource24" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource25" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource26" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource27" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource28" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource29" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource30" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource31" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource32" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource35" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource36" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource37" />
+    <oryx:render rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource38" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource0">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Pool</oryx:type>
+    <oryx:name>Buyer</oryx:name>
+    <oryx:boundaryVisible>true</oryx:boundaryVisible>
+    <oryx:processType>None</oryx:processType>
+    <oryx:status>None</oryx:status>
+    <oryx:adHocOrdering>Parallel</oryx:adHocOrdering>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>44,52,879,210</oryx:bounds>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Lane</oryx:type>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>30,0,835,158</oryx:bounds>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource0" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource2">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#StartEvent</oryx:type>
+    <oryx:eventType>Start</oryx:eventType>
+    <oryx:trigger>None</oryx:trigger>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>53.99998474121094,60,83.99998474121094,90</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource17" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource3">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Task</oryx:type>
+    <oryx:name>Place
+order</oryx:name>
+    <oryx:activityType>Task</oryx:activityType>
+    <oryx:status>None</oryx:status>
+    <oryx:startQuantity>1</oryx:startQuantity>
+    <oryx:loopType>None</oryx:loopType>
+    <oryx:loopCounter>1</oryx:loopCounter>
+    <oryx:loopMaximum>1</oryx:loopMaximum>
+    <oryx:testTime>After</oryx:testTime>
+    <oryx:MI_Ordering>Sequential</oryx:MI_Ordering>
+    <oryx:MI_FlowCondition>All</oryx:MI_FlowCondition>
+    <oryx:TaskType>None</oryx:TaskType>
+    <oryx:Implementation>Webservice</oryx:Implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>120,44,198,106</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource18" />
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource23" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource5">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Task</oryx:type>
+    <oryx:name>Pay</oryx:name>
+    <oryx:activityType>Task</oryx:activityType>
+    <oryx:status>None</oryx:status>
+    <oryx:startQuantity>1</oryx:startQuantity>
+    <oryx:loopType>None</oryx:loopType>
+    <oryx:loopCounter>1</oryx:loopCounter>
+    <oryx:loopMaximum>1</oryx:loopMaximum>
+    <oryx:testTime>After</oryx:testTime>
+    <oryx:MI_Ordering>Sequential</oryx:MI_Ordering>
+    <oryx:MI_FlowCondition>All</oryx:MI_FlowCondition>
+    <oryx:TaskType>None</oryx:TaskType>
+    <oryx:Implementation>Webservice</oryx:Implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>593.80078125,51,671.80078125,106</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource29" />
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource31" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource7">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#EndEvent</oryx:type>
+    <oryx:eventType>End</oryx:eventType>
+    <oryx:result>None</oryx:result>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>708,63.999996185302734,736,91.99999618530273</oryx:bounds>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource4">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#IntermediateMessageEvent</oryx:type>
+    <oryx:eventType>Intermediate</oryx:eventType>
+    <oryx:trigger>Message</oryx:trigger>
+    <oryx:implementation>Web Service</oryx:implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>341.25,60,371.25,90</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource25" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+    <oryx:docker>356.25,75</oryx:docker>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource6">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#IntermediateMessageEvent</oryx:type>
+    <oryx:eventType>Intermediate</oryx:eventType>
+    <oryx:trigger>Message</oryx:trigger>
+    <oryx:implementation>Web Service</oryx:implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>525.5,60,555.5,90</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource27" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+    <oryx:docker>540.5,75</oryx:docker>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource15">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#IntermediateMessageEvent</oryx:type>
+    <oryx:eventType>Intermediate</oryx:eventType>
+    <oryx:trigger>Message</oryx:trigger>
+    <oryx:implementation>Web Service</oryx:implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>621.80078125,346.5,651.80078125,376.5</oryx:bounds>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+    <oryx:docker>636.80078125,361.5</oryx:docker>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource8">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Pool</oryx:type>
+    <oryx:name>Seller</oryx:name>
+    <oryx:boundaryVisible>true</oryx:boundaryVisible>
+    <oryx:processType>None</oryx:processType>
+    <oryx:status>None</oryx:status>
+    <oryx:adHocOrdering>Parallel</oryx:adHocOrdering>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>48,326,876,514</oryx:bounds>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Lane</oryx:type>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>30,0,828,188</oryx:bounds>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource8" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource10">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#StartMessageEvent</oryx:type>
+    <oryx:eventType>Start</oryx:eventType>
+    <oryx:trigger>Message</oryx:trigger>
+    <oryx:implementation>Web Service</oryx:implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>144,37,174,67</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource19" />
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource36" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource11">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#AND_Gateway</oryx:type>
+    <oryx:gatewayType>AND</oryx:gatewayType>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>222,37,252,67</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource20" />
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource21" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource12">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Task</oryx:type>
+    <oryx:name>Ack
+order</oryx:name>
+    <oryx:activityType>Task</oryx:activityType>
+    <oryx:status>None</oryx:status>
+    <oryx:startQuantity>1</oryx:startQuantity>
+    <oryx:loopType>None</oryx:loopType>
+    <oryx:loopCounter>1</oryx:loopCounter>
+    <oryx:loopMaximum>1</oryx:loopMaximum>
+    <oryx:testTime>After</oryx:testTime>
+    <oryx:MI_Ordering>Sequential</oryx:MI_Ordering>
+    <oryx:MI_FlowCondition>All</oryx:MI_FlowCondition>
+    <oryx:TaskType>None</oryx:TaskType>
+    <oryx:Implementation>Webservice</oryx:Implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>319.75,21,392.75,83</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource24" />
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource35" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource13">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Task</oryx:type>
+    <oryx:name>Get item
+from stock</oryx:name>
+    <oryx:activityType>Task</oryx:activityType>
+    <oryx:status>None</oryx:status>
+    <oryx:startQuantity>1</oryx:startQuantity>
+    <oryx:loopType>None</oryx:loopType>
+    <oryx:loopCounter>1</oryx:loopCounter>
+    <oryx:loopMaximum>1</oryx:loopMaximum>
+    <oryx:testTime>After</oryx:testTime>
+    <oryx:MI_Ordering>Sequential</oryx:MI_Ordering>
+    <oryx:MI_FlowCondition>All</oryx:MI_FlowCondition>
+    <oryx:TaskType>None</oryx:TaskType>
+    <oryx:Implementation>Webservice</oryx:Implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>314.25,113,398.25,167</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource22" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource14">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Task</oryx:type>
+    <oryx:name>Deliver
+item</oryx:name>
+    <oryx:activityType>Task</oryx:activityType>
+    <oryx:status>None</oryx:status>
+    <oryx:startQuantity>1</oryx:startQuantity>
+    <oryx:loopType>None</oryx:loopType>
+    <oryx:loopCounter>1</oryx:loopCounter>
+    <oryx:loopMaximum>1</oryx:loopMaximum>
+    <oryx:testTime>After</oryx:testTime>
+    <oryx:MI_Ordering>Sequential</oryx:MI_Ordering>
+    <oryx:MI_FlowCondition>All</oryx:MI_FlowCondition>
+    <oryx:TaskType>None</oryx:TaskType>
+    <oryx:Implementation>Webservice</oryx:Implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>501.5,62,579.5,113</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource26" />
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource28" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource16">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#EndEvent</oryx:type>
+    <oryx:eventType>End</oryx:eventType>
+    <oryx:result>None</oryx:result>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>725,73.5,753,101.5</oryx:bounds>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource33">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#AND_Gateway</oryx:type>
+    <oryx:gatewayType>AND</oryx:gatewayType>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>447,72.5,477,102.5</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource32" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource34">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#DataObject</oryx:type>
+    <oryx:artifactType>DataObject</oryx:artifactType>
+    <oryx:name>Order</oryx:name>
+    <oryx:requiredForStart>true</oryx:requiredForStart>
+    <oryx:producedAtCompletion>true</oryx:producedAtCompletion>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>139,107,179,167</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource37" />
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource17">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>158.06248712539673,127,193.32811844348907,127</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource3" />
+    <oryx:dockers>15 15 39 31  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource18">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#MessageFlow</oryx:type>
+    <oryx:bounds>233.50030923174614,158.39440429207016,236.74969076825386,362.2930957079298</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource10" />
+    <oryx:dockers>39 31 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource19">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>252.625,378,299.375,378</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource11" />
+    <oryx:dockers>15 15 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource20">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>330.31015747970343,378.426268404082,397.338266192019,380.2924781388486</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource12" />
+    <oryx:dockers>15 15 24.999984741210938 33.999996185302734  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource21">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>315,393.4375,391.25,466</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource13" />
+    <oryx:dockers>15 15 315 466 0 27  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource22">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>476.4542878197083,418.8665458147488,529.1902434302917,445.0475166852512</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource33" />
+    <oryx:dockers>42 27 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource23">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>272.525390625,128,414.6103515625,126</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource4" />
+    <oryx:dockers>39 31 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource24">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#MessageFlow</oryx:type>
+    <oryx:bounds>430.68401706724035,142.6246144206527,436.34137355775965,346.28944807934727</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource4" />
+    <oryx:dockers>39 14 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource25">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>445.64453125,128,599.10546875,126</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource6" />
+    <oryx:dockers>15 15 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource26">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#MessageFlow</oryx:type>
+    <oryx:bounds>614.7340738709976,142.2733200825954,618.4846761290024,387.0001174174046</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource6" />
+    <oryx:dockers>39 0 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource27">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>629.9212789002504,127.5847672730384,666.8621073302184,128.9855452269616</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource5" />
+    <oryx:dockers>15 15 39 27.5  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource28">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>658.214829451928,413.08347251712263,696.390639298072,413.28762123287737</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource38" />
+    <oryx:dockers>39 25.5 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource29">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#MessageFlow</oryx:type>
+    <oryx:bounds>707.3167639299411,158.53596349612195,711.7175759748441,397.65446619137805</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource38" />
+    <oryx:dockers>39 27.5 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource30">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>727.5468619848439,412.5,810,412.92067927558753</oryx:bounds>
+    <oryx:dockers>15 15 810 412.5  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource31">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>746.1285548463469,130.08372716631217,781.0626377806062,130.27954922590928</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource7" />
+    <oryx:dockers>39 27.5 14 14  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource1" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource32">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>555.2967406545973,413.75076624023933,579.0313843454027,414.13985875976067</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource14" />
+    <oryx:dockers>15 15 52 27  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource35">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#SequenceFlow</oryx:type>
+    <oryx:ConditionType>None</oryx:ConditionType>
+    <oryx:quantity>1</oryx:quantity>
+    <oryx:bounds>471.5495713071147,390.5213690912773,528.3117568178852,409.5762871587227</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource33" />
+    <oryx:dockers>36.5 31 15 15  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource36">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Association_Unidirectional</oryx:type>
+    <oryx:direction>To</oryx:direction>
+    <oryx:bounds>236.9999899340839,393.0937493443489,236.99999719131281,432.0937474370003</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource34" />
+    <oryx:dockers>15 15 19.999984741210938 26.999996185302734  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource37">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#Association_Unidirectional</oryx:type>
+    <oryx:direction>To</oryx:direction>
+    <oryx:bounds>257.18105586886725,394.0012134764447,397.11777225613275,454.3034740235553</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource12" />
+    <oryx:dockers>20 30 36.5 31  #</oryx:dockers>
+    <raziel:parent rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource9" />
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource38">
+    <oryx:type>http://b3mn.org/stencilset/bpmn#IntermediateMessageEvent</oryx:type>
+    <oryx:eventType>Intermediate</oryx:eventType>
+    <oryx:trigger>Message</oryx:trigger>
+    <oryx:implementation>Web Service</oryx:implementation>
+    <oryx:bgColor>#ffffff</oryx:bgColor>
+    <oryx:bounds>697,398,727,428</oryx:bounds>
+    <raziel:outgoing rdf:resource="http://b3mn.hpi.uni-potsdam.de/server.php?resource=TryThis#resource30" />
+    <oryx:docker>712,413</oryx:docker>
+  </rdf:Description>
+</rdf:RDF>
