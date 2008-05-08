@@ -17,6 +17,7 @@ public abstract class NodeImpl implements Node {
 	private List<FlowRelationship> outgoingFlowRelationships;
 	private String guard;
 	private Vector<Locator> locators = new Vector<Locator>();
+	private String rolename;
 
 	public String getId() {
 		return id;
@@ -55,6 +56,14 @@ public abstract class NodeImpl implements Node {
 
 	public void setGuard(String guard) {
 		this.guard = guard;
+	}
+	
+	public String getRolename() {
+		return rolename;
+	}
+	
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
 	}
 
 	public Vector<Locator> getLocators() {

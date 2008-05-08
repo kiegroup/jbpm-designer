@@ -83,6 +83,11 @@ public class ExecConverter extends Converter {
 		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId());
 		
 		exTask.pl_context = addPlace(net, "pl_context_" + task.getId());
+
+		String rolename = task.getRolename();
+		
+		// TODO: integrate context place
+
 		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isdelegated"));
 		exTask.pl_context.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isreviewed"));
 		
@@ -99,6 +104,7 @@ public class ExecConverter extends Converter {
 		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_running, extractDataURL);
 		//addFlowRelationship(net, exTask.pl_context, exTask.tr_allocate);
 		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_context, baseXsltURL + "context_allocate.xsl");
+		exTask.tr_allocate.setRolename(rolename);
 		
 		if (task.isSkippable()) {
 			// skip Transition
@@ -119,6 +125,7 @@ public class ExecConverter extends Converter {
 		addExecFlowRelationship(net, exTask.tr_submit, exTask.pl_deciding, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_submit);
 		addExecFlowRelationship(net, exTask.tr_submit, exTask.pl_context, baseXsltURL + "context_submit.xsl");
+		exTask.tr_submit.setRolename(rolename);
 		
 		// delegate Transition
 		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), task.getLabel(),model,form,bindings);
@@ -130,6 +137,7 @@ public class ExecConverter extends Converter {
 		addExecFlowRelationship(net, exTask.tr_delegate, exTask.pl_running, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_delegate);
 		addExecFlowRelationship(net, exTask.tr_delegate, exTask.pl_context, baseXsltURL + "context_delegate.xsl");
+		exTask.tr_delegate.setRolename(rolename);
 		
 		// review Transition
 		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), task.getLabel(),model,form,bindings);
@@ -141,7 +149,8 @@ public class ExecConverter extends Converter {
 		addExecFlowRelationship(net, exTask.tr_review, exTask.pl_complete, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_review);
 		addExecFlowRelationship(net, exTask.tr_review, exTask.pl_context, baseXsltURL + "context_review.xsl");
-
+		exTask.tr_review.setRolename(rolename);
+		
 		// done Transition
 		exTask.tr_done = addAutomaticTransition(net, "tr_done_" + task.getId(), task.getLabel(), "", copyXsltURL, false);
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_done);
@@ -156,12 +165,14 @@ public class ExecConverter extends Converter {
 		addExecFlowRelationship(net, exTask.tr_suspend, exTask.pl_suspended, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_suspend);
 		addExecFlowRelationship(net, exTask.tr_suspend, exTask.pl_context, baseXsltURL + "context_suspend.xsl");
+		exTask.tr_suspend.setRolename(rolename);
 		
 		exTask.tr_resume = addAutomaticTransition(net, "tr_resume_" + task.getId(), task.getLabel(), "resume", copyXsltURL, true);
 		addFlowRelationship(net, exTask.pl_suspended, exTask.tr_resume);
 		addExecFlowRelationship(net, exTask.tr_resume, exTask.pl_running, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_resume);
 		addExecFlowRelationship(net, exTask.tr_resume, exTask.pl_context, baseXsltURL + "context_resume.xsl");
+		exTask.tr_resume.setRolename(rolename);
 		
 		// finish transition
 		//TODO: create context_finish.xsl

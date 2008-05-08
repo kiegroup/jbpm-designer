@@ -384,6 +384,57 @@ public class BPMNRDFImporter {
 						task.setSkippable(false);
 					}
 				}
+				
+ 				if (attribute.equals("rolename")) {
+					String roleValue = getContent(n);
+					if (roleValue != null) {
+						task.setRolename(roleValue);
+					}
+					else {
+						task.setRolename("Default");
+					}
+				}
+				
+				if (attribute.equals("rightinitprocess")) {
+					String rightValue = getContent(n);
+					if (rightValue != null && rightValue.equals("true")) {
+						task.setRightInitProcess("true");
+					}
+					else {
+						task.setRightInitProcess("false");
+					}
+				}
+
+				if (attribute.equals("rightexecutetask")) {
+					String rightValue = getContent(n);
+					if (rightValue != null && rightValue.equals("true")) {
+						task.setRightExecuteTask("true");
+					}
+					else {
+						task.setRightExecuteTask("false");
+					}
+				}
+				
+				if (attribute.equals("rightskiptask")) {
+					String rightValue = getContent(n);
+					if (rightValue != null && rightValue.equals("true")) {
+						task.setRightSkipTask("true");
+					}
+					else {
+						task.setRightSkipTask("false");
+					}
+				}
+				
+				if (attribute.equals("rightdelegateTask")) {
+					String rightValue = getContent(n);
+					if (rightValue != null && rightValue.equals("true")) {
+						task.setRightDelegateTask("true");
+					}
+					else {
+						task.setRightDelegateTask("false");
+					}
+				}
+				
 				if (attribute.equals("form")) {
 					String form = getContent(n);
 					if (form != null && form.equals("true")) {
@@ -392,7 +443,6 @@ public class BPMNRDFImporter {
 						task.setForm(null);
 					}
 				}
-
 				// TODO: add further attributes...
 				// if (attribute.equals("poolId")) {
 				// pool.setId(getContent(n));

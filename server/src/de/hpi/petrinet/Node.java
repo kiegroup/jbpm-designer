@@ -16,6 +16,9 @@ public interface Node {
 	List<FlowRelationship> getOutgoingFlowRelationships();
 	String getGuard();
 	void setGuard(String guard);
+	
+	String getRolename();
+	void setRolename(String rolename);
 
 	boolean isSimilarTo(Node node);
 	

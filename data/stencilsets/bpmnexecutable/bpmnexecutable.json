@@ -727,6 +727,51 @@
 					"optional":false
 				},
 				{
+					"id":"rolename",
+					"type":"String",
+					"title":"Rolename",
+					"value":false,
+					"description":"This role with following rights has the permission to execute this task.",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"rightinitprocess",
+					"type":"Boolean",
+					"title":"start a Process",
+					"value":false,
+					"description":"Should the role has the right to start a Process?",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"rightexecutetask",
+					"type":"Boolean",
+					"title":"execute a Task",
+					"value":false,
+					"description":"Should the role has the right to allocate, execute, suspend and resume a Task?",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"rightskiptask",
+					"type":"Boolean",
+					"title":"skip a Task",
+					"value":false,
+					"description":"Should the role has the right to skip a Task?",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"rightdelegatetask",
+					"type":"Boolean",
+					"title":"delegate a Task",
+					"value":false,
+					"description":"Should the role has the right to delegate and review a Task?",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"form",
 					"type":"String",
 					"title":"Attribute list",

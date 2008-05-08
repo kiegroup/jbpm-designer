@@ -2,6 +2,7 @@ package de.hpi.execpn.impl;
 
 import de.hpi.execpn.AutomaticTransition;
 import de.hpi.execpn.ExecFlowRelationship;
+import de.hpi.execpn.FormTransition;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.TauTransition;

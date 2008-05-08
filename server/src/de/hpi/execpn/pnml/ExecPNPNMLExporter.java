@@ -80,6 +80,10 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			tsHelper.setGuard(doc, ts, transition.getGuard());
 		}
 		
+		if (transition.getRolename() != null) {
+			tsHelper.setRolename(doc, ts, transition.getRolename());
+		}
+		
 		// get incoming places out of petri net model
 		List<FlowRelationship> incomingArcs = transition.getIncomingFlowRelationships();
 		List<Place> incomingPlaces = new ArrayList<Place>();
