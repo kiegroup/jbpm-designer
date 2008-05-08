@@ -3,7 +3,6 @@ package de.hpi.execpn.pnml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -16,7 +15,6 @@ import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
-import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.Transition;
 import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
 
@@ -43,16 +41,18 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			Transition transition) {
 		Element tnode = super.appendTransition(doc, netnode, transition);
 		Element ts = tsHelper.addToolspecificElement(doc, tnode);
-		
-		Node n1node = tnode.appendChild(doc.createElement("name"));
-		addContentElement(doc, n1node, "value", transition.getId());
-		addContentElement(doc, n1node, "text", transition.getId());
+		if (!tsHelper.hasChildWithName(tnode, "name")){
+			Node n1node = tnode.appendChild(doc.createElement("name"));
+			addContentElement(doc, n1node, "value", transition.getId());
+			addContentElement(doc, n1node, "text", transition.getId());
+		}
 		
 		if (transition instanceof FormTransition) {
-			tsHelper.addModelReference(doc, ts, ((FormTransition) transition).getModelURL());
+			FormTransition formT = (FormTransition) transition;
+			tsHelper.addModelReference(doc, ts, formT.getModelURL());
 			tnode.setAttribute("type", "receive");
+			tsHelper.addFormAndBindings(doc, ts, formT.getFormURL(), formT.getBindingsURL());
 		} else /*if (transition instanceof AutomaticTransition)*/{
-			// TODO: What about guards?
 			tnode.setAttribute("type", "automatic");
 		}
 		

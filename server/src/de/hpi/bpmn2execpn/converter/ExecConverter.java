@@ -117,7 +117,7 @@ public class ExecConverter extends Converter {
 		}
 		
 		// submit Transition
-		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(),model,form,bindings);
+		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(), model, form, bindings);
 		// TODO: FormTransition -> Form erstellen/angeben
 		submit.setAction("submit");
 		exTask.tr_submit = submit;
@@ -131,7 +131,7 @@ public class ExecConverter extends Converter {
 		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), task.getLabel(),model,form,bindings);
 		// TODO: FormTransition -> Form erstellen/angeben
 		delegate.setAction("delegate");
-		delegate.setGuard("plFinish.isDelegated == true");
+		delegate.setGuard(exTask.pl_deciding.getId() + ".isDelegated == 'true'");
 		exTask.tr_delegate = delegate;
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_delegate);
 		addExecFlowRelationship(net, exTask.tr_delegate, exTask.pl_running, extractDataURL);
@@ -143,7 +143,7 @@ public class ExecConverter extends Converter {
 		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), task.getLabel(),model,form,bindings);
 		// TODO: FormTransition -> Form erstellen/angeben
 		review.setAction("review");
-		review.setGuard("(plFinish.owner != '') &amp;&amp; (plFinish.isReviewed == true) &amp;&amp; (plFinish.isDelegated == false) &amp;&amp; (plFinish.wantToReview == true)");
+		review.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".isReviewed == 'true'");
 		exTask.tr_review = review;
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_review);
 		addExecFlowRelationship(net, exTask.tr_review, exTask.pl_complete, extractDataURL);
@@ -157,7 +157,7 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, exTask.tr_done, exTask.pl_complete);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_done);
 		addExecFlowRelationship(net, exTask.tr_done, exTask.pl_context, baseXsltURL + "context_done.xsl");
-		exTask.tr_done.setGuard("((plFinish.owner == '') || (plFinish.isReviewed == false) || (plFinish.wantToReview == false)) &amp;&amp; (plFinish.isDelegated == false)");
+		exTask.tr_done.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".isReviewed != 'true'");
 		
 		// suspend/resume
 		exTask.tr_suspend = addAutomaticTransition(net, "tr_suspend_" + task.getId(), task.getLabel(), "suspend", copyXsltURL, true);
@@ -182,10 +182,6 @@ public class ExecConverter extends Converter {
 		/*addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");
 		*/
-		
-		exTask.tr_delegate.setGuard(exTask.pl_context.getId() + ".isDelegated == 'true'");
-		exTask.tr_review.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".isReviewed == 'true'");
-		exTask.tr_done.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".isReviewed != 'true'");
 		
 		taskList.add(exTask);
 		
@@ -270,23 +266,16 @@ public class ExecConverter extends Converter {
 				Place executed = addPlace(net, "ad-hoc_task_executed_"
 						+ exTask.getId());
 				addFlowRelationship(net, startT, enabled);
-				addFlowRelationship(net, enabled, exTask.tr_allocate);
+				addFlowRelationship(net, enabled, exTask.tr_enable);
 				addFlowRelationship(net, enableStarting, exTask.tr_allocate);
 				addFlowRelationship(net, exTask.tr_allocate, enableStarting);
-				addFlowRelationship(net, enableFinishing, exTask.tr_done);
-				addFlowRelationship(net, exTask.tr_done, executed);		
-				addFlowRelationship(net, exTask.tr_done, updatedState);
-				addFlowRelationship(net, enableFinishing, exTask.tr_review);
-				addFlowRelationship(net, exTask.tr_review, executed);		
-				addFlowRelationship(net, exTask.tr_review, updatedState);
-				addFlowRelationship(net, executed, defaultEndT);
+				addFlowRelationship(net, enableFinishing, exTask.tr_finish);
+				addFlowRelationship(net, exTask.tr_finish, executed);		
+				addFlowRelationship(net, exTask.tr_finish, updatedState);
 
 				if (exTask.isSkippable()) {
-					addFlowRelationship(net, enabled, exTask.tr_skip);
 					addFlowRelationship(net, enableStarting, exTask.tr_skip);
 					addFlowRelationship(net, exTask.tr_skip, enableStarting);
-					addFlowRelationship(net, exTask.tr_skip, executed);
-					addFlowRelationship(net, exTask.tr_skip, updatedState);
 				}
 				
 				// finishing construct(finalize with skip, finish, abort and leave_suspend)
@@ -307,6 +296,7 @@ public class ExecConverter extends Converter {
 				addFlowRelationship(net, executed, finish);
 				addFlowRelationship(net, finish, taskFinalized);
 				
+				//TODO: remove ability to abort?
 				addFlowRelationship(net, enableFinalize, abort);
 				addFlowRelationship(net, exTask.pl_running, abort);
 				addFlowRelationship(net, abort, taskFinalized);
@@ -338,18 +328,13 @@ public class ExecConverter extends Converter {
 				Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
 				Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
 				addFlowRelationship(net, startT, enabled);
-				addFlowRelationship(net, enabled, exTask.tr_allocate);
+				addFlowRelationship(net, enabled, exTask.tr_enable);
 				addFlowRelationship(net, synch, exTask.tr_allocate);
-				addFlowRelationship(net, exTask.tr_review, executed);
-				addFlowRelationship(net, exTask.tr_review, updatedState);
-				addFlowRelationship(net, exTask.tr_done, executed);
-				addFlowRelationship(net, exTask.tr_done, updatedState);
+				addFlowRelationship(net, exTask.tr_finish, executed);
+				addFlowRelationship(net, exTask.tr_finish, updatedState);
 				addFlowRelationship(net, executed, defaultEndT);
 
 				if (exTask.isSkippable()) {
-					addFlowRelationship(net, exTask.tr_skip, executed);
-					addFlowRelationship(net, exTask.tr_skip, updatedState);
-					addFlowRelationship(net, enabled, exTask.tr_skip);
 					addFlowRelationship(net, synch, exTask.tr_skip);
 				}
 

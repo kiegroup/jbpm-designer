@@ -20,6 +20,9 @@ public class ToolspecificPNMLHelper {
 	}
 	
 	void addModelReference(Document doc, Element parent, String modelURL){
+		if (modelURL == null){
+			return;
+		}
 		Element output, model;
 		//create new 'output' and 'model' elements, if not already there
 		if (!hasChildWithName(parent, "output")){		//no 'output' there -> create both new
@@ -93,5 +96,29 @@ public class ToolspecificPNMLHelper {
 		Element trans = (Element) parent.appendChild(doc.createElement("transformation"));
 		trans.setAttribute("href", url);
 	}
-
+	
+	void addFormAndBindings(Document doc, Element parent, String formURL, String bindingURL){
+		Element output, form, bindings;
+		if (!hasChildWithName(parent, "output")){
+			output = (Element) parent.appendChild(doc.createElement("output"));
+		}else{
+			output =  (Element) parent.getElementsByTagName("output").item(0);
+		}
+		if (formURL != null){
+			if (!hasChildWithName(output, "form")){
+				form = (Element) parent.appendChild(doc.createElement("form"));
+			}else{
+				form =  (Element) parent.getElementsByTagName("form").item(0);
+			}
+			form.setAttribute("href", formURL);
+		}
+		if (bindingURL != null){
+			if (!hasChildWithName(output, "bindings")){
+				bindings = (Element) parent.appendChild(doc.createElement("bindings"));
+			}else{
+				bindings =  (Element) parent.getElementsByTagName("bindings").item(0);
+			}
+			bindings.setAttribute("href", bindingURL);
+		}
+	}
 }
