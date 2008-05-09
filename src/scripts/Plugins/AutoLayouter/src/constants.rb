@@ -31,7 +31,8 @@ Dev_Path = File.join(File.dirname(__FILE__), "..")
 
 #Location of Dot layouter executable
 #Dot_Bin = "#{File.join(Dev_Path, "bin")}/dot.exe"	# For Windows (included)
-Dot_Bin = "/usr/local/bin/dot"						# For OS X (get installer)
+#Dot_Bin = "/usr/local/bin/dot"						# For OS X (get installer)
+Dot_Bin = "/usr/bin/dot"							# For Debian (apt-get graphiz)
 
 #Folder for debugging pictures
 Pics_Path = File.join(Dev_Path,"debug_pictures")
