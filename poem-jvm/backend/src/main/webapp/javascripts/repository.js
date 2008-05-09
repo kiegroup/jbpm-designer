@@ -645,7 +645,7 @@ Repository.render = {
 		// openid login template
 		// TODO implement openid-login -- login or logout REQUIRES reload of repository!
 		this.openid_tpl = new Ext.XTemplate(
-			'<div id="oryx_repository_header" onmouseover="this.className = \'mouseover\'" onmouseover="this.className = \'\'">',
+			'<div id="oryx_repository_header" onmouseover="this.className = \'mouseover\'" onmouseout="this.className = \'\'">',
 				'<img src="/poem-backend-1.0/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>',
 		
 				'<tpl if="this.isAnonymousUser(current_user) || this.isPublic(current_user)">',
