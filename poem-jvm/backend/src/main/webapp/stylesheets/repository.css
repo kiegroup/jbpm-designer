@@ -129,6 +129,17 @@ body, td, input, textarea {
 	width:100%;
 }
 
+#oryx_repository_header span{
+	position:relative;
+	right:10px;
+	top:2px;
+	display:none;
+}
+
+#oryx_repository_header.mouseover span{
+	display:inline;
+}
+
 #openid_login {
 	position:absolute;
 	right:10px;
