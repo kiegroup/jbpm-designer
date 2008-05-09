@@ -130,10 +130,14 @@ body, td, input, textarea {
 }
 
 #oryx_repository_header span{
-	position:relative;
-	right:10px;
+	left:-60px;
+	position:absolute;
 	top:2px;
-	display:none;
+}
+
+#oryx_repository_header span img{
+	position:relative;
+	right:6px;
 }
 
 #oryx_repository_header.mouseover span{
