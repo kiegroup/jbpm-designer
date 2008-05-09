@@ -22,6 +22,7 @@ import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
+import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.petrinet.FlowRelationship;
@@ -174,7 +175,11 @@ public abstract class Converter {
 
 	protected void handleDataObjects(PetriNet net, ConversionContext c)
 			throws DataObjectNoInitStateException {
-		// do nothing
+		//nothing
+	}
+	
+	protected void handleDataObject(PetriNet net, DataObject object, ConversionContext c){
+		//nothing
 	}
 
 	// ********************************************************************
@@ -209,6 +214,8 @@ public abstract class Converter {
 				handlePool(net, (Pool) node, c);
 			} else if (node instanceof Lane) {
 				handleLane(net, (Lane) node, c);
+			} else if (node instanceof DataObject) {
+				handleDataObject(net, (DataObject) node, c);
 			}
 		}
 	}

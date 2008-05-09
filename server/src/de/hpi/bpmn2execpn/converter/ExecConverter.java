@@ -14,6 +14,7 @@ import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
 import de.hpi.bpmn2execpn.model.ExecTask;
 import de.hpi.bpmn2pn.converter.Converter;
+import de.hpi.bpmn2pn.converter.DataObjectNoInitStateException;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.execpn.AutomaticTransition;
@@ -96,21 +97,24 @@ public class ExecConverter extends Converter {
 			
 			// create MetaData Layout Actions, that will be logged --> here not regarded
 			
-			// interrogate all incoming data objects for task and create model
+			// interrogate all incoming data objects for task, create DataPlaces for them and create Task model
 			List<Edge> edges = task.getIncomingEdges();
 			for (Edge edge : edges) {
 				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
-					// TODO getContentXML() has to be implemented
+					// create XML Structure for Task
 					String modelXML = dataObject.getModel();
 					StringBufferInputStream in = new StringBufferInputStream(modelXML);
 					try {
+						//TODO why is Parser not working?
 						Document doc = parser.parse(in);
 						Node dataObjectId = processData.appendChild(modelDoc.createElement(dataObject.getId()));
-						Node dataTagOfDataModel = modelDoc.getDocumentElement().getFirstChild();
+						Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
 						Node child = dataTagOfDataModel.getFirstChild();
-						while ((child = child.getNextSibling()) != null)
+						while (child != null) {
 							dataObjectId.appendChild(child.cloneNode(true));
+							child = child.getNextSibling();
+						};
 					} catch (Exception io) {
 						io.printStackTrace();
 					}
@@ -144,20 +148,23 @@ public class ExecConverter extends Converter {
 		exTask.pl_running = addPlace(net, "pl_running_" + task.getId());
 		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId());
 		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId());
-		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId());
-		
-		// TODO generate locators for places
-		//exTask.pl_ready.addLocator(new Locator());
-		
-		
+		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId());	
 		exTask.pl_context = addPlace(net, "pl_context_" + task.getId());
 
+		// add role dependencies
 		String rolename = task.getRolename();
 		
-		// TODO: integrate context place
+		// integrate context place
+		exTask.pl_context.addLocator(new Locator("startTime", "xsd:string", "/data/metadata/startTime"));
+		exTask.pl_context.addLocator(new Locator("endTime", "xsd:string", "/data/metadata/endTime"));
+		exTask.pl_context.addLocator(new Locator("status", "xsd:string", "/data/metadata/status"));
+		exTask.pl_context.addLocator(new Locator("owner", "xsd:string", "/data/metadata/owner"));
 		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isdelegated"));
 		exTask.pl_context.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isreviewed"));
-		
+		exTask.pl_context.addLocator(new Locator("reviewRequested", "xsd:string", "/data/metadata/reviewRequested"));
+		exTask.pl_context.addLocator(new Locator("startTime", "xsd:string", "/data/metadata/firstOwner"));
+		exTask.pl_context.addLocator(new Locator("actions", "xsd:string", "/data/metadata/actions"));
+
 		
 		//enable transition
 		//TODO: read/write to context place
@@ -421,6 +428,38 @@ public class ExecConverter extends Converter {
 								
 				addFlowRelationship(net, taskFinalized, endT);	
 			}
+		}
+	}
+	
+	@Override
+	protected void handleDataObject(PetriNet net, DataObject object, ConversionContext c){
+		
+		try {
+			if (object instanceof ExecDataObject) {
+				ExecDataObject dataobject = (ExecDataObject) object;
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance (  ) ; 
+				DocumentBuilder parser = factory.newDocumentBuilder (  ) ; 
+				
+				//create data place for Task
+				Place dataPlace = addPlace(net,"pl_data_"+dataobject.getId());
+				ExecTask.addDataPlace(dataPlace);
+				
+				// for data place add locators
+				String modelXML = dataobject.getModel();
+				StringBufferInputStream in = new StringBufferInputStream(modelXML);
+				Document doc = parser.parse(in);
+				Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
+				Node child = dataTagOfDataModel.getFirstChild();
+				while (child != null) {
+					dataPlace.addLocator(new Locator(
+							child.getNodeName(),
+							"xsd:string",
+							"/data/processdata/"+dataobject.getId()+"/"+child.getNodeName()));
+					child = child.getNextSibling();
+				};
+			}
+		} catch (Exception io) {
+			io.printStackTrace();
 		}
 	}
 	
