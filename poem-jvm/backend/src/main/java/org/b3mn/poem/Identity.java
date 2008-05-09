@@ -119,17 +119,23 @@ public class Identity {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Representation> getModels(String type, Date from, Date to) {
+	public List<Representation> getModels(String type, Date from, Date to, boolean must_be_owner, boolean shared) {
 		List<Representation> list = (List<Representation>) Persistance.getSession().
-		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r" +
-					" where (a.subject_name=:subject or a.subject_name='public')" +
-					" and r.type like :type and r.updated >= :from and r.updated <= :to" +
-					" and i.id=a.object_id and i.id=r.ident_id")
+		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r " +
+					   "where ((a.subject_name=:subject or a.subject_name='public') " +
+            					"and r.type like :type and r.updated >= :from and r.updated <= :to " +
+            					"and i.id=a.object_id and i.id=r.ident_id) " + 
+            			"and ( (:must_be_owner and context_name='ownership') " + 
+        					  "and ( (:shared and (select is_shared(i.id) > 0) ) " +
+        					         "or (not :shared)) " +
+            			"or (not :must_be_owner))")
 		.addEntity("representation", Representation.class)
 	    .setString("subject", this.getUri())
 	    .setString("type", type)
 	    .setDate("from", from)
 	    .setDate("to", to)
+	    .setBoolean("must_be_owner", must_be_owner)
+	    .setBoolean("shared", shared)
 	    .list();
 		Persistance.commit();
 		return list;

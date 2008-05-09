@@ -25,7 +25,8 @@ public class IdentityTest {
 	
 	@Test public void getModels() {
 		String openid = "https://openid.hpi.uni-potsdam.de/user/ole.eckermann";
-		List<Representation> models = Identity.instance(openid).getModels("bpmn", new Date(0), new Date(109,0,1));
+		List<Representation> models = Identity.instance(openid).getModels("bpmn", new Date(0), new Date(109,0,1), false, false);
+		System.err.println(models.size());
 		assertEquals("bpmn",models.get(0).getType());
 	}
 	

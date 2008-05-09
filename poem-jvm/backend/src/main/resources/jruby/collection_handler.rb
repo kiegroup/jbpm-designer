@@ -35,10 +35,13 @@ module Handler
        else
          to = Time.now+100000
        end
+       
+       must_be_owner = interaction.params['must_be_owner']=='true'
+       shared = interaction.params['shared']=='true'
         
        type = interaction.params['type'] || '%'
         
-       models = interaction.subject.getModels(type, from, to)
+       models = interaction.subject.getModels(type, from, to, must_be_owner, shared)
        output = []
        models.each do |model|
          output << Helper.getModelInfo(interaction, Identity.instance(model.getIdent_id))
