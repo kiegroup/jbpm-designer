@@ -505,7 +505,7 @@ Repository.app = {
 	deleteModel: function(item, url) {
         ORYX.Log.debug("DeleteUrl:%0",this.models[url]);
 		var model = this.models[url];
-		console.log(model);
+		// console.log(model);
 		if (window.confirm("Are you sure you want to delete this model?\n\n  " + model.info.title + "\n\nThis cannot be undone.")) {
 			// hide the container, delete it later
 			$(item).style.display = "none";
