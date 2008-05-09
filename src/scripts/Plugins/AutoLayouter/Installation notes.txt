@@ -4,3 +4,6 @@ Required Ruby-Extensions
 
 Requires executable of dot layouting-program, which is included in graphviz.
 Available at http://www.graphviz.org/
+
+For unix systems, install dot and register it in ./src/constants. Also, there
+you will find default configurations for windows and OS X.
