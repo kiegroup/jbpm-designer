@@ -665,7 +665,7 @@ Repository.render = {
 				'<tpl if="!this.isAnonymousUser(current_user) && !this.isPublic(current_user)">',
 					'<form action="/poem-backend-1.0/logout.jsp" method="post" id="openid_login">',
 						'<div>',
-							'<input type="text" name="openid" id="openid_login_openid" class="text logged_id" value="{current_user}" disabled="disabled" />',
+							'Hi, {current_user}',
 							'<input type="submit" class="button" value="logout"/>',
 						'</div>',
 					'</form>',
