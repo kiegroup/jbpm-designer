@@ -132,12 +132,12 @@ body, td, input, textarea {
 #oryx_repository_header span{
 	left:-70px;
 	position:absolute;
+	display:none;
 	top:1px;
 }
 
 #oryx_repository_header span img{
 	position:relative;
-	display:none;
 	right:6px;
 	margin-right:6px;
 }
