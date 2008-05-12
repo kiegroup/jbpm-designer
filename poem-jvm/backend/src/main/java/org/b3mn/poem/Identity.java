@@ -74,8 +74,8 @@ public class Identity {
 			Session session = Persistance.getSession();
 			Identity identity = (Identity) session.
 			createSQLQuery("select {identity.*} from identity(?)")
-			.addEntity("identity", Identity.class).setString(0, "/data/model/").uniqueResult();
-			identity.setUri("/data/model/" + identity.getId());
+			.addEntity("identity", Identity.class).setString(0, "/model/new").uniqueResult();
+			identity.setUri("/model/" + identity.getId());
 			
 			session.save(identity);
 			
