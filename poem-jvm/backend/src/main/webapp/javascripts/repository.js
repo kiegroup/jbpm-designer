@@ -602,28 +602,41 @@ Repository.app = {
 		}
 	},
 	
-	filterModelsByModelType: function(modeltype_id, isOwner, isShared) {
-		//alert("Filter models by type: " + modeltype_id);
-		this.filter = {
-						type: 		modeltype_id 	? modeltype_id 	: 'undefined', 
-						owner: 		isOwner 		? isOwner 		: false,
-						is_shared: 	isShared 		? isShared 		: false 
-					};
+	filterModelsByModelType: function(modeltype_id) {
+						
+		this.filter = modeltype_id ? {type: modeltype_id} : {};
+		
 		this.updatePanels();
 	},
 	
-	filterModelsByAccess: function(access) {
+	filterModelsByAccessAndType: function(access, modeltype_id) {
+		
+		var newFilter = {};
+		
 		switch(access) {
-			case "owner": 
-				alert("filter models by access: show models I created (ia am owner of)")
+			case "my_processes": 
+				newFilter = {owner: true}
 				break;
-			case "shared":
-				alert("filter models by access: show models that are shared with me")
+			case "shared_processes":
+				newFilter = {owner: true, is_shared: true}
+				break;
+			case "contributor":
+				newFilter = {contributor: true}
+				break;
+			case "reader":
+				newFilter = {reader: true}
 				break;
 			case "public":
-				alert("filter models by access. show models that are public")
+				newFilter = {is_public: true}
 				break;
 		}
+		
+		if(modeltype_id){
+			newFilter['type'] = modeltype_id
+		}
+		
+		this.filter = newFilter;
+		this.updatePanels();
 	},
 	
 	/**
@@ -957,7 +970,7 @@ Repository.render = {
 													qtip: modeltype.description,
 													listeners: {
 														click: function() {
-															Repository.app.filterModelsByModelType( modeltype.id, true, child.id == 'shared_processes');
+															Repository.app.filterModelsByAccessAndType( child.id, modeltype.id );
 														}
 													}
 												})
@@ -972,26 +985,66 @@ Repository.render = {
                     expanded: true,
                     children: [{
                         text: 'my processes',
+						id: 'my_processes',
                         expanded: true,
 						children: [{
                             text: "show all",
                             leaf: true,
 							listeners: {
 								click: function() {
-									Repository.app.filterModelsByModelType( undefined, true, false );
+									Repository.app.filterModelsByAccessAndType('my_processes');
 								}
 							}
                         }]
                     },{
                         text: 'shared processes',
 						id: 'shared_processes',
-                        expanded: true,
+                        expanded: false,
 						children: [{
                             text: "show all",
                             leaf: true,
 							listeners: {
 								click: function() {
-									Repository.app.filterModelsByModelType(undefined, true, true );
+									Repository.app.filterModelsByAccessAndType('shared_processes');
+								}
+							}
+                        }]
+                    },{
+                        text: 'contributor',
+						id: 'contributor',
+                        expanded: false,
+						children: [{
+                            text: "show all",
+                            leaf: true,
+							listeners: {
+								click: function() {
+									Repository.app.filterModelsByAccessAndType('contributor');
+								}
+							}
+                        }]
+                    },{
+                        text: 'reader',
+						id: 'reader',
+                        expanded: false,
+						children: [{
+                            text: "show all",
+                            leaf: true,
+							listeners: {
+								click: function() {
+									Repository.app.filterModelsByAccessAndType('reader');
+								}
+							}
+                        }]
+                    },{
+                        text: 'public',
+						id: 'public',
+                        expanded: false,
+						children: [{
+                            text: "show all",
+                            leaf: true,
+							listeners: {
+								click: function() {
+									Repository.app.filterModelsByAccessAndType('public');
 								}
 							}
                         }]
