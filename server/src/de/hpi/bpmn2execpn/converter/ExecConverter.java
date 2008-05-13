@@ -247,13 +247,11 @@ public class ExecConverter extends Converter {
 		exTask.tr_resume.setRolename(rolename);
 		
 		// finish transition
-		//TODO: create context_finish.xsl
-		exTask.tr_finish =exTask.tr_done = addAutomaticTransition(net, "tr_finish_" + task.getId(), task.getLabel(), "", copyXsltURL, false);
+		exTask.tr_finish  = addAutomaticTransition(net, "tr_finish_" + task.getId(), task.getLabel(), "", copyXsltURL, false);
 		addFlowRelationship(net, exTask.pl_complete, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, c.map.get(getOutgoingSequenceFlow(task)), extractDataURL);
-		/*addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
+		addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");
-		*/
 		
 		taskList.add(exTask);
 		
