@@ -68,7 +68,7 @@
 					"length":"50"
 				},
 				{
-					"id":"expressionLanguage",
+					"id":"expressionlanguage",
 					"type":"String",
 					"title":"ExpressionLanguage",
 					"value":"",
@@ -78,7 +78,7 @@
 					"length":"50"
 				},
 				{
-					"id":"queryLanguage",
+					"id":"querylanguage",
 					"type":"String",
 					"title":"QueryLanguage",
 					"value":"",
@@ -88,7 +88,7 @@
 					"length":"50"
 				},
 				{
-					"id":"creationDate",
+					"id":"creationdate",
 					"type":"Date",
 					"title":"CreationDate",
 					"value":"10/07/07",
@@ -98,7 +98,7 @@
 					"dateFormat":"j/m/y"
 				},
 				{
-					"id":"modificationDate",
+					"id":"modificationdate",
 					"type":"Date",
 					"title":"ModificationDate",
 					"value":"10/07/07",
@@ -219,7 +219,7 @@
 					"length":""
 				},
 				{
-					"id":"activityType",
+					"id":"activitytype",
 					"type":"String",
 					"title":"ActivityType",
 					"value":"Task",
@@ -289,7 +289,7 @@
 					]
 				},
 				{
-					"id":"inputSets",
+					"id":"inputsets",
 					"type":"String",
 					"title":"InputSets",
 					"value":"",
@@ -313,7 +313,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"outputSets",
+					"id":"outputsets",
 					"type":"String",
 					"title":"OutputSets",
 					"value":"",
@@ -337,7 +337,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"ioRules",
+					"id":"iorules",
 					"type":"String",
 					"title":"IORules",
 					"value":"",
@@ -349,7 +349,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"startQuantity",
+					"id":"startquantity",
 					"type":"Integer",
 					"title":"StartQuantity",
 					"value":1,
@@ -360,7 +360,7 @@
 					"min":"1"
 				},
 				{
-					"id":"loopType",
+					"id":"looptype",
 					"type":"Choice",
 					"title":"LoopType",
 					"value":"None",
@@ -390,7 +390,7 @@
 					]
 				},
 				{
-					"id":"loopCondition",
+					"id":"loopcondition",
 					"type":"String",
 					"title":"LoopCondition",
 					"value":"",
@@ -401,7 +401,7 @@
 					"length":"50"
 				},
 				{
-					"id":"loopCounter",
+					"id":"loopcounter",
 					"type":"Integer",
 					"title":"LoopCounter",
 					"value":1,
@@ -412,7 +412,7 @@
 					"min":"0"
 				},
 				{
-					"id":"loopMaximum",
+					"id":"loopmaximum",
 					"type":"Integer",
 					"title":"LoopMaximum",
 					"value":1,
@@ -423,7 +423,7 @@
 					"min":"0"
 				},
 				{
-					"id":"testTime",
+					"id":"testtime",
 					"type":"Choice",
 					"title":"TestTime",
 					"value":"After",
@@ -447,7 +447,7 @@
 					]
 				},
 				{
-					"id":"MI_Condition",
+					"id":"mi_condition",
 					"type":"String",
 					"title":"MI_Condition",
 					"value":"",
@@ -458,7 +458,7 @@
 					"length":"50"
 				},
 				{
-					"id":"MI_Ordering",
+					"id":"mi_ordering",
 					"type":"Choice",
 					"title":"MI_Ordering",
 					"value":"Sequential",
@@ -482,7 +482,7 @@
 					]
 				},
 				{
-					"id":"MI_FlowCondition",
+					"id":"mi_flowcondition",
 					"type":"Choice",
 					"title":"MI_FlowCondition",
 					"value":"All",
@@ -518,7 +518,7 @@
 					]
 				},
 				{
-					"id":"ComplexMI_Condition",
+					"id":"complexmi_condition",
 					"type":"String",
 					"title":"ComplexMI_Condition",
 					"value":"",
@@ -529,7 +529,7 @@
 					"length":"50"
 				},
 				{
-					"id":"isCompensation",
+					"id":"iscompensation",
 					"type":"Boolean",
 					"title":"isCompensation",
 					"value":false,
@@ -539,7 +539,7 @@
 					"refToView":"compensation"
 				},
 				{
-					"id":"TaskType",
+					"id":"tasktype",
 					"type":"Choice",
 					"title":"TaskType",
 					"value":"None",
@@ -599,7 +599,7 @@
 					]
 				},
 				{
-					"id":"InMessage",
+					"id":"inmessage",
 					"type":"String",
 					"title":"InMessage",
 					"value":"",
@@ -610,7 +610,7 @@
 					"length":"50"
 				},
 				{
-					"id":"OutMessage",
+					"id":"outmessage",
 					"type":"String",
 					"title":"OutMessage",
 					"value":"",
@@ -621,7 +621,7 @@
 					"length":"50"
 				},
 				{
-					"id":"Implementation",
+					"id":"implementation",
 					"type":"Choice",
 					"title":"Implementation",
 					"value":"Webservice",
@@ -651,7 +651,7 @@
 					]
 				},
 				{
-					"id":"Message",
+					"id":"message",
 					"type":"String",
 					"title":"Message",
 					"value":"",
@@ -662,7 +662,7 @@
 					"length":"50"
 				},
 				{
-					"id":"Instatiate",
+					"id":"instatiate",
 					"type":"Boolean",
 					"title":"Instatiate",
 					"value":false,
@@ -672,7 +672,7 @@
 					"refToView":""
 				},
 				{
-					"id":"Performers",
+					"id":"performers",
 					"type":"String",
 					"title":"Performers",
 					"value":"",
@@ -684,7 +684,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"Script",
+					"id":"script",
 					"type":"String",
 					"title":"Script",
 					"value":"",
@@ -695,7 +695,7 @@
 					"length":"50"
 				},
 				{
-					"id":"TaskRef",
+					"id":"taskref",
 					"type":"String",
 					"title":"TaskRef",
 					"value":"",
@@ -706,7 +706,7 @@
 					"length":"50"
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffcc",
@@ -834,7 +834,7 @@
 					"length":""
 				},
 				{
-					"id":"activityType",
+					"id":"activitytype",
 					"type":"String",
 					"title":"ActivityType",
 					"value":"Sub-Process",
@@ -904,7 +904,7 @@
 					]
 				},
 				{
-					"id":"inputSets",
+					"id":"inputsets",
 					"type":"String",
 					"title":"InputSets",
 					"value":"",
@@ -928,7 +928,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"outputSets",
+					"id":"outputsets",
 					"type":"String",
 					"title":"OutputSets",
 					"value":"",
@@ -952,7 +952,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"ioRules",
+					"id":"iorules",
 					"type":"String",
 					"title":"IORules",
 					"value":"",
@@ -964,7 +964,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"startQuantity",
+					"id":"startquantity",
 					"type":"Integer",
 					"title":"StartQuantity",
 					"value":1,
@@ -975,7 +975,7 @@
 					"min":"1"
 				},
 				{
-					"id":"loopType",
+					"id":"looptype",
 					"type":"Choice",
 					"title":"LoopType",
 					"value":"None",
@@ -1005,7 +1005,7 @@
 					]
 				},
 				{
-					"id":"loopCondition",
+					"id":"loopcondition",
 					"type":"String",
 					"title":"LoopCondition",
 					"value":"",
@@ -1016,7 +1016,7 @@
 					"length":"50"
 				},
 				{
-					"id":"loopCounter",
+					"id":"loopcounter",
 					"type":"Integer",
 					"title":"LoopCounter",
 					"value":1,
@@ -1026,7 +1026,7 @@
 					"refToView":""
 				},
 				{
-					"id":"loopMaximum",
+					"id":"loopmaximum",
 					"type":"Integer",
 					"title":"LoopMaximum",
 					"value":1,
@@ -1036,7 +1036,7 @@
 					"refToView":""
 				},
 				{
-					"id":"testTime",
+					"id":"testtime",
 					"type":"Choice",
 					"title":"TestTime",
 					"value":"After",
@@ -1060,7 +1060,7 @@
 					]
 				},
 				{
-					"id":"MI_Condition",
+					"id":"mi_condition",
 					"type":"String",
 					"title":"MI_Condition",
 					"value":"",
@@ -1071,7 +1071,7 @@
 					"length":"50"
 				},
 				{
-					"id":"MI_Ordering",
+					"id":"mi_ordering",
 					"type":"Choice",
 					"title":"MI_Ordering",
 					"value":"Sequential",
@@ -1095,7 +1095,7 @@
 					]
 				},
 				{
-					"id":"MI_FlowCondition",
+					"id":"mi_flowcondition",
 					"type":"Choice",
 					"title":"MI_FlowCondition",
 					"value":"All",
@@ -1176,7 +1176,7 @@
 					"length":"50"
 				},
 				{
-					"id":"isCompensation",
+					"id":"iscompensation",
 					"type":"Boolean",
 					"title":"isCompensation",
 					"value":false,
@@ -1215,7 +1215,7 @@
 					]
 				},
 				{
-					"id":"isATransaction",
+					"id":"isatransaction",
 					"type":"Boolean",
 					"title":"isATransaction",
 					"value":false,
@@ -1247,7 +1247,7 @@
 					"refToView":"u"
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -1331,7 +1331,7 @@
 					"length":""
 				},
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"value":"AND",
@@ -1353,7 +1353,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_outgoingSequenceFlow",
+					"id":"gates_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gates] OutgoingSequenceFlow",
 					"value":"",
@@ -1365,7 +1365,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_Assignments",
+					"id":"gates_assignments",
 					"type":"String",
 					"title":"[Gates] Assignments",
 					"value":"",
@@ -1377,7 +1377,7 @@
 					"wrapLines":true
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -1461,7 +1461,7 @@
 					"length":""
 				},
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"value":"OR",
@@ -1483,7 +1483,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_outgoingSequenceFlow",
+					"id":"gates_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gates] OutgoingSequenceFlow",
 					"value":"",
@@ -1495,7 +1495,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_Assignments",
+					"id":"gates_assignments",
 					"type":"String",
 					"title":"[Gates] Assignments",
 					"value":"",
@@ -1507,7 +1507,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"defaultGate",
+					"id":"defaultgate",
 					"type":"String",
 					"title":"DefaultGate",
 					"value":"",
@@ -1519,7 +1519,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gate_outgoingSequenceFlow",
+					"id":"gate_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gate] OutgoingSequenceFlow",
 					"value":"",
@@ -1530,7 +1530,7 @@
 					"length":"50"
 				},
 				{
-					"id":"gate_Assignments",
+					"id":"gate_assignments",
 					"type":"String",
 					"title":"[Gate] Assignments",
 					"value":"",
@@ -1542,7 +1542,7 @@
 					"wrapLines":true
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -1627,7 +1627,7 @@
 					"length":""
 				},
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"value":"XOR",
@@ -1637,7 +1637,7 @@
 					"length":""
 				},
 				{
-					"id":"xorType",
+					"id":"xortype",
 					"type":"String",
 					"title":"XORType",
 					"value":"Data",
@@ -1647,7 +1647,7 @@
 					"length":""
 				},
 				{
-					"id":"markerVisible",
+					"id":"markervisible",
 					"type":"Choice",
 					"title":"MarkerVisible",
 					"value":"false",
@@ -1683,7 +1683,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_outgoingSequenceFlow",
+					"id":"gates_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gates] OutgoingSequenceFlow",
 					"value":"",
@@ -1695,7 +1695,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_Assignments",
+					"id":"gates_assignments",
 					"type":"String",
 					"title":"[Gates] Assignments",
 					"value":"",
@@ -1707,7 +1707,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"defaultGate",
+					"id":"defaultgate",
 					"type":"String",
 					"title":"DefaultGate",
 					"value":"",
@@ -1719,7 +1719,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gate_outgoingSequenceFlow",
+					"id":"gate_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gate] OutgoingSequenceFlow",
 					"value":"",
@@ -1730,7 +1730,7 @@
 					"length":"50"
 				},
 				{
-					"id":"gate_Assignments",
+					"id":"gate_assignments",
 					"type":"String",
 					"title":"[Gate] Assignments",
 					"value":"",
@@ -1742,7 +1742,7 @@
 					"wrapLines":true
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -1826,7 +1826,7 @@
 					"length":""
 				},
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"value":"XOR",
@@ -1836,7 +1836,7 @@
 					"length":""
 				},
 				{
-					"id":"xorType",
+					"id":"xortype",
 					"type":"String",
 					"title":"XORType",
 					"value":"Event",
@@ -1858,7 +1858,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_outgoingSequenceFlow",
+					"id":"gates_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gates] OutgoingSequenceFlow",
 					"value":"",
@@ -1870,7 +1870,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_Assignments",
+					"id":"gates_assignments",
 					"type":"String",
 					"title":"[Gates] Assignments",
 					"value":"",
@@ -1882,7 +1882,7 @@
 					"wrapLines":true
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -1966,7 +1966,7 @@
 					"length":""
 				},
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"value":"Complex",
@@ -1988,7 +1988,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_outgoingSequenceFlow",
+					"id":"gates_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gates] OutgoingSequenceFlow",
 					"value":"",
@@ -2000,7 +2000,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_Assignments",
+					"id":"gates_assignments",
 					"type":"String",
 					"title":"[Gates] Assignments",
 					"value":"",
@@ -2012,7 +2012,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"incomingCondition",
+					"id":"incomingcondition",
 					"type":"String",
 					"title":"IncomingCondition",
 					"value":"",
@@ -2023,7 +2023,7 @@
 					"length":"50"
 				},
 				{
-					"id":"outgoingCondition",
+					"id":"outgoingcondition",
 					"type":"String",
 					"title":"OutgoingCondition",
 					"value":"",
@@ -2034,7 +2034,7 @@
 					"length":"50"
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -2093,7 +2093,7 @@
  			},
 			"properties": [
 				{
-					"id":"poolId",
+					"id":"poolid",
 					"type":"String",
 					"title":"PoolId",
 					"value":"",
@@ -2104,7 +2104,7 @@
 					"length":"30"
 				},
 				{
-					"id":"poolCategories",
+					"id":"poolcategories",
 					"type":"String",
 					"title":"PoolCategories",
 					"value":"",
@@ -2116,7 +2116,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"poolDocumentation",
+					"id":"pooldocumentation",
 					"type":"String",
 					"title":"PoolDocumentation",
 					"value":"",
@@ -2162,7 +2162,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"boundaryVisible",
+					"id":"boundaryvisible",
 					"type":"Boolean",
 					"title":"BoundaryVisible",
 					"value":true,
@@ -2172,7 +2172,7 @@
 					"refToView":"border"
 				},
 				{
-					"id":"processId",
+					"id":"processid",
 					"type":"String",
 					"title":"ProcessId",
 					"value":"",
@@ -2183,7 +2183,7 @@
 					"length":"30"
 				},
 				{
-					"id":"processName",
+					"id":"processname",
 					"type":"String",
 					"title":"ProcessName",
 					"value":"",
@@ -2194,7 +2194,7 @@
 					"length":"30"
 				},
 				{
-					"id":"processType",
+					"id":"processtype",
 					"type":"Choice",
 					"title":"ProcessType",
 					"value":"None",
@@ -2290,51 +2290,7 @@
 					]
 				},
 				{
-					"id":"adHoc",
-					"type":"Boolean",
-					"title":"AdHoc",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"adHocOrdering",
-					"type":"Choice",
-					"title":"AdHocOrdering",
-					"value":"Parallel",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"c1",
-							"value":"Sequential",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"value":"Parallel",
-							"refToView":""
-						}
-					]
-				},
-				{
-					"id":"adHocCompletionCondition",
-					"type":"String",
-					"title":"AdHocCompletionCondition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"suppressJoinFailure",
+					"id":"suppressjoinfailure",
 					"type":"Boolean",
 					"title":"SuppressJoinFailure",
 					"value":false,
@@ -2343,7 +2299,7 @@
 					"optional":false
 				},
 				{
-					"id":"enableInstanceCompensation",
+					"id":"enableinstancecompensation",
 					"type":"Boolean",
 					"title":"EnableBooleanCompensation",
 					"value":false,
@@ -2352,7 +2308,7 @@
 					"optional":false
 				},
 				{
-					"id":"processCategories",
+					"id":"processcategories",
 					"type":"String",
 					"title":"ProcessCategories",
 					"value":"",
@@ -2364,7 +2320,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"processDocumentation",
+					"id":"processdocumentation",
 					"type":"String",
 					"title":"ProcessDocumentation",
 					"value":"",
@@ -2375,7 +2331,7 @@
 					"length":"30"
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -2449,7 +2405,7 @@
 					"length":""
 				},
 				{
-					"id":"parentPool",
+					"id":"parentpool",
 					"type":"String",
 					"title":"ParentPool",
 					"value":"",
@@ -2460,7 +2416,7 @@
 					"length":"30"
 				},
 				{
-					"id":"parentLane",
+					"id":"parentlane",
 					"type":"String",
 					"title":"ParentLane",
 					"value":"",
@@ -2471,7 +2427,7 @@
 					"length":"30"
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -2531,7 +2487,7 @@
 					"length":"30"
 				},
 				{
-					"id":"artifactType",
+					"id":"artifacttype",
 					"type":"String",
 					"title":"ArtifactType",
 					"value":"Group",
@@ -2621,7 +2577,7 @@
 					"length":"30"
 				},
 				{
-					"id":"artifactType",
+					"id":"artifacttype",
 					"type":"String",
 					"title":"ArtifactType",
 					"value":"Annotation",
@@ -2713,7 +2669,7 @@
 					"length":"30"
 				},
 				{
-					"id":"artifactType",
+					"id":"artifacttype",
 					"type":"String",
 					"title":"ArtifactType",
 					"value":"DataObject",
@@ -2775,7 +2731,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"requiredForStart",
+					"id":"requiredforstart",
 					"type":"Boolean",
 					"title":"Required for start",
 					"value":true,
@@ -2784,7 +2740,7 @@
 					"optional":false,
 				},
 				{
-					"id":"producedAtCompletion",
+					"id":"producedatcompletion",
 					"type":"Boolean",
 					"title":"Produced at completion",
 					"value":true,
@@ -2793,7 +2749,7 @@
 					"optional":false,
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -2890,7 +2846,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Start",
@@ -2911,7 +2867,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -2997,7 +2953,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Start",
@@ -3059,7 +3015,7 @@
 					]
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -3145,7 +3101,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Start",
@@ -3166,7 +3122,7 @@
 					"length":""
 				},
 				{
-					"id":"timeDate",
+					"id":"timedate",
 					"type":"Date",
 					"title":"TimeDate",
 					"value":"20/04/07",
@@ -3176,7 +3132,7 @@
 					"dateFormat":"j/m/y"
 				},
 				{
-					"id":"timeCycle",
+					"id":"timecycle",
 					"type":"String",
 					"title":"TimeCycle",
 					"value":"",
@@ -3187,7 +3143,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -3273,7 +3229,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Start",
@@ -3294,7 +3250,7 @@
 					"length":""
 				},
 				{
-					"id":"ruleName",
+					"id":"rulename",
 					"type":"String",
 					"title":"RuleName",
 					"value":"",
@@ -3305,7 +3261,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -3391,7 +3347,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Start",
@@ -3412,7 +3368,7 @@
 					"length":""
 				},
 				{
-					"id":"linkId",
+					"id":"linkid",
 					"type":"String",
 					"title":"LinkId",
 					"value":"",
@@ -3423,7 +3379,7 @@
 					"length":""
 				},
 				{
-					"id":"processRef",
+					"id":"processref",
 					"type":"String",
 					"title":"ProcessRef",
 					"value":"",
@@ -3434,7 +3390,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -3520,7 +3476,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Start",
@@ -3553,7 +3509,7 @@
 					"wrapLines":true
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -3639,7 +3595,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -3671,7 +3627,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -3757,7 +3713,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -3830,7 +3786,7 @@
 					]
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -3916,7 +3872,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -3948,7 +3904,7 @@
 					"length":""
 				},
 				{
-					"id":"timeDate",
+					"id":"timedate",
 					"type":"Date",
 					"title":"TimeDate",
 					"value":"20/04/07",
@@ -3958,7 +3914,7 @@
 					"dateFormat":"j/m/y"
 				},
 				{
-					"id":"timeCycle",
+					"id":"timecycle",
 					"type":"String",
 					"title":"TimeCycle",
 					"value":"",
@@ -3969,7 +3925,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -4055,7 +4011,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -4087,7 +4043,7 @@
 					"length":""
 				},
 				{
-					"id":"errorCode",
+					"id":"errorcode",
 					"type":"String",
 					"title":"ErrorCode",
 					"value":"",
@@ -4098,7 +4054,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -4184,7 +4140,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -4216,7 +4172,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -4302,7 +4258,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -4345,7 +4301,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -4431,7 +4387,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -4463,7 +4419,7 @@
 					"length":""
 				},
 				{
-					"id":"ruleName",
+					"id":"rulename",
 					"type":"String",
 					"title":"RuleName",
 					"value":"",
@@ -4474,7 +4430,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -4560,7 +4516,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -4592,7 +4548,7 @@
 					"length":""
 				},
 				{
-					"id":"linkId",
+					"id":"linkid",
 					"type":"String",
 					"title":"LinkId",
 					"value":"",
@@ -4603,7 +4559,7 @@
 					"length":""
 				},
 				{
-					"id":"processRef",
+					"id":"processref",
 					"type":"String",
 					"title":"ProcessRef",
 					"value":"",
@@ -4614,7 +4570,7 @@
 					"length":""
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -4700,7 +4656,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"Intermediate",
@@ -4744,7 +4700,7 @@
 					"wrapLines":true
 				},				
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -4853,7 +4809,7 @@
 					"length":""
 				},
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"String",
 					"title":"EventType",
 					"value":"End",
@@ -4923,7 +4879,7 @@
 					]
 				},
 				{
-					"id":"errorCode",
+					"id":"errorcode",
 					"type":"String",
 					"title":"ErrorCode",
 					"value":"",
@@ -4945,7 +4901,7 @@
 					"length":""
 				},
 				{
-					"id":"linkId",
+					"id":"linkid",
 					"type":"String",
 					"title":"LinkId",
 					"value":"",
@@ -4956,7 +4912,7 @@
 					"length":""
 				},
 				{
-					"id":"processRef",
+					"id":"processref",
 					"type":"String",
 					"title":"ProcessRef",
 					"value":"",
@@ -4979,7 +4935,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -5068,7 +5024,7 @@
 					"length":""
 				},
 				{
-					"id":"ConditionType",
+					"id":"conditiontype",
 					"type":"String",
 					"title":"ConditionType",
 					"value":"None",
@@ -5166,7 +5122,7 @@
 					"length":""
 				},
 				{
-					"id":"ConditionType",
+					"id":"conditiontype",
 					"type":"String",
 					"title":"ConditionType",
 					"value":"Expression",
@@ -5176,7 +5132,7 @@
 					"length":""
 				},
 				{
-					"id":"ConditionExpression",
+					"id":"conditionexpression",
 					"type":"String",
 					"title":"ConditionExpression",
 					"value":"",
@@ -5274,7 +5230,7 @@
 					"length":""
 				},
 				{
-					"id":"ConditionType",
+					"id":"conditiontype",
 					"type":"String",
 					"title":"ConditionType",
 					"value":"Default",
