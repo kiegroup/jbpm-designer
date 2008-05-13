@@ -917,7 +917,7 @@ Repository.render = {
                 loader: new Ext.tree.TreeLoader(),
                 root: new Ext.tree.AsyncTreeNode({
 					listeners : {
-						append: function(tree, parent, node, index) {
+						/*append: function(tree, parent, node, index) {
 							// add child nodes for the model types dynamically loaded from and offered by the server
 							if (node.id == "tree_node_processes_by_type") {
 								Repository.app.loadModelTypes(function(model_types) {
@@ -938,48 +938,51 @@ Repository.render = {
 									})
 								})
 							} // end of if (node.id == "tree_node_processes_by_type") {
+						}*/
+						load: function( parent ){
+							Repository.app.loadModelTypes(function(model_types) {
+								
+									parent.childNodes.each(function(child){
+										
+										model_types.each(function(modeltype) {
+											child.appendChild(
+												new Ext.tree.TreeNode({
+													text: modeltype.title,
+													leaf: true,
+													icon: modeltype.icon_url,
+													qtip: modeltype.description,
+													listeners: {
+														click: function() {
+															Repository.app.filterModelsByModelType(modeltype.id);
+														}
+													}
+												})
+											)
+										})											
+									})									
+								})
 						}
 					},
 					
 					
                     expanded: true,
-                    children: [/*{
-                        text: 'all processes',
-                        leaf: false,
-                        expanded: true,
-                        iconCls: "no-icon",
-                        children: [{
-                            text: "created by me",
-                            leaf: true,
-							listeners: {
-								click: function(){
-									Repository.app.filterModelsByAccess("owner");
-								}
-							}
-                        }, {
-                            text: "shared with me",
-                            leaf: true,
-							listeners: {
-								click: function() {
-									Repository.app.filterModelsByAccess("shared");
-								}
-							}
-                        }, {
-                            text: "public",
-                            leaf: true,
-							listeners: {
-								click: function() {
-									Repository.app.filterModelsByAccess("public");
-								}
-							}
-                        }]
-                    }, */{
-                        text: 'processes by type',
-						id: "tree_node_processes_by_type",
+                    children: [{
+                        text: 'my processes',
                         expanded: true,
 						children: [{
                             text: "show all",
-                        	iconCls: "no-icon",
+                            leaf: true,
+							listeners: {
+								click: function() {
+									Repository.app.filterModelsByModelType();
+								}
+							}
+                        }]
+                    },{
+                        text: 'shared processes',
+                        expanded: true,
+						children: [{
+                            text: "show all",
                             leaf: true,
 							listeners: {
 								click: function() {
