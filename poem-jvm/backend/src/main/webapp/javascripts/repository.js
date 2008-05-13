@@ -602,9 +602,13 @@ Repository.app = {
 		}
 	},
 	
-	filterModelsByModelType: function(modeltype_id) {
+	filterModelsByModelType: function(modeltype_id, isOwner, isShared) {
 		//alert("Filter models by type: " + modeltype_id);
-		this.filter = modeltype_id ? {type: modeltype_id} : {};
+		this.filter = {
+						type: 		modeltype_id 	? modeltype_id 	: 'undefined', 
+						owner: 		isOwner 		? isOwner 		: false,
+						is_shared: 	isShared 		? isShared 		: false 
+					};
 		this.updatePanels();
 	},
 	
@@ -953,7 +957,7 @@ Repository.render = {
 													qtip: modeltype.description,
 													listeners: {
 														click: function() {
-															Repository.app.filterModelsByModelType(modeltype.id);
+															Repository.app.filterModelsByModelType( modeltype.id, true, child.id == 'shared_processes');
 														}
 													}
 												})
@@ -974,19 +978,20 @@ Repository.render = {
                             leaf: true,
 							listeners: {
 								click: function() {
-									Repository.app.filterModelsByModelType();
+									Repository.app.filterModelsByModelType( undefined, true, false );
 								}
 							}
                         }]
                     },{
                         text: 'shared processes',
+						id: 'shared_processes',
                         expanded: true,
 						children: [{
                             text: "show all",
                             leaf: true,
 							listeners: {
 								click: function() {
-									Repository.app.filterModelsByModelType();
+									Repository.app.filterModelsByModelType(undefined, true, true );
 								}
 							}
                         }]
