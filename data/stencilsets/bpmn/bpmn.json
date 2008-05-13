@@ -1632,7 +1632,7 @@
 					"id":"markerVisible",
 					"type":"Choice",
 					"title":"MarkerVisible",
-					"value":"false",
+					"value":"true",
 					"description":"",
 					"readonly":false,
 					"optional":false,
