@@ -60,19 +60,16 @@ class Testdata < ActiveRecord::Migration
       insert into "structure" (hierarchy, ident_id) select 'U257', id from identity where uri = '/data/model/7';
       insert into "structure" (hierarchy, ident_id) select 'U258', id from identity where uri = '/data/model/8';
       insert into "structure" (hierarchy, ident_id) select 'U259', id from identity where uri = '/data/model/9';
-      insert into "structure" (hierarchy, ident_id) select 'U25A', id from identity where uri = '/data/model/10';
+      insert into "structure" (hierarchy, ident_id) select 'U250', id from identity where uri = '/data/model/10';
     }
     
     execute %q{
       insert into "interaction" (subject, object, scheme, term) select 'U1', 'U251', 'http://b3mn.org/http', 'read';
       insert into "interaction" (subject, object, scheme, term) select 'U1', 'U252', 'http://b3mn.org/http', 'read';
       insert into "interaction" (subject, object, scheme, term) select 'U1', 'U253', 'http://b3mn.org/http', 'read';
-      insert into "interaction" (subject, object, scheme, term) select 'U1', 'U254', 'http://b3mn.org/http', 'read';
-      insert into "interaction" (subject, object, scheme, term) select 'U1', 'U255', 'http://b3mn.org/http', 'read';
-      insert into "interaction" (subject, object, scheme, term) select 'U1', 'U256', 'http://b3mn.org/http', 'read';
-      insert into "interaction" (subject, object, scheme, term) select 'U1', 'U257', 'http://b3mn.org/http', 'read';
-      insert into "interaction" (subject, object, scheme, term) select 'U1', 'U258', 'http://b3mn.org/http', 'read';
-      insert into "interaction" (subject, object, scheme, term) select 'U21', 'U251', 'http://b3mn.org/http', 'write';
+      insert into "interaction" (subject, object, scheme, term) select 'U23', 'U251', 'http://b3mn.org/http', 'write';
+      insert into "interaction" (subject, object, scheme, term) select 'U23', 'U252', 'http://b3mn.org/http', 'write';
+      insert into "interaction" (subject, object, scheme, term) select 'U23', 'U254', 'http://b3mn.org/http', 'write';
     }
 
     

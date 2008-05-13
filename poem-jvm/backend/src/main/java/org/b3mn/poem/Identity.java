@@ -119,23 +119,30 @@ public class Identity {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Representation> getModels(String type, Date from, Date to, boolean must_be_owner, boolean shared) {
+	public List<Representation> getModels(String type, Date from, Date to, boolean owner, boolean is_shared, boolean is_public, boolean contributor, boolean reader) {
 		List<Representation> list = (List<Representation>) Persistance.getSession().
 		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r " +
 					   "where ((a.subject_name=:subject or a.subject_name='public') " +
-            					"and r.type like :type and r.updated >= :from and r.updated <= :to " +
+            					"and r.type like :type " +
+            					"and r.updated >= :from and r.updated <= :to " +
             					"and i.id=a.object_id and i.id=r.ident_id) " + 
-            			"and ( (:must_be_owner and context_name='ownership') " + 
-        					  "and ( (:shared and (select is_shared(i.id) > 0) ) " +
-        					         "or (not :shared)) " +
-            			"or (not :must_be_owner))")
+            			"and ( (:owner and context_name='ownership') " + 
+        					  "and ( (:is_shared and (select is_shared(i.id) > 0) ) " +
+        					         "or (not :is_shared)) " +
+            			"or (not :owner))" +
+            			"and ((:is_public and a.subject_name='public') or (not :is_public))" +
+            			"and ((:contributor and a.access_term='write') or (not :contributor))" +
+            			"and ((:reader and a.access_term='read' and (not a.subject_name='public')) or (not :reader))")
 		.addEntity("representation", Representation.class)
 	    .setString("subject", this.getUri())
 	    .setString("type", type)
 	    .setDate("from", from)
 	    .setDate("to", to)
-	    .setBoolean("must_be_owner", must_be_owner)
-	    .setBoolean("shared", shared)
+	    .setBoolean("owner", owner)
+	    .setBoolean("is_shared", is_shared)
+	    .setBoolean("is_public", is_public)
+	    .setBoolean("contributor", contributor)
+	    .setBoolean("reader", reader)
 	    .list();
 		Persistance.commit();
 		return list;

@@ -36,12 +36,15 @@ module Handler
          to = Time.now+100000
        end
        
-       must_be_owner = interaction.params['must_be_owner']=='true'
-       shared = interaction.params['shared']=='true'
+       owner = interaction.params['must_be_owner']=='true'
+       is_shared = interaction.params['shared']=='true'
+       contributor = interaction.params['contributor']=='true'
+       reader = interaction.params['reader']=='true'
+       is_public = interaction.params['public']=='true'
         
        type = interaction.params['type'] || '%'
         
-       models = interaction.subject.getModels(type, from, to, must_be_owner, shared)
+       models = interaction.subject.getModels(type, from, to, owner, is_shared, is_public, contributor, reader)
        output = []
        models.each do |model|
          output << Helper.getModelInfo(interaction, Identity.instance(model.getIdent_id))

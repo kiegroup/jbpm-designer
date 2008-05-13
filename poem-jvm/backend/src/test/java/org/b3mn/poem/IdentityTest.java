@@ -25,9 +25,21 @@ public class IdentityTest {
 	
 	@Test public void getModels() {
 		String openid = "https://openid.hpi.uni-potsdam.de/user/ole.eckermann";
-		List<Representation> models = Identity.instance(openid).getModels("bpmn", new Date(0), new Date(109,0,1), false, false);
+		Date now = new Date(109,0,1);
+		List<Representation> models = Identity.instance(openid).getModels("%", new Date(0), now, false, false, false, false, false);
 		System.err.println(models.size());
-		assertEquals("bpmn",models.get(0).getType());
+		models = Identity.instance(openid).getModels("bpmn", new Date(0), now, false, false, false, false, false);
+		System.err.println(models.size());
+		models = Identity.instance(openid).getModels("%", new Date(0), now, true, false, false, false, false);
+		System.err.println(models.size());
+		models = Identity.instance(openid).getModels("bpmn", new Date(0), now, true, true, false, false, false);
+		System.err.println(models.size());
+		models = Identity.instance(openid).getModels("bpmn", new Date(0), now, false, false, true, false, false);
+		System.err.println(models.size());
+		models = Identity.instance(openid).getModels("%", new Date(0), now, false, false, false, true, false);
+		System.err.println(models.size());
+		models = Identity.instance(openid).getModels("bpmn", new Date(0), now, false, false, false, false, true);
+		System.err.println(models.size());
 	}
 	
 	@Test public void userHierarchy() {
