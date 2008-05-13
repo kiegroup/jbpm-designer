@@ -1141,7 +1141,7 @@
 					"refToView":"adhoc"
 				},
 				{
-					"id":"AdHocOrdering",
+					"id":"adhocordering",
 					"type":"Choice",
 					"title":"AdHocOrdering",
 					"value":"Sequential",
@@ -1165,7 +1165,7 @@
 					]
 				},
 				{
-					"id":"AdHocCompletionCondition",
+					"id":"adhoccompletioncondition",
 					"type":"String",
 					"title":"AdHocCompletionCondition",
 					"value":"",
@@ -1250,7 +1250,7 @@
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
-					"value":"#ffffcc",
+					"value":"#ffffff",
 					"description":"",
 					"readonly":false,
 					"optional":false,
