@@ -975,7 +975,11 @@ Repository.render = {
 													}
 												})
 											)
-										})											
+										})	
+										
+										if(child !== parent.firstChild){
+											child.collapse();
+										}										
 									})									
 								})
 						}
@@ -999,7 +1003,7 @@ Repository.render = {
                     },{
                         text: 'shared processes',
 						id: 'shared_processes',
-                        expanded: false,
+                        expanded: true,
 						children: [{
                             text: "show all",
                             leaf: true,
@@ -1012,7 +1016,7 @@ Repository.render = {
                     },{
                         text: 'contributor',
 						id: 'contributor',
-                        expanded: false,
+                        expanded: true,
 						children: [{
                             text: "show all",
                             leaf: true,
@@ -1025,7 +1029,7 @@ Repository.render = {
                     },{
                         text: 'reader',
 						id: 'reader',
-                        expanded: false,
+                        expanded: true,
 						children: [{
                             text: "show all",
                             leaf: true,
@@ -1038,7 +1042,7 @@ Repository.render = {
                     },{
                         text: 'public',
 						id: 'public',
-                        expanded: false,
+                        expanded: true,
 						children: [{
                             text: "show all",
                             leaf: true,
