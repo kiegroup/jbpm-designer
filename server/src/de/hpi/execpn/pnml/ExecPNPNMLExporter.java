@@ -56,9 +56,17 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			tnode.setAttribute("type", "automatic");
 		}
 		
+		
+		// TODO possibly refactor action into TransitionImpl
 		if (transition instanceof LabeledTransition) {
 			LabeledTransition lTrans = (LabeledTransition) transition;
-			if (lTrans.getAction() != null) {
+			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
+				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
+			}
+		}
+		if (transition instanceof AutomaticTransition) {
+			AutomaticTransition lTrans = (AutomaticTransition) transition;
+			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
 				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
 			}
 		}
