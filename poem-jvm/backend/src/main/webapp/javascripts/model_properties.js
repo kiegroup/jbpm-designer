@@ -125,7 +125,7 @@ ModelProperties.app = {
 		
 		try {	
 			Ext.Ajax.request({
-				method: "POST",
+				method: "PUT",
 				url: this.current_model.info.edit_uri,
 				params: {
 					title: title,
