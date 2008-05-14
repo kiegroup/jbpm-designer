@@ -122,7 +122,7 @@ public class Identity {
 	public List<Representation> getModels(String type, Date from, Date to, boolean owner, boolean is_shared, boolean is_public, boolean contributor, boolean reader) {
 		List<Representation> list = (List<Representation>) Persistance.getSession().
 		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r " +
-					   "where ((a.subject_name=:subject or a.subject_name='public') " +
+					   "where ((a.subject_name=:subject or (a.subject_name='public' and :is_public)) " +
             					"and r.type like :type " +
             					"and r.updated >= :from and r.updated <= :to " +
             					"and i.id=a.object_id and i.id=r.ident_id) " + 
