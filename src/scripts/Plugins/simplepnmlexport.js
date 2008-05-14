@@ -36,7 +36,7 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
             'functionality': this.export.bind(this),
             'group': "Export",
             'icon': ORYX.PATH + "images/exportarrow.png",
-            'description': "Export as PNML - unexecutable",
+            'description': "Export as PNML",
             'index': 1,
             'minShape': 0,
             'maxShape': 0
