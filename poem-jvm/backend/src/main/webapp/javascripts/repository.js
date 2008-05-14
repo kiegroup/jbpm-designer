@@ -1000,7 +1000,7 @@ Repository.render = {
 								Repository.app.filterModelsByAccessAndType();
 							}},
 						children: [{
-							text: 'My private processes',
+							text: 'My processes',
 							id: 'my_processes',
 							leaf: true,
 							listeners: {
@@ -1052,7 +1052,6 @@ Repository.render = {
 					}, {
 						text: 'Public',
 						id: 'public',
-						expandable:false,
 						listeners: {
 							click: function(){
 								Repository.app.filterModelsByAccessAndType('public');
