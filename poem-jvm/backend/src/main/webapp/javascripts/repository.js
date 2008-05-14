@@ -933,9 +933,9 @@ Repository.render = {
                 loader: new Ext.tree.TreeLoader(),
                 root: new Ext.tree.AsyncTreeNode({
 					listeners : {
-						/*append: function(tree, parent, node, index) {
+						append: function(tree, parent, node, index) {
 							// add child nodes for the model types dynamically loaded from and offered by the server
-							if (node.id == "tree_node_processes_by_type") {
+							if (node.id == "models_by_type") {
 								Repository.app.loadModelTypes(function(model_types) {
 									model_types.each(function(modeltype) {
 										node.appendChild(
@@ -953,8 +953,11 @@ Repository.render = {
 										)
 									})
 								})
+								
+								node.collapse();
 							} // end of if (node.id == "tree_node_processes_by_type") {
-						}*/
+						}
+						/*
 						load: function( parent ){
 							Repository.app.loadModelTypes(function(model_types) {
 								
@@ -981,77 +984,72 @@ Repository.render = {
 										}										
 									})									
 								})
-						}
+						}*/
 					},
 					
 					
                     expanded: true,
                     children: [{
-                        text: 'my processes',
-						id: 'my_processes',
-                        expanded: true,
+						text: 'All items',
+						id: 'all_items',
+						expanded: true,
+						listeners: {
+							click: function(){
+								Repository.app.filterModelsByAccessAndType();
+							}},
 						children: [{
-                            text: "show all",
-                            leaf: true,
+							text: 'My private processes',
+							id: 'my_processes',
+							leaf: true,
 							listeners: {
-								click: function() {
+								click: function(){
 									Repository.app.filterModelsByAccessAndType('my_processes');
 								}
 							}
-                        }]
-                    },{
-                        text: 'shared processes',
-						id: 'shared_processes',
-                        expanded: true,
-						children: [{
-                            text: "show all",
-                            leaf: true,
+						}, {
+							text: 'My shared processes',
+							id: 'shared_processes',
+							leaf: true,
 							listeners: {
-								click: function() {
+								click: function(){
 									Repository.app.filterModelsByAccessAndType('shared_processes');
 								}
 							}
-                        }]
-                    },{
-                        text: 'contributor',
-						id: 'contributor',
-                        expanded: true,
-						children: [{
-                            text: "show all",
-                            leaf: true,
+						}, {
+							text: 'Me as a contributor',
+							id: 'contributor',
+							leaf: true,
 							listeners: {
-								click: function() {
+								click: function(){
 									Repository.app.filterModelsByAccessAndType('contributor');
 								}
 							}
-                        }]
-                    },{
-                        text: 'reader',
-						id: 'reader',
-                        expanded: true,
-						children: [{
-                            text: "show all",
-                            leaf: true,
+						}, {
+							text: 'Me as a reader',
+							id: 'reader',
+							leaf: true,
 							listeners: {
-								click: function() {
+								click: function(){
 									Repository.app.filterModelsByAccessAndType('reader');
 								}
 							}
-                        }]
-                    },{
-                        text: 'public',
+						}]
+					}, {
+						text: 'Models by type',
+						id: 'models_by_type',
+						leaf: true,
+						expanded: true
+					}, {
+						text: 'Public',
 						id: 'public',
-                        expanded: true,
-						children: [{
-                            text: "show all",
-                            leaf: true,
-							listeners: {
-								click: function() {
-									Repository.app.filterModelsByAccessAndType('public');
-								}
+						leaf: true,
+						expandable:false,
+						listeners: {
+							click: function(){
+								Repository.app.filterModelsByAccessAndType('public');
 							}
-                        }]
-                    }]
+						}
+					}]
                 }),
                 rootVisible: false
             }, // model list
