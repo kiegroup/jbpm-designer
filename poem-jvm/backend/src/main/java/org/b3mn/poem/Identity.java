@@ -70,7 +70,7 @@ public class Identity {
 		return identity;
 	}
 	
-	public static Identity newModel(Identity owner, String title, String type, String mime_type, String language, String summary, String content) {
+	public static Identity newModel(Identity owner, String title, String type, String mime_type, String language, String summary, String svg, String content) {
 			Session session = Persistance.getSession();
 			Identity identity = (Identity) session.
 			createSQLQuery("select {identity.*} from identity(?)")
@@ -85,6 +85,7 @@ public class Identity {
 			representation.setSummary(summary);
 			representation.setLanguage(language);
 			representation.setMime_type(mime_type);
+			representation.setSvg(svg);
 			representation.setContent(content);
 			session.save(representation);
 			

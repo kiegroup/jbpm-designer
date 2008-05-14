@@ -43,6 +43,7 @@ class Poem < ActiveRecord::Migration
       t.column :updated,    'timestamp with time zone', :null => false
       
       t.column :content,    :text, :null => false
+      t.column :svg,        :text
       t.column :type,		    :text, :null => false, :default => 'undefined'
     end
     

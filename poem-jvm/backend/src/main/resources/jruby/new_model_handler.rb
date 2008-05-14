@@ -45,16 +45,19 @@ module Handler
         interaction.response.setStatus(403)
         out = interaction.response.getWriter
         out.println("Forbidden!")
-      else
+      elsif interaction.params['svg'] && interaction.params['data']
         title = interaction.params['title'] || 'New Process'
         type = interaction.params['type'] || 'bpmn'
         mime_type = interaction.params['mime_type'] || 'application/xhtml+xml'
         language = interaction.params['language'] || 'en_US'
         summary = interaction.params['summary'] || 'is new'
 
-        identity = Identity.newModel(interaction.subject, title, type, mime_type, language, summary, interaction.params['data']);
+        identity = Identity.newModel(interaction.subject, title, type, mime_type, language, summary, interaction.params['svg'], interaction.params['data']);
         interaction.response.addHeader('Location', interaction.hostname + identity.getUri + '/self')
         interaction.response.setStatus(201)
+      else
+        interaction.response.setStatus(400)
+        out.println("data and/or svg missing")
       end
     end
   end  
