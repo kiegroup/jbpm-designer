@@ -1037,7 +1037,16 @@ Repository.render = {
 					}, {
 						text: 'Models by type',
 						id: 'models_by_type',
-						expanded: true
+						expanded: true,
+						children: [{
+							text: 'Show all',
+							leaf: true,
+							listeners: {
+								click: function(){
+									Repository.app.filterModelsByAccessAndType();
+								}
+							}
+						}]
 					}, {
 						text: 'Public',
 						id: 'public',
