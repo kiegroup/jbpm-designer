@@ -1037,12 +1037,10 @@ Repository.render = {
 					}, {
 						text: 'Models by type',
 						id: 'models_by_type',
-						leaf: true,
 						expanded: true
 					}, {
 						text: 'Public',
 						id: 'public',
-						leaf: true,
 						expandable:false,
 						listeners: {
 							click: function(){
