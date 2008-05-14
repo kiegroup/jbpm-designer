@@ -77,8 +77,11 @@ public class IdentityTest {
 		String mime_type = "application/xhtml+xml";
 		String language = "US_en";
 		String summary = "JUnit Test Process";
+		String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"  \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
+				+ "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1000\" height=\"600\" viewBox=\"0 0 5 5\">"
+				+ "<rect id=\"black_stripe\" fill=\"#000\" width=\"5\" height=\"3\"/> </svg>";
 		String content = "<div id=\"oryxcanvas\" class=\"-oryx-canvas\"><span class=\"oryx-mode\">writeable</span><span class=\"oryx-mode\">fullscreen</span><a rel=\"oryx-stencilset\" href=\"/files/stencilsets/bpmn/bpmn.json\"/></div>";
-		Identity identity = Identity.newModel(owner, title, type, mime_type, language, summary, content);
+		Identity identity = Identity.newModel(owner, title, type, mime_type, language, summary, svg, content);
 		assertEquals(identity.read().getTitle(),title);
 		identity.delete();
 	}
