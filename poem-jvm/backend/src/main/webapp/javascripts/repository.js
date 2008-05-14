@@ -46,7 +46,7 @@ Repository.app = {
 	
 	current_user: null,
 	
-	anonymous_user: "",
+	anonymous_user: "public",
 	
     models: [], // saves all loaded models
     /**
@@ -178,6 +178,7 @@ Repository.app = {
 	 * @param {String} openid
 	 */
 	isAnonymousUser: function(openid) {
+		if( !openid ){ openid == Repository.app.current_user }
 		return this.equalUsers(openid, this.anonymous_user);
 	},
 	
@@ -665,7 +666,7 @@ Repository.render = {
 			'<div id="oryx_repository_header" onmouseover="this.className = \'mouseover\'" onmouseout="this.className = \'\'">',
 				'<img src="/backend/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>',
 		
-				'<tpl if="this.isAnonymousUser(current_user) || this.isPublic(current_user)">',
+				'<tpl if="this.isAnonymousUser(current_user)">',
 					'<form action="/backend/consumer" method="post" id="openid_login">',
 						'<div>',
 							'<span>',
@@ -679,7 +680,7 @@ Repository.render = {
 					'</form>',
 				'</tpl>',
 				
-				'<tpl if="!this.isAnonymousUser(current_user) && !this.isPublic(current_user)">',
+				'<tpl if="!this.isAnonymousUser(current_user)">',
 					'<form action="/backend/logout.jsp" method="post" id="openid_login">',
 						'<div>',
 							'Hi, {current_user}',
@@ -698,9 +699,6 @@ Repository.render = {
 					return Repository.app.isAnonymousUser(user);
 				},
 				
-				isPublic: function(user){
-					return user == "public"
-				},
 				changeOpenId: function(url, start, size){
 					var o = document.getElementById('openid_login_openid');
 					o.value = url;
@@ -958,6 +956,10 @@ Repository.render = {
 								})
 								
 							} // end of if (node.id == "tree_node_processes_by_type") {
+							
+							if(Repository.app.isAnonymousUser() && node.id == "all_items"){
+								parent.removeChild( node )
+							}
 						}
 						/*
 						load: function( parent ){
@@ -1052,6 +1054,7 @@ Repository.render = {
 					}, {
 						text: 'Public',
 						id: 'public',
+						leaf: true,
 						listeners: {
 							click: function(){
 								Repository.app.filterModelsByAccessAndType('public');
