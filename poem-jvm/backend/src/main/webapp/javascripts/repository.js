@@ -952,9 +952,11 @@ Repository.render = {
 											})
 										)
 									})
+									
+									node.collapse();
+								
 								})
 								
-								node.collapse();
 							} // end of if (node.id == "tree_node_processes_by_type") {
 						}
 						/*
