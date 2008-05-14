@@ -46,7 +46,8 @@ Repository.app = {
 	
 	current_user: null,
 	
-	anonymous_user: "public",
+	anonymous_user: "",
+	public_user:"public",
 	
     models: [], // saves all loaded models
     /**
@@ -178,10 +179,21 @@ Repository.app = {
 	 * @param {String} openid
 	 */
 	isAnonymousUser: function(openid) {
-		if( !openid ){ openid == Repository.app.current_user }
+		if( !openid ){ openid = Repository.app.current_user }
 		return this.equalUsers(openid, this.anonymous_user);
 	},
-	
+
+	/**
+	 * Checks whether a user is the public user, 
+	 * based on the definition that an empty string (!== null) identifies the anonymous user
+	 * 
+	 * @param {String} openid
+	 */
+	isPublicUser: function(openid) {
+		if( !openid ){ openid = Repository.app.current_user }
+		return this.equalUsers(openid, this.public_user);
+	},
+		
 	/**
 	 * creates a time string from milliseconds since 1. Januar 1970, 0:00:00 Uhr UTC (via new Date().getTime())
 	 * 
@@ -478,28 +490,51 @@ Repository.app = {
 
 		ORYX.Log.debug("Create new Model:%0",modeltype);
 		
-		var modelTypeObj;
 		
-		Repository.app.model_types.each(function(el){ 
-			if( el.id == modeltype ){
-				modelTypeObj = el
-			} 
-		});
-		
-		var stencilSetURI	= modelTypeObj ? modelTypeObj.uri : null;
-		
-		// If the server has sends not uri value, take the bpmn stencilset
-		stencilSetURI		= stencilSetURI ? stencilSetURI : '/stencilsets/bpmn/bpmn.json';
-		
-		var url = './new' + '?stencilset=' + stencilSetURI;
-
-		var editor = window.open( url );
-		window.setTimeout(
-			function() {
-				if(!editor || !editor.opener || editor.closed) {
+		var callback = function(){
+			var modelTypeObj;
+			
+			Repository.app.model_types.each(function(el){
+				if (el.id == modeltype) {
+					modelTypeObj = el
+				}
+			});
+			
+			var stencilSetURI = modelTypeObj ? modelTypeObj.uri : null;
+			
+			// If the server has sends not uri value, take the bpmn stencilset
+			stencilSetURI = stencilSetURI ? stencilSetURI : '/stencilsets/bpmn/bpmn.json';
+			
+			var url = './new' + '?stencilset=' + stencilSetURI;
+			
+			var editor = window.open(url);
+			window.setTimeout(function(){
+				if (!editor || !editor.opener || editor.closed) {
 					Ext.MessageBox.alert("Editor not started.", "The editor does not seem to be started yet. Please check, whether you have a popup blocker enabled and disable it or allow popups for this site. We will never display any commercials on this site.").setIcon(Ext.MessageBox.QUESTION)
 				}
 			}, 5000);
+		}
+		
+		if(Repository.app.isPublicUser()){
+	
+			Ext.Msg.show({
+			   title:'Message',
+			   msg: 'As a public user, you can not save a model. Do you want to model anyway?',
+			   buttons: Ext.Msg.YESNO,
+			   fn: function(btn, text){
+			   		if(btn == 'yes'){
+						callback();
+					}
+			   }
+			});
+					
+		} else {
+			
+			callback();
+			
+		}
+		
+		
 		
 	},
 	
@@ -666,7 +701,7 @@ Repository.render = {
 			'<div id="oryx_repository_header" onmouseover="this.className = \'mouseover\'" onmouseout="this.className = \'\'">',
 				'<img src="/backend/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>',
 		
-				'<tpl if="this.isAnonymousUser(current_user)">',
+				'<tpl if="this.isAnonymousUser(current_user) || this.isPublicUser(current_user)">',
 					'<form action="/backend/consumer" method="post" id="openid_login">',
 						'<div>',
 							'<span>',
@@ -680,7 +715,7 @@ Repository.render = {
 					'</form>',
 				'</tpl>',
 				
-				'<tpl if="!this.isAnonymousUser(current_user)">',
+				'<tpl if="!this.isAnonymousUser(current_user) && !this.isPublicUser(current_user)">',
 					'<form action="/backend/logout.jsp" method="post" id="openid_login">',
 						'<div>',
 							'Hi, {current_user}',
@@ -697,6 +732,12 @@ Repository.render = {
 					ORYX.Log.debug("current user: >%0<", user);
 					// local function, due to scope
 					return Repository.app.isAnonymousUser(user);
+				},
+				
+				isPublicUser: function(user){
+					ORYX.Log.debug("current user: >%0<", user);
+					// local function, due to scope
+					return Repository.app.isPublicUser(user);
 				},
 				
 				changeOpenId: function(url, start, size){
@@ -957,8 +998,8 @@ Repository.render = {
 								
 							} // end of if (node.id == "tree_node_processes_by_type") {
 							
-							if(Repository.app.isAnonymousUser() && node.id == "all_items"){
-								parent.removeChild( node )
+							if(Repository.app.isPublicUser() && node.id == "all_items"){
+								parent.removeChild(node)
 							}
 						}
 						/*
