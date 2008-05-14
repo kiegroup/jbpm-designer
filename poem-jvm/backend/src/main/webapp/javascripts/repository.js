@@ -782,8 +782,7 @@ Repository.render = {
 				var is_owner = false;
 				
 				access.each(function(accessor){
-					if (Repository.app.isCurrentUser(accessor.subject) && 
-					    accessor.predicate == "owner") 
+					if ( (Repository.app.isCurrentUser(accessor.subject) || accessor.subject == "public") && accessor.predicate == "owner") 
 					{
 						is_owner = true;
 						return $break;
