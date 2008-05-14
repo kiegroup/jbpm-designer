@@ -29,7 +29,7 @@ module Handler
       content = "<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">"
   	  content << "<span class=\"oryx-mode\">writeable</span>"
   	  content << "<span class=\"oryx-mode\">fullscreen</span>"
-  	  content << "<a href=\"" + stencilset + "\" rel=\"oryx-stencilset\"></a>\n"
+  	  content << "<a href=\"http://" + request.getServerName + ':' + request.getServerPort.to_s + stencilset + "\" rel=\"oryx-stencilset\"></a>\n"
   	  content << "</div>\n"
   	  model = {'title' => 'New Process Model', 'content' => content}
 

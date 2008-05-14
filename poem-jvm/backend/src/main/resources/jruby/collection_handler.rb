@@ -36,11 +36,11 @@ module Handler
          to = Time.now+100000
        end
        
-       owner = interaction.params['must_be_owner']=='true'
-       is_shared = interaction.params['shared']=='true'
+       owner = interaction.params['owner']=='true'
+       is_shared = interaction.params['is_shared']=='true'
        contributor = interaction.params['contributor']=='true'
        reader = interaction.params['reader']=='true'
-       is_public = interaction.params['public']=='true'
+       is_public = interaction.params['is_public']=='true'
         
        type = interaction.params['type'] || '%'
         
