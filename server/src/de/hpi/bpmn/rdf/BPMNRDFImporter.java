@@ -442,7 +442,7 @@ public class BPMNRDFImporter {
 						sp.setAdhoc(false);
 					}
 				}
-				else if (attribute.equals("AdHocOrdering")) {
+				else if (attribute.equals("adhocordering")) {
 					// standard case is sequential ordering
 					String ordering = getContent(n);
 					if (ordering.equals("Parallel")) {
@@ -450,7 +450,7 @@ public class BPMNRDFImporter {
 					} else {
 						sp.setParallelOrdering(false);
 					}
-				} else if (attribute.equals("AdHocCompletionCondition")) {
+				} else if (attribute.equals("adhoccompletioncondition")) {
 					sp.setCompletionCondition(getContent(n));					
 				} else {
 					handleStandardAttributes(attribute, n, sp, c, "name");
