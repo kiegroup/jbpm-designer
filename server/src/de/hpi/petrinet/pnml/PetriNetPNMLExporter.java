@@ -62,7 +62,9 @@ public class PetriNetPNMLExporter {
 		fnode.setAttribute("id", "from "+rel.getSource().getId()+" to "+rel.getTarget().getId());
 		fnode.setAttribute("source", rel.getSource().getId());
 		fnode.setAttribute("target", rel.getTarget().getId());
-		
+		if (rel.getMode()==FlowRelationship.RELATION_MODE_READTOKEN){
+			fnode.setAttribute("type", "read");
+		}
 		Node insnode = fnode.appendChild(doc.createElement("inscription"));
 		addContentElement(doc, insnode, "value", "1");
 		

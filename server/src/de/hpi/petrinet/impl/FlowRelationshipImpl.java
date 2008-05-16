@@ -7,6 +7,7 @@ public class FlowRelationshipImpl implements FlowRelationship {
 	
 	protected Node source;
 	protected Node target;
+	protected int mode = FlowRelationship.RELATION_MODE_TAKETOKEN;
 
 	public Node getSource() {
 		return source;
@@ -32,8 +33,17 @@ public class FlowRelationshipImpl implements FlowRelationship {
 			target.getIncomingFlowRelationships().add(this);
 	}
 	
+	
 	public String toString() {
 		return "("+source+","+target+")";
+	}
+
+	public int getMode() {
+		return mode;
+	}
+
+	public void setMode(int mode) {
+		this.mode = mode;
 	}
 
 }
