@@ -378,8 +378,8 @@ public class BPMNRDFImporter {
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 
 				if (attribute.equals("isskippable")) {
-					String adHocValue = getContent(n);
-					if (adHocValue != null && adHocValue.equals("true")) {
+					String skippableValue = getContent(n);
+					if (skippableValue != null && skippableValue.equals("true")) {
 						task.setSkippable(true);
 					} else {
 						task.setSkippable(false);
