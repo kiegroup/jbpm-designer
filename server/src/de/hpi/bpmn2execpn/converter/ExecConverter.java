@@ -1,23 +1,34 @@
 package de.hpi.bpmn2execpn.converter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-import java.io.*;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
-import de.hpi.bpmn.ExecDataObject;
-import de.hpi.petrinet.Place;
-import de.hpi.petrinet.ExecPlace;
 import de.hpi.bpmn.Edge;
+import de.hpi.bpmn.ExecDataObject;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
 import de.hpi.bpmn2execpn.model.ExecTask;
 import de.hpi.bpmn2pn.converter.Converter;
-import de.hpi.bpmn2pn.converter.DataObjectNoInitStateException;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.execpn.AutomaticTransition;
@@ -27,13 +38,10 @@ import de.hpi.execpn.FormTransition;
 import de.hpi.execpn.impl.ExecPNFactoryImpl;
 import de.hpi.execpn.pnml.Locator;
 import de.hpi.petrinet.ExecPlace;
+import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.PetriNet;
+import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
-
-import javax.xml.parsers.*; 
-import org.w3c.dom.*;
-import org.w3c.dom.ls.*;
-import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 
 public class ExecConverter extends Converter {
 
@@ -502,6 +510,16 @@ public class ExecConverter extends Converter {
 		rel.setTarget(target);
 		rel.setTransformationURL(xsltURL);
 		net.getFlowRelationships().add(rel);
+		return rel;
+	}
+	
+	public ExecFlowRelationship addReadOnlyExecFlowRelationship(PetriNet net,
+			de.hpi.petrinet.Node source, de.hpi.petrinet.Node target, String xsltURL) {	
+		ExecFlowRelationship rel = addExecFlowRelationship(net, source, target, xsltURL);
+		if (rel == null){
+			return null;
+		}
+		rel.setMode(FlowRelationship.RELATION_MODE_READTOKEN);
 		return rel;
 	}
 	
