@@ -15,6 +15,7 @@ import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.ExecPlace;
 import de.hpi.petrinet.Transition;
 import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
 
@@ -108,6 +109,17 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 	protected Element appendPlace(Document doc, Node netnode, PetriNet net,
 			Place place) {
 		Element pnode = super.appendPlace(doc, netnode, net, place);
+		
+		// set type of Place and add data model to DataPlace
+		if (place instanceof ExecPlace) {
+			ExecPlace execplace = ((ExecPlace)place);
+			pnode.setAttribute("type", execplace.getType().toString());
+			if (execplace.getType() == ExecPlace.Type.data)
+				addContentElement(doc, pnode, "model", execplace.getModel());
+		}
+		else
+			pnode.setAttribute("type", ExecPlace.Type.flow.toString());
+		
 
 		Node n1node = pnode.appendChild(doc.createElement("name"));
 		addContentElement(doc, n1node, "value", place.getId());

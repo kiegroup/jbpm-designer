@@ -2,12 +2,15 @@ package de.hpi.bpmn2execpn.converter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.io.*;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.ExecDataObject;
+import de.hpi.petrinet.Place;
+import de.hpi.petrinet.ExecPlace;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.SubProcess;
@@ -23,8 +26,8 @@ import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.FormTransition;
 import de.hpi.execpn.impl.ExecPNFactoryImpl;
 import de.hpi.execpn.pnml.Locator;
+import de.hpi.petrinet.ExecPlace;
 import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 
 import javax.xml.parsers.*; 
@@ -61,6 +64,22 @@ public class ExecConverter extends Converter {
 	protected void createStartPlaces(PetriNet net, ConversionContext c) {
 		// do nothing...: we want start transitions instead of start places
 	}
+	
+	/*
+	@Override
+	public PetriNet convert () {
+		// !! no start place for petrinet
+		// but create a start transition 
+		ExecPetriNet pn = (ExecPetriNet) super.convert();
+		AutomaticTransition startTransition = addAutomaticTransition(pn, "tr_initProcess", "", "initProcess", copyXsltURL, false);
+		pn.setStartTransition(startTransition);
+		Vector <Place> dataPlaces = ExecTask.pl_dataPlaces;
+		for (Place place : dataPlaces)
+			addFlowRelationship(pn, startTransition, place);
+		return pn;
+	}
+	// connect startTransition with contextplaces
+	*/
 
 	// TODO this is a dirty hack...
 	@Override
@@ -144,12 +163,12 @@ public class ExecConverter extends Converter {
 			e.printStackTrace();
 		}
 		
-		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId());
-		exTask.pl_running = addPlace(net, "pl_running_" + task.getId());
-		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId());
-		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId());
-		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId());	
-		exTask.pl_context = addPlace(net, "pl_context_" + task.getId());
+		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_running = addPlace(net, "pl_running_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId(), ExecPlace.Type.flow);	
+		exTask.pl_context = addPlace(net, "pl_context_" + task.getId(), ExecPlace.Type.context);
 
 		// add role dependencies
 		String rolename = task.getRolename();
@@ -261,6 +280,7 @@ public class ExecConverter extends Converter {
 
 		for (IntermediateEvent event : task.getAttachedEvents())
 			handleAttachedIntermediateEventForTask(net, event, c);
+		
 	}
 	
 	@Override
@@ -439,11 +459,12 @@ public class ExecConverter extends Converter {
 				DocumentBuilder parser = factory.newDocumentBuilder (  ) ; 
 				
 				//create data place for Task
-				Place dataPlace = addPlace(net,"pl_data_"+dataobject.getId());
+				ExecPlace dataPlace = addPlace(net,"pl_data_"+dataobject.getId(), ExecPlace.Type.data);
 				ExecTask.addDataPlace(dataPlace);
 				
 				// for data place add locators
 				String modelXML = dataobject.getModel();
+				dataPlace.setModel(modelXML);
 				StringBufferInputStream in = new StringBufferInputStream(modelXML);
 				Document doc = parser.parse(in);
 				Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
@@ -493,5 +514,14 @@ public class ExecConverter extends Converter {
 		t.setModelURL(model);
 		net.getTransitions().add(t);
 		return t;
+	}
+	
+	public ExecPlace addPlace(PetriNet net, String id, ExecPlace.Type type) {
+		ExecPlace p = ((ExecPNFactoryImpl)pnfactory).createPlace();
+		p.setId(id);
+		if (type != null)
+			p.setType(type);
+		net.getPlaces().add(p);
+		return p;
 	}
 }

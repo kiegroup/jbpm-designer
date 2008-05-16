@@ -175,6 +175,11 @@ public abstract class Converter {
 
 	protected void handleDataObjects(PetriNet net, ConversionContext c)
 			throws DataObjectNoInitStateException {
+		for (DataObject node : diagram.getDataObjects()) {
+			if (node instanceof DataObject) {
+				handleDataObject(net, (DataObject) node, c);
+			}
+		}
 		//nothing
 	}
 	
@@ -214,9 +219,7 @@ public abstract class Converter {
 				handlePool(net, (Pool) node, c);
 			} else if (node instanceof Lane) {
 				handleLane(net, (Lane) node, c);
-			} else if (node instanceof DataObject) {
-				handleDataObject(net, (DataObject) node, c);
-			}
+			};
 		}
 	}
 
