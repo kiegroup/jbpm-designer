@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
@@ -163,7 +164,70 @@ public class ExecConverter extends Converter {
 				e.printStackTrace();
 			}
 			
-			// TODO with model create formular and bindings
+//			// from Task model (modelDoc) extract formular and bindings 
+//			Document formDoc = parser.newDocument();
+//			Document bindDoc = parser.newDocument();
+//			// create structure of form
+//			// TODO how can process be shown up? Delegated from? Delegate?
+//			Text text = formDoc.createTextNode(
+//				"<b> Logged in as user: </b>/n"+
+//				"<x:output ref=\"instance('output-token')/data/metadata/owner\" />/n"+
+//				"<x:group>/n"+
+//				"	<x:output bind=\"delegationstate\"><h2> Delegate task </h2></x:output>/n"+
+//				"	<x:output bind=\"executionstate\"><h2> Execute task </h2></x:output>/n"+
+//				"	<x:output bind=\"reviewstate\"><h2> Review task </h2></x:output>/n"+
+//				"</x:group>/n"+
+//				"<br /><br />/n"+
+//				"<x:group ref=\"instance('ui_settings')/delegategroup\" >/n"+
+//			    "    <x:select1 ref=\"instance('output-token')/data/metadata/delegate\" class=\"delegator\">  /n"+
+//			    "        <x:label> Delegate to: </x:label>/n"+
+//			    "            <x:item>/n"+
+//			    "                <x:label>Adam</x:label>/n"+
+//			    "                <x:value>Adam</x:value> /n"+
+//			    "            </x:item>/n"+
+//			    "            <x:item>/n"+
+//			    "                <x:label>Bert</x:label>/n"+
+//			    "                <x:value>Bert</x:value>/n"+
+//			    "            </x:item>/n"+
+//			    "            <x:item>/n"+
+//			    "                <x:label>Hugo</x:label>/n"+
+//			    "                <x:value>Hugo</x:value>/n"+
+//			    "            </x:item>/n"+
+//			    "            <x:item>/n"+
+//			    "                <x:label>Rudi</x:label>/n"+
+//			    "                <x:value>Rudi</x:value>/n"+
+//			    "            </x:item>           /n"+
+//			    "</x:select1>/n"+
+//			    "</x:group>/n"+
+//			    "<br />/n"+
+//				"<x:group bind=\"fade.delegatedfrom\"><x:output ref=\"instance('output-token')/data/metadata/delegatedfrom\" class=\"delegator\">/n"+
+//				"		<x:label> Delegated from: </x:label>/n"+
+//				"</x:output></x:group>/n"+
+//				"<br/><br />/n"+
+//				"<x:group bind=\"fade.message\"><x:input ref=\"instance('output-token')/data/processdata/message\" class=\"metainfo\">/n"+
+//				"		<x:label> Message: </x:label>/n"+
+//				"</x:input></x:group>/n"+
+//				"<br/><br />/n"+
+//				"<x:group bind=\"fade.deadline\"><x:input ref=\"instance('output-token')/data/processdata/deadline\" class=\"metainfo\">/n"+
+//				"		<x:label> Deadline: </x:label>/n"+
+//				"</x:input></x:group>/n"+
+//				"<br/><br />/n"+
+//				"<x:group bind=\"wantToReviewGroup\">/n"+
+//				"            <x:input ref=\"instance('output-token')/data/metadata/reviewRequested\" class=\"metainfo\">/n"+
+//				"		<x:label> Responsible: </x:label>/n"+
+//				"            </x:input>/n"+
+//				"</x:group>/n"+
+//				"<br/><br />/n"+
+//				"/n"+
+//				"<x:group ref=\"instance('ui_settings')/delegationstate\">/n"+
+//				"	<br/><br />/n"+
+//				"   <div class=\"labels\"> &nbsp;<b>readonly readable</b> </div>/n"+
+//				"   <br/>/n"+
+//				"</x:group>/n"
+//			);
+//			formDoc.appendChild(text);
+			
+			// build form fields of necessary attributes
 			
 			// TODO persist form and bindings and save URL
 			
