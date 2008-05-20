@@ -4,13 +4,12 @@ import de.hpi.bpmn2pn.model.ExecPlaceImpl;
 import de.hpi.execpn.AutomaticTransition;
 import de.hpi.execpn.ExecFlowRelationship;
 import de.hpi.execpn.FormTransition;
+import de.hpi.execpn.TransformationTransition;
 import de.hpi.petrinet.ExecPlace;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.Place;
 import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.impl.PetriNetFactoryImpl;
-import de.hpi.petrinet.impl.PlaceImpl;
 
 public class ExecPNFactoryImpl extends PetriNetFactoryImpl {
 
@@ -32,11 +31,13 @@ public class ExecPNFactoryImpl extends PetriNetFactoryImpl {
 	@Override
 	public TauTransition createTauTransition() {
 		AutomaticTransition tau = new AutomaticTransitionImpl();
-		tau.setManuallyTriggered(false);
-		tau.setXsltURL(null);
 		return tau;
 	}
 	
+	public TransformationTransition createTransformationTransition(){
+		return new TransformationTransitionImpl();
+	}
+
 	public AutomaticTransition createAutomaticTransition(){
 		return new AutomaticTransitionImpl();
 	}

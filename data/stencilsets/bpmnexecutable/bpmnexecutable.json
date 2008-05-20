@@ -718,13 +718,14 @@
 					"stroke":false
 				},
 				{
-					"id":"isskipable",
+					"id":"isskippable",
 					"type":"Boolean",
-					"title":"isSkipable",
+					"title":"isSkippable",
 					"value":false,
 					"description":"",
 					"readonly":false,
-					"optional":false
+					"optional":false,
+					"refToView":"isskippable"
 				},
 				{
 					"id":"rolename",

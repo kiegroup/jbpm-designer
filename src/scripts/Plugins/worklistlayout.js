@@ -39,7 +39,7 @@ Ext.store2 = new Ext.data.GroupingStore({
            id: 'transition_name',
            totalRecords: '@total'
        }, [
-           'transition_id', 'transition_name' , 'action', 'case_id', 'attractivity', 'pending_time'
+           'transition_id', 'transition_name' , 'action', 'case_id', 'pending_time', 'role'
        ])
 });
 
@@ -67,7 +67,7 @@ Ext.case_grid = new Ext.grid.GridPanel({
 						        loadMask : {msg:"Loading cases..."},
 				                viewConfig: {
 										        forceFit: true,
-										        autoFit:true
+										        autoFit: true
 										    }
 						        });
 		
@@ -76,8 +76,10 @@ Ext.task_grid = new xg.GridPanel({
 								columns: [ 
 //									{id: 'transition_id', header: 'transition id', sortable: true, dataIndex: 'transition_id', renderer: transitionLinkRenderer},
 									{header: 'transition name', sortable: true, dataIndex: 'transition_name'},
-									{header: 'attractivity', sortable: true, dataIndex: 'attractivity', renderer: attractivityRenderer},
-									{header: 'pending_time', sortable: true, dataIndex: 'pending_time'}
+//									{header: 'attractivity', sortable: true, dataIndex: 'attractivity', renderer: attractivityRenderer},
+									{header: 'pending_time', sortable: true, dataIndex: 'pending_time'},
+									{header: 'role', sortable: true, dataIndex: 'role'}
+
 //									,
 //									{header: 'action', sortable: true, dataIndex: 'action'}
 								],
@@ -122,11 +124,11 @@ function caseLinkRenderer(value) {
 function floattorgb(val) {
 	return parseInt(parseFloat(val)*2.55);
 }
-
+/*
 function attractivityRenderer(value) {
 	return '<span style="color: rgb(' + (255 - floattorgb(value)) + ','+floattorgb(value)+', 0);">' + value + '</span>'; 
 }
-
+*/
 function taskOnClick(blub) {
 	Ext.spawnBtn.setDisabled(true);
 	Ext.allocateBtn.setDisabled(true);

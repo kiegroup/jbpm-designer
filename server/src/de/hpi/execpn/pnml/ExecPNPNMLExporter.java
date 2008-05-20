@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import de.hpi.execpn.AutomaticTransition;
+import de.hpi.execpn.TransformationTransition;
 import de.hpi.execpn.ExecFlowRelationship;
 import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.FormTransition;
@@ -42,6 +43,7 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			Transition transition) {
 		Element tnode = super.appendTransition(doc, netnode, transition);
 		Element ts = tsHelper.addToolspecificElement(doc, tnode);
+		
 		if (!tsHelper.hasChildWithName(tnode, "name")){
 			Node n1node = tnode.appendChild(doc.createElement("name"));
 			addContentElement(doc, n1node, "value", transition.getId());
@@ -51,40 +53,30 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		if (transition instanceof FormTransition) {
 			FormTransition formT = (FormTransition) transition;
 			tsHelper.addModelReference(doc, ts, formT.getModelURL());
-			tnode.setAttribute("type", "receive");
 			tsHelper.addFormAndBindings(doc, ts, formT.getFormURL(), formT.getBindingsURL());
-		} else /*if (transition instanceof AutomaticTransition)*/{
-			tnode.setAttribute("type", "automatic");
 		}
 		
+		if (transition instanceof TransformationTransition) {
+			TransformationTransition lTrans = (TransformationTransition) transition;
+			if (lTrans.getXsltURL() != null) {
+				tsHelper.setFireXsltURL(doc, ts, lTrans.getXsltURL());
+			}
+
+			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
+				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
+			}
+		}
 		
-		// TODO possibly refactor action into TransitionImpl
 		if (transition instanceof LabeledTransition) {
 			LabeledTransition lTrans = (LabeledTransition) transition;
 			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
 				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
 			}
+
+			tnode.setAttribute("type", "receive");
+		} else {
+			tnode.setAttribute("type", "automatic");
 		}
-		if (transition instanceof AutomaticTransition) {
-			AutomaticTransition lTrans = (AutomaticTransition) transition;
-			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
-				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
-			}
-		}
-		
-		if (transition instanceof AutomaticTransition) {
-			AutomaticTransition auto = (AutomaticTransition) transition;
-			tsHelper.setFireTypeManual(doc, ts, auto.isManuallyTriggered());
-			if (auto.getXsltURL() != null) {
-				tsHelper.setFireXsltURL(doc, ts, auto.getXsltURL());
-			}
-			if (auto.isManuallyTriggered()){
-				tnode.setAttribute("type", "receive");
-			}else{
-				tnode.setAttribute("type", "automatic");
-			}
-		}
-		
 		if (transition.getGuard() != null) {
 			tsHelper.setGuard(doc, ts, transition.getGuard());
 		}
