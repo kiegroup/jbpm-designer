@@ -126,10 +126,12 @@ public class ExecConverter extends Converter {
 			// create MetaData Layout Actions, that will be logged --> here not regarded
 			
 			// interrogate all incoming data objects for task, create DataPlaces for them and create Task model
-			List<Edge> edges = task.getIncomingEdges();
-			for (Edge edge : edges) {
+			List<Edge> edges_in = task.getIncomingEdges();
+			for (Edge edge : edges_in) {
 				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
+					// for incoming data objects of task: create read dependencies
+					addReadOnlyExecFlowRelationship(net, exTask.tr_enable, ExecTask.getDataPlace(dataObject.getId()),null);
 					// create XML Structure for Task
 					String modelXML = dataObject.getModel();
 					StringBufferInputStream in = new StringBufferInputStream(modelXML);
@@ -146,6 +148,18 @@ public class ExecConverter extends Converter {
 					} catch (Exception io) {
 						io.printStackTrace();
 					}
+				}
+			}
+			
+			// interrogate all outgoing data objects for task and create flow relationships for them
+			List<Edge> edges_out = task.getOutgoingEdges();
+			for (Edge edge : edges_in) {
+				if (edge.getSource() instanceof ExecDataObject) {
+					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
+					// for outgoing data objects of task: create read/write dependencies
+					addReadOnlyExecFlowRelationship(net, exTask.tr_enable, ExecTask.getDataPlace(dataObject.getId()),null);
+					addFlowRelationship(net, exTask.tr_finish, ExecTask.getDataPlace(dataObject.getId()));
+					addFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_finish);
 				}
 			}
 			
@@ -250,7 +264,7 @@ public class ExecConverter extends Converter {
 		exTask.pl_context.addLocator(new Locator("endTime", "xsd:string", "/data/metadata/endTime"));
 		exTask.pl_context.addLocator(new Locator("status", "xsd:string", "/data/metadata/status"));
 		exTask.pl_context.addLocator(new Locator("owner", "xsd:string", "/data/metadata/owner"));
-		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isdelegated"));
+		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isDelegated"));
 		exTask.pl_context.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isreviewed"));
 		exTask.pl_context.addLocator(new Locator("reviewRequested", "xsd:string", "/data/metadata/reviewRequested"));
 		exTask.pl_context.addLocator(new Locator("startTime", "xsd:string", "/data/metadata/firstOwner"));
@@ -295,7 +309,7 @@ public class ExecConverter extends Converter {
 		// delegate Transition
 		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), task.getLabel(),model,form,bindings);
 		delegate.setAction("delegate");
-		delegate.setGuard(exTask.pl_deciding.getId() + ".isDelegated == 'true'");
+		delegate.setGuard(exTask.pl_context.getId() + ".isDelegated == 'true'");
 		exTask.tr_delegate = delegate;
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_delegate);
 		addExecFlowRelationship(net, exTask.tr_delegate, exTask.pl_running, extractDataURL);
