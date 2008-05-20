@@ -165,14 +165,14 @@ public class ExecConverter extends Converter {
 			
 			// persist model and deliver URL
 			try {
-				DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
-				DOMImplementationLS implLS = (DOMImplementationLS)registry.getDOMImplementation("LS");
+				//DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+				//DOMImplementationLS implLS = (DOMImplementationLS)registry.getDOMImplementation("LS");
 				
-				LSSerializer dom3Writer = implLS.createLSSerializer();
-				LSOutput output=implLS.createLSOutput();
-				OutputStream outputStream = new FileOutputStream(new File(this.baseFileName+"_"+ task.getId() +"_model"+".xml"));
-				output.setByteStream(outputStream);
-				dom3Writer.write(modelDoc,output);
+				//LSSerializer dom3Writer = implLS.createLSSerializer();
+				//LSOutput output=implLS.createLSOutput();
+				//OutputStream outputStream = new FileOutputStream(new File(this.baseFileName+"_"+ task.getId() +"_model"+".xml"));
+				//output.setByteStream(outputStream);
+				//dom3Writer.write(modelDoc,output);
 			} catch (Exception e) {
 				System.out.println("Model could not be persisted");
 				e.printStackTrace();
