@@ -1,8 +1,5 @@
 package de.hpi.bpmn2execpn.converter;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.bootstrap.DOMImplementationRegistry;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSOutput;
-import org.w3c.dom.ls.LSSerializer;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.hpi.bpmn.BPMNDiagram;
@@ -46,7 +39,6 @@ import de.hpi.petrinet.Transition;
 
 public class ExecConverter extends Converter {
 
-	private static final boolean abortWhenFinalize = true;
 	private static final String baseXsltURL = "http://localhost:3000/examples/contextPlace/";
 	private static final String copyXsltURL = baseXsltURL + "copy_xslt.xsl";
 	private static final String extractDataURL = baseXsltURL + "extract_processdata.xsl";
@@ -114,14 +106,14 @@ public class ExecConverter extends Converter {
 			
 			// create MetaData Layout for Task model
 			// (take attention to the fact, that the attributes are again defined in the engine)
-			Node startTime 		= metaData.appendChild(modelDoc.createElement("startTime"));
-			Node endTime 		= metaData.appendChild(modelDoc.createElement("endTime"));
-			Node status 		= metaData.appendChild(modelDoc.createElement("status"));
-			Node owner 			= metaData.appendChild(modelDoc.createElement("owner"));
-			Node isDelegated 	= metaData.appendChild(modelDoc.createElement("isDelegated"));
-			Node reviewRequested = metaData.appendChild(modelDoc.createElement("reviewRequested"));
-			Node firstOwner 	= metaData.appendChild(modelDoc.createElement("firstOwner"));
-			Node actions 		= metaData.appendChild(modelDoc.createElement("actions"));
+			/*Node startTime 		=*/ metaData.appendChild(modelDoc.createElement("startTime"));
+			/*Node endTime 			=*/ metaData.appendChild(modelDoc.createElement("endTime"));
+			/*Node status 			=*/ metaData.appendChild(modelDoc.createElement("status"));
+			/*Node owner 			=*/ metaData.appendChild(modelDoc.createElement("owner"));
+			/*Node isDelegated 		=*/ metaData.appendChild(modelDoc.createElement("isDelegated"));
+			/*Node reviewRequested 	=*/ metaData.appendChild(modelDoc.createElement("reviewRequested"));
+			/*Node firstOwner 		=*/ metaData.appendChild(modelDoc.createElement("firstOwner"));
+			/*Node actions 			=*/ metaData.appendChild(modelDoc.createElement("actions"));
 			
 			// create MetaData Layout Actions, that will be logged --> here not regarded
 			
@@ -131,7 +123,7 @@ public class ExecConverter extends Converter {
 				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
 					// for incoming data objects of task: create read dependencies
-					addReadOnlyExecFlowRelationship(net, exTask.tr_enable, ExecTask.getDataPlace(dataObject.getId()),null);
+					addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
 					// create XML Structure for Task
 					String modelXML = dataObject.getModel();
 					StringBufferInputStream in = new StringBufferInputStream(modelXML);
@@ -153,11 +145,11 @@ public class ExecConverter extends Converter {
 			
 			// interrogate all outgoing data objects for task and create flow relationships for them
 			List<Edge> edges_out = task.getOutgoingEdges();
-			for (Edge edge : edges_in) {
+			for (Edge edge : edges_out) {
 				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
 					// for outgoing data objects of task: create read/write dependencies
-					addReadOnlyExecFlowRelationship(net, exTask.tr_enable, ExecTask.getDataPlace(dataObject.getId()),null);
+					addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
 					addFlowRelationship(net, exTask.tr_finish, ExecTask.getDataPlace(dataObject.getId()));
 					addFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_finish);
 				}
@@ -297,9 +289,11 @@ public class ExecConverter extends Converter {
 		}
 		
 		// submit Transition
-		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(), model, form, bindings);
-		submit.setAction("submit");
-		exTask.tr_submit = submit;
+		// TODO: This is just for the moment (as long as no forms are used witg submit transistions)
+		//FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(), model, form, bindings);
+		//submit.setAction("submit");
+		//exTask.tr_submit = submit;
+		exTask.tr_submit = addTransformationTransition(net, "tr_submit_" + task.getId(), task.getLabel(),"submit", copyXsltURL);
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_submit);
 		addExecFlowRelationship(net, exTask.tr_submit, exTask.pl_deciding, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_submit);
@@ -378,156 +372,95 @@ public class ExecConverter extends Converter {
 			handleSubProcessAdHoc(net, process, c);
 		}
 	}
+	
+	
+	
 
-	// TODO: Data dependencies
-	// TODO missing completion condition concept
-	protected void handleSubProcessAdHoc(PetriNet net, SubProcess process,
-			ConversionContext c) {
+	/* TODO:   There are a number of tasks that remain to be done here:
+	 * - Integrating data dependencies as guards
+	 * - Make CC String running
+	 * - Transforming an XML CC into an Ruby String
+	 * - Adding second parallel mode
+	 * - Connecting auto skip with context places
+	 */
+	protected void handleSubProcessAdHoc(PetriNet net, SubProcess process, ConversionContext c) {
 		SubProcessPlaces pl = c.getSubprocessPlaces(process);
+		boolean isParallel = process.isParallelOrdering();	
 
 		// start and end transitions
 		Transition startT = addTauTransition(net, "ad-hoc_start_" + process.getId());
 		Transition endT = addTauTransition(net, "ad-hoc_end_" + process.getId());
 		Transition defaultEndT = addTauTransition(net, "ad-hoc_defaultEnd_" + process.getId());
-		Place execState = addPlace(net, "ad-hoc_execState_" + process.getId());
 		
 		addFlowRelationship(net, pl.startP, startT);
-		addFlowRelationship(net, startT, execState);
-		addFlowRelationship(net, execState, defaultEndT);
-		addFlowRelationship(net, execState, endT);
 		addFlowRelationship(net, defaultEndT, pl.endP);
 		addFlowRelationship(net, endT, pl.endP);
 
 		
 		// standard completion condition check
 		Place updatedState = addPlace(net, "ad-hoc_updatedState_" + process.getId());
-		Place ccStatus = addPlace(net, "ad-hoc_ccStatus_" + process.getId());
-		Transition ccCheck = addTauTransition(net, "ad-hoc_ccCheck_" + process.getId());
-		Transition finalize = addTauTransition(net, "ad-hoc_finalize_" + process.getId());
-		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
-		addFlowRelationship(net, updatedState, ccCheck);
-		addFlowRelationship(net, execState, ccCheck);
-		addFlowRelationship(net, ccCheck, execState);
-		addFlowRelationship(net, ccCheck, ccStatus);
 		
-		if (process.isParallelOrdering() && abortWhenFinalize) {
-			// parallel ad-hoc construct with abortion of tasks when completion condition is true -------------------------------
-			
-			//	synchronization and completionCondition checks(enableStarting, enableFinishing)
-			Place enableStarting = addPlace(net, "ad-hoc_enableStarting_" + process.getId());
-			Place enableFinishing = addPlace(net, "ad-hoc_enableFinishing_" + process.getId());
-			addFlowRelationship(net, startT, enableStarting);
-			addFlowRelationship(net, startT, enableFinishing);
-			
-			addFlowRelationship(net, enableStarting, defaultEndT);
-			addFlowRelationship(net, enableFinishing, defaultEndT);
-			
-			addFlowRelationship(net, enableStarting, ccCheck);
-			
-			addFlowRelationship(net, resume, enableStarting);
-			addFlowRelationship(net, resume, enableFinishing);
-			
-			// TODO: add guard expressions			
-			addFlowRelationship(net, ccStatus, resume); //guard expression: ccStatus == false
-			addFlowRelationship(net, ccStatus, finalize); // guard expression: ccStatus == true
-			
-			// task specific constructs
-			for (ExecTask exTask : taskList) {
-				// execution(enabledP, executedP, connections in between)
-				Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
-				Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
-				addFlowRelationship(net, startT, enabled);
-				addFlowRelationship(net, enabled, exTask.tr_enable);
-				addFlowRelationship(net, enableStarting, exTask.tr_allocate);
-				addFlowRelationship(net, exTask.tr_allocate, enableStarting);
-				addFlowRelationship(net, enableFinishing, exTask.tr_finish);
-				addFlowRelationship(net, exTask.tr_finish, executed);		
-				addFlowRelationship(net, exTask.tr_finish, updatedState);
+//		String completionConditionString = getCompletionConditionString(process);
+		// TODO (Stefan)!!!
+		Transition finalize = addFormTransition(net, "ad-hoc_finalize_" + process.getId(), "FINALIZE", null, null, null);
+//		finalize.setGuard("true");
+		Transition resume = addFormTransition(net, "ad-hoc_resume_" + process.getId(), "RESUME", null, null, null);
+//		resume.setGuard("false" );
+		
 
-				if (exTask.isSkippable()) {
-					addFlowRelationship(net, enableStarting, exTask.tr_skip);
-					addFlowRelationship(net, exTask.tr_skip, enableStarting);
-				}
-				
-				// finishing construct(finalize with skip, finish, abort and leave_suspend)
-				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
-				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
-				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
-				Transition finish = addTauTransition(net, "ad-hoc_finish_task_"	+ exTask.getId());
-				Transition abort = addTauTransition(net, "ad-hoc_abort_task_" + exTask.getId());
-				Transition leaveSuspended = addTauTransition(net, "ad-hoc_leave_suspended_task_" + exTask.getId());
-				
-				addFlowRelationship(net, finalize, enableFinalize);
-				
-				addFlowRelationship(net, enableFinalize, skip);
-				addFlowRelationship(net, enabled, skip);
-				addFlowRelationship(net, skip, taskFinalized);
-				
-				addFlowRelationship(net, enableFinalize, finish);
-				addFlowRelationship(net, executed, finish);
-				addFlowRelationship(net, finish, taskFinalized);
-				
-				//TODO: remove ability to abort?
-				addFlowRelationship(net, enableFinalize, abort);
-				addFlowRelationship(net, exTask.pl_running, abort);
-				addFlowRelationship(net, abort, taskFinalized);
-					
-				addFlowRelationship(net, enableFinalize,  leaveSuspended);
-				addFlowRelationship(net, exTask.pl_suspended,  leaveSuspended);
-				addFlowRelationship(net,  leaveSuspended, taskFinalized);
-				
-				addFlowRelationship(net, taskFinalized, endT);	
-			}
-		}else if (process.isParallelOrdering() && !abortWhenFinalize) {
-			// parallel ad-hoc construct, running tasks can finish on their own after completion condition is true -------------
-			throw new NotImplementedException();
-		}else {
-			// sequential ad-hoc construct -----------------------------------------------------------------------------------------------
+		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
+		Place synch = addPlace(net, "ad-hoc_synch_" + process.getId());
+		addFlowRelationship(net, startT, synch);
+		addFlowRelationship(net, synch, defaultEndT);
 
-			// synchronization and completionCondition checks(synch, corresponds to enableStarting)
-			Place synch = addPlace(net, "ad-hoc_synch_" + process.getId());
-			addFlowRelationship(net, startT, synch);
-			addFlowRelationship(net, synch, defaultEndT);
+		addFlowRelationship(net, updatedState, resume); 
+		addFlowRelationship(net, updatedState, finalize); 
+		
+		if (isParallel){
+			addFlowRelationship(net, synch, finalize);
+		} else {
 			addFlowRelationship(net, resume, synch);
+		}
 
-			// TODO: add guard expressions
-			addFlowRelationship(net, ccStatus, resume); //guard expression: ccStatus == false
-			addFlowRelationship(net, ccStatus, finalize); // guard expression: ccStatus == true
-
-//			 task specific constructs
-			for (ExecTask exTask : taskList) {
-				// execution(enabledP, executedP, connections in between)
-				Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
-				Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
-				addFlowRelationship(net, startT, enabled);
-				addFlowRelationship(net, enabled, exTask.tr_enable);
+		// task specific constructs
+		for (ExecTask exTask : taskList) {
+			Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
+			Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
+			addFlowRelationship(net, startT, enabled);
+			addFlowRelationship(net, enabled, exTask.tr_enable);
+			if (isParallel){
+				addReadOnlyFlowRelationship(net, synch, exTask.tr_allocate);
+			} else {
 				addFlowRelationship(net, synch, exTask.tr_allocate);
-				addFlowRelationship(net, exTask.tr_finish, executed);
-				addFlowRelationship(net, exTask.tr_finish, updatedState);
-				addFlowRelationship(net, executed, defaultEndT);
-
-				if (exTask.isSkippable()) {
-					addFlowRelationship(net, synch, exTask.tr_skip);
-				}
-
-				// finishing construct(finalize with skip, finish and abort)
-				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
-				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
-				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
-				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
-				
-				addFlowRelationship(net, finalize, enableFinalize);
-				
-				addFlowRelationship(net, enableFinalize, skip);
-				addFlowRelationship(net, enabled, skip);
-				addFlowRelationship(net, skip, taskFinalized);
-				
-				addFlowRelationship(net, enableFinalize, finish);
-				addFlowRelationship(net, executed, finish);
-				addFlowRelationship(net, finish, taskFinalized);
-								
-				addFlowRelationship(net, taskFinalized, endT);	
 			}
+			addFlowRelationship(net, exTask.tr_finish, executed);
+			addFlowRelationship(net, exTask.tr_finish, updatedState);
+			addFlowRelationship(net, executed, defaultEndT);
+			if (exTask.isSkippable()) {
+				addFlowRelationship(net, synch, exTask.tr_skip);
+			}
+
+			// let completioncondition cheks access the context place
+			addReadOnlyFlowRelationship(net, exTask.pl_context, resume);
+			addReadOnlyFlowRelationship(net, exTask.pl_context, finalize);
+				
+			// finishing construct(finalize with skip, finish and abort)
+			Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
+			Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
+			Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
+			Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
+			
+			addFlowRelationship(net, finalize, enableFinalize);
+				
+			addFlowRelationship(net, enableFinalize, skip);
+			addFlowRelationship(net, exTask.pl_ready, skip);
+			addFlowRelationship(net, skip, taskFinalized);
+				
+			addFlowRelationship(net, enableFinalize, finish);
+			addFlowRelationship(net, executed, finish);
+			addFlowRelationship(net, finish, taskFinalized);
+						
+			addFlowRelationship(net, taskFinalized, endT);	
 		}
 	}
 	
@@ -587,7 +520,7 @@ public class ExecConverter extends Converter {
 	}
 	
 	public ExecFlowRelationship addReadOnlyExecFlowRelationship(PetriNet net,
-			de.hpi.petrinet.Node source, de.hpi.petrinet.Node target, String xsltURL) {	
+			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target, String xsltURL) {	
 		ExecFlowRelationship rel = addExecFlowRelationship(net, source, target, xsltURL);
 		if (rel == null){
 			return null;
@@ -606,7 +539,13 @@ public class ExecConverter extends Converter {
 		net.getTransitions().add(t);
 		return t;
 	}
+
 	
+	private String getCompletionConditionString(SubProcess adHocSubprocess){
+		assert (adHocSubprocess.isAdhoc());
+		return adHocSubprocess.getCompletionCondition();
+	}
+
 	public AutomaticTransition addAutomaticTransition(PetriNet net, String id, String label) {
 		AutomaticTransition t = ((ExecPNFactoryImpl)pnfactory).createAutomaticTransition();
 		t.setId(id);
@@ -623,4 +562,5 @@ public class ExecConverter extends Converter {
 		net.getPlaces().add(p);
 		return p;
 	}
+
 }

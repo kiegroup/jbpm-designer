@@ -8,6 +8,7 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.ControlFlow;
+import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.IntermediateEvent;
@@ -22,7 +23,6 @@ import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
-import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.petrinet.FlowRelationship;
@@ -32,8 +32,6 @@ import de.hpi.petrinet.PetriNetFactory;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.Transition;
-import de.hpi.execpn.impl.ExecPNFactoryImpl;
-import de.hpi.execpn.FormTransition;
 
 // TODO: handle termination events, throwing exceptions
 public abstract class Converter {
@@ -564,6 +562,16 @@ public abstract class Converter {
 		rel.setSource(source);
 		rel.setTarget(target);
 		net.getFlowRelationships().add(rel);
+		return rel;
+	}
+	
+	public FlowRelationship addReadOnlyFlowRelationship(PetriNet net,
+			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {	
+		FlowRelationship rel = addFlowRelationship(net, source, target);
+		if (rel == null){
+			return null;
+		}
+		rel.setMode(FlowRelationship.RELATION_MODE_READTOKEN);
 		return rel;
 	}
 
