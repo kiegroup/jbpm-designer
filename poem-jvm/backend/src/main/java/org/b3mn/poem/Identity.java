@@ -70,12 +70,12 @@ public class Identity {
 		return identity;
 	}
 	
-	public static Identity newModel(Identity owner, String title, String type, String mime_type, String language, String summary, String content) {
+	public static Identity newModel(Identity owner, String title, String type, String mime_type, String language, String summary, String svg, String content) {
 			Session session = Persistance.getSession();
 			Identity identity = (Identity) session.
 			createSQLQuery("select {identity.*} from identity(?)")
-			.addEntity("identity", Identity.class).setString(0, "/data/model/").uniqueResult();
-			identity.setUri("/data/model/" + identity.getId());
+			.addEntity("identity", Identity.class).setString(0, "/model/new").uniqueResult();
+			identity.setUri("/model/" + identity.getId());
 			
 			session.save(identity);
 			
@@ -85,6 +85,7 @@ public class Identity {
 			representation.setSummary(summary);
 			representation.setLanguage(language);
 			representation.setMime_type(mime_type);
+			representation.setSvg(svg);
 			representation.setContent(content);
 			session.save(representation);
 			
@@ -119,17 +120,30 @@ public class Identity {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Representation> getModels(String type, Date from, Date to) {
+	public List<Representation> getModels(String type, Date from, Date to, boolean owner, boolean is_shared, boolean is_public, boolean contributor, boolean reader) {
 		List<Representation> list = (List<Representation>) Persistance.getSession().
-		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r" +
-					" where (a.subject_name=:subject or a.subject_name='public')" +
-					" and r.type like :type and r.updated >= :from and r.updated <= :to" +
-					" and i.id=a.object_id and i.id=r.ident_id")
+		createSQLQuery("select DISTINCT ON(i.id) r.* from access as a, identity as i, representation as r " +
+					   "where ((a.subject_name=:subject or (a.subject_name='public' and :is_public)) " +
+            					"and r.type like :type " +
+            					"and r.updated >= :from and r.updated <= :to " +
+            					"and i.id=a.object_id and i.id=r.ident_id) " + 
+            			"and ( (:owner and context_name='ownership') " + 
+        					  "and ( (:is_shared and (select is_shared(i.id) > 0) ) " +
+        					         "or (not :is_shared)) " +
+            			"or (not :owner))" +
+            			"and ((:is_public and a.subject_name='public') or (not :is_public))" +
+            			"and ((:contributor and a.access_term='write') or (not :contributor))" +
+            			"and ((:reader and a.access_term='read' and (not a.subject_name='public')) or (not :reader))")
 		.addEntity("representation", Representation.class)
 	    .setString("subject", this.getUri())
 	    .setString("type", type)
 	    .setDate("from", from)
 	    .setDate("to", to)
+	    .setBoolean("owner", owner)
+	    .setBoolean("is_shared", is_shared)
+	    .setBoolean("is_public", is_public)
+	    .setBoolean("contributor", contributor)
+	    .setBoolean("reader", reader)
 	    .list();
 		Persistance.commit();
 		return list;

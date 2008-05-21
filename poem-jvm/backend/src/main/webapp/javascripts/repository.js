@@ -29,7 +29,7 @@ window.onbeforeunload = function() {
 */
 
 // reference local blank image
-Ext.BLANK_IMAGE_URL = '/poem-backend-1.0/ext/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = '/backend/ext/resources/images/default/s.gif';
 
 // create namespace
 Ext.namespace('Repository');
@@ -47,6 +47,7 @@ Repository.app = {
 	current_user: null,
 	
 	anonymous_user: "",
+	public_user:"public",
 	
     models: [], // saves all loaded models
     /**
@@ -178,9 +179,21 @@ Repository.app = {
 	 * @param {String} openid
 	 */
 	isAnonymousUser: function(openid) {
+		if( !openid ){ openid = Repository.app.current_user }
 		return this.equalUsers(openid, this.anonymous_user);
 	},
-	
+
+	/**
+	 * Checks whether a user is the public user, 
+	 * based on the definition that an empty string (!== null) identifies the anonymous user
+	 * 
+	 * @param {String} openid
+	 */
+	isPublicUser: function(openid) {
+		if( !openid ){ openid = Repository.app.current_user }
+		return this.equalUsers(openid, this.public_user);
+	},
+		
 	/**
 	 * creates a time string from milliseconds since 1. Januar 1970, 0:00:00 Uhr UTC (via new Date().getTime())
 	 * 
@@ -477,28 +490,51 @@ Repository.app = {
 
 		ORYX.Log.debug("Create new Model:%0",modeltype);
 		
-		var modelTypeObj;
 		
-		Repository.app.model_types.each(function(el){ 
-			if( el.id == modeltype ){
-				modelTypeObj = el
-			} 
-		});
-		
-		var stencilSetURI	= modelTypeObj ? modelTypeObj.uri : null;
-		
-		// If the server has sends not uri value, take the bpmn stencilset
-		stencilSetURI		= stencilSetURI ? stencilSetURI : '/stencilsets/bpmn/bpmn.json';
-		
-		var url = './new' + '?stencilset=' + stencilSetURI;
-
-		var editor = window.open( url );
-		window.setTimeout(
-			function() {
-				if(!editor || !editor.opener || editor.closed) {
+		var callback = function(){
+			var modelTypeObj;
+			
+			Repository.app.model_types.each(function(el){
+				if (el.id == modeltype) {
+					modelTypeObj = el
+				}
+			});
+			
+			var stencilSetURI = modelTypeObj ? modelTypeObj.uri : null;
+			
+			// If the server has sends not uri value, take the bpmn stencilset
+			stencilSetURI = stencilSetURI ? stencilSetURI : '/stencilsets/bpmn/bpmn.json';
+			
+			var url = './new' + '?stencilset=' + stencilSetURI;
+			
+			var editor = window.open(url);
+			window.setTimeout(function(){
+				if (!editor || !editor.opener || editor.closed) {
 					Ext.MessageBox.alert("Editor not started.", "The editor does not seem to be started yet. Please check, whether you have a popup blocker enabled and disable it or allow popups for this site. We will never display any commercials on this site.").setIcon(Ext.MessageBox.QUESTION)
 				}
 			}, 5000);
+		}
+		
+		if(Repository.app.isPublicUser()){
+	
+			Ext.Msg.show({
+			   title:'Message',
+			   msg: 'As a public user, you can not save a model. Do you want to model anyway?',
+			   buttons: Ext.Msg.YESNO,
+			   fn: function(btn, text){
+			   		if(btn == 'yes'){
+						callback();
+					}
+			   }
+			});
+					
+		} else {
+			
+			callback();
+			
+		}
+		
+		
 		
 	},
 	
@@ -572,7 +608,7 @@ Repository.app = {
 			Ext.Ajax.request({
 				method: "GET",
 				// TODO change URL to be dynamically
-				url: "/poem-backend-1.0/poem/model_types",
+				url: "/backend/poem/model_types",
 				success: function success(response, options) {
 					Repository.app.model_types  = Ext.util.JSON.decode(response.responseText);
 
@@ -603,23 +639,40 @@ Repository.app = {
 	},
 	
 	filterModelsByModelType: function(modeltype_id) {
-		//alert("Filter models by type: " + modeltype_id);
+						
 		this.filter = modeltype_id ? {type: modeltype_id} : {};
+		
 		this.updatePanels();
 	},
 	
-	filterModelsByAccess: function(access) {
+	filterModelsByAccessAndType: function(access, modeltype_id) {
+		
+		var newFilter = {};
+		
 		switch(access) {
-			case "owner": 
-				alert("filter models by access: show models I created (ia am owner of)")
+			case "my_processes": 
+				newFilter = {owner: true}
 				break;
-			case "shared":
-				alert("filter models by access: show models that are shared with me")
+			case "shared_processes":
+				newFilter = {owner: true, is_shared: true}
+				break;
+			case "contributor":
+				newFilter = {contributor: true}
+				break;
+			case "reader":
+				newFilter = {reader: true}
 				break;
 			case "public":
-				alert("filter models by access. show models that are public")
+				newFilter = {is_public: true}
 				break;
 		}
+		
+		if(modeltype_id){
+			newFilter['type'] = modeltype_id
+		}
+		
+		this.filter = newFilter;
+		this.updatePanels();
 	},
 	
 	/**
@@ -646,15 +699,15 @@ Repository.render = {
 		// TODO implement openid-login -- login or logout REQUIRES reload of repository!
 		this.openid_tpl = new Ext.XTemplate(
 			'<div id="oryx_repository_header" onmouseover="this.className = \'mouseover\'" onmouseout="this.className = \'\'">',
-				'<img src="/poem-backend-1.0/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>',
+				'<img src="/backend/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>',
 		
-				'<tpl if="this.isAnonymousUser(current_user) || this.isPublic(current_user)">',
-					'<form action="/poem-backend-1.0/consumer" method="post" id="openid_login">',
+				'<tpl if="this.isAnonymousUser(current_user) || this.isPublicUser(current_user)">',
+					'<form action="/backend/consumer" method="post" id="openid_login">',
 						'<div>',
 							'<span>',
-								'<img src="/poem-backend-1.0/images/repository/hpi.png" onclick="Repository.render.openid_tpl.changeOpenId(\'https://openid.hpi.uni-potsdam.de/user/username\', 39, 8)"/>',
-								'<img src="/poem-backend-1.0/images/repository/blogger.png" onclick="Repository.render.openid_tpl.changeOpenId(\'http://username.blogspot.com/\', 7, 8)"/>',
-								'<img src="/poem-backend-1.0/images/repository/myopenid.png" onclick="Repository.render.openid_tpl.changeOpenId(\'http://username.myopenid.com/  \', 7, 8)"/>',
+								'<img src="/backend/images/repository/hpi.png" onclick="Repository.render.openid_tpl.changeOpenId(\'https://openid.hpi.uni-potsdam.de/user/username\', 39, 8)"/>',
+								'<img src="/backend/images/repository/blogger.png" onclick="Repository.render.openid_tpl.changeOpenId(\'http://username.blogspot.com/\', 7, 8)"/>',
+								'<img src="/backend/images/repository/myopenid.png" onclick="Repository.render.openid_tpl.changeOpenId(\'http://username.myopenid.com/  \', 7, 8)"/>',
 							'</span>',
 							'<input type="text" name="openid_identifier" id="openid_login_openid" class="text gray" value="your.openid.net" onblur="if(this.value.replace(/^\s+/, \'\').replace(/\s+$/, \'\').length==0) {this.value=\'your.openid.net\'; this.className+=\' gray\';}" onfocus="this.className = this.className.replace(/ gray/ig, \'\'); if(this.value==\'your.openid.net\') this.value=\'\';" />',
 							'<input type="submit" class="button" value="login"/>',
@@ -662,8 +715,8 @@ Repository.render = {
 					'</form>',
 				'</tpl>',
 				
-				'<tpl if="!this.isAnonymousUser(current_user) && !this.isPublic(current_user)">',
-					'<form action="/poem-backend-1.0/logout.jsp" method="post" id="openid_login">',
+				'<tpl if="!this.isAnonymousUser(current_user) && !this.isPublicUser(current_user)">',
+					'<form action="/backend/logout.jsp" method="post" id="openid_login">',
 						'<div>',
 							'Hi, {current_user}',
 							'<input type="submit" class="button" value="logout"/>',
@@ -681,9 +734,12 @@ Repository.render = {
 					return Repository.app.isAnonymousUser(user);
 				},
 				
-				isPublic: function(user){
-					return user == "public"
+				isPublicUser: function(user){
+					ORYX.Log.debug("current user: >%0<", user);
+					// local function, due to scope
+					return Repository.app.isPublicUser(user);
 				},
+				
 				changeOpenId: function(url, start, size){
 					var o = document.getElementById('openid_login_openid');
 					o.value = url;
@@ -765,8 +821,7 @@ Repository.render = {
 				var is_owner = false;
 				
 				access.each(function(accessor){
-					if (Repository.app.isCurrentUser(accessor.subject) && 
-					    accessor.predicate == "owner") 
+					if ( (Repository.app.isCurrentUser(accessor.subject) || accessor.subject == "public") && accessor.predicate == "owner") 
 					{
 						is_owner = true;
 						return $break;
@@ -919,7 +974,7 @@ Repository.render = {
 					listeners : {
 						append: function(tree, parent, node, index) {
 							// add child nodes for the model types dynamically loaded from and offered by the server
-							if (node.id == "tree_node_processes_by_type") {
+							if (node.id == "models_by_type") {
 								Repository.app.loadModelTypes(function(model_types) {
 									model_types.each(function(modeltype) {
 										node.appendChild(
@@ -936,58 +991,117 @@ Repository.render = {
 											})
 										)
 									})
+									
+									node.collapse();
+								
 								})
+								
 							} // end of if (node.id == "tree_node_processes_by_type") {
+							
+							if(Repository.app.isPublicUser() && node.id == "all_items"){
+								parent.removeChild(node)
+							}
 						}
+						/*
+						load: function( parent ){
+							Repository.app.loadModelTypes(function(model_types) {
+								
+									parent.childNodes.each(function(child){
+										
+										model_types.each(function(modeltype) {
+											child.appendChild(
+												new Ext.tree.TreeNode({
+													text: modeltype.title,
+													leaf: true,
+													icon: modeltype.icon_url,
+													qtip: modeltype.description,
+													listeners: {
+														click: function() {
+															Repository.app.filterModelsByAccessAndType( child.id, modeltype.id );
+														}
+													}
+												})
+											)
+										})	
+										
+										if(child !== parent.firstChild){
+											child.collapse();
+										}										
+									})									
+								})
+						}*/
 					},
 					
 					
                     expanded: true,
-                    children: [/*{
-                        text: 'all processes',
-                        leaf: false,
-                        expanded: true,
-                        iconCls: "no-icon",
-                        children: [{
-                            text: "created by me",
-                            leaf: true,
+                    children: [{
+						text: 'All items',
+						id: 'all_items',
+						expanded: true,
+						listeners: {
+							click: function(){
+								Repository.app.filterModelsByAccessAndType();
+							}},
+						children: [{
+							text: 'My processes',
+							id: 'my_processes',
+							leaf: true,
 							listeners: {
 								click: function(){
-									Repository.app.filterModelsByAccess("owner");
+									Repository.app.filterModelsByAccessAndType('my_processes');
 								}
 							}
-                        }, {
-                            text: "shared with me",
-                            leaf: true,
+						}, {
+							text: 'My shared processes',
+							id: 'shared_processes',
+							leaf: true,
 							listeners: {
-								click: function() {
-									Repository.app.filterModelsByAccess("shared");
+								click: function(){
+									Repository.app.filterModelsByAccessAndType('shared_processes');
 								}
 							}
-                        }, {
-                            text: "public",
-                            leaf: true,
+						}, {
+							text: 'Me as a contributor',
+							id: 'contributor',
+							leaf: true,
 							listeners: {
-								click: function() {
-									Repository.app.filterModelsByAccess("public");
+								click: function(){
+									Repository.app.filterModelsByAccessAndType('contributor');
 								}
 							}
-                        }]
-                    }, */{
-                        text: 'processes by type',
-						id: "tree_node_processes_by_type",
-                        expanded: true,
+						}, {
+							text: 'Me as a reader',
+							id: 'reader',
+							leaf: true,
+							listeners: {
+								click: function(){
+									Repository.app.filterModelsByAccessAndType('reader');
+								}
+							}
+						}]
+					}, {
+						text: 'Models by type',
+						id: 'models_by_type',
+						expanded: true,
 						children: [{
-                            text: "show all",
-                        	iconCls: "no-icon",
-                            leaf: true,
+							text: 'Show all',
+							leaf: true,
 							listeners: {
-								click: function() {
-									Repository.app.filterModelsByModelType();
+								click: function(){
+									Repository.app.filterModelsByAccessAndType();
 								}
 							}
-                        }]
-                    }]
+						}]
+					}, {
+						text: 'Public',
+						id: 'public',
+						leaf: true,
+						listeners: {
+							click: function(){
+								Repository.app.filterModelsByAccessAndType('public');
+							}
+						}
+					}]
                 }),
                 rootVisible: false
             }, // model list
@@ -999,7 +1113,7 @@ Repository.render = {
 						{
 							text: 'Create new Model',
 							iconCls: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
-							icon: "/poem-backend-1.0/images/silk/shape_square_add.png",
+							icon: "/backend/images/silk/shape_square_add.png",
 							tooltip: {
 								text: 'Create a new model of the selected type',
 								autoHide: true
@@ -1032,7 +1146,7 @@ Repository.render = {
 						{
 							text: 'Refresh List',
 							iconCls: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
-							icon: "/poem-backend-1.0/images/silk/arrow_refresh.png",
+							icon: "/backend/images/silk/arrow_refresh.png",
 							tooltip: {
 								text: 'Updates the list of displayed models',
 								autoHide: true
@@ -1044,7 +1158,7 @@ Repository.render = {
 							id: "toolbar_filter_button",
 							text: 'remove filter',
 							iconCls: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
-							icon: "/poem-backend-1.0/images/silk/lightbulb.png",
+							icon: "/backend/images/silk/lightbulb.png",
 							tooltip: {
 								text: 'Click to remove the filter.',
 								autoHide: true

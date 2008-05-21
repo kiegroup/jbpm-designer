@@ -35,17 +35,20 @@ module Handler
     end
 
     def doPut(interaction)
-      representation = interaction.object.read
-      representation.setContent(interaction.params['data'])
-      representation.update
       interaction.response.setStatus(200)
     end
 
     def doPost(interaction)
-      representation = interaction.object.read
-      representation.setContent(interaction.params['data'])
-      representation.update
-      interaction.response.setStatus(200)
+      if(interaction.params['data'] && interaction.params['svg'])
+        representation = interaction.object.read
+        representation.setContent(interaction.params['data'])
+        representation.setSvg(interaction.params['svg'])
+        representation.update
+        interaction.response.setStatus(200)
+      else
+        interaction.response.setStatus(400)
+        out.println("data and/or svg missing")
+      end
     end
     
     def doDelete(interaction)

@@ -34,6 +34,7 @@ require 'model_handler'
 require 'collection_handler'
 require 'new_model_handler'
 require 'repository_handler'
+require 'java_handler'
 
 include_class 'org.b3mn.poem.Identity'
 include_class 'org.b3mn.poem.Access'
@@ -68,7 +69,10 @@ class Dispatcher
       access = scope.access(openid, Helper.getRelation(uri)) unless scope.nil?
       unless access.nil?
         if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
-          if (Handler.constants.include?(access.getTerm))
+          if (access.getScheme == 'java')
+            handler = Handler::JavaHandler.new
+            handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), Identity.instance(Helper.getObjectPath(uri)), nil, request, response, hostname), access.getTerm)
+          elsif (access.getScheme == 'ruby' && Handler.constants.include?(access.getTerm))
             handler = Handler.module_eval("#{access.getTerm}").new
             handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), Identity.instance(Helper.getObjectPath(uri)), Helper.getParams(request), request, response, hostname))
           else

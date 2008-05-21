@@ -42,6 +42,7 @@ public class Representation {
     private String summary;
     private Date created;
     private Date updated;
+    private String svg;
     private String content;
  
     
@@ -50,6 +51,12 @@ public class Representation {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+    public String getSvg() {
+		return svg;
+	}
+	public void setSvg(String svg) {
+		this.svg = svg;
 	}
 	public Date getCreated() {
 		return created;

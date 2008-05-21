@@ -1,29 +1,20 @@
 package de.hpi.execpn.impl;
 
 import de.hpi.execpn.AutomaticTransition;
+import de.hpi.petrinet.impl.LabeledTransitionImpl;
 import de.hpi.petrinet.impl.TauTransitionImpl;
 
 public class AutomaticTransitionImpl extends TauTransitionImpl implements AutomaticTransition {
 
-	protected String xsltURL;
-	protected boolean triggerManually;
-	protected String action;
-	protected String label;
-	
-	public String getXsltURL() {
-		return xsltURL;
+	private String label;
+	private String action;
+
+	public String getLabel() {
+		return label;
 	}
 
-	public void setXsltURL(String url) {
-		xsltURL = url;		
-	}
-
-	public boolean isManuallyTriggered() {
-		return triggerManually;
-	}
-
-	public void setManuallyTriggered(boolean triggerManually) {
-		this.triggerManually = triggerManually;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public String getAction() {
@@ -34,12 +25,4 @@ public class AutomaticTransitionImpl extends TauTransitionImpl implements Automa
 		this.action = action;
 	}
 
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	
 }

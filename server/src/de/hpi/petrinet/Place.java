@@ -1,5 +1,7 @@
 package de.hpi.petrinet;
 
-public interface Place extends Node {
+import de.hpi.bpmn.ExecDataObject.Type;
 
+public interface Place extends Node {
+	
 }

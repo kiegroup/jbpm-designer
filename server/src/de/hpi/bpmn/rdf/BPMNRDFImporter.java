@@ -378,8 +378,8 @@ public class BPMNRDFImporter {
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 
 				if (attribute.equals("isskippable")) {
-					String adHocValue = getContent(n);
-					if (adHocValue != null && adHocValue.equals("true")) {
+					String skippableValue = getContent(n);
+					if (skippableValue != null && skippableValue.equals("true")) {
 						task.setSkippable(true);
 					} else {
 						task.setSkippable(false);
@@ -442,7 +442,7 @@ public class BPMNRDFImporter {
 						sp.setAdhoc(false);
 					}
 				}
-				else if (attribute.equals("AdHocOrdering")) {
+				else if (attribute.equals("adhocordering")) {
 					// standard case is sequential ordering
 					String ordering = getContent(n);
 					if (ordering.equals("Parallel")) {
@@ -450,7 +450,7 @@ public class BPMNRDFImporter {
 					} else {
 						sp.setParallelOrdering(false);
 					}
-				} else if (attribute.equals("AdHocCompletionCondition")) {
+				} else if (attribute.equals("adhoccompletioncondition")) {
 					sp.setCompletionCondition(getContent(n));					
 				} else {
 					handleStandardAttributes(attribute, n, sp, c, "name");

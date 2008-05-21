@@ -73,15 +73,7 @@ public class ToolspecificPNMLHelper {
 	}
 	
 	
-	void setFireTypeManual(Document doc, Element parent, boolean triggerManually) {
-		Element fire = (Element)parent.appendChild(doc.createElement("fire"));
-		if (triggerManually){
-			fire.setAttribute("type", "manual");
-		}else{
-			fire.setAttribute("type", "automatic");
-		}
-	}
-	
+
 	void setFireXsltURL(Document doc, Element parent, String url) {
 		Element fire;
 		if (!hasChildWithName(parent, "fire")){	

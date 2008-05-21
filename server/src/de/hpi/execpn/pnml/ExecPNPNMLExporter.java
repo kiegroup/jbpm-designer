@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import de.hpi.execpn.AutomaticTransition;
+import de.hpi.execpn.TransformationTransition;
 import de.hpi.execpn.ExecFlowRelationship;
 import de.hpi.execpn.ExecPetriNet;
 import de.hpi.execpn.FormTransition;
@@ -15,6 +16,7 @@ import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.ExecPlace;
 import de.hpi.petrinet.Transition;
 import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
 
@@ -41,6 +43,7 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			Transition transition) {
 		Element tnode = super.appendTransition(doc, netnode, transition);
 		Element ts = tsHelper.addToolspecificElement(doc, tnode);
+		
 		if (!tsHelper.hasChildWithName(tnode, "name")){
 			Node n1node = tnode.appendChild(doc.createElement("name"));
 			addContentElement(doc, n1node, "value", transition.getId());
@@ -50,32 +53,30 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		if (transition instanceof FormTransition) {
 			FormTransition formT = (FormTransition) transition;
 			tsHelper.addModelReference(doc, ts, formT.getModelURL());
-			tnode.setAttribute("type", "receive");
 			tsHelper.addFormAndBindings(doc, ts, formT.getFormURL(), formT.getBindingsURL());
-		} else /*if (transition instanceof AutomaticTransition)*/{
-			tnode.setAttribute("type", "automatic");
 		}
 		
-		if (transition instanceof LabeledTransition) {
-			LabeledTransition lTrans = (LabeledTransition) transition;
-			if (lTrans.getAction() != null) {
+		if (transition instanceof TransformationTransition) {
+			TransformationTransition lTrans = (TransformationTransition) transition;
+			if (lTrans.getXsltURL() != null) {
+				tsHelper.setFireXsltURL(doc, ts, lTrans.getXsltURL());
+			}
+
+			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
 				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
 			}
 		}
 		
-		if (transition instanceof AutomaticTransition) {
-			AutomaticTransition auto = (AutomaticTransition) transition;
-			tsHelper.setFireTypeManual(doc, ts, auto.isManuallyTriggered());
-			if (auto.getXsltURL() != null) {
-				tsHelper.setFireXsltURL(doc, ts, auto.getXsltURL());
+		if (transition instanceof LabeledTransition) {
+			LabeledTransition lTrans = (LabeledTransition) transition;
+			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
+				tsHelper.setTaskAndAction(doc, ts, lTrans.getLabel(), lTrans.getAction());
 			}
-			if (auto.isManuallyTriggered()){
-				tnode.setAttribute("type", "receive");
-			}else{
-				tnode.setAttribute("type", "automatic");
-			}
+
+			tnode.setAttribute("type", "receive");
+		} else {
+			tnode.setAttribute("type", "automatic");
 		}
-		
 		if (transition.getGuard() != null) {
 			tsHelper.setGuard(doc, ts, transition.getGuard());
 		}
@@ -100,6 +101,17 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 	protected Element appendPlace(Document doc, Node netnode, PetriNet net,
 			Place place) {
 		Element pnode = super.appendPlace(doc, netnode, net, place);
+		
+		// set type of Place and add data model to DataPlace
+		if (place instanceof ExecPlace) {
+			ExecPlace execplace = ((ExecPlace)place);
+			pnode.setAttribute("type", execplace.getType().toString());
+			if (execplace.getType() == ExecPlace.Type.data)
+				addContentElement(doc, pnode, "model", execplace.getModel());
+		}
+		else
+			pnode.setAttribute("type", ExecPlace.Type.flow.toString());
+		
 
 		Node n1node = pnode.appendChild(doc.createElement("name"));
 		addContentElement(doc, n1node, "value", place.getId());

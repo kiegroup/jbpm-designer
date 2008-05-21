@@ -53,6 +53,10 @@ class Dbroot < ActiveRecord::Migration
         select '/access', 'ruby', 'AccessHandler', 'edit access';
       insert into "plugin"(rel, scheme, term, title)
         select '/info-access', 'ruby', 'MetaHandler', 'About';
+      insert into plugin (rel, scheme, term, title) 
+        select '/pdf', 'java', 'PdfRenderer', 'Model as PDF';
+        insert into plugin (rel, scheme, term, title) 
+          select '/svg', 'java', 'SvgRenderer', 'Model as SVG';
     }
 
   end

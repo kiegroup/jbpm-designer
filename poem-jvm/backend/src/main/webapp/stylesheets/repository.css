@@ -1,6 +1,6 @@
 body {
 	background-color: #0102ac;
-	background-image: url(/poem-backend-1.0/images/style/bluescreen.jpg);
+	background-image: url(/backend/images/style/bluescreen.jpg);
 	background-position: top center;
 	background-repeat: no-repeat;
 }
@@ -17,7 +17,7 @@ body, td, input, textarea {
 }
 
 .ajax_loader {
-	background-image: url(/poem-backend-1.0/images/repository/ajax-loader.gif);
+	background-image: url(/backend/images/repository/ajax-loader.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 }
@@ -184,7 +184,7 @@ body, td, input, textarea {
  */
 
 .create_model_menu {
-	background-image: url(/poem-backend-1.0/images/silk/shape_square_add.png) !important;
+	background-image: url(/backend/images/silk/shape_square_add.png) !important;
 	background-repeat: no-repeat;
 }
 
@@ -192,7 +192,7 @@ body, td, input, textarea {
 .edit_model_button,
 .delete_model_button,
 .view_model_button {
-	background-image: url(/poem-backend-1.0/images/silk/pencil.png) !important;
+	background-image: url(/backend/images/silk/pencil.png) !important;
 	background-repeat: no-repeat;
 	position: absolute;
 	right: 20px;
@@ -210,16 +210,16 @@ body, td, input, textarea {
 } 
 
 .view_model_button {
-	background-image: url(/poem-backend-1.0/images/silk/magnifier.png) !important;
+	background-image: url(/backend/images/silk/magnifier.png) !important;
 }
 
 .start_model_button {
 	right: 40px;
-	background-image: url(/poem-backend-1.0/images/silk/shape_square_go.png) !important;
+	background-image: url(/backend/images/silk/shape_square_go.png) !important;
 }
 
 .delete_model_button {
 	right: 0px;
-	background-image: url(/poem-backend-1.0/images/silk/delete.png) !important;
+	background-image: url(/backend/images/silk/delete.png) !important;
 }
 

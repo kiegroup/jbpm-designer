@@ -29,5 +29,9 @@
 	<g id="compensation">
 		<path oryx:anchors="bottom" fill="black" stroke="black" d="M 62 74 L 66 70 L 66 78 L 62 74 L 62 70 L 58 74 L 62 78 L 62 74" stroke-width="1" />
 	</g>
+	<g id="isskippable">
+	   	<text style="font-size:14px;font-family:Ariel" id="skippable-text" x="90" y="10" oryx:align="middle center" stroke="green">?</text>
+	</g>
+	
   </g>
 </svg>
