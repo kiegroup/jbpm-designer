@@ -11,6 +11,6 @@
   </oryx:magnets>
   <g pointer-events="fill">
     <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1"/>
-    <polyline stroke="black" fill="none" stroke-width="1" points="8,11 8,21 24,21 24,11 8,11 16,17 24,11" />
+    <polyline stroke="black" fill="none" stroke-width="1.4" points="8,11 8,21 24,21 24,11 8,11 16,17 24,11" />
   </g>
 </svg>

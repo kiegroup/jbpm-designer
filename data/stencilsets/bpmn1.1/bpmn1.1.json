@@ -3567,12 +3567,12 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateEvent",
+			"id":"IntermediateEventCatching",
 			"title":"Intermediate event",
-			"groups":["Intermediate Events"],
+			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.intermediate.svg",
-			"icon":"new_intermediateevent.png",
+			"icon":"intermediateevent/node.event.none.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -3580,7 +3580,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -3685,12 +3686,12 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateMessageEvent",
+			"id":"IntermediateMessageEventCatching",
 			"title":"Intermediate message event",
-			"groups":["Intermediate Events"],
+			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate message event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.message.intermediate.svg",
-			"icon":"new_messageevent.png",
+			"icon":"intermediateevent/node.event.message.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -3698,7 +3699,9 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
+				
 			],
 			"properties": [
 				{
@@ -3764,6 +3767,20 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Catching",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "messageCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "messageThrowing"}
+						]
 				},
 				{
 					"id":"trigger",
@@ -3844,12 +3861,12 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateTimerEvent",
-			"title":"Intermediate timer event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate timer event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.timer.intermediate.svg",
-			"icon":"new_timerevent.png",
+			"id":"IntermediateMessageEventThrowing",
+			"title":"Intermediate message event",
+			"groups":["Intermediate Events Throwing"],
+			"description":"An intermediate message event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.message.intermediate.svg",
+			"icon":"intermediateevent/node.event.message.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -3857,7 +3874,182 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"eventType",
+					"type":"String",
+					"title":"EventType",
+					"value":"Intermediate",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Throwing",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "messageCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "messageThrowing"}
+						]
+				},
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"value":"Message",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"Target",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"message",
+					"type":"String",
+					"title":"Message",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"implementation",
+					"type":"Choice",
+					"title":"Implementation",
+					"value":"Web Service",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"webservice",
+							"title":"c1",
+							"value":"Web Service",
+							"refToView":""
+						},
+						{
+							"id":"other",
+							"title":"c2",
+							"value":"Other",
+							"refToView":""
+						},
+						{
+							"id":"unspecified",
+							"title":"c3",
+							"value":"Unspecified",
+							"refToView":""
+						}
+					]
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"frame",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateTimerEventCatching",
+			"title":"Intermediate timer event",
+			"groups":["Intermediate Events Catching"],
+			"description":"An intermediate timer event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.timer.intermediate.svg",
+			"icon":"intermediateevent/node.timerevent.intermediate.png",
+			"roles":[
+				"sequence_start",
+				"sequence_end",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"tc",
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -3985,10 +4177,10 @@
 			"type": "node",
 			"id":"IntermediateErrorEvent",
 			"title":"Intermediate error event",
-			"groups":["Intermediate Events"],
+			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate error event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.error.intermediate.svg",
-			"icon":"new_errorevent.png",
+			"icon":"intermediateevent/node.event.error.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -3996,7 +4188,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -4114,10 +4307,10 @@
 			"type": "node",
 			"id":"IntermediateCancelEvent",
 			"title":"Intermediate cancel event",
-			"groups":["Intermediate Events"],
+			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate cancel event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.cancel.intermediate.svg",
-			"icon":"new_cancelevent.png",
+			"icon":"intermediateevent/node.event.cancel.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -4125,7 +4318,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -4230,12 +4424,12 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateCompensationEvent",
+			"id":"IntermediateCompensationEventCatching",
 			"title":"Intermediate compensation event",
-			"groups":["Intermediate Events"],
+			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate compensation event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.compensation.intermediate.svg",
-			"icon":"new_compensationevent.png",
+			"icon":"intermediateevent/node.event.compensation.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -4243,7 +4437,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -4311,6 +4506,20 @@
 					"length":""
 				},
 				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Catching",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "compensationCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "compensationThrowing"}
+						]
+				},
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4359,12 +4568,12 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateRuleEvent",
-			"title":"Intermediate rule event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate rule event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.rule.intermediate.svg",
-			"icon":"new_ruleevent.png",
+			"id":"IntermediateCompensationEventThrowing",
+			"title":"Intermediate compensation event",
+			"groups":["Intermediate Events Throwing"],
+			"description":"An intermediate compensation event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.compensation.intermediate.svg",
+			"icon":"intermediateevent/node.event.compensation.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -4372,7 +4581,152 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"eventType",
+					"type":"String",
+					"title":"EventType",
+					"value":"Intermediate",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Throwing",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "compensationCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "compensationThrowing"}
+						]
+				},
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"value":"Compensation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"Target",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"activity",
+					"type":"String",
+					"title":"Activity",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"frame",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateConditionalEvent",
+			"title":"Intermediate conditional event",
+			"groups":["Intermediate Events Catching"],
+			"description":"An intermediate rule event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.conditional.intermediate.svg",
+			"icon":"intermediateevent/node.event.conditional.intermediate.png",
+			"roles":[
+				"sequence_start",
+				"sequence_end",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"tc",
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -4462,9 +4816,9 @@
 					"length":""
 				},
 				{
-					"id":"ruleName",
+					"id":"condition",
 					"type":"String",
-					"title":"RuleName",
+					"title":"Condition",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -4488,12 +4842,12 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateLinkEvent",
+			"id":"IntermediateLinkEventCatching",
 			"title":"Intermediate link event",
-			"groups":["Intermediate Events"],
+			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate link event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.link.intermediate.svg",
-			"icon":"new_linkevent.png",
+			"icon":"intermediateevent/node.event.link.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -4501,7 +4855,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -4567,6 +4922,20 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Catching",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "linkCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "linkThrowing"}
+						]
 				},
 				{
 					"id":"trigger",
@@ -4628,12 +4997,12 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateMultipleEvent",
-			"title":"Intermediate multiple event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate multiple event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.multiple.intermediate.svg",
-			"icon":"new_multipleevent.png",
+			"id":"IntermediateLinkEventThrowing",
+			"title":"Intermediate link event",
+			"groups":["Intermediate Events Throwing"],
+			"description":"An intermediate link event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.link.intermediate.svg",
+			"icon":"intermediateevent/node.event.link.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -4641,7 +5010,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -4709,6 +5079,175 @@
 					"length":""
 				},
 				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Throwing",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "linkCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "linkThrowing"}
+						]
+				},
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"value":"Link",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"Target",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"linkId",
+					"type":"String",
+					"title":"LinkId",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"processRef",
+					"type":"String",
+					"title":"ProcessRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"frame",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateMultipleEventCatching",
+			"title":"Intermediate multiple event",
+			"groups":["Intermediate Events Catching"],
+			"description":"An intermediate multiple event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.multiple.intermediate.svg",
+			"icon":"intermediateevent/node.event.multiple.catching.intermediate.png",
+			"roles":[
+				"sequence_start",
+				"sequence_end",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"tc",
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"eventType",
+					"type":"String",
+					"title":"EventType",
+					"value":"Intermediate",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Catching",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "middlePolygonCatching" },
+						{ id: "throwing",       title: "c1", value: "Throwing",     refToView: "middlePolygonThrowing"}
+						]
+				},
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4758,6 +5297,465 @@
 		},
 		{
 			"type": "node",
+			"id":"IntermediateMultipleEventThrowing",
+			"title":"Intermediate multiple event",
+			"groups":["Intermediate Events Throwing"],
+			"description":"An intermediate multiple event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.multiple.intermediate.svg",
+			"icon":"intermediateevent/node.event.multiple.throwing.intermediate.png",
+			"roles":[
+				"sequence_start",
+				"sequence_end",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"tc",
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"eventType",
+					"type":"String",
+					"title":"EventType",
+					"value":"Intermediate",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Throwing",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "middlePolygonCatching" },
+						{ id: "throwing",       title: "c1", value: "Throwing",     refToView: "middlePolygonThrowing"}
+						]
+				},
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"Target",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"triggers",
+					"type":"String",
+					"title":"Triggers",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"frame",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateSignalEventCatching",
+			"title":"Intermediate signal event",
+			"groups":["Intermediate Events Catching"],
+			"description":"An intermediate multiple event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.signal.intermediate.svg",
+			"icon":"intermediateevent/node.event.signal.catching.intermediate.png",
+			"roles":[
+				"sequence_start",
+				"sequence_end",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"tc",
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"eventType",
+					"type":"String",
+					"title":"EventType",
+					"value":"Intermediate",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Catching",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "signalCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "signalThrowing"}
+						]
+				},
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"Target",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"triggers",
+					"type":"String",
+					"title":"Triggers",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},	
+				{
+					"id":"signalRef",
+					"type":"String",
+					"title":"SignalRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":false
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"frame",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateSignalEventThrowing",
+			"title":"Intermediate signal event",
+			"groups":["Intermediate Events Throwing"],
+			"description":"An intermediate multiple event with incoming and outgoing edges.",
+			"view":"intermediateevent/node.event.signal.intermediate.svg",
+			"icon":"intermediateevent/node.event.signal.throwing.intermediate.png",
+			"roles":[
+				"sequence_start",
+				"sequence_end",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"tc",
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"eventType",
+					"type":"String",
+					"title":"EventType",
+					"value":"Intermediate",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"value":"Throwing",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{ id: "catching",     title: "c1", value: "Catching",     refToView: "signalCatching" },
+						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "signalThrowing"}
+						]
+				},
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"Target",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"triggers",
+					"type":"String",
+					"title":"Triggers",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},	
+				{
+					"id":"signalRef",
+					"type":"String",
+					"title":"SignalRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":false
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"frame",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
 			"id":"MessageEndEvent",
 			"title":"Message end event",
 			"groups":["Endevents"],
@@ -4771,7 +5769,7 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all"				
 			],
 			"properties": [
 				{
@@ -6642,7 +7640,7 @@
 					}
 				]
 			},
-			{
+			/*{
 				"role":"IntermediateEvent",
 				"connects": [
 					{
@@ -6650,8 +7648,17 @@
 						"to":["IntermediateEvent"]
 					}
 				]
-			},
+			},*/
 			{
+				"role":"IntermediateEventOnActivityBoundary",
+				"connects": [
+					{
+						"from":"Task",
+						"to":["IntermediateEventOnActivityBoundary"]
+					}
+				]
+			},
+			/*{
 				"role":"IntermediateMessageEvent",
 				"connects": [
 					{
@@ -6722,7 +7729,16 @@
 						"to":["IntermediateMultipleEvent"]
 					}
 				]
-			}
+			},
+			{
+				"role":"IntermediateSignalEvent",
+				"connects": [
+					{
+						"from":"Task",
+						"to":["IntermediateMultipleEvent"]
+					}
+				]
+			}*/
 		],
 		"cardinalityRules": [
 			{
@@ -6803,9 +7819,20 @@
 				contains: ["tc"]
 			}
 		],
+		canConnect: function(args) { 
+			
+			if((args.sourceStencil.id() === args.sourceStencil.namespace()+"Task") ){
+				console.log("ConnectionTest for Task activity\n");
+				console.log("TargetStencils: %s\n",args.targetStencil.toString());
+				/*if(args.targetStencil.property("behavior").value === "Throwing") {
+					return false;*/
+			}
+			return true; 
+		}
+		
 //		canConnect: function(args) { 
 //			if(args.result) {
-//				if(args.sourceShape.parent.parent.id == args.targetShape.parent.parent.id) {
+//				if(args.sourceShape.parent.parent.id() == args.targetShape.parent.parent.id) {
 //						args.result = false;
 //				}
 //			}
