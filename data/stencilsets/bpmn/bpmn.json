@@ -2373,7 +2373,7 @@
 		{
 			"type": "node",
 			"id":"Lane",
-			"title":"Lanes",
+			"title":"Lane",
 			"groups":["Swimlanes"],
 			"description":"",
 			"view":"swimlane/node.lane.svg",
@@ -2791,8 +2791,8 @@
 		{
 			"type": "node",
 			"id":"StartEvent",
-			"title":"Start event",
-			"groups":["Startevents"],
+			"title":"Start Event",
+			"groups":["Start Events"],
 			"description":"An event without incoming edges.",
 			"view":"startevent/node.event.start.svg",
 			"icon":"new_startevent.png",		
@@ -2898,8 +2898,8 @@
 		{
 			"type": "node",
 			"id":"StartMessageEvent",
-			"title":"Start message event",
-			"groups":["Startevents"],
+			"title":"Start Message Event",
+			"groups":["Start Events"],
 			"description":"A message event without incoming edges.",
 			"view":"startevent/node.event.message.start.svg",
 			"icon":"new_messageevent.png",
@@ -3046,8 +3046,8 @@
 		{
 			"type": "node",
 			"id":"StartTimerEvent",
-			"title":"Start timer event",
-			"groups":["Startevents"],
+			"title":"Start Timer Event",
+			"groups":["Start Events"],
 			"description":"A timer event without incoming edges.",
 			"view":"startevent/node.event.timer.start.svg",
 			"icon":"new_timerevent.png",
@@ -3174,8 +3174,8 @@
 		{
 			"type": "node",
 			"id":"StartRuleEvent",
-			"title":"Start rule event",
-			"groups":["Startevents"],
+			"title":"Start Rule Event",
+			"groups":["Start Events"],
 			"description":"A rule event without incoming edges.",
 			"view":"startevent/node.event.rule.start.svg",
 			"icon":"new_ruleevent.png",
@@ -3292,8 +3292,8 @@
 		{
 			"type": "node",
 			"id":"StartLinkEvent",
-			"title":"Start link event",
-			"groups":["Startevents"],
+			"title":"Start Link Event",
+			"groups":["Start Events"],
 			"description":"A link event without incoming edges.",
 			"view":"startevent/node.event.link.start.svg",
 			"icon":"new_linkevent.png",
@@ -3421,8 +3421,8 @@
 		{
 			"type": "node",
 			"id":"StartMultipleEvent",
-			"title":"Start multiple event",
-			"groups":["Startevents"],
+			"title":"Start Multiple Event",
+			"groups":["Start Events"],
 			"description":"A multiple event without incoming edges.",
 			"view":"startevent/node.event.multiple.start.svg",
 			"icon":"new_multipleevent.png",
@@ -3540,7 +3540,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateEvent",
-			"title":"Intermediate event",
+			"title":"Intermediate Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.intermediate.svg",
@@ -3658,7 +3658,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateMessageEvent",
-			"title":"Intermediate message event",
+			"title":"Intermediate Message Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate message event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.message.intermediate.svg",
@@ -3817,7 +3817,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateTimerEvent",
-			"title":"Intermediate timer event",
+			"title":"Intermediate Timer Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate timer event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.timer.intermediate.svg",
@@ -3956,7 +3956,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateErrorEvent",
-			"title":"Intermediate error event",
+			"title":"Intermediate Error Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate error event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.error.intermediate.svg",
@@ -4085,7 +4085,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateCancelEvent",
-			"title":"Intermediate cancel event",
+			"title":"Intermediate Cancel Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate cancel event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.cancel.intermediate.svg",
@@ -4203,7 +4203,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateCompensationEvent",
-			"title":"Intermediate compensation event",
+			"title":"Intermediate Compensation Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate compensation event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.compensation.intermediate.svg",
@@ -4332,7 +4332,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateRuleEvent",
-			"title":"Intermediate rule event",
+			"title":"Intermediate Rule Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate rule event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.rule.intermediate.svg",
@@ -4461,7 +4461,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateLinkEvent",
-			"title":"Intermediate link event",
+			"title":"Intermediate Link Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate link event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.link.intermediate.svg",
@@ -4601,7 +4601,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateMultipleEvent",
-			"title":"Intermediate multiple event",
+			"title":"Intermediate Multiple Event",
 			"groups":["Intermediate Events"],
 			"description":"An intermediate multiple event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.multiple.intermediate.svg",
@@ -4731,8 +4731,8 @@
 		{
 			"type": "node",
 			"id":"EndEvent",
-			"title":"End event",
-			"groups":["Endevents"],
+			"title":"End Event",
+			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
 			"view":"endevent/node.event.end.svg",
 			"icon":"new_event_end.png",
@@ -4966,7 +4966,7 @@
 		{
 			"type": "edge",
 			"id":"SequenceFlow",
-			"title":"Sequence flow",
+			"title":"Sequence Flow",
 			"description":"",
 			"groups":["Connecting Objects"],
 			"view":"connection/connection.sequenceflow.normal.svg",
@@ -5064,7 +5064,7 @@
 		{
 			"type": "edge",
 			"id":"ConditionalFlow",
-			"title":"Conditional flow",
+			"title":"Conditional Flow",
 			"description":"",
 			"groups":["Connecting Objects"],
 			"view":"connection/connection.sequenceflow.conditional.svg",
@@ -5172,7 +5172,7 @@
 		{
 			"type": "edge",
 			"id":"DefaultFlow",
-			"title":"Default flow",
+			"title":"Default Flow",
 			"description":"",
 			"groups":["Connecting Objects"],
 			"view":"connection/connection.sequenceflow.default.svg",
@@ -5531,7 +5531,7 @@
 		{
 			"type": "edge",
 			"id":"MessageFlow",
-			"title":"Message flow",
+			"title":"Message Flow",
 			"description":"",
 			"groups":["Connecting Objects"],
 			"view":"connection/connection.messageflow.svg",
