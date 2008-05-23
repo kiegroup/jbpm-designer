@@ -154,8 +154,7 @@ var DataManager = {
 			
 			// object is literal
 			DataManager.graft(XMLNS.XHTML,
-				document.getElementsByTagNameNS(XMLNS.XHTML,
-				'body').item(0), [
+				$("processdata"), [
 				
 				'div', {'id': id}, [
 					'a', { 'href': 'http://www.apfelfabrik.de/dummyresource', 'rel':'raziel-entry' }]
@@ -858,8 +857,7 @@ ResourceManager = {
 					
 					// store div in DOM
 					
-					document.getElementsByTagNameNS(XMLNS.XHTML,
-						'body').item(0).appendChild(div.cloneNode(true));
+					$("processdata").appendChild(div.cloneNode(true));
 
 					// parse local erdf data once more.
 					
@@ -1105,8 +1103,7 @@ ResourceManager = {
 				localDiv.parentNode.removeChild(localDiv);
 				
 				// store div in DOM
-				document.getElementsByTagNameNS(XMLNS.XHTML,
-					'body').item(0).appendChild(div.cloneNode(true));
+				$("processdata").item(0).appendChild(div.cloneNode(true));
 				DataManager.__synclocal();
 				break;
 
