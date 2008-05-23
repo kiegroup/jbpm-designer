@@ -48,6 +48,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			'index': 0,
 			'minShape': 1,
 			'maxShape': 1
+			// TODO Cuntextflaeche weg..
 		});
 	},
 	
@@ -74,7 +75,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 	
 		/*
 		 * 	load relevant data
-		 */ 
+		 */ 	
 		var oldCC = adHocActivity.properties['oryx-adhoccompletioncondition'];
 		var taskArrayFields = ['resourceID', 'resourceName'];
 		var taskArray = []; 
@@ -82,6 +83,8 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		var stateArray = [ ['ready'], ['skipped'], ['completed'] ];
 		var dataStoreFields = ['resourceID', 'resourceName'];
 		var dataStore
+		
+		var askedToSave = false;
 		
 		var childNodes = adHocActivity.getChildNodes();
 		for (var i = 0; i < childNodes.length; i++) {
@@ -97,6 +100,8 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			}
 		}
 		
+		// TODO integrate data!
+				
 		/*
 		 * 	initialiaze UI
 		 */ 
@@ -110,6 +115,11 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
     		data : stateArray
 		});
 		
+		var dataStore = new Ext.data.SimpleStore({
+   			fields: dataStoreFields,
+    		data : dataStore
+		});
+		
 		var taskCombo = new Ext.form.ComboBox({
     		store: taskStore,
 			valueField: taskArrayFields[0],
@@ -119,7 +129,8 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
     		mode: 'local',
     		triggerAction: 'all',
    			selectOnFocus: true,
-			editable: false
+			editable: false,
+			width: 180
 		});
 		
 		var stateCombo = new Ext.form.ComboBox({
@@ -130,24 +141,23 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
     		mode: 'local',
     		triggerAction: 'all',
    			selectOnFocus: true,
-			editable: false
+			editable: false,
+			width: 180
 		});
 
 		var addStateExprButton = new Ext.Button({
 			text: "Add Expression",
 			handler: function(){
-				var taskC = taskCombo;
 				var task = taskCombo.getValue();
 				var state = stateCombo.getValue();
 				if (task != this.UNSAVED_RESOURCE && task != "" && state != "") {
-					this.addStringToTextArea(textArea, "stateExpression("+task+", "+state+")");
+					this.addStringToTextArea(textArea, "stateExpression('"+task+"', '"+state+"')");
 					taskCombo.setValue("");
 					stateCombo.setValue("");
 				}
 			}.bind(this)
 		});
 		
-		// TODO integrate data!
 		var dataCombo = new Ext.form.ComboBox({
     		store: dataStore,
 			valueField: dataStoreFields[0],
@@ -157,10 +167,27 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
     		mode: 'local',
     		triggerAction: 'all',
    			selectOnFocus: true,
-			editable: false
+			editable: false,
+			width: 180
 		});
-		var valueField = new Ext.form.TextField({});
-		var addDataExprButton = new Ext.Button({text: "Add Expression"});
+		
+		var valueField = new Ext.form.TextField({
+			width: 180,
+			emptyText: 'Enter a value that must equal...',
+		});
+		
+		var addDataExprButton = new Ext.Button({
+			text: "Add Expression",
+			handler: function(){
+				var data = dataCombo.getValue();
+				var value = valueField.getValue();
+				if (data != this.UNSAVED_RESOURCE && data != "" && value != "") {
+					this.addStringToTextArea(textArea, "dataExpression('"+data+"', '"+value+"')");
+					dataCombo.setValue("");
+					valueField.setValue("");
+				}
+			}.bind(this)
+		});
 		
 		var addAndButton = new Ext.Button({
 			text: "and", 
@@ -195,7 +222,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		});
 		
 		var textArea = new Ext.form.TextArea({
-			width: 484,
+			width: 418,
 			height: 100,
 			value: oldCC
 		});
@@ -208,34 +235,37 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		});
 		
 		var win = new Ext.Window({ 
-			width: 500,
-			height: 450,
+			width: 450,
+			//minWidth: 400,
+			height: 485,
+			//minHeight: 450,
 			resizable: false,
 			minimizable: false,
 			modal: true,
 			autoScroll: true,
 			title: 'Edit Ad-Hoc Completion Condtions',
-			// TODO Layout
+			layout: 'table',
+			defaults: {
+		        bodyStyle:'padding:3px;background-color:transparent;border-width:0px'
+		    },
+			layoutConfig: {
+		        columns: 7
+		    },
 			items: [
-				new Ext.form.Label({text: "Add Execution State Expression", style: 'font-size:12px;'}),
-				taskCombo,
-				stateCombo,
-				addStateExprButton,	
-				
-				new Ext.form.Label({text: "Add Data Expression", style: 'font-size:12px;'}),
-				dataCombo,
-				valueField,
-				addDataExprButton,
-				
-				new Ext.form.Label({text: "Add Logical Operator", style: 'font-size:12px;'}),
-				addAndButton,
-				addOrButton,
-				addLPButton,
-				addRPButton,
-				
-				new Ext.form.Label({text: "Current Completion Condition", style: 'font-size:12px;'}),
-				textArea,
-				clearButton
+				{ items: [new Ext.form.Label({text: "Add Execution State Expression: ", style: 'font-size:12px;'})], colspan: 7},
+				{}, {items: [taskCombo], colspan: 6},
+				{}, {items: [stateCombo], colspan: 4}, {items: [addStateExprButton]}, {},
+				{colspan: 7},
+				{ items: [new Ext.form.Label({text: "Add Data Expression: ", style: 'font-size:12px;'})], colspan: 7},	
+				{}, {items: [dataCombo], colspan: 6},
+				{}, {items: [valueField], colspan: 4}, {items: [addDataExprButton]}, {},
+				{colspan: 7},
+				{ items: [new Ext.form.Label({text: "Add Logical Operators: ", style: 'font-size:12px;'})], colspan: 7},	
+				{}, {items: [addAndButton]}, {items: [addOrButton]}, {items: [addLPButton]}, {items: [addRPButton]}, {colspan: 2},
+				{colspan: 7},
+				{ items: [new Ext.form.Label({text: "Current Completion Condition: ", style: 'font-size:12px;'})], colspan: 7},
+				{}, {items: [textArea], colspan: 5}, {},
+				{colspan: 5}, {items: [clearButton]}, {}
 			],
 			buttons: [
 				{
@@ -258,6 +288,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		});
 		win.show();	
 		
+		
 	},
 	
 	
@@ -278,25 +309,12 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 	 * @param {String} errorMsg
 	 */
 	openErroDialog: function(errorMsg){
-		var win = new Ext.Window({ 
-			width: 320,
-			height: 130,
-			resizable: false,
-			minimizable: false,
-			modal: true,
-			autoScroll: true,
-			title: 'Error',
-			html: '<p style="font-size:12px;">'+errorMsg+'</p>',
-			buttons: [{
-		        text: 'OK',
-		        handler: function(){ win.hide();}
-		    }],
-	    	keys: [{
-	        	key: 27,  // Esc
-	        	fn: function(){win.hide();}
-	    	}]
-		});
-		win.show();	
+		Ext.MessageBox.show({
+           title: 'Error',
+           msg: errorMsg,
+           buttons: Ext.MessageBox.OK,
+           icon: Ext.MessageBox.ERROR
+       });
 	}	
 	
 });
