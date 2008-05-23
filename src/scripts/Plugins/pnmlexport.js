@@ -134,7 +134,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
 					var pnmlfile = request.responseText;
 					if (pnmlfile.indexOf("RDF to BPMN failed with Exception:") == 0) {
 						//open error window
-						alert(pnmlfile); //errormessage
+						Ext.Msg.alert("Oryx", pnmlfile); //errormessage
 					}
 					else {
 						var absolutepath = "http://" + location.host + "/oryx/" + pnmlfile;
@@ -152,7 +152,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
 			
 		} catch (error){
 			this.facade.raiseEvent({type:'loading.disable'});
-			alert(error);
+			Ext.Msg.alert("Oryx", error);
 	 	}
 	}
 });

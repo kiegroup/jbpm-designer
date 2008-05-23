@@ -122,7 +122,7 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
 			
 		} catch (error){
 			this.facade.raiseEvent({type:'loading.disable'});
-			alert(error);
+			Ext.Msg.alert("Oryx", error);
 	 	}
 	}
 });
