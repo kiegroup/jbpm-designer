@@ -186,13 +186,15 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			}
 			
 			var textLines = this._text.split("\n");
-
+			while(textLines.last() == "")
+				textLines.remove(textLines.last());
+				
 			this.node.textContent = "";
 
 			if(this.node.ownerDocument) {
 				textLines.each((function(textLine, index) {
 					var tspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-					tspan.textContent = textLine;
+					tspan.textContent = textLine.escapeHTML();
 					tspan.setAttributeNS(null, 'x', this.x);
 					tspan.setAttributeNS(null, 'y', this.y);
 
