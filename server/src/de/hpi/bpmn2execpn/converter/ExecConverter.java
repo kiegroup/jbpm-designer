@@ -11,8 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Edge;
@@ -88,6 +86,8 @@ public class ExecConverter extends Converter {
 		ExecTask exTask = new ExecTask();
 		exTask.setId(task.getId());
 		exTask.setLabel(task.getLabel());
+		exTask.setResourceId(task.getResourceId());
+		String taskDesignation = exTask.getTaskDesignation();
 		
 		// create proper model, form and bindings
 		String model = null;
@@ -104,6 +104,7 @@ public class ExecConverter extends Converter {
 			Node metaData = data.appendChild(modelDoc.createElement("metadata"));
 			Node processData = data.appendChild(modelDoc.createElement("processdata"));			
 			
+			//TODO: use metadata_model.xml instead of building it by hand
 			// create MetaData Layout for Task model
 			// (take attention to the fact, that the attributes are again defined in the engine)
 			/*Node startTime 		=*/ metaData.appendChild(modelDoc.createElement("startTime"));
@@ -257,31 +258,31 @@ public class ExecConverter extends Converter {
 		exTask.pl_context.addLocator(new Locator("status", "xsd:string", "/data/metadata/status"));
 		exTask.pl_context.addLocator(new Locator("owner", "xsd:string", "/data/metadata/owner"));
 		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isDelegated"));
-		exTask.pl_context.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isreviewed"));
 		exTask.pl_context.addLocator(new Locator("reviewRequested", "xsd:string", "/data/metadata/reviewRequested"));
 		exTask.pl_context.addLocator(new Locator("startTime", "xsd:string", "/data/metadata/firstOwner"));
 		exTask.pl_context.addLocator(new Locator("actions", "xsd:string", "/data/metadata/actions"));
 
 		
 		//enable transition
-		//TODO: read/write to context place
-		exTask.tr_enable = addAutomaticTransition(net, "tr_enable_" + task.getId(), task.getLabel());
+		//note: structure of context place must be initialized by engine
+		exTask.tr_enable = addAutomaticTransition(net, "tr_enable_" + task.getId(), taskDesignation);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.tr_enable);
-		addFlowRelationship(net, exTask.tr_enable, exTask.pl_ready);
+		addExecFlowRelationship(net, exTask.tr_enable, exTask.pl_ready, extractDataURL);
+		addFlowRelationship(net, exTask.pl_context, exTask.tr_enable);
+		addExecFlowRelationship(net, exTask.tr_enable, exTask.pl_context, baseXsltURL + "context_enable.xsl");
 		
 		// allocate Transition
-		//TODO: change context_allocate when context place gets initialized at start of process
-		exTask.tr_allocate = addTransformationTransition(net, "tr_allocate_" + task.getId(), task.getLabel(),"allocate", copyXsltURL);
+		exTask.tr_allocate = addTransformationTransition(net, "tr_allocate_" + task.getId(), taskDesignation,"allocate", copyXsltURL);
 		addFlowRelationship(net, exTask.pl_ready, exTask.tr_allocate);
 		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_running, extractDataURL);
-		//addFlowRelationship(net, exTask.pl_context, exTask.tr_allocate);
+		addFlowRelationship(net, exTask.pl_context, exTask.tr_allocate);
 		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_context, baseXsltURL + "context_allocate.xsl");
 		exTask.tr_allocate.setRolename(rolename);
 		
 		if (task.isSkippable()) {
 			// skip Transition
 			exTask.setSkippable(true);
-			exTask.tr_skip = addTransformationTransition(net, "tr_skip_" + task.getId(), task.getLabel(), "skip", copyXsltURL);
+			exTask.tr_skip = addTransformationTransition(net, "tr_skip_" + task.getId(), taskDesignation, "skip", copyXsltURL);
 			addFlowRelationship(net, exTask.pl_ready, exTask.tr_skip);
 			addExecFlowRelationship(net, exTask.tr_skip, exTask.pl_complete, extractDataURL);
 			addFlowRelationship(net, exTask.pl_context, exTask.tr_skip);
@@ -293,7 +294,7 @@ public class ExecConverter extends Converter {
 		//FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(), model, form, bindings);
 		//submit.setAction("submit");
 		//exTask.tr_submit = submit;
-		exTask.tr_submit = addTransformationTransition(net, "tr_submit_" + task.getId(), task.getLabel(),"submit", copyXsltURL);
+		exTask.tr_submit = addTransformationTransition(net, "tr_submit_" + task.getId(), taskDesignation, "submit", copyXsltURL);
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_submit);
 		addExecFlowRelationship(net, exTask.tr_submit, exTask.pl_deciding, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_submit);
@@ -301,7 +302,7 @@ public class ExecConverter extends Converter {
 		exTask.tr_submit.setRolename(rolename);
 		
 		// delegate Transition
-		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), task.getLabel(),model,form,bindings);
+		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), taskDesignation, model, form, bindings);
 		delegate.setAction("delegate");
 		delegate.setGuard(exTask.pl_context.getId() + ".isDelegated == 'true'");
 		exTask.tr_delegate = delegate;
@@ -312,9 +313,9 @@ public class ExecConverter extends Converter {
 		exTask.tr_delegate.setRolename(rolename);
 		
 		// review Transition
-		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), task.getLabel(),model,form,bindings);
+		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), taskDesignation,model,form,bindings);
 		review.setAction("review");
-		review.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".isReviewed == 'true'");
+		review.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".reviewRequested == 'true'");
 		exTask.tr_review = review;
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_review);
 		addExecFlowRelationship(net, exTask.tr_review, exTask.pl_complete, extractDataURL);
@@ -323,15 +324,15 @@ public class ExecConverter extends Converter {
 		exTask.tr_review.setRolename(rolename);
 		
 		// done Transition
-		exTask.tr_done = addAutomaticTransition(net, "tr_done_" + task.getId(), task.getLabel());
+		exTask.tr_done = addAutomaticTransition(net, "tr_done_" + task.getId(), taskDesignation);
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_done);
 		addFlowRelationship(net, exTask.tr_done, exTask.pl_complete);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_done);
 		addExecFlowRelationship(net, exTask.tr_done, exTask.pl_context, baseXsltURL + "context_done.xsl");
-		exTask.tr_done.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".isReviewed != 'true'");
+		exTask.tr_done.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".reviewRequested != 'true'");
 		
-		// suspend/resume
-		exTask.tr_suspend = addTransformationTransition(net, "tr_suspend_" + task.getId(), task.getLabel(), "suspend", copyXsltURL);
+		// suspend
+		exTask.tr_suspend = addTransformationTransition(net, "tr_suspend_" + task.getId(), taskDesignation, "suspend", copyXsltURL);
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_suspend);
 		addExecFlowRelationship(net, exTask.tr_suspend, exTask.pl_suspended, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_suspend);
@@ -339,7 +340,7 @@ public class ExecConverter extends Converter {
 		exTask.tr_suspend.setRolename(rolename);
 		
 		// resume
-		exTask.tr_resume = addTransformationTransition(net, "tr_resume_" + task.getId(), task.getLabel(), "resume", copyXsltURL);
+		exTask.tr_resume = addTransformationTransition(net, "tr_resume_" + task.getId(), taskDesignation, "resume", copyXsltURL);
 		addFlowRelationship(net, exTask.pl_suspended, exTask.tr_resume);
 		addExecFlowRelationship(net, exTask.tr_resume, exTask.pl_running, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_resume);
@@ -347,7 +348,7 @@ public class ExecConverter extends Converter {
 		exTask.tr_resume.setRolename(rolename);
 		
 		// finish transition
-		exTask.tr_finish = addAutomaticTransition(net, "tr_finish_" + task.getId(), task.getLabel());
+		exTask.tr_finish = addAutomaticTransition(net, "tr_finish_" + task.getId(), taskDesignation);
 		addFlowRelationship(net, exTask.pl_complete, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, c.map.get(getOutgoingSequenceFlow(task)), extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
@@ -497,10 +498,11 @@ public class ExecConverter extends Converter {
 		}
 	}
 	
-	public TransformationTransition addTransformationTransition(PetriNet net, String id, String label, String action, String xsltURL) {
+	public TransformationTransition addTransformationTransition(PetriNet net, String id, String task, String action, String xsltURL) {
 		TransformationTransition t =((ExecPNFactoryImpl) pnfactory).createTransformationTransition();
 		t.setId(id);
-		t.setLabel(label);
+		t.setLabel(id);
+		t.setTask(task);
 		t.setAction(action);
 		t.setXsltURL(xsltURL);
 		net.getTransitions().add(t);
@@ -529,10 +531,11 @@ public class ExecConverter extends Converter {
 		return rel;
 	}
 	
-	public FormTransition addFormTransition(PetriNet net, String id, String label, String model, String form, String bindings) {
+	public FormTransition addFormTransition(PetriNet net, String id, String task, String model, String form, String bindings) {
 		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
 		t.setId(id);
-		t.setLabel(label);
+		t.setLabel(id);
+		t.setTask(task);
 		t.setFormURL(form);
 		t.setBindingsURL(bindings);
 		t.setModelURL(model);
@@ -546,10 +549,12 @@ public class ExecConverter extends Converter {
 		return adHocSubprocess.getCompletionCondition();
 	}
 
-	public AutomaticTransition addAutomaticTransition(PetriNet net, String id, String label) {
+	public AutomaticTransition addAutomaticTransition(PetriNet net, String id, String task) {
 		AutomaticTransition t = ((ExecPNFactoryImpl)pnfactory).createAutomaticTransition();
 		t.setId(id);
-		t.setLabel(label);
+		t.setLabel(id);
+		t.setTask(task);
+		t.setXsltURL(copyXsltURL);
 		net.getTransitions().add(t);
 		return t;
 	}

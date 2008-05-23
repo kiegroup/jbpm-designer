@@ -6,7 +6,12 @@ public interface AutomaticTransition extends TauTransition {
 	
 	String getAction();
 	String getLabel();
+	String getTask();
+	String getXsltURL();
+	
 	void setAction(String action);
 	void setLabel(String label);
+	void setTask(String taskId);
+	void setXsltURL(String xsltUrl);
 
 }

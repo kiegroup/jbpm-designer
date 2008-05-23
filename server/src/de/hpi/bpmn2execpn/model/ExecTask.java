@@ -22,5 +22,18 @@ public class ExecTask extends Task {
 		return pl_dataPlaces.get("pl_data_"+objectId);
 	}
 
+	public String getTaskDesignation(){
+		String designation;
+		if (label != null){
+			if (label.trim().equals("")){
+				designation = resourceId.substring(1);
+			}else{
+				designation = label;
+			}
+		}else{
+			designation = resourceId.substring(1);
+		}
+		return designation;
+	}
 }
 
