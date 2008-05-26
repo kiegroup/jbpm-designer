@@ -94,7 +94,7 @@ public class ExportServlet extends HttpServlet {
 			BufferedWriter out1 = new BufferedWriter(new FileWriter(tmpPNMLFile));
 			
 			// URL only for testing purposes...
-			ExecConverter converter = new ExecConverter(diagram, modelURL);
+			ExecConverter converter = new ExecConverter(diagram, modelURL, this.getServletContext().getRealPath("/"));
 			converter.setBaseFileName(this.getServletContext().getRealPath("/") + "tmp" + File.separator + basefilename);
 			PetriNet net = converter.convert();		
 			ExecPetriNet execnet = (ExecPetriNet)net;

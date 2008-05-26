@@ -1,0 +1,56 @@
+<div>
+<b> Logged in as user: </b>
+<x:output ref="instance('output-token')/data/metadata/owner" />
+<x:group>
+	<x:output bind="delegationstate"><h2> Delegate task </h2></x:output>
+	<x:output bind="executionstate"><h2> Execute task </h2></x:output>
+	<x:output bind="reviewstate"><h2> Review task </h2></x:output>
+</x:group>
+<br /><br />
+<x:group ref="instance('ui_settings')/delegategroup" >
+    <x:select1 ref="instance('output-token')/data/metadata/delegate" class="delegator">  
+        <x:label> Delegate to: </x:label>
+            <x:item>
+                <x:label>Adam</x:label>
+                <x:value>Adam</x:value> 
+            </x:item>
+            <x:item>
+                <x:label>Bert</x:label>
+                <x:value>Bert</x:value>
+            </x:item>
+            <x:item>
+                <x:label>Hugo</x:label>
+                <x:value>Hugo</x:value>
+            </x:item>
+            <x:item>
+                <x:label>Rudi</x:label>
+                <x:value>Rudi</x:value>
+            </x:item>           
+</x:select1>
+</x:group>
+<br />
+<x:group bind="fade.delegatedfrom"><x:output ref="instance('output-token')/data/metadata/delegatedfrom" class="delegator">
+		<x:label> Delegated from: </x:label>
+</x:output></x:group>
+<br/><br />
+<x:group bind="fade.message"><x:input ref="instance('output-token')/data/processdata/message" class="metainfo">
+		<x:label> Message: </x:label>
+</x:input></x:group>
+<br/><br />
+<x:group bind="fade.deadline"><x:input ref="instance('output-token')/data/processdata/deadline" class="metainfo">
+		<x:label> Deadline: </x:label>
+</x:input></x:group>
+<br/><br />
+<x:group bind="wantToReviewGroup">
+            <x:input ref="instance('output-token')/data/metadata/reviewRequested" class="metainfo">
+		<x:label> Responsible: </x:label>
+            </x:input>
+</x:group>
+<br/><br />
+
+<x:group ref="instance('ui_settings')/delegationstate">
+	<br/><br />
+   <div class="labels"> <b>readonly readable</b> </div>
+   <br/>
+</x:group>
+</div>

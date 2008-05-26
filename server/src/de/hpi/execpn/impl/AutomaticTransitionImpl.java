@@ -5,11 +5,20 @@ import de.hpi.petrinet.impl.TauTransitionImpl;
 
 public class AutomaticTransitionImpl extends TauTransitionImpl implements AutomaticTransition {
 
+	protected String modelURL;
 	private String label;
 	private String action;
 	private String task;
 	private String xsltURL;
+	
+	public String getModelURL() {
+		return modelURL;
+	}
 
+	public void setModelURL(String modelURL) {
+		this.modelURL = modelURL;
+	}
+	
 	public String getXsltURL() {
 		return xsltURL;
 	}
