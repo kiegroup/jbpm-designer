@@ -47,7 +47,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
             'name': "bpmntopnml",
             'functionality': this.export.bind(this),
             'group': "Export",
-            'icon': ORYX.PATH + "images/exportarrow.png",
+            'icon': ORYX.PATH + "images/bpmn2pn_deploy.png",
             'description': "Export as executable PNML and deploy",
             'index': 2,
             'minShape': 0,
