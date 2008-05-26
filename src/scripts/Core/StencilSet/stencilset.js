@@ -104,8 +104,18 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         return (this.namespace() === stencilSet.namespace());
     },
     
-    stencils: function(){
-        return this._stencils.values();
+	/**
+	 * 
+	 * @param {Oryx.Core.StencilSet.Stencil} rootStencil If rootStencil is defined, it only returns stencils
+	 * 			that could be (in)direct child of that stencil.
+	 */
+    stencils: function(rootNode){
+		if(rootNode) {
+			var stencils = this.stencils();
+			
+		} else {
+        	return this._stencils.values();
+		}
     },
     
     nodes: function(){
