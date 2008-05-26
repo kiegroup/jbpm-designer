@@ -109,10 +109,36 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 	 * @param {Oryx.Core.StencilSet.Stencil} rootStencil If rootStencil is defined, it only returns stencils
 	 * 			that could be (in)direct child of that stencil.
 	 */
-    stencils: function(rootNode){
-		if(rootNode) {
+    stencils: function(rootNode, rules){
+		if(rootNode && rules) {
 			var stencils = this.stencils();
+			var containers = [rootNode];
+			var checkedContainers = [];
 			
+			var result = [];
+			
+			while (containers.size() > 0) {
+				var container = containers.pop();
+				checkedContainers.push(container);
+				var children = stencils.findAll(function(stencil){
+					var args = {
+						containingStencil: container,
+						containedStencil: stencil
+					};
+					return rules.canContain(args);
+				});
+				for(var i = 0; i < children.size(); i++) {
+					if (!checkedContainers.member(children[i])) {
+						containers.push(children[i]);
+					}
+				}
+				result = result.concat(children).uniq();
+			}
+			var edges = stencils.findAll(function(stencil) {
+				return stencil.type() == "edge";
+			});
+			result = result.concat(edges);
+			return result;
 		} else {
         	return this._stencils.values();
 		}
