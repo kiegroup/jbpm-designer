@@ -60,6 +60,8 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend({
 	layout: function() {
 		if(this.parent) {
 			this.parent.layout();
+		} else {
+			this._update();
 		}
 	},
 	
