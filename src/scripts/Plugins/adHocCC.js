@@ -35,6 +35,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 
 	/**
 	 * Offers the plugin functionality:
+	 * 
 	 */
 	construct: function(facade) {
 		this.facade = facade;
@@ -48,13 +49,14 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			'index': 0,
 			'minShape': 1,
 			'maxShape': 1
-			// TODO Cuntextflaeche weg..
+			// ISSUE: Should the Context Area this Plugin is creating be removed?
 		});
 	},
 	
 	
 	/**
 	 * Opens a Dialog that can be used to edit an ad-hoc activity's completion condition
+	 * 
 	 */
 	editCC: function(){	
 	
@@ -83,20 +85,22 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		var stateArray = [ ['ready'], ['skipped'], ['completed'] ];
 		var dataStoreFields = ['resourceID', 'resourceName'];
 		var dataStore
-		
-		var askedToSave = false;
-		
+
 		var childNodes = adHocActivity.getChildNodes();
 		for (var i = 0; i < childNodes.length; i++) {
 			var child = childNodes[i];
 			if (child._stencil.id() == "http://b3mn.org/stencilset/bpmnexec#Task"){
+				var resourceName = child.properties['oryx-name'];			
 				var resourceID = child.resourceId;
-				// TODO ask to save??
-				if (typeof resourceID != "undefined") {
-					taskArray.push([resourceID, child.properties['oryx-name']]);
-				} else {
-					taskArray.push([this.UNSAVED_RESOURCE, child.properties['oryx-name']+" (unsaved)"]);
+				if (typeof resourceID == "undefined") {
+					DataManager.__persistDOM(this.facade);
+					resourceID = child.resourceId;
+					if (typeof resourceID == "undefined") {
+						resourceID = this.UNSAVED_RESOURCE;
+						resourceName = resourceName + " (unsaved)";
+					}
 				}
+				taskArray.push([resourceID, resourceName]);
 			}
 		}
 		
@@ -273,8 +277,10 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		        	handler: function(){
 		            	win.hide();
 						adHocActivity.properties['oryx-adhoccompletioncondition'] = textArea.getValue();
-						// TODO : refresh of property section / re-selection ? 
-		        	}
+						// ISSUE: This might be done more elegant using a refresh-event implemented in the property window plugin
+						this.facade.setSelection([]);
+						this.facade.setSelection(elements);
+		        	}.bind(this)
 		    	},
 				{
 		        	text: 'Cancel',
@@ -287,20 +293,24 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 	    	}]
 		});
 		win.show();	
-		
-		
 	},
 	
 	
 	/**
 	 * Adds an string into a text area
 	 * 
+	 * NOTE: This implementation does only work with Gecko browsers (e.g. Mozilla Firefox)
+	 * 
 	 * @param {TextField} textArea
 	 * @param {String} string
 	 */
 	addStringToTextArea: function(textArea, string){
-		textArea.setValue(textArea.getValue()+string); 
-		// TODO use cursos position
+		var selectionStart = textArea.getEl().dom.selectionStart;
+		var selectionEnd = textArea.getEl().dom.selectionEnd;
+		var currentValue = textArea.getValue();
+		textArea.setValue(currentValue.substring(0, selectionStart)+string+currentValue.substring(selectionEnd));
+		textArea.getEl().dom.selectionStart = selectionStart + string.length;
+		textArea.getEl().dom.selectionEnd = textArea.getEl().dom.selectionStart;
 	},
 	
 	/**
