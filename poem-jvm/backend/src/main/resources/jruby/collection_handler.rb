@@ -47,7 +47,7 @@ module Handler
        models = interaction.subject.getModels(type, from, to, owner, is_shared, is_public, contributor, reader)
        output = []
        models.each do |model|
-         output << Helper.getModelInfo(interaction, Identity.instance(model.getIdent_id))
+         output << Helper.getModelMetadata(interaction, Identity.instance(model.getIdent_id))
        end
        Helper.jsonResponse(interaction.response, output)
     end

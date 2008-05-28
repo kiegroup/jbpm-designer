@@ -94,6 +94,7 @@ Repository.app = {
     /**
      * creates a callback that register a penal for preloading data
      */
+
     registerPanel: function(params, container, min_items){
         min_items = min_items || 3;
         return function(panel){
@@ -495,7 +496,7 @@ Repository.app = {
 			var modelTypeObj;
 			
 			Repository.app.model_types.each(function(el){
-				if (el.id == modeltype) {
+				if (el.uri == modeltype) {
 					modelTypeObj = el
 				}
 			});
@@ -607,7 +608,6 @@ Repository.app = {
 			// load list of diagram types
 			Ext.Ajax.request({
 				method: "GET",
-				// TODO change URL to be dynamically
 				url: "/backend/poem/model_types",
 				success: function success(response, options) {
 					Repository.app.model_types  = Ext.util.JSON.decode(response.responseText);
@@ -638,14 +638,14 @@ Repository.app = {
 		}
 	},
 	
-	filterModelsByModelType: function(modeltype_id) {
+	filterModelsByModelType: function(modeltype_uri) {
 						
-		this.filter = modeltype_id ? {type: modeltype_id} : {};
+		this.filter = modeltype_uri ? {type: modeltype_uri} : {};
 		
 		this.updatePanels();
 	},
 	
-	filterModelsByAccessAndType: function(access, modeltype_id) {
+	filterModelsByAccessAndType: function(access, modeltype_uri) {
 		
 		var newFilter = {};
 		
@@ -667,8 +667,8 @@ Repository.app = {
 				break;
 		}
 		
-		if(modeltype_id){
-			newFilter['type'] = modeltype_id
+		if(modeltype_uri){
+			newFilter['type'] = modeltype_uri
 		}
 		
 		this.filter = newFilter;
@@ -812,7 +812,6 @@ Repository.render = {
 		
 		'<tpl for="access">',
     	    '<p class="owner">owner: {access_rights:this.getOwner}</p>',
-//			'<p>access: {access:this.access}</p>',
 		'</tpl>',
 		
 		{
@@ -985,7 +984,7 @@ Repository.render = {
 												qtip: modeltype.description,
 												listeners: {
 													click: function() {
-														Repository.app.filterModelsByModelType(modeltype.id);
+														Repository.app.filterModelsByModelType(modeltype.uri);
 													}
 												}
 											})
@@ -1017,7 +1016,7 @@ Repository.render = {
 													qtip: modeltype.description,
 													listeners: {
 														click: function() {
-															Repository.app.filterModelsByAccessAndType( child.id, modeltype.id );
+															Repository.app.filterModelsByAccessAndType( child.id, modeltype.uri);
 														}
 													}
 												})

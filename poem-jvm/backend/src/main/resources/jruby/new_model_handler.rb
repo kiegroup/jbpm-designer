@@ -47,7 +47,7 @@ module Handler
         out.println("Forbidden!")
       elsif interaction.params['svg'] && interaction.params['data']
         title = interaction.params['title'] || 'New Process'
-        type = interaction.params['type'] || 'bpmn'
+        type = interaction.params['type'] || '/stencilsets/bpmn/bpmn.json'
         mime_type = interaction.params['mime_type'] || 'application/xhtml+xml'
         language = interaction.params['language'] || 'en_US'
         summary = interaction.params['summary'] || 'is new'

@@ -61,13 +61,7 @@ module Handler
       interaction.response.setStatus(200)
       out = interaction.response.getWriter
       
-      output = ActiveSupport::JSON.encode(
-      [
-          {:id => "bpmn", :title => "BPMN", :description => "Business Process Model Notation", :uri => "/stencilsets/bpmn/bpmn.json", :icon_url => "/oryx/stencilsets/bpmn/bpmn.png"},
-          {:id => "petrinet", :title => "Petri Net", :description => "Petri Net", :uri => "/stencilsets/petrinets/petrinet.json", :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"},
-          {:id => "epc", :title => "EPC", :description => "Event-Driven Process Chain", :uri => "/stencilsets/epc/epc.json", :icon_url => "/oryx/stencilsets/epc/epc.png"},
-          {:id => "workflownet", :title => "Workflow Net", :description => "Workflow Net", :uri => "/stencilsets/workflownets/workflownets.json", :icon_url => "/oryx/stencilsets/workflownets/workflownets.png"}
-      ])
+      output = ActiveSupport::JSON.encode(Helper.getModelTypes)
       out.print(output);
 
     end
