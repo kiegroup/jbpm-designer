@@ -50,6 +50,17 @@
         
     </target>
     
+   <target name="build-execution">
+        
+        <copy todir='build/execution'>
+            <fileset dir="data/execution"/>
+        </copy>
+        <echo>
+            Copied execution data into build destination
+        </echo>
+        
+    </target>
+    
     <target name="build-server">
         
         <mkdir dir="build/classes"/>
@@ -87,7 +98,7 @@
         </javac>
     </target>
     
-    <target name="build" depends="build-plugins, build-stencilsets, build-server">
+    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server">
         
         <mkdir dir="build/tmp"/>
         <copy todir='build' file='src/scripts/Core/config.js'/>
@@ -229,9 +240,10 @@
             <classes dir="build/classes"/>
             
         </war>
-    	
-    	<copy todir='C:/Philipp/Programme/Tomcat-6.0.16/webapps' file= 'dist/oryx.war'/>
+        
+          
     </target>
     
     <target name="all" depends="build, examples, compress, dist"/>
+    
 </project>
