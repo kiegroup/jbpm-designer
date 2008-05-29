@@ -249,6 +249,14 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			}.bind(this)
 		});
 		
+		var addNotButton = new Ext.Button({
+			text: "not", 
+			minWidth: 50,
+			handler: function(){
+				this.addStringToTextArea(textArea, "!");
+			}.bind(this)
+		});
+		
 		var textArea = new Ext.form.TextArea({
 			width: 418,
 			height: 100,
@@ -289,7 +297,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 				{}, {items: [valueField], colspan: 4}, {items: [addDataExprButton]}, {},
 				{colspan: 7},
 				{ items: [new Ext.form.Label({text: "Add Logical Operators: ", style: 'font-size:12px;'})], colspan: 7},	
-				{}, {items: [addAndButton]}, {items: [addOrButton]}, {items: [addLPButton]}, {items: [addRPButton]}, {colspan: 2},
+				{}, {items: [addAndButton]}, {items: [addOrButton]}, {items: [addLPButton]}, {items: [addRPButton]}, {items: [addNotButton]}, {},
 				{colspan: 7},
 				{ items: [new Ext.form.Label({text: "Current Completion Condition: ", style: 'font-size:12px;'})], colspan: 7},
 				{}, {items: [textArea], colspan: 5}, {},
