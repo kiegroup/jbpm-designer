@@ -23,10 +23,10 @@
 
 module Helper
   @@model_types = {
-      "/stencilsets/bpmn/bpmn.json" => {:title => "BPMN", :description => "Business Process Model Notation", :icon_url => "/oryx/stencilsets/bpmn/bpmn.png"},
-      "/stencilsets/petrinets/petrinet.json" => {:title => "Petri Net", :description => "Petri Net", :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"},
-      "/stencilsets/epc/epc.json" => {:title => "EPC", :description => "Event-Driven Process Chain", :icon_url => "/oryx/stencilsets/epc/epc.png"},
-      "/stencilsets/workflownets/workflownets.json" => {:title => "Workflow Net", :description => "Workflow Net", :icon_url => "/oryx/stencilsets/workflownets/workflownets.png"}
+      "http://b3mn.org/stencilset/bpmn#" => {:uri => "/stencilsets/bpmn/bpmn.json", :title => "BPMN", :description => "Business Process Model Notation", :icon_url => "/oryx/stencilsets/bpmn/bpmn.png"},
+      "http://b3mn.org/stencilset/petrinet#" => {:uri => "/stencilsets/petrinets/petrinet.json", :title => "Petri Net", :description => "Petri Net", :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"},
+      "http://b3mn.org/stencilset/epc#" => {:uri => "/stencilsets/epc/epc.json", :title => "EPC", :description => "Event-Driven Process Chain", :icon_url => "/oryx/stencilsets/epc/epc.png"},
+      "http://www.example.org/workflownets#" => {:uri => "/stencilsets/workflownets/workflownets.json", :title => "Workflow Net", :description => "Workflow Net", :icon_url => "/oryx/stencilsets/workflownets/workflownets.png"}
   }
   
   def self.toHash(obj, keys)
@@ -93,7 +93,7 @@ module Helper
     
   def self.getModelTypes()    
     types = @@model_types.collect { |key, value|
-      {:uri => key}.merge(value)
+      {:namespace => key}.merge(value)
     }
   end
   

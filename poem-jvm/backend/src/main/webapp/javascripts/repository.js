@@ -487,7 +487,7 @@ Repository.app = {
 		});
     },
 	
-	createModel: function(modeltype) {
+	createModel: function(modelnamespace) {
 
 		ORYX.Log.debug("Create new Model:%0",modeltype);
 		
@@ -496,7 +496,7 @@ Repository.app = {
 			var modelTypeObj;
 			
 			Repository.app.model_types.each(function(el){
-				if (el.uri == modeltype) {
+				if (el.namespace == modelnamespace) {
 					modelTypeObj = el
 				}
 			});
@@ -638,14 +638,14 @@ Repository.app = {
 		}
 	},
 	
-	filterModelsByModelType: function(modeltype_uri) {
+	filterModelsByModelType: function(modeltype_namespace) {
 						
-		this.filter = modeltype_uri ? {type: modeltype_uri} : {};
+		this.filter = modeltype_namespace ? {type: modeltype_namespace} : {};
 		
 		this.updatePanels();
 	},
 	
-	filterModelsByAccessAndType: function(access, modeltype_uri) {
+	filterModelsByAccessAndType: function(access, modeltype_namespace) {
 		
 		var newFilter = {};
 		
@@ -667,8 +667,8 @@ Repository.app = {
 				break;
 		}
 		
-		if(modeltype_uri){
-			newFilter['type'] = modeltype_uri
+		if(modeltype_namespace){
+			newFilter['type'] = modeltype_namespace
 		}
 		
 		this.filter = newFilter;
@@ -984,7 +984,7 @@ Repository.render = {
 												qtip: modeltype.description,
 												listeners: {
 													click: function() {
-														Repository.app.filterModelsByModelType(modeltype.uri);
+														Repository.app.filterModelsByModelType(modeltype.namespace);
 													}
 												}
 											})
@@ -1131,7 +1131,7 @@ Repository.render = {
 														icon: modeltype.icon_url,
 														qtip: modeltype.description,
 														handler: function(){
-															Repository.app.createModel(modeltype.id);
+															Repository.app.createModel(modeltype.namespace);
 														}
 													})
 												})
