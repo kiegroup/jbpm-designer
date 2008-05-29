@@ -1,7 +1,7 @@
 
 /**
- * Copyright (c) 2006
- * Martin Czuchra, Nicolas Peters, Daniel Polak, Willi Tscheschner
+ * Copyright (c) 2008
+ * Lutz Gericke
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -24,16 +24,15 @@
 if (!ORYX.Plugins) 
     ORYX.Plugins = new Object();
 
-function gup( name )
-{
-  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec( window.location.href );
-  if( results == null )
-    return "";
-  else
-    return results[1];
+function gup(name){
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.href);
+    if (results == null) 
+        return "";
+    else 
+        return results[1];
 }
 
 ORYX.Plugins.Pnmlexport = Clazz.extend({
@@ -44,7 +43,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         this.facade = facade;
         
         this.facade.offer({
-            'name': "bpmntopnml",
+            'name': 'bpmntopnml',
             'functionality': this.export.bind(this),
             'group': "Export",
             'icon': ORYX.PATH + "images/bpmn2pn_deploy.png",
@@ -55,104 +54,122 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         });
         
     },
-
+    
     export: function(){
-
-		// raise loading enable event
+    
+        // raise loading enable event
         this.facade.raiseEvent({
             type: 'loading.enable'
         });
-            
-		// asynchronously ...
+        
+        // asynchronously ...
         window.setTimeout((function(){
-			
-			// ... save synchronously
+        
+            // ... save synchronously
             this.exportSynchronously();
-			
-			// raise loading disable event.
+            
+            // raise loading disable event.
             this.facade.raiseEvent({
                 type: 'loading.disable'
             });
-			
+            
         }).bind(this), 10);
-
-		return true;
+        
+        return true;
     },
-
-    exportSynchronously: function() {
-
+    
+    exportSynchronously: function(){
+    
         var resource = location.href;
-		
-		//get current DOM content
-		var serializedDOM = DataManager.__persistDOM(this.facade);
-		//add namespaces
-		serializedDOM = '<?xml version="1.0" encoding="utf-8"?>' +
-		'<html xmlns="http://www.w3.org/1999/xhtml" ' +
-		'xmlns:b3mn="http://b3mn.org/2007/b3mn" ' +
-		'xmlns:ext="http://b3mn.org/2007/ext" ' +
-		'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ' +
-		'xmlns:atom="http://b3mn.org/2007/atom+xhtml">' +
-		'<head profile="http://purl.org/NET/erdf/profile">' +
-		'<link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />' +
-		'<link rel="schema.dcTerms" href="http://purl.org/dc/terms/ " />' +
-		'<link rel="schema.b3mn" href="http://b3mn.org" />' +
-		'<link rel="schema.oryx" href="http://oryx-editor.org/" />' +
-		'<link rel="schema.raziel" href="http://raziel.org/" />' +
-		'<base href="' +
-		location.href.split("?")[0] +
-		'" />' +
-		'</head><body>' +
-		serializedDOM +
-		'</body></html>';
-		
-		//convert to RDF
-		var parser = new DOMParser();
-		var parsedDOM = parser.parseFromString(serializedDOM, "text/xml");
-		var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
-		var xsltProcessor = new XSLTProcessor();
-		var xslRef = document.implementation.createDocument("", "", null);
-		xslRef.async = false;
-		xslRef.load(xsltPath);
-		xsltProcessor.importStylesheet(xslRef);
-		try {
-			var rdf = xsltProcessor.transformToDocument(parsedDOM);
-			var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
-			serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
-			
-			var diagramTitle = gup('resource');
-			
-			// Send the request to the server.
-			new Ajax.Request(ORYX.CONFIG.PNML_EXPORT_URL, {
-				method: 'POST',
-				asynchronous: false,
-				parameters: {
-					resource: resource,
-					data: serialized_rdf,
-					title: diagramTitle
-				},
-				onSuccess: function(request){
-					var pnmlfile = request.responseText;
-					if (pnmlfile.indexOf("RDF to BPMN failed with Exception:") == 0) {
-						//open error window
-						Ext.Msg.alert("Oryx", pnmlfile); //errormessage
-					}
-					else {
-						var absolutepath = "http://" + location.host + "/oryx/" + pnmlfile;
-						//open download window
-						var win = window.open('data:text/html,' +
-						encodeURIComponent(["<html><head><title>Petri net created</title></head><body>" +
-						"<h4>Process: " +
-						self.document.title +
-						"</h4><a href=\"" +
-						absolutepath +
-						"</body></html>"].join('\r\n')), '_blank', "resizable=yes,width=400,height=150,toolbar=0,scrollbars=yes");
-					}
-				}
-			});
-			
-		} catch (error){
-			this.facade.raiseEvent({type:'loading.disable'});
-			Ext.Msg.alert("Oryx", error);
-	 	}
-	}
+        
+        //get current DOM content
+        var serializedDOM = DataManager.__persistDOM(this.facade);
+        //add namespaces
+        serializedDOM = '<?xml version="1.0" encoding="utf-8"?>' +
+        '<html xmlns="http://www.w3.org/1999/xhtml" ' +
+        'xmlns:b3mn="http://b3mn.org/2007/b3mn" ' +
+        'xmlns:ext="http://b3mn.org/2007/ext" ' +
+        'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ' +
+        'xmlns:atom="http://b3mn.org/2007/atom+xhtml">' +
+        '<head profile="http://purl.org/NET/erdf/profile">' +
+        '<link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />' +
+        '<link rel="schema.dcTerms" href="http://purl.org/dc/terms/ " />' +
+        '<link rel="schema.b3mn" href="http://b3mn.org" />' +
+        '<link rel="schema.oryx" href="http://oryx-editor.org/" />' +
+        '<link rel="schema.raziel" href="http://raziel.org/" />' +
+        '<base href="' +
+        location.href.split("?")[0] +
+        '" />' +
+        '</head><body>' +
+        serializedDOM +
+        '</body></html>';
+        
+        //convert to RDF
+        var parser = new DOMParser();
+        var parsedDOM = parser.parseFromString(serializedDOM, "text/xml");
+        var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
+        var xsltProcessor = new XSLTProcessor();
+        var xslRef = document.implementation.createDocument("", "", null);
+        xslRef.async = false;
+        xslRef.load(xsltPath);
+        xsltProcessor.importStylesheet(xslRef);
+        try {
+            var rdf = xsltProcessor.transformToDocument(parsedDOM);
+            var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
+            serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
+            
+            var diagramTitle = gup('resource');
+            
+            // Send the request to the server.
+            new Ajax.Request(ORYX.CONFIG.PNML_EXPORT_URL, {
+                method: 'POST',
+                asynchronous: false,
+                parameters: {
+                    resource: resource,
+                    data: serialized_rdf,
+                    title: diagramTitle
+                },
+                onSuccess: function(request){
+                    var pnmlfile = request.responseText;
+                    if (pnmlfile.indexOf("RDF to BPMN failed with Exception:") == 0) {
+                        //open error window
+                        alert(pnmlfile); //errormessage
+                    }
+                    else {
+                        var absolutepath = "http://" + location.host + "/oryx/" + pnmlfile;
+                        var output = "<h2>Process: " +
+                        self.document.title +
+                        "</h2><a target=\"_blank\" href=\"" +
+                        absolutepath;
+
+                        var win = new Ext.Window({
+                            width: 320,
+                            height: 240,
+                            resizable: false,
+                            minimizable: false,
+                            modal: true,
+                            autoScroll: true,
+                            title: 'Deployment successful',
+                            html: output,
+                            buttons: [{
+                                text: 'OK',
+                                handler: function(){
+                                    win.hide();
+                                }
+                            }]
+                        });
+                        win.show();
+
+                    }
+                }
+            });
+            
+        } 
+        catch (error) {
+            this.facade.raiseEvent({
+                type: 'loading.disable'
+            });
+            alert(error);
+        }
+    }
 });
