@@ -83,14 +83,16 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		var taskArray = []; 
 		var stateArrayFields = ['state'];
 		var stateArray = [ ['ready'], ['skipped'], ['completed'] ];
-		var dataStoreFields = ['resourceID', 'resourceName'];
-		var dataStore
+		var dataArrayFields = ['resourceID_FieldName', 'dataNameAndFieldName'];
+		var dataArray = [];
 
+		var parser = new DOMParser();
+		
 		var childNodes = adHocActivity.getChildNodes();
 		for (var i = 0; i < childNodes.length; i++) {
 			var child = childNodes[i];
-			if (child._stencil.id() == "http://b3mn.org/stencilset/bpmnexec#Task"){
-				var resourceName = child.properties['oryx-name'];			
+			if (child._stencil.id() == "http://b3mn.org/stencilset/bpmnexec#Task") {
+				var resourceName = child.properties['oryx-name'];
 				var resourceID = child.resourceId;
 				if (typeof resourceID == "undefined") {
 					DataManager.__persistDOM(this.facade);
@@ -102,9 +104,31 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 				}
 				taskArray.push([resourceID, resourceName]);
 			}
+			else if (child._stencil.id() == "http://b3mn.org/stencilset/bpmnexec#DataObject") {
+				var resourceName = child.properties['oryx-name'];
+				var resourceID = child.resourceId;
+				if (typeof resourceID == "undefined") {
+					DataManager.__persistDOM(this.facade);
+					resourceID = child.resourceId;
+					if (typeof resourceID == "undefined") {
+						resourceID = this.UNSAVED_RESOURCE;
+						resourceName = resourceName + " (unsaved)";
+					}
+				}
+				var dataModelString = child.properties['oryx-datamodel'];
+				var dataModel = parser.parseFromString(dataModelString,"text/xml");
+				var rootXMLNode = dataModel.childNodes[0];
+				if (rootXMLNode != null){
+					var childXMLNodes = rootXMLNode.childNodes;
+					for (var j = 0; j < childXMLNodes.length; j++) {
+						var dataFieldTagName = childXMLNodes[j].tagName;
+						if (dataFieldTagName != null) {
+							dataArray.push([[resourceID, dataFieldTagName], resourceName + "/" + dataFieldTagName]);
+						}
+					}
+				}
+			}
 		}
-		
-		// TODO integrate data!
 				
 		/*
 		 * 	initialiaze UI
@@ -120,8 +144,8 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		});
 		
 		var dataStore = new Ext.data.SimpleStore({
-   			fields: dataStoreFields,
-    		data : dataStore
+   			fields: dataArrayFields,
+    		data : dataArray
 		});
 		
 		var taskCombo = new Ext.form.ComboBox({
@@ -164,8 +188,8 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		
 		var dataCombo = new Ext.form.ComboBox({
     		store: dataStore,
-			valueField: dataStoreFields[0],
-    		displayField: dataStoreFields[1],
+			valueField: dataArrayFields[0],
+    		displayField: dataArrayFields[1],
     		emptyText: 'Select a data field...',
 			typeAhead: true,
     		mode: 'local',
@@ -185,8 +209,8 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			handler: function(){
 				var data = dataCombo.getValue();
 				var value = valueField.getValue();
-				if (data != this.UNSAVED_RESOURCE && data != "" && value != "") {
-					this.addStringToTextArea(textArea, "dataExpression('"+data+"', '"+value+"')");
+				if (data != null && data[0] != this.UNSAVED_RESOURCE && value != "") {
+					this.addStringToTextArea(textArea, "dataExpression('"+data[0]+"', '"+data[1]+"', '"+value+"')");
 					dataCombo.setValue("");
 					valueField.setValue("");
 				}
