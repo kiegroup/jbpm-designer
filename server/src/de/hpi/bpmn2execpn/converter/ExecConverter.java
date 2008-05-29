@@ -60,6 +60,7 @@ public class ExecConverter extends Converter {
 	private static final String baseXsltURL = "http://localhost:3000/examples/contextPlace/";
 	private static final String copyXsltURL = baseXsltURL + "copy_xslt.xsl";
 	private static final String extractDataURL = baseXsltURL + "extract_processdata.xsl";
+	// TODO: Resolve this by using pnengine.properties - Engine does not have to be local!
 	private static final String enginePostURL = "http://localhost:3000/documents/";
 	private static String contextPath;
 	protected String standardModel;
@@ -234,7 +235,7 @@ public class ExecConverter extends Converter {
 			sax.printStackTrace();
 		}
 		
-		exTask.pl_inited = addPlace(net, "pl_init_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_inited = addPlace(net, "pl_inited_" + task.getId(), ExecPlace.Type.flow);
 		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId(), ExecPlace.Type.flow);
 		exTask.pl_running = addPlace(net, "pl_running_" + task.getId(), ExecPlace.Type.flow);
 		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId(), ExecPlace.Type.flow);
@@ -257,7 +258,7 @@ public class ExecConverter extends Converter {
 		exTask.pl_context.addLocator(new Locator("actions", "xsd:string", "/data/metadata/actions"));
 
 		//init transition
-		exTask.tr_init = addAutomaticTransition(net, "tr_inited_" + task.getId(), taskDesignation);
+		exTask.tr_init = addAutomaticTransition(net, "tr_init_" + task.getId(), taskDesignation);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.tr_init);
 		addFlowRelationship(net, exTask.tr_init, exTask.pl_inited);
 		
@@ -291,12 +292,9 @@ public class ExecConverter extends Converter {
 		}
 		
 		// submit Transition
-		// TODO: This is just for the moment (as long as no forms are used witg submit transistions)
 		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(), model, form, bindings);
-		//submit.setAction("submit");
+		submit.setAction("submit");
 		exTask.tr_submit = submit;
-		//exTask.tr_submit = addTransformationTransition(net, "tr_submit_" + task.getId(), task.getLabel(),"submit", copyXsltURL);
-		//exTask.tr_submit = submit;
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_submit);
 		addExecFlowRelationship(net, exTask.tr_submit, exTask.pl_deciding, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_submit);
@@ -383,12 +381,17 @@ public class ExecConverter extends Converter {
 	}
 	
 	
-	
+	private String getCompletionConditionString(SubProcess adHocSubprocess){
+		assert (adHocSubprocess.isAdhoc());
+		// TODO (see below)
+		return "place_pl_context_resource2.status == 'completed'";
+	}
+
 
 	/* TODO:   There are a number of tasks that remain to be done here:
+	 * 
 	 * - Integrating data dependencies as guards
-	 * - Make CC String running
-	 * - Transforming an XML CC into an Ruby String
+	 * - Transforming an Pseudo Code CC into an Ruby String (Friday, 30th May)
 	 * - Adding second parallel mode
 	 * - Connecting auto skip with context places
 	 */
@@ -409,12 +412,11 @@ public class ExecConverter extends Converter {
 		// standard completion condition check
 		Place updatedState = addPlace(net, "ad-hoc_updatedState_" + process.getId());
 		
-//		String completionConditionString = getCompletionConditionString(process);
-		// TODO (Stefan)!!!
-		Transition finalize = addFormTransition(net, "ad-hoc_finalize_" + process.getId(), "FINALIZE", null, null, null);
-//		finalize.setGuard("true");
-		Transition resume = addFormTransition(net, "ad-hoc_resume_" + process.getId(), "RESUME", null, null, null);
-//		resume.setGuard("false" );
+		String completionConditionString = getCompletionConditionString(process);
+		Transition finalize = addTauTransition(net, "ad-hoc_finalize_" + process.getId());
+		finalize.setGuard(completionConditionString);
+		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
+		resume.setGuard("!("+completionConditionString+")" );
 		
 
 		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
@@ -436,7 +438,7 @@ public class ExecConverter extends Converter {
 			Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
 			Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
 			addFlowRelationship(net, startT, enabled);
-			addFlowRelationship(net, enabled, exTask.tr_enable);
+			addFlowRelationship(net, enabled, exTask.tr_init);
 			if (isParallel){
 				addReadOnlyFlowRelationship(net, synch, exTask.tr_allocate);
 			} else {
@@ -509,6 +511,7 @@ public class ExecConverter extends Converter {
 		TransformationTransition t =((ExecPNFactoryImpl) pnfactory).createTransformationTransition();
 		t.setId(id);
 		t.setLabel(id);
+		// TODO: why is this uncommended?
 //		t.setTask(task);
 		t.setAction(action);
 		t.setXsltURL(xsltURL);
@@ -542,6 +545,7 @@ public class ExecConverter extends Converter {
 		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
 		t.setId(id);
 		t.setLabel(id);
+		// TODO: why is this uncommended?
 //		t.setTask(task);
 		t.setFormURL(form);
 		t.setBindingsURL(bindings);
@@ -550,18 +554,12 @@ public class ExecConverter extends Converter {
 		return t;
 	}
 
-	
-	private String getCompletionConditionString(SubProcess adHocSubprocess){
-		assert (adHocSubprocess.isAdhoc());
-		return adHocSubprocess.getCompletionCondition();
-	}
-
 	public AutomaticTransition addAutomaticTransition(PetriNet net, String id, String task) {
 		AutomaticTransition t = ((ExecPNFactoryImpl)pnfactory).createAutomaticTransition();
 		t.setId(id);
 		t.setLabel(id);
-//		t.setTask(task);
-//		t.setXsltURL(copyXsltURL);
+		t.setTask(task);
+		t.setXsltURL(copyXsltURL);
 		net.getTransitions().add(t);
 		return t;
 	}
