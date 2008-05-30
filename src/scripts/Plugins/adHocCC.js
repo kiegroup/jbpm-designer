@@ -70,7 +70,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			return ; 
 		}
 		var adHocActivity = elements[0];
-		if (adHocActivity._stencil.id() != "http://b3mn.org/stencilset/bpmnexec#Subprocess" || adHocActivity.properties['oryx-isadhoc'] != "true"){
+		if (adHocActivity._stencil.id() != "http://b3mn.org/stencilset/bpmnexec#Subprocess" || !adHocActivity.properties['oryx-isadhoc']){
 			this.openErroDialog("Selected element has no ad-hoc completion condition!"); 
 			return ;
 		}

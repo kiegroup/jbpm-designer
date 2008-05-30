@@ -10,6 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -380,18 +382,10 @@ public class ExecConverter extends Converter {
 		}
 	}
 	
-	
-	private String getCompletionConditionString(SubProcess adHocSubprocess){
-		assert (adHocSubprocess.isAdhoc());
-		// TODO (see below)
-		return "place_pl_context_resource2.status == 'completed'";
-	}
-
 
 	/* TODO:   There are a number of tasks that remain to be done here:
 	 * 
 	 * - Integrating data dependencies as guards
-	 * - Transforming an Pseudo Code CC into an Ruby String (Friday, 30th May)
 	 * - Adding second parallel mode
 	 * - Connecting auto skip with context places
 	 */
@@ -407,12 +401,12 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, pl.startP, startT);
 		addFlowRelationship(net, defaultEndT, pl.endP);
 		addFlowRelationship(net, endT, pl.endP);
-
 		
 		// standard completion condition check
 		Place updatedState = addPlace(net, "ad-hoc_updatedState_" + process.getId());
 		
 		String completionConditionString = getCompletionConditionString(process);
+		System.out.println(completionConditionString);
 		Transition finalize = addTauTransition(net, "ad-hoc_finalize_" + process.getId());
 		finalize.setGuard(completionConditionString);
 		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
@@ -434,6 +428,7 @@ public class ExecConverter extends Converter {
 		}
 
 		// task specific constructs
+		// TODO: HUGE BUG!
 		for (ExecTask exTask : taskList) {
 			Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
 			Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
@@ -474,6 +469,55 @@ public class ExecConverter extends Converter {
 			addFlowRelationship(net, taskFinalized, endT);	
 		}
 	}
+	
+	private String getCompletionConditionString(SubProcess adHocSubprocess){
+		assert (adHocSubprocess.isAdhoc());
+		
+		StringBuffer result = new StringBuffer();
+		String input = adHocSubprocess.getCompletionCondition();
+
+		Pattern pattern = Pattern.compile(
+				"stateExpression\\( *'(\\w*)' *, *'(\\w*)' *\\)|"+
+				"dataExpression\\( *'(\\w*)' *, *'(\\w*)' *, *'(\\w*)' *\\)|"+
+				"(&)|(\\|)|(\\()|(\\))|(!)");
+		Matcher matcher = pattern.matcher(input);
+
+		while (matcher.find()) {
+			
+			String groupStateExpr1 = matcher.group(1);
+			String groupStateExpr2 = matcher.group(2);
+			
+			String groupDataExpr1 = matcher.group(3);
+			String groupDataExpr2 = matcher.group(4);
+			String groupDataExpr3 = matcher.group(5);
+			
+			String groupAnd = matcher.group(6);
+			String groupOr = matcher.group(7);
+			String groupLP = matcher.group(8);
+			String groupRP = matcher.group(9);
+			String groupNot = matcher.group(10);
+
+			if (groupStateExpr1 != null && groupStateExpr2 != null){
+				result.append("place_pl_context_"+groupStateExpr1+".status=='"+groupStateExpr2+"'");
+			} else if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
+				result.append("true");
+			} else if (groupAnd != null) {
+				result.append("&&");
+			} else if (groupOr != null) {
+				result.append("||");
+			} else if (groupLP != null) {
+				result.append(groupLP);
+			} else if (groupRP != null) {
+				result.append(groupRP);
+			} else if (groupNot != null) {
+				result.append(groupNot);
+			}
+		}
+		return result.toString();
+	}
+
+	
+	
 	
 	@Override
 	protected void handleDataObject(PetriNet net, DataObject object, ConversionContext c){
