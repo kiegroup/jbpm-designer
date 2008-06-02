@@ -489,7 +489,7 @@ Repository.app = {
 	
 	createModel: function(modelnamespace) {
 
-		ORYX.Log.debug("Create new Model:%0",modeltype);
+		ORYX.Log.debug("Create new Model:%0",modelnamespace);
 		
 		
 		var callback = function(){
@@ -803,7 +803,7 @@ Repository.render = {
 		'<tpl for="info">',
 	        '<h3>',
 				'<a href="#start-modeling" onclick="Repository.app.startModel(\'{[parent.item_id]}\',\'{[parent.info.edit_uri]}\'); return false;">',
-					'{title} ({type})',
+					'{title} ({ss_name})',
 				'</a>',
 			'</h3>',
 	        '<p class="description">{summary:htmlEncode}</p>',
@@ -1250,6 +1250,11 @@ Repository.render = {
         model.item_id =  toHtmlId(model.info.edit_uri);
         var item = $(model.item_id);
         
+		
+		// Set the stencil set name
+		model.info["ss_name"] = ""
+		Repository.app.model_types.each(function(el){ if( el.namespace == model.info.type ){model.info.ss_name = el.title}})
+		
         // if item is null, it does not exist in the dom, thus it is new 
         // if item exists but lies in another container we should not overwrite that one
 		// this can only be performed if the container is given and valid
