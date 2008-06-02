@@ -45,18 +45,21 @@ class Dbroot < ActiveRecord::Migration
     
     # create basic plugin relation
     execute %q{
-      insert into "plugin"(rel, scheme, term, title)
+      insert into plugin (rel, scheme, term, title)
       	select '/self', 'ruby', 'ModelHandler', 'Oryx Editor';
-      insert into "plugin"(rel, scheme, term, title)
+      insert into plugin (rel, scheme, term, title)
       	select '/info', 'ruby', 'InfoHandler', 'edit info';
-      insert into "plugin"(rel, scheme, term, title)
+      insert into plugin (rel, scheme, term, title)
         select '/access', 'ruby', 'AccessHandler', 'edit access';
-      insert into "plugin"(rel, scheme, term, title)
+      insert into plugin (rel, scheme, term, title)
         select '/info-access', 'ruby', 'MetaHandler', 'About';
       insert into plugin (rel, scheme, term, title) 
+        select '/svg', 'java', 'ImageRenderer', 'Model as SVG';
+      insert into plugin (rel, scheme, term, title) 
         select '/pdf', 'java', 'PdfRenderer', 'Model as PDF';
-        insert into plugin (rel, scheme, term, title) 
-          select '/svg', 'java', 'SvgRenderer', 'Model as SVG';
+      insert into plugin (rel, scheme, term, title) 
+        select '/png', 'java', 'PngRenderer', 'Model as PNG';      
+          
     }
 
   end

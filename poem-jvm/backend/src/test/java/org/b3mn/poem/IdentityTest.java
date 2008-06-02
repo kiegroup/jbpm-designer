@@ -28,17 +28,17 @@ public class IdentityTest {
 		Date now = new Date(109,0,1);
 		List<Representation> models = Identity.instance(openid).getModels("%", new Date(0), now, false, false, false, false, false);
 		System.err.println(models.size());
-		models = Identity.instance(openid).getModels("/stencilsets/bpmn/bpmn.json", new Date(0), now, false, false, false, false, false);
+		models = Identity.instance(openid).getModels("http://b3mn.org/stencilset/bpmn#", new Date(0), now, false, false, false, false, false);
 		System.err.println(models.size());
 		models = Identity.instance(openid).getModels("%", new Date(0), now, true, false, false, false, false);
 		System.err.println(models.size());
-		models = Identity.instance(openid).getModels("/stencilsets/bpmn/bpmn.json", new Date(0), now, true, true, false, false, false);
+		models = Identity.instance(openid).getModels("http://b3mn.org/stencilset/bpmn#", new Date(0), now, true, true, false, false, false);
 		System.err.println(models.size());
-		models = Identity.instance(openid).getModels("/stencilsets/bpmn/bpmn.json", new Date(0), now, false, false, true, false, false);
+		models = Identity.instance(openid).getModels("http://b3mn.org/stencilset/bpmn#", new Date(0), now, false, false, true, false, false);
 		System.err.println(models.size());
 		models = Identity.instance(openid).getModels("%", new Date(0), now, false, false, false, true, false);
 		System.err.println(models.size());
-		models = Identity.instance(openid).getModels("/stencilsets/bpmn/bpmn.json", new Date(0), now, false, false, false, false, true);
+		models = Identity.instance(openid).getModels("http://b3mn.org/stencilset/bpmn#", new Date(0), now, false, false, false, false, true);
 		System.err.println(models.size());
 	}
 	
