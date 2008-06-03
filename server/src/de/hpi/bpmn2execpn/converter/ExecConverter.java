@@ -412,7 +412,6 @@ public class ExecConverter extends Converter {
 		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
 		resume.setGuard("!("+completionConditionString+")" );
 		
-
 		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
 		Place synch = addPlace(net, "ad-hoc_synch_" + process.getId());
 		addFlowRelationship(net, startT, synch);
@@ -475,42 +474,44 @@ public class ExecConverter extends Converter {
 		
 		StringBuffer result = new StringBuffer();
 		String input = adHocSubprocess.getCompletionCondition();
-
-		Pattern pattern = Pattern.compile(
-				"stateExpression\\( *'(\\w*)' *, *'(\\w*)' *\\)|"+
-				"dataExpression\\( *'(\\w*)' *, *'(\\w*)' *, *'(\\w*)' *\\)|"+
-				"(&)|(\\|)|(\\()|(\\))|(!)");
-		Matcher matcher = pattern.matcher(input);
-
-		while (matcher.find()) {
-			
-			String groupStateExpr1 = matcher.group(1);
-			String groupStateExpr2 = matcher.group(2);
-			
-			String groupDataExpr1 = matcher.group(3);
-			String groupDataExpr2 = matcher.group(4);
-			String groupDataExpr3 = matcher.group(5);
-			
-			String groupAnd = matcher.group(6);
-			String groupOr = matcher.group(7);
-			String groupLP = matcher.group(8);
-			String groupRP = matcher.group(9);
-			String groupNot = matcher.group(10);
-
-			if (groupStateExpr1 != null && groupStateExpr2 != null){
-				result.append("place_pl_context_"+groupStateExpr1+".status=='"+groupStateExpr2+"'");
-			} else if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
-				result.append("true");
-			} else if (groupAnd != null) {
-				result.append("&&");
-			} else if (groupOr != null) {
-				result.append("||");
-			} else if (groupLP != null) {
-				result.append(groupLP);
-			} else if (groupRP != null) {
-				result.append(groupRP);
-			} else if (groupNot != null) {
-				result.append(groupNot);
+		if (input != null && !input.equals("")){
+	
+			Pattern pattern = Pattern.compile(
+					"stateExpression\\( *'(\\w*)' *, *'(\\w*)' *\\)|"+
+					"dataExpression\\( *'(\\w*)' *, *'(\\w*)' *, *'(\\w*)' *\\)|"+
+					"(&)|(\\|)|(\\()|(\\))|(!)");
+			Matcher matcher = pattern.matcher(input);
+	
+			while (matcher.find()) {
+				
+				String groupStateExpr1 = matcher.group(1);
+				String groupStateExpr2 = matcher.group(2);
+				
+				String groupDataExpr1 = matcher.group(3);
+				String groupDataExpr2 = matcher.group(4);
+				String groupDataExpr3 = matcher.group(5);
+				
+				String groupAnd = matcher.group(6);
+				String groupOr = matcher.group(7);
+				String groupLP = matcher.group(8);
+				String groupRP = matcher.group(9);
+				String groupNot = matcher.group(10);
+	
+				if (groupStateExpr1 != null && groupStateExpr2 != null){
+					result.append("place_pl_context_"+groupStateExpr1+".status=='"+groupStateExpr2+"'");
+				} else if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
+					result.append("true");
+				} else if (groupAnd != null) {
+					result.append("&&");
+				} else if (groupOr != null) {
+					result.append("||");
+				} else if (groupLP != null) {
+					result.append(groupLP);
+				} else if (groupRP != null) {
+					result.append(groupRP);
+				} else if (groupNot != null) {
+					result.append(groupNot);
+				}
 			}
 		}
 		return result.toString();
