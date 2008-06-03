@@ -1153,8 +1153,9 @@ Repository.render = {
 								autoHide: true
 							},
 							handler: function(){
-								Repository.app.updatePanels();
-							}.createDelegate(this),
+								//Repository.app.updatePanels();
+								Repository.app.filterModelsByNothing();
+							}
 						},
 						'->', // spacer,
 						new Ext.Toolbar.Button({
