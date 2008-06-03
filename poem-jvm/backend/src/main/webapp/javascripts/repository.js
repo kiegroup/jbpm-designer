@@ -1150,7 +1150,9 @@ Repository.render = {
 								text: 'Updates the list of displayed models',
 								autoHide: true
 							},
-							handler: Repository.app.updatePanels,
+							handler: function(){
+								Repository.app.updatePanels();
+							},
 						},
 						'->', // spacer,
 						new Ext.Toolbar.Button({
