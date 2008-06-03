@@ -557,7 +557,7 @@ public class ExecConverter extends Converter {
 		t.setId(id);
 		t.setLabel(id);
 		// TODO: why is this uncommended?
-//		t.setTask(task);
+		t.setTask(task);
 		t.setAction(action);
 		t.setXsltURL(xsltURL);
 		net.getTransitions().add(t);
@@ -591,7 +591,7 @@ public class ExecConverter extends Converter {
 		t.setId(id);
 		t.setLabel(id);
 		// TODO: why is this uncommended?
-//		t.setTask(task);
+		t.setTask(task);
 		t.setFormURL(form);
 		t.setBindingsURL(bindings);
 		t.setModelURL(model);
