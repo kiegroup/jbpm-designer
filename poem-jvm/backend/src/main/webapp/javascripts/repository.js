@@ -979,6 +979,7 @@ Repository.render = {
 										node.appendChild(
 											new Ext.tree.TreeNode({
 												text: modeltype.title,
+												id: modeltype.namespace,
 												leaf: true,
 												icon: modeltype.icon_url,
 												qtip: modeltype.description,
@@ -1152,7 +1153,7 @@ Repository.render = {
 							},
 							handler: function(){
 								Repository.app.updatePanels();
-							},
+							}.createDelegate(this),
 						},
 						'->', // spacer,
 						new Ext.Toolbar.Button({
