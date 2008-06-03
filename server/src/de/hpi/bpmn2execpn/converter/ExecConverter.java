@@ -40,6 +40,7 @@ import de.hpi.bpmn.ExecDataObject;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
+import de.hpi.bpmn2execpn.model.ExecConversionContext;
 import de.hpi.bpmn2execpn.model.ExecTask;
 import de.hpi.bpmn2pn.converter.Converter;
 import de.hpi.bpmn2pn.model.ConversionContext;
@@ -67,12 +68,10 @@ public class ExecConverter extends Converter {
 	private static String contextPath;
 	protected String standardModel;
 	protected String baseFileName;
-	private List<ExecTask> taskList;
 
 	public ExecConverter(BPMNDiagram diagram, String modelURL, String contextPath) {
 		super(diagram, new ExecPNFactoryImpl(modelURL));
 		this.standardModel = modelURL;
-		this.taskList = new ArrayList<ExecTask>();
 		this.contextPath = contextPath;
 	}
 	
@@ -304,7 +303,7 @@ public class ExecConverter extends Converter {
 		exTask.tr_submit.setRolename(rolename);
 		submit.setFormURL(form);
 		submit.setBindingsURL(bindings);
-		
+				
 		// delegate Transition
 		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), taskDesignation, model, form, bindings);
 		delegate.setAction("delegate");
@@ -362,7 +361,8 @@ public class ExecConverter extends Converter {
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");
 		
-		taskList.add(exTask);
+		assert(c instanceof ExecConversionContext);
+		((ExecConversionContext)c).addToSubprocessToExecTasksMap(task.getParent(), exTask);
 		
 		handleMessageFlow(net, task, exTask.tr_allocate, exTask.tr_submit, c);
 		if (c.ancestorHasExcpH)
@@ -412,6 +412,7 @@ public class ExecConverter extends Converter {
 		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
 		resume.setGuard("!("+completionConditionString+")" );
 		
+
 		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
 		Place synch = addPlace(net, "ad-hoc_synch_" + process.getId());
 		addFlowRelationship(net, startT, synch);
@@ -427,45 +428,48 @@ public class ExecConverter extends Converter {
 		}
 
 		// task specific constructs
-		// TODO: HUGE BUG!
-		for (ExecTask exTask : taskList) {
-			Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
-			Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
-			addFlowRelationship(net, startT, enabled);
-			addFlowRelationship(net, enabled, exTask.tr_init);
-			if (isParallel){
-				addReadOnlyFlowRelationship(net, synch, exTask.tr_allocate);
-			} else {
-				addFlowRelationship(net, synch, exTask.tr_allocate);
+		assert (c instanceof ExecConversionContext);
+		List<ExecTask> taskList = ((ExecConversionContext)c).subprocessToExecTasksMap.get(process);
+		if (taskList != null) {
+			for (ExecTask exTask : taskList) {
+				Place enabled = addPlace(net, "ad-hoc_task_enabled_" + exTask.getId());
+				Place executed = addPlace(net, "ad-hoc_task_executed_" + exTask.getId());
+				addFlowRelationship(net, startT, enabled);
+				addFlowRelationship(net, enabled, exTask.tr_init);
+				if (isParallel){
+					addReadOnlyFlowRelationship(net, synch, exTask.tr_allocate);
+				} else {
+					addFlowRelationship(net, synch, exTask.tr_allocate);
+				}
+				addFlowRelationship(net, exTask.tr_finish, executed);
+				addFlowRelationship(net, exTask.tr_finish, updatedState);
+				addFlowRelationship(net, executed, defaultEndT);
+				if (exTask.isSkippable()) {
+					addFlowRelationship(net, synch, exTask.tr_skip);
+				}
+	
+				// let completioncondition cheks access the context place
+				addReadOnlyFlowRelationship(net, exTask.pl_context, resume);
+				addReadOnlyFlowRelationship(net, exTask.pl_context, finalize);
+					
+				// finishing construct(finalize with skip, finish and abort)
+				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
+				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
+				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
+				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
+				
+				addFlowRelationship(net, finalize, enableFinalize);
+					
+				addFlowRelationship(net, enableFinalize, skip);
+				addFlowRelationship(net, exTask.pl_ready, skip);
+				addFlowRelationship(net, skip, taskFinalized);
+					
+				addFlowRelationship(net, enableFinalize, finish);
+				addFlowRelationship(net, executed, finish);
+				addFlowRelationship(net, finish, taskFinalized);
+							
+				addFlowRelationship(net, taskFinalized, endT);	
 			}
-			addFlowRelationship(net, exTask.tr_finish, executed);
-			addFlowRelationship(net, exTask.tr_finish, updatedState);
-			addFlowRelationship(net, executed, defaultEndT);
-			if (exTask.isSkippable()) {
-				addFlowRelationship(net, synch, exTask.tr_skip);
-			}
-
-			// let completioncondition cheks access the context place
-			addReadOnlyFlowRelationship(net, exTask.pl_context, resume);
-			addReadOnlyFlowRelationship(net, exTask.pl_context, finalize);
-				
-			// finishing construct(finalize with skip, finish and abort)
-			Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
-			Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
-			Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
-			Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
-			
-			addFlowRelationship(net, finalize, enableFinalize);
-				
-			addFlowRelationship(net, enableFinalize, skip);
-			addFlowRelationship(net, exTask.pl_ready, skip);
-			addFlowRelationship(net, skip, taskFinalized);
-				
-			addFlowRelationship(net, enableFinalize, finish);
-			addFlowRelationship(net, executed, finish);
-			addFlowRelationship(net, finish, taskFinalized);
-						
-			addFlowRelationship(net, taskFinalized, endT);	
 		}
 	}
 	
@@ -556,7 +560,6 @@ public class ExecConverter extends Converter {
 		TransformationTransition t =((ExecPNFactoryImpl) pnfactory).createTransformationTransition();
 		t.setId(id);
 		t.setLabel(id);
-		// TODO: why is this uncommended?
 		t.setTask(task);
 		t.setAction(action);
 		t.setXsltURL(xsltURL);
@@ -590,7 +593,6 @@ public class ExecConverter extends Converter {
 		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
 		t.setId(id);
 		t.setLabel(id);
-		// TODO: why is this uncommended?
 		t.setTask(task);
 		t.setFormURL(form);
 		t.setBindingsURL(bindings);
@@ -1005,6 +1007,10 @@ public class ExecConverter extends Converter {
 		
 	}
 	
+	@Override
+	protected ConversionContext setupConversionContext() {
+		return new ExecConversionContext();
+	}
 	
     /** 
      * Writes *requestData* to url *targetURL* as form-data 
