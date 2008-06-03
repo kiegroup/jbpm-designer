@@ -194,7 +194,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			if(this.node.ownerDocument) {
 				textLines.each((function(textLine, index) {
 					var tspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-					tspan.textContent = textLine.escapeHTML();
+					tspan.textContent = textLine;
 					tspan.setAttributeNS(null, 'x', this.x);
 					tspan.setAttributeNS(null, 'y', this.y);
 
