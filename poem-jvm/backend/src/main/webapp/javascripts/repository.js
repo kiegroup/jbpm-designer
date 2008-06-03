@@ -273,6 +273,7 @@ Repository.app = {
 		// show filter button, if no filter was set
 		var filter_info = ""
 		for(var i in this.filter) {
+			if(i == "to" || i == "from"){ continue }
 			filter_info += (filter_info.length == 0 ? "" : ", ")
 			        + i + ": " + this.filter[i];
 		}
