@@ -72,7 +72,10 @@ public class ToolspecificPNMLHelper {
 		role.setTextContent(roleText);
 	}
 	
-	
+	void setContextPlaceID(Document doc, Element parent, String id){
+		Element contextPlaceID = (Element)parent.appendChild(doc.createElement("contextPlaceID"));
+		contextPlaceID.setTextContent(id);
+	}
 
 	void setFireXsltURL(Document doc, Element parent, String url) {
 		Element fire;
