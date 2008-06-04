@@ -27,7 +27,7 @@ module Handler
       
       java_script_includes = ['log', 'application', 'repository', 'model_properties']
       stylesheet_links = ['openid', 'repository', 'model_properties']
-      ext_path = 'backend/ext/'
+      ext_path = '/backend/ext/'
       
       interaction.response.setStatus(200)
       interaction.response.setContentType("text/html")
@@ -42,10 +42,10 @@ module Handler
       out.println('<script type="text/javascript" src="' + ext_path + 'adapter/ext/ext-base.js"></script>')
       out.println('<script type="text/javascript" src="' + ext_path + 'ext-all-debug.js"></script>')
       java_script_includes.each do |java_script|
-        out.println('<script type="text/javascript" src="backend/javascripts/' + java_script + '.js"></script>')
+        out.println('<script type="text/javascript" src="/backend/javascripts/' + java_script + '.js"></script>')
       end
       stylesheet_links.each do |stylesheet|
-        out.println('<link rel="stylesheet" type="text/css" href="backend/stylesheets/' + stylesheet + '.css">')
+        out.println('<link rel="stylesheet" type="text/css" href="/backend/stylesheets/' + stylesheet + '.css">')
       end
       out.println('<script type="text/javascript">Ext.onReady(function(){Repository.app.init("' + interaction.subject.getUri + '");});</script>')  
       out.println('<title>Oryx - Repository</title>')
