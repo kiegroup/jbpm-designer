@@ -308,7 +308,7 @@ public class ExecConverter extends Converter {
 		exTask.tr_submit.setRolename(rolename);
 		submit.setFormURL(form);
 		submit.setBindingsURL(bindings);
-				
+
 		// delegate Transition
 		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), taskDesignation, model, form, bindings);
 		delegate.setAction("delegate");
@@ -417,7 +417,9 @@ public class ExecConverter extends Converter {
 		Place updatedState = addPlace(net, "ad-hoc_updatedState_" + process.getId());
 		
 		String completionConditionString = getCompletionConditionString(process);
-		System.out.println(completionConditionString);
+		if (completionConditionString.length() == 0) {
+			completionConditionString = "false";
+		}
 		Transition finalize = addTauTransition(net, "ad-hoc_finalize_" + process.getId());
 		finalize.setGuard(completionConditionString);
 		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
