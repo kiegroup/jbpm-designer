@@ -17,27 +17,30 @@
   </oryx:magnets>
   <g pointer-events="fill" oryx:minimumSize="80 60" oryx:maximumSize="" >
     <rect id="border" oryx:resize="vertical horizontal" x="0" y="0" width="100" height="80" rx="10" ry="10" stroke="black" stroke-width="1" fill="none" />
-    <rect id="taskrect" oryx:resize="vertical horizontal" x="2" y="2" width="96" height="76" rx="8" ry="8" stroke="black" stroke-width="1" fill="white" />
+    <rect id="taskrect" oryx:anchors="bottom top right left" x="2" y="2" width="96" height="76" rx="8" ry="8" stroke="black" stroke-width="1" fill="white" />
     	<text font-size="14" id="acttext" x="50" y="40" oryx:align="middle center" stroke="black"></text>
     	
  	<a id="u">
-	 	<g id="b">
-		 	<rect x="45" y="68" oryx:resize="vertical horizontal" width="10" height="10" fill="none" stroke="black" stroke-width="1" />
-			<path oryx:resize="vertical horizontal" fill="none" stroke="black" d="m50 68 v10 m-5 -5 h10" stroke-width="1" />
+	 	<g id="b" 
+			oryx:anchors="bottom">
+			
+		 	<rect oryx:anchors="bottom" x="46" y="66" width="10" height="10" fill="none" stroke="black" stroke-width="1" />
+			<path oryx:anchors="bottom" fill="none" stroke="black" d="M51 66 v10 M 46 71 h10" stroke-width="1"/>
+		
 		</g>
 	</a>
 	<g id="none"></g>
 	<g id="loop">
-		<path oryx:anchors="bottom" oryx:resize="vertical horizontal" fill="none" stroke="black" stroke-width="1" d="M34,76 L37,76 L37,73 M37,76 C26,64 51,64 40,76" />
+		<path oryx:anchors="bottom top" oryx:resize="vertical horizontal" fill="none" stroke="black" stroke-width="1" d="M34,76 L37,76 L37,73 M37,76 C26,64 51,64 40,76" />
 	</g>
 	<g id="multiple">
-		<path oryx:anchors="bottom" oryx:resize="vertical horizontal" fill="none" stroke="black" d="m37 68 v8 M41 68 v8" stroke-width="2" />
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M47 68 v8 M51 68 v8 M55 68 v8" stroke-width="2" transform="translate(-16 0)" />
 	</g>
 	<g id="adhoc">
-		<path oryx:anchors="bottom" oryx:resize="vertical horizontal" fill="none" stroke="black" d="m58 73 c0 -4 4 -4 4 0 s4 4 4 0" stroke-width="1" />
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M58 73 c0 -4 4 -4 4 0 s4 4 4 0" stroke-width="1" />
 	</g>
 	<g id="compensation">
-		<path oryx:anchors="bottom" oryx:resize="vertical horizontal" fill="black" stroke="black" d="M 28 72 L 32 68 L 32 76 L 28 72 L 28 68 L 24 72 L 28 76 L 28 72" stroke-width="1" />
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M 21 72 L 25 68 L 25 76 L 21 72 L 21 68 L 17 72 L 21 76 L 21 72" stroke-width="1" />
 	</g>
   </g>
 </svg>
