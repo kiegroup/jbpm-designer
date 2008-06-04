@@ -13,8 +13,8 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 
 public class PngRenderer extends ImageRenderer {
-    
-    @Override
+
+	@Override
     protected void setResponseHeaders(HttpServletResponse res) {
   		res.setContentType("image/png");
   		res.setStatus(200);

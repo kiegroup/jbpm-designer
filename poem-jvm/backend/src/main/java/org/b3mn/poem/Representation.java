@@ -24,9 +24,18 @@
 package org.b3mn.poem;
 
 import javax.persistence.*;
-
 import org.hibernate.HibernateException;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+
+import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Date;
 
 @Entity
@@ -131,6 +140,32 @@ public class Representation {
 		representation.setCreated(new Date(System.currentTimeMillis()));
 		representation.setUpdated(new Date(System.currentTimeMillis()));
 		return representation;
+	}
+	
+	public String getRdf() throws TransformerException {
+		String serializedDOM = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+		"<html xmlns=\"http://www.w3.org/1999/xhtml\" " +
+		"xmlns:b3mn=\"http://b3mn.org/2007/b3mn\" " +
+		"xmlns:ext=\"http://b3mn.org/2007/ext\" " +
+		"xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" "  +
+		"xmlns:atom=\"http://b3mn.org/2007/atom+xhtml\">" +
+		"<head profile=\"http://purl.org/NET/erdf/profile\">" +
+		"<link rel=\"schema.dc\" href=\"http://purl.org/dc/elements/1.1/\" />" +
+		"<link rel=\"schema.dcTerms\" href=\"http://purl.org/dc/terms/ \" />" +
+		"<link rel=\"schema.b3mn\" href=\"http://b3mn.org\" />" +
+		"<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />" +
+		"<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />" +
+		"</head><body>" + this.getContent() + "</body></html>";
+        File xsltFile = new File("../webapps/backend/extract-rdf.xsl");
+        Source xsltSource = new StreamSource(xsltFile);
+        Source erdfSource = new StreamSource(new StringReader(serializedDOM));
+
+        TransformerFactory transFact =
+                TransformerFactory.newInstance();
+        Transformer trans = transFact.newTransformer(xsltSource);
+        StringWriter output = new StringWriter();
+        trans.transform(erdfSource, new StreamResult(output));
+		return output.toString();
 		
 	}
 	

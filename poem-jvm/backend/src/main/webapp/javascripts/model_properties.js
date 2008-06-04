@@ -36,9 +36,9 @@ ModelProperties.app = {
 	 */
 	current_model: null,
 	
-	anonymous_user: "", // do not change, except it's changed server side
+	anonymous_user: "public", // do not change, except it's changed server side
 	
-	create_model_uri: "/data/model/", // the uri a POST request containing the models details  will be sent to create a new model
+	create_model_uri: "/model/", // the uri a POST request containing the models details  will be sent to create a new model
 	
 	init: function(current_user) {
 		var expected_ext_version = "2.0";

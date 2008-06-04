@@ -14,8 +14,6 @@ import org.apache.fop.svg.PDFTranscoder;
 
 public class PdfRenderer extends ImageRenderer{
 
-    private static final long serialVersionUID = 8526319871562210085L;
-
     @Override
     protected void setResponseHeaders(HttpServletResponse res) {
   		res.setContentType("application/pdf");

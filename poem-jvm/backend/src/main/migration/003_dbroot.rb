@@ -58,7 +58,9 @@ class Dbroot < ActiveRecord::Migration
       insert into plugin (rel, scheme, term, title) 
         select '/pdf', 'java', 'PdfRenderer', 'Model as PDF';
       insert into plugin (rel, scheme, term, title) 
-        select '/png', 'java', 'PngRenderer', 'Model as PNG';      
+        select '/png', 'java', 'PngRenderer', 'Model as PNG'; 
+      insert into plugin (rel, scheme, term, title) 
+        select '/rdf', 'java', 'RdfExporter', 'Model as RDF'; 
           
     }
 
