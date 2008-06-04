@@ -138,7 +138,9 @@
         </echo>
         
         <copy todir='build/lib'>
-            <fileset dir='lib' includes='**/*'/>
+            <fileset dir='lib' includes='**/*'>
+				<exclude name="**/*.jar"/>
+			</fileset>
         </copy>
         <copy todir='build/shared'>
             <fileset dir='shared' includes='**/*.js'/>
