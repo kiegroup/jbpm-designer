@@ -708,7 +708,7 @@ Repository.render = {
 							'<span>',
 								'<img src="/backend/images/repository/hpi.png" onclick="Repository.render.openid_tpl.changeOpenId(\'https://openid.hpi.uni-potsdam.de/user/username\', 39, 8)"/>',
 								'<img src="/backend/images/repository/blogger.png" onclick="Repository.render.openid_tpl.changeOpenId(\'http://username.blogspot.com/\', 7, 8)"/>',
-								'<img src="/backend/images/repository/myopenid.png" onclick="Repository.render.openid_tpl.changeOpenId(\'http://username.myopenid.com/  \', 7, 8)"/>',
+								'<img src="/backend/images/repository/getopenid.png" onclick="Repository.render.openid_tpl.changeOpenId(\'http://getopenid.com/username\', 21, 8)"/>',
 							'</span>',
 							'<input type="text" name="openid_identifier" id="openid_login_openid" class="text gray" value="your.openid.net" onblur="if(this.value.replace(/^\s+/, \'\').replace(/\s+$/, \'\').length==0) {this.value=\'your.openid.net\'; this.className+=\' gray\';}" onfocus="this.className = this.className.replace(/ gray/ig, \'\'); if(this.value==\'your.openid.net\') this.value=\'\';" />',
 							'<input type="submit" class="button" value="login"/>',
