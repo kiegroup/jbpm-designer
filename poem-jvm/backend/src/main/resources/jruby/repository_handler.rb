@@ -28,7 +28,7 @@ module Handler
       java_script_includes = ['log', 'application', 'repository', 'model_properties']
       stylesheet_links = ['openid', 'repository', 'model_properties']
       
-      backend_path = 'backend'
+      backend_path = '/weske/b3mn-mirror/backend'
       ext_path = backend_path + '/ext/'
       
       interaction.response.setStatus(200)
