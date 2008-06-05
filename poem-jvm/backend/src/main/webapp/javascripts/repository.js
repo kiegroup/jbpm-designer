@@ -682,14 +682,7 @@ Repository.app = {
 	filterModelsByNothing: function() {
 		this.filter = {};
 		this.updatePanels();
-	},
-	
-	filterUpdate: function() {
-		
-		this.filter = this.filter ? this.filter : {};
-		
-		this.updatePanels();
-	}	
+	}
 }
 
 Repository.render = {
@@ -1161,7 +1154,7 @@ Repository.render = {
 							},
 							handler: function(){
 								//Repository.app.filter = this.filter
-								Repository.app.filterUpdate();
+								Repository.app.updatePanels();
 								//Repository.app.filterModelsByNothing();
 							}
 						},
