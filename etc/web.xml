@@ -6,6 +6,12 @@
 
 	<display-name>Oryx Editor</display-name>
 
+	<!-- the number within the session-timout element must be expressed in
+		minutes. it is now 24 hours. -->
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
+
 	<servlet>
 		<display-name>Oryx OpenID Authentication Servlet</display-name>
 		<servlet-name>AuthServlet</servlet-name>
