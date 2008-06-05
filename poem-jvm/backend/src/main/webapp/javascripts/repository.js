@@ -1153,8 +1153,9 @@ Repository.render = {
 								autoHide: true
 							},
 							handler: function(){
-								//Repository.app.updatePanels();
-								Repository.app.filterModelsByNothing();
+								//Repository.app.filter = this.filter
+								Repository.app.updatePanels();
+								//Repository.app.filterModelsByNothing();
 							}
 						},
 						'->', // spacer,
