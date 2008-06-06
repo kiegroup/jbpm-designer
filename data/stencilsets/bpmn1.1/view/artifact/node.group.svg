@@ -10,6 +10,6 @@
   <defs></defs>
   <g pointer-events="fill" oryx:minimumSize="60 50">
     <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="120" height="90" rx="5" ry="5" stroke="black" stroke-dasharray="2, 4, 10, 4" stroke-width="1" fill="none" />
-    <text font-size="14" id="text" x="2" y="2" oryx:align="top left" stroke="black"></text>
+    <text font-size="14" id="text" x="61" y="2" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>

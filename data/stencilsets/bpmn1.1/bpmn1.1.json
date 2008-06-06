@@ -1732,27 +1732,13 @@
 				},
 				{
 					"id":"markerVisible",
-					"type":"Choice",
+					"type":"Boolean",
 					"title":"MarkerVisible",
 					"value":"false",
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"marker",
-					"items": [
-						{
-							"id":"c1",
-							"title":"c1",
-							"value":"false",
-							"refToView":"none"
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"value":"true",
-							"refToView":"cross"
-						}
-					]
+					"refToView":"cross"
 				},
 				{
 					"id":"gates",
@@ -1926,6 +1912,16 @@
 					"value":"Event",
 					"description":"",
 					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"instantiate",
+					"type":"Boolean",
+					"title":"Instantiate",
+					"value":"false",
+					"description":"",
+					"readonly":false,
 					"optional":false,
 					"length":""
 				},
@@ -2222,9 +2218,9 @@
 					"length":""
 				},
 				{
-					"id":"participants",
+					"id":"participantRef",
 					"type":"String",
-					"title":"Participants",
+					"title":"ParticipantRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -2256,9 +2252,18 @@
 					"refToView":"border"
 				},
 				{
-					"id":"processId",
+					"id":"mainPool",
+					"type":"Boolean",
+					"title":"MainPool",
+					"value":false,
+					"description":"Defines, if the current Pool is the main Pool of the diagram.",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"processRef",
 					"type":"String",
-					"title":"ProcessId",
+					"title":"ProcessRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -6798,231 +6803,6 @@
 				}
 			]
 		},
-		/*{
-			"type": "node",
-			"id":"EndEvent",
-			"title":"End event",
-			"groups":["Endevents"],
-			"description":"An event without outgoing edges.",
-			"view":"endevent/node.event.multiple.end.svg",
-			"icon":"new_event_end.png",
-			"repositoryEntries": [
-
-				{ name:   "End Event",
-				  groups: ["End Events"],
-				  icon:   "new_event_end.png",
-				  properties: { result: "None" }},
-
-				{ name: "End Cancel Event",
-				  groups: ["End Events"],
-				  icon:"new_cancelevent.png",
-				  properties: { result: "Cancel" }},
-
-				{	"name": "End Compensation Event",
-					"groups": ["End Events"],
-					"icon":"new_compensationevent.png",
-					"properties": {"result": "Compensation"}},
-
-				{	"name": "End Message Event",
-					"groups": ["End Events"],
-					"icon":"new_messageevent.png",
-					"properties": {
-						"result": "Message"}}
-			],
-			"roles":[
-				"sequence_end",
-				"messageflow_start",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Endevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"pool",
-					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"lanes",
-					"type":"String",
-					"title":"Lanes",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"result",
-					"type":"String",
-					"title":"Result",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-				},
-				{
-					"id":"message",
-					"type":"String",
-					"title":"Message",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"implementation",
-					"type":"Choice",
-					"title":"Implementation",
-					"value":"Web Service",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"webservice",
-							"title":"c1",
-							"value":"Web Service",
-							"refToView":""
-						},
-						{
-							"id":"other",
-							"title":"c2",
-							"value":"Other",
-							"refToView":""
-						},
-						{
-							"id":"unspecified",
-							"title":"c3",
-							"value":"Unspecified",
-							"refToView":""
-						}
-					]
-				},
-				{
-					"id":"errorCode",
-					"type":"String",
-					"title":"ErrorCode",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"activity",
-					"type":"String",
-					"title":"Activity",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"linkId",
-					"type":"String",
-					"title":"LinkId",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"processRef",
-					"type":"String",
-					"title":"ProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"results",
-					"type":"String",
-					"title":"Results",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},*/
 		{
 			"type": "edge",
 			"id":"SequenceFlow",
@@ -7772,15 +7552,6 @@
 					}
 				]
 			},
-			/*{
-				"role":"IntermediateEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateEvent"]
-					}
-				]
-			},*/
 			{
 				"role":"IntermediateEventOnActivityBoundary",
 				"connects": [
@@ -7799,87 +7570,6 @@
 					}
 				]
 			},
-			/*{
-				"role":"IntermediateMessageEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateMessageEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateTimerEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateTimerEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateErrorEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateErrorEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateCancelEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateCancelEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateCompensationEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateCompensationEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateRuleEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateRuleEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateLinkEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateLinkEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateMultipleEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateMultipleEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateSignalEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateMultipleEvent"]
-					}
-				]
-			}*/
 		],
 		"cardinalityRules": [
 			{
@@ -7959,27 +7649,6 @@
 				role: "Subprocess",
 				contains: ["tc"]
 			}
-		],
-		canConnect: function(args) { 
-			
-			// test wheater an intermediate event can put on the boundary of an activity
-			if((args.sourceStencil.id() === args.sourceStencil.namespace()+"Task") ||
-				(args.sourceStencil.id() === args.sourceStencil.namespace()+"Subprocess")){
-				
-				var check = args.targetStencil.roles().any(function(e){return e == args.targetStencil.namespace()+'IntermediateEvent'});
-				if(check) {
-				// prefer shape property values
-					if(args.targetShape) {
-						if(args.targetShape.properties["oryx-behavior"] == "Throwing") {
-							return false;
-						}					
-					} else {
-					// check stencil property values
-						if(args.targetStencil.property("oryx-behavior").value() == "Throwing") return false;
-					}
-				}
-			}
-			return true; 
-		}
+		]
 	}
 }
