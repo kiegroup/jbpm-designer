@@ -1,4 +1,4 @@
-package de.hpi.PTnet.impl;
+package de.hpi.interactionnet.localmodelgeneration;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,25 +12,38 @@ import de.hpi.PTnet.PTNetInterpreter;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 
-public class BoundednessChecker {
-	
+/**
+ * @author Gero.Decker
+ */
+public class FinalMarkingsCalculator {
+
 	protected PTNet net;
 	protected PTNetInterpreter interpreter;
 	protected Set<String> markings;
+	protected Set<String> finalMarkings;
 	protected List<int[]> markings_b;
 	
-	public BoundednessChecker(PTNetInterpreter interpreter, PTNet net) {
+	public FinalMarkingsCalculator(PTNet net) {
 		this.net = net;
-		this.interpreter = interpreter;
+		this.interpreter = (PTNetInterpreter)net.getInterpreter();
 		this.markings = new HashSet<String>();
+		this.finalMarkings = new HashSet<String>();
 		this.markings_b = new ArrayList<int[]>();
 	}
 	
-	public boolean checkBoundedness() {
-		return doCheck(net.getInitialMarking());
+	/**
+	 * 
+	 * @return null if the net is unbounded, the list of final markings otherwise
+	 */
+	public List<Marking> getFinalMarkings() {
+		List<Marking> mlist = new ArrayList<Marking>();
+		if (doCheck(net.getInitialMarking(), mlist))
+			return mlist;
+		else
+			return null;
 	}
 	
-	protected boolean doCheck(Marking marking) {
+	protected boolean doCheck(Marking marking,List<Marking> mlist) {
 		String markingStr = marking.toString();
 //		System.out.println("Checking marking "+markingStr);
 		
@@ -45,11 +58,17 @@ public class BoundednessChecker {
 		markings_b.add(m_b);
 
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
-		for (Transition t: transitions) {
-			Marking newmarking = interpreter.fireTransition(net, marking, t);
-			if (!doCheck(newmarking))
-				return false;
-		}
+		if (transitions.size() == 0) {
+			if (!finalMarkings.contains(markingStr)) {
+				finalMarkings.add(markingStr);
+				mlist.add(marking);
+			}
+		} else
+			for (Transition t: transitions) {
+				Marking newmarking = interpreter.fireTransition(net, marking, t);
+				if (!doCheck(newmarking, mlist))
+					return false;
+			}
 		return true;
 	}
 
@@ -79,5 +98,6 @@ public class BoundednessChecker {
 		return false;
 	}
 	
-
 }
+
+

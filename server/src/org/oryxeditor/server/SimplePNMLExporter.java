@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.configuration.Configuration;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
@@ -22,11 +23,17 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.StandardConverter;
+import de.hpi.ibpmn.IBPMNDiagram;
+import de.hpi.ibpmn.converter.IBPMNConverter;
+import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
+import de.hpi.interactionnet.InteractionNet;
+import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
+import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
 
 /**
- * Copyright (c) 2008 Lutz Gericke
+ * Copyright (c) 2008 Lutz Gericke, Gero Decker
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -58,19 +65,13 @@ public class SimplePNMLExporter extends HttpServlet {
 			String rdf = req.getParameter("data");
 
 			DocumentBuilder builder;
-			BPMNDiagram diagram;
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-			BPMNRDFImporter importer = new BPMNRDFImporter(document);
-			diagram = (BPMNDiagram) importer.loadBPMN();
-
-			// URL only for testing purposes...
-			PetriNet net = new StandardConverter(diagram).convert();
 			Document pnmlDoc = builder.newDocument();
-
-			PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
-			exp.savePetriNet(pnmlDoc, net);
+			
+			processDocument(document, pnmlDoc);
+			
 			OutputFormat format = new OutputFormat(pnmlDoc);
 
 			StringWriter stringOut = new StringWriter();
@@ -81,11 +82,91 @@ public class SimplePNMLExporter extends HttpServlet {
 
 			res.getWriter().print(stringOut.toString());
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	protected void processDocument(Document document, Document pnmlDoc) {
+		String type = getDocumentType(document);
+		if (type.equals("ibpmn.json"))
+			processIBPMN(document, pnmlDoc);
+		else if (type.equals("bpmn.json"))
+			processBPMN(document, pnmlDoc);
+		else if (type.equals("interactionpetrinets.json"))
+			processIPN(document, pnmlDoc);
+	}
+	
+	protected void processBPMN(Document document, Document pnmlDoc) {
+		BPMNRDFImporter importer = new BPMNRDFImporter(document);
+		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
+
+		PetriNet net = new StandardConverter(diagram).convert();
+
+		PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
+		exp.savePetriNet(pnmlDoc, net);
+	}
+
+	protected void processIBPMN(Document document, Document pnmlDoc) {
+		IBPMNRDFImporter importer = new IBPMNRDFImporter(document);
+		BPMNDiagram diagram = (IBPMNDiagram) importer.loadIBPMN();
+
+		PetriNet net = new IBPMNConverter(diagram).convert();
+
+		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
+		exp.savePetriNet(pnmlDoc, net);
+	}
+
+	protected void processIPN(Document document, Document pnmlDoc) {
+		InteractionNetRDFImporter importer = new InteractionNetRDFImporter(document);
+		InteractionNet net = (InteractionNet) importer.loadInteractionNet();
+
+		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
+		exp.savePetriNet(pnmlDoc, net);
+	}
+
+
+	
+	protected String getDocumentType(Document doc) {
+		Node node = doc.getDocumentElement();
+		if (node == null || !node.getNodeName().equals("rdf:RDF"))
+			return null;
+		
+		node = node.getFirstChild();
+		while (node != null) {
+			 String about = getAttributeValue(node, "rdf:about");
+			 if (about != null && about.contains("oryxcanvas")) break;
+			 node = node.getNextSibling();
+		}
+		String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
+		if (type != null)
+			return type.substring(type.lastIndexOf('/')+1);
+		
+		return null;
+	}
+
+//	protected String getContent(Node node) {
+//		if (node != null && node.hasChildNodes())
+//			return node.getFirstChild().getNodeValue();
+//		return null;
+//	}
+	
+	private String getAttributeValue(Node node, String attribute) {
+		Node item = node.getAttributes().getNamedItem(attribute);
+		if (item != null)
+			return item.getNodeValue();
+		else
+			return null;
+	}
+
+	private Node getChild(Node n, String name) {
+		if (n == null)
+			return null;
+		for (Node node=n.getFirstChild(); node != null; node=node.getNextSibling())
+			if (node.getNodeName().indexOf(name) >= 0) 
+				return node;
+		return null;
+	}
+
 }

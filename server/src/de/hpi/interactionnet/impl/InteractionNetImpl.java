@@ -13,6 +13,7 @@ import de.hpi.interactionnet.InteractionNetFactory;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.interactionnet.Role;
 import de.hpi.petrinet.FlowRelationship;
+import de.hpi.PTnet.Marking;
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.SyntaxChecker;
@@ -21,11 +22,18 @@ import de.hpi.petrinet.Transition;
 public class InteractionNetImpl extends PTNetImpl implements InteractionNet {
 	
 	private List<Role> roles;
+	private List<Marking> finalMarkings;
 
 	public List<Role> getRoles() {
 		if (roles == null)
 			roles = new ArrayList();
 		return roles;
+	}
+
+	public List<Marking> getFinalMarkings() {
+		if (finalMarkings == null)
+			finalMarkings = new ArrayList<Marking>();
+		return finalMarkings;
 	}
 
 	@Override
