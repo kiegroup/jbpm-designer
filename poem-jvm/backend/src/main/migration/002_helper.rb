@@ -67,7 +67,7 @@
 
      execute %q{
 
- create function work_around_path(hierarchy text) returns setof text as $$
+ create or replace function work_around_path(hierarchy text) returns setof text as $$
  def poem_path(hierarchy):
  	# Returns an ordered collection of strings. The first item of the collection is
  	# the path to the first item in the hierarchy and so on.
@@ -89,7 +89,6 @@
  				all.append(hierarchy[:position+2*tilde_count])
  			position += 2*tilde_count;
  		return all
-
    return poem_path(hierarchy)[2:-1]
  $$ language plpythonu immutable;
 
@@ -116,7 +115,7 @@
  	return all
  $$ language plpythonu immutable;
 
- create function parent(hierarchy text) returns text as $$
+ create or replace function parent(hierarchy text) returns text as $$
  def poem_path(hierarchy):
  	# Returns an ordered collection of strings. The first item of the collection is
  	# the path to the first item in the hierarchy and so on.
@@ -143,7 +142,7 @@
  return poem_path(hierarchy)[-2]
  $$ language plpythonu immutable;
 
- create function encode_position(positio integer) returns text as $$
+ create or replace function encode_position(positio integer) returns text as $$
  # Encodes number to string representation
  # 0: "0" = 0, "z" = 61
  # 1: "~0" = 62, "~z" = 123
@@ -169,7 +168,7 @@
  raise "Stored Procedure: Encode Postition: Position out of range." 
  $$ language plpythonu immutable;
 
- create function decode_position(code text) returns integer as $$
+ create or replace function decode_position(code text) returns integer as $$
  # Decodes the input code string to the original number
  offset = 0
  if (code == ""):
@@ -196,7 +195,7 @@
  	return 3968 + digits[0] * 62 * 62 + digits[1] * 62 + digits[2]
  $$ language plpythonu immutable;
 
- create function child_position(hierarchy text) returns integer as $$
+ create or replace function child_position(hierarchy text) returns integer as $$
  def poem_path(hierarchy):
  	# Returns an ordered collection of strings. The first item of the collection is
  	# the path to the first item in the hierarchy and so on.

@@ -17,6 +17,7 @@ public class PdfRenderer extends ImageRenderer{
     @Override
     protected void setResponseHeaders(HttpServletResponse res) {
   		res.setContentType("application/pdf");
+  		res.setHeader("Content-Disposition", "filename=process.pdf");
   		res.setStatus(200);
     }
 

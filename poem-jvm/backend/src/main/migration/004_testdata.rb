@@ -64,7 +64,7 @@ class Testdata < ActiveRecord::Migration
     }
     
     execute %q{
-      insert into "interaction" (subject, object, scheme, term) select 'U1', 'U251', 'http://b3mn.org/http', 'read';
+      insert into "interaction" (subject, object, scheme, term) select 'U1', 'U251', 'http://b3mn.org/http', 'write';
       insert into "interaction" (subject, object, scheme, term) select 'U1', 'U252', 'http://b3mn.org/http', 'read';
       insert into "interaction" (subject, object, scheme, term) select 'U1', 'U254', 'http://b3mn.org/http', 'read';
       insert into "interaction" (subject, object, scheme, term) select 'U23', 'U251', 'http://b3mn.org/http', 'write';
