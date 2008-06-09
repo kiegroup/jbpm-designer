@@ -23,7 +23,7 @@ public class DesynchronizabilityChecker {
 		if (net.getFinalMarkings().size() == 0)
 			net.getFinalMarkings().addAll(new FinalMarkingsCalculator(net).getFinalMarkings());
 		List<Marking> finalMarkings = new ArrayList<Marking>();
-		PTNet dnet = new Desynchronizer().getDesynchronizedNet(net);
+		PTNet dnet = new Desynchronizer().getDesynchronizedNet(net, finalMarkings);
 		return new WeakTerminationChecker(dnet, finalMarkings).check(conflictingTransitions);
 	}
 
