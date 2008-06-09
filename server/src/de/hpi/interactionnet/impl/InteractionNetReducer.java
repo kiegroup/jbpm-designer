@@ -13,6 +13,7 @@ import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
 import de.hpi.petrinet.PetriNet;
+import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 import de.hpi.petrinet.pnml.XMLFileLoaderSaver;
 
@@ -36,6 +37,15 @@ public class InteractionNetReducer extends PTNetReducer {
 		} else {
 			return super.createNewTransition(net, t);
 		}
+	}
+
+	@Override
+	protected Place createNewPlace(PetriNet net, Place p1, Place p2) {
+		Place pnew = super.createNewPlace(net, p1, p2);
+		InteractionNet inet = (InteractionNet)net;
+		for (Marking m: inet.getFinalMarkings())
+			m.setNumTokens(pnew, m.getNumTokens(p1) + m.getNumTokens(p2));
+		return pnew;
 	}
 
 	private static int fileCounter = 3000;

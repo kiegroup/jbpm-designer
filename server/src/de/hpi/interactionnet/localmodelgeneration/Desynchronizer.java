@@ -1,5 +1,6 @@
 package de.hpi.interactionnet.localmodelgeneration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,8 @@ public class Desynchronizer {
 			// copy places
 			for (Place p: rnet.getPlaces()) {
 				Place newp = factory.createPlace();
-				newp.setId(p.getId());
+				newnet.getPlaces().add(newp);
+				newp.setId(r.getName()+"_"+p.getId());
 				map.put(p, newp);
 				newnet.getInitialMarking().setNumTokens(newp, rnet.getInitialMarking().getNumTokens(p));
 			}
@@ -77,7 +79,7 @@ public class Desynchronizer {
 					finalMarkings.add(newm);
 				}
 			else {
-				List<Marking> oldFinalMarkings = finalMarkings;
+				List<Marking> oldFinalMarkings = new ArrayList<Marking>(finalMarkings);
 				finalMarkings.clear();
 				for (Marking m: rnet.getFinalMarkings()) {
 					for (Marking m2: oldFinalMarkings) {
@@ -97,6 +99,7 @@ public class Desynchronizer {
 					newt = factory.createLabeledTransition();
 					((LabeledTransition)newt).setLabel(((LabeledTransition)t).getLabel());
 				}
+				newnet.getTransitions().add(newt);
 				newt.setId(r.getName()+"_"+t.getId());
 				map.put(t, newt);
 				

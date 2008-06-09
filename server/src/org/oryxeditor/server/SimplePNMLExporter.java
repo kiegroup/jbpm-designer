@@ -27,6 +27,7 @@ import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
+import de.hpi.interactionnet.localmodelgeneration.DesynchronizabilityChecker;
 import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
 import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
 import de.hpi.petrinet.PetriNet;
@@ -124,6 +125,8 @@ public class SimplePNMLExporter extends HttpServlet {
 
 		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
 		exp.savePetriNet(pnmlDoc, net);
+		
+		new DesynchronizabilityChecker().check(net, null);
 	}
 
 
