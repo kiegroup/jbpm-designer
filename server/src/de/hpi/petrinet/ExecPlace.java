@@ -17,4 +17,8 @@ public interface ExecPlace extends Place {
 	public void setModel (String model);
 	
 	public String getModel ();
+	
+	public void setName (String name);
+	
+	public String getName ();
 }

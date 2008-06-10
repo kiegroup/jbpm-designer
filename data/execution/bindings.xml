@@ -9,7 +9,7 @@
 		<submitbutton />
 		<reviewsubmitbutton />
         <cancelbutton />
-        <delegatedfromform />
+        <delegatedFromForm />
         <messageform />
         <deadlineform />
         <wantToReviewGroup />
@@ -19,61 +19,79 @@
 </x:instance>
 
 		<!-- Describes metadata attributes and messages/deadlines -->
-          <x:bind id="owner" nodeset="instance('output-token')/data/metadata/owner"/>
-          <x:bind id="isDelegated" nodeset="instance('output-token')/data/metadata/isDelegated"/>
-          <x:bind id="isReviewed" nodeset="instance('output-token')/data/metadata/isReviewed"/>
-          <x:bind id="reviewRequested" nodeset="instance('output-token')/data/processdata/reviewRequested"/>
-          <x:bind id="delegate" nodeset="instance('output-token')/data/metadata/delegate"/>
-          <x:bind id="firstOwner" nodeset="instance('output-token')/data/metadata/firstOwner"/>
-          <x:bind id="firstOwner.readonly" nodeset="instance('output-token')/data/metadata/firstOwner/@readonly"/>
-          <x:bind id="message" nodeset="instance('output-token')/data/processdata/message"/>
-          <x:bind id="messagereadonly" nodeset="instance('output-token')/data/processdata/message/@readonly"/>
-          <x:bind id="deadline" nodeset="instance('output-token')/data/processdata/deadline"/>
-          <x:bind id="deadlinereadonly" nodeset="instance('output-token')/data/processdata/deadline/@readonly"/>
-          <x:bind id="delegatedfrom" nodeset="instance('output-token')/data/metadata/delegatedfrom"/>
-          <x:bind id="wantToReview" nodeset="instance('output-token')/data/processdata/wantToReview" type="xsd:boolean"/>
+          <x:bind id="owner" nodeset="instance('output-token')/places/metadata/owner"/>
+          <x:bind id="isDelegated" nodeset="instance('output-token')/places/metadata/isDelegated"/>
+          <x:bind id="isReviewed" nodeset="instance('output-token')/places/metadata/isReviewed"/>
+          <x:bind id="reviewRequested" nodeset="instance('output-token')/places/processdata/reviewRequested"/>
+          <x:bind id="delegate" nodeset="instance('output-token')/places/metadata/delegate"/>
+          <x:bind id="firstOwner" nodeset="instance('output-token')/places/metadata/firstOwner"/>
+          <x:bind id="firstOwner.readonly" nodeset="instance('output-token')/places/metadata/firstOwner/@readonly"/>
+          <x:bind id="message" nodeset="instance('output-token')/places/processdata/message"/>
+          <x:bind id="messagereadonly" nodeset="instance('output-token')/places/processdata/message/@readonly"/>
+          <x:bind id="deadline" nodeset="instance('output-token')/places/processdata/deadline"/>
+          <x:bind id="deadlinereadonly" nodeset="instance('output-token')/places/processdata/deadline/@readonly"/>
+          <x:bind id="delegatedFrom" nodeset="instance('output-token')/places/metadata/delegatedFrom"/>
+          <x:bind id="wantToReview" nodeset="instance('output-token')/places/processdata/wantToReview" type="xsd:boolean"/>
           
           
 		<!-- Describes Button Dependencies -->
-		<x:bind nodeset="instance('ui_settings')/delegatebutton" relevant="instance('output-token')/data/metadata/isDelegated = 'true'" />
-		<x:bind nodeset="instance('ui_settings')/cancelbutton" relevant="instance('output-token')/data/metadata/isDelegated = 'true'" />
-        <x:bind nodeset="instance('ui_settings')/interactbutton" relevant="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/metadata/isReviewed != 'true' and instance('output-token')/data/metadata/canBeDelegated = 'true'" />
-		<x:bind nodeset="instance('ui_settings')/submitbutton" relevant="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/processdata/reviewRequested != 'true'" />
-		<x:bind nodeset="instance('ui_settings')/reviewsubmitbutton" relevant="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/processdata/ReviewRequested = 'true'" />
+		<x:bind nodeset="instance('ui_settings')/delegatebutton" relevant="instance('output-token')/places/metadata/isDelegated = 'true'" />
+		<x:bind nodeset="instance('ui_settings')/cancelbutton" relevant="instance('output-token')/places/metadata/isDelegated = 'true'" />
+        <x:bind nodeset="instance('ui_settings')/interactbutton" relevant="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/metadata/isReviewed != 'true' and instance('output-token')/places/metadata/canBeDelegated = 'true'" />
+		<x:bind nodeset="instance('ui_settings')/submitbutton" relevant="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/metadata/reviewRequested != 'true'" />
+		<x:bind nodeset="instance('ui_settings')/reviewsubmitbutton" relevant="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/metadata/reviewRequested = 'true'" />
 		
 		<!-- Describes Metadata bindings -->
-		<x:bind nodeset="instance('ui_settings')/messageform" id="fade.message" relevant="instance('output-token')/data/metadata/isDelegated = 'true' or (instance('output-token')/data/metadata/isDelegated!='true' and instance('output-token')/data/processdata/message!='' and instance('output-token')/data/metadata/isReviewed!='true')" />
-		<x:bind nodeset="instance('output-token')/data/processdata/message" readonly="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/processdata/message/@readonly = 'true'" />
-		<x:bind nodeset="instance('output-token')/data/processdata/message/@readonly" type="xsd:boolean" />
-		<x:bind nodeset="instance('ui_settings')/deadlineform" id="fade.deadline" relevant="instance('output-token')/data/metadata/isDelegated = 'true' or (instance('output-token')/data/metadata/isDelegated!='true' and instance('output-token')/data/processdata/deadline!='' and instance('output-token')/data/metadata/isReviewed!='true')" />
-		<x:bind nodeset="instance('output-token')/data/processdata/deadline" readonly="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/processdata/message/@readonly = 'true'" />
-		<x:bind nodeset="instance('output-token')/data/processdata/deadline/@readonly" type="xsd:boolean" />
-		<x:bind nodeset="instance('ui_settings')/delegatedfromform" id="fade.delegatedfrom" relevant="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/metadata/delegatedfrom != ''" />
-		<x:bind nodeset="instance('output-token')/data/metadata/owner" readonly="instance('output-token')/data/metadata/owner/@readonly = 'true'" />
-        <x:bind nodeset="instance('ui_settings')/wantToReviewGroup" id="wantToReviewGroup" relevant="instance('output-token')/data/metadata/isDelegated = 'true' and instance('output-token')/data/metadata/owner = ''" />
-        <x:bind nodeset="instance('ui_settings')/delegategroup" relevant="instance('output-token')/data/metadata/isDelegated = 'true'"  />
+		<x:bind nodeset="instance('ui_settings')/messageform" id="fade.message" relevant="instance('output-token')/places/metadata/isDelegated = 'true' or (instance('output-token')/places/metadata/isDelegated!='true' and instance('output-token')/places/processdata/message!='' and instance('output-token')/places/metadata/isReviewed!='true')" />
+		<x:bind nodeset="instance('output-token')/places/processdata/message" readonly="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/processdata/message/@readonly = 'true'" />
+		<x:bind nodeset="instance('output-token')/places/processdata/message/@readonly" type="xsd:boolean" />
+		<x:bind nodeset="instance('ui_settings')/deadlineform" id="fade.deadline" relevant="instance('output-token')/places/metadata/isDelegated = 'true' or (instance('output-token')/places/metadata/isDelegated!='true' and instance('output-token')/places/processdata/deadline!='' and instance('output-token')/places/metadata/isReviewed!='true')" />
+		<x:bind nodeset="instance('output-token')/places/processdata/deadline" readonly="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/processdata/message/@readonly = 'true'" />
+		<x:bind nodeset="instance('output-token')/places/processdata/deadline/@readonly" type="xsd:boolean" />
+		<x:bind nodeset="instance('ui_settings')/delegatedFromForm" id="fade.delegatedFrom" relevant="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/metadata/delegatedFrom != ''" />
+		<x:bind nodeset="instance('output-token')/places/metadata/owner" readonly="instance('output-token')/places/metadata/owner/@readonly = 'true'" />
+        <x:bind nodeset="instance('ui_settings')/wantToReviewGroup" id="wantToReviewGroup" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and instance('output-token')/places/metadata/owner = ''" />
+        <x:bind nodeset="instance('ui_settings')/delegategroup" relevant="instance('output-token')/places/metadata/isDelegated = 'true'"  />
         
         <!-- Describes states of formular -->
-        <x:bind id="delegationstate" nodeset="instance('ui_settings')/delegationstate" relevant="instance('output-token')/data/metadata/isDelegated = 'true'" />
-		<x:bind id="executionstate" nodeset="instance('ui_settings')/executionstate" relevant="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/metadata/isReviewed != 'true'" />
-		<x:bind id="reviewstate" nodeset="instance('ui_settings')/reviewstate" relevant="instance('output-token')/data/metadata/isDelegated != 'true' and instance('output-token')/data/metadata/isReviewed = 'true'" />
+        <x:bind id="delegationstate" nodeset="instance('ui_settings')/delegationstate" relevant="instance('output-token')/places/metadata/isDelegated = 'true'" />
+		<x:bind id="executionstate" nodeset="instance('ui_settings')/executionstate" relevant="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/metadata/isReviewed != 'true'" />
+		<x:bind id="reviewstate" nodeset="instance('ui_settings')/reviewstate" relevant="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/metadata/isReviewed = 'true'" />
+		
+<!-- 
+		<x:action ev:event="xforms-ready">
+			<x:insert nodeset="instance('output_token')/datax" at="last()" position="after"/>
+            <x:setvalue ref="instance(' x  ')/datax" value="hallo"/>
+		</x:action>
+-->
+		
+		<!-- Copy input to output token -->
+		<x:action ev:event="xforms-ready">
+		<x:insert nodeset="instance('output-token')/places/data"
+			origin="instance('incoming-tokens')/*/token/data/metadata" />
+		<x:setvalue ref="instance('incoming-tokens')/*/token/data/processdata/@place_id"
+			value="../../../../@id" />
+		<x:insert nodeset="instance('output-token')/places/data"
+			origin="instance('incoming-tokens')/*/token/data/processdata" />
+		</x:action>
+		
 		
 		<!--  
-		<x:bind id="name" nodeset="instance('output-token')/data/name"/>
-		<x:bind id="name.readonly" nodeset="instance('output-token')/data/name/@readonly"/>
-		<x:bind id="name.visible" nodeset="instance('output-token')/data/name/@visible"/>
+		<x:bind id="name" nodeset="instance('output-token')/places/name"/>
+		<x:bind id="name.readonly" nodeset="instance('output-token')/places/name/@readonly"/>
+		<x:bind id="name.visible" nodeset="instance('output-token')/places/name/@visible"/>
 		-->
 		<!--  
-		<x:bind nodeset="instance('output-token')/data/name/@readonly" type="xsd:boolean" />
-		<x:bind nodeset="instance('output-token')/data/name/@visible" type="xsd:boolean" />
+		<x:bind nodeset="instance('output-token')/places/name/@readonly" type="xsd:boolean" />
+		<x:bind nodeset="instance('output-token')/places/name/@visible" type="xsd:boolean" />
 		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" type="xsd:boolean" />
 		<x:bind nodeset="instance('ui_settings')/name/@futurevisible" type="xsd:boolean" />
 		-->
 		<!--
-		<x:bind nodeset="instance('ui_settings')/name/@futurevisible" relevant="instance('output-token')/data/metadata/isDelegated = 'true' and instance('output-token')/data/name/@visible = 'true'" />
-		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" relevant="instance('output-token')/data/metadata/isDelegated = 'true' and ((instance('output-token')/data/name/@readonly = 'true' and instance('output-token')/data/name/@visible != 'true') or instance('output-token')/data/name/@visible = 'true')" />
-	  	<x:bind nodeset="instance('output-token')/data/name" readonly="instance('output-token')/data/name/@readonly = 'true'"/>
-		<x:bind nodeset="instance('ui_settings')/name" id="fade.name" relevant="not(instance('output-token')/data/name/@visible != 'true' and instance('output-token')/data/name/@readonly != 'true')" />
+		<x:bind nodeset="instance('ui_settings')/name/@futurevisible" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and instance('output-token')/places/name/@visible = 'true'" />
+		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and ((instance('output-token')/places/name/@readonly = 'true' and instance('output-token')/places/name/@visible != 'true') or instance('output-token')/places/name/@visible = 'true')" />
+	  	<x:bind nodeset="instance('output-token')/places/name" readonly="instance('output-token')/places/name/@readonly = 'true'"/>
+		<x:bind nodeset="instance('ui_settings')/name" id="fade.name" relevant="not(instance('output-token')/places/name/@visible != 'true' and instance('output-token')/places/name/@readonly != 'true')" />
 		<x:bind nodeset="instance('ui_settings')/name/@futurevisible" readonly="instance('ui_settings')/name/@futurereadonly = 'true'" />
 		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" readonly="instance('ui_settings')/name/@futurevisible = 'true'" />
 		-->

@@ -9,7 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,12 +28,17 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xerces.internal.dom.DeferredTextImpl;
 
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
@@ -63,9 +70,9 @@ public class ExecConverter extends Converter {
 	private static final String baseXsltURL = "http://localhost:3000/examples/contextPlace/";
 	private static final String copyXsltURL = baseXsltURL + "copy_xslt.xsl";
 	private static final String extractDataURL = baseXsltURL + "extract_processdata.xsl";
-	// TODO: Resolve this by using pnengine.properties - Engine does not have to be local!
-	private static final String enginePostURL = "http://localhost:3000/documents/";
-	private static String contextPath;
+	private static final String extractFormDataURL = baseXsltURL + "extract_init_processdata.xsl";
+	private static String enginePostURL;
+	private String contextPath;
 	protected String standardModel;
 	protected String baseFileName;
 
@@ -88,22 +95,6 @@ public class ExecConverter extends Converter {
 	protected void createStartPlaces(PetriNet net, ConversionContext c) {
 		// do nothing...: we want start transitions instead of start places
 	}
-	
-	/*
-	@Override
-	public PetriNet convert () {
-		// !! no start place for petrinet
-		// but create a start transition 
-		ExecPetriNet pn = (ExecPetriNet) super.convert();
-		AutomaticTransition startTransition = addAutomaticTransition(pn, "tr_initProcess", "", "initProcess", copyXsltURL, false);
-		pn.setStartTransition(startTransition);
-		Vector <Place> dataPlaces = ExecTask.pl_dataPlaces;
-		for (Place place : dataPlaces)
-			addFlowRelationship(pn, startTransition, place);
-		return pn;
-	}
-	// connect startTransition with contextplaces
-	*/
 
 	// TODO this is a dirty hack...
 	@Override
@@ -114,36 +105,64 @@ public class ExecConverter extends Converter {
 		exTask.setResourceId(task.getResourceId());
 		String taskDesignation = exTask.getTaskDesignation();
 		
-		// create proper model, form and bindings
+		// create model, form and bindings
 		String model = null;
 		String form = null;
 		String bindings = null;
+		
+		exTask.pl_inited = addPlace(net, "pl_inited_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_running = addPlace(net, "pl_running_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId(), ExecPlace.Type.flow);
+		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId(), ExecPlace.Type.flow);	
+		exTask.pl_context = addPlace(net, "pl_context_" + task.getId(), ExecPlace.Type.context);
+
+		// create transitions
+		AutomaticTransition enable = addAutomaticTransition(net, "tr_enable_" + task.getId(), taskDesignation);
+		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel());
+		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), taskDesignation);
+		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), taskDesignation);
+		
+		exTask.tr_init = addAutomaticTransition(net, "tr_init_" + task.getId(), taskDesignation);
+		exTask.tr_enable = enable;
+		exTask.tr_allocate = addTransformationTransition(net, "tr_allocate_" + task.getId(), taskDesignation,"allocate", copyXsltURL);
+		exTask.tr_submit = submit;
+		exTask.tr_delegate = delegate;
+		exTask.tr_review = review;
+		exTask.tr_done = addAutomaticTransition(net, "tr_done_" + task.getId(), taskDesignation);
+		exTask.tr_suspend = addTransformationTransition(net, "tr_suspend_" + task.getId(), taskDesignation, "suspend", copyXsltURL);
+		exTask.tr_resume = addTransformationTransition(net, "tr_resume_" + task.getId(), taskDesignation, "resume", copyXsltURL);
+		exTask.tr_finish = addAutomaticTransition(net, "tr_finish_" + task.getId(), taskDesignation);
+	
+		exTask.tr_init.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_enable.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_submit.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_allocate.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_delegate.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_review.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_done.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_suspend.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_resume.setContextPlaceID(exTask.pl_context.getId());
+		exTask.tr_finish.setContextPlaceID(exTask.pl_context.getId());
+		
+		// create Documents for model, form, bindings
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance (  ) ; 
 		
 		try {
 			DocumentBuilder parser = factory.newDocumentBuilder (  ) ; 
 		
 			Document modelDoc = parser.newDocument();
-			Element dataEl = modelDoc.createElement("data");
-			Node data = modelDoc.appendChild(dataEl);
-			Node metaData = data.appendChild(modelDoc.createElement("metadata"));
-			Node processData = data.appendChild(modelDoc.createElement("processdata"));			
+			//modelDoc.appendChild(modelDoc.createElement("engine-info"));
+			Node places = modelDoc.appendChild(modelDoc.createElement("places"));
 			
-			//TODO: use metadata_model.xml instead of building it by hand
-			// create MetaData Layout for Task model
-			// (take attention to the fact, that the attributes are again defined in the engine)
-			/*Node startTime 		=*/ metaData.appendChild(modelDoc.createElement("startTime"));
-			/*Node endTime 			=*/ metaData.appendChild(modelDoc.createElement("endTime"));
-			/*Node status 			=*/ metaData.appendChild(modelDoc.createElement("status"));
-			/*Node owner 			=*/ metaData.appendChild(modelDoc.createElement("owner"));
-			/*Node isDelegated 		=*/ metaData.appendChild(modelDoc.createElement("isDelegated"));
-			/*Node reviewRequested 	=*/ metaData.appendChild(modelDoc.createElement("reviewRequested"));
-			/*Node firstOwner 		=*/ metaData.appendChild(modelDoc.createElement("firstOwner"));
-			/*Node actions 			=*/ metaData.appendChild(modelDoc.createElement("actions"));
+			Node data = places.appendChild(modelDoc.createElement("data")); 
+			//Node metaData = places.appendChild(modelDoc.createElement("metadata")); 
+			//Node processData = places.appendChild(modelDoc.createElement("processdata"));
 			
-			// create MetaData Layout Actions, that will be logged --> here not regarded
-			
+
 			// interrogate all incoming data objects for task, create DataPlaces for them and create Task model
+			HashMap<String, Node> processdataMap = new HashMap<String, Node>();
 			List<Edge> edges_in = task.getIncomingEdges();
 			for (Edge edge : edges_in) {
 				if (edge.getSource() instanceof ExecDataObject) {
@@ -152,44 +171,43 @@ public class ExecConverter extends Converter {
 					addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
 					// create XML Structure for Task
 					String modelXML = dataObject.getModel();
+					
+					// attach to task model
+					Element dataEl = modelDoc.createElement("data");
+					dataEl.setAttribute("place_id", dataObject.getId());
+					//placesEl.appendChild(dataEl);
+					
 					try {
 						Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-						Node dataObjectId = processData.appendChild(modelDoc.createElement(dataObject.getId()));
-						Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
-						Node child = dataTagOfDataModel.getNextSibling();
-						while (child != null) {
-							Node attributeToAttach = modelDoc.importNode(child.cloneNode(true), true);
-							dataObjectId.appendChild(attributeToAttach);
-							child = child.getNextSibling();
-						};
+						Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
+						processdataMap.put(dataObject.getId(), processdata);
+						
 					} catch (Exception io) {
 						io.printStackTrace();
 					}
 				}
 			}
 			
-			// interrogate all outgoing data objects for task and create flow relationships for them
+			// interrogate all outgoing data objects for task, create DataPlaces for them and create Task model
 			List<Edge> edges_out = task.getOutgoingEdges();
 			for (Edge edge : edges_out) {
-				if (edge.getTarget() instanceof ExecDataObject) {
+				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getTarget();
-					// for outgoing data objects of task: create read/write dependencies
-					NodeList list = processData.getChildNodes();
-					String modelXML = dataObject.getModel();
-					if (!isContainedIn(dataObject, list)) {
-						// if object is already read, then not neccessary
-						Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-						Node dataObjectId = processData.appendChild(modelDoc.createElement(dataObject.getId()));
-						Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
-						Node child = dataTagOfDataModel.getNextSibling();
-						while (child != null) {
-							Node attributeToAttach = modelDoc.importNode(child.cloneNode(true), true);
-							dataObjectId.appendChild(attributeToAttach);
-							child = child.getNextSibling();
-						};
+					// for incoming data objects of task: create read dependencies
+					if (!isContainedIn(dataObject, processdataMap)) {
+
+						// create XML Structure for Task
+						String modelXML = dataObject.getModel();
+						try {
+							Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
+							Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
+							processdataMap.put(dataObject.getId(), processdata);							
+						} catch (Exception io) {
+							io.printStackTrace();
+						}
 						addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
 					}
-					addFlowRelationship(net, exTask.tr_finish, ExecTask.getDataPlace(dataObject.getId()));
+					addExecFlowRelationship(net, exTask.tr_finish, ExecTask.getDataPlace(dataObject.getId()), create_extract_processdata_xsl(dataObject, parser));
 					addFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_finish);
 				}
 			}
@@ -198,33 +216,42 @@ public class ExecConverter extends Converter {
 			// build form Document template without attributes
 			Document formDoc = buildFormTemplate(parser);
 			// adds form fields of necessary attributes
-			formDoc = addFormFields(formDoc, processData);
+			formDoc = addFormFields(formDoc, processdataMap);
 			// build bindings Document for attributes
 			Document bindDoc = buildBindingsDocument(parser);
 			// adds binding attributes for tags
-			bindDoc = addBindings(bindDoc, processData);
+			bindDoc = addBindings(bindDoc, processdataMap);
 			
-			// append metadata for internal tokenmodel of transitions
-			Element message = modelDoc.createElement("message");
-			Element deadline = modelDoc.createElement("deadline");
-			Element wantToReview = modelDoc.createElement("wantToReview");
+			// initialize engine Post URL
+			try {
+				PropertiesConfiguration config = new PropertiesConfiguration("pnengine.properties");
+				this.enginePostURL = config.getString("pnengine.url") + "/documents/";
 			
-			processData.appendChild(message);
-			processData.appendChild(deadline);
-			processData.appendChild(wantToReview);
-			
-			message.setAttribute("readonly", "true");
-			deadline.setAttribute("readonly", "true");
-			wantToReview.setTextContent("false");
-			
-			// persist form and bindings and save URL
-			model = this.postDataToURL(domToString(modelDoc),enginePostURL);
-			form = this.postDataToURL(domToString(formDoc),enginePostURL);
-			
-			String bindingsString = domToString(bindDoc);
-			bindings = this.postDataToURL(
-					bindingsString.replace("<bindings>", "").replace("</bindings>", ""),
-					enginePostURL);
+				// persist form and bindings and save URL
+				model = this.postDataToURL(domToString(modelDoc),enginePostURL);
+				form = this.postDataToURL(domToString(formDoc),enginePostURL);
+				
+				String bindingsString = domToString(bindDoc);
+				bindings = this.postDataToURL(
+						bindingsString.replace("<bindings>", "").replace("</bindings>", ""),
+						enginePostURL);
+				
+				// set URLs for transitions
+				submit.setModelURL(model);
+				submit.setFormURL(form);
+				submit.setBindingsURL(bindings);
+				delegate.setModelURL(model);
+				delegate.setFormURL(form);
+				delegate.setBindingsURL(bindings);
+				review.setModelURL(model);
+				review.setFormURL(form);
+				review.setBindingsURL(bindings);
+
+				
+			} catch (ConfigurationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -236,14 +263,7 @@ public class ExecConverter extends Converter {
 			sax.printStackTrace();
 		}
 		
-		exTask.pl_inited = addPlace(net, "pl_inited_" + task.getId(), ExecPlace.Type.flow);
-		exTask.pl_ready = addPlace(net, "pl_ready_" + task.getId(), ExecPlace.Type.flow);
-		exTask.pl_running = addPlace(net, "pl_running_" + task.getId(), ExecPlace.Type.flow);
-		exTask.pl_deciding = addPlace(net, "pl_deciding_" + task.getId(), ExecPlace.Type.flow);
-		exTask.pl_suspended = addPlace(net, "pl_suspended_" + task.getId(), ExecPlace.Type.flow);
-		exTask.pl_complete = addPlace(net, "pl_complete_" + task.getId(), ExecPlace.Type.flow);	
-		exTask.pl_context = addPlace(net, "pl_context_" + task.getId(), ExecPlace.Type.context);
-
+		
 		// add role dependencies
 		String rolename = task.getRolename();
 		
@@ -259,26 +279,19 @@ public class ExecConverter extends Converter {
 		exTask.pl_context.addLocator(new Locator("actions", "xsd:string", "/data/metadata/actions"));
 
 		//init transition
-		exTask.tr_init = addAutomaticTransition(net, "tr_init_" + task.getId(), taskDesignation);
-		exTask.tr_init.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.tr_init);
 		addFlowRelationship(net, exTask.tr_init, exTask.pl_inited);
 		
 		//enable transition
 		//note: structure of context place must be initialized by engine
-		AutomaticTransition enable = addAutomaticTransition(net, "tr_enable_" + task.getId(), taskDesignation);
-		exTask.tr_enable = enable;
-		exTask.tr_enable.setContextPlaceID(exTask.pl_context.getId());
 		//addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.tr_enable);
 		addFlowRelationship(net, exTask.pl_inited, exTask.tr_enable);
-		addExecFlowRelationship(net, exTask.tr_enable, exTask.pl_ready, extractDataURL);
+		addFlowRelationship(net, exTask.tr_enable, exTask.pl_ready);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_enable);
 		addExecFlowRelationship(net, exTask.tr_enable, exTask.pl_context, baseXsltURL + "context_enable.xsl");
 		enable.setModelURL(model);
 		
 		// allocate Transition
-		exTask.tr_allocate = addTransformationTransition(net, "tr_allocate_" + task.getId(), taskDesignation,"allocate", copyXsltURL);
-		exTask.tr_allocate.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_ready, exTask.tr_allocate);
 		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_running, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_allocate);
@@ -297,10 +310,7 @@ public class ExecConverter extends Converter {
 		}
 		
 		// submit Transition
-		FormTransition submit = addFormTransition(net, "tr_submit_" + task.getId(), task.getLabel(), model, form, bindings);
 		submit.setAction("submit");
-		exTask.tr_submit = submit;
-		exTask.tr_submit.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_submit);
 		addExecFlowRelationship(net, exTask.tr_submit, exTask.pl_deciding, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_submit);
@@ -310,11 +320,8 @@ public class ExecConverter extends Converter {
 		submit.setBindingsURL(bindings);
 
 		// delegate Transition
-		FormTransition delegate = addFormTransition(net, "tr_delegate_" + task.getId(), taskDesignation, model, form, bindings);
 		delegate.setAction("delegate");
 		delegate.setGuard(exTask.pl_context.getId() + ".isDelegated == 'true'");
-		exTask.tr_delegate = delegate;
-		exTask.tr_delegate.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_delegate);
 		addExecFlowRelationship(net, exTask.tr_delegate, exTask.pl_running, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_delegate);
@@ -324,11 +331,8 @@ public class ExecConverter extends Converter {
 		delegate.setBindingsURL(bindings);
 		
 		// review Transition
-		FormTransition review = addFormTransition(net, "tr_review_" + task.getId(), taskDesignation,model,form,bindings);
 		review.setAction("review");
 		review.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".reviewRequested == 'true'");
-		exTask.tr_review = review;
-		exTask.tr_review.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_review);
 		addExecFlowRelationship(net, exTask.tr_review, exTask.pl_complete, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_review);
@@ -338,8 +342,6 @@ public class ExecConverter extends Converter {
 		review.setBindingsURL(bindings);
 		
 		// done Transition
-		exTask.tr_done = addAutomaticTransition(net, "tr_done_" + task.getId(), taskDesignation);
-		exTask.tr_done.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_deciding, exTask.tr_done);
 		addFlowRelationship(net, exTask.tr_done, exTask.pl_complete);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_done);
@@ -347,8 +349,6 @@ public class ExecConverter extends Converter {
 		exTask.tr_done.setGuard(exTask.pl_context.getId() + ".isDelegated != 'true' && " + exTask.pl_context.getId() + ".reviewRequested != 'true'");
 		
 		// suspend
-		exTask.tr_suspend = addTransformationTransition(net, "tr_suspend_" + task.getId(), taskDesignation, "suspend", copyXsltURL);
-		exTask.tr_suspend.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_running, exTask.tr_suspend);
 		addExecFlowRelationship(net, exTask.tr_suspend, exTask.pl_suspended, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_suspend);
@@ -356,8 +356,6 @@ public class ExecConverter extends Converter {
 		exTask.tr_suspend.setRolename(rolename);
 		
 		// resume
-		exTask.tr_resume = addTransformationTransition(net, "tr_resume_" + task.getId(), taskDesignation, "resume", copyXsltURL);
-		exTask.tr_resume.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_suspended, exTask.tr_resume);
 		addExecFlowRelationship(net, exTask.tr_resume, exTask.pl_running, extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_resume);
@@ -365,13 +363,11 @@ public class ExecConverter extends Converter {
 		exTask.tr_resume.setRolename(rolename);
 		
 		// finish transition
-		exTask.tr_finish = addAutomaticTransition(net, "tr_finish_" + task.getId(), taskDesignation);
-		exTask.tr_finish.setContextPlaceID(exTask.pl_context.getId());
 		addFlowRelationship(net, exTask.pl_complete, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, c.map.get(getOutgoingSequenceFlow(task)), extractDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
-		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");
-		
+		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");	
+			
 		assert(c instanceof ExecConversionContext);
 		((ExecConversionContext)c).addToSubprocessToExecTasksMap(task.getParent(), exTask);
 		
@@ -548,20 +544,24 @@ public class ExecConverter extends Converter {
 				
 				//create data place for Task
 				ExecPlace dataPlace = addPlace(net,"pl_data_"+dataobject.getId(), ExecPlace.Type.data);
+				dataPlace.setName(dataobject.getId());
 				ExecTask.addDataPlace(dataPlace);
 				
 				// for data place add locators
 				String modelXML = dataobject.getModel();
-				dataPlace.setModel(modelXML);
-				Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
+					Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
+					Element processdata = (Element) doc.getDocumentElement().getElementsByTagName("processdata").item(0);
+					processdata.setAttribute("name",dataobject.getId());
+					
+				dataPlace.setModel(domToString(doc));
 				Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
-				Node child = dataTagOfDataModel.getFirstChild();
-				while (child != null) {
+				NodeList childs = dataTagOfDataModel.getChildNodes();
+				for (int i = 0; i < childs.getLength(); i++) {
+					if (childs.item(i).getNodeName().equals("#text")) continue;
 					dataPlace.addLocator(new Locator(
-							child.getNodeName(),
+							childs.item(i).getNodeName(),
 							"xsd:string",
-							"/data/processdata/"+dataobject.getId()+"/"+child.getNodeName()));
-					child = child.getNextSibling();
+							"/data/processdata/"+dataobject.getId()+"/"+childs.item(i).getNodeName()));
 				};
 			}
 		} catch (Exception io) {
@@ -602,14 +602,11 @@ public class ExecConverter extends Converter {
 		return rel;
 	}
 	
-	public FormTransition addFormTransition(PetriNet net, String id, String task, String model, String form, String bindings) {
+	public FormTransition addFormTransition(PetriNet net, String id, String task) {
 		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
 		t.setId(id);
 		t.setLabel(id);
 		t.setTask(task);
-		t.setFormURL(form);
-		t.setBindingsURL(bindings);
-		t.setModelURL(model);
 		net.getTransitions().add(t);
 		return t;
 	}
@@ -639,50 +636,59 @@ public class ExecConverter extends Converter {
 		return template;
 	}
 	
-	// build Structure for forms
-	Document addFormFields(Document doc, Node processData) {
-		NodeList list = processData.getChildNodes();
+	// build Structure for forms: go for all data/processdata child nodes
+	Document addFormFields(Document doc, HashMap<String, Node> processdataMap) {
 		Node root = doc.getFirstChild();
-		for (int i = 0; i<list.getLength(); i++) {
-			String attributeName = list.item(i).getNodeName();
-			
-			// for template watch in engine folder "/public/examples/delegation/formulartemplate"
-			// ==========  create Document  ===========			
-			Element div = doc.createElement("div");
-			div.setAttribute("class", "formatted");
-			root.appendChild(div);
-			
-			div.appendChild(doc.createElement("br"));
-			
-			Element div2 = doc.createElement("div");
-			div2.setAttribute("id", attributeName + "_grp");
-			div.appendChild(div2);
-			
-			Element input = doc.createElement("x:input");
-			input.setAttribute("ref", "instance('ui_settings')/"+ attributeName +"/@futurereadonly");
-			input.setAttribute("class", "leftcheckbox");
-			div.appendChild(input);
-			
-			Element input2 = doc.createElement("x:input");
-			input2.setAttribute("ref", "instance('ui_settings')/"+ attributeName +"/@futurevisible");
-			input2.setAttribute("class", "leftcheckbox");
-			div.appendChild(input2);
-			
-			Element group = doc.createElement("x:group");
-			group.setAttribute("bind", "fade."+ attributeName);
-			group.setAttribute("class", "fieldgroup");
-			div.appendChild(group);
-			
-			Element label = doc.createElement("x:label");
-			Element nameinput = doc.createElement("x:input");
-			label.setTextContent(attributeName+": ");
-			nameinput.setAttribute("ref", "instance('output-token')/data/processdata/" + attributeName);
-			nameinput.setAttribute("class", "inputclass");
-			group.appendChild(label);
-			
-			div.appendChild(doc.createElement("br"));
-			div.appendChild(doc.createElement("br"));
-			
+
+		for (String dataObjectName : processdataMap.keySet()){
+			Node processDataNode = processdataMap.get(dataObjectName);
+			Node dataElements = processDataNode.getNextSibling();
+			do {
+				// pretty hacked code
+				if (dataElements == null) break;
+				String attributeName = dataElements.getNodeName();
+				if (attributeName.equals("#text")) break;
+				
+				// for template watch in engine folder "/public/examples/delegation/formulartemplate"
+				// ==========  create Document  ===========			
+				Element div = doc.createElement("div");
+				div.setAttribute("class", "formatted");
+				root.appendChild(div);
+				
+				div.appendChild(doc.createElement("br"));
+				
+				Element div2 = doc.createElement("div");
+				div2.setAttribute("id", dataObjectName+"_"+attributeName + "_grp");
+				div.appendChild(div2);
+				
+				Element input = doc.createElement("x:input");
+				input.setAttribute("ref", "instance('ui_settings')/"+ dataObjectName+"_"+attributeName +"/@futurereadonly");
+				input.setAttribute("class", "leftcheckbox");
+				div.appendChild(input);
+				
+				Element input2 = doc.createElement("x:input");
+				input2.setAttribute("ref", "instance('ui_settings')/"+ dataObjectName+"_"+attributeName +"/@futurevisible");
+				input2.setAttribute("class", "leftcheckbox");
+				div.appendChild(input2);
+				
+				Element group = doc.createElement("x:group");
+				group.setAttribute("bind", "fade."+ dataObjectName+"_"+attributeName);
+				group.setAttribute("class", "fieldgroup");
+				div.appendChild(group);
+				
+				Element label = doc.createElement("x:label");
+				Element nameinput = doc.createElement("x:input");
+				label.setTextContent(attributeName+": ");
+				nameinput.setAttribute("ref", "instance('output-token')/places/processdata[@name='"+dataObjectName+"']/" + attributeName);
+				nameinput.setAttribute("class", "inputclass");
+				group.appendChild(label);
+				group.appendChild(nameinput);
+				
+				div.appendChild(doc.createElement("br"));
+				div.appendChild(doc.createElement("br"));
+				
+				
+			} while ((dataElements = dataElements.getNextSibling()) != null);
 		}
 		
 		{
@@ -696,7 +702,7 @@ public class ExecConverter extends Converter {
 			group.appendChild(deltrigger);
 			
 			Element dellabel = doc.createElement("x:label");
-			dellabel.setNodeValue("Delegate");
+			dellabel.setTextContent("Delegate");
 			deltrigger.appendChild(dellabel);
 			
 			Element delaction = doc.createElement("x:action");
@@ -714,46 +720,53 @@ public class ExecConverter extends Converter {
 				//values
 				Element value1 = doc.createElement("x:setvalue");
 				value1.setAttribute("bind", "isDelegated");
-				value1.setNodeValue("false");
+				value1.setTextContent("false");
 				delaction.appendChild(value1);
 				
 				Element value2 = doc.createElement("x:setvalue");
 				value2.setAttribute("bind", "isReviewed");
-				value2.setNodeValue("false");
+				value2.setTextContent("false");
 				delaction.appendChild(value2);
 				
 				Element value3 = doc.createElement("x:setvalue");
 				value3.setAttribute("bind", "delegatedFrom");
-				value3.setAttribute("value", "instance('output-token')/data/metadata/owner");
+				value3.setAttribute("value", "instance('output-token')/places/metadata/owner");
 				delaction.appendChild(value3);
 				
 				Element value4 = doc.createElement("x:setvalue");
 				value4.setAttribute("bind", "firstOwner");
-				value4.setAttribute("value", "instance('output-token')/data/metadata/owner");
+				value4.setAttribute("value", "instance('output-token')/places/metadata/owner");
 				delaction.appendChild(value4);
 				
 				Element value5 = doc.createElement("x:setvalue");
 				value5.setAttribute("bind", "owner.readonly");
-				value5.setNodeValue("true");
+				value5.setTextContent("true");
 				delaction.appendChild(value5);
 				
 				Element value6 = doc.createElement("x:setvalue");
 				value6.setAttribute("bind", "owner");
-				value6.setAttribute("value", "instance('output-token')/data/metadata/delegate");
+				value6.setAttribute("value", "instance('output-token')/places/metadata/delegate");
 				delaction.appendChild(value6);
 				
-				for (int i = 0; i<list.getLength(); i++) {
-					String attributeName = list.item(i).getNodeName();
-				
-				Element valuereadonly = doc.createElement("x:setvalue");
-				valuereadonly.setAttribute("bind", attributeName + ".readonly");
-				valuereadonly.setAttribute("value", "instance('ui_settings')/"+attributeName+"/@futurereadonly = 'true'");
-				delaction.appendChild(valuereadonly);
-				
-				Element valuevisible = doc.createElement("x:setvalue");
-				valuevisible.setAttribute("bind", attributeName + ".visible");
-				valuevisible.setAttribute("value", "instance('ui_settings')/"+attributeName+"/@futurevisible = 'true'");
-				delaction.appendChild(valuevisible);
+				for (String dataObjectName : processdataMap.keySet()){
+					Node processDataNode = processdataMap.get(dataObjectName);
+					Node dataElements = processDataNode.getNextSibling();
+					do {
+						// pretty hacked code
+						if (dataElements == null) break;
+						String attributeName = dataElements.getNodeName();
+						if (attributeName.equals("#text")) break;
+			
+					Element valuereadonly = doc.createElement("x:setvalue");
+					valuereadonly.setAttribute("bind", dataObjectName+"_"+attributeName + ".readonly");
+					valuereadonly.setAttribute("value", "instance('ui_settings')/"+dataObjectName+"_"+attributeName+"/@futurereadonly = 'true'");
+					delaction.appendChild(valuereadonly);
+					
+					Element valuevisible = doc.createElement("x:setvalue");
+					valuevisible.setAttribute("bind", dataObjectName+"_"+attributeName + ".visible");
+					valuevisible.setAttribute("value", "instance('ui_settings')/"+dataObjectName+"_"+attributeName+"/@futurevisible = 'true'");
+					delaction.appendChild(valuevisible);
+					} while ((dataElements = dataElements.getNextSibling()) != null);
 				
 				}
 			
@@ -763,7 +776,7 @@ public class ExecConverter extends Converter {
 			group.appendChild(canceltrigger);
 			
 			Element cancellabel = doc.createElement("x:label");
-			cancellabel.setNodeValue("Cancel");
+			cancellabel.setTextContent("Cancel");
 			canceltrigger.appendChild(cancellabel);
 			
 			Element cancelaction = doc.createElement("x:action");
@@ -781,12 +794,12 @@ public class ExecConverter extends Converter {
 				//values
 				Element cancelvalue1 = doc.createElement("x:setvalue");
 				cancelvalue1.setAttribute("bind", "isDelegated");
-				cancelvalue1.setNodeValue("false");
+				cancelvalue1.setTextContent("false");
 				cancelaction.appendChild(cancelvalue1);
 				
 				Element cancelvalue2 = doc.createElement("x:setvalue");
 				cancelvalue2.setAttribute("bind", "isReviewed");
-				cancelvalue2.setNodeValue("false");
+				cancelvalue2.setTextContent("false");
 				cancelaction.appendChild(cancelvalue2);
 					
 		}
@@ -802,7 +815,7 @@ public class ExecConverter extends Converter {
 			group.appendChild(reviewtrigger);
 			
 			Element reviewlabel = doc.createElement("x:label");
-			reviewlabel.setNodeValue("Review");
+			reviewlabel.setTextContent("Review");
 			reviewtrigger.appendChild(reviewlabel);
 			
 			Element reviewaction = doc.createElement("x:action");
@@ -820,12 +833,12 @@ public class ExecConverter extends Converter {
 				//values
 				Element reviewvalue1 = doc.createElement("x:setvalue");
 				reviewvalue1.setAttribute("bind", "wantToReview");
-				reviewvalue1.setNodeValue("false");
+				reviewvalue1.setTextContent("false");
 				reviewaction.appendChild(reviewvalue1);
 				
 				Element reviewvalue2 = doc.createElement("x:setvalue");
 				reviewvalue2.setAttribute("bind", "isReviewed");
-				reviewvalue2.setNodeValue("false");
+				reviewvalue2.setTextContent("false");
 				reviewaction.appendChild(reviewvalue2);
 			
 			
@@ -842,7 +855,7 @@ public class ExecConverter extends Converter {
 			group.appendChild(submittrigger);
 			
 			Element submitlabel = doc.createElement("x:label");
-			submitlabel.setNodeValue("Submit");
+			submitlabel.setTextContent("Submit");
 			submittrigger.appendChild(submitlabel);
 			
 			Element submitaction = doc.createElement("x:action");
@@ -860,70 +873,78 @@ public class ExecConverter extends Converter {
 				//values
 				Element value1 = doc.createElement("x:setvalue");
 				value1.setAttribute("bind", "delegatedFrom");
-				value1.setNodeValue("");
+				value1.setTextContent("");
 				submitaction.appendChild(value1);
 				
 				Element value2 = doc.createElement("x:setvalue");
 				value2.setAttribute("bind", "isDelegated");
-				value2.setNodeValue("false");
+				value2.setTextContent("false");
 				submitaction.appendChild(value2);
 				
 				Element value3 = doc.createElement("x:setvalue");
 				value3.setAttribute("bind", "isReviewed");
-				value3.setNodeValue("true");
+				value3.setTextContent("true");
 				submitaction.appendChild(value3);
 				
 				Element value4 = doc.createElement("x:setvalue");
 				value4.setAttribute("bind", "owner");
-				value4.setAttribute("value", "instance('output-token')/data/metadata/firstOwner");
+				value4.setAttribute("value", "instance('output-token')/places/metadata/firstOwner");
 				submitaction.appendChild(value4);
 				
-				for (int i = 0; i<list.getLength(); i++) {
-					String attributeName = list.item(i).getNodeName();
+				for (String dataObjectName : processdataMap.keySet()){
+					Node processDataNode = processdataMap.get(dataObjectName);
+					Node dataElements = processDataNode.getNextSibling();
+					do {
+						// pretty hacked code
+						if (dataElements == null) break;
+						String attributeName = dataElements.getNodeName();
+						if (attributeName.equals("#text")) break;
 				
-				Element valuereadonly = doc.createElement("x:setvalue");
-				valuereadonly.setAttribute("bind", attributeName + ".readonly");
-				valuereadonly.setNodeValue("false");
-				submitaction.appendChild(valuereadonly);
-				
-				Element valuevisible = doc.createElement("x:setvalue");
-				valuevisible.setAttribute("bind", attributeName + ".visible");
-				valuevisible.setNodeValue("true");
-				submitaction.appendChild(valuevisible);
+					Element valuereadonly = doc.createElement("x:setvalue");
+					valuereadonly.setAttribute("bind", dataObjectName+"_"+attributeName + ".readonly");
+					valuereadonly.setTextContent("false");
+					submitaction.appendChild(valuereadonly);
+					
+					Element valuevisible = doc.createElement("x:setvalue");
+					valuevisible.setAttribute("bind", dataObjectName+"_"+attributeName + ".visible");
+					valuevisible.setTextContent("true");
+					submitaction.appendChild(valuevisible);
+					
+					} while ((dataElements = dataElements.getNextSibling()) != null);
 				
 				}
 			
-			// cancelButton
-			Element canceltrigger = doc.createElement("x:trigger");
-			canceltrigger.setAttribute("ref", "instance('ui_settings')/cancelbutton");
-			group.appendChild(canceltrigger);
+			// interactButton
+			Element interacttrigger = doc.createElement("x:trigger");
+			interacttrigger.setAttribute("ref", "instance('ui_settings')/interactbutton");
+			group.appendChild(interacttrigger);
 			
-			Element cancellabel = doc.createElement("x:label");
-			cancellabel.setNodeValue("Cancel");
-			canceltrigger.appendChild(cancellabel);
+			Element interactlabel = doc.createElement("x:label");
+			interactlabel.setTextContent("Interact");
+			interacttrigger.appendChild(interactlabel);
 			
-			Element cancelaction = doc.createElement("x:action");
-			cancelaction.setAttribute("ev:event", "DOMActivate");
-			canceltrigger.appendChild(cancelaction);
+			Element interactaction = doc.createElement("x:action");
+			interactaction.setAttribute("ev:event", "DOMActivate");
+			interacttrigger.appendChild(interactaction);
 			
-			Element cancelaction2 = doc.createElement("x:action");
-			cancelaction2.setAttribute("ev:event", "DOMActivate");
-			canceltrigger.appendChild(cancelaction2);
+			Element interactaction2 = doc.createElement("x:action");
+			interactaction2.setAttribute("ev:event", "DOMActivate");
+			interacttrigger.appendChild(interactaction2);
 			
-			Element cancelsend = doc.createElement("x:send");
-			cancelsend.setAttribute("submission", "form1");
-			cancelaction2.appendChild(cancelsend);
+			Element interactsend = doc.createElement("x:send");
+			interactsend.setAttribute("submission", "form1");
+			interactaction2.appendChild(interactsend);
 			
 				//values
-				Element cancelvalue1 = doc.createElement("x:setvalue");
-				cancelvalue1.setAttribute("bind", "isDelegated");
-				cancelvalue1.setNodeValue("true");
-				cancelaction.appendChild(cancelvalue1);
+				Element interactvalue1 = doc.createElement("x:setvalue");
+				interactvalue1.setAttribute("bind", "isDelegated");
+				interactvalue1.setTextContent("true");
+				interactaction.appendChild(interactvalue1);
 				
-				Element cancelvalue2 = doc.createElement("x:setvalue");
-				cancelvalue2.setAttribute("bind", "isReviewed");
-				cancelvalue2.setNodeValue("false");
-				cancelaction.appendChild(cancelvalue2);
+				Element interactvalue2 = doc.createElement("x:setvalue");
+				interactvalue2.setAttribute("bind", "isReviewed");
+				interactvalue2.setTextContent("false");
+				interactaction.appendChild(interactvalue2);
 				
 		}
 		
@@ -942,81 +963,117 @@ public class ExecConverter extends Converter {
 	}
 	
 	// build structure for bindings
-	Document addBindings(Document doc, Node processData) {
-		NodeList list = processData.getChildNodes();
+	Document addBindings(Document doc, HashMap<String, Node> processdataMap) {
 		Node root = doc.getFirstChild();
-		for (int i = 0; i<list.getLength(); i++) {
-			String attributeName = list.item(i).getNodeName();
 		
-			Element bind1 = doc.createElement("x:bind");
-			bind1.setAttribute("id", attributeName);
-			bind1.setAttribute("nodeset", "instance('output-token')/data/" + attributeName);
-			root.appendChild(bind1);
+		//add necessary ui_settings nodes
+		NodeList list = doc.getDocumentElement().getElementsByTagName("x:instance");
+		for (int i = 0; i < list.getLength(); i++) {
+			NamedNodeMap attributes = list.item(i).getAttributes();
+			if (attributes.getNamedItem("id").getNodeValue().equals("ui_settings")) {
+				
+				for (String dataObjectName : processdataMap.keySet()){
+					Node processDataNode = processdataMap.get(dataObjectName);
+					Node dataElements = processDataNode;
+					do {
+						// pretty hacked code
+						if (dataElements == null) break;
+						if (dataElements.getNodeName().equals("#text")) continue;
+						Element property = doc.createElement(dataObjectName + "_" + dataElements.getNodeName());
+						property.setAttribute("futurereadonly", "false");
+						property.setAttribute("futurevisible", "false");
+						for (Node ui_setting_nodes = list.item(i).getFirstChild(); ; ui_setting_nodes = ui_setting_nodes.getNextSibling()) {
+							if (ui_setting_nodes.getNodeName().equals("#text")) continue;
+							ui_setting_nodes.appendChild(property);
+							break;
+						}
+						
+					} while ((dataElements = dataElements.getNextSibling()) != null);
+					
+				}
+			}
+		}
+		
+		// add necessary token bindings
+		for (String dataObjectName : processdataMap.keySet()){
+			Node processDataNode = processdataMap.get(dataObjectName);
+			Node dataElements = processDataNode.getNextSibling();
+			do {
+				// pretty hacked code
+				if (dataElements == null) break;
+				String attributeName = dataElements.getNodeName();
+				if (attributeName.equals("#text")) continue;
 			
-			Element bind2 = doc.createElement("x:bind");
-			bind2.setAttribute("id", attributeName+".readonly");
-			bind2.setAttribute("nodeset", "instance('output-token')/data/" + attributeName + "/@readonly");
-			root.appendChild(bind2);
-			
-			Element bind3 = doc.createElement("x:bind");
-			bind3.setAttribute("id", attributeName+".visible");
-			bind3.setAttribute("nodeset", "instance('output-token')/data/" + attributeName +"/@visible");
-			root.appendChild(bind3);
-			
-			Element bind4 = doc.createElement("x:bind");
-			bind4.setAttribute("type", "xsd:boolean");
-			bind4.setAttribute("nodeset", "instance('output-token')/data/" + attributeName +"/@readonly");
-			root.appendChild(bind4);
-			
-			Element bind5 = doc.createElement("x:bind");
-			bind5.setAttribute("type", "xsd:boolean");
-			bind5.setAttribute("nodeset", "instance('output-token')/data/" + attributeName +"/@visible");
-			root.appendChild(bind5);
-			
-			Element bind6 = doc.createElement("x:bind");
-			bind6.setAttribute("type", "xsd:boolean");
-			bind6.setAttribute("nodeset", "instance('ui_settings')/" + attributeName +"/@futurereadonly");
-			root.appendChild(bind6);
-			
-			Element bind7 = doc.createElement("x:bind");
-			bind7.setAttribute("type", "xsd:boolean");
-			bind7.setAttribute("nodeset", "instance('ui_settings')/" + attributeName +"/@futurevisible");
-			root.appendChild(bind7);
-			
-			Element bind8 = doc.createElement("x:bind");
-			bind8.setAttribute("nodeset", "instance('ui_settings')/" + attributeName +"/@futurevisible");
-			bind8.setAttribute("relevant", "instance('output-token')/data/metadata/isDelegated = 'true' and instance('output-token')/data/processdata/" + attributeName +"/@visible = 'true'");
-			root.appendChild(bind8);
-			
-			Element bind9 = doc.createElement("x:bind");
-			bind9.setAttribute("nodeset", "instance('ui_settings')/" + attributeName +"/@futurereadonly");
-			bind9.setAttribute("relevant", "instance('output-token')/data/metadata/isDelegated = 'true' and ((instance('output-token')/data/processdata/" + attributeName +"/@readonly = 'true' and instance('output-token')/data/processdata/" + attributeName +"/@visible != 'true') or instance('output-token')/data/processdata/" + attributeName +"/@visible = 'true')");
-			root.appendChild(bind9);
-			
-			Element bind10 = doc.createElement("x:bind");
-			bind10.setAttribute("nodeset", "instance('output-token')/data/processdata/" + attributeName);
-			bind10.setAttribute("readonly", "instance('output-token')/data/processdata/" + attributeName +"/@readonly = 'true'");
-			root.appendChild(bind10);
-			
-			Element bind11 = doc.createElement("x:bind");
-			bind11.setAttribute("nodeset", "instance('ui_settings')/" + attributeName);
-			bind11.setAttribute("relevant", "not(instance('output-token')/data/processdata/" + attributeName +"/@visible != 'true' and instance('output-token')/data/processdata/" + attributeName +"/@readonly != 'true')");
-			bind11.setAttribute("id", "fade." + attributeName);
-			root.appendChild(bind11);
-			
-			Element bind12 = doc.createElement("x:bind");
-			bind12.setAttribute("nodeset", "instance('ui_settings')/" + attributeName +"/@futurevisible");
-			bind12.setAttribute("readonly", "instance('ui_settings')/" + attributeName +"/@futurereadonly = 'true'");
-			root.appendChild(bind12);
-			
-			Element bind13 = doc.createElement("x:bind");
-			bind13.setAttribute("nodeset", "instance('ui_settings')/" + attributeName +"/@futurereadonly");
-			bind13.setAttribute("readonly", "instance('ui_settings')/" + attributeName +"/@futurevisible = 'true'");
-			root.appendChild(bind13);
-			
+				Element bind1 = doc.createElement("x:bind");
+				bind1.setAttribute("id", dataObjectName+"_"+attributeName);
+				bind1.setAttribute("nodeset", "instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName);
+				root.appendChild(bind1);
+				
+				Element bind2 = doc.createElement("x:bind");
+				bind2.setAttribute("id", dataObjectName+"_"+attributeName+".readonly");
+				bind2.setAttribute("nodeset", "instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName + "/@readonly");
+				root.appendChild(bind2);
+				
+				Element bind3 = doc.createElement("x:bind");
+				bind3.setAttribute("id", dataObjectName+"_"+attributeName+".visible");
+				bind3.setAttribute("nodeset", "instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@visible");
+				root.appendChild(bind3);
+				
+				Element bind4 = doc.createElement("x:bind");
+				bind4.setAttribute("type", "xsd:boolean");
+				bind4.setAttribute("nodeset", "instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@readonly");
+				root.appendChild(bind4);
+				
+				Element bind5 = doc.createElement("x:bind");
+				bind5.setAttribute("type", "xsd:boolean");
+				bind5.setAttribute("nodeset", "instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@visible");
+				root.appendChild(bind5);
+				
+				Element bind6 = doc.createElement("x:bind");
+				bind6.setAttribute("type", "xsd:boolean");
+				bind6.setAttribute("nodeset", "instance('ui_settings')/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@futurereadonly");
+				root.appendChild(bind6);
+				
+				Element bind7 = doc.createElement("x:bind");
+				bind7.setAttribute("type", "xsd:boolean");
+				bind7.setAttribute("nodeset", "instance('ui_settings')/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@futurevisible");
+				root.appendChild(bind7);
+				
+				Element bind8 = doc.createElement("x:bind");
+				bind8.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurevisible");
+				bind8.setAttribute("relevant", "instance('output-token')/places/metadata/isDelegated = 'true' and instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@visible = 'true'");
+				root.appendChild(bind8);
+				
+				Element bind9 = doc.createElement("x:bind");
+				bind9.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurereadonly");
+				bind9.setAttribute("relevant", "instance('output-token')/places/metadata/isDelegated = 'true' and ((instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@readonly = 'true' and instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@visible != 'true') or instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@visible = 'true')");
+				root.appendChild(bind9);
+				
+				Element bind10 = doc.createElement("x:bind");
+				bind10.setAttribute("nodeset", "instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName);
+				bind10.setAttribute("readonly", "instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@readonly = 'true'");
+				root.appendChild(bind10);
+				
+				Element bind11 = doc.createElement("x:bind");
+				bind11.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName+"_"+attributeName);
+				bind11.setAttribute("relevant", "not(instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@visible != 'true' and instance('output-token')/places/processdata[" + "@name='"+dataObjectName+"'" + "]/" +attributeName +"/@readonly != 'true')");
+				bind11.setAttribute("id", "fade." + dataObjectName+"_"+attributeName);
+				root.appendChild(bind11);
+				
+				Element bind12 = doc.createElement("x:bind");
+				bind12.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurevisible");
+				bind12.setAttribute("readonly", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurereadonly = 'true'");
+				root.appendChild(bind12);
+				
+				Element bind13 = doc.createElement("x:bind");
+				bind13.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurereadonly");
+				bind13.setAttribute("readonly", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurevisible = 'true'");
+				root.appendChild(bind13);
+				
+			} while ((dataElements = dataElements.getNextSibling()) != null);
 		}
 			
-			return doc;
+		return doc;
 		
 	}
 	
@@ -1076,12 +1133,47 @@ public class ExecConverter extends Converter {
                 return URLResponse; 
         } 
      
+     /**
+      * checks if such a <processdata id="..."> tag exists, that conforms to dataobject id 
+      * @param dataObject DataObject, that could be already mapped to the <data> childs
+      * @param list List of <data> childs
+      * @return is tag existent?
+      */
 		private boolean isContainedIn(ExecDataObject dataObject, NodeList list){
-			for (int i = 0; i<list.getLength(); i++) {
-				if (list.item(i).getNodeName().equals(dataObject.getId()))
-					return true;
+			for (int procdata = 0; procdata<list.getLength(); procdata++) {
+				NamedNodeMap attributeList = list.item(procdata).getAttributes();
+				for (int attr = 0; attr<attributeList.getLength(); attr++) {
+					Node attribute = attributeList.item(attr);
+					if (list.item(procdata).getNodeName() == "processData" && attribute.equals(dataObject.getId()))
+						return true;
+				}
 			}
 			return false;
+		}
+		
+		private boolean isContainedIn(ExecDataObject dataObject, HashMap<String, Node> map){
+			Set<String> list = map.keySet();
+			if (list.contains(dataObject.getId()))
+				return true;
+			return false;
+		}
+		
+		/**
+		 * returns a map with key dataPlace (conforms to dataObject id) and attributes of dataObject
+		 * @param data
+		 * @return
+		 */
+		private HashMap<String, NodeList> getProcessDataNodes(Node data) {
+			HashMap<String, NodeList> targetMap = new HashMap<String, NodeList>();
+			NodeList list = data.getChildNodes();
+			for (int i = 0; i<list.getLength(); i++) {
+				if (list.item(i).getNodeName().equals("processdata")) {
+					String id = list.item(i).getAttributes().getNamedItem("id").getNodeName();
+					NodeList attributes = list.item(i).getChildNodes();
+					targetMap.put(id, attributes);
+				}
+			}
+			return targetMap;
 		}
 		
 		private String domToString(Document document) {
@@ -1112,6 +1204,50 @@ public class ExecConverter extends Converter {
 	        }
 	        
 	        return domAsString.toString();
+		}
+		
+		String create_extract_processdata_xsl(ExecDataObject dataObject, DocumentBuilder parser)
+															throws IOException{
+			Document xslDoc = parser.newDocument();
+			
+			Element stylesheet = xslDoc.createElement("xsl:stylesheet");
+			stylesheet.setAttribute("version", "1.0");
+			stylesheet.setAttribute("xmlns:xsl", "http://www.w3.org/1999/XSL/Transform");
+			xslDoc.appendChild(stylesheet);
+			
+			
+			Element template = xslDoc.createElement("xsl:template");
+			stylesheet.setAttribute("match", "/");
+			stylesheet.appendChild(template);
+			
+			Element data = xslDoc.createElement("data");
+			template.appendChild(data);
+			
+			Element apply = xslDoc.createElement("xsl:apply-templates");
+			apply.setAttribute("select", "//processdata");
+			data.appendChild(apply);
+			
+			
+			Element template2 = xslDoc.createElement("xsl:template");
+			stylesheet.setAttribute("match", "processdata[@target_place=\'"+ dataObject.getId() +"\']");
+			stylesheet.appendChild(template);
+			
+			Element processdata = xslDoc.createElement("processdata");
+			template2.appendChild(processdata);
+			
+			Element attribute = xslDoc.createElement("xsl:attribute");
+			apply.setAttribute("name", "place");
+			processdata.appendChild(attribute);
+
+			Element value = xslDoc.createElement("xsl:value-of");
+			apply.setAttribute("select", "../@place");
+			attribute.appendChild(value);
+			
+			Element copy = xslDoc.createElement("xsl:copy-of");
+			apply.setAttribute("select", "./*");
+			processdata.appendChild(copy);
+			
+			return postDataToURL(domToString(xslDoc),enginePostURL);
 		}
 
 }
