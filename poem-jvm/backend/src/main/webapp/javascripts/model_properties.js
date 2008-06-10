@@ -544,7 +544,7 @@ ModelProperties.render = {
 							'<p><label for="edit_model_summary">description</label><textarea rows="7" name="summary" id="edit_model_summary">{summary}</textarea></p>',
 						'</fieldset>',
 						'<fieldset>',
-							'<p><label for="edit_model_type">type</label><input type="text" name="type" class="text disabled" value="{type:uppercase}" disabled="disabled" id="edit_model_type" /></p>',
+							'<p><label for="edit_model_type">type</label><input type="text" name="type" class="text disabled" value="{ss_name}" disabled="disabled" id="edit_model_type" /></p>',
 							'<p><label for="edit_model_created">created</label><input type="text" name="created" class="text disabled" value="{created:this.dateFormat}" disabled="disabled" id="edit_model_created" /></p>',
 							'<p><label for="edit_model_updated">last update</label><input type="text" name="updated" class="text disabled" value="{updated:this.dateFormat}" disabled="disabled" id="edit_model_updated" /></p>',
 						'</fieldset>',
