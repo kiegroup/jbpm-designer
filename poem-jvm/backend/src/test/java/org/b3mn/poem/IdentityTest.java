@@ -10,13 +10,13 @@ public class IdentityTest {
 	
 	
 	@Test public void getAcccess() {
-		String uri = "/data/model/10";
+		String uri = "/data/model/1";
 		List<Access> access = Identity.instance(uri).getAccess();
 		assertEquals(1, access.size());
 	}
 	
 	@Test public void access() {
-		String term = "owner", openid = "https://openid.hpi.uni-potsdam.de/user/ole.eckermann", uri = "/data/model/9", rel="/self";
+		String term = "owner", openid = "https://openid.hpi.uni-potsdam.de/user/ole.eckermann", uri = "/data/model/1", rel="/self";
 		Identity model = Identity.instance(uri);
 		Access access = model.access(openid,rel);
 		String new_Term = access.getAccess_term();
@@ -55,7 +55,7 @@ public class IdentityTest {
 	
 	@Test public void createAndDeleteInteraction() {
 		Identity subject = Identity.instance("https://openid.hpi.uni-potsdam.de/user/hagen.overdick");
-		Identity object =  Identity.instance("/data/model/9");
+		Identity object =  Identity.instance("/data/model/1");
 		String term = "write";
 		if(Interaction.exist(subject.getUserHierarchy(), object.getModelHierarchy(), term) == null) {
 			Interaction right = new Interaction();
