@@ -74,8 +74,8 @@ class Testdata < ActiveRecord::Migration
 
     
     execute %q{
-      insert into "representation"(ident_id, type, title, summary, mime_type, svg, content)
-        select id, 'http://b3mn.org/stencilset/bpmn#', 'MyProcess', 'Ganz tolles Ding!', 'application/xhtml+xml', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 5 5"><rect id="black_stripe" fill="#000" width="5" height="3"/> </svg>', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
+      insert into "representation"(ident_id, type, title, summary, mime_type, content)
+        select id, 'http://b3mn.org/stencilset/bpmn#', 'SvgTest', 'Ganz tolles Ding!', 'application/xhtml+xml', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'
       	from identity where uri = '/data/model/1';
       insert into "representation"(ident_id, type, title, summary, mime_type, svg, content)
         select id, 'http://b3mn.org/stencilset/bpmn#', 'Example', 'Ganz tolles Ding!', 'application/xhtml+xml', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 5 5"><rect id="black_stripe" fill="#000" width="5" height="3"/> </svg>', '<div id="oryxcanvas" class="-oryx-canvas"><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span><a rel="oryx-stencilset" href="/oryx/stencilsets/bpmn/bpmn.json"/></div>'

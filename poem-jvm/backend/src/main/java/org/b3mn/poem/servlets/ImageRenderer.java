@@ -16,7 +16,16 @@ public class ImageRenderer {
 	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object, String hostname) throws IOException {
     	setResponseHeaders(res);
     	try {
-			transcode(object.read().getSvg(), res.getOutputStream());
+    		String SvgRepresentation = object.read().getSvg();
+    		if(SvgRepresentation == null) {
+    			SvgRepresentation = "<svg xmlns=\"http://www.w3.org/2000/svg\" " +
+    					"xmlns:oryx=\"http://oryx-editor.org\" id=\"oryx_1\" width=\"800\" " +
+    					"height=\"400\" xlink=\"http://www.w3.org/1999/xlink\" " +
+    					"svg=\"http://www.w3.org/2000/svg\"><text x=\"30\" y=\"30\" font-size=\"12px\">" +
+    					"Sorry, there is no graphical representation available on the server.<tspan x=\"30\" y=\"50\">" +
+    					"Please load the process with the Oryx Editor and push the Save button.</tspan></text></svg>";
+    		}
+    		transcode(SvgRepresentation, res.getOutputStream());
 		} catch (TranscoderException e) {
 			e.printStackTrace();
 		}
