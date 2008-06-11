@@ -12,7 +12,7 @@ public class IdentityTest {
 	@Test public void getAcccess() {
 		String uri = "/data/model/1";
 		List<Access> access = Identity.instance(uri).getAccess();
-		assertEquals(1, access.size());
+		assertEquals(3, access.size());
 	}
 	
 	@Test public void access() {
