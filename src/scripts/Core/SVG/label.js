@@ -186,7 +186,9 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			}
 			
 			var textLines = this._text.split("\n");
-
+			while(textLines.last() == "")
+				textLines.remove(textLines.last());
+				
 			this.node.textContent = "";
 
 			if(this.node.ownerDocument) {

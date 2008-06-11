@@ -50,6 +50,17 @@
         
     </target>
     
+   <target name="build-execution">
+        
+        <copy todir='build/execution'>
+            <fileset dir="data/execution"/>
+        </copy>
+        <echo>
+            Copied execution data into build destination
+        </echo>
+        
+    </target>
+    
     <target name="build-server">
         
         <mkdir dir="build/classes"/>
@@ -87,7 +98,7 @@
         </javac>
     </target>
     
-    <target name="build" depends="build-plugins, build-stencilsets, build-server">
+    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server">
         
         <mkdir dir="build/tmp"/>
         <copy todir='build' file='src/scripts/Core/config.js'/>
@@ -127,7 +138,9 @@
         </echo>
         
         <copy todir='build/lib'>
-            <fileset dir='lib' includes='**/*'/>
+            <fileset dir='lib' includes='**/*'>
+				<exclude name="**/*.jar"/>
+			</fileset>
         </copy>
         <copy todir='build/shared'>
             <fileset dir='shared' includes='**/*.js'/>
@@ -229,8 +242,10 @@
             <classes dir="build/classes"/>
             
         </war>
-    	
+        
+          
     </target>
     
     <target name="all" depends="build, examples, compress, dist"/>
+    
 </project>

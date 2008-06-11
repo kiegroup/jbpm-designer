@@ -22,6 +22,13 @@
  ##############################
 
 module Helper
+  @@model_types = {
+      "http://b3mn.org/stencilset/bpmn#" => {:uri => "/stencilsets/bpmn/bpmn.json", :title => "BPMN", :description => "Business Process Model Notation", :icon_url => "/oryx/stencilsets/bpmn/bpmn.png"},
+      "http://b3mn.org/stencilset/petrinet#" => {:uri => "/stencilsets/petrinets/petrinet.json", :title => "Petri Net", :description => "Petri Net", :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"},
+      "http://b3mn.org/stencilset/epc#" => {:uri => "/stencilsets/epc/epc.json", :title => "EPC", :description => "Event-Driven Process Chain", :icon_url => "/oryx/stencilsets/epc/epc.png"},
+      "http://www.example.org/workflownets#" => {:uri => "/stencilsets/workflownets/workflownets.json", :title => "Workflow Net", :description => "Workflow Net", :icon_url => "/oryx/stencilsets/workflownets/workflownets.png"}
+  }
+  
   def self.toHash(obj, keys)
     output = {}
     keys.each do |key|
@@ -54,7 +61,7 @@ module Helper
     out.print(ActiveSupport::JSON.encode(output))
   end
   
-  def self.getModelInfo(interaction, model = nil)
+  def self.getModelMetadata(interaction, model = nil)
     model ||= interaction.object
     uris = []
     interaction.subject.getServlets.each do |servlet|
@@ -63,11 +70,7 @@ module Helper
                   'title' => servlet.getTitle }
       end 
     end
-    info = toHash(model.read, %w{Title Summary Updated Created Type})
-    info['edit_uri'] = interaction.hostname + model.getUri + '/info'
-    info['self_uri'] = interaction.hostname + model.getUri + '/self'
-    info['meta_uri'] = interaction.hostname + model.getUri + '/info-access'
-    info['icon_url'] = '/oryx/stencilsets/' + info['type'] + '/' + info['type'] + '.png'
+    info = getModelInfo(model, interaction.hostname)
     access_rights = []
     model.getAccess.each do |right|
       item = toHash(right, %w{Subject Predicate})
@@ -76,6 +79,22 @@ module Helper
     end
     access = {'access_rights' => access_rights, 'edit_uri' => interaction.hostname + model.getUri + '/access'}
     output = {'uris'=>uris, 'info'=>info,'access'=>access}
+  end
+  
+  def self.getModelInfo(model, hostname)
+    representation = model.read
+    output = Helper.toHash(representation, %w{Title Summary Updated Created Type})
+    output['edit_uri'] = hostname + model.getUri + '/info'
+    output['self_uri'] = hostname + model.getUri + '/self'
+    output['meta_uri'] = hostname + model.getUri + '/info-access'
+    output['icon_url'] = @@model_types[representation.getType][:icon_url]
+    return output
+  end
+    
+  def self.getModelTypes()    
+    types = @@model_types.collect { |key, value|
+      {:namespace => key}.merge(value)
+    }
   end
   
   def self.getOryxModel(representation)

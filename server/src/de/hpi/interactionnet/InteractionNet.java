@@ -13,6 +13,8 @@ public interface InteractionNet extends PTNet {
 	
 	Marking getInitialMarking();
 	
+	List<Marking> getFinalMarkings();
+	
 	InteractionNetFactory getFactory();
 
 }

@@ -2,10 +2,10 @@ package de.hpi.interactionnet.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.impl.PTNetImpl;
 import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionNet;
@@ -21,11 +21,18 @@ import de.hpi.petrinet.Transition;
 public class InteractionNetImpl extends PTNetImpl implements InteractionNet {
 	
 	private List<Role> roles;
+	private List<Marking> finalMarkings;
 
 	public List<Role> getRoles() {
 		if (roles == null)
 			roles = new ArrayList();
 		return roles;
+	}
+
+	public List<Marking> getFinalMarkings() {
+		if (finalMarkings == null)
+			finalMarkings = new ArrayList<Marking>();
+		return finalMarkings;
 	}
 
 	@Override
@@ -44,9 +51,7 @@ public class InteractionNetImpl extends PTNetImpl implements InteractionNet {
 		InteractionNet newnet = factory.createInteractionNet();
 		Map map = new HashMap();
 		
-		for (Iterator<Role> it=getRoles().iterator(); it.hasNext(); ) {
-			Role r1 = it.next();
-			
+		for (Role r1: getRoles()) {
 			Role r2 = factory.createRole();
 			newnet.getRoles().add(r2);
 			map.put(r1, r2);
@@ -54,9 +59,7 @@ public class InteractionNetImpl extends PTNetImpl implements InteractionNet {
 			r2.setName(r1.getName());
 		}
 		
-		for (Iterator iter=getPlaces().iterator(); iter.hasNext(); ) {
-			Place p1 = (Place)iter.next();
-			
+		for (Place p1: getPlaces()) {
 			Place p2 = factory.createPlace();
 			newnet.getPlaces().add(p2);
 			map.put(p1, p2);
@@ -65,8 +68,14 @@ public class InteractionNetImpl extends PTNetImpl implements InteractionNet {
 			newnet.getInitialMarking().setNumTokens(p2, getInitialMarking().getNumTokens(p1));
 		}
 		
-		for (Iterator<Transition> iter=getTransitions().iterator(); iter.hasNext(); ) {
-			Transition t1 = iter.next();
+		for (Marking m: getFinalMarkings()) {
+			Marking newm = factory.createMarking(newnet);
+			newnet.getFinalMarkings().add(newm);
+			for (Place p1: getPlaces())
+				newm.setNumTokens((Place)map.get(p1), m.getNumTokens(p1));
+		}
+		
+		for (Transition t1: getTransitions()) {
 			Transition t2;
 			
 			if (t1 instanceof InteractionTransition) {
@@ -95,9 +104,7 @@ public class InteractionNetImpl extends PTNetImpl implements InteractionNet {
 			map.put(t1, t2);
 		}
 		
-		for (Iterator iter=getFlowRelationships().iterator(); iter.hasNext(); ) {
-			FlowRelationship f1 = (FlowRelationship)iter.next();
-			
+		for (FlowRelationship f1: getFlowRelationships()) {
 			FlowRelationship f2 = factory.createFlowRelationship();
 			newnet.getFlowRelationships().add(f2);
 			

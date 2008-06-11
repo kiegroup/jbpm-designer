@@ -27,7 +27,9 @@ module Handler
       
       java_script_includes = ['log', 'application', 'repository', 'model_properties']
       stylesheet_links = ['openid', 'repository', 'model_properties']
-      ext_path = '/backend/ext/'
+      
+      backend_path = '/backend'
+      ext_path = backend_path + '/ext/'
       
       interaction.response.setStatus(200)
       interaction.response.setContentType("text/html")
@@ -42,10 +44,10 @@ module Handler
       out.println('<script type="text/javascript" src="' + ext_path + 'adapter/ext/ext-base.js"></script>')
       out.println('<script type="text/javascript" src="' + ext_path + 'ext-all-debug.js"></script>')
       java_script_includes.each do |java_script|
-        out.println('<script type="text/javascript" src="/backend/javascripts/' + java_script + '.js"></script>')
+        out.println('<script type="text/javascript" src="' + backend_path + '/javascripts/' + java_script + '.js"></script>')
       end
       stylesheet_links.each do |stylesheet|
-        out.println('<link rel="stylesheet" type="text/css" href="/backend/stylesheets/' + stylesheet + '.css">')
+        out.println('<link rel="stylesheet" type="text/css" href="' + backend_path + '/stylesheets/' + stylesheet + '.css">')
       end
       out.println('<script type="text/javascript">Ext.onReady(function(){Repository.app.init("' + interaction.subject.getUri + '");});</script>')  
       out.println('<title>Oryx - Repository</title>')
@@ -61,13 +63,7 @@ module Handler
       interaction.response.setStatus(200)
       out = interaction.response.getWriter
       
-      output = ActiveSupport::JSON.encode(
-      [
-          {:id => "bpmn", :title => "BPMN", :description => "Business Process Model Notation", :uri => "/stencilsets/bpmn/bpmn.json", :icon_url => "/oryx/stencilsets/bpmn/bpmn.png"},
-          {:id => "petrinet", :title => "Petri Net", :description => "Petri Net", :uri => "/stencilsets/petrinets/petrinet.json", :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"},
-          {:id => "epc", :title => "EPC", :description => "Event-Driven Process Chain", :uri => "/stencilsets/epc/epc.json", :icon_url => "/oryx/stencilsets/epc/epc.png"},
-          {:id => "workflownet", :title => "Workflow Net", :description => "Workflow Net", :uri => "/stencilsets/workflownets/workflownets.json", :icon_url => "/oryx/stencilsets/workflownets/workflownets.png"}
-      ])
+      output = ActiveSupport::JSON.encode(Helper.getModelTypes)
       out.print(output);
 
     end

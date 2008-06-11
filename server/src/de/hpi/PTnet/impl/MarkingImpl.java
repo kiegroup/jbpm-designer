@@ -69,11 +69,16 @@ public class MarkingImpl implements Marking {
 		if (markingStr == null) {
 			StringBuilder str = new StringBuilder();
 			str.append("{");
-			for (Iterator<Place> it=net.getPlaces().iterator(); it.hasNext(); ) {
-				Place p = it.next();
-				str.append("(").append(p.getId()).append(",").append(getNumTokens(p)).append(")");
-				if (it.hasNext())
-					str.append(",");
+			boolean firstEntry = true;
+			for (Place p: net.getPlaces()) {
+				int numt = getNumTokens(p);
+				if (numt > 0) {
+					if (firstEntry)
+						firstEntry = false;
+					else
+						str.append(",");
+					str.append("(").append(p.getId()).append(",").append(numt).append(")");
+				}
 			}
 			str.append("}");
 			markingStr = str.toString();

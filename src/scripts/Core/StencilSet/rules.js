@@ -45,19 +45,20 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 
 		this._stencils = [];
 		
+		this._cachedConnectSET = new Hash();
+		this._cachedConnectSE = new Hash();
+		this._cachedConnectTE = new Hash();
+		this._cachedCardSE = new Hash();
+		this._cachedCardTE = new Hash();
+		this._cachedContainPC = new Hash();
+		
 		this._connectionRules = new Hash();
 		this._cardinalityRules = new Hash();
 		this._containmentRules = new Hash();
-		
-		this._outgoingEdgeStencilsCallbacks = new Hash();
-		this._incomingEdgeStencilsCallbacks = new Hash();
-		this._sourceStencilsCallbacks = new Hash();
-		this._targetStencilsCallbacks = new Hash();
-		this._canConnectCallbacks = new Hash();
-		this._canContainCallbacks = new Hash();
 	},
 
 	initializeRules: function(stencilSet) {
+
 		var jsonRules = stencilSet.jsonRules();
 		var namespace = stencilSet.namespace();
 		
@@ -169,27 +170,103 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 				}).bind(this));
 			}).bind(this));
 		}
+	},
+	
+	_cacheConnect: function(args) {
+		result = this._canConnect(args);
+		
+		if (args.sourceStencil && args.targetStencil) {
+			var source = this._cachedConnectSET[args.sourceStencil.id()];
+			
+			if(!source) {
+				source = new Hash();
+				this._cachedConnectSET[args.sourceStencil.id()] = source;
+			}
+			
+			var edge = source[args.edgeStencil.id()];
+			
+			if(!edge) {
+				edge = new Hash();
+				source[args.edgeStencil.id()] = edge;
+			}
+			
+			edge[args.targetStencil.id()] = result;
+			
+		} else if (args.sourceStencil) {
+			var source = this._cachedConnectSE[args.sourceStencil.id()];
+			
+			if(!source) {
+				source = new Hash();
+				this._cachedConnectSE[args.sourceStencil.id()] = source;
+			}
+			
+			source[args.edgeStencil.id()] = result;
 
-		//init callbacks
-		if(jsonRules.outgoingEdgeStencils) {
-			this._outgoingEdgeStencilsCallbacks[namespace] = jsonRules.outgoingEdgeStencils;
+		} else {
+			var target = this._cachedConnectTE[args.targetStencil.id()];
+			
+			if(!target) {
+				target = new Hash();
+				this._cachedConnectTE[args.targetStencil.id()] = target;
+			}
+			
+			target[args.edgeStencil.id()] = result;
 		}
-		if(jsonRules.incomingEdgeStencils) {
-			this._incomingEdgeStencilsCallbacks[namespace] = jsonRules.incomingEdgeStencils;
+		
+		return result;
+	},
+	
+	_cacheCard: function(args) {
+			
+		if(args.sourceStencil) {
+			var source = this._cachedCardSE[args.sourceStencil.id()]
+			
+			if(!source) {
+				source = new Hash();
+				this._cachedCardSE[args.sourceStencil.id()] = source;
+			}
+			
+			var max = this._getMaximumNumberOfOutgoingEdge(args);
+			if(max == undefined)
+				max = -1;
+				
+			source[args.edgeStencil.id()] = max;
+		}	
+		
+		if(args.targetStencil) {
+			var target = this._cachedCardTE[args.targetStencil.id()]
+			
+			if(!target) {
+				target = new Hash();
+				this._cachedCardTE[args.targetStencil.id()] = target;
+			}
+			
+			var max = this._getMaximumNumberOfIncomingEdge(args);
+			if(max == undefined)
+				max = -1;
+				
+			target[args.edgeStencil.id()] = max;
 		}
-		if(jsonRules.sourceStencils) {
-			this._sourceStencilsCallbacks[namespace] = jsonRules.sourceStencils;
+	},
+	
+	_cacheContain: function(args) {
+		
+		var result = [this._canContain(args), 
+					  this._getMaximumOccurrence(args.containingStencil, args.containedStencil)]
+		
+		if(result[1] == undefined) 
+			result[1] = -1;
+		
+		var children = this._cachedContainPC[args.containingStencil.id()];
+		
+		if(!children) {
+			children = new Hash();
+			this._cachedContainPC[args.containingStencil.id()] = children;
 		}
-		if(jsonRules.targetStencils) {
-			this._targetStencilsCallbacks[namespace] = jsonRules.targetStencils;
-		}
-		if(jsonRules.canConnect) {
-			this._canConnectCallbacks[namespace] = jsonRules.canConnect;
-		}
-		if(jsonRules.canContain) {
-			this._canContainCallbacks[namespace] = jsonRules.canContain;
-		}
-
+		
+		children[args.containedStencil.id()] = result;
+		
+		return result;
 	},
 
 	/** Begin connection rules' methods */
@@ -370,7 +447,155 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 	 *  
 	 *  @return {Boolean} Returns, if the edge can connect source and target.
 	 */
-	canConnect: function(args) {
+	canConnect: function(args) {	
+		//check arguments
+		if(!args ||
+		   (!args.sourceShape && !args.sourceStencil &&
+		    !args.targetShape && !args.targetStencil) ||
+		    !args.edgeShape && !args.edgeStencil) {
+		   	return false; 
+		}
+		
+		//init arguments
+		if(args.sourceShape) {
+			args.sourceStencil = args.sourceShape.getStencil();
+		}
+		if(args.targetShape) {
+			args.targetStencil = args.targetShape.getStencil();
+		}
+		if(args.edgeShape) {
+			args.edgeStencil = args.edgeShape.getStencil();
+		}
+		
+		var result;
+		
+		if(args.sourceStencil && args.targetStencil) {
+			var source = this._cachedConnectSET[args.sourceStencil.id()];
+			
+			if(!source)
+				result = this._cacheConnect(args);
+			else {
+				var edge = source[args.edgeStencil.id()];
+
+				if(!edge)
+					result = this._cacheConnect(args);
+				else {	
+					var target = edge[args.targetStencil.id()];
+
+					if(target == undefined)
+						result = this._cacheConnect(args);
+					else
+						result = target;
+				}
+			}
+		} else if (args.sourceStencil) {	
+			var source = this._cachedConnectSE[args.sourceStencil.id()];
+			
+			if(!source)
+				result = this._cacheConnect(args);
+			else {
+				var edge = source[args.edgeStencil.id()];
+					
+				if(edge == undefined)
+					result = this._cacheConnect(args);
+				else
+					result = edge;
+			}
+		} else { //args.targetStencil
+			var target = this._cachedConnectTE[args.targetStencil.id()];
+			
+			if(!target)
+				result = this._cacheConnect(args);
+			else {
+				var edge = target[args.edgeStencil.id()];
+					
+				if(edge == undefined)
+					result = this._cacheConnect(args);
+				else
+					result = edge;
+			}
+		}	
+		
+		//check cardinality
+		if (result) {
+			if(args.sourceShape) {
+				var source = this._cachedCardSE[args.sourceStencil.id()];
+				
+				if(!source) {
+					this._cacheCard(args);
+					source = this._cachedCardSE[args.sourceStencil.id()];
+				}
+				
+				var max = source[args.edgeStencil.id()];
+				
+				if(max == undefined) {
+					this._cacheCard(args);
+				}
+				
+				max = source[args.edgeStencil.id()];
+				
+				if(max != -1) {
+					result = args.sourceShape.getOutgoingShapes().all(function(cs) {
+								if((cs.getStencil().id() === args.edgeStencil.id()) && 
+								   ((args.edgeShape) ? cs !== args.edgeShape : true)) {
+									max--;
+									return (max > 0) ? true : false;
+								} else {
+									return true;
+								}
+							});
+				}
+			} 
+			
+			if (args.targetShape) {
+				var target = this._cachedCardTE[args.targetStencil.id()];
+				
+				if(!target) {
+					this._cacheCard(args);
+					target = this._cachedCardTE[args.targetStencil.id()];
+				}
+				
+				var max = target[args.edgeStencil.id()];
+				
+				if(max == undefined) {
+					this._cacheCard(args);
+				}
+				
+				max = target[args.edgeStencil.id()];
+				
+				if(max != -1) {
+					result = args.targetShape.getIncomingShapes().all(function(cs){
+								if ((cs.getStencil().id() === args.edgeStencil.id()) &&
+								((args.edgeShape) ? cs !== args.edgeShape : true)) {
+									max--;
+									return (max > 0) ? true : false;
+								}
+								else {
+									return true;
+								}
+							});
+				}
+			}
+		} 	
+		
+		return result;
+	},
+	
+	/**
+	 * 
+	 * @param {Object} args
+	 *  edgeStencil:   ORYX.Core.StencilSet.Stencil
+	 *  edgeShape:     ORYX.Core.Edge |undefined
+	 *  sourceStencil: ORYX.Core.StencilSet.Stencil | undefined
+	 *  sourceShape:   ORYX.Core.Node |undefined
+	 *  targetStencil: ORYX.Core.StencilSet.Stencil | undefined
+	 *  targetShape:   ORYX.Core.Node |undefined
+	 *  
+	 *  At least source or target has to be specified!!!
+	 *  
+	 *  @return {Boolean} Returns, if the edge can connect source and target.
+	 */
+	_canConnect: function(args) {
 		//check arguments
 		if(!args ||
 		   (!args.sourceShape && !args.sourceStencil &&
@@ -423,35 +648,8 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 				});
 			}
 		}
-
-		var resultCardSrc = true;
-		var resultCardTgt = true;
-		if(args.edgeStencil) {
-			if(args.sourceShape) {
-				//2. check if source's maximum number of outgoing edges of this type is reached
-				resultCardSrc = !this._isMaximumNumberOfOutgoingEdgesReached(args);
-			}
-			if(args.targetShape) {
-				//3. check if target's maximum number of incoming edges of this type is reached
-				resultCardTgt = !this._isMaximumNumberOfIncomingEdgesReached(args);
-			}
-		}
-
-		//all tests have to evaluate to true to validate the connection
-		var result = resultCR && resultCardSrc && resultCardTgt;
 		
-		if(result) {
-			//4. ask the stencil sets, but only if the previous result is true.
-			//if one callback returns false, no other callback will be called
-			result = this._canConnectCallbacks.values().all(function(cb) {
-				try {
-					var newArgs = Object.clone(args);
-					newArgs.result = result;
-					return cb(newArgs);
-				} catch (e) {return true;}
-			}); 
-		}
-		return result;
+		return resultCR;
 	},
 
 	/** End connection rules' methods */
@@ -483,17 +681,74 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 			args.containingStencil = args.containingShape.getStencil();
 		}
 		
+		if(args.containingStencil.type() == 'edge' || args.containedStencil.type() == 'edge')
+			return false;
+		
+		var childValues;
+		
+		var parent = this._cachedContainPC[args.containingStencil.id()];
+		
+		if(!parent)
+			childValues = this._cacheContain(args);
+		else {
+			childValues = parent[args.containedStencil.id()];
+			
+			if(!childValues)
+				childValues = this._cacheContain(args);
+		}
+
+		if(!childValues[0])
+			return false;
+		else if (childValues[1] == -1)
+			return true;
+		else {
+			if(args.containingShape) {
+				var max = childValues[1];
+				return args.containingShape.getChildShapes(false).all(function(as) {
+					if(as.getStencil().id() === args.containedStencil.id()) {
+						max--;
+						return (max > 0) ? true : false;
+					} else {
+						return true;
+					}
+				});
+			} else {
+				return true;
+			}
+		}
+	},
+	
+	/**
+	 * 
+	 * @param {Object} args
+	 *  containingStencil: ORYX.Core.StencilSet.Stencil
+	 *  containingShape:   ORYX.Core.AbstractShape
+	 *  containedStencil:  ORYX.Core.StencilSet.Stencil
+	 *  containedShape:    ORYX.Core.Shape
+	 */
+	_canContain: function(args) {
+		if(!args ||
+		   !args.containingStencil && !args.containingShape ||
+		   !args.containedStencil && !args.containedShape) {
+		   	return false;
+		}
+		
+		//init arguments
+		if(args.containedShape) {
+			args.containedStencil = args.containedShape.getStencil();
+		}
+		
+		if(args.containingShape) {
+			args.containingStencil = args.containingShape.getStencil();
+		}
+		
 		if(args.containingShape) {
 			if(args.containingShape instanceof ORYX.Core.Edge) {
 				//edges cannot contain other shapes
 				return false;
-			} else {
-				//check maximum occurrence of the contained stencil in the containing shape
-				if(!(this._isMaximumOccurrenceReached(args.containingShape, args.containedStencil))) {
-					return false;
-				}
 			}
 		}
+
 		
 		var result;
 		
@@ -508,18 +763,6 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 				return false;
 			}
 		}).bind(this));
-
-		if(result) {
-			//ask the stencil sets, if the previous result is true
-			//if one callback returns false, no other callback will be called
-			result = this._canContainCallbacks.values().all(function(cb) {
-				try {
-					var newArgs = Object.clone(args);
-					newArgs.result = result;
-					return cb(newArgs);
-				} catch (e) {return true;}
-			}); 
-		}
 		
 		return result;
 	},
@@ -566,18 +809,18 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 			return (stencil.roles().member(role) && stencil.type() === "node") ? true : false;
 		});
 	},
-	
+
 	/**
 	 * 
-	 * @param {ORYX.Core.AbstractShape} parent
-	 * @param {ORYX.Core.StencilSet.Stencil} stencil
+	 * @param {ORYX.Core.StencilSet.Stencil} parent
+	 * @param {ORYX.Core.StencilSet.Stencil} child
 	 * 
-	 * @returns {Boolean} Returns, if the maximum occurrence of shapes of the 
-	 * 					  stencil's type inside the parent is reached.
+	 * @returns {Boolean} Returns the maximum occurrence of shapes of the 
+	 * 					  stencil's type inside the parent.
 	 */
-	_isMaximumOccurrenceReached: function(parent, stencil) {
+	_getMaximumOccurrence: function(parent, child) {
 		var max;
-		stencil.roles().each((function(role) {
+		child.roles().each((function(role) {
 			var cardRule = this._cardinalityRules[role];
 			if(cardRule && cardRule.maximumOccurrence) {
 				if(max) {
@@ -587,47 +830,29 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 				}
 			}
 		}).bind(this));
-		
-		if(max) {
-			return parent.getChildShapes(false).all(function(as) {
-				if(as.getStencil().id() === stencil.id()) {
-					max--;
-					return (max > 0) ? true : false;
-				} else {
-					return true;
-				}
-			});
-		} else {
-			return true;
-		}
-		
+
 		return max;
 	},
-	
+
+
 	/**
 	 * 
 	 * @param {Object} args
-	 *  sourceShape: ORYX.Core.Node
+	 *  sourceStencil: ORYX.Core.Node
 	 *  edgeStencil: ORYX.Core.StencilSet.Stencil
-	 *  edgeShape:   ORYX.Core.Edge | undefined
 	 *  
-	 *  @return {Boolean} Returns, if the maximum number of outgoing edges of 
-	 *  				  the type specified by edgeStencil of the sourceShape 
-	 *  				  is reached.
+	 *  @return {Boolean} Returns, the maximum number of outgoing edges of 
+	 *  				  the type specified by edgeStencil of the sourceShape.
 	 */
-	_isMaximumNumberOfOutgoingEdgesReached: function(args) {
+	_getMaximumNumberOfOutgoingEdge: function(args) {
 		if(!args ||
-		   !args.sourceShape ||
-		   !args.edgeShape && !args.edgeStencil) {
+		   !args.sourceStencil ||
+		   !args.edgeStencil) {
 		   	return false;
 		}
 		
-		if(args.edgeShape) {
-			args.edgeStencil = args.edgeShape.getStencil();
-		}
-		
 		var max;
-		args.sourceShape.getStencil().roles().each((function(role) {
+		args.sourceStencil.roles().each((function(role) {
 			var cardRule = this._cardinalityRules[role];
 
 			if(cardRule && cardRule.outgoingEdges) {
@@ -645,45 +870,27 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 			}
 		}).bind(this));
 
-		if(max) {
-			return !args.sourceShape.getOutgoingShapes().all(function(cs) {
-				if((cs.getStencil().id() === args.edgeStencil.id()) && 
-				   ((args.edgeShape) ? cs !== args.edgeShape : true)) {
-					max--;
-					return (max > 0) ? true : false;
-				} else {
-					return true;
-				}
-			}); 
-		} else {
-			return false;
-		}
+		return max;
 	},
 	
 	/**
 	 * 
 	 * @param {Object} args
-	 *  targetShape: ORYX.Core.Node
+	 *  targetStencil: ORYX.Core.StencilSet.Stencil
 	 *  edgeStencil: ORYX.Core.StencilSet.Stencil
-	 *  edgeShape:   ORYX.Core.Edge | undefined
 	 *  
-	 *  @return {Boolean} Returns, if the maximum number of incoming edges of 
-	 *  				  the type specified by edgeStencil of the targetShape 
-	 *  				  is reached.
+	 *  @return {Boolean} Returns the maximum number of incoming edges of 
+	 *  				  the type specified by edgeStencil of the targetShape.
 	 */
-	_isMaximumNumberOfIncomingEdgesReached: function(args) {
+	_getMaximumNumberOfIncomingEdge: function(args) {
 		if(!args ||
-		   !args.targetShape ||
-		   !args.edgeShape && !args.edgeStencil) {
+		   !args.targetStencil ||
+		   !args.edgeStencil) {
 		   	return false;
 		}
 		
-		if(args.edgeShape) {
-			args.edgeStencil = args.edgeShape.getStencil();
-		}
-		
 		var max;
-		args.targetShape.getStencil().roles().each((function(role) {
+		args.targetStencil.roles().each((function(role) {
 			var cardRule = this._cardinalityRules[role];
 			if(cardRule && cardRule.incomingEdges) {
 				args.edgeStencil.roles().each(function(edgeRole) {
@@ -699,19 +906,7 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 			}
 		}).bind(this));
 
-		if(max) {
-			return !args.targetShape.getIncomingShapes().all(function(cs) {
-				if((cs.getStencil().id() === args.edgeStencil.id()) && 
-				   ((args.edgeShape) ? cs !== args.edgeShape : true)) {
-					max--;
-					return (max > 0) ? true : false;
-				} else {
-					return true;
-				}
-			}); 
-		} else {
-			return false;
-		}
+		return max;
 	},
 	
 	/**

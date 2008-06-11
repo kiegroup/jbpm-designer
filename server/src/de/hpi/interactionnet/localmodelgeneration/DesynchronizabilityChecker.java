@@ -1,0 +1,32 @@
+package de.hpi.interactionnet.localmodelgeneration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hpi.PTnet.Marking;
+import de.hpi.PTnet.PTNet;
+import de.hpi.interactionnet.InteractionNet;
+import de.hpi.petrinet.Transition;
+
+/**
+ * @author Gero.Decker
+ */
+public class DesynchronizabilityChecker {
+	
+	/**
+	 * 
+	 * @param net
+	 * @param conflictingTransitions will contain the conflicting transitions (if any)
+	 * @return
+	 */
+	public boolean check(InteractionNet net, List<Transition> conflictingTransitions) {
+		if (net.getFinalMarkings().size() == 0)
+			net.getFinalMarkings().addAll(new FinalMarkingsCalculator(net).getFinalMarkings());
+		List<Marking> finalMarkings = new ArrayList<Marking>();
+		PTNet dnet = new Desynchronizer().getDesynchronizedNet(net, finalMarkings);
+		return new WeakTerminationChecker(dnet, finalMarkings).check(conflictingTransitions);
+	}
+
+}
+
+

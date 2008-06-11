@@ -36,9 +36,9 @@ ModelProperties.app = {
 	 */
 	current_model: null,
 	
-	anonymous_user: "", // do not change, except it's changed server side
+	anonymous_user: "public", // do not change, except it's changed server side
 	
-	create_model_uri: "/data/model/", // the uri a POST request containing the models details  will be sent to create a new model
+	create_model_uri: "/model/", // the uri a POST request containing the models details  will be sent to create a new model
 	
 	init: function(current_user) {
 		var expected_ext_version = "2.0";
@@ -544,7 +544,7 @@ ModelProperties.render = {
 							'<p><label for="edit_model_summary">description</label><textarea rows="7" name="summary" id="edit_model_summary">{summary}</textarea></p>',
 						'</fieldset>',
 						'<fieldset>',
-							'<p><label for="edit_model_type">type</label><input type="text" name="type" class="text disabled" value="{type:uppercase}" disabled="disabled" id="edit_model_type" /></p>',
+							'<p><label for="edit_model_type">type</label><input type="text" name="type" class="text disabled" value="{ss_name}" disabled="disabled" id="edit_model_type" /></p>',
 							'<p><label for="edit_model_created">created</label><input type="text" name="created" class="text disabled" value="{created:this.dateFormat}" disabled="disabled" id="edit_model_created" /></p>',
 							'<p><label for="edit_model_updated">last update</label><input type="text" name="updated" class="text disabled" value="{updated:this.dateFormat}" disabled="disabled" id="edit_model_updated" /></p>',
 						'</fieldset>',

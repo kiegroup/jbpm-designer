@@ -1,6 +1,6 @@
 
 Ext.BLANK_IMAGE_URL = 'lib/ext-2.0.2/resources/images/default/s.gif';
-Ext.engine_url = 'http://localhost:3000/';
+Ext.engine_url = 'http://bpt-imac6:3000/';
 
 
 function loadStoreForCase(val) {
@@ -39,7 +39,7 @@ Ext.store2 = new Ext.data.GroupingStore({
            id: 'transition_name',
            totalRecords: '@total'
        }, [
-           'transition_id', 'transition_name' , 'action', 'case_id', 'pending_time', 'role'
+           'transition_id', 'transition_name' , 'action', 'case_id', ' ', 'role', 'delegation_ratio'
        ])
 });
 
@@ -78,6 +78,7 @@ Ext.task_grid = new xg.GridPanel({
 									{header: 'transition name', sortable: true, dataIndex: 'transition_name'},
 //									{header: 'attractivity', sortable: true, dataIndex: 'attractivity', renderer: attractivityRenderer},
 									{header: 'pending_time', sortable: true, dataIndex: 'pending_time'},
+									{header: 'delegation_ratio', sortable: true, dataIndex: 'delegation_ratio', renderer: delegationRenderer},
 									{header: 'role', sortable: true, dataIndex: 'role'}
 
 //									,
@@ -123,6 +124,15 @@ function caseLinkRenderer(value) {
 
 function floattorgb(val) {
 	return parseInt(parseFloat(val)*2.55);
+}
+
+function delegationRenderer(value) {
+	value = parseFloat(value)*100;
+	output = '' + value + ' %';
+	if (value > 40)	{
+		output = '<span style="color: rgb(255,0,0);">' + value + '</span>';
+	}
+	return output;
 }
 /*
 function attractivityRenderer(value) {
@@ -327,7 +337,7 @@ Ext.viewport = new Ext.Viewport({
 			                width: '100%',
 			                margins:'35 0 5 5',
 			                cmargins:'35 5 5 5',
-			                html: '<iframe style="border: 0px none" name="form_frame" width="100%" height="100%" src="about:blank" />'
+			                html: '<iframe style="border: 0px none" id="form_frame" name="form_frame" width="100%" height="100%" src="about:blank" />'
 			                }
                 ]
                 }]

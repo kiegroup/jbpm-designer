@@ -45,8 +45,7 @@ public class BoundednessChecker {
 		markings_b.add(m_b);
 
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
-		for (Iterator<Transition> it=transitions.iterator(); it.hasNext(); ) {
-			Transition t = it.next();
+		for (Transition t: transitions) {
 			Marking newmarking = interpreter.fireTransition(net, marking, t);
 			if (!doCheck(newmarking))
 				return false;

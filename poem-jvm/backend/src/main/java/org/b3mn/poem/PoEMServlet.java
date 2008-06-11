@@ -22,7 +22,6 @@
 ****************************************/
 
 package org.b3mn.poem;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class PoEMServlet extends HttpServlet {
 		throws ServletException, IOException {
 		ruby.getLoadService().require("dispatcher");
 		RubyClass dispatcher = ruby.getClass("Dispatcher");
-
+		
 		IRubyObject[] args = {JavaEmbedUtils.javaToRuby(ruby, request), JavaEmbedUtils.javaToRuby(ruby, response)};
 		IRubyObject[] damn_java_hack = {};
 		IRubyObject instance = dispatcher.newInstance(damn_java_hack, Block.NULL_BLOCK);

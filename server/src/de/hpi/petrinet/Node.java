@@ -25,4 +25,7 @@ public interface Node {
 	Vector<Locator> getLocators();
 	void addLocator(Locator locator);
 	
+	String getContextPlaceID();
+	void setContextPlaceID(String contextPlaceID);
+	
 }

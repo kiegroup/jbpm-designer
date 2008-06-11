@@ -31,7 +31,7 @@ if(!ORYX.Core) {ORYX.Core = {};}
  * @classDescription Top Level uiobject.
  *
  */
-ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend({
+ORYX.Core.AbstractShape = {
 
 	/**
 	 * Constructor
@@ -58,9 +58,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend({
 	},
 
 	layout: function() {
-		if(this.parent) {
-			this.parent.layout();
-		}
+
 	},
 	
 	/**
@@ -293,4 +291,5 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend({
 	},
 	
 	toString: function() { return "ORYX.Core.AbstractShape " + this.id }
- });
+ };
+ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(ORYX.Core.AbstractShape);

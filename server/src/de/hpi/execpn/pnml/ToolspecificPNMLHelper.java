@@ -72,7 +72,10 @@ public class ToolspecificPNMLHelper {
 		role.setTextContent(roleText);
 	}
 	
-	
+	void setContextPlaceID(Document doc, Element parent, String id){
+		Element contextPlaceID = (Element)parent.appendChild(doc.createElement("contextPlaceID"));
+		contextPlaceID.setTextContent(id);
+	}
 
 	void setFireXsltURL(Document doc, Element parent, String url) {
 		Element fire;
@@ -98,17 +101,17 @@ public class ToolspecificPNMLHelper {
 		}
 		if (formURL != null){
 			if (!hasChildWithName(output, "form")){
-				form = (Element) parent.appendChild(doc.createElement("form"));
+				form = (Element) output.appendChild(doc.createElement("form"));
 			}else{
-				form =  (Element) parent.getElementsByTagName("form").item(0);
+				form =  (Element) output.getElementsByTagName("form").item(0);
 			}
 			form.setAttribute("href", formURL);
 		}
 		if (bindingURL != null){
 			if (!hasChildWithName(output, "bindings")){
-				bindings = (Element) parent.appendChild(doc.createElement("bindings"));
+				bindings = (Element) output.appendChild(doc.createElement("bindings"));
 			}else{
-				bindings =  (Element) parent.getElementsByTagName("bindings").item(0);
+				bindings =  (Element) output.getElementsByTagName("bindings").item(0);
 			}
 			bindings.setAttribute("href", bindingURL);
 		}

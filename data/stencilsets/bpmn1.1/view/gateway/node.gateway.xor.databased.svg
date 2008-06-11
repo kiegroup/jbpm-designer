@@ -12,11 +12,10 @@
   <g pointer-events="fill">
     <path id="frame" fill="white" stroke-width="1" stroke="black" d="M 1,16 L 16,1 L 31,16 L 16,31 L 1,16" />
     
-    <g id="none"></g>
-    
     <g id="cross">
-      <path d="M 11.5 9.5 L 14.5 9.5 L 20.5 22.5 L 17.5 22.5 L 11.5 9.5" fill="black" stroke="black" stroke-width="1" />
-      <path d="M 11.5 22.5 L 17.5 9.5 L 20.5 9.5 L 14.5 22.5 L 11.5 22.5" fill="black" stroke="black" stroke-width="1" />
+      <path d="M 10.5 9.5 L 13.5 9.5 L 21.5 22.5 L 18.5 22.5 L 10.5 9.5" fill="black" stroke="black" stroke-width="1" />
+      <path d="M 10.5 22.5 L 18.5 9.5 L 21.5 9.5 L 13.5 22.5 L 10.5 22.5" fill="black" stroke="black" stroke-width="1" />
     </g>
+
   </g>
 </svg>

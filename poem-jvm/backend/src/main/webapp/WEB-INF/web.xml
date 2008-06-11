@@ -6,6 +6,12 @@
     
     <display-name>PoEM</display-name>
     
+	<!-- the number within the session-timout element must be expressed in
+		minutes. it is now 24 hours. -->
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
+	
     <servlet>
         <display-name>PoEM Servlet</display-name>
         <servlet-name>PoEMServlet</servlet-name>
@@ -39,5 +45,7 @@
             </taglib-location>
         </taglib>
     </jsp-config>
+
+
 
 </web-app>

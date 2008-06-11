@@ -1,6 +1,6 @@
 {
 	"title":"Workflow Nets",
-	"namespace":"http://www.example.org/workflownets",
+	"namespace":"http://www.example.org/workflownets#",
 	"description":"Simple stencil set for Workflow Nets.",
  	"stencils" : [
  		{
