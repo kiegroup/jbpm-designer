@@ -286,7 +286,7 @@ public class ExecConverter extends Converter {
 		//note: structure of context place must be initialized by engine
 		//addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), exTask.tr_enable);
 		addFlowRelationship(net, exTask.pl_inited, exTask.tr_enable);
-		addFlowRelationship(net, exTask.tr_enable, exTask.pl_ready);
+		addExecFlowRelationship(net, exTask.tr_enable, exTask.pl_ready, extractFormDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_enable);
 		addExecFlowRelationship(net, exTask.tr_enable, exTask.pl_context, baseXsltURL + "context_enable.xsl");
 		enable.setModelURL(model);
@@ -739,7 +739,7 @@ public class ExecConverter extends Converter {
 				delaction.appendChild(value4);
 				
 				Element value5 = doc.createElement("x:setvalue");
-				value5.setAttribute("bind", "owner.readonly");
+				value5.setAttribute("bind", "firstOwner.readonly");
 				value5.setTextContent("true");
 				delaction.appendChild(value5);
 				
