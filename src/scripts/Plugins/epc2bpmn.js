@@ -26,7 +26,7 @@ if (!ORYX.Plugins)
 
 
 /**
- * Supports EPCs by offering a syntax check and export and import ability..
+ * Implements a mapping from EPC Models to BPMN Models
  *
  *
  */
@@ -66,6 +66,68 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
         
 		//if( !checkIfEPCisLoaded ){ return }
 		
+		/*
+			Ext.QuickTips.init();
+			
+			var form1 = new Ext.form.FormPanel({
+			    labelWidth: 75,
+			    defaultType: 'textfield',
+			    bodyStyle:'padding:15px',
+			    defaults: {
+			        // applied to each contained item
+			        width: 230,
+			        msgTarget: 'side'
+			    },
+			
+			    items: [{
+			            fieldLabel: 'URL',
+			            name: 'last'
+			        }
+			    ]
+			});
+			
+			
+			var form2 = new Ext.form.FormPanel({
+			    id:'form_advance',
+			    collapsed:true,
+			    labelWidth: 75,
+			    defaultType: 'textfield',
+			    bodyStyle:'padding:15px',
+			    defaults: {
+			        // applied to each contained item
+			        width: 230,
+			        msgTarget: 'side'
+			    },
+			
+			    items: [{
+			            fieldLabel: 'Sub',
+			            name: 'last'
+			        }
+			    ]
+			});
+			
+			var e = new Ext.Window({
+			    title:"Oryx Import",
+			    width:370,
+			    items:[form1, {
+			            text:'advance',
+			            xtype:'button',
+			            enableToggle:true,
+			            handler:function(d){
+			                var d = Ext.getCmp('form_advance')
+			                if(d.collapsed){
+			                    d.expand();
+			                } else {
+			                    d.collapse();
+			                }
+			            }
+			        }, form2],
+			    buttons:[{text:'Import'},{text:'Cancel'}]  
+			})
+			e.show()		 
+		 
+		 
+		 */
 		Ext.Msg.prompt('Transfer from EPC to BPMN', 'Please enter the URL to the EPC model:', function(btn, text){
 		    if (btn == 'ok' && text != ''){
 		        new Ajax.Request(text, {
