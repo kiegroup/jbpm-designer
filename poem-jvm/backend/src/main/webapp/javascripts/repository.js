@@ -350,8 +350,12 @@ Repository.app = {
         });
 
 		// merge the configuration for the model list
-		var params = this.filter || {};
-		
+		var params = {};
+
+		for (var property in this.filter) {
+			params[property] = this.filter[property];
+		}
+				
 		for (var property in panel_info.params) {
 			params[property] = panel_info.params[property];
 		}
