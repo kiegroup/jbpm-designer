@@ -5459,7 +5459,9 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
