@@ -13,7 +13,8 @@
 			"icon":				"new_diagram.png",
 			"mayBeRoot":		true,
 			"hide":				true,
-			"roles":			["fromtoall"],
+			"roles":			["fromtoall",
+								 "canContainArtifacts"],
 			"properties": [
 				{
 					"id":"id",
@@ -777,7 +778,8 @@
 				"conditional_start",
 				"default_start",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"canContainArtifacts"
 			],
 			"properties": [
 				{
@@ -2140,7 +2142,8 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"fromtoall"				
+				"fromtoall",
+				"canContainArtifacts"				
 			],
 			"layout":function(shape) {		
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
@@ -2489,7 +2492,8 @@
 				"messageflow_start",
 				"messageflow_end",
 				"PoolChild",
-				"fromtoall"				
+				"fromtoall",
+				"canContainArtifacts"				
 			],	
 			"layout":function(shape) {		
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
@@ -2611,7 +2615,8 @@
 			"view":"artifact/node.group.svg",
 			"icon":"new_group.png",
 			"roles": [
-				"fromtoall"
+				"fromtoall",
+				"canContainArtifacts"
 			],
 			"properties": [
 				{
@@ -7461,19 +7466,19 @@
 				]
 			},
 			{
-				"role":"fromtoall",
+				"role":"canContainArtifacts",
 				"contains": [
 					"Group"
 				]
 			},
 			{
-				"role":"fromtoall",
+				"role":"canContainArtifacts",
 				"contains": [
 					"DataObject"
 				]
 			},
 			{
-				"role":"fromtoall",
+				"role":"canContainArtifacts",
 				"contains": [
 					"TextAnnotation"
 				]
