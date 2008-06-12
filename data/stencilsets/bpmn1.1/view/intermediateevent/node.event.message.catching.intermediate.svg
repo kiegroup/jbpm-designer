@@ -18,10 +18,5 @@
 		<polyline stroke="black" fill="none" stroke-width="1.4" points="8,11 8,21 24,21 24,11 8,11 16,17 24,11" />
 	</g>
 	
-	<g id="messageThrowing">
-		<path stroke="white" fill="black" stroke-width="1" d="M8,11 L8,21 L24,21 L24,11 L16,17z"/>
-		<path stroke="white" fill="black" stroke-width="1" d="M7,10 L16,17 L25 10z"/>
-	</g>
-	
   </g>
 </svg>
