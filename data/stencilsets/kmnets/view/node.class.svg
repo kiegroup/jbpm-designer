@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   version="1.0">
+  <oryx:magnets>
+  	<oryx:magnet oryx:cx="50" oryx:cy="62.5" oryx:default="yes"/>
+  	<oryx:magnet oryx:cx="50" oryx:cy="0"/>
+  	<oryx:magnet oryx:cx="50" oryx:cy="125"/>
+  	<oryx:magnet oryx:cx="0" oryx:cy="62.5"/>
+  	<oryx:magnet oryx:cx="100" oryx:cy="62.5"/>
+  </oryx:magnets>
+  <g>
+    <rect
+       id="classname"
+       oryx:anchors="top left right"
+       width="100" height="25"
+       x="0" y="0"
+       stroke="black" fill="white" stroke-width="2"/>
+    <rect
+       id="rect"
+       oryx:anchors="left right top bottom"
+       oryx:resize="vertical horizontal"
+       width="100" height="100"
+       x="0" y="25"
+       stroke="black" fill="white" stroke-width="2"/>
+    <line
+       id="line"
+       oryx:anchors="left right"
+       oryx:resize="vertical horizontal"
+       x1="0" y1="75" x2="100" y2="75"
+       stroke="black" fill="black" stroke-width="2"/>
+	<text id="name" x="50" y="12.5" oryx:align="middle center" oryx:anchors="top"></text>
+	<text id="attributes" x="5" y="30" oryx:align="top left" oryx:anchors="top left"></text>
+	<text id="methods" x="5" y="80" oryx:align="top left" oryx:anchors="left"></text>			
+  </g>
+</svg>
