@@ -8,14 +8,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerException;
 
 import org.b3mn.poem.Identity;
+import org.b3mn.poem.Persistance;
+
 public class RdfExporter {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object, String hostname) throws IOException {
-  		res.setContentType("text/xml");
+		
+		res.setContentType("text/xml");
   		res.setStatus(200);	
   		try {
+  			String rdfRepresentation = object.read().getRdf();
+  			Persistance.commit();
     		PrintWriter out = res.getWriter();
-			out.write(object.read().getRdf());
+			out.write(rdfRepresentation);
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
