@@ -40,7 +40,7 @@ const TRIPLE_ADD =		0x02;
 const TRIPLE_RELOAD =	0x04;
 const TRIPLE_SAVE =		0x08;
 
-const PROCESSDATA_ID = 'processdata';
+const PROCESSDATA_REF = 'processdata';
 
 // HTTP status code constants
 //
@@ -154,13 +154,13 @@ var DataManager = {
 			var id = DataManager.__provideId();
 			shape.resourceId = id;
 			
-			if(!$(PROCESSDATA_ID))
+			if(!$$('.' + PROCESSDATA_REF)[0])
 				DataManager.graft(XMLNS.XHTML,
-					document.getElementsByTagNameNS(XMLNS.XHTML, 'body').item(0), ['div', {'id': PROCESSDATA_ID, 'style':'display:none;'}]);
+					document.getElementsByTagNameNS(XMLNS.XHTML, 'body').item(0), ['div', {'class': PROCESSDATA_REF, 'style':'display:none;'}]);
 				
 			// object is literal
 			DataManager.graft(XMLNS.XHTML,
-				$(PROCESSDATA_ID), [
+				$$('.' + PROCESSDATA_REF)[0], [
 				
 				'div', {'id': id}, [
 					'a', { 'href': 'http://www.apfelfabrik.de/dummyresource', 'rel':'raziel-entry' }]
@@ -227,6 +227,9 @@ var DataManager = {
 			DataManager.__forceExistance(shape);
 		});
 		//DataManager.__synclocal();
+		
+		DataManager.__renderCanvas(facade);
+		
 		shapes.each( function(shape) {
 			
 			DataManager.__persistShape(shape);
@@ -234,35 +237,54 @@ var DataManager = {
 				$(ERDF.__stripHashes(shape.resourceId)), true);
 		});
 		
-		result += DataManager.__renderCanvas(facade);
+		//result += DataManager.__renderCanvas(facade);
 		
 		return result;
 	},
 
 	__renderCanvas: function(facade) {
 
-		var result = '<div id="oryxcanvas" class="-oryx-canvas">'
-		var stencilSets = facade.getStencilSets();
 		var canvas = facade.getCanvas();
+		var stencilSets = facade.getStencilSets();
 		var shapes = canvas.getChildShapes(true);
+		
+		DataManager.__forceExistance(canvas);
+		
+		DataManager.__persistShape(canvas);
+		
+		var shapeResource = new ERDF.Resource(canvas.resourceId);
 
-		// add writable flag.
-		result += '<span class="oryx-mode">writeable</span>';
-		result += '<span class="oryx-mode">fullscreen</span>';
+		// remove all triples for this particular shape's resource
+		DataManager.removeTriples( DataManager.query(
+			shapeResource, undefined, undefined));
 
-		// add all stencil set.
+		DataManager.addTriple( new ERDF.Triple(
+			shapeResource,
+			{prefix: "oryx", name: "mode"},
+			new ERDF.Literal("writable")
+		));
+
+		DataManager.addTriple( new ERDF.Triple(
+			shapeResource,
+			{prefix: "oryx", name: "mode"},
+			new ERDF.Literal("fullscreen")
+		));
+
 		stencilSets.values().each(function(stencilset) {
-			result += '<a rel="oryx-stencilset" href="'+
-			stencilset.source()+'"/>'; });
-
-		// add all shape render flag.
+			DataManager.addTriple( new ERDF.Triple(
+				shapeResource,
+				{prefix: "oryx", name: "stencilset"},
+				new ERDF.Resource(stencilset.source())
+			));
+		});
+						
 		shapes.each(function(shape) {
-			result += '<a rel="oryx-render" href="#'+
-			shape.resourceId+'"/>'; });
-
-		result += '</div>';
-
-		return result;
+			DataManager.addTriple( new ERDF.Triple(
+				shapeResource,
+				{prefix: "oryx", name: "render"},
+				new ERDF.Resource(shape.resourceId)
+			));
+		});
 	},
 
 	__counter: 0,
@@ -862,11 +884,11 @@ ResourceManager = {
 					var id = div.getAttribute('id');
 					
 					// store div in DOM
-					if(!$(PROCESSDATA_ID))
+					if(!$$('.' + PROCESSDATA_REF)[0])
 						DataManager.graft(XMLNS.XHTML,
-							document.getElementsByTagNameNS(XMLNS.XHTML, 'body').item(0), ['div', {'id': PROCESSDATA_ID, 'style':'display:none;'}]);
+							document.getElementsByTagNameNS(XMLNS.XHTML, 'body').item(0), ['div', {'class': PROCESSDATA_REF, 'style':'display:none;'}]);
 				
-					$(PROCESSDATA_ID).appendChild(div.cloneNode(true));
+					$$('.' + PROCESSDATA_REF)[0].appendChild(div.cloneNode(true));
 
 					// parse local erdf data once more.
 					
@@ -1112,11 +1134,11 @@ ResourceManager = {
 				localDiv.parentNode.removeChild(localDiv);
 				
 				// store div in DOM
-				if(!$(PROCESSDATA_ID))
+				if(!$$(PROCESSDATA_REF)[0])
 					DataManager.graft(XMLNS.XHTML,
-						document.getElementsByTagNameNS(XMLNS.XHTML, 'body').item(0), ['div', {'id': PROCESSDATA_ID, 'style':'display:none;'}]);
+						document.getElementsByTagNameNS(XMLNS.XHTML, 'body').item(0), ['div', {'class': PROCESSDATA_REF, 'style':'display:none;'}]);
 				
-				$(PROCESSDATA_ID).appendChild(div.cloneNode(true));
+				$$(PROCESSDATA_REF)[0].appendChild(div.cloneNode(true));
 				DataManager.__synclocal();
 				break;
 
