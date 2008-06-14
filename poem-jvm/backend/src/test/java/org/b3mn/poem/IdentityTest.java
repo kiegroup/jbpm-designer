@@ -73,7 +73,7 @@ public class IdentityTest {
 	@Test public void newModelandDeleteModel() {
 		Identity owner = Identity.instance("https://openid.hpi.uni-potsdam.de/user/ole.eckermann");
 		String title = "New Process";
-		String type = "bpmn";
+		String type = "http://b3mn.org/stencilset/bpmn#";
 		String mime_type = "application/xhtml+xml";
 		String language = "US_en";
 		String summary = "JUnit Test Process";

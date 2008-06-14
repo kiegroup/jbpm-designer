@@ -22,6 +22,7 @@
  ##############################
 
 module Helper
+  include_class 'org.b3mn.poem.Persistance'
   @@model_types = {
       "http://b3mn.org/stencilset/bpmn#" => {:uri => "/stencilsets/bpmn/bpmn.json", :title => "BPMN", :description => "Business Process Model Notation", :icon_url => "/oryx/stencilsets/bpmn/bpmn.png"},
       "http://b3mn.org/stencilset/petrinet#" => {:uri => "/stencilsets/petrinets/petrinet.json", :title => "Petri Net", :description => "Petri Net", :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"},
@@ -88,6 +89,7 @@ module Helper
     output['self_uri'] = hostname + model.getUri + '/self'
     output['meta_uri'] = hostname + model.getUri + '/info-access'
     output['icon_url'] = @@model_types[representation.getType][:icon_url]
+    Persistance.commit
     return output
   end
     
