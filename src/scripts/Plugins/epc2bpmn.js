@@ -36,10 +36,9 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
     
 	EPC_NAMESPACE: 'http://b3mn.org/stencilset/epc#',
 	BPMN_NAMESPACE: 'http://b3mn.org/stencilset/bpmn#',
-    /**
-     * Offers the plugin functionality:
-     *
-     */
+    
+	
+    // Offers the plugin functionality
     construct: function(facade){
         this.facade = facade;
         Facade = facade;
@@ -100,6 +99,9 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			}.bind(this),
 			onFailure: function(request){
 				
+				// Disable the loading panel
+				this.facade.raiseEvent({ type: 'loading.disable'});	
+				
 				Ext.Msg.alert("Oryx", "Request to server failed!");
 			
 			}.bind(this)
@@ -115,7 +117,11 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 	 * @param {Object} options
 	 */
     doTransform: function( erdfString , options){
-	
+
+		var start = new Date()
+		start = (start.getSeconds()+(start.getMinutes()*60))
+		console.log("Start: " + start);
+
 		var elements = this.parseToObject( erdfString );
 		
 		var shapes = [];
@@ -128,7 +134,13 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		var eventsMappings 			= options && options.events ? options.events.split(";").compact().without("").without(" ").collect(function(s){return s.toLowerCase()}) : [];
 		var isIncludedInEMapping	= function(s){ return eventsMappings.any(function(map){return s.toLowerCase().include(map)})}
 		
+		
+		
+		// ------------------------------------------
 		// 1. Rule: Map - Function --> Task
+		//
+		
+		// 
 		var functions = elements.findAll(function(el){ return el.type.endsWith("Function")})
 		functions.each(function(epc){
 			// Create a new Task
@@ -142,10 +154,18 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		}.bind(this))
 		
 		
-		// Get all Events
+		// ------------------------------------------
+		// 2. Rule: Events
+		//
+		
+		// 			
 		var events = elements.findAll(function(el){ return el.type.endsWith("Event")})
-
+		
+		// ------------------------------------------
 		// 2a. Rule: Map - Events without an incoming edge --> StartEvent
+		//
+		
+		// 
 		var startevents	= events.findAll(function(ev){ return !elements.any(function(el){ return el.outgoing && el.outgoing.any(function(out){ return out.slice(1) == ev.id }) }) })
 		startevents.each(function(epc){		
 		
@@ -161,7 +181,11 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		}.bind(this));		
 		
 		
+		// ------------------------------------------
 		// 2b. Rule: Map - Events without an outgoing edge --> EndEvent
+		//
+		
+		// 		
 		var endevents	= events.findAll(function(ev){ return !ev.outgoing })
 		endevents.each(function(epc){
 			// Create a new Task
@@ -176,7 +200,12 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			shapes.push({shape: shape, epc:epc})
 		}.bind(this));	
 
+
+		// ------------------------------------------
 		// extention Rule: Map - Events to Message Events which are defined in the advance settings
+		//
+		
+		// 	
 		var intermediateEvents	= [].without.apply(events, startevents.concat(endevents))
 		intermediateEvents		= intermediateEvents.findAll(function(epc){ return isIncludedInEMapping(epc.title)})
 		intermediateEvents.each(function(epc){
@@ -187,8 +216,13 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 
 			shapes.push({shape: shape, epc:epc})
 		}.bind(this));
+			
 				
+		// ------------------------------------------
 		// 3. Rule: Map - Connector --> Gateway
+		//
+		
+		// 	
 		var connectors	= elements.findAll(function(el){ return el.type.endsWith("Connector") })
 		connectors.each(function(epc){
 			
@@ -204,7 +238,12 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		}.bind(this))				
 
 
+				
+		// ------------------------------------------
 		// 2c. Rule: Map - Events directly after an Split Connectors (except AND-Connector) --> Conditions on the Edges after the Gateway
+		//
+		
+		// 	
 		connectors.each(function(epc){
 			if(epc.outgoing && epc.outgoing.length > 1 && !epc.type.endsWith("AndConnector")){
 
@@ -227,7 +266,11 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		
 				
 
-		// 5. Rule: Map - Data --> Data Object
+		// ------------------------------------------
+		// 5. Rule: Map - Data --> Data Object		
+		//
+		
+		// 	
 		var datas = elements.findAll(function(el){ return el.type.endsWith("Data")})
 		datas.each(function(epc){
 			// Create a new Task
@@ -239,21 +282,30 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			
 			shapes.push({shape: shape, epc:epc})
 		}.bind(this))
-				
-		// 6. Rule: Map - System --> ?		
-		var datas = elements.findAll(function(el){ return el.type.endsWith("System")})
-		datas.each(function(epc){
+
+
+		// ------------------------------------------
+		// 6. Rule: Map - System --> Annotation		
+		//
+		
+		// 					
+		var systems = elements.findAll(function(el){ return el.type.endsWith("System")})
+		systems.each(function(epc){
 			// Create a new Task
 			var shape = this.createElement("TextAnnotation", epc, true);
-			// Map Title -> Name
-			shape.setProperty(	"oryx-text", 			epc.title);
+			// Map Title -> Text
+			shape.setProperty(	"oryx-text", "Used System: " + epc.title);
 						
 			shapes.push({shape: shape, epc:epc})
 		}.bind(this))
 
 
 
+		// ------------------------------------------
 		// 7. Rule: Map - ProcessLink --> Sub-Process
+		//
+		
+		// 
 		var processlinks = elements.findAll(function(el){ return el.type.endsWith("ProcessInterface")})
 		processlinks.each(function(epc){
 			// Create a new Task
@@ -268,8 +320,17 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			shapes.push({shape: shape, epc:epc})
 		}.bind(this))		
 
+		var s1 = new Date()
+		s1 = (s1.getSeconds()+(s1.getMinutes()*60))
+		console.log("Before Orga: " + (s1 - start));
+		
+		
 
+		// ------------------------------------------
 		// 4. Rule: Map - Organization/Position --> Pool
+		//
+		
+		// 
 		var organizations = options.organization ? elements.findAll(function(el){ return el.type.endsWith("Organization") || el.type.endsWith("Position")}) : [];
 		if( organizations.length > 0 ){
 			
@@ -394,7 +455,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		
 		}
 		
-				
+					
 		// --------------------------
 		// Generate all Edges
 		//
@@ -474,12 +535,15 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		}.bind(this))		
 
 
+		// --------------------------
+		// UPDATE
+		//		
 		this.facade.getCanvas().update();
 		
 		if( options.autolayout ){
 			this.facade.raiseEvent({type:'autolayout.layout'});
 		}	
-
+		
 	},
 	
 	/**
@@ -706,10 +770,12 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					    width:			400,
 						id:				'transform-epc-bpmn-id-panel',
 						cls:			'transform-epc-bpmn-window',
-					    items: 			new Ext.Panel({frame:true,items:[mainForm, groupButton , advanceForm]}),
+					    items: 			new Ext.Panel({frame:true,autoHeight:true,items:[mainForm, groupButton , advanceForm]}),
 						floating:		true,
+						shim:			true,
 						modal:			true,
-						resizeable:		false,			    
+						resizable:		false,
+						autoHeight:		true,			    
 						buttons:[{
 								text:	'Import',
 								handler: function(){
