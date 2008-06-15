@@ -1,0 +1,7038 @@
+{
+	"title":"BpelProcess",
+	"namespace":"http://b3mn.org/stencilset/bpel#",
+	"description":"The stencil set for the BpelProcess wiki.",
+ 	"stencils" : [
+ 		{
+			"type":"node",
+			"id":"Process",
+			"title":"Worksheet",
+			"groups":["Project"],
+			"description":"",
+			"view":"others/node.Bpel.svg",
+			"icon":"new_task.png",
+			"roles": [],
+			"properties": [
+				{
+					"id":"title",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"Project Name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"avoidServer",
+					"prefix":"oryx",
+					"title":"avoidServer",
+					"type":"Boolean",
+					"description":"avoid server if only one Bpel process",
+					"value":"true",
+					"width":100,
+					"optional":true,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"BPEL",
+			"title":"Bpel",
+			"description":"An Bpel Process",
+			"groups":["BPEL"],
+			"view":"others/node.Bpel.svg",
+			"icon":"new_task.png",
+			"roles": ["ActivityHolder","ProcessChild","HandlerHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"targetNamespace",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"targetNamespace",
+					"value":"http://bpel.com/process",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"abstractProcessProfile",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"abstractProcessProfile",
+					"value":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"queryLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"queryLanguage",
+					"value":"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"expressionLanguage",
+					"value":"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":""
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":""
+						}
+					]
+				},
+				{
+					"id":"exitOnStandardFault",
+					"type":"Choice",
+					"title":"exitOnStandardFault",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":""
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":""
+						}
+					]
+				},
+				{
+					"id":"xmlns",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"xmlns",
+					"value":"http://docs.oasis-open.org/wsbpel/2.0/process/executable",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"otherxmlns",
+					"prefix":"oryx",
+					"type":"Complex",
+					"title":"other xmlns",
+					"value":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"prefix",
+							"name":"prefix",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						},
+						{
+							"id":"namespace",
+							"name":"namespace",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						}
+					]
+				},
+				{
+					"id":"extensions",
+					"type":"Complex",
+					"title":"extensions",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"namespace",
+							"name":"namespace",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+						{
+							"id":"mustUnderstand",
+							"name":"mustUnderstand",
+							"type":"Choice",
+							"value":"yes",
+							"width":100,
+							"optional":false,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"tooltip":""
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"tooltip":""
+								}
+							]							
+						}
+					]
+				},					
+				{
+					"id":"import",
+					"type":"Complex",
+					"title":"import",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"namespace",
+							"name":"namespace",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						},
+						{
+							"id":"location",
+							"name":"location",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						},
+						{
+							"id":"importType",
+							"name":"importType",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						}
+					]
+				},	
+				{
+					"id":"variables",
+					"type":"Complex",
+					"title":"variables",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"messageType",
+							"name":"messageType",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"element",
+							"name":"Element",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspectype",
+							"name":"FromSpecType",
+							"type":"Choice",
+							"value":"Variable",
+							"width":100,
+							"optional":false,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Variable"
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"partnerLink"
+								},
+								{
+									"id":"c3",
+									"title":"c3",
+									"value":"VarProperty"
+								},
+								{
+									"id":"c4",
+									"title":"c4",
+									"value":"Expression"
+								},
+								{
+									"id":"c5",
+									"title":"c5",
+									"value":"Literal"
+								},
+								{
+									"id":"c6",
+									"title":"c6",
+									"value":"Opaque"
+								},
+								{
+									"id":"c7",
+									"title":"c7",
+									"value":"Empty"
+								}
+							],
+							"disable": [
+								{
+									"value":"Variable",
+									"items": [
+										"fromspecproperty",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"
+									]
+								},
+								{
+									"value":"partnerLink",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral"
+									]
+								},
+								{
+									"value":"VarProperty",
+									"items": [
+										"fromspecpart",
+										"fromspecquerylanguage",
+										"fromspecquery",							
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"
+									]
+								},
+								{
+									"value":"Expression",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"							
+									]
+								},
+								{
+									"value":"Literal",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"							
+									]
+								},
+								{
+									"value":"Opaque",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"						
+									]
+								},
+								{
+									"value":"Empty",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"						
+									]
+								}
+							]
+						},
+						{
+							"id":"fromspecvariablename",
+							"name":"FS_VariableName",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"value":"",
+							"prefix":"oryx",
+							"width":110,
+							"optional":true,
+						},
+						{
+							"id":"fromspecpart",
+							"name":"FS_Part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecpartnerLink",
+							"name":"FS_partnerLink",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+							"width":110,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						},
+						{
+							"id":"fromspecendpointReference",
+							"name":"FS_endpointReference",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},			
+						{
+							"id":"fromspecquerylanguage",
+							"name":"FS_QueryLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":false,
+						},
+						{
+							"id":"fromspecquery",
+							"name":"FS_Query",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecproperty",
+							"name":"FS_Property",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"fromspecexpressionlanguage",
+							"name":"FS_ExpLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":true,
+						},
+						{
+							"id":"fromspecexpression",
+							"name":"FS_Exp",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecliteral",
+							"name":"FS_Literal",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						}
+				]			
+				},	
+				{
+					"id":"PartnerLinks",
+					"type":"Complex",
+					"title":"PartnerLinks",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"PartnetLinkType",
+							"name":"PartnetLinkType",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"myRole",
+							"name":"myRole",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"partnerRole",
+							"name":"partnerRole",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"initializePartnerRole",
+							"name":"initializePartnerRole",
+							"value":"",
+							"width":100,
+							"type":"Choice",
+							"optional":true,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"tooltip":""
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"tooltip":""
+								}
+							]
+								
+						}
+
+						
+					]
+				},	
+				{
+					"id":"CorrelationSets",
+					"type":"Complex",
+					"title":"CorrelationSets",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"properties",
+							"name":"properties",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						}
+					]
+				},
+				{
+					"id":"messageExchanges",
+					"type":"Complex",
+					"title":"messageExchanges",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"invoke",
+			"title":"Invoke",
+			"groups":["Action"],
+			"description":"An Invoke activity.",
+			"view":"action/node.action.invoke.svg",
+			"icon":"new_invoke.png",
+			"roles": ["Activity","PoolChild","CatchHolder","compensationHandlerHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"partnerLink",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+					"title":"partnerLink",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"length":undefined
+				},
+				{
+					"id":"portType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"portType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"operation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"operation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"inputVariable",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"inputVariable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"outputVariable",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"outputVariable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"Correlations",
+					"type":"Complex",
+					"title":"Correlations",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"Correlation",
+							"name":"Correlation",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"CorrelationSets","searchPropertieScope":"CorrelationSets",
+							"width":100,
+							"value":"",
+							"optional":true,
+							"prefix":"oryx"
+						},
+						{
+							"id":"initiate",
+							"name":"initiate",
+							"type":"Choice",
+							"value":"",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"refToView":""
+								},
+								{
+									"id":"join",
+									"title":"join",
+									"value":"join",
+									"refToView":""
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"refToView":""
+								}
+							]
+						},
+						{
+							"id":"pattern",
+							"name":"pattern",
+							"type":"Choice",
+							"value":"request",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"request",
+									"title":"request",
+									"value":"request",
+									"refToView":""
+								},
+								{
+									"id":"response",
+									"title":"response",
+									"value":"response",
+									"refToView":"response"
+								},
+								{
+									"id":"request_response",
+									"title":"request_response",
+									"value":"request_response",
+									"refToView":""
+								}
+							]
+						}
+					]
+				},
+				{
+					"id":"toParts",
+					"type":"Complex",
+					"title":"toParts",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"part",
+							"name":"part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"Correlation",
+							"name":"Correlation",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"width":100,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						}
+					]
+				},
+				{
+					"id":"fromParts",
+					"type":"Complex",
+					"title":"fromParts",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"part",
+							"name":"part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"toVariable",
+							"name":"toVariable",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"width":100,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"receive",
+			"title":"Receive",
+			"groups":["Action"],
+			"description":"An Receive activity.",
+			"view":"action/node.action.receive.svg",
+			"icon":"new_receive.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"partnerLink",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+					"title":"partnerLink",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"length":undefined
+				},
+				{
+					"id":"portType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"portType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"operation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"operation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"variable",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"variable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"messageExchange",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"messageExchanges","searchPropertieScope":"messageExchanges",
+					"title":"messageExchange",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"createInstance",
+					"type":"Choice",
+					"title":"createInstance",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"Correlations",
+					"type":"Complex",
+					"title":"Correlations",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"Correlation",
+							"name":"Correlation",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"CorrelationSets","searchPropertieScope":"CorrelationSets",
+							"width":100,
+							"value":"",
+							"optional":true,
+							"prefix":"oryx"
+						},
+						{
+							"id":"initiate",
+							"name":"initiate",
+							"type":"Choice",
+							"value":"",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"refToView":""
+								},
+								{
+									"id":"join",
+									"title":"join",
+									"value":"join",
+									"refToView":""
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"refToView":""
+								}
+							]
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"reply",
+			"title":"Reply",
+			"groups":["Action"],
+			"description":"An Reply activity.",
+			"view":"action/node.action.reply.svg",
+			"icon":"new_reply.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"partnerLink",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+					"title":"partnerLink",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"length":undefined
+				},
+				{
+					"id":"portType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"portType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"operation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"operation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"variable",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"variable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"faultName",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"faultName",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"messageExchange",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"messageExchanges","searchPropertieScope":"messageExchanges",
+					"title":"messageExchange",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined
+				},
+				{
+					"id":"Correlations",
+					"type":"Complex",
+					"title":"Correlations",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"Correlation",
+							"name":"Correlation",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"CorrelationSets","searchPropertieScope":"CorrelationSets",
+							"width":100,
+							"value":"",
+							"optional":true,
+							"prefix":"oryx"
+						},
+						{
+							"id":"initiate",
+							"name":"initiate",
+							"type":"Choice",
+							"value":"yes",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"refToView":""
+								},
+								{
+									"id":"join",
+									"title":"join",
+									"value":"join",
+									"refToView":""
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"refToView":""
+								}
+							]
+						},
+						{
+							"id":"pattern",
+							"name":"pattern",
+							"type":"Choice",
+							"value":"request",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"request",
+									"title":"request",
+									"value":"request",
+									"refToView":""
+								},
+								{
+									"id":"response",
+									"title":"response",
+									"value":"response",
+									"refToView":"response"
+								},
+								{
+									"id":"request_response",
+									"title":"request_response",
+									"value":"request_response",
+									"refToView":""
+								}
+							]
+						}
+					]
+				},
+				{
+					"id":"toParts",
+					"type":"Complex",
+					"title":"toParts",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"part",
+							"name":"part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"Correlation",
+							"name":"Correlation",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"width":100,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"assign",
+			"title":"Assign",
+			"groups":["Action"],
+			"description":"An Assign activity.",
+			"view":"action/node.action.assign.svg",
+			"icon":"new_assign.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"validate",
+					"type":"Choice",
+					"title":"validate",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"copy",
+					"type":"Complex",
+					"title":"Copy",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"complexItems": [
+						{
+							"id":"keepSrcElementName",
+							"name":"keepSrcElementName",
+							"type":"Choice",
+							"value":"",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"yes",
+									"refToView":""
+								},
+								{
+									"id":"c3",
+									"title":"c3",
+									"value":"no",
+									"refToView":""
+								}
+							]
+						},
+						{
+							"id":"ignoreMissingFromData",
+							"name":"ignoreMissingFromData",
+							"type":"Choice",
+							"value":"fromParent",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"fromParent",
+									"title":"fromParent",
+									"value":"fromParent",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"yes",
+									"refToView":""
+								},
+								{
+									"id":"c3",
+									"title":"c3",
+									"value":"no",
+									"refToView":""
+								}
+							]
+						},
+						{
+							"id":"fromspectype",
+							"name":"FromSpecType",
+							"type":"Choice",
+							"value":"Variable",
+							"width":100,
+							"optional":false,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Variable",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"partnerLink",
+									"refToView":""
+								},
+								{
+									"id":"c3",
+									"title":"c3",
+									"value":"VarProperty",
+									"refToView":""
+								},
+								{
+									"id":"c4",
+									"title":"c4",
+									"value":"Expression",
+									"refToView":""
+								},
+								{
+									"id":"c5",
+									"title":"c5",
+									"value":"Literal",
+									"refToView":""
+								},
+								{
+									"id":"c6",
+									"title":"c6",
+									"value":"Opaque",
+									"refToView":""
+								},
+								{
+									"id":"c7",
+									"title":"c7",
+									"value":"Empty",
+									"refToView":""
+								}
+							],
+							"disable": [
+								{
+									"value":"Variable",
+									"items": [
+										"fromspecproperty",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"
+									]
+								},
+								{
+									"value":"partnerLink",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral"
+									]
+								},
+								{
+									"value":"VarProperty",
+									"items": [
+										"fromspecpart",
+										"fromspecquerylanguage",
+										"fromspecquery",							
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"
+									]
+								},
+								{
+									"value":"Expression",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"							
+									]
+								},
+								{
+									"value":"Literal",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"							
+									]
+								},
+								{
+									"value":"Opaque",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"						
+									]
+								},
+								{
+									"value":"Empty",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"						
+									]
+								}
+							]
+						},
+						{
+							"id":"fromspecvariablename",
+							"name":"FS_VariableName",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"value":"",
+							"width":110,
+							"optional":true,
+							"prefix":"oryx"
+						},
+						{
+							"id":"fromspecpart",
+							"name":"FS_Part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecpartnerLink",
+							"name":"FS_partnerLink",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+							"width":110,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						},
+						{
+							"id":"fromspecendpointReference",
+							"name":"FS_endpointReference",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},			
+						{
+							"id":"fromspecquerylanguage",
+							"name":"FS_QueryLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":false,
+						},
+						{
+							"id":"fromspecquery",
+							"name":"FS_Query",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecproperty",
+							"name":"FS_Property",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"fromspecexpressionlanguage",
+							"name":"FS_ExpLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":true,
+						},
+						{
+							"id":"fromspecexpression",
+							"name":"FS_Exp",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecliteral",
+							"name":"FS_Literal",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"tospectype",
+							"name":"ToSpecType",
+							"type":"Choice",
+							"value":"Variable",
+							"width":100,
+							"optional":false,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Variable",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"partnerLink",
+									"refToView":""
+								},
+								{
+									"id":"c3",
+									"title":"c3",
+									"value":"VarProperty",
+									"refToView":""
+								},
+								{
+									"id":"c4",
+									"title":"c4",
+									"value":"Expression",
+									"refToView":""
+								},
+								{
+									"id":"c5",
+									"title":"c5",
+									"value":"Literal",
+									"refToView":""
+								},
+								{
+									"id":"c6",
+									"title":"c6",
+									"value":"Opaque",
+									"refToView":""
+								}
+							],
+							"disable": [
+								{
+									"value":"Variable",
+									"items": [
+										"tospecproperty",
+										"tospecexpressionlanguage",
+										"tospecexpression",
+										"tospecpartnerLink"										
+									]
+								},
+								{
+									"value":"partnerLink",
+									"items": [
+										"tospecvariablename",
+										"tospecpart",
+										"tospecproperty",
+										"tospecquerylanguage",
+										"tospecquery",
+										"tospecexpressionlanguage",
+										"tospecexpression"
+									]
+								},
+								{
+									"value":"VarProperty",
+									"items": [
+										"tospecpart",
+										"tospecquerylanguage",
+										"tospecquery",							
+										"tospecexpressionlanguage",
+										"tospecexpression",
+										"tospecpartnerLink"
+										
+									]
+								},
+								{
+									"value":"Expression",
+									"items": [
+										"tospecvariablename",
+										"tospecpart",
+										"tospecproperty",
+										"tospecquerylanguage",
+										"tospecquery",
+										"tospecexpressionlanguage",
+										"tospecexpression",
+										"tospecpartnerLink"
+									]
+								},
+								{
+									"value":"Opaque",
+									"items": [
+										"tospecvariablename",
+										"tospecpart",
+										"tospecproperty",
+										"tospecquerylanguage",
+										"tospecquery",
+										"tospecexpressionlanguage",
+										"tospecexpression",
+										"tospecpartnerLink"
+									]
+								}
+							]
+						},
+						{
+							"id":"tospecvariablename",
+							"name":"TS_VariableName",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"value":"",
+							"width":110,
+							"optional":true,
+							"prefix":"oryx"
+						},
+						{
+							"id":"tospecpart",
+							"name":"TS_Part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"tospecpartnerLink",
+							"name":"TS_partnerLink",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+							"width":110,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						},
+						{
+							"id":"tospecquerylanguage",
+							"name":"TS_QueryLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":false,
+						},
+						{
+							"id":"tospecquery",
+							"name":"TS_Query",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"tospecproperty",
+							"name":"TS_Property",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"tospecexpressionlanguage",
+							"name":"TS_ExpLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":true,
+						},
+						{
+							"id":"tospecexpression",
+							"name":"TS_Exp",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}				
+			]
+		},
+		{
+			"type": "node",
+			"id":"empty",
+			"title":"Empty",
+			"groups":["Action"],
+			"description":"An Empty activity.",
+			"view":"action/node.action.empty.svg",
+			"icon":"new_task_none.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"opaqueActivity",
+			"title":"opaqueActivity",
+			"groups":["Action"],
+			"description":"An Opaque activity.",
+			"view":"action/node.action.opaqueActivity.svg",
+			"icon":"new_task.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"validate",
+			"title":"validate",
+			"groups":["Action"],
+			"description":"An validate activity.",
+			"view":"action/node.action.validate.svg",
+			"icon":"new_validate.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"checkVariables",
+					"type":"Complex",
+					"title":"variables",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"complexItems": [
+						{
+							"id":"variables",
+							"name":"variables",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"value":"",
+							"prefix":"oryx",
+							"width":110,
+							"optional":true,
+						}
+					]
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"extensionActivity",
+			"title":"extensionActivity",
+			"groups":["Action"],
+			"description":"An Extension activity.",
+			"view":"action/node.action.extensionActivity.svg",
+			"icon":"new_extensionActivity.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"elementName",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"elementName",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"throw",
+			"title":"throw",
+			"groups":["Fault"],
+			"description":"An throw activity.",
+			"view":"fault/node.fault.throw.svg",
+			"icon":"new_throw.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"faultName",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"faultName",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"faultVariable",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"faultVariable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"exit",
+			"title":"exit",
+			"groups":["Fault"],
+			"description":"An Exit activity.",
+			"view":"fault/node.fault.exit.svg",
+			"icon":"new_exit.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"rethrow",
+			"title":"rethrow",
+			"groups":["Fault"],
+			"description":"An rethrow activity.",
+			"view":"fault/node.fault.rethrow.svg",
+			"icon":"new_throw.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"wait",
+			"title":"wait",
+			"groups":["Action"],
+			"description":"An Wait activity.",
+			"view":"action/node.action.wait.svg",
+			"icon":"new_wait.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"comum_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"expressionForOrUntil",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"expression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"ForUntil_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"ForUntil_opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+
+				{
+					"id":"ForOrUntil",
+					"type":"Choice",
+					"title":"ForOrUntil",
+					"value":"for",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"for",
+							"title":"for",
+							"value":"for",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"until",
+							"title":"until",
+							"value":"until",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+				
+			]
+		},
+		{
+			"type": "node",
+			"id":"scope",
+			"title":"Scope",
+			"description":"One Scope",
+			"groups":["Controls Scope"],
+			"view":"controls/controls.scope.svg",
+			"icon":"new_scope.png",
+			"roles": ["Activity","ActivityHolder","PoolChild","HandlerHolder","compensationHandlerHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"exitOnStandardFault",
+					"type":"Choice",
+					"title":"exitOnStandardFault",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+						
+					]
+				},
+				{
+					"id":"exitOnStandardFault",
+					"type":"Choice",
+					"title":"exitOnStandardFault",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"variables",
+					"type":"Complex",
+					"title":"variables",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"messageType",
+							"name":"messageType",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"element",
+							"name":"Element",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspectype",
+							"name":"FromSpecType",
+							"type":"Choice",
+							"value":"Variable",
+							"width":100,
+							"optional":false,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Variable",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"partnerLink",
+									"refToView":""
+								},
+								{
+									"id":"c3",
+									"title":"c3",
+									"value":"VarProperty",
+									"refToView":""
+								},
+								{
+									"id":"c4",
+									"title":"c4",
+									"value":"Expression",
+									"refToView":""
+								},
+								{
+									"id":"c5",
+									"title":"c5",
+									"value":"Literal",
+									"refToView":""
+								},
+								{
+									"id":"c6",
+									"title":"c6",
+									"value":"Opaque",
+									"refToView":""
+								},
+								{
+									"id":"c7",
+									"title":"c7",
+									"value":"Empty",
+									"refToView":""
+								}
+							],
+							"disable": [
+								{
+									"value":"Variable",
+									"items": [
+										"fromspecproperty",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"
+									]
+								},
+								{
+									"value":"partnerLink",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral"
+									]
+								},
+								{
+									"value":"VarProperty",
+									"items": [
+										"fromspecpart",
+										"fromspecquerylanguage",
+										"fromspecquery",							
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"
+									]
+								},
+								{
+									"value":"Expression",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"							
+									]
+								},
+								{
+									"value":"Literal",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"							
+									]
+								},
+								{
+									"value":"Opaque",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"						
+									]
+								},
+								{
+									"value":"Empty",
+									"items": [
+										"fromspecvariablename",
+										"fromspecpart",
+										"fromspecproperty",
+										"fromspecquerylanguage",
+										"fromspecquery",
+										"fromspecexpressionlanguage",
+										"fromspecexpression",
+										"fromspecliteral",
+										"fromspecpartnerLink",
+										"fromspecendpointReference"						
+									]
+								}
+							]
+						},
+						{
+							"id":"fromspecvariablename",
+							"name":"FS_VariableName",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"value":"",
+							"prefix":"oryx",
+							"width":110,
+							"optional":true,
+						},
+						{
+							"id":"fromspecpart",
+							"name":"FS_Part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecpartnerLink",
+							"name":"FS_partnerLink",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+							"width":110,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						},
+						{
+							"id":"fromspecendpointReference",
+							"name":"FS_endpointReference",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},			
+						{
+							"id":"fromspecquerylanguage",
+							"name":"FS_QueryLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":false,
+						},
+						{
+							"id":"fromspecquery",
+							"name":"FS_Query",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecproperty",
+							"name":"FS_Property",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"fromspecexpressionlanguage",
+							"name":"FS_ExpLanguage",
+							"type":"String",
+							"value":"",
+							"width":150,
+							"optional":true,
+						},
+						{
+							"id":"fromspecexpression",
+							"name":"FS_Exp",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"fromspecliteral",
+							"name":"FS_Literal",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						}
+				]			
+				},
+				{
+					"id":"PartnerLinks",
+					"type":"Complex",
+					"title":"PartnerLinks",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"PartnetLinkType",
+							"name":"PartnetLinkType",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"myRole",
+							"name":"myRole",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"partnerRole",
+							"name":"partnerRole",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						},
+						{
+							"id":"initializePartnerRole",
+							"name":"initializePartnerRole",
+							"type":"",
+							"value":"",
+							"width":100,
+							"type":"Choice",
+							"optional":true,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"tooltip":"",
+									"refToView":"none"
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"tooltip":"",
+									"refToView":"none"
+								}
+							]
+								
+						}
+
+						
+					]
+				},	
+				{
+					"id":"CorrelationSets",
+					"type":"Complex",
+					"title":"CorrelationSets",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"properties",
+							"name":"properties",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true,
+						}
+					]
+				},
+				{
+					"id":"messageExchanges",
+					"type":"Complex",
+					"title":"messageExchanges",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"sequence",
+			"title":"Sequence",
+			"description":"One Sequence",
+			"groups":["Controls Sequence"],
+			"view":"controls/controls.sequence.svg",
+			"icon":"new_sequence.png",
+			"roles": ["PoolHolder","Activity","PoolChild"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"if",
+			"title":"If Holder",
+			"description":"One If Holder",
+			"groups":["Controls If"],
+			"view":"controls/controls.ifHolder.svg",
+			"icon":"new_ifHolder.png",
+			"roles": ["PoolHolder","Activity","PoolChild","If"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"if_condition",
+			"title":"If condition",
+			"groups":["Controls If"],
+			"description":"If condition",
+			"view":"controls/node.if_condition.svg",
+			"icon":"new_if_condition.png",
+			"roles": ["Condition"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"expressionLanguage",
+					"type":"String",
+					"title":"expressionLanguage",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"50",
+					"wrapLines":false
+				},
+				{
+					"id":"bool_expression",
+					"type":"String",
+					"title":"bool_expression",
+					"value":"",
+					"description":"",
+					"refToView":"label",
+					"readonly":false,
+					"optional":false,
+					"length":undefined
+				},
+				{
+					"id":"If_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"flow",
+			"title":"Flow",
+			"description":"One Flow",
+			"groups":["Controls Flow"],
+			"view":"controls/controls.flow.svg",
+			"icon":"new_flow.png",
+			"roles": ["PoolHolder","Activity","PoolChild","Flow"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"pick",
+			"title":"pick",
+			"description":"One pick activity",
+			"groups":["Controls Pick"],
+			"view":"controls/controls.pick.svg",
+			"icon":"new_task.png",
+			"roles": ["Activity","PoolChild"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"createInstance",
+					"type":"Choice",
+					"title":"createInstance",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"while",
+			"title":"While",
+			"description":"One While",
+			"groups":["Loop"],
+			"view":"loop/loop.while.svg",
+			"icon":"new_while.png",
+			"roles": ["Activity","PoolChild","ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"condition_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"cond_expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"condition_booleanExpression",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"cond_booleanExpression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"condition_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"cond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}				
+			]
+		},
+		{
+			"type": "node",
+			"id":"repeatUntil",
+			"title":"RepeatUntil",
+			"description":"One repeat Until",
+			"groups":["Loop"],
+			"view":"loop/loop.repeatUntil.svg",
+			"icon":"new_repeatUntil.png",
+			"roles": ["Activity","PoolChild", "ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"condition_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"cond_expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"condition_booleanExpression",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"cond_booleanExpression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"condition_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"cond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"forEach",
+			"title":"For Each",
+			"description":"One For Each",
+			"groups":["Loop"],
+			"view":"loop/loop.foreach.svg",
+			"icon":"new_for_each.png",
+			"roles": ["Activity","PoolChild","ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"condition_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"cond_expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"condition_booleanExpression",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"cond_booleanExpression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"condition_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"cond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}				
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"compensante",
+			"title":"compensate",
+			"description":"One Compensate",
+			"groups":["Compensate"],
+			"view":"compensate/node.compensate.compensate.svg",
+			"icon":"new_compensation.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"compensanteScope",
+			"title":"compensateScope",
+			"description":"One Compensate Scope",
+			"groups":["Compensate"],
+			"view":"compensate/node.compensate.compensateScope.svg",
+			"icon":"new_compensationScope.png",
+			"roles": ["Activity","PoolChild"],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"target",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"target",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"compensationHandler",
+			"title":"compensationHandler",
+			"description":"One compensationHandler",
+			"groups":["Compensate"],
+			"view":"compensate/node.compensate.compensateHandler.svg",
+			"icon":"new_compensationHandler.png",
+			"roles": ["Handler","ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"onMessage",
+			"title":"onMessage",
+			"description":"One onMessage from the element Pick",
+			"groups":["Controls Pick"],
+			"view":"handler/node.handler.onMessage.svg",
+			"icon":"new_onMessage.png",
+			"roles": ["ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"partnerLink",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+					"title":"partnerLink",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"portType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"portType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"operation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"operation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"variable",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"variable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"fromParts",
+					"type":"Complex",
+					"title":"fromParts",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"part",
+							"name":"part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"toVariable",
+							"name":"toVariable",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"width":100,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						}
+					]
+				},
+				{
+					"id":"Correlations",
+					"type":"Complex",
+					"title":"Correlations",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"Correlation",
+							"name":"Correlation",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"CorrelationSets","searchPropertieScope":"CorrelationSets",
+							"width":100,
+							"value":"",
+							"optional":true,
+							"prefix":"oryx"
+						},
+						{
+							"id":"initiate",
+							"name":"initiate",
+							"type":"Choice",
+							"value":"",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"refToView":""
+								},
+								{
+									"id":"join",
+									"title":"join",
+									"value":"join",
+									"refToView":""
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"refToView":""
+								}
+							]
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"onAlarm",
+			"title":"onAlarm",
+			"description":"One element onAlarm",
+			"groups":["Controls Pick","Handler EventHandlers"],
+			"view":"others/node.shared.onAlarm.svg",
+			"icon":"new_onAlarm.png",
+			"roles": ["ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"comum_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"(FOR/UNTIL)expr Lang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"expressionForOrUntil",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"(For/Until)expression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"ForOrUntil",
+					"type":"Choice",
+					"title":"ForOrUntil",
+					"value":"for",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"for",
+							"title":"for",
+							"value":"for",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"until",
+							"title":"until",
+							"value":"until",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"ForUntil_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"ForUntil_opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"repeatExpressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"Repeat Exp Lang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"repeatTimeExpression",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"repeat time exp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"repeat_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"repeat_opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+				
+			]
+		},
+		{
+			"type": "node",
+			"id":"eventHandlers",
+			"title":"eventHandlers",
+			"description":"One eventHandlers",
+			"groups":["Handler EventHandlers"],
+			"view":"handler/node.handler.eventHandlers.svg",
+			"icon":"new_task.png",
+			"roles": [],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"onEvent",
+			"title":"onEvent",
+			"description":"One onEvent from the element EventHandlers",
+			"groups":["Handler EventHandlers"],
+			"view":"handler/node.handler.onEvent.svg",
+			"icon":"new_onEvent.png",
+			"roles": ["ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"partnerLink",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
+					"title":"partnerLink",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"length":undefined
+				},
+				{
+					"id":"portType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"portType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"operation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"operation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"choiceValue",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"messageType/element",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"choiceType",
+					"type":"Choice",
+					"title":"choiceType",
+					"value":"Empty",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"Empty",
+							"title":"Empty",
+							"value":"Empty",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"messageType",
+							"title":"messageType",
+							"value":"messageType",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"element",
+							"title":"element",
+							"value":"element",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"variable",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"Variable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"fromParts",
+					"type":"Complex",
+					"title":"fromParts",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"part",
+							"name":"part",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"toVariable",
+							"name":"toVariable",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+							"width":100,
+							"value":"",
+							"optional":false,
+							"prefix":"oryx"
+						}
+					]
+				},
+				{
+					"id":"Correlations",
+					"type":"Complex",
+					"title":"Correlations",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"Correlation",
+							"name":"Correlation",
+							"type":"searcher",
+							"searchBPELId":"BPEL","searchScopeId":"Scope",
+							"searchPropertieBPEL":"CorrelationSets","searchPropertieScope":"CorrelationSets",
+							"width":100,
+							"value":"",
+							"optional":true,
+							"prefix":"oryx"
+						},
+						{
+							"id":"initiate",
+							"name":"initiate",
+							"type":"Choice",
+							"value":"",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"yes",
+									"title":"yes",
+									"value":"yes",
+									"refToView":""
+								},
+								{
+									"id":"join",
+									"title":"join",
+									"value":"join",
+									"refToView":""
+								},
+								{
+									"id":"no",
+									"title":"no",
+									"value":"no",
+									"refToView":""
+								}
+							]
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"terminationHandler",
+			"title":"terminationHandler",
+			"description":"One terminationHandler",
+			"groups":["Handler termination"],
+			"view":"handler/node.handler.terminationHandler.svg",
+			"icon":"new_termination.png",
+			"roles": ["Handler","ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"faultHandlers",
+			"title":"faultHandlers",
+			"description":"One faultHandlers",
+			"groups":["Handler faultHandlers"],
+			"view":"handler/node.handler.faultHandlers.svg",
+			"icon":"new_faultHandlers.png",
+			"roles": ["Handler","CatchHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"catch",
+			"title":"catch",
+			"description":"One catch",
+			"groups":["Handler faultHandlers"],
+			"view":"handler/node.handler.catch1.svg",
+			"icon":"new_catch.png",
+			"roles": ["ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"faultName",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"top",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"faultVariable",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"faultVariable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"faultMessageType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"FMessageType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"faultElement",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"faultElement",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"catchAll",
+			"title":"catchAll",
+			"description":"One Catch All",
+			"groups":["Handler faultHandlers"],
+			"view":"handler/node.handler.catchAll.svg",
+			"icon":"new_catchAll.png",
+			"roles": ["ActivityHolder"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"sequenceOrder",
+			"title":"Sequence",
+			"description":"Defines a order in Sequence",
+			"groups":["Controls Sequence"],
+			"view":"controls/edge.sequenceOrder.svg",
+			"icon":"new_sequence_flow.png",
+			"roles": ["sequence"],
+			"properties": [
+				{
+					"id":"title",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"Title",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"sequenceFlow",
+			"title":"Bpel Flow",
+			"description":"Defines a Link in a Flow Element",
+			"groups":["Controls Flow"],
+			"view":"controls/edge.sequenceFlow.svg",
+			"icon":"new_sequence_flow.png",
+			"roles": [],
+			"properties": [
+				{
+					"id":"linkName",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"transition_expression",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"expression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"TC_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"TC_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"sequenceIfTrue",
+			"title":"If True",
+			"description":"Connects the Activity related if the condition is True",
+			"groups":["Controls If"],
+			"view":"controls/edge.ifTrue.svg",
+			"icon":"new_sequence_flow.png",
+			"roles": ["sequenceIf","if"],
+			"properties": []
+		},
+		{
+			"type": "edge",
+			"id":"sequenceIfFalse",
+			"title":"If False",
+			"description":"Defines the Activity related within the condition if is True",
+			"groups":["Controls If"],
+			"view":"controls/edge.ifFalse.svg",
+			"icon":"new_sequence_flow.png",
+			"roles": ["Controls Sequence","if"],
+			"properties": []
+		}
+	
+	],
+	"rules": {
+		"connectionRules": [
+			{
+				"role":"sequenceIfTrue",
+				"connects": [
+					{
+						"from":"if_condition",
+						"to":["Activity"]
+					}
+				]
+			},
+			{
+				"role":"sequenceIfFalse",
+				"connects": [
+					{
+						"from":"if_condition",
+						"to":["Activity","if_condition"]
+					}
+				]
+			},
+			{
+				"role":"sequenceFlow",
+				"connects": [
+					{
+						"from":"Activity",
+						"to":["Activity"]
+					}
+				]
+			},
+			{
+				"role":"sequenceOrder",
+				"connects": [
+					{
+						"from":"Activity",
+						"to":["Activity"]
+					}
+				]
+			},
+			{
+				"role":"Association",
+				"connects": [
+					{
+						"from":"ActSrc",
+						"to":["AssTgt"]
+					},
+					{
+						"from":"AssSrc",
+						"to":["ActTgt"]
+					}
+				]
+			},
+			{
+				"role":"Timer",
+				"connects": [
+					{
+						"from":"Activity",
+						"to":"Timer"
+					}
+				]
+			}
+		],
+		
+		"cardinalityRules":[
+			{	
+				"role":"compensationHandler",
+				"maximumOccurrence":1,
+			},
+			{	
+				"role":"catchAll",
+				"maximumOccurrence":1,
+			},
+			{	
+				"role":"faultHandlers",
+				"maximumOccurrence":1,
+			},
+			{	
+				"role":"terminationHandler",
+				"maximumOccurrence":1,
+			},
+			{	
+				"role":"Condition",
+				"maximumOccurrence":undefined,
+				"outgoingEdges": [
+					{
+						"role":"sequenceIfFalse",
+						"maximum":1
+					},
+					{
+						"role":"sequenceIfTrue",
+						"maximum":1
+					}
+				],
+				"incomingEdges": [
+					{
+						"role":"sequenceIfTrue",
+						"maximum":1
+					}
+				]
+			},
+			{	
+				"role":"Activity",
+				"maximumOccurrence":1,
+				"outgoingEdges": [
+					{
+						"role":"sequenceOrder",
+						"maximum":1
+					},
+					{
+						"role":"sequenceFlow",
+						"maximum":undefined
+					}
+				],
+				"incomingEdges": [
+					{
+						"role":"sequenceOrder",
+						"maximum":1
+					},
+					{
+						"role":"sequenceFlow",
+						"maximum":undefined
+					},
+					{
+						"role":"sequenceIf",
+						"maximum":1
+					}
+					
+
+				]
+			}
+			
+			
+			
+		],
+		"containmentRules": [
+			{
+				"role":"If",
+				"contains": ["Condition"]			
+			},
+			{
+				"role":"PoolHolder",
+				"contains": ["PoolChild"]
+			},
+			{
+				"role":"CatchHolder",
+				"contains": ["catch","catchAll"]
+			},
+			{
+				"role":"eventHandlers",
+				"contains": ["onEvent","onAlarm"]
+			},
+			{
+				"role":"pick",
+				"contains": ["onMessage","onAlarm"]
+			},
+			{
+				"role":"ActivityHolder",
+				"contains": ["Activity"]
+			},
+			{
+				"role":"HandlerHolder",
+			"contains": ["faultHandlers","terminationHandler", "eventHandlers"]
+			},
+			{
+				"role":"compensationHandlerHolder",
+				"contains": ["compensationHandler"]
+			},
+			{
+				"role":"Process",
+				"contains": [
+					"ProcessChild"
+				]
+			}
+		],
+		canContain: function(args) {return args.result;  },
+		canConnect: function(args) { 
+		
+			if(args.result) {
+			
+			//##########SEQUENCE ORDER####################
+				
+				if((args.edgeStencil.id() == args.edgeStencil.namespace() + "sequenceOrder")|| (args.edgeStencil.id() == args.edgeStencil.namespace() + "sequenceIfTrue") || (args.edgeStencil.id() == args.edgeStencil.namespace() + "sequenceIfFalse")){
+					//if the parent shape has a role for the target edge
+					var targetResult= true, sourceResult =true;
+					if (args.targetShape){
+						var hasRule = args.edgeStencil.roles().any((function(stencilRule){	
+							if(args.targetShape.getParentShape().getStencil().roles().member(stencilRule))
+								return true;
+							else
+								return false;
+						}).bind(this));
+						targetResult = hasRule;
+					}
+					//if the parent shape has a role for the source edge
+				
+					if (args.sourceShape){
+						var hasRule = args.edgeStencil.roles().any((function(stencilRule){	
+							if(args.sourceShape.getParentShape().getStencil().roles().member(stencilRule))
+								return true;
+							else
+								return false;
+						}).bind(this));
+						sourceResult = hasRule;
+					}
+					
+					if(args.targetShape && args.sourceShape)
+						if (args.targetShape.getParentShape()!==args.sourceShape.getParentShape()) 
+							args.result = false;
+					
+						args.result = targetResult && sourceResult;
+				}
+				
+				
+				
+				//##########SEQUENCE FLOW####################
+				
+					//if the parent shape has a role for the source edge
+					
+				
+					
+					
+				if(args.edgeStencil.id() == args.edgeStencil.namespace() + "sequenceFlow"){
+						
+					//if the parent shape has a role for the target edge
+					var targetResult= true, sourceResult =true;
+					
+					if (args.sourceShape){
+							currentParent = args.sourceShape.getParentShape();
+							var existsFlow= false;
+							while(currentParent && !existsFlow && currentParent){
+								if(currentParent.getStencil().id() == currentParent.getStencil().namespace()  + "flow")
+									existsFlow = true;
+								currentParent = currentParent.parent;
+							}
+							sourceResult = existsFlow;
+						}
+					
+					if (args.targetShape){
+						currentParent = args.targetShape.getParentShape();
+						var existsFlow= false;
+						while(currentParent && !existsFlow && currentParent){
+							if(currentParent.getStencil().id() == currentParent.getStencil().namespace() + "flow")
+								existsFlow = true;
+							currentParent = currentParent.parent;
+						}
+						targetResult = existsFlow;
+					}
+					args.result = targetResult && sourceResult;
+				}
+				
+			}
+			return args.result; 
+		}
+	}
+}
