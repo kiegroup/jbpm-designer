@@ -229,7 +229,9 @@ var DataManager = {
 		//DataManager.__synclocal();
 		
 		DataManager.__renderCanvas(facade);
-		
+		result += DataManager.serialize(
+				$(ERDF.__stripHashes(facade.getCanvas().resourceId)), true);
+				
 		shapes.each( function(shape) {
 			
 			DataManager.__persistShape(shape);
