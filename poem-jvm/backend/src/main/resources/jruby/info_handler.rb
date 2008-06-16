@@ -34,11 +34,7 @@ module Handler
     end
       
     def doPost(interaction)
-      representation = interaction.object.read
-      interaction.params.each do |key, value|
-        representation.send "set#{key.capitalize}", value
-      end
-      representation.update 
+      Representation.update(interaction.object.getId, interaction.params['title'], interaction.params['summary'], nil, nil)
       Helper.jsonResponse(interaction.response, Helper.getModelMetadata(interaction, interaction.object))
     end
   end

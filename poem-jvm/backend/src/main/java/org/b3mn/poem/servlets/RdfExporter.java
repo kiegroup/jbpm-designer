@@ -18,7 +18,6 @@ public class RdfExporter {
   		res.setStatus(200);	
   		try {
   			String rdfRepresentation = object.read().getRdf();
-  			Persistance.commit();
     		PrintWriter out = res.getWriter();
 			out.write(rdfRepresentation);
 		} catch (TransformerException e) {

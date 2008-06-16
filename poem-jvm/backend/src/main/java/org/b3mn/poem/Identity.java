@@ -76,7 +76,6 @@ public class Identity {
 			createSQLQuery("select {identity.*} from identity(?)")
 			.addEntity("identity", Identity.class).setString(0, "/model/new").uniqueResult();
 			identity.setUri("/model/" + identity.getId());
-			
 			session.save(identity);
 			
 			Representation representation = Representation.instance(identity);
@@ -88,12 +87,10 @@ public class Identity {
 			representation.setSvg(svg);
 			representation.setContent(content);
 			session.save(representation);
+			Persistance.commit();
 			
 			Structure.instance(identity.getId(), owner.getUserHierarchy());
-			
-			Persistance.commit();
 			return identity;
-			
 	}
 	
 	public static Identity ensureSubject(String openid) {
@@ -103,8 +100,8 @@ public class Identity {
 		createSQLQuery("select {identity.*} from identity(?)")
 		.addEntity("identity", Identity.class).
 		setString(0, openid).uniqueResult();
-		Structure.instance(identity.getId(), userroot.getUserHierarchy());
 		Persistance.commit();
+		Structure.instance(identity.getId(), userroot.getUserHierarchy());
 		return identity;	
 	}
 	
@@ -114,8 +111,8 @@ public class Identity {
 		createSQLQuery("select {identity.*} from identity(?)")
 		.addEntity("identity", Identity.class).
 		setString(0, openid).uniqueResult();
-		Structure.instance(identity.getId(), hierarchy);
 		Persistance.commit();
+		Structure.instance(identity.getId(), hierarchy);
 		return identity;	
 	}
 	
@@ -208,6 +205,7 @@ public class Identity {
 		createSQLQuery("select {representation.*} from {representation} where ident_id = :ident_id")
 		.addEntity("representation", Representation.class)
 	    .setInteger("ident_id", this.id).uniqueResult();
+		Persistance.commit();
 		return rep;
 	}
 	

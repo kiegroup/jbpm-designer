@@ -89,7 +89,6 @@ module Helper
     output['self_uri'] = hostname + model.getUri + '/self'
     output['meta_uri'] = hostname + model.getUri + '/info-access'
     output['icon_url'] = @@model_types[representation.getType][:icon_url]
-    Persistance.commit
     return output
   end
     

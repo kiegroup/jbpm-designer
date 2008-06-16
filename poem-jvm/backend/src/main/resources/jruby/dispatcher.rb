@@ -58,7 +58,7 @@ class Dispatcher
       '/new' => 'NewModelHandler'
     }
     
-    openid = request.getSession.getAttribute(OpenIDAuthenticationServlet::OPENID_SESSION_IDENTIFIER) || 'public'
+    openid = request.getSession.getAttribute(OpenIDAuthenticationServlet::OPENID_SESSION_IDENTIFIER) || 'https://openid.hpi.uni-potsdam.de/user/ole.eckermann'
     uri = request.getPathInfo
 
     if(handler_name = relations[Helper.getRelation(uri)])
