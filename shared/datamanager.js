@@ -284,7 +284,7 @@ var DataManager = {
 			DataManager.addTriple( new ERDF.Triple(
 				shapeResource,
 				{prefix: "oryx", name: "render"},
-				new ERDF.Resource(shape.resourceId)
+				new ERDF.Resource("#" + shape.resourceId)
 			));
 		});
 	},
@@ -390,9 +390,8 @@ var DataManager = {
 	 *                 just the element to be serialized.
 	 */
 	serialize: function(node, preserveNamespace) {
-		
+
 		if (node.nodeType == node.ELEMENT_NODE) {
-			
 			// serialize an element node.
 			
 			var children = $A(node.childNodes);
