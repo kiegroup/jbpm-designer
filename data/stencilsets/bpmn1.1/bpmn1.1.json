@@ -13,7 +13,8 @@
 			"icon":				"new_diagram.png",
 			"mayBeRoot":		true,
 			"hide":				true,
-			"roles":			["fromtoall"],
+			"roles":			["fromtoall",
+								 "canContainArtifacts"],
 			"properties": [
 				{
 					"id":"id",
@@ -777,7 +778,8 @@
 				"conditional_start",
 				"default_start",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"canContainArtifacts"
 			],
 			"properties": [
 				{
@@ -2140,7 +2142,8 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"fromtoall"				
+				"fromtoall",
+				"canContainArtifacts"				
 			],
 			"layout":function(shape) {		
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
@@ -2489,7 +2492,8 @@
 				"messageflow_start",
 				"messageflow_end",
 				"PoolChild",
-				"fromtoall"				
+				"fromtoall",
+				"canContainArtifacts"				
 			],	
 			"layout":function(shape) {		
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
@@ -2611,7 +2615,8 @@
 			"view":"artifact/node.group.svg",
 			"icon":"new_group.png",
 			"roles": [
-				"fromtoall"
+				"fromtoall",
+				"canContainArtifacts"
 			],
 			"properties": [
 				{
@@ -3799,7 +3804,7 @@
 			"title":"Intermediate message event",
 			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate message event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.message.intermediate.svg",
+			"view":"intermediateevent/node.event.message.catching.intermediate.svg",
 			"icon":"intermediateevent/node.event.message.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -3810,7 +3815,6 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEvent",
 				"IntermediateEventOnSubprocessBoundary"
 				
 			],
@@ -3878,20 +3882,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Catching",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "messageCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "messageThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -3976,7 +3966,7 @@
 			"title":"Intermediate message event",
 			"groups":["Intermediate Events Throwing"],
 			"description":"An intermediate message event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.message.intermediate.svg",
+			"view":"intermediateevent/node.event.message.throwing.intermediate.svg",
 			"icon":"intermediateevent/node.event.message.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -3985,10 +3975,7 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEvent",
-				"IntermediateEventOnSubprocessBoundary"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -4054,20 +4041,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Throwing",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "messageCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "messageThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -4163,8 +4136,7 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
@@ -4305,8 +4277,7 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
@@ -4437,8 +4408,7 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
@@ -4558,8 +4528,7 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
@@ -4625,20 +4594,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Catching",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "compensationCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "compensationThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -4693,7 +4648,7 @@
 			"title":"Intermediate compensation event",
 			"groups":["Intermediate Events Throwing"],
 			"description":"An intermediate compensation event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.compensation.intermediate.svg",
+			"view":"intermediateevent/node.event.compensation.throwing.intermediate.svg",
 			"icon":"intermediateevent/node.event.compensation.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -4702,10 +4657,7 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -4771,20 +4723,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Throwing",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "compensationCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "compensationThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -4850,8 +4788,7 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
@@ -4971,7 +4908,7 @@
 			"title":"Intermediate link event",
 			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate link event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.link.intermediate.svg",
+			"view":"intermediateevent/node.event.link.catching.intermediate.svg",
 			"icon":"intermediateevent/node.event.link.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -4980,10 +4917,7 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -5049,20 +4983,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Catching",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "linkCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "linkThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -5128,7 +5048,7 @@
 			"title":"Intermediate link event",
 			"groups":["Intermediate Events Throwing"],
 			"description":"An intermediate link event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.link.intermediate.svg",
+			"view":"intermediateevent/node.event.link.throwing.intermediate.svg",
 			"icon":"intermediateevent/node.event.link.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -5137,10 +5057,7 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -5206,20 +5123,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Throwing",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "linkCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "linkThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -5285,7 +5188,7 @@
 			"title":"Intermediate multiple event",
 			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate multiple event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.multiple.intermediate.svg",
+			"view":"intermediateevent/node.event.multiple.catching.intermediate.svg",
 			"icon":"intermediateevent/node.event.multiple.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -5296,8 +5199,7 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
@@ -5363,20 +5265,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Catching",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "middlePolygonCatching" },
-						{ id: "throwing",       title: "c1", value: "Throwing",     refToView: "middlePolygonThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -5432,7 +5320,7 @@
 			"title":"Intermediate multiple event",
 			"groups":["Intermediate Events Throwing"],
 			"description":"An intermediate multiple event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.multiple.intermediate.svg",
+			"view":"intermediateevent/node.event.multiple.throwing.intermediate.svg",
 			"icon":"intermediateevent/node.event.multiple.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -5441,10 +5329,7 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -5510,20 +5395,6 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
-				},
-				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Throwing",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "middlePolygonCatching" },
-						{ id: "throwing",       title: "c1", value: "Throwing",     refToView: "middlePolygonThrowing"}
-						]
 				},
 				{
 					"id":"trigger",
@@ -5579,7 +5450,7 @@
 			"title":"Intermediate signal event",
 			"groups":["Intermediate Events Catching"],
 			"description":"An intermediate multiple event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.signal.intermediate.svg",
+			"view":"intermediateevent/node.event.signal.catching.intermediate.svg",
 			"icon":"intermediateevent/node.event.signal.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -5590,8 +5461,7 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
 				{
@@ -5659,24 +5529,10 @@
 					"length":""
 				},
 				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Catching",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "signalCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "signalThrowing"}
-						]
-				},
-				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
-					"value":"Multiple",
+					"value":"Signal",
 					"description":"",
 					"readonly":true,
 					"optional":false,
@@ -5738,7 +5594,7 @@
 			"title":"Intermediate signal event",
 			"groups":["Intermediate Events Throwing"],
 			"description":"An intermediate multiple event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.signal.intermediate.svg",
+			"view":"intermediateevent/node.event.signal.throwing.intermediate.svg",
 			"icon":"intermediateevent/node.event.signal.throwing.intermediate.png",
 			"roles":[
 				"sequence_start",
@@ -5747,10 +5603,7 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEvent"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -5818,24 +5671,10 @@
 					"length":""
 				},
 				{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"value":"Throwing",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{ id: "catching",     title: "c1", value: "Catching",     refToView: "signalCatching" },
-						{ id: "throwing",     title: "c1", value: "Throwing",     refToView: "signalThrowing"}
-						]
-				},
-				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
-					"value":"Multiple",
+					"value":"Signal",
 					"description":"",
 					"readonly":true,
 					"optional":false,
@@ -6959,7 +6798,7 @@
 				{
 					"id":"source",
 					"type":"String",
-					"title":"Source",
+					"title":"SourceRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -6969,7 +6808,7 @@
 				{
 					"id":"target",
 					"type":"String",
-					"title":"Target",
+					"title":"TargetRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7067,7 +6906,7 @@
 				{
 					"id":"source",
 					"type":"String",
-					"title":"Source",
+					"title":"SourceRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7077,7 +6916,7 @@
 				{
 					"id":"target",
 					"type":"String",
-					"title":"Target",
+					"title":"TargetRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7165,7 +7004,7 @@
 				{
 					"id":"source",
 					"type":"String",
-					"title":"Source",
+					"title":"SourceRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7175,7 +7014,7 @@
 				{
 					"id":"target",
 					"type":"String",
-					"title":"Target",
+					"title":"TargetRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7252,7 +7091,7 @@
 				{
 					"id":"source",
 					"type":"String",
-					"title":"Source",
+					"title":"SourceRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7262,7 +7101,7 @@
 				{
 					"id":"target",
 					"type":"String",
-					"title":"Target",
+					"title":"TargetRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7339,7 +7178,7 @@
 				{
 					"id":"source",
 					"type":"String",
-					"title":"Source",
+					"title":"SourceRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7349,7 +7188,7 @@
 				{
 					"id":"target",
 					"type":"String",
-					"title":"Target",
+					"title":"TargetRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7426,7 +7265,7 @@
 				{
 					"id":"source",
 					"type":"String",
-					"title":"Source",
+					"title":"SourceRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7436,7 +7275,7 @@
 				{
 					"id":"target",
 					"type":"String",
-					"title":"Target",
+					"title":"TargetRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7446,7 +7285,7 @@
 				{
 					"id":"message",
 					"type":"String",
-					"title":"Message",
+					"title":"MessageRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7569,7 +7408,7 @@
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					}
 				]
-			},
+			}
 		],
 		"cardinalityRules": [
 			{
@@ -7629,25 +7468,28 @@
 				]
 			},
 			{
-				"role":"fromtoall",
+				"role":"canContainArtifacts",
 				"contains": [
 					"Group"
 				]
 			},
 			{
-				"role":"fromtoall",
+				"role":"canContainArtifacts",
 				"contains": [
 					"DataObject"
 				]
 			},
 			{
-				"role":"fromtoall",
+				"role":"canContainArtifacts",
 				"contains": [
 					"TextAnnotation"
 				]
-			}, {
-				role: "Subprocess",
-				contains: ["tc"]
+			}, 
+			{
+				"role": "Subprocess",
+				"contains": [
+					"tc"
+				]
 			}
 		]
 	}

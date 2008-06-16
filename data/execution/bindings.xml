@@ -14,7 +14,7 @@
         <deadlineform />
         <wantToReviewGroup />
         <delegategroup />
-        <!-- <attribute futurereadonly="false" futurevisible="false" /> -->
+        <!-- <attribute futurereadonly="false" futurewritable="false" /> -->
    </data>
 </x:instance>
 
@@ -22,14 +22,14 @@
           <x:bind id="owner" nodeset="instance('output-token')/places/metadata/owner"/>
           <x:bind id="isDelegated" nodeset="instance('output-token')/places/metadata/isDelegated"/>
           <x:bind id="isReviewed" nodeset="instance('output-token')/places/metadata/isReviewed"/>
-          <x:bind id="reviewRequested" nodeset="instance('output-token')/places/processdata/reviewRequested"/>
+          <x:bind id="reviewRequested" nodeset="instance('output-token')/places/metadata/reviewRequested"/>
           <x:bind id="delegate" nodeset="instance('output-token')/places/metadata/delegate"/>
           <x:bind id="firstOwner" nodeset="instance('output-token')/places/metadata/firstOwner"/>
           <x:bind id="firstOwner.readonly" nodeset="instance('output-token')/places/metadata/firstOwner/@readonly"/>
           <x:bind id="message" nodeset="instance('output-token')/places/processdata/message"/>
           <x:bind id="messagereadonly" nodeset="instance('output-token')/places/processdata/message/@readonly"/>
-          <x:bind id="deadline" nodeset="instance('output-token')/places/processdata/deadline"/>
-          <x:bind id="deadlinereadonly" nodeset="instance('output-token')/places/processdata/deadline/@readonly"/>
+          <x:bind id="deadline" nodeset="instance('output-token')/places/metadata/deadline"/>
+          <x:bind id="deadlinereadonly" nodeset="instance('output-token')/places/metadata/deadline/@readonly"/>
           <x:bind id="delegatedFrom" nodeset="instance('output-token')/places/metadata/delegatedFrom"/>
           <x:bind id="wantToReview" nodeset="instance('output-token')/places/processdata/wantToReview" type="xsd:boolean"/>
           
@@ -45,12 +45,12 @@
 		<x:bind nodeset="instance('ui_settings')/messageform" id="fade.message" relevant="instance('output-token')/places/metadata/isDelegated = 'true' or (instance('output-token')/places/metadata/isDelegated!='true' and instance('output-token')/places/processdata/message!='' and instance('output-token')/places/metadata/isReviewed!='true')" />
 		<x:bind nodeset="instance('output-token')/places/processdata/message" readonly="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/processdata/message/@readonly = 'true'" />
 		<x:bind nodeset="instance('output-token')/places/processdata/message/@readonly" type="xsd:boolean" />
-		<x:bind nodeset="instance('ui_settings')/deadlineform" id="fade.deadline" relevant="instance('output-token')/places/metadata/isDelegated = 'true' or (instance('output-token')/places/metadata/isDelegated!='true' and instance('output-token')/places/processdata/deadline!='' and instance('output-token')/places/metadata/isReviewed!='true')" />
-		<x:bind nodeset="instance('output-token')/places/processdata/deadline" readonly="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/processdata/message/@readonly = 'true'" />
-		<x:bind nodeset="instance('output-token')/places/processdata/deadline/@readonly" type="xsd:boolean" />
+		<x:bind nodeset="instance('ui_settings')/deadlineform" id="fade.deadline" relevant="instance('output-token')/places/metadata/isDelegated = 'true' or (instance('output-token')/places/metadata/isDelegated!='true' and instance('output-token')/places/metadata/deadline!='' and instance('output-token')/places/metadata/isReviewed!='true')" />
+		<x:bind nodeset="instance('output-token')/places/metadata/deadline" readonly="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/processdata/message/@readonly = 'true'" />
+		<x:bind nodeset="instance('output-token')/places/metadata/deadline/@readonly" type="xsd:boolean" />
 		<x:bind nodeset="instance('ui_settings')/delegatedFromForm" id="fade.delegatedFrom" relevant="instance('output-token')/places/metadata/isDelegated != 'true' and instance('output-token')/places/metadata/delegatedFrom != ''" />
 		<x:bind nodeset="instance('output-token')/places/metadata/owner" readonly="instance('output-token')/places/metadata/owner/@readonly = 'true'" />
-        <x:bind nodeset="instance('ui_settings')/wantToReviewGroup" id="wantToReviewGroup" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and instance('output-token')/places/metadata/owner = ''" />
+        <x:bind nodeset="instance('ui_settings')/wantToReviewGroup" id="wantToReviewGroup" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and instance('output-token')/places/metadata/delegatedFrom = ''" />
         <x:bind nodeset="instance('ui_settings')/delegategroup" relevant="instance('output-token')/places/metadata/isDelegated = 'true'"  />
         
         <!-- Describes states of formular -->
@@ -67,6 +67,8 @@
 		
 		<!-- Copy input to output token -->
 		<x:action ev:event="xforms-ready">
+		<x:setvalue ref="instance('incoming-tokens')/*/token/data/metadata/@place_id"
+			value="../../../../@id" />
 		<x:insert nodeset="instance('output-token')/places/data"
 			origin="instance('incoming-tokens')/*/token/data/metadata" />
 		<x:setvalue ref="instance('incoming-tokens')/*/token/data/processdata/@place_id"
@@ -79,20 +81,20 @@
 		<!--  
 		<x:bind id="name" nodeset="instance('output-token')/places/name"/>
 		<x:bind id="name.readonly" nodeset="instance('output-token')/places/name/@readonly"/>
-		<x:bind id="name.visible" nodeset="instance('output-token')/places/name/@visible"/>
+		<x:bind id="name.writable" nodeset="instance('output-token')/places/name/@writable"/>
 		-->
 		<!--  
 		<x:bind nodeset="instance('output-token')/places/name/@readonly" type="xsd:boolean" />
-		<x:bind nodeset="instance('output-token')/places/name/@visible" type="xsd:boolean" />
+		<x:bind nodeset="instance('output-token')/places/name/@writable" type="xsd:boolean" />
 		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" type="xsd:boolean" />
-		<x:bind nodeset="instance('ui_settings')/name/@futurevisible" type="xsd:boolean" />
+		<x:bind nodeset="instance('ui_settings')/name/@futurewritable" type="xsd:boolean" />
 		-->
 		<!--
-		<x:bind nodeset="instance('ui_settings')/name/@futurevisible" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and instance('output-token')/places/name/@visible = 'true'" />
-		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and ((instance('output-token')/places/name/@readonly = 'true' and instance('output-token')/places/name/@visible != 'true') or instance('output-token')/places/name/@visible = 'true')" />
+		<x:bind nodeset="instance('ui_settings')/name/@futurewritable" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and instance('output-token')/places/name/@writable = 'true'" />
+		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" relevant="instance('output-token')/places/metadata/isDelegated = 'true' and ((instance('output-token')/places/name/@readonly = 'true' and instance('output-token')/places/name/@writable != 'true') or instance('output-token')/places/name/@writable = 'true')" />
 	  	<x:bind nodeset="instance('output-token')/places/name" readonly="instance('output-token')/places/name/@readonly = 'true'"/>
-		<x:bind nodeset="instance('ui_settings')/name" id="fade.name" relevant="not(instance('output-token')/places/name/@visible != 'true' and instance('output-token')/places/name/@readonly != 'true')" />
-		<x:bind nodeset="instance('ui_settings')/name/@futurevisible" readonly="instance('ui_settings')/name/@futurereadonly = 'true'" />
-		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" readonly="instance('ui_settings')/name/@futurevisible = 'true'" />
+		<x:bind nodeset="instance('ui_settings')/name" id="fade.name" relevant="not(instance('output-token')/places/name/@writable != 'true' and instance('output-token')/places/name/@readonly != 'true')" />
+		<x:bind nodeset="instance('ui_settings')/name/@futurewritable" readonly="instance('ui_settings')/name/@futurereadonly = 'true'" />
+		<x:bind nodeset="instance('ui_settings')/name/@futurereadonly" readonly="instance('ui_settings')/name/@futurewritable = 'true'" />
 		-->
 </bindings>

@@ -157,4 +157,50 @@ input.text.disabled:hover, input.disabled:hover, select.disabled:hover, textarea
 }
 
 
+
+/*** PLUGIN SPECIFIC ***/
+
+/*** PLUGIN: Transform EPC to BPMN **/
+.transform-epc-bpmn-window .transform-epc-bpmn-group-button *, .transform-epc-bpmn-group-button.x-btn-pressed * {
+	background:transparent;
+	color:#555555;
+	height:15px;
+}
+
+.transform-epc-bpmn-window *{
+	font-family:tahoma,arial,helvetica,sans-serif;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-size:11px;
+}
+
+.transform-epc-bpmn-window .transform-epc-bpmn-group-button button {
+	font-size:11px;
+	font-weight:bold;
+}			
+
+
+.transform-epc-bpmn-window .transform-epc-bpmn-group-button .x-btn-center {
+	background:transparent url(../lib/ext-2.0.2/resources/images/default/grid/group-expand-sprite.gif) no-repeat scroll 0px 0px;
+	padding-left:15px;
+	border-bottom:1px solid #CCCCCC;
+	text-align:left;
+	width:100%;
+
+}
+
+.transform-epc-bpmn-window .transform-epc-bpmn-group-button.x-btn-pressed .x-btn-center {
+	background-position:0px -50px;
+}
+
+.transform-epc-bpmn-window .transform-epc-bpmn-title {
+	border-bottom:1px solid #CCCCCC;
+	margin-bottom:10px;
+	text-align:left;
+	color:#555555;
+	display:block;
+	font-weight:bold;
+}
 			/*** DEBUG **/.NewToolbar {	display:inline; 	z-index:10;	position:absolute; 	top:50px; 	left:800px; 	background:#CCCCCC; 	border:1px solid gray;	}.NewToolbarButton {	display:block; 	z-index:10;	position:relative; 	top:0px; 	left:0px; 	background:#99BBBB; 	margin:5px;	padding:5px;	font-size:9px;	border:1px solid gray;	}

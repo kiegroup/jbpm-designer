@@ -5052,6 +5052,16 @@
 					"length":""
 				},
 				{
+					"id":"ConditionExpression",
+					"type":"String",
+					"title":"ConditionExpression",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
 					"id":"quantity",
 					"type":"Integer",
 					"title":"Quantity",

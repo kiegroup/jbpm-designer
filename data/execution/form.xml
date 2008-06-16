@@ -34,11 +34,11 @@
 		<x:label> Delegated from: </x:label>
 </x:output></x:group>
 <br/><br />
-<x:group bind="fade.message"><x:input ref="instance('output-token')/places/processdata/message" class="metainfo">
+<x:group bind="fade.message"><x:input ref="instance('output-token')/places/metadata/message" class="metainfo">
 		<x:label> Message: </x:label>
 </x:input></x:group>
 <br/><br />
-<x:group bind="fade.deadline"><x:input ref="instance('output-token')/places/processdata/deadline" class="metainfo">
+<x:group bind="fade.deadline"><x:input ref="instance('output-token')/places/metadata/deadline" class="metainfo">
 		<x:label> Deadline: </x:label>
 </x:input></x:group>
 <br/><br />

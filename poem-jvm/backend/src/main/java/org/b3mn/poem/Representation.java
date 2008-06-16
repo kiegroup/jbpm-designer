@@ -122,13 +122,25 @@ public class Representation {
 		this.updated = updated;
 	}
 	
-    public void update() {
+    public static void update(int id, String title, String summary, String content, String svg) {
+    	
+    	Representation rep = (Representation) Persistance.getSession()
+    	.createSQLQuery("select {representation.*} from {representation} where ident_id = :ident_id")
+		.addEntity("representation", Representation.class)
+	    .setInteger("ident_id", id).uniqueResult();
+
         try {
-        Date date = new Date(System.currentTimeMillis());
-        this.setUpdated(date);
-        Persistance.getSession().flush();
-        Persistance.commit();
-        }
+	        Date date = new Date(System.currentTimeMillis());
+	        
+	        if(title != null) rep.setTitle(title);
+	        if(summary != null) rep.setSummary(summary);
+	        if(content != null) rep.setContent(content);
+	        if(svg != null) rep.setSvg(svg);
+	        
+	        rep.setUpdated(date);
+	        Persistance.getSession().flush();
+	        Persistance.commit();
+	    }
         catch(HibernateException ex) {
             System.err.println(ex.getMessage());
         }
