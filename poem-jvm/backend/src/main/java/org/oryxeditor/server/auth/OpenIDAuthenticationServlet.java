@@ -28,237 +28,238 @@ import org.openid4java.message.ax.FetchResponse;
 import org.openid4java.message.sreg.SRegRequest;
 
 /**
- * This servlet provedes openID authentication.
- * 
- * This servlet is based on the work of Sutra Zhou, who published it within the
- * openid4java project under the Apache License, version 2.0.
- * 
- * @author Martin Czuchra, Sutra Zhou
- */
+* This servlet provedes openID authentication.
+*
+* This servlet is based on the work of Sutra Zhou, who published it within the
+* openid4java project under the Apache License, version 2.0.
+*
+* @author Martin Czuchra, Sutra Zhou
+*/
 public class OpenIDAuthenticationServlet extends HttpServlet {
 
-    private static final long serialVersionUID = -6968062295268437353L;
-    private ConsumerManager manager;
+   private static final long serialVersionUID = -6968062295268437353L;
+   private ConsumerManager manager;
 
-    public static final String OPENID_SESSION_IDENTIFIER = "openid";
+   public static final String OPENID_SESSION_IDENTIFIER = "openid";
+   public static final String REPOSITORY_REDIRECT = "/poem/repository";
 
-    public void init(ServletConfig config) throws ServletException {
-	super.init(config);
+   public void init(ServletConfig config) throws ServletException {
+       super.init(config);
 
-	config.getServletContext();
+       config.getServletContext();
 
-	try {
+       try {
 
-	    this.manager = new ConsumerManager();
-	    manager.setAssociations(new InMemoryConsumerAssociationStore());
-	    manager.setNonceVerifier(new InMemoryNonceVerifier(5000));
-	} catch (ConsumerException e) {
-	    throw new ServletException(e);
-	}
-    }
+           this.manager = new ConsumerManager();
+           manager.setAssociations(new InMemoryConsumerAssociationStore());
+           manager.setNonceVerifier(new InMemoryNonceVerifier(5000));
+       } catch (ConsumerException e) {
+           throw new ServletException(e);
+       }
+   }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse)
-     */
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-	    throws ServletException, IOException {
-	doPost(req, resp);
-    }
+   /*
+    * (non-Javadoc)
+    *
+    * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
+    *      javax.servlet.http.HttpServletResponse)
+    */
+   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+           throws ServletException, IOException {
+       doPost(req, resp);
+   }
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-	    throws ServletException, IOException {
-	if ("true".equals(req.getParameter("is_return"))) {
-	    processReturn(req, resp);
-	} else {
-	    String identifier = req.getParameter("openid_identifier");
-	    this.authRequest(identifier, req, resp);
-	}
-    }
+   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+           throws ServletException, IOException {
+       if ("true".equals(req.getParameter("is_return"))) {
+           processReturn(req, resp);
+       } else {
+           String identifier = req.getParameter("openid_identifier");
+           this.authRequest(identifier, req, resp);
+       }
+   }
 
-    private void processReturn(HttpServletRequest req, HttpServletResponse resp)
-	    throws ServletException, IOException {
-	Identifier identifier = this.verifyResponse(req);
-	if (identifier == null) {
-	    this.getServletContext().getRequestDispatcher("/index.jsp")
-		    .forward(req, resp);
-	} else {
+   private void processReturn(HttpServletRequest req, HttpServletResponse resp)
+           throws ServletException, IOException {
+       Identifier identifier = this.verifyResponse(req);
+       if (identifier == null) {
+           this.getServletContext().getRequestDispatcher("/index.jsp")
+                   .forward(req, resp);
+       } else {
 
-	    // authentication successful.
+           // authentication successful.
 
-	    // store openid in session for future use by ruby dispatcher.
-	    req.getSession().setAttribute(OPENID_SESSION_IDENTIFIER,
-		    identifier.getIdentifier());
+           // store openid in session for future use by ruby dispatcher.
+           req.getSession().setAttribute(OPENID_SESSION_IDENTIFIER,
+                   identifier.getIdentifier());
 
-	    req.setAttribute("identifier", identifier.getIdentifier());
-	    this.getServletContext().getRequestDispatcher("/return.jsp")
-		    .forward(req, resp);
-	}
-    }
+           req.setAttribute("identifier", identifier.getIdentifier());
+           resp.sendRedirect(req.getContextPath() + REPOSITORY_REDIRECT);
+       }
+   }
 
-    // --- placing the authentication request ---
-    @SuppressWarnings("unchecked")
-    public String authRequest(String userSuppliedString,
-	    HttpServletRequest httpReq, HttpServletResponse httpResp)
-	    throws IOException, ServletException {
-	try {
-	    // configure the return_to URL where your application will receive
-	    // the authentication responses from the OpenID provider
-	    // String returnToUrl = "http://example.com/openid";
-	    String returnToUrl = httpReq.getRequestURL().toString()
-		    + "?is_return=true";
+   // --- placing the authentication request ---
+   @SuppressWarnings("unchecked")
+   public String authRequest(String userSuppliedString,
+           HttpServletRequest httpReq, HttpServletResponse httpResp)
+           throws IOException, ServletException {
+       try {
+           // configure the return_to URL where your application will receive
+           // the authentication responses from the OpenID provider
+           // String returnToUrl = "http://example.com/openid";
+           String returnToUrl = httpReq.getRequestURL().toString()
+                   + "?is_return=true";
 
-	    // perform discovery on the user-supplied identifier
-	    List discoveries = manager.discover(userSuppliedString);
+           // perform discovery on the user-supplied identifier
+           List discoveries = manager.discover(userSuppliedString);
 
-	    // attempt to associate with the OpenID provider
-	    // and retrieve one service endpoint for authentication
-	    DiscoveryInformation discovered = manager.associate(discoveries);
+           // attempt to associate with the OpenID provider
+           // and retrieve one service endpoint for authentication
+           DiscoveryInformation discovered = manager.associate(discoveries);
 
-	    // store the discovery information in the user's session
-	    httpReq.getSession().setAttribute("openid-disc", discovered);
+           // store the discovery information in the user's session
+           httpReq.getSession().setAttribute("openid-disc", discovered);
 
-	    // obtain a AuthRequest message to be sent to the OpenID provider
-	    AuthRequest authReq = manager.authenticate(discovered, returnToUrl);
+           // obtain a AuthRequest message to be sent to the OpenID provider
+           AuthRequest authReq = manager.authenticate(discovered, returnToUrl);
 
-	    // Attribute Exchange example: fetching the 'email' attribute
-	    FetchRequest fetch = FetchRequest.createFetchRequest();
-	    SRegRequest sregReq = SRegRequest.createFetchRequest();
+           // Attribute Exchange example: fetching the 'email' attribute
+           FetchRequest fetch = FetchRequest.createFetchRequest();
+           SRegRequest sregReq = SRegRequest.createFetchRequest();
 
-	    if ("1".equals(httpReq.getParameter("nickname"))) {
-		// fetch.addAttribute("nickname",
-		// "http://schema.openid.net/contact/nickname", false);
-		sregReq.addAttribute("nickname", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("email"))) {
-		fetch.addAttribute("email",
-			"http://schema.openid.net/contact/email", false);
-		sregReq.addAttribute("email", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("fullname"))) {
-		fetch.addAttribute("fullname",
-			"http://schema.openid.net/contact/fullname", false);
-		sregReq.addAttribute("fullname", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("dob"))) {
-		fetch.addAttribute("dob",
-			"http://schema.openid.net/contact/dob", true);
-		sregReq.addAttribute("dob", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("gender"))) {
-		fetch.addAttribute("gender",
-			"http://schema.openid.net/contact/gender", false);
-		sregReq.addAttribute("gender", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("postcode"))) {
-		fetch.addAttribute("postcode",
-			"http://schema.openid.net/contact/postcode", false);
-		sregReq.addAttribute("postcode", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("country"))) {
-		fetch.addAttribute("country",
-			"http://schema.openid.net/contact/country", false);
-		sregReq.addAttribute("country", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("language"))) {
-		fetch.addAttribute("language",
-			"http://schema.openid.net/contact/language", false);
-		sregReq.addAttribute("language", false);
-	    }
-	    if ("1".equals(httpReq.getParameter("timezone"))) {
-		fetch.addAttribute("timezone",
-			"http://schema.openid.net/contact/timezone", false);
-		sregReq.addAttribute("timezone", false);
-	    }
+           if ("1".equals(httpReq.getParameter("nickname"))) {
+               // fetch.addAttribute("nickname",
+               // "http://schema.openid.net/contact/nickname", false);
+               sregReq.addAttribute("nickname", false);
+           }
+           if ("1".equals(httpReq.getParameter("email"))) {
+               fetch.addAttribute("email",
+                       "http://schema.openid.net/contact/email", false);
+               sregReq.addAttribute("email", false);
+           }
+           if ("1".equals(httpReq.getParameter("fullname"))) {
+               fetch.addAttribute("fullname",
+                       "http://schema.openid.net/contact/fullname", false);
+               sregReq.addAttribute("fullname", false);
+           }
+           if ("1".equals(httpReq.getParameter("dob"))) {
+               fetch.addAttribute("dob",
+                       "http://schema.openid.net/contact/dob", true);
+               sregReq.addAttribute("dob", false);
+           }
+           if ("1".equals(httpReq.getParameter("gender"))) {
+               fetch.addAttribute("gender",
+                       "http://schema.openid.net/contact/gender", false);
+               sregReq.addAttribute("gender", false);
+           }
+           if ("1".equals(httpReq.getParameter("postcode"))) {
+               fetch.addAttribute("postcode",
+                       "http://schema.openid.net/contact/postcode", false);
+               sregReq.addAttribute("postcode", false);
+           }
+           if ("1".equals(httpReq.getParameter("country"))) {
+               fetch.addAttribute("country",
+                       "http://schema.openid.net/contact/country", false);
+               sregReq.addAttribute("country", false);
+           }
+           if ("1".equals(httpReq.getParameter("language"))) {
+               fetch.addAttribute("language",
+                       "http://schema.openid.net/contact/language", false);
+               sregReq.addAttribute("language", false);
+           }
+           if ("1".equals(httpReq.getParameter("timezone"))) {
+               fetch.addAttribute("timezone",
+                       "http://schema.openid.net/contact/timezone", false);
+               sregReq.addAttribute("timezone", false);
+           }
 
-	    // attach the extension to the authentication request
-	    if (!sregReq.getAttributes().isEmpty()) {
-		authReq.addExtension(sregReq);
-	    }
+           // attach the extension to the authentication request
+           if (!sregReq.getAttributes().isEmpty()) {
+               authReq.addExtension(sregReq);
+           }
 
-	    if (!discovered.isVersion2()) {
-		// Option 1: GET HTTP-redirect to the OpenID Provider endpoint
-		// The only method supported in OpenID 1.x
-		// redirect-URL usually limited ~2048 bytes
-		httpResp.sendRedirect(authReq.getDestinationUrl(true));
-		return null;
-	    } else {
-		// Option 2: HTML FORM Redirection (Allows payloads >2048 bytes)
+           if (!discovered.isVersion2()) {
+               // Option 1: GET HTTP-redirect to the OpenID Provider endpoint
+               // The only method supported in OpenID 1.x
+               // redirect-URL usually limited ~2048 bytes
+               httpResp.sendRedirect(authReq.getDestinationUrl(true));
+               return null;
+           } else {
+               // Option 2: HTML FORM Redirection (Allows payloads >2048 bytes)
 
-		RequestDispatcher dispatcher = getServletContext()
-			.getRequestDispatcher("/formredirection.jsp");
-		httpReq.setAttribute("prameterMap", httpReq.getParameterMap());
-		httpReq.setAttribute("message", authReq);
-		// httpReq.setAttribute("destinationUrl", httpResp
-		// .getDestinationUrl(false));
-		dispatcher.forward(httpReq, httpResp);
-	    }
-	} catch (OpenIDException e) {
-	    // present error to the user
-	}
+               RequestDispatcher dispatcher = getServletContext()
+                       .getRequestDispatcher("/formredirection.jsp");
+               httpReq.setAttribute("prameterMap", httpReq.getParameterMap());
+               httpReq.setAttribute("message", authReq);
+               // httpReq.setAttribute("destinationUrl", httpResp
+               // .getDestinationUrl(false));
+               dispatcher.forward(httpReq, httpResp);
+           }
+       } catch (OpenIDException e) {
+           // present error to the user
+       }
 
-	return null;
-    }
 
-    // --- processing the authentication response ---
-    @SuppressWarnings("unchecked")
-    public Identifier verifyResponse(HttpServletRequest httpReq)
-	    throws ServletException {
-	try {
-	    // extract the parameters from the authentication response
-	    // (which comes in as a HTTP request from the OpenID provider)
-	    ParameterList response = new ParameterList(httpReq
-		    .getParameterMap());
+       return null;
+   }
 
-	    // retrieve the previously stored discovery information
-	    DiscoveryInformation discovered = (DiscoveryInformation) httpReq
-		    .getSession().getAttribute("openid-disc");
+   // --- processing the authentication response ---
+   @SuppressWarnings("unchecked")
+   public Identifier verifyResponse(HttpServletRequest httpReq)
+           throws ServletException {
+       try {
+           // extract the parameters from the authentication response
+           // (which comes in as a HTTP request from the OpenID provider)
+           ParameterList response = new ParameterList(httpReq
+                   .getParameterMap());
 
-	    // extract the receiving URL from the HTTP request
-	    StringBuffer receivingURL = httpReq.getRequestURL();
-	    String queryString = httpReq.getQueryString();
-	    if (queryString != null && queryString.length() > 0)
-		receivingURL.append("?").append(httpReq.getQueryString());
+           // retrieve the previously stored discovery information
+           DiscoveryInformation discovered = (DiscoveryInformation) httpReq
+                   .getSession().getAttribute("openid-disc");
 
-	    // verify the response; ConsumerManager needs to be the same
-	    // (static) instance used to place the authentication request
-	    VerificationResult verification = manager.verify(receivingURL
-		    .toString(), response, discovered);
+           // extract the receiving URL from the HTTP request
+           StringBuffer receivingURL = httpReq.getRequestURL();
+           String queryString = httpReq.getQueryString();
+           if (queryString != null && queryString.length() > 0)
+               receivingURL.append("?").append(httpReq.getQueryString());
 
-	    // examine the verification result and extract the verified
-	    // identifier
-	    Identifier verified = verification.getVerifiedId();
-	    if (verified != null) {
-		AuthSuccess authSuccess = (AuthSuccess) verification
-			.getAuthResponse();
+           // verify the response; ConsumerManager needs to be the same
+           // (static) instance used to place the authentication request
+           VerificationResult verification = manager.verify(receivingURL
+                   .toString(), response, discovered);
 
-		if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
-		    FetchResponse fetchResp = (FetchResponse) authSuccess
-			    .getExtension(AxMessage.OPENID_NS_AX);
+           // examine the verification result and extract the verified
+           // identifier
+           Identifier verified = verification.getVerifiedId();
+           if (verified != null) {
+               AuthSuccess authSuccess = (AuthSuccess) verification
+                       .getAuthResponse();
 
-		    // List emails = fetchResp.getAttributeValues("email");
-		    // String email = (String) emails.get(0);
+               if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
+                   FetchResponse fetchResp = (FetchResponse) authSuccess
+                           .getExtension(AxMessage.OPENID_NS_AX);
 
-		    List aliases = fetchResp.getAttributeAliases();
-		    for (Iterator iter = aliases.iterator(); iter.hasNext();) {
-			String alias = (String) iter.next();
-			List values = fetchResp.getAttributeValues(alias);
-			if (values.size() > 0) {
-			    httpReq.setAttribute(alias, values.get(0));
-			}
-		    }
-		}
+                   // List emails = fetchResp.getAttributeValues("email");
+                   // String email = (String) emails.get(0);
 
-		return verified; // success
-	    }
-	} catch (OpenIDException e) {
-	    // present error to the user
-	    // throw new ServletException(e);
-	}
+                   List aliases = fetchResp.getAttributeAliases();
+                   for (Iterator iter = aliases.iterator(); iter.hasNext();) {
+                       String alias = (String) iter.next();
+                       List values = fetchResp.getAttributeValues(alias);
+                       if (values.size() > 0) {
+                           httpReq.setAttribute(alias, values.get(0));
+                       }
+                   }
+               }
 
-	return null;
-    }
+               return verified; // success
+           }
+       } catch (OpenIDException e) {
+           // present error to the user
+           // throw new ServletException(e);
+       }
+
+       return null;
+   }
 
 }
