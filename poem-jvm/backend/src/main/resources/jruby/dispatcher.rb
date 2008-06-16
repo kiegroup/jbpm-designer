@@ -58,7 +58,7 @@ class Dispatcher
       '/new' => 'NewModelHandler'
     }
     
-    openid = request.getSession.getAttribute(OpenIDAuthenticationServlet::OPENID_SESSION_IDENTIFIER) || 'tester'
+    openid = request.getSession.getAttribute(OpenIDAuthenticationServlet::OPENID_SESSION_IDENTIFIER) || 'public'
     uri = request.getPathInfo
 
     if(handler_name = relations[Helper.getRelation(uri)])
