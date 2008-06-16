@@ -8,9 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.batik.transcoder.TranscoderException;
-
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.Persistance;
 
 public class ImageRenderer {
 

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerException;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.Persistance;
 
 public class RdfExporter {
 
