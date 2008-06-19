@@ -278,6 +278,14 @@ var DataManager = {
 				{prefix: "oryx", name: "stencilset"},
 				new ERDF.Resource(stencilset.source())
 			));
+			
+			stencilset.extensions().keys().each(function(extension) {
+				DataManager.addTriple( new ERDF.Triple(
+					shapeResource,
+					{prefix: "oryx", name: "ssextension"},
+					new ERDF.Literal(extension)
+				));
+			});
 		});
 						
 		shapes.each(function(shape) {

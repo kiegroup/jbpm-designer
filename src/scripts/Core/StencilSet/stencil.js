@@ -40,7 +40,7 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	/**
 	 * Constructor
 	 */
-	construct: function(jsonStencil, namespace, source, stencilSet) {
+	construct: function(jsonStencil, namespace, source, stencilSet, propertyPackages) {
 		arguments.callee.$.construct.apply(this, arguments); // super();
 
 		// check arguments and set defaults.
@@ -48,11 +48,13 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 		if(!namespace) throw "Stencil does not provide namespace.";
 		if(!source) throw "Stencil does not provide SVG source.";
 		if(!stencilSet) throw "Fatal internal error loading stencilset.";
+		//if(!propertyPackages) throw "Fatal internal error loading stencilset.";
 		
 		this._source = source;
 		this._jsonStencil = jsonStencil;
 		this._stencilSet = stencilSet;
 		this._namespace = namespace;
+		//this._propertyPackages = propertyPackages;
 		
 		this._view;
 		this._properties = new Hash();
@@ -161,6 +163,18 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 				this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
 			}).bind(this));
 		}
+		
+		// init property packages
+		/*if(this._jsonStencil.propertyPackages && this._jsonStencil.propertyPackages instanceof Array) {
+			this._jsonStencil.propertyPackages.each((function(ppId) {
+				var pp = this._propertyPackages[ppId];
+				
+				pp.each((function(prop){
+					var oProp = new ORYX.Core.StencilSet.Property(prop, this._namespace, this);
+					this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
+				}).bind(this));
+			}).bind(this));
+		}*/
 	},
 
 	/**
