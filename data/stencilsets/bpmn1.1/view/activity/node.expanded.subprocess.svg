@@ -15,7 +15,7 @@
   	<oryx:magnet oryx:cx="50" oryx:cy="0" oryx:anchors="top" />
   	<oryx:magnet oryx:cx="50" oryx:cy="40" oryx:default="yes" />
   </oryx:magnets>
-  <g pointer-events="fill" oryx:minimumSize="160 120" oryx:maximumSize="" >
+  <g pointer-events="fill" oryx:minimumSize="200 160" oryx:maximumSize="" >
     <rect id="border" oryx:resize="vertical horizontal" x="0" y="0" width="100" height="80" rx="10" ry="10" stroke="black" stroke-width="1" fill="none" />
     <rect id="taskrect" oryx:anchors="bottom top right left" x="2" y="2" width="96" height="76" rx="8" ry="8" stroke="black" stroke-width="1" fill="white" />
     	<text font-size="14" id="acttext" x="50" y="40" oryx:align="middle center" stroke="black"></text>
@@ -27,11 +27,10 @@
 	       	style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2.0999999;stroke-dasharray:none;stroke-opacity:1"
 	         id="path2396"
 	         d="M 50.5,73 L 50.5,76 L 47.5,76 M 50.5,76 A 4.875,4.875 0 1 1 54.5,76"
-			transform="translate(-14,0)"
-	         />
+			/>
 	</g>
 	<g id="multiple">
-		<path oryx:anchors="bottom" fill="none" stroke="black" d="M47 68 v8 M51 68 v8 M55 68 v8" stroke-width="2" transform="translate(-14 0)" />
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M47 68 v8 M51 68 v8 M55 68 v8" stroke-width="2" />
 	</g>
 	<g id="adhoc">
 		<text 
@@ -40,12 +39,12 @@
 			y="76"
 			font-size="20"
 			font-weight="bold"
-			transform="translate(14,0)"
+			transform="translate(8,0)"
 		>~</text>
 	</g>
 	<g id="compensation">
 		<path oryx:anchors="bottom" fill="none" stroke="black" d="M 51 72 L 55 68 L 55 76 L 51 72 L 51 68 L 47 72 L 51 76 L 51 72" stroke-width="1"
-		transform="translate(-28,0)" />
+		transform="translate(-14,0)" />
 	</g>
   </g>
 </svg>
