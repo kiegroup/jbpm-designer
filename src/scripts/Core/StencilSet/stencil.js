@@ -239,6 +239,13 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	layout: function(shape, targetShape) {
 		return this._jsonStencil.layout(shape, targetShape);
 	},
+	
+	addProperty: function(property, namespace) {
+		if(property && namespace) {
+			var oProp = new ORYX.Core.StencilSet.Property(property, namespace, this);
+			this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
+		}
+	},
 
 	_loadSVGOnSuccess: function(result) {
 		

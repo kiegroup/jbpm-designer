@@ -56,6 +56,8 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         if (source.endsWith("/")) {
             source = source.substr(0, source.length - 1);
         }
+		
+		this._extensions = new Hash();
         
         this._source = source;
         this._baseUrl = source.substring(0, source.lastIndexOf("/") + 1);
@@ -179,6 +181,44 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
     source: function(){
         return this._source;
     },
+	
+	extensions: function() {
+		return this._extensions;
+	},
+	
+	addExtension: function(jsonExtension) {
+		try {
+			if(jsonExtension["extends"] == this.namespace()) {
+				this._extensions[jsonExtension.namespace] = jsonExtension;
+				
+				//TODO load new stencils
+				
+				
+				//load additional properties
+				var stencils = this.stencils();
+				
+				stencils.each(function(stencil) {
+					var roles = stencil.roles();
+					
+					jsonExtension.properties.each(function(prop) {
+						prop.roles.any(function(role) {
+							if(roles.member(role)) {
+								prop.properties.each(function(property) {
+									console.log(property)
+									stencil.addProperty(property, jsonExtension.namespace);
+								});
+								
+								return true;
+							} else
+								return false;
+						})
+					})
+				}.bind(this));
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	},
     
     __handleStencilset: function(response){
     

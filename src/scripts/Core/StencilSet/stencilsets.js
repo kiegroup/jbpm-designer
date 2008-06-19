@@ -165,4 +165,3 @@ ORYX.Core.StencilSet.loadStencilSet = function(url, editorId) {
 		ORYX.Core.StencilSet._rulesByEditorInstance[editorId] = rules;
 	}
 };
-
