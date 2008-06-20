@@ -174,7 +174,13 @@ public class ExecConverter extends Converter {
 					addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
 					// create XML Structure for Task
 					String modelXML = dataObject.getModel();
-
+					/*modelXML =
+						"<schema xmlns=\"http://www.w3.org/1999/xhtml\""+
+						      "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""+
+						      "xsi:schemaLocation=\"http://www.w3.org/1999/xhtml"+
+						      "http://www.w3.org/1999/xhtml.xsd\">" +
+						      modelXML +
+						      "</schema>";*/
 					
 					// attach to task model
 					Element dataEl = modelDoc.createElement("data");
@@ -183,8 +189,10 @@ public class ExecConverter extends Converter {
 					
 					try {
 						Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-						Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
-						processdataMap.put(dataObject.getId(), processdata);
+						NodeList processdata = doc.getElementsByTagName("xsd:element");
+						//Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
+						if (processdata.getLength() > 0)
+							processdataMap.put(dataObject.getId(), processdata.item(0));
 						
 					} catch (Exception io) {
 						io.printStackTrace();
@@ -202,10 +210,19 @@ public class ExecConverter extends Converter {
 
 						// create XML Structure for Task
 						String modelXML = dataObject.getModel();
+						modelXML =
+							"<html xmlns=\"http://www.w3.org/1999/xhtml\""+
+							      "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""+
+							      "xsi:schemaLocation=\"http://www.w3.org/1999/xhtml"+
+							      "http://www.w3.org/1999/xhtml.xsd\">" +
+							      modelXML;
+						
 						try {
 							Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-							Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
-							processdataMap.put(dataObject.getId(), processdata);							
+							NodeList processdata = doc.getElementsByTagName("xsd:element");
+							//Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
+							if (processdata.getLength() > 0)
+								processdataMap.put(dataObject.getId(), processdata.item(0));						
 						} catch (Exception io) {
 							io.printStackTrace();
 						}
@@ -551,21 +568,34 @@ public class ExecConverter extends Converter {
 				dataPlace.setName(dataobject.getId());
 				ExecTask.addDataPlace(dataPlace);
 				
-				// for data place add locators
+				// create Document for data places 
+				Document placesDoc = parser.newDocument();
+				Element data = placesDoc.createElement("data");
+				placesDoc.appendChild(data);
+				Element processData = placesDoc.createElement("processdata");
+				data.appendChild(processData);
+				processData.setAttribute("name",dataobject.getId());
+				
+				// receive elements
 				String modelXML = dataobject.getModel();
-					Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-					Element processdata = (Element) doc.getDocumentElement().getElementsByTagName("processdata").item(0);
-					processdata.setAttribute("name",dataobject.getId());
+				Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
+				Node dataElement = (Element) doc.getDocumentElement().getElementsByTagName("xsd:element").item(0);
+				
+				for (; dataElement != null; dataElement = dataElement.getNextSibling()) {
+					// fetch elements
+					if (dataElement.getNodeType() != Node.ELEMENT_NODE) continue;
+					String nodeName = dataElement.getAttributes().getNamedItem("name").getTextContent();
+					String nodeType = dataElement.getAttributes().getNamedItem("type").getTextContent();
 					
-				dataPlace.setModel(domToString(doc));
-				Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
-				NodeList childs = dataTagOfDataModel.getChildNodes();
-				for (int i = 0; i < childs.getLength(); i++) {
-					if (childs.item(i).getNodeName().equals("#text")) continue;
+					// append dataElements to dataPlaceModel
+					Element element = placesDoc.createElement(nodeName);
+					element.setAttribute("type", nodeType);
+					processData.appendChild(element);
+					dataPlace.setModel(domToString(placesDoc));
+					
+					// for dataplaces add locators
 					dataPlace.addLocator(new Locator(
-							childs.item(i).getNodeName(),
-							"xsd:string",
-							"/data/processdata/"+dataobject.getId()+"/"+childs.item(i).getNodeName()));
+							nodeName, nodeType, "/data/processdata/"+nodeName));
 				};
 			}
 		} catch (Exception io) {
@@ -645,13 +675,17 @@ public class ExecConverter extends Converter {
 		Node root = doc.getFirstChild();
 
 		for (String dataObjectName : processdataMap.keySet()){
-			Node processDataNode = processdataMap.get(dataObjectName);
-			Node dataElements = processDataNode.getNextSibling();
+			Node processDataChild = processdataMap.get(dataObjectName);
 			do {
-				// pretty hacked code
-				if (dataElements == null) break;
-				String attributeName = dataElements.getNodeName();
-				if (attributeName.equals("#text")) break;
+				if (processDataChild == null) break;
+				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+				String attributeName, attributeType;
+				Node name = processDataChild.getAttributes().getNamedItem("name");
+				if (name == null) continue;
+				attributeName = name.getNodeValue();
+				Node type = processDataChild.getAttributes().getNamedItem("type");
+				if (type == null) continue;
+				attributeType = type.getNodeValue();
 				
 				// for template watch in engine folder "/public/examples/delegation/formulartemplate"
 				// ==========  create Document  ===========			
@@ -692,7 +726,7 @@ public class ExecConverter extends Converter {
 				div.appendChild(doc.createElement("br"));
 				
 				
-			} while ((dataElements = dataElements.getNextSibling()) != null);
+			} while ((processDataChild = processDataChild.getNextSibling()) != null);
 		}
 		
 		{
@@ -753,13 +787,17 @@ public class ExecConverter extends Converter {
 				delaction.appendChild(value6);
 				
 				for (String dataObjectName : processdataMap.keySet()){
-					Node processDataNode = processdataMap.get(dataObjectName);
-					Node dataElements = processDataNode.getNextSibling();
+					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
-						// pretty hacked code
-						if (dataElements == null) break;
-						String attributeName = dataElements.getNodeName();
-						if (attributeName.equals("#text")) break;
+						if (processDataChild == null) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+						String attributeName, attributeType;
+						Node name = processDataChild.getAttributes().getNamedItem("name");
+						if (name == null) continue;
+						attributeName = name.getNodeValue();
+						Node type = processDataChild.getAttributes().getNamedItem("type");
+						if (type == null) continue;
+						attributeType = type.getNodeValue();
 			
 					Element valuereadonly = doc.createElement("x:setvalue");
 					valuereadonly.setAttribute("bind", dataObjectName+"_"+attributeName + ".readonly");
@@ -770,7 +808,7 @@ public class ExecConverter extends Converter {
 					valuewritable.setAttribute("bind", dataObjectName+"_"+attributeName + ".writable");
 					valuewritable.setAttribute("value", "instance('ui_settings')/"+dataObjectName+"_"+attributeName+"/@futurewritable = 'true'");
 					delaction.appendChild(valuewritable);
-					} while ((dataElements = dataElements.getNextSibling()) != null);
+					} while ((processDataChild = processDataChild.getNextSibling()) != null);
 				
 				}
 			
@@ -896,13 +934,17 @@ public class ExecConverter extends Converter {
 				submitaction.appendChild(value4);
 				
 				for (String dataObjectName : processdataMap.keySet()){
-					Node processDataNode = processdataMap.get(dataObjectName);
-					Node dataElements = processDataNode.getNextSibling();
+					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
-						// pretty hacked code
-						if (dataElements == null) break;
-						String attributeName = dataElements.getNodeName();
-						if (attributeName.equals("#text")) break;
+						if (processDataChild == null) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+						String attributeName, attributeType;
+						Node name = processDataChild.getAttributes().getNamedItem("name");
+						if (name == null) continue;
+						attributeName = name.getNodeValue();
+						Node type = processDataChild.getAttributes().getNamedItem("type");
+						if (type == null) continue;
+						attributeType = type.getNodeValue();
 				
 					Element valuereadonly = doc.createElement("x:setvalue");
 					valuereadonly.setAttribute("bind", dataObjectName+"_"+attributeName + ".readonly");
@@ -914,7 +956,7 @@ public class ExecConverter extends Converter {
 					valuewritable.setTextContent("true");
 					submitaction.appendChild(valuewritable);
 					
-					} while ((dataElements = dataElements.getNextSibling()) != null);
+					} while ((processDataChild = processDataChild.getNextSibling()) != null);
 				
 				}
 			
@@ -977,13 +1019,19 @@ public class ExecConverter extends Converter {
 			if (attributes.getNamedItem("id").getNodeValue().equals("ui_settings")) {
 				
 				for (String dataObjectName : processdataMap.keySet()){
-					Node processDataNode = processdataMap.get(dataObjectName);
-					Node dataElements = processDataNode;
+					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
-						// pretty hacked code
-						if (dataElements == null) break;
-						if (dataElements.getNodeName().equals("#text")) continue;
-						Element property = doc.createElement(dataObjectName + "_" + dataElements.getNodeName());
+						if (processDataChild == null) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+						String attributeName, attributeType;
+						Node name = processDataChild.getAttributes().getNamedItem("name");
+						if (name == null) continue;
+						attributeName = name.getNodeValue();
+						Node type = processDataChild.getAttributes().getNamedItem("type");
+						if (type == null) continue;
+						attributeType = type.getNodeValue();
+						
+						Element property = doc.createElement(dataObjectName + "_" + attributeName);
 						property.setAttribute("futurereadonly", "false");
 						property.setAttribute("futurewritable", "false");
 						for (Node ui_setting_nodes = list.item(i).getFirstChild(); ; ui_setting_nodes = ui_setting_nodes.getNextSibling()) {
@@ -992,7 +1040,7 @@ public class ExecConverter extends Converter {
 							break;
 						}
 						
-					} while ((dataElements = dataElements.getNextSibling()) != null);
+					} while ((processDataChild = processDataChild.getNextSibling()) != null);
 					
 				}
 			}
@@ -1000,13 +1048,17 @@ public class ExecConverter extends Converter {
 		
 		// add necessary token bindings
 		for (String dataObjectName : processdataMap.keySet()){
-			Node processDataNode = processdataMap.get(dataObjectName);
-			Node dataElements = processDataNode.getNextSibling();
+			Node processDataChild = processdataMap.get(dataObjectName);
 			do {
-				// pretty hacked code
-				if (dataElements == null) break;
-				String attributeName = dataElements.getNodeName();
-				if (attributeName.equals("#text")) continue;
+				if (processDataChild == null) break;
+				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+				String attributeName, attributeType;
+				Node name = processDataChild.getAttributes().getNamedItem("name");
+				if (name == null) continue;
+				attributeName = name.getNodeValue();
+				Node type = processDataChild.getAttributes().getNamedItem("type");
+				if (type == null) continue;
+				attributeType = type.getNodeValue();
 			
 				Element bind1 = doc.createElement("x:bind");
 				bind1.setAttribute("id", dataObjectName+"_"+attributeName);
@@ -1074,7 +1126,7 @@ public class ExecConverter extends Converter {
 				bind13.setAttribute("readonly", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurewritable = 'true'");
 				root.appendChild(bind13);
 				
-			} while ((dataElements = dataElements.getNextSibling()) != null);
+			} while ((processDataChild = processDataChild.getNextSibling()) != null);
 		}
 			
 		return doc;
