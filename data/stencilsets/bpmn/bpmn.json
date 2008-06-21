@@ -5805,6 +5805,87 @@
 						"to":["IntermediateMultipleEvent"]
 					}
 				]
+			},
+			{
+				"role":"IntermediateEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateMessageEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateMessageEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateTimerEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateTimerEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateErrorEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateErrorEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateCancelEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateCancelEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateCompensationEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateCompensationEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateRuleEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateRuleEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateLinkEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateLinkEvent"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateMultipleEvent",
+				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateMultipleEvent"]
+					}
+				]
 			}
 		],
 		"cardinalityRules": [

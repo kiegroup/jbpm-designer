@@ -2837,7 +2837,7 @@
 					"description":"Defines, if the rectangular boundary for the Pool is visible.",
 					"readonly":false,
 					"optional":false,
-					"refToView":"border"
+					"refToView": ["border", "c", "caption", "captionDisableAntialiasing"]
 				},
 				{
 					"id":"mainPool",
@@ -3123,7 +3123,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":["text_v","text_h"],
+					"refToView":"text_v",
 					"length":""
 				},
 				{
@@ -3158,7 +3158,7 @@
 					"description":"Defines, if the rectangular boundary for the Pool is visible.",
 					"readonly":false,
 					"optional":false,
-					"refToView":"border"
+					"refToView": ["border", "c"]
 				},
 				{
 					"id":"mainPool",
