@@ -5726,17 +5726,12 @@
 				]
 			},
 			{
-				"role":"IntermediateEvent",
-				"connects": [
-					{
-						"from":"Task",
-						"to":["IntermediateEvent"]
-					}
-				]
-			},
-			{
 				"role":"IntermediateMessageEvent",
 				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateMessageEvent"]
+					},
 					{
 						"from":"Task",
 						"to":["IntermediateMessageEvent"]
@@ -5747,6 +5742,10 @@
 				"role":"IntermediateTimerEvent",
 				"connects": [
 					{
+						"from":"Subprocess",
+						"to":["IntermediateTimerEvent"]
+					},
+					{
 						"from":"Task",
 						"to":["IntermediateTimerEvent"]
 					}
@@ -5755,6 +5754,10 @@
 			{
 				"role":"IntermediateErrorEvent",
 				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateErrorEvent"]
+					},
 					{
 						"from":"Task",
 						"to":["IntermediateErrorEvent"]
@@ -5765,6 +5768,10 @@
 				"role":"IntermediateCancelEvent",
 				"connects": [
 					{
+						"from":"Subprocess",
+						"to":["IntermediateCancelEvent"]
+					},
+					{
 						"from":"Task",
 						"to":["IntermediateCancelEvent"]
 					}
@@ -5773,6 +5780,10 @@
 			{
 				"role":"IntermediateCompensationEvent",
 				"connects": [
+					{
+						"from":"Subprocess",
+						"to":["IntermediateCompensationEvent"]
+					},
 					{
 						"from":"Task",
 						"to":["IntermediateCompensationEvent"]
@@ -5783,17 +5794,12 @@
 				"role":"IntermediateRuleEvent",
 				"connects": [
 					{
-						"from":"Task",
+						"from":"Subprocess",
 						"to":["IntermediateRuleEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateLinkEvent",
-				"connects": [
+					},
 					{
 						"from":"Task",
-						"to":["IntermediateLinkEvent"]
+						"to":["IntermediateRuleEvent"]
 					}
 				]
 			},
@@ -5803,84 +5809,7 @@
 					{
 						"from":"Task",
 						"to":["IntermediateMultipleEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateMessageEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateMessageEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateTimerEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateTimerEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateErrorEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateErrorEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateCancelEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateCancelEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateCompensationEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateCompensationEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateRuleEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateRuleEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateLinkEvent",
-				"connects": [
-					{
-						"from":"Subprocess",
-						"to":["IntermediateLinkEvent"]
-					}
-				]
-			},
-			{
-				"role":"IntermediateMultipleEvent",
-				"connects": [
+					},
 					{
 						"from":"Subprocess",
 						"to":["IntermediateMultipleEvent"]
