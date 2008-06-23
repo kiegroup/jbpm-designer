@@ -411,11 +411,9 @@ public class ExecConverter extends Converter {
 		}
 	}
 	
-
 	/* TODO:   There are a number of tasks that remain to be done here:
 	 * 
 	 * - Integrating data dependencies as guards
-	 * - Adding second parallel mode
 	 * - Connecting auto skip with context places
 	 */
 	protected void handleSubProcessAdHoc(PetriNet net, SubProcess process, ConversionContext c) {
@@ -486,14 +484,19 @@ public class ExecConverter extends Converter {
 				// finishing construct(finalize with skip, finish and abort)
 				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
 				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
-				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
+				Transition skipReady = addTauTransition(net, "ad-hoc_skipready_task_" + exTask.getId());
+				Transition skipEnabled = addTauTransition(net, "ad-hoc_skipenabled_task_" + exTask.getId());
 				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
 				
 				addFlowRelationship(net, finalize, enableFinalize);
 					
-				addFlowRelationship(net, enableFinalize, skip);
-				addFlowRelationship(net, exTask.pl_ready, skip);
-				addFlowRelationship(net, skip, taskFinalized);
+				addFlowRelationship(net, enableFinalize, skipReady);
+				addFlowRelationship(net, exTask.pl_ready, skipReady);
+				addFlowRelationship(net, skipReady, taskFinalized);
+				
+				addFlowRelationship(net, enableFinalize, skipEnabled);
+				addFlowRelationship(net, enabled, skipEnabled);
+				addFlowRelationship(net, skipEnabled, taskFinalized);
 					
 				addFlowRelationship(net, enableFinalize, finish);
 				addFlowRelationship(net, executed, finish);
@@ -535,7 +538,7 @@ public class ExecConverter extends Converter {
 				if (groupStateExpr1 != null && groupStateExpr2 != null){
 					result.append("place_pl_context_"+groupStateExpr1+".status=='"+groupStateExpr2+"'");
 				} else if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
-					result.append("true");
+					result.append("pl_data_"+groupDataExpr1+"."+groupDataExpr2+"=='"+groupDataExpr3+"'");
 				} else if (groupAnd != null) {
 					result.append("&&");
 				} else if (groupOr != null) {
@@ -551,6 +554,7 @@ public class ExecConverter extends Converter {
 		}
 		return result.toString();
 	}
+
 
 	
 	
