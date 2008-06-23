@@ -193,7 +193,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
             asynchronous: false,
 			onSuccess: (function(transport) {
 
-				var jsonExtension;
+				var jsonExtension = new Hash();
 				
 				eval("jsonExtension = " + transport.responseText);
 				
