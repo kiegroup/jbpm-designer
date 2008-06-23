@@ -440,7 +440,6 @@ public class ExecConverter extends Converter {
 		finalize.setGuard(completionConditionString);
 		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
 		resume.setGuard("!("+completionConditionString+")" );
-		
 
 		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
 		Place synch = addPlace(net, "ad-hoc_synch_" + process.getId());
@@ -454,6 +453,13 @@ public class ExecConverter extends Converter {
 			addFlowRelationship(net, synch, finalize);
 		} else {
 			addFlowRelationship(net, resume, synch);
+		}
+		
+		// data place specific constructs
+		List<Place> dataObjectPlaces = getAccessedDataObjectsPlaces(process);
+		for (Place place : dataObjectPlaces){
+			addReadOnlyFlowRelationship(net, place, resume);
+			addReadOnlyFlowRelationship(net, place, finalize); 
 		}
 
 		// task specific constructs
@@ -555,6 +561,31 @@ public class ExecConverter extends Converter {
 		return result.toString();
 	}
 
+	private List<Place> getAccessedDataObjectsPlaces(SubProcess adHocSubprocess){
+		assert (adHocSubprocess.isAdhoc());
+		List<Place> list = new ArrayList<Place>();
+		String input = adHocSubprocess.getCompletionCondition();
+		
+		if (input != null && !input.equals("")){
+	
+			Pattern pattern = Pattern.compile("dataExpression\\( *'(\\w*)' *, *'(\\w*)' *, *'(\\w*)' *\\)|");
+			Matcher matcher = pattern.matcher(input);
+	
+			while (matcher.find()) {
+				String groupDataExpr1 = matcher.group(1);
+				String groupDataExpr2 = matcher.group(2);
+				String groupDataExpr3 = matcher.group(3);
+	
+				if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
+					Place place = ExecTask.getDataPlace(groupDataExpr1);
+					if (place != null){
+						list.add(place);
+					}
+				}
+			}
+		}
+		return list;
+	}
 
 	
 	
