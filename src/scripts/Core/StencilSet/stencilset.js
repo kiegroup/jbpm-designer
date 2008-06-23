@@ -195,9 +195,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 				
 				try {
 					
-					var jsonExtension;
-					
-					eval("jsonExtension = " + transport.responseText);
+					eval("var jsonExtension = " + transport.responseText);
 				
 					if(jsonExtension["extends"] == this.namespace()) {
 						this._extensions[jsonExtension.namespace] = jsonExtension;
