@@ -160,11 +160,9 @@ public class ExecConverter extends Converter {
 			Document modelDoc = parser.newDocument();
 			//modelDoc.appendChild(modelDoc.createElement("engine-info"));
 			Node places = modelDoc.appendChild(modelDoc.createElement("places"));
-			
 			Node data = places.appendChild(modelDoc.createElement("data")); 
 			//Node metaData = places.appendChild(modelDoc.createElement("metadata")); 
 			//Node processData = places.appendChild(modelDoc.createElement("processdata"));
-			
 
 			// interrogate all incoming data objects for task, create DataPlaces for them and create Task model
 			HashMap<String, Node> processdataMap = new HashMap<String, Node>();
@@ -172,6 +170,7 @@ public class ExecConverter extends Converter {
 			for (Edge edge : edges_in) {
 				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
+					
 					// for incoming data objects of task: create read dependencies
 					addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
 					// create XML Structure for Task
@@ -586,7 +585,7 @@ public class ExecConverter extends Converter {
 				for (; dataElement != null; dataElement = dataElement.getNextSibling()) {
 					// fetch elements
 					if (dataElement.getNodeType() != Node.ELEMENT_NODE) continue;
-					String nodeName = dataElement.getAttributes().getNamedItem("name").getTextContent();
+					String nodeName = dataElement.getAttributes().getNamedItem("name").getTextContent().replaceAll(" " , "");
 					String nodeType = dataElement.getAttributes().getNamedItem("type").getTextContent();
 					
 					// append dataElements to dataPlaceModel
@@ -675,54 +674,177 @@ public class ExecConverter extends Converter {
 	// build Structure for forms: go for all data/processdata child nodes
 	Document addFormFields(Document doc, HashMap<String, Node> processdataMap) {
 		Node root = doc.getFirstChild();
+		
+		Element div = doc.createElement("div");
+		div.setAttribute("class", "formatted");
+		root.appendChild(div);
+		
+		div.appendChild(doc.createElement("br"));
+
+		Element table = doc.createElement("table");
+		div.appendChild(table);
+		
+		Element trhead = doc.createElement("tr");
+		table.appendChild(trhead);
+		
+		Element th1 = doc.createElement("th");
+		trhead.appendChild(th1);
+		Element th2 = doc.createElement("th");
+		trhead.appendChild(th2);
+		Element th3 = doc.createElement("th");
+		trhead.appendChild(th3);
+		Element th4 = doc.createElement("th");
+		trhead.appendChild(th4);
+		Element th5 = doc.createElement("th");
+		trhead.appendChild(th5);
+		
+		th3.setAttribute("align", "left");
+		th3.setTextContent("Values");
+		
+		Element xgroup1 = doc.createElement("x:group");
+		th5.appendChild(xgroup1);
+		xgroup1.setAttribute("ref", "instance('ui_settings')/delegationstate");
+		xgroup1.setTextContent("Visibility Rights");
+		
+		Element xgroup2 = doc.createElement("x:group");
+		th5.appendChild(xgroup2);
+		xgroup2.setAttribute("ref", "instance('ui_settings')/reevaluationstate");
+		xgroup2.setTextContent("Recent Values");
 
 		for (String dataObjectName : processdataMap.keySet()){
 			Node processDataChild = processdataMap.get(dataObjectName);
 			do {
 				if (processDataChild == null) break;
-				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
 				String attributeName, attributeType;
 				Node name = processDataChild.getAttributes().getNamedItem("name");
 				if (name == null) continue;
-				attributeName = name.getNodeValue();
+				attributeName = name.getNodeValue().replaceAll(" " , "");
 				Node type = processDataChild.getAttributes().getNamedItem("type");
 				if (type == null) continue;
 				attributeType = type.getNodeValue();
 				
 				// for template watch in engine folder "/public/examples/delegation/formulartemplate"
 				// ==========  create Document  ===========			
-				Element div = doc.createElement("div");
-				div.setAttribute("class", "formatted");
-				root.appendChild(div);
+
+				Element trbody = doc.createElement("tr");
+				table.appendChild(trbody);
 				
-				div.appendChild(doc.createElement("br"));
+				Element td1 = doc.createElement("td");
+				trbody.appendChild(td1);
+				Element td2 = doc.createElement("td");
+				trbody.appendChild(td2);
+				Element td3 = doc.createElement("td");
+				trbody.appendChild(td3);
+				Element td4 = doc.createElement("td");
+				trbody.appendChild(td4);
+				Element td5 = doc.createElement("td");
+				trbody.appendChild(td5);
 				
-				Element div2 = doc.createElement("div");
-				div2.setAttribute("id", dataObjectName+"_"+attributeName + "_grp");
-				div.appendChild(div2);
+				td1.setTextContent(name.getNodeValue());
 				
-				Element input = doc.createElement("x:input");
-				input.setAttribute("ref", "instance('ui_settings')/"+ dataObjectName+"_"+attributeName +"/@futurereadonly");
-				input.setAttribute("class", "leftcheckbox");
-				div.appendChild(input);
-				
-				Element input2 = doc.createElement("x:input");
-				input2.setAttribute("ref", "instance('ui_settings')/"+ dataObjectName+"_"+attributeName +"/@futurewritable");
-				input2.setAttribute("class", "rightcheckbox");
-				div.appendChild(input2);
-				
-				Element group = doc.createElement("x:group");
-				group.setAttribute("bind", "fade."+ dataObjectName+"_"+attributeName);
-				group.setAttribute("class", "fieldgroup");
-				div.appendChild(group);
-				
-				Element label = doc.createElement("x:label");
 				Element nameinput = doc.createElement("x:input");
-				label.setTextContent(attributeName+": ");
 				nameinput.setAttribute("ref", "instance('output-token')/places/processdata[@name='"+dataObjectName+"']/" + attributeName);
 				nameinput.setAttribute("class", "inputclass");
-				group.appendChild(label);
-				group.appendChild(nameinput);
+				td3.appendChild(nameinput);
+				
+				Element buttongroup = doc.createElement("x:group");
+				buttongroup.setAttribute("ref", "instance('ui_settings')/delegationstate");
+				td5.appendChild(buttongroup);
+				
+				// SWITCH Button
+				Element switch1 = doc.createElement("x:switch");
+				buttongroup.appendChild(switch1);	
+				
+				Element case1 = doc.createElement("x:case");
+				case1.setAttribute("id", attributeName + "_writable");
+				switch1.appendChild(case1);	
+				
+					Element xtrigger1 = doc.createElement("x:trigger");
+					xtrigger1.setAttribute("appearance", "minimal");
+					case1.appendChild(xtrigger1);
+				
+					Element image1 = doc.createElement("img");
+					image1.setAttribute("src", "/images/buttons_writable.png");
+					xtrigger1.appendChild(image1);
+					
+					Element xtoggle1 = doc.createElement("x:toggle");
+					xtoggle1.setAttribute("case", attributeName + "_readonly");
+					xtoggle1.setAttribute("ev:event", "DOMActivate");
+					xtrigger1.appendChild(xtoggle1);
+					
+					Element setvalue1_1 = doc.createElement("x:setvalue");
+					setvalue1_1.setAttribute("bind", dataObjectName+"_"+attributeName +".futurereadonly");
+					setvalue1_1.setTextContent("true");
+					xtrigger1.appendChild(setvalue1_1);
+					
+					Element setvalue1_2 = doc.createElement("x:setvalue");
+					setvalue1_2.setAttribute("bind", dataObjectName+"_"+attributeName +".futurewritable");
+					setvalue1_2.setTextContent("false");
+					xtrigger1.appendChild(setvalue1_2);
+				
+				Element case2 = doc.createElement("x:case");
+				case2.setAttribute("id", attributeName + "_readonly");
+				switch1.appendChild(case2);	
+				
+					Element xtrigger2 = doc.createElement("x:trigger");
+					xtrigger2.setAttribute("appearance", "minimal");
+					case2.appendChild(xtrigger2);
+				
+					Element image2 = doc.createElement("img");
+					image2.setAttribute("src", "/images/buttons_readonly.png");
+					xtrigger2.appendChild(image2);
+					
+					Element xtoggle2 = doc.createElement("x:toggle");
+					xtoggle2.setAttribute("case", attributeName + "_invisible");
+					xtoggle2.setAttribute("ev:event", "DOMActivate");
+					xtrigger2.appendChild(xtoggle2);
+					
+					Element setvalue2_1 = doc.createElement("x:setvalue");
+					setvalue2_1.setAttribute("bind", dataObjectName+"_"+attributeName +".futurereadonly");
+					setvalue2_1.setTextContent("false");
+					xtrigger2.appendChild(setvalue2_1);
+					
+					Element setvalue2_2 = doc.createElement("x:setvalue");
+					setvalue2_2.setAttribute("bind", dataObjectName+"_"+attributeName +".futurewritable");
+					setvalue2_2.setTextContent("false");
+					xtrigger2.appendChild(setvalue2_2);
+				
+				Element case3 = doc.createElement("x:case");
+				case3.setAttribute("id", attributeName + "_invisible");
+				switch1.appendChild(case3);	
+				
+					Element xtrigger3 = doc.createElement("x:trigger");
+					xtrigger3.setAttribute("appearance", "minimal");
+					case3.appendChild(xtrigger3);
+				
+					Element image3 = doc.createElement("img");
+					image3.setAttribute("src", "/images/buttons_invisible.png");
+					xtrigger3.appendChild(image3);
+					
+					Element xtoggle3 = doc.createElement("x:toggle");
+					xtoggle3.setAttribute("case", attributeName + "_writable");
+					xtoggle3.setAttribute("ev:event", "DOMActivate");
+					xtrigger3.appendChild(xtoggle3);
+					
+					Element setvalue3_1 = doc.createElement("x:setvalue");
+					setvalue3_1.setAttribute("bind", dataObjectName+"_"+attributeName +".futurereadonly");
+					setvalue3_1.setTextContent("false");
+					xtrigger3.appendChild(setvalue3_1);
+					
+					Element setvalue3_2 = doc.createElement("x:setvalue");
+					setvalue3_2.setAttribute("bind", dataObjectName+"_"+attributeName +".futurewritable");
+					setvalue3_2.setTextContent("true");
+					xtrigger3.appendChild(setvalue3_2);
+				// end SWITCH Button
+				
+				Element reevaluationgroup = doc.createElement("x:group");
+				reevaluationgroup.setAttribute("ref", "instance('ui_settings')/reevaluationstate");
+				td5.appendChild(reevaluationgroup);
+				
+				// REEVALUATION values displaying
+				
+				// end REEVALUATION values displaying
 				
 				div.appendChild(doc.createElement("br"));
 				div.appendChild(doc.createElement("br"));
@@ -792,11 +914,11 @@ public class ExecConverter extends Converter {
 					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
 						if (processDataChild == null) break;
-						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
 						String attributeName, attributeType;
 						Node name = processDataChild.getAttributes().getNamedItem("name");
 						if (name == null) continue;
-						attributeName = name.getNodeValue();
+						attributeName = name.getNodeValue().replaceAll(" " , "");
 						Node type = processDataChild.getAttributes().getNamedItem("type");
 						if (type == null) continue;
 						attributeType = type.getNodeValue();
@@ -939,11 +1061,11 @@ public class ExecConverter extends Converter {
 					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
 						if (processDataChild == null) break;
-						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
 						String attributeName, attributeType;
 						Node name = processDataChild.getAttributes().getNamedItem("name");
 						if (name == null) continue;
-						attributeName = name.getNodeValue();
+						attributeName = name.getNodeValue().replaceAll(" " , "");
 						Node type = processDataChild.getAttributes().getNamedItem("type");
 						if (type == null) continue;
 						attributeType = type.getNodeValue();
@@ -993,7 +1115,6 @@ public class ExecConverter extends Converter {
 				interactvalue2.setAttribute("bind", "isReviewed");
 				interactvalue2.setTextContent("false");
 				interactaction.appendChild(interactvalue2);
-				
 		}
 		
 			// ==========  end of creation ============
@@ -1024,11 +1145,11 @@ public class ExecConverter extends Converter {
 					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
 						if (processDataChild == null) break;
-						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
 						String attributeName, attributeType;
 						Node name = processDataChild.getAttributes().getNamedItem("name");
 						if (name == null) continue;
-						attributeName = name.getNodeValue();
+						attributeName = name.getNodeValue().replaceAll(" " , "");
 						Node type = processDataChild.getAttributes().getNamedItem("type");
 						if (type == null) continue;
 						attributeType = type.getNodeValue();
@@ -1053,11 +1174,11 @@ public class ExecConverter extends Converter {
 			Node processDataChild = processdataMap.get(dataObjectName);
 			do {
 				if (processDataChild == null) break;
-				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) break;
+				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
 				String attributeName, attributeType;
 				Node name = processDataChild.getAttributes().getNamedItem("name");
 				if (name == null) continue;
-				attributeName = name.getNodeValue();
+				attributeName = name.getNodeValue().replaceAll(" " , "");
 				Node type = processDataChild.getAttributes().getNamedItem("type");
 				if (type == null) continue;
 				attributeType = type.getNodeValue();
@@ -1090,11 +1211,13 @@ public class ExecConverter extends Converter {
 				Element bind6 = doc.createElement("x:bind");
 				bind6.setAttribute("type", "xsd:boolean");
 				bind6.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName + "_" +attributeName +"/@futurereadonly");
+				bind6.setAttribute("id", dataObjectName + "_" + attributeName + ".futurereadonly");
 				root.appendChild(bind6);
 				
 				Element bind7 = doc.createElement("x:bind");
 				bind7.setAttribute("type", "xsd:boolean");
 				bind7.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName + "_" +attributeName +"/@futurewritable");
+				bind7.setAttribute("id", dataObjectName + "_" + attributeName + ".futurewritable");
 				root.appendChild(bind7);
 				
 				Element bind8 = doc.createElement("x:bind");
