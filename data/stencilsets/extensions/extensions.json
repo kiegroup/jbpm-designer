@@ -1,4 +1,5 @@
-"extensions": [
+{
+	"extensions": [
 		{
 			"title":"BPMN Cost Extension",
 			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmncosts#",
