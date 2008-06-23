@@ -225,17 +225,13 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 					}
 				} catch (e) {
 					ORYX.Log.debug("StencilSet.addExtension: Something went wrong when initialising the stencil set extension. " + e);
-					console.log(e)
-				}
-				
+				}	
 			}).bind(this),
 			onFailure: (function(transport) {
 				ORYX.Log.debug("Loading stencil set extension file failed. The request returned an error." + transport);
-				console.log(transport)
 			}).bind(this),
 			onException: (function(transport) {
 				ORYX.Log.debug("Loading stencil set extension file failed. The request returned an error." + transport);
-				console.log(transport)
 			}).bind(this)
 		
 		});
