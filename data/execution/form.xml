@@ -1,20 +1,20 @@
-<div>
-<b> Logged in as user: </b><br />
-
-<x:output ref="instance('output-token')/places/metadata/owner" /><br />
-<x:group>
+<div><x:group>
 	<x:output bind="delegationstate"><h2> Delegate task </h2></x:output>
 	<x:output bind="executionstate"><h2> Execute task </h2></x:output>
 	<x:output bind="reviewstate"><h2> Review task </h2></x:output>
 </x:group>
-<br /><br />
-<x:group ref="instance('ui_settings')/delegategroup" >
-    <x:select1 ref="instance('output-token')/places/metadata/delegate" class="delegator">  
-        <x:label> Delegate to: </x:label>
+<br/><br/>
+<table bgcolor="lightyellow"><tr><td>
+<x:group ref="instance('ui_settings')/delegategroup">Delegate:</x:group>
+</td>
+<td>
+<x:group ref="instance('ui_settings')/delegategroup">
+    <x:select1 class="delegator" ref="instance('output-token')/places/metadata/delegate" style="width:142;">  
             <x:item>
                 <x:label>Adam</x:label>
                 <x:value>Adam</x:value> 
             </x:item>
+
             <x:item>
                 <x:label>Bert</x:label>
                 <x:value>Bert</x:value>
@@ -22,6 +22,7 @@
             <x:item>
                 <x:label>Hugo</x:label>
                 <x:value>Hugo</x:value>
+
             </x:item>
             <x:item>
                 <x:label>Rudi</x:label>
@@ -29,29 +30,49 @@
             </x:item>           
 </x:select1>
 </x:group>
-<br />
-<x:group bind="fade.delegatedFrom"><x:output ref="instance('output-token')/places/metadata/delegatedFrom" class="delegator">
-		<x:label> Delegated from: </x:label>
-</x:output></x:group>
-<br/><br />
-<x:group bind="fade.message"><x:input ref="instance('output-token')/places/metadata/message" class="metainfo">
-		<x:label> Message: </x:label>
-</x:input></x:group>
-<br/><br />
-<x:group bind="fade.deadline"><x:input ref="instance('output-token')/places/metadata/deadline" class="metainfo">
-		<x:label> Deadline: </x:label>
-</x:input></x:group>
-<br/><br />
-<x:group bind="wantToReviewGroup">
-            <x:input ref="instance('output-token')/places/metadata/reviewRequested" class="metainfo">
-		<x:label> Responsible: </x:label>
-            </x:input>
-</x:group>
-<br/><br />
-
-<x:group ref="instance('ui_settings')/delegationstate">
-	<br/><br />
-   <div class="labels"> <b>readonly readable</b> </div>
-   <br/>
-</x:group>
-</div>
+</td><td width="10" /><td /></tr>
+<tr><td><x:group bind="fade.delegatedFrom">Delegated from:</x:group></td>
+	<td>
+		<x:group bind="fade.delegatedFrom"><x:output class="delegator" ref="instance('output-token')/places/metadata/delegatedFrom">
+		</x:output></x:group>	
+	</td><td /><td style="font-weight:bold; color:red;"><x:group ref="instance('ui_settings')/executionstate">Fill in the Form and Submit!</x:group><x:group ref="instance('ui_settings')/reviewstate">Review the form and submit!</x:group></td><td /></tr>
+	<tr><td>
+		<x:group bind="fade.message">Message:</x:group>
+	</td><td>
+		<x:group bind="fade.message"><x:input class="metainfo" ref="instance('output-token')/places/metadata/message">
+		</x:input></x:group>
+	</td><td></td><td><x:group bind="wantToReviewGroup">Stay responsible for process:</x:group></td><td align="center">
+		<x:group bind="wantToReviewGroup">
+		<x:input class="metainfo" ref="instance('output-token')/places/metadata/reviewRequested" />
+		</x:group>
+		</td></tr>
+	<tr><td>
+		<x:group bind="fade.deadline">Deadline:</x:group>
+	</td><td>
+		<x:group bind="fade.deadline"><x:input class="metainfo" ref="instance('output-token')/places/metadata/deadline" /></x:group>
+	</td><td /><td><x:group ref="instance('ui_settings')/delegationstate">Set all rights to </x:group></td><td>
+		<x:group ref="instance('ui_settings')/delegationstate">
+			<table>
+			<tr><th>
+		    <x:trigger appearance = 'minimal'>
+		       <img src="/images/buttons_writable.png" />
+				<x:toggle case="blub_writable" ev:event="DOMActivate" />
+		    </x:trigger>
+			</th>
+			<th>
+		    <x:trigger appearance = 'minimal'>
+		       <img src="/images/buttons_readonly.png" />
+				<x:toggle case="blub_readonly" ev:event="DOMActivate" />
+		    </x:trigger>
+			</th>
+			<th>
+		    <x:trigger appearance = 'minimal'>
+		       <img src="/images/buttons_invisible.png" />
+				<x:toggle case="blub_invisible" ev:event="DOMActivate" />
+		    </x:trigger>
+			</th></tr>
+			</table>
+			</x:group>
+			</td></tr>
+</table>
+<br/></div>
