@@ -195,9 +195,10 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 
 				var jsonExtension = new Hash();
 				
-				eval("jsonExtension = " + transport.responseText);
-				
 				try {
+					
+					eval("jsonExtension = " + transport.responseText);
+				
 					if(jsonExtension["extends"] == this.namespace()) {
 						this._extensions[jsonExtension.namespace] = jsonExtension;
 						
@@ -225,12 +226,16 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 						}.bind(this));
 					}
 				} catch (e) {
-					ORYX.Log.debug("StencilSet.addExtension: Something went wrong when initialising the stencil set extension.");
+					ORYX.Log.debug("StencilSet.addExtension: Something went wrong when initialising the stencil set extension. " + e);
 				}
 				
 			}).bind(this),
 			onFailure: (function(transport) {
-				//Ext.Msg.alert("Oryx", "Loading stencil set extension configuration file failed. The request returned an error.");
+				ORYX.Log.debug("Loading stencil set extension file failed. The request returned an error." + transport);
+
+			}).bind(this),
+			onException: (function(transport) {
+				ORYX.Log.debug("Loading stencil set extension file failed. The request returned an error." + transport);
 
 			}).bind(this)
 		
