@@ -71,6 +71,8 @@ public class ExecConverter extends Converter {
 	private static final String copyXsltURL = baseXsltURL + "copy_xslt.xsl";
 	private static final String extractDataURL = baseXsltURL + "extract_processdata.xsl";
 	private static final String extractFormDataURL = baseXsltURL + "extract_init_processdata.xsl";
+	private static final String extractAllocateDataURL = baseXsltURL + "extract_allocate_processdata.xsl";
+	private static final String extractFinishDataURL = baseXsltURL + "extract_finish_processdata.xsl";
 	private static String enginePostURL;
 	private String contextPath;
 	protected String standardModel;
@@ -292,7 +294,7 @@ public class ExecConverter extends Converter {
 		exTask.pl_context.addLocator(new Locator("startTime", "xsd:string", "/data/metadata/startTime"));
 		exTask.pl_context.addLocator(new Locator("endTime", "xsd:string", "/data/metadata/endTime"));
 		exTask.pl_context.addLocator(new Locator("status", "xsd:string", "/data/metadata/status"));
-		exTask.pl_context.addLocator(new Locator("owner", "xsd:string", "/data/metadata/owner"));
+		exTask.pl_context.addLocator(new Locator("owner", "xsd:string", "/data/executiondata/owner"));
 		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isDelegated"));
 		exTask.pl_context.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isReviewed"));
 		exTask.pl_context.addLocator(new Locator("reviewRequested", "xsd:string", "/data/metadata/reviewRequested"));
@@ -314,7 +316,7 @@ public class ExecConverter extends Converter {
 		
 		// allocate Transition
 		addFlowRelationship(net, exTask.pl_ready, exTask.tr_allocate);
-		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_running, extractDataURL);
+		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_running, extractAllocateDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_allocate);
 		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_context, baseXsltURL + "context_allocate.xsl");
 		exTask.tr_allocate.setRolename(rolename);
@@ -385,7 +387,7 @@ public class ExecConverter extends Converter {
 		
 		// finish transition
 		addFlowRelationship(net, exTask.pl_complete, exTask.tr_finish);
-		addExecFlowRelationship(net, exTask.tr_finish, c.map.get(getOutgoingSequenceFlow(task)), extractDataURL);
+		addExecFlowRelationship(net, exTask.tr_finish, c.map.get(getOutgoingSequenceFlow(task)), extractFinishDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");	
 			
