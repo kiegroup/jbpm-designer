@@ -104,7 +104,6 @@ public class ExecConverter extends Converter {
 		exTask.setId(task.getId());
 		exTask.setLabel(task.getLabel());
 		exTask.setResourceId(task.getResourceId());
-		exTask.setParent(task.getParent());
 		String taskDesignation = exTask.getTaskDesignation();
 		
 		// create model, form and bindings
@@ -148,9 +147,6 @@ public class ExecConverter extends Converter {
 		exTask.tr_resume.setContextPlaceID(exTask.pl_context.getId());
 		exTask.tr_finish.setContextPlaceID(exTask.pl_context.getId());
 		
-		
-
-		
 		// create Documents for model, form, bindings
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance (  ) ; 
 		
@@ -170,9 +166,9 @@ public class ExecConverter extends Converter {
 			for (Edge edge : edges_in) {
 				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
-					
+					Place dataPlace = ExecTask.getDataPlace(dataObject.getId());
 					// for incoming data objects of task: create read dependencies
-					addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
+					addReadOnlyExecFlowRelationship(net, dataPlace, exTask.tr_enable, null);
 					// create XML Structure for Task
 					String modelXML = dataObject.getModel();
 					/*modelXML =
@@ -196,7 +192,10 @@ public class ExecConverter extends Converter {
 							processdataMap.put(dataObject.getId(), elements.item(0));
 							// if contained in an ad-hoc subprocess, add
 							//	data dependency
-							addDataDependeny(net, exTask, elements);
+							Container parent = task.getParent();
+							if (parent instanceof SubProcess && ((SubProcess)parent).isAdhoc()){ 
+								addDataDependeny(exTask, "blub", elements);
+							}
 						}
 					} catch (Exception io) {
 						io.printStackTrace();
@@ -394,7 +393,7 @@ public class ExecConverter extends Converter {
 		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");	
 			
 		assert(c instanceof ExecConversionContext);
-		((ExecConversionContext)c).addToSubprocessToExecTasksMap(exTask.getParent(), exTask);
+		((ExecConversionContext)c).addToSubprocessToExecTasksMap(task.getParent(), exTask);
 		
 		handleMessageFlow(net, task, exTask.tr_allocate, exTask.tr_submit, c);
 		if (c.ancestorHasExcpH)
@@ -418,6 +417,8 @@ public class ExecConverter extends Converter {
 	 * 
 	 * - Integrating data dependencies as guards
 	 * - Connecting auto skip with context places
+	 * 
+	 * - Test Data CC and Skipper ..
 	 */
 	protected void handleSubProcessAdHoc(PetriNet net, SubProcess process, ConversionContext c) {
 		SubProcessPlaces pl = c.getSubprocessPlaces(process);
@@ -590,17 +591,26 @@ public class ExecConverter extends Converter {
 		return list;
 	}
 	
-	private void addDataDependeny(PetriNet net, ExecTask execTask, NodeList elements){
-//		Container parent = execTask.getParent();
-//		if (parent instanceof SubProcess && ((SubProcess)parent).isAdhoc()){
-//			StringBuffer guardStringBuffer = new StringBuffer();
-//			for (int i = 0 ; i<elements.getLength(); i++){
-//				String name = elements.item(i).getAttributes(). ("name");
-//			}
-//			if (guardStringBuffer.length() > 0){
-//				execTask.tr_allocate.setGuard(guardStringBuffer.toString());
-//			}
-//		}
+	private void addDataDependeny(ExecTask execTask, String dataPlaceName, NodeList elements){
+		
+		StringBuffer guardStringBuffer = new StringBuffer();
+		for (int i = 0 ; i<elements.getLength(); i++){
+			String name = elements.item(i).getAttributes().getNamedItem("name").getNodeValue();
+			if (guardStringBuffer.length() > 0){
+				guardStringBuffer.append("&&");
+			}
+			guardStringBuffer.append(dataPlaceName+"."+name+"!=''");
+		}
+		if (guardStringBuffer.length() > 0){
+			String formerGuard = execTask.tr_allocate.getGuard();
+			if (formerGuard != null && formerGuard.length() > 0){
+				guardStringBuffer.append("&&("+formerGuard+")");
+			}
+			String guardString = guardStringBuffer.toString();
+			execTask.tr_allocate.setGuard(guardString);
+			System.out.println(guardString);
+		}
+		
 	}
 
 	
