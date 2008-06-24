@@ -38,9 +38,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xerces.internal.dom.DeferredTextImpl;
-
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.ExecDataObject;
@@ -105,6 +104,7 @@ public class ExecConverter extends Converter {
 		exTask.setId(task.getId());
 		exTask.setLabel(task.getLabel());
 		exTask.setResourceId(task.getResourceId());
+		exTask.setParent(task.getParent());
 		String taskDesignation = exTask.getTaskDesignation();
 		
 		// create model, form and bindings
@@ -190,11 +190,14 @@ public class ExecConverter extends Converter {
 					
 					try {
 						Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-						NodeList processdata = doc.getElementsByTagName("xsd:element");
+						NodeList elements = doc.getElementsByTagName("xsd:element");
 						//Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
-						if (processdata.getLength() > 0)
-							processdataMap.put(dataObject.getId(), processdata.item(0));
-						
+						if (elements.getLength() > 0){
+							processdataMap.put(dataObject.getId(), elements.item(0));
+							// if contained in an ad-hoc subprocess, add
+							//	data dependency
+							addDataDependeny(net, exTask, elements);
+						}
 					} catch (Exception io) {
 						io.printStackTrace();
 					}
@@ -391,7 +394,7 @@ public class ExecConverter extends Converter {
 		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");	
 			
 		assert(c instanceof ExecConversionContext);
-		((ExecConversionContext)c).addToSubprocessToExecTasksMap(task.getParent(), exTask);
+		((ExecConversionContext)c).addToSubprocessToExecTasksMap(exTask.getParent(), exTask);
 		
 		handleMessageFlow(net, task, exTask.tr_allocate, exTask.tr_submit, c);
 		if (c.ancestorHasExcpH)
@@ -585,6 +588,19 @@ public class ExecConverter extends Converter {
 			}
 		}
 		return list;
+	}
+	
+	private void addDataDependeny(PetriNet net, ExecTask execTask, NodeList elements){
+//		Container parent = execTask.getParent();
+//		if (parent instanceof SubProcess && ((SubProcess)parent).isAdhoc()){
+//			StringBuffer guardStringBuffer = new StringBuffer();
+//			for (int i = 0 ; i<elements.getLength(); i++){
+//				String name = elements.item(i).getAttributes(). ("name");
+//			}
+//			if (guardStringBuffer.length() > 0){
+//				execTask.tr_allocate.setGuard(guardStringBuffer.toString());
+//			}
+//		}
 	}
 
 	
