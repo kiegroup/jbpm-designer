@@ -194,7 +194,7 @@ public class ExecConverter extends Converter {
 							//	data dependency
 							Container parent = task.getParent();
 							if (parent instanceof SubProcess && ((SubProcess)parent).isAdhoc()){ 
-								addDataDependeny(exTask, "blub", elements);
+								addDataDependeny(exTask, dataPlace.getId(), elements);
 							}
 						}
 					} catch (Exception io) {
@@ -608,7 +608,6 @@ public class ExecConverter extends Converter {
 			}
 			String guardString = guardStringBuffer.toString();
 			execTask.tr_allocate.setGuard(guardString);
-			System.out.println(guardString);
 		}
 		
 	}
