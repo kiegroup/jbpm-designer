@@ -65,10 +65,6 @@ Repository.app = {
             throw "ExtJS has wrong version: " + Ext.version + " (expected " + expected_ext_version + ")";
         }
 		
-		if(!Ext.isGecko) {
-			throw "No Gecko Engine.";
-		}
-		
 		// register the current user
 		if (!current_user && current_user != this.anonymous_user) {
 			throw "Current user missing"
