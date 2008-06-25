@@ -194,7 +194,8 @@ public class ExecConverter extends Converter {
 							//	data dependency
 							Container parent = task.getParent();
 							if (parent instanceof SubProcess && ((SubProcess)parent).isAdhoc()){ 
-								addDataDependeny(exTask, dataPlace.getId(), elements);
+								// TODO: Use Node List??? - ugly solution
+								//addDataDependeny(net, exTask, dataPlace, elements);
 							}
 						}
 					} catch (Exception io) {
@@ -548,7 +549,7 @@ public class ExecConverter extends Converter {
 				if (groupStateExpr1 != null && groupStateExpr2 != null){
 					result.append("place_pl_context_"+groupStateExpr1+".status=='"+groupStateExpr2+"'");
 				} else if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
-					result.append("pl_data_"+groupDataExpr1+"."+groupDataExpr2+"=='"+groupDataExpr3+"'");
+					result.append("place_pl_data_"+groupDataExpr1+"."+groupDataExpr2+"=='"+groupDataExpr3+"'");
 				} else if (groupAnd != null) {
 					result.append("&&");
 				} else if (groupOr != null) {
@@ -591,7 +592,7 @@ public class ExecConverter extends Converter {
 		return list;
 	}
 	
-	private void addDataDependeny(ExecTask execTask, String dataPlaceName, NodeList elements){
+	private void addDataDependeny(PetriNet net, ExecTask execTask, Place dataPlace, NodeList elements){
 		
 		StringBuffer guardStringBuffer = new StringBuffer();
 		for (int i = 0 ; i<elements.getLength(); i++){
@@ -599,7 +600,7 @@ public class ExecConverter extends Converter {
 			if (guardStringBuffer.length() > 0){
 				guardStringBuffer.append("&&");
 			}
-			guardStringBuffer.append(dataPlaceName+"."+name+"!=''");
+			guardStringBuffer.append(dataPlace.getId()+"."+name+"!=''");
 		}
 		if (guardStringBuffer.length() > 0){
 			String formerGuard = execTask.tr_allocate.getGuard();
@@ -608,6 +609,7 @@ public class ExecConverter extends Converter {
 			}
 			String guardString = guardStringBuffer.toString();
 			execTask.tr_allocate.setGuard(guardString);
+			addReadOnlyFlowRelationship(net, dataPlace, execTask.tr_allocate);
 		}
 		
 	}
