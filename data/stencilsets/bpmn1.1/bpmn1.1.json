@@ -2735,8 +2735,12 @@
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
 				
-				if(lanes.length > 0) {
+					console.log("test");
+					console.log(lanes[0].properties["oryx-showCaption"]);
+					lanes[0].properties["oryx-showCaption"] = false;
 				
+				if(lanes.length > 0) {
+					
 					lanes = lanes.sortBy(function(lane) {
 						return lane.bounds.upperLeft().y;
 					});
@@ -2745,6 +2749,7 @@
 					var shapeHeight = 0;
 					var topBound = 0;
 					lanes.each(function(lane) {
+						lane.properties["oryx-showCaption"] = true;
 						var ul = lane.bounds.upperLeft();
 						var lr = lane.bounds.lowerRight();
 						ul.y = shapeHeight;
@@ -3407,7 +3412,6 @@
 				});
 				
 				if(lanes.length > 0) {
-				
 					lanes = lanes.sortBy(function(lane) {
 						return lane.bounds.upperLeft().y;
 					});
@@ -3507,6 +3511,18 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"frame",
+					"fill":true,
+					"stroke":false
+				},
+				{
+					"id":"showCaption",
+					"type":"Boolean",
+					"title":"ShowCaption",
+					"value":"true",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView": ["caption", "captionDisableAntialiasing", "text_v"],
 					"fill":true,
 					"stroke":false
 				}
@@ -8310,7 +8326,11 @@
 				"role":"IntermediateEventOnSubprocessBoundary",
 				"connects": [
 					{
-						"from":"Subprocess",
+						"from":"collapsedSubprocess",
+						"to":["IntermediateEventOnSubprocessBoundary"]
+					},
+					{
+						"from":"expandedSubprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					}
 				]
