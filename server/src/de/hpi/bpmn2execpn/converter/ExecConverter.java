@@ -160,6 +160,10 @@ public class ExecConverter extends Converter {
 			//Node metaData = places.appendChild(modelDoc.createElement("metadata")); 
 			//Node processData = places.appendChild(modelDoc.createElement("processdata"));
 
+			// initialize engine Post URL
+			PropertiesConfiguration config = new PropertiesConfiguration("pnengine.properties");
+			this.enginePostURL = config.getString("pnengine.url") + "/documents/";
+			
 			// interrogate all incoming data objects for task, create DataPlaces for them and create Task model
 			HashMap<String, Node> processdataMap = new HashMap<String, Node>();
 			List<Edge> edges_in = task.getIncomingEdges();
@@ -207,7 +211,7 @@ public class ExecConverter extends Converter {
 			// interrogate all outgoing data objects for task, create DataPlaces for them and create Task model
 			List<Edge> edges_out = task.getOutgoingEdges();
 			for (Edge edge : edges_out) {
-				if (edge.getSource() instanceof ExecDataObject) {
+				if (edge.getTarget() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getTarget();
 					// for incoming data objects of task: create read dependencies
 					if (!isContainedIn(dataObject, processdataMap)) {
@@ -247,10 +251,7 @@ public class ExecConverter extends Converter {
 			// adds binding attributes for tags
 			bindDoc = addBindings(bindDoc, processdataMap);
 			
-			// initialize engine Post URL
-			try {
-				PropertiesConfiguration config = new PropertiesConfiguration("pnengine.properties");
-				this.enginePostURL = config.getString("pnengine.url") + "/documents/";
+
 			
 				// persist form and bindings and save URL
 				model = this.postDataToURL(domToString(modelDoc),enginePostURL);
@@ -273,11 +274,8 @@ public class ExecConverter extends Converter {
 				review.setBindingsURL(bindings);
 
 				
-			} catch (ConfigurationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
+		} catch (ConfigurationException e1) {
+			e1.printStackTrace();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException ex) {
@@ -1458,37 +1456,72 @@ public class ExecConverter extends Converter {
 			stylesheet.setAttribute("xmlns:xsl", "http://www.w3.org/1999/XSL/Transform");
 			xslDoc.appendChild(stylesheet);
 			
-			
+			/* */
 			Element template = xslDoc.createElement("xsl:template");
-			stylesheet.setAttribute("match", "/");
+			template.setAttribute("match", "/");
 			stylesheet.appendChild(template);
 			
 			Element data = xslDoc.createElement("data");
 			template.appendChild(data);
 			
 			Element apply = xslDoc.createElement("xsl:apply-templates");
-			apply.setAttribute("select", "//processdata");
+			template.setAttribute("select", "/places/processdata");
 			data.appendChild(apply);
 			
 			
 			Element template2 = xslDoc.createElement("xsl:template");
-			stylesheet.setAttribute("match", "processdata[@target_place=\'"+ dataObject.getId() +"\']");
-			stylesheet.appendChild(template);
+			template2.setAttribute("match", "processdata[@target_place=\'pl_data_"+ dataObject.getId() +"\']");
+			stylesheet.appendChild(template2);
 			
 			Element processdata = xslDoc.createElement("processdata");
 			template2.appendChild(processdata);
 			
-			Element attribute = xslDoc.createElement("xsl:attribute");
-			apply.setAttribute("name", "place");
-			processdata.appendChild(attribute);
-
-			Element value = xslDoc.createElement("xsl:value-of");
-			apply.setAttribute("select", "../@place");
-			attribute.appendChild(value);
+			Element attribute1 = xslDoc.createElement("xsl:attribute");
+			attribute1.setAttribute("name", "target_place");
+			processdata.appendChild(attribute1);
+			Element value1 = xslDoc.createElement("xsl:value-of");
+			value1.setAttribute("select", "@target_place");
+			attribute1.appendChild(value1);
+			
+			Element attribute2 = xslDoc.createElement("xsl:attribute");
+			attribute2.setAttribute("name", "place_id");
+			processdata.appendChild(attribute2);
+			Element value2 = xslDoc.createElement("xsl:value-of");
+			value2.setAttribute("select", "@place_id");
+			attribute2.appendChild(value2);
+			
+			Element attribute3 = xslDoc.createElement("xsl:attribute");
+			attribute3.setAttribute("name", "name");
+			processdata.appendChild(attribute3);
+			Element value3 = xslDoc.createElement("xsl:value-of");
+			value3.setAttribute("select", "@name");
+			attribute3.appendChild(value3);
 			
 			Element copy = xslDoc.createElement("xsl:copy-of");
-			apply.setAttribute("select", "./*");
+			copy.setAttribute("select", "./*");
 			processdata.appendChild(copy);
+			
+			
+			Element template3 = xslDoc.createElement("xsl:template");
+			template3.setAttribute("match", "metadata/*");
+			stylesheet.appendChild(template3);
+			
+			Element template4 = xslDoc.createElement("xsl:template");
+			template4.setAttribute("match", "processdata/*");
+			stylesheet.appendChild(template4);
+			
+			/* Test 
+			Element template = xslDoc.createElement("xsl:template");
+			template.setAttribute("match", "/");
+			stylesheet.appendChild(template);
+			
+			Element data = xslDoc.createElement("data");
+			template.appendChild(data);
+
+			Element copy = xslDoc.createElement("xsl:copy-of");
+			copy.setAttribute("select", "*");
+			data.appendChild(copy);
+			*/
 			
 			return postDataToURL(domToString(xslDoc),enginePostURL);
 		}
