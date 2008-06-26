@@ -37,8 +37,8 @@
 		<plugin source="addssextension.js" name="ORYX.Plugins.SSExtensionLoader" />
 		<plugin source="selectionframe.js" name="ORYX.Plugins.SelectionFrame" />
 		<plugin source="shapeHighlighting.js" name="ORYX.Plugins.ShapeHighlighting" />
-
-
+		<plugin source="overlay.js" name="ORYX.Plugins.Overlay" />		
+		<plugin source="edit.js" name="ORYX.Plugins.Edit" />
 
 		<!-- plugin for PNML export and deployment -->
 		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport">

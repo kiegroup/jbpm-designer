@@ -31,9 +31,8 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 		
         this.facade = facade;
         
-		this.active = false;
-		this.el 	= undefined;
-		this.callback = undefined;
+		this.active 		= false;
+		this.raisedEventIds = [];
 		
         this.facade.offer({
             'name': "Syntax Checker",
@@ -52,11 +51,15 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 
 		if (this.active) {
 			
-			this.facade.raiseEvent({
-				type: 	"overlay.hide",
-				id: 	"syntaxcheck"
-			});
-			this.active = !this.active;				
+			this.raisedEventIds.each(function(id){
+				this.facade.raiseEvent({
+						type: 	"overlay.hide",
+						id: 	id
+					});
+			}.bind(this))
+
+			this.raisedEventIds = [];
+			this.active 		= !this.active;				
 
 		} else {
 			
@@ -108,25 +111,30 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 				onSuccess: function(request){
 						var resp = request.responseText.evalJSON();
 
-						if (resp.conflicttransitions) {
-						if (resp.conflicttransitions.length > 0) {
-						
-							// Get all Valid ResourceIDs and collect all shapes
-							var errorshapes = resp.conflicttransitions.collect(function(res){ return this.facade.getCanvas().getChildShapeByResourceId( res ) }.bind(this)).compact();
-
-							this.facade.raiseEvent({
-								type: 			"overlay.show",
-								id: 			"syntaxcheck",
-								shapes: 		errorshapes,
-								attributes: 	{fill: "red", stroke: "black"}
-							});
-
-							this.active = !this.active;				
-
-						} else {
-
-							Ext.Msg.alert("Oryx", "There are no syntax errors.");
-						}
+						if (resp instanceof Object ) {
+							resp = $H(resp)
+							if (resp.size() > 0) {
+							
+								// Get all Valid ResourceIDs and collect all shapes
+								resp.keys().each(function( value ){ 
+								
+									var sh = this.facade.getCanvas().getChildShapeByResourceId( value );
+	
+									if( sh ){
+										
+										this.raiseOverlay(sh, resp[value]);
+										
+									}
+									
+								}.bind(this));
+	
+								this.active = !this.active;				
+	
+							} else {
+	
+								Ext.Msg.alert("Oryx", "There are no syntax errors.");
+								
+							}
 						} else {
 							Ext.Msg.alert("Oryx", "Invalid answer from server.");
 						}
@@ -140,6 +148,28 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 
 		}
 		
-	}	
+	},	
+	
+	raiseOverlay: function(shape, errorMsg) {
+		
+		var id = "syntaxchecker." + this.raisedEventIds.length;
+		
+		var cross = ORYX.Editor.graft("http://www.w3.org/2000/svg", null ,
+			['path', {
+				"title":errorMsg, "stroke-width": 5.0, "stroke":"red", "d":  "M20,-5 L5,-20 M5,-5 L20,-20", "line-captions": "round"
+				}]);
+
+		this.facade.raiseEvent({
+			type: 			"overlay.show",
+			id: 			id,
+			shapes: 		[shape],
+			node:			cross,
+			nodePosition:	shape instanceof ORYX.Core.Edge ? "START" : "NW"
+		});		
+		
+		this.raisedEventIds.push(id);
+		
+		return cross;		
+	}
     
 });
