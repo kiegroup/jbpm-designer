@@ -1,7 +1,6 @@
 
 /**
- * Copyright (c) 2006
- * Martin Czuchra, Nicolas Peters, Daniel Polak, Willi Tscheschner, Gero Decker
+ * Copyright (c) 2008, Gero Decker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -24,55 +23,46 @@
 if (!ORYX.Plugins) 
     ORYX.Plugins = new Object();
 
-ORYX.Plugins.SimplePnmlexport = Clazz.extend({
+ORYX.Plugins.SyntaxChecker = Clazz.extend({
 
     facade: undefined,
     
     construct: function(facade){
+		
         this.facade = facade;
         
+		this.active = false;
+		this.el 	= undefined;
+		this.callback = undefined;
+		
         this.facade.offer({
-            'name': "simplebpmntopnml",
-            'functionality': this.export.bind(this),
-            'group': "Export",
-            'icon': ORYX.PATH + "images/bpmn2pn.png",
-            'description': "Export as PNML",
-            'index': 1,
+            'name': "Syntax Checker",
+            'functionality': this.showOverlay.bind(this),
+            'group': "Verification",
+            'icon': ORYX.PATH + "images/error_go.png",
+            'description': "Check Syntax",
+            'index': 0,
             'minShape': 0,
             'maxShape': 0
         });
-        
-    },
-
-    export: function(){
-
-		// raise loading enable event
-        this.facade.raiseEvent({
-            type: 'loading.enable'
-        });
-            
-		// asynchronously ...
-        window.setTimeout((function(){
-			
-			// ... save synchronously
-            this.exportSynchronously();
-			
-			// raise loading disable event.
-            this.facade.raiseEvent({
-                type: 'loading.disable'
-            });
-			
-        }).bind(this), 10);
-
-		return true;
-    },
-
-    exportSynchronously: function() {
-
-        var resource = location.href;
 		
-		//get current DOM content
-		var serializedDOM = DataManager.__persistDOM(this.facade);
+    },
+    
+	showOverlay: function(){
+
+		if (this.active) {
+			
+			this.facade.raiseEvent({
+				type: 	"overlay.hide",
+				id: 	"syntaxcheck"
+			});
+			this.active = !this.active;				
+
+		} else {
+			
+			// Force to set all resource IDs
+			var serializedDOM = DataManager.serializeDOM( this.facade );
+
 		//add namespaces
 		serializedDOM = '<?xml version="1.0" encoding="utf-8"?>' +
 		'<html xmlns="http://www.w3.org/1999/xhtml" ' +
@@ -92,7 +82,7 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
 		'</head><body>' +
 		serializedDOM +
 		'</body></html>';
-		
+
 		//convert to RDF
 		var parser = new DOMParser();
 		var parsedDOM = parser.parseFromString(serializedDOM, "text/xml");
@@ -108,21 +98,48 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
 //			serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
 			
 			// Send the request to the server.
-			new Ajax.Request(ORYX.CONFIG.SIMPLE_PNML_EXPORT_URL, {
+			new Ajax.Request(ORYX.CONFIG.SYNTAXCHECKER_URL, {
 				method: 'POST',
 				asynchronous: false,
 				parameters: {
-					resource: resource,
+					resource: location.href,
 					data: serialized_rdf
 				},
 				onSuccess: function(request){
-						var win = window.open('data:text/xml,' +request.responseText, '_blank', "resizable=yes,width=640,height=480,toolbar=0,scrollbars=yes");
-				}
+						var resp = request.responseText.evalJSON();
+
+						if (resp.conflicttransitions) {
+						if (resp.conflicttransitions.length > 0) {
+						
+							// Get all Valid ResourceIDs and collect all shapes
+							var errorshapes = resp.conflicttransitions.collect(function(res){ return this.facade.getCanvas().getChildShapeByResourceId( res ) }.bind(this)).compact();
+
+							this.facade.raiseEvent({
+								type: 			"overlay.show",
+								id: 			"syntaxcheck",
+								shapes: 		errorshapes,
+								attributes: 	{fill: "red", stroke: "black"}
+							});
+
+							this.active = !this.active;				
+
+						} else {
+
+							Ext.Msg.alert("Oryx", "There are no syntax errors.");
+						}
+						} else {
+							Ext.Msg.alert("Oryx", "Invalid answer from server.");
+						}
+				}.bind(this)
 			});
 			
 		} catch (error){
 			this.facade.raiseEvent({type:'loading.disable'});
 			Ext.Msg.alert("Oryx", error);
 	 	}
-	}
+
+		}
+		
+	}	
+    
 });

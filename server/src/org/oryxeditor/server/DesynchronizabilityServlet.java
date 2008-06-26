@@ -2,7 +2,10 @@ package org.oryxeditor.server;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,27 +15,24 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.configuration.Configuration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-
 import de.hpi.bpmn.BPMNDiagram;
-import de.hpi.bpmn.rdf.BPMNRDFImporter;
-import de.hpi.bpmn2pn.converter.StandardConverter;
+import de.hpi.bpmn.validation.BPMNSyntaxChecker;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
-import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
+import de.hpi.interactionnet.localmodelgeneration.DesynchronizabilityChecker;
 import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
-import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
+import de.hpi.petrinet.SyntaxChecker;
+import de.hpi.petrinet.Transition;
 
 /**
- * Copyright (c) 2008 Lutz Gericke, Gero Decker
+ * Copyright (c) 2008 Gero Decker
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,13 +52,13 @@ import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class SimplePNMLExporter extends HttpServlet {
+public class DesynchronizabilityServlet extends HttpServlet {
 	private static final long serialVersionUID = -8374877061121257562L;
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
 		try {
-			res.setContentType("text/pnml+xml");
+			res.setContentType("text/json");
 
 			String rdf = req.getParameter("data");
 
@@ -66,19 +66,9 @@ public class SimplePNMLExporter extends HttpServlet {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-			Document pnmlDoc = builder.newDocument();
 			
-			processDocument(document, pnmlDoc);
+			processDocument(document, res.getWriter());
 			
-			OutputFormat format = new OutputFormat(pnmlDoc);
-
-			StringWriter stringOut = new StringWriter();
-			XMLSerializer serial2 = new XMLSerializer(stringOut, format);
-			serial2.asDOMSerializer();
-
-			serial2.serialize(pnmlDoc.getDocumentElement());
-
-			res.getWriter().print(stringOut.toString());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -86,42 +76,61 @@ public class SimplePNMLExporter extends HttpServlet {
 		}
 	}
 
-	protected void processDocument(Document document, Document pnmlDoc) {
-		String type = getStencilSet(document);
-		if (type.equals("ibpmn.json"))
-			processIBPMN(document, pnmlDoc);
-		else if (type.equals("bpmn.json") || type.equals("bpmnexec.json"))
-			processBPMN(document, pnmlDoc);
-		else if (type.equals("interactionpetrinets.json"))
-			processIPN(document, pnmlDoc);
+	protected void processDocument(Document document, PrintWriter writer) {
+		List<Transition> conflictingTransitions = new ArrayList<Transition>();
+		
+		try {
+			String type = getStencilSet(document);
+			if (type.equals("ibpmn.json"))
+				processIBPMN(document, conflictingTransitions);
+			else if (type.equals("interactionpetrinets.json"))
+				processIPN(document, conflictingTransitions);
+
+			writer.print("{\"conflicttransitions\": [");
+			boolean isFirst = true;
+			for (Transition t: conflictingTransitions) {
+				if (isFirst)
+					isFirst = false;
+				else
+					writer.print(",");
+				writer.print("\""+t.getId()+"\"");
+			}
+			writer.print("]}");
+
+		} catch (SyntaxErrorException e) {
+			writer.print("{\"syntaxerrors\": {");
+			boolean isFirst = true;
+			for (Entry<String,String> error: e.getErrors().entrySet()) {
+				if (isFirst)
+					isFirst = false;
+				else
+					writer.print(",");
+				writer.print("\""+error.getKey()+"\": \""+error.getValue()+"\"");
+			}
+			writer.print("}}");
+		}
 	}
 	
-	protected void processBPMN(Document document, Document pnmlDoc) {
-		BPMNRDFImporter importer = new BPMNRDFImporter(document);
-		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
-
-		PetriNet net = new StandardConverter(diagram).convert();
-
-		PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
-		exp.savePetriNet(pnmlDoc, net);
-	}
-
-	protected void processIBPMN(Document document, Document pnmlDoc) {
+	protected void processIBPMN(Document document, List<Transition> conflictingTransitions) throws SyntaxErrorException {
 		IBPMNRDFImporter importer = new IBPMNRDFImporter(document);
 		BPMNDiagram diagram = (IBPMNDiagram) importer.loadIBPMN();
+		BPMNSyntaxChecker checker = diagram.getSyntaxChecker();
+		if (!checker.checkSyntax())
+			throw new SyntaxErrorException(checker.getErrors());
 
-		PetriNet net = new IBPMNConverter(diagram).convert();
+		InteractionNet net = (InteractionNet)new IBPMNConverter(diagram).convert();
 
-		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
-		exp.savePetriNet(pnmlDoc, net);
+		new DesynchronizabilityChecker().check(net, conflictingTransitions);
 	}
 
-	protected void processIPN(Document document, Document pnmlDoc) {
+	protected void processIPN(Document document, List<Transition> conflictingTransitions) throws SyntaxErrorException {
 		InteractionNetRDFImporter importer = new InteractionNetRDFImporter(document);
 		InteractionNet net = (InteractionNet) importer.loadInteractionNet();
+		SyntaxChecker checker = net.getSyntaxChecker();
+		if (!checker.checkSyntax())
+			throw new SyntaxErrorException(checker.getErrors());
 		
-		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
-		exp.savePetriNet(pnmlDoc, net);
+		new DesynchronizabilityChecker().check(net, conflictingTransitions);
 	}
 
 
@@ -144,6 +153,12 @@ public class SimplePNMLExporter extends HttpServlet {
 		return null;
 	}
 
+//	protected String getContent(Node node) {
+//		if (node != null && node.hasChildNodes())
+//			return node.getFirstChild().getNodeValue();
+//		return null;
+//	}
+	
 	private String getAttributeValue(Node node, String attribute) {
 		Node item = node.getAttributes().getNamedItem(attribute);
 		if (item != null)

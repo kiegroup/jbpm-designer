@@ -12,7 +12,7 @@ import de.hpi.petrinet.Place;
 import de.hpi.petrinet.TauTransition;
 import de.hpi.petrinet.Transition;
 
-public abstract class PetriNetReducer {
+public abstract class CopyOfPetriNetReducer {
 	
 	private int freshNameCounter = 1;
 	

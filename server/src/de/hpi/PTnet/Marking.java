@@ -1,5 +1,7 @@
 package de.hpi.PTnet;
 
+import java.util.List;
+
 import de.hpi.petrinet.Place;
 
 
@@ -10,5 +12,7 @@ public interface Marking extends de.hpi.petrinet.Marking {
 	void addToken(Place p);
 	
 	boolean removeToken(Place p);
+	
+	List<Place> getMarkedPlaces();
 	
 }

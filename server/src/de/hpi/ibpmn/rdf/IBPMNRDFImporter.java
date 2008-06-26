@@ -656,7 +656,7 @@ public class IBPMNRDFImporter {
 	}
 	
 	protected String getResourceId(String id) {
-		return id.substring(id.indexOf('#'));
+		return id.substring(id.indexOf('#')+1);
 	}
 
 	protected Node getChild(Node n, String name) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.PTNet;
+import de.hpi.PTnet.impl.WeakTerminationChecker;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.petrinet.Transition;
 

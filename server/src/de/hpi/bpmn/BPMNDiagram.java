@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.hpi.bpmn.validation.BPMNSyntaxChecker;
+
 /**
  * 
  * @author Gero.Decker
@@ -16,6 +18,10 @@ public class BPMNDiagram implements Container {
 	protected List<DataObject> dataObjects;
 	protected List<Edge> edges;
 	protected List<Container> processes;
+	
+	public BPMNSyntaxChecker getSyntaxChecker() {
+		return new BPMNSyntaxChecker(this);
+	}
 	
 	public String getTitle() {
 		return title;

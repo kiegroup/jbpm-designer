@@ -2,7 +2,8 @@ package org.oryxeditor.server;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.PrintWriter;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,23 +17,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
-import de.hpi.bpmn2pn.converter.StandardConverter;
 import de.hpi.ibpmn.IBPMNDiagram;
-import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
-import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
 import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
-import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
+import de.hpi.petrinet.SyntaxChecker;
 
 /**
- * Copyright (c) 2008 Lutz Gericke, Gero Decker
+ * Copyright (c) 2008 Gero Decker
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,13 +46,13 @@ import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class SimplePNMLExporter extends HttpServlet {
-	private static final long serialVersionUID = -8374877061121257562L;
+public class SyntaxCheckerServlet extends HttpServlet {
+	private static final long serialVersionUID = 929153463101368351L;
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
 		try {
-			res.setContentType("text/pnml+xml");
+			res.setContentType("text/json");
 
 			String rdf = req.getParameter("data");
 
@@ -66,19 +60,9 @@ public class SimplePNMLExporter extends HttpServlet {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-			Document pnmlDoc = builder.newDocument();
 			
-			processDocument(document, pnmlDoc);
+			processDocument(document, res.getWriter());
 			
-			OutputFormat format = new OutputFormat(pnmlDoc);
-
-			StringWriter stringOut = new StringWriter();
-			XMLSerializer serial2 = new XMLSerializer(stringOut, format);
-			serial2.asDOMSerializer();
-
-			serial2.serialize(pnmlDoc.getDocumentElement());
-
-			res.getWriter().print(stringOut.toString());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -86,42 +70,48 @@ public class SimplePNMLExporter extends HttpServlet {
 		}
 	}
 
-	protected void processDocument(Document document, Document pnmlDoc) {
+	protected void processDocument(Document document, PrintWriter writer) {
 		String type = getStencilSet(document);
-		if (type.equals("ibpmn.json"))
-			processIBPMN(document, pnmlDoc);
-		else if (type.equals("bpmn.json") || type.equals("bpmnexec.json"))
-			processBPMN(document, pnmlDoc);
+		SyntaxChecker checker = null;
+		if (type.equals("bpmn.json") || type.equals("bpmneec.json"))
+			checker = getCheckerBPMN(document);
+		else if (type.equals("ibpmn.json"))
+			checker = getCheckerIBPMN(document);
 		else if (type.equals("interactionpetrinets.json"))
-			processIPN(document, pnmlDoc);
+			checker = getCheckerIPN(document);
+
+		if (checker == null || checker.checkSyntax()) {
+			writer.print("{}");
+		} else {
+			writer.print("{");
+			boolean isFirst = true;
+			for (Entry<String,String> error: checker.getErrors().entrySet()) {
+				if (isFirst)
+					isFirst = false;
+				else
+					writer.print(",");
+				writer.print("\""+error.getKey()+"\": \""+error.getValue()+"\"");
+			}
+			writer.print("}");
+		}
 	}
 	
-	protected void processBPMN(Document document, Document pnmlDoc) {
+	protected SyntaxChecker getCheckerBPMN(Document document) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
-		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
-
-		PetriNet net = new StandardConverter(diagram).convert();
-
-		PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
-		exp.savePetriNet(pnmlDoc, net);
+		BPMNDiagram diagram = importer.loadBPMN();
+		return diagram.getSyntaxChecker();
 	}
 
-	protected void processIBPMN(Document document, Document pnmlDoc) {
+	protected SyntaxChecker getCheckerIBPMN(Document document) {
 		IBPMNRDFImporter importer = new IBPMNRDFImporter(document);
 		BPMNDiagram diagram = (IBPMNDiagram) importer.loadIBPMN();
-
-		PetriNet net = new IBPMNConverter(diagram).convert();
-
-		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
-		exp.savePetriNet(pnmlDoc, net);
+		return diagram.getSyntaxChecker();
 	}
 
-	protected void processIPN(Document document, Document pnmlDoc) {
+	protected SyntaxChecker getCheckerIPN(Document document) {
 		InteractionNetRDFImporter importer = new InteractionNetRDFImporter(document);
 		InteractionNet net = (InteractionNet) importer.loadInteractionNet();
-		
-		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
-		exp.savePetriNet(pnmlDoc, net);
+		return net.getSyntaxChecker();
 	}
 
 
@@ -134,7 +124,7 @@ public class SimplePNMLExporter extends HttpServlet {
 		node = node.getFirstChild();
 		while (node != null) {
 			 String about = getAttributeValue(node, "rdf:about");
-			 if (about != null && about.contains("oryxcanvas")) break;
+			 if (about != null && about.contains("canvas")) break;
 			 node = node.getNextSibling();
 		}
 		String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
@@ -144,6 +134,12 @@ public class SimplePNMLExporter extends HttpServlet {
 		return null;
 	}
 
+//	protected String getContent(Node node) {
+//		if (node != null && node.hasChildNodes())
+//			return node.getFirstChild().getNodeValue();
+//		return null;
+//	}
+	
 	private String getAttributeValue(Node node, String attribute) {
 		Node item = node.getAttributes().getNamedItem(attribute);
 		if (item != null)
