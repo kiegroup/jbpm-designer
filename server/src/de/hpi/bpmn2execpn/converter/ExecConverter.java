@@ -408,18 +408,11 @@ public class ExecConverter extends Converter {
 			ConversionContext c) {
 		super.handleSubProcess(net, process, c);
 		if (process.isAdhoc()) {
-			handleSubProcessAdHoc(net, process, c);
+			handleAdHocSubProcess(net, process, c);
 		}
 	}
 	
-	/* TODO:   There are a number of tasks that remain to be done here:
-	 * 
-	 * - Integrating data dependencies as guards
-	 * - Connecting auto skip with context places
-	 * 
-	 * - Test Data CC and Skipper ..
-	 */
-	protected void handleSubProcessAdHoc(PetriNet net, SubProcess process, ConversionContext c) {
+	protected void handleAdHocSubProcess(PetriNet net, SubProcess process, ConversionContext c) {
 		SubProcessPlaces pl = c.getSubprocessPlaces(process);
 		boolean isParallel = process.isParallelOrdering();	
 
