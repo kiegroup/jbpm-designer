@@ -13,8 +13,7 @@
 			"icon":				"new_diagram.png",
 			"mayBeRoot":		true,
 			"hide":				true,
-			"roles":			["fromtoall",
-								 "canContainArtifacts"],
+			"roles":			["canContainArtifacts"],
 			"properties": [
 				{
 					"id":"id",
@@ -2738,6 +2737,7 @@
 					console.log("test");
 					console.log(lanes[0].properties["oryx-showCaption"]);
 					lanes[0].properties["oryx-showCaption"] = false;
+					console.log(lanes[0].properties["oryx-showCaption"]);
 				
 				if(lanes.length > 0) {
 					
@@ -2749,7 +2749,6 @@
 					var shapeHeight = 0;
 					var topBound = 0;
 					lanes.each(function(lane) {
-						lane.properties["oryx-showCaption"] = true;
 						var ul = lane.bounds.upperLeft();
 						var lr = lane.bounds.lowerRight();
 						ul.y = shapeHeight;
@@ -3795,7 +3794,7 @@
 					"description":"Text description",
 					"readonly":false,
 					"optional":true,
-					"refToView":"text",
+					"refToView":"text_name",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -3805,6 +3804,7 @@
 					"title":"State",
 					"value":"",
 					"description":"",
+					"refToView":"text_state",
 					"readonly":false,
 					"optional":true
 				},
@@ -3861,7 +3861,6 @@
 			"icon":"startevent/node.event.start.png",		
 			"roles": [
 				"sequence_start",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -4116,7 +4115,6 @@
 			"icon":"startevent/node.event.timer.start.png",
 			"roles": [
 				"sequence_start",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -4244,7 +4242,6 @@
 			"icon":"startevent/node.event.conditional.start.png",
 			"roles": [
 				"sequence_start",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -4362,7 +4359,6 @@
 			"icon":"startevent/node.event.signal.start.png",
 			"roles": [
 				"sequence_start",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -4610,7 +4606,6 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -4893,7 +4888,7 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
+				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -5052,7 +5047,6 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -5192,11 +5186,9 @@
 			"icon":"intermediateevent/node.event.error.intermediate.png",
 			"roles":[
 				"sequence_start",
-				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"tc",
+				"onBoundaryOnly",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary"
@@ -5323,11 +5315,9 @@
 			"icon":"intermediateevent/node.event.cancel.intermediate.png",
 			"roles":[
 				"sequence_start",
-				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"tc",
+				"onBoundaryOnly",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary"
@@ -5442,12 +5432,8 @@
 			"view":"intermediateevent/node.event.compensation.catching.intermediate.svg",
 			"icon":"intermediateevent/node.event.compensation.catching.intermediate.png",
 			"roles":[
-				"sequence_start",
-				"sequence_end",
-				"messageflow_end",
-				"to_task_event",
+				"onBoundaryOnly",
 				"from_task_event",
-				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary"
@@ -5575,7 +5561,6 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -5704,7 +5689,6 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -5835,7 +5819,6 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -5979,7 +5962,6 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -6121,7 +6103,6 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -6253,7 +6234,7 @@
 			"roles":[
 				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
+				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -6382,8 +6363,6 @@
 			"icon":"intermediateevent/node.event.link.catching.intermediate.png",
 			"roles":[
 				"sequence_start",
-				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -6521,9 +6500,7 @@
 			"view":"intermediateevent/node.event.link.throwing.intermediate.svg",
 			"icon":"intermediateevent/node.event.link.throwing.intermediate.png",
 			"roles":[
-				"sequence_start",
 				"sequence_end",
-				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -6662,7 +6639,6 @@
 			"icon":"endevent/node.event.end.png",
 			"roles":[
 				"sequence_end",
-				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -6913,7 +6889,6 @@
 			"icon":"endevent/node.event.error.end.png",
 			"roles":[
 				"sequence_end",
-				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -7027,7 +7002,6 @@
 			"icon":"endevent/node.event.cancel.end.png",
 			"roles":[
 				"sequence_end",
-				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -7132,7 +7106,6 @@
 			"icon":"endevent/node.event.compensation.end.png",
 			"roles":[
 				"sequence_end",
-				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -7248,7 +7221,6 @@
 			"icon":"endevent/node.event.signal.end.png",
 			"roles":[
 				"sequence_end",
-				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -7364,7 +7336,6 @@
 			"icon":"endevent/node.event.multiple.end.png",
 			"roles":[
 				"sequence_end",
-				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -7469,7 +7440,6 @@
 			"icon":"endevent/node.event.terminate.end.png",
 			"roles":[
 				"sequence_end",
-				"messageflow_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
@@ -8378,7 +8348,7 @@
 			{
 				"role":"BPMNDiagram",
 				"contains": [
-					"Pool", "CollapsedPool", "tc"
+					"Pool", "CollapsedPool", "tc", "onBoundaryOnly"
 				]
 			},
 			{

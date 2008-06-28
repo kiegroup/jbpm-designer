@@ -9,17 +9,17 @@
    version="1.0">
   <defs></defs>
   <oryx:magnets>
-  	<oryx:magnet oryx:cx="0" oryx:cy="49" oryx:anchors="left" />
-  	<oryx:magnet oryx:cx="249" oryx:cy="99" oryx:anchors="bottom" />
-  	<oryx:magnet oryx:cx="499" oryx:cy="49" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="0" oryx:cy="29" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="249" oryx:cy="59" oryx:anchors="bottom" />
+  	<oryx:magnet oryx:cx="499" oryx:cy="29" oryx:anchors="right" />
   	<oryx:magnet oryx:cx="249" oryx:cy="0" oryx:anchors="top" />
-  	<oryx:magnet oryx:cx="249" oryx:cy="49" oryx:default="yes" />
+  	<oryx:magnet oryx:cx="249" oryx:cy="29" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill" >
-    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="500" height="100" stroke="black" fill="white" fill-opacity=".3" />
-    <rect id="border" oryx:resize="vertical horizontal" x="0" y="0" width="500" height="100" stroke="black" stroke-width="1" fill="none" />
+    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="500" height="60" stroke="black" fill="white" fill-opacity=".3" />
+    <rect id="border" oryx:resize="vertical horizontal" x="0" y="0" width="500" height="60" stroke="black" stroke-width="1" fill="none" />
 	
-    <text x="250" y="50" font-size="20" id="text_v" oryx:align="middle center" oryx:anchors="" fill="black" stroke="black"></text>
+    <text x="250" y="30" font-size="20" id="text_v" oryx:align="middle center" oryx:anchors="" fill="black" stroke="black"></text>
 
   </g>
 </svg>
