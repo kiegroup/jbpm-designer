@@ -162,15 +162,8 @@ var DataManager = {
 			DataManager.graft(XMLNS.XHTML,
 				$$('.' + PROCESSDATA_REF)[0], [
 				
-				'div', {'id': id}, [
-					'a', { 'href': 'http://www.apfelfabrik.de/dummyresource', 'rel':'raziel-entry' }]
+				'div', {'id': id}
 			]);
-			
-			this._triples.push(new ERDF.Triple(
-				new ERDF.Resource(id),
-				{prefix: 'raziel', name: 'entry'},
-				new ERDF.Resource('http://www.apfelfabrik.de/dummyresource')			
-			));
 			
 		} else {
 			
