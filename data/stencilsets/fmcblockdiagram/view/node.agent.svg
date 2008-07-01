@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:oryx="http://www.b3mn.org/oryx"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    width="102"
    height="82"
    version="1.0">
@@ -15,7 +13,7 @@
     <oryx:magnet oryx:cx="40" oryx:cy="22.5" oryx:anchors="center" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill" oryx:minimumSize="40 15" >
-    <rect id="taskrect" oryx:resize="vertical horizontal" x="0" y="0" width="80" height="45" stroke="black" stroke-width="1" fill="white" />
-      <text font-size="12" id="text" x="40" y="20" oryx:align="middle center" stroke="black"></text>
+    <rect id="agent" oryx:resize="vertical horizontal" x="0" y="0" width="80" height="45" stroke="black" stroke-width="1" fill="white" />
+    <text font-size="12" id="agentname" x="40" y="20" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>
