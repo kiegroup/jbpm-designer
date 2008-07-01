@@ -757,7 +757,6 @@ public class ExecConverter extends Converter {
 		Element xgroup1 = doc.createElement("x:group");
 		th5.appendChild(xgroup1);
 		xgroup1.setAttribute("ref", "instance('ui_settings')/delegationstate");
-		xgroup1.setTextContent("Visibility Rights");
 		
 		Element xgroup2 = doc.createElement("x:group");
 		th5.appendChild(xgroup2);
@@ -800,96 +799,6 @@ public class ExecConverter extends Converter {
 				nameinput.setAttribute("ref", "instance('output-token')/places/processdata[@name='"+dataObjectName+"']/" + attributeName);
 				nameinput.setAttribute("class", "inputclass");
 				td3.appendChild(nameinput);
-				
-				Element buttongroup = doc.createElement("x:group");
-				buttongroup.setAttribute("ref", "instance('ui_settings')/delegationstate");
-				td5.appendChild(buttongroup);
-				
-				// SWITCH Button
-				Element switch1 = doc.createElement("x:switch");
-				buttongroup.appendChild(switch1);	
-				
-				Element case1 = doc.createElement("x:case");
-				case1.setAttribute("id", attributeName + "_writable");
-				switch1.appendChild(case1);	
-				
-					Element xtrigger1 = doc.createElement("x:trigger");
-					xtrigger1.setAttribute("appearance", "minimal");
-					case1.appendChild(xtrigger1);
-				
-					Element image1 = doc.createElement("img");
-					image1.setAttribute("src", "/images/buttons_writable.png");
-					xtrigger1.appendChild(image1);
-					
-					Element xtoggle1 = doc.createElement("x:toggle");
-					xtoggle1.setAttribute("case", attributeName + "_readonly");
-					xtoggle1.setAttribute("ev:event", "DOMActivate");
-					xtrigger1.appendChild(xtoggle1);
-					
-					Element setvalue1_1 = doc.createElement("x:setvalue");
-					setvalue1_1.setAttribute("bind", dataObjectName+"_"+attributeName +".futurereadonly");
-					setvalue1_1.setTextContent("true");
-					xtrigger1.appendChild(setvalue1_1);
-					
-					Element setvalue1_2 = doc.createElement("x:setvalue");
-					setvalue1_2.setAttribute("bind", dataObjectName+"_"+attributeName +".futurewritable");
-					setvalue1_2.setTextContent("false");
-					xtrigger1.appendChild(setvalue1_2);
-				
-				Element case2 = doc.createElement("x:case");
-				case2.setAttribute("id", attributeName + "_readonly");
-				switch1.appendChild(case2);	
-				
-					Element xtrigger2 = doc.createElement("x:trigger");
-					xtrigger2.setAttribute("appearance", "minimal");
-					case2.appendChild(xtrigger2);
-				
-					Element image2 = doc.createElement("img");
-					image2.setAttribute("src", "/images/buttons_readonly.png");
-					xtrigger2.appendChild(image2);
-					
-					Element xtoggle2 = doc.createElement("x:toggle");
-					xtoggle2.setAttribute("case", attributeName + "_invisible");
-					xtoggle2.setAttribute("ev:event", "DOMActivate");
-					xtrigger2.appendChild(xtoggle2);
-					
-					Element setvalue2_1 = doc.createElement("x:setvalue");
-					setvalue2_1.setAttribute("bind", dataObjectName+"_"+attributeName +".futurereadonly");
-					setvalue2_1.setTextContent("false");
-					xtrigger2.appendChild(setvalue2_1);
-					
-					Element setvalue2_2 = doc.createElement("x:setvalue");
-					setvalue2_2.setAttribute("bind", dataObjectName+"_"+attributeName +".futurewritable");
-					setvalue2_2.setTextContent("false");
-					xtrigger2.appendChild(setvalue2_2);
-				
-				Element case3 = doc.createElement("x:case");
-				case3.setAttribute("id", attributeName + "_invisible");
-				switch1.appendChild(case3);	
-				
-					Element xtrigger3 = doc.createElement("x:trigger");
-					xtrigger3.setAttribute("appearance", "minimal");
-					case3.appendChild(xtrigger3);
-				
-					Element image3 = doc.createElement("img");
-					image3.setAttribute("src", "/images/buttons_invisible.png");
-					xtrigger3.appendChild(image3);
-					
-					Element xtoggle3 = doc.createElement("x:toggle");
-					xtoggle3.setAttribute("case", attributeName + "_writable");
-					xtoggle3.setAttribute("ev:event", "DOMActivate");
-					xtrigger3.appendChild(xtoggle3);
-					
-					Element setvalue3_1 = doc.createElement("x:setvalue");
-					setvalue3_1.setAttribute("bind", dataObjectName+"_"+attributeName +".futurereadonly");
-					setvalue3_1.setTextContent("false");
-					xtrigger3.appendChild(setvalue3_1);
-					
-					Element setvalue3_2 = doc.createElement("x:setvalue");
-					setvalue3_2.setAttribute("bind", dataObjectName+"_"+attributeName +".futurewritable");
-					setvalue3_2.setTextContent("true");
-					xtrigger3.appendChild(setvalue3_2);
-				// end SWITCH Button
 				
 				Element reevaluationgroup = doc.createElement("x:group");
 				reevaluationgroup.setAttribute("ref", "instance('ui_settings')/reevaluationstate");
