@@ -3,7 +3,7 @@
 	<x:output bind="executionstate"><h2> Execute task </h2></x:output>
 	<x:output bind="reviewstate"><h2> Review task </h2></x:output>
 </x:group>
-<br/><br/>
+<!--<br/><br/>-->
 <table bgcolor="lightyellow"><tr><td>
 <x:group ref="instance('ui_settings')/delegategroup">Delegate:</x:group>
 </td>
@@ -50,29 +50,6 @@
 		<x:group bind="fade.deadline">Deadline:</x:group>
 	</td><td>
 		<x:group bind="fade.deadline"><x:input class="metainfo" ref="instance('output-token')/places/metadata/deadline" /></x:group>
-	</td><td /><td><x:group ref="instance('ui_settings')/delegationstate">Set all rights to </x:group></td><td>
-		<x:group ref="instance('ui_settings')/delegationstate">
-			<table>
-			<tr><th>
-		    <x:trigger appearance = 'minimal'>
-		       <img src="/images/buttons_writable.png" />
-				<x:toggle case="blub_writable" ev:event="DOMActivate" />
-		    </x:trigger>
-			</th>
-			<th>
-		    <x:trigger appearance = 'minimal'>
-		       <img src="/images/buttons_readonly.png" />
-				<x:toggle case="blub_readonly" ev:event="DOMActivate" />
-		    </x:trigger>
-			</th>
-			<th>
-		    <x:trigger appearance = 'minimal'>
-		       <img src="/images/buttons_invisible.png" />
-				<x:toggle case="blub_invisible" ev:event="DOMActivate" />
-		    </x:trigger>
-			</th></tr>
-			</table>
-			</x:group>
-			</td></tr>
+	</td><td /></tr>
 </table>
-<br/></div>
+<!--<br/>--></div>
