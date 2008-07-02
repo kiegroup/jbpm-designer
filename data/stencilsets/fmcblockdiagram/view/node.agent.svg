@@ -14,6 +14,8 @@
   </oryx:magnets>
   <g pointer-events="fill" oryx:minimumSize="40 15" >
     <rect id="agent" oryx:resize="vertical horizontal" x="0" y="0" width="80" height="45" stroke="black" stroke-width="1" fill="white" />
-    <text font-size="12" id="agentname" x="40" y="20" oryx:align="middle center" stroke="black"></text>
+    <a id="theanchor">
+      <text font-size="12" id="text" x="40" y="20" oryx:align="middle center" stroke="black"></text>
+    </a>
   </g>
 </svg>
