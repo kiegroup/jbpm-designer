@@ -69,11 +69,11 @@ public class BPMNDiagram implements Container {
 		getAllNodesRecursively(this, allNodes);
 		
 		// handle subprocesses => trivial
-//		for (Iterator<Node> niter = allNodes.iterator(); niter.hasNext(); ) {
-//			Node node = niter.next();
-//			if (node instanceof SubProcess)
-//				handleSubProcess((SubProcess)node);
-//		}
+		for (Iterator<Node> niter = allNodes.iterator(); niter.hasNext(); ) {
+			Node node = niter.next();
+			if (node instanceof SubProcess)
+				handleSubProcess((SubProcess)node);
+		}
 		
 		// identify components within allNodes
 		while (allNodes.size() > 0) {

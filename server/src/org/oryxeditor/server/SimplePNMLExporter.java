@@ -134,7 +134,7 @@ public class SimplePNMLExporter extends HttpServlet {
 		node = node.getFirstChild();
 		while (node != null) {
 			 String about = getAttributeValue(node, "rdf:about");
-			 if (about != null && about.contains("oryxcanvas")) break;
+			 if (about != null && about.contains("canvas")) break;
 			 node = node.getNextSibling();
 		}
 		String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
