@@ -48,7 +48,7 @@ public class Preprocessor {
 	protected void handleSequenceFlow(Container process) {
 		for (Node node: process.getChildNodes()) {
 			if (node instanceof Activity || node instanceof Event) {
-				if (countSequenceFlows(node.getIncomingEdges()) > 0) {
+				if (countSequenceFlows(node.getIncomingEdges()) > 1) {
 					// create new xor-gateway
 					XORDataBasedGateway g = factory.createXORDataBasedGateway();
 					g.setParent(node.getParent());
@@ -65,7 +65,7 @@ public class Preprocessor {
 					flow.setSource(g);
 					flow.setTarget(node);
 				}
-				if (countSequenceFlows(node.getOutgoingEdges()) > 0) {
+				if (countSequenceFlows(node.getOutgoingEdges()) > 1) {
 					// create new xor-gateway
 					ANDGateway g = factory.createANDGateway();
 					g.setParent(node.getParent());
@@ -146,7 +146,7 @@ public class Preprocessor {
 			for (Node node: endNodes) {
 				// introduce end plain event
 				EndPlainEvent e = factory.createEndPlainEvent();
-				e.setParent(startNodes.get(0).getParent());
+				e.setParent(endNodes.get(0).getParent());
 				e.setProcess(process);
 				
 				// add sequence flow

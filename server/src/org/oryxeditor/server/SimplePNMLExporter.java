@@ -20,7 +20,9 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
+import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.StandardConverter;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.converter.IBPMNConverter;
@@ -99,6 +101,7 @@ public class SimplePNMLExporter extends HttpServlet {
 	protected void processBPMN(Document document, Document pnmlDoc) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
 		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
+		new Preprocessor(diagram, new BPMNFactory()).process();
 
 		PetriNet net = new StandardConverter(diagram).convert();
 

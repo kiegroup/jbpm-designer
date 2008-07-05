@@ -21,15 +21,16 @@ import de.hpi.petrinet.SyntaxChecker;
 
 public class BPMNSyntaxChecker implements SyntaxChecker {
 	
-	private static final String NO_SOURCE = "Each edge must have a source";
-	private static final String NO_TARGET = "Each edge must have a target";
-	private static final String FLOWOBJECT_NOT_CONTAINED_IN_PROCESS = "Each flow object must be contained in a process";
-	private static final String ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "End events must have incoming sequence flow";
-	private static final String STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "Start events must have outgoing sequence flow";
-	private static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "Intermediate events must have incoming sequence flow";
-	private static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "Start events must not have incoming sequence flow";
-	private static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "Attached intermediate events must not have incoming sequence flow";
-	private static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "End events must not have outgoing sequence flow";
+	private static final String NO_SOURCE = "An edge must have a source.";
+	private static final String NO_TARGET = "An edge must have a target.";
+	private static final String DIFFERENT_PROCESS = "Source and target node must be contained in the same process.";
+	private static final String FLOWOBJECT_NOT_CONTAINED_IN_PROCESS = "a flow object must be contained in a process.";
+	private static final String ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An end event must have incoming sequence flow.";
+	private static final String STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "A start event must have outgoing sequence flow.";
+	private static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An intermediate event must have incoming sequence flow.";
+	private static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "Start events must not have incoming sequence flow.";
+	private static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "Attached intermediate events must not have incoming sequence flow.";
+	private static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "End events must not have outgoing sequence flow.";
 	private static final String EVENTBASEDGATEWAY_BADCONTINUATION = "Event-based gateways must not be followed by gateways or subprocesses.";
 
 	protected BPMNDiagram diagram;
@@ -65,6 +66,10 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 			if (edge.getTarget() == null) 
 				addError(edge, NO_TARGET);
 				//return false;
+			if (edge instanceof ControlFlow) {
+				if (((Node)edge.getSource()).getProcess() != ((Node)edge.getTarget()).getProcess())
+					addError(edge, DIFFERENT_PROCESS);
+			}
 		}
 		return true;
 	}
