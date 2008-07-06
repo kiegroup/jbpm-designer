@@ -19,6 +19,9 @@ import org.xml.sax.SAXException;
 
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
+import de.hpi.diagram.Diagram;
+import de.hpi.epc.rdf.EPCDiagramRDFImporter;
+import de.hpi.epc.validation.EPCSyntaxChecker;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
@@ -79,6 +82,8 @@ public class SyntaxCheckerServlet extends HttpServlet {
 			checker = getCheckerIBPMN(document);
 		else if (type.equals("interactionpetrinets.json"))
 			checker = getCheckerIPN(document);
+		else if (type.equals("epc.json"))
+			checker = getCheckerEPC(document);
 
 		if (checker == null || checker.checkSyntax()) {
 			writer.print("{}");
@@ -112,6 +117,12 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		InteractionNetRDFImporter importer = new InteractionNetRDFImporter(document);
 		InteractionNet net = (InteractionNet) importer.loadInteractionNet();
 		return net.getSyntaxChecker();
+	}
+	
+	protected SyntaxChecker getCheckerEPC(Document document) {
+		EPCDiagramRDFImporter importer = new EPCDiagramRDFImporter(document);
+		Diagram diagram = importer.loadEPCDiagram();
+		return new EPCSyntaxChecker(diagram);
 	}
 
 

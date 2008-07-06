@@ -39,16 +39,18 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 */
 	construct: function(facade) {
 		this.facade = facade;
-		
-		this.facade.offer({
-			'name':"Check EPC's Syntax",
-			'functionality': this.checkEPC.bind(this),
-			'group': "epc",
-			'icon': ORYX.PATH + "images/epc_check.png",
-			'description': "Perfom an EPC syntax check",
-			'index': 1,
-			'minShape': 0,
-			'maxShape': 0});
+
+//		Syntax Check has been migrated to syntaxchecker.js-Framework		
+
+//		this.facade.offer({
+//			'name':"Check EPC's Syntax",
+//			'functionality': this.checkEPC.bind(this),
+//			'group': "epc",
+//			'icon': ORYX.PATH + "images/epc_check.png",
+//			'description': "Perfom an EPC syntax check",
+//			'index': 1,
+//			'minShape': 0,
+//			'maxShape': 0});
 
 		this.facade.offer({
 			'name':"Import EPC",
@@ -72,41 +74,42 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			
 	},
 	
+//		Syntax Check has been migrated to syntaxchecker.js-Framework	
 	
-	/**
-	 * Perfoms a EPC syntax check
-	 */
-	checkEPC: function(){	
-		
-		this.facade.raiseEvent({type:'loading.enable', text:'Checking model'});
-		
-		var checkResult = this.doSyntaxCheck();
-		var errorsArray = checkResult[0];
-		var warningsArray = checkResult[1];
-		
-		/*
-		 * 		display results
-		 */
-		
-		var title = "Syntax Check";
-		var content;
-		
-		if (errorsArray.length > 0){
-			content = "Syntax check failed: Found "+errorsArray.length+" errors (and "+warningsArray.length+" warnings)!";
-		} else if (warningsArray.length > 0) {
-			content = "Syntax check was successful (but "+warningsArray.length+" warnings occured)!";
-		} else {
-			content = "Syntax check was successful!";
-		}
-		
-		array = new Array(content);
-		array = array.concat(errorsArray);
-		array = array.concat(warningsArray);
-		
-		this.facade.raiseEvent({type:'loading.disable'});
-		
-		this.openMultiLineMessageDialog(title, array, 250, 400);
-	},
+//	/**
+//	 * Perfoms a EPC syntax check
+//	 */
+//	checkEPC: function(){	
+//		
+//		this.facade.raiseEvent({type:'loading.enable', text:'Checking model'});
+//		
+//		var checkResult = this.doSyntaxCheck();
+//		var errorsArray = checkResult[0];
+//		var warningsArray = checkResult[1];
+//		
+//		/*
+//		 * 		display results
+//		 */
+//		
+//		var title = "Syntax Check";
+//		var content;
+//		
+//		if (errorsArray.length > 0){
+//			content = "Syntax check failed: Found "+errorsArray.length+" errors (and "+warningsArray.length+" warnings)!";
+//		} else if (warningsArray.length > 0) {
+//			content = "Syntax check was successful (but "+warningsArray.length+" warnings occured)!";
+//		} else {
+//			content = "Syntax check was successful!";
+//		}
+//		
+//		array = new Array(content);
+//		array = array.concat(errorsArray);
+//		array = array.concat(warningsArray);
+//		
+//		this.facade.raiseEvent({type:'loading.disable'});
+//		
+//		this.openMultiLineMessageDialog(title, array, 250, 400);
+//	},
 	
 	/**
 	 * Imports an AML or EPML description
@@ -238,289 +241,286 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 
     },
 	
+//		Syntax Check has been migrated to syntaxchecker.js-Framework		
 	
-	/**
-	 * 
-	 * 
-	 * 		Syntax Check - Functions:
-	 * 
-	 * 
-	 */	
-	
-	
-	/**
-	 * Performs the actual syntax check.
-	 * 
-	 * @return an array containing 2 arrays:
-	 *  [ errorsArray, warningsArray ]
-	 */
-	doSyntaxCheck: function(){
-
-		var errorsArray = new Array();
-		var warningsArray = new Array();
-		
-		/*
-		 * 		actual checks
-		 */ 
-		
-		// 1st check: Startevents
-		var numberOfStartEvents = 0;
-		// 2nd check: End-events or -functions
-		var numberOfEndNodes = 0;
-		
-		
-		var nodes = this.facade.getCanvas().getChildNodes();
-		var edges = this.facade.getCanvas().getChildEdges();
-		
-		// 3rd check: empty diagram?
-		if (nodes.length == 0 && edges.length == 0){
-			warningsArray.push(" - Warning: The diagram contains no elements.")
-		}
-		
-		for (var i = 0; i < nodes.size(); i++) {
-			
-			var node = nodes[i];
-			var stencil = node.getStencil();
-			var incoming = node.getIncomingShapes();
-			var outgoing = node.getOutgoingShapes();
-			var stencilName = stencil.title();
-			var title = node.properties["oryx-title"];
-	
-			
-			
-			if (stencil.id() == stencil.namespace() + "Event") {
-			
-				// 4th check: not connected node
-				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
-					errorsArray.push(" - Error: The event '"+title+"' has no incoming and outgoing control flow.");
-					continue;
-				}
-				
-				if (this.numberOfSequenceFlows(incoming) == 0) {
-					numberOfStartEvents += 1;
-				}
-				if (this.numberOfSequenceFlows(outgoing) == 0) {
-					numberOfEndNodes += 1;
-				}
-				// 5th check: to many connections?
-				if (this.numberOfSequenceFlows(incoming) > 1) {
-					errorsArray.push(" - Error: The event '"+title+"' has more than one incoming connections.");
-				}
-				if (this.numberOfSequenceFlows(outgoing) > 1) {
-					errorsArray.push(" - Error: The event '"+title+"' has more than one outgoing connections.");
-				}
-				// 6th check: bipartite?
-				var nextArray = this.getNextEventsOrFunctionsShapes(outgoing);
-				for (var x = 0; x < nextArray.size(); x++){
-					var next = nextArray[x];
-					if (next.getStencil().id() == stencil.namespace() + "Event"){
-						errorsArray.push(" - Error: The event '"+title+"' is followed by another Event.");
-						break;
-					}
-				}							
-			}
-			else if (stencil.id() == stencil.namespace() + "Function") {
-				// 4th check: not connected node
-				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
-					errorsArray.push(" - Error: The function '"+title+"' has no incoming and outgoing control flow.");
-					continue;
-				}
-				
-				// 7th check: Function without input?
-				if (this.numberOfSequenceFlows(incoming) == 0) {
-					errorsArray.push(" - Error: The function '" + title + "' has no incoming control flow.");
-				}
-				if (this.numberOfSequenceFlows(outgoing) == 0) {
-					errorsArray.push(" - Error: The function '" + title + "' has no outgoing control flow.");
-				}
-				// 5th check: to many connections?
-				if (this.numberOfSequenceFlows(incoming) > 1) {
-					errorsArray.push(" - Error: The function '"+title+"' has more than one incoming control flow.");
-				}
-				if (this.numberOfSequenceFlows(outgoing) > 1) {
-					errorsArray.push(" - Error: The function '"+title+"' has more than one outgoing control flow.");
-				}
-				// 6th check: bipartite?
-				var nextArray = this.getNextEventsOrFunctionsShapes(outgoing);
-				for (var x = 0; x < nextArray.size(); x++){
-					var next = nextArray[x];
-					if (next.getStencil().id() == stencil.namespace() + "Function"){
-						errorsArray.push(" - Error: The Function '"+title+"' is followed by another Function.");
-						break;
-					}
-				}
-			} else if (stencil.id() == stencil.namespace() + "ProcessInterface") {
-				// 4th check: not connected node
-				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
-					errorsArray.push(" - Error: The process interface '"+title+"' has no incoming and outgoing control flow.");
-					continue;
-				}
-				// 5th check: to many connections?
-				if (this.numberOfSequenceFlows(incoming) > 1) {
-					errorsArray.push(" - Error: The process interface '"+title+"' has more than one incoming control flow.");
-				}
-				if (this.numberOfSequenceFlows(outgoing) > 1) {
-					errorsArray.push(" - Error: The process interface '"+title+"' has more than one outgoing control flow.");
-				}
-			} else if (stencil.id() == stencil.namespace() + "AndConnector" ||
-						stencil.id() == stencil.namespace() + "XorConnector" ||
-						stencil.id() == stencil.namespace() + "OrConnector") {
-							
-				// 4th check: not connected node
-				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
-					errorsArray.push(" - Error: There is a "+stencilName+" which has no incoming and outgoing control flow.");
-					continue;
-				}
-				// 8th check: no input or output?
-				if (this.numberOfSequenceFlows(incoming) == 0) {
-					errorsArray.push(" - Error: There is a "+stencilName+" without incoming control flow.");
-					continue;
-				}
-				if (this.numberOfSequenceFlows(outgoing) == 0) {
-					errorsArray.push(" - Error: There is a "+stencilName+" without outgoing control flow.");
-					continue;
-				}
-				// 9th check - split or join?
-				if (this.numberOfSequenceFlows(incoming) == 1 && this.numberOfSequenceFlows(outgoing) == 1){
-					warningsArray.push(" - Warning: There is a "+stencilName+" which is neither a split or a join.");
-				}
-				if (this.numberOfSequenceFlows(incoming) > 1 && this.numberOfSequenceFlows(outgoing) > 1){
-					errorsArray.push(" - Error: There is a "+stencilName+" which is both - a split and a join.");
-					continue;
-				}
-				// 5th check: to many connections?
-				if (this.numberOfSequenceFlows(incoming) > 2) {
-					warningsArray.push(" - Warning: There is a "+stencilName+" with more than two incoming control flows.");
-				}
-				if (this.numberOfSequenceFlows(outgoing) > 2) {
-					warningsArray.push(" - Warning: There is a "+stencilName+" with more than two outgoing control flows.");
-				}
-				// 10th check - event before or/xor split?	
-				if (this.numberOfSequenceFlows(outgoing) > 1 && (stencil.id() == stencil.namespace() + "XorConnector" ||
-																stencil.id() == stencil.namespace() + "OrConnector") ){
-					var nextArray = this.getNextEventsOrFunctionsShapes(outgoing);
-
-					for (var x = 0; x < nextArray.size(); x++){
-						var next = nextArray[x];
-						if (next.getStencil().id() == stencil.namespace() + "Function"){
-							errorsArray.push(" - Error: There is a "+stencilName+" split node which is followed by a function");
-							break;
-						}
-					}							
-				}		
-			}
-		}
-		
-		for (var i = 0; i < edges.size(); i++) {
-			
-			var edge = edges[i];
-			var stencil = edge.getStencil();
-			var incoming = edge.getIncomingShapes();
-			var outgoing = edge.getOutgoingShapes();
-			var stencilName = stencil.title();
-			var title = edge.properties["oryx-title"];
-			
-			// 6th check: not connected edges
-			if (incoming.length + outgoing.length == 0){
-				errorsArray.push(" - Error: There is a "+stencilName+" edge without incoming and outgoing connections.");
-				continue;
-			}
-			if (incoming.length == 0){
-				errorsArray.push(" - Error: There is a "+stencilName+" edge without incoming connection.");
-				continue;
-			}
-			if (outgoing.length == 0){
-				errorsArray.push(" - Error: There is a "+stencilName+" edge without outgoing connections.");
-				continue;
-			}
-		}
-		
-		
-		// evaluation of 1st and 2nd checks:
-		if (numberOfStartEvents > 1){
-			errorsArray.push(" - Error: There are several start events. Should be one.");
-		}
-		if (numberOfEndNodes > 1){
-			errorsArray.push(" - Error: There are several end events. Should be one.");
-		}
-		
-		/*
-		 * Return
-		 */
-		
-		return [ errorsArray, warningsArray ];
-	},
-	
-	/**
-	 * returns the number of sequence flows within the edges array
-	 * 
-	 * @param {Array} edges
-	 */
-	numberOfSequenceFlows: function(edges){
-		var count = 0;
-		for (var i = 0; i < edges.size(); i++ ){
-			var edge = edges[i];
-			var stencil = edge.getStencil();
-			if (stencil.id() == stencil.namespace() + "ControlFlow"){
-				count += 1;
-			}
-		}
-		return count;
-	},
-	
-	/**
-	 * returns the next event's or function's shapes
-	 *
-	 * @param {Array} edges
-	 */
-	getNextEventsOrFunctionsShapes: function(edges){
-		newEdges = [];
-		result = []
-		for (var i = 0; i < edges.size(); i++) {
-			var edge
-			newEdges.push(edges[i]);
-		}
-		return this.getNextEventsOrFunctionsShapes_(newEdges, 0, result);
-	},
-
-	/**
-	 * intern - getNextEventsOrFunctionsShapes_
-	 *
-	 * @param {Object} edges
-	 * @param {Object} count
-	 * @param {Object} result
-	 */
-	getNextEventsOrFunctionsShapes_: function(edges, count, result){
-		var newCount = edges.size();
-		for (var i = count; i < edges.size(); i++){
-			var edge = edges[i];
-			var outgoing = edge.getOutgoingShapes();
-			for (var j = 0; j < outgoing.size(); j++){
-				var node = outgoing[j];
-				var stencil = node.getStencil();
-				if (stencil.id() == stencil.namespace() + "Function" ||
-						stencil.id() == stencil.namespace() + "Event"  ){
-					result.push(node);
-				} else {
-					var nextOutgoing = node.getOutgoingShapes();
-					for (var x = 0; x < nextOutgoing.size(); x++){
-						var nextEdge = nextOutgoing[x];
-						var nextStencil = nextEdge.getStencil();
-						if (nextStencil.id() == stencil.namespace() + "ControlFlow"){
-							if (edges.indexOf(nextEdge) == -1){
-								edges.push(nextEdge);
-							}
-						}
-					}
-				}
-			}
-		}
-		if (newCount < edges.size()){
-			return this.getNextEventsOrFunctionsShapes_(edges, count, result);
-		} else {
-			return result;
-		}
-	},
+//	/**
+//	 * 		Syntax Check - Functions:
+//	 */	
+//	
+//	
+//	/**
+//	 * Performs the actual syntax check.
+//	 * 
+//	 * @return an array containing 2 arrays:
+//	 *  [ errorsArray, warningsArray ]
+//	 */
+//	doSyntaxCheck: function(){
+//
+//		var errorsArray = new Array();
+//		var warningsArray = new Array();
+//		
+//		/*
+//		 * 		actual checks
+//		 */ 
+//		
+//		// 1st check: Startevents
+//		var numberOfStartEvents = 0;
+//		// 2nd check: End-events or -functions
+//		var numberOfEndNodes = 0;
+//		
+//		
+//		var nodes = this.facade.getCanvas().getChildNodes();
+//		var edges = this.facade.getCanvas().getChildEdges();
+//		
+//		// 3rd check: empty diagram?
+//		if (nodes.length == 0 && edges.length == 0){
+//			warningsArray.push(" - Warning: The diagram contains no elements.")
+//		}
+//		
+//		for (var i = 0; i < nodes.size(); i++) {
+//			
+//			var node = nodes[i];
+//			var stencil = node.getStencil();
+//			var incoming = node.getIncomingShapes();
+//			var outgoing = node.getOutgoingShapes();
+//			var stencilName = stencil.title();
+//			var title = node.properties["oryx-title"];
+//	
+//			
+//			
+//			if (stencil.id() == stencil.namespace() + "Event") {
+//			
+//				// 4th check: not connected node
+//				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
+//					errorsArray.push(" - Error: The event '"+title+"' has no incoming and outgoing control flow.");
+//					continue;
+//				}
+//				
+//				if (this.numberOfSequenceFlows(incoming) == 0) {
+//					numberOfStartEvents += 1;
+//				}
+//				if (this.numberOfSequenceFlows(outgoing) == 0) {
+//					numberOfEndNodes += 1;
+//				}
+//				// 5th check: to many connections?
+//				if (this.numberOfSequenceFlows(incoming) > 1) {
+//					errorsArray.push(" - Error: The event '"+title+"' has more than one incoming connections.");
+//				}
+//				if (this.numberOfSequenceFlows(outgoing) > 1) {
+//					errorsArray.push(" - Error: The event '"+title+"' has more than one outgoing connections.");
+//				}
+//				// 6th check: bipartite?
+//				var nextArray = this.getNextEventsOrFunctionsShapes(outgoing);
+//				for (var x = 0; x < nextArray.size(); x++){
+//					var next = nextArray[x];
+//					if (next.getStencil().id() == stencil.namespace() + "Event"){
+//						errorsArray.push(" - Error: The event '"+title+"' is followed by another Event.");
+//						break;
+//					}
+//				}							
+//			}
+//			else if (stencil.id() == stencil.namespace() + "Function") {
+//				// 4th check: not connected node
+//				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
+//					errorsArray.push(" - Error: The function '"+title+"' has no incoming and outgoing control flow.");
+//					continue;
+//				}
+//				
+//				// 7th check: Function without input?
+//				if (this.numberOfSequenceFlows(incoming) == 0) {
+//					errorsArray.push(" - Error: The function '" + title + "' has no incoming control flow.");
+//				}
+//				if (this.numberOfSequenceFlows(outgoing) == 0) {
+//					errorsArray.push(" - Error: The function '" + title + "' has no outgoing control flow.");
+//				}
+//				// 5th check: to many connections?
+//				if (this.numberOfSequenceFlows(incoming) > 1) {
+//					errorsArray.push(" - Error: The function '"+title+"' has more than one incoming control flow.");
+//				}
+//				if (this.numberOfSequenceFlows(outgoing) > 1) {
+//					errorsArray.push(" - Error: The function '"+title+"' has more than one outgoing control flow.");
+//				}
+//				// 6th check: bipartite?
+//				var nextArray = this.getNextEventsOrFunctionsShapes(outgoing);
+//				for (var x = 0; x < nextArray.size(); x++){
+//					var next = nextArray[x];
+//					if (next.getStencil().id() == stencil.namespace() + "Function"){
+//						errorsArray.push(" - Error: The Function '"+title+"' is followed by another Function.");
+//						break;
+//					}
+//				}
+//			} else if (stencil.id() == stencil.namespace() + "ProcessInterface") {
+//				// 4th check: not connected node
+//				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
+//					errorsArray.push(" - Error: The process interface '"+title+"' has no incoming and outgoing control flow.");
+//					continue;
+//				}
+//				// 5th check: to many connections?
+//				if (this.numberOfSequenceFlows(incoming) > 1) {
+//					errorsArray.push(" - Error: The process interface '"+title+"' has more than one incoming control flow.");
+//				}
+//				if (this.numberOfSequenceFlows(outgoing) > 1) {
+//					errorsArray.push(" - Error: The process interface '"+title+"' has more than one outgoing control flow.");
+//				}
+//			} else if (stencil.id() == stencil.namespace() + "AndConnector" ||
+//						stencil.id() == stencil.namespace() + "XorConnector" ||
+//						stencil.id() == stencil.namespace() + "OrConnector") {
+//							
+//				// 4th check: not connected node
+//				if (this.numberOfSequenceFlows(incoming) + this.numberOfSequenceFlows(outgoing) == 0){
+//					errorsArray.push(" - Error: There is a "+stencilName+" which has no incoming and outgoing control flow.");
+//					continue;
+//				}
+//				// 8th check: no input or output?
+//				if (this.numberOfSequenceFlows(incoming) == 0) {
+//					errorsArray.push(" - Error: There is a "+stencilName+" without incoming control flow.");
+//					continue;
+//				}
+//				if (this.numberOfSequenceFlows(outgoing) == 0) {
+//					errorsArray.push(" - Error: There is a "+stencilName+" without outgoing control flow.");
+//					continue;
+//				}
+//				// 9th check - split or join?
+//				if (this.numberOfSequenceFlows(incoming) == 1 && this.numberOfSequenceFlows(outgoing) == 1){
+//					warningsArray.push(" - Warning: There is a "+stencilName+" which is neither a split or a join.");
+//				}
+//				if (this.numberOfSequenceFlows(incoming) > 1 && this.numberOfSequenceFlows(outgoing) > 1){
+//					errorsArray.push(" - Error: There is a "+stencilName+" which is both - a split and a join.");
+//					continue;
+//				}
+//				// 5th check: to many connections?
+//				if (this.numberOfSequenceFlows(incoming) > 2) {
+//					warningsArray.push(" - Warning: There is a "+stencilName+" with more than two incoming control flows.");
+//				}
+//				if (this.numberOfSequenceFlows(outgoing) > 2) {
+//					warningsArray.push(" - Warning: There is a "+stencilName+" with more than two outgoing control flows.");
+//				}
+//				// 10th check - event before or/xor split?	
+//				if (this.numberOfSequenceFlows(outgoing) > 1 && (stencil.id() == stencil.namespace() + "XorConnector" ||
+//																stencil.id() == stencil.namespace() + "OrConnector") ){
+//					var nextArray = this.getNextEventsOrFunctionsShapes(outgoing);
+//
+//					for (var x = 0; x < nextArray.size(); x++){
+//						var next = nextArray[x];
+//						if (next.getStencil().id() == stencil.namespace() + "Function"){
+//							errorsArray.push(" - Error: There is a "+stencilName+" split node which is followed by a function");
+//							break;
+//						}
+//					}							
+//				}		
+//			}
+//		}
+//		
+//		for (var i = 0; i < edges.size(); i++) {
+//			
+//			var edge = edges[i];
+//			var stencil = edge.getStencil();
+//			var incoming = edge.getIncomingShapes();
+//			var outgoing = edge.getOutgoingShapes();
+//			var stencilName = stencil.title();
+//			var title = edge.properties["oryx-title"];
+//			
+//			// 6th check: not connected edges
+//			if (incoming.length + outgoing.length == 0){
+//				errorsArray.push(" - Error: There is a "+stencilName+" edge without incoming and outgoing connections.");
+//				continue;
+//			}
+//			if (incoming.length == 0){
+//				errorsArray.push(" - Error: There is a "+stencilName+" edge without incoming connection.");
+//				continue;
+//			}
+//			if (outgoing.length == 0){
+//				errorsArray.push(" - Error: There is a "+stencilName+" edge without outgoing connections.");
+//				continue;
+//			}
+//		}
+//		
+//		
+//		// evaluation of 1st and 2nd checks:
+//		if (numberOfStartEvents > 1){
+//			errorsArray.push(" - Error: There are several start events. Should be one.");
+//		}
+//		if (numberOfEndNodes > 1){
+//			errorsArray.push(" - Error: There are several end events. Should be one.");
+//		}
+//		
+//		/*
+//		 * Return
+//		 */
+//		
+//		return [ errorsArray, warningsArray ];
+//	},
+//	
+//	/**
+//	 * returns the number of sequence flows within the edges array
+//	 * 
+//	 * @param {Array} edges
+//	 */
+//	numberOfSequenceFlows: function(edges){
+//		var count = 0;
+//		for (var i = 0; i < edges.size(); i++ ){
+//			var edge = edges[i];
+//			var stencil = edge.getStencil();
+//			if (stencil.id() == stencil.namespace() + "ControlFlow"){
+//				count += 1;
+//			}
+//		}
+//		return count;
+//	},
+//	
+//	/**
+//	 * returns the next event's or function's shapes
+//	 *
+//	 * @param {Array} edges
+//	 */
+//	getNextEventsOrFunctionsShapes: function(edges){
+//		newEdges = [];
+//		result = []
+//		for (var i = 0; i < edges.size(); i++) {
+//			var edge
+//			newEdges.push(edges[i]);
+//		}
+//		return this.getNextEventsOrFunctionsShapes_(newEdges, 0, result);
+//	},
+//
+//	/**
+//	 * intern - getNextEventsOrFunctionsShapes_
+//	 *
+//	 * @param {Object} edges
+//	 * @param {Object} count
+//	 * @param {Object} result
+//	 */
+//	getNextEventsOrFunctionsShapes_: function(edges, count, result){
+//		var newCount = edges.size();
+//		for (var i = count; i < edges.size(); i++){
+//			var edge = edges[i];
+//			var outgoing = edge.getOutgoingShapes();
+//			for (var j = 0; j < outgoing.size(); j++){
+//				var node = outgoing[j];
+//				var stencil = node.getStencil();
+//				if (stencil.id() == stencil.namespace() + "Function" ||
+//						stencil.id() == stencil.namespace() + "Event"  ){
+//					result.push(node);
+//				} else {
+//					var nextOutgoing = node.getOutgoingShapes();
+//					for (var x = 0; x < nextOutgoing.size(); x++){
+//						var nextEdge = nextOutgoing[x];
+//						var nextStencil = nextEdge.getStencil();
+//						if (nextStencil.id() == stencil.namespace() + "ControlFlow"){
+//							if (edges.indexOf(nextEdge) == -1){
+//								edges.push(nextEdge);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		if (newCount < edges.size()){
+//			return this.getNextEventsOrFunctionsShapes_(edges, count, result);
+//		} else {
+//			return result;
+//		}
+//	},
 
 	/**
 	 * 
