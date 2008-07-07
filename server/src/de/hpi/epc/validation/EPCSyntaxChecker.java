@@ -35,7 +35,6 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 		this.errors = new HashMap<String,String>();
 	}
 
-	@Override
 	public boolean checkSyntax() {
 		errors.clear();
 		if (diagram == null)
@@ -46,7 +45,6 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 		return errors.size() == 0;
 	}
 
-	@Override
 	public Map<String, String> getErrors() {
 		return errors;
 	}
