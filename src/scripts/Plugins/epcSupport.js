@@ -134,7 +134,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			rdfResultString = rdfResult;
 			rdfResult = null;
 		} else {
-			rdfResultString = '<?xml version="1.0" encoding="utf-8"?>' +
+			rdfResultString =
 				xmlSerializer.serializeToString(rdfResult);
 		}
 		
@@ -149,7 +149,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			epmlResultString = epmlResult;
 			epmlResult = null;
 		} else {
-			epmlResultString = '<?xml version="1.0" encoding="utf-8"?>' +
+			epmlResultString =
 				xmlSerializer.serializeToString(epmlResult);
 		}
 		
@@ -228,7 +228,9 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 * 
 	 */
 	openUploadDialog: function(){
-		dialog = new Ext.BasicDialog("result-dialog", { 
+		var resource = location.search.split("resource=");
+		resource = resource[1].split("&")[0];
+		dialog = new Ext.Window({ 
 			autoCreate: true, 
 			title: 'Upload File', 
 			height: 180, 
@@ -238,24 +240,25 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			fixedcenter: true, 
 			shadow:true, 
 			proxyDrag: true,
-			resizable:false
+			resizable:false,
+			html: '<div>'+
+						'<span class="ext-mb-text" style="font-family: Verdana; font-size: 9pt;" >'+
+							'Select an EPML (.epml) file and import it.<br /><br />'+
+						'</span>'+
+					'</div>'+
+					'<div>'+
+						'<form action="./epc-upload?resource='+resource+'" enctype="multipart/form-data" method="post">'+
+							'<input type="file" name="uploadfile" /><br /><br />'+
+							'<input type="submit" value="Import EPC" />'+
+							'<input type="button" onclick="dialog.hide()" value="Cancel" />'+
+						'</form>'+
+					'</div>',
 		});
-		dialog.addKeyListener(27, dialog.hide, dialog);
 		dialog.on('hide', function(){
 			dialog.destroy(true);
 			delete dialog;
 		});
-		dialog.body.createChild({
-            	tag:"div",
-            	html:'<span class="ext-mb-text" style="font-family: Verdana; font-size: 9pt;" >Select an EPML (.epml) or AML (.xml) file and import it.<br /><br /></span>'
-        	});
-        var resource = location.search.split("resource=");
-		resource = resource[1].split("&")[0];
-		dialog.body.createChild({
-            	tag:"div",
-            	html:'<form action="./epc-upload?resource='+resource+'" enctype="multipart/form-data" method="post"><input type="file" name="uploadfile" /><br /><br /><input type="submit" value="Import EPC" />     <input type="button" onclick="dialog.hide()" value="Cancel" /></form>'
-        	});
-		dialog.show(this.el, "tl-bl?");
+		dialog.show();
 	},
 	
 	/**
