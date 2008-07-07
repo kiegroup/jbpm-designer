@@ -111,16 +111,15 @@ class Poem < ActiveRecord::Migration
     }
     
     create_table 'content' do |t|
-      #t.column :ident_id, :integer, :null => false 
       t.column :erdf, :text, :null => false
-      t.column :svg, :text, :null => false  
+      t.column :svg, :text, :null => true  
     end
     
     execute %q{
       alter table "content" alter column erdf set storage main;
       alter table "content" alter column svg set storage main;
 
-      alter table "content" add foreign key(id) references "identity" on delete cascade;
+      alter table "content" add foreign key(id) references "representation" on delete cascade;
     }
 
   end
