@@ -84,10 +84,11 @@ public class Identity {
 			representation.setSummary(summary);
 			representation.setLanguage(language);
 			representation.setMime_type(mime_type);
-			representation.setSvg(svg);
-			representation.setContent(content);
 			session.save(representation);
 			Persistance.commit();
+			
+			representation.setSvg(svg);
+			representation.setContent(content);
 			
 			Structure.instance(identity.getId(), owner.getUserHierarchy());
 			return identity;

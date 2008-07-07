@@ -42,8 +42,6 @@ class Poem < ActiveRecord::Migration
       t.column :created,    'timestamp with time zone', :null => false
       t.column :updated,    'timestamp with time zone', :null => false
       
-      t.column :content,    :text, :null => false
-      t.column :svg,        :text
       t.column :type,		    :text, :null => false, :default => 'undefined'
     end
     
@@ -110,6 +108,19 @@ class Poem < ActiveRecord::Migration
       alter table "plugin" alter column term set storage main; 
       alter table "plugin" alter column title set storage main;
       create index rel_idx on "plugin"(rel);
+    }
+    
+    create_table 'content' do |t|
+      #t.column :ident_id, :integer, :null => false 
+      t.column :erdf, :text, :null => false
+      t.column :svg, :text, :null => false  
+    end
+    
+    execute %q{
+      alter table "content" alter column erdf set storage main;
+      alter table "content" alter column svg set storage main;
+
+      alter table "content" add foreign key(id) references "identity" on delete cascade;
     }
 
   end
