@@ -2734,12 +2734,17 @@
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
 				
-					console.log("test");
-					console.log(lanes[0].properties["oryx-showCaption"]);
-					lanes[0].properties["oryx-showCaption"] = false;
-					console.log(lanes[0].properties["oryx-showCaption"]);
-				
 				if(lanes.length > 0) {
+					
+					// only one lane in pool
+					if(lanes.length == 1) {
+						lanes.first().setProperty("oryx-showcaption", false);
+					} else {
+						lanes.each(function(lane) {
+							lane.setProperty("oryx-showcaption", true);
+						});
+					}
+					
 					
 					lanes = lanes.sortBy(function(lane) {
 						return lane.bounds.upperLeft().y;
