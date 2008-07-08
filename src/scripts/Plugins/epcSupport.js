@@ -50,15 +50,15 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			'minShape': 0,
 			'maxShape': 0});
 			
-//		this.facade.offer({
-//			'name':"Import EPC",
-//			'functionality': this.importEPC.bind(this),
-//			'group': "epc",
-//			'icon': ORYX.PATH + "images/epc_import.png",
-//			'description': "Import an EPML file",
-//			'index': 2,
-//			'minShape': 0,
-//			'maxShape': 0});
+		this.facade.offer({
+			'name':"Import EPC",
+			'functionality': this.importEPC.bind(this),
+			'group': "epc",
+			'icon': ORYX.PATH + "images/epc_import.png",
+			'description': "Import an EPML file",
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0});
 
 //		Syntax Check has been migrated to syntaxchecker.js-Framework		
 
@@ -92,11 +92,10 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 		var index = location.href.lastIndexOf("/");
 
 		
-		// A Syntax Syntax-Check should be triggered, here.
+		// TODO: a Syntax Syntax-Check should be triggered, here.
 		 
-		// get process' name
-		var resource = location.search.split("resource=");
-		resource = resource[1].split("&")[0];
+		// TODO: get process' name
+		var resource = "Oryx-EPC";
 		
 		// Force to set all resource IDs
 		var serializedDOM = DataManager.serializeDOM( this.facade );
@@ -119,8 +118,8 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 		'" />' +
 		'</head><body>' +
 		serializedDOM +
-		'<div id="generatedProcessInfos"><span class="oryx-id">epc_test_blub</span>' + 
-		'<span class="oryx-name">epc_test_blub</span></div>' +
+		'<div id="generatedProcessInfos"><span class="oryx-id">' + resource + '</span>' + 
+		'<span class="oryx-name">' + resource + '</span></div>' +
 		'</body></html>';
 		
 		/*
@@ -228,8 +227,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 * 
 	 */
 	openUploadDialog: function(){
-		var resource = location.search.split("resource=");
-		resource = resource[1].split("&")[0];
+		var resource = location.href;
 		dialog = new Ext.Window({ 
 			autoCreate: true, 
 			title: 'Upload File', 

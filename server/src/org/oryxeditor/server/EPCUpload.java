@@ -6,10 +6,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -23,8 +19,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -73,12 +67,12 @@ public class EPCUpload extends HttpServlet {
     	}
     	
     	// Get the resourceID - Needed for redirect.
-    	final String resourceID = req.getParameter("resource");
+    	final String resource = req.getParameter("resource");
     	
     	// No isMultipartContent => Error
     	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
     	if (!isMultipartContent){
-    		printError(out, "No Multipart Content transmitted.", resourceID);
+    		printError(out, "No Multipart Content transmitted.", resource);
 			return ;
     	}
     	
@@ -90,11 +84,11 @@ public class EPCUpload extends HttpServlet {
     	try {
     		items = servletFileUpload.parseRequest(req);
     		if (items.size() != 1){
-    			printError(out, "Not exactly one File.", resourceID);
+    			printError(out, "Not exactly one File.", resource);
     			return ;
     		}
     	} catch (FileUploadException e) {
-    		handleException(out, resourceID, e); 
+    		handleException(out, resource, e); 
 	   		return;
     	} 
     	final FileItem fileItem = (FileItem)items.get(0);
@@ -109,12 +103,12 @@ public class EPCUpload extends HttpServlet {
     	try {
     		inputStream = fileItem.getInputStream();
     	} catch (IOException e){ 
-    		handleException(out, resourceID, e); 
+    		handleException(out, resource, e); 
     		return;
     	}
 	   		
     	// epml2eRDF XSLT source
-    	final File epml2eRDFxsltFile = new File("webapps/oryx/xslt/EPML2eRDF.xslt");
+    	final File epml2eRDFxsltFile = new File("../webapps/oryx/xslt/EPML2eRDF.xslt");
     	final Source epml2eRDFxsltSource = new StreamSource(epml2eRDFxsltFile);	
 
     	// Transformer Factory
@@ -125,22 +119,8 @@ public class EPCUpload extends HttpServlet {
 
     	if (fileName.endsWith(".epml") || content.contains("http://www.epml.de")){
     		epmlSource = new StreamSource(inputStream);
-    	} else if (fileName.endsWith(".xml")){
-    		try {
-	    		final File aml2epmlXsltFile = new File("webapps/oryx/xslt/AML2EPML_2.xslt");
-	        	final Source aml2epmlXsltSource = new StreamSource(aml2epmlXsltFile);
-	    		Transformer transformer = transformerFactory.newTransformer(aml2epmlXsltSource);
-	    		content = content.replace("ARIS-Export.dtd", "webapps/oryx/lib/ARIS-Export.dtd");
-	    		StringWriter writer = new StringWriter();
-	    		transformer.transform( new StreamSource(new StringReader(content)), new StreamResult(writer));
-	    		String epmlString = writer.toString();
-	    		epmlSource = new StreamSource(new StringReader(epmlString));
-    		} catch (Exception e){
-        		handleException(out, resourceID, e); 
-        		return;
-        	}
     	} else {
-    		printError(out, "No EPML or AML file uploaded.", resourceID);
+    		printError(out, "No EPML or AML file uploaded.", resource);
     		return ;
     	}
     		
@@ -152,41 +132,42 @@ public class EPCUpload extends HttpServlet {
     		transformer.transform(epmlSource, new StreamResult(writer));
     		resultString = writer.toString();
     	} catch (Exception e){
-    		handleException(out, resourceID, e); 
+    		handleException(out, resource, e); 
     		return;
     	}
-    	
-    	// Write result to database
+
     	if (resultString != null){
     		try {
     			if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>")){
     				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>", "");
     				resultString = resultString.replace("</root>", "");
-    				writeToDatabase(resourceID, resultString);
     			} else {
-    				printError(out, "Error during transformation.", resourceID);
+    				printError(out, "Error during transformation.", resource);
+    				return ;
     			}
 
     		} catch (Exception e){
-    			handleException(out, resourceID, e); 
+    			handleException(out, resource, e); 
     			return;
     		}
     	}
     		
     	// Redirect to oryx
-    	res.setHeader("Location", "./server?resource="+resourceID);
+
+    	// wie krieg ich resultString da rein?
+    	res.setHeader("Location", resource);
     	res.setStatus(301);	
     }
     
     
     
-    private void printError(PrintWriter out, String err, String resourceID){
+    private void printError(PrintWriter out, String err, String resource){
     	if (out != null){
     		out.println("<html><head><title>Error during upload</title></head><body>");
     		out.println("An error has occured: <br />");
     		out.println("  " + err);
     		out.println("<br /><br />");
-    		out.println("<a href='./server?resource="+resourceID+"'>Back to Oryx</a>");
+    		out.println("<a href='"+resource+"'>Back to Oryx</a>");
     		out.println("</body></html>");
     	}
     }
@@ -196,24 +177,4 @@ public class EPCUpload extends HttpServlet {
 		printError(out, e.getLocalizedMessage(), resourceID);
 	}
     
-    private void writeToDatabase(String resourceID, String content) throws ConfigurationException, SQLException{
-    	if (config == null){
-    		config = new PropertiesConfiguration("database.properties");
-    	}
-    	//String connector = config.getString("db.connector");
-    	String url = config.getString("db.url");
-    	String username = config.getString("db.username");
-    	String password = config.getString("db.password");
-    	
-    	Connection database = DriverManager.getConnection(url, username, password);
-    	PreparedStatement stmt = database.prepareStatement("SELECT ID FROM sites WHERE Name = ?");
-    	stmt.setString(1, resourceID);
-
-		if (stmt.executeQuery().next()) {
-		    PreparedStatement store = database.prepareStatement("UPDATE sites SET Site = ? WHERE Name = ?");
-		    store.setString(1, content);
-		    store.setString(2, resourceID);
-		    store.execute();
-	    }
-    }
 }
