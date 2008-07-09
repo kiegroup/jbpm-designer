@@ -199,6 +199,16 @@
 					"wrapLines":true
 				},
 				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -827,6 +837,16 @@
 					"wrapLines":true
 				},
 				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -1413,6 +1433,16 @@
 					"wrapLines":true
 				},
 				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -1982,6 +2012,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -2167,6 +2217,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -2317,6 +2387,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -2445,6 +2535,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -2610,6 +2720,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -3906,6 +4036,25 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -4013,6 +4162,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -4162,6 +4331,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -4289,6 +4478,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -4392,6 +4601,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
 					"wrapLines":true
 				},
 				{
@@ -4534,6 +4763,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -4655,6 +4904,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -4774,6 +5043,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -4933,6 +5222,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -5095,6 +5404,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -5234,6 +5563,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -5363,6 +5712,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -5477,6 +5846,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -5605,6 +5994,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -5737,6 +6146,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -5865,6 +6294,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -6006,6 +6455,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -6151,6 +6620,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -6281,6 +6770,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -6407,6 +6916,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -6545,6 +7074,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -6686,6 +7235,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -6789,6 +7358,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -6936,6 +7525,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -7049,6 +7658,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -7151,6 +7780,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
@@ -7268,6 +7917,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -7383,6 +8052,26 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
 					"id":"pool",
 					"type":"String",
 					"title":"Pool",
@@ -7485,6 +8174,26 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
+				},
+				{
+					"id":"assignments",
+					"type":"String",
+					"title":"Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"wrapLines":true
 				},
 				{
 					"id":"pool",
