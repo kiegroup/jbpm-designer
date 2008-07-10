@@ -65,13 +65,10 @@ public class EPCUpload extends HttpServlet {
     	    e.printStackTrace();
     	}
     	
-    	// Get the resourceID - Needed for redirect.
-    	final String resource = req.getParameter("resource");
-    	
     	// No isMultipartContent => Error
     	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
     	if (!isMultipartContent){
-    		printError(out, "No Multipart Content transmitted.", resource);
+    		printError(out, "No Multipart Content transmitted.");
 			return ;
     	}
     	
@@ -83,11 +80,11 @@ public class EPCUpload extends HttpServlet {
     	try {
     		items = servletFileUpload.parseRequest(req);
     		if (items.size() != 1){
-    			printError(out, "Not exactly one File.", resource);
+    			printError(out, "Not exactly one File.");
     			return ;
     		}
     	} catch (FileUploadException e) {
-    		handleException(out, resource, e); 
+    		handleException(out, e); 
 	   		return;
     	} 
     	final FileItem fileItem = (FileItem)items.get(0);
@@ -102,7 +99,7 @@ public class EPCUpload extends HttpServlet {
     	try {
     		inputStream = fileItem.getInputStream();
     	} catch (IOException e){ 
-    		handleException(out, resource, e); 
+    		handleException(out, e); 
     		return;
     	}
 	   		
@@ -119,7 +116,7 @@ public class EPCUpload extends HttpServlet {
     	if (fileName.endsWith(".epml") || content.contains("http://www.epml.de")){
     		epmlSource = new StreamSource(inputStream);
     	} else {
-    		printError(out, "No EPML or AML file uploaded.", resource);
+    		printError(out, "No EPML or AML file uploaded.");
     		return ;
     	}
     		
@@ -131,7 +128,7 @@ public class EPCUpload extends HttpServlet {
     		transformer.transform(epmlSource, new StreamResult(writer));
     		resultString = writer.toString();
     	} catch (Exception e){
-    		handleException(out, resource, e); 
+    		handleException(out, e); 
     		return;
     	}
 
@@ -140,16 +137,24 @@ public class EPCUpload extends HttpServlet {
     			if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>")){
     				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>", "");
     				resultString = resultString.replace("</root>", "");
-    				System.out.println(resultString);
-    		        out.print("{\"success\":true}"); //+resultString+"'}");
+    				resultString = resultString.replaceAll("<", "&lt;");
+    				resultString = resultString.replaceAll(">", "&gt;");
+    		        out.print("{success:true, content:'"+resultString+"'}"); 
+    		        return ;
+    			} else if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>")) {
+    				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>", "");
+    				resultString = resultString.replace("</root>", "");
+    				resultString = resultString.replaceAll("<", "&lt;");
+    				resultString = resultString.replaceAll(">", "&gt;");
+    		        out.print("{success:true, content:'"+resultString+"'}"); 
     		        return ;
     			} else {
-    				printError(out, "Error during transformation.", resource);
+    				printError(out, "Error during transformation.");
     				return ;
     			}
 
     		} catch (Exception e){
-    			handleException(out, resource, e); 
+    			handleException(out, e); 
     			return;
     		}
     	}
@@ -157,16 +162,16 @@ public class EPCUpload extends HttpServlet {
     
     
     
-    private void printError(PrintWriter out, String err, String resource){
+    private void printError(PrintWriter out, String err){
     	if (out != null){
     		out.print("{success:false, content:'"+err+"'}");
 
     	}
     }
     
-	private void handleException(PrintWriter out, final String resourceID, Exception e) {
+	private void handleException(PrintWriter out, Exception e) {
 		e.printStackTrace();
-		printError(out, e.getLocalizedMessage(), resourceID);
+		printError(out, e.getLocalizedMessage());
 	}
     
 }

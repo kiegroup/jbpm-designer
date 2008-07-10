@@ -230,13 +230,11 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 * 
 	 */
 	openUploadDialog: function(){
-		var resource = location.href;
 		
 		var form = new Ext.form.FormPanel({
 			frame : true,
 			defaultType : 'textfield',
 		 	waitMsgTarget : true,
-		  	bodyStyle : 'padding:5px 5px 0',
 		  	labelAlign : 'left',
 		  	buttonAlign: 'right',
 		  	fileUpload : true,
@@ -253,25 +251,38 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			handler: function()
 			{
 				form.form.submit({
-		      		url:'./epc-upload?resource='+resource,
+		      		url:'./epc-upload',
 		      		waitMsg: "Importing...",
 		      		success: function(f,a){
-		        		console.log(a);
+						dialog.hide();
+						var erdf = a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}"));
+		        		erdf = erdf.replace(/&lt;/g, "<");
+						erdf = erdf.replace(/&gt;/g, ">");
+						alert(erdf);
+						var parser = new DOMParser();
+						var parsedErdf = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><html>'+erdf+'</html>',"text/xml");	
+						alert(parsedErdf);
+						// TODO ..
 		      		},
 					failure: function(f,a){
-		        		console.log(a);
+						dialog.hide();
+						Ext.MessageBox.show({
+           					title: 'Error',
+          	 				msg: a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}")),
+           					buttons: Ext.MessageBox.OK,
+           					icon: Ext.MessageBox.ERROR
+       					});
 		      		}
-					
 		  		});
 		  	}
 		})
 
 
-		dialog = new Ext.Window({ 
+		var dialog = new Ext.Window({ 
 			autoCreate: true, 
 			title: 'Upload File', 
-			height: 180, 
-			width: 300, 
+			height: 130, 
+			width: 400, 
 			modal:true,
 			collapsible:false,
 			fixedcenter: true, 
@@ -279,19 +290,6 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			proxyDrag: true,
 			resizable:false,
 			items: [new Ext.form.Label({text: "Select an EPML (.epml) file and import it.", style: 'font-size:12px;'}),form]
-			
-//			html: '<div>'+
-//						'<span class="ext-mb-text" style="font-family: Verdana; font-size: 9pt;" >'+
-//							'Select an EPML (.epml) file and import it.<br /><br />'+
-//						'</span>'+
-//					'</div>'+
-//					'<div>'+
-//						'<form action="./epc-upload?resource='+resource+'" enctype="multipart/form-data" method="post">'+
-//							'<input type="file" name="uploadfile" /><br /><br />'+
-//							'<input type="submit" value="Import EPC" />'+
-//							'<input type="button" onclick="dialog.hide()" value="Cancel" />'+
-//						'</form>'+
-//					'</div>'
 		});
 		dialog.on('hide', function(){
 			dialog.destroy(true);
