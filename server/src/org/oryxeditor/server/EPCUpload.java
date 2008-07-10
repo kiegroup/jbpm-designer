@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -51,7 +49,7 @@ public class EPCUpload extends HttpServlet {
 
 	private static final long serialVersionUID = 316274845723034029L;
 	
-	private static Configuration config = null;
+//	private static Configuration config = null;
 	
     /**
      * The POST request.
@@ -59,6 +57,7 @@ public class EPCUpload extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     	
     	// Get the PrintWriter
+    	res.setContentType("text/html");
     	PrintWriter out = null;
     	try {
     	    out = res.getWriter();
@@ -141,6 +140,9 @@ public class EPCUpload extends HttpServlet {
     			if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>")){
     				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>", "");
     				resultString = resultString.replace("</root>", "");
+    				System.out.println(resultString);
+    		        out.print("{\"success\":true}"); //+resultString+"'}");
+    		        return ;
     			} else {
     				printError(out, "Error during transformation.", resource);
     				return ;
@@ -151,24 +153,14 @@ public class EPCUpload extends HttpServlet {
     			return;
     		}
     	}
-    		
-    	// Redirect to oryx
-
-    	// wie krieg ich resultString da rein?
-    	res.setHeader("Location", resource);
-    	res.setStatus(301);	
     }
     
     
     
     private void printError(PrintWriter out, String err, String resource){
     	if (out != null){
-    		out.println("<html><head><title>Error during upload</title></head><body>");
-    		out.println("An error has occured: <br />");
-    		out.println("  " + err);
-    		out.println("<br /><br />");
-    		out.println("<a href='"+resource+"'>Back to Oryx</a>");
-    		out.println("</body></html>");
+    		out.print("{success:false, content:'"+err+"'}");
+
     	}
     }
     
