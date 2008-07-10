@@ -62,8 +62,10 @@ ModelProperties.app = {
 	 * @param {String} openid2
 	 */
 	equalUsers: function(openid1, openid2) {
-		openid1 = openid1+"";
-		openid2 = openid2+"";
+		openid1 = openid1.toLowerCase();
+		openid2 = openid2.toLowerCase();
+		openid1 = openid1.toLowerCase()+"";
+		openid2 = openid2.toLowerCase()+"";
 		
 		filter = function(url) {
 			return url.replace(/^https?:\/\//, "").replace(/\/*$/,"");

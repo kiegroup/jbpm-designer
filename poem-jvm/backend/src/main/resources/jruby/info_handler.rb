@@ -41,7 +41,7 @@ module Handler
 
   class AccessHandler < DefaultHandler
     def doPost(interaction)
-      subject = Identity.ensureSubject(interaction.params['subject'])
+      subject = Identity.ensureSubject(interaction.params['subject'].downcase)
       subject_hierarchy = subject.getUserHierarchy
       object_hierarchy = interaction.object.getModelHierarchy
       term = interaction.params['predicate']
@@ -69,7 +69,7 @@ module Handler
     end
     
     def doDelete(interaction)
-      # Attentation! HTTP-Server interaction vs HibernateClass Interaction.
+      # Attention! HTTP-Server interaction vs HibernateClass Interaction.
       right = Interaction.exist(interaction.params['id'].to_i)
       if right
         right.delete

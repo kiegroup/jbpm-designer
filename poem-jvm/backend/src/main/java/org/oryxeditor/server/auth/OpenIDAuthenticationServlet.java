@@ -87,7 +87,9 @@ public class OpenIDAuthenticationServlet extends HttpServlet {
        if ("true".equals(req.getParameter("is_return"))) {
            processReturn(req, resp);
        } else {
-           String identifier = req.getParameter("openid_identifier");
+    	   // Convert OpenID identifier to lower case in order to prevent creating 	   
+    	   // different accounts for the same OpenID
+           String identifier = req.getParameter("openid_identifier").toLowerCase();
            this.authRequest(identifier, req, resp);
        }
    }
