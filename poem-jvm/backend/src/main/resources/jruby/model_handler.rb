@@ -38,6 +38,7 @@ module Handler
     end
 
     def doPost(interaction)
+      out = interaction.response.getWriter
       if(interaction.params['data'] && interaction.params['svg'])
         Representation.update(interaction.object.getId, nil, nil, interaction.params['data'], interaction.params['svg'])
         interaction.response.setStatus(200)
