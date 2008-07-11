@@ -18,7 +18,7 @@ public abstract class PetriNetReducer {
 	
 	public void removeTransitions(PetriNet net, List<Transition> removeList) {
 		// TODO remove
-		logIt(net, null);
+//		logIt(net, null);
 
 		Object[] rl = removeList.toArray();
 		boolean cancel;

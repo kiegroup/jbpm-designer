@@ -59,6 +59,7 @@ class Dispatcher
     }
     
     openid = request.getSession.getAttribute(OpenIDAuthenticationServlet::OPENID_SESSION_IDENTIFIER) || 'public'
+    openid = openid.downcase
     uri = request.getPathInfo
 
     if(handler_name = relations[Helper.getRelation(uri)])

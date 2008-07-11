@@ -27,6 +27,9 @@ import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
 import org.openid4java.message.sreg.SRegRequest;
 
+import org.openid4java.util.ProxyProperties;
+import org.openid4java.util.HttpClientFactory;
+
 /**
 * This servlet provedes openID authentication.
 *
@@ -49,6 +52,16 @@ public class OpenIDAuthenticationServlet extends HttpServlet {
        config.getServletContext();
 
        try {
+           // --- Forward proxy setup (only if needed) --- 
+           String proxyHostName = getInitParameter("proxy-host-name").trim();
+           String proxyPort = getInitParameter("proxy-port").trim();
+           
+           if (proxyHostName.length() > 0 && proxyPort.length() > 0) {
+               ProxyProperties proxyProps = new ProxyProperties(); 
+               proxyProps.setProxyHostName(proxyHostName); 
+               proxyProps.setProxyPort(Integer.valueOf(proxyPort)); 
+               HttpClientFactory.setProxyProperties(proxyProps);
+           }
 
            this.manager = new ConsumerManager();
            manager.setAssociations(new InMemoryConsumerAssociationStore());
@@ -74,7 +87,9 @@ public class OpenIDAuthenticationServlet extends HttpServlet {
        if ("true".equals(req.getParameter("is_return"))) {
            processReturn(req, resp);
        } else {
-           String identifier = req.getParameter("openid_identifier");
+    	   // Convert OpenID identifier to lower case in order to prevent creating 	   
+    	   // different accounts for the same OpenID
+           String identifier = req.getParameter("openid_identifier").toLowerCase();
            this.authRequest(identifier, req, resp);
        }
    }
@@ -197,6 +212,7 @@ public class OpenIDAuthenticationServlet extends HttpServlet {
            }
        } catch (OpenIDException e) {
            // present error to the user
+           throw new ServletException(e);
        }
 
 
@@ -256,7 +272,7 @@ public class OpenIDAuthenticationServlet extends HttpServlet {
            }
        } catch (OpenIDException e) {
            // present error to the user
-           // throw new ServletException(e);
+           throw new ServletException(e);
        }
 
        return null;

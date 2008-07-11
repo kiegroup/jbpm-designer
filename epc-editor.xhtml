@@ -10,15 +10,16 @@
         <title>Oryx</title>
 
         <!-- libraries -->
-        <script src="lib/prototype-1.5.1_rc3.js" type="text/javascript" />
+		<script src="lib/prototype-1.5.1.js" type="text/javascript" />
         <script src="lib/path_parser.js" type="text/javascript" />
-        <script src="lib/ext-1.0/adapter/yui/yui-utilities.js" type="text/javascript" />
-        <script src="lib/ext-1.0/adapter/yui/ext-yui-adapter.js" type="text/javascript" />
-        <script src="lib/ext-1.0/ext-all-debug.js" type="text/javascript" />
-        <script src="lib/ext-1.0/ColorField.js" type="text/javascript" />
+        <script src="lib/ext-2.0.2/adapter/yui/yui-utilities.js" type="text/javascript" />
+        <script src="lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js" type="text/javascript" />
+        <script src="lib/ext-2.0.2/ext-all-debug.js" type="text/javascript" />
+		<script src="lib/ext-2.0.2/color-field.js" type="text/javascript" />
+		
         <style media="screen" type="text/css">
-			@import url("lib/ext-1.0/resources/css/ext-all.css");
-			@import url("lib/ext-1.0/resources/css/ytheme-gray.css");
+			@import url("lib/ext-2.0.2/resources/css/ext-all.css");
+			@import url("lib/ext-2.0.2/resources/css/xtheme-gray.css"); 
 		</style>
 				
         <script src="shared/kickstart.js" type="text/javascript" />
@@ -39,12 +40,12 @@
 		<meta name="oryx.type" content="http://b3mn.org/stencilset/epc#Diagram" />
     </head>
 
-    <body>
+    <body style="display: block; overflow: hidden;">
 
-		<div class="-oryx-canvas" id="oryx-canvas123" style="width:1200px; height:600px;">
+		<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;">
 
 			<a href="./stencilsets/epc/epc.json" rel="oryx-stencilset"></a>
-
+			
 			<span class="oryx-mode">writeable</span>
 			<span class="oryx-mode">fullscreen</span>
 		</div>

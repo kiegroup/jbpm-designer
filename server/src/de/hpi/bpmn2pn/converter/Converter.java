@@ -257,34 +257,47 @@ public abstract class Converter {
 	// assumption: exactly one input and one output edge
 	protected void handleSubProcess(PetriNet net, SubProcess process,
 			ConversionContext c) {
-		//standard subprocess
-		// TODO multiple start events bound as XOR ??
-		SubProcessPlaces pl = c.getSubprocessPlaces(process);
+		
+		if (process.getChildNodes().size() > 0) {
+			//standard subprocess
+			// TODO multiple start events bound as XOR ??
+			SubProcessPlaces pl = c.getSubprocessPlaces(process);
+	
+			Transition startT = addTauTransition(net, "start" + process.getId());
+			pl.startP = addPlace(net, "start" + process.getId());
+			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(process)),
+					startT);
+			addFlowRelationship(net, startT, pl.startP);
+	
+			Transition endT = addTauTransition(net, "end" + process.getId());
+			pl.endP = addPlace(net, "end" + process.getId());
+			addFlowRelationship(net, pl.endP, endT);
+			addFlowRelationship(net, endT, c.map
+					.get(getOutgoingSequenceFlow(process)));
+	
+			handleMessageFlow(net, process, startT, endT, c);
+	
+			// exception handling
+			if (c.ancestorHasExcpH || process.getAttachedEvents().size() > 0)
+				prepareExceptionHandling(net, process, startT, endT, c);
+			for (IntermediateEvent event : process.getAttachedEvents())
+				handleAttachedIntermediateEventForSubProcess(net, event, c);
+	
+			boolean ancestorHasExcpH = c.ancestorHasExcpH;
+			c.ancestorHasExcpH |= process.getAttachedEvents().size() > 0;
+			handleNodesRecursively(net, process, c);
+			c.ancestorHasExcpH = ancestorHasExcpH;
+		} else {
+			Transition t = addLabeledTransition(net, process.getId(), process.getLabel());
+			handleMessageFlow(net, process, t, t, c);
+			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(process)), t);
+			addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(process)));
+			if (c.ancestorHasExcpH)
+				handleExceptions(net, process, t, c);
 
-		Transition startT = addTauTransition(net, "start" + process.getId());
-		pl.startP = addPlace(net, "start" + process.getId());
-		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(process)),
-				startT);
-		addFlowRelationship(net, startT, pl.startP);
-
-		Transition endT = addTauTransition(net, "end" + process.getId());
-		pl.endP = addPlace(net, "end" + process.getId());
-		addFlowRelationship(net, pl.endP, endT);
-		addFlowRelationship(net, endT, c.map
-				.get(getOutgoingSequenceFlow(process)));
-
-		handleMessageFlow(net, process, startT, endT, c);
-
-		// exception handling
-		if (c.ancestorHasExcpH || process.getAttachedEvents().size() > 0)
-			prepareExceptionHandling(net, process, startT, endT, c);
-		for (IntermediateEvent event : process.getAttachedEvents())
-			handleAttachedIntermediateEventForSubProcess(net, event, c);
-
-		boolean ancestorHasExcpH = c.ancestorHasExcpH;
-		c.ancestorHasExcpH |= process.getAttachedEvents().size() > 0;
-		handleNodesRecursively(net, process, c);
-		c.ancestorHasExcpH = ancestorHasExcpH;
+			for (IntermediateEvent event : process.getAttachedEvents())
+				handleAttachedIntermediateEventForTask(net, event, c);
+		}
 	}
 
 	// ********************************************************************

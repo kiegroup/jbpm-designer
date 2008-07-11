@@ -142,30 +142,33 @@
  return poem_path(hierarchy)[-2]
  $$ language plpythonu immutable;
 
- create or replace function encode_position(positio integer) returns text as $$
- # Encodes number to string representation
- # 0: "0" = 0, "z" = 61
- # 1: "~0" = 62, "~z" = 123
- # 2: "~~00" = 124, "~~zz" = 3967
- # 3: "~~~000" = 3968, "~~~zzz" = 242295
- position = positio
- if position in range(0,10):
- 	return str(position)
- if position in range(10,36):
-  	return chr(position+55)
- if position in range(16,62):
-     return chr(position+61)
- if position in range(62,124):
-     return "~" + encode_position(position-62)
- if position in range(124, 3968):
-     return "~~" + encode_position((position-124)/62) + encode_position((position-124)%62) 
- if position in range(3968, 242296):
- 	position -= 3968
- 	digit1 = position / (62 * 62)
- 	digit2 = (position % (62 * 62)) / 62
- 	digit3 = (position % (62 * 62)) % 62
- 	return "~~~" + encode_position(digit1) + encode_position(digit2) + encode_position(digit3)
- raise "Stored Procedure: Encode Postition: Position out of range." 
+ create or replace function encode_position(pos integer) returns text as $$
+ def encode_pos(positio):
+   # Encodes number to string representation
+   # 0: "0" = 0, "z" = 61
+   # 1: "~0" = 62, "~z" = 123
+   # 2: "~~00" = 124, "~~zz" = 3967
+   # 3: "~~~000" = 3968, "~~~zzz" = 242295
+   position = positio
+   if position in range(0,10):
+    return str(position)
+   if position in range(10,36):
+      return chr(position+55)
+   if position in range(16,62):
+       return chr(position+61)
+   if position in range(62,124):
+       return "~" + encode_pos(position-62)
+   if position in range(124, 3968):
+       return "~~" + encode_pos((position-124)/62) + encode_pos((position-124)%62) 
+   if position in range(3968, 242296):
+    position -= 3968
+    digit1 = position / (62 * 62)
+    digit2 = (position % (62 * 62)) / 62
+    digit3 = (position % (62 * 62)) % 62
+    return "~~~" + encode_pos(digit1) + encode_pos(digit2) + encode_pos(digit3)
+   raise "Stored Procedure: Encode Postition: Position out of range." 
+ 
+ return encode_pos(pos)
  $$ language plpythonu immutable;
 
  create or replace function decode_position(code text) returns integer as $$

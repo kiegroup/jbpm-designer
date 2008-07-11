@@ -1,6 +1,8 @@
 package de.hpi.petrinet.pnml;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,6 +17,8 @@ import de.hpi.petrinet.Transition;
 public class PetriNetPNMLExporter {
 
 	public void savePetriNet(Document doc, PetriNet net) {
+		ensureUniqueIDs(net);
+		
 		Node root = doc.appendChild(doc.createElement("pnml"));
 		Element netnode = (Element)root.appendChild(doc.createElement("net"));
 		
@@ -34,11 +38,34 @@ public class PetriNetPNMLExporter {
 		}
 	}
 
+	protected void ensureUniqueIDs(PetriNet net) {
+		Set<String> ids = new HashSet<String>();
+		int newpcounter = 1;
+		int newtcounter = 1;
+		
+		for (Transition t: net.getTransitions()) {
+			if (t.getId() == null || ids.contains(t.getId())) {
+				while (ids.contains("t$"+newtcounter))
+					newtcounter++;
+				t.setId("p$"+(newtcounter++));
+			}
+			ids.add(t.getId());
+		}
+		for (Place p: net.getPlaces()) {
+			if (p.getId() == null || ids.contains(p.getId())) {
+				while (ids.contains("p$"+newpcounter))
+					newpcounter++;
+				p.setId("p$"+(newpcounter++));
+			}
+			ids.add(p.getId());
+		}
+	}
+
 	protected void handlePetriNetAttributes(Document doc, Element node, PetriNet net) {
 		node.setAttribute("id", "Net-One");
 		node.setAttribute("type", "Petri net");
 	}
-
+	
 	protected Element appendPlace(Document doc, Node netnode, PetriNet net, Place place) {
 		Element pnode = (Element)netnode.appendChild(doc.createElement("place"));
 		pnode.setAttribute("id", place.getId());

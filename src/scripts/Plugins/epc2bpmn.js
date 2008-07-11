@@ -35,19 +35,27 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
     facade: undefined,
     
 	EPC_NAMESPACE: 'http://b3mn.org/stencilset/epc#',
-	BPMN_NAMESPACE: 'http://b3mn.org/stencilset/bpmn#',
+	BPMN1_0_NAMESPACE: 'http://b3mn.org/stencilset/bpmn#',
+	BPMN1_1_NAMESPACE: 'http://b3mn.org/stencilset/bpmn1.1#',
     
 	
     // Offers the plugin functionality
     construct: function(facade){
+		
         this.facade = facade;
         Facade = facade;
-        this.facade.offer({
+        
+		this.isBPMN1_0 = this.facade.getStencilSets().keys().include(this.BPMN1_0_NAMESPACE);
+		this.isBPMN1_1 = this.facade.getStencilSets().keys().include(this.BPMN1_1_NAMESPACE);
+		
+		if( !this.isBPMN1_0 && !this.isBPMN1_1){ return }
+		
+		this.facade.offer({
             'name': "EPC to BPMN transform",
             'functionality': this.startTransform.bind(this),
             'group': "epc",
             'icon': ORYX.PATH + "images/epc_export.png",
-            'description': "Tranform from EPC to BPMN",
+            'description': "Import from EPC",
             'index': 1,
             'minShape': 0,
             'maxShape': 0
@@ -60,7 +68,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
      * Transforming from EPC to BPMN
      */
     startTransform: function(){
-    
+	
 		this.showPanel( this.sendRequest.bind(this) );
 	
 	},
@@ -72,10 +80,13 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 	 */
 	sendRequest: function(options){
 
+		var waitingpanel = new Ext.Window({id:'oryx-loading-panel_epc2bpmn',bodyStyle:'padding: 8px',title:'Oryx',width:230,height:55,modal:true,resizable:false,closable:false,frame:true,html:'<span style="font-size:11px;">Please wait while Oryx is importing...</span>'})
+		waitingpanel.show()
+		
 		if( !options || !options.url ){ return }
 
 
-		this.facade.raiseEvent({ type: 'loading.enable',text: 'Import' });
+		//this.facade.raiseEvent({ type: 'loading.enable',text: 'Import' });
 				
 		var url = "./engineproxy?url=" + options.url;
 				
@@ -86,14 +97,20 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 				// asynchronously ...
 	            window.setTimeout((function(){
 	         
-					this.doTransform( request.responseText, options)
-	                
-					// Disable the loading panel
-					this.facade.raiseEvent({ type: 'loading.disable'});					
-					//show finshed status
-					this.facade.raiseEvent({ type:'loading.status', text:'Import finished!' });
-	
-	
+			 		try{
+						this.doTransform( request.responseText, options);
+					} catch(e) {
+						Ext.Msg.alert("Oryx","An Error is occured while importing!");
+					}
+					
+					Ext.getCmp("oryx-loading-panel_epc2bpmn").close();
+
+					// If autolayout is needed, it will be calles 'asychronly'
+					if (options.autolayout) {
+						window.setTimeout((function(){
+							this.facade.raiseEvent({type: 'autolayout.layout'});
+						}).bind(this), 100);
+					}
 	            }).bind(this), 100);
 		
 
@@ -127,9 +144,18 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			return 
 		}
 		var getEPCElementById = function(id){ return elements.find(function(el){ return el.id == id })}
-		
-		var eventsMappings 			= options && options.events ? options.events.split(";").compact().without("").without(" ").collect(function(s){return s.toLowerCase()}) : [];
-		var isIncludedInEMapping	= function(s){ return eventsMappings.any(function(map){return s.toLowerCase().include(map)})}
+		var deleteShape = function(thisEpc){
+							var fShape = shapes.find(function(sh){ return sh.epc == thisEpc });
+							if( fShape ){
+								fShape.shape.parent.remove( fShape.shape );
+								shapes = shapes.without( fShape )
+							}
+						}	
+		var eventsMappingsThrow 	= options && options.events_throw ? options.events_throw.split(";").compact().without("").without(" ").collect(function(s){return s.toLowerCase()}) : [];
+		var eventsMappingsCatch		= options && options.events_catch ? options.events_catch.split(";").compact().without("").without(" ").collect(function(s){return s.toLowerCase()}) : [];
+
+		var isIncludedInMappingEventThrow	= function(s){ return eventsMappingsThrow.any(function(map){return map.split(" ").all(function(word){ return s.toLowerCase().include(word) })})}
+		var isIncludedInMappingEventCatch	= function(s){ return eventsMappingsCatch.any(function(map){return map.split(" ").all(function(word){ return s.toLowerCase().include(word) })})}
 		
 		
 		
@@ -167,7 +193,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		startevents.each(function(epc){		
 		
 			// If its inculded in the mapping, set the type to StartMessageEvent, otherwise is it a StartEvent
-			var startEventType = isIncludedInEMapping(epc.title) ? "StartMessageEvent" : "StartEvent";
+			var startEventType = isIncludedInMappingEventCatch(epc.title) ? "StartMessageEvent" : "StartEvent";
 			
 			// Create a new Task
 			var shape = this.createElement(startEventType, epc, true);
@@ -182,19 +208,28 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		// 2b. Rule: Map - Events without an outgoing edge --> EndEvent
 		//
 		
+				
 		// 		
 		var endevents	= events.findAll(function(ev){ return !ev.outgoing })
 		endevents.each(function(epc){
+
+			// If its inculded in the mapping, set the type to StartMessageEvent, otherwise is it a StartEvent
+			var endEventType = this.isBPMN1_1 && isIncludedInMappingEventThrow(epc.title) ? "MessageEndEvent" : "EndEvent";
+			
 			// Create a new Task
-			var shape = this.createElement("EndEvent", epc, true);
+			var shape = this.createElement(endEventType, epc, true);
+			
+			//var fcTitle = deletePreviousFunction( epc )
+			
 			// Map Title, Description -> Documentation
 			shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);
 
 			// Set the end event type of message
-			if( isIncludedInEMapping(epc.title) ){
+			if(  this.isBPMN1_0 && isIncludedInMappingEventThrow(epc.title)){
 				shape.setProperty(	"oryx-result", "Message");
 			}
 			shapes.push({shape: shape, epc:epc})
+			
 		}.bind(this));	
 
 
@@ -203,18 +238,49 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		//
 		
 		// 	
-		var intermediateEvents	= [].without.apply(events, startevents.concat(endevents))
-		intermediateEvents		= intermediateEvents.findAll(function(epc){ return isIncludedInEMapping(epc.title)})
-		intermediateEvents.each(function(epc){
+		var intermediateEvents		= [].without.apply(events, startevents.concat(endevents))
+		intermediateEventsCatch		= intermediateEvents.findAll(function(epc){ return isIncludedInMappingEventCatch(epc.title)})
+		intermediateEventsCatch.each(function(epc){
+			var type = this.isBPMN1_1 ? "IntermediateMessageEventCatching" : "IntermediateMessageEvent";
 			// Create a new Task
-			var shape = this.createElement("IntermediateMessageEvent", epc, true);
+			var shape = this.createElement(type, epc, true);
 			// Map Title, Description -> Documentation
 			shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);
 
 			shapes.push({shape: shape, epc:epc})
+			
 		}.bind(this));
 			
-				
+
+		intermediateFunctionsThrow		= functions.findAll(function(epc){ return isIncludedInMappingEventThrow(epc.title)})
+		intermediateFunctionsThrow.each(function(epc){
+			
+			deleteShape( epc )
+			
+			var type = this.isBPMN1_1 ? "IntermediateMessageEventThrowing" : "IntermediateMessageEvent";
+			
+			var fEdge = epc.outgoing ? getEPCElementById( epc.outgoing[0].slice(1) ) : null;
+			if( fEdge && fEdge.outgoing){
+				var fEvent = getEPCElementById(fEdge.outgoing[0].slice(1));
+				if(fEvent && fEvent.type.endsWith("Event") && !fEvent.outgoing && isIncludedInMappingEventThrow(fEvent.title)){
+					deleteShape( fEvent );
+					type = this.isBPMN1_1 ? "MessageEndEvent" : "EndEvent";
+				}
+			}
+			
+			// Create a new Task
+			var shape = this.createElement(type, epc, true);
+			
+			// Map Title, Description -> Documentation
+			shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);
+			
+			if(  this.isBPMN1_0 && type == "EndEvent"){
+				shape.setProperty(	"oryx-result", "Message");
+			}
+			
+			shapes.push({shape: shape, epc:epc})
+					
+		}.bind(this));						
 		// ------------------------------------------
 		// 3. Rule: Map - Connector --> Gateway
 		//
@@ -224,10 +290,13 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		connectors.each(function(epc){
 			
 			// Set the BPMN Type
-			var type = "Exclusive_Databased_Gateway"
-			if(epc.type.endsWith("AndConnector")){ 		type = "AND_Gateway" } 
-			else if(epc.type.endsWith("OrConnector")){ 	type = "OR_Gateway"  }
+			var type = "Exclusive_Databased_Gateway";
+			if(epc.type.endsWith("AndConnector")){ 		type = "AND_Gateway"; } 
+			else if(epc.type.endsWith("OrConnector")){ 	type = "OR_Gateway";  }
 			
+			if( type == "Exclusive_Databased_Gateway" && epc.outgoing && epc.outgoing.all(function(out){  return intermediateEventsCatch.include(getEPCElementById(getEPCElementById(out.slice(1)).outgoing[0].slice(1))) })){
+				type = "Exclusive_Eventbased_Gateway";
+			}
 			// Create a new Task
 			var shape = this.createElement(type, epc, true);
 
@@ -247,7 +316,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 				epc.outgoing.each(function(out){
 					var next = getEPCElementById(out.slice(1));
 					// If its an edge
-					if( next.type.endsWith("ControlFlow") ){
+					if( next.type.endsWith("ControlFlow") && next.outgoing){
 						
 						next.outgoing.each(function(out2){
 							var nextnext = getEPCElementById(out2.slice(1));
@@ -305,8 +374,10 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		// 
 		var processlinks = elements.findAll(function(el){ return el.type.endsWith("ProcessInterface")})
 		processlinks.each(function(epc){
+			
+			var type = this.isBPMN1_1 ? "collapsedSubprocess" : "Subprocess";
 			// Create a new Task
-			var shape = this.createElement("Subprocess", epc, true);
+			var shape = this.createElement(type, epc, true);
 			// Map Title -> Name
 			shape.setProperty(	"oryx-name", 			epc.title);
 			// Map Description -> Documentation
@@ -324,7 +395,10 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		//
 		
 		// 
-		var organizations = options.organization ? elements.findAll(function(el){ return el.type.endsWith("Organization") || el.type.endsWith("Position")}) : [];
+		var organizations 		= options.organization ? elements.findAll(function(el){ return el.type.endsWith("Organization") || el.type.endsWith("Position")}) : [];
+		var organizationNames 	= organizations.collect(function(epc){ return epc.title }).uniq().sort();
+		organizations			= organizationNames.collect(function(name){ return organizations.findAll(function(epc){ return epc.title == name}) });
+		
 		if( organizations.length > 0 ){
 			
 			var pool 		= this.createElement("Pool");
@@ -332,37 +406,43 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			var lanes 		= [];
 			var addedShapes	= [];
 			
-			organizations.each(function(epc){
+			organizations.each(function(epcs){
 				// Create a new Task
 				var lane = this.createElement("Lane");
 				// Map Title -> Name
-				lane.setProperty(	"oryx-name", epc.title);
+				lane.setProperty(	"oryx-name", epcs[0].title);
 				pool.add( lane );
-				lanes.push({shape: lane, epc:epc});
+				lanes.push({shape: lane, epc:epcs[0]});
 				
-				var prevFunctions = epc.outgoing ? epc.outgoing.collect(function(out){ return getEPCElementById(out.slice(1)).outgoing.slice(1) }) : [];
-			
-				var allRelatedFunctions = shapes.findAll(function(shape){ return shape.epc.type.endsWith("Function") || shape.epc.type.endsWith("ProcessInterface") })
-				allRelatedFunctions = allRelatedFunctions.findAll(function(shape){ return  (prevFunctions.indexOf(shape.epc.id) >= 0) || (shape.epc.outgoing && shape.epc.outgoing.any(function(out){ return getEPCElementById(out.slice(1)).outgoing.first().slice(1) == epc.id}))})
+				epcs.each(function(epc){
+
+					var prevFunctions = epc.outgoing ? epc.outgoing.collect(function(out){ return getEPCElementById(out.slice(1)).outgoing[0].slice(1) }) : [];
 				
-				allRelatedFunctions.each(function(shape){
-					lane.add(shape.shape)
-					addedShapes.push(shape)
-				})
-						
-			}.bind(this))	
+					var allRelatedFunctions = shapes.findAll(function(shape){ return shape.epc.type.endsWith("Function") || shape.epc.type.endsWith("ProcessInterface") })
+					allRelatedFunctions = allRelatedFunctions.findAll(function(shape){ return  prevFunctions.include(shape.epc.id) || (shape.epc.outgoing && shape.epc.outgoing.any(function(out){ return getEPCElementById(out.slice(1)).outgoing.first().slice(1) == epc.id}))})
+					
+					allRelatedFunctions.each(function(shape){
+						lane.add(shape.shape)
+						addedShapes.push(shape)
+					})
+											
+				});
+			}.bind(this));	
 			
 			var notAddedShapes = [].without.apply(shapes, addedShapes);
-			
-			var emptyLane	= this.createElement("Lane");
-			pool.add( emptyLane );
-						
+
+			// Get all function which are not added to a pool yet
 			var notAddedFunctions = notAddedShapes.findAll(function(shape){ return shape.epc.type.endsWith("Function")  || shape.epc.type.endsWith("ProcessInterface") });
-			notAddedFunctions.each(function(shape){
-				emptyLane.add( shape.shape )
-				addedShapes.push(shape);				
-			})
-			
+			if( notAddedFunctions.length > 0 ){
+				// Create a new empty pool
+				var emptyLane	= this.createElement("Lane");
+				pool.add( emptyLane );
+				// Add all functions to this pool
+				notAddedFunctions.each(function(shape){
+					emptyLane.add( shape.shape )
+					addedShapes.push(shape);				
+				})			
+			}
 
 			var notAddedShapes = [].without.apply(shapes, addedShapes);			
 			
@@ -533,10 +613,6 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		//		
 		this.facade.getCanvas().update();
 		
-		if( options.autolayout ){
-			this.facade.raiseEvent({type:'autolayout.layout'});
-		}	
-		
 	},
 	
 	/**
@@ -546,11 +622,20 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 	 * @param {Object} epcElement
 	 * @param {Object} setBounds
 	 */
-	createElement: function(bpmnType, epcElement, setBounds){
+	createElement: function(bpmnType, epcElement, setBounds, alternativeBPMNType){
 
-		// Create a new Stencil								
-		var stencil = ORYX.Core.StencilSet.stencil('http://b3mn.org/stencilset/bpmn#' + bpmnType);
+		// Create a new Stencil		
+		var ssn 	= this.facade.getStencilSets().keys()[0];						
+		var stencil = ORYX.Core.StencilSet.stencil(ssn + bpmnType);
 	
+		if( !stencil && alternativeBPMNType ){
+			stencil = ORYX.Core.StencilSet.stencil(ssn + alternativeBPMNType);
+		}
+
+		if( !stencil ){
+			return null;
+		}
+			
 		// Create a new Shape
 		var newShape = (stencil.type() == "node") ?
 										new ORYX.Core.Node(
@@ -586,7 +671,8 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		var getElementByIdFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id})}
 
 		// Get the oryx-editor div
-		var editorNode 	= getElementByIdFromDiv('oryxcanvas')
+		var editorNode 	= getElementByIdFromDiv('oryxcanvas');
+		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryx-canvas123');
 
 		var hasEPC = editorNode ? $A(editorNode.childNodes).any(function(node){return node.nodeName.toLowerCase() == "a" && node.getAttribute('rel') == 'oryx-stencilset' && node.getAttribute('href').endsWith('epc/epc.json')}) : null;
 
@@ -690,13 +776,17 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 								xtype: 	'label',
 								cls:	'transform-epc-bpmn-title'
 					        },{
-								text:	'If u like to transform indivual event from EPC to event in BPMN, please give keyword regarding to these (sepreated with a \';\').',
+								text:	'If u like to transform indivual event from EPC to event in BPMN, please give keyword regarding to these (separated with a \';\').',
 								xtype: 	'label',
 								width:	'100%',
 								style:	'margin-bottom:10px;display:block;'
 					        },{
 								labelStyle: 'background:transparent url(stencilsets/bpmn/icons/intermediate-message.png) no-repeat scroll 0px -1px;width:30px;height:20px',
-					            name: 	'events'
+					            name: 	'events_catch'
+					        },{
+								labelStyle: !this.isBPMN1_0 ? 'background:transparent url(stencilsets/bpmn/icons/intermediate-message.png) no-repeat scroll 0px -30px;width:30px;height:20px' : 'display:none',
+					            name: 	'events_throw',
+								style:	this.isBPMN1_0 ? "display:none;" : ""
 					        },{
 								text:	'Organization',
 								xtype: 	'label',
@@ -733,7 +823,6 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					});
 
 		Ext.getCmp('transform-epc-bpmn-id-organization').on('check', function(obj, check){
-			
 			if(check){
 				Ext.getCmp('transform-epc-bpmn-id-autolayout').setValue( true );
 				Ext.getCmp('transform-epc-bpmn-id-autolayout').disable();
@@ -741,6 +830,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 				Ext.getCmp('transform-epc-bpmn-id-autolayout').enable();
 			}
 		})
+		
 		
 		var groupButton = {
 			            text:			'Advanced Settings',
@@ -781,20 +871,22 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 									}
 									
 									if( !Ext.getCmp('transform-epc-bpmn-id-advance').collapsed ){
-										res.events 			= Ext.getCmp('transform-epc-bpmn-id-advance').findByType('textfield')[0].getValue();
-										//res.other 			= Ext.getCmp('transform-epc-bpmn-id-advance').findByType('textfield')[1].getValue();
+										res.events_catch	= Ext.getCmp('transform-epc-bpmn-id-advance').findByType('textfield')[0].getValue();
+										if( this.isBPMN1_1 ){
+											res.events_throw = Ext.getCmp('transform-epc-bpmn-id-advance').findByType('textfield')[1].getValue();
+										}
 										res.organization	= Ext.getCmp('transform-epc-bpmn-id-advance').findByType('checkbox')[0].getValue();
 										res.autolayout 		= Ext.getCmp('transform-epc-bpmn-id-advance').findByType('checkbox')[1].getValue();
 									}
 									
-									Ext.getCmp('transform-epc-bpmn-id-panel').destroy();
+									Ext.getCmp('transform-epc-bpmn-id-panel').close();
 								
 									callback( res );
-								}
+								}.bind(this)
 							},{
 								text:	'Cancel',
 								handler: function(){
-									Ext.getCmp('transform-epc-bpmn-id-panel').destroy();
+									Ext.getCmp('transform-epc-bpmn-id-panel').close();
 								}
 							}]  
 					})

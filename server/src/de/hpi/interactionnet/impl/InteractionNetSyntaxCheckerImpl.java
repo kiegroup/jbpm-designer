@@ -26,10 +26,10 @@ public class InteractionNetSyntaxCheckerImpl extends PetriNetSyntaxCheckerImpl
 	public boolean checkSyntax() {
 		if (!super.checkSyntax())
 			return false;
-		if (!checkRolesAndMessageTypes())
-			return false;
-		errorCode = null;
-		return true;
+//		if (!checkRolesAndMessageTypes())
+//			return false;
+		checkRolesAndMessageTypes();
+		return (errors.size() == 0);
 	}
 
 	private boolean checkRolesAndMessageTypes() {
@@ -39,22 +39,24 @@ public class InteractionNetSyntaxCheckerImpl extends PetriNetSyntaxCheckerImpl
 			if (t instanceof InteractionTransition) {
 				InteractionTransition ti = (InteractionTransition)t;
 				if (ti.getSender() == null) {
-					errorCode = SENDER_NOT_SET+" (transition "+t.getId()+")";
-					return false;
+					addNodeError(ti, SENDER_NOT_SET);
+//					return false;
+					continue;
 				}
 				if (ti.getReceiver() == null) {
-					errorCode = RECEIVER_NOT_SET+" (transition "+t.getId()+")";
-					return false;
+					addNodeError(ti, RECEIVER_NOT_SET);
+//					return false;
+					continue;
 				}
 				if (ti.getMessageType() == null) {
-					errorCode = MESSAGETYPE_NOT_SET+" (transition "+t.getId()+")";
-					return false;
+					addNodeError(ti, MESSAGETYPE_NOT_SET);
+//					return false;
 				}
 				
 			} else if (t instanceof ActionTransition) {
 				ActionTransition ta = (ActionTransition)t;
 				if (ta.getRole() == null) {
-					errorCode = ROLE_NOT_SET+" (transition "+t.getId()+")";
+					addNodeError(t, ROLE_NOT_SET);
 				}
 				
 			} else if (t instanceof TauTransition) {

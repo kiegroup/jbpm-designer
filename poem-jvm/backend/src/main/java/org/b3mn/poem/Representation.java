@@ -51,22 +51,76 @@ public class Representation {
     private String summary;
     private Date created;
     private Date updated;
-    private String svg;
-    private String content;
- 
+
+    // The following 5 methods access the "content" table instead of "representation". 
+    // This isn't nice style but it was necessary to separate meta and content data, in order 
+    // to provide adequate performance. 
+    
+    // Check whether the content already exists
+    private boolean contentExists() {
+    	boolean result = Persistance.getSession().
+    		createSQLQuery("SELECT id FROM content WHERE id=:id").
+    		setLong("id", this.id).list().size() != 0;
+    	Persistance.commit();
+    	return result;
+    }
     
     public String getContent() {
-		return content;
+    	String content = (String)Persistance.getSession().
+    		createSQLQuery("SELECT content.erdf FROM content WHERE id=:id").
+    		setLong("id", id).uniqueResult();
+    	Persistance.commit();
+    	return content;
 	}
-	public void setContent(String content) {
-		this.content = content;
+    
+	public void setContent(String erdf) {
+		// Check whether the content already exists
+		if (contentExists()) {
+			// Create and execute UPDATE query
+			Persistance.getSession().
+			createSQLQuery("UPDATE content SET erdf=:erdf WHERE id=:id").
+			setString("erdf", erdf).
+			setLong("id", id).executeUpdate();
+			Persistance.commit();
+		}
+		else {
+			// Create and execute INSERT query
+			Persistance.getSession().
+			createSQLQuery("INSERT INTO content (id, erdf, svg) VALUES (:id, :erdf, '')").
+			setLong("id", id).
+			setString("erdf", erdf).executeUpdate();
+			Persistance.commit();
+		}
 	}
+	
     public String getSvg() {
-		return svg;
+    	String svg = (String)Persistance.getSession().
+			createSQLQuery("SELECT content.svg FROM content WHERE id=:id").
+			setLong("id", id).uniqueResult();
+    	Persistance.commit();
+    	return svg;
 	}
+    
 	public void setSvg(String svg) {
-		this.svg = svg;
+		// Check whether the content already exists
+		if (contentExists()) {
+			// Create and execute UPDATE query
+			Persistance.getSession().
+			createSQLQuery("UPDATE content SET svg=:svg WHERE id=:id").
+			setString("svg", svg).
+			setLong("id", id).executeUpdate();
+			Persistance.commit();
+		}
+		else {
+			// Create and execute INSERT query
+			Persistance.getSession().
+			createSQLQuery("INSERT INTO content (id, svg, erdf) VALUES (:id, :svg, '')").
+			setLong("id", id).
+			setString("svg", svg).executeUpdate();
+			Persistance.commit();
+		}
 	}
+	
 	public Date getCreated() {
 		return created;
 	}
@@ -134,12 +188,13 @@ public class Representation {
 	        
 	        if(title != null) rep.setTitle(title);
 	        if(summary != null) rep.setSummary(summary);
-	        if(content != null) rep.setContent(content);
-	        if(svg != null) rep.setSvg(svg);
 	        
 	        rep.setUpdated(date);
 	        Persistance.getSession().flush();
 	        Persistance.commit();
+	        
+	        if(content != null) rep.setContent(content);
+	        if(svg != null) rep.setSvg(svg);
 	    }
         catch(HibernateException ex) {
             System.err.println(ex.getMessage());

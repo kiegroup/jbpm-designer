@@ -16,8 +16,33 @@
   	<oryx:magnet oryx:cx="299" oryx:cy="124" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill" >
-    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="none" fill="white" opacity=".3" />
+    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" fill="white" fill-opacity=".3" />
     <rect id="border" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" stroke-width="1" fill="none" />
+
+	<rect 
+		id="caption"
+		oryx:anchors="left top bottom"
+		x="0"
+		y="0"
+		width="30"
+		height="250"
+		stroke="black"
+		stroke-width="1"
+		fill="white"
+	/>
+	
+	<rect 
+		id="captionDisableAntialiasing"
+		oryx:anchors="left top bottom"
+		x="0"
+		y="0"
+		width="30"
+		height="250"
+		stroke="black"
+		stroke-width="1"
+		fill="white"
+	/>
+	
     <text x="10" y="125" font-size="14" id="text_v" oryx:align="middle center" oryx:anchors="left" oryx:rotate="270" fill="black" stroke="black"></text>
   </g>
 </svg>

@@ -1,4 +1,4 @@
-package de.hpi.interactionnet.localmodelgeneration;
+package de.hpi.PTnet.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +19,7 @@ public class WeakTerminationChecker {
 	protected PTNetInterpreter interpreter;
 	protected Set<String> goodMarkings;
 	protected Set<String> badMarkings;
+	protected Set<String> visitedMarkings;
 	protected Set<String> finalMarkings;
 	
 	public WeakTerminationChecker(PTNet net, List<Marking> finalMarkings) {
@@ -26,8 +27,10 @@ public class WeakTerminationChecker {
 		this.interpreter = (PTNetInterpreter)net.getInterpreter();
 		this.goodMarkings = new HashSet<String>();
 		this.badMarkings = new HashSet<String>();
+		this.visitedMarkings = new HashSet<String>();
+		this.finalMarkings = new HashSet<String>();
 		for (Marking m: finalMarkings)
-			this.goodMarkings.add(m.toString());
+			this.finalMarkings.add(m.toString());
 	}
 	
 	/**
@@ -41,42 +44,43 @@ public class WeakTerminationChecker {
 		else
 			conflictingTransitions.clear();
 		
-		doCheck(net.getInitialMarking(), conflictingTransitions);
-		return (conflictingTransitions.size() > 0);
+		return doCheck(net.getInitialMarking(), conflictingTransitions, false);
 	}
 
-	protected boolean doCheck(Marking marking, List<Transition> conflictingTransitions) {
+	protected boolean doCheck(Marking marking, List<Transition> conflictingTransitions, boolean returnFalseIfVisited) {
 		String markingStr = marking.toString();
 //		System.out.println("Checking marking "+markingStr);
 		
-		// check if this marking was already processed
+		// check if this marking was already processed		
 		if (goodMarkings.contains(markingStr))
 			return true;
 		if (badMarkings.contains(markingStr))
 			return false;
-		badMarkings.add(markingStr);
 		
-		boolean leadsToGoodMarking = false;
+		boolean alreadyVisited = visitedMarkings.contains(markingStr);
+		if (alreadyVisited && returnFalseIfVisited)
+			return false;
+		if (!alreadyVisited)
+			visitedMarkings.add(markingStr);
+		
+		boolean leadsToGoodMarking = finalMarkings.contains(markingStr);
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
 		List<Transition> badTransitions = new ArrayList<Transition>();
 		for (Transition t: transitions) {
 			Marking newmarking = interpreter.fireTransition(net, marking, t);
 			
-			boolean cresult = doCheck(newmarking, conflictingTransitions);
+			boolean cresult = doCheck(newmarking, conflictingTransitions, alreadyVisited);
 			leadsToGoodMarking |= cresult;
-			if (!cresult && !conflictingTransitions.contains(t)) {
-				if (leadsToGoodMarking)
-					conflictingTransitions.add(t);
-				else 
-					badTransitions.add(t);
-			}
+			if (!cresult)
+				badTransitions.add(t);
 		}
-
+		
 		if (leadsToGoodMarking) {
-			badMarkings.remove(markingStr);
+			visitedMarkings.remove(markingStr);
 			goodMarkings.add(markingStr);
 			for (Transition t: badTransitions)
-				conflictingTransitions.add(t);
+				if (!conflictingTransitions.contains(t))
+					conflictingTransitions.add(t);
 		}
 		
 		return leadsToGoodMarking;

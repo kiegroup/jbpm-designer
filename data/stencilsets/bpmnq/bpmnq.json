@@ -692,6 +692,30 @@
 					"length":""
 				},
 				{
+					"id":"SplitJoin",
+					"type":"Choice",
+					"title":"Split/Join",
+					"value":"AND Split",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"andSplit",
+							"title":"AND Split",
+							"value":"AND Split",
+							"refToView":""
+						},
+						{
+							"id":"andJoin",
+							"title":"AND Join",
+							"value":"AND Join",
+							"refToView":""
+						}
+					]
+				},
+				{
 					"id":"gates",
 					"type":"String",
 					"title":"Gates",
@@ -792,6 +816,16 @@
 					"length":"30"
 				},
 				{
+					"id":"gatewayType",
+					"type":"String",
+					"title":"GatewayType",
+					"value":"GENERIC",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -856,6 +890,52 @@
 					"length":"30"
 				},
 				{
+					"id":"gatewayType",
+					"type":"String",
+					"title":"GatewayType",
+					"value":"GENERIC SPLIT",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"gates",
+					"type":"String",
+					"title":"Gates",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gates_outgoingSequenceFlow",
+					"type":"String",
+					"title":"[Gates] OutgoingSequenceFlow",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gates_Assignments",
+					"type":"String",
+					"title":"[Gates] Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},	
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -919,6 +999,52 @@
 					"refToView":"",
 					"length":"30"
 				},
+				{
+					"id":"gatewayType",
+					"type":"String",
+					"title":"GatewayType",
+					"value":"GENERIC JOIN",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"gates",
+					"type":"String",
+					"title":"Gates",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gates_outgoingSequenceFlow",
+					"type":"String",
+					"title":"[Gates] OutgoingSequenceFlow",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gates_Assignments",
+					"type":"String",
+					"title":"[Gates] Assignments",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},	
 				{
 					"id":"bgColor",
 					"type":"Color",
@@ -992,6 +1118,30 @@
 					"readonly":true,
 					"optional":false,
 					"length":"",
+				},
+				{
+					"id":"SplitJoin",
+					"type":"Choice",
+					"title":"Split/Join",
+					"value":"OR Split",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"orSplit",
+							"title":"OR Split",
+							"value":"OR Split",
+							"refToView":""
+						},
+						{
+							"id":"orJoin",
+							"title":"OR Join",
+							"value":"OR Join",
+							"refToView":""
+						}
+					]
 				},
 				{
 					"id":"gates",
@@ -1140,6 +1290,30 @@
 					"length":""
 				},
 				{
+					"id":"SplitJoin",
+					"type":"Choice",
+					"title":"Split/Join",
+					"value":"XOR Split",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"xorSplit",
+							"title":"XOR Split",
+							"value":"XOR Split",
+							"refToView":""
+						},
+						{
+							"id":"xorJoin",
+							"title":"XOR Join",
+							"value":"XOR Join",
+							"refToView":""
+						}
+					]
+				},
+				{
 					"id":"xorType",
 					"type":"String",
 					"title":"XORType",
@@ -1153,7 +1327,7 @@
 					"id":"markerVisible",
 					"type":"Choice",
 					"title":"MarkerVisible",
-					"value":"false",
+					"value":"true",
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -1317,6 +1491,30 @@
 					"readonly":true,
 					"optional":false,
 					"length":""
+				},
+				{
+					"id":"SplitJoin",
+					"type":"Choice",
+					"title":"Split/Join",
+					"value":"XOR Split",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"xorSplit",
+							"title":"XOR Split",
+							"value":"XOR Split",
+							"refToView":""
+						},
+						{
+							"id":"xorJoin",
+							"title":"XOR Join",
+							"value":"XOR Join",
+							"refToView":""
+						}
+					]
 				},
 				{
 					"id":"xorType",

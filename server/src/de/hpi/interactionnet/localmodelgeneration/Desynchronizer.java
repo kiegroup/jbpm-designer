@@ -8,8 +8,8 @@ import java.util.Map;
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.PTNet;
 import de.hpi.PTnet.PTNetFactory;
-import de.hpi.PTnet.impl.PTNetFactoryImpl;
 import de.hpi.interactionnet.InteractionNet;
+import de.hpi.interactionnet.InteractionNetFactory;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.interactionnet.Role;
 import de.hpi.petrinet.FlowRelationship;
@@ -25,7 +25,7 @@ import de.hpi.petrinet.Transition;
 public class Desynchronizer {
 	
 	public PTNet getDesynchronizedNet(InteractionNet net, List<Marking> newFinalMarkings) {
-		PTNetFactory factory = new PTNetFactoryImpl();
+		InteractionNetFactory factory = net.getFactory();
 		PTNet newnet = factory.createPetriNet();
 		
 		// create places for all interaction models
@@ -55,7 +55,7 @@ public class Desynchronizer {
 		return channelMap;
 	}
 
-	private void addRoleProjections(PTNet newnet, InteractionNet net, List<Marking> finalMarkings, Map<String, Place> channelMap, PTNetFactory factory) {
+	private void addRoleProjections(PTNet newnet, InteractionNet net, List<Marking> finalMarkings, Map<String, Place> channelMap, InteractionNetFactory factory) {
 		LocalModelGenerator generator = new LocalModelGenerator();
 		for (Role r: net.getRoles()) {
 			// generate local model
@@ -100,7 +100,7 @@ public class Desynchronizer {
 					((LabeledTransition)newt).setLabel(((LabeledTransition)t).getLabel());
 				}
 				newnet.getTransitions().add(newt);
-				newt.setId(r.getName()+"_"+t.getId());
+				newt.setId(t.getId());
 				map.put(t, newt);
 				
 				// add flow relationships to channel places

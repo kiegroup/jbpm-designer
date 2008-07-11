@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.hpi.bpmn.validation.BPMNSyntaxChecker;
+
 /**
  * 
  * @author Gero.Decker
@@ -16,6 +18,10 @@ public class BPMNDiagram implements Container {
 	protected List<DataObject> dataObjects;
 	protected List<Edge> edges;
 	protected List<Container> processes;
+	
+	public BPMNSyntaxChecker getSyntaxChecker() {
+		return new BPMNSyntaxChecker(this);
+	}
 	
 	public String getTitle() {
 		return title;
@@ -63,11 +69,11 @@ public class BPMNDiagram implements Container {
 		getAllNodesRecursively(this, allNodes);
 		
 		// handle subprocesses => trivial
-//		for (Iterator<Node> niter = allNodes.iterator(); niter.hasNext(); ) {
-//			Node node = niter.next();
-//			if (node instanceof SubProcess)
-//				handleSubProcess((SubProcess)node);
-//		}
+		for (Iterator<Node> niter = allNodes.iterator(); niter.hasNext(); ) {
+			Node node = niter.next();
+			if (node instanceof SubProcess)
+				handleSubProcess((SubProcess)node);
+		}
 		
 		// identify components within allNodes
 		while (allNodes.size() > 0) {

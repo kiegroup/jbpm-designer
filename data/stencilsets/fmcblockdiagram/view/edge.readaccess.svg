@@ -1,0 +1,15 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:oryx="http://www.b3mn.org/oryx"
+	version="1.0"
+	oryx:edge="edge" >
+	<defs>
+
+      <marker id="start" refX="1" refY="4" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+        <path d="M 0 4 L 10 0 L 10 8 L 0 4" fill="black" stroke="black" />
+      </marker>
+	</defs>
+	<g>
+	    <path id="edge" d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-start="url(#start)" marker-end="url(#end)" />
+	</g>
+</svg>

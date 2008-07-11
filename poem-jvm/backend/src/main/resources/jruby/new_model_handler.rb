@@ -41,9 +41,9 @@ module Handler
     end
     
     def doPost(interaction)
+      out = interaction.response.getWriter
       if interaction.subject.getUri == 'public'
         interaction.response.setStatus(403)
-        out = interaction.response.getWriter
         out.println("Forbidden!")
       elsif interaction.params['svg'] && interaction.params['data']
         title = interaction.params['title'] || 'New Process'

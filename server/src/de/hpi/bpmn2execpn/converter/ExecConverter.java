@@ -38,9 +38,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xerces.internal.dom.DeferredTextImpl;
-
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.ExecDataObject;
@@ -71,6 +70,8 @@ public class ExecConverter extends Converter {
 	private static final String copyXsltURL = baseXsltURL + "copy_xslt.xsl";
 	private static final String extractDataURL = baseXsltURL + "extract_processdata.xsl";
 	private static final String extractFormDataURL = baseXsltURL + "extract_init_processdata.xsl";
+	private static final String extractAllocateDataURL = baseXsltURL + "extract_allocate_processdata.xsl";
+	private static final String extractFinishDataURL = baseXsltURL + "extract_finish_processdata.xsl";
 	private static String enginePostURL;
 	private String contextPath;
 	protected String standardModel;
@@ -146,9 +147,6 @@ public class ExecConverter extends Converter {
 		exTask.tr_resume.setContextPlaceID(exTask.pl_context.getId());
 		exTask.tr_finish.setContextPlaceID(exTask.pl_context.getId());
 		
-		
-
-		
 		// create Documents for model, form, bindings
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance (  ) ; 
 		
@@ -158,23 +156,32 @@ public class ExecConverter extends Converter {
 			Document modelDoc = parser.newDocument();
 			//modelDoc.appendChild(modelDoc.createElement("engine-info"));
 			Node places = modelDoc.appendChild(modelDoc.createElement("places"));
-			
 			Node data = places.appendChild(modelDoc.createElement("data")); 
 			//Node metaData = places.appendChild(modelDoc.createElement("metadata")); 
 			//Node processData = places.appendChild(modelDoc.createElement("processdata"));
-			
 
+			// initialize engine Post URL
+			PropertiesConfiguration config = new PropertiesConfiguration("pnengine.properties");
+			this.enginePostURL = config.getString("pnengine.url") + "/documents/";
+			
 			// interrogate all incoming data objects for task, create DataPlaces for them and create Task model
 			HashMap<String, Node> processdataMap = new HashMap<String, Node>();
 			List<Edge> edges_in = task.getIncomingEdges();
 			for (Edge edge : edges_in) {
 				if (edge.getSource() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getSource();
+					Place dataPlace = ExecTask.getDataPlace(dataObject.getId());
 					// for incoming data objects of task: create read dependencies
-					addReadOnlyExecFlowRelationship(net, ExecTask.getDataPlace(dataObject.getId()), exTask.tr_enable, null);
+					addReadOnlyExecFlowRelationship(net, dataPlace, exTask.tr_enable, null);
 					// create XML Structure for Task
 					String modelXML = dataObject.getModel();
-
+					/*modelXML =
+						"<schema xmlns=\"http://www.w3.org/1999/xhtml\""+
+						      "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""+
+						      "xsi:schemaLocation=\"http://www.w3.org/1999/xhtml"+
+						      "http://www.w3.org/1999/xhtml.xsd\">" +
+						      modelXML +
+						      "</schema>";*/
 					
 					// attach to task model
 					Element dataEl = modelDoc.createElement("data");
@@ -183,9 +190,18 @@ public class ExecConverter extends Converter {
 					
 					try {
 						Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-						Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
-						processdataMap.put(dataObject.getId(), processdata);
-						
+						NodeList elements = doc.getElementsByTagName("xsd:element");
+						//Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
+						if (elements.getLength() > 0){
+							processdataMap.put(dataObject.getId(), elements.item(0));
+							// if contained in an ad-hoc subprocess, add
+							//	data dependency
+							Container parent = task.getParent();
+							if (parent instanceof SubProcess && ((SubProcess)parent).isAdhoc()){ 
+								// TODO: Use Node List??? - ugly solution
+								//addDataDependeny(net, exTask, dataPlace, elements);
+							}
+						}
 					} catch (Exception io) {
 						io.printStackTrace();
 					}
@@ -195,17 +211,26 @@ public class ExecConverter extends Converter {
 			// interrogate all outgoing data objects for task, create DataPlaces for them and create Task model
 			List<Edge> edges_out = task.getOutgoingEdges();
 			for (Edge edge : edges_out) {
-				if (edge.getSource() instanceof ExecDataObject) {
+				if (edge.getTarget() instanceof ExecDataObject) {
 					ExecDataObject dataObject = (ExecDataObject)edge.getTarget();
 					// for incoming data objects of task: create read dependencies
 					if (!isContainedIn(dataObject, processdataMap)) {
 
 						// create XML Structure for Task
 						String modelXML = dataObject.getModel();
+						modelXML =
+							"<html xmlns=\"http://www.w3.org/1999/xhtml\""+
+							      "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""+
+							      "xsi:schemaLocation=\"http://www.w3.org/1999/xhtml"+
+							      "http://www.w3.org/1999/xhtml.xsd\">" +
+							      modelXML;
+						
 						try {
 							Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-							Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
-							processdataMap.put(dataObject.getId(), processdata);							
+							NodeList processdata = doc.getElementsByTagName("xsd:element");
+							//Node processdata = doc.getDocumentElement().getFirstChild().getFirstChild();
+							if (processdata.getLength() > 0)
+								processdataMap.put(dataObject.getId(), processdata.item(0));						
 						} catch (Exception io) {
 							io.printStackTrace();
 						}
@@ -226,10 +251,7 @@ public class ExecConverter extends Converter {
 			// adds binding attributes for tags
 			bindDoc = addBindings(bindDoc, processdataMap);
 			
-			// initialize engine Post URL
-			try {
-				PropertiesConfiguration config = new PropertiesConfiguration("pnengine.properties");
-				this.enginePostURL = config.getString("pnengine.url") + "/documents/";
+
 			
 				// persist form and bindings and save URL
 				model = this.postDataToURL(domToString(modelDoc),enginePostURL);
@@ -252,11 +274,8 @@ public class ExecConverter extends Converter {
 				review.setBindingsURL(bindings);
 
 				
-			} catch (ConfigurationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
+		} catch (ConfigurationException e1) {
+			e1.printStackTrace();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException ex) {
@@ -275,7 +294,7 @@ public class ExecConverter extends Converter {
 		exTask.pl_context.addLocator(new Locator("startTime", "xsd:string", "/data/metadata/startTime"));
 		exTask.pl_context.addLocator(new Locator("endTime", "xsd:string", "/data/metadata/endTime"));
 		exTask.pl_context.addLocator(new Locator("status", "xsd:string", "/data/metadata/status"));
-		exTask.pl_context.addLocator(new Locator("owner", "xsd:string", "/data/metadata/owner"));
+		exTask.pl_context.addLocator(new Locator("owner", "xsd:string", "/data/executiondata/owner"));
 		exTask.pl_context.addLocator(new Locator("isDelegated", "xsd:string", "/data/metadata/isDelegated"));
 		exTask.pl_context.addLocator(new Locator("isReviewed", "xsd:string", "/data/metadata/isReviewed"));
 		exTask.pl_context.addLocator(new Locator("reviewRequested", "xsd:string", "/data/metadata/reviewRequested"));
@@ -297,7 +316,7 @@ public class ExecConverter extends Converter {
 		
 		// allocate Transition
 		addFlowRelationship(net, exTask.pl_ready, exTask.tr_allocate);
-		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_running, extractDataURL);
+		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_running, extractAllocateDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_allocate);
 		addExecFlowRelationship(net, exTask.tr_allocate, exTask.pl_context, baseXsltURL + "context_allocate.xsl");
 		exTask.tr_allocate.setRolename(rolename);
@@ -368,7 +387,7 @@ public class ExecConverter extends Converter {
 		
 		// finish transition
 		addFlowRelationship(net, exTask.pl_complete, exTask.tr_finish);
-		addExecFlowRelationship(net, exTask.tr_finish, c.map.get(getOutgoingSequenceFlow(task)), extractDataURL);
+		addExecFlowRelationship(net, exTask.tr_finish, c.map.get(getOutgoingSequenceFlow(task)), extractFinishDataURL);
 		addFlowRelationship(net, exTask.pl_context, exTask.tr_finish);
 		addExecFlowRelationship(net, exTask.tr_finish, exTask.pl_context, baseXsltURL + "context_finish.xsl");	
 			
@@ -389,18 +408,11 @@ public class ExecConverter extends Converter {
 			ConversionContext c) {
 		super.handleSubProcess(net, process, c);
 		if (process.isAdhoc()) {
-			handleSubProcessAdHoc(net, process, c);
+			handleAdHocSubProcess(net, process, c);
 		}
 	}
 	
-
-	/* TODO:   There are a number of tasks that remain to be done here:
-	 * 
-	 * - Integrating data dependencies as guards
-	 * - Adding second parallel mode
-	 * - Connecting auto skip with context places
-	 */
-	protected void handleSubProcessAdHoc(PetriNet net, SubProcess process, ConversionContext c) {
+	protected void handleAdHocSubProcess(PetriNet net, SubProcess process, ConversionContext c) {
 		SubProcessPlaces pl = c.getSubprocessPlaces(process);
 		boolean isParallel = process.isParallelOrdering();	
 
@@ -424,7 +436,6 @@ public class ExecConverter extends Converter {
 		finalize.setGuard(completionConditionString);
 		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
 		resume.setGuard("!("+completionConditionString+")" );
-		
 
 		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
 		Place synch = addPlace(net, "ad-hoc_synch_" + process.getId());
@@ -438,6 +449,13 @@ public class ExecConverter extends Converter {
 			addFlowRelationship(net, synch, finalize);
 		} else {
 			addFlowRelationship(net, resume, synch);
+		}
+		
+		// data place specific constructs
+		List<Place> dataObjectPlaces = getAccessedDataObjectsPlaces(process);
+		for (Place place : dataObjectPlaces){
+			addReadOnlyFlowRelationship(net, place, resume);
+			addReadOnlyFlowRelationship(net, place, finalize); 
 		}
 
 		// task specific constructs
@@ -468,14 +486,19 @@ public class ExecConverter extends Converter {
 				// finishing construct(finalize with skip, finish and abort)
 				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
 				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
-				Transition skip = addTauTransition(net, "ad-hoc_skip_task_"	+ exTask.getId());
+				Transition skipReady = addTauTransition(net, "ad-hoc_skipready_task_" + exTask.getId());
+				Transition skipEnabled = addTauTransition(net, "ad-hoc_skipenabled_task_" + exTask.getId());
 				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
 				
 				addFlowRelationship(net, finalize, enableFinalize);
 					
-				addFlowRelationship(net, enableFinalize, skip);
-				addFlowRelationship(net, exTask.pl_ready, skip);
-				addFlowRelationship(net, skip, taskFinalized);
+				addFlowRelationship(net, enableFinalize, skipReady);
+				addFlowRelationship(net, exTask.pl_ready, skipReady);
+				addFlowRelationship(net, skipReady, taskFinalized);
+				
+				addFlowRelationship(net, enableFinalize, skipEnabled);
+				addFlowRelationship(net, enabled, skipEnabled);
+				addFlowRelationship(net, skipEnabled, taskFinalized);
 					
 				addFlowRelationship(net, enableFinalize, finish);
 				addFlowRelationship(net, executed, finish);
@@ -517,7 +540,7 @@ public class ExecConverter extends Converter {
 				if (groupStateExpr1 != null && groupStateExpr2 != null){
 					result.append("place_pl_context_"+groupStateExpr1+".status=='"+groupStateExpr2+"'");
 				} else if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
-					result.append("true");
+					result.append("place_pl_data_"+groupDataExpr1+"."+groupDataExpr2+"=='"+groupDataExpr3+"'");
 				} else if (groupAnd != null) {
 					result.append("&&");
 				} else if (groupOr != null) {
@@ -532,6 +555,54 @@ public class ExecConverter extends Converter {
 			}
 		}
 		return result.toString();
+	}
+
+	private List<Place> getAccessedDataObjectsPlaces(SubProcess adHocSubprocess){
+		assert (adHocSubprocess.isAdhoc());
+		List<Place> list = new ArrayList<Place>();
+		String input = adHocSubprocess.getCompletionCondition();
+		
+		if (input != null && !input.equals("")){
+	
+			Pattern pattern = Pattern.compile("dataExpression\\( *'(\\w*)' *, *'(\\w*)' *, *'(\\w*)' *\\)|");
+			Matcher matcher = pattern.matcher(input);
+	
+			while (matcher.find()) {
+				String groupDataExpr1 = matcher.group(1);
+				String groupDataExpr2 = matcher.group(2);
+				String groupDataExpr3 = matcher.group(3);
+	
+				if (groupDataExpr1 != null && groupDataExpr2 != null && groupDataExpr3 != null){
+					Place place = ExecTask.getDataPlace(groupDataExpr1);
+					if (place != null){
+						list.add(place);
+					}
+				}
+			}
+		}
+		return list;
+	}
+	
+	private void addDataDependeny(PetriNet net, ExecTask execTask, Place dataPlace, NodeList elements){
+		
+		StringBuffer guardStringBuffer = new StringBuffer();
+		for (int i = 0 ; i<elements.getLength(); i++){
+			String name = elements.item(i).getAttributes().getNamedItem("name").getNodeValue();
+			if (guardStringBuffer.length() > 0){
+				guardStringBuffer.append("&&");
+			}
+			guardStringBuffer.append(dataPlace.getId()+"."+name+"!=''");
+		}
+		if (guardStringBuffer.length() > 0){
+			String formerGuard = execTask.tr_allocate.getGuard();
+			if (formerGuard != null && formerGuard.length() > 0){
+				guardStringBuffer.append("&&("+formerGuard+")");
+			}
+			String guardString = guardStringBuffer.toString();
+			execTask.tr_allocate.setGuard(guardString);
+			addReadOnlyFlowRelationship(net, dataPlace, execTask.tr_allocate);
+		}
+		
 	}
 
 	
@@ -551,21 +622,34 @@ public class ExecConverter extends Converter {
 				dataPlace.setName(dataobject.getId());
 				ExecTask.addDataPlace(dataPlace);
 				
-				// for data place add locators
+				// create Document for data places 
+				Document placesDoc = parser.newDocument();
+				Element data = placesDoc.createElement("data");
+				placesDoc.appendChild(data);
+				Element processData = placesDoc.createElement("processdata");
+				data.appendChild(processData);
+				processData.setAttribute("name",dataobject.getId());
+				
+				// receive elements
 				String modelXML = dataobject.getModel();
-					Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
-					Element processdata = (Element) doc.getDocumentElement().getElementsByTagName("processdata").item(0);
-					processdata.setAttribute("name",dataobject.getId());
+				Document doc = parser.parse(new InputSource(new StringReader(modelXML)));
+				Node dataElement = (Element) doc.getDocumentElement().getElementsByTagName("xsd:element").item(0);
+				
+				for (; dataElement != null; dataElement = dataElement.getNextSibling()) {
+					// fetch elements
+					if (dataElement.getNodeType() != Node.ELEMENT_NODE) continue;
+					String nodeName = dataElement.getAttributes().getNamedItem("name").getTextContent().replaceAll(" " , "");
+					String nodeType = dataElement.getAttributes().getNamedItem("type").getTextContent();
 					
-				dataPlace.setModel(domToString(doc));
-				Node dataTagOfDataModel = doc.getDocumentElement().getFirstChild();
-				NodeList childs = dataTagOfDataModel.getChildNodes();
-				for (int i = 0; i < childs.getLength(); i++) {
-					if (childs.item(i).getNodeName().equals("#text")) continue;
+					// append dataElements to dataPlaceModel
+					Element element = placesDoc.createElement(nodeName);
+					element.setAttribute("type", nodeType);
+					processData.appendChild(element);
+					dataPlace.setModel(domToString(placesDoc));
+					
+					// for dataplaces add locators
 					dataPlace.addLocator(new Locator(
-							childs.item(i).getNodeName(),
-							"xsd:string",
-							"/data/processdata/"+dataobject.getId()+"/"+childs.item(i).getNodeName()));
+							nodeName, nodeType, "/data/processdata/"+nodeName));
 				};
 			}
 		} catch (Exception io) {
@@ -643,56 +727,92 @@ public class ExecConverter extends Converter {
 	// build Structure for forms: go for all data/processdata child nodes
 	Document addFormFields(Document doc, HashMap<String, Node> processdataMap) {
 		Node root = doc.getFirstChild();
+		
+		Element div = doc.createElement("div");
+		div.setAttribute("class", "formatted");
+		root.appendChild(div);
+		
+		div.appendChild(doc.createElement("br"));
+
+		Element table = doc.createElement("table");
+		div.appendChild(table);
+		
+		Element trhead = doc.createElement("tr");
+		table.appendChild(trhead);
+		
+		Element th1 = doc.createElement("th");
+		trhead.appendChild(th1);
+		Element th2 = doc.createElement("th");
+		trhead.appendChild(th2);
+		Element th3 = doc.createElement("th");
+		trhead.appendChild(th3);
+		Element th4 = doc.createElement("th");
+		trhead.appendChild(th4);
+		Element th5 = doc.createElement("th");
+		trhead.appendChild(th5);
+		
+		th3.setAttribute("align", "left");
+		th3.setTextContent("Values");
+		
+		Element xgroup1 = doc.createElement("x:group");
+		th5.appendChild(xgroup1);
+		xgroup1.setAttribute("ref", "instance('ui_settings')/delegationstate");
+		
+		Element xgroup2 = doc.createElement("x:group");
+		th5.appendChild(xgroup2);
+		xgroup2.setAttribute("ref", "instance('ui_settings')/reevaluationstate");
+		xgroup2.setTextContent("Recent Values");
 
 		for (String dataObjectName : processdataMap.keySet()){
-			Node processDataNode = processdataMap.get(dataObjectName);
-			Node dataElements = processDataNode.getNextSibling();
+			Node processDataChild = processdataMap.get(dataObjectName);
 			do {
-				// pretty hacked code
-				if (dataElements == null) break;
-				String attributeName = dataElements.getNodeName();
-				if (attributeName.equals("#text")) break;
+				if (processDataChild == null) break;
+				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
+				String attributeName, attributeType;
+				Node name = processDataChild.getAttributes().getNamedItem("name");
+				if (name == null) continue;
+				attributeName = name.getNodeValue().replaceAll(" " , "");
+				Node type = processDataChild.getAttributes().getNamedItem("type");
+				if (type == null) continue;
+				attributeType = type.getNodeValue();
 				
 				// for template watch in engine folder "/public/examples/delegation/formulartemplate"
 				// ==========  create Document  ===========			
-				Element div = doc.createElement("div");
-				div.setAttribute("class", "formatted");
-				root.appendChild(div);
+
+				Element trbody = doc.createElement("tr");
+				table.appendChild(trbody);
 				
-				div.appendChild(doc.createElement("br"));
+				Element td1 = doc.createElement("td");
+				trbody.appendChild(td1);
+				Element td2 = doc.createElement("td");
+				trbody.appendChild(td2);
+				Element td3 = doc.createElement("td");
+				trbody.appendChild(td3);
+				Element td4 = doc.createElement("td");
+				trbody.appendChild(td4);
+				Element td5 = doc.createElement("td");
+				trbody.appendChild(td5);
 				
-				Element div2 = doc.createElement("div");
-				div2.setAttribute("id", dataObjectName+"_"+attributeName + "_grp");
-				div.appendChild(div2);
+				td1.setTextContent(name.getNodeValue());
 				
-				Element input = doc.createElement("x:input");
-				input.setAttribute("ref", "instance('ui_settings')/"+ dataObjectName+"_"+attributeName +"/@futurereadonly");
-				input.setAttribute("class", "leftcheckbox");
-				div.appendChild(input);
-				
-				Element input2 = doc.createElement("x:input");
-				input2.setAttribute("ref", "instance('ui_settings')/"+ dataObjectName+"_"+attributeName +"/@futurewritable");
-				input2.setAttribute("class", "rightcheckbox");
-				div.appendChild(input2);
-				
-				Element group = doc.createElement("x:group");
-				group.setAttribute("bind", "fade."+ dataObjectName+"_"+attributeName);
-				group.setAttribute("class", "fieldgroup");
-				div.appendChild(group);
-				
-				Element label = doc.createElement("x:label");
 				Element nameinput = doc.createElement("x:input");
-				label.setTextContent(attributeName+": ");
 				nameinput.setAttribute("ref", "instance('output-token')/places/processdata[@name='"+dataObjectName+"']/" + attributeName);
 				nameinput.setAttribute("class", "inputclass");
-				group.appendChild(label);
-				group.appendChild(nameinput);
+				td3.appendChild(nameinput);
+				
+				Element reevaluationgroup = doc.createElement("x:group");
+				reevaluationgroup.setAttribute("ref", "instance('ui_settings')/reevaluationstate");
+				td5.appendChild(reevaluationgroup);
+				
+				// REEVALUATION values displaying
+				
+				// end REEVALUATION values displaying
 				
 				div.appendChild(doc.createElement("br"));
 				div.appendChild(doc.createElement("br"));
 				
 				
-			} while ((dataElements = dataElements.getNextSibling()) != null);
+			} while ((processDataChild = processDataChild.getNextSibling()) != null);
 		}
 		
 		{
@@ -753,13 +873,17 @@ public class ExecConverter extends Converter {
 				delaction.appendChild(value6);
 				
 				for (String dataObjectName : processdataMap.keySet()){
-					Node processDataNode = processdataMap.get(dataObjectName);
-					Node dataElements = processDataNode.getNextSibling();
+					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
-						// pretty hacked code
-						if (dataElements == null) break;
-						String attributeName = dataElements.getNodeName();
-						if (attributeName.equals("#text")) break;
+						if (processDataChild == null) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
+						String attributeName, attributeType;
+						Node name = processDataChild.getAttributes().getNamedItem("name");
+						if (name == null) continue;
+						attributeName = name.getNodeValue().replaceAll(" " , "");
+						Node type = processDataChild.getAttributes().getNamedItem("type");
+						if (type == null) continue;
+						attributeType = type.getNodeValue();
 			
 					Element valuereadonly = doc.createElement("x:setvalue");
 					valuereadonly.setAttribute("bind", dataObjectName+"_"+attributeName + ".readonly");
@@ -770,7 +894,7 @@ public class ExecConverter extends Converter {
 					valuewritable.setAttribute("bind", dataObjectName+"_"+attributeName + ".writable");
 					valuewritable.setAttribute("value", "instance('ui_settings')/"+dataObjectName+"_"+attributeName+"/@futurewritable = 'true'");
 					delaction.appendChild(valuewritable);
-					} while ((dataElements = dataElements.getNextSibling()) != null);
+					} while ((processDataChild = processDataChild.getNextSibling()) != null);
 				
 				}
 			
@@ -896,13 +1020,17 @@ public class ExecConverter extends Converter {
 				submitaction.appendChild(value4);
 				
 				for (String dataObjectName : processdataMap.keySet()){
-					Node processDataNode = processdataMap.get(dataObjectName);
-					Node dataElements = processDataNode.getNextSibling();
+					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
-						// pretty hacked code
-						if (dataElements == null) break;
-						String attributeName = dataElements.getNodeName();
-						if (attributeName.equals("#text")) break;
+						if (processDataChild == null) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
+						String attributeName, attributeType;
+						Node name = processDataChild.getAttributes().getNamedItem("name");
+						if (name == null) continue;
+						attributeName = name.getNodeValue().replaceAll(" " , "");
+						Node type = processDataChild.getAttributes().getNamedItem("type");
+						if (type == null) continue;
+						attributeType = type.getNodeValue();
 				
 					Element valuereadonly = doc.createElement("x:setvalue");
 					valuereadonly.setAttribute("bind", dataObjectName+"_"+attributeName + ".readonly");
@@ -914,7 +1042,7 @@ public class ExecConverter extends Converter {
 					valuewritable.setTextContent("true");
 					submitaction.appendChild(valuewritable);
 					
-					} while ((dataElements = dataElements.getNextSibling()) != null);
+					} while ((processDataChild = processDataChild.getNextSibling()) != null);
 				
 				}
 			
@@ -949,7 +1077,6 @@ public class ExecConverter extends Converter {
 				interactvalue2.setAttribute("bind", "isReviewed");
 				interactvalue2.setTextContent("false");
 				interactaction.appendChild(interactvalue2);
-				
 		}
 		
 			// ==========  end of creation ============
@@ -977,13 +1104,19 @@ public class ExecConverter extends Converter {
 			if (attributes.getNamedItem("id").getNodeValue().equals("ui_settings")) {
 				
 				for (String dataObjectName : processdataMap.keySet()){
-					Node processDataNode = processdataMap.get(dataObjectName);
-					Node dataElements = processDataNode;
+					Node processDataChild = processdataMap.get(dataObjectName);
 					do {
-						// pretty hacked code
-						if (dataElements == null) break;
-						if (dataElements.getNodeName().equals("#text")) continue;
-						Element property = doc.createElement(dataObjectName + "_" + dataElements.getNodeName());
+						if (processDataChild == null) break;
+						if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
+						String attributeName, attributeType;
+						Node name = processDataChild.getAttributes().getNamedItem("name");
+						if (name == null) continue;
+						attributeName = name.getNodeValue().replaceAll(" " , "");
+						Node type = processDataChild.getAttributes().getNamedItem("type");
+						if (type == null) continue;
+						attributeType = type.getNodeValue();
+						
+						Element property = doc.createElement(dataObjectName + "_" + attributeName);
 						property.setAttribute("futurereadonly", "false");
 						property.setAttribute("futurewritable", "false");
 						for (Node ui_setting_nodes = list.item(i).getFirstChild(); ; ui_setting_nodes = ui_setting_nodes.getNextSibling()) {
@@ -992,7 +1125,7 @@ public class ExecConverter extends Converter {
 							break;
 						}
 						
-					} while ((dataElements = dataElements.getNextSibling()) != null);
+					} while ((processDataChild = processDataChild.getNextSibling()) != null);
 					
 				}
 			}
@@ -1000,13 +1133,17 @@ public class ExecConverter extends Converter {
 		
 		// add necessary token bindings
 		for (String dataObjectName : processdataMap.keySet()){
-			Node processDataNode = processdataMap.get(dataObjectName);
-			Node dataElements = processDataNode.getNextSibling();
+			Node processDataChild = processdataMap.get(dataObjectName);
 			do {
-				// pretty hacked code
-				if (dataElements == null) break;
-				String attributeName = dataElements.getNodeName();
-				if (attributeName.equals("#text")) continue;
+				if (processDataChild == null) break;
+				if (processDataChild.getNodeType() != Node.ELEMENT_NODE) continue;
+				String attributeName, attributeType;
+				Node name = processDataChild.getAttributes().getNamedItem("name");
+				if (name == null) continue;
+				attributeName = name.getNodeValue().replaceAll(" " , "");
+				Node type = processDataChild.getAttributes().getNamedItem("type");
+				if (type == null) continue;
+				attributeType = type.getNodeValue();
 			
 				Element bind1 = doc.createElement("x:bind");
 				bind1.setAttribute("id", dataObjectName+"_"+attributeName);
@@ -1036,11 +1173,13 @@ public class ExecConverter extends Converter {
 				Element bind6 = doc.createElement("x:bind");
 				bind6.setAttribute("type", "xsd:boolean");
 				bind6.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName + "_" +attributeName +"/@futurereadonly");
+				bind6.setAttribute("id", dataObjectName + "_" + attributeName + ".futurereadonly");
 				root.appendChild(bind6);
 				
 				Element bind7 = doc.createElement("x:bind");
 				bind7.setAttribute("type", "xsd:boolean");
 				bind7.setAttribute("nodeset", "instance('ui_settings')/" + dataObjectName + "_" +attributeName +"/@futurewritable");
+				bind7.setAttribute("id", dataObjectName + "_" + attributeName + ".futurewritable");
 				root.appendChild(bind7);
 				
 				Element bind8 = doc.createElement("x:bind");
@@ -1074,7 +1213,7 @@ public class ExecConverter extends Converter {
 				bind13.setAttribute("readonly", "instance('ui_settings')/" + dataObjectName+"_"+attributeName +"/@futurewritable = 'true'");
 				root.appendChild(bind13);
 				
-			} while ((dataElements = dataElements.getNextSibling()) != null);
+			} while ((processDataChild = processDataChild.getNextSibling()) != null);
 		}
 			
 		return doc;
@@ -1219,37 +1358,72 @@ public class ExecConverter extends Converter {
 			stylesheet.setAttribute("xmlns:xsl", "http://www.w3.org/1999/XSL/Transform");
 			xslDoc.appendChild(stylesheet);
 			
-			
+			/* */
 			Element template = xslDoc.createElement("xsl:template");
-			stylesheet.setAttribute("match", "/");
+			template.setAttribute("match", "/");
 			stylesheet.appendChild(template);
 			
 			Element data = xslDoc.createElement("data");
 			template.appendChild(data);
 			
 			Element apply = xslDoc.createElement("xsl:apply-templates");
-			apply.setAttribute("select", "//processdata");
+			template.setAttribute("select", "/places/processdata");
 			data.appendChild(apply);
 			
 			
 			Element template2 = xslDoc.createElement("xsl:template");
-			stylesheet.setAttribute("match", "processdata[@target_place=\'"+ dataObject.getId() +"\']");
-			stylesheet.appendChild(template);
+			template2.setAttribute("match", "processdata[@target_place=\'pl_data_"+ dataObject.getId() +"\']");
+			stylesheet.appendChild(template2);
 			
 			Element processdata = xslDoc.createElement("processdata");
 			template2.appendChild(processdata);
 			
-			Element attribute = xslDoc.createElement("xsl:attribute");
-			apply.setAttribute("name", "place");
-			processdata.appendChild(attribute);
-
-			Element value = xslDoc.createElement("xsl:value-of");
-			apply.setAttribute("select", "../@place");
-			attribute.appendChild(value);
+			Element attribute1 = xslDoc.createElement("xsl:attribute");
+			attribute1.setAttribute("name", "target_place");
+			processdata.appendChild(attribute1);
+			Element value1 = xslDoc.createElement("xsl:value-of");
+			value1.setAttribute("select", "@target_place");
+			attribute1.appendChild(value1);
+			
+			Element attribute2 = xslDoc.createElement("xsl:attribute");
+			attribute2.setAttribute("name", "place_id");
+			processdata.appendChild(attribute2);
+			Element value2 = xslDoc.createElement("xsl:value-of");
+			value2.setAttribute("select", "@place_id");
+			attribute2.appendChild(value2);
+			
+			Element attribute3 = xslDoc.createElement("xsl:attribute");
+			attribute3.setAttribute("name", "name");
+			processdata.appendChild(attribute3);
+			Element value3 = xslDoc.createElement("xsl:value-of");
+			value3.setAttribute("select", "@name");
+			attribute3.appendChild(value3);
 			
 			Element copy = xslDoc.createElement("xsl:copy-of");
-			apply.setAttribute("select", "./*");
+			copy.setAttribute("select", "./*");
 			processdata.appendChild(copy);
+			
+			
+			Element template3 = xslDoc.createElement("xsl:template");
+			template3.setAttribute("match", "metadata/*");
+			stylesheet.appendChild(template3);
+			
+			Element template4 = xslDoc.createElement("xsl:template");
+			template4.setAttribute("match", "processdata/*");
+			stylesheet.appendChild(template4);
+			
+			/* Test 
+			Element template = xslDoc.createElement("xsl:template");
+			template.setAttribute("match", "/");
+			stylesheet.appendChild(template);
+			
+			Element data = xslDoc.createElement("data");
+			template.appendChild(data);
+
+			Element copy = xslDoc.createElement("xsl:copy-of");
+			copy.setAttribute("select", "*");
+			data.appendChild(copy);
+			*/
 			
 			return postDataToURL(domToString(xslDoc),enginePostURL);
 		}

@@ -1,7 +1,9 @@
 package de.hpi.PTnet.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -77,7 +79,9 @@ public class MarkingImpl implements Marking {
 						firstEntry = false;
 					else
 						str.append(",");
-					str.append("(").append(p.getId()).append(",").append(numt).append(")");
+					str.append(p.getId());
+					if (numt > 1)
+						str.append(p.getId()).append(":").append(numt);
 				}
 			}
 			str.append("}");
@@ -88,6 +92,15 @@ public class MarkingImpl implements Marking {
 	
 	public void reset() {
 		markingStr = null;
+	}
+
+	public List<Place> getMarkedPlaces() {
+		List<Place> places = new ArrayList<Place>();
+		for (Place p: net.getPlaces()) {
+			if (getNumTokens(p) > 0)
+				places.add(p);
+		}
+		return places;
 	}
 
 }

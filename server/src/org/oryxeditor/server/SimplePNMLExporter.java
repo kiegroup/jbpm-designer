@@ -12,7 +12,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.configuration.Configuration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -21,13 +20,14 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
+import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.StandardConverter;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
-import de.hpi.interactionnet.localmodelgeneration.DesynchronizabilityChecker;
 import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
 import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
 import de.hpi.petrinet.PetriNet;
@@ -56,7 +56,6 @@ import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
  */
 public class SimplePNMLExporter extends HttpServlet {
 	private static final long serialVersionUID = -8374877061121257562L;
-	private static Configuration config = null;
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
@@ -90,10 +89,10 @@ public class SimplePNMLExporter extends HttpServlet {
 	}
 
 	protected void processDocument(Document document, Document pnmlDoc) {
-		String type = getDocumentType(document);
+		String type = getStencilSet(document);
 		if (type.equals("ibpmn.json"))
 			processIBPMN(document, pnmlDoc);
-		else if (type.equals("bpmn.json"))
+		else if (type.equals("bpmn.json") || type.equals("bpmnexec.json"))
 			processBPMN(document, pnmlDoc);
 		else if (type.equals("interactionpetrinets.json"))
 			processIPN(document, pnmlDoc);
@@ -102,6 +101,7 @@ public class SimplePNMLExporter extends HttpServlet {
 	protected void processBPMN(Document document, Document pnmlDoc) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
 		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
+		new Preprocessor(diagram, new BPMNFactory()).process();
 
 		PetriNet net = new StandardConverter(diagram).convert();
 
@@ -122,16 +122,14 @@ public class SimplePNMLExporter extends HttpServlet {
 	protected void processIPN(Document document, Document pnmlDoc) {
 		InteractionNetRDFImporter importer = new InteractionNetRDFImporter(document);
 		InteractionNet net = (InteractionNet) importer.loadInteractionNet();
-
+		
 		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
 		exp.savePetriNet(pnmlDoc, net);
-		
-		new DesynchronizabilityChecker().check(net, null);
 	}
 
 
 	
-	protected String getDocumentType(Document doc) {
+	protected String getStencilSet(Document doc) {
 		Node node = doc.getDocumentElement();
 		if (node == null || !node.getNodeName().equals("rdf:RDF"))
 			return null;
@@ -139,7 +137,7 @@ public class SimplePNMLExporter extends HttpServlet {
 		node = node.getFirstChild();
 		while (node != null) {
 			 String about = getAttributeValue(node, "rdf:about");
-			 if (about != null && about.contains("oryxcanvas")) break;
+			 if (about != null && about.contains("canvas")) break;
 			 node = node.getNextSibling();
 		}
 		String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
@@ -149,12 +147,6 @@ public class SimplePNMLExporter extends HttpServlet {
 		return null;
 	}
 
-//	protected String getContent(Node node) {
-//		if (node != null && node.hasChildNodes())
-//			return node.getFirstChild().getNodeValue();
-//		return null;
-//	}
-	
 	private String getAttributeValue(Node node, String attribute) {
 		Node item = node.getAttributes().getNamedItem(attribute);
 		if (item != null)

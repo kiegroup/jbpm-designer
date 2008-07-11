@@ -22,7 +22,7 @@
           <x:bind id="owner" nodeset="instance('output-token')/places/metadata/owner"/>
           <x:bind id="isDelegated" nodeset="instance('output-token')/places/metadata/isDelegated"/>
           <x:bind id="isReviewed" nodeset="instance('output-token')/places/metadata/isReviewed"/>
-          <x:bind id="reviewRequested" nodeset="instance('output-token')/places/metadata/reviewRequested"/>
+          <x:bind id="reviewRequested" nodeset="instance('output-token')/places/metadata/reviewRequested" type="xsd:boolean"/>
           <x:bind id="delegate" nodeset="instance('output-token')/places/metadata/delegate"/>
           <x:bind id="firstOwner" nodeset="instance('output-token')/places/metadata/firstOwner"/>
           <x:bind id="firstOwner.readonly" nodeset="instance('output-token')/places/metadata/firstOwner/@readonly"/>
@@ -31,7 +31,6 @@
           <x:bind id="deadline" nodeset="instance('output-token')/places/metadata/deadline"/>
           <x:bind id="deadlinereadonly" nodeset="instance('output-token')/places/metadata/deadline/@readonly"/>
           <x:bind id="delegatedFrom" nodeset="instance('output-token')/places/metadata/delegatedFrom"/>
-          <x:bind id="wantToReview" nodeset="instance('output-token')/places/processdata/wantToReview" type="xsd:boolean"/>
           
           
 		<!-- Describes Button Dependencies -->

@@ -160,6 +160,10 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			this.node.setAttributeNS(null, 'letter-spacing', '2px');
 		} else {
 			this.node.setAttributeNS(null, 'stroke', 'none');
+			if (!this.node.getAttributeNS(null, 'font-family')) {
+				this.node.setAttributeNS(null, 'font-family', 'Verdana');
+				this.node.setAttributeNS(null, 'font-weight', 'bold');
+			}
 		}
 	},
 	

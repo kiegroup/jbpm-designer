@@ -81,6 +81,34 @@
 		<url-pattern>/simplepnmlexporter</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<display-name>
+			Oryx Desynchronizability Checker
+		</display-name>
+		<servlet-name>DesynchronizabilityServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.DesynchronizabilityServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DesynchronizabilityServlet</servlet-name>
+		<url-pattern>/desynchronizability</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>
+			Oryx syntax checker
+		</display-name>
+		<servlet-name>SyntaxChecker</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.SyntaxCheckerServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SyntaxChecker</servlet-name>
+		<url-pattern>/syntaxchecker</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>DownloadServlet</servlet-name>
 		<url-pattern>/download</url-pattern>
