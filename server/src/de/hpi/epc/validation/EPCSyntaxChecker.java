@@ -95,14 +95,14 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 							break;
 						}
 					}
-				} else if (in == 1 && out ==2){
+				} else if (in == 2 && out == 1){
 					// nothing todo
 				} else {
 					addError(node, NO_CORRECT_CONNECTOR);
 				}
 			}
 			else if ("AndConnector".equals(node.getType())){
-				if ( ! (in == 2 && out == 1) || (in == 1 && out ==2) ){
+				if ( ! ( (in == 2 && out == 1) || (in == 1 && out == 2) ) ){
 					addError(node, NO_CORRECT_CONNECTOR);
 				}
 			}
