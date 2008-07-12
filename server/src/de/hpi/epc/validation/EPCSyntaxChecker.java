@@ -62,12 +62,15 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 		List<DiagramNode> startEvents = new ArrayList<DiagramNode>();
 		List<DiagramNode> endEvents = new ArrayList<DiagramNode>();
 		for (DiagramNode node: diagram.getNodes()) {
-			int in = node.getIncomingEdges().size();
-			int out = node.getOutgoingEdges().size();
-			if (in == 0 && out == 0){
+			int inAll = node.getIncomingEdges().size();
+			int outAll = node.getOutgoingEdges().size();
+			if (inAll == 0 && outAll == 0){
 				addError(node, NOT_CONNECTED);
+				continue;
 			}
-			else if ("Event".equals(node.getType())){
+			int in = numberOfControlFlows(node.getIncomingEdges());
+			int out =  numberOfControlFlows(node.getOutgoingEdges());
+			if ("Event".equals(node.getType())){
 				if (in == 1 && out == 0) endEvents.add(node);
 				else if (in == 0 && out == 1) startEvents.add(node);
 				else if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
@@ -75,17 +78,16 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 					if ("Event".equals(next.getType())) addError(next, EVENT_AFTER_EVENT);
 				}
 			}
-			else if (in == 0 || out == 0){
-				addError(node, NOT_CONNECTED_2);
-			}
 			else if ("Function".equals(node.getType())){
 				if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
+				else if (in == 0 || out == 0) addError(node, NOT_CONNECTED_2);
 				for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
 					if ("Function".equals(next.getType())) addError(next, FUNCTION_AFTER_FUNCTION);
 				}
 			}
 			else if ("ProcessInterface".equals(node.getType())){
 				if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
+				else if (in == 0 || out == 0) addError(node, NOT_CONNECTED_2);
 			}
 			else if ("XorConnector".equals(node.getType()) || "OrConnector".equals(node.getType())){
 				if (in == 1 && out == 2){
@@ -129,6 +131,14 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 		} else {
 			errors.put(obj.getResourceId(), errorCode);
 		}
+	}
+	
+	private int numberOfControlFlows(List<DiagramEdge> edges){
+		int result = 0;
+		for (DiagramEdge edge : edges){
+			if ("ControlFlow".equals(edge.getType())) result++;
+		}
+		return result;
 	}
 	
 	private List<DiagramNode>getNextEventsOrFunctions(List<DiagramEdge> edges){

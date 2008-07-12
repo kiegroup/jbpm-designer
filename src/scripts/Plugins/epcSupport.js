@@ -354,7 +354,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			submitForm.method = "POST";
 			win.document.write("</body></html>");
 			win.document.close();
-			submitForm.action= "./download";
+			submitForm.action= ORYX.PATH + "/download";
 			submitForm.submit();
 		}		
 	},
