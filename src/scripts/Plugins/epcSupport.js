@@ -251,17 +251,16 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			handler: function()
 			{
 				form.form.submit({
-		      		url:'./epc-upload',
+		      		url: ORYX.PATH + '/epc-upload',
 		      		waitMsg: "Importing...",
 		      		success: function(f,a){
 						dialog.hide();
 						var erdf = a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}"));
 		        		erdf = erdf.replace(/&lt;/g, "<");
 						erdf = erdf.replace(/&gt;/g, ">");
+						//var parser = new DOMParser();
+						//var parsedErdf = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><html>'+erdf+'</html>',"text/xml");	
 						alert(erdf);
-						var parser = new DOMParser();
-						var parsedErdf = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><html>'+erdf+'</html>',"text/xml");	
-						alert(parsedErdf);
 						// TODO ..
 		      		},
 					failure: function(f,a){
