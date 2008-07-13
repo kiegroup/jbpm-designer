@@ -63,10 +63,10 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 			if (edge.getSource() == null)
 				addError(edge, NO_SOURCE);
 				//return false;
-			if (edge.getTarget() == null) 
+			else if (edge.getTarget() == null) 
 				addError(edge, NO_TARGET);
 				//return false;
-			if (edge instanceof ControlFlow) {
+			else if (edge instanceof ControlFlow) {
 				if (((Node)edge.getSource()).getProcess() != ((Node)edge.getTarget()).getProcess())
 					addError(edge, DIFFERENT_PROCESS);
 			}
