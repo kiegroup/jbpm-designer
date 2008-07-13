@@ -35,7 +35,7 @@ if(!ORYX.Core.StencilSet) {ORYX.Core.StencilSet = {};}
  *
  * This class implements the API to check the stencil sets' rules.
  */
-ORYX.Core.StencilSet.Rules = Clazz.extend({
+ORYX.Core.StencilSet.Rules = {
 
 	/**
 	 * Constructor
@@ -73,7 +73,8 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 						cr[rules.role] = new Hash();
 					}
 				} else {
-					cr[namespace + rules.role] = new Hash();
+					if(!cr[namespace + rules.role])
+						cr[namespace + rules.role] = new Hash();
 				}
 				
 				rules.connects.each((function(connect) {
@@ -91,19 +92,22 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 						}).bind(this));
 					} 
 					
-					if(this._isRoleOfOtherNamespace(rules.role)) {
-						if(this._isRoleOfOtherNamespace(connect.from)) {
-							cr[rules.role][connect.from] = toRoles;
-						} else {
-							cr[rules.role][namespace + connect.from] = toRoles;
-						}	
-					} else {
-						if(this._isRoleOfOtherNamespace(connect.from)) {
-							cr[namespace + rules.role][connect.from] = toRoles;
-						} else {
-							cr[namespace + rules.role][namespace + connect.from] = toRoles;
-						}
-					}
+					var role, from;
+					if(this._isRoleOfOtherNamespace(rules.role))
+						role = rules.role;
+					else
+						role = namespace + rules.role;
+						  
+					if(this._isRoleOfOtherNamespace(connect.from))
+						from = connect.from;
+					else
+						from = namespace + connect.from;
+					
+					if(!cr[role][from])	
+						cr[role][from] = toRoles;
+					else
+						cr[role][from] = cr[role][from].concat(toRoles);
+				
 				}).bind(this));
 			}).bind(this));
 		}
@@ -515,7 +519,7 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 					result = edge;
 			}
 		}	
-		
+			
 		//check cardinality
 		if (result) {
 			if(args.sourceShape) {
@@ -576,7 +580,7 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 							});
 				}
 			}
-		} 	
+		}
 		
 		return result;
 	},
@@ -937,4 +941,5 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 	},
 
 	toString: function() { return "Rules"; }
-});
+}
+ORYX.Core.StencilSet.Rules = Clazz.extend(ORYX.Core.StencilSet.Rules);
