@@ -1,11 +1,17 @@
-{
-	"stencilsets": [
+[
 		{
 			"title":"BPMN 1.0",
 			"namespace":"http://b3mn.org/stencilset/bpmn#",
 			"description":"BPMN 1.0 stencil set specification.",
 			"definition":"/bpmn/bpmn.json",
 			"icon":"/bpmn/bpmn.png"
+		},
+		{
+			"title":"BPMN 1.1",
+			"namespace":"http://b3mn.org/stencilset/bpmn1.1#",
+			"description":"BPMN 1.1 stencil set specification.",
+			"definition":"/bpmn1.1/bpmn1.1.json",
+			"icon":"/bpmn1.1/bpmn1.1.png"
 		},
 		{
 			"title":"EPC",
@@ -28,5 +34,4 @@
 			"definition":"/workflownets/workflownets.json",
 			"icon":"/workflownets/workflownets.png"
 		}
-	]
-}
+]

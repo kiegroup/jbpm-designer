@@ -613,7 +613,7 @@ Repository.app = {
 			// load list of diagram types
 			Ext.Ajax.request({
 				method: "GET",
-				url: "/backend/poem/model_types",
+				url: "/oryx/stencilsets/stencilsets.json",
 				success: function success(response, options) {
 					Repository.app.model_types  = Ext.util.JSON.decode(response.responseText);
 
@@ -988,7 +988,7 @@ Repository.render = {
 												text: modeltype.title,
 												id: modeltype.namespace,
 												leaf: true,
-												icon: modeltype.icon_url,
+												icon: "oryx/stencilsets/" + modeltype.icon,
 												qtip: modeltype.description,
 												listeners: {
 													click: function() {
@@ -1136,7 +1136,7 @@ Repository.render = {
 												model_types.each(function(modeltype){
 													menu.addMenuItem({
 														text: modeltype.title,
-														icon: modeltype.icon_url,
+														icon: "oryx/stencilsets/" + modeltype.icon,
 														qtip: modeltype.description,
 														handler: function(){
 															Repository.app.createModel(modeltype.namespace);
