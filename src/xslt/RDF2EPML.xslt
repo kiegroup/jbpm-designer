@@ -162,7 +162,9 @@
 				<name><xsl:value-of select="$title" /></name>
 				<description><xsl:value-of select="./oryx:description" /></description>
 				<xsl:call-template name="node-position" />
-				<toProcess linkToEpcId="1"/>
+				<toProcess>
+					<xsl:attribute name="linkToEpcId"><xsl:value-of select="./oryx:refuri" /></xsl:attribute>
+				</toProcess>
 			</processInterface>
 	 	</xsl:if>
 		<!-- Data -->

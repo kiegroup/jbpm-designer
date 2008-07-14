@@ -85,6 +85,10 @@
 	<xsl:template match="processInterface">
 		<xsl:call-template name="add-standard-node-properties">
 			<xsl:with-param name="type">http://b3mn.org/stencilset/epc#ProcessInterface</xsl:with-param>
+			<xsl:with-param name="additional-property-name">oryx-refuri</xsl:with-param>
+			<xsl:with-param name="additional-property-value">
+				<xsl:value-of select="./toProcess/attribute::linkToEpcId" />
+			</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
@@ -250,7 +254,7 @@
 			<span class="oryx-type"><xsl:value-of select="$type" /></span>
 			<span class="oryx-title"><xsl:value-of select="./name" /></span>
 			<span class="oryx-description">
-				<xsl:if test="$at_desc=''"><xsl:value-of select="./description" /></xsl:if>
+				<xsl:value-of select="./description" />
 				<xsl:if test="not($at_desc='')"><xsl:value-of select="$at_desc" /></xsl:if>
 			</span>
 			<!-- additional attributes -->

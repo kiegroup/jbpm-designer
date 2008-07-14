@@ -50,15 +50,15 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			'minShape': 0,
 			'maxShape': 0});
 			
-//		this.facade.offer({
-//			'name':"Import EPC",
-//			'functionality': this.importEPC.bind(this),
-//			'group': "epc",
-//			'icon': ORYX.PATH + "images/epc_import.png",
-//			'description': "Import an EPML file",
-//			'index': 2,
-//			'minShape': 0,
-//			'maxShape': 0});
+		this.facade.offer({
+			'name':"Import EPC",
+			'functionality': this.importEPC.bind(this),
+			'group': "epc",
+			'icon': ORYX.PATH + "images/epc_import.png",
+			'description': "Import an EPML file",
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0});
 
 //		Syntax Check has been migrated to syntaxchecker.js-Framework		
 
@@ -258,11 +258,10 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 						var erdf = a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}"));
 		        		erdf = erdf.replace(/&lt;/g, "<");
 						erdf = erdf.replace(/&gt;/g, ">");
-						//var parser = new DOMParser();
-						//var parsedErdf = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><html>'+erdf+'</html>',"text/xml");	
-						alert(erdf);
-						// TODO ..
-		      		},
+						erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
+						this.loadContent(erdf);
+						
+		      		}.bind(this),
 					failure: function(f,a){
 						dialog.hide();
 						Ext.MessageBox.show({
@@ -273,7 +272,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
        					});
 		      		}
 		  		});
-		  	}
+		  	}.bind(this)
 		})
 
 
@@ -358,36 +357,167 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 		}		
 	},
 	
-	loadERDF: function(form){
+	
+	/**
+	 * 
+	 * THE FOLLOWING METHODS ARE A TEMPORARY SOLUTION
+	 * 
+	 * THEY WILL BE REMOVED WHEN A GENERAL ERDF IMPORTER IS IMPLEMENTED
+	 * 
+	 */
+	
+	/**
+	 * Loads the imported string into the oryx
+	 * 
+	 * @param {Object} content
+	 */
+	loadContent: function(content){
 		
+		var epcs = this.parseToObject( content );
 		
+		epcs = epcs.collect(function(epc){ return {epcData: epc, stencil: ORYX.Core.StencilSet.stencil(epc.type)}})
 		
-		Ext.Ajax.request({
-			method: "POST",
-			url: ModelProperties.app.current_model.access.edit_uri,
-			params: {
-				subject: openid,
-				predicate: predicate
-			},
-			success: function(response, options) {
-				if (typeof success == typeof function(){}) {
-					var new_access = Ext.util.JSON.decode(response.responseText);
-					// TODO add response validation
-					ModelProperties.app.current_model.access.access_rights.push(new_access);
-					
-					if (typeof success == typeof function(){}) {
-						success(response, options)
-					}
-				}
-			},
+		var nodes = epcs.findAll(function(epc){ return epc.stencil.type() == "node" });
+		var edges = epcs.findAll(function(epc){ return epc.stencil.type() == "edge" });
+		
+		nodes = nodes.collect(function(epc){
+									
+			if( !epc.stencil){
+				throw $break;
+			}
 			
-			failure: function(response, options) {
-				if (typeof failure == typeof function(){}) {
-					failure(response, options);
+			// Create a new Shape
+			var newShape = 	new ORYX.Core.Node( {'eventHandlerCallback':this.facade.raiseEvent }, epc.stencil );
+											
+			// Add the shape to the canvas
+			this.facade.getCanvas().add(newShape);
+		
+			if( epc.epcData.bounds ){
+				// Set the bounds
+				newShape.bounds.centerMoveTo( epc.epcData.bounds.center )
+			}
+			
+			for (var key in epc.epcData){
+				if (key != "bounds" && key != "id" && key != "type" && key != "outgoing" && key != "parent" && key != "dockers"){
+					newShape.properties['oryx-'+key] = epc.epcData[key];
+				}
+			} 
+			return {epcData: epc.epcData, stencil: epc.stencil, shape: newShape};
+			
+		}.bind(this));
+		
+	
+	
+		edges.each(function(epc){
+									
+			if( !epc.stencil){
+				throw $break;
+			}
+			
+			// Create a new Shape
+			var newShape = new ORYX.Core.Edge({'eventHandlerCallback':this.facade.raiseEvent }, epc.stencil);
+
+			// Add the shape to the canvas
+			this.facade.getCanvas().add(newShape);
+		
+			if( epc.epcData.bounds ){
+				// Set the bounds
+				newShape.bounds.centerMoveTo( epc.epcData.bounds.center )
+			}
+			
+
+			var from0 	= nodes.find(function(node){ return node.epcData.outgoing && node.epcData.outgoing.any(function(out){ return out.slice(1) == epc.epcData.id }) });
+			if (from0)
+				var from = from0.shape;
+			var to0	= nodes.find(function(node){ return epc.epcData.outgoing && node.epcData.id == epc.epcData.outgoing[0].slice(1) });
+			if (to0)
+				var to = to0.shape;
+			// Set the docker
+			if( from ){
+				newShape.dockers.first().setDockedShape( from );
+				newShape.dockers.first().setReferencePoint({x: from.bounds.width() / 2.0, y: from.bounds.height() / 2.0});
+				newShape.dockers.first().update();
+			}
+			if( to ){
+				newShape.dockers.last().setDockedShape( to );
+				newShape.dockers.last().setReferencePoint({x: to.bounds.width() / 2.0, y: to.bounds.height() / 2.0});
+				newShape.dockers.last().update();
+			}
+			
+			for (var key in epc.epcData){
+				if (key != "bounds" && key != "id" && key != "type" && key != "outgoing" && key != "parent" && key != "dockers"){
+					newShape.properties['oryx-'+key] = epc.epcData[key];
 				}
 			}
-		})
+			
+		}.bind(this));
+				
+		this.facade.getCanvas().update();
+		
+	},
+	
+	/**
+	 * Parsed the given ERDF-String to a Array with the individual
+	 * EPC-Objects
+	 * 
+	 * @param {Object} erdfString
+	 */
+	parseToObject: function ( erdfString ){
 
-	}
+		var parser	= new DOMParser();			
+		var doc		= parser.parseFromString( erdfString ,"text/xml");
+
+		var getElementByIdFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id})}
+
+		// Get the oryx-editor div
+		var editorNode 	= getElementByIdFromDiv('oryxcanvas');
+		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryx-canvas123');
+
+		var hasEPC = editorNode ? $A(editorNode.childNodes).any(function(node){return node.nodeName.toLowerCase() == "a" && node.getAttribute('rel') == 'oryx-stencilset' && node.getAttribute('href').endsWith('epc/epc.json')}) : null;
+
+		if( !hasEPC ){
+			this.throwErrorMessage('Imported model is not an EPC model!');
+			return null
+		}
+
+
+		// Get all ids from the canvas node for rendering
+		var renderNodes = $A(editorNode.childNodes).collect(function(el){ return el.nodeName.toLowerCase() == "a" && el.getAttribute('rel') == 'oryx-render' ? el.getAttribute('href').slice(1) : null}).compact()
+		// Collect all nodes from the ids
+		renderNodes = renderNodes.collect(function(el){return getElementByIdFromDiv(el)});
+
+		// Function for extract all eRDF-Attributes and give them back as an Object
+		var parseAttribute = function(node){
+		    var res = {}
+			// Set the resource id
+			if(node.getAttribute("id")){
+				res["id"] = node.getAttribute("id");
+			}
+			
+			// Set all attributes
+		    $A(node.childNodes).each( function(node){ 
+				if( node.nodeName.toLowerCase() == "span" && node.getAttribute('class')){
+		            var key = node.getAttribute('class').slice(5);
+					res[key] = node.firstChild ? node.firstChild.nodeValue : '';
+		        	if( key == "bounds" ){
+						var ba = $A(res[key].split(",")).collect(function(el){return Number(el)})
+						res[key] = {a:{x:ba[0], y:ba[1]},b:{x:ba[2], y:ba[3]},center:{x:ba[0]+((ba[2]-ba[0])/2),y:ba[1]+((ba[3]-ba[1])/2)}}
+					}
+				} else if( node.nodeName.toLowerCase() == "a" && node.getAttribute('rel')){
+		            var key = node.getAttribute('rel').split("-")[1];
+					if( !res[key] ){
+						res[key] = [];
+					}
+					
+		            res[key].push( node.getAttribute('href') )
+		        }
+		    })
+		    return res
+		}
+
+		// Collect all Attributes out of the Nodes
+		return renderNodes.collect(function(el){return parseAttribute(el)});
+				
+	}	
 	
 });
