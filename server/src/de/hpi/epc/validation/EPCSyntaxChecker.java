@@ -21,11 +21,15 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 	private static final String NO_CORRECT_CONNECTOR = "Node is no correct conector";
 	
 	private static final String MANY_STARTS = "There must be only one start event";
-	private static final String MANY_ENDS = "There must be only one end event";
+	//private static final String MANY_ENDS = "There must be only one end event";
 	
 	private static final String FUNCTION_AFTER_OR = "There must be no functions after a splitting OR/XOR";
+	private static final String PI_AFTER_OR = "There must be no process interface after a splitting OR/XOR";
 	private static final String FUNCTION_AFTER_FUNCTION =  "There must be no function after a function";
 	private static final String EVENT_AFTER_EVENT =  "There must be no event after an event";
+	private static final String PI_AFTER_FUNCTION =  "There must be no process interface after a function";
+	private static final String FUNCTION_AFTER_PI =  "There must be no function after a process interface";
+
 	
 	protected Diagram diagram;
 	protected Map<String,String> errors;
@@ -83,17 +87,26 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 				else if (in == 0 || out == 0) addError(node, NOT_CONNECTED_2);
 				for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
 					if ("Function".equals(next.getType())) addError(next, FUNCTION_AFTER_FUNCTION);
+					if ("ProcessInterface".equals(next.getType())) addError(next, PI_AFTER_FUNCTION);
 				}
 			}
 			else if ("ProcessInterface".equals(node.getType())){
 				if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
-				else if (in == 0 || out == 0) addError(node, NOT_CONNECTED_2);
+				else if (in == 0 && out == 0) addError(node, NOT_CONNECTED_2);
+				for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
+					if ("Function".equals(next.getType())) addError(next, FUNCTION_AFTER_PI);
+					// PI after PI is allowed at the moment..
+				}
+				
 			}
 			else if ("XorConnector".equals(node.getType()) || "OrConnector".equals(node.getType())){
 				if (in == 1 && out == 2){
 					for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
 						if ("Function".equals(next.getType())){
 							addError(node, FUNCTION_AFTER_OR);
+							break;
+						} else if ("ProcessInterface".equals(next.getType())){
+							addError(next, PI_AFTER_OR);
 							break;
 						}
 					}
@@ -114,11 +127,11 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 				addError(n, MANY_STARTS);
 			}
 		}
-		if (endEvents.size() > 1){
-			for (DiagramNode n : endEvents){
-				addError(n, MANY_ENDS);
-			}
-		}
+//		if (endEvents.size() > 1){
+//			for (DiagramNode n : endEvents){
+//				addError(n, MANY_ENDS);
+//			}
+//		}
 	}
 	
 	protected void addError(DiagramObject obj, String errorCode) {
@@ -155,7 +168,7 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 		for (DiagramEdge edge : edges){
 			if ("ControlFlow".equals(edge.getType())){
 				DiagramNode target = edge.getTarget();
-				if ("Function".equals(target.getType()) || "Event".equals(target.getType())){
+				if ("Function".equals(target.getType()) || "Event".equals(target.getType()) || "ProcessInterface".equals(target.getType())){
 					result.add(target);
 				} else {
 					newEdges.addAll(target.getOutgoingEdges());
