@@ -161,19 +161,19 @@ ORYX.Core.AbstractShape = {
 	getAbstractShapesAtPosition: function() {
 		var x, y;
 		switch (arguments.length) {
-			case 0:
-				//TODO error
-				return undefined;
 			case 1:
 				x = arguments[0].x;
 				y = arguments[0].y;
 				break;
-			default:	//two or more arguments
+			case 2:	//two or more arguments
 				x = arguments[0];
 				y = arguments[1];
+				break;
+			default:
+				throw "getAbstractShapesAtPosition needs 1 or 2 arguments!"
 		}
 
-		if(this.isPointIncluded({x:x, y:y})) {
+		if(this.isPointIncluded(x, y)) {
 
 			var result = [];
 			result.push(this);
@@ -188,7 +188,7 @@ ORYX.Core.AbstractShape = {
 				var nodesAtPosition = new Hash();
 				
 				ne.each(function(node) {
-					var candidates = node.getAbstractShapesAtPosition(x,y);
+					var candidates = node.getAbstractShapesAtPosition( x , y );
 					if(candidates.length > 0) {
 						var nodesInZOrder = $A(node.node.parentNode.childNodes);
 						var zOrderIndex = nodesInZOrder.indexOf(node.node);
@@ -226,9 +226,9 @@ ORYX.Core.AbstractShape = {
 	 * Calculate if the point is inside the Shape
 	 * @param {Point}
 	 */
-	isPointIncluded: function(point, absoluteBounds) {
+	isPointIncluded: function(pointX, pointY, absoluteBounds) {
 		var absBounds = absoluteBounds ? absoluteBounds : this.absoluteBounds();
-		return absBounds.isIncluded(point);
+		return absBounds.isIncluded(pointX, pointY);
 				
 	},
 	

@@ -367,11 +367,27 @@ ORYX.Core.Bounds = Clazz.extend({
 	},
 	
 	isIncluded: function(point) {
-		
+
+		var pointX, pointY;
+
+		// Get the the two Points	
+		switch(arguments.length) {
+			case 1:
+				pointX = arguments[0].x;
+				pointY = arguments[0].y;
+				break;
+			case 2:
+				pointX = arguments[0];
+				pointY = arguments[1];
+				break;
+			default:
+				throw "getIntersectionPoints needs two or four arguments";
+		}
+				
 		var ul = this.upperLeft();
 		var lr = this.lowerRight();
 		
-		if(point.x >= ul.x && point.x <= lr.x && point.y >= ul.y && point.y <= lr.y)
+		if(pointX >= ul.x && pointX <= lr.x && pointY >= ul.y && pointY <= lr.y)
 			return true;
 		else 
 			return false;
