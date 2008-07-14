@@ -2863,7 +2863,7 @@
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
-				
+
 				if(lanes.length > 0) {
 					
 					// only one lane in pool
@@ -2875,12 +2875,17 @@
 						});
 					}
 					
-					
 					lanes = lanes.sortBy(function(lane) {
 						return lane.bounds.upperLeft().y;
 					});
 					
 					var shapeWidth = shape.bounds.width();
+					lanes.each(function(lane) {
+						if(lane.isChanged) {
+							shapeWidth = lane.bounds.width() + 30;
+						}
+					});
+					
 					var shapeHeight = 0;
 					var topBound = 0;
 					lanes.each(function(lane) {
@@ -2895,7 +2900,7 @@
 					});
 					
 					var upl = shape.bounds.upperLeft();
-					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight);
+					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
  			},
 			"properties": [
@@ -3551,6 +3556,13 @@
 					});
 					
 					var shapeWidth = shape.bounds.width();
+					lanes.each(function(lane) {
+						if(lane.isChanged) {
+							shapeWidth = lane.bounds.width() + 30;
+						}
+					});
+					
+					
 					var shapeHeight = 0;
 					var topBound = 0;
 					lanes.each(function(lane) {
@@ -3565,7 +3577,7 @@
 					});
 					
 					var upl = shape.bounds.upperLeft();
-					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight);
+					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
  			},			
 			"properties": [
