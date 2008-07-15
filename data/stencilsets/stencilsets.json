@@ -3,35 +3,35 @@
 			"title":"BPMN 1.0",
 			"namespace":"http://b3mn.org/stencilset/bpmn#",
 			"description":"BPMN 1.0 stencil set specification.",
-			"definition":"/bpmn/bpmn.json",
-			"icon":"/bpmn/bpmn.png"
+			"uri":"/bpmn/bpmn.json",
+			"icon_url":"/bpmn/bpmn.png"
 		},
 		{
 			"title":"BPMN 1.1",
 			"namespace":"http://b3mn.org/stencilset/bpmn1.1#",
 			"description":"BPMN 1.1 stencil set specification.",
-			"definition":"/bpmn1.1/bpmn1.1.json",
-			"icon":"/bpmn1.1/bpmn1.1.png"
+			"uri":"/bpmn1.1/bpmn1.1.json",
+			"icon_url":"/bpmn1.1/bpmn1.1.png"
 		},
 		{
 			"title":"EPC",
 			"namespace":"http://b3mn.org/stencilset/epc#",
 			"description":"Event-driven Process Chain specification.",
-			"definition":"/epc/epc.json",
-			"icon":"/epc/epc.png"
+			"uri":"/epc/epc.json",
+			"icon_url":"/epc/epc.png"
 		},
 		{
 			"title":"Petrinets",
 			"namespace":"http://b3mn.org/stencilset/petrinet#",
 			"description":"Petrinets specification.",
-			"definition":"/petrinets/petrinet.json",
-			"icon":"/petrinets/petrinets.png"
+			"uri":"/petrinets/petrinet.json",
+			"icon_url":"/petrinets/petrinets.png"
 		},
 		{
 			"title":"Workflow Nets",
 			"namespace":"http://www.example.org/workflownets#",
 			"description":"Simple stencil set for Workflow Nets.",
-			"definition":"/workflownets/workflownets.json",
-			"icon":"/workflownets/workflownets.png"
+			"uri":"/workflownets/workflownets.json",
+			"icon_url":"/workflownets/workflownets.png"
 		}
 ]
