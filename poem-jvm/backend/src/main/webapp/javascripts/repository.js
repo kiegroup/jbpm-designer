@@ -49,6 +49,8 @@ Repository.app = {
 	anonymous_user: "",
 	public_user:"public",
 	
+	stencilset_url: "/oryx/stencilsets/",
+	
     models: [], // saves all loaded models
     /**
      * saves information for debugging, especially for problem identifying when page is loaded
@@ -621,6 +623,11 @@ Repository.app = {
 					
 					Repository.app._model_types_loading = false;
 					
+					for (var i = 0; i < Repository.app.model_types.length; i++) {
+						Repository.app.model_types[i].icon_url = Repository.app.stencilset_url + Repository.app.model_types[i].icon_url;
+						Repository.app.model_types[i].uri = Repository.app.stencilset_url + Repository.app.model_types[i].uri;
+					}
+					
 					if (callback instanceof Function) {
 						callback(Repository.app.model_types);
 					}
@@ -988,7 +995,7 @@ Repository.render = {
 												text: modeltype.title,
 												id: modeltype.namespace,
 												leaf: true,
-												icon: "oryx/stencilsets/" + modeltype.icon,
+												icon: modeltype.icon_url,
 												qtip: modeltype.description,
 												listeners: {
 													click: function() {
@@ -1136,7 +1143,7 @@ Repository.render = {
 												model_types.each(function(modeltype){
 													menu.addMenuItem({
 														text: modeltype.title,
-														icon: "oryx/stencilsets/" + modeltype.icon,
+														icon: modeltype.icon_url,
 														qtip: modeltype.description,
 														handler: function(){
 															Repository.app.createModel(modeltype.namespace);
