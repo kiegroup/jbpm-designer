@@ -49,7 +49,8 @@ Repository.app = {
 	anonymous_user: "",
 	public_user:"public",
 	
-	stencilset_url: "/oryx/stencilsets/",
+	stencilset_url: "/stencilsets/",
+	oryx_url: "/oryx/",
 	
     models: [], // saves all loaded models
     /**
@@ -624,7 +625,7 @@ Repository.app = {
 					Repository.app._model_types_loading = false;
 					
 					for (var i = 0; i < Repository.app.model_types.length; i++) {
-						Repository.app.model_types[i].icon_url = Repository.app.stencilset_url + Repository.app.model_types[i].icon_url;
+						Repository.app.model_types[i].icon_url = Repository.app.oryx_url + Repository.app.stencilset_url + Repository.app.model_types[i].icon_url;
 						Repository.app.model_types[i].uri = Repository.app.stencilset_url + Repository.app.model_types[i].uri;
 					}
 					
