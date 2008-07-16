@@ -24,11 +24,42 @@
 module Helper
   include_class 'org.b3mn.poem.Persistance'
   @@model_types = {
-      "http://b3mn.org/stencilset/bpmn#" => {:uri => "/stencilsets/bpmn/bpmn.json", :title => "BPMN", :description => "Business Process Model Notation", :icon_url => "/oryx/stencilsets/bpmn/bpmn.png"},
-      "http://b3mn.org/stencilset/petrinet#" => {:uri => "/stencilsets/petrinets/petrinet.json", :title => "Petri Net", :description => "Petri Net", :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"},
-      "http://b3mn.org/stencilset/epc#" => {:uri => "/stencilsets/epc/epc.json", :title => "EPC", :description => "Event-Driven Process Chain", :icon_url => "/oryx/stencilsets/epc/epc.png"},
-      "http://www.example.org/workflownets#" => {:uri => "/stencilsets/workflownets/workflownets.json", :title => "Workflow Net", :description => "Workflow Net", :icon_url => "/oryx/stencilsets/workflownets/workflownets.png"},
-  	  "http://b3mn.org/stencilset/bpmn1.1#" => {:uri => "/stencilsets/bpmn1.1/bpmn1.1.json", :title => "BPMN 1.1", :description => "Business Process Model Notation 1.1", :icon_url => "/oryx/stencilsets/bpmn1.1/bpmn1.1.png"}
+      "http://b3mn.org/stencilset/bpmn#" => {
+          :uri         => "/stencilsets/bpmn/bpmn.json",
+          :title       => "BPMN",
+          :description => "Business Process Model Notation",
+          :icon_url    => "/oryx/stencilsets/bpmn/bpmn.png"
+      },
+      "http://b3mn.org/stencilset/petrinet#" => {
+          :uri         => "/stencilsets/petrinets/petrinet.json",
+          :title       => "Petri Net",
+          :description => "Petri Net",
+          :icon_url => "/oryx/stencilsets/petrinets/petrinets.png"
+      },
+      "http://b3mn.org/stencilset/epc#" => {
+          :uri         => "/stencilsets/epc/epc.json",
+          :title       => "EPC",
+          :description => "Event-Driven Process Chain",
+          :icon_url    => "/oryx/stencilsets/epc/epc.png"
+      },
+      "http://www.example.org/workflownets#" => {
+          :uri         => "/stencilsets/workflownets/workflownets.json",
+          :title       => "Workflow Net",
+          :description => "Workflow Net",
+          :icon_url    => "/oryx/stencilsets/workflownets/workflownets.png"
+      },
+  	  "http://b3mn.org/stencilset/bpmn1.1#" => {
+          :uri         => "/stencilsets/bpmn1.1/bpmn1.1.json",
+          :title       => "BPMN 1.1",
+          :description => "Business Process Model Notation 1.1",
+          :icon_url    => "/oryx/stencilsets/bpmn1.1/bpmn1.1.png"
+      },
+  	  "http://www.fmc-modeling.org/stencilsets/fmcblockdiagram#" => {
+          :uri         => "/stencilsets/fmcblockdiagram/fmcblockdiagram.json",
+          :title       => "FMC Block Diagram",
+          :description => "FMC Block Diagrams show compositional structures as a composition of collaborating system components.",
+          :icon_url    => "/oryx/stencilsets/fmcblockdiagram/fmcblockdiagram.png"
+      }
   }
   
   def self.toHash(obj, keys)
