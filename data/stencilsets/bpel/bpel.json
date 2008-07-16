@@ -3419,10 +3419,1027 @@
 		},
 		{
 			"type": "node",
+			"id":"if",
+			"title":"If Holder",
+			"description":"One If Holder",
+			"groups":["Controls If"],
+			"view":"controls/controls.ifHolder.svg",
+			"icon":"new_ifHolder.png",
+			"roles": ["PoolHolder","Activity","PoolChild","If"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"if_condition",
+			"title":"If condition",
+			"groups":["Controls If"],
+			"description":"If condition",
+			"view":"controls/node.if_condition.svg",
+			"icon":"new_if_condition.png",
+			"roles": ["Condition"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"expressionLanguage",
+					"type":"String",
+					"title":"expressionLanguage",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"50",
+					"wrapLines":false
+				},
+				{
+					"id":"bool_expression",
+					"type":"String",
+					"title":"bool_expression",
+					"value":"",
+					"description":"",
+					"refToView":"label",
+					"readonly":false,
+					"optional":false,
+					"length":undefined
+				},
+				{
+					"id":"If_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"flow",
+			"title":"Flow",
+			"description":"One Flow",
+			"groups":["Controls Flow"],
+			"view":"controls/controls.flow.svg",
+			"icon":"new_flow.png",
+			"roles": ["PoolHolder","Activity","PoolChild","Flow"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"forEach",
+			"title":"For Each",
+			"description":"One for each activity",
+			"groups":["Controls For Each"],
+			"view":"loop/loop.foreach.svg",
+			"icon":"new_for_each.png",
+			"roles": ["Activity","PoolChild"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},	
+				{
+					"id":"counterName",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
+					"title":"variable",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":undefined
+				},
+				{
+					"id":"paralle",
+					"type":"Choice",
+					"title":"paralle",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"startCounterValue_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"startCounter_expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"startCounterValue_integer_Expression",
+					"prefix":"oryx",
+					"type":"Integer",
+					"title":"startCounter_Integer_Expression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"finalCounterValue_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"finalCounter_expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"finalCounterValue_integer_Expression",
+					"prefix":"oryx",
+					"type":"Integer",
+					"title":"finalCounter_Integer_Expression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}				
+			]
+		},
+		{
+			"type": "node",
+			"id":"completionCondition",
+			"title":"CompletionCondition",
+			"description":"",
+			"groups":["Controls For Each"],
+			"view":"controls/node.if_condition.svg",
+			"icon":"new_if_condition.png",
+			"roles": ["Condition"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},	
+                {
+					"id":"branches_expressionLanguage",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"branches_expressionLanguage",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"successfulBranchesOnly",
+					"type":"Choice",
+					"title":"successfulBranchesOnly",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"branches_integer_Expression",
+					"prefix":"oryx",
+					"type":"Integer",
+					"title":"branches_Integer_Expression",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+				    "id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}				
+			]
+		},
+		{
+			"type": "node",
+			"id":"pick",
+			"title":"pick",
+			"description":"One pick activity",
+			"groups":["Controls Pick"],
+			"view":"controls/controls.pick.svg",
+			"icon":"new_task.png",
+			"roles": ["Activity","PoolChild"],
+			"layout":function(shape) {		
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
+ 			},
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"JC_expLang",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_expLang",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_boolExp",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"JoinCond_boolExp",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"JoinCond_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"JoinCond_Opaque",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Choice",
+					"title":"suppressJoinFailure",
+					"value":"fromParent",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"fromParent",
+							"title":"fromParent",
+							"value":"fromParent",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+					"id":"createInstance",
+					"type":"Choice",
+					"title":"createInstance",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"yes",
+							"title":"yes",
+							"value":"yes",
+							"tooltip":"",
+							"refToView":"none"
+						},
+						{
+							"id":"no",
+							"title":"no",
+							"value":"no",
+							"tooltip":"",
+							"refToView":"none"
+						}
+					]
+				},
+				{
+				"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "node",
 			"id":"scope",
 			"title":"Scope",
 			"description":"One Scope",
-			"groups":["Controls Scope"],
+			"groups":["Controls Scope", "Controls For Each"],
 			"view":"controls/controls.scope.svg",
 			"icon":"new_scope.png",
 			"roles": ["Activity","ActivityHolder","PoolChild","HandlerHolder","compensationHandlerHolder"],
@@ -4184,569 +5201,6 @@
 		},
 		{
 			"type": "node",
-			"id":"if",
-			"title":"If Holder",
-			"description":"One If Holder",
-			"groups":["Controls If"],
-			"view":"controls/controls.ifHolder.svg",
-			"icon":"new_ifHolder.png",
-			"roles": ["PoolHolder","Activity","PoolChild","If"],
-			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
- 			},
-			"properties": [
-				{
-					"id":"name",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"name",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"label",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"JC_expLang",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_expLang",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_boolExp",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_boolExp",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_opaque",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"JoinCond_Opaque",
-					"value":false,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"suppressJoinFailure",
-					"type":"Choice",
-					"title":"suppressJoinFailure",
-					"value":"fromParent",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"yes",
-							"title":"yes",
-							"value":"yes",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"no",
-							"title":"no",
-							"value":"no",
-							"tooltip":"",
-							"refToView":"none"
-						}
-					]
-				},
-				{
-				"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"if_condition",
-			"title":"If condition",
-			"groups":["Controls If"],
-			"description":"If condition",
-			"view":"controls/node.if_condition.svg",
-			"icon":"new_if_condition.png",
-			"roles": ["Condition"],
-			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
- 			},
-			"properties": [
-				{
-					"id":"expressionLanguage",
-					"type":"String",
-					"title":"expressionLanguage",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":"50",
-					"wrapLines":false
-				},
-				{
-					"id":"bool_expression",
-					"type":"String",
-					"title":"bool_expression",
-					"value":"",
-					"description":"",
-					"refToView":"label",
-					"readonly":false,
-					"optional":false,
-					"length":undefined
-				},
-				{
-					"id":"If_opaque",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"opaque",
-					"value":false,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-				"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"flow",
-			"title":"Flow",
-			"description":"One Flow",
-			"groups":["Controls Flow"],
-			"view":"controls/controls.flow.svg",
-			"icon":"new_flow.png",
-			"roles": ["PoolHolder","Activity","PoolChild","Flow"],
-			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
- 			},
-			"properties": [
-				{
-					"id":"name",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"name",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"label",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"JC_expLang",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_expLang",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_boolExp",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_boolExp",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_opaque",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"JoinCond_Opaque",
-					"value":false,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"suppressJoinFailure",
-					"type":"Choice",
-					"title":"suppressJoinFailure",
-					"value":"fromParent",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"yes",
-							"title":"yes",
-							"value":"yes",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"no",
-							"title":"no",
-							"value":"no",
-							"tooltip":"",
-							"refToView":"none"
-						}
-					]
-				},
-				{
-				"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"pick",
-			"title":"pick",
-			"description":"One pick activity",
-			"groups":["Controls Pick"],
-			"view":"controls/controls.pick.svg",
-			"icon":"new_task.png",
-			"roles": ["Activity","PoolChild"],
-			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
- 			},
-			"properties": [
-				{
-					"id":"name",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"name",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"label",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"JC_expLang",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_expLang",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_boolExp",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_boolExp",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_opaque",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"JoinCond_Opaque",
-					"value":false,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"suppressJoinFailure",
-					"type":"Choice",
-					"title":"suppressJoinFailure",
-					"value":"fromParent",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"yes",
-							"title":"yes",
-							"value":"yes",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"no",
-							"title":"no",
-							"value":"no",
-							"tooltip":"",
-							"refToView":"none"
-						}
-					]
-				},
-				{
-					"id":"createInstance",
-					"type":"Choice",
-					"title":"createInstance",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"yes",
-							"title":"yes",
-							"value":"yes",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"no",
-							"title":"no",
-							"value":"no",
-							"tooltip":"",
-							"refToView":"none"
-						}
-					]
-				},
-				{
-				"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
 			"id":"while",
 			"title":"While",
 			"description":"One While",
@@ -5123,196 +5577,6 @@
 					"fill":true,
 					"stroke":false
 				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"forEach",
-			"title":"For Each",
-			"description":"One For Each",
-			"groups":["Loop"],
-			"view":"loop/loop.foreach.svg",
-			"icon":"new_for_each.png",
-			"roles": ["Activity","PoolChild","ActivityHolder"],
-			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
- 			},
-			"properties": [
-				{
-					"id":"name",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"name",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"label",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"JC_expLang",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_expLang",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_boolExp",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_boolExp",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_opaque",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"JoinCond_Opaque",
-					"value":false,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"suppressJoinFailure",
-					"type":"Choice",
-					"title":"suppressJoinFailure",
-					"value":"fromParent",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"yes",
-							"title":"yes",
-							"value":"yes",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"no",
-							"title":"no",
-							"value":"no",
-							"tooltip":"",
-							"refToView":"none"
-						}
-					]
-				},
-				{
-					"id":"condition_expressionLanguage",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"cond_expressionLanguage",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"condition_booleanExpression",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"cond_booleanExpression",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"condition_opaque",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"cond_Opaque",
-					"value":false,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-				"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}				
 			]
 		},
 		{
@@ -6931,6 +7195,10 @@
 			{
 				"role":"eventHandlers",
 				"contains": ["onEvent","onAlarm"]
+			},
+			{ 
+			    "role":"forEach",
+				"contains": ["completionCondition","scope"]
 			},
 			{
 				"role":"pick",

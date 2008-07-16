@@ -80,7 +80,17 @@
 		<servlet-name>SimplePNMLExporter</servlet-name>
 		<url-pattern>/simplepnmlexporter</url-pattern>
 	</servlet-mapping>
-
+	
+	<servlet>
+		<display-name>Oryx BPEL IMPORTER</display-name>
+		<servlet-name>BPELImporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPELImporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPELImporter</servlet-name>
+		<url-pattern>/bpelimporter</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<display-name>
 			Oryx Desynchronizability Checker

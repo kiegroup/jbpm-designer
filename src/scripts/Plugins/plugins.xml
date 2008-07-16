@@ -61,6 +61,11 @@
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
+		
+	    <!-- plugin for BPEL import and export --> 
+		<plugin source="bpel.js" name="ORYX.Plugins.BpelGenerator">
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
+		</plugin>
 	
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
 		
@@ -70,11 +75,6 @@
 		</plugin>
 		<plugin source="autoLayout.js" name="ORYX.Plugins.AutoLayout" />
 		<plugin source="overlayexample.js" name="ORYX.Plugins.OverlayExample" />
-		
-		   plugin for BPEL import and export 
-		<plugin source="bpel.js" name="ORYX.Plugins.BpelGenerator">
-			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
-		</plugin>
 		-->
 		
 
