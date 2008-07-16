@@ -180,6 +180,30 @@
 		<url-pattern>/layouter</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<display-name>Step Through</display-name>
+		<servlet-name>StepThrough</servlet-name>
+		<servlet-class>
+			de.hpi.petrinet.stepthrough.StepThroughServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StepThrough</servlet-name>
+		<url-pattern>/stepthrough</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Step Through Checker</display-name>
+		<servlet-name>StepThroughChecker</servlet-name>
+		<servlet-class>
+			de.hpi.petrinet.stepthrough.StepThroughCheckerServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StepThroughChecker</servlet-name>
+		<url-pattern>/stepthroughchecker</url-pattern>
+	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>/server</welcome-file>
 	</welcome-file-list>

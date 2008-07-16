@@ -68,22 +68,18 @@ public class PTNetInterpreterImpl implements PTNetInterpreter {
 		return new StateSpaceCalculator(this, (PTNet)net, (Marking)marking).getReachableTransitions();
 	}
 
-
-	
-	
-	
 	public de.hpi.petrinet.Marking fireTransition(PetriNet net,
 			de.hpi.petrinet.Marking marking, Transition t) {
-		return fireTransition(net, marking, t);
+		return fireTransition(net, (de.hpi.PTnet.Marking)marking, t);
 	}
 
 	public List<de.hpi.petrinet.Transition> getEnabledTransitions(PetriNet net,
 			de.hpi.petrinet.Marking marking) {
-		return getEnabledTransitions(net, marking);
+		return getEnabledTransitions(net, (de.hpi.PTnet.Marking)marking);
 	}
 
 	public boolean[] getEnablement(PetriNet net, de.hpi.petrinet.Marking marking) {
-		return getEnablement(net, marking);
+		return getEnablement(net, (de.hpi.PTnet.Marking)marking);
 	}
 
 }

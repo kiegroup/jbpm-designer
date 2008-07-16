@@ -417,9 +417,9 @@ public class ExecConverter extends Converter {
 		boolean isParallel = process.isParallelOrdering();	
 
 		// start and end transitions
-		Transition startT = addTauTransition(net, "ad-hoc_start_" + process.getId());
-		Transition endT = addTauTransition(net, "ad-hoc_end_" + process.getId());
-		Transition defaultEndT = addTauTransition(net, "ad-hoc_defaultEnd_" + process.getId());
+		Transition startT = addTauTransition(net, "ad-hoc_start_" + process.getId(), process, 1);
+		Transition endT = addTauTransition(net, "ad-hoc_end_" + process.getId(), process, 1);
+		Transition defaultEndT = addTauTransition(net, "ad-hoc_defaultEnd_" + process.getId(), process, 1);
 		
 		addFlowRelationship(net, pl.startP, startT);
 		addFlowRelationship(net, defaultEndT, pl.endP);
@@ -432,9 +432,9 @@ public class ExecConverter extends Converter {
 		if (completionConditionString.length() == 0) {
 			completionConditionString = "false";
 		}
-		Transition finalize = addTauTransition(net, "ad-hoc_finalize_" + process.getId());
+		Transition finalize = addTauTransition(net, "ad-hoc_finalize_" + process.getId(), process, 0);
 		finalize.setGuard(completionConditionString);
-		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId());
+		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId(), process, 0);
 		resume.setGuard("!("+completionConditionString+")" );
 
 		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
@@ -486,9 +486,9 @@ public class ExecConverter extends Converter {
 				// finishing construct(finalize with skip, finish and abort)
 				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
 				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
-				Transition skipReady = addTauTransition(net, "ad-hoc_skipready_task_" + exTask.getId());
-				Transition skipEnabled = addTauTransition(net, "ad-hoc_skipenabled_task_" + exTask.getId());
-				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId());
+				Transition skipReady = addTauTransition(net, "ad-hoc_skipready_task_" + exTask.getId(), exTask, 0);
+				Transition skipEnabled = addTauTransition(net, "ad-hoc_skipenabled_task_" + exTask.getId(), exTask, 0);
+				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId(), exTask, 0);
 				
 				addFlowRelationship(net, finalize, enableFinalize);
 					

@@ -62,10 +62,16 @@
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
 		
-	    <!-- plugin for BPEL import and export --> 
+		<!-- plugin for BPEL import and export --> 
 		<plugin source="bpel.js" name="ORYX.Plugins.BpelGenerator">
 			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
 		</plugin>
+		
+		<!--
+		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.StepThroughPlugin">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
+		</plugin>
+		-->
 	
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
 		
@@ -83,5 +89,4 @@
 	<properties>
 		<property group="File" index="1" />
 		<property group="Edit" index="2" />	
-	</properties>
-</config>
+	</properties></config>
