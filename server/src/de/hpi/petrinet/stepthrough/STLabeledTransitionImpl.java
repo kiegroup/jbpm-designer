@@ -10,32 +10,26 @@ public class STLabeledTransitionImpl extends LabeledTransitionImpl implements ST
 	private AutoSwitchLevel level;
 	private int timesExecuted = 0;
 	
-	@Override
 	public DiagramObject getBPMNObj() {
 		return BPMNObj;
 	}
 
-	@Override
 	public void setBPMNObj(DiagramObject obj) {
 		BPMNObj = obj;
 	}
 	
-	@Override
 	public int getTimesExecuted() {
 		return timesExecuted;
 	}
 
-	@Override
 	public void incTimesExecuted() {
 		timesExecuted ++;
 	}
 
-	@Override
 	public AutoSwitchLevel getAutoSwitchLevel() {
 		return level;
 	}
 	
-	@Override
 	public void setAutoSwitchLevel(AutoSwitchLevel level) {
 		this.level = level;
 	}
