@@ -67,11 +67,10 @@
 			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
 		</plugin>
 		
-		<!--
+
 		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.StepThroughPlugin">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 		</plugin>
-		-->
 	
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
 		
