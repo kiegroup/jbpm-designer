@@ -3,6 +3,7 @@ package de.hpi.petrinet.stepthrough;
 import de.hpi.PTnet.PTNet;
 import de.hpi.PTnet.PTNetInterpreter;
 import de.hpi.PTnet.impl.PTNetInterpreterImpl;
+import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Node;
 import de.hpi.petrinet.Marking;
@@ -141,9 +142,8 @@ public class STMapper {
 		if (switchLevel == AutoSwitchLevel.HyperAuto) {
 			// HyperAuto tries to fire all transitions until the user has to make a decision, e.g. at an XOR gateway
 			int timesFired = 0;
-			int choices = fireableObjects.size();
 			List<STTransition> nowFireableObjects = getFireableTransitions();
-
+			
 			while (timesFired < 50) {
 				// Find all transitions that were not fireable before
 				List<STTransition> newFireableObjects = new ArrayList();
@@ -216,7 +216,10 @@ public class STMapper {
 		// Update changedObjs with Objects that aren't fireable anymore
 		for(int i = 0; i < fireableObjects.size(); i++) {
 			if(!newlyFireableObjects.contains(fireableObjects.get(i))) {
-				changedObjs.add(fireableObjects.get(i));
+				// May already be inside the list because it has been fired
+				if(!changedObjs.contains(fireableObjects.get(i))) {
+					changedObjs.add(fireableObjects.get(i));
+				}
 			}
 		}
 		
