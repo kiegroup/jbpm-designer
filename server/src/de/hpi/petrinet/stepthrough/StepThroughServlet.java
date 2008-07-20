@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.oryxeditor.server.StencilSetUtil;
 import org.w3c.dom.Document;
 
 import de.hpi.PTnet.PTNet;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
+import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.STConverter;
@@ -34,11 +36,9 @@ public class StepThroughServlet extends HttpServlet {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-			BPMNRDFImporter importer = new BPMNRDFImporter(document);
-			BPMNDiagram diagram = (BPMNDiagram)importer.loadBPMN();
-			new Preprocessor(diagram, new BPMNFactory()).process();
+
 			// Produce a PetriNet and create a StepThroughMapper with it
-			PetriNet net = new STConverter(diagram).convert();
+			PetriNet net = loadPetriNet(document);
 			STMapper stm = new STMapper((PTNet)net);
 			
 			// Set whether the client wants to have the state of all resources or just of the last changes
@@ -51,7 +51,7 @@ public class StepThroughServlet extends HttpServlet {
 
 			// Simulate step by step
 			String[] objectsToFire = objectsToFireString.split(";");
-			for(int i = 0; i < objectsToFire.length; i++) {
+			for (int i = 0; i < objectsToFire.length; i++) {
 				// If necessary, delete all uninteresting changed objects
 				if(onlyChangedObjects) stm.clearChangedObjs();
 				// Set AutoSwitchLevel
@@ -68,4 +68,18 @@ public class StepThroughServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+
+	private PetriNet loadPetriNet(Document document) {
+		BPMNDiagram diagram = null;
+		String type = new StencilSetUtil().getStencilSet(document);
+		if (type.equals("bpmn.json")) {
+			diagram = new BPMNRDFImporter(document).loadBPMN();
+		} else if (type.equals("bpmn1.1.json")) {
+			diagram = new BPMN11RDFImporter(document).loadBPMN();
+		}
+		
+		new Preprocessor(diagram, new BPMNFactory()).process();
+		return new STConverter(diagram).convert();
+	}
+
 }

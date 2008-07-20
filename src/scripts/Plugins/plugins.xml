@@ -72,6 +72,7 @@
 
 		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.StepThroughPlugin">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 		</plugin>
 	
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
