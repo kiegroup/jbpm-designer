@@ -112,7 +112,7 @@
 					"type":"String",
 					"title":"Pools",
 					"value":"",
-					"description":"A Business Process Diagramm shall contain one or more Pools.",
+					"description":"A Business Process Diagram shall contain one or more Pools.",
 					"readonly":false,
 					"optional":false,
 					"length":"50",
@@ -313,7 +313,7 @@
 					"type":"String",
 					"title":"Properties",
 					"value":"",
-					"description":"Describes local Properties may added to the activity. These Properties are only for use within the processing of the activity",
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
 					"optional": 	true,
 					"length":""
@@ -394,7 +394,7 @@
 					"type":"Integer",
 					"title":"CompletionQuantity",
 					"value":1,
-					"description":"Defines the number of tokens that must be generate from the activity",
+					"description":"Defines the number of tokens that must be generated from the activity",
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
@@ -703,9 +703,9 @@
 					"length":"50"
 				},
 				{
-					"id":"Instatiate",
+					"id":"Instantiate",
 					"type":"Boolean",
-					"title":"Instatiate",
+					"title":"Instantiate",
 					"value":false,
 					"description":"",
 					"readonly":false,
@@ -757,16 +757,7 @@
 					"refToView":"taskrect",
 					"fill":true,
 					"stroke":false
-				},
-				{
-					"id":"isskipable",
-					"type":"Boolean",
-					"title":"isSkipable",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				}				
+				}
 			]
 		},
  		{
@@ -774,7 +765,7 @@
 			"id":"CollapsedSubprocess",
 			"title":"Collapsed Subprocess",
 			"groups":["Activities"],
-			"description":"An subprocess.",
+			"description":"A subprocess.",
 			"view":"activity/node.collapsed.subprocess.svg",
 			"icon":"new_subprocess.png",
 			"roles": [
@@ -951,7 +942,7 @@
 					"type":"String",
 					"title":"Properties",
 					"value":"",
-					"description":"Describes local Properties may added to the activity. These Properties are only for use within the processing of the activity",
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
 					"optional": 	true,
 					"length":""
@@ -1369,7 +1360,7 @@
 			"id":"Subprocess",
 			"title":"Expanded Subprocess",
 			"groups":["Activities"],
-			"description":"An subprocess.",
+			"description":"A subprocess.",
 			"view":"activity/node.expanded.subprocess.svg",
 			"icon":"new_task.png",
 			"roles": [
@@ -1547,7 +1538,7 @@
 					"type":"String",
 					"title":"Properties",
 					"value":"",
-					"description":"Describes local Properties may added to the activity. These Properties are only for use within the processing of the activity",
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
 					"optional": 	true,
 					"length":""
@@ -1963,7 +1954,7 @@
 		{
 			"type": "node",
 			"id":"Exclusive_Databased_Gateway",
-			"title":"Exclusive Data-based (XOR) Gateway",
+			"title":"Data-based Exclusive (XOR) Gateway",
 			"groups":["Gateways"],
 			"description":"A decision point.",
 			"view":"gateway/node.gateway.xor.databased.svg",
@@ -2169,7 +2160,7 @@
 		{
 			"type": "node",
 			"id":"Exclusive_Eventbased_Gateway",
-			"title":"Exclusive Event-based (XOR) Gateway",
+			"title":"Event-based Exclusive (XOR) Gateway",
 			"groups":["Gateways"],
 			"description":"A decision point.",
 			"view":"gateway/node.gateway.xor.eventbased.svg",
@@ -2978,7 +2969,7 @@
 					"type":"Boolean",
 					"title":"BoundaryVisible",
 					"value":true,
-					"description":"Defines, if the rectangular boundary for the Pool is visible.",
+					"description":"Defines if the rectangular boundary for the Pool is visible.",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["border", "c", "caption", "captionDisableAntialiasing"]
@@ -2988,7 +2979,7 @@
 					"type":"Boolean",
 					"title":"MainPool",
 					"value":false,
-					"description":"Defines, if the current Pool is the main Pool of the diagram.",
+					"description":"Defines if the current Pool is the main Pool of the diagram.",
 					"readonly":false,
 					"optional":false
 				},
@@ -3299,7 +3290,7 @@
 					"type":"Boolean",
 					"title":"BoundaryVisible",
 					"value":true,
-					"description":"Defines, if the rectangular boundary for the Pool is visible.",
+					"description":"Defines if the rectangular boundary for the Pool is visible.",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["border", "c"]
@@ -3309,7 +3300,7 @@
 					"type":"Boolean",
 					"title":"MainPool",
 					"value":false,
-					"description":"Defines, if the current Pool is the main Pool of the diagram.",
+					"description":"Defines if the current Pool is the main Pool of the diagram.",
 					"readonly":false,
 					"optional":false
 				},
@@ -3679,7 +3670,7 @@
 			"id":"Group",
 			"title":"Group",
 			"groups":["Artifacts"],
-			"description":"A group box element",
+			"description":"A group box element.",
 			"view":"artifact/node.group.svg",
 			"icon":"new_group.png",
 			"roles": [
@@ -3769,7 +3760,7 @@
 			"id":"TextAnnotation",
 			"title":"Text Annotation",
 			"groups":["Artifacts"],
-			"description":"A text annotation",
+			"description":"A text annotation.",
 			"view":"artifact/node.text.annotation.svg",
 			"icon":"new_text_annotation.png",
 			"roles": [
@@ -3859,7 +3850,7 @@
 			"type": "node",
 			"id":"DataObject",
 			"title":"Data Object",
-			"description":"A data object",
+			"description":"A data object.",
 			"groups":["Artifacts"],
 			"view":"artifact/node.data.object.svg",
 			"icon":"new_data_object.png",
@@ -3938,7 +3929,7 @@
 					"type":"String",
 					"title":"Name",
 					"value":"",
-					"description":"Text description",
+					"description":"Text description.",
 					"readonly":false,
 					"optional":true,
 					"refToView":"text_name",
@@ -4443,7 +4434,7 @@
 			"id":"StartConditionalEvent",
 			"title":"Start Conditional Event",
 			"groups":["Start Events"],
-			"description":"A rule event without incoming edges.",
+			"description":"A conditional event without incoming edges.",
 			"view":"startevent/node.event.conditional.start.svg",
 			"icon":"startevent/node.event.conditional.start.png",
 			"roles": [
@@ -6109,7 +6100,7 @@
 			"id":"IntermediateConditionalEvent",
 			"title":"Intermediate Conditional Event",
 			"groups":["Catching Intermediate Events"],
-			"description":"An intermediate rule event with incoming and outgoing edges.",
+			"description":"An intermediate conditional event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.conditional.intermediate.svg",
 			"icon":"intermediateevent/node.event.conditional.intermediate.png",
 			"roles":[
@@ -7324,7 +7315,7 @@
 			"id":"EndMessageEvent",
 			"title":"Message End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A message event without outgoing edges.",
 			"view":"endevent/node.event.message.end.svg",
 			"icon":"endevent/node.event.message.end.png",
 			"roles":[
@@ -7490,7 +7481,7 @@
 			"id":"EndErrorEvent",
 			"title":"Error End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"An error event without outgoing edges.",
 			"view":"endevent/node.event.error.end.svg",
 			"icon":"endevent/node.event.error.end.png",
 			"roles":[
@@ -7623,7 +7614,7 @@
 			"id":"EndCancelEvent",
 			"title":"Cancel End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A cancel event without outgoing edges.",
 			"view":"endevent/node.event.cancel.end.svg",
 			"icon":"endevent/node.event.cancel.end.png",
 			"roles":[
@@ -7747,7 +7738,7 @@
 			"id":"EndCompensationEvent",
 			"title":"Compensation End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A compensation event without outgoing edges.",
 			"view":"endevent/node.event.compensation.end.svg",
 			"icon":"endevent/node.event.compensation.end.png",
 			"roles":[
@@ -7882,7 +7873,7 @@
 			"id":"EndSignalEvent",
 			"title":"Signal End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A signal event without outgoing edges.",
 			"view":"endevent/node.event.signal.end.svg",
 			"icon":"endevent/node.event.signal.end.png",
 			"roles":[
@@ -8017,7 +8008,7 @@
 			"id":"EndMultipleEvent",
 			"title":"Multiple End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A multiple event without outgoing edges.",
 			"view":"endevent/node.event.multiple.end.svg",
 			"icon":"endevent/node.event.multiple.end.png",
 			"roles":[
@@ -8141,7 +8132,7 @@
 			"id":"EndTerminateEvent",
 			"title":"Terminate Flow",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A terminate event without outgoing edges.",
 			"view":"endevent/node.event.terminate.end.svg",
 			"icon":"endevent/node.event.terminate.end.png",
 			"roles":[
