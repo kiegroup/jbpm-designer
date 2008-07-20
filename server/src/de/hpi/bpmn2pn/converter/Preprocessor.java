@@ -1,7 +1,10 @@
 package de.hpi.bpmn2pn.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.Activity;
@@ -13,6 +16,7 @@ import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.Event;
+import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.SequenceFlow;
@@ -46,18 +50,20 @@ public class Preprocessor {
 	}
 
 	protected void handleSequenceFlow(Container process) {
+		Map<Gateway,Node> addedGateways = new HashMap<Gateway,Node>();
 		for (Node node: process.getChildNodes()) {
 			if (node instanceof Activity || node instanceof Event) {
 				if (countSequenceFlows(node.getIncomingEdges()) > 1) {
 					// create new xor-gateway
 					XORDataBasedGateway g = factory.createXORDataBasedGateway();
-					g.setParent(node.getParent());
-					g.setProcess(node.getProcess());
+//					g.setParent(node.getParent()); // attention: concurrent update!
+//					g.setProcess(node.getProcess()); // attention: concurrent update!
+					addedGateways.put(g, node);
 	
 					// reroute incoming branches
-					for (Edge edge: node.getIncomingEdges())
+					for (Edge edge: new ArrayList<Edge>(node.getIncomingEdges()))
 						if (edge instanceof ControlFlow)
-							edge.setTarget(node);
+							edge.setTarget(g);
 					
 					// add new sequence flow
 					SequenceFlow flow = factory.createSequenceFlow();
@@ -68,13 +74,14 @@ public class Preprocessor {
 				if (countSequenceFlows(node.getOutgoingEdges()) > 1) {
 					// create new xor-gateway
 					ANDGateway g = factory.createANDGateway();
-					g.setParent(node.getParent());
-					g.setProcess(node.getProcess());
+//					g.setParent(node.getParent()); // attention: concurrent update!
+//					g.setProcess(node.getProcess()); // attention: concurrent update!
+					addedGateways.put(g, node);
 	
 					// reroute outgoing branches
-					for (Edge edge: node.getOutgoingEdges())
+					for (Edge edge: new ArrayList<Edge>(node.getOutgoingEdges()))
 						if (edge instanceof ControlFlow)
-							edge.setSource(node);
+							edge.setSource(g);
 					
 					// add new sequence flow
 					SequenceFlow flow = factory.createSequenceFlow();
@@ -85,6 +92,12 @@ public class Preprocessor {
 			}
 			if (node instanceof SubProcess)
 				handleSequenceFlow((SubProcess)node);
+		}
+		for (Entry<Gateway,Node> entry: addedGateways.entrySet()) {
+			Gateway g = entry.getKey();
+			Node node = entry.getValue();
+			g.setParent(node.getParent()); 
+			g.setProcess(node.getProcess()); 
 		}
 	}
 
