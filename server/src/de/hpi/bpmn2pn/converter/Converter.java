@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hpi.bpmn.ANDGateway;
+import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
@@ -12,6 +13,7 @@ import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
+import de.hpi.bpmn.Event;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Lane;
 import de.hpi.bpmn.MessageFlow;
@@ -130,7 +132,9 @@ public abstract class Converter {
 		// get all flows
 		List<MessageFlow> allFlows = new ArrayList<MessageFlow>();
 		for (Edge edge : diagram.getEdges()) {
-			if (edge instanceof MessageFlow)
+			if (edge instanceof MessageFlow && 
+					(edge.getSource() instanceof Activity || edge.getSource() instanceof Event) &&
+					(edge.getTarget() instanceof Activity || edge.getTarget() instanceof Event))
 				allFlows.add((MessageFlow) edge);
 		}
 
