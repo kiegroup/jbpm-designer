@@ -149,7 +149,8 @@
 				"conditional_start",
 				"default_start",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"FromEventbasedGateway"
 			],
 			"properties": [
 				{
@@ -692,9 +693,9 @@
 					]
 				},
 				{
-					"id":"Message",
+					"id":"MessageRef",
 					"type":"String",
-					"title":"Message",
+					"title":"MessageRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -757,7 +758,7 @@
 					"refToView":"taskrect",
 					"fill":true,
 					"stroke":false
-				}
+				}		
 			]
 		},
  		{
@@ -2166,9 +2167,7 @@
 			"view":"gateway/node.gateway.xor.eventbased.svg",
 			"icon":"new_gateway_xor_event.png",
 			"roles": [
-				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2859,7 +2858,17 @@
 					
 					// only one lane in pool
 					if(lanes.length == 1) {
-						lanes.first().setProperty("oryx-showcaption", false);
+						
+						// test whether the sole lane has child lanes
+						var childLanes = lanes.first().getChildNodes(false).findAll(function(node) {
+							return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
+						});
+						if(childLanes.length > 0) {
+							lanes.first().setProperty("oryx-showcaption", true);
+						} else {
+							lanes.first().setProperty("oryx-showcaption", false);
+						}
+						
 					} else {
 						lanes.each(function(lane) {
 							lane.setProperty("oryx-showcaption", true);
@@ -3547,6 +3556,7 @@
 					});
 					
 					var shapeWidth = shape.bounds.width();
+					
 					lanes.each(function(lane) {
 						if(lane.isChanged) {
 							shapeWidth = lane.bounds.width() + 30;
@@ -5009,7 +5019,8 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"FromEventbasedGateway"
 				
 			],
 			"properties": [
@@ -5369,7 +5380,8 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"FromEventbasedGateway"
 			],
 			"properties": [
 				{
@@ -5676,7 +5688,6 @@
 				"from_task_event",
 				"onBoundaryOnly",
 				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
@@ -6261,7 +6272,8 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"FromEventbasedGateway"
 			],
 			"properties": [
 				{
@@ -8915,6 +8927,10 @@
 					{
 						"from":"sequence_start",
 						"to":["sequence_end"]
+					},
+					{
+						"from":"Exclusive_Eventbased_Gateway",
+						"to":["FromEventbasedGateway"]
 					}
 				]
 			},
@@ -8933,6 +8949,10 @@
 					{
 						"from":"conditional_start",
 						"to":["sequence_end"]
+					},
+					{
+						"from":"Exclusive_Eventbased_Gateway",
+						"to":["FromEventbasedGateway"]
 					}
 				]
 			},
