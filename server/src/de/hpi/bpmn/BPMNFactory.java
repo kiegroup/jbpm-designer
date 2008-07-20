@@ -36,12 +36,16 @@ public class BPMNFactory {
 		return new StartTimerEvent();
 	}
 
-	public StartRuleEvent createStartRuleEvent() {
-		return new StartRuleEvent();
+	public StartConditionalEvent createStartConditionalEvent() {
+		return new StartConditionalEvent();
 	}
 
 	public StartLinkEvent createStartLinkEvent() {
 		return new StartLinkEvent();
+	}
+
+	public StartSignalEvent createStartSignalEvent() {
+		return new StartSignalEvent();
 	}
 
 	public StartMultipleEvent createStartMultipleEvent() {
@@ -64,12 +68,16 @@ public class BPMNFactory {
 		return new IntermediateCompensationEvent();
 	}
 
-	public IntermediateRuleEvent createIntermediateRuleEvent() {
-		return new IntermediateRuleEvent();
+	public IntermediateConditionalEvent createIntermediateConditionalEvent() {
+		return new IntermediateConditionalEvent();
 	}
 
 	public IntermediateLinkEvent createIntermediateLinkEvent() {
 		return new IntermediateLinkEvent();
+	}
+
+	public IntermediateSignalEvent createIntermediateSignalEvent() {
+		return new IntermediateSignalEvent();
 	}
 
 	public IntermediateMultipleEvent createIntermediateMultipleEvent() {
@@ -112,6 +120,10 @@ public class BPMNFactory {
 
 	public EndLinkEvent createEndLinkEvent() {
 		return new EndLinkEvent();
+	}
+
+	public EndSignalEvent createEndSignalEvent() {
+		return new EndSignalEvent();
 	}
 
 	public EndMultipleEvent createEndMultipleEvent() {

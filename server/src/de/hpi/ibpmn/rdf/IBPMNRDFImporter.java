@@ -35,7 +35,7 @@ import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.IntermediateLinkEvent;
 import de.hpi.bpmn.IntermediateMultipleEvent;
 import de.hpi.bpmn.IntermediatePlainEvent;
-import de.hpi.bpmn.IntermediateRuleEvent;
+import de.hpi.bpmn.IntermediateConditionalEvent;
 import de.hpi.bpmn.IntermediateTimerEvent;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
@@ -43,7 +43,7 @@ import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartLinkEvent;
 import de.hpi.bpmn.StartMultipleEvent;
 import de.hpi.bpmn.StartPlainEvent;
-import de.hpi.bpmn.StartRuleEvent;
+import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartTimerEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.TextAnnotation;
@@ -342,7 +342,7 @@ public class IBPMNRDFImporter {
 	}
 
 	protected void addStartRuleEvent(Node node, ImportContext c) {
-		StartRuleEvent event = factory.createStartRuleEvent();
+		StartConditionalEvent event = factory.createStartConditionalEvent();
 		handleEvent(node, event, c, "ruleName");
 	}
 
@@ -377,7 +377,7 @@ public class IBPMNRDFImporter {
 	}
 
 	protected void addIntermediateRuleEvent(Node node, ImportContext c) {
-		IntermediateRuleEvent event = factory.createIntermediateRuleEvent();
+		IntermediateConditionalEvent event = factory.createIntermediateConditionalEvent();
 		handleEvent(node, event, c, "ruleName");
 	}
 

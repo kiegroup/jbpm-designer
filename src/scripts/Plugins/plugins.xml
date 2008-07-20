@@ -46,6 +46,7 @@
 		<plugin source="simplepnmlexport.js" name="ORYX.Plugins.SimplePnmlexport">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>	
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 		</plugin>	
@@ -57,6 +58,7 @@
 		<plugin source="syntaxchecker.js" name="ORYX.Plugins.SyntaxChecker">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
@@ -88,4 +90,5 @@
 	<properties>
 		<property group="File" index="1" />
 		<property group="Edit" index="2" />	
-	</properties></config>
+	</properties>
+</config>

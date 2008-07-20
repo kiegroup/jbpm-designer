@@ -21,6 +21,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
+import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.StandardConverter;
@@ -94,12 +95,25 @@ public class SimplePNMLExporter extends HttpServlet {
 			processIBPMN(document, pnmlDoc);
 		else if (type.equals("bpmn.json") || type.equals("bpmnexec.json"))
 			processBPMN(document, pnmlDoc);
+		else if (type.equals("bpmn1.1.json"))
+			processBPMN11(document, pnmlDoc);
 		else if (type.equals("interactionpetrinets.json"))
 			processIPN(document, pnmlDoc);
 	}
 	
 	protected void processBPMN(Document document, Document pnmlDoc) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
+		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
+		new Preprocessor(diagram, new BPMNFactory()).process();
+
+		PetriNet net = new StandardConverter(diagram).convert();
+
+		PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
+		exp.savePetriNet(pnmlDoc, net);
+	}
+
+	protected void processBPMN11(Document document, Document pnmlDoc) {
+		BPMN11RDFImporter importer = new BPMN11RDFImporter(document);
 		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
 		new Preprocessor(diagram, new BPMNFactory()).process();
 

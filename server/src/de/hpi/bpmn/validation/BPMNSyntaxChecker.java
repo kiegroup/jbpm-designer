@@ -27,7 +27,7 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 	private static final String FLOWOBJECT_NOT_CONTAINED_IN_PROCESS = "a flow object must be contained in a process.";
 	private static final String ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An end event must have incoming sequence flow.";
 	private static final String STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "A start event must have outgoing sequence flow.";
-	private static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An intermediate event must have incoming sequence flow.";
+//	private static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An intermediate event must have incoming sequence flow.";
 	private static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "Start events must not have incoming sequence flow.";
 	private static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "Attached intermediate events must not have incoming sequence flow.";
 	private static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "End events must not have outgoing sequence flow.";
@@ -98,11 +98,11 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 				addError(node, STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW);
 //				return false;
 			}
-			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() == null 
-					&& !hasIncomingControlFlow(node)) {
-				addError(node, INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW);
-//				return false;
-			}
+//			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() == null 
+//					&& !hasIncomingControlFlow(node)) {
+//				addError(node, INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW);
+////				return false;
+//			}
 //			if ((node instanceof Activity || node instanceof EndEvent || node instanceof Gateway)
 //					&& !hasIncomingControlFlow(node)) return false;
 //			if ((node instanceof Activity || node instanceof StartEvent || node instanceof IntermediateEvent || node instanceof Gateway)

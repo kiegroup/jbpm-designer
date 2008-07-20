@@ -1,6 +1,6 @@
 package de.hpi.bpmn;
 
-public class IntermediateCompensationEvent extends IntermediateEvent {
+public class IntermediateSignalEvent extends IntermediateEvent {
 
 	protected boolean isThrowing;
 

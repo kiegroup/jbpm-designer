@@ -771,7 +771,7 @@
 		},
  		{
 			"type": "node",
-			"id":"collapsedSubprocess",
+			"id":"CollapsedSubprocess",
 			"title":"Collapsed Subprocess",
 			"groups":["Activities"],
 			"description":"An subprocess.",
@@ -1366,7 +1366,7 @@
 		},
 		{
 			"type": "node",
-			"id":"expandedSubprocess",
+			"id":"Subprocess",
 			"title":"Expanded Subprocess",
 			"groups":["Activities"],
 			"description":"An subprocess.",
@@ -4863,7 +4863,7 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateEventCatching",
+			"id":"IntermediateEvent",
 			"title":"Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"An intermediate event with incoming and outgoing edges.",
@@ -5364,7 +5364,7 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateTimerEventCatching",
+			"id":"IntermediateTimerEvent",
 			"title":"Intermediate Timer Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"An intermediate timer event with incoming and outgoing edges.",
@@ -7321,7 +7321,7 @@
 		},
 		{
 			"type": "node",
-			"id":"MessageEndEvent",
+			"id":"EndMessageEvent",
 			"title":"Message End Event",
 			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
@@ -7487,7 +7487,7 @@
 		},
 		{
 			"type": "node",
-			"id":"ErrorEndEvent",
+			"id":"EndErrorEvent",
 			"title":"Error End Event",
 			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
@@ -7620,7 +7620,7 @@
 		},
 		{
 			"type": "node",
-			"id":"CancelEndEvent",
+			"id":"EndCancelEvent",
 			"title":"Cancel End Event",
 			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
@@ -7744,7 +7744,7 @@
 		},
 		{
 			"type": "node",
-			"id":"CompensationEndEvent",
+			"id":"EndCompensationEvent",
 			"title":"Compensation End Event",
 			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
@@ -7879,7 +7879,7 @@
 		},
 		{
 			"type": "node",
-			"id":"SignalEndEvent",
+			"id":"EndSignalEvent",
 			"title":"Signal End Event",
 			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
@@ -8014,7 +8014,7 @@
 		},
 		{
 			"type": "node",
-			"id":"MultipleEndEvent",
+			"id":"EndMultipleEvent",
 			"title":"Multiple End Event",
 			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
@@ -8138,7 +8138,7 @@
 		},
 		{
 			"type": "node",
-			"id":"TerminateEndEvent",
+			"id":"EndTerminateEvent",
 			"title":"Terminate Flow",
 			"groups":["End Events"],
 			"description":"An event without outgoing edges.",
@@ -9022,11 +9022,11 @@
 				"role":"IntermediateEventOnSubprocessBoundary",
 				"connects": [
 					{
-						"from":"collapsedSubprocess",
+						"from":"CollapsedSubprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					},
 					{
-						"from":"expandedSubprocess",
+						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					}
 				]
@@ -9108,7 +9108,7 @@
 				]
 			}, 
 			{
-				"role": "expandedSubprocess",
+				"role": "Subprocess",
 				"contains": [
 					"tc"
 				]

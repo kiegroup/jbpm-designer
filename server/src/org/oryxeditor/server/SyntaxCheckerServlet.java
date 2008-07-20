@@ -18,6 +18,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.diagram.Diagram;
 import de.hpi.epc.rdf.EPCDiagramRDFImporter;
@@ -78,6 +79,8 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		SyntaxChecker checker = null;
 		if (type.equals("bpmn.json") || type.equals("bpmneec.json"))
 			checker = getCheckerBPMN(document);
+		else if (type.equals("bpmn1.1.json"))
+			checker = getCheckerBPMN11(document);
 		else if (type.equals("ibpmn.json"))
 			checker = getCheckerIBPMN(document);
 		else if (type.equals("interactionpetrinets.json"))
@@ -103,6 +106,12 @@ public class SyntaxCheckerServlet extends HttpServlet {
 	
 	protected SyntaxChecker getCheckerBPMN(Document document) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
+		BPMNDiagram diagram = importer.loadBPMN();
+		return diagram.getSyntaxChecker();
+	}
+
+	protected SyntaxChecker getCheckerBPMN11(Document document) {
+		BPMN11RDFImporter importer = new BPMN11RDFImporter(document);
 		BPMNDiagram diagram = importer.loadBPMN();
 		return diagram.getSyntaxChecker();
 	}

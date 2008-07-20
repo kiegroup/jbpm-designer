@@ -27,6 +27,7 @@ import de.hpi.bpmn.EndLinkEvent;
 import de.hpi.bpmn.EndMessageEvent;
 import de.hpi.bpmn.EndMultipleEvent;
 import de.hpi.bpmn.EndPlainEvent;
+import de.hpi.bpmn.EndSignalEvent;
 import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn.Event;
 import de.hpi.bpmn.ExecDataObject;
@@ -40,6 +41,7 @@ import de.hpi.bpmn.IntermediateLinkEvent;
 import de.hpi.bpmn.IntermediateMessageEvent;
 import de.hpi.bpmn.IntermediateMultipleEvent;
 import de.hpi.bpmn.IntermediatePlainEvent;
+import de.hpi.bpmn.IntermediateSignalEvent;
 import de.hpi.bpmn.IntermediateTimerEvent;
 import de.hpi.bpmn.Lane;
 import de.hpi.bpmn.MessageFlow;
@@ -51,6 +53,7 @@ import de.hpi.bpmn.StartLinkEvent;
 import de.hpi.bpmn.StartMessageEvent;
 import de.hpi.bpmn.StartMultipleEvent;
 import de.hpi.bpmn.StartPlainEvent;
+import de.hpi.bpmn.StartSignalEvent;
 import de.hpi.bpmn.StartTimerEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
@@ -68,7 +71,7 @@ import de.hpi.bpmn.XOREventBasedGateway;
  * @author gero.decker
  * 
  */
-public class BPMNRDFImporter {
+public class BPMN11RDFImporter {
 
 	protected Document doc;
 	protected BPMNFactory factory;
@@ -86,7 +89,7 @@ public class BPMNRDFImporter {
 		// resource id
 	}
 
-	public BPMNRDFImporter(Document doc) {
+	public BPMN11RDFImporter(Document doc) {
 		this.doc = doc;
 	}
 
@@ -123,11 +126,15 @@ public class BPMNRDFImporter {
 					handleDiagram(node, c);
 				} else if (type.equals("Pool")) {
 					addPool(node, c);
+				} else if (type.equals("CollapsedPool")) {
+					addPool(node, c);
 				} else if (type.equals("Lane")) {
 					addLane(node, c);
 				} else if (type.equals("Task")) {
 					addTask(node, c);
 				} else if (type.equals("Subprocess")) {
+					addSubProcess(node, c);
+				} else if (type.equals("CollapsedSubprocess")) {
 					addSubProcess(node, c);
 
 				} else if (type.equals("StartEvent")) {
@@ -136,44 +143,61 @@ public class BPMNRDFImporter {
 					addStartMessageEvent(node, c);
 				} else if (type.equals("StartTimerEvent")) {
 					addStartTimerEvent(node, c);
-				} else if (type.equals("StartRuleEvent")) {
-					addStartRuleEvent(node, c);
-				} else if (type.equals("StartLinkEvent")) {
-					addStartLinkEvent(node, c);
+				} else if (type.equals("StartConditionalEvent")) {
+					addStartConditionalEvent(node, c);
+				} else if (type.equals("StartSignalEvent")) {
+					addStartSignalEvent(node, c);
 				} else if (type.equals("StartMultipleEvent")) {
 					addStartMultipleEvent(node, c);
 
 				} else if (type.equals("IntermediateEvent")) {
 					addIntermediatePlainEvent(node, c);
-				} else if (type.equals("IntermediateMessageEvent")) {
-					addIntermediateMessageEvent(node, c);
+				} else if (type.equals("IntermediateMessageEventCatching")) {
+					addIntermediateMessageEvent(node, c, false);
 				} else if (type.equals("IntermediateErrorEvent")) {
 					addIntermediateErrorEvent(node, c);
 				} else if (type.equals("IntermediateTimerEvent")) {
 					addIntermediateTimerEvent(node, c);
 				} else if (type.equals("IntermediateCancelEvent")) {
 					addIntermediateCancelEvent(node, c);
-				} else if (type.equals("IntermediateCompensationEvent")) {
-					addIntermediateCompensationEvent(node, c);
-				} else if (type.equals("IntermediateRuleEvent")) {
-					addIntermediateRuleEvent(node, c);
-				} else if (type.equals("IntermediateLinkEvent")) {
-					addIntermediateLinkEvent(node, c);
-				} else if (type.equals("IntermediateMultipleEvent")) {
-					addIntermediateMultipleEvent(node, c);
+				} else if (type.equals("IntermediateCompensationEventCatching")) {
+					addIntermediateCompensationEvent(node, c, false);
+				} else if (type.equals("IntermediateConditionalEvent")) {
+					addIntermediateConditionalEvent(node, c);
+				} else if (type.equals("IntermediateSignalEventCatching")) {
+					addIntermediateSignalEvent(node, c, false);
+				} else if (type.equals("IntermediateMultipleEventCatching")) {
+					addIntermediateMultipleEvent(node, c, false);
+				} else if (type.equals("IntermediateLinkEventCatching")) {
+					addIntermediateLinkEvent(node, c, false);
 
-					// TODO: talk to Martin regarding other end events...
+				} else if (type.equals("IntermediateMessageEventThrowing")) {
+					addIntermediateMessageEvent(node, c, true);
+				} else if (type.equals("IntermediateCompensationEventThrowing")) {
+					addIntermediateCompensationEvent(node, c, true);
+				} else if (type.equals("IntermediateSignalEventThrowing")) {
+					addIntermediateSignalEvent(node, c, true);
+				} else if (type.equals("IntermediateMultipleEventThrowing")) {
+					addIntermediateMultipleEvent(node, c, true);
+				} else if (type.equals("IntermediateLinkEventThrowing")) {
+					addIntermediateLinkEvent(node, c, true);
+
 				} else if (type.equals("EndEvent")) {
-					String result = getContent(getChild(node, "result"));
-					if (result.equals("None")) {
-						addEndPlainEvent(node, c);
-					} else if (result.equals("Cancel")) {
-						addEndCancelEvent(node, c);
-					} else if (result.equals("Compensation")) {
-						addEndCompensationEvent(node, c);
-					} else if (result.equals("Message")) {
-						addEndMessageEvent(node, c);
-					}
+					addEndPlainEvent(node, c);
+				} else if (type.equals("EndMessageEvent")) {
+					addEndMessageEvent(node, c);
+				} else if (type.equals("EndErrorEvent")) {
+					addEndErrorEvent(node, c);
+				} else if (type.equals("EndCancelEvent")) {
+					addEndCancelEvent(node, c);
+				} else if (type.equals("EndCompensationEvent")) {
+					addEndCompensationEvent(node, c);
+				} else if (type.equals("EndSignalEvent")) {
+					addEndSignalEvent(node, c);
+				} else if (type.equals("EndMultipleEvent")) {
+					addEndMultipleEvent(node, c);
+				} else if (type.equals("EndTerminateEvent")) {
+					addEndTerminateEvent(node, c);
 
 				} else if (type.equals("Exclusive_Databased_Gateway")) {
 					addXORDataBasedGateway(node, c);
@@ -376,33 +400,6 @@ public class BPMNRDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 
-				if (attribute.equals("isskippable")) {
-					String skippableValue = getContent(n);
-					if (skippableValue != null && skippableValue.equals("true")) {
-						task.setSkippable(true);
-					} else {
-						task.setSkippable(false);
-					}
-				}
-				
- 				if (attribute.equals("rolename")) {
-					String roleValue = getContent(n);
-					if (roleValue != null) {
-						task.setRolename(roleValue);
-					}
-					else {
-						task.setRolename("Default");
-					}
-				}
-				
-				if (attribute.equals("form")) {
-					String form = getContent(n);
-					if (form != null && form.equals("true")) {
-						task.setForm(form);
-					} else {
-						task.setForm(null);
-					}
-				}
 				// TODO: add further attributes...
 				// if (attribute.equals("poolId")) {
 				// pool.setId(getContent(n));
@@ -475,7 +472,7 @@ public class BPMNRDFImporter {
 		handleEvent(node, event, c, "timeDate");
 	}
 
-	protected void addStartRuleEvent(Node node, ImportContext c) {
+	protected void addStartConditionalEvent(Node node, ImportContext c) {
 		StartConditionalEvent event = factory.createStartConditionalEvent();
 		handleEvent(node, event, c, "ruleName");
 	}
@@ -483,6 +480,11 @@ public class BPMNRDFImporter {
 	protected void addStartLinkEvent(Node node, ImportContext c) {
 		StartLinkEvent event = factory.createStartLinkEvent();
 		handleEvent(node, event, c, "linkId");
+	}
+
+	protected void addStartSignalEvent(Node node, ImportContext c) {
+		StartSignalEvent event = factory.createStartSignalEvent();
+		handleEvent(node, event, c, "triggers");
 	}
 
 	protected void addStartMultipleEvent(Node node, ImportContext c) {
@@ -505,31 +507,42 @@ public class BPMNRDFImporter {
 		handleEvent(node, event, c, "target");
 	}
 
-	protected void addIntermediateCompensationEvent(Node node, ImportContext c) {
+	protected void addIntermediateCompensationEvent(Node node, ImportContext c, boolean isThrowing) {
 		IntermediateCompensationEvent event = factory
 				.createIntermediateCompensationEvent();
+		event.setThrowing(isThrowing);
 		handleEvent(node, event, c, "target");
 	}
 
-	protected void addIntermediateRuleEvent(Node node, ImportContext c) {
+	protected void addIntermediateConditionalEvent(Node node, ImportContext c) {
 		IntermediateConditionalEvent event = factory.createIntermediateConditionalEvent();
 		handleEvent(node, event, c, "ruleName");
 	}
 
-	protected void addIntermediateLinkEvent(Node node, ImportContext c) {
+	protected void addIntermediateLinkEvent(Node node, ImportContext c, boolean isThrowing) {
 		IntermediateLinkEvent event = factory.createIntermediateLinkEvent();
+		event.setThrowing(isThrowing);
 		handleEvent(node, event, c, "linkId");
 	}
 
-	protected void addIntermediateMultipleEvent(Node node, ImportContext c) {
-		IntermediateMultipleEvent event = factory
-				.createIntermediateMultipleEvent();
+	protected void addIntermediateSignalEvent(Node node, ImportContext c, boolean isThrowing) {
+		IntermediateSignalEvent event = factory
+				.createIntermediateSignalEvent();
+		event.setThrowing(isThrowing);
 		handleEvent(node, event, c, "triggers");
 	}
 
-	protected void addIntermediateMessageEvent(Node node, ImportContext c) {
+	protected void addIntermediateMultipleEvent(Node node, ImportContext c, boolean isThrowing) {
+		IntermediateMultipleEvent event = factory
+				.createIntermediateMultipleEvent();
+		event.setThrowing(isThrowing);
+		handleEvent(node, event, c, "triggers");
+	}
+
+	protected void addIntermediateMessageEvent(Node node, ImportContext c, boolean isThrowing) {
 		IntermediateMessageEvent event = factory
 				.createIntermediateMessageEvent();
+		event.setThrowing(isThrowing);
 		handleEvent(node, event, c, "message");
 	}
 
@@ -571,6 +584,11 @@ public class BPMNRDFImporter {
 	protected void addEndLinkEvent(Node node, ImportContext c) {
 		EndLinkEvent event = factory.createEndLinkEvent();
 		handleEvent(node, event, c, "linkId");
+	}
+
+	protected void addEndSignalEvent(Node node, ImportContext c) {
+		EndSignalEvent event = factory.createEndSignalEvent();
+		handleEvent(node, event, c, "");
 	}
 
 	protected void addEndMultipleEvent(Node node, ImportContext c) {
@@ -657,13 +675,10 @@ public class BPMNRDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(
 						n.getNodeName().indexOf(':') + 1);
-				boolean test = attribute.equals("datamodel");
 				// TODO: add further attributes...
 				if (attribute.equals("state")) {
 					obj.setState(getContent(n)); }
-				else if (attribute.equals("datamodel")) {
-					obj.setModel(getContent(n));
-				} else {
+				else {
 					handleStandardAttributes(attribute, n, obj, c, "name");
 				}
 			}
