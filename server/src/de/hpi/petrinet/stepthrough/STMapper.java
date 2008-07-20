@@ -6,6 +6,7 @@ import de.hpi.PTnet.impl.PTNetInterpreterImpl;
 import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.SubProcess;
 import de.hpi.petrinet.Marking;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Transition;
@@ -235,9 +236,15 @@ public class STMapper {
 		List<STTransition> fireableObjects = getFireableTransitions();
 		// Save relevant information in the string
 		// Format: BPMNResourceID,TimesExecuted,isFireable;
-		for(int i = 0; i < changedObjs.size(); i++) {
-			STTransition t = changedObjs.get(i);
+		for(STTransition t : changedObjs) {
+			// Don't send invisible objects
 			if (t.getBPMNObj().getResourceId() != null) {
+				// Non-empty subprocesses should only be highlighted if the user has to fire them
+				if (t.getBPMNObj() instanceof SubProcess) {
+					SubProcess sp = (SubProcess) t.getBPMNObj();
+					if((sp.getChildNodes().size() > 0) && !fireableObjects.contains(t))
+						continue;
+				}
 				sb.append(t.getBPMNObj().getResourceId());
 				sb.append(",");
 				sb.append(t.getTimesExecuted());
