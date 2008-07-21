@@ -26,6 +26,7 @@
 //TODO: L and U agents and storages
 //TODO: bing protocol boundary to background
 //TODO: two and three dot shapes
+//TODO: enumeration of nodes (see Figure 27 of the FMC Visualization Guidelines at http://www.fmc-modeling.org/visualization_guidelines)
 //TODO: text annotation
 //TODO: brace
 //TODO: rounded edges (like in the universal communication channel in Viso stencils)
@@ -33,15 +34,15 @@
 //TODO: prefix for properties (raziel, oryx or fmc)?
 
 {
-	"title":"FMC",
+	"title":"FMC Block Diagram",
 	"namespace":"http://www.fmc-modeling.org/stencilsets/fmcblockdiagram#",
-	"description":"FMC Block Diagrams show compositional structures as a composition of collaborating system components.",
+	"description":"FMC Block Diagrams show compositional structures as a composition of collaborating system components. (For further information see www.fmc-modeling.org)",
  	"stencils" : [
   		{
 			"type": "node",
 			"id":"Diagram",
 			"title":"Diagram",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"description":"A Diagram",
 			"view":"node.diagram.svg",
 			"icon":"node.diagram.png",
@@ -67,7 +68,7 @@
 			"type": "node",
 			"id":"HumanAgent",
 			"title":"Human Agent",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"description":"A human agent is an active system component exactly like an agent but the only difference that it depicts a human.",
 			"view":"node.human-agent.svg",
 			"icon":"node.human-agent.png",
@@ -106,7 +107,7 @@
 			"type": "node",
 			"id":"Agent",
 			"title":"Agent",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"description":"Active system component: Serves a well-defined purpose and therefore has access to adjacent passive system components and only those may be connected to it.",
 			"view":"node.agent.svg",
 			"icon":"node.agent.png",
@@ -146,7 +147,7 @@
 			"type": "node",
 			"id":"Storage",
 			"title":"Storage",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"description":"A storage is used by agents to store data.",
 			"view":"node.storage.svg",
 			"icon":"node.storage.png",
@@ -189,7 +190,7 @@
 			"type": "node",
 			"id":"Channel",
 			"title":"Channel",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"description":"A channel is used for communication purposes between at least two active system components.",
 			"view":"node.channel.svg",
 			"icon":"node.channel.png",
@@ -221,7 +222,7 @@
 			"type": "node",
 			"id":"StructureVariance",
 			"title":"Structure Variance",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"description":"Structure variance deals with the creation and disappearance of system components. An agent (A1) changes the system structure (creation/deletion of A2) at a location depicted as dotted storage. System structure change is depicted as modifying access. After creation agent A1 can communicate with agent A2 or vice versa.",
 			"view":"node.structurevariance.svg",
 			"icon":"node.structurevariance.png",
@@ -252,7 +253,7 @@
 			"id":"BidirectionalConnection",
 			"title":"Bidirectional Connection",
 			"description":"Represents a connection between an active and a passive component of the system. The active component has read and write access to the passive component.",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"view":"edge.bidirectionalconnection.svg",
 			"icon":"edge.bidirectionalconnection.png",
 			"roles": [
@@ -278,7 +279,7 @@
 			"id":"WriteAccess",
 			"title":"Write Access",
 			"description":"Directed edges represent a read or write access an active system component has to a passive system component.",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"view":"edge.writeaccess.svg",
 			"icon":"edge.writeaccess.png",
 			"roles": [
@@ -304,7 +305,7 @@
 			"id":"ReadAccess",
 			"title":"Read Access",
 			"description":"Directed edges represent a read or write access an active system component has to a passive system component.",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"view":"edge.readaccess.svg",
 			"icon":"edge.readaccess.png",
 			"roles": [
@@ -330,7 +331,7 @@
 			"id":"ModifyingAccess",
 			"title":"Modifying Access",
 			"description":"The Modifying Access is used to indicate that an agent is able to read from a storage and write to it. This is called modifying access. Usually the agent will not modify the entire information, but only a fraction.",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"view":"edge.modifyingaccess.svg",
 			"icon":"edge.modifyingaccess.png",
 			"roles": [
@@ -356,7 +357,7 @@
 			"id":"ProtocolBoundary",
 			"title":"Protocol Boundary",
 			"description":"A protocol boundary is used to indicate that a certain protocol is used for communication between agents.",
-			"groups":["Block Diagram"],
+			"groups":[],
 			"view":"edge.protocolboundary.svg",
 			"icon":"edge.protocolboundary.png",
 			"roles": [
