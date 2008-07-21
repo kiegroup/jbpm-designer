@@ -75,7 +75,8 @@
 			"roles": [
 				"from_active",
 				"to_active",
-				"fromtoall"
+				"fromtoall",
+				"agentcontent"
 			],
 			"properties": [
 				{
