@@ -22,7 +22,7 @@
  **/
 
 //TODO: request symbols
-//TODO: better svg for modifying access
+//TODO: better svg for modifying access (I tried with 'view/edge.modifyingaccess.2.svg' and 'view/edge.modifyingaccess.3.edit.svg' but they don't work in Oryx)
 //TODO: L and U agents and storages
 //TODO: bing protocol boundary to background
 //TODO: two and three dot shapes
@@ -101,6 +101,18 @@
                     "readonly":false,
                     "optional":true,
                     "refToView":"theanchor"
+				},
+                {
+                    "id":"color",
+                    "type":"Color",
+                    "title":"Color",
+                    "value": "#ffffff",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "refToView":"humanagent",
+                    "fill":true,
+                    "stroke":false
 				}
 			]
 		},
@@ -141,7 +153,19 @@
                     "readonly":false,
                     "optional":true,
                     "refToView":"theanchor"
-				}
+				},
+                {
+                    "id":"color",
+                    "type":"Color",
+                    "title":"Color",
+                    "value": "#ffffff",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "refToView":"agent",
+                    "fill":true,
+                    "stroke":false
+                }
 			]
 		},
  		{
@@ -184,6 +208,18 @@
                     "readonly":false,
                     "optional":true,
                     "refToView":"theanchor"
+				},
+                {
+                    "id":"color",
+                    "type":"Color",
+                    "title":"Color",
+                    "value": "#ffffff",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "refToView":"storage",
+                    "fill":true,
+                    "stroke":false
 				}
 			]
 		},
@@ -216,6 +252,18 @@
 					"optional":true,
 					"refToView":"text",
 					"length":""
+				},
+                {
+                    "id":"color",
+                    "type":"Color",
+                    "title":"Color",
+                    "value": "#ffffff",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "refToView":"channel",
+                    "fill":true,
+                    "stroke":false
 				}
 			]
 		},
@@ -246,6 +294,18 @@
 					"refToView":"text",
 					"length":"20",
 					"wrapLines":true
+				},
+                {
+                    "id":"color",
+                    "type":"Color",
+                    "title":"Color",
+                    "value": "#e8e8e8",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "refToView":"structurevariance",
+                    "fill":true,
+                    "stroke":false
 				}
 			]
 		},
