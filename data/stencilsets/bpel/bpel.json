@@ -12,31 +12,7 @@
 			"view":"others/node.Bpel.svg",
 			"icon":"new_task.png",
 			"roles": [],
-			"properties": [
-				{
-					"id":"title",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"Project Name",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"avoidServer",
-					"prefix":"oryx",
-					"title":"avoidServer",
-					"type":"Boolean",
-					"description":"avoid server if only one Bpel process",
-					"value":"true",
-					"width":100,
-					"optional":true,
-				}
-			]
+			"properties": []
 		},
 		{
 			"type": "node",
@@ -4037,88 +4013,10 @@
 					"wrapLines":false
 				},
 				{
-				"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}				
-			]
-		},
-		{
-			"type": "node",
-			"id":"completionCondition",
-			"title":"CompletionCondition",
-			"description":"",
-			"groups":["Controls For Each"],
-			"view":"controls/node.if_condition.svg",
-			"icon":"new_if_condition.png",
-			"roles": ["Condition"],
-			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
- 			},
-			"properties": [
-				{
-					"id":"name",
+					"id":"completion_condition_expressionLanguage",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"name",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"label",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"JC_expLang",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_expLang",
+					"title":"completion_condition_expressionLanguage",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -4129,82 +4027,9 @@
 					"wrapLines":false
 				},
 				{
-					"id":"JoinCond_boolExp",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"JoinCond_boolExp",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"JoinCond_opaque",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"JoinCond_Opaque",
-					"value":false,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"suppressJoinFailure",
+					"id":"completion_condition_successfulBranchesOnly",
 					"type":"Choice",
-					"title":"suppressJoinFailure",
-					"value":"fromParent",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"yes",
-							"title":"yes",
-							"value":"yes",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
-							"id":"no",
-							"title":"no",
-							"value":"no",
-							"tooltip":"",
-							"refToView":"none"
-						}
-					]
-				},	
-                {
-					"id":"branches_expressionLanguage",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"branches_expressionLanguage",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"successfulBranchesOnly",
-					"type":"Choice",
-					"title":"successfulBranchesOnly",
+					"title":"completion_condition_successfulBranchesOnly",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -4229,10 +4054,10 @@
 					]
 				},
 				{
-					"id":"branches_integer_Expression",
+					"id":"completion_condition_branches_count",
 					"prefix":"oryx",
 					"type":"Integer",
-					"title":"branches_Integer_Expression",
+					"title":"completion_condition_branches_count",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -4243,7 +4068,7 @@
 					"wrapLines":false
 				},
 				{
-				    "id":"bgColor",
+				"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"value":"#ffffff",
@@ -7109,6 +6934,10 @@
 		],
 		
 		"cardinalityRules":[
+			{	
+				"role":"ProcessChild",
+				"maximumOccurrence":1,
+			},	
 			{	
 				"role":"compensationHandler",
 				"maximumOccurrence":1,
