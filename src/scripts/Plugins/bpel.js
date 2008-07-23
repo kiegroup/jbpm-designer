@@ -34,19 +34,6 @@ ORYX.Plugins.BpelGenerator = Clazz.extend({
 	construct: function(facade) {
 		this.facade = facade;
 
-/*        this.facade.offer({
-
-			'name':"ImportBPEL",
-			'functionality': this.openUploadDialog.bind(this),
-			'group': "BPEL",
-			'icon': ORYX.PATH + "images/folder_page_white.png",
-			'description': "Import a BPEL file",
-			'index': 1,
-			'minShape': 0,
-			'maxShape': 0}); 
-*/
-	
-
 	    this.facade.offer({
 			'name':"ExportBPEL",
 			'functionality': this.download.bind(this),
@@ -61,78 +48,9 @@ ORYX.Plugins.BpelGenerator = Clazz.extend({
 	},
 	
 	
-    /**
-	 * Opens a upload dialog.
-	 * 
-	 */
-	/*
-	openUploadDialog: function(){
-		
-		var form = new Ext.form.FormPanel({
-			frame : true,
-			defaultType : 'textfield',
-		 	waitMsgTarget : true,
-		  	labelAlign : 'left',
-		  	buttonAlign: 'right',
-		  	fileUpload : true,
-		  	enctype : 'multipart/form-data',
-		  	items : [
-		  	{
-		    	fieldLabel : 'File',
-		    	inputType : 'file'
-		  	}]
-		});
-
-		var submit =form.addButton({
-			text:"Submit",
-			handler: function()
-			{
-				form.form.submit({
-		      		url: ORYX.PATH + '/bpelimporter',
-		      		waitMsg: "Importing...",
-		      		success: function(f,a){
-						dialog.hide();
-						var erdf = a.response.responseText;
-						var parsedErdf = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><html>'+erdf+'</html>',"text/xml");	
-						alert(erdf);
-		      		},
-					failure: function(f,a){
-						dialog.hide();
-
-						Ext.MessageBox.show({
-           					title: 'Error',
-          	 				msg: a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}")),
-           					buttons: Ext.MessageBox.OK,
-           					icon: Ext.MessageBox.ERROR
-       					});
-
-		      		}
-		  		});
-		  	}
-		})
-
-
-		var dialog = new Ext.Window({ 
-			autoCreate: true, 
-			title: 'Upload File', 
-			height: 130, 
-			width: 400, 
-			modal:true,
-			collapsible:false,
-			fixedcenter: true, 
-			shadow:true, 
-			proxyDrag: true,
-			resizable:false,
-			items: [new Ext.form.Label({text: "Select a file and upload it.", style: 'font-size:12px;'}),form]
-		});
-		dialog.on('hide', function(){
-			dialog.destroy(true);
-			delete dialog;
-		});
-		dialog.show();
-	},
+    
 	
-	*/
+	
 
 //	save:function(){ 
 	   // Ext.MessageBox.show({
@@ -153,10 +71,12 @@ ORYX.Plugins.BpelGenerator = Clazz.extend({
 			
 			//holds the output data
 			var outputData;	
+			var counter = 0;
 			
 			//do the XML generator for each BPEL 
 			//get the Name of the current Bpel shape .........
 			this.facade.getCanvas().getChildShapes().each((function(children){
+				counter ++;
 				var stencilName = children.getStencil().id();
 				var namespace = children.getStencil().namespace();
 				//if the stencil name is BPEL, in this case is necessary to add the name of the stencil in the outputfiles and generate the##################
@@ -195,8 +115,16 @@ ORYX.Plugins.BpelGenerator = Clazz.extend({
 			}	
 */  
             // now wir limit that the user cann just edit one BPEL model 
-            var win = window.open('data:application/xhtml+xml,' + outputData, 'Bpel file');
-			
+            if (counter === 1) {
+                var win = window.open('data:application/xhtml+xml,' + outputData, 'Bpel file');
+            } else {
+            	Ext.MessageBox.show({
+            	    title: 'Error',
+            	    msg: 'no BPEL process exists',
+            	    buttons: Ext.MessageBox.OK,
+           			icon: Ext.MessageBox.ERROR
+            	})
+            }
 			this.facade.raiseEvent({type:'loading.disable'});
 	},
 	

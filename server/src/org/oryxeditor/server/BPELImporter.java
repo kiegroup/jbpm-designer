@@ -84,6 +84,7 @@ public class BPELImporter extends HttpServlet {
     		handleException(out, e); 
 	   		return;
     	} 
+    	
     	final FileItem fileItem = (FileItem)items.get(0);
     		
     	
@@ -102,7 +103,6 @@ public class BPELImporter extends HttpServlet {
 			return;
     	}
     	System.out.println("File imported...");
-
     }
     
     
