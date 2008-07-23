@@ -7,24 +7,45 @@
 package de.hpi.nunet;
 
 
-public interface NuNetFactory {
 
-	NuNetFactory eINSTANCE = de.hpi.nunet.impl.NuNetFactoryImpl.init();
+public class NuNetFactory {
 
-	NuNet createNuNet();
+	public static NuNetFactory eINSTANCE = new NuNetFactory();
 
-	Place createPlace();
+	public NuNet createNuNet() {
+		return new NuNet();
+	}
 
-	Transition createTransition();
+	public Node createNode() {
+		return new Node();
+	}
 
-	FlowRelationship createFlowRelationship();
+	public Place createPlace() {
+		return new Place();
+	}
 
-	Token createToken();
+	public Transition createTransition() {
+		return new Transition();
+	}
 
-	InterconnectionModel createInterconnectionModel();
+	public FlowRelationship createFlowRelationship() {
+		return new FlowRelationship();
+	}
 
-	ProcessModel createProcessModel();
-	
-	Marking createMarking(NuNet net);
+	public Token createToken() {
+		return new Token();
+	}
+
+	public InterconnectionModel createInterconnectionModel() {
+		return new InterconnectionModel();
+	}
+
+	public ProcessModel createProcessModel() {
+		return new ProcessModel();
+	}
+
+	public Marking createMarking(NuNet net) {
+		return new Marking(net);
+	}
 
 } //NuNetFactory

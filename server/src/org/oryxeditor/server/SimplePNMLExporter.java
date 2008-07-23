@@ -28,10 +28,10 @@ import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
-import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
-import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
+import de.hpi.interactionnet.serialization.InteractionNetPNMLExporter;
+import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
 import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
+import de.hpi.petrinet.serialization.PetriNetPNMLExporter;
 
 /**
  * Copyright (c) 2008 Lutz Gericke, Gero Decker

@@ -8,17 +8,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import de.hpi.execpn.AutomaticTransition;
-import de.hpi.execpn.TransformationTransition;
 import de.hpi.execpn.ExecFlowRelationship;
+import de.hpi.execpn.ExecLabeledTransition;
 import de.hpi.execpn.ExecPetriNet;
+import de.hpi.execpn.ExecPlace;
+import de.hpi.execpn.ExecTransition;
 import de.hpi.execpn.FormTransition;
+import de.hpi.execpn.TransformationTransition;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
-import de.hpi.petrinet.ExecPlace;
 import de.hpi.petrinet.Transition;
-import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
+import de.hpi.petrinet.serialization.PetriNetPNMLExporter;
 
 public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 
@@ -73,7 +75,7 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 			}
 		}
 		if (transition instanceof LabeledTransition) {
-			LabeledTransition lTrans = (LabeledTransition) transition;
+			ExecLabeledTransition lTrans = (ExecLabeledTransition) transition;
 			if (lTrans.getAction() != null && !lTrans.getAction().equals("")) {
 				tsHelper.setTaskAndAction(doc, ts, lTrans.getTask(), lTrans.getAction());
 			}
@@ -81,20 +83,20 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		} else {
 			tnode.setAttribute("type", "automatic");
 		}
-		if (transition.getGuard() != null) {
-			tsHelper.setGuard(doc, ts, transition.getGuard());
+		if (((ExecTransition)transition).getGuard() != null) {
+			tsHelper.setGuard(doc, ts, ((ExecTransition)transition).getGuard());
 		}
 		
-		if (transition.getRolename() != null) {
-			tsHelper.setRolename(doc, ts, transition.getRolename());
+		if (((ExecTransition)transition).getRolename() != null) {
+			tsHelper.setRolename(doc, ts, ((ExecTransition)transition).getRolename());
 		}
 		
-		if (transition.getContextPlaceID() != null) {
-			tsHelper.setContextPlaceID(doc, ts, transition.getContextPlaceID());
+		if (((ExecTransition)transition).getContextPlaceID() != null) {
+			tsHelper.setContextPlaceID(doc, ts, ((ExecTransition)transition).getContextPlaceID());
 		}
 		
 		// get incoming places out of petri net model
-		List<FlowRelationship> incomingArcs = transition.getIncomingFlowRelationships();
+		List<? extends FlowRelationship> incomingArcs = transition.getIncomingFlowRelationships();
 		List<Place> incomingPlaces = new ArrayList<Place>();
 		for (FlowRelationship arc : incomingArcs) {
 			if (arc.getSource() instanceof Place) {
@@ -132,7 +134,7 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		addContentElement(doc, n1node, "text", place.getId());
 		
 
-		for (Locator loc : place.getLocators()) {
+		for (Locator loc : ((ExecPlace)place).getLocators()) {
 			tsHelper.addLocator(doc, ts, loc);			
 		}
 		
@@ -145,6 +147,9 @@ public class ExecPNPNMLExporter extends PetriNetPNMLExporter {
 		if (rel instanceof ExecFlowRelationship){
 			Element ts = tsHelper.addToolspecificElement(doc, fnode);
 			tsHelper.setArcTransformationURL(doc, ts,((ExecFlowRelationship)rel).getTransformationURL());
+			if (((ExecFlowRelationship)rel).getMode()==ExecFlowRelationship.RELATION_MODE_READTOKEN){
+				fnode.setAttribute("type", "read");
+			}
 		}
 		return fnode;
 	}

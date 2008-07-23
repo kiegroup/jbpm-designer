@@ -8,7 +8,7 @@ import java.util.Set;
 
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.PTNet;
-import de.hpi.PTnet.PTNetInterpreter;
+import de.hpi.PTnet.verification.PTNetInterpreter;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 

@@ -33,9 +33,30 @@ import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.PetriNetFactory;
 import de.hpi.petrinet.Place;
-import de.hpi.petrinet.TauTransition;
+import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.Transition;
 
+/**
+ * Copyright (c) 2008 Gero Decker
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 // TODO: handle termination events, throwing exceptions
 public abstract class Converter {
 
@@ -268,13 +289,13 @@ public abstract class Converter {
 			// TODO multiple start events bound as XOR ??
 			SubProcessPlaces pl = c.getSubprocessPlaces(process);
 	
-			Transition startT = addTauTransition(net, "start" + process.getId(), process, 1);
+			Transition startT = addSilentTransition(net, "start" + process.getId(), process, 1);
 			pl.startP = addPlace(net, "start" + process.getId());
 			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(process)),
 					startT);
 			addFlowRelationship(net, startT, pl.startP);
 	
-			Transition endT = addTauTransition(net, "end" + process.getId(), process, 1);
+			Transition endT = addSilentTransition(net, "end" + process.getId(), process, 1);
 			pl.endP = addPlace(net, "end" + process.getId());
 			addFlowRelationship(net, pl.endP, endT);
 			addFlowRelationship(net, endT, c.map
@@ -365,7 +386,7 @@ public abstract class Converter {
 	// assumption: at least one input and at least one output edge
 	protected void handleANDGateway(PetriNet net, ANDGateway gateway,
 			ConversionContext c) {
-		Transition t = addTauTransition(net, gateway.getId(), gateway, 1);
+		Transition t = addSilentTransition(net, gateway.getId(), gateway, 1);
 		for (Edge e : gateway.getIncomingEdges())
 			addFlowRelationship(net, c.map.get(e), t);
 		for (Edge e : gateway.getOutgoingEdges())
@@ -388,7 +409,7 @@ public abstract class Converter {
 		if (gateway.getIncomingEdges().size() > 1) {
 			for (Edge e : gateway.getIncomingEdges()) {
 				// It doesn't matter which edge is enabled, they all enable the gateway
-				Transition t2 = addTauTransition(net, "merge"+e.getId(), gateway, 1);
+				Transition t2 = addSilentTransition(net, "merge"+e.getId(), gateway, 1);
 				addFlowRelationship(net, c.map.get(e), t2);
 				addFlowRelationship(net, t2, p);
 			}
@@ -397,7 +418,7 @@ public abstract class Converter {
 				|| gateway.getIncomingEdges().size() == 1) {
 			for (Edge e : gateway.getOutgoingEdges()) {
 				// Here the edge is saved, because each edge represents an option for the user.
-				Transition t2 = addTauTransition(net, "option"+e.getId(), e, 0);
+				Transition t2 = addSilentTransition(net, "option"+e.getId(), e, 0);
 				addFlowRelationship(net, p, t2);
 				addFlowRelationship(net, t2, c.map.get(e));
 			}
@@ -409,7 +430,7 @@ public abstract class Converter {
 			XOREventBasedGateway gateway, ConversionContext c) {
 		Place p = c.map.get(gateway);
 		for (Edge e : gateway.getIncomingEdges()) {
-			Transition t = addTauTransition(net, "merge"+e.getId(), gateway, 1);
+			Transition t = addSilentTransition(net, "merge"+e.getId(), gateway, 1);
 			addFlowRelationship(net, c.map.get(e), t);
 			addFlowRelationship(net, t, p);
 		}
@@ -452,7 +473,7 @@ public abstract class Converter {
 
 		if (c.ancestorHasExcpH) {
 			pl.cancel = addPlace(net, "cancel" + process.getId());
-			Transition tcancel = addTauTransition(net, "cancel"+process.getId(), process, 0); // Not sure about the process
+			Transition tcancel = addSilentTransition(net, "cancel"+process.getId(), process, 0); // Not sure about the process
 			addFlowRelationship(net, pl.ok, tcancel);
 			addFlowRelationship(net, tcancel, pl.nok);
 			addFlowRelationship(net, tcancel, pl.cancel);
@@ -461,7 +482,7 @@ public abstract class Converter {
 			addFlowRelationship(net, tcancel, parentpl.nok);
 			addFlowRelationship(net, parentpl.nok, tcancel);
 
-			Transition tnok = addTauTransition(net, "nok"+process.getId(), process, 0);
+			Transition tnok = addSilentTransition(net, "nok"+process.getId(), process, 0);
 			addFlowRelationship(net, pl.cancel, tnok);
 			addFlowRelationship(net, pl.nok, tnok);
 			addFlowRelationship(net, pl.endP, tnok);
@@ -485,7 +506,7 @@ public abstract class Converter {
 		addFlowRelationship(net, t, pl.nok);
 		addFlowRelationship(net, t, excp);
 
-		Transition texcp = addTauTransition(net, "excp"+event.getId(), event, 0);
+		Transition texcp = addSilentTransition(net, "excp"+event.getId(), event, 0);
 		addFlowRelationship(net, excp, texcp);
 		addFlowRelationship(net, pl.nok, texcp);
 		addFlowRelationship(net, pl.endP, texcp);
@@ -507,7 +528,7 @@ public abstract class Converter {
 	protected void handleExceptions(PetriNet net, Node node, Transition t,
 			ConversionContext c) {
 		// skip transition
-		Transition tskip = addTauTransition(net, "skip"+node.getId(), node, 0); // Is the node really the thing to press for the exception?
+		Transition tskip = addSilentTransition(net, "skip"+node.getId(), node, 0); // Is the node really the thing to press for the exception?
 		for (FlowRelationship rel : t.getIncomingFlowRelationships())
 			addFlowRelationship(net, rel.getSource(), tskip);
 		for (FlowRelationship rel : t.getOutgoingFlowRelationships())
@@ -553,12 +574,12 @@ public abstract class Converter {
 		return p;
 	}
 
-	protected TauTransition addTauTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel) {
-		return addSimpleTauTransition(net, id);
+	protected SilentTransition addSilentTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel) {
+		return addSimpleSilentTransition(net, id);
 	}
 	
-	protected TauTransition addSimpleTauTransition(PetriNet net, String id) {
-		TauTransition t = pnfactory.createTauTransition();
+	protected SilentTransition addSimpleSilentTransition(PetriNet net, String id) {
+		SilentTransition t = pnfactory.createSilentTransition();
 		t.setId(id);
 		net.getTransitions().add(t);
 		return t;
@@ -587,16 +608,6 @@ public abstract class Converter {
 		return rel;
 	}
 	
-	public FlowRelationship addReadOnlyFlowRelationship(PetriNet net,
-			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {	
-		FlowRelationship rel = addFlowRelationship(net, source, target);
-		if (rel == null){
-			return null;
-		}
-		rel.setMode(FlowRelationship.RELATION_MODE_READTOKEN);
-		return rel;
-	}
-
 	
 	// returns label if it's not null or emtpy, else returns id
 	public String getDescriptiveLabel(String label, String id){

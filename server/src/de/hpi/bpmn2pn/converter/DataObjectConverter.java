@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hpi.PTnet.impl.PTNetFactoryImpl;
+import de.hpi.PTnet.PTNetFactory;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
@@ -37,7 +37,7 @@ public class DataObjectConverter extends Converter {
 //		}
 //	}
 	public DataObjectConverter(BPMNDiagram diagram) {
-		super(diagram, new PTNetFactoryImpl());
+		super(diagram, new PTNetFactory());
 	}
 
 	@Override

@@ -25,8 +25,8 @@ import de.hpi.epc.validation.EPCSyntaxChecker;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
-import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
-import de.hpi.petrinet.SyntaxChecker;
+import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
+import de.hpi.petrinet.verification.SyntaxChecker;
 
 /**
  * Copyright (c) 2008 Gero Decker

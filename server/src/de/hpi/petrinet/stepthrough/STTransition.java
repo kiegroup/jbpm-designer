@@ -4,6 +4,7 @@ import de.hpi.bpmn.DiagramObject;
 import de.hpi.petrinet.Transition;
 
 public interface STTransition extends Transition {
+	
 	DiagramObject getBPMNObj();
 	void setBPMNObj(DiagramObject obj);
 	
@@ -15,4 +16,5 @@ public interface STTransition extends Transition {
 	
 	int getTimesExecuted();
 	void incTimesExecuted();
+	
 }

@@ -1,19 +1,34 @@
 package de.hpi.interactionnet;
 
 import de.hpi.PTnet.PTNetFactory;
-import de.hpi.interactionnet.impl.InteractionNetFactoryImpl;
 
 
-public interface InteractionNetFactory extends PTNetFactory {
+public class InteractionNetFactory extends PTNetFactory {
 	
-	InteractionNetFactory eINSTANCE = InteractionNetFactoryImpl.init();
+	public static InteractionNetFactory eINSTANCE = new InteractionNetFactory();
 
-	InteractionNet createInteractionNet();
-	
-	InteractionTransition createInteractionTransition();
-	
-	ActionTransition createActionTransition();
-	
-	Role createRole();
+	public InteractionNet createInteractionNet() {
+		return new InteractionNet();
+	}
+
+	public Role createRole() {
+		return new Role();
+	}
+
+	public InteractionTransition createLabeledTransition() {
+		return new InteractionTransition();
+	}
+
+	public static InteractionNetFactory init() {
+		return new InteractionNetFactory();
+	}
+
+	public ActionTransition createActionTransition() {
+		return new ActionTransition();
+	}
+
+	public InteractionTransition createInteractionTransition() {
+		return new InteractionTransition();
+	}
 
 }

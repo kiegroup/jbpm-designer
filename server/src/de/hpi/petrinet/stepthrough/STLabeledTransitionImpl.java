@@ -1,10 +1,9 @@
 package de.hpi.petrinet.stepthrough;
 
 import de.hpi.bpmn.DiagramObject;
-import de.hpi.petrinet.LabeledTransition;
-import de.hpi.petrinet.impl.LabeledTransitionImpl;
+import de.hpi.petrinet.LabeledTransitionImpl;
 
-public class STLabeledTransitionImpl extends LabeledTransitionImpl implements STTransition, LabeledTransition {
+public class STLabeledTransitionImpl extends LabeledTransitionImpl implements STTransition {
 
 	private DiagramObject BPMNObj;
 	private AutoSwitchLevel level;

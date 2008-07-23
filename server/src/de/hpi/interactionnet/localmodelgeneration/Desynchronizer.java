@@ -16,7 +16,7 @@ import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.Place;
-import de.hpi.petrinet.TauTransition;
+import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.Transition;
 
 /**
@@ -93,8 +93,8 @@ public class Desynchronizer {
 			// copy transitions
 			for (Transition t: rnet.getTransitions()) {
 				Transition newt;
-				if (t instanceof TauTransition)
-					newt = factory.createTauTransition();
+				if (t instanceof SilentTransition)
+					newt = factory.createSilentTransition();
 				else {
 					newt = factory.createLabeledTransition();
 					((LabeledTransition)newt).setLabel(((LabeledTransition)t).getLabel());

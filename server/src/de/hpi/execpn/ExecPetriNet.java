@@ -2,9 +2,17 @@ package de.hpi.execpn;
 
 import de.hpi.petrinet.PetriNet;
 
-public interface ExecPetriNet extends PetriNet {
+public class ExecPetriNet extends PetriNet {
 
-	String getName();
+	protected String name;
+	protected AutomaticTransition tr_initPetrinet;
 	
-	void setName(String name);
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

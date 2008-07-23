@@ -1,13 +1,116 @@
 package de.hpi.PTnet;
 
-import de.hpi.petrinet.PetriNet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public interface PTNet extends PetriNet {
+import de.hpi.PTnet.verification.PTNetInterpreter;
+import de.hpi.petrinet.PetriNet;
+import de.hpi.petrinet.Place;
+
+/**
+ * Copyright (c) 2008 Gero Decker
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+public class PTNet extends PetriNet {
 	
-	PTNet getCopy();
+	protected Marking marking;
+
+	@Override
+	public List<Place> getPlaces() {
+		if (places == null)
+			places = new MyPlaceList(this);
+		return places;
+	}
+
+	public Marking getInitialMarking() {
+		if (marking == null)
+			marking = PTNetFactory.eINSTANCE.createMarking(this);
+		return marking;
+	}
 	
-	Marking getInitialMarking();
+	public PTNetFactory getFactory() {
+		return PTNetFactory.eINSTANCE;
+	}
 	
-	PTNetFactory getFactory();
+	// TODO implement this
+	public PTNet getCopy() {
+		return null;
+	}
+	
+//	@Override
+//	protected boolean doOptimization(String parameter) {
+//		if (parameter.equals(REMOVE_REDUNDANTPLACES))
+//			return new PTNetOptimizer(this).removeRedundantPlaces();
+//		else if (parameter.equals(REMOVE_REDUNDANTTRANSITIONS))
+//			return new PTNetOptimizer(this).removeRedundantTransitions();
+//		else if (parameter.equals(REMOVE_UNNECESSARYPLACES))
+//			return new PTNetOptimizer(this).removeUnnecessaryPlaces();
+//		else if (parameter.equals(REMOVE_UNNECESSARYTRANSITIONS))
+//			return new PTNetOptimizer(this).removeUnnecessaryTransitions();
+//		else if (parameter.equals(REMOVE_ALLTAUTRANSITIONS))
+//			return new PTNetOptimizer(this).removeAllTauTransitions();
+//		else if (parameter.equals(REMOVE_EASYTAUTRANSITIONS))
+//			return new PTNetOptimizer(this).removeEasyTauTransitions();
+//		else if (parameter.equals(REMOVE_UNREACHABLETRANSITIONS))
+//			return new PTNetOptimizer(this).removeUnreachableTransitions();
+//		else
+//			return false;
+//	}
+	
+	public PTNetInterpreter getInterpreter() {
+		return getFactory().createInterpreter();
+	}
+
+	protected class MyPlaceList extends ArrayList<Place> {
+		
+		private static final long serialVersionUID = -1042530176195412148L;
+		protected PTNet net;
+		
+		public MyPlaceList(PTNet owner) {
+			this.net = owner;
+		}
+
+		@Override
+		public Place remove(int index) {
+			((Marking)net.getInitialMarking()).reset();
+			return super.remove(index);
+		}
+
+		@Override
+		public boolean remove(Object o) {
+			((Marking)net.getInitialMarking()).reset();
+			return super.remove(o);
+		}
+
+		@Override
+		protected void removeRange(int fromIndex, int toIndex) {
+			((Marking)net.getInitialMarking()).reset();
+			super.removeRange(fromIndex, toIndex);
+		}
+
+		@Override
+		public boolean removeAll(Collection list) {
+			((Marking)net.getInitialMarking()).reset();
+			return super.removeAll(list);
+		}
+	}
 	
 }

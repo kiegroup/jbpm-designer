@@ -9,7 +9,7 @@ import de.hpi.diagram.Diagram;
 import de.hpi.diagram.DiagramEdge;
 import de.hpi.diagram.DiagramNode;
 import de.hpi.diagram.DiagramObject;
-import de.hpi.petrinet.SyntaxChecker;
+import de.hpi.petrinet.verification.SyntaxChecker;
 
 public class EPCSyntaxChecker implements SyntaxChecker {
 	

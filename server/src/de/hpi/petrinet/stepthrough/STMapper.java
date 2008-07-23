@@ -1,18 +1,14 @@
 package de.hpi.petrinet.stepthrough;
 
-import de.hpi.PTnet.PTNet;
-import de.hpi.PTnet.PTNetInterpreter;
-import de.hpi.PTnet.impl.PTNetInterpreterImpl;
-import de.hpi.bpmn.ANDGateway;
-import de.hpi.bpmn.DiagramObject;
-import de.hpi.bpmn.Node;
-import de.hpi.bpmn.SubProcess;
-import de.hpi.petrinet.Marking;
-import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.Transition;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hpi.PTnet.PTNet;
+import de.hpi.PTnet.verification.PTNetInterpreter;
+import de.hpi.bpmn.DiagramObject;
+import de.hpi.bpmn.SubProcess;
+import de.hpi.petrinet.Marking;
+import de.hpi.petrinet.Transition;
 
 public class STMapper {
 	private PTNet petriNet;
@@ -23,7 +19,7 @@ public class STMapper {
 	
 	public STMapper(PTNet pn) {
 		petriNet = pn;
-		petriNetInterpreter = new PTNetInterpreterImpl();
+		petriNetInterpreter = new PTNetInterpreter();
 		petriNetMarking = petriNet.getInitialMarking();
 
 		fireInvisibleTransitions(); // invisible start events may have been generated
@@ -48,17 +44,17 @@ public class STMapper {
 //		return foundTransitions;
 //	}
 	
-	private STTransition findTransition(String objResourceID) {
-		List<Transition> transitionList = petriNet.getTransitions();
-		STTransition t;
-		for(int i = 0; i < transitionList.size(); i++) {
-			t = (STTransition)transitionList.get(i);
-			if(t.getBPMNObj().getResourceId().equals(objResourceID)) {
-				return t;
-			}
-		}
-		return null;
-	}
+//	private STTransition findTransition(String objResourceID) {
+//		List<Transition> transitionList = petriNet.getTransitions();
+//		STTransition t;
+//		for(int i = 0; i < transitionList.size(); i++) {
+//			t = (STTransition)transitionList.get(i);
+//			if(t.getBPMNObj().getResourceId().equals(objResourceID)) {
+//				return t;
+//			}
+//		}
+//		return null;
+//	}
 
 	public List<DiagramObject> getFireableObjects () {
 		List<DiagramObject> objects = new ArrayList();

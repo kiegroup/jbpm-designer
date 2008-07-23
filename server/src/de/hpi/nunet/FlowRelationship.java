@@ -6,19 +6,48 @@
  */
 package de.hpi.nunet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public interface FlowRelationship {
+public class FlowRelationship extends de.hpi.petrinet.FlowRelationship {
 
-	Node getSource();
+	protected Node source;
+	protected Node target;
+	protected List variables;
+	
+	public Node getSource() {
+		return this.source;
+	}
 
-	void setSource(Node value);
+	public void setSource(Node value) {
+		if (source != null)
+			source.getOutgoingFlowRelationships().remove(this);
+		source = value;
+		if (source != null)
+			source.getOutgoingFlowRelationships().add(this);
+	}
 
-	Node getTarget();
+	public Node getTarget() {
+		return this.target;
+	}
 
-	void setTarget(Node value);
+	public void setTarget(Node value) {
+		if (target != null)
+			target.getIncomingFlowRelationships().remove(this);
+		target = value;
+		if (target != null)
+			target.getIncomingFlowRelationships().add(this);
+	}
 
-	List<String> getVariables();
+	public List<String> getVariables() {
+		if (variables == null)
+			variables = new ArrayList<String>();
+		return variables;
+	}
+	
+	public String toString() {
+		return "(("+source+", "+target+"), "+getVariables()+")";
+	}
 
 } // FlowRelationship

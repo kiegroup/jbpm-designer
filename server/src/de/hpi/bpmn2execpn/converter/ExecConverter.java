@@ -53,12 +53,13 @@ import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.execpn.AutomaticTransition;
 import de.hpi.execpn.ExecFlowRelationship;
+import de.hpi.execpn.ExecPNFactory;
 import de.hpi.execpn.ExecPetriNet;
+import de.hpi.execpn.ExecPlace;
+import de.hpi.execpn.ExecTransition;
 import de.hpi.execpn.FormTransition;
 import de.hpi.execpn.TransformationTransition;
-import de.hpi.execpn.impl.ExecPNFactoryImpl;
 import de.hpi.execpn.pnml.Locator;
-import de.hpi.petrinet.ExecPlace;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
@@ -78,7 +79,7 @@ public class ExecConverter extends Converter {
 	protected String baseFileName;
 
 	public ExecConverter(BPMNDiagram diagram, String modelURL, String contextPath) {
-		super(diagram, new ExecPNFactoryImpl(modelURL));
+		super(diagram, new ExecPNFactory(modelURL));
 		this.standardModel = modelURL;
 		this.contextPath = contextPath;
 	}
@@ -417,9 +418,9 @@ public class ExecConverter extends Converter {
 		boolean isParallel = process.isParallelOrdering();	
 
 		// start and end transitions
-		Transition startT = addTauTransition(net, "ad-hoc_start_" + process.getId(), process, 1);
-		Transition endT = addTauTransition(net, "ad-hoc_end_" + process.getId(), process, 1);
-		Transition defaultEndT = addTauTransition(net, "ad-hoc_defaultEnd_" + process.getId(), process, 1);
+		Transition startT = addSilentTransition(net, "ad-hoc_start_" + process.getId(), process, 1);
+		Transition endT = addSilentTransition(net, "ad-hoc_end_" + process.getId(), process, 1);
+		Transition defaultEndT = addSilentTransition(net, "ad-hoc_defaultEnd_" + process.getId(), process, 1);
 		
 		addFlowRelationship(net, pl.startP, startT);
 		addFlowRelationship(net, defaultEndT, pl.endP);
@@ -432,9 +433,9 @@ public class ExecConverter extends Converter {
 		if (completionConditionString.length() == 0) {
 			completionConditionString = "false";
 		}
-		Transition finalize = addTauTransition(net, "ad-hoc_finalize_" + process.getId(), process, 0);
+		ExecTransition finalize = (ExecTransition)addSilentTransition(net, "ad-hoc_finalize_" + process.getId(), process, 0);
 		finalize.setGuard(completionConditionString);
-		Transition resume = addTauTransition(net, "ad-hoc_resume_" + process.getId(), process, 0);
+		ExecTransition resume = (ExecTransition)addSilentTransition(net, "ad-hoc_resume_" + process.getId(), process, 0);
 		resume.setGuard("!("+completionConditionString+")" );
 
 		// synchronization and completionCondition checks(synch, corresponds to enableStarting)
@@ -486,9 +487,9 @@ public class ExecConverter extends Converter {
 				// finishing construct(finalize with skip, finish and abort)
 				Place enableFinalize = addPlace(net, "ad-hoc_enable_finalize_task_" + exTask.getId());
 				Place taskFinalized = addPlace(net, "ad-hoc_task_finalized_" + exTask.getId());
-				Transition skipReady = addTauTransition(net, "ad-hoc_skipready_task_" + exTask.getId(), exTask, 0);
-				Transition skipEnabled = addTauTransition(net, "ad-hoc_skipenabled_task_" + exTask.getId(), exTask, 0);
-				Transition finish = addTauTransition(net, "ad-hoc_finish_task_" + exTask.getId(), exTask, 0);
+				Transition skipReady = addSilentTransition(net, "ad-hoc_skipready_task_" + exTask.getId(), exTask, 0);
+				Transition skipEnabled = addSilentTransition(net, "ad-hoc_skipenabled_task_" + exTask.getId(), exTask, 0);
+				Transition finish = addSilentTransition(net, "ad-hoc_finish_task_" + exTask.getId(), exTask, 0);
 				
 				addFlowRelationship(net, finalize, enableFinalize);
 					
@@ -658,7 +659,7 @@ public class ExecConverter extends Converter {
 	}
 	
 	public TransformationTransition addTransformationTransition(PetriNet net, String id, String task, String action, String xsltURL) {
-		TransformationTransition t =((ExecPNFactoryImpl) pnfactory).createTransformationTransition();
+		TransformationTransition t =((ExecPNFactory) pnfactory).createTransformationTransition();
 		t.setId(id);
 		t.setLabel(id);
 		t.setTask(task);
@@ -672,7 +673,7 @@ public class ExecConverter extends Converter {
 			de.hpi.petrinet.Node source, de.hpi.petrinet.Node target, String xsltURL) {
 		if (source == null || target == null)
 			return null;
-		ExecFlowRelationship rel = ((ExecPNFactoryImpl) pnfactory).createExecFlowRelationship();
+		ExecFlowRelationship rel = (ExecFlowRelationship)pnfactory.createFlowRelationship();
 		rel.setSource(source);
 		rel.setTarget(target);
 		rel.setTransformationURL(xsltURL);
@@ -686,12 +687,12 @@ public class ExecConverter extends Converter {
 		if (rel == null){
 			return null;
 		}
-		rel.setMode(FlowRelationship.RELATION_MODE_READTOKEN);
+		rel.setMode(ExecFlowRelationship.RELATION_MODE_READTOKEN);
 		return rel;
 	}
 	
 	public FormTransition addFormTransition(PetriNet net, String id, String task) {
-		FormTransition t = ((ExecPNFactoryImpl)pnfactory).createFormTransition();
+		FormTransition t = ((ExecPNFactory)pnfactory).createFormTransition();
 		t.setId(id);
 		t.setLabel(id);
 		t.setTask(task);
@@ -700,7 +701,7 @@ public class ExecConverter extends Converter {
 	}
 
 	public AutomaticTransition addAutomaticTransition(PetriNet net, String id, String task) {
-		AutomaticTransition t = ((ExecPNFactoryImpl)pnfactory).createAutomaticTransition();
+		AutomaticTransition t = ((ExecPNFactory)pnfactory).createAutomaticTransition();
 		t.setId(id);
 		t.setLabel(id);
 		t.setTask(task);
@@ -710,7 +711,7 @@ public class ExecConverter extends Converter {
 	}
 	
 	public ExecPlace addPlace(PetriNet net, String id, ExecPlace.Type type) {
-		ExecPlace p = ((ExecPNFactoryImpl)pnfactory).createPlace();
+		ExecPlace p = (ExecPlace)((ExecPNFactory)pnfactory).createPlace();
 		p.setId(id);
 		if (type != null)
 			p.setType(type);
@@ -1426,6 +1427,16 @@ public class ExecConverter extends Converter {
 			*/
 			
 			return postDataToURL(domToString(xslDoc),enginePostURL);
+		}
+
+		public FlowRelationship addReadOnlyFlowRelationship(PetriNet net,
+				de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {	
+			ExecFlowRelationship rel = (ExecFlowRelationship)addFlowRelationship(net, source, target);
+			if (rel == null){
+				return null;
+			}
+			rel.setMode(ExecFlowRelationship.RELATION_MODE_READTOKEN);
+			return rel;
 		}
 
 }

@@ -15,7 +15,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.configuration.Configuration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -27,9 +26,9 @@ import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.localmodelgeneration.DesynchronizabilityChecker;
-import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
-import de.hpi.petrinet.SyntaxChecker;
+import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
 import de.hpi.petrinet.Transition;
+import de.hpi.petrinet.verification.SyntaxChecker;
 
 /**
  * Copyright (c) 2008 Gero Decker

@@ -1,36 +1,23 @@
 package de.hpi.bpmn2pn.converter;
 
-import de.hpi.PTnet.PTNet;
 import de.hpi.bpmn.BPMNDiagram;
-import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DiagramObject;
-import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.Place;
-import de.hpi.petrinet.TauTransition;
+import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.stepthrough.AutoSwitchLevel;
 import de.hpi.petrinet.stepthrough.STLabeledTransitionImpl;
 import de.hpi.petrinet.stepthrough.STPetriNetFactoryImpl;
-import de.hpi.petrinet.stepthrough.STTauTransitionImpl;
+import de.hpi.petrinet.stepthrough.STSilentTransition;
 
-public class STConverter extends Converter {
+public class STConverter extends StandardConverter {
 	public STConverter(BPMNDiagram diagram) {
 		super(diagram, new STPetriNetFactoryImpl());
 	}
 	
 	@Override
-	protected void createStartPlaces(PetriNet net, ConversionContext c) {
-		super.createStartPlaces(net, c);
-		for (Container process: diagram.getProcesses()) {
-			Place p = c.getSubprocessPlaces(process).startP;
-			((PTNet)net).getInitialMarking().addToken(p);
-		}
-	}
-	
-	@Override
-	protected TauTransition addTauTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel) {
-		STTauTransitionImpl t = (STTauTransitionImpl) addSimpleTauTransition(net, id);
+	protected SilentTransition addSilentTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel) {
+		STSilentTransition t = (STSilentTransition) addSimpleSilentTransition(net, id);
 		t.setBPMNObj(BPMNObj);
 		t.setAutoSwitchLevel(intLevelToAutoSwitchLevel(autoLevel));
 		return t;
