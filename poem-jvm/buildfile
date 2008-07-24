@@ -97,6 +97,14 @@ task 'migrate' do
   )
 end
 
+# This tasks dumps the PostgreSQL database into a file. (ensure that pg_dump is in the path)
+task 'dump-db' do
+  shared = %Q{-h #{db_config['host']} #{db_config['database']}}
+  user = "-U #{db_config['superuser']}" if db_config['superuser']
+  puts "pg_dump --clean --file=../db/database_dump_raw.sql --format=plain #{user} #{shared}"
+  puts %x{pg_dump --clean --file=../db/database_dump_raw.sql --format=plain #{user} #{shared}}
+end
+
 # Helper to read the config, notice hibernate has it's own config (go generate!)
 def db_config
   YAML.load_file(File.join(File.dirname(__FILE__),'shared', 'database.yml'))[$POEM_ENV || 'development']
