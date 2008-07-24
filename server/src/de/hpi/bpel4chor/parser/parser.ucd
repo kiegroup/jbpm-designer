@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="parser-aid" foregroundRGB="255,255,255" description="" id="parser" metadata="uml2-1.0" initialized="true" scrolledY="282" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="TriggerParser" location="390,628" size="338,65" id="parser/TriggerParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="315,18">
+      <children xsi:type="editmodel:MethodEditModel" name="parseTrigger" id="parser/TriggerParser#parseTrigger(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ParserErrors" location="502,40" size="194,171" id="parser/ParserErrors">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,126">
+      <children xsi:type="editmodel:MethodEditModel" name="ParserErrors" id="parser/ParserErrors#ParserErrors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="parser/ParserErrors#addError(Ljava.lang.Error;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="parser/ParserErrors#addError(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="parser/ParserErrors#addError(Ljava.lang.Exception;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="clear" id="parser/ParserErrors#clear()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getErrors" id="parser/ParserErrors#getErrors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isEmpty" id="parser/ParserErrors#isEmpty()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="GraphicalObjectParser" location="45,530" size="391,71" id="parser/GraphicalObjectParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="368,18">
+      <children xsi:type="editmodel:MethodEditModel" name="parse" id="parser/GraphicalObjectParser#parse(Lmodel.GraphicalObject;Lorg.w3c.dom.Node;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SupportingParser" location="45,40" size="442,221" id="parser/SupportingParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="419,180">
+      <children xsi:type="editmodel:MethodEditModel" name="parseCopy" id="parser/SupportingParser#parseCopy(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseCorrelationSet" id="parser/SupportingParser#parseCorrelationSet(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseCorrelations" id="parser/SupportingParser#parseCorrelations(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseExpression" id="parser/SupportingParser#parseExpression(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseFromParts" id="parser/SupportingParser#parseFromParts(Lorg.w3c.dom.Node;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseFromSpec" id="parser/SupportingParser#parseFromSpec(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseImport" id="parser/SupportingParser#parseImport(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseLoop" id="parser/SupportingParser#parseLoop(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseToParts" id="parser/SupportingParser#parseToParts(Lorg.w3c.dom.Node;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseToSpec" id="parser/SupportingParser#parseToSpec(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="DiagramParser" location="208,790" size="294,80" id="parser/DiagramParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="271,36">
+      <children xsi:type="editmodel:MethodEditModel" name="DiagramParser" id="parser/DiagramParser#DiagramParser(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseDiagram" id="parser/DiagramParser#parseDiagram(Lorg.w3c.dom.Element;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ProcessParser" location="48,700" size="304,85" id="parser/ProcessParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="281,36">
+      <children xsi:type="editmodel:MethodEditModel" name="ProcessParser" id="parser/ProcessParser#ProcessParser(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseProcess" id="parser/ProcessParser#parseProcess(Lorg.w3c.dom.Node;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Parser" location="364,703" size="390,80" id="parser/Parser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="367,36">
+      <children xsi:type="editmodel:MethodEditModel" name="parse" id="parser/Parser#parse(Ljava.lang.String;ZLutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parse" id="parser/Parser#parse(Ljava.io.File;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ArtifactParser" location="45,270" size="620,121" id="parser/ArtifactParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="597,72">
+      <children xsi:type="editmodel:MethodEditModel" name="ArtifactParser" id="parser/ArtifactParser#ArtifactParser(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseReferenceDataObject" id="parser/ArtifactParser#parseReferenceDataObject(Lorg.w3c.dom.Node;Lorg.w3c.dom.Node;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseSetDataObject" id="parser/ArtifactParser#parseSetDataObject(Lorg.w3c.dom.Node;Lorg.w3c.dom.Node;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseVariableDataObject" id="parser/ArtifactParser#parseVariableDataObject(Lorg.w3c.dom.Node;Lorg.w3c.dom.Node;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SwimlaneParser" location="440,520" size="311,100" id="parser/SwimlaneParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="288,54">
+      <children xsi:type="editmodel:MethodEditModel" name="SwimlaneParser" id="parser/SwimlaneParser#SwimlaneParser(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parsePool" id="parser/SwimlaneParser#parsePool(Lorg.w3c.dom.Node;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parsePoolSet" id="parser/SwimlaneParser#parsePoolSet(Lorg.w3c.dom.Node;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ConnectionsParser" location="45,400" size="358,121" id="parser/ConnectionsParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="335,72">
+      <children xsi:type="editmodel:MethodEditModel" name="ConnectionsParser" id="parser/ConnectionsParser#ConnectionsParser(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseAssociation" id="parser/ConnectionsParser#parseAssociation(Lorg.w3c.dom.Node;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseMessageFlow" id="parser/ConnectionsParser#parseMessageFlow(Lorg.w3c.dom.Node;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseTransition" id="parser/ConnectionsParser#parseTransition(Lorg.w3c.dom.Node;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ActivityParser" location="50,600" size="300,90" id="parser/ActivityParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="277,36">
+      <children xsi:type="editmodel:MethodEditModel" name="ActivityParser" id="parser/ActivityParser#ActivityParser(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseActivity" id="parser/ActivityParser#parseActivity(Lorg.w3c.dom.Node;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SubProcessParser" location="410,400" size="338,101" id="parser/SubProcessParser">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="315,54">
+      <children xsi:type="editmodel:MethodEditModel" name="SubProcessParser" id="parser/SubProcessParser#SubProcessParser(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseSubProcess" id="parser/SubProcessParser#parseSubProcess(Lmodel.SubProcess;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseSubProcessId" id="parser/SubProcessParser#parseSubProcessId(Lorg.w3c.dom.Node;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="activities-id" foregroundRGB="255,255,255" description="" id="model.activities" metadata="uml2-1.0" initialized="true" scrolledY="424" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="Gateway" location="40,620" size="632,421" id="model.activities/Gateway">
+    <children xsi:type="editmodel:CompartmentEditModel" size="141,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="sPLIT_XORDATA" id="model.activities/Gateway#sPLIT_XORDATA"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sPLIT_XOREVENT" id="model.activities/Gateway#sPLIT_XOREVENT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_AND" id="model.activities/Gateway#tYPE_AND"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_OR" id="model.activities/Gateway#tYPE_OR"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_XOR" id="model.activities/Gateway#tYPE_XOR"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="609,252">
+      <children xsi:type="editmodel:MethodEditModel" name="Gateway" id="model.activities/Gateway#Gateway(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Gateway" id="model.activities/Gateway#Gateway(Ljava.lang.String;Ljava.lang.String;ZLutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Gateway" id="model.activities/Gateway#Gateway(Ljava.lang.String;Ljava.lang.String;ZZLutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSourceFor" id="model.activities/Gateway#addSourceFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTargetFor" id="model.activities/Gateway#addTargetFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="determineEvaluationOrder" id="model.activities/Gateway#determineEvaluationOrder()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCreateInstance" id="model.activities/Gateway#getCreateInstance()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getGatewayType" id="model.activities/Gateway#getGatewayType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getOutgoingWithId" id="model.activities/Gateway#getOutgoingWithId(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSplitType" id="model.activities/Gateway#getSplitType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCreateInstance" id="model.activities/Gateway#setCreateInstance(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEvaluationOrder" id="model.activities/Gateway#setEvaluationOrder(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setGatewayType" id="model.activities/Gateway#setGatewayType(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSplitType" id="model.activities/Gateway#setSplitType(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

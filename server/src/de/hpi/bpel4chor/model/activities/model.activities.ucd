@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" id="model.activities" metadata="uml2-1.0" initialized="true" scrolledX="1121" scrolledY="1196" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.6/@sourceConnections.1 //@children.12/@sourceConnections.1" name="Output" location="282,2013" size="194,201" id="util/Output">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,108">
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="util/Output#addError(Ljava.lang.Error;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="util/Output#addError(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="util/Output#addError(Ljava.lang.Exception;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="clear" id="util/Output#clear()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getErrors" id="util/Output#getErrors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isEmpty" id="util/Output#isEmpty()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.15/@sourceConnections.2 //@children.7/@sourceConnections.1" name="FromPart" location="50,743" size="224,187" id="model.supporting/FromPart">
+    <children xsi:type="editmodel:CompartmentEditModel" size="122,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="fROM_PARTS" id="model.supporting/FromPart#fROM_PARTS"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="191,90">
+      <children xsi:type="editmodel:MethodEditModel" name="FromPart" id="model.supporting/FromPart#FromPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPart" id="model.supporting/FromPart#getPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getToVariable" id="model.supporting/FromPart#getToVariable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPart" id="model.supporting/FromPart#setPart(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setToVariable" id="model.supporting/FromPart#setToVariable(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.15/@sourceConnections.0 //@children.7/@sourceConnections.0 //@children.9/@sourceConnections.0" name="Correlation" location="2224,1819" size="236,331" id="model.supporting/Correlation">
+    <children xsi:type="editmodel:CompartmentEditModel" size="212,126">
+      <children xsi:type="editmodel:AttributeEditModel" name="cORRELATIONS" id="model.supporting/Correlation#cORRELATIONS"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iNITIATE_JOIN" id="model.supporting/Correlation#iNITIATE_JOIN"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iNITIATE_NO" id="model.supporting/Correlation#iNITIATE_NO"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iNITIATE_YES" id="model.supporting/Correlation#iNITIATE_YES"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pATTERN_REQUEST" id="model.supporting/Correlation#pATTERN_REQUEST"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pATTERN_REQUEST_RESPONSE" id="model.supporting/Correlation#pATTERN_REQUEST_RESPONSE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pATTERN_RESPONSE" id="model.supporting/Correlation#pATTERN_RESPONSE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="158,126">
+      <children xsi:type="editmodel:MethodEditModel" name="Correlation" id="model.supporting/Correlation#Correlation()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getInitiate" id="model.supporting/Correlation#getInitiate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPattern" id="model.supporting/Correlation#getPattern()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSet" id="model.supporting/Correlation#getSet()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setInitiate" id="model.supporting/Correlation#setInitiate(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPattern" id="model.supporting/Correlation#setPattern(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSet" id="model.supporting/Correlation#setSet(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.11/@sourceConnections.0" name="Copy" location="2163,596" size="337,241" id="model.supporting/Copy">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="314,162">
+      <children xsi:type="editmodel:MethodEditModel" name="Copy" id="model.supporting/Copy#Copy()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromSpec" id="model.supporting/Copy#getFromSpec()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getToSpec" id="model.supporting/Copy#getToSpec()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isIgnoreMissingFromData" id="model.supporting/Copy#isIgnoreMissingFromData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isKeepSrcElementName" id="model.supporting/Copy#isKeepSrcElementName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromSpec" id="model.supporting/Copy#setFromSpec(Lmodel.supporting.FromSpec;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setIgnoreMissingFromData" id="model.supporting/Copy#setIgnoreMissingFromData(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setKeepSrcElementName" id="model.supporting/Copy#setKeepSrcElementName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setToSpec" id="model.supporting/Copy#setToSpec(Lmodel.supporting.ToSpec;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.15/@sourceConnections.1 //@children.9/@sourceConnections.1" name="ToPart" location="1060,50" size="239,187" id="model.supporting/ToPart">
+    <children xsi:type="editmodel:CompartmentEditModel" size="107,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="tO_PARTS" id="model.supporting/ToPart#tO_PARTS"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="216,90">
+      <children xsi:type="editmodel:MethodEditModel" name="ToPart" id="model.supporting/ToPart#ToPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromVariable" id="model.supporting/ToPart#getFromVariable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPart" id="model.supporting/ToPart#getPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromVariable" id="model.supporting/ToPart#setFromVariable(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPart" id="model.supporting/ToPart#setPart(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.6/@sourceConnections.0 //@children.6/@sourceConnections.2" name="GraphicalObject" location="1125,2404" size="209,187" id="model/GraphicalObject">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="186,108">
+      <children xsi:type="editmodel:MethodEditModel" name="GraphicalObject" id="model/GraphicalObject#GraphicalObject(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GraphicalObject" id="model/GraphicalObject#GraphicalObject(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="equals" id="model/GraphicalObject#equals(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getId" id="model/GraphicalObject#getId()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setId" id="model/GraphicalObject#setId(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="model/GraphicalObject#toString()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.12/@sourceConnections.0" name="Activity" location="1072,2641" size="315,655" id="model.activities/Activity">
+    <children xsi:type="editmodel:CompartmentEditModel">
+      <children xsi:type="editmodel:AttributeEditModel" name="sourceFor" id="model.connections/Transition@sourceFor+model.activities/Activity@|model.connections/Transition#sourceFor"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="targetFor" id="model.connections/Transition@targetFor+model.activities/Activity@|model.connections/Transition#targetFor"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="292,540">
+      <children xsi:type="editmodel:MethodEditModel" name="Activity" id="model.activities/Activity#Activity(ZLutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Activity" id="model.activities/Activity#Activity(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Activity" id="model.activities/Activity#Activity(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSourceFor" id="model.activities/Activity#addSourceFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTargetFor" id="model.activities/Activity#addTargetFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getAttachedEvents" id="model.activities/Activity#getAttachedEvents(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLoop" id="model.activities/Activity#getLoop()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model.activities/Activity#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParentContainer" id="model.activities/Activity#getParentContainer()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParentSwimlane" id="model.activities/Activity#getParentSwimlane()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPredecessor" id="model.activities/Activity#getPredecessor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPredecessors" id="model.activities/Activity#getPredecessors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSourceFor" id="model.activities/Activity#getSourceFor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSuccessor" id="model.activities/Activity#getSuccessor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSuccessors" id="model.activities/Activity#getSuccessors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSuppressJoinFailure" id="model.activities/Activity#getSuppressJoinFailure()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTargetFor" id="model.activities/Activity#getTargetFor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTransitionFrom" id="model.activities/Activity#getTransitionFrom(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTransitionTo" id="model.activities/Activity#getTransitionTo(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isGenerated" id="model.activities/Activity#isGenerated()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isReceiving" id="model.activities/Activity#isReceiving()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeSourceFor" id="model.activities/Activity#removeSourceFor(Lmodel.connections.Transition;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeTargetFor" id="model.activities/Activity#removeTargetFor(Lmodel.connections.Transition;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLoop" id="model.activities/Activity#setLoop(Lmodel.supporting.Loop;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model.activities/Activity#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setParentContainer" id="model.activities/Activity#setParentContainer(Lmodel.Container;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setParentSwimlane" id="model.activities/Activity#setParentSwimlane(Lmodel.Swimlane;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSourceFor" id="model.activities/Activity#setSourceFor(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSuppressJoinFailure" id="model.activities/Activity#setSuppressJoinFailure(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTargetFor" id="model.activities/Activity#setTargetFor(Ljava.util.List;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model/GraphicalObject&lt;-model.activities/Activity" source="//@children.6" target="//@children.5" targetEnd="//@children.6/@sourceConnections.0/@children.1" sourceEnd="//@children.6/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="147,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="94,187" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/Activity->util/Output" source="//@children.6" target="//@children.0" targetEnd="//@children.6/@sourceConnections.1/@children.2" label="//@children.6/@sourceConnections.1/@children.0" sourceEnd="//@children.6/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="194,191"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/Activity->model/GraphicalObject" source="//@children.6" target="//@children.5" targetEnd="//@children.6/@sourceConnections.2/@children.2" label="//@children.6/@sourceConnections.2/@children.0" sourceEnd="//@children.6/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="157,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="104,187"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ReceiveTask" location="1159,1437" size="297,277" id="model.activities/ReceiveTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="274,198">
+      <children xsi:type="editmodel:MethodEditModel" name="ReceiveTask" id="model.activities/ReceiveTask#ReceiveTask(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCorrelations" id="model.activities/ReceiveTask#getCorrelations()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromParts" id="model.activities/ReceiveTask#getFromParts()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageExchange" id="model.activities/ReceiveTask#getMessageExchange()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isInstantiate" id="model.activities/ReceiveTask#isInstantiate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isOpaqueOutput" id="model.activities/ReceiveTask#isOpaqueOutput()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCorrelations" id="model.activities/ReceiveTask#setCorrelations(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromParts" id="model.activities/ReceiveTask#setFromParts(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setInstantiate" id="model.activities/ReceiveTask#setInstantiate(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMessageExchange" id="model.activities/ReceiveTask#setMessageExchange(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOpaqueOutput" id="model.activities/ReceiveTask#setOpaqueOutput(Z)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/Correlation@correlations+model.activities/ReceiveTask@" source="//@children.7" target="//@children.2" targetEnd="//@children.7/@sourceConnections.0/@children.2" label="//@children.7/@sourceConnections.0/@children.0" sourceEnd="//@children.7/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="287,277" id="model.supporting/Correlation@correlations+model.activities/ReceiveTask@|model.activities/ReceiveTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="correlations" location="0,10" id="model.supporting/Correlation@correlations+model.activities/ReceiveTask@|model.supporting/Correlation#correlations" multiplicityLabel="//@children.7/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.7/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - correlations" location="2150,1836" size="67,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="2213,1808" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/FromPart@fromParts+model.activities/ReceiveTask@" source="//@children.7" target="//@children.1" targetEnd="//@children.7/@sourceConnections.1/@children.2" label="//@children.7/@sourceConnections.1/@children.0" sourceEnd="//@children.7/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" id="model.supporting/FromPart@fromParts+model.activities/ReceiveTask@|model.activities/ReceiveTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="fromParts" location="214,187" id="model.supporting/FromPart@fromParts+model.activities/ReceiveTask@|model.supporting/FromPart#fromParts" multiplicityLabel="//@children.7/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.7/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - fromParts" location="200,937" size="57,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="271,937" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/ReceiveTask" source="//@children.7" target="//@children.13/@sourceConnections.0" targetEnd="//@children.7/@sourceConnections.2/@children.1" sourceEnd="//@children.7/@sourceConnections.2/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="148,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/ReceiveTask->model.activities/Task" source="//@children.7" target="//@children.12" targetEnd="//@children.7/@sourceConnections.3/@children.2" label="//@children.7/@sourceConnections.3/@children.0" sourceEnd="//@children.7/@sourceConnections.3/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="287,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,141"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="NoneTask" location="2170,1437" size="180,97" id="model.activities/NoneTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="157,18">
+      <children xsi:type="editmodel:MethodEditModel" name="NoneTask" id="model.activities/NoneTask#NoneTask(Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/NoneTask" source="//@children.8" target="//@children.13/@sourceConnections.0" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="90,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/NoneTask->model.activities/Task" source="//@children.8" target="//@children.12" targetEnd="//@children.8/@sourceConnections.1/@children.2" label="//@children.8/@sourceConnections.1/@children.0" sourceEnd="//@children.8/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="115,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="64,151"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SendTask" location="2380,1437" size="297,277" id="model.activities/SendTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="274,198">
+      <children xsi:type="editmodel:MethodEditModel" name="SendTask" id="model.activities/SendTask#SendTask(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCorrelations" id="model.activities/SendTask#getCorrelations()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFaultName" id="model.activities/SendTask#getFaultName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageExchange" id="model.activities/SendTask#getMessageExchange()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getToParts" id="model.activities/SendTask#getToParts()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isOpaqueInput" id="model.activities/SendTask#isOpaqueInput()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCorrelations" id="model.activities/SendTask#setCorrelations(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFaultName" id="model.activities/SendTask#setFaultName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMessageExchange" id="model.activities/SendTask#setMessageExchange(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOpaqueInput" id="model.activities/SendTask#setOpaqueInput(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setToParts" id="model.activities/SendTask#setToParts(Ljava.util.List;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/Correlation@correlations+model.activities/SendTask@" source="//@children.9" target="//@children.2" targetEnd="//@children.9/@sourceConnections.0/@children.2" label="//@children.9/@sourceConnections.0/@children.0" sourceEnd="//@children.9/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="39,277" id="model.supporting/Correlation@correlations+model.activities/SendTask@|model.activities/SendTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="correlations" location="195,0" id="model.supporting/Correlation@correlations+model.activities/SendTask@|model.supporting/Correlation#correlations" multiplicityLabel="//@children.9/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.9/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - correlations" location="2426,1798" size="67,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="2408,1798" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/ToPart@toParts+model.activities/SendTask@" source="//@children.9" target="//@children.4" targetEnd="//@children.9/@sourceConnections.1/@children.2" label="//@children.9/@sourceConnections.1/@children.0" sourceEnd="//@children.9/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" id="model.supporting/ToPart@toParts+model.activities/SendTask@|model.activities/SendTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="toParts" location="229,187" id="model.supporting/ToPart@toParts+model.activities/SendTask@|model.supporting/ToPart#toParts" multiplicityLabel="//@children.9/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.9/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - toParts" location="1238,244" size="44,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="1296,244" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/SendTask" source="//@children.9" target="//@children.13/@sourceConnections.0" targetEnd="//@children.9/@sourceConnections.2/@children.1" sourceEnd="//@children.9/@sourceConnections.2/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="148,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/SendTask->model.activities/Task" source="//@children.9" target="//@children.12" targetEnd="//@children.9/@sourceConnections.3/@children.2" label="//@children.9/@sourceConnections.3/@children.0" sourceEnd="//@children.9/@sourceConnections.3/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="77,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="236,151"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="EmptyTask" location="3227,1437" size="184,97" id="model.activities/EmptyTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="161,18">
+      <children xsi:type="editmodel:MethodEditModel" name="EmptyTask" id="model.activities/EmptyTask#EmptyTask(Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/EmptyTask" source="//@children.10" target="//@children.13/@sourceConnections.0" targetEnd="//@children.10/@sourceConnections.0/@children.1" sourceEnd="//@children.10/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="92,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/EmptyTask->model.activities/Task" source="//@children.10" target="//@children.12" targetEnd="//@children.10/@sourceConnections.1/@children.2" label="//@children.10/@sourceConnections.1/@children.0" sourceEnd="//@children.10/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="315,141"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="AssignTask" location="2707,1437" size="199,169" id="model.activities/AssignTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="176,90">
+      <children xsi:type="editmodel:MethodEditModel" name="AssignTask" id="model.activities/AssignTask#AssignTask(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addCopyElement" id="model.activities/AssignTask#addCopyElement(Lmodel.supporting.Copy;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCopyElements" id="model.activities/AssignTask#getCopyElements()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getValidate" id="model.activities/AssignTask#getValidate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setValidate" id="model.activities/AssignTask#setValidate(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/Copy@copyObjects+model.activities/AssignTask@" source="//@children.11" target="//@children.3" targetEnd="//@children.11/@sourceConnections.0/@children.2" label="//@children.11/@sourceConnections.0/@children.0" sourceEnd="//@children.11/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" id="model.supporting/Copy@copyObjects+model.activities/AssignTask@|model.activities/AssignTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="copyObjects" location="327,241" id="model.supporting/Copy@copyObjects+model.activities/AssignTask@|model.supporting/Copy#copyObjects" multiplicityLabel="//@children.11/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.11/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - copyObjects" location="2412,844" size="71,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="2497,844" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/AssignTask" source="//@children.11" target="//@children.13/@sourceConnections.0" targetEnd="//@children.11/@sourceConnections.1/@children.1" sourceEnd="//@children.11/@sourceConnections.1/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="99,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/AssignTask->model.activities/Task" source="//@children.11" target="//@children.12" targetEnd="//@children.11/@sourceConnections.2/@children.2" label="//@children.11/@sourceConnections.2/@children.0" sourceEnd="//@children.11/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="305,151"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.13/@sourceConnections.0 //@children.15/@sourceConnections.4 //@children.7/@sourceConnections.3 //@children.11/@sourceConnections.2 //@children.9/@sourceConnections.3 //@children.10/@sourceConnections.1 //@children.13/@sourceConnections.1 //@children.8/@sourceConnections.1 //@children.14/@sourceConnections.1" name="Task" location="2221,1236" size="315,151" id="model.activities/Task">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="292,72">
+      <children xsi:type="editmodel:MethodEditModel" name="Task" id="model.activities/Task#Task(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Task" id="model.activities/Task#Task(ZLutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSourceFor" id="model.activities/Task#addSourceFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTargetFor" id="model.activities/Task#addTargetFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/Task->model.activities/Activity" source="//@children.12" target="//@children.6" targetEnd="//@children.12/@sourceConnections.0/@children.2" label="//@children.12/@sourceConnections.0/@children.0" sourceEnd="//@children.12/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,151" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="315,10"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/Task->util/Output" source="//@children.12" target="//@children.0" targetEnd="//@children.12/@sourceConnections.1/@children.2" label="//@children.12/@sourceConnections.1/@children.0" sourceEnd="//@children.12/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,151" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="194,10"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FoldedTask" location="1486,1437" size="430,115" id="model.activities/FoldedTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="407,36">
+      <children xsi:type="editmodel:MethodEditModel" name="FoldedTask" id="model.activities/FoldedTask#FoldedTask(Lorg.w3c.dom.Element;Lmodel.Container;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getBPELElement" id="model.activities/FoldedTask#getBPELElement()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.14/@sourceConnections.0 //@children.8/@sourceConnections.0 //@children.9/@sourceConnections.2 //@children.11/@sourceConnections.1 //@children.7/@sourceConnections.2 //@children.15/@sourceConnections.3 //@children.10/@sourceConnections.0" id="model.activities/Task&lt;-model.activities/FoldedTask" source="//@children.13" target="//@children.12" targetEnd="//@children.13/@sourceConnections.0/@children.1" sourceEnd="//@children.13/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="215,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="157,151" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/FoldedTask->model.activities/Task" source="//@children.13" target="//@children.12" targetEnd="//@children.13/@sourceConnections.1/@children.2" label="//@children.13/@sourceConnections.1/@children.0" sourceEnd="//@children.13/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="420,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,141"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ValidateTask" location="1946,1437" size="194,97" id="model.activities/ValidateTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,18">
+      <children xsi:type="editmodel:MethodEditModel" name="ValidateTask" id="model.activities/ValidateTask#ValidateTask(Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/ValidateTask" source="//@children.14" target="//@children.13/@sourceConnections.0" targetEnd="//@children.14/@sourceConnections.0/@children.1" sourceEnd="//@children.14/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="97,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/ValidateTask->model.activities/Task" source="//@children.14" target="//@children.12" targetEnd="//@children.14/@sourceConnections.1/@children.2" label="//@children.14/@sourceConnections.1/@children.0" sourceEnd="//@children.14/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="194,10" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,151"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ServiceTask" location="2936,1437" size="261,277" id="model.activities/ServiceTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="238,198">
+      <children xsi:type="editmodel:MethodEditModel" name="ServiceTask" id="model.activities/ServiceTask#ServiceTask(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCorrelations" id="model.activities/ServiceTask#getCorrelations()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromParts" id="model.activities/ServiceTask#getFromParts()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getToParts" id="model.activities/ServiceTask#getToParts()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isOpaqueInput" id="model.activities/ServiceTask#isOpaqueInput()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isOpaqueOutput" id="model.activities/ServiceTask#isOpaqueOutput()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCorrelations" id="model.activities/ServiceTask#setCorrelations(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromParts" id="model.activities/ServiceTask#setFromParts(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOpaqueInput" id="model.activities/ServiceTask#setOpaqueInput(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOpaqueOutput" id="model.activities/ServiceTask#setOpaqueOutput(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setToParts" id="model.activities/ServiceTask#setToParts(Ljava.util.List;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/Correlation@correlations+model.activities/ServiceTask@" source="//@children.15" target="//@children.2" targetEnd="//@children.15/@sourceConnections.0/@children.2" label="//@children.15/@sourceConnections.0/@children.0" sourceEnd="//@children.15/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,267" id="model.supporting/Correlation@correlations+model.activities/ServiceTask@|model.activities/ServiceTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="correlations" location="226,0" id="model.supporting/Correlation@correlations+model.activities/ServiceTask@|model.supporting/Correlation#correlations" multiplicityLabel="//@children.15/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.15/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - correlations" location="2376,1798" size="67,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="2457,1798" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/ToPart@toParts+model.activities/ServiceTask@" source="//@children.15" target="//@children.4" targetEnd="//@children.15/@sourceConnections.1/@children.2" label="//@children.15/@sourceConnections.1/@children.0" sourceEnd="//@children.15/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,0" id="model.supporting/ToPart@toParts+model.activities/ServiceTask@|model.activities/ServiceTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="toParts" location="239,177" id="model.supporting/ToPart@toParts+model.activities/ServiceTask@|model.supporting/ToPart#toParts" multiplicityLabel="//@children.15/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.15/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - toParts" location="1306,206" size="44,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="1306,234" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/FromPart@fromParts+model.activities/ServiceTask@" source="//@children.15" target="//@children.1" targetEnd="//@children.15/@sourceConnections.2/@children.2" label="//@children.15/@sourceConnections.2/@children.0" sourceEnd="//@children.15/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" id="model.supporting/FromPart@fromParts+model.activities/ServiceTask@|model.activities/ServiceTask#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="fromParts" location="214,187" id="model.supporting/FromPart@fromParts+model.activities/ServiceTask@|model.supporting/FromPart#fromParts" multiplicityLabel="//@children.15/@sourceConnections.2/@children.2/@children.1" roleLabel="//@children.15/@sourceConnections.2/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - fromParts" location="200,937" size="57,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="271,937" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/ServiceTask" source="//@children.15" target="//@children.13/@sourceConnections.0" targetEnd="//@children.15/@sourceConnections.3/@children.1" sourceEnd="//@children.15/@sourceConnections.3/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="130,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="model.activities/ServiceTask->model.activities/Task" source="//@children.15" target="//@children.12" targetEnd="//@children.15/@sourceConnections.4/@children.2" label="//@children.15/@sourceConnections.4/@children.0" sourceEnd="//@children.15/@sourceConnections.4/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="315,141"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=7" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

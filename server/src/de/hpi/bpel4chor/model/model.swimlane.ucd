@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="model-id" foregroundRGB="255,255,255" description="" id="model" metadata="uml2-1.0" initialized="true" scrolledY="208" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0" name="GraphicalObject" location="184,190" size="145,59" id="model/GraphicalObject">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="186,108"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="PoolSet" location="50,610" size="168,66" id="model/PoolSet">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="145,18">
+      <children xsi:type="editmodel:MethodEditModel" name="PoolSet" id="model/PoolSet#PoolSet(Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model/Swimlane&lt;-model/PoolSet" source="//@children.1" target="//@children.2" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="100,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="51,283" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.3/@sourceConnections.0 //@children.1/@sourceConnections.0" name="Swimlane" location="99,282" size="306,284" id="model/Swimlane">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="283,234">
+      <children xsi:type="editmodel:MethodEditModel" name="Swimlane" id="model/Swimlane#Swimlane(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addImport" id="model/Swimlane#addImport(Lmodel.supporting.Import;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getImportForNamespace" id="model/Swimlane#getImportForNamespace(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getImportForPrefix" id="model/Swimlane#getImportForPrefix(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getImports" id="model/Swimlane#getImports()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model/Swimlane#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPrefix" id="model/Swimlane#getPrefix()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProcess" id="model/Swimlane#getProcess()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTargetNamespace" id="model/Swimlane#getTargetNamespace()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model/Swimlane#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPrefix" id="model/Swimlane#setPrefix(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setProcess" id="model/Swimlane#setProcess(Lmodel.Process;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTargetNamespace" id="model/Swimlane#setTargetNamespace(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model/GraphicalObject&lt;-model/Swimlane" source="//@children.2" target="//@children.0" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="163,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="78,59"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Pool" location="230,610" size="267,186" id="model/Pool">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="244,144">
+      <children xsi:type="editmodel:MethodEditModel" name="Pool" id="model/Pool#Pool(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSelect" id="model/Pool#addSelect(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getContainment" id="model/Pool#getContainment()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParticipantName" id="model/Pool#getParticipantName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSelects" id="model/Pool#getSelects()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setContainment" id="model/Pool#setContainment(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setParticipantName" id="model/Pool#setParticipantName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSelects" id="model/Pool#setSelects(Ljava.util.List;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model/Swimlane&lt;-model/Pool" source="//@children.3" target="//@children.2" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="87,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="218,284"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

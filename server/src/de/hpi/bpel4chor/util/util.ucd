@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="util-aid" foregroundRGB="255,255,255" description="" id="util" metadata="uml2-1.0" initialized="true" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="ListUtil" location="370,215" size="243,98" id="util/ListUtil" runTimeClassModel="toString(Ljava.util.List;),isEqual(Ljava.util.List;Ljava.util.List;),intersect(Ljava.util.List;Ljava.util.List;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="220,54">
+      <children xsi:type="editmodel:MethodEditModel" name="intersect" id="util/ListUtil#intersect(Ljava.util.List;Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isEqual" id="util/ListUtil#isEqual(Ljava.util.List;Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="util/ListUtil#toString(Ljava.util.List;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="BPELUtil" location="40,160" size="324,153" id="util/BPELUtil" runTimeClassModel="generateScopeName(Lmodel.activities.Activity;),stringToNCName(Ljava.lang.String;),setStandardAttributes(Lorg.w3c.dom.Element;Lmodel.activities.Activity;),booleanToYesNo(Z),getPattern(Lmodel.supporting.Correlation;),getInitiate(Lmodel.supporting.Correlation;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="301,108">
+      <children xsi:type="editmodel:MethodEditModel" name="booleanToYesNo" id="util/BPELUtil#booleanToYesNo(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="generateScopeName" id="util/BPELUtil#generateScopeName(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getInitiate" id="util/BPELUtil#getInitiate(Lmodel.supporting.Correlation;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPattern" id="util/BPELUtil#getPattern(Lmodel.supporting.Correlation;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStandardAttributes" id="util/BPELUtil#setStandardAttributes(Lorg.w3c.dom.Element;Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="stringToNCName" id="util/BPELUtil#stringToNCName(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="IDGenerator" location="250,320" size="218,66" id="util/IDGenerator" runTimeClassModel="generateID(Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="195,18">
+      <children xsi:type="editmodel:MethodEditModel" name="generateID" id="util/IDGenerator#generateID(Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="XMLUtil" location="40,40" size="345,116" id="util/XMLUtil" runTimeClassModel="getNodeValue(Lorg.w3c.dom.Node;Lutil.Output;),getFirstElement(Lorg.w3c.dom.NodeList;),getChildWithName(Lorg.w3c.dom.Node;Ljava.lang.String;),nodeToString(Lorg.w3c.dom.Node;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="322,72">
+      <children xsi:type="editmodel:MethodEditModel" name="getChildWithName" id="util/XMLUtil#getChildWithName(Lorg.w3c.dom.Node;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFirstElement" id="util/XMLUtil#getFirstElement(Lorg.w3c.dom.NodeList;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getNodeValue" id="util/XMLUtil#getNodeValue(Lorg.w3c.dom.Node;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="nodeToString" id="util/XMLUtil#nodeToString(Lorg.w3c.dom.Node;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="Output" location="390,40" size="194,166" id="util/Output" runTimeClassModel="addError(Ljava.lang.Error;),clear(),addError(Ljava.lang.Exception;),addError(Ljava.lang.String;),isEmpty(),getErrors()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,108">
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="util/Output#addError(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="util/Output#addError(Ljava.lang.Exception;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="util/Output#addError(Ljava.lang.Error;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="clear" id="util/Output#clear()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getErrors" id="util/Output#getErrors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isEmpty" id="util/Output#isEmpty()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

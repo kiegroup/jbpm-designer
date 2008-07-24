@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="supporting-aid" foregroundRGB="255,255,255" description="" id="model.supporting" metadata="uml2-1.0" initialized="true" scrolledY="633" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="CorrelationSet" location="590,1020" size="198,131" id="model.supporting/CorrelationSet">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="175,90">
+      <children xsi:type="editmodel:MethodEditModel" name="CorrelationSet" id="model.supporting/CorrelationSet#CorrelationSet()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addProperty" id="model.supporting/CorrelationSet#addProperty(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model.supporting/CorrelationSet#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProperties" id="model.supporting/CorrelationSet#getProperties()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model.supporting/CorrelationSet#setName(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FromPart" location="590,870" size="214,141" id="model.supporting/FromPart">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="191,90">
+      <children xsi:type="editmodel:MethodEditModel" name="FromPart" id="model.supporting/FromPart#FromPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPart" id="model.supporting/FromPart#getPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getToVariable" id="model.supporting/FromPart#getToVariable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPart" id="model.supporting/FromPart#setPart(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setToVariable" id="model.supporting/FromPart#setToVariable(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ToPart" location="590,720" size="239,139" id="model.supporting/ToPart">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="216,90">
+      <children xsi:type="editmodel:MethodEditModel" name="ToPart" id="model.supporting/ToPart#ToPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromVariable" id="model.supporting/ToPart#getFromVariable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPart" id="model.supporting/ToPart#getPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromVariable" id="model.supporting/ToPart#setFromVariable(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPart" id="model.supporting/ToPart#setPart(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FromSpec" location="412,45" size="317,501" id="model.supporting/FromSpec">
+    <children xsi:type="editmodel:CompartmentEditModel" size="168,108">
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_EMPTY" id="model.supporting/FromSpec#tYPE_EMPTY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_EXPRESSION" id="model.supporting/FromSpec#tYPE_EXPRESSION"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_LITERAL" id="model.supporting/FromSpec#tYPE_LITERAL"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_OPAQUE" id="model.supporting/FromSpec#tYPE_OPAQUE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_VARIABLE" id="model.supporting/FromSpec#tYPE_VARIABLE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_VAR_PROPERTY" id="model.supporting/FromSpec#tYPE_VAR_PROPERTY"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="294,342">
+      <children xsi:type="editmodel:MethodEditModel" name="FromSpec" id="model.supporting/FromSpec#FromSpec()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpression" id="model.supporting/FromSpec#getExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpressionLanguage" id="model.supporting/FromSpec#getExpressionLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLiteral" id="model.supporting/FromSpec#getLiteral()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPart" id="model.supporting/FromSpec#getPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProperty" id="model.supporting/FromSpec#getProperty()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getQuery" id="model.supporting/FromSpec#getQuery()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getQueryLanguage" id="model.supporting/FromSpec#getQueryLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getType" id="model.supporting/FromSpec#getType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getVariableName" id="model.supporting/FromSpec#getVariableName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpression" id="model.supporting/FromSpec#setExpression(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpressionLanguage" id="model.supporting/FromSpec#setExpressionLanguage(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLiteral" id="model.supporting/FromSpec#setLiteral(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPart" id="model.supporting/FromSpec#setPart(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setProperty" id="model.supporting/FromSpec#setProperty(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setQuery" id="model.supporting/FromSpec#setQuery(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setQueryLanguage" id="model.supporting/FromSpec#setQueryLanguage(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setType" id="model.supporting/FromSpec#setType(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setVariableName" id="model.supporting/FromSpec#setVariableName(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Copy" location="5,720" size="337,206" id="model.supporting/Copy">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="314,162">
+      <children xsi:type="editmodel:MethodEditModel" name="Copy" id="model.supporting/Copy#Copy()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromSpec" id="model.supporting/Copy#getFromSpec()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getToSpec" id="model.supporting/Copy#getToSpec()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isIgnoreMissingFromData" id="model.supporting/Copy#isIgnoreMissingFromData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isKeepSrcElementName" id="model.supporting/Copy#isKeepSrcElementName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromSpec" id="model.supporting/Copy#setFromSpec(Lmodel.supporting.FromSpec;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setIgnoreMissingFromData" id="model.supporting/Copy#setIgnoreMissingFromData(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setKeepSrcElementName" id="model.supporting/Copy#setKeepSrcElementName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setToSpec" id="model.supporting/Copy#setToSpec(Lmodel.supporting.ToSpec;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Correlation" location="350,940" size="235,281" id="model.supporting/Correlation">
+    <children xsi:type="editmodel:CompartmentEditModel" size="212,108">
+      <children xsi:type="editmodel:AttributeEditModel" name="iNITIATE_JOIN" id="model.supporting/Correlation#iNITIATE_JOIN"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iNITIATE_NO" id="model.supporting/Correlation#iNITIATE_NO"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iNITIATE_YES" id="model.supporting/Correlation#iNITIATE_YES"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pATTERN_REQUEST" id="model.supporting/Correlation#pATTERN_REQUEST"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pATTERN_REQUEST_RESPONSE" id="model.supporting/Correlation#pATTERN_REQUEST_RESPONSE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pATTERN_RESPONSE" id="model.supporting/Correlation#pATTERN_RESPONSE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="158,126">
+      <children xsi:type="editmodel:MethodEditModel" name="Correlation" id="model.supporting/Correlation#Correlation()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getInitiate" id="model.supporting/Correlation#getInitiate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPattern" id="model.supporting/Correlation#getPattern()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSet" id="model.supporting/Correlation#getSet()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setInitiate" id="model.supporting/Correlation#setInitiate(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPattern" id="model.supporting/Correlation#setPattern(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSet" id="model.supporting/Correlation#setSet(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Loop" location="45,45" size="360,481" id="model.supporting/Loop">
+    <children xsi:type="editmodel:CompartmentEditModel" size="174,126">
+      <children xsi:type="editmodel:AttributeEditModel" name="lOOP" id="model.supporting/Loop#lOOP"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="oRDERING_PARALLEL" id="model.supporting/Loop#oRDERING_PARALLEL"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="oRDERING_SEQUENTIAL" id="model.supporting/Loop#oRDERING_SEQUENTIAL"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tEST_TIME_AFTER" id="model.supporting/Loop#tEST_TIME_AFTER"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tEST_TIME_BEFORE" id="model.supporting/Loop#tEST_TIME_BEFORE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_MULITPLE" id="model.supporting/Loop#tYPE_MULITPLE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_STANDARD" id="model.supporting/Loop#tYPE_STANDARD"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="337,306">
+      <children xsi:type="editmodel:MethodEditModel" name="Loop" id="model.supporting/Loop#Loop()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCompletionCondition" id="model.supporting/Loop#getCompletionCondition()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFinalCounterValue" id="model.supporting/Loop#getFinalCounterValue()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLoopCondition" id="model.supporting/Loop#getLoopCondition()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLoopType" id="model.supporting/Loop#getLoopType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getOrdering" id="model.supporting/Loop#getOrdering()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStartCounterValue" id="model.supporting/Loop#getStartCounterValue()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTestTime" id="model.supporting/Loop#getTestTime()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isSuccessfulBranchesOnly" id="model.supporting/Loop#isSuccessfulBranchesOnly()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCompletionCondition" id="model.supporting/Loop#setCompletionCondition(Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFinalCounterValue" id="model.supporting/Loop#setFinalCounterValue(Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLoopCondition" id="model.supporting/Loop#setLoopCondition(Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLoopType" id="model.supporting/Loop#setLoopType(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOrdering" id="model.supporting/Loop#setOrdering(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStartCounterValue" id="model.supporting/Loop#setStartCounterValue(Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSuccessfulBranchesOnly" id="model.supporting/Loop#setSuccessfulBranchesOnly(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTestTime" id="model.supporting/Loop#setTestTime(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Import" location="350,720" size="226,206" id="model.supporting/Import">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="203,162">
+      <children xsi:type="editmodel:MethodEditModel" name="Import" id="model.supporting/Import#Import()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getImportType" id="model.supporting/Import#getImportType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLocation" id="model.supporting/Import#getLocation()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getNamespace" id="model.supporting/Import#getNamespace()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPrefix" id="model.supporting/Import#getPrefix()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setImportType" id="model.supporting/Import#setImportType(Ljava.net.URI;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLocation" id="model.supporting/Import#setLocation(Ljava.net.URI;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setNamespace" id="model.supporting/Import#setNamespace(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPrefix" id="model.supporting/Import#setPrefix(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ToSpec" location="735,45" size="317,421" id="model.supporting/ToSpec">
+    <children xsi:type="editmodel:CompartmentEditModel" size="168,72">
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_EMPTY" id="model.supporting/ToSpec#tYPE_EMPTY"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_EXPRESSION" id="model.supporting/ToSpec#tYPE_EXPRESSION"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_VARIABLE" id="model.supporting/ToSpec#tYPE_VARIABLE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_VAR_PROPERTY" id="model.supporting/ToSpec#tYPE_VAR_PROPERTY"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="294,306">
+      <children xsi:type="editmodel:MethodEditModel" name="ToSpec" id="model.supporting/ToSpec#ToSpec()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpression" id="model.supporting/ToSpec#getExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpressionLanguage" id="model.supporting/ToSpec#getExpressionLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPart" id="model.supporting/ToSpec#getPart()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProperty" id="model.supporting/ToSpec#getProperty()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getQuery" id="model.supporting/ToSpec#getQuery()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getQueryLanguage" id="model.supporting/ToSpec#getQueryLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getType" id="model.supporting/ToSpec#getType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getVariableName" id="model.supporting/ToSpec#getVariableName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpression" id="model.supporting/ToSpec#setExpression(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpressionLanguage" id="model.supporting/ToSpec#setExpressionLanguage(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPart" id="model.supporting/ToSpec#setPart(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setProperty" id="model.supporting/ToSpec#setProperty(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setQuery" id="model.supporting/ToSpec#setQuery(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setQueryLanguage" id="model.supporting/ToSpec#setQueryLanguage(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setType" id="model.supporting/ToSpec#setType(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setVariableName" id="model.supporting/ToSpec#setVariableName(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Expression" location="5,940" size="317,151" id="model.supporting/Expression">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="294,108">
+      <children xsi:type="editmodel:MethodEditModel" name="Expression" id="model.supporting/Expression#Expression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Expression" id="model.supporting/Expression#Expression(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpression" id="model.supporting/Expression#getExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpressionLanguage" id="model.supporting/Expression#getExpressionLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpression" id="model.supporting/Expression#setExpression(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpressionLanguage" id="model.supporting/Expression#setExpressionLanguage(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="Container-i" foregroundRGB="255,255,255" description="" id="model" metadata="uml2-1.0" initialized="true" scrolledY="348" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="SubProcess" location="70,580" size="270,82" id="model/SubProcess" runTimeClassModel="setBlockActivity(Lmodel.activities.BlockActivity;),getBlockActivity()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="247,36">
+      <children xsi:type="editmodel:MethodEditModel" name="getBlockActivity" id="model/SubProcess#getBlockActivity()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setBlockActivity" id="model/SubProcess#setBlockActivity(Lmodel.activities.BlockActivity;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model/Container&lt;-model/SubProcess" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.0/@children.1" sourceEnd="//@children.0/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="244,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="24,456" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Process" location="380,580" size="405,367" id="model/Process" runTimeClassModel="addMessageExchange(Ljava.lang.String;),setQueryLanguage(Ljava.net.URI;),isExitOnStandardFault(),isEnableInstanceCompensation(),setSuppressJoinFailure(Z),setEnableInstanceCompensation(Z),setName(Ljava.lang.String;),setExpressionLanguage(Ljava.net.URI;),setExitOnStandardFault(Z),getQueryLanguage(),addCorrelationSet(Lmodel.supporting.CorrelationSet;),getMessageExchanges(),getName(),getCorrelationSets(),getSubProcesses(),isSuppressJoinFailure(),addSubProcess(Lmodel.SubProcess;),getExpressionLanguage()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="382,324">
+      <children xsi:type="editmodel:MethodEditModel" name="addCorrelationSet" id="model/Process#addCorrelationSet(Lmodel.supporting.CorrelationSet;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addMessageExchange" id="model/Process#addMessageExchange(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSubProcess" id="model/Process#addSubProcess(Lmodel.SubProcess;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCorrelationSets" id="model/Process#getCorrelationSets()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpressionLanguage" id="model/Process#getExpressionLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageExchanges" id="model/Process#getMessageExchanges()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model/Process#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getQueryLanguage" id="model/Process#getQueryLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSubProcesses" id="model/Process#getSubProcesses()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isEnableInstanceCompensation" id="model/Process#isEnableInstanceCompensation()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isExitOnStandardFault" id="model/Process#isExitOnStandardFault()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isSuppressJoinFailure" id="model/Process#isSuppressJoinFailure()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEnableInstanceCompensation" id="model/Process#setEnableInstanceCompensation(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExitOnStandardFault" id="model/Process#setExitOnStandardFault(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpressionLanguage" id="model/Process#setExpressionLanguage(Ljava.net.URI;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model/Process#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setQueryLanguage" id="model/Process#setQueryLanguage(Ljava.net.URI;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSuppressJoinFailure" id="model/Process#setSuppressJoinFailure(Z)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model/Container&lt;-model/Process" source="//@children.1" target="//@children.3" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="98,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="188,491"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Component" location="100,670" size="277,59" id="transformation.factories/Component" runTimeClassModel="getSinkObject(),tYPE_REPEAT,tYPE_PICK,tYPE_QUASI_ATTACHED_EVENTS,getType(),tYPE_QUASI_IF,tYPE_FLOW,tYPE_QUASI_FLOW,tYPE_GENERALISED_FLOW,tYPE_REPEAT_WHILE,getSourceObject(),isQuasi(),tYPE_QUASI_PICK,setType(I),tYPE_WHILE,getExit(),setSource(Lmodel.activities.Activity;),setSink(Lmodel.activities.Activity;),tYPE_QUASI_SPECIAL_FLOW,tYPE_SEQUENCE,tYPE_SYNCHRONIZING_PROCESS,Component(ILjava.util.List;Ljava.util.List;Lmodel.activities.Activity;Lmodel.activities.Activity;),tYPE_ATTACHED_EVENTS,tYPE_IF,getEntry(),tYPE_SPECIAL_FLOW">
+    <children xsi:type="editmodel:CompartmentEditModel" size="207,288"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="167,180"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model/Container&lt;-transformation.factories/Component" source="//@children.2" target="//@children.3" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="259,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="69,491"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0 //@children.2/@sourceConnections.0 //@children.1/@sourceConnections.0" name="Container" location="290,40" size="287,491" id="model/Container" runTimeClassModel="getDataBasedExclusiveDecisionGateways(),removeTransitions(Ljava.util.List;),getTransitions(),getTasks(),removeTransition(Lmodel.connections.Transition;),Container(Ljava.util.List;Ljava.util.List;),getActivities(),getStartEvents(),removeActivity(Lmodel.activities.Activity;),getIntermediateEvents(Ljava.lang.String;),removeActivities(Ljava.util.List;),equals(Ljava.lang.Object;),getGateways(),addTransition(Lmodel.connections.Transition;),getHandlers(Ljava.lang.String;),addTransitions(Ljava.util.List;),getScopes(),getEventBasedExclusiveDecisionGateways(),setId(Ljava.lang.String;),getJoinGateways(Ljava.lang.String;),addActivity(Lmodel.activities.Activity;),getId(),Container(),getSplitGateways(Ljava.lang.String;),getEndEvents()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="264,450">
+      <children xsi:type="editmodel:MethodEditModel" name="Container" id="model/Container#Container()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Container" id="model/Container#Container(Ljava.util.List;Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addActivity" id="model/Container#addActivity(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTransition" id="model/Container#addTransition(Lmodel.connections.Transition;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTransitions" id="model/Container#addTransitions(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="equals" id="model/Container#equals(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActivities" id="model/Container#getActivities()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDataBasedExclusiveDecisionGateways" id="model/Container#getDataBasedExclusiveDecisionGateways()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEndEvents" id="model/Container#getEndEvents()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEventBasedExclusiveDecisionGateways" id="model/Container#getEventBasedExclusiveDecisionGateways()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getGateways" id="model/Container#getGateways()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getHandlers" id="model/Container#getHandlers(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getId" id="model/Container#getId()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIntermediateEvents" id="model/Container#getIntermediateEvents(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getJoinGateways" id="model/Container#getJoinGateways(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getScopes" id="model/Container#getScopes()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSplitGateways" id="model/Container#getSplitGateways(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStartEvents" id="model/Container#getStartEvents()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTasks" id="model/Container#getTasks()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTransitions" id="model/Container#getTransitions()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeActivities" id="model/Container#removeActivities(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeActivity" id="model/Container#removeActivity(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeTransition" id="model/Container#removeTransition(Lmodel.connections.Transition;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeTransitions" id="model/Container#removeTransitions(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setId" id="model/Container#setId(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" properties="open=model/Container;wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

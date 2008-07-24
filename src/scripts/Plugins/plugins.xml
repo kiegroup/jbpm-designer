@@ -63,7 +63,13 @@
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
-		
+
+		<!--
+		<plugin source="bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
+		</plugin>
+		-->
+				
 		<!-- plugin for BPEL import and export --> 
 		<plugin source="bpel.js" name="ORYX.Plugins.BpelGenerator">
 			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
