@@ -38,7 +38,7 @@ public class StepThroughCheckerServlet extends HttpServlet {
 			
 			// Check Diagram in Syntax and Compatibility
 			STSyntaxChecker checker = new STSyntaxChecker(diagram);
-			checker.checkDiagram();
+			checker.checkSyntax(true);
 			
 			if (checker.getErrors().size() > 0) {
 				// Write errors into the output, if any exist

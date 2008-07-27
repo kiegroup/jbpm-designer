@@ -29,7 +29,6 @@ import de.hpi.bpmn.EndMultipleEvent;
 import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn.Event;
-import de.hpi.bpmn.ExecDataObject;
 import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateCancelEvent;
 import de.hpi.bpmn.IntermediateCompensationEvent;
@@ -58,6 +57,7 @@ import de.hpi.bpmn.TextAnnotation;
 import de.hpi.bpmn.UndirectedAssociation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
+import de.hpi.bpmn.exec.ExecDataObject;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -678,7 +678,6 @@ public class BPMNRDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(
 						n.getNodeName().indexOf(':') + 1);
-				boolean test = attribute.equals("datamodel");
 				// TODO: add further attributes...
 				if (attribute.equals("state")) {
 					obj.setState(getContent(n)); }

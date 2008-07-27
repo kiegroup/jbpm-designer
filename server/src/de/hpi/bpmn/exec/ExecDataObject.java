@@ -1,4 +1,6 @@
-package de.hpi.bpmn;
+package de.hpi.bpmn.exec;
+
+import de.hpi.bpmn.DataObject;
 
 public class ExecDataObject extends DataObject {
 

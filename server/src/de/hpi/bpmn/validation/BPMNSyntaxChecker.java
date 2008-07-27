@@ -13,7 +13,9 @@ import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.Event;
 import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateEvent;
+import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.Pool;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XOREventBasedGateway;
@@ -45,6 +47,7 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 	private static final String NO_SOURCE = "An edge must have a source.";
 	private static final String NO_TARGET = "An edge must have a target.";
 	private static final String DIFFERENT_PROCESS = "Source and target node must be contained in the same process.";
+	private static final String SAME_PROCESS = "Source and target node must be contained in different pools.";
 	private static final String FLOWOBJECT_NOT_CONTAINED_IN_PROCESS = "a flow object must be contained in a process.";
 	private static final String ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An end event must have incoming sequence flow.";
 	private static final String STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "A start event must have outgoing sequence flow.";
@@ -63,24 +66,31 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 	}
 
 	public boolean checkSyntax() {
+		return checkSyntax(false);
+	}
+	
+	public boolean checkSyntax(boolean checkControlFlowOnly) {
 		errors.clear();
 		if (diagram == null)
 			return false;
 		
 //		if (!checkEdges()) return false;
 //		if (!checkNodesRecursively(diagram)) return false;
-		checkEdges();
+		checkEdges(checkControlFlowOnly);
 		checkNodesRecursively(diagram);
 		
 		return errors.size() == 0;
 	}
-	
+
 	public Map<String,String> getErrors() {
 		return errors;
 	}
 
-	protected boolean checkEdges() {
+	protected boolean checkEdges(boolean checkControlFlowOnly) {
 		for (Edge edge: diagram.getEdges()) {
+			if (checkControlFlowOnly && !(edge instanceof ControlFlow || edge instanceof MessageFlow))
+				continue;
+			
 			if (edge.getSource() == null)
 				addError(edge, NO_SOURCE);
 				//return false;
@@ -91,8 +101,25 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 				if (((Node)edge.getSource()).getProcess() != ((Node)edge.getTarget()).getProcess())
 					addError(edge, DIFFERENT_PROCESS);
 			}
+			else if (edge instanceof MessageFlow) {
+				if (getPool(((Node)edge.getSource()).getParent()) == getPool(((Node)edge.getTarget()).getParent()))
+					addError(edge, SAME_PROCESS);
+			}
 		}
 		return true;
+	}
+
+	protected Pool getPool(Container container) {
+		while (container != null && !(container instanceof Pool) && !(container instanceof BPMNDiagram)) {
+			if (container instanceof Node)
+				container = ((Node)container).getParent();
+			else
+				return null;
+		}
+		if (container instanceof Pool)
+			return (Pool)container;
+		else
+			return null;
 	}
 
 	protected boolean checkNodesRecursively(Container container) {

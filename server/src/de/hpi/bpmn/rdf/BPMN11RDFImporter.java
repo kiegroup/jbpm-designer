@@ -30,7 +30,6 @@ import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.EndSignalEvent;
 import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn.Event;
-import de.hpi.bpmn.ExecDataObject;
 import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateCancelEvent;
 import de.hpi.bpmn.IntermediateCompensationEvent;
@@ -61,6 +60,7 @@ import de.hpi.bpmn.TextAnnotation;
 import de.hpi.bpmn.UndirectedAssociation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
+import de.hpi.bpmn.exec.ExecDataObject;
 
 /**
  * Copyright (c) 2008 Gero Decker

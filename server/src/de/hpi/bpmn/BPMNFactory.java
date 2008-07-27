@@ -1,5 +1,7 @@
 package de.hpi.bpmn;
 
+import de.hpi.bpmn.exec.ExecDataObject;
+
 public class BPMNFactory {
 	
 	public BPMNDiagram createBPMNDiagram() {
