@@ -217,6 +217,18 @@
 		<url-pattern>/stepthroughchecker</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<display-name>XForms Export</display-name>
+		<servlet-name>XFormsExportServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.XFormsExportServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>XFormsExportServlet</servlet-name>
+		<url-pattern>/xforms</url-pattern>
+	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>/server</welcome-file>
 	</welcome-file-list>

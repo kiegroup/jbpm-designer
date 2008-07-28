@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   width="56"
+   height="24"
+   version="1.0">
+  <defs></defs>
+   <g oryx:minimumSize="54 22" oryx:maximumSize="54 500" >
+    <rect oryx:anchor="top" oryx:resize="vertical" x="0" y="0" width="54" height="30" stroke="black" stroke-width="1" fill="#FFA8A8" />
+    
+  </g>
+</svg>
