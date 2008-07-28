@@ -41,15 +41,21 @@ ORYX.Core.Bounds = Clazz.extend({
 		this.a = {};
 		this.b = {};
 		this.set.apply(this, arguments);
+		this.suspendChange = false;
+		this.changedWhileSuspend = false;
 	},
 	
 	/**
 	 * Calls all registered callbacks.
 	 */
-	_changed: function() {
-		this._changedCallbacks.each(function(callback) {
-			callback();
-		});
+	_changed: function(sizeChanged) {
+		if(!this.suspendChange) {
+			this._changedCallbacks.each(function(callback) {
+				callback(this, sizeChanged);
+			}.bind(this));
+			this.changedWhileSuspend = false;
+		} else
+			this.changedWhileSuspend = true;
 	},
 	
 	/**
@@ -140,7 +146,7 @@ ORYX.Core.Bounds = Clazz.extend({
 		}
 		
 		if(changed) {
-			this._changed();
+			this._changed(true);
 		}
 	},
 	
@@ -179,6 +185,7 @@ ORYX.Core.Bounds = Clazz.extend({
 	 * or
 	 * @param {Number} x
 	 * @param {Number} y
+	 * 
 	 */
 	moveBy: function() {
 		var changed = false;
@@ -249,7 +256,7 @@ ORYX.Core.Bounds = Clazz.extend({
 			this.a = c;
 			this.b = d;
 			
-			this._changed();
+			this._changed(true);
 		}
 	},
 	
@@ -264,7 +271,7 @@ ORYX.Core.Bounds = Clazz.extend({
 			((this.a.x > this.b.x) ? this.a : this.b).x += p.x;
 			((this.b.y > this.a.y) ? this.b : this.a).y += p.y;
 			
-			this._changed();
+			this._changed(true);
 		}
 	},
 	
@@ -274,8 +281,13 @@ ORYX.Core.Bounds = Clazz.extend({
 	 */
 	widen: function(x) {
 		if (x !== 0) {
+			this.suspendChange = true;
 			this.moveBy({x: -x, y: -x});
 			this.extend({x: 2*x, y: 2*x});
+			this.suspendChange = false;
+			if(this.changedWhileSuspend) {
+				this._changed(true);
+			}
 		}
 	},
 	
