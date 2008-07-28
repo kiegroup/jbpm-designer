@@ -1,0 +1,52 @@
+@namespace xf url("http://www.w3.org/2002/xforms");
+@namespace url("http://www.w3.org/1999/xhtml");
+
+xf|input, 
+xf|secret, 
+xf|textarea, 
+xf|output, 
+xf|trigger, 
+xf|submit {
+	display: table-cell;
+	line-height: 1em;
+	padding-right: 10px;
+	padding-bottom: 20px;
+}
+
+xf|input > xf|label, 
+xf|secret > xf|label, 
+xf|textarea > xf|label, 
+xf|output > xf|label, 
+xf|trigger > xf|label, 
+xf|submit > xf|label {
+	display: table-caption;
+	text-align: left;
+	font-family: Ariel, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: small;
+}
+
+xf|group {
+	display: table-cell;
+	line-height: 1em;
+	padding: 10px 10px 10px 10px;
+	border: 1px dashed grey;
+}
+
+xf|group > xf|label {
+	display: table-caption;
+	text-align: left;
+	font-family: Ariel, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: small;
+}
+ 
+*:required {
+	background-color: yellow;
+}
+ 
+*:invalid  {
+	background-color: pink;
+}	
+
+

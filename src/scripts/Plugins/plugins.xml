@@ -80,6 +80,16 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 		</plugin>
+		
+		<!-- plugins for XForms editor --> 
+		<!-- 
+		<plugin source="xformsexport.js" name="ORYX.Plugins.XFormsExport">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+		</plugin>	
+		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+		</plugin>
+		-->
 	
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
 		
