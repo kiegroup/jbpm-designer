@@ -146,8 +146,6 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"conditional_start",
-				"default_start",
 				"tc",
 				"fromtoall",
 				"FromEventbasedGateway"
@@ -201,13 +199,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -316,8 +353,41 @@
 					"value":"",
 					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
-					"optional": 	true,
-					"length":""
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"value",
+							"name":"Value",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true,
+						},
+					]
 				},
 				{
 					"id":"inputSets",
@@ -776,8 +846,6 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"conditional_start",
-				"default_start",
 				"tc",
 				"fromtoall"
 			],
@@ -830,13 +898,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -945,8 +1052,41 @@
 					"value":"",
 					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
-					"optional": 	true,
-					"length":""
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"value",
+							"name":"Value",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true,
+						},
+					]
 				},
 				{
 					"id":"inputSets",
@@ -1371,8 +1511,6 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"conditional_start",
-				"default_start",
 				"tc",
 				"fromtoall",
 				"canContainArtifacts"
@@ -1426,13 +1564,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -1541,8 +1718,41 @@
 					"value":"",
 					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
-					"optional": 	true,
-					"length":""
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"value",
+							"name":"Value",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true,
+						},
+					]
 				},
 				{
 					"id":"inputSets",
@@ -1964,8 +2174,6 @@
 				"sequence_start",
 				"sequence_end",
 				"tc",
-				"conditional_start",
-				"default_start",
 				"fromtoall"
 			],
 			"properties": [
@@ -2015,13 +2223,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2218,13 +2465,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2337,7 +2623,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2388,13 +2673,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2487,7 +2811,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2538,13 +2861,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2672,7 +3034,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2723,13 +3084,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2879,16 +3279,50 @@
 						return lane.bounds.upperLeft().y;
 					});
 					
+					
 					var shapeWidth = shape.bounds.width();
+
 					lanes.each(function(lane) {
-						if(lane.isChanged) {
+						if(lane.isChanged)
 							shapeWidth = lane.bounds.width() + 30;
-						}
 					});
+					
+					
+					// get deepest childs in each branch
+					var firstLanes = lanes.clone();
+					var turn = 1;
+						do {
+							
+							var allChildLanes = new Array();
+							var parentLanes = lanes.findAll(function(lane) {
+							
+								var childLanes = lane.getChildNodes(false).findAll(function(node) {
+									return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
+									});
+							
+									if(childLanes.length > 0) {
+										allChildLanes = allChildLanes.concat(childLanes);
+										return true;
+									}
+									});
+								
+								// set bounds of deepest child lanes
+								var shapeUpperLeft = shape.bounds.upperLeft();
+								allChildLanes.each(function(lane) {
+									var upperLeft = lane.bounds.upperLeft();
+									var lowerRight = lane.bounds.lowerRight();
+									lowerRight.x = shapeWidth-30*turn;
+									lane.bounds.set(upperLeft, lowerRight);
+								});
+							
+							lanes = allChildLanes.clone();
+							turn++;
+							
+						} while(parentLanes.length > 0);
 					
 					var shapeHeight = 0;
 					var topBound = 0;
-					lanes.each(function(lane) {
+					firstLanes.each(function(lane) {
 						var ul = lane.bounds.upperLeft();
 						var lr = lane.bounds.lowerRight();
 						ul.y = shapeHeight;
@@ -3559,10 +3993,9 @@
 					
 					lanes.each(function(lane) {
 						if(lane.isChanged) {
-							shapeWidth = lane.bounds.width() + 30;
+							shapeWidth = lane.bounds.width()+30;
 						}
 					});
-					
 					
 					var shapeHeight = 0;
 					var topBound = 0;
@@ -3961,11 +4394,43 @@
 					"type":"String",
 					"title":"Properties",
 					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":undefined,
-					"wrapLines":true
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
+					"readonly": 	false,
+					"optional": 	false,
+					"complexItems": [
+					{
+						"id":"name",
+						"name":"Name",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false 
+					},
+					{
+						"id":"type",
+						"name":"Type",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false,
+					},
+					{
+						"id":"value",
+						"name":"Value",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false,
+					},
+					{
+						"id":"correlation",
+						"name":"Correlation",
+						"type":"Boolean",
+						"value":"false",
+						"width":100,
+						"optional":true,
+					},
+					]
 				},
 				{
 					"id":"requiredForStart",
@@ -4061,13 +4526,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4188,13 +4692,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4355,13 +4898,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4502,13 +5084,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4628,13 +5249,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"documentation",
@@ -4787,13 +5447,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4928,13 +5627,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5070,13 +5808,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5249,13 +6026,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5430,13 +6246,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5589,13 +6444,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5737,13 +6631,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5873,13 +6806,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6021,13 +6993,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6171,13 +7182,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6322,13 +7372,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6483,13 +7572,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6646,13 +7774,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6796,13 +7963,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6944,13 +8150,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7102,13 +8347,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7261,13 +8545,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7386,13 +8709,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7551,13 +8913,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7684,13 +9085,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7808,13 +9248,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7943,13 +9422,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -8078,13 +9596,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -8202,13 +9759,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -8269,7 +9865,7 @@
 			"title":"Sequence Flow",
 			"description":"",
 			"groups":["Connecting Objects"],
-			"view":"connection/connection.sequenceflow.normal.svg",
+			"view":"connection/connection.sequenceflow.svg",
 			"icon":"new_sequenceflow.png",
 			"roles": [
 			],
@@ -8319,105 +9915,7 @@
 					"length":""
 				},
 				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"ConditionType",
-					"type":"String",
-					"title":"ConditionType",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"quantity",
-					"type":"Integer",
-					"title":"Quantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"ConditionalFlow",
-			"title":"Conditional Flow",
-			"description":"",
-			"groups":["Connecting Objects"],
-			"view":"connection/connection.sequenceflow.conditional.svg",
-			"icon":"new_conditionalflow.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
+					"id":"sourceRef",
 					"type":"String",
 					"title":"SourceRef",
 					"value":"",
@@ -8427,7 +9925,7 @@
 					"length":""
 				},
 				{
-					"id":"target",
+					"id":"targetRef",
 					"type":"String",
 					"title":"TargetRef",
 					"value":"",
@@ -8438,13 +9936,32 @@
 				},
 				{
 					"id":"ConditionType",
-					"type":"String",
+					"type":"Choice",
 					"title":"ConditionType",
-					"value":"Expression",
-					"description":"",
-					"readonly":true,
+					"value":"None",
+					"description":"Determine the typ of the flow object.",
+					"readonly":false,
 					"optional":false,
-					"length":""
+					"items": [
+						{
+							"id":"none",
+							"title":"none",
+							"value":"None",
+							"refToView":""
+						},
+						{
+							"id":"expression",
+							"title":"expression",
+							"value":"Expression",
+							"refToView":"conditional"
+						},
+						{
+							"id":"default",
+							"title":"default",
+							"value":"Default",
+							"refToView":"default"
+						}
+					]
 				},
 				{
 					"id":"ConditionExpression",
@@ -8453,104 +9970,6 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"quantity",
-					"type":"Integer",
-					"title":"Quantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"DefaultFlow",
-			"title":"Default Flow",
-			"description":"",
-			"groups":["Connecting Objects"],
-			"view":"connection/connection.sequenceflow.default.svg",
-			"icon":"new_defaultflow.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"SourceRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"TargetRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"ConditionType",
-					"type":"String",
-					"title":"ConditionType",
-					"value":"Default",
-					"description":"",
-					"readonly":true,
 					"optional":false,
 					"length":""
 				},
@@ -8926,28 +10345,6 @@
 				"connects": [
 					{
 						"from":"sequence_start",
-						"to":["sequence_end"]
-					},
-					{
-						"from":"Exclusive_Eventbased_Gateway",
-						"to":["FromEventbasedGateway"]
-					}
-				]
-			},
-			{
-				"role":"DefaultFlow",
-				"connects": [
-					{
-						"from":"default_start",
-						"to":["sequence_end"]
-					}
-				]
-			},
-			{
-				"role":"ConditionalFlow",
-				"connects": [
-					{
-						"from":"conditional_start",
 						"to":["sequence_end"]
 					},
 					{
