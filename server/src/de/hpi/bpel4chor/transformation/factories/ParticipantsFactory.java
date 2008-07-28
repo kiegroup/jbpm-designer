@@ -777,7 +777,7 @@ public class ParticipantsFactory {
 					refDataObject = this.diagram.getLoopCounter(source);
 					if (refDataObject == null) {
 						refDataObject = generateLoopCounterRef(source);
-						// eventuell automatisch generieren, aber dann auch in Diagram einfügen,
+						// eventuell automatisch generieren, aber dann auch in Diagram einfuegen,
 						// damit er bei der Generierung des message flows bekannt ist
 					}
 				}
