@@ -174,14 +174,6 @@ public class BPMNFactory {
 		return new MessageFlow();
 	}
 
-	public DefaultFlow createDefaultFlow() {
-		return new DefaultFlow();
-	}
-
-	public ConditionalFlow createConditionalFlow() {
-		return new ConditionalFlow();
-	}
-
 	public Association createAssociation() {
 		return new Association();
 	}

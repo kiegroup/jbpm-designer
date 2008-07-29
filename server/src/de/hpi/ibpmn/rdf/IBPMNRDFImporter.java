@@ -14,10 +14,9 @@ import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.ComplexGateway;
-import de.hpi.bpmn.ConditionalFlow;
 import de.hpi.bpmn.Container;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.DataObject;
-import de.hpi.bpmn.DefaultFlow;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndCancelEvent;
 import de.hpi.bpmn.EndCompensationEvent;
@@ -30,20 +29,19 @@ import de.hpi.bpmn.Event;
 import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateCancelEvent;
 import de.hpi.bpmn.IntermediateCompensationEvent;
+import de.hpi.bpmn.IntermediateConditionalEvent;
 import de.hpi.bpmn.IntermediateErrorEvent;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.IntermediateLinkEvent;
 import de.hpi.bpmn.IntermediateMultipleEvent;
 import de.hpi.bpmn.IntermediatePlainEvent;
-import de.hpi.bpmn.IntermediateConditionalEvent;
 import de.hpi.bpmn.IntermediateTimerEvent;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
-import de.hpi.bpmn.SequenceFlow;
+import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartLinkEvent;
 import de.hpi.bpmn.StartMultipleEvent;
 import de.hpi.bpmn.StartPlainEvent;
-import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartTimerEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.TextAnnotation;
@@ -564,13 +562,15 @@ public class IBPMNRDFImporter {
 	}
 
 	protected void addDefaultFlow(Node node, ImportContext c) {
-		DefaultFlow flow = factory.createDefaultFlow();
+		SequenceFlow flow = factory.createSequenceFlow();
+		flow.setConditionType(SequenceFlow.ConditionType.DEFAULT);
 		c.diagram.getEdges().add(flow);
 		setConnections(flow, node, c);
 	}
 
 	protected void addConditionalFlow(Node node, ImportContext c) {
-		ConditionalFlow flow = factory.createConditionalFlow();
+		SequenceFlow flow = factory.createSequenceFlow();
+		flow.setConditionType(SequenceFlow.ConditionType.EXPRESSION);
 		c.diagram.getEdges().add(flow);
 		setConnections(flow, node, c);
 	}

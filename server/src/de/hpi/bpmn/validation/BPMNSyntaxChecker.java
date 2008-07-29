@@ -6,7 +6,7 @@ import java.util.Map;
 import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.ControlFlow;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
@@ -88,7 +88,7 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 
 	protected boolean checkEdges(boolean checkControlFlowOnly) {
 		for (Edge edge: diagram.getEdges()) {
-			if (checkControlFlowOnly && !(edge instanceof ControlFlow || edge instanceof MessageFlow))
+			if (checkControlFlowOnly && !(edge instanceof SequenceFlow || edge instanceof MessageFlow))
 				continue;
 			
 			if (edge.getSource() == null)
@@ -97,7 +97,7 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 			else if (edge.getTarget() == null) 
 				addError(edge, NO_TARGET);
 				//return false;
-			else if (edge instanceof ControlFlow) {
+			else if (edge instanceof SequenceFlow) {
 				if (((Node)edge.getSource()).getProcess() != ((Node)edge.getTarget()).getProcess())
 					addError(edge, DIFFERENT_PROCESS);
 			}
@@ -195,14 +195,14 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 
 	protected boolean hasIncomingControlFlow(Node node) {
 		for (Edge edge: node.getIncomingEdges())
-			if (edge instanceof ControlFlow)
+			if (edge instanceof SequenceFlow)
 				return true;
 		return false;
 	}
 
 	protected boolean hasOutgoingControlFlow(Node node) {
 		for (Edge edge: node.getOutgoingEdges())
-			if (edge instanceof ControlFlow)
+			if (edge instanceof SequenceFlow)
 				return true;
 		return false;
 	}

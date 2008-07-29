@@ -8,7 +8,7 @@ import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.ControlFlow;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
@@ -20,7 +20,6 @@ import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
@@ -553,17 +552,17 @@ public abstract class Converter {
 	// utility methods
 	// ********************************************************************
 
-	public ControlFlow getIncomingSequenceFlow(Node node) {
+	public SequenceFlow getIncomingSequenceFlow(Node node) {
 		for (Edge edge : node.getIncomingEdges())
-			if (edge instanceof ControlFlow)
-				return (ControlFlow) edge;
+			if (edge instanceof SequenceFlow)
+				return (SequenceFlow) edge;
 		return null;
 	}
 
-	public ControlFlow getOutgoingSequenceFlow(Node node) {
+	public SequenceFlow getOutgoingSequenceFlow(Node node) {
 		for (Edge edge : node.getOutgoingEdges())
-			if (edge instanceof ControlFlow)
-				return (ControlFlow) edge;
+			if (edge instanceof SequenceFlow)
+				return (SequenceFlow) edge;
 		return null;
 	}
 

@@ -16,9 +16,8 @@ import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.ComplexGateway;
-import de.hpi.bpmn.ConditionalFlow;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.DefaultFlow;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndCancelEvent;
 import de.hpi.bpmn.EndCompensationEvent;
@@ -46,7 +45,6 @@ import de.hpi.bpmn.Lane;
 import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartLinkEvent;
 import de.hpi.bpmn.StartMessageEvent;
@@ -265,10 +263,6 @@ public class BPMN11RDFImporter {
 				addSequenceFlow(edgeNode, c);
 			} else if (type.equals("MessageFlow")) {
 				addMessageFlow(edgeNode, c);
-			} else if (type.equals("DefaultFlow")) {
-				addDefaultFlow(edgeNode, c);
-			} else if (type.equals("ConditionalFlow")) {
-				addConditionalFlow(edgeNode, c);
 			} else if (type.equals("Association_Unidirectional")) {
 				addAssociation(edgeNode, c);
 			} else if (type.equals("Association_Bidirectional")) {
@@ -738,23 +732,28 @@ public class BPMN11RDFImporter {
 	protected void addSequenceFlow(Node node, ImportContext c) {
 		SequenceFlow flow = factory.createSequenceFlow();
 		c.diagram.getEdges().add(flow);
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				if (attribute.equals("conditiontype")) {
+					String ctype = getContent(n);
+					if (ctype.equals("Expression"))
+						flow.setConditionType(SequenceFlow.ConditionType.EXPRESSION);
+					else if (ctype.equals("Default"))
+						flow.setConditionType(SequenceFlow.ConditionType.DEFAULT);
+				}
+			}
+		}
 		setConnections(flow, node, c);
 	}
 
 	protected void addMessageFlow(Node node, ImportContext c) {
 		MessageFlow flow = factory.createMessageFlow();
-		c.diagram.getEdges().add(flow);
-		setConnections(flow, node, c);
-	}
-
-	protected void addDefaultFlow(Node node, ImportContext c) {
-		DefaultFlow flow = factory.createDefaultFlow();
-		c.diagram.getEdges().add(flow);
-		setConnections(flow, node, c);
-	}
-
-	protected void addConditionalFlow(Node node, ImportContext c) {
-		ConditionalFlow flow = factory.createConditionalFlow();
 		c.diagram.getEdges().add(flow);
 		setConnections(flow, node, c);
 	}

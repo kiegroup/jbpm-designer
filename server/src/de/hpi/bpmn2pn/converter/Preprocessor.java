@@ -11,7 +11,7 @@ import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.ControlFlow;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.EndPlainEvent;
@@ -19,7 +19,6 @@ import de.hpi.bpmn.Event;
 import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.StartPlainEvent;
 import de.hpi.bpmn.SubProcess;
@@ -83,7 +82,7 @@ public class Preprocessor {
 	
 					// reroute incoming branches
 					for (Edge edge: new ArrayList<Edge>(node.getIncomingEdges()))
-						if (edge instanceof ControlFlow)
+						if (edge instanceof SequenceFlow)
 							edge.setTarget(g);
 					
 					// add new sequence flow
@@ -101,7 +100,7 @@ public class Preprocessor {
 	
 					// reroute outgoing branches
 					for (Edge edge: new ArrayList<Edge>(node.getOutgoingEdges()))
-						if (edge instanceof ControlFlow)
+						if (edge instanceof SequenceFlow)
 							edge.setSource(g);
 					
 					// add new sequence flow
@@ -125,7 +124,7 @@ public class Preprocessor {
 	protected int countSequenceFlows(List<Edge> edges) {
 		int count = 0;
 		for (Edge edge: edges)
-			if (edge instanceof ControlFlow)
+			if (edge instanceof SequenceFlow)
 				count++;
 		return count;
 	}

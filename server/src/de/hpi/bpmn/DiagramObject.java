@@ -3,9 +3,6 @@ package de.hpi.bpmn;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hpi.petrinet.Place;
-import de.hpi.petrinet.Transition;
-
 /**
  * This is the parent class for Node and Edge. 
  * Why could edges have incoming and outgoing edges? Well, e.g. SequenceFlow can have an undirected association attached
