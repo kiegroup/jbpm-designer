@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
+
+    <property file="build.properties" />
     
     <target name="clean">
         <delete dir="dist"/>
@@ -99,7 +101,7 @@
         </javac>
     </target>
     
-    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server">
+    <target name="build-editor-core">
         
         <mkdir dir="build/tmp"/>
         <copy todir='build' file='src/scripts/Core/config.js'/>
@@ -158,6 +160,8 @@
         </echo>
         
     </target>
+
+    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server, build-editor-core" />
     
     <target name='compress'>
         
@@ -248,5 +252,83 @@
     </target>
     
     <target name="all" depends="build, examples, compress, dist"/>
-    
+
+
+    <target name="deploy">
+        <copy file="dist/oryx.war" todir="${deploymentdir}" />
+    </target>
+
+    <target name="deploy-stencilsets">
+        <copy todir='${deploymentdir}/oryx/stencilsets'>
+            <fileset dir="data/stencilsets"/>
+        </copy>
+        <echo>
+            Copied stencilsets into deployment destination
+        </echo>
+    </target>
+
+    <target name="undeploy">
+        <delete file="${deploymentdir}/oryx.war" />
+    </target>
+
+    <!-- tasks for PoEM Backend -->
+    <target name="clean-backend">
+        <exec executable="buildr" dir="poem-jvm">
+            <arg value="clean"/>
+        </exec>
+    </target>
+
+    <target name="build-backend">
+        <exec executable="buildr" dir="poem-jvm">
+            <arg value="package"/>
+        </exec>
+    </target>
+
+    <target name="deploy-backend">
+        <copy file="poem-jvm/backend/target/poem-backend-1.0.war" tofile="${deploymentdir}/backend.war" />
+    </target>
+
+    <target name="undeploy-backend">
+        <delete file="${deploymentdir}/backend.war" />
+    </target>
+
+    <!-- tasks for backend database -->
+    <target name="clean-db">
+        <exec executable="buildr" dir="poem-jvm">
+            <arg value="clean-postgres"/>
+        </exec>
+    </target>
+
+    <target name="build-db">
+        <exec executable="buildr" dir="poem-jvm">
+            <arg value="migrate"/>
+        </exec>
+    </target>
+
+    <target name="dump-db">
+        <exec executable="buildr" dir="poem-jvm">
+            <arg value="dump-db"/>
+        </exec>
+    </target>
+
+    <!-- combined tasks for editor and backend -->
+    <target name="rebuild-all" depends="clean, all, clean-backend, build-backend" />
+
+    <target name="rebuild-all-parallel">
+        <parallel>
+            <sequential>
+                <antcall target="clean" />
+                <antcall target="all" />
+            </sequential>
+            <sequential>
+                <antcall target="clean-backend" />
+                <antcall target="build-backend" />
+            </sequential>
+        </parallel>
+    </target>
+
+    <target name="deploy-all" depends="deploy, deploy-backend" /> 
+
+    <target name="undeploy-all" depends="undeploy, undeploy-backend" /> 
+
 </project>
