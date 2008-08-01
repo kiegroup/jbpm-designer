@@ -101,8 +101,8 @@ end
 task 'dump-db' do
   shared = %Q{-h #{db_config['host']} #{db_config['database']}}
   user = "-U #{db_config['superuser']}" if db_config['superuser']
-  puts "pg_dump --clean --file=../db/database_dump_raw.sql --format=plain #{user} #{shared}"
-  puts %x{pg_dump --clean --file=../db/database_dump_raw.sql --format=plain #{user} #{shared}}
+  puts "pg_dump --clean --file=database_dump_raw.sql --format=plain #{user} #{shared}"
+  puts %x{pg_dump --clean --file=database_dump_raw.sql --format=plain #{user} #{shared}}
 end
 
 # Helper to read the config, notice hibernate has it's own config (go generate!)
