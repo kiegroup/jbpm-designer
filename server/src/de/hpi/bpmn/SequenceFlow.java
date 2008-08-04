@@ -1,5 +1,7 @@
 package de.hpi.bpmn;
 
+import de.hpi.bpmn.serialization.BPMNSerialization;
+
 public class SequenceFlow extends Edge {
 	
 	public enum ConditionType {
@@ -16,4 +18,8 @@ public class SequenceFlow extends Edge {
 		this.conditionType = conditionType;
 	}
 
+	@Override
+	public StringBuilder getSerialization(BPMNSerialization serialization) {
+		return serialization.getSerializationForDiagramObject(this);
+	}
 }

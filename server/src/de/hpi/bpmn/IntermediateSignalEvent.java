@@ -1,5 +1,7 @@
 package de.hpi.bpmn;
 
+import de.hpi.bpmn.serialization.BPMNSerialization;
+
 public class IntermediateSignalEvent extends IntermediateEvent {
 
 	protected boolean isThrowing;
@@ -12,4 +14,8 @@ public class IntermediateSignalEvent extends IntermediateEvent {
 		this.isThrowing = isThrowing;
 	}
 
+	@Override
+	public StringBuilder getSerialization(BPMNSerialization serialization) {
+		return serialization.getSerializationForDiagramObject(this);
+	}
 }
