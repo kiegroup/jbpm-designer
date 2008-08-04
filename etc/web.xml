@@ -105,6 +105,16 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<display-name>Oryx BPEL EXPORTER</display-name>
+		<servlet-name>BPELExporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPELExporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPELExporter</servlet-name>
+		<url-pattern>/bpelexporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<display-name>
 			Oryx Desynchronizability Checker
 		</display-name>

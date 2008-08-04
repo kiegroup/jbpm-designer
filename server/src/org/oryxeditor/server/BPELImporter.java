@@ -1,14 +1,22 @@
 
 package org.oryxeditor.server;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 
 import org.apache.commons.fileupload.FileItem;
@@ -61,14 +69,13 @@ public class BPELImporter extends HttpServlet {
     	    e.printStackTrace();
     	}
     	
-    	
     	// No isMultipartContent => Error
     	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
     	if (!isMultipartContent){
     		printError(out, "No Multipart Content transmitted.");
 			return ;
     	}
-  
+    	
     	// Get the uploaded file
     	final FileItemFactory factory = new DiskFileItemFactory();
     	final ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
@@ -84,26 +91,83 @@ public class BPELImporter extends HttpServlet {
     		handleException(out, e); 
 	   		return;
     	} 
-    	
     	final FileItem fileItem = (FileItem)items.get(0);
     		
-    	
-    	// Get filename and content
+    	// Get filename and content (needed to distinguish between EPML and AML)
     	final String fileName = fileItem.getName();
     	String content = fileItem.getString();
-    	
-    	System.out.println("file name : " + fileName);
-    	System.out.println("content : " + content);
-    	
-    	try{
-        	out.print("{success:true, content:'" + "file name : " + fileName);
-        	out.print("  text : " + content + "'}");
-    	} catch (Exception e){
-			handleException(out, e); 
-			return;
+
+
+    	// Get the input stream	
+    	final InputStream inputStream;
+    	try {
+    		inputStream = fileItem.getInputStream();
+    	} catch (IOException e){ 
+    		handleException(out, e); 
+    		return;
     	}
-    	System.out.println("File imported...");
+	   		
+    	// epel2eRDF XSLT source
+    	final File bpel2eRDFxsltFile = new File("../webapps/oryx/xslt/BPEL2eRDF.xslt");
+    	final Source bpel2eRDFxsltSource = new StreamSource(bpel2eRDFxsltFile);	
+
+    	// Transformer Factory
+    	final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+    	// Get the bpel source
+    	final Source bpelSource;
+
+    	if (fileName.endsWith(".bpel")){
+    		bpelSource = new StreamSource(inputStream);
+    	} else {
+    		printError(out, "No file with .bepl extension uploaded.");
+    		return ;
+    	}
+    		
+    	// Get the result string
+    	String resultString = null;
+    	try {
+    		Transformer transformer = transformerFactory.newTransformer(bpel2eRDFxsltSource);
+    		StringWriter writer = new StringWriter();
+    		transformer.transform(bpelSource, new StreamResult(writer));
+    		resultString = writer.toString();
+    	} catch (Exception e){
+    		handleException(out, e); 
+    		return;
+    	}
+
+    	if (resultString != null){
+    		try {
+    			if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>")){
+    				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>", "");
+    				resultString = resultString.replace("</root>", "");
+    				resultString = resultString.replaceAll("<", "&lt;");
+    				resultString = resultString.replaceAll(">", "&gt;");
+    		        out.print("{success:true, content:'"+resultString+"'}"); 
+    		        return ;
+    			} else if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>")) {
+    				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>", "");
+    				resultString = resultString.replace("</root>", "");
+    				resultString = resultString.replaceAll("<", "&lt;");
+    				resultString = resultString.replaceAll(">", "&gt;");
+    		        out.print("{success:true, content:'"+resultString+"'}"); 
+    		        return ;
+    			} else {
+    				printError(out, "Error during transformation.");
+    				return ;
+    			}
+
+    		} catch (Exception e){
+    			handleException(out, e); 
+    			return;
+    		}
+    	}
+    	
+    	System.out.println("imported");
+    	System.out.println("File name:" + fileName);
+    	System.out.println("Content:" + resultString);
     }
+    
     
     
     private void printError(PrintWriter out, String err){

@@ -120,6 +120,24 @@ ORYX.Plugins.BpelImporter = Clazz.extend({
        					});*/
 
 		      		}
+/*			        success: function(f,a){
+						dialog.hide();
+						var erdf = a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}"));
+		        		erdf = erdf.replace(/&lt;/g, "<");
+						erdf = erdf.replace(/&gt;/g, ">");
+						erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
+						this.loadContent(erdf);
+						
+		      		}.bind(this),
+					failure: function(f,a){
+						dialog.hide();
+						Ext.MessageBox.show({
+           					title: 'Error',
+          	 				msg: a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}")),
+           					buttons: Ext.MessageBox.OK,
+           					icon: Ext.MessageBox.ERROR
+       					});
+		      		}*/
 		  		});
 		  	}
 		})

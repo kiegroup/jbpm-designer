@@ -5407,7 +5407,7 @@
 		{
 		
 			"type": "node",
-			"id":"compensante",
+			"id":"compensate",
 			"title":"compensate",
 			"description":"One Compensate",
 			"groups":["Compensate"],
@@ -6114,7 +6114,7 @@
 			"groups":["Handler EventHandlers"],
 			"view":"handler/node.handler.eventHandlers.svg",
 			"icon":"new_task.png",
-			"roles": [],
+			"roles": ["eventHandlers"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
 				
@@ -7027,7 +7027,7 @@
 			},
 			{ 
 			    "role":"forEach",
-				"contains": ["completionCondition","scope"]
+				"contains": ["scope"]
 			},
 			{
 				"role":"pick",
