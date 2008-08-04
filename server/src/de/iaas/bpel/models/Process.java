@@ -29,7 +29,6 @@ public class Process extends Node implements Container{
 	
 	protected List<Node> childNodes;
 	
-	@Override
 	public List<Node> getChildNodes() {
 		if (childNodes == null)
 			childNodes = new ArrayList<Node>();

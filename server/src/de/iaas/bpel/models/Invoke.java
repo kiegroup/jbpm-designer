@@ -28,7 +28,6 @@ import java.util.List;
 public class Invoke extends BasicActivity implements Container{
 	protected List<Node> childNodes;
 	
-	@Override
 	public List<Node> getChildNodes() {
 		if (childNodes == null)
 			childNodes = new ArrayList<Node>();
