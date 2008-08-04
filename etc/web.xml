@@ -56,6 +56,19 @@
 -->
 
 	<servlet>
+		<display-name>BPEL Export</display-name>
+		<servlet-name>BPEL</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.BPEL4CHOR
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPEL</servlet-name>
+		<url-pattern>/bpel</url-pattern>
+	</servlet-mapping>
+	
+
+	<servlet>
 		<display-name>Oryx BPMN to PNML Export</display-name>
 		<servlet-name>ExportServlet</servlet-name>
 		<servlet-class>
@@ -80,7 +93,27 @@
 		<servlet-name>SimplePNMLExporter</servlet-name>
 		<url-pattern>/simplepnmlexporter</url-pattern>
 	</servlet-mapping>
-
+	
+	<servlet>
+		<display-name>Oryx BPEL IMPORTER</display-name>
+		<servlet-name>BPELImporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPELImporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPELImporter</servlet-name>
+		<url-pattern>/bpelimporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Oryx BPEL EXPORTER</display-name>
+		<servlet-name>BPELExporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPELExporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPELExporter</servlet-name>
+		<url-pattern>/bpelexporter</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<display-name>
 			Oryx Desynchronizability Checker
@@ -168,6 +201,42 @@
 	<servlet-mapping>
 		<servlet-name>AutoLayouter</servlet-name>
 		<url-pattern>/layouter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Step Through</display-name>
+		<servlet-name>StepThrough</servlet-name>
+		<servlet-class>
+			de.hpi.petrinet.stepthrough.StepThroughServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StepThrough</servlet-name>
+		<url-pattern>/stepthrough</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Step Through Checker</display-name>
+		<servlet-name>StepThroughChecker</servlet-name>
+		<servlet-class>
+			de.hpi.petrinet.stepthrough.StepThroughCheckerServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StepThroughChecker</servlet-name>
+		<url-pattern>/stepthroughchecker</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>XForms Export</display-name>
+		<servlet-name>XFormsExportServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.XFormsExportServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>XFormsExportServlet</servlet-name>
+		<url-pattern>/xforms</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>

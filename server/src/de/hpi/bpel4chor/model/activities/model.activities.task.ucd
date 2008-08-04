@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" foregroundRGB="255,255,255" description="" id="model.activities" metadata="uml2-1.0" initialized="true" scrolledX="352" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="EmptyTask" location="810,290" size="110,59" id="model.activities/EmptyTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="161,18"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Task&lt;-model.activities/EmptyTask" source="//@children.0" target="//@children.6" targetEnd="//@children.0/@sourceConnections.0/@children.1" sourceEnd="//@children.0/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="104,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="54,150"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="AssignTask" location="1110,360" size="112,59" id="model.activities/AssignTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="176,90"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/AssignTask" source="//@children.1" target="//@children.6" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="55,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="215,151"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showLiterals="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ServiceTask" location="1310,220" size="119,59" id="model.activities/ServiceTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="238,198"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Task&lt;-model.activities/ServiceTask" source="//@children.2" target="//@children.6" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="33,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="275,150"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="NoneTask" location="870,360" size="104,59" id="model.activities/NoneTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="157,18"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Task&lt;-model.activities/NoneTask" source="//@children.3" target="//@children.6" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="91,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="72,150"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FoldedTask" location="790,220" size="115,59" id="model.activities/FoldedTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="407,36"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Task&lt;-model.activities/FoldedTask" source="//@children.4" target="//@children.6" targetEnd="//@children.4/@sourceConnections.0/@children.1" sourceEnd="//@children.4/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="57,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="36,150" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SendTask" location="1227,360" size="104,59" id="model.activities/SendTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="274,198"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Task&lt;-model.activities/SendTask" source="//@children.5" target="//@children.6" targetEnd="//@children.5/@sourceConnections.0/@children.1" sourceEnd="//@children.5/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="8,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="234,150"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.0 //@children.7/@sourceConnections.0 //@children.5/@sourceConnections.0 //@children.8/@sourceConnections.0 //@children.2/@sourceConnections.0 //@children.3/@sourceConnections.0 //@children.0/@sourceConnections.0 //@children.4/@sourceConnections.0" name="Task" location="950,40" size="315,151" id="model.activities/Task">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="292,72">
+      <children xsi:type="editmodel:MethodEditModel" name="Task" id="model.activities/Task#Task(ZLutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Task" id="model.activities/Task#Task(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSourceFor" id="model.activities/Task#addSourceFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTargetFor" id="model.activities/Task#addTargetFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ValidateTask" location="980,360" size="124,59" id="model.activities/ValidateTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,18"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Task&lt;-model.activities/ValidateTask" source="//@children.7" target="//@children.6" targetEnd="//@children.7/@sourceConnections.0/@children.1" sourceEnd="//@children.7/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="61,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="91,151"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ReceiveTask" location="1290,290" size="122,59" id="model.activities/ReceiveTask">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="274,198"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Task&lt;-model.activities/ReceiveTask" source="//@children.8" target="//@children.6" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="255,150"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showLiterals="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=0" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

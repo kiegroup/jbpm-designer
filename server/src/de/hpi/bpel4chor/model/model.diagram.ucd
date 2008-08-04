@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="model-ai" foregroundRGB="255,255,255" description="" id="model" metadata="uml2-1.0" initialized="true" scrolledX="14" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="Diagram" location="40,40" size="494,836" id="model/Diagram" runTimeClassModel="getTargetNamespace(),getParticipantSetDataObjects(),addAssociation(Lmodel.connections.Association;),getStandardVariables(Lmodel.activities.Activity;Z),addParticipantReferenceDataObject(Lmodel.artifacts.ParticipantReferenceDataObject;),getGroundingFile(),getLoopCounter(Lmodel.activities.Activity;),setExpressionLanguage(Ljava.net.URI;),getPoolSets(),getQueryLanguage(),Diagram(),getCounterVariable(Lmodel.activities.BlockActivity;),getAssociatedCompensationHandler(Lmodel.activities.IntermediateEvent;),getMessageFlowWithSource(Ljava.lang.String;),getName(),getMessageFlowsWithSource(Ljava.lang.String;),getMessageFlows(),getAssociationsWithSource(Ljava.lang.String;Ljava.lang.String;Ljava.lang.Class;),getMessageVariable(Lmodel.activities.StartEvent;),getParticipantSetsWithName(Ljava.lang.String;),getParticipantReferencesWithName(Ljava.lang.String;),getObject(Ljava.lang.String;),getExpressionLanguage(),setQueryLanguage(Ljava.net.URI;),getCounterVariable(Lmodel.activities.Task;),getFaultVariable(Lmodel.activities.IntermediateEvent;),getMessageFlowsWithTarget(Ljava.lang.String;),addParticipantSetDataObject(Lmodel.artifacts.ParticipantSetDataObject;),setName(Ljava.lang.String;),setGroundingFile(Ljava.lang.String;),getPools(),putObject(Ljava.lang.String;Ljava.lang.Object;),setTargetNamespace(Ljava.lang.String;),getVariableDataObjects(),addVariableDataObject(Lmodel.artifacts.VariableDataObject;),addPoolSet(Lmodel.PoolSet;),addMessageFlow(Lmodel.connections.MessageFlow;),setId(Ljava.lang.String;),getParticipantRefDataObjects(),getId(),getAssociationsWithTarget(Ljava.lang.String;Ljava.lang.String;Ljava.lang.Class;),getLoopCounterSet(Lmodel.activities.Activity;),addPool(Lmodel.Pool;),getStandardVariable(Lmodel.activities.Activity;Z)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="471,792">
+      <children xsi:type="editmodel:MethodEditModel" name="Diagram" id="model/Diagram#Diagram()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addAssociation" id="model/Diagram#addAssociation(Lmodel.connections.Association;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addMessageFlow" id="model/Diagram#addMessageFlow(Lmodel.connections.MessageFlow;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addParticipantReferenceDataObject" id="model/Diagram#addParticipantReferenceDataObject(Lmodel.artifacts.ParticipantReferenceDataObject;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addParticipantSetDataObject" id="model/Diagram#addParticipantSetDataObject(Lmodel.artifacts.ParticipantSetDataObject;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addPool" id="model/Diagram#addPool(Lmodel.Pool;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addPoolSet" id="model/Diagram#addPoolSet(Lmodel.PoolSet;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addVariableDataObject" id="model/Diagram#addVariableDataObject(Lmodel.artifacts.VariableDataObject;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getAssociatedCompensationHandler" id="model/Diagram#getAssociatedCompensationHandler(Lmodel.activities.IntermediateEvent;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getAssociationsWithSource" id="model/Diagram#getAssociationsWithSource(Ljava.lang.String;Ljava.lang.String;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getAssociationsWithTarget" id="model/Diagram#getAssociationsWithTarget(Ljava.lang.String;Ljava.lang.String;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCounterVariable" id="model/Diagram#getCounterVariable(Lmodel.activities.Task;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCounterVariable" id="model/Diagram#getCounterVariable(Lmodel.activities.BlockActivity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpressionLanguage" id="model/Diagram#getExpressionLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFaultVariable" id="model/Diagram#getFaultVariable(Lmodel.activities.IntermediateEvent;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getGroundingFile" id="model/Diagram#getGroundingFile()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getId" id="model/Diagram#getId()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLoopCounter" id="model/Diagram#getLoopCounter(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLoopCounterSet" id="model/Diagram#getLoopCounterSet(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageFlowWithSource" id="model/Diagram#getMessageFlowWithSource(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageFlows" id="model/Diagram#getMessageFlows()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageFlowsWithSource" id="model/Diagram#getMessageFlowsWithSource(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageFlowsWithTarget" id="model/Diagram#getMessageFlowsWithTarget(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageVariable" id="model/Diagram#getMessageVariable(Lmodel.activities.StartEvent;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model/Diagram#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getObject" id="model/Diagram#getObject(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParticipantRefDataObjects" id="model/Diagram#getParticipantRefDataObjects()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParticipantReferencesWithName" id="model/Diagram#getParticipantReferencesWithName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParticipantSetDataObjects" id="model/Diagram#getParticipantSetDataObjects()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParticipantSetsWithName" id="model/Diagram#getParticipantSetsWithName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPoolSets" id="model/Diagram#getPoolSets()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPools" id="model/Diagram#getPools()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getQueryLanguage" id="model/Diagram#getQueryLanguage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStandardVariable" id="model/Diagram#getStandardVariable(Lmodel.activities.Activity;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStandardVariables" id="model/Diagram#getStandardVariables(Lmodel.activities.Activity;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTargetNamespace" id="model/Diagram#getTargetNamespace()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getVariableDataObjects" id="model/Diagram#getVariableDataObjects()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="putObject" id="model/Diagram#putObject(Ljava.lang.String;Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpressionLanguage" id="model/Diagram#setExpressionLanguage(Ljava.net.URI;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setGroundingFile" id="model/Diagram#setGroundingFile(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setId" id="model/Diagram#setId(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model/Diagram#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setQueryLanguage" id="model/Diagram#setQueryLanguage(Ljava.net.URI;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTargetNamespace" id="model/Diagram#setTargetNamespace(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model/PoolSet@poolSets+model/Diagram@" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="494,409" id="model/PoolSet@poolSets+model/Diagram@|model/Diagram#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="poolSets" location="0,29" id="model/PoolSet@poolSets+model/Diagram@|model/PoolSet#poolSets" multiplicityLabel="//@children.0/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.0/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - poolSets" location="560,428" size="52,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="608,456" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model/Pool@pools+model/Diagram@" source="//@children.0" target="//@children.2" targetEnd="//@children.0/@sourceConnections.1/@children.2" label="//@children.0/@sourceConnections.1/@children.0" sourceEnd="//@children.0/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="494,509" id="model/Pool@pools+model/Diagram@|model/Diagram#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="pools" location="0,29" id="model/Pool@pools+model/Diagram@|model/Pool#pools" multiplicityLabel="//@children.0/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.0/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - pools" location="597,528" size="36,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="629,556" size="4,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0" name="PoolSet" location="619,420" size="92,59" id="model/PoolSet" runTimeClassModel="PoolSet(Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="145,18"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.1" name="Pool" location="640,520" size="71,59" id="model/Pool" runTimeClassModel="addSelect(Ljava.lang.String;),getContainment(),getSelects(),getParticipantName(),setSelects(Ljava.util.List;),setContainment(Ljava.lang.String;),setParticipantName(Ljava.lang.String;),Pool(Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="244,144"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

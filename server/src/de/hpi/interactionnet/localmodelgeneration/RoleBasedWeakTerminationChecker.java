@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.hpi.PTnet.Marking;
-import de.hpi.PTnet.PTNetInterpreter;
+import de.hpi.PTnet.verification.PTNetInterpreter;
 import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.InteractionTransition;

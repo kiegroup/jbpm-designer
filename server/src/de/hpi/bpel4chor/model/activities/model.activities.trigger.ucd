@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="model.activities.trigger" foregroundRGB="255,255,255" description="" id="model.activities" metadata="uml2-1.0" initialized="true" scrolledX="695" scrolledY="375" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="Correlation" location="980,850" size="236,59" id="model.supporting/Correlation" runTimeClassModel="getSet(),iNITIATE_NO,pATTERN_REQUEST_RESPONSE,getInitiate(),pATTERN_REQUEST,setSet(Ljava.lang.String;),setPattern(Ljava.lang.String;),iNITIATE_YES,getPattern(),setInitiate(Ljava.lang.String;),pATTERN_RESPONSE,cORRELATIONS,Correlation(),iNITIATE_JOIN">
+    <children xsi:type="editmodel:CompartmentEditModel" size="212,126"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="158,126"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/Correlation@correlations+model.activities/TriggerResultMessage@" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="correlations" location="169,0" id="model.supporting/Correlation@correlations+model.activities/TriggerResultMessage@|model.supporting/Correlation#correlations" attachSource="true" multiplicityLabel="//@children.0/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.0/@sourceConnections.0/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - correlations" location="1156,866" size="67,14" fontInfo="Arial-8-0" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="1138,866" size="4,14" fontInfo="Arial-8-0" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="65,241" id="model.supporting/Correlation@correlations+model.activities/TriggerResultMessage@|model.activities/TriggerResultMessage#"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FromPart" location="1240,850" size="224,59" id="model.supporting/FromPart" runTimeClassModel="getPart(),fROM_PARTS,setToVariable(Ljava.lang.String;),getToVariable(),setPart(Ljava.lang.String;),FromPart()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="122,18"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="191,90"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="model.supporting/FromPart@fromParts+model.activities/TriggerResultMessage@" source="//@children.1" target="//@children.3" targetEnd="//@children.1/@sourceConnections.0/@children.2" label="//@children.1/@sourceConnections.0/@children.0" sourceEnd="//@children.1/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="fromParts" location="70,0" id="model.supporting/FromPart@fromParts+model.activities/TriggerResultMessage@|model.supporting/FromPart#fromParts" attachSource="true" multiplicityLabel="//@children.1/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.1/@sourceConnections.0/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - fromParts" location="1317,829" size="57,14" fontInfo="Arial-8-0" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="1299,829" size="4,14" fontInfo="Arial-8-0" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="226,241" id="model.supporting/FromPart@fromParts+model.activities/TriggerResultMessage@|model.activities/TriggerResultMessage#" roleLabel="//@children.1/@sourceConnections.0/@children.2/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" location="1303,829" size="0,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ResultError" location="825,581" size="211,133" id="model.activities/ResultError" runTimeClassModel="setErrorCode(Ljava.lang.String;),ResultError(),getErrorCode()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="188,54">
+      <children xsi:type="editmodel:MethodEditModel" name="ResultError" id="model.activities/ResultError#ResultError()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getErrorCode" id="model.activities/ResultError#getErrorCode()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setErrorCode" id="model.activities/ResultError#setErrorCode(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Trigger&lt;-model.activities/ResultError" source="//@children.2" target="//@children.4" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="201,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,32" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0 //@children.1/@sourceConnections.0" name="TriggerResultMessage" location="1084,581" size="297,241" id="model.activities/TriggerResultMessage" runTimeClassModel="setMessageExchange(Ljava.lang.String;),getFromParts(),TriggerResultMessage(),setOpaqueOutput(Z),setFromParts(Ljava.util.List;),getMessageExchange(),setCorrelations(Ljava.util.List;),getCorrelations(),isOpaqueOutput()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="274,162">
+      <children xsi:type="editmodel:MethodEditModel" name="TriggerResultMessage" id="model.activities/TriggerResultMessage#TriggerResultMessage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCorrelations" id="model.activities/TriggerResultMessage#getCorrelations()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromParts" id="model.activities/TriggerResultMessage#getFromParts()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageExchange" id="model.activities/TriggerResultMessage#getMessageExchange()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isOpaqueOutput" id="model.activities/TriggerResultMessage#isOpaqueOutput()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCorrelations" id="model.activities/TriggerResultMessage#setCorrelations(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromParts" id="model.activities/TriggerResultMessage#setFromParts(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMessageExchange" id="model.activities/TriggerResultMessage#setMessageExchange(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOpaqueOutput" id="model.activities/TriggerResultMessage#setOpaqueOutput(Z)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Trigger&lt;-model.activities/TriggerResultMessage" source="//@children.3" target="//@children.4" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="219,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="43,59"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.3/@sourceConnections.0 //@children.6/@sourceConnections.0 //@children.2/@sourceConnections.0 //@children.5/@sourceConnections.0" name="Trigger" location="1260,470" size="88,59" id="model.activities/Trigger" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TriggerTimer" location="1385,581" size="370,205" id="model.activities/TriggerTimer" runTimeClassModel="setRepeatEveryExpression(Lmodel.supporting.Expression;),getTimeDurationExpression(),getTimeDeadlineExpression(),getRepeatEveryExpression(),setTimeDurationExpression(Lmodel.supporting.Expression;),setTimeDeadlineExpression(Lmodel.supporting.Expression;),TriggerTimer()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="347,126">
+      <children xsi:type="editmodel:MethodEditModel" name="TriggerTimer" id="model.activities/TriggerTimer#TriggerTimer()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRepeatEveryExpression" id="model.activities/TriggerTimer#getRepeatEveryExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTimeDeadlineExpression" id="model.activities/TriggerTimer#getTimeDeadlineExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTimeDurationExpression" id="model.activities/TriggerTimer#getTimeDurationExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setRepeatEveryExpression" id="model.activities/TriggerTimer#setRepeatEveryExpression(Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTimeDeadlineExpression" id="model.activities/TriggerTimer#setTimeDeadlineExpression(Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTimeDurationExpression" id="model.activities/TriggerTimer#setTimeDurationExpression(Lmodel.supporting.Expression;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Trigger&lt;-model.activities/TriggerTimer" source="//@children.5" target="//@children.4" targetEnd="//@children.5/@sourceConnections.0/@children.1" sourceEnd="//@children.5/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="47,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="63,59"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ResultCompensation" location="870,690" size="204,169" id="model.activities/ResultCompensation" runTimeClassModel="getActivityId(),setActivity(Lmodel.activities.Activity;),ResultCompensation(Ljava.lang.String;),getActivity(),ResultCompensation()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="181,90">
+      <children xsi:type="editmodel:MethodEditModel" name="ResultCompensation" id="model.activities/ResultCompensation#ResultCompensation()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="ResultCompensation" id="model.activities/ResultCompensation#ResultCompensation(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActivity" id="model.activities/ResultCompensation#getActivity()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActivityId" id="model.activities/ResultCompensation#getActivityId()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setActivity" id="model.activities/ResultCompensation#setActivity(Lmodel.activities.Activity;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Trigger&lt;-model.activities/ResultCompensation" source="//@children.6" target="//@children.4" targetEnd="//@children.6/@sourceConnections.0/@children.1" sourceEnd="//@children.6/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="177,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,49" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=0" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

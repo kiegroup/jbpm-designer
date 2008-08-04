@@ -16,11 +16,8 @@ import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.ComplexGateway;
-import de.hpi.bpmn.ConditionalFlow;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.DataObject;
-import de.hpi.bpmn.ExecDataObject;
-import de.hpi.bpmn.DefaultFlow;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndCancelEvent;
 import de.hpi.bpmn.EndCompensationEvent;
@@ -34,24 +31,23 @@ import de.hpi.bpmn.Event;
 import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateCancelEvent;
 import de.hpi.bpmn.IntermediateCompensationEvent;
+import de.hpi.bpmn.IntermediateConditionalEvent;
 import de.hpi.bpmn.IntermediateErrorEvent;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.IntermediateLinkEvent;
 import de.hpi.bpmn.IntermediateMessageEvent;
 import de.hpi.bpmn.IntermediateMultipleEvent;
 import de.hpi.bpmn.IntermediatePlainEvent;
-import de.hpi.bpmn.IntermediateRuleEvent;
 import de.hpi.bpmn.IntermediateTimerEvent;
 import de.hpi.bpmn.Lane;
 import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
-import de.hpi.bpmn.SequenceFlow;
+import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartLinkEvent;
 import de.hpi.bpmn.StartMessageEvent;
 import de.hpi.bpmn.StartMultipleEvent;
 import de.hpi.bpmn.StartPlainEvent;
-import de.hpi.bpmn.StartRuleEvent;
 import de.hpi.bpmn.StartTimerEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
@@ -59,7 +55,29 @@ import de.hpi.bpmn.TextAnnotation;
 import de.hpi.bpmn.UndirectedAssociation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
+import de.hpi.bpmn.exec.ExecDataObject;
 
+/**
+ * Copyright (c) 2008 Gero Decker
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 /**
  * main method: loadBPMN()
  * 
@@ -477,7 +495,7 @@ public class BPMNRDFImporter {
 	}
 
 	protected void addStartRuleEvent(Node node, ImportContext c) {
-		StartRuleEvent event = factory.createStartRuleEvent();
+		StartConditionalEvent event = factory.createStartConditionalEvent();
 		handleEvent(node, event, c, "ruleName");
 	}
 
@@ -513,7 +531,7 @@ public class BPMNRDFImporter {
 	}
 
 	protected void addIntermediateRuleEvent(Node node, ImportContext c) {
-		IntermediateRuleEvent event = factory.createIntermediateRuleEvent();
+		IntermediateConditionalEvent event = factory.createIntermediateConditionalEvent();
 		handleEvent(node, event, c, "ruleName");
 	}
 
@@ -658,7 +676,6 @@ public class BPMNRDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(
 						n.getNodeName().indexOf(':') + 1);
-				boolean test = attribute.equals("datamodel");
 				// TODO: add further attributes...
 				if (attribute.equals("state")) {
 					obj.setState(getContent(n)); }
@@ -713,13 +730,15 @@ public class BPMNRDFImporter {
 	}
 
 	protected void addDefaultFlow(Node node, ImportContext c) {
-		DefaultFlow flow = factory.createDefaultFlow();
+		SequenceFlow flow = factory.createSequenceFlow();
+		flow.setConditionType(SequenceFlow.ConditionType.DEFAULT);
 		c.diagram.getEdges().add(flow);
 		setConnections(flow, node, c);
 	}
 
 	protected void addConditionalFlow(Node node, ImportContext c) {
-		ConditionalFlow flow = factory.createConditionalFlow();
+		SequenceFlow flow = factory.createSequenceFlow();
+		flow.setConditionType(SequenceFlow.ConditionType.EXPRESSION);
 		c.diagram.getEdges().add(flow);
 		setConnections(flow, node, c);
 	}

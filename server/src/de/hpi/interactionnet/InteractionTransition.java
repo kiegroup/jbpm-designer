@@ -1,19 +1,39 @@
 package de.hpi.interactionnet;
 
-import de.hpi.petrinet.LabeledTransition;
+import de.hpi.petrinet.LabeledTransitionImpl;
 
-public interface InteractionTransition extends LabeledTransition {
+public class InteractionTransition extends LabeledTransitionImpl {
 	
-	Role getSender();
-	
-	void setSender(Role role);
+	protected Role sender;
+	protected Role receiver;
+	protected String messageType;
 
-	Role getReceiver();
-	
-	void setReceiver(Role role);
+	public String getMessageType() {
+		return messageType;
+	}
 
-	String getMessageType();
+	public Role getReceiver() {
+		return receiver;
+	}
+
+	public Role getSender() {
+		return sender;
+	}
+
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
+	}
+
+	public void setReceiver(Role role) {
+		this.receiver = role;
+	}
+
+	public void setSender(Role role) {
+		this.sender = role;
+	}
 	
-	void setMessageType(String messageType);
+	public String toString() {
+		return sender+"=>"+receiver+" ("+messageType+")";
+	}
 
 }

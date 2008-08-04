@@ -7,10 +7,10 @@ import java.util.List;
 import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.InteractionTransition;
-import de.hpi.interactionnet.impl.InteractionNetReducer;
+import de.hpi.interactionnet.verification.InteractionNetReducer;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.Place;
-import de.hpi.petrinet.TauTransition;
+import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.Transition;
 
 public class CopyOfLocalModelGenerator extends InteractionNetReducer {
@@ -63,12 +63,12 @@ public class CopyOfLocalModelGenerator extends InteractionNetReducer {
 	protected void getTauTransitions(InteractionNet net,List<Transition> tautransitions) {
 		for (Iterator<Transition> it=net.getTransitions().iterator(); it.hasNext(); ) {
 			Transition t = it.next();
-			if (t instanceof TauTransition) {
-				for (Iterator<FlowRelationship> it2=t.getIncomingFlowRelationships().iterator(); it2.hasNext(); ) {
+			if (t instanceof SilentTransition) {
+				for (Iterator<? extends FlowRelationship> it2=t.getIncomingFlowRelationships().iterator(); it2.hasNext(); ) {
 					Place p = (Place)it2.next().getSource();
 					if (p.getOutgoingFlowRelationships().size() > 1) {
 						boolean isOutputPlace = false;
-						for (Iterator<FlowRelationship> it3=t.getOutgoingFlowRelationships().iterator(); it3.hasNext(); ) {
+						for (Iterator<? extends FlowRelationship> it3=t.getOutgoingFlowRelationships().iterator(); it3.hasNext(); ) {
 							if (it3.next().getTarget() == p) {
 								isOutputPlace = true;
 								break;

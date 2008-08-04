@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="connections-aid" foregroundRGB="255,255,255" description="" id="model.connections" metadata="uml2-1.0" initialized="true" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="MessageFlow" location="420,45" size="255,241" id="model.connections/MessageFlow" runTimeClassModel="getName(),setSource(Lmodel.activities.Activity;),MessageFlow(Lutil.Output;),setMessageName(Ljava.lang.String;),setTarget(Lmodel.activities.Activity;),setName(Ljava.lang.String;),getTarget(),getMessageName(),getSource()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="232,162">
+      <children xsi:type="editmodel:MethodEditModel" name="MessageFlow" id="model.connections/MessageFlow#MessageFlow(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageName" id="model.connections/MessageFlow#getMessageName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model.connections/MessageFlow#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSource" id="model.connections/MessageFlow#getSource()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTarget" id="model.connections/MessageFlow#getTarget()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMessageName" id="model.connections/MessageFlow#setMessageName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model.connections/MessageFlow#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSource" id="model.connections/MessageFlow#setSource(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTarget" id="model.connections/MessageFlow#setTarget(Lmodel.activities.Activity;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Association" location="690,45" size="231,259" id="model.connections/Association" runTimeClassModel="setDirection(Ljava.lang.String;),dIRECTION_TO,getDirection(),setSource(Lmodel.GraphicalObject;),setTarget(Lmodel.GraphicalObject;),Association(Lutil.Output;),dIRECTION_NONE,getTarget(),getSource(),dIRECTION_FROM">
+    <children xsi:type="editmodel:CompartmentEditModel" size="140,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="dIRECTION_FROM" id="model.connections/Association#dIRECTION_FROM"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="dIRECTION_NONE" id="model.connections/Association#dIRECTION_NONE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="dIRECTION_TO" id="model.connections/Association#dIRECTION_TO"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="208,126">
+      <children xsi:type="editmodel:MethodEditModel" name="Association" id="model.connections/Association#Association(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDirection" id="model.connections/Association#getDirection()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSource" id="model.connections/Association#getSource()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTarget" id="model.connections/Association#getTarget()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDirection" id="model.connections/Association#setDirection(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSource" id="model.connections/Association#setSource(Lmodel.GraphicalObject;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTarget" id="model.connections/Association#setTarget(Lmodel.GraphicalObject;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Transition" location="50,45" size="359,296" id="model.connections/Transition" runTimeClassModel="setName(Ljava.lang.String;),setConditionType(Ljava.lang.String;),tYPE_EXPRESSION,tYPE_OTHERWISE,getSource(),getName(),getConditionExpression(),setTarget(Lmodel.activities.Activity;Lutil.Output;),Transition(Lutil.Output;),setSource(Lmodel.activities.Activity;Lutil.Output;),Transition(Lmodel.activities.Activity;Lmodel.activities.Activity;Lutil.Output;),getTarget(),getConditionType(),setConditionExpression(Lmodel.supporting.Expression;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="148,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_EXPRESSION" id="model.connections/Transition#tYPE_EXPRESSION"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_OTHERWISE" id="model.connections/Transition#tYPE_OTHERWISE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="336,216">
+      <children xsi:type="editmodel:MethodEditModel" name="Transition" id="model.connections/Transition#Transition(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Transition" id="model.connections/Transition#Transition(Lmodel.activities.Activity;Lmodel.activities.Activity;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConditionExpression" id="model.connections/Transition#getConditionExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConditionType" id="model.connections/Transition#getConditionType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model.connections/Transition#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSource" id="model.connections/Transition#getSource()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTarget" id="model.connections/Transition#getTarget()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setConditionExpression" id="model.connections/Transition#setConditionExpression(Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setConditionType" id="model.connections/Transition#setConditionType(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model.connections/Transition#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSource" id="model.connections/Transition#setSource(Lmodel.activities.Activity;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTarget" id="model.connections/Transition#setTarget(Lmodel.activities.Activity;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

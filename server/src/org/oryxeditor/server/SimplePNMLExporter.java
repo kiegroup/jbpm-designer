@@ -13,7 +13,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
@@ -21,6 +20,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
+import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.StandardConverter;
@@ -28,10 +28,10 @@ import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
-import de.hpi.interactionnet.pnml.InteractionNetPNMLExporter;
-import de.hpi.interactionnet.rdf.InteractionNetRDFImporter;
+import de.hpi.interactionnet.serialization.InteractionNetPNMLExporter;
+import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
 import de.hpi.petrinet.PetriNet;
-import de.hpi.petrinet.pnml.PetriNetPNMLExporter;
+import de.hpi.petrinet.serialization.PetriNetPNMLExporter;
 
 /**
  * Copyright (c) 2008 Lutz Gericke, Gero Decker
@@ -89,17 +89,30 @@ public class SimplePNMLExporter extends HttpServlet {
 	}
 
 	protected void processDocument(Document document, Document pnmlDoc) {
-		String type = getStencilSet(document);
+		String type = new StencilSetUtil().getStencilSet(document);
 		if (type.equals("ibpmn.json"))
 			processIBPMN(document, pnmlDoc);
 		else if (type.equals("bpmn.json") || type.equals("bpmnexec.json"))
 			processBPMN(document, pnmlDoc);
+		else if (type.equals("bpmn1.1.json"))
+			processBPMN11(document, pnmlDoc);
 		else if (type.equals("interactionpetrinets.json"))
 			processIPN(document, pnmlDoc);
 	}
 	
 	protected void processBPMN(Document document, Document pnmlDoc) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
+		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
+		new Preprocessor(diagram, new BPMNFactory()).process();
+
+		PetriNet net = new StandardConverter(diagram).convert();
+
+		PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
+		exp.savePetriNet(pnmlDoc, net);
+	}
+
+	protected void processBPMN11(Document document, Document pnmlDoc) {
+		BPMN11RDFImporter importer = new BPMN11RDFImporter(document);
 		BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
 		new Preprocessor(diagram, new BPMNFactory()).process();
 
@@ -125,43 +138,6 @@ public class SimplePNMLExporter extends HttpServlet {
 		
 		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
 		exp.savePetriNet(pnmlDoc, net);
-	}
-
-
-	
-	protected String getStencilSet(Document doc) {
-		Node node = doc.getDocumentElement();
-		if (node == null || !node.getNodeName().equals("rdf:RDF"))
-			return null;
-		
-		node = node.getFirstChild();
-		while (node != null) {
-			 String about = getAttributeValue(node, "rdf:about");
-			 if (about != null && about.contains("canvas")) break;
-			 node = node.getNextSibling();
-		}
-		String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
-		if (type != null)
-			return type.substring(type.lastIndexOf('/')+1);
-		
-		return null;
-	}
-
-	private String getAttributeValue(Node node, String attribute) {
-		Node item = node.getAttributes().getNamedItem(attribute);
-		if (item != null)
-			return item.getNodeValue();
-		else
-			return null;
-	}
-
-	private Node getChild(Node n, String name) {
-		if (n == null)
-			return null;
-		for (Node node=n.getFirstChild(); node != null; node=node.getNextSibling())
-			if (node.getNodeName().indexOf(name) >= 0) 
-				return node;
-		return null;
 	}
 
 }

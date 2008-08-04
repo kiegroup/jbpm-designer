@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="model.activities.event" foregroundRGB="255,255,255" description="" id="model.activities" metadata="uml2-1.0" initialized="true" scrolledX="31" scrolledY="1405" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="IntermediateEvent" location="335,1695" size="547,281" id="model.activities/IntermediateEvent" runTimeClassModel="tRIGGER_TIMER,setTarget(Lmodel.activities.Activity;),tRIGGER_ERROR,IntermediateEvent(Lutil.Output;),tRIGGER_TERMINATION,setTriggerType(Ljava.lang.String;Lutil.Output;),getCreateInstance(),tRIGGER_MESSAGE,setCreateInstance(Z),IntermediateEvent(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;Lmodel.activities.Trigger;Lutil.Output;),getConnectedHandler(),getTarget(),tRIGGER_COMPENSATION">
+    <children xsi:type="editmodel:CompartmentEditModel" size="183,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_COMPENSATION" id="model.activities/IntermediateEvent#tRIGGER_COMPENSATION"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_ERROR" id="model.activities/IntermediateEvent#tRIGGER_ERROR"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_MESSAGE" id="model.activities/IntermediateEvent#tRIGGER_MESSAGE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_TERMINATION" id="model.activities/IntermediateEvent#tRIGGER_TERMINATION"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_TIMER" id="model.activities/IntermediateEvent#tRIGGER_TIMER"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="524,162">
+      <children xsi:type="editmodel:MethodEditModel" name="IntermediateEvent" id="model.activities/IntermediateEvent#IntermediateEvent(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConnectedHandler" id="model.activities/IntermediateEvent#getConnectedHandler()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCreateInstance" id="model.activities/IntermediateEvent#getCreateInstance()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTarget" id="model.activities/IntermediateEvent#getTarget()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCreateInstance" id="model.activities/IntermediateEvent#setCreateInstance(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTarget" id="model.activities/IntermediateEvent#setTarget(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTriggerType" id="model.activities/IntermediateEvent#setTriggerType(Ljava.lang.String;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="IntermediateEvent" id="model.activities/IntermediateEvent#IntermediateEvent(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;Lmodel.activities.Trigger;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/Event&lt;-model.activities/IntermediateEvent" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.0/@children.1" sourceEnd="//@children.0/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="136,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="85,210" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true" showAttributes="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="StartEvent" location="605,1535" size="486,151" id="model.activities/StartEvent" runTimeClassModel="StartEvent(Ljava.lang.String;Lmodel.activities.Trigger;ZLutil.Output;),tRIGGER_TIMER,StartEvent(Lutil.Output;),tRIGGER_NONE,setTriggerType(Ljava.lang.String;Lutil.Output;),tRIGGER_MESSAGE">
+    <children xsi:type="editmodel:CompartmentEditModel" size="153,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_MESSAGE" id="model.activities/StartEvent#tRIGGER_MESSAGE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_NONE" id="model.activities/StartEvent#tRIGGER_NONE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_TIMER" id="model.activities/StartEvent#tRIGGER_TIMER"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="463,72">
+      <children xsi:type="editmodel:MethodEditModel" name="StartEvent" id="model.activities/StartEvent#StartEvent(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="StartEvent" id="model.activities/StartEvent#StartEvent(Ljava.lang.String;Lmodel.activities.Trigger;ZLutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTriggerType" id="model.activities/StartEvent#setTriggerType(Ljava.lang.String;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Event&lt;-model.activities/StartEvent" source="//@children.1" target="//@children.3" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="123,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="233,211"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true" showAttributes="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="EndEvent" location="260,1543" size="311,107" id="model.activities/EndEvent" runTimeClassModel="EndEvent(Lutil.Output;),tRIGGER_NONE,setTriggerType(Ljava.lang.String;Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="131,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="tRIGGER_NONE" id="model.activities/EndEvent#tRIGGER_NONE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="288,36">
+      <children xsi:type="editmodel:MethodEditModel" name="EndEvent" id="model.activities/EndEvent#EndEvent(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTriggerType" id="model.activities/EndEvent#setTriggerType(Ljava.lang.String;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/Event&lt;-model.activities/EndEvent" source="//@children.2" target="//@children.3" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="272,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="37,211"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true" showAttributes="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.1/@sourceConnections.0 //@children.0/@sourceConnections.0" name="Event" location="495,1295" size="357,211" id="model.activities/Event" runTimeClassModel="addTargetFor(Lmodel.connections.Transition;Lutil.Output;),Event(Ljava.lang.String;Ljava.lang.String;Lmodel.activities.Trigger;),getTriggerType(),Event(Lutil.Output;),addSourceFor(Lmodel.connections.Transition;Lutil.Output;),getTrigger(),setTriggerType(Ljava.lang.String;Lutil.Output;),Event(ZLmodel.activities.Trigger;Lutil.Output;),setTrigger(Lmodel.activities.Trigger;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="334,162">
+      <children xsi:type="editmodel:MethodEditModel" name="Event" id="model.activities/Event#Event(ZLmodel.activities.Trigger;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Event" id="model.activities/Event#Event(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Event" id="model.activities/Event#Event(Ljava.lang.String;Ljava.lang.String;Lmodel.activities.Trigger;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSourceFor" id="model.activities/Event#addSourceFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTargetFor" id="model.activities/Event#addTargetFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTrigger" id="model.activities/Event#getTrigger()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTrigger" id="model.activities/Event#setTrigger(Lmodel.activities.Trigger;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTriggerType" id="model.activities/Event#getTriggerType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTriggerType" id="model.activities/Event#setTriggerType(Ljava.lang.String;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=0" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

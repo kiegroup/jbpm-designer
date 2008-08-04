@@ -25,8 +25,14 @@
 		</plugin>
 
 		<!-- following plugins don't require Ext -->
-		<plugin source="arrangement.js" name="ORYX.Plugins.Arrangement" />
+		<plugin source="arrangement.js" name="ORYX.Plugins.Arrangement">
+			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
+		</plugin>
 		<plugin source="file.js" name="ORYX.Plugins.File" />
+		<plugin source="file.js" name="ORYX.Plugins.Save">
+			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
+		</plugin>
+		
 		<plugin source="view.js" name="ORYX.Plugins.View" />
 		<plugin source="dragdropresize.js" name="ORYX.Plugins.DragDropResize" />
 		<plugin source="grouping.js" name="ORYX.Plugins.Grouping" />	
@@ -46,6 +52,7 @@
 		<plugin source="simplepnmlexport.js" name="ORYX.Plugins.SimplePnmlexport">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>	
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 		</plugin>	
@@ -57,9 +64,35 @@
 		<plugin source="syntaxchecker.js" name="ORYX.Plugins.SyntaxChecker">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
+		</plugin>
+
+		<!--
+		<plugin source="bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
+		</plugin>
+		-->
+				
+		<!-- plugin for BPEL import and export --> 
+		<plugin source="bpel.js" name="ORYX.Plugins.BpelGenerator">
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
+		</plugin>
+		
+
+		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.StepThroughPlugin">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+		</plugin>
+		
+		<!-- plugins for XForms editor --> 
+		<plugin source="xformsexport.js" name="ORYX.Plugins.XFormsExport">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+		</plugin>	
+		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 		</plugin>
 	
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
@@ -70,11 +103,6 @@
 		</plugin>
 		<plugin source="autoLayout.js" name="ORYX.Plugins.AutoLayout" />
 		<plugin source="overlayexample.js" name="ORYX.Plugins.OverlayExample" />
-		
-		   plugin for BPEL import and export 
-		<plugin source="bpel.js" name="ORYX.Plugins.BpelGenerator">
-			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
-		</plugin>
 		-->
 		
 

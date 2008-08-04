@@ -22,7 +22,7 @@
        height="60"
        rx="30"
        ry="30"
-       style="fill:#e8e8e8;stroke:#000000;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round"
+       style="stroke:#000000;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round"
        id="structurevariance"
        oryx:resize="vertical horizontal"
        stroke-dasharray="8, 6" />

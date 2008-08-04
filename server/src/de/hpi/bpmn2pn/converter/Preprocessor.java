@@ -1,26 +1,50 @@
 package de.hpi.bpmn2pn.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.ControlFlow;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.Event;
+import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.StartPlainEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
 
+/**
+ * Copyright (c) 2008 Gero Decker
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 public class Preprocessor {
 	
 	protected BPMNDiagram diagram;
@@ -46,18 +70,20 @@ public class Preprocessor {
 	}
 
 	protected void handleSequenceFlow(Container process) {
+		Map<Gateway,Node> addedGateways = new HashMap<Gateway,Node>();
 		for (Node node: process.getChildNodes()) {
 			if (node instanceof Activity || node instanceof Event) {
 				if (countSequenceFlows(node.getIncomingEdges()) > 1) {
 					// create new xor-gateway
 					XORDataBasedGateway g = factory.createXORDataBasedGateway();
-					g.setParent(node.getParent());
-					g.setProcess(node.getProcess());
+//					g.setParent(node.getParent()); // attention: concurrent update!
+//					g.setProcess(node.getProcess()); // attention: concurrent update!
+					addedGateways.put(g, node);
 	
 					// reroute incoming branches
-					for (Edge edge: node.getIncomingEdges())
-						if (edge instanceof ControlFlow)
-							edge.setTarget(node);
+					for (Edge edge: new ArrayList<Edge>(node.getIncomingEdges()))
+						if (edge instanceof SequenceFlow)
+							edge.setTarget(g);
 					
 					// add new sequence flow
 					SequenceFlow flow = factory.createSequenceFlow();
@@ -68,13 +94,14 @@ public class Preprocessor {
 				if (countSequenceFlows(node.getOutgoingEdges()) > 1) {
 					// create new xor-gateway
 					ANDGateway g = factory.createANDGateway();
-					g.setParent(node.getParent());
-					g.setProcess(node.getProcess());
+//					g.setParent(node.getParent()); // attention: concurrent update!
+//					g.setProcess(node.getProcess()); // attention: concurrent update!
+					addedGateways.put(g, node);
 	
 					// reroute outgoing branches
-					for (Edge edge: node.getOutgoingEdges())
-						if (edge instanceof ControlFlow)
-							edge.setSource(node);
+					for (Edge edge: new ArrayList<Edge>(node.getOutgoingEdges()))
+						if (edge instanceof SequenceFlow)
+							edge.setSource(g);
 					
 					// add new sequence flow
 					SequenceFlow flow = factory.createSequenceFlow();
@@ -86,12 +113,18 @@ public class Preprocessor {
 			if (node instanceof SubProcess)
 				handleSequenceFlow((SubProcess)node);
 		}
+		for (Entry<Gateway,Node> entry: addedGateways.entrySet()) {
+			Gateway g = entry.getKey();
+			Node node = entry.getValue();
+			g.setParent(node.getParent()); 
+			g.setProcess(node.getProcess()); 
+		}
 	}
 
 	protected int countSequenceFlows(List<Edge> edges) {
 		int count = 0;
 		for (Edge edge: edges)
-			if (edge instanceof ControlFlow)
+			if (edge instanceof SequenceFlow)
 				count++;
 		return count;
 	}

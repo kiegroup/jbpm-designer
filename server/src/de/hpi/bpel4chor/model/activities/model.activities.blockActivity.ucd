@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="model.activities.blockActivity" foregroundRGB="255,255,255" description="" id="model.activities" metadata="uml2-1.0" initialized="true" scrolledY="668" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.1/@sourceConnections.0" name="BlockActivity" location="360,740" size="315,211" id="model.activities/BlockActivity" runTimeClassModel="addTargetFor(Lmodel.connections.Transition;Lutil.Output;),BlockActivity(Lutil.Output;),addSourceFor(Lmodel.connections.Transition;Lutil.Output;),getSubProcess(),setSubProcess(Lmodel.SubProcess;),getIsolated(),setIsolated(Ljava.lang.String;),getExitOnStandardFault(),setExitOnStandardFault(Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="292,162">
+      <children xsi:type="editmodel:MethodEditModel" name="BlockActivity" id="model.activities/BlockActivity#BlockActivity(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSourceFor" id="model.activities/BlockActivity#addSourceFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTargetFor" id="model.activities/BlockActivity#addTargetFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExitOnStandardFault" id="model.activities/BlockActivity#getExitOnStandardFault()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIsolated" id="model.activities/BlockActivity#getIsolated()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSubProcess" id="model.activities/BlockActivity#getSubProcess()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExitOnStandardFault" id="model.activities/BlockActivity#setExitOnStandardFault(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setIsolated" id="model.activities/BlockActivity#setIsolated(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSubProcess" id="model.activities/BlockActivity#setSubProcess(Lmodel.SubProcess;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Handler" location="200,1000" size="334,256" id="model.activities/Handler" runTimeClassModel="addTargetFor(Lmodel.connections.Transition;Lutil.Output;),tYPE_MESSAGE,setHandlerType(Ljava.lang.String;),tYPE_TERMINATION,tYPE_COMPENSATION,getHandlerType(),addSourceFor(Lmodel.connections.Transition;Lutil.Output;),tYPE_TIMER,getMessageEventHandlerStart(Lutil.Output;),tYPE_FAULT,Handler(Lutil.Output;),getTimerEventHandlerStart(Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="165,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_COMPENSATION" id="model.activities/Handler#tYPE_COMPENSATION"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_FAULT" id="model.activities/Handler#tYPE_FAULT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_MESSAGE" id="model.activities/Handler#tYPE_MESSAGE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_TERMINATION" id="model.activities/Handler#tYPE_TERMINATION"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_TIMER" id="model.activities/Handler#tYPE_TIMER"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="311,126">
+      <children xsi:type="editmodel:MethodEditModel" name="Handler" id="model.activities/Handler#Handler(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSourceFor" id="model.activities/Handler#addSourceFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTargetFor" id="model.activities/Handler#addTargetFor(Lmodel.connections.Transition;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getHandlerType" id="model.activities/Handler#getHandlerType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageEventHandlerStart" id="model.activities/Handler#getMessageEventHandlerStart(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTimerEventHandlerStart" id="model.activities/Handler#getTimerEventHandlerStart(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setHandlerType" id="model.activities/Handler#setHandlerType(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.activities/BlockActivity&lt;-model.activities/Handler" source="//@children.1" target="//@children.0" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="213,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="53,211" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Scope" location="535,1000" size="300,136" id="model.activities/Scope" runTimeClassModel="addMessageExchange(Ljava.lang.String;),getCorrelationSets(),Scope(Lutil.Output;),addCorrelationSet(Lmodel.supporting.CorrelationSet;),getMessageExchanges()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="277,90">
+      <children xsi:type="editmodel:MethodEditModel" name="Scope" id="model.activities/Scope#Scope(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addCorrelationSet" id="model.activities/Scope#addCorrelationSet(Lmodel.supporting.CorrelationSet;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addMessageExchange" id="model.activities/Scope#addMessageExchange(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCorrelationSets" id="model.activities/Scope#getCorrelationSets()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMessageExchanges" id="model.activities/Scope#getMessageExchanges()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.activities/BlockActivity&lt;-model.activities/Scope" source="//@children.2" target="//@children.0" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="69,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="244,211"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

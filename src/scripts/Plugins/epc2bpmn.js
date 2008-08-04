@@ -198,8 +198,11 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			// Create a new Task
 			var shape = this.createElement(startEventType, epc, true);
 			// Map Title, Description -> Documentation
-			shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);
-
+			if( startEventType == "StartMessageEvent"){
+				shape.setProperty(	"oryx-message", epc.title );
+			} else {
+				shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);			
+			}
 			shapes.push({shape: shape, epc:epc})
 		}.bind(this));		
 		
@@ -221,12 +224,17 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			
 			//var fcTitle = deletePreviousFunction( epc )
 			
-			// Map Title, Description -> Documentation
-			shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);
+			// Map Title, Description -> Documentation			
+			if( endEventType == "MessageEndEvent"){
+				shape.setProperty(	"oryx-message", epc.title );
+			} else {
+				shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);			
+			}
 
 			// Set the end event type of message
 			if(  this.isBPMN1_0 && isIncludedInMappingEventThrow(epc.title)){
 				shape.setProperty(	"oryx-result", "Message");
+				shape.setProperty(	"oryx-message", epc.title );
 			}
 			shapes.push({shape: shape, epc:epc})
 			
@@ -244,8 +252,9 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			var type = this.isBPMN1_1 ? "IntermediateMessageEventCatching" : "IntermediateMessageEvent";
 			// Create a new Task
 			var shape = this.createElement(type, epc, true);
-			// Map Title, Description -> Documentation
-			shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);
+			// Map Title -> Message
+			shape.setProperty(	"oryx-message", epc.title );
+			//shape.setProperty(	"oryx-message", epc.title + " - "+ epc.description);
 
 			shapes.push({shape: shape, epc:epc})
 			
@@ -271,8 +280,9 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			// Create a new Task
 			var shape = this.createElement(type, epc, true);
 			
-			// Map Title, Description -> Documentation
-			shape.setProperty(	"oryx-documentation", epc.title + " - "+ epc.description);
+			// Map Title -> Message
+			shape.setProperty(	"oryx-message", epc.title );
+			//shape.setProperty(	"oryx-message", epc.title + " - "+ epc.description);
 			
 			if(  this.isBPMN1_0 && type == "EndEvent"){
 				shape.setProperty(	"oryx-result", "Message");

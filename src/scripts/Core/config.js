@@ -20,6 +20,9 @@ ORYX.CONFIG = {
 	SS_EXTENSIONS_FOLDER:		"/oryx/stencilsets/extensions/",
 	SS_EXTENSIONS_CONFIG:		"/oryx/stencilsets/extensions/extensions.json",	
 	ORYX_NEW_URL:				"/new",	
+	STEP_THROUGH:				"/oryx/stepthrough",
+	STEP_THROUGH_CHECKER:		"/oryx/stepthroughchecker",
+	XFORMS_EXPORT_URL:			"/oryx/xforms",
 	
 	/* Namespaces */
 	NAMESPACE_ORYX:				"http://www.b3mn.org/oryx",

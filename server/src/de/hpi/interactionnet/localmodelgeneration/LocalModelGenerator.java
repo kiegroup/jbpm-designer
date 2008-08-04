@@ -13,7 +13,7 @@ import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
-import de.hpi.petrinet.TauTransition;
+import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.Transition;
 
 public class LocalModelGenerator {
@@ -161,12 +161,12 @@ public class LocalModelGenerator {
 	
 	// merges places
 	protected void applyRule2(PetriNet net, Transition i) {
-		for (Iterator<FlowRelationship> p1iter=i.getIncomingFlowRelationships().iterator(); p1iter.hasNext(); ) {
-			FlowRelationship f1 = p1iter.next();
+		for (FlowRelationship rel: i.getIncomingFlowRelationships()) {
+			FlowRelationship f1 = rel;
 			Place p1 = (Place)f1.getSource();
 			
-			for (Iterator<FlowRelationship> p2iter=i.getOutgoingFlowRelationships().iterator(); p2iter.hasNext(); ) {
-				FlowRelationship f2 = p2iter.next();
+			for (FlowRelationship rel2: i.getOutgoingFlowRelationships()) {
+				FlowRelationship f2 = rel2;
 				Place p2 = (Place)f2.getTarget();
 
 				// for each pair p1 / p2 we create a new place
@@ -175,8 +175,8 @@ public class LocalModelGenerator {
 				pnew.setId("Px"+(freshNameCounter++));
 
 				// add the flows
-				for (Iterator<FlowRelationship> iter2=p1.getIncomingFlowRelationships().iterator(); iter2.hasNext(); ) {
-					Transition i2 = (Transition)iter2.next().getSource();
+				for (FlowRelationship rel3: p1.getIncomingFlowRelationships()) {
+					Transition i2 = (Transition)rel3.getSource();
 					if (i2 != i) {
 						FlowRelationship f = net.getFactory().createFlowRelationship();
 						net.getFlowRelationships().add(f);
@@ -184,8 +184,8 @@ public class LocalModelGenerator {
 						f.setTarget(pnew);
 					}
 				}
-				for (Iterator<FlowRelationship> iter2=p2.getIncomingFlowRelationships().iterator(); iter2.hasNext(); ) {
-					Transition i2 = (Transition)iter2.next().getSource();
+				for (FlowRelationship rel3: p2.getIncomingFlowRelationships()) {
+					Transition i2 = (Transition)rel3.getSource();
 					if (i2 != i) {
 						FlowRelationship f = net.getFactory().createFlowRelationship();
 						net.getFlowRelationships().add(f);
@@ -193,8 +193,8 @@ public class LocalModelGenerator {
 						f.setTarget(pnew);
 					}
 				}
-				for (Iterator<FlowRelationship> iter2=p1.getOutgoingFlowRelationships().iterator(); iter2.hasNext(); ) {
-					Transition i2 = (Transition)iter2.next().getTarget();
+				for (FlowRelationship rel3: p1.getOutgoingFlowRelationships()) {
+					Transition i2 = (Transition)rel3.getTarget();
 					if (i2 != i) {
 						FlowRelationship f = net.getFactory().createFlowRelationship();
 						net.getFlowRelationships().add(f);
@@ -202,8 +202,8 @@ public class LocalModelGenerator {
 						f.setTarget(i2);
 					}
 				}
-				for (Iterator<FlowRelationship> iter2=p2.getOutgoingFlowRelationships().iterator(); iter2.hasNext(); ) {
-					Transition i2 = (Transition)iter2.next().getTarget();
+				for (FlowRelationship rel3: p2.getOutgoingFlowRelationships()) {
+					Transition i2 = (Transition)rel3.getTarget();
 					if (i2 != i) {
 						FlowRelationship f = net.getFactory().createFlowRelationship();
 						net.getFlowRelationships().add(f);
@@ -216,10 +216,10 @@ public class LocalModelGenerator {
 
 		// remove old places and flow relationships
 		List<Place> rp = new ArrayList();
-		for (Iterator<FlowRelationship> p1iter=i.getIncomingFlowRelationships().iterator(); p1iter.hasNext(); )
-			rp.add((Place)p1iter.next().getSource());
-		for (Iterator<FlowRelationship> p2iter=i.getOutgoingFlowRelationships().iterator(); p2iter.hasNext(); )
-			rp.add((Place)p2iter.next().getTarget());
+		for (FlowRelationship rel: i.getIncomingFlowRelationships())
+			rp.add((Place)rel.getSource());
+		for (FlowRelationship rel: i.getOutgoingFlowRelationships())
+			rp.add((Place)rel.getTarget());
 		for (Iterator<Place> pit=rp.iterator(); pit.hasNext(); ) {
 			Place px = pit.next();
 			net.getFlowRelationships().removeAll(px.getIncomingFlowRelationships());
@@ -236,20 +236,19 @@ public class LocalModelGenerator {
 
 		List<Transition> succ = new ArrayList();
 		List<Place> out = new ArrayList();
-		for (Iterator<FlowRelationship> iter2=i.getOutgoingFlowRelationships().iterator(); iter2.hasNext(); ) {
-			Place p = (Place)iter2.next().getTarget();
+		for (FlowRelationship rel: i.getOutgoingFlowRelationships()) {
+			Place p = (Place)rel.getTarget();
 			out.add(p);
 //			if (isInputPlace(p, i))
 //				continue;
-			for (Iterator<FlowRelationship> iter3=p.getOutgoingFlowRelationships().iterator(); iter3.hasNext(); ) {
-				Transition i2 = (Transition)iter3.next().getTarget();
+			for (FlowRelationship rel2: p.getOutgoingFlowRelationships()) {
+				Transition i2 = (Transition)rel2.getTarget();
 				if (!i2.equals(i) && !succ.contains(i2))
 					succ.add(i2);
 			}
 		}
 		
-		for (Iterator<Transition> iter2=succ.iterator(); iter2.hasNext(); ) {
-			Transition i2 = iter2.next();
+		for (Transition i2: succ) {
 			
 			// check if the sequence i => i2 is possible at all
 			if (isBadSequence(i, i2)) {
@@ -263,8 +262,8 @@ public class LocalModelGenerator {
 			} else {
 
 				List<Place> in = new ArrayList();
-				for (Iterator<FlowRelationship> iter3=i2.getIncomingFlowRelationships().iterator(); iter3.hasNext(); ) {
-					Place p = (Place)iter3.next().getSource();
+				for (FlowRelationship rel: i2.getIncomingFlowRelationships()) {
+					Place p = (Place)rel.getSource();
 					in.add(p);
 				}
 	
@@ -280,39 +279,38 @@ public class LocalModelGenerator {
 				
 				// remove input places
 				if (inew == i2) {
-					for (Iterator<FlowRelationship> p1iter=i2.getIncomingFlowRelationships().iterator(); p1iter.hasNext(); ) {
-						Place p1 = (Place)p1iter.next().getSource();
+					for (FlowRelationship rel: i2.getIncomingFlowRelationships()) {
+						Place p1 = (Place)rel.getSource();
 						net.getFlowRelationships().removeAll(p1.getIncomingFlowRelationships());
 						net.getPlaces().remove(p1);
 					}
 					net.getFlowRelationships().removeAll(i2.getIncomingFlowRelationships());
 				}
 	
-				for (Iterator<FlowRelationship> iter3=i.getIncomingFlowRelationships().iterator(); iter3.hasNext(); ) {
-					Place p = (Place)iter3.next().getSource();
+				for (FlowRelationship rel: i.getIncomingFlowRelationships()) {
+					Place p = (Place)rel.getSource();
 					if (!isInputPlace(p, inew))
 						net.getFlowRelationships().add(createFlowRelationship(net, p, inew));
 				}
 				if (inew != i2)
-					for (Iterator<FlowRelationship> iter3=i2.getIncomingFlowRelationships().iterator(); iter3.hasNext(); ) {
-						Place p = (Place)iter3.next().getSource();
+					for (FlowRelationship rel: i2.getIncomingFlowRelationships()) {
+						Place p = (Place)rel.getSource();
 						if (!out.contains(p) && !isInputPlace(p, inew))
 							net.getFlowRelationships().add(createFlowRelationship(net, p, inew));
 					}
-				for (Iterator<Place> iter3=out.iterator(); iter3.hasNext(); ) {
-					Place p = iter3.next();
+				for (Place p: out) {
 					if (!in.contains(p) && !isOutputPlace(inew, p))
 						net.getFlowRelationships().add(createFlowRelationship(net, inew, p));
 				}
 				if (inew != i2)
-					for (Iterator<FlowRelationship> iter3=i2.getOutgoingFlowRelationships().iterator(); iter3.hasNext(); ) {
-						Place p = (Place)iter3.next().getTarget();
+					for (FlowRelationship rel: i2.getOutgoingFlowRelationships()) {
+						Place p = (Place)rel.getTarget();
 						if (!isOutputPlace(inew, p))
 							net.getFlowRelationships().add(createFlowRelationship(net, inew, p));
 					}
 				
 				// check if we created a looping tau transition...
-				if (inew != i2 && inew instanceof TauTransition) {
+				if (inew != i2 && inew instanceof SilentTransition) {
 					if (isLoopingTransition(inew)) {
 						net.getFlowRelationships().removeAll(inew.getIncomingFlowRelationships());
 						net.getFlowRelationships().removeAll(inew.getOutgoingFlowRelationships());
@@ -365,13 +363,13 @@ public class LocalModelGenerator {
 	// assumption: net is 1-safe
 	// therefore, conflict concerning input token or double creation of a token is not possible
 	protected boolean isBadSequence(Transition i, Transition i2) {
-		for (Iterator<FlowRelationship> it=i2.getIncomingFlowRelationships().iterator(); it.hasNext(); ) {
-			Place p = (Place)it.next().getSource();
+		for (FlowRelationship rel: i2.getIncomingFlowRelationships()) {
+			Place p = (Place)rel.getSource();
 			if (isInputPlace(p, i) && !isOutputPlace(i, p))
 				return true;
 		}
-		for (Iterator<FlowRelationship> it=i.getOutgoingFlowRelationships().iterator(); it.hasNext(); ) {
-			Place p = (Place)it.next().getTarget();
+		for (FlowRelationship rel: i.getOutgoingFlowRelationships()) {
+			Place p = (Place)rel.getTarget();
 			if (isOutputPlace(i2, p) && !isInputPlace(p, i2))
 				return true;
 		}
@@ -404,7 +402,7 @@ public class LocalModelGenerator {
 			tnew.setRole(ta.getRole());
 			return tnew;
 		} else {
-			TauTransition tnew = net.getFactory().createTauTransition();
+			SilentTransition tnew = net.getFactory().createSilentTransition();
 			return tnew;
 		}
 	}
@@ -437,8 +435,8 @@ public class LocalModelGenerator {
 			Place p = (Place)rel.getSource();
 			// assumption: there are not two flow relationships with the same source / target
 			if (p.getOutgoingFlowRelationships().size() > 1) {
-				for (Iterator<FlowRelationship> it2=p.getOutgoingFlowRelationships().iterator(); it2.hasNext(); ) {
-					Transition t = (Transition)it2.next().getTarget();
+				for (FlowRelationship rel2: p.getOutgoingFlowRelationships()) {
+					Transition t = (Transition)rel2.getTarget();
 					if (t == i)
 						continue;
 //					if (!isOutputPlace(t, p))

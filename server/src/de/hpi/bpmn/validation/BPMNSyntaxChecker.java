@@ -6,28 +6,52 @@ import java.util.Map;
 import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.ControlFlow;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.Event;
 import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.IntermediateEvent;
+import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.Pool;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XOREventBasedGateway;
-import de.hpi.petrinet.SyntaxChecker;
+import de.hpi.petrinet.verification.SyntaxChecker;
 
+/**
+ * Copyright (c) 2008 Gero Decker
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 public class BPMNSyntaxChecker implements SyntaxChecker {
 	
 	private static final String NO_SOURCE = "An edge must have a source.";
 	private static final String NO_TARGET = "An edge must have a target.";
 	private static final String DIFFERENT_PROCESS = "Source and target node must be contained in the same process.";
+	private static final String SAME_PROCESS = "Source and target node must be contained in different pools.";
 	private static final String FLOWOBJECT_NOT_CONTAINED_IN_PROCESS = "a flow object must be contained in a process.";
 	private static final String ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An end event must have incoming sequence flow.";
 	private static final String STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "A start event must have outgoing sequence flow.";
-	private static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An intermediate event must have incoming sequence flow.";
+//	private static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An intermediate event must have incoming sequence flow.";
 	private static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "Start events must not have incoming sequence flow.";
 	private static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "Attached intermediate events must not have incoming sequence flow.";
 	private static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "End events must not have outgoing sequence flow.";
@@ -42,36 +66,60 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 	}
 
 	public boolean checkSyntax() {
+		return checkSyntax(false);
+	}
+	
+	public boolean checkSyntax(boolean checkControlFlowOnly) {
 		errors.clear();
 		if (diagram == null)
 			return false;
 		
 //		if (!checkEdges()) return false;
 //		if (!checkNodesRecursively(diagram)) return false;
-		checkEdges();
+		checkEdges(checkControlFlowOnly);
 		checkNodesRecursively(diagram);
 		
 		return errors.size() == 0;
 	}
-	
+
 	public Map<String,String> getErrors() {
 		return errors;
 	}
 
-	protected boolean checkEdges() {
+	protected boolean checkEdges(boolean checkControlFlowOnly) {
 		for (Edge edge: diagram.getEdges()) {
+			if (checkControlFlowOnly && !(edge instanceof SequenceFlow || edge instanceof MessageFlow))
+				continue;
+			
 			if (edge.getSource() == null)
 				addError(edge, NO_SOURCE);
 				//return false;
-			if (edge.getTarget() == null) 
+			else if (edge.getTarget() == null) 
 				addError(edge, NO_TARGET);
 				//return false;
-			if (edge instanceof ControlFlow) {
+			else if (edge instanceof SequenceFlow) {
 				if (((Node)edge.getSource()).getProcess() != ((Node)edge.getTarget()).getProcess())
 					addError(edge, DIFFERENT_PROCESS);
 			}
+			else if (edge instanceof MessageFlow) {
+				if (getPool(((Node)edge.getSource()).getParent()) == getPool(((Node)edge.getTarget()).getParent()))
+					addError(edge, SAME_PROCESS);
+			}
 		}
 		return true;
+	}
+
+	protected Pool getPool(Container container) {
+		while (container != null && !(container instanceof Pool) && !(container instanceof BPMNDiagram)) {
+			if (container instanceof Node)
+				container = ((Node)container).getParent();
+			else
+				return null;
+		}
+		if (container instanceof Pool)
+			return (Pool)container;
+		else
+			return null;
 	}
 
 	protected boolean checkNodesRecursively(Container container) {
@@ -98,11 +146,11 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 				addError(node, STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW);
 //				return false;
 			}
-			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() == null 
-					&& !hasIncomingControlFlow(node)) {
-				addError(node, INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW);
-//				return false;
-			}
+//			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() == null 
+//					&& !hasIncomingControlFlow(node)) {
+//				addError(node, INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW);
+////				return false;
+//			}
 //			if ((node instanceof Activity || node instanceof EndEvent || node instanceof Gateway)
 //					&& !hasIncomingControlFlow(node)) return false;
 //			if ((node instanceof Activity || node instanceof StartEvent || node instanceof IntermediateEvent || node instanceof Gateway)
@@ -147,14 +195,14 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 
 	protected boolean hasIncomingControlFlow(Node node) {
 		for (Edge edge: node.getIncomingEdges())
-			if (edge instanceof ControlFlow)
+			if (edge instanceof SequenceFlow)
 				return true;
 		return false;
 	}
 
 	protected boolean hasOutgoingControlFlow(Node node) {
 		for (Edge edge: node.getOutgoingEdges())
-			if (edge instanceof ControlFlow)
+			if (edge instanceof SequenceFlow)
 				return true;
 		return false;
 	}

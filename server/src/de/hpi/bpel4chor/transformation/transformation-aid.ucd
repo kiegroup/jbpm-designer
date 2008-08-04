@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="transformation-aid" foregroundRGB="255,255,255" description="" id="transformation" metadata="uml2-1.0" initialized="true" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="Transformation" location="45,130" size="234,71" id="transformation/Transformation" runTimeClassModel="transform(Lmodel.Diagram;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="211,18">
+      <children xsi:type="editmodel:MethodEditModel" name="transform" id="transformation/Transformation#transform(Lmodel.Diagram;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TransformationErrors" location="290,130" size="194,171" id="transformation/TransformationErrors" runTimeClassModel="TransformationErrors(),addError(Ljava.lang.Error;),clear(),addError(Ljava.lang.String;),addError(Ljava.lang.Exception;),isEmpty(),getErrors()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,126">
+      <children xsi:type="editmodel:MethodEditModel" name="TransformationErrors" id="transformation/TransformationErrors#TransformationErrors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="transformation/TransformationErrors#addError(Ljava.lang.Error;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="transformation/TransformationErrors#addError(Ljava.lang.Exception;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addError" id="transformation/TransformationErrors#addError(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="clear" id="transformation/TransformationErrors#clear()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getErrors" id="transformation/TransformationErrors#getErrors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isEmpty" id="transformation/TransformationErrors#isEmpty()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="BPMN2BPEL4ChorImpl" location="45,45" size="335,71" id="transformation/BPMN2BPEL4ChorImpl" runTimeClassModel="transform(Ljava.lang.String;Z)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="312,18">
+      <children xsi:type="editmodel:MethodEditModel" name="transform" id="transformation/BPMN2BPEL4ChorImpl#transform(Ljava.lang.String;Z)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:PackageEditModel" name="transformation.factories" location="500,50" size="189,141" id="transformation.factories">
+    <packagePreferences xsi:type="editmodel:UMLClassDiagramPackagePreference" showStereotype="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

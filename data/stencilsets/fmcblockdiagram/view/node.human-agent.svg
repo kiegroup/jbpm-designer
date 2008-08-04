@@ -12,7 +12,7 @@
        width="22.6772"
        height="34.015701"
        id="humanagent"
-       style="fill:#ffffff;stroke:#000000"
+       style="stroke:#000000"
        oryx:resize="horizontal vertical"
        oryx:anchor="top bottom left right" />
     <a id="theanchor">

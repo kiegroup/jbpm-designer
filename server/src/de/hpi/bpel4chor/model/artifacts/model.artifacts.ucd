@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="artifacts-aid" foregroundRGB="255,255,255" description="" id="model.artifacts" metadata="uml2-1.0" initialized="true" scrolledY="107" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="ParticipantReferenceDataObject" location="60,360" size="286,295" id="model.artifacts/ParticipantReferenceDataObject" runTimeClassModel="cONTAINMENT_ADD_IF_NOT_EXISTS,addSelect(Ljava.lang.String;),getContainment(),getSelects(),getType(),setContainment(Ljava.lang.String;),cONTAINMENT_REQUIRED,setCopyTo(Ljava.lang.String;),setType(Ljava.lang.String;),getCopyTo(),cONTAINMENT_MUST_ADD,getScope(),ParticipantReferenceDataObject(Lutil.Output;),setScope(Lmodel.activities.BlockActivity;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="235,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="cONTAINMENT_ADD_IF_NOT_EXISTS" id="model.artifacts/ParticipantReferenceDataObject#cONTAINMENT_ADD_IF_NOT_EXISTS"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="cONTAINMENT_MUST_ADD" id="model.artifacts/ParticipantReferenceDataObject#cONTAINMENT_MUST_ADD"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="cONTAINMENT_REQUIRED" id="model.artifacts/ParticipantReferenceDataObject#cONTAINMENT_REQUIRED"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="263,198">
+      <children xsi:type="editmodel:MethodEditModel" name="ParticipantReferenceDataObject" id="model.artifacts/ParticipantReferenceDataObject#ParticipantReferenceDataObject(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSelect" id="model.artifacts/ParticipantReferenceDataObject#addSelect(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getContainment" id="model.artifacts/ParticipantReferenceDataObject#getContainment()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCopyTo" id="model.artifacts/ParticipantReferenceDataObject#getCopyTo()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getScope" id="model.artifacts/ParticipantReferenceDataObject#getScope()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSelects" id="model.artifacts/ParticipantReferenceDataObject#getSelects()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getType" id="model.artifacts/ParticipantReferenceDataObject#getType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setContainment" id="model.artifacts/ParticipantReferenceDataObject#setContainment(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCopyTo" id="model.artifacts/ParticipantReferenceDataObject#setCopyTo(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setScope" id="model.artifacts/ParticipantReferenceDataObject#setScope(Lmodel.activities.BlockActivity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setType" id="model.artifacts/ParticipantReferenceDataObject#setType(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.artifacts/DataObject&lt;-model.artifacts/ParticipantReferenceDataObject" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.0/@children.1" sourceEnd="//@children.0/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="283,13" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="19,70" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0 //@children.3/@sourceConnections.0 //@children.2/@sourceConnections.0" name="DataObject" location="393,250" size="185,72" id="model.artifacts/DataObject" runTimeClassModel="DataObject(Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="162,18">
+      <children xsi:type="editmodel:MethodEditModel" name="DataObject" id="model.artifacts/DataObject#DataObject(Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="model.artifacts/Artifact&lt;-model.artifacts/DataObject" source="//@children.1" target="//@children.4" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="80,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="102,141"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ParticipantSetDataObject" location="360,400" size="251,175" id="model.artifacts/ParticipantSetDataObject" runTimeClassModel="getType(),ParticipantSetDataObject(Lutil.Output;),getCopyTo(),setCopyTo(Ljava.lang.String;),getScope(),setScope(Lmodel.activities.BlockActivity;),setType(Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="228,126">
+      <children xsi:type="editmodel:MethodEditModel" name="ParticipantSetDataObject" id="model.artifacts/ParticipantSetDataObject#ParticipantSetDataObject(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCopyTo" id="model.artifacts/ParticipantSetDataObject#getCopyTo()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getScope" id="model.artifacts/ParticipantSetDataObject#getScope()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getType" id="model.artifacts/ParticipantSetDataObject#getType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCopyTo" id="model.artifacts/ParticipantSetDataObject#setCopyTo(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setScope" id="model.artifacts/ParticipantSetDataObject#setScope(Lmodel.activities.BlockActivity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setType" id="model.artifacts/ParticipantSetDataObject#setType(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.artifacts/DataObject&lt;-model.artifacts/ParticipantSetDataObject" source="//@children.2" target="//@children.1" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="125,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="92,72"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="VariableDataObject" location="610,360" size="295,335" id="model.artifacts/VariableDataObject" runTimeClassModel="getType(),vARIABLE_TYPE_XML_TYPE,tYPE_FAULT,vARIABLE_TYPE_XML_ELEMENT,getVariableType(),tYPE_COUNTER,setType(Ljava.lang.String;),tYPE_MESSAGE,getFromSpec(),setFromSpec(Lmodel.supporting.FromSpec;),getVariableTypeValue(),tYPE_STANDARD,setVariableType(Ljava.lang.String;),setVariableTypeValue(Ljava.lang.String;),VariableDataObject(Lutil.Output;),vARIABLE_TYPE_MESSAGE">
+    <children xsi:type="editmodel:CompartmentEditModel" size="215,126">
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_COUNTER" id="model.artifacts/VariableDataObject#tYPE_COUNTER"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_FAULT" id="model.artifacts/VariableDataObject#tYPE_FAULT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_MESSAGE" id="model.artifacts/VariableDataObject#tYPE_MESSAGE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_STANDARD" id="model.artifacts/VariableDataObject#tYPE_STANDARD"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="vARIABLE_TYPE_MESSAGE" id="model.artifacts/VariableDataObject#vARIABLE_TYPE_MESSAGE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="vARIABLE_TYPE_XML_ELEMENT" id="model.artifacts/VariableDataObject#vARIABLE_TYPE_XML_ELEMENT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="vARIABLE_TYPE_XML_TYPE" id="model.artifacts/VariableDataObject#vARIABLE_TYPE_XML_TYPE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="272,162">
+      <children xsi:type="editmodel:MethodEditModel" name="VariableDataObject" id="model.artifacts/VariableDataObject#VariableDataObject(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFromSpec" id="model.artifacts/VariableDataObject#getFromSpec()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getType" id="model.artifacts/VariableDataObject#getType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getVariableType" id="model.artifacts/VariableDataObject#getVariableType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getVariableTypeValue" id="model.artifacts/VariableDataObject#getVariableTypeValue()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFromSpec" id="model.artifacts/VariableDataObject#setFromSpec(Lmodel.supporting.FromSpec;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setType" id="model.artifacts/VariableDataObject#setType(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setVariableType" id="model.artifacts/VariableDataObject#setVariableType(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setVariableTypeValue" id="model.artifacts/VariableDataObject#setVariableTypeValue(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="model.artifacts/DataObject&lt;-model.artifacts/VariableDataObject" source="//@children.3" target="//@children.1" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="175,72"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.0" name="Artifact" location="370,70" size="222,141" id="model.artifacts/Artifact" runTimeClassModel="getName(),setContainer(Lmodel.Container;),setName(Ljava.lang.String;),Artifact(Lutil.Output;),getContainer()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="199,90">
+      <children xsi:type="editmodel:MethodEditModel" name="Artifact" id="model.artifacts/Artifact#Artifact(Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getContainer" id="model.artifacts/Artifact#getContainer()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="model.artifacts/Artifact#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setContainer" id="model.artifacts/Artifact#setContainer(Lmodel.Container;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="model.artifacts/Artifact#setName(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

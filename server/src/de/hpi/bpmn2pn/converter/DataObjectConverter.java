@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hpi.PTnet.impl.PTNetFactoryImpl;
+import de.hpi.PTnet.PTNetFactory;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
@@ -37,7 +37,7 @@ public class DataObjectConverter extends Converter {
 //		}
 //	}
 	public DataObjectConverter(BPMNDiagram diagram) {
-		super(diagram, new PTNetFactoryImpl());
+		super(diagram, new PTNetFactory());
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class DataObjectConverter extends Converter {
 	{
 		for(String state: ((DataObjectConversionContext)c).dataObjStates.get(dataObjectLabel))
 		{
-			Transition t = addLabeledTransition(net, task.getId(), task.getLabel());
+			Transition t = addLabeledTransition(net, task.getId(), task, 0, task.getLabel());
 			handleMessageFlow(net, task, t, t, c);
 			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), t);
 			addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(task)));
@@ -83,7 +83,7 @@ public class DataObjectConverter extends Converter {
 	}
 	protected void handleConditionalUpdate(PetriNet net, Task task,String dataObjectLabel, ConversionContext c,String preState, String postState)
 	{
-		Transition t = addLabeledTransition(net, task.getId(), task.getLabel());
+		Transition t = addLabeledTransition(net, task.getId(), task, 0, task.getLabel());
 		handleMessageFlow(net, task, t, t, c);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), t);
 		addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(task)));
@@ -99,7 +99,7 @@ public class DataObjectConverter extends Converter {
 	}
 	protected void handleConditionalRead(PetriNet net, Task task,String dataObjectLabel, ConversionContext c,String preState)
 	{
-		Transition t = addLabeledTransition(net, task.getId(), task.getLabel());
+		Transition t = addLabeledTransition(net, task.getId(), task, 0, task.getLabel());
 		handleMessageFlow(net, task, t, t, c);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(task)), t);
 		addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(task)));

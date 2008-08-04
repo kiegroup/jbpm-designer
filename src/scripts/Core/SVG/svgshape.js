@@ -408,16 +408,18 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 		}
 	},
 	
-	isPointIncluded: function(point) {
+	isPointIncluded: function(pointX, pointY) {
+	
 		
+	
 		// Check if there are the right arguments and if the node is visible
-		if(!point || point.x == undefined || point.y == undefined || !this.isVisible()) {
+		if(!pointX || !pointX || !this.isVisible()) {
 			return false;
 		}
-		
+
 		if(this.element instanceof SVGRectElement || this.element instanceof SVGImageElement) {
-			return (point.x >= this.x && point.x <= this.x+this.width &&
-					point.y >= this.y && point.y <= this.y+this.height);
+			return (pointX >= this.x && pointX <= this.x + this.width &&
+					pointY >= this.y && pointY <= this.y+this.height);
 
 		} else if(this.element instanceof SVGCircleElement) {
 			//calculate the radius
@@ -431,7 +433,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			var cx = this.x + this.width/2.0;
 			var cy = this.y + this.height/2.0;
 			
-			return ORYX.Core.Math.isPointInEllipse(point, {x:cx, y:cy, radiusX:r, radiusY:r});
+			return ORYX.Core.Math.isPointInEllipse({x: pointX, y:pointY}, {x:cx, y:cy, radiusX:r, radiusY:r});
 
 		} else if(this.element instanceof SVGEllipseElement) {
 			var rx = this.width/2;
@@ -439,13 +441,13 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			var cx = this.x + rx;
 			var cy = this.y + ry;
 
-			return ORYX.Core.Math.isPointInEllipse(point, {x:cx, y:cy, radiusX:rx, radiusY:ry});
+			return ORYX.Core.Math.isPointInEllipse({x: pointX, y:pointY}, {x:cx, y:cy, radiusX:rx, radiusY:ry});
 			
 		} else if(this.element instanceof SVGLineElement) {
 			var x2 = this.x + this.width;
 			var y2 = this.y + this.height;
 			
-			return ORYX.Core.Math.isPointInLine(point, {point1:{x:this.x, y:this.y},
+			return ORYX.Core.Math.isPointInLine({x: pointX, y:pointY}, {point1:{x:this.x, y:this.y},
 												  point2:{x:x2, y:y2}});
 
 		} else if(this.element instanceof SVGPolylineElement || this.element instanceof SVGPolygonElement) {
@@ -462,7 +464,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 										y:parseFloat(pointsArray[++i])});		
 				}
 				
-				return ORYX.Core.Math.isPointInPolygone(point, arrayOfPoints);
+				return ORYX.Core.Math.isPointInPolygone({x: pointX, y:pointY}, arrayOfPoints);
 			} else {
 				return false;
 			}
@@ -473,7 +475,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			parser.setHandler(handler);
 			parser.parsePath(this.element);
 
-			return ORYX.Core.Math.isPointInPolygone(point, handler.points);
+			return ORYX.Core.Math.isPointInPolygone({x: pointX, y:pointY}, handler.points);
 
 			delete parser;
 			delete handler;
@@ -482,35 +484,28 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 		}
 	},
 
-	isVisible: function() {
+	isVisible: function(elem) {
 		
-		/*var svgNodes = [this.element];
-		
-		var parent = this.element.parentNode;
-		while(parent && parent instanceof SVGElement && parent.className !== "me") {
-			svgNodes.push(parent);
-			parent = parent.parentNode;
+		if (!elem) {
+			elem = this.element;
 		}
-		
-		return !svgNodes.any(function(node){
-						isDisplay = node.getAttributeNS(NAMESPACE_ORYX, "display") 		!== "none";
-						isVisible = node.getAttributeNS(NAMESPACE_ORYX, "visibility") 	!== "hidden";
-						return !(isDisplay && isVisible);
-		
-					});*/
-		
-		var isVisible
-		
-		try{
-			// Check if there have a SVG Bounding box, if yes, than the element is visible
-			isVisible = this.element instanceof SVGElement && this.element.getBBox() ? 
-							true :
-							false;
-		} catch(e) {
-			isVisible = false;
+		//console.log(this, elem, elem.getAttributeNS(null, "display"));
+		if (elem instanceof SVGElement) {
+			if (elem instanceof SVGGElement) {
+				if (elem.className && elem.className.baseVal == "me") 
+					return true;
+			}
+
+			var attr = elem.getAttributeNS(null, "display");
+			if(!attr)
+				return this.isVisible(elem.parentNode);
+			else if (attr == "none") 
+				return false;
+			else 
+				return true;
 		}
-					
-		return isVisible		
+
+		return true;
 	},
 
 	toString: function() { return (this.element) ? "SVGShape " + this.element.id : "SVGShape " + this.element;}

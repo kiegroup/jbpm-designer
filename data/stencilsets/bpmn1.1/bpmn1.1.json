@@ -112,7 +112,7 @@
 					"type":"String",
 					"title":"Pools",
 					"value":"",
-					"description":"A Business Process Diagramm shall contain one or more Pools.",
+					"description":"A Business Process Diagram shall contain one or more Pools.",
 					"readonly":false,
 					"optional":false,
 					"length":"50",
@@ -146,10 +146,9 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"conditional_start",
-				"default_start",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"FromEventbasedGateway"
 			],
 			"properties": [
 				{
@@ -200,13 +199,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -310,13 +348,46 @@
 				},
 				{
 					"id":"properties",
-					"type":"String",
+					"type":"Complex",
 					"title":"Properties",
 					"value":"",
-					"description":"Describes local Properties may added to the activity. These Properties are only for use within the processing of the activity",
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
-					"optional": 	true,
-					"length":""
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"value",
+							"name":"Value",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true,
+						},
+					]
 				},
 				{
 					"id":"inputSets",
@@ -394,7 +465,7 @@
 					"type":"Integer",
 					"title":"CompletionQuantity",
 					"value":1,
-					"description":"Defines the number of tokens that must be generate from the activity",
+					"description":"Defines the number of tokens that must be generated from the activity",
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
@@ -692,9 +763,9 @@
 					]
 				},
 				{
-					"id":"Message",
+					"id":"MessageRef",
 					"type":"String",
-					"title":"Message",
+					"title":"MessageRef",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -703,9 +774,9 @@
 					"length":"50"
 				},
 				{
-					"id":"Instatiate",
+					"id":"Instantiate",
 					"type":"Boolean",
-					"title":"Instatiate",
+					"title":"Instantiate",
 					"value":false,
 					"description":"",
 					"readonly":false,
@@ -757,24 +828,15 @@
 					"refToView":"taskrect",
 					"fill":true,
 					"stroke":false
-				},
-				{
-					"id":"isskipable",
-					"type":"Boolean",
-					"title":"isSkipable",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				}				
+				}		
 			]
 		},
  		{
 			"type": "node",
-			"id":"collapsedSubprocess",
+			"id":"CollapsedSubprocess",
 			"title":"Collapsed Subprocess",
 			"groups":["Activities"],
-			"description":"An subprocess.",
+			"description":"A subprocess.",
 			"view":"activity/node.collapsed.subprocess.svg",
 			"icon":"new_subprocess.png",
 			"roles": [
@@ -784,8 +846,6 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"conditional_start",
-				"default_start",
 				"tc",
 				"fromtoall"
 			],
@@ -838,13 +898,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -948,13 +1047,46 @@
 				},
 				{
 					"id":"properties",
-					"type":"String",
+					"type":"Complex",
 					"title":"Properties",
 					"value":"",
-					"description":"Describes local Properties may added to the activity. These Properties are only for use within the processing of the activity",
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
-					"optional": 	true,
-					"length":""
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"value",
+							"name":"Value",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true,
+						},
+					]
 				},
 				{
 					"id":"inputSets",
@@ -1366,10 +1498,10 @@
 		},
 		{
 			"type": "node",
-			"id":"expandedSubprocess",
+			"id":"Subprocess",
 			"title":"Expanded Subprocess",
 			"groups":["Activities"],
-			"description":"An subprocess.",
+			"description":"A subprocess.",
 			"view":"activity/node.expanded.subprocess.svg",
 			"icon":"new_task.png",
 			"roles": [
@@ -1379,8 +1511,6 @@
 				"messageflow_end",
 				"to_task_event",
 				"from_task_event",
-				"conditional_start",
-				"default_start",
 				"tc",
 				"fromtoall",
 				"canContainArtifacts"
@@ -1434,13 +1564,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -1544,13 +1713,46 @@
 				},
 				{
 					"id":"properties",
-					"type":"String",
+					"type":"Complex",
 					"title":"Properties",
 					"value":"",
-					"description":"Describes local Properties may added to the activity. These Properties are only for use within the processing of the activity",
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
 					"readonly": 	false,
-					"optional": 	true,
-					"length":""
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"value",
+							"name":"Value",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true,
+						},
+					]
 				},
 				{
 					"id":"inputSets",
@@ -1963,7 +2165,7 @@
 		{
 			"type": "node",
 			"id":"Exclusive_Databased_Gateway",
-			"title":"Exclusive Data-based (XOR) Gateway",
+			"title":"Data-based Exclusive (XOR) Gateway",
 			"groups":["Gateways"],
 			"description":"A decision point.",
 			"view":"gateway/node.gateway.xor.databased.svg",
@@ -1972,8 +2174,6 @@
 				"sequence_start",
 				"sequence_end",
 				"tc",
-				"conditional_start",
-				"default_start",
 				"fromtoall"
 			],
 			"properties": [
@@ -2023,13 +2223,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2169,15 +2408,13 @@
 		{
 			"type": "node",
 			"id":"Exclusive_Eventbased_Gateway",
-			"title":"Exclusive Event-based (XOR) Gateway",
+			"title":"Event-based Exclusive (XOR) Gateway",
 			"groups":["Gateways"],
 			"description":"A decision point.",
 			"view":"gateway/node.gateway.xor.eventbased.svg",
 			"icon":"new_gateway_xor_event.png",
 			"roles": [
-				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2228,13 +2465,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2347,7 +2623,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2398,13 +2673,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2497,7 +2811,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2548,13 +2861,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2682,7 +3034,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -2733,13 +3084,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -2863,27 +3253,76 @@
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
-				
+
 				if(lanes.length > 0) {
 					
 					// only one lane in pool
 					if(lanes.length == 1) {
-						lanes.first().setProperty("oryx-showcaption", false);
+						
+						// test whether the sole lane has child lanes
+						var childLanes = lanes.first().getChildNodes(false).findAll(function(node) {
+							return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
+						});
+						if(childLanes.length > 0) {
+							lanes.first().setProperty("oryx-showcaption", true);
+						} else {
+							lanes.first().setProperty("oryx-showcaption", false);
+						}
+						
 					} else {
 						lanes.each(function(lane) {
 							lane.setProperty("oryx-showcaption", true);
 						});
 					}
 					
-					
 					lanes = lanes.sortBy(function(lane) {
 						return lane.bounds.upperLeft().y;
 					});
 					
+					
 					var shapeWidth = shape.bounds.width();
+
+					lanes.each(function(lane) {
+						if(lane.isChanged)
+							shapeWidth = lane.bounds.width() + 30;
+					});
+					
+					
+					// get deepest childs in each branch
+					var firstLanes = lanes.clone();
+					var turn = 1;
+						do {
+							
+							var allChildLanes = new Array();
+							var parentLanes = lanes.findAll(function(lane) {
+							
+								var childLanes = lane.getChildNodes(false).findAll(function(node) {
+									return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
+									});
+							
+									if(childLanes.length > 0) {
+										allChildLanes = allChildLanes.concat(childLanes);
+										return true;
+									}
+									});
+								
+								// set bounds of deepest child lanes
+								var shapeUpperLeft = shape.bounds.upperLeft();
+								allChildLanes.each(function(lane) {
+									var upperLeft = lane.bounds.upperLeft();
+									var lowerRight = lane.bounds.lowerRight();
+									lowerRight.x = shapeWidth-30*turn;
+									lane.bounds.set(upperLeft, lowerRight);
+								});
+							
+							lanes = allChildLanes.clone();
+							turn++;
+							
+						} while(parentLanes.length > 0);
+					
 					var shapeHeight = 0;
 					var topBound = 0;
-					lanes.each(function(lane) {
+					firstLanes.each(function(lane) {
 						var ul = lane.bounds.upperLeft();
 						var lr = lane.bounds.lowerRight();
 						ul.y = shapeHeight;
@@ -2895,7 +3334,7 @@
 					});
 					
 					var upl = shape.bounds.upperLeft();
-					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight);
+					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
  			},
 			"properties": [
@@ -2973,7 +3412,7 @@
 					"type":"Boolean",
 					"title":"BoundaryVisible",
 					"value":true,
-					"description":"Defines, if the rectangular boundary for the Pool is visible.",
+					"description":"Defines if the rectangular boundary for the Pool is visible.",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["border", "c", "caption", "captionDisableAntialiasing"]
@@ -2983,7 +3422,7 @@
 					"type":"Boolean",
 					"title":"MainPool",
 					"value":false,
-					"description":"Defines, if the current Pool is the main Pool of the diagram.",
+					"description":"Defines if the current Pool is the main Pool of the diagram.",
 					"readonly":false,
 					"optional":false
 				},
@@ -3294,7 +3733,7 @@
 					"type":"Boolean",
 					"title":"BoundaryVisible",
 					"value":true,
-					"description":"Defines, if the rectangular boundary for the Pool is visible.",
+					"description":"Defines if the rectangular boundary for the Pool is visible.",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["border", "c"]
@@ -3304,7 +3743,7 @@
 					"type":"Boolean",
 					"title":"MainPool",
 					"value":false,
-					"description":"Defines, if the current Pool is the main Pool of the diagram.",
+					"description":"Defines if the current Pool is the main Pool of the diagram.",
 					"readonly":false,
 					"optional":false
 				},
@@ -3551,6 +3990,13 @@
 					});
 					
 					var shapeWidth = shape.bounds.width();
+					
+					lanes.each(function(lane) {
+						if(lane.isChanged) {
+							shapeWidth = lane.bounds.width()+30;
+						}
+					});
+					
 					var shapeHeight = 0;
 					var topBound = 0;
 					lanes.each(function(lane) {
@@ -3565,7 +4011,7 @@
 					});
 					
 					var upl = shape.bounds.upperLeft();
-					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight);
+					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
  			},			
 			"properties": [
@@ -3667,7 +4113,7 @@
 			"id":"Group",
 			"title":"Group",
 			"groups":["Artifacts"],
-			"description":"A group box element",
+			"description":"A group box element.",
 			"view":"artifact/node.group.svg",
 			"icon":"new_group.png",
 			"roles": [
@@ -3757,7 +4203,7 @@
 			"id":"TextAnnotation",
 			"title":"Text Annotation",
 			"groups":["Artifacts"],
-			"description":"A text annotation",
+			"description":"A text annotation.",
 			"view":"artifact/node.text.annotation.svg",
 			"icon":"new_text_annotation.png",
 			"roles": [
@@ -3847,7 +4293,7 @@
 			"type": "node",
 			"id":"DataObject",
 			"title":"Data Object",
-			"description":"A data object",
+			"description":"A data object.",
 			"groups":["Artifacts"],
 			"view":"artifact/node.data.object.svg",
 			"icon":"new_data_object.png",
@@ -3926,7 +4372,7 @@
 					"type":"String",
 					"title":"Name",
 					"value":"",
-					"description":"Text description",
+					"description":"Text description.",
 					"readonly":false,
 					"optional":true,
 					"refToView":"text_name",
@@ -3945,14 +4391,46 @@
 				},
 				{
 					"id":"properties",
-					"type":"String",
+					"type":"Complex",
 					"title":"Properties",
 					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":undefined,
-					"wrapLines":true
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
+					"readonly": 	false,
+					"optional": 	false,
+					"complexItems": [
+					{
+						"id":"name",
+						"name":"Name",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false 
+					},
+					{
+						"id":"type",
+						"name":"Type",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false,
+					},
+					{
+						"id":"value",
+						"name":"Value",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false,
+					},
+					{
+						"id":"correlation",
+						"name":"Correlation",
+						"type":"Boolean",
+						"value":"false",
+						"width":100,
+						"optional":true,
+					},
+					]
 				},
 				{
 					"id":"requiredForStart",
@@ -4048,13 +4526,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4175,13 +4692,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4342,13 +4898,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4431,7 +5026,7 @@
 			"id":"StartConditionalEvent",
 			"title":"Start Conditional Event",
 			"groups":["Start Events"],
-			"description":"A rule event without incoming edges.",
+			"description":"A conditional event without incoming edges.",
 			"view":"startevent/node.event.conditional.start.svg",
 			"icon":"startevent/node.event.conditional.start.png",
 			"roles": [
@@ -4489,13 +5084,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4615,13 +5249,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"documentation",
@@ -4774,13 +5447,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -4851,7 +5563,7 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateEventCatching",
+			"id":"IntermediateEvent",
 			"title":"Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"An intermediate event with incoming and outgoing edges.",
@@ -4915,13 +5627,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5006,7 +5757,8 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"FromEventbasedGateway"
 				
 			],
 			"properties": [
@@ -5056,13 +5808,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5235,13 +6026,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5352,7 +6182,7 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateTimerEventCatching",
+			"id":"IntermediateTimerEvent",
 			"title":"Intermediate Timer Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"An intermediate timer event with incoming and outgoing edges.",
@@ -5366,7 +6196,8 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"FromEventbasedGateway"
 			],
 			"properties": [
 				{
@@ -5415,13 +6246,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5574,13 +6444,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5673,7 +6582,6 @@
 				"from_task_event",
 				"onBoundaryOnly",
 				"fromtoall",
-				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary"
 			],
 			"properties": [
@@ -5723,13 +6631,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -5859,13 +6806,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6007,13 +6993,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6097,7 +7122,7 @@
 			"id":"IntermediateConditionalEvent",
 			"title":"Intermediate Conditional Event",
 			"groups":["Catching Intermediate Events"],
-			"description":"An intermediate rule event with incoming and outgoing edges.",
+			"description":"An intermediate conditional event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.conditional.intermediate.svg",
 			"icon":"intermediateevent/node.event.conditional.intermediate.png",
 			"roles":[
@@ -6157,13 +7182,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6258,7 +7322,8 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"FromEventbasedGateway"
 			],
 			"properties": [
 				{
@@ -6307,13 +7372,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6468,13 +7572,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6631,13 +7774,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6781,13 +7963,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -6929,13 +8150,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7087,13 +8347,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7246,13 +8545,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7309,10 +8647,10 @@
 		},
 		{
 			"type": "node",
-			"id":"MessageEndEvent",
+			"id":"EndMessageEvent",
 			"title":"Message End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A message event without outgoing edges.",
 			"view":"endevent/node.event.message.end.svg",
 			"icon":"endevent/node.event.message.end.png",
 			"roles":[
@@ -7371,13 +8709,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7475,10 +8852,10 @@
 		},
 		{
 			"type": "node",
-			"id":"ErrorEndEvent",
+			"id":"EndErrorEvent",
 			"title":"Error End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"An error event without outgoing edges.",
 			"view":"endevent/node.event.error.end.svg",
 			"icon":"endevent/node.event.error.end.png",
 			"roles":[
@@ -7536,13 +8913,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7608,10 +9024,10 @@
 		},
 		{
 			"type": "node",
-			"id":"CancelEndEvent",
+			"id":"EndCancelEvent",
 			"title":"Cancel End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A cancel event without outgoing edges.",
 			"view":"endevent/node.event.cancel.end.svg",
 			"icon":"endevent/node.event.cancel.end.png",
 			"roles":[
@@ -7669,13 +9085,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7732,10 +9187,10 @@
 		},
 		{
 			"type": "node",
-			"id":"CompensationEndEvent",
+			"id":"EndCompensationEvent",
 			"title":"Compensation End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A compensation event without outgoing edges.",
 			"view":"endevent/node.event.compensation.end.svg",
 			"icon":"endevent/node.event.compensation.end.png",
 			"roles":[
@@ -7793,13 +9248,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -7867,10 +9361,10 @@
 		},
 		{
 			"type": "node",
-			"id":"SignalEndEvent",
+			"id":"EndSignalEvent",
 			"title":"Signal End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A signal event without outgoing edges.",
 			"view":"endevent/node.event.signal.end.svg",
 			"icon":"endevent/node.event.signal.end.png",
 			"roles":[
@@ -7928,13 +9422,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -8002,10 +9535,10 @@
 		},
 		{
 			"type": "node",
-			"id":"MultipleEndEvent",
+			"id":"EndMultipleEvent",
 			"title":"Multiple End Event",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A multiple event without outgoing edges.",
 			"view":"endevent/node.event.multiple.end.svg",
 			"icon":"endevent/node.event.multiple.end.png",
 			"roles":[
@@ -8063,13 +9596,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -8126,10 +9698,10 @@
 		},
 		{
 			"type": "node",
-			"id":"TerminateEndEvent",
+			"id":"EndTerminateEvent",
 			"title":"Terminate Flow",
 			"groups":["End Events"],
-			"description":"An event without outgoing edges.",
+			"description":"A terminate event without outgoing edges.",
 			"view":"endevent/node.event.terminate.end.svg",
 			"icon":"endevent/node.event.terminate.end.png",
 			"roles":[
@@ -8187,13 +9759,52 @@
 				},
 				{
 					"id":"assignments",
-					"type":"String",
+					"type":"Complex",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"wrapLines":true
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"c1",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"c2",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						},
+					]
 				},
 				{
 					"id":"pool",
@@ -8254,7 +9865,7 @@
 			"title":"Sequence Flow",
 			"description":"",
 			"groups":["Connecting Objects"],
-			"view":"connection/connection.sequenceflow.normal.svg",
+			"view":"connection/connection.sequenceflow.svg",
 			"icon":"new_sequenceflow.png",
 			"roles": [
 			],
@@ -8304,105 +9915,7 @@
 					"length":""
 				},
 				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"ConditionType",
-					"type":"String",
-					"title":"ConditionType",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"quantity",
-					"type":"Integer",
-					"title":"Quantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"ConditionalFlow",
-			"title":"Conditional Flow",
-			"description":"",
-			"groups":["Connecting Objects"],
-			"view":"connection/connection.sequenceflow.conditional.svg",
-			"icon":"new_conditionalflow.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
+					"id":"sourceRef",
 					"type":"String",
 					"title":"SourceRef",
 					"value":"",
@@ -8412,7 +9925,7 @@
 					"length":""
 				},
 				{
-					"id":"target",
+					"id":"targetRef",
 					"type":"String",
 					"title":"TargetRef",
 					"value":"",
@@ -8423,13 +9936,32 @@
 				},
 				{
 					"id":"ConditionType",
-					"type":"String",
+					"type":"Choice",
 					"title":"ConditionType",
-					"value":"Expression",
-					"description":"",
-					"readonly":true,
+					"value":"None",
+					"description":"Determine the typ of the flow object.",
+					"readonly":false,
 					"optional":false,
-					"length":""
+					"items": [
+						{
+							"id":"none",
+							"title":"none",
+							"value":"None",
+							"refToView":""
+						},
+						{
+							"id":"expression",
+							"title":"expression",
+							"value":"Expression",
+							"refToView":"conditional"
+						},
+						{
+							"id":"default",
+							"title":"default",
+							"value":"Default",
+							"refToView":"default"
+						}
+					]
 				},
 				{
 					"id":"ConditionExpression",
@@ -8438,104 +9970,6 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"quantity",
-					"type":"Integer",
-					"title":"Quantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"DefaultFlow",
-			"title":"Default Flow",
-			"description":"",
-			"groups":["Connecting Objects"],
-			"view":"connection/connection.sequenceflow.default.svg",
-			"icon":"new_defaultflow.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"SourceRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"TargetRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"ConditionType",
-					"type":"String",
-					"title":"ConditionType",
-					"value":"Default",
-					"description":"",
-					"readonly":true,
 					"optional":false,
 					"length":""
 				},
@@ -8912,24 +10346,10 @@
 					{
 						"from":"sequence_start",
 						"to":["sequence_end"]
-					}
-				]
-			},
-			{
-				"role":"DefaultFlow",
-				"connects": [
+					},
 					{
-						"from":"default_start",
-						"to":["sequence_end"]
-					}
-				]
-			},
-			{
-				"role":"ConditionalFlow",
-				"connects": [
-					{
-						"from":"conditional_start",
-						"to":["sequence_end"]
+						"from":"Exclusive_Eventbased_Gateway",
+						"to":["FromEventbasedGateway"]
 					}
 				]
 			},
@@ -9010,11 +10430,11 @@
 				"role":"IntermediateEventOnSubprocessBoundary",
 				"connects": [
 					{
-						"from":"collapsedSubprocess",
+						"from":"CollapsedSubprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					},
 					{
-						"from":"expandedSubprocess",
+						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					}
 				]
@@ -9096,7 +10516,7 @@
 				]
 			}, 
 			{
-				"role": "expandedSubprocess",
+				"role": "Subprocess",
 				"contains": [
 					"tc"
 				]

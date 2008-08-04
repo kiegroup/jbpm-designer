@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="factories-aid" foregroundRGB="255,255,255" description="" id="transformation.factories" metadata="uml2-1.0" initialized="true" scrolledY="522" tag="1000" key="32303036313030362042504D4E324250454C3443686F722F4B65727374696E">
+  <children xsi:type="editmodel:ClassEditModel" name="TopologyFactory" location="610,2350" size="313,105" id="transformation.factories/TopologyFactory" runTimeClassModel="TopologyFactory(Lmodel.Diagram;Lutil.Output;),transformTopology()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="290,36">
+      <children xsi:type="editmodel:MethodEditModel" name="TopologyFactory" id="transformation.factories/TopologyFactory#TopologyFactory(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="transformTopology" id="transformation.factories/TopologyFactory#transformTopology()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ParticipantsFactory" location="283,2350" size="325,110" id="transformation.factories/ParticipantsFactory" runTimeClassModel="transformParticipants(Lorg.w3c.dom.Document;),getType(Lmodel.artifacts.DataObject;),ParticipantsFactory(Lmodel.Diagram;Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="302,54">
+      <children xsi:type="editmodel:MethodEditModel" name="ParticipantsFactory" id="transformation.factories/ParticipantsFactory#ParticipantsFactory(Lmodel.Diagram;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getType" id="transformation.factories/ParticipantsFactory#getType(Lmodel.artifacts.DataObject;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="transformParticipants" id="transformation.factories/ParticipantsFactory#transformParticipants(Lorg.w3c.dom.Document;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Link" location="85,1550" size="437,205" id="transformation.factories/Link" runTimeClassModel="getName(),getExpression(),setExpression(Lmodel.supporting.Expression;),Link(Lmodel.activities.Activity;Lmodel.activities.Activity;I),Link(Lmodel.activities.Activity;Lmodel.activities.Activity;Lmodel.supporting.Expression;I),getTarget(),getSource()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="414,126">
+      <children xsi:type="editmodel:MethodEditModel" name="Link" id="transformation.factories/Link#Link(Lmodel.activities.Activity;Lmodel.activities.Activity;Lmodel.supporting.Expression;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Link" id="transformation.factories/Link#Link(Lmodel.activities.Activity;Lmodel.activities.Activity;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExpression" id="transformation.factories/Link#getExpression()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="transformation.factories/Link#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSource" id="transformation.factories/Link#getSource()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTarget" id="transformation.factories/Link#getTarget()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setExpression" id="transformation.factories/Link#setExpression(Lmodel.supporting.Expression;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Component" location="50,1950" size="230,515" id="transformation.factories/Component" runTimeClassModel="getSinkObject(),tYPE_REPEAT,tYPE_PICK,tYPE_QUASI_ATTACHED_EVENTS,getType(),tYPE_QUASI_IF,tYPE_FLOW,tYPE_QUASI_FLOW,tYPE_GENERALISED_FLOW,tYPE_REPEAT_WHILE,getSourceObject(),isQuasi(),tYPE_QUASI_PICK,setType(I),getExit(),tYPE_WHILE,setSource(Lmodel.activities.Activity;),setSink(Lmodel.activities.Activity;),tYPE_QUASI_SPECIAL_FLOW,tYPE_SEQUENCE,tYPE_SYNCHRONIZING_PROCESS,Component(ILjava.util.List;Ljava.util.List;Lmodel.activities.Activity;Lmodel.activities.Activity;),tYPE_ATTACHED_EVENTS,tYPE_IF,getEntry(),tYPE_SPECIAL_FLOW">
+    <children xsi:type="editmodel:CompartmentEditModel" size="207,288">
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_ATTACHED_EVENTS" id="transformation.factories/Component#tYPE_ATTACHED_EVENTS"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_FLOW" id="transformation.factories/Component#tYPE_FLOW"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_GENERALISED_FLOW" id="transformation.factories/Component#tYPE_GENERALISED_FLOW"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_IF" id="transformation.factories/Component#tYPE_IF"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_PICK" id="transformation.factories/Component#tYPE_PICK"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_QUASI_ATTACHED_EVENTS" id="transformation.factories/Component#tYPE_QUASI_ATTACHED_EVENTS"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_QUASI_FLOW" id="transformation.factories/Component#tYPE_QUASI_FLOW"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_QUASI_IF" id="transformation.factories/Component#tYPE_QUASI_IF"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_QUASI_PICK" id="transformation.factories/Component#tYPE_QUASI_PICK"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_QUASI_SPECIAL_FLOW" id="transformation.factories/Component#tYPE_QUASI_SPECIAL_FLOW"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_REPEAT" id="transformation.factories/Component#tYPE_REPEAT"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_REPEAT_WHILE" id="transformation.factories/Component#tYPE_REPEAT_WHILE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_SEQUENCE" id="transformation.factories/Component#tYPE_SEQUENCE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_SPECIAL_FLOW" id="transformation.factories/Component#tYPE_SPECIAL_FLOW"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_SYNCHRONIZING_PROCESS" id="transformation.factories/Component#tYPE_SYNCHRONIZING_PROCESS"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tYPE_WHILE" id="transformation.factories/Component#tYPE_WHILE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="167,180">
+      <children xsi:type="editmodel:MethodEditModel" name="Component" id="transformation.factories/Component#Component(ILjava.util.List;Ljava.util.List;Lmodel.activities.Activity;Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEntry" id="transformation.factories/Component#getEntry()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getExit" id="transformation.factories/Component#getExit()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSinkObject" id="transformation.factories/Component#getSinkObject()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSourceObject" id="transformation.factories/Component#getSourceObject()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getType" id="transformation.factories/Component#getType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isQuasi" id="transformation.factories/Component#isQuasi()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSink" id="transformation.factories/Component#setSink(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSource" id="transformation.factories/Component#setSource(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setType" id="transformation.factories/Component#setType(I)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ProcessFactory" location="288,2235" size="389,111" id="transformation.factories/ProcessFactory" runTimeClassModel="transformProcess(Lmodel.Swimlane;Lutil.Output;),ProcessFactory(Lmodel.Diagram;),diagram">
+    <children xsi:type="editmodel:CompartmentEditModel" size="102,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="diagram" id="transformation.factories/ProcessFactory#diagram"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="366,36">
+      <children xsi:type="editmodel:MethodEditModel" name="ProcessFactory" id="transformation.factories/ProcessFactory#ProcessFactory(Lmodel.Diagram;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="transformProcess" id="transformation.factories/ProcessFactory#transformProcess(Lmodel.Swimlane;Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="GeneralizedFlowMapper" location="90,1130" size="744,115" id="transformation.factories/GeneralizedFlowMapper" runTimeClassModel="mapGeneralizedFlow(),GeneralizedFlowMapper(Lmodel.Diagram;Lorg.w3c.dom.Document;Lmodel.Container;Ltransformation.factories.Component;Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="721,36">
+      <children xsi:type="editmodel:MethodEditModel" name="GeneralizedFlowMapper" id="transformation.factories/GeneralizedFlowMapper#GeneralizedFlowMapper(Lmodel.Diagram;Lorg.w3c.dom.Document;Lmodel.Container;Ltransformation.factories.Component;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="mapGeneralizedFlow" id="transformation.factories/GeneralizedFlowMapper#mapGeneralizedFlow()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SupportingFactory" location="45,427" size="482,339" id="transformation.factories/SupportingFactory" runTimeClassModel="createLinks(Ljava.util.List;),createVariablesElement(Lmodel.Swimlane;Lmodel.Container;),createMessageExchangesElement(Lmodel.activities.Scope;),createToPartsElement(Ljava.util.List;),createMessageExchangesElement(Lmodel.Process;),createCompletionCondition(Lmodel.supporting.Loop;),createImportElements(Lmodel.Swimlane;),createFromSpecElement(Lmodel.supporting.FromSpec;),createToSpecElement(Lmodel.supporting.ToSpec;),createFromPartsElement(Ljava.util.List;),createVariableElement(Lmodel.Swimlane;Lmodel.artifacts.VariableDataObject;),createCorrelationSetsElement(Lmodel.activities.Scope;),SupportingFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lutil.Output;),createCorrelationsElement(Ljava.util.List;),createCorrelationSetsElement(Lmodel.Process;),createExpressionElement(Ljava.lang.String;Lmodel.supporting.Expression;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="459,288">
+      <children xsi:type="editmodel:MethodEditModel" name="SupportingFactory" id="transformation.factories/SupportingFactory#SupportingFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createCompletionCondition" id="transformation.factories/SupportingFactory#createCompletionCondition(Lmodel.supporting.Loop;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createCorrelationSetsElement" id="transformation.factories/SupportingFactory#createCorrelationSetsElement(Lmodel.activities.Scope;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createCorrelationSetsElement" id="transformation.factories/SupportingFactory#createCorrelationSetsElement(Lmodel.Process;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createCorrelationsElement" id="transformation.factories/SupportingFactory#createCorrelationsElement(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createExpressionElement" id="transformation.factories/SupportingFactory#createExpressionElement(Ljava.lang.String;Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createFromPartsElement" id="transformation.factories/SupportingFactory#createFromPartsElement(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createFromSpecElement" id="transformation.factories/SupportingFactory#createFromSpecElement(Lmodel.supporting.FromSpec;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createImportElements" id="transformation.factories/SupportingFactory#createImportElements(Lmodel.Swimlane;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createLinks" id="transformation.factories/SupportingFactory#createLinks(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createMessageExchangesElement" id="transformation.factories/SupportingFactory#createMessageExchangesElement(Lmodel.Process;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createMessageExchangesElement" id="transformation.factories/SupportingFactory#createMessageExchangesElement(Lmodel.activities.Scope;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createToPartsElement" id="transformation.factories/SupportingFactory#createToPartsElement(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createToSpecElement" id="transformation.factories/SupportingFactory#createToSpecElement(Lmodel.supporting.ToSpec;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createVariableElement" id="transformation.factories/SupportingFactory#createVariableElement(Lmodel.Swimlane;Lmodel.artifacts.VariableDataObject;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createVariablesElement" id="transformation.factories/SupportingFactory#createVariablesElement(Lmodel.Swimlane;Lmodel.Container;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SynchronizingProcessMapper" location="85,1245" size="686,301" id="transformation.factories/SynchronizingProcessMapper" runTimeClassModel="transformation.factories.SynchronizingProcessMapper.TEC,SynchronizingProcessMapper(Lmodel.Diagram;Lorg.w3c.dom.Document;Lmodel.Container;Ltransformation.factories.Component;),mapSynchronizingProcess(Lutil.Output;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="663,36">
+      <children xsi:type="editmodel:MethodEditModel" name="SynchronizingProcessMapper" id="transformation.factories/SynchronizingProcessMapper#SynchronizingProcessMapper(Lmodel.Diagram;Lorg.w3c.dom.Document;Lmodel.Container;Ltransformation.factories.Component;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="mapSynchronizingProcess" id="transformation.factories/SynchronizingProcessMapper#mapSynchronizingProcess(Lutil.Output;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="218,207">
+      <children xsi:type="editmodel:ClassEditModel" name="TEC" size="218,205" id="transformation.factories/SynchronizingProcessMapper$TEC">
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <children xsi:type="editmodel:CompartmentEditModel" size="195,126">
+          <children xsi:type="editmodel:MethodEditModel" name="TEC" id="transformation.factories/SynchronizingProcessMapper$TEC#TEC()"/>
+          <children xsi:type="editmodel:MethodEditModel" name="addActivities" id="transformation.factories/SynchronizingProcessMapper$TEC#addActivities(Ljava.util.List;)"/>
+          <children xsi:type="editmodel:MethodEditModel" name="addActivity" id="transformation.factories/SynchronizingProcessMapper$TEC#addActivity(Lmodel.activities.Activity;)"/>
+          <children xsi:type="editmodel:MethodEditModel" name="addExpression" id="transformation.factories/SynchronizingProcessMapper$TEC#addExpression(Lmodel.supporting.Expression;)"/>
+          <children xsi:type="editmodel:MethodEditModel" name="addExpressions" id="transformation.factories/SynchronizingProcessMapper$TEC#addExpressions(Ljava.util.List;)"/>
+          <children xsi:type="editmodel:MethodEditModel" name="getActivities" id="transformation.factories/SynchronizingProcessMapper$TEC#getActivities()"/>
+          <children xsi:type="editmodel:MethodEditModel" name="getExpressions" id="transformation.factories/SynchronizingProcessMapper$TEC#getExpressions()"/>
+        </children>
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true"/>
+      </children>
+    </children>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SequenceFlowFactory" location="288,1955" size="574,171" id="transformation.factories/SequenceFlowFactory" runTimeClassModel="foldComponent(Ltransformation.factories.Component;Ljava.util.List;),foldComponent(Ltransformation.factories.Component;),SequenceFlowFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lmodel.Container;Lutil.Output;),createAndInsertFoldedTask(Ltransformation.factories.Component;Lorg.w3c.dom.Element;),transformSequenceFlow(),mapActivity(Lmodel.activities.Activity;Ljava.util.List;Lmodel.supporting.Expression;),mapActivity(Lmodel.activities.Activity;Ljava.util.List;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="551,126">
+      <children xsi:type="editmodel:MethodEditModel" name="SequenceFlowFactory" id="transformation.factories/SequenceFlowFactory#SequenceFlowFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lmodel.Container;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createAndInsertFoldedTask" id="transformation.factories/SequenceFlowFactory#createAndInsertFoldedTask(Ltransformation.factories.Component;Lorg.w3c.dom.Element;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="foldComponent" id="transformation.factories/SequenceFlowFactory#foldComponent(Ltransformation.factories.Component;Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="foldComponent" id="transformation.factories/SequenceFlowFactory#foldComponent(Ltransformation.factories.Component;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="mapActivity" id="transformation.factories/SequenceFlowFactory#mapActivity(Lmodel.activities.Activity;Ljava.util.List;Lmodel.supporting.Expression;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="mapActivity" id="transformation.factories/SequenceFlowFactory#mapActivity(Lmodel.activities.Activity;Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="transformSequenceFlow" id="transformation.factories/SequenceFlowFactory#transformSequenceFlow()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="StructuredElementsFactory" location="535,725" size="481,231" id="transformation.factories/StructuredElementsFactory" runTimeClassModel="createFaultHandlerElements(Lmodel.activities.Activity;),createOnMessageBranch(Lmodel.activities.ReceiveTask;Lorg.w3c.dom.Element;),createLoopElement(Lmodel.activities.Activity;Lorg.w3c.dom.Element;),createScopeElement(Lmodel.activities.BlockActivity;),createFaultHandlersElement(Lmodel.activities.Activity;),StructuredElementsFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lutil.Output;),createPickBranchElement(Lmodel.activities.IntermediateEvent;Lorg.w3c.dom.Element;),createCompensationHandlerElement(Lmodel.activities.Activity;),createEventHandlersElement(Lmodel.Container;),createTerminationHandlerElement(Lmodel.activities.Activity;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="458,180">
+      <children xsi:type="editmodel:MethodEditModel" name="StructuredElementsFactory" id="transformation.factories/StructuredElementsFactory#StructuredElementsFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createCompensationHandlerElement" id="transformation.factories/StructuredElementsFactory#createCompensationHandlerElement(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createEventHandlersElement" id="transformation.factories/StructuredElementsFactory#createEventHandlersElement(Lmodel.Container;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createFaultHandlerElements" id="transformation.factories/StructuredElementsFactory#createFaultHandlerElements(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createFaultHandlersElement" id="transformation.factories/StructuredElementsFactory#createFaultHandlersElement(Lmodel.activities.Activity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createLoopElement" id="transformation.factories/StructuredElementsFactory#createLoopElement(Lmodel.activities.Activity;Lorg.w3c.dom.Element;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createOnMessageBranch" id="transformation.factories/StructuredElementsFactory#createOnMessageBranch(Lmodel.activities.ReceiveTask;Lorg.w3c.dom.Element;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createPickBranchElement" id="transformation.factories/StructuredElementsFactory#createPickBranchElement(Lmodel.activities.IntermediateEvent;Lorg.w3c.dom.Element;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createScopeElement" id="transformation.factories/StructuredElementsFactory#createScopeElement(Lmodel.activities.BlockActivity;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createTerminationHandlerElement" id="transformation.factories/StructuredElementsFactory#createTerminationHandlerElement(Lmodel.activities.Activity;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Componentizer" location="288,2135" size="418,94" id="transformation.factories/Componentizer" runTimeClassModel="Componentizer(Lmodel.Diagram;Lmodel.Container;Lutil.Output;),getNextComponent()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="395,36">
+      <children xsi:type="editmodel:MethodEditModel" name="Componentizer" id="transformation.factories/Componentizer#Componentizer(Lmodel.Diagram;Lmodel.Container;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getNextComponent" id="transformation.factories/Componentizer#getNextComponent()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="BasicActivityFactory" location="535,427" size="465,299" id="transformation.factories/BasicActivityFactory" runTimeClassModel="createWaitElement(Lmodel.activities.IntermediateEvent;),createReceiveElement(Lmodel.activities.IntermediateEvent;),createSendingElement(Lmodel.activities.SendTask;),createCompensateElement(Lmodel.activities.IntermediateEvent;),createAssignElement(Lmodel.activities.AssignTask;),createReceiveElement(Lmodel.activities.ReceiveTask;),createValidateElement(Lmodel.activities.ValidateTask;),createThrowElement(Lmodel.activities.IntermediateEvent;Z),createInvokeElement(Lmodel.activities.ServiceTask;),createInvokeElement(Lmodel.activities.SendTask;),BasicActivityFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lutil.Output;),createReceiveElement(Lmodel.activities.StartEvent;Z),createEmptyElement(Lmodel.activities.EmptyTask;),createOpaqueElement(Lmodel.activities.NoneTask;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="442,252">
+      <children xsi:type="editmodel:MethodEditModel" name="BasicActivityFactory" id="transformation.factories/BasicActivityFactory#BasicActivityFactory(Lmodel.Diagram;Lorg.w3c.dom.Document;Lutil.Output;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createAssignElement" id="transformation.factories/BasicActivityFactory#createAssignElement(Lmodel.activities.AssignTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createCompensateElement" id="transformation.factories/BasicActivityFactory#createCompensateElement(Lmodel.activities.IntermediateEvent;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createEmptyElement" id="transformation.factories/BasicActivityFactory#createEmptyElement(Lmodel.activities.EmptyTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createInvokeElement" id="transformation.factories/BasicActivityFactory#createInvokeElement(Lmodel.activities.ServiceTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createInvokeElement" id="transformation.factories/BasicActivityFactory#createInvokeElement(Lmodel.activities.SendTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createOpaqueElement" id="transformation.factories/BasicActivityFactory#createOpaqueElement(Lmodel.activities.NoneTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createReceiveElement" id="transformation.factories/BasicActivityFactory#createReceiveElement(Lmodel.activities.IntermediateEvent;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createReceiveElement" id="transformation.factories/BasicActivityFactory#createReceiveElement(Lmodel.activities.ReceiveTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createReceiveElement" id="transformation.factories/BasicActivityFactory#createReceiveElement(Lmodel.activities.StartEvent;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createSendingElement" id="transformation.factories/BasicActivityFactory#createSendingElement(Lmodel.activities.SendTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createThrowElement" id="transformation.factories/BasicActivityFactory#createThrowElement(Lmodel.activities.IntermediateEvent;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createValidateElement" id="transformation.factories/BasicActivityFactory#createValidateElement(Lmodel.activities.ValidateTask;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createWaitElement" id="transformation.factories/BasicActivityFactory#createWaitElement(Lmodel.activities.IntermediateEvent;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showAssociationMember="true" showMethods="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=0"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterNames="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showAssociationMember="true" showMethods="true"/>
+</editmodel:ClassDiagramEditModel>

@@ -49,6 +49,9 @@ Repository.app = {
 	anonymous_user: "",
 	public_user:"public",
 	
+	stencilset_url: "/stencilsets/",
+	oryx_url: "/oryx/",
+	
     models: [], // saves all loaded models
     /**
      * saves information for debugging, especially for problem identifying when page is loaded
@@ -613,13 +616,18 @@ Repository.app = {
 			// load list of diagram types
 			Ext.Ajax.request({
 				method: "GET",
-				url: "/backend/poem/model_types",
+				url: "/oryx/stencilsets/stencilsets.json",
 				success: function success(response, options) {
 					Repository.app.model_types  = Ext.util.JSON.decode(response.responseText);
 
 					ORYX.Log.debug("server offered %0 model types", Repository.app.model_types.length)
 					
 					Repository.app._model_types_loading = false;
+					
+					for (var i = 0; i < Repository.app.model_types.length; i++) {
+						Repository.app.model_types[i].icon_url = Repository.app.oryx_url + Repository.app.stencilset_url + Repository.app.model_types[i].icon_url;
+						Repository.app.model_types[i].uri = Repository.app.stencilset_url + Repository.app.model_types[i].uri;
+					}
 					
 					if (callback instanceof Function) {
 						callback(Repository.app.model_types);
