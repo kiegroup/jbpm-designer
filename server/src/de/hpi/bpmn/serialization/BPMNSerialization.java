@@ -7,6 +7,7 @@ import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.EndCancelEvent;
 import de.hpi.bpmn.EndCompensationEvent;
 import de.hpi.bpmn.EndErrorEvent;
+import de.hpi.bpmn.EndLinkEvent;
 import de.hpi.bpmn.EndMessageEvent;
 import de.hpi.bpmn.EndMultipleEvent;
 import de.hpi.bpmn.EndPlainEvent;
@@ -100,6 +101,7 @@ public interface BPMNSerialization {
 	public StringBuilder getSerializationForDiagramObject(EndCancelEvent endCancelEvent);
 	public StringBuilder getSerializationForDiagramObject(EndCompensationEvent endCompensationEvent);
 	public StringBuilder getSerializationForDiagramObject(EndErrorEvent endErrorEvent);
+	public StringBuilder getSerializationForDiagramObject(EndLinkEvent endLinkEvent);
 
 
 }

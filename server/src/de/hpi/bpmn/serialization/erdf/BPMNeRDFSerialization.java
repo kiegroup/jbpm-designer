@@ -11,6 +11,7 @@ import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.EndCancelEvent;
 import de.hpi.bpmn.EndCompensationEvent;
 import de.hpi.bpmn.EndErrorEvent;
+import de.hpi.bpmn.EndLinkEvent;
 import de.hpi.bpmn.EndMessageEvent;
 import de.hpi.bpmn.EndMultipleEvent;
 import de.hpi.bpmn.EndPlainEvent;
@@ -52,6 +53,7 @@ import de.hpi.bpmn.serialization.erdf.templates.DataObjectTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.EndCancelEventTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.EndCompensationEventTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.EndErrorEventTemplate;
+import de.hpi.bpmn.serialization.erdf.templates.EndLinkEventTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.EndMessageEventTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.EndMultipleEventTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.EndPlainEventTemplate;
@@ -401,5 +403,10 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 		return XOREventBasedGatewayTemplate.getInstance().getCompletedTemplate(xorEventBasedGateway, this.context);
 	}
 	
+	@Override
+	public StringBuilder getSerializationForDiagramObject(
+			EndLinkEvent endLinkEvent) {
+		return EndLinkEventTemplate.getInstance().getCompletedTemplate(endLinkEvent, this.context);
+	}
 
 }
