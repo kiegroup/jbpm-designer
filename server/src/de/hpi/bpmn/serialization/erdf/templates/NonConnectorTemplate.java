@@ -19,6 +19,10 @@ public abstract class NonConnectorTemplate extends BPMN2ERDFTemplateImpl {
 	}
 	
 	protected void appendResourceLinkForBoundaryEvent(StringBuilder s, IntermediateEvent i, ERDFSerializationContext context) {
+		// is the event attached to an activity at all?
+		if (i.getActivity() == null)
+			return;
+		
 		s.append("<a rel=\"raziel-parent\" href=\"#resource");
 		s.append(context.getResourceIDForDiagramObject(i.getActivity()));
 		s.append("\"/>");

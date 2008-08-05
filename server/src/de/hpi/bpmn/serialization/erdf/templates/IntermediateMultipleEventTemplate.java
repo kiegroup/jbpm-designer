@@ -30,6 +30,7 @@ public class IntermediateMultipleEventTemplate extends NonConnectorTemplate {
 		appendOryxField(s,"eventtype","Intermediate");
 		appendStandardFields(s);
 		appendOryxField(s,"trigger","Multiple");
+		appendResourceLinkForBoundaryEvent(s, e, transformationContext);
 		appendResourceEndPattern(s, e, transformationContext);
 		
 		return s;

@@ -30,6 +30,7 @@ public class IntermediateSignalEventTemplate extends NonConnectorTemplate {
 		appendOryxField(s,"eventtype","Intermediate");
 		appendStandardFields(s);
 		appendOryxField(s,"trigger","Signal");
+		appendResourceLinkForBoundaryEvent(s, e, transformationContext);
 		appendResourceEndPattern(s, e, transformationContext);
 		
 		return s;

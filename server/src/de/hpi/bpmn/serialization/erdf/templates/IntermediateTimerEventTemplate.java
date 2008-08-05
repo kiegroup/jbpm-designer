@@ -26,6 +26,7 @@ public class IntermediateTimerEventTemplate extends NonConnectorTemplate {
 		appendOryxField(s,"eventtype","Intermediate");
 		appendStandardFields(s);
 		appendOryxField(s,"trigger","Timer");
+		appendResourceLinkForBoundaryEvent(s, e, context);
 		appendResourceEndPattern(s, e, context);
 		
 		return s;

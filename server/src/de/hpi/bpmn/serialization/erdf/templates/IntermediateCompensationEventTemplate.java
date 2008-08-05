@@ -30,6 +30,7 @@ public class IntermediateCompensationEventTemplate extends NonConnectorTemplate 
 		appendOryxField(s,"eventtype","Intermediate");
 		appendStandardFields(s);
 		appendOryxField(s,"trigger","Compensation");
+		appendResourceLinkForBoundaryEvent(s, e, transformationContext);
 		appendResourceEndPattern(s, e, transformationContext);
 		
 		return s;
