@@ -96,6 +96,7 @@
                     <include name="servlet-api.jar"/>
                     <include name="openid4java.jar"/>
                     <include name="js.jar"/>
+					<include name="oryxAtlas.jar"/>
                 </fileset>
             </classpath>
         </javac>
@@ -237,6 +238,8 @@
                 <!-- database connectors. consider moving this to users responsibility -->
                 <include name="mysql-connector-java-5.1.5-bin.jar"/>
                 <!-- <include name="postgresql-8.3dev-602.jdbc3.jar"/> -->
+				
+				<include name="oryxAtlas.jar"/>
             </lib>
             
             <fileset dir="build">
