@@ -10,6 +10,8 @@ public class SequenceFlow extends Edge {
 	
 	protected ConditionType conditionType = ConditionType.NONE;
 
+	protected String conditionExpression = "";
+	
 	public ConditionType getConditionType() {
 		return conditionType;
 	}
@@ -22,4 +24,13 @@ public class SequenceFlow extends Edge {
 	public StringBuilder getSerialization(BPMNSerialization serialization) {
 		return serialization.getSerializationForDiagramObject(this);
 	}
+
+	public String getConditionExpression() {
+		return conditionExpression;
+	}
+
+	public void setConditionExpression(String conditionExpression) {
+		this.conditionExpression = conditionExpression;
+	}
+	
 }

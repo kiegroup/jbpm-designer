@@ -42,6 +42,19 @@ import de.hpi.bpmn.UndirectedAssociation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
 
+/**
+ * Every target language for serializations of a BPMN model has to implement
+ * this interface. An implementation of this interface is passed to all 
+ * BPMN elements that are serialized. They do nothing more than calling the 
+ * method getSerializationForDiagramObject(). The actual method is then selected
+ * based on the type information.
+ * 
+ * Please see the package de.hpi.bpmn.serialization.erdf for an exemplary 
+ * implementation.
+ * 
+ * @author matthias.weidlich
+ *
+ */
 public interface BPMNSerialization {
 	
 	public StringBuilder getSerializationHeader();
