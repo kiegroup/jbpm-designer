@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/openid4java.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/oryxAtlas.jar"/>
 	<classpathentry kind="output" path="server/bin"/>
 </classpath>

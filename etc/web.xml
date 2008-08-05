@@ -192,6 +192,17 @@
 	</servlet-mapping>
 
 	<servlet>
+		<display-name>Oryx AML Support Servlet</display-name>
+		<servlet-name>AMLSupport</servlet-name>
+		<servlet-class>org.oryxeditor.server.AMLSupport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AMLSupport</servlet-name>
+		<url-pattern>/amlsupport</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
 		<display-name>Automatic Layouter Servlet</display-name>
 		<servlet-name>AutoLayouter</servlet-name>
 		<servlet-class>
