@@ -18,9 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -28,12 +32,13 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+//import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
 import de.hpi.bpt.epc.EPC;
 import de.hpi.bpt.epc.aml.util.AMLParser;
@@ -106,16 +111,16 @@ public class AMLSupport extends HttpServlet {
 
     	
     	try {
-			DocumentBuilder builder;
+			/*DocumentBuilder builder;
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			builder = docFactory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(fileItem.get()));
-						
+		
 			String content = document.getTextContent();
 			out.print("{success:true, content:'"+ content +"'}");
-			
-			/*AMLParser parser = new AMLParser(fileItem.getName());
-			parser.parse(document);
+			*/
+			AMLParser parser = new AMLParser(((DiskFileItem)fileItem).getStoreLocation().getAbsolutePath());
+			parser.parse();
 			Collection<EPC> epcs = new HashSet<EPC>();
 			Iterator<String> ids = parser.getModelIds().iterator();
 			while (ids.hasNext()) {
@@ -123,12 +128,34 @@ public class AMLSupport extends HttpServlet {
 				epcs.add(parser.getEPC(modelId));
 			}
 			
+			//serialize epcs to eRDF oryx format
 			OryxSerializer oryxSerializer = new OryxSerializer(epcs);
 			oryxSerializer.parse();
 
 			Document outputDocument = oryxSerializer.getDocument();
-*/
-	//		out.print("{success:true, content:'"+ outputDocument.getTextContent() +"'}");
+			
+			//get document as string
+			String docAsString = "";
+			
+			try {
+	            Source source = new DOMSource(outputDocument);
+	            StringWriter stringWriter = new StringWriter();
+	            Result result = new StreamResult(stringWriter);
+	            TransformerFactory tfactory = TransformerFactory.newInstance();
+	            Transformer transformer = tfactory.newTransformer();
+	            transformer.transform(source, result);
+	            docAsString = stringWriter.getBuffer().toString();
+	        } catch (TransformerConfigurationException e) {
+	        	handleException(out, e); 
+	    		return;
+	        } catch (TransformerException e) {
+	        	handleException(out, e); 
+	    		return;
+	        }
+	        
+	        //write response
+	        System.out.println(docAsString);
+			out.print("{success:true, content:'"+ docAsString +"'}");
 			
 		} catch (Exception e) {
 			handleException(out, e); 
