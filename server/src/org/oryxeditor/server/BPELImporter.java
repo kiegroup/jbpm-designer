@@ -107,8 +107,9 @@ public class BPELImporter extends HttpServlet {
     		return;
     	}
 	   		
-    	// epel2eRDF XSLT source
-    	final File bpel2eRDFxsltFile = new File("../webapps/oryx/xslt/BPEL2eRDF.xslt");
+    	// BPEL2eRDF XSLT source
+    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/BPEL2eRDF.xslt";
+    	final File bpel2eRDFxsltFile = new File(xsltFilename);
     	final Source bpel2eRDFxsltSource = new StreamSource(bpel2eRDFxsltFile);	
 
     	// Transformer Factory

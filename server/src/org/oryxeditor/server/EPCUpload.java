@@ -104,7 +104,8 @@ public class EPCUpload extends HttpServlet {
     	}
 	   		
     	// epml2eRDF XSLT source
-    	final File epml2eRDFxsltFile = new File("../webapps/oryx/xslt/EPML2eRDF.xslt");
+    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/EPML2eRDF.xslt";
+    	final File epml2eRDFxsltFile = new File(xsltFilename);
     	final Source epml2eRDFxsltSource = new StreamSource(epml2eRDFxsltFile);	
 
     	// Transformer Factory
