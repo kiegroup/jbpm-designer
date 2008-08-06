@@ -154,8 +154,8 @@ public class AMLSupport extends HttpServlet {
 	        }
 	        
 	        //write response
-	        System.out.println(docAsString);
-			out.print("{success:true, content:'"+ docAsString +"'}");
+	       // System.out.println(docAsString);
+			out.print("" + docAsString +"");
 			
 		} catch (Exception e) {
 			handleException(out, e); 

@@ -112,7 +112,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				      						waitMsg: 	"Importing...",
 				      						success: 	function(f,a){
 													dialog.hide();
-													console.log(a.result.content)
+													
+													var erdf = a.result;
+													erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
+													
+													this.loadContent( erdf );
 													/*
 													var erdf = a.result.content;
 													erdf = erdf.replace(/&lt;/g, "<");
@@ -150,8 +154,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		dialog.show();
 	},
 	
-	loadContent: function(erdf){
+	loadDiagrams: function(erdf){
 		
+		erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
+													
+													
 		console.log(erdf);
 
 	},
@@ -169,12 +176,12 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	 * 
 	 * @param {Object} content
 	 */
-/*	loadContent: function(content){
+	loadContent: function(content){
 		
 		var epcs = this.parseToObject( content );
 		
 		epcs = epcs.collect(function(epc){ return {epcData: epc, stencil: ORYX.Core.StencilSet.stencil(epc.type)}})
-		
+		console.log(epcs)
 		var nodes = epcs.findAll(function(epc){ return epc.stencil.type() == "node" });
 		var edges = epcs.findAll(function(epc){ return epc.stencil.type() == "edge" });
 		
@@ -253,7 +260,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		this.facade.getCanvas().update();
 		
 	},
-	*/
+	
 	/**
 	 * Parsed the given ERDF-String to a Array with the individual
 	 * EPC-Objects
@@ -266,12 +273,17 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		var doc		= parser.parseFromString( erdfString ,"text/xml");
 
 		var getElementByIdFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id})}
+		var getElementByClassNameFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("class")== id})}
 
 		// Get the oryx-editor div
-		var editorNode 	= getElementByIdFromDiv('oryxcanvas');
+		var editorNode 	= null//doc.getElementsByTagName('-oryx-canvas');
+		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryxcanvas');
 		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryx-canvas123');
+		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('Modelhtspu');
+		
+		console.log(doc, erdfString, editorNode)
 
-		var hasEPC = editorNode ? $A(editorNode.childNodes).any(function(node){return node.nodeName.toLowerCase() == "a" && node.getAttribute('rel') == 'oryx-stencilset' && node.getAttribute('href').endsWith('epc/epc.json')}) : null;
+		var hasEPC = editorNode ? $A(editorNode.childNodes).any(function(node){return node.nodeName.toLowerCase() == "a" && node.getAttribute('rel') == 'oryx-stencilset' && node.getAttribute('href').endsWith('epc/epc.json')}) : true;
 
 		if( !hasEPC ){
 			this.throwErrorMessage('Imported model is not an EPC model!');
@@ -316,6 +328,15 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		// Collect all Attributes out of the Nodes
 		return renderNodes.collect(function(el){return parseAttribute(el)});
 				
-	}	
+	},
+
+	
+	/**
+	 * 
+	 * @param {Object} message
+	 */
+	throwErrorMessage: function(message){
+		Ext.Msg.alert( 'Oryx', message )
+	},		
 	
 });
