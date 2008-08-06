@@ -40,10 +40,10 @@ include_class 'org.b3mn.poem.Identity'
 include_class 'org.b3mn.poem.Access'
 include_class 'org.oryxeditor.server.auth.OpenIDAuthenticationServlet'
 
-ServerInteraction = Struct.new :subject, :object, :params, :request, :response, :hostname
+ServerInteraction = Struct.new :subject, :object, :params, :request, :response, :hostname, :context
 
 class Dispatcher
-  def dispatch(request,response)
+  def dispatch(request,response,context)
     hostname = 'http://' + request.getServerName + ':' + request.getServerPort.to_s + request.getContextPath +  request.getServletPath
     puts request.getMethod.capitalize + ': ' + hostname + request.getPathInfo
     rights = {
@@ -64,7 +64,7 @@ class Dispatcher
 
     if(handler_name = relations[Helper.getRelation(uri)])
       handler = Handler.module_eval("#{handler_name}").new
-      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname))    
+      handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), nil, Helper.getParams(request), request, response, hostname, context))    
     else
       scope = Identity.instance(Helper.getObjectPath(uri))
       access = scope.access(openid, Helper.getRelation(uri)) unless scope.nil?
@@ -72,10 +72,10 @@ class Dispatcher
         if(rights[access.getAccess_term].include?(request.getMethod.capitalize))
           if (access.getScheme == 'java')
             handler = Handler::JavaHandler.new
-            handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), Identity.instance(Helper.getObjectPath(uri)), nil, request, response, hostname), access.getTerm)
+            handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), Identity.instance(Helper.getObjectPath(uri)), nil, request, response, hostname), access.getTerm, context)
           elsif (access.getScheme == 'ruby' && Handler.constants.include?(access.getTerm))
             handler = Handler.module_eval("#{access.getTerm}").new
-            handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), Identity.instance(Helper.getObjectPath(uri)), Helper.getParams(request), request, response, hostname))
+            handler.handleRequest(ServerInteraction.new(Identity.ensureSubject(openid), Identity.instance(Helper.getObjectPath(uri)), Helper.getParams(request), request, response, hostname, context))
           else
             response.setStatus(501)
             out = response.getWriter

@@ -4,14 +4,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.batik.transcoder.TranscoderException;
 import org.b3mn.poem.Identity;
 
-public class ImageRenderer {
-
+public class ImageRenderer extends PluginBase {
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object, String hostname) throws IOException {
     	setResponseHeaders(res);
     	try {
