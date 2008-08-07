@@ -17,7 +17,6 @@ public class StartMessageEventTemplate extends NonConnectorTemplate implements
 	}	
 
 
-	@Override
 	public StringBuilder getCompletedTemplate(DiagramObject diagramObject, 
 			ERDFSerializationContext context) {
 		

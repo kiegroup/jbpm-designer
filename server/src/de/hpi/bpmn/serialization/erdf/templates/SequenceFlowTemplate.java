@@ -16,7 +16,6 @@ public class SequenceFlowTemplate extends ConnectorTemplate implements
 		return instance;
 	}
 	
-	@Override
 	public StringBuilder getCompletedTemplate(DiagramObject diagramObject,
 			ERDFSerializationContext context) {
 		

@@ -15,7 +15,6 @@ public class IntermediateErrorEventTemplate extends NonConnectorTemplate {
 		return instance;
 	}
 	
-	@Override
 	public StringBuilder getCompletedTemplate(DiagramObject diagramObject,
 			ERDFSerializationContext context) {
 		

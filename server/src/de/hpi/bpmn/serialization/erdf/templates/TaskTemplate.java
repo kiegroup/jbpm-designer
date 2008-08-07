@@ -17,7 +17,6 @@ public class TaskTemplate extends NonConnectorTemplate {
 	}
 
 	
-	@Override
 	public StringBuilder getCompletedTemplate(DiagramObject diagramObject, ERDFSerializationContext context) {
 		
 		Task t = (Task) diagramObject;

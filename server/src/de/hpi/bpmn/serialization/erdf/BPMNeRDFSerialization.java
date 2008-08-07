@@ -96,8 +96,6 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 		this.context = new ERDFSerializationContext(bpmnDiagram);
 	}
 	
-	
-	@Override
 	public StringBuilder getSerializationHeader() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">");
@@ -125,285 +123,204 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 		return sb;
 	}
 	
-	@Override
 	public StringBuilder getSerializationFooter() {
 		return new StringBuilder("");
 	}
 
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			Task task) {
 		return TaskTemplate.getInstance().getCompletedTemplate(task, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			StartMessageEvent startMessageEvent) {
 		return StartMessageEventTemplate.getInstance().getCompletedTemplate(startMessageEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			StartPlainEvent startPlainEvent) {
 		return StartPlainEventTemplate.getInstance().getCompletedTemplate(startPlainEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(ANDGateway andGateway) {
 		return ANDGatewayTemplate.getInstance().getCompletedTemplate(andGateway, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			Association association) {
 		return AssociationTemplate.getInstance().getCompletedTemplate(association, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			ComplexGateway complexGateway) {
 		return ComplexGatewayTemplate.getInstance().getCompletedTemplate(complexGateway, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(DataObject dataObject) {
 		return DataObjectTemplate.getInstance().getCompletedTemplate(dataObject, this.context);
 	}
 
-
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndCancelEvent endCancelEvent) {
 		return EndCancelEventTemplate.getInstance().getCompletedTemplate(endCancelEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndCompensationEvent endCompensationEvent) {
 		return EndCompensationEventTemplate.getInstance().getCompletedTemplate(endCompensationEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndErrorEvent endErrorEvent) {
 		return EndErrorEventTemplate.getInstance().getCompletedTemplate(endErrorEvent, this.context);
 	}
 
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndMessageEvent endMessageEvent) {
 		return EndMessageEventTemplate.getInstance().getCompletedTemplate(endMessageEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndMultipleEvent endMultipleEvent) {
 		return EndMultipleEventTemplate.getInstance().getCompletedTemplate(endMultipleEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndPlainEvent endPlainEvent) {
 		return EndPlainEventTemplate.getInstance().getCompletedTemplate(endPlainEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndSignalEvent endSignalEvent) {
 		return EndSignalEventTemplate.getInstance().getCompletedTemplate(endSignalEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndTerminateEvent endTerminateEvent) {
 		return EndTerminateEventTemplate.getInstance().getCompletedTemplate(endTerminateEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateCancelEvent intermediateCancelEvent) {
 		return IntermediateCancelEventTemplate.getInstance().getCompletedTemplate(intermediateCancelEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateCompensationEvent intermediateCompensationEvent) {
 		return IntermediateCompensationEventTemplate.getInstance().getCompletedTemplate(intermediateCompensationEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateConditionalEvent intermediateConditionalEvent) {
 		return IntermediateConditionalEventTemplate.getInstance().getCompletedTemplate(intermediateConditionalEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateErrorEvent intermediateErrorEvent) {
 		return IntermediateErrorEventTemplate.getInstance().getCompletedTemplate(intermediateErrorEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateLinkEvent intermediateLinkEvent) {
 		return IntermediateLinkEventTemplate.getInstance().getCompletedTemplate(intermediateLinkEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateMessageEvent intermediateMessageEvent) {
 		return IntermediateMessageEventTemplate.getInstance().getCompletedTemplate(intermediateMessageEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateMultipleEvent intermediateMultipleEvent) {
 		return IntermediateMultipleEventTemplate.getInstance().getCompletedTemplate(intermediateMultipleEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediatePlainEvent intermediatePlainEvent) {
 		return IntermediatePlainEventTemplate.getInstance().getCompletedTemplate(intermediatePlainEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateSignalEvent intermediateSignalEvent) {
 		return IntermediateSignalEventTemplate.getInstance().getCompletedTemplate(intermediateSignalEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			IntermediateTimerEvent intermediateTimerEvent) {
 		return IntermediateTimerEventTemplate.getInstance().getCompletedTemplate(intermediateTimerEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(Lane lane) {
 		return LaneTemplate.getInstance().getCompletedTemplate(lane, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			MessageFlow messageFlow) {
 		return MessageFlowTemplate.getInstance().getCompletedTemplate(messageFlow, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(ORGateway orGateway) {
 		return ORGatewayTemplate.getInstance().getCompletedTemplate(orGateway, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(Pool pool) {
 		return PoolTemplate.getInstance().getCompletedTemplate(pool, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			SequenceFlow sequenceFlow) {
 		return SequenceFlowTemplate.getInstance().getCompletedTemplate(sequenceFlow, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			StartConditionalEvent startConditionalEvent) {
 		return StartConditionalEventTemplate.getInstance().getCompletedTemplate(startConditionalEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			StartLinkEvent startLinkEvent) {
 		return StartLinkEventTemplate.getInstance().getCompletedTemplate(startLinkEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			StartMultipleEvent startMultipleEvent) {
 		return StartMultipleEventTemplate.getInstance().getCompletedTemplate(startMultipleEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			StartSignalEvent startSignalEvent) {
 		return StartSignalEventTemplate.getInstance().getCompletedTemplate(startSignalEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			StartTimerEvent startTimerEvent) {
 		return StartTimerEventTemplate.getInstance().getCompletedTemplate(startTimerEvent, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(SubProcess subProcess) {
 		return SubProcessTemplate.getInstance().getCompletedTemplate(subProcess, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			TextAnnotation textAnnotation) {
 		return TextAnnotationTemplate.getInstance().getCompletedTemplate(textAnnotation, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			UndirectedAssociation undirectedAssociation) {
 		return UndirectedAssociationTemplate.getInstance().getCompletedTemplate(undirectedAssociation, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			XORDataBasedGateway xorDataBasedGateway) {
 		return XORDataBasedGatewayTemplate.getInstance().getCompletedTemplate(xorDataBasedGateway, this.context);
 	}
 
-
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			XOREventBasedGateway xorEventBasedGateway) {
 		return XOREventBasedGatewayTemplate.getInstance().getCompletedTemplate(xorEventBasedGateway, this.context);
 	}
 	
-	@Override
 	public StringBuilder getSerializationForDiagramObject(
 			EndLinkEvent endLinkEvent) {
 		return EndLinkEventTemplate.getInstance().getCompletedTemplate(endLinkEvent, this.context);

@@ -15,7 +15,6 @@ public class XOREventBasedGatewayTemplate extends NonConnectorTemplate {
 		return instance;
 	}
 
-	@Override
 	public StringBuilder getCompletedTemplate(DiagramObject diagramObject,
 			ERDFSerializationContext context) {
 		
