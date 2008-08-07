@@ -33,7 +33,7 @@ public class BPMNDiagram implements Container {
 
 	public List<DataObject> getDataObjects() {
 		if (dataObjects == null)
-			dataObjects = new ArrayList();
+			dataObjects = new ArrayList<DataObject>();
 		return dataObjects;
 	}
 
@@ -43,13 +43,13 @@ public class BPMNDiagram implements Container {
 	 */
 	public List<Edge> getEdges() {
 		if (edges == null)
-			edges = new ArrayList();
+			edges = new ArrayList<Edge>();
 		return edges;
 	}
 
 	public List<Node> getChildNodes() {
 		if (childNodes == null)
-			childNodes = new ArrayList();
+			childNodes = new ArrayList<Node>();
 		return childNodes;
 	}
 	
@@ -63,9 +63,9 @@ public class BPMNDiagram implements Container {
 	
 	// identifies sets of nodes, connected through SequenceFlow
 	public void identifyProcesses() {
-		processes = new ArrayList();
+		processes = new ArrayList<Container>();
 		
-		List<Node> allNodes = new ArrayList();
+		List<Node> allNodes = new ArrayList<Node>();
 		getAllNodesRecursively(this, allNodes);
 		
 		// handle subprocesses => trivial
