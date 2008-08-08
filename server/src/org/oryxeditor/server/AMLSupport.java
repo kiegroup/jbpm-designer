@@ -75,6 +75,8 @@ public class AMLSupport extends HttpServlet {
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     	
+    	String oryxBaseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/oryx/";
+
     	// Get the PrintWriter
     	res.setContentType("text/html");
     	PrintWriter out = null;
@@ -129,7 +131,7 @@ public class AMLSupport extends HttpServlet {
 			}
 			
 			//serialize epcs to eRDF oryx format
-			OryxSerializer oryxSerializer = new OryxSerializer(epcs);
+			OryxSerializer oryxSerializer = new OryxSerializer(epcs, oryxBaseUrl);
 			oryxSerializer.parse();
 
 			Document outputDocument = oryxSerializer.getDocument();
