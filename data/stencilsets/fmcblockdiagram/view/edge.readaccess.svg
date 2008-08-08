@@ -10,6 +10,6 @@
       </marker>
 	</defs>
 	<g>
-	    <path id="edge" d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-start="url(#start)" marker-end="url(#end)" />
+	    <path id="edge" d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-start="url(#start)" />
 	</g>
 </svg>

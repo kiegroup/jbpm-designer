@@ -75,9 +75,9 @@
     <path
        id="edge"
        d="M 10,50 C 10,50 35.81008,25.372411 107.78742,25.248814 C 179.76483,25.125216 210,50 210,50"
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-start:url(#start);marker-end:url(#end)" />
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#end)" />
     <path
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-start:url(#start);marker-end:url(#end)"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#end)"
          d="M 210.27224,63.38369 C 210.27224,63.38369 184.46216,88.011279 112.48482,88.134876 C 40.50741,88.258474 10.27224,63.38369 10.27224,63.38369"
          id="path2390" />
   </g>
