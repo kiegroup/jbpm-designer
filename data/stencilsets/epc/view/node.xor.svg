@@ -6,9 +6,9 @@
    height="40"
    version="1.1">
   <g>
-    <circle cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1"/>
+    <ellipse oryx:resize="vertical horizontal" cx="16" cy="16" rx="15" ry="15" stroke="black" fill="white" stroke-width="1"/>
 
-    <path d="M 10 10 l 12 12 m -12 0 l 12 -12" stroke="black" fill="white" stroke-width="1" />
+    <path oryx:resize="vertical horizontal" d="M 10 10 l 12 12 m -12 0 l 12 -12" stroke="black" fill="white" stroke-width="1" />
 
     <text id="text" x="16" y="16" oryx:defaultPosition="middleRight"></text>
   </g>

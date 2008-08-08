@@ -15,7 +15,7 @@
   	<oryx:magnet oryx:cx="50" oryx:cy="0" oryx:anchors="top" />
   	<oryx:magnet oryx:cx="50" oryx:cy="30" oryx:default="yes" />
   </oryx:magnets>
-  <g pointer-events="fill" oryx:minimumSize="50 30" oryx:maximumSize="200 120" >
+  <g pointer-events="fill">
 
     <path d="M 0 0 l 100 0 l 0 52 l -20 -8 l -60 16 l -20 -8 z " oryx:resize="vertical horizontal" stroke="black" fill="#dcdcdc" stroke-width="1" />
 

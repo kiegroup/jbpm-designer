@@ -15,7 +15,7 @@
   	<oryx:magnet oryx:cx="60" oryx:cy="0" oryx:anchors="top" />
   	<oryx:magnet oryx:cx="60" oryx:cy="25" oryx:default="yes" />
   </oryx:magnets>
-  <g pointer-events="fill" oryx:minimumSize="60 25" oryx:maximumSize="240 100" >
+  <g pointer-events="fill">
     <ellipse id="functionrect" oryx:resize="vertical horizontal" cx="60" cy="25" rx="60" ry="25" stroke="black" stroke-width="1" fill="#ffffaf" />
     <path d="M 10 11 l 0 28" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <text font-size="12" id="text" x="60" y="25" oryx:align="middle center" stroke="black"></text>
