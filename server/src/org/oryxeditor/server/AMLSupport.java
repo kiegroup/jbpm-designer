@@ -79,6 +79,8 @@ public class AMLSupport extends HttpServlet {
 
     	// Get the PrintWriter
     	res.setContentType("text/plain");
+    	res.setCharacterEncoding("utf-8");
+    	
     	PrintWriter out = null;
     	try {
     	    out = res.getWriter();
@@ -156,7 +158,6 @@ public class AMLSupport extends HttpServlet {
 	        }
 	        
 	        //write response
-	       // System.out.println(docAsString);
 			out.print("" + docAsString +"");
 			
 		} catch (Exception e) {
