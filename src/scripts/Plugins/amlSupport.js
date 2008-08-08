@@ -113,10 +113,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				      						success: 	function(f,a){
 													dialog.hide();
 													
+													console.log(f,a)
 													var erdf = a.result;
-													erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
+													//erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
 													
-													this.loadContent( erdf );
+													this.loadDiagrams( erdf );
 													/*
 													var erdf = a.result.content;
 													erdf = erdf.replace(/&lt;/g, "<");
@@ -155,13 +156,157 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	},
 	
 	loadDiagrams: function(erdf){
+
+		var doc = this.parseToDoc( erdf );
 		
-		erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
-													
-													
-		console.log(erdf);
+		// get the serialiezed object for the first process data
+		var serialized = this.parseToSerializeObjects( doc.firstChild );	
+				
+		this.importData( serialized );
+		
 
 	},
+
+	/**
+	 * Gives a div from xml with a given id
+	 * 
+	 * @param {Object} doc
+	 * @param {Object} id
+	 */
+	getElementByIdFromDiv: function(doc, id){
+		
+		return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id})
+	
+	},
+
+	/**
+	 * Give all divs with a given class name
+	 * 
+	 * @param {Object} doc
+	 * @param {Object} id
+	 */
+	getElementByClassNameFromDiv: function(doc, id){
+
+		return $A(doc.getElementsByTagName('div')).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	
+
+	},
+	
+	/**
+	 * Parses the erdf string to an xml-document
+	 * 
+	 * @param {Object} erdfString
+	 */
+	parseToDoc: function( erdfString ){
+		
+		var parser	= new DOMParser();			
+		
+		return parser.parseFromString( erdfString ,"text/xml");
+
+	},
+
+	/**
+	 * Parses one process model to the serialized form
+	 * 
+	 * @param {Object} oneProcessData
+	 */
+	parseToSerializeObjects: function( oneProcessData ){
+
+		// Get the oryx-editor div
+		var editorNode 	= this.getElementByClassNameFromDiv( oneProcessData, '-oryx-canvas')[0];
+
+		// Get all ids from the canvas node for rendering
+		var renderNodes = $A(editorNode.childNodes).collect(function(el){ return el.nodeName.toLowerCase() == "a" && el.getAttribute('rel') == 'oryx-render' ? el.getAttribute('href').slice(1) : null}).compact()
+		// Collect all nodes from the ids
+		renderNodes = renderNodes.collect(function(el){return this.getElementByIdFromDiv( oneProcessData, el)}.bind(this));
+		
+		// Function for extract all eRDF-Attributes and give them back as an Object
+		var parseAttribute = function(node){
+		    
+			var res = {type: undefined, id: undefined ,serialize: [] }
+			
+			// Set the resource id
+			if(node.getAttribute("id")){
+				res.id = node.getAttribute("id");
+			}
+			
+			// Set all attributes
+		    $A(node.childNodes).each( function(node){ 
+				if( node.nodeName.toLowerCase() == "span" && node.getAttribute('class')){
+		            var name 	= node.getAttribute('class').split("-");
+					var value 	= node.firstChild ? node.firstChild.nodeValue : '';
+					
+					res.serialize.push({name: name[1], prefix:  name[0], value: value})
+
+					if( name[1] == "type" ){
+						res.type = value;
+					}
+
+				} else if( node.nodeName.toLowerCase() == "a" && node.getAttribute('rel')){
+		            var name 	= node.getAttribute('rel').split("-");
+					var value 	= node.getAttribute('href');
+					
+					res.serialize.push({name: name[1], prefix:  name[0], value: value})
+		        }
+		    })
+			
+		    return res.type ? res : null ;
+		}		
+		
+		// Collect all Attributes out of the Nodes
+		return renderNodes.collect(function(el){return parseAttribute(el)}).compact();
+		
+		
+	},
+	
+	importData: function( serialized ){
+		
+		var canvas  = this.facade.getCanvas();
+		
+		serialized.each(function(ser){
+
+			// Try to create a new Shape
+			try {
+				// Create a new Stencil								
+				var stencil = ORYX.Core.StencilSet.stencil( ser.type );
+	
+				// Create a new Shape
+				var newShape = (stencil.type() == "node") ?
+									new ORYX.Core.Node(
+										{'eventHandlerCallback':this.facade.raiseEvent},
+										stencil) :
+									new ORYX.Core.Edge(
+										{'eventHandlerCallback':this.facade.raiseEvent},
+										stencil);
+				
+				// Set the resource id
+				newShape.resourceId = ser.id;
+				
+				// Add the shape to the canvas
+				canvas.add( newShape );
+								
+				// Add to new shapes
+				ser['shape'] = newShape;				
+			} catch(e) {
+				ORYX.Log.warn("LoadingContent: Stencil could not create.");
+				//return;
+			}
+					
+		}.bind(this))
+		
+		console.log( serialized )
+		
+		// Deserialize the properties from the shapes
+		serialized.each(
+			function(pair){
+				pair.shape.deserialize(pair.serialize);
+			}
+		);
+		
+		// Update the canvas
+		canvas.update();
+				
+	},
+
 	
 	/**
 	 * 
@@ -260,7 +405,6 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		this.facade.getCanvas().update();
 		
 	},
-	
 	/**
 	 * Parsed the given ERDF-String to a Array with the individual
 	 * EPC-Objects
@@ -273,23 +417,16 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		var doc		= parser.parseFromString( erdfString ,"text/xml");
 
 		var getElementByIdFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id})}
-		var getElementByClassNameFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("class")== id})}
+		var getElementByClassNameFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })}
 
 		// Get the oryx-editor div
-		var editorNode 	= null//doc.getElementsByTagName('-oryx-canvas');
+		var editorNode 	= getElementByClassNameFromDiv('-oryx-canvas')[0];
 		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryxcanvas');
 		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryx-canvas123');
-		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('Modelhtspu');
 		
-		console.log(doc, erdfString, editorNode)
+		//console.log(doc, erdfString, editorNode)
 
-		var hasEPC = editorNode ? $A(editorNode.childNodes).any(function(node){return node.nodeName.toLowerCase() == "a" && node.getAttribute('rel') == 'oryx-stencilset' && node.getAttribute('href').endsWith('epc/epc.json')}) : true;
-
-		if( !hasEPC ){
-			this.throwErrorMessage('Imported model is not an EPC model!');
-			return null
-		}
-
+		//editorNode = editorNode[0];
 
 		// Get all ids from the canvas node for rendering
 		var renderNodes = $A(editorNode.childNodes).collect(function(el){ return el.nodeName.toLowerCase() == "a" && el.getAttribute('rel') == 'oryx-render' ? el.getAttribute('href').slice(1) : null}).compact()

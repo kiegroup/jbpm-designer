@@ -78,7 +78,7 @@ public class AMLSupport extends HttpServlet {
     	String oryxBaseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/oryx/";
 
     	// Get the PrintWriter
-    	res.setContentType("text/html");
+    	res.setContentType("text/plain");
     	PrintWriter out = null;
     	try {
     	    out = res.getWriter();
