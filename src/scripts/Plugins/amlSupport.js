@@ -58,112 +58,34 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	
 	/**
 	 * Imports an AML description
-	 */
-	importAML: function(){
-		this.openUploadDialog();
-	},		
-
-	/**
-	 * Opens a upload dialog.
 	 * 
 	 */
-	openUploadDialog: function(){
+	importAML: function(){
+		this._showUploadDialog( this.loadDiagrams.bind(this) );
+	},		
 
-		var form = new Ext.form.FormPanel({
-			frame : true,
-            bodyStyle: 'padding:5px',
-			defaultType : 'textfield',
-		 	waitMsgTarget : true,
-		  	labelAlign : 'left',
-		  	buttonAlign: 'right',
-		  	fileUpload : true,
-		  	enctype : 'multipart/form-data',
-		  	items : [
-		  	{
-		    	text : 		'Select an AML (.aml) file to import it!', 
-				style : 	'font-size:12px;margin-bottom:10px;display:block;',
-				xtype : 	'label'
-		  	},{
-		    	fieldLabel : 	'File',
-		    	inputType : 	'file',
-				labelStyle :	'width:50px'
-		  	}]
-		});
-
-		var dialog = new Ext.Window({ 
-			autoCreate: true, 
-			title: 		'Import AML-File', 
-			height: 	'auto', 
-			width: 		400, 
-			modal:		true,
-			collapsible:false,
-			fixedcenter:true, 
-			shadow:		true, 
-			proxyDrag: 	true,
-			resizable:	false,
-			items: [form],
-			buttons:[
-				{
-					text:'Import',
-					handler:function(){
-						
-						form.form.submit({
-				      						url: 		ORYX.PATH + this.AMLServletURL,
-				      						waitMsg: 	"Importing...",
-				      						success: 	function(f,a){
-													dialog.hide();
-													
-													console.log(f,a)
-													var erdf = a.result;
-													//erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
-													
-													this.loadDiagrams( erdf );
-													/*
-													var erdf = a.result.content;
-													erdf = erdf.replace(/&lt;/g, "<");
-													erdf = erdf.replace(/&gt;/g, ">");
-													erdf = '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
-													this.loadContent(erdf);*/
-				      							}.bind(this),
-											failure: 	function(f,a){
-													dialog.hide();
-													
-													console.log('Error',f,a)
-													/*
-													Ext.MessageBox.show({
-						           						title: 		'Error',
-						          	 					msg: 		'Error',//a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}")),
-						           						buttons: 	Ext.MessageBox.OK,
-						           						icon: 		Ext.MessageBox.ERROR
-						       						});*/
-								      		}	
-										});					
-					}.bind(this)
-				},{
-					text:'Close',
-					handler:function(){
-						dialog.hide();
-					}.bind(this)
-				}
-			]
-		});
-		
-		dialog.on('hide', function(){
-			dialog.destroy(true);
-			delete dialog;
-		});
-		dialog.show();
-	},
 	
+	/**
+	 * Shows all included diagrams and imports them
+	 * 
+	 */	
 	loadDiagrams: function(erdf){
 
-		var doc = this.parseToDoc( erdf );
+		// Get the dom-structure
+		var doc 	= this.parseToDoc( erdf );
+		// Get the several process diagrams
 		
-		// get the serialiezed object for the first process data
-		var serialized = this.parseToSerializeObjects( doc.firstChild );	
-				
-		this.importData( serialized );
+		var values 	= $A(doc.firstChild.childNodes).collect(function(node){ return {title: this.getChildNodesByClassName( node.firstChild, 'oryx-title')[0].textContent, data: node}}.bind(this))
 		
+		this._showPanel(values, function(result){
+
+			// get the serialiezed object for the first process data
+			var serialized = this.parseToSerializeObjects( result[0] );	
+	
+			// Import the shapes out of the serialization		
+			this.importData( serialized );
+						
+		}.bind(this))
 
 	},
 
@@ -185,12 +107,24 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	 * @param {Object} doc
 	 * @param {Object} id
 	 */
-	getElementByClassNameFromDiv: function(doc, id){
+	getElementsByClassNameFromDiv: function(doc, id){
 
 		return $A(doc.getElementsByTagName('div')).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	
 
 	},
-	
+
+	/**
+	 * Give all child nodes with the given class name
+	 * 
+	 * @param {Object} doc
+	 * @param {Object} id
+	 */
+	getChildNodesByClassName: function(doc, id){
+
+		return $A(doc.childNodes).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	
+
+	},
+		
 	/**
 	 * Parses the erdf string to an xml-document
 	 * 
@@ -210,15 +144,17 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	 * @param {Object} oneProcessData
 	 */
 	parseToSerializeObjects: function( oneProcessData ){
-
+		
 		// Get the oryx-editor div
-		var editorNode 	= this.getElementByClassNameFromDiv( oneProcessData, '-oryx-canvas')[0];
+		var editorNode 	= this.getElementsByClassNameFromDiv( oneProcessData, '-oryx-canvas')[0];
 
 		// Get all ids from the canvas node for rendering
 		var renderNodes = $A(editorNode.childNodes).collect(function(el){ return el.nodeName.toLowerCase() == "a" && el.getAttribute('rel') == 'oryx-render' ? el.getAttribute('href').slice(1) : null}).compact()
+		
 		// Collect all nodes from the ids
 		renderNodes = renderNodes.collect(function(el){return this.getElementByIdFromDiv( oneProcessData, el)}.bind(this));
-		
+		renderNodes.push(editorNode);
+	
 		// Function for extract all eRDF-Attributes and give them back as an Object
 		var parseAttribute = function(node){
 		    
@@ -228,7 +164,13 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			if(node.getAttribute("id")){
 				res.id = node.getAttribute("id");
 			}
-			
+
+			// If the node is the canvas simply
+			// set already the canvas as shape 
+			if(node.getAttribute("class") == "-oryx-canvas"){
+				res['shape'] = this.facade.getCanvas();
+			}
+						
 			// Set all attributes
 		    $A(node.childNodes).each( function(node){ 
 				if( node.nodeName.toLowerCase() == "span" && node.getAttribute('class')){
@@ -250,10 +192,10 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		    })
 			
 		    return res.type ? res : null ;
-		}		
+		}.bind(this)		
 		
 		// Collect all Attributes out of the Nodes
-		return renderNodes.collect(function(el){return parseAttribute(el)}).compact();
+		return renderNodes.collect(function(el){return parseAttribute(el)}.bind(this)).compact();
 		
 		
 	},
@@ -263,6 +205,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		var canvas  = this.facade.getCanvas();
 		
 		serialized.each(function(ser){
+
+			// If the shape is the canvas, continue
+			if( ser.shape && ser.shape instanceof ORYX.Core.Canvas){
+				return;
+			}
 
 			// Try to create a new Shape
 			try {
@@ -293,8 +240,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 					
 		}.bind(this))
 		
-		console.log( serialized )
-		
+				
 		// Deserialize the properties from the shapes
 		serialized.each(
 			function(pair){
@@ -307,167 +253,161 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				
 	},
 
-	
 	/**
-	 * 
-	 * THE FOLLOWING METHODS ARE A TEMPORARY SOLUTION
-	 * 
-	 * THEY WILL BE REMOVED WHEN A GENERAL ERDF IMPORTER IS IMPLEMENTED
+	 * Opens a upload dialog.
 	 * 
 	 */
-	
-	/**
-	 * Loads the imported string into the oryx
-	 * 
-	 * @param {Object} content
-	 */
-	loadContent: function(content){
-		
-		var epcs = this.parseToObject( content );
-		
-		epcs = epcs.collect(function(epc){ return {epcData: epc, stencil: ORYX.Core.StencilSet.stencil(epc.type)}})
-		console.log(epcs)
-		var nodes = epcs.findAll(function(epc){ return epc.stencil.type() == "node" });
-		var edges = epcs.findAll(function(epc){ return epc.stencil.type() == "edge" });
-		
-		nodes = nodes.collect(function(epc){
-									
-			if( !epc.stencil){
-				throw $break;
-			}
-			
-			// Create a new Shape
-			var newShape = 	new ORYX.Core.Node( {'eventHandlerCallback':this.facade.raiseEvent }, epc.stencil );
-											
-			// Add the shape to the canvas
-			this.facade.getCanvas().add(newShape);
-		
-			if( epc.epcData.bounds ){
-				// Set the bounds
-				newShape.bounds.centerMoveTo( epc.epcData.bounds.center )
-			}
-			
-			for (var key in epc.epcData){
-				if (key != "bounds" && key != "id" && key != "type" && key != "outgoing" && key != "parent" && key != "dockers"){
-					newShape.properties['oryx-'+key] = epc.epcData[key];
+	_showUploadDialog: function( successCallback ){
+
+		var form = new Ext.form.FormPanel({
+			frame : 		true,
+			bodyStyle:		'padding:5px;',
+			defaultType : 	'textfield',
+		 	waitMsgTarget : true,
+		  	labelAlign : 	'left',
+		  	buttonAlign: 	'right',
+		  	fileUpload : 	true,
+		  	enctype : 		'multipart/form-data',
+		  	items : [
+		  	{
+		    	text : 		'Select an AML (.aml) file to import it!', 
+				style : 	'font-size:12px;margin-bottom:10px;display:block;',
+				xtype : 	'label'
+		  	},{
+		    	fieldLabel : 	'File',
+		    	inputType : 	'file',
+				labelStyle :	'width:50px;',
+				style :			'overflow:hidden;'
+		  	}]
+		});
+
+		var dialog = new Ext.Window({ 
+			autoCreate: true, 
+			title: 		'Import AML-File', 
+			height: 	'auto', 
+			width: 		440, 
+			modal:		true,
+			collapsible:false,
+			fixedcenter:true, 
+			shadow:		true, 
+			proxyDrag: 	true,
+			resizable:	false,
+			items: [form],
+			buttons:[
+				{
+					text:'Import',
+					handler:function(){
+						
+						form.form.submit({
+				      						url: 		ORYX.PATH + this.AMLServletURL,
+				      						waitMsg: 	"Importing...",
+				      						success: 	function(f,a){
+												
+													dialog.hide();	
+													successCallback( a.result );
+
+				      							}.bind(this),
+											failure: 	function(f,a){
+													dialog.hide();
+													
+													Ext.MessageBox.show({
+						           						title: 		'Error',
+						          	 					msg: 		a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}")),
+						           						buttons: 	Ext.MessageBox.OK,
+						           						icon: 		Ext.MessageBox.ERROR
+						       						});
+								      		}	
+										});					
+					}.bind(this)
+				},{
+					text:'Close',
+					handler:function(){
+						dialog.hide();
+					}.bind(this)
 				}
-			} 
-			return {epcData: epc.epcData, stencil: epc.stencil, shape: newShape};
-			
-		}.bind(this));
+			]
+		});
 		
-	
-	
-		edges.each(function(epc){
-									
-			if( !epc.stencil){
-				throw $break;
-			}
-			
-			// Create a new Shape
-			var newShape = new ORYX.Core.Edge({'eventHandlerCallback':this.facade.raiseEvent }, epc.stencil);
-
-			// Add the shape to the canvas
-			this.facade.getCanvas().add(newShape);
-		
-			if( epc.epcData.bounds ){
-				// Set the bounds
-				newShape.bounds.centerMoveTo( epc.epcData.bounds.center )
-			}
-			
-
-			var from0 	= nodes.find(function(node){ return node.epcData.outgoing && node.epcData.outgoing.any(function(out){ return out.slice(1) == epc.epcData.id }) });
-			if (from0)
-				var from = from0.shape;
-			var to0	= nodes.find(function(node){ return epc.epcData.outgoing && node.epcData.id == epc.epcData.outgoing[0].slice(1) });
-			if (to0)
-				var to = to0.shape;
-			// Set the docker
-			if( from ){
-				newShape.dockers.first().setDockedShape( from );
-				newShape.dockers.first().setReferencePoint({x: from.bounds.width() / 2.0, y: from.bounds.height() / 2.0});
-				newShape.dockers.first().update();
-			}
-			if( to ){
-				newShape.dockers.last().setDockedShape( to );
-				newShape.dockers.last().setReferencePoint({x: to.bounds.width() / 2.0, y: to.bounds.height() / 2.0});
-				newShape.dockers.last().update();
-			}
-			
-			for (var key in epc.epcData){
-				if (key != "bounds" && key != "id" && key != "type" && key != "outgoing" && key != "parent" && key != "dockers"){
-					newShape.properties['oryx-'+key] = epc.epcData[key];
-				}
-			}
-			
-		}.bind(this));
-				
-		this.facade.getCanvas().update();
-		
+		dialog.on('hide', function(){
+			dialog.destroy(true);
+			delete dialog;
+		});
+		dialog.show();
 	},
-	/**
-	 * Parsed the given ERDF-String to a Array with the individual
-	 * EPC-Objects
-	 * 
-	 * @param {Object} erdfString
-	 */
-	parseToObject: function ( erdfString ){
-
-		var parser	= new DOMParser();			
-		var doc		= parser.parseFromString( erdfString ,"text/xml");
-
-		var getElementByIdFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id})}
-		var getElementByClassNameFromDiv = function(id){ return $A(doc.getElementsByTagName('div')).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })}
-
-		// Get the oryx-editor div
-		var editorNode 	= getElementByClassNameFromDiv('-oryx-canvas')[0];
-		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryxcanvas');
-		editorNode 		= editorNode ? editorNode : getElementByIdFromDiv('oryx-canvas123');
-		
-		//console.log(doc, erdfString, editorNode)
-
-		//editorNode = editorNode[0];
-
-		// Get all ids from the canvas node for rendering
-		var renderNodes = $A(editorNode.childNodes).collect(function(el){ return el.nodeName.toLowerCase() == "a" && el.getAttribute('rel') == 'oryx-render' ? el.getAttribute('href').slice(1) : null}).compact()
-		// Collect all nodes from the ids
-		renderNodes = renderNodes.collect(function(el){return getElementByIdFromDiv(el)});
-
-		// Function for extract all eRDF-Attributes and give them back as an Object
-		var parseAttribute = function(node){
-		    var res = {}
-			// Set the resource id
-			if(node.getAttribute("id")){
-				res["id"] = node.getAttribute("id");
-			}
-			
-			// Set all attributes
-		    $A(node.childNodes).each( function(node){ 
-				if( node.nodeName.toLowerCase() == "span" && node.getAttribute('class')){
-		            var key = node.getAttribute('class').slice(5);
-					res[key] = node.firstChild ? node.firstChild.nodeValue : '';
-		        	if( key == "bounds" ){
-						var ba = $A(res[key].split(",")).collect(function(el){return Number(el)})
-						res[key] = {a:{x:ba[0], y:ba[1]},b:{x:ba[2], y:ba[3]},center:{x:ba[0]+((ba[2]-ba[0])/2),y:ba[1]+((ba[3]-ba[1])/2)}}
-					}
-				} else if( node.nodeName.toLowerCase() == "a" && node.getAttribute('rel')){
-		            var key = node.getAttribute('rel').split("-")[1];
-					if( !res[key] ){
-						res[key] = [];
-					}
-					
-		            res[key].push( node.getAttribute('href') )
-		        }
-		    })
-		    return res
-		}
-
-		// Collect all Attributes out of the Nodes
-		return renderNodes.collect(function(el){return parseAttribute(el)});
-				
-	},
-
 	
+    _showPanel: function(values, successCallback){
+    
+        // Extract the data
+        var data = [];
+        values.each(function(value){
+            data.push([ value.title, value.data ])
+        });
+        
+        // Create a new Selection Model
+        var sm = new Ext.grid.CheckboxSelectionModel({ header:'',singleSelect:true});
+        // Create a new Grid with a selection box
+        var grid = new Ext.grid.GridPanel({
+            store: new Ext.data.SimpleStore({
+                data: data,
+                fields: ['title']
+            }),
+            cm: new Ext.grid.ColumnModel([sm, {
+                header: "Title",
+                width: 260,
+                sortable: true,
+                dataIndex: 'title'
+            }, ]),
+            sm: sm,
+            frame: true,
+            width: 300,
+			height:'auto',
+            iconCls: 'icon-grid'
+        });
+        
+        // Create a new Panel
+        var panel = new Ext.Panel({
+            items: [{
+                xtype: 'label',
+                text: 'Select the diagram you want to import.',
+                style: 'margin:5px;display:block'
+            }, grid],
+			height:'auto',
+            frame: true
+        })
+        
+        // Create a new Window
+        var window = new Ext.Window({
+            width: 327,
+			height:'auto',
+            title: 'Oryx',
+            floating: true,
+            shim: true,
+            modal: true,
+            resizable: false,
+            autoHeight: true,
+            items: [panel],
+            buttons: [{
+                text: "Import",
+                handler: function(){
+                    var selectionModel = grid.getSelectionModel();
+                    var result = selectionModel.selections.items.collect(function(item){
+                        return item.json[1];
+                    })
+                    window.close();
+                    successCallback(result);
+                }.bind(this)
+            }, {
+                text: "Cancel",
+                handler: function(){
+                    window.close();
+                }.bind(this)
+            }]			
+        })
+        
+        // Show the window
+        window.show();
+        
+    },
 	/**
 	 * 
 	 * @param {Object} message
