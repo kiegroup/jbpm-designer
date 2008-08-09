@@ -108,6 +108,18 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffafff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
 				}
 			]
 		},
@@ -160,6 +172,18 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#96ff96",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
 				}
 			]
 		},
@@ -177,7 +201,20 @@
 				"connector",
 				"all"
 			],
-			"properties": []
+			"properties": [		
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
+				}
+			]
 		},
 			{
 			"type": "node",
@@ -193,7 +230,20 @@
 				"connector",
 				"all"
 			],
-			"properties": []
+			"properties": [		
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
+				}
+			]
 		},
 			{
 			"type": "node",
@@ -209,7 +259,20 @@
 				"connector",
 				"all"
 			],
-			"properties": []
+			"properties": [		
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
+				}
+			]
 		},
 		{
 			"type": "edge",
@@ -287,6 +350,18 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":["celem", "celem2"],
+					"fill":true,
+					"stroke":false
 				}
 			]
 		},
@@ -326,6 +401,18 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffffaf",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
 				}
 			]
 		},
@@ -365,6 +452,18 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffff80",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
 				}
 			]
 		},
@@ -405,6 +504,18 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#dcdcdc",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
 				}
 			]
 		},
@@ -444,6 +555,18 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#b0b0ff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"celem",
+					"fill":true,
+					"stroke":false
 				}
 			]
 		},

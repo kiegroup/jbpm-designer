@@ -16,7 +16,7 @@
   	<oryx:magnet oryx:cx="50" oryx:cy="30" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill">
-    <path id="eventpath" d="M 0 30 l 15 -30 l 70 0 l 15 30 l -15 30 l -70 0 z" oryx:resize="vertical horizontal" stroke="black" stroke-width="1" fill="#ffafff" />
+    <path id="celem" d="M 0 30 l 15 -30 l 70 0 l 15 30 l -15 30 l -70 0 z" oryx:resize="vertical horizontal" stroke="black" stroke-width="1" fill="#ffafff" />
     	<text font-size="12" id="text" x="50" y="30" oryx:align="middle center" stroke="black"></text>
     	<text font-size="12" id="commonnesstext" x="-2" y="-5" oryx:align="right top" stroke="black"></text>
   </g>

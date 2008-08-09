@@ -16,7 +16,7 @@
   	<oryx:magnet oryx:cx="50" oryx:cy="30" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill">
-    <rect id="systemrect" oryx:resize="vertical horizontal" x="0" y="0" width="100" height="60" stroke="black" stroke-width="1" fill="#b0b0ff" />
+    <rect id="celem" oryx:resize="vertical horizontal" x="0" y="0" width="100" height="60" stroke="black" stroke-width="1" fill="#b0b0ff" />
     <path d="M 4 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <path d="M 8 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <path d="M 96 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />

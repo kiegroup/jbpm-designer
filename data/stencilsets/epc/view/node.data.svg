@@ -17,7 +17,7 @@
   </oryx:magnets>
   <g pointer-events="fill">
 
-    <path d="M 0 0 l 100 0 l 0 52 l -20 -8 l -60 16 l -20 -8 z " oryx:resize="vertical horizontal" stroke="black" fill="#dcdcdc" stroke-width="1" />
+    <path id="celem" d="M 0 0 l 100 0 l 0 52 l -20 -8 l -60 16 l -20 -8 z " oryx:resize="vertical horizontal" stroke="black" fill="#dcdcdc" stroke-width="1" />
 
     <text font-size="12" id="text" x="50" y="26" oryx:align="middle center" stroke="black"></text>
   </g>
