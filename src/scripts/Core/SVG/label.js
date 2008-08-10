@@ -50,8 +50,11 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		}
 		
 		this.node = options.textElement;
+		this.shapeId = options.shapeId;
 		
 		this.id;
+		
+		this.fitToElemId;
 		
 		this.x;
 		this.y;
@@ -75,6 +78,12 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		}
 		
 		//initialization	
+		
+		//set referenced element the text is fit to
+		this.fitToElemId = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'fittoelem');
+		if(this.fitToElemId)
+			this.fitToElemId = this.shapeId + this.fitToElemId;
+		
 		//set alignment	
 		var alignValues = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align');
 		if(alignValues) {
@@ -203,33 +212,61 @@ ORYX.Core.SVG.Label = Clazz.extend({
 
 					//append tspan to text node
 					this.node.appendChild(tspan);
-			
-					//set vertical position
-					var dy = 0;
-					switch (this._verticalAlign) {
-						case 'bottom':
-							dy = -(textLines.length - index - 1)*(this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
-							break;
-						case 'middle':
-							dy = -(textLines.length/2 - index - 1)*(this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
-							dy -= ORYX.CONFIG.LABEL_LINE_DISTANCE/2;
-							break;
-						case 'top':
-							dy = index*(this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
-							dy += this._fontSize;
-							break;
-					}
-					
-					tspan.setAttributeNS(null, 'dy', dy);
 				}).bind(this));
 				
 				//Work around for Mozilla bug 293581
 				if(this.isVisible) {
 					this.node.setAttributeNS(null, 'visibility', 'hidden');
 				}
-				window.setTimeout(this._positionText.bind(this), 0);
+
+				if(this.fitToElemId)
+					window.setTimeout(this._checkFittingToReferencedElem.bind(this), 0);
+				else
+					window.setTimeout(this._positionText.bind(this), 0);
 			}
 		}
+	},
+	
+	_checkFittingToReferencedElem: function() {
+		var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
+		
+		var refNode = this.node.ownerDocument.getElementById(this.fitToElemId);
+		
+		if (refNode) {
+			
+			var refbb = refNode.getBBox();
+			
+			var startIndex = 0;
+			
+			for (var j = 0; j < tspans.length; j++) {
+				var tspan = tspans[j];
+				
+				var textLength = tspan.getComputedTextLength();
+				//var numOfChars = tspan.getNumberOfChars();
+				if(textLength > refbb.width) {
+
+					for (var i = 0; i < tspan.textContent.length; i++) {
+						var sslength = tspan.getSubStringLength(startIndex, i - startIndex);
+
+						if(sslength > refbb.width) {
+							var newtspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
+							newtspan.textContent = tspan.textContent.substring(startIndex, i);
+							newtspan.setAttributeNS(null, 'x', this.x);
+							newtspan.setAttributeNS(null, 'y', this.y);
+		
+							//insert tspan to text node
+							this.node.insertBefore(newtspan, tspan);
+							
+							startIndex = i;
+						}
+					}
+					
+					tspan.textContent = tspan.textContent.substring(startIndex, tspan.textContent.length);
+				}
+			}
+		}
+		
+		window.setTimeout(this._positionText.bind(this), 0);
 	},
 	
 	/**
@@ -237,10 +274,28 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	 * Before the method getComputedTextLength works, the text has to be rendered.
 	 */
 	_positionText: function() {
-		var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-		
 		try {
-			$A(tspans).each((function(tspan) {
+			var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
+			
+			$A(tspans).each((function(tspan, index){
+				//set vertical position
+				var dy = 0;
+				switch (this._verticalAlign) {
+					case 'bottom':
+						dy = -(tspans.length - index - 1) * (this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
+						break;
+					case 'middle':
+						dy = -(tspans.length / 2.0 - index - 1) * (this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
+						dy -= ORYX.CONFIG.LABEL_LINE_DISTANCE / 2;
+						break;
+					case 'top':
+						dy = index * (this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
+						dy += this._fontSize;
+						break;
+				}
+				
+				tspan.setAttributeNS(null, 'dy', dy);
+				
 				//set horizontal position
 				var textLength = tspan.getComputedTextLength();
 				switch (this._horizontalAlign) {
@@ -248,13 +303,14 @@ ORYX.Core.SVG.Label = Clazz.extend({
 						tspan.setAttributeNS(null, 'dx', 0);
 						break;
 					case 'center':
-						tspan.setAttributeNS(null, 'dx', -textLength/2);
+						tspan.setAttributeNS(null, 'dx', -textLength / 2);
 						break;
 					case 'right':
 						tspan.setAttributeNS(null, 'dx', -textLength);
 						break;
 				}
-			}).bind(this));	
+			}).bind(this));
+
 		} catch(e) {
 			this._isChanged = true;
 		}
