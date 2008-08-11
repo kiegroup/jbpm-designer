@@ -79,91 +79,98 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		
 		this._showPanel(values, function(result){
 
-			var loadedDiagrams = [];
-			
-			result.each(function(item){
-
-				var url 		= '/backend/poem' + ORYX.CONFIG.ORYX_NEW_URL + "?stencilset=/stencilsets/epc/epc.json"; 
-				var dummyData 	= '<div class="processdata"><div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;"><a href="/stencilsets/epc/epc.json" rel="oryx-stencilset"></a><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span></div></div>';
-				var dummySVG 	= '<svg/>';
-				var params 		= { data: dummyData, svg: dummySVG, title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
-			
-				
-				new Ajax.Request(url, {
-	                method: 'POST',
-	                asynchronous: false,
-	                parameters: params,
-					onSuccess: function(transport) {
-						
-						var loc = transport.getResponseHeader('location');
-						var id 	= this.getNodesByClassName( item.data, "div", "-oryx-canvas" )[0].getAttribute("id");
-				
-						loadedDiagrams.push({name: item.name, data:item.data, url: loc, id: id});
-						
-					}.bind(this)
-				
-				});
-				
-			}.bind(this));
-			
-			// Redefine all ID within every process diagrams 
-			// with the new url
-			loadedDiagrams.each(function(searchItem){
-				
-				var id 		= searchItem.id;
-				var newURL 	= searchItem.url;
-				
-				loadedDiagrams.each(function(refItem){
-					
-					var uriRefs	= this.getNodesByClassName( refItem.data, "span", "oryx-refuri" );
-					$A(uriRefs).each(function(node){ 
-						if( node.textContent == id ){
-							node.textContent = newURL
-						}
-					})
-					
-				}.bind(this));				
-			}.bind(this));
-			
-			
-			// Send all diagrams to the server
-			loadedDiagrams.each(function(item){
-
-				var url 		= item.url; 
-				var dummySVG 	= '<svg/>';
-				
-				var data		= DataManager.serialize(item.data);
-				data 			= "<div " + data.slice(data.search("class"));
-				
-				var params 		= { data: data, svg: dummySVG };
-				
-				item["successfull"] = false;
-				
-				new Ajax.Request(url, {
-	                method: 'POST',
-	                asynchronous: false,
-	                parameters: params,
-					onSuccess: function(transport) {
-						
-						item["successfull"] = true;
-						
-					}.bind(this)
-				
-				});
-								
-			}.bind(this));
-			
-			window.setTimeout(function(){
-				
-				this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );	
-			
-			}.bind(this), 100);
-			
-			// get the serialiezed object for the first process data
-			//var serialized = this.parseToSerializeObjects( result[0].data );	
+			if( result.length > 1 ){
 	
-			// Import the shapes out of the serialization		
-			//this.importData( serialized );
+				var loadedDiagrams = [];
+				
+				// Generate for every diagram a new url
+				result.each(function(item){
+	
+					var url 		= '/backend/poem' + ORYX.CONFIG.ORYX_NEW_URL + "?stencilset=/stencilsets/epc/epc.json"; 
+					var dummyData 	= '<div class="processdata"><div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;"><a href="/stencilsets/epc/epc.json" rel="oryx-stencilset"></a><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span></div></div>';
+					var dummySVG 	= '<svg/>';
+					var params 		= { data: dummyData, svg: dummySVG, title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
+				
+					
+					new Ajax.Request(url, {
+		                method: 'POST',
+		                asynchronous: false,
+		                parameters: params,
+						onSuccess: function(transport) {
+							
+							var loc = transport.getResponseHeader('location');
+							var id 	= this.getNodesByClassName( item.data, "div", "-oryx-canvas" )[0].getAttribute("id");
+					
+							loadedDiagrams.push({name: item.name, data:item.data, url: loc, id: id});
+							
+						}.bind(this)
+					
+					});
+					
+				}.bind(this));
+				
+				// Redefine all ID within every process diagrams 
+				// with the new url
+				loadedDiagrams.each(function(searchItem){
+					
+					var id 		= searchItem.id;
+					var newURL 	= searchItem.url;
+					
+					loadedDiagrams.each(function(refItem){
+						
+						var uriRefs	= this.getNodesByClassName( refItem.data, "span", "oryx-refuri" );
+						$A(uriRefs).each(function(node){ 
+							if( node.textContent == id ){
+								node.textContent = newURL
+							}
+						})
+						
+					}.bind(this));				
+				}.bind(this));
+				
+				
+				// Send all diagrams to the server
+				loadedDiagrams.each(function(item){
+	
+					var url 		= item.url; 
+					var dummySVG 	= '<svg/>';
+					
+					var data		= DataManager.serialize(item.data);
+					data 			= "<div " + data.slice(data.search("class"));
+					
+					var params 		= { data: data, svg: dummySVG };
+					
+					item["successfull"] = false;
+					
+					new Ajax.Request(url, {
+		                method: 'POST',
+		                asynchronous: false,
+		                parameters: params,
+						onSuccess: function(transport) {
+							
+							item["successfull"] = true;
+							
+						}.bind(this)
+					
+					});
+									
+				}.bind(this));
+				
+				// Show the results	
+				this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );	
+					
+			} else {
+
+				// get the serialiezed object for the first process data
+				var serialized = this.parseToSerializeObjects( result[0].data );	
+		
+				// Import the shapes out of the serialization		
+				this.importData( serialized );
+							
+			}
+			
+			
+
 						
 		}.bind(this))
 
@@ -528,7 +535,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Extract the data
         var data = [];
         values.each(function(value){
-            data.push([ value.name, '<a href="' + value.url + "' target='_blank'>" + value.url + "</a>", value.successfull ])
+            data.push([ value.name, '<a href="' + value.url + '" target="_blank">' + value.url + '</a>', value.successfull ])
         });
         
 
@@ -545,12 +552,12 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 dataIndex: 'name'
             }, {
                 header: "URL",
-                width: 260,
+                width: 300,
                 sortable: true,
                 dataIndex: 'url'
             }, {
                 header: "Imported",
-                width: 40,
+                width: 100,
                 sortable: true,
                 dataIndex: 'successfull'
             }]),
@@ -572,9 +579,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         })
         
         // Create a new Window
-        var extWindow = new Ext.Window({
+        var extWindow2 = new Ext.Window({
             width		: 'auto',
-			height		: 'auto',
             title		: 'Oryx',
             floating	: true,
             shim		: true,
@@ -586,14 +592,14 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 text: "Ok",
                 handler: function(){
 
-					extWindow.close()	
+					extWindow2.close()	
 									
                 }.bind(this)
             }]			
         })
         
         // Show the window
-        extWindow.show();
+        extWindow2.show();
         
     },	
 	/**
