@@ -130,8 +130,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			// Send all diagrams to the server
 			loadedDiagrams.each(function(item){
 
-				var url 	= item.url; 
-				var params 	= { data: item.data };
+				var url 		= item.url; 
+				var dummySVG 	= '<svg/>';
+				var params 		= { data: item.data, svg: dummySVG };
+				
+				item["successful"] = false;
 				
 				new Ajax.Request(url, {
 	                method: 'POST',
@@ -519,7 +522,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Extract the data
         var data = [];
         values.each(function(value){
-            data.push([ value.name, value.url, value.successfull ])
+            data.push([ value.name, '<a href="' + value.url + "' target='_blank'>" + value.url + "</a>", value.successfull ])
         });
         
 
