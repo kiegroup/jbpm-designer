@@ -32,7 +32,7 @@ public class AlternativesRenderer extends HttpServlet {
 	String format = req.getParameter("format");
 	
 	try {
-		data = new String(data.getBytes("UTF-8"), "UTF-8");
+		data = new String(data.getBytes("UTF-8"));
 	} catch (UnsupportedEncodingException e1) {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
@@ -44,8 +44,6 @@ public class AlternativesRenderer extends HttpServlet {
 	this.baseFilename = String.valueOf(System.currentTimeMillis());
 	this.inFile = tmpPath + this.baseFilename + ".svg";
 	this.outFile = tmpPath + this.baseFilename + ".pdf";
-
-	System.out.println(inFile);
 
 	try {
 
@@ -76,13 +74,13 @@ public class AlternativesRenderer extends HttpServlet {
 		    OutputStream out = new java.io.FileOutputStream(outFile);
 		    out = new java.io.BufferedOutputStream(out);
 		    try {
-			TranscoderOutput output = new TranscoderOutput(out);
-	
-			// Do the transformation
-			transcoder.transcode(input, output);
+				TranscoderOutput output = new TranscoderOutput(out);
+		
+				// Do the transformation
+				transcoder.transcode(input, output);
 			
 		    } finally {
-			out.close();
+		    	out.close();
 		    }
 		} finally {
 		    in.close();
