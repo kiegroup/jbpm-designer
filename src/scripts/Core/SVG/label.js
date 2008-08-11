@@ -229,20 +229,21 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	
 	_checkFittingToReferencedElem: function() {
 		var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-		
+
 		var refNode = this.node.ownerDocument.getElementById(this.fitToElemId);
-		
+
 		if (refNode) {
 			
 			var refbb = refNode.getBBox();
 			
 			var startIndex = 0;
+			var lastSeperatorIndex = 0;
 			
 			for (var j = 0; j < tspans.length; j++) {
 				var tspan = tspans[j];
 				
 				var textLength = tspan.getComputedTextLength();
-				//var numOfChars = tspan.getNumberOfChars();
+
 				if(textLength > refbb.width) {
 
 					for (var i = 0; i < tspan.textContent.length; i++) {
@@ -250,18 +251,35 @@ ORYX.Core.SVG.Label = Clazz.extend({
 
 						if(sslength > refbb.width) {
 							var newtspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-							newtspan.textContent = tspan.textContent.substring(startIndex, i);
+							if(lastSeperatorIndex <= startIndex) {
+								newtspan.textContent = tspan.textContent.slice(startIndex, i-1);
+								lastSeperatorIndex = i;
+							} else{
+								newtspan.textContent = tspan.textContent.slice(startIndex, lastSeperatorIndex);
+							}
+							
 							newtspan.setAttributeNS(null, 'x', this.x);
 							newtspan.setAttributeNS(null, 'y', this.y);
 		
 							//insert tspan to text node
 							this.node.insertBefore(newtspan, tspan);
 							
-							startIndex = i;
+							startIndex = lastSeperatorIndex;
+							
+						} else {
+							var curChar = tspan.textContent.charAt(i);
+							if(curChar == ' ' || 
+							   curChar == '-' || 
+							   curChar == "." || 
+							   curChar == "," ||
+							   curChar == ";" ||
+							   curChar == ":") {
+								lastSeperatorIndex = i;
+							}
 						}
 					}
 					
-					tspan.textContent = tspan.textContent.substring(startIndex, tspan.textContent.length);
+					tspan.textContent = tspan.textContent.slice(startIndex);
 				}
 			}
 		}
