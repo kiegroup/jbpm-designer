@@ -110,16 +110,15 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			// with the new url
 			loadedDiagrams.each(function(searchItem){
 				
-				var id 	= searchItem.id;
-				var url = searchItem.url;
+				var id 		= searchItem.id;
+				var newURL 	= searchItem.url;
 				
 				loadedDiagrams.each(function(refItem){
 					
 					var uriRefs	= this.getNodesByClassName( refItem.data, "span", "oryx-refuri" );
 					$A(uriRefs).each(function(node){ 
-						
-						if( node.getAttribute("id") == id ){
-							node.textContent = url
+						if( node.textContent == id ){
+							node.textContent = newURL
 						}
 					})
 					
