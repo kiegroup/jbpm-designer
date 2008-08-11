@@ -2,6 +2,15 @@
 	padding-bottom: 24px;
 }
 
+.ext-gecko .x-window-body div.ext_specific_window_overflow.x-form-item  {
+	overflow:hidden;
+}
+
+.ext-gecko .x-window-body div.ext_specific_window_overflow.x-form-item  .x-form-element {
+	padding-left:60px;
+}
+
+
 #oryx_editor_header {       background-image: url('../images/header_bg.small.gif');       background-position: top center;       background-repeat: repeat-x;       position: absolute;       width: 100%;	   height: 30px;}.LoadingIndicator, .StatusIndicator {	font-family:Verdana;	font-size:11px; 	display:block; 	background: white no-repeat 8px; 	padding:5px; 	padding-left:30px; 	width:60px; 	position:fixed; 	top:0px; 	left:0px;	border:1px solid silver;}
 
 .LoadingIndicator {

@@ -73,8 +73,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 
 		// Get the dom-structure
 		var doc 	= this.parseToDoc( erdf );
-		// Get the several process diagrams
 		
+		// Get the several process diagrams
 		var values 	= $A(doc.firstChild.childNodes).collect(function(node){ return {title: this.getChildNodesByClassName( node.firstChild, 'oryx-title')[0].textContent, data: node}}.bind(this))
 		
 		this._showPanel(values, function(result){
@@ -263,7 +263,6 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			frame : 		true,
 			bodyStyle:		'padding:5px;',
 			defaultType : 	'textfield',
-		 	waitMsgTarget : true,
 		  	labelAlign : 	'left',
 		  	buttonAlign: 	'right',
 		  	fileUpload : 	true,
@@ -277,7 +276,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		    	fieldLabel : 	'File',
 		    	inputType : 	'file',
 				labelStyle :	'width:50px;',
-				style :			'overflow:hidden;'
+				itemCls :		'ext_specific_window_overflow'
 		  	}]
 		});
 
@@ -285,7 +284,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			autoCreate: true, 
 			title: 		'Import AML-File', 
 			height: 	'auto', 
-			width: 		440, 
+			width: 		'auto', 
 			modal:		true,
 			collapsible:false,
 			fixedcenter:true, 
@@ -298,17 +297,22 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 					text:'Import',
 					handler:function(){
 						
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Get diagrams..."});
+						loadMask.show();
+
 						form.form.submit({
 				      						url: 		ORYX.PATH + this.AMLServletURL,
-				      						waitMsg: 	"Importing...",
 				      						success: 	function(f,a){
-												
+													
+													loadMask.hide();
 													dialog.hide();	
 													successCallback( a.result );
 
 				      							}.bind(this),
 											failure: 	function(f,a){
-													dialog.hide();
+													
+													loadMask.hide();
+													dialog.hide();	
 													
 													Ext.MessageBox.show({
 						           						title: 		'Error',
@@ -337,6 +341,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	
     _showPanel: function(values, successCallback){
     
+							
         // Extract the data
         var data = [];
         values.each(function(value){
@@ -376,7 +381,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         })
         
         // Create a new Window
-        var window = new Ext.Window({
+        var panel = new Ext.Window({
             width: 327,
 			height:'auto',
             title: 'Oryx',
@@ -389,23 +394,35 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             buttons: [{
                 text: "Import",
                 handler: function(){
+
+					var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Importing..."});
+					loadMask.show();
+							
                     var selectionModel = grid.getSelectionModel();
                     var result = selectionModel.selections.items.collect(function(item){
                         return item.json[1];
                     })
-                    window.close();
-                    successCallback(result);
+                    panel.close();
+                
+					window.setTimeout( function(){
+						
+						successCallback(result);
+						loadMask.hide();
+						
+					}.bind(this), 100);		
+
+										
                 }.bind(this)
             }, {
                 text: "Cancel",
                 handler: function(){
-                    window.close();
+                    panel.close();
                 }.bind(this)
             }]			
         })
         
         // Show the window
-        window.show();
+        panel.show();
         
     },
 	/**
