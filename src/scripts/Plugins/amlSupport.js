@@ -108,14 +108,14 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			
 			// Redefine all ID within every process diagrams 
 			// with the new url
-			loadedDiagrams.each(function(item){
+			loadedDiagrams.each(function(searchItem){
 				
-				var id 	= item.id;
-				var url = item.url;
+				var id 	= searchItem.id;
+				var url = searchItem.url;
 				
-				loadedDiagrams.each(function(item){
+				loadedDiagrams.each(function(refItem){
 					
-					var uriRefs	= this.getNodesByClassName( item.data, "span", "oryx-refuri" );
+					var uriRefs	= this.getNodesByClassName( refItem.data, "span", "oryx-refuri" );
 					$A(uriRefs).each(function(node){ 
 						
 						if( node.getAttribute("id") == id ){
@@ -132,7 +132,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 
 				var url 		= item.url; 
 				var dummySVG 	= '<svg/>';
-				var params 		= { data: item.data, svg: dummySVG };
+				
+				var data		= DataManager.serialize(item.data);
+				data 			= "<div " + data.slice(data.search("class"));
+				
+				var params 		= { data: data, svg: dummySVG };
 				
 				item["successful"] = false;
 				
