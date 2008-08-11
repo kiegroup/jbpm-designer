@@ -77,7 +77,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		// Get the several process diagrams
 		var values 	= $A(doc.firstChild.childNodes).collect(function(node){ return {title: this.getChildNodesByClassName( node.firstChild, 'oryx-title')[0].textContent, data: node}}.bind(this))
 		
-		this._showPanel(values, function(result){
+		this._showPanel(values, function(result, mask){
 
 			var loadedDiagrams = [];
 			
@@ -153,9 +153,14 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 								
 			}.bind(this));
 			
+			window.setTimeout(function(){
+				
+				mask.hide();
+				
+				this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );	
 			
-			this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );
-
+			}.bind(this), 100);
+			
 			// get the serialiezed object for the first process data
 			//var serialized = this.parseToSerializeObjects( result[0].data );	
 	
@@ -499,8 +504,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 
 					window.setTimeout( function(){
 						
-						successCallback(result);
-						loadMask.hide();
+						successCallback(result, loadMask);
 						
 					}.bind(this), 100);		
 
