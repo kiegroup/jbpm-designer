@@ -79,11 +79,79 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		
 		this._showPanel(values, function(result){
 
+			var loadedDiagrams = [];
+			
+			result.each(function(item){
+
+				var url 	= '/backend/poem' + ORYX.CONFIG.ORYX_NEW_URL + "?stencilset=/stencilsets/epc/epc.json"; 
+				var params 	= { title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
+				
+				new Ajax.Request(url, {
+	                method: 'POST',
+	                asynchronous: false,
+	                parameters: params,
+					onSuccess: function(transport) {
+						
+						var loc = transport.getResponseHeader("location");
+						var id 	= this.getNodeByClassName( item.data, "div", "-oryx-canvas" )[0].getAttribute("id");
+				
+						loadedDiagrams.push({name: item.name, data:item.data, url: loc, id: id});
+						
+					}.bind(this)
+				
+				});
+				
+			});
+			
+			// Redefine all ID within every process diagrams 
+			// with the new url
+			loadedDiagrams.each(function(item){
+				
+				var id 	= item.id;
+				var url = item.url;
+				
+				loadedDiagrams.each(function(item){
+					
+					var uriRefs	= this.getNodeByClassName( item.data, "span", "oryx-refuri" );
+					$A(uriRefs).each(function(node){ 
+						
+						if( node.getAttribute("id") == id ){
+							node.textContent = url
+						}
+					})
+					
+				}.bind(this));				
+			}.bind(this));
+			
+			
+			// Send all diagrams to the server
+			loadedDiagrams.each(function(item){
+
+				var url 	= item.url; 
+				var params 	= { data: item.data };
+				
+				new Ajax.Request(url, {
+	                method: 'POST',
+	                asynchronous: false,
+	                parameters: params,
+					onSuccess: function(transport) {
+						
+						item["successful"] = true;
+						
+					}.bind(this)
+				
+				});
+								
+			});
+			
+			
+			this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );
+
 			// get the serialiezed object for the first process data
-			var serialized = this.parseToSerializeObjects( result[0] );	
+			//var serialized = this.parseToSerializeObjects( result[0].data );	
 	
 			// Import the shapes out of the serialization		
-			this.importData( serialized );
+			//this.importData( serialized );
 						
 		}.bind(this))
 
@@ -124,7 +192,19 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		return $A(doc.childNodes).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	
 
 	},
-		
+
+	/**
+	 * Give all child nodes with the given class name
+	 * 
+	 * @param {Object} doc
+	 * @param {Object} id
+	 */
+	getNodeByClassName: function(doc, tagName, className){
+
+		return $A(doc.getElementsByTagName( tagName )).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	
+
+	},
+			
 	/**
 	 * Parses the erdf string to an xml-document
 	 * 
@@ -349,7 +429,10 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         });
         
         // Create a new Selection Model
-        var sm = new Ext.grid.CheckboxSelectionModel({ header:'',singleSelect:true});
+        var sm = new Ext.grid.CheckboxSelectionModel({ 
+			header			:'',
+			//singleSelect	:true
+		});
         // Create a new Grid with a selection box
         var grid = new Ext.grid.GridPanel({
             store: new Ext.data.SimpleStore({
@@ -366,7 +449,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             frame: true,
             width: 300,
 			height:'auto',
-            iconCls: 'icon-grid'
+            iconCls: 'icon-grid',
+			//draggable: true
         });
         
         // Create a new Panel
@@ -381,7 +465,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         })
         
         // Create a new Window
-        var panel = new Ext.Window({
+        var extWindow = new Ext.Window({
             width: 327,
 			height:'auto',
             title: 'Oryx',
@@ -400,9 +484,9 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 							
                     var selectionModel = grid.getSelectionModel();
                     var result = selectionModel.selections.items.collect(function(item){
-                        return item.json[1];
+                        return {name: item.json[0], data: item.json[1]};
                     })
-                    panel.close();
+                    extWindow.close();
                 
 					window.setTimeout( function(){
 						
@@ -416,15 +500,90 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             }, {
                 text: "Cancel",
                 handler: function(){
-                    panel.close();
+                    extWindow.close();
                 }.bind(this)
             }]			
         })
         
         // Show the window
-        panel.show();
+        extWindow.show();
         
     },
+	
+    _showResultPanel: function(values){
+    
+							
+        // Extract the data
+        var data = [];
+        values.each(function(value){
+            data.push([ value.name, value.url, value.successfull ])
+        });
+        
+
+        // Create a new Grid with a selection box
+        var grid = new Ext.grid.GridPanel({
+            store: new Ext.data.SimpleStore({
+                data: data,
+                fields: ['name', 'url', 'successfull']
+            }),
+            cm: new Ext.grid.ColumnModel([{
+                header: "Name",
+                width: 260,
+                sortable: true,
+                dataIndex: 'name'
+            }, {
+                header: "URL",
+                width: 260,
+                sortable: true,
+                dataIndex: 'url'
+            }, {
+                header: "Imported",
+                width: 40,
+                sortable: true,
+                dataIndex: 'successfull'
+            }]),
+            frame: true,
+            width: 500,
+			height:'auto',
+            iconCls: 'icon-grid'
+        });
+        
+        // Create a new Panel
+        var panel = new Ext.Panel({
+            items: [{
+                xtype: 'label',
+                text: 'All imported diagrams!',
+                style: 'margin:5px;display:block'
+            }, grid],
+			height:'auto',
+            frame: true
+        })
+        
+        // Create a new Window
+        var extWindow = new Ext.Window({
+            width		: 'auto',
+			height		:'auto',
+            title		: 'Oryx',
+            floating	: true,
+            shim		: true,
+            modal		: true,
+            resizable	: false,
+            autoHeight	: true,
+            items: [panel],
+            buttons: [{
+                text: "Ok",
+                handler: function(){
+
+					extWindow.close()	
+									
+                }.bind(this)
+            }]			
+        })
+        
+        // Show the window
+        extWindow.show();
+        
+    },	
 	/**
 	 * 
 	 * @param {Object} message
