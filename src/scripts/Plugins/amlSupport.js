@@ -77,7 +77,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		// Get the several process diagrams
 		var values 	= $A(doc.firstChild.childNodes).collect(function(node){ return {title: this.getChildNodesByClassName( node.firstChild, 'oryx-title')[0].textContent, data: node}}.bind(this))
 		
-		this._showPanel(values, function(result, mask){
+		this._showPanel(values, function(result){
 
 			var loadedDiagrams = [];
 			
@@ -137,7 +137,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				
 				var params 		= { data: data, svg: dummySVG };
 				
-				item["successful"] = false;
+				item["successfull"] = false;
 				
 				new Ajax.Request(url, {
 	                method: 'POST',
@@ -145,7 +145,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	                parameters: params,
 					onSuccess: function(transport) {
 						
-						item["successful"] = true;
+						item["successfull"] = true;
 						
 					}.bind(this)
 				
@@ -154,8 +154,6 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			}.bind(this));
 			
 			window.setTimeout(function(){
-				
-				mask.hide();
 				
 				this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );	
 			
@@ -504,7 +502,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 
 					window.setTimeout( function(){
 						
-						successCallback(result, loadMask);
+						successCallback(result);
+						loadMask.hide();
 						
 					}.bind(this), 100);		
 
@@ -575,7 +574,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Create a new Window
         var extWindow = new Ext.Window({
             width		: 'auto',
-			height		:'auto',
+			height		: 'auto',
             title		: 'Oryx',
             floating	: true,
             shim		: true,
