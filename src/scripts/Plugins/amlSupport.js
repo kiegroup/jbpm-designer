@@ -85,7 +85,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 
 				var url 		= '/backend/poem' + ORYX.CONFIG.ORYX_NEW_URL + "?stencilset=/stencilsets/epc/epc.json"; 
 				var dummyData 	= '<div class="processdata"><div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;"><a href="./stencilsets/epc/epc.json" rel="oryx-stencilset"></a><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span></div></div>';
-				var params 		= { data: dummyData, title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
+				var dummySVG 	= '<svg/>';
+				var params 		= { data: dummyData, svg: dummySVG, title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
 			
 				
 				new Ajax.Request(url, {
