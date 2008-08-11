@@ -84,7 +84,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			result.each(function(item){
 
 				var url 		= '/backend/poem' + ORYX.CONFIG.ORYX_NEW_URL + "?stencilset=/stencilsets/epc/epc.json"; 
-				var dummyData 	= '<div class="processdata"><div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;"><a href="./stencilsets/epc/epc.json" rel="oryx-stencilset"></a><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span></div></div>';
+				var dummyData 	= '<div class="processdata"><div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;"><a href="/stencilsets/epc/epc.json" rel="oryx-stencilset"></a><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span></div></div>';
 				var dummySVG 	= '<svg/>';
 				var params 		= { data: dummyData, svg: dummySVG, title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
 			
@@ -95,8 +95,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	                parameters: params,
 					onSuccess: function(transport) {
 						
-						var loc = transport.getResponseHeader("location");
-						var id 	= this.getNodeByClassName( item.data, "div", "-oryx-canvas" )[0].getAttribute("id");
+						var loc = transport.getResponseHeader('location');
+						var id 	= this.getNodesByClassName( item.data, "div", "-oryx-canvas" )[0].getAttribute("id");
 				
 						loadedDiagrams.push({name: item.name, data:item.data, url: loc, id: id});
 						
@@ -104,7 +104,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				
 				});
 				
-			});
+			}.bind(this));
 			
 			// Redefine all ID within every process diagrams 
 			// with the new url
@@ -115,7 +115,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				
 				loadedDiagrams.each(function(item){
 					
-					var uriRefs	= this.getNodeByClassName( item.data, "span", "oryx-refuri" );
+					var uriRefs	= this.getNodesByClassName( item.data, "span", "oryx-refuri" );
 					$A(uriRefs).each(function(node){ 
 						
 						if( node.getAttribute("id") == id ){
@@ -145,7 +145,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				
 				});
 								
-			});
+			}.bind(this));
 			
 			
 			this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );
@@ -202,9 +202,9 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	 * @param {Object} doc
 	 * @param {Object} id
 	 */
-	getNodeByClassName: function(doc, tagName, className){
+	getNodesByClassName: function(doc, tagName, className){
 
-		return $A(doc.getElementsByTagName( tagName )).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	
+		return $A(doc.getElementsByTagName( tagName )).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == className }) })	
 
 	},
 			
