@@ -18,6 +18,6 @@
   <g pointer-events="fill" oryx:minimumSize="55 20" oryx:maximumSize="220 80" >
     <rect id="celem" oryx:resize="vertical horizontal" x="0" y="0" width="110" height="40" stroke="black" stroke-width="1" fill="#ffff80" />
     <path d="M 5 0 l 0 40" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
-    	<text font-size="12" id="text" x="55" y="20" oryx:align="middle center" stroke="black"></text>
+    	<text oryx:fittoelem="celem" font-size="12" id="text" x="55" y="20" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>
