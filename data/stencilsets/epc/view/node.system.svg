@@ -17,10 +17,11 @@
   </oryx:magnets>
   <g pointer-events="fill">
     <rect id="celem" oryx:resize="vertical horizontal" x="0" y="0" width="100" height="60" stroke="black" stroke-width="1" fill="#b0b0ff" />
-    <path d="M 4 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
+    <rect id="textrect" oryx:resize="vertical horizontal" x="8" y="0" width="84" height="60" stroke="none" fill="none" />
+	<path d="M 4 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <path d="M 8 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <path d="M 96 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <path d="M 92 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
-    <text oryx:fittoelem="celem" font-size="12" id="text" x="50" y="30" oryx:align="middle center" stroke="black"></text>
+    <text oryx:fittoelem="textrect" font-size="12" id="text" x="50" y="30" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>

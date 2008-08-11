@@ -23,7 +23,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"diagramtext",
-					"length":"32",
 					"wrapLines":true
 				},
 				{
@@ -43,8 +42,7 @@
 					"value":"",
 					"description":"Holds the name of the author of the diagram",
 					"readonly":false,
-					"optional":true,
-					"length":"32"
+					"optional":true
 				},
 				{
 					"id":"description",
@@ -82,7 +80,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"32",
 					"wrapLines":true
 				},
 				{
@@ -146,7 +143,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"32",
 					"wrapLines":true
 				},
 				{
@@ -337,7 +333,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"32",
 					"wrapLines":true
 				},
 				{
@@ -401,7 +396,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"32",
 					"wrapLines":true
 				},
 				{
@@ -452,7 +446,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"32",
 					"wrapLines":true
 				},
 				{
@@ -504,7 +497,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"32",
 					"wrapLines":true
 				},
 				{
@@ -555,7 +547,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"32",
 					"wrapLines":true
 				},
 				{

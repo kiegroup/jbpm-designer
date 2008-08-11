@@ -8,7 +8,7 @@
   <g>
     <ellipse id="celem" oryx:resize="vertical horizontal" cx="16" cy="16" rx="15" ry="15" stroke="black" fill="white" stroke-width="1"/>
 
-    <path oryx:resize="vertical horizontal" d="M 11 10 l 5 12 l 5 -12" stroke="black" fill="white" stroke-width="1" />
+    <path oryx:resize="vertical horizontal" d="M 11 10 l 5 12 l 5 -12" stroke="black" fill="none" stroke-width="1" />
 
     <text id="text" x="16" y="16" oryx:defaultPosition="middleRight"></text>
   </g>
