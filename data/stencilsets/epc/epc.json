@@ -172,6 +172,19 @@
 					"readonly":false,
 					"optional":true,
 					"wrapLines":true
+				},
+				{
+					"id":"refuri",
+					"type":"String",
+					"title":"URI",
+					"value":"",
+					"description":"The URI of the referenced process",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"128",
+					"wrapLines":true
 				},				
 				{
 					"id":"bgColor",
