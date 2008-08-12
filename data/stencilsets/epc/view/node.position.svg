@@ -19,6 +19,6 @@
     <rect id="celem" oryx:resize="vertical horizontal" x="0" y="0" width="110" height="40" stroke="black" stroke-width="1" fill="#ffff80" />
 	<rect id="textrect" oryx:resize="vertical horizontal" x="7" y="0" width="101" height="40" stroke="none" fill="none" />
     <path d="M 5 0 l 0 40" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
-    	<text oryx:fittoelem="textrect" font-size="12" id="text" x="55" y="20" oryx:align="middle center" stroke="black"></text>
+    	<text oryx:fittoelem="textrect" font-size="11" id="text" x="55" y="20" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>

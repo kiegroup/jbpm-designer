@@ -162,7 +162,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		this.text(this.node.textContent);
 		
 		//workaround for firefox on mac bug that avoids rendering text fill
-		if(navigator.platform.indexOf("Mac") > -1) {
+		/*if(navigator.platform.indexOf("Mac") > -1) {
 			this.node.setAttributeNS(null, 'stroke', 'black');
 			this.node.setAttributeNS(null, 'stroke-width', '0.5px');
 			this.node.setAttributeNS(null, 'font-family', 'Skia');
@@ -172,7 +172,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			if (!this.node.getAttributeNS(null, 'font-family')) {
 				this.node.setAttributeNS(null, 'font-family', 'Verdana');
 			}
-		}
+		}*/
 	},
 	
 	/**

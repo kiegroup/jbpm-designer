@@ -19,7 +19,7 @@
     <ellipse id="celem" oryx:resize="vertical horizontal" cx="60" cy="25" rx="60" ry="25" stroke="black" stroke-width="1" fill="#ffffaf" />
     <rect id="textrect" oryx:resize="vertical horizontal" x="12" y="11" width="96" height="28" stroke="none" fill="none" />
 	<path d="M 10 11 l 0 28" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
-    <text oryx:fittoelem="textrect" font-size="12" id="text" x="60" y="25" oryx:align="middle center" stroke="black"></text>
+    <text oryx:fittoelem="textrect" font-size="11" id="text" x="60" y="25" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>
 

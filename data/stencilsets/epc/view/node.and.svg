@@ -10,6 +10,6 @@
 
     <path d="M 11 22 l 5 -12 l 5 12" oryx:resize="vertical horizontal" stroke="black" fill="none" stroke-width="1" />
 
-    <text id="text" x="16" y="16" oryx:defaultPosition="middleRight"></text>
+    <text font-size="11" id="text" x="16" y="16" oryx:defaultPosition="middleRight"></text>
   </g>
 </svg>

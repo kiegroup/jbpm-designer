@@ -22,6 +22,6 @@
     <path d="M 8 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <path d="M 96 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
     <path d="M 92 0 l 0 60" oryx:resize="vertical horizontal" stroke="black" fill="white" stroke-width="1" />
-    <text oryx:fittoelem="textrect" font-size="12" id="text" x="50" y="30" oryx:align="middle center" stroke="black"></text>
+    <text oryx:fittoelem="textrect" font-size="11" id="text" x="50" y="30" oryx:align="middle center" stroke="black"></text>
   </g>
 </svg>
