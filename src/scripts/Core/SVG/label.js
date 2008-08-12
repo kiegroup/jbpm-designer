@@ -228,8 +228,10 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	},
 	
 	_checkFittingToReferencedElem: function() {
-		var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-
+		var tspans = $A(this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan'));
+		
+		var newtspans = [];
+		
 		var refNode = this.node.ownerDocument.getElementById(this.fitToElemId);
 
 		if (refNode) {
@@ -243,7 +245,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				var tspan = tspans[j];
 				
 				var textLength = tspan.getComputedTextLength();
-
+				
 				if(textLength > refbb.width) {
 
 					for (var i = 0; i < tspan.textContent.length; i++) {
@@ -252,17 +254,18 @@ ORYX.Core.SVG.Label = Clazz.extend({
 						if(sslength > refbb.width) {
 							var newtspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
 							if(lastSeperatorIndex <= startIndex) {
-								newtspan.textContent = tspan.textContent.slice(startIndex, i-1);
+								newtspan.textContent = tspan.textContent.slice(startIndex, i);
 								lastSeperatorIndex = i;
 							} else{
-								newtspan.textContent = tspan.textContent.slice(startIndex, lastSeperatorIndex);
+								newtspan.textContent = tspan.textContent.slice(startIndex, ++lastSeperatorIndex);
 							}
 							
 							newtspan.setAttributeNS(null, 'x', this.x);
 							newtspan.setAttributeNS(null, 'y', this.y);
 		
 							//insert tspan to text node
-							this.node.insertBefore(newtspan, tspan);
+							//this.node.insertBefore(newtspan, tspan);
+							newtspans.push(newtspan);
 							
 							startIndex = lastSeperatorIndex;
 							
@@ -278,9 +281,18 @@ ORYX.Core.SVG.Label = Clazz.extend({
 							}
 						}
 					}
-					
+
 					tspan.textContent = tspan.textContent.slice(startIndex);
 				}
+				
+				newtspans.push(tspan);
+			}
+			
+			while(this.node.hasChildNodes())
+				this.node.removeChild(this.node.childNodes[0]);
+				
+			while(newtspans.length > 0) {
+				this.node.appendChild(newtspans.shift());
 			}
 		}
 		
