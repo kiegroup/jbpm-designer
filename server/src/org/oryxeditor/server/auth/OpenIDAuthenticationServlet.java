@@ -28,7 +28,7 @@ import org.openid4java.message.ax.FetchResponse;
 import org.openid4java.message.sreg.SRegRequest;
 
 /**
- * This servlet provedes openID authentication.
+ * This servlet provides openID authentication.
  * 
  * This servlet is based on the work of Sutra Zhou, who published it within the
  * openid4java project under the Apache License, version 2.0.
