@@ -575,6 +575,42 @@
 			]
 		},
 		{
+			"type": "node",
+			"id":"TextNote",
+			"title":"Text Note",
+			"groups":[ "extended EPC" ],
+			"description":"A Text Note",
+			"view":"node.text.note.svg",
+			"icon":"new_text_note.png",
+			"roles": ["all"],
+			"properties": [
+				{
+					"id":"text",
+					"type":"String",
+					"title":"Text",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"wrapLines":true
+				},				
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":["celem", "celem2", "celem3"],
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
 			"type": "edge",
 			"id":"Relation",
 			"title":"Relation",
