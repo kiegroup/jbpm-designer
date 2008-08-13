@@ -1,0 +1,12 @@
+{
+	"title":"BPMN Sub Set Extension",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnsubset#",
+	"description":"BPMN extension that reduces the available stencils.",
+	"extends":"http://b3mn.org/stencilset/bpmn#",
+	"stencils":[],
+	"properties": [],
+	"removestencils": [
+		"Subprocess",
+		"Exclusive_Databased_Gateway"
+	]
+}
