@@ -184,11 +184,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	 */
 	sendRequest: function( url, params, successcallback ){
 
-		var success = false;
-		
-		var setTrue = function(){
-			success = true;
-		}		
+		var suc = false;
 
 		new Ajax.Request(url, {
             method			: 'POST',
@@ -196,11 +192,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             parameters		: params,
 			onSuccess		: function(transport) {
 				
+				suc = true;
+				
 				if(successcallback){
 					successcallback( transport )	
 				}
-				
-				setTrue();
 				
 			}.bind(this),
 			
@@ -220,7 +216,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		});
 		
 		
-		return success;
+		return suc;
 							
 	},
 
