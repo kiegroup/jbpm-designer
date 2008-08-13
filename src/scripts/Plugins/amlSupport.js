@@ -185,6 +185,10 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	sendRequest: function( url, params, successcallback ){
 
 		var success = false;
+		
+		var setTrue = function(){
+			success = true;
+		}		
 
 		new Ajax.Request(url, {
             method			: 'POST',
@@ -195,7 +199,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				if(successcallback){
 					successcallback( transport )	
 				}
-				success = true;
+				
+				setTrue();
 				
 			}.bind(this),
 			
@@ -497,6 +502,9 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		});
         // Create a new Grid with a selection box
         var grid = new Ext.grid.GridPanel({
+			//ddGroup          	: 'gridPanel',
+			//enableDragDrop   	: true,
+			cls					: 'ext_specialize_gridPanel_aml',
             store: new Ext.data.SimpleStore({
                 data: data,
                 fields: ['title']
@@ -570,6 +578,34 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Show the window
         extWindow.show();
         
+        sm.selectAll()
+
+		new Ext.dd.DropTarget(grid.getEl(), {
+			ddGroup: "gridPanel",
+			copy: false,
+			notifyDrop: function(dd, e, data){
+			
+				var sm = grid.getSelectionModel();
+				var rows = sm.getSelections();
+				
+				var cindex = dd.getDragData(e).rowIndex;
+				
+				for (i = 0; i < rows.length; i++) {
+					var rowData = store.getById(rows[i].id);
+					
+					if (!this.copy) 
+						store.remove(store.getById(rows[i].id));
+					
+					store.insert(cindex, rowData);
+					
+					
+				}
+				
+				sm.selectFirstRow()
+			}
+		});
+		
+      	grid.getView().refresh();		
     },
 	
     _showResultPanel: function(values){
