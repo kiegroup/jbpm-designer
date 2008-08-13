@@ -81,83 +81,81 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 
 			if( result.length > 1 ){
 	
+				var requestsSuccessfull = true;
+	
 				var loadedDiagrams = [];
 				
 				// Generate for every diagram a new url
 				result.each(function(item){
-	
+		
+					// Set url, dummy data, and params for the request, to get a new url
 					var url 		= '/backend/poem' + ORYX.CONFIG.ORYX_NEW_URL + "?stencilset=/stencilsets/epc/epc.json"; 
 					var dummyData 	= '<div class="processdata"><div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;"><a href="/stencilsets/epc/epc.json" rel="oryx-stencilset"></a><span class="oryx-mode">writeable</span><span class="oryx-mode">fullscreen</span></div></div>';
 					var dummySVG 	= '<svg/>';
 					var params 		= { data: dummyData, svg: dummySVG, title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
-				
-					
-					new Ajax.Request(url, {
-		                method: 'POST',
-		                asynchronous: false,
-		                parameters: params,
-						onSuccess: function(transport) {
-							
+		
+					// Send the request
+					requestsSuccessfull = this.sendRequest( url, params, function(){ 
+								
 							var loc = transport.getResponseHeader('location');
 							var id 	= this.getNodesByClassName( item.data, "div", "-oryx-canvas" )[0].getAttribute("id");
-					
+						
 							loadedDiagrams.push({name: item.name, data:item.data, url: loc, id: id});
 							
-						}.bind(this)
+						}.bind(this));				
 					
-					});
+					// If an error during the reqest occurs, return
+					if( !requestsSuccessfull ){ throw $break }
 					
 				}.bind(this));
-				
-				// Redefine all ID within every process diagrams 
-				// with the new url
-				loadedDiagrams.each(function(searchItem){
+
+				// If an error during the reqest occurs, return
+				if( !requestsSuccessfull ){ return }
 					
-					var id 		= searchItem.id;
-					var newURL 	= searchItem.url;
+									
+				// Replace all IDs within every process diagrams with the new url
+				// First, find all 'oryx-uriref' spans
+				var allURIRefs = loadedDiagrams.collect(function(item){ return $A(this.getNodesByClassName( refItem.data, "span", "oryx-refuri" )) }.bind(this)).flatten()
+				// Second, replace it, if there is a url for it, otherwise, delete the link
+				allURIRefs.each(function(uriRef){
 					
-					loadedDiagrams.each(function(refItem){
-						
-						var uriRefs	= this.getNodesByClassName( refItem.data, "span", "oryx-refuri" );
-						$A(uriRefs).each(function(node){ 
-							if( node.textContent == id ){
-								node.textContent = newURL
-							}
-						})
-						
-					}.bind(this));				
-				}.bind(this));
+					if( uriRef.textContent.length == 0 ){ return }
+					
+					var findURL = loadedDiagrams.find(function(item){ return node.textContent == item.id })
+					
+					uriRef.textContent = findURL ? findURL.url : "" ;					
+					
+				})
+
 				
 				
 				// Send all diagrams to the server
 				loadedDiagrams.each(function(item){
 	
+					// Get the URL
 					var url 		= item.url; 
+					// Define the svg
 					var dummySVG 	= '<svg/>';
-					
+					// Get the data
 					var data		= DataManager.serialize(item.data);
 					data 			= "<div " + data.slice(data.search("class"));
-					
+					// Set the parameter for the request
 					var params 		= { data: data, svg: dummySVG };
 					
-					item["successfull"] = false;
+					// Send the request
+					requestsSuccessfull = this.sendRequest( url, params );
 					
-					new Ajax.Request(url, {
-		                method: 'POST',
-		                asynchronous: false,
-		                parameters: params,
-						onSuccess: function(transport) {
-							
-							item["successfull"] = true;
-							
-						}.bind(this)
 					
-					});
+					// If an error during the reqest occurs, return
+					if( !requestsSuccessfull ){ throw $break }
 									
 				}.bind(this));
-				
+
+				// If an error during the reqest occurs, return
+				if( !requestsSuccessfull ){ return }
+								
 				// Show the results	
-				this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url,  successfull: item['successfull']} }) );	
+				this._showResultPanel( loadedDiagrams.collect(function(item){ return {name: item.name, url: item.url } }) );	
 					
 			} else {
 
@@ -174,6 +172,51 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 						
 		}.bind(this))
 
+	},
+	
+	
+	/**
+	 * 
+	 * 
+	 * @param {Object} url
+	 * @param {Object} params
+	 * @param {Object} successcallback
+	 */
+	sendRequest: function( url, params, successcallback ){
+
+		var success = false;
+
+		new Ajax.Request(url, {
+            method			: 'POST',
+            asynchronous	: false,
+            parameters		: params,
+			onSuccess		: function(transport) {
+				
+				if(successcallback){
+					successcallback( transport )	
+				}
+				success = true;
+				
+			}.bind(this),
+			
+			onFailure		: function(transport) {
+
+				Ext.Msg.alert("Oryx", "Request in Import of AML failed.");
+				ORYX.log.warn("Import AML failed: " + transport.responseText);
+				
+			}.bind(this),
+			
+			on403			: function(transport) {
+
+				Ext.Msg.alert("Oryx", "You have no rights to import multiple EPC-Diagrams.");
+				ORYX.log.warn("Import AML failed: " + transport.responseText);
+				
+			}.bind(this)		
+		});
+		
+		
+		return success;
+							
 	},
 
 	/**
@@ -535,7 +578,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Extract the data
         var data = [];
         values.each(function(value){
-            data.push([ value.name, '<a href="' + value.url + '" target="_blank">' + value.url + '</a>', value.successfull ])
+            data.push([ value.name, '<a href="' + value.url + '" target="_blank">' + value.url + '</a>' ])
         });
         
 
@@ -543,7 +586,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         var grid = new Ext.grid.GridPanel({
             store: new Ext.data.SimpleStore({
                 data: data,
-                fields: ['name', 'url', 'successfull']
+                fields: ['name', 'url' ]
             }),
             cm: new Ext.grid.ColumnModel([{
                 header: "Name",
@@ -555,11 +598,6 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 width: 300,
                 sortable: true,
                 dataIndex: 'url'
-            }, {
-                header: "Imported",
-                width: 100,
-                sortable: true,
-                dataIndex: 'successfull'
             }]),
             frame: true,
             width: 500,
