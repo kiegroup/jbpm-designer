@@ -522,9 +522,9 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Create a new Panel
         var panel = new Ext.Panel({
             items: [{
-                xtype: 'label',
-                text: 'Select the diagram you want to import.',
-                style: 'margin:5px;display:block'
+                xtype	: 'label',
+                text	: 'Select the diagram(s) you want to import! <br/> If one model is selected, it will be imported in the current editor, if more than one is selected, those models will directly be stored in the repository.',
+                style	: 'margin:5px;display:block'
             }, grid],
 			height:'auto',
             frame: true
