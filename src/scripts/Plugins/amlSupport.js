@@ -95,7 +95,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 					var params 		= { data: dummyData, svg: dummySVG, title: item.name, summary: "", type: "http://b3mn.org/stencilset/epc#" };
 		
 					// Send the request
-					requestsSuccessfull = this.sendRequest( url, params, function(){ 
+					requestsSuccessfull = this.sendRequest( url, params, function( transport ){ 
 								
 							var loc = transport.getResponseHeader('location');
 							var id 	= this.getNodesByClassName( item.data, "div", "-oryx-canvas" )[0].getAttribute("id");
