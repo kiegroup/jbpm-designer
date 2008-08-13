@@ -76,6 +76,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		
 		// Get the several process diagrams
 		var values 	= $A(doc.firstChild.childNodes).collect(function(node){ return {title: this.getChildNodesByClassName( node.firstChild, 'oryx-title')[0].textContent, data: node}}.bind(this))
+		// Sort the values
+		values.sort(function(a,b){ return a.title > b.title})
 		
 		this._showPanel(values, function(result){
 
@@ -115,7 +117,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 									
 				// Replace all IDs within every process diagrams with the new url
 				// First, find all 'oryx-uriref' spans
-				var allURIRefs = loadedDiagrams.collect(function(item){ return $A(this.getNodesByClassName( refItem.data, "span", "oryx-refuri" )) }.bind(this)).flatten()
+				var allURIRefs = loadedDiagrams.collect(function(item){ return $A(this.getNodesByClassName( item.data, "span", "oryx-refuri" )) }.bind(this)).flatten()
 				// Second, replace it, if there is a url for it, otherwise, delete the link
 				allURIRefs.each(function(uriRef){
 					
@@ -161,6 +163,9 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 
 				// get the serialiezed object for the first process data
 				var serialized = this.parseToSerializeObjects( result[0].data );	
+				
+				// Delete all ref-uris
+				serialized.each(function(item){ item.serialize.each( function(attr){ if(attr.name == 'refuri'){ attr.value = "" } }) })
 		
 				// Import the shapes out of the serialization		
 				var shapes = this.importData( serialized );
