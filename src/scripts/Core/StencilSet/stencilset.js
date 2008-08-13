@@ -204,35 +204,53 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 							
 					if(jsonExtension["extends"] == this.namespace()) {
 						this._extensions[jsonExtension.namespace] = jsonExtension;
-						
-						
+				
+						//load new stencils
+						/*if(jsonExtension.stencils) {
+							$A(jsonExtension.stencils).each(function(stencil) {
+								var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this);            
+								this._stencils[oStencil.id()] = oStencil;
+								this._availableStencils[oStencil.id()] = oStencil;
+							}.bind(this));
 							
-						//TODO load new stencils
-						
+							
+						}*/
 						
 						//load additional properties
-						var stencils = this._stencils.values();
-						
-						stencils.each(function(stencil) {
-							var roles = stencil.roles();
+						if (jsonExtension.properties) {
+							var stencils = this._stencils.values();
 							
-							jsonExtension.properties.each(function(prop) {
-								prop.roles.any(function(role) {
-									role = jsonExtension["extends"] + role;
-									if(roles.member(role)) {
-										prop.properties.each(function(property) {
-											stencil.addProperty(property, jsonExtension.namespace);
-										});
-										
-										return true;
-									} else
-										return false;
+							stencils.each(function(stencil){
+								var roles = stencil.roles();
+								
+								jsonExtension.properties.each(function(prop){
+									prop.roles.any(function(role){
+										role = jsonExtension["extends"] + role;
+										if (roles.member(role)) {
+											prop.properties.each(function(property){
+												stencil.addProperty(property, jsonExtension.namespace);
+											});
+											
+											return true;
+										}
+										else 
+											return false;
+									})
 								})
-							})
-						}.bind(this));
+							}.bind(this));
+						}
 						
-						//TODO remove stencil properties
-			
+						//remove stencil properties
+						if(jsonExtension.removeproperties) {
+							jsonExtension.removeproperties.each(function(remprop) {
+								var stencil = this.stencil(jsonExtension["extends"] + remprop.stencil);
+								if(stencil) {
+									remprop.properties.each(function(propId) {
+										stencil.removeProperty(propId);
+									});
+								}
+							}.bind(this));
+						}
 						
 						//remove stencils
 						if(jsonExtension.removestencils) {

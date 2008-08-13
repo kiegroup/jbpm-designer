@@ -260,6 +260,16 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 			this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
 		}
 	},
+	
+	removeProperty: function(propertyId) {
+		if(propertyId) {
+			var oProp = this._properties.values().find(function(prop) {
+				return (propertyId == prop.id());
+			});
+			if(oProp)
+				delete this._properties[oProp.prefix() + "-" + oProp.id()];
+		}
+	},
 
 	_loadSVGOnSuccess: function(result) {
 		
