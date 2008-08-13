@@ -161,14 +161,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 					
 			} else {
 
-				// get the serialiezed object for the first process data
-				var serialized = this.parseToSerializeObjects( result[0].data );	
-				
-				// Delete all ref-uris
-				serialized.each(function(item){ item.serialize.each( function(attr){ if(attr.name == 'refuri'){ attr.value = "" } }) })
-		
-				// Import the shapes out of the serialization		
-				var shapes = this.importData( serialized );
+				var erdfDOM = result[0].data;
+				// Delete all uri-refs
+				 $A(this.getNodesByClassName( erdfDOM , "span", "oryx-refuri" ) ).each(function(node){ node.textcontent = ""});
+				// Import the erdf strucutre
+				this.facade.importERDF( erdfDOM );
 				
 				//this.facade.setSelection( shapes );
 							
@@ -227,29 +224,6 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 							
 	},
 
-	/**
-	 * Gives a div from xml with a given id
-	 * 
-	 * @param {Object} doc
-	 * @param {Object} id
-	 */
-	getElementByIdFromDiv: function(doc, id){
-		
-		return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id})
-	
-	},
-
-	/**
-	 * Give all divs with a given class name
-	 * 
-	 * @param {Object} doc
-	 * @param {Object} id
-	 */
-	getElementsByClassNameFromDiv: function(doc, id){
-
-		return $A(doc.getElementsByTagName('div')).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	
-
-	},
 
 	/**
 	 * Give all child nodes with the given class name
@@ -288,122 +262,6 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 
 	},
 
-	/**
-	 * Parses one process model to the serialized form
-	 * 
-	 * @param {Object} oneProcessData
-	 */
-	parseToSerializeObjects: function( oneProcessData ){
-		
-		// Get the oryx-editor div
-		var editorNode 	= this.getElementsByClassNameFromDiv( oneProcessData, '-oryx-canvas')[0];
-
-		// Get all ids from the canvas node for rendering
-		var renderNodes = $A(editorNode.childNodes).collect(function(el){ return el.nodeName.toLowerCase() == "a" && el.getAttribute('rel') == 'oryx-render' ? el.getAttribute('href').slice(1) : null}).compact()
-		
-		// Collect all nodes from the ids
-		renderNodes = renderNodes.collect(function(el){return this.getElementByIdFromDiv( oneProcessData, el)}.bind(this));
-		renderNodes.push(editorNode);
-	
-		// Function for extract all eRDF-Attributes and give them back as an Object
-		var parseAttribute = function(node){
-		    
-			var res = {type: undefined, id: undefined ,serialize: [] }
-			
-			// Set the resource id
-			if(node.getAttribute("id")){
-				res.id = node.getAttribute("id");
-			}
-
-			// If the node is the canvas simply
-			// set already the canvas as shape 
-			if(node.getAttribute("class") == "-oryx-canvas"){
-				res['shape'] = this.facade.getCanvas();
-			}
-						
-			// Set all attributes
-		    $A(node.childNodes).each( function(node){ 
-				if( node.nodeName.toLowerCase() == "span" && node.getAttribute('class')){
-		            var name 	= node.getAttribute('class').split("-");
-					var value 	= node.firstChild ? node.firstChild.nodeValue : '';
-					
-					res.serialize.push({name: name[1], prefix:  name[0], value: value})
-
-					if( name[1] == "type" ){
-						res.type = value;
-					}
-
-				} else if( node.nodeName.toLowerCase() == "a" && node.getAttribute('rel')){
-		            var name 	= node.getAttribute('rel').split("-");
-					var value 	= node.getAttribute('href');
-					
-					res.serialize.push({name: name[1], prefix:  name[0], value: value})
-		        }
-		    })
-			
-		    return res.type ? res : null ;
-		}.bind(this)		
-		
-		// Collect all Attributes out of the Nodes
-		return renderNodes.collect(function(el){return parseAttribute(el)}.bind(this)).compact();
-		
-		
-	},
-	
-	importData: function( serialized ){
-		
-		var canvas  = this.facade.getCanvas();
-		
-		serialized.each(function(ser){
-
-			// If the shape is the canvas, continue
-			if( ser.shape && ser.shape instanceof ORYX.Core.Canvas){
-				return;
-			}
-
-			// Try to create a new Shape
-			try {
-				// Create a new Stencil								
-				var stencil = ORYX.Core.StencilSet.stencil( ser.type );
-	
-				// Create a new Shape
-				var newShape = (stencil.type() == "node") ?
-									new ORYX.Core.Node(
-										{'eventHandlerCallback':this.facade.raiseEvent},
-										stencil) :
-									new ORYX.Core.Edge(
-										{'eventHandlerCallback':this.facade.raiseEvent},
-										stencil);
-				
-				// Set the resource id
-				newShape.resourceId = ser.id;
-				
-				// Add the shape to the canvas
-				canvas.add( newShape );
-								
-				// Add to new shapes
-				ser['shape'] = newShape;				
-			} catch(e) {
-				ORYX.Log.warn("LoadingContent: Stencil could not create.");
-				//return;
-			}
-					
-		}.bind(this))
-		
-				
-		// Deserialize the properties from the shapes
-		serialized.each(
-			function(pair){
-				pair.shape.deserialize(pair.serialize);
-			}
-		);
-		
-		// Update the canvas
-		canvas.update();
-		
-		return serialized.collect(function(item) { return item.shape })
-				
-	},
 
 	/**
 	 * Opens a upload dialog.
