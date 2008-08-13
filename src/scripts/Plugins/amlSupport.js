@@ -121,7 +121,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 					
 					if( uriRef.textContent.length == 0 ){ return }
 					
-					var findURL = loadedDiagrams.find(function(item){ return node.textContent == item.id })
+					var findURL = loadedDiagrams.find(function(item){ return uriRef.textContent == item.id })
 					
 					uriRef.textContent = findURL ? findURL.url : "" ;					
 					
@@ -163,7 +163,9 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 				var serialized = this.parseToSerializeObjects( result[0].data );	
 		
 				// Import the shapes out of the serialization		
-				this.importData( serialized );
+				var shapes = this.importData( serialized );
+				
+				//this.facade.setSelection( shapes );
 							
 			}
 			
@@ -393,6 +395,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		
 		// Update the canvas
 		canvas.update();
+		
+		return serialized.collect(function(item) { return item.shape })
 				
 	},
 
@@ -500,7 +504,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         var grid = new Ext.grid.GridPanel({
 			//ddGroup          	: 'gridPanel',
 			//enableDragDrop   	: true,
-			cls					: 'ext_specialize_gridPanel_aml',
+			//cls				: 'ext_specialize_gridPanel_aml',
             store: new Ext.data.SimpleStore({
                 data: data,
                 fields: ['title']
@@ -574,34 +578,6 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Show the window
         extWindow.show();
         
-        sm.selectAll()
-
-		new Ext.dd.DropTarget(grid.getEl(), {
-			ddGroup: "gridPanel",
-			copy: false,
-			notifyDrop: function(dd, e, data){
-			
-				var sm = grid.getSelectionModel();
-				var rows = sm.getSelections();
-				
-				var cindex = dd.getDragData(e).rowIndex;
-				
-				for (i = 0; i < rows.length; i++) {
-					var rowData = store.getById(rows[i].id);
-					
-					if (!this.copy) 
-						store.remove(store.getById(rows[i].id));
-					
-					store.insert(cindex, rowData);
-					
-					
-				}
-				
-				sm.selectFirstRow()
-			}
-		});
-		
-      	grid.getView().refresh();		
     },
 	
     _showResultPanel: function(values){
