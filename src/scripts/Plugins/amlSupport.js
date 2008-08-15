@@ -163,7 +163,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 
 				var erdfDOM = result[0].data;
 				// Delete all uri-refs
-				 $A(this.getNodesByClassName( erdfDOM , "span", "oryx-refuri" ) ).each(function(node){ node.textcontent = ""});
+				 $A(this.getNodesByClassName( erdfDOM , "span", "oryx-refuri" ) ).each(function(node){ node.textContent = ""});
 				// Import the erdf strucutre
 				this.facade.importERDF( erdfDOM );
 				
@@ -381,7 +381,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             sm: sm,
             frame: true,
             width: 300,
-			height:'auto',
+			height:300,
             iconCls: 'icon-grid',
 			//draggable: true
         });
@@ -390,7 +390,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         var panel = new Ext.Panel({
             items: [{
                 xtype	: 'label',
-                text	: 'Select the diagram(s) you want to import! <br/> If one model is selected, it will be imported in the current editor, if more than one is selected, those models will directly be stored in the repository.',
+                html	: 'Select the diagram(s) you want to import! <br/> If one model is selected, it will be imported in the current editor, if more than one is selected, those models will directly be stored in the repository.',
                 style	: 'margin:5px;display:block'
             }, grid],
 			height:'auto',
@@ -472,7 +472,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             }]),
             frame: true,
             width: 500,
-			height:'auto',
+			height:300,
             iconCls: 'icon-grid'
         });
         
