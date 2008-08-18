@@ -2,6 +2,8 @@ package de.hpi.petrinet.stepthrough;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +25,11 @@ import de.hpi.bpmn2pn.converter.STConverter;
 import de.hpi.petrinet.PetriNet;
 
 public class StepThroughServlet extends HttpServlet {
+	// The servlet is responsible for getting the Ajax request,
+	// checking for errors,
+	// creating all necessary objects,
+	// translating the executionTrace into commands for the STMapper
+	// and writing a string into the answer of the request.
 	private static final long serialVersionUID = 1L;
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -36,10 +43,35 @@ public class StepThroughServlet extends HttpServlet {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-
+			
+			// Check the syntax?
+			if (req.getParameter("checkSyntax").equals("true")) {
+				BPMNDiagram diagram = loadBPMN(document);
+				// Check Diagram in Syntax and Compatibility
+				STSyntaxChecker checker = new STSyntaxChecker(diagram);
+				checker.checkSyntax(true);
+				if (checker.getErrors().size() > 0) {
+					PrintWriter writer = res.getWriter();
+					// Announce errors
+					writer.print("!errors!");
+					// Write errors into the output, if any exist
+					for (Entry<String, String> error : checker.getErrors()
+							.entrySet()) {
+						res.getWriter().print(
+								error.getKey() + ":" + error.getValue() + ";");
+					}
+					
+					// Stop further execution
+					return;
+				}
+			}
+			
 			// Produce a PetriNet and create a StepThroughMapper with it
 			PetriNet net = loadPetriNet(document);
 			STMapper stm = new STMapper((PTNet)net);
+		
+			// Automation level is now hard coded
+			stm.setAutoSwitchLevel(AutoSwitchLevel.SemiAuto);
 			
 			// Set whether the client wants to have the state of all resources or just of the last changes
 			boolean onlyChangedObjects = false;
@@ -54,12 +86,10 @@ public class StepThroughServlet extends HttpServlet {
 			for (int i = 0; i < objectsToFire.length; i++) {
 				// If necessary, delete all uninteresting changed objects
 				if(onlyChangedObjects) stm.clearChangedObjs();
-				// Set AutoSwitchLevel
-				String[] objAndLevel = objectsToFire[i].split(",");
-				if(objAndLevel.length != 2) continue; // malformed string!
-				stm.setAutoSwitchLevel(AutoSwitchLevel.fromInt(Integer.valueOf(objAndLevel[1]).intValue()));
+				// Check for proper string
+				if(!objectsToFire[i].startsWith("resource")) continue;
 				// and fire
-				stm.fireObject(objAndLevel[0]);
+				stm.fireObject(objectsToFire[i]);
 			}
 			
 			// Submit the changed objects
@@ -81,5 +111,14 @@ public class StepThroughServlet extends HttpServlet {
 		new Preprocessor(diagram, new BPMNFactory()).process();
 		return new STConverter(diagram).convert();
 	}
-
+	
+	private BPMNDiagram loadBPMN(Document document) {
+		String type = new StencilSetUtil().getStencilSet(document);
+		if (type.equals("bpmn.json"))
+			return new BPMNRDFImporter(document).loadBPMN();
+		else if (type.equals("bpmn1.1.json"))
+			return new BPMN11RDFImporter(document).loadBPMN();
+		else 
+			return null;
+	}
 }

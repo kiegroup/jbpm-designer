@@ -227,18 +227,6 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<display-name>Step Through Checker</display-name>
-		<servlet-name>StepThroughChecker</servlet-name>
-		<servlet-class>
-			de.hpi.petrinet.stepthrough.StepThroughCheckerServlet
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>StepThroughChecker</servlet-name>
-		<url-pattern>/stepthroughchecker</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
 		<display-name>XForms Export</display-name>
 		<servlet-name>XFormsExportServlet</servlet-name>
 		<servlet-class>
