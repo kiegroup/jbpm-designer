@@ -15,7 +15,27 @@
   	<oryx:magnet oryx:cx="20" oryx:cy="30" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill">
-    <polygon oryx:resize="vertical horizontal" id="frame" stroke="black" fill="white" stroke-width="1" points="0,0 0,60 40,60 40,10 30,0 30,10 40,10 30,0" />
+	<polyline 
+		oryx:resize="vertical horizontal" 
+		oryx:anchors="left right" 
+		id="frame" 
+		stroke="black" 
+		fill="white" 
+		stroke-width="1" 
+		points="30,60 0,60 0,0 30,0" />
+	<polyline 
+		oryx:anchors="right top bottom" 
+		id="celem2" stroke="black" 
+		fill="white" 
+		stroke-width="1" 
+		points="30,60 40,60 40,10 30,10" />
+    <polyline 
+		oryx:anchors="right top" 
+		id="celem3" 
+		stroke="black" 
+		fill="white" 
+		stroke-width="1" 
+		points="40,10 30,0 30,10 40,10" />
     <text font-size="14" id="text_name" x="20" y="30" oryx:align="middle center" stroke="black"></text>
 	<text font-size="11" id="text_state" x="20" y="50" oryx:align="middle center" stroke="black"
 		oryx:anchors="bottom"></text>

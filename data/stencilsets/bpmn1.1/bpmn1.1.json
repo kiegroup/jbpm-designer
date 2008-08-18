@@ -4458,7 +4458,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"frame",
+					"refToView":["frame", "celem2", "celem3"],
 					"fill":true,
 					"stroke":false
 				}
