@@ -585,7 +585,7 @@
 			"roles": ["all"],
 			"properties": [
 				{
-					"id":"text",
+					"id":"title",
 					"type":"String",
 					"title":"Text",
 					"value":"",
