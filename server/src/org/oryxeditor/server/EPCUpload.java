@@ -56,19 +56,11 @@ public class EPCUpload extends HttpServlet {
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     	
-    	// Get the PrintWriter
-    	res.setContentType("text/html");
-    	PrintWriter out = null;
-    	try {
-    	    out = res.getWriter();
-    	} catch (IOException e) {
-    	    e.printStackTrace();
-    	}
     	
     	// No isMultipartContent => Error
     	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
     	if (!isMultipartContent){
-    		printError(out, "No Multipart Content transmitted.");
+    		printError(res, "No Multipart Content transmitted.");
 			return ;
     	}
     	
@@ -80,11 +72,11 @@ public class EPCUpload extends HttpServlet {
     	try {
     		items = servletFileUpload.parseRequest(req);
     		if (items.size() != 1){
-    			printError(out, "Not exactly one File.");
+    			printError(res, "Not exactly one File.");
     			return ;
     		}
     	} catch (FileUploadException e) {
-    		handleException(out, e); 
+    		handleException(res, e); 
 	   		return;
     	} 
     	final FileItem fileItem = (FileItem)items.get(0);
@@ -99,7 +91,7 @@ public class EPCUpload extends HttpServlet {
     	try {
     		inputStream = fileItem.getInputStream();
     	} catch (IOException e){ 
-    		handleException(out, e); 
+    		handleException(res, e); 
     		return;
     	}
 	   		
@@ -117,7 +109,7 @@ public class EPCUpload extends HttpServlet {
     	if (fileName.endsWith(".epml") || content.contains("http://www.epml.de")){
     		epmlSource = new StreamSource(inputStream);
     	} else {
-    		printError(out, "No EPML or AML file uploaded.");
+    		printError(res, "No EPML or AML file uploaded.");
     		return ;
     	}
     		
@@ -129,50 +121,60 @@ public class EPCUpload extends HttpServlet {
     		transformer.transform(epmlSource, new StreamResult(writer));
     		resultString = writer.toString();
     	} catch (Exception e){
-    		handleException(out, e); 
+    		handleException(res, e); 
     		return;
     	}
 
     	if (resultString != null){
     		try {
-    			if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>")){
-    				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>", "");
-    				resultString = resultString.replace("</root>", "");
-    				resultString = resultString.replaceAll("<", "&lt;");
-    				resultString = resultString.replaceAll(">", "&gt;");
-    		        out.print("{success:true, content:'"+resultString+"'}"); 
-    		        return ;
-    			} else if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>")) {
-    				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>", "");
-    				resultString = resultString.replace("</root>", "");
-    				resultString = resultString.replaceAll("<", "&lt;");
-    				resultString = resultString.replaceAll(">", "&gt;");
-    		        out.print("{success:true, content:'"+resultString+"'}"); 
-    		        return ;
-    			} else {
-    				printError(out, "Error during transformation.");
-    				return ;
-    			}
+    			
+    			printResponse( res, resultString );
 
     		} catch (Exception e){
-    			handleException(out, e); 
+    			handleException(res, e); 
     			return;
     		}
     	}
     }
     
-    
-    
-    private void printError(PrintWriter out, String err){
-    	if (out != null){
-    		out.print("{success:false, content:'"+err+"'}");
-
+    private void printResponse(HttpServletResponse res, String text){
+    	if (res != null){
+ 
+        	// Get the PrintWriter
+        	res.setContentType("text/plain");
+        	
+        	PrintWriter out = null;
+        	try {
+        	    out = res.getWriter();
+        	} catch (IOException e) {
+        	    e.printStackTrace();
+        	}
+        	
+    		out.print(text);
     	}
     }
     
-	private void handleException(PrintWriter out, Exception e) {
+    
+    private void printError(HttpServletResponse res, String err){
+    	if (res != null){
+ 
+        	// Get the PrintWriter
+        	res.setContentType("text/html");
+        	
+        	PrintWriter out = null;
+        	try {
+        	    out = res.getWriter();
+        	} catch (IOException e) {
+        	    e.printStackTrace();
+        	}
+        	
+    		out.print("{success:false, content:'"+err+"'}");
+    	}
+    }
+    
+	private void handleException(HttpServletResponse res, Exception e) {
 		e.printStackTrace();
-		printError(out, e.getLocalizedMessage());
+		printError(res, e.getLocalizedMessage());
 	}
     
 }

@@ -256,6 +256,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 	 */
 	parseToDoc: function( erdfString ){
 		
+		erdfString = erdfString.startsWith('<?xml') ? erdfString : '<?xml version="1.0" encoding="utf-8"?>'+erdfString+'';	
+		
 		var parser	= new DOMParser();			
 		
 		return parser.parseFromString( erdfString ,"text/xml");
