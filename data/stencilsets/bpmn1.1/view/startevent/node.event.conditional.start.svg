@@ -17,5 +17,11 @@
     		M 10 14 L 22 14
     		M 10 18 L 22 18
     		M 10 22 L 22 22" fill="none" stroke="black" />
+	<text font-size="11" 
+		id="text_name" 
+		x="16" y="38" 
+		oryx:align="middle center" 
+		stroke="black"
+	></text>
   </g>
 </svg>

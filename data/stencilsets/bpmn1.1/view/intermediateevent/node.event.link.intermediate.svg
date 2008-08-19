@@ -16,6 +16,12 @@
 
     <polygon id="linkCatching" stroke="black" fill="white" stroke-width="1.4" points="9,13 19,13 19,10 25,16 19,22 19,19 9,19" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
 	<polygon id="linkThrowing" stroke="black" fill="black" stroke-width="1" points="9,13 19,13 19,10 25,16 19,22 19,19 9,19" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
+	<text font-size="11" 
+		id="text_name" 
+		x="16" y="38" 
+		oryx:align="middle center" 
+		stroke="black"
+	></text>
   </g>
 </svg>
 

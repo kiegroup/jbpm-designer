@@ -13,6 +13,11 @@
     <circle id="frame" cx="16" cy="16" r="14" stroke="black" fill="white" stroke-width="3"/>
    	<path stroke="white" fill="black" stroke-width="1" d="M8,11 L8,21 L24,21 L24,11 L16,17z"/>
 	<path stroke="white" fill="black" stroke-width="1" d="M7,10 L16,17 L25 10z"/>
-
+	<text font-size="11" 
+		id="text_name" 
+		x="16" y="37" 
+		oryx:align="middle center" 
+		stroke="black"
+	></text>
   </g>
 </svg>

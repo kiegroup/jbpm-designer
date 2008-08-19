@@ -23,5 +23,11 @@
 		stroke-opacity:1"
        	d="M 20.834856,22.874369 L 10.762008,22.873529 L 7.650126,13.293421 L 15.799725,7.3734296 L 23.948336,13.294781 L 20.834856,22.874369 z"
        id="middlePolygonThrowing" />
+	<text font-size="11" 
+		id="text_name" 
+		x="16" y="38" 
+		oryx:align="middle center" 
+		stroke="black"
+	></text>
   </g>
 </svg>
