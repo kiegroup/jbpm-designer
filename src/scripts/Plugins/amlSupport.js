@@ -296,7 +296,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 			autoCreate: true, 
 			title: 		'Import AML-File', 
 			height: 	'auto', 
-			width: 		'auto', 
+			width: 		420, 
 			modal:		true,
 			collapsible:false,
 			fixedcenter:true, 
