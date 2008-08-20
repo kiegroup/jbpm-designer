@@ -2,12 +2,21 @@
 	display:none;
 }
 
+.x-grid3-row-table {
+	table-layout: fixed;
+}
 .ext_specialize_gridPanel_aml {
 	
 }
 
 .x-grid3-scroller {
 	padding-bottom: 24px;
+}
+
+.x_form_text_set_absolute {
+	position:absolute;
+	top:-500px;
+	left:-500px;
 }
 
 .ext-gecko .x-window-body div.ext_specific_window_overflow.x-form-item  {

@@ -16,6 +16,7 @@
 		<plugin source="propertywindow.js" name="ORYX.Plugins.PropertyWindow" />
 		<plugin source="loading.js" name="ORYX.Plugins.Loading" />
 		<plugin source="canvasResize.js" name="ORYX.Plugins.CanvasResize" />
+		<plugin source="renameShapes.js" name="ORYX.Plugins.RenameShapes" />
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
