@@ -24,8 +24,8 @@
 	</g>
 	<text font-size="11" 
 		id="text_name" 
-		x="16" y="38" 
-		oryx:align="middle center" 
+		x="16" y="33" 
+		oryx:align="top center" 
 		stroke="black"
 	></text>
 	

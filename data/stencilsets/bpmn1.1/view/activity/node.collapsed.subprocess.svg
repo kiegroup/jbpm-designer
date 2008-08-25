@@ -18,7 +18,15 @@
   <g pointer-events="fill" oryx:minimumSize="80 60" oryx:maximumSize="200 160" >
     <rect id="border" oryx:resize="vertical horizontal" x="-1.5" y="-1.5" width="103" height="83" rx="10" ry="10" stroke="black" stroke-width="1" fill="none" />
     <rect id="taskrect" oryx:anchors="bottom top right left" x="2" y="2" width="96" height="76" rx="8" ry="8" stroke="black" stroke-width="1" fill="white" />
-    	<text font-size="14" id="acttext" x="50" y="40" oryx:align="middle center" stroke="black"></text>
+    	<text 
+			font-size="14"
+			id="acttext" 
+			x="50" 
+			y="40" 
+			oryx:align="middle center"
+			oryx:fittoelem="taskrect"
+			stroke="black">
+		</text>
     	
  	<a id="u">
 	 	<g id="b" 

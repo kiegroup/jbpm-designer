@@ -13,8 +13,8 @@
     <circle id="frame" cx="16" cy="16" r="14" stroke="black" fill="white" stroke-width="3"/>
 	<text font-size="11" 
 		id="text_name" 
-		x="16" y="37" 
-		oryx:align="middle center" 
+		x="16" y="32" 
+		oryx:align="top center" 
 		stroke="black"
 	></text>
   </g>

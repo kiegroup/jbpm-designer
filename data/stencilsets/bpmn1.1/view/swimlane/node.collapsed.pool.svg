@@ -19,7 +19,17 @@
     <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="500" height="60" stroke="black" fill="white" fill-opacity=".3" />
     <rect id="border" oryx:resize="vertical horizontal" x="0" y="0" width="500" height="60" stroke="black" stroke-width="1" fill="none" />
 	
-    <text x="250" y="30" font-size="20" id="text_v" oryx:align="middle center" oryx:anchors="" fill="black" stroke="black"></text>
+    <text 
+		x="250" 
+		y="30" 
+		font-size="20" 
+		id="text_v" 
+		oryx:align="middle center" 
+		oryx:fittoelem="border"
+		oryx:anchors="" 
+		fill="black" 
+		stroke="black">
+	</text>
 
   </g>
 </svg>

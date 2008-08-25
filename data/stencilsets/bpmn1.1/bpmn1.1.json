@@ -33,7 +33,7 @@
 					"description":"Name is an attribute that is text description of the Diagram.",
 					"readonly":false,
 					"optional":false,
-					"length":"50",
+					"length":"",
 					"refToView":"diagramtext",
 					"wrapLines":true
 				},
@@ -194,7 +194,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"acttext",
-					"length":"50",
+					"length":"",
 					"wrapLines":true
 				},
 				{
@@ -893,7 +893,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"acttext",
-					"length":"50",
+					"length":"",
 					"wrapLines":true
 				},
 				{
@@ -2218,6 +2218,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
+					"refToView":"text_name",
 					"optional":true,
 					"wrapLines":true
 				},
@@ -2460,6 +2461,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
+					"refToView":"text_name",
 					"optional":true,
 					"wrapLines":true
 				},
@@ -2668,6 +2670,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
+					"refToView":"text_name",
 					"optional":true,
 					"wrapLines":true
 				},
@@ -2856,6 +2859,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
+					"refToView":"text_name",
 					"optional":true,
 					"wrapLines":true
 				},
@@ -3079,6 +3083,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
+					"refToView":"text_name",
 					"optional":true,
 					"wrapLines":true
 				},
@@ -3702,7 +3707,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text_v",
-					"length":""
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"participantRef",
@@ -4194,7 +4200,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"20"
+					"length":"",
+					"wrapLines":true
 				}
 			]
 		},
@@ -4383,7 +4390,7 @@
 					"id":"state",
 					"type":"String",
 					"title":"State",
-					"value":"",
+					"value":"[ ]",
 					"description":"",
 					"refToView":"text_state",
 					"readonly":false,
@@ -4524,7 +4531,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -4691,7 +4698,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -4898,7 +4905,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5085,7 +5092,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5251,7 +5258,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5631,7 +5638,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5813,7 +5820,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6032,7 +6039,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6253,7 +6260,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6452,7 +6459,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6640,7 +6647,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6816,7 +6823,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7004,7 +7011,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7194,7 +7201,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7385,7 +7392,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7586,7 +7593,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7789,7 +7796,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7979,7 +7986,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8167,7 +8174,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8365,7 +8372,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8564,7 +8571,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8729,7 +8736,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8934,7 +8941,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9107,7 +9114,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9271,7 +9278,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9446,7 +9453,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9621,7 +9628,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9785,7 +9792,7 @@
 					"readonly":false,
 					"refToView":"text_name",
 					"optional":true,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",

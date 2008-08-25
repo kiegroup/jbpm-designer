@@ -36,7 +36,23 @@
 		fill="white" 
 		stroke-width="1" 
 		points="40,10 30,0 30,10 40,10" />
-    <text font-size="14" id="text_name" x="20" y="30" oryx:align="middle center" stroke="black"></text>
+	<rect
+		id="unvisibleBorder"
+		x="0"
+		y="0"
+		height="60"
+		width="40"
+		stroke="none"
+		fill="none"
+		oryx:resize="horizontal vertical" />
+    <text 
+		font-size="14" 
+		id="text_name" 
+		x="20" y="30" 
+		oryx:align="middle center"
+		oryx:fittoelem="unvisibleBorder"
+		stroke="black">
+	</text>
 	<text font-size="11" id="text_state" x="20" y="50" oryx:align="middle center" stroke="black"
 		oryx:anchors="bottom"></text>
   </g>
