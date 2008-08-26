@@ -176,6 +176,10 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		}*/
 	},
 	
+	changed: function() {
+		this._isChanged = true;
+	},
+	
 	/**
 	 * Update the SVG text element.
 	 */
