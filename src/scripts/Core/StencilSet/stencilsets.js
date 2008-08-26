@@ -165,3 +165,25 @@ ORYX.Core.StencilSet.loadStencilSet = function(url, editorId) {
 		ORYX.Core.StencilSet._rulesByEditorInstance[editorId] = rules;
 	}
 };
+
+/**
+ * Returns the translation of an attribute in jsonObject specified by its name
+ * according to navigator.language
+ */
+ORYX.Core.StencilSet.getTranslation = function(jsonObject, name) {
+	var lang = navigator.language;
+	
+	lang = lang.replace("-", "_").toLowerCase();
+	
+	var result = jsonObject[name + "_" + lang];
+	
+	if(result)
+		return result;
+		
+	result = jsonObject[name + "_" + lang.substr(0, 2)];
+	
+	if(result)
+		return result;
+		
+	return jsonObject[name];
+};

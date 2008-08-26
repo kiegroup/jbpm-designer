@@ -202,15 +202,15 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	},
 
 	title: function() {
-		return this._jsonStencil.title;
+		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "title");
 	},
 
 	description: function() {
-		return this._jsonStencil.description;
+		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "description");
 	},
 	
 	groups: function() {
-		return this._jsonStencil.groups;
+		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "groups");
 	},
 
 	view: function() {

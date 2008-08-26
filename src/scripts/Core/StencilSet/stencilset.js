@@ -165,11 +165,11 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
     },
     
     title: function(){
-        return this._jsonObject.title;
+        return ORYX.Core.StencilSet.getTranslation(this._jsonObject, "title");
     },
     
     description: function(){
-        return this._jsonObject.description;
+        return ORYX.Core.StencilSet.getTranslation(this._jsonObject, "description");
     },
     
     namespace: function(){
