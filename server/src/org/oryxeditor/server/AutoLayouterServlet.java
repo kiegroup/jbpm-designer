@@ -76,7 +76,7 @@ class StreamReadThread extends Thread {
 
 public class AutoLayouterServlet extends HttpServlet {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     private static final long serialVersionUID = -1255777265795121521L;
 
     protected void wait_for_thread(StreamReadThread thread) {
@@ -94,7 +94,7 @@ public class AutoLayouterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
 	    throws ServletException, IOException {
 
-	if (DEBUG) {
+	if (false && DEBUG) {
 
 	    // execute 'which ruby' in the context of the servlet container.
 	    try {
