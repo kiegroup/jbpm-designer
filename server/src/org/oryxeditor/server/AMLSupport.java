@@ -2,10 +2,15 @@ package org.oryxeditor.server;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,7 +49,6 @@ import de.hpi.bpt.epc.EPC;
 import de.hpi.bpt.epc.aml.util.AMLParser;
 import de.hpi.bpt.epc.aml.util.OryxSerializer;
 
-
 /**
  * Copyright (c) 2008 Willi Tscheschner
  * 
@@ -69,61 +73,73 @@ import de.hpi.bpt.epc.aml.util.OryxSerializer;
 public class AMLSupport extends HttpServlet {
 
 	private static final long serialVersionUID = 316274845723034029L;
-	
-    /**
-     * The POST request.EPCUpload.java
-     */
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
-    	
-    	String oryxBaseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/oryx/";
 
-    	// Get the PrintWriter
-    	res.setContentType("text/plain");
-    	res.setCharacterEncoding("utf-8");
-    	
-    	PrintWriter out = null;
-    	try {
-    	    out = res.getWriter();
-    	} catch (IOException e) {
-    	    e.printStackTrace();
-    	}
-    	
-    	// No isMultipartContent => Error
-    	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
-    	if (!isMultipartContent){
-    		printError(out, "No Multipart Content transmitted.");
-			return ;
-    	}
-    	
-    	// Get the uploaded file
-    	final FileItemFactory factory = new DiskFileItemFactory();
-    	final ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
-    	servletFileUpload.setSizeMax(-1);
-    	final List<?> items;
-    	try {
-    		items = servletFileUpload.parseRequest(req);
-    		if (items.size() != 1){
-    			printError(out, "Not exactly one File.");
-    			return ;
-    		}
-    	} catch (FileUploadException e) {
-    		handleException(out, e); 
-	   		return;
-    	} 
-    	
-    	final FileItem fileItem = (FileItem)items.get(0);
-
-    	
-    	try {
-			/*DocumentBuilder builder;
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			builder = docFactory.newDocumentBuilder();
-			Document document = builder.parse(new ByteArrayInputStream(fileItem.get()));
+	/**
+	 * The POST request.EPCUpload.java
+	 */
+	protected void doPost(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException {
 		
-			String content = document.getTextContent();
-			out.print("{success:true, content:'"+ content +"'}");
-			*/
-			AMLParser parser = new AMLParser(((DiskFileItem)fileItem).getStoreLocation().getAbsolutePath());
+		PrintWriter out = null;
+		
+		FileItem fileItem = null;
+		
+		try {
+			String oryxBaseUrl = req.getScheme() + "://" + req.getServerName()
+					+ ":" + req.getServerPort() + "/oryx/";
+
+			// Get the PrintWriter
+			res.setContentType("text/plain");
+			res.setCharacterEncoding("utf-8");
+
+			out = res.getWriter();
+
+			// No isMultipartContent => Error
+			final boolean isMultipartContent = ServletFileUpload
+					.isMultipartContent(req);
+			if (!isMultipartContent) {
+				printError(out, "No Multipart Content transmitted.");
+				return;
+			}
+
+			// Get the uploaded file
+			final FileItemFactory factory = new DiskFileItemFactory();
+			final ServletFileUpload servletFileUpload = new ServletFileUpload(
+					factory);
+			servletFileUpload.setSizeMax(-1);
+			final List<?> items;
+
+			items = servletFileUpload.parseRequest(req);
+			if (items.size() != 1) {
+				printError(out, "Not exactly one File.");
+				return;
+			}
+
+			fileItem = (FileItem) items.get(0);
+
+			// replace dtd reference by existing reference /oryx/lib/ARIS-Export.dtd
+			String amlStr = fileItem.getString("UTF-8");
+			
+			amlStr = amlStr.replaceFirst("\"ARIS-Export.dtd\"", "\"" + oryxBaseUrl + "lib/ARIS-Export.dtd\"");
+			
+			FileOutputStream fileout = null;
+			OutputStreamWriter outwriter = null;
+			
+			try {
+				fileout = new FileOutputStream(((DiskFileItem)fileItem).getStoreLocation());
+				outwriter = new OutputStreamWriter(fileout, "UTF-8");
+				outwriter.write(amlStr);
+				outwriter.flush();
+				
+			} finally {
+				if(outwriter != null)
+					outwriter.close();
+				if(fileout != null)
+					fileout.close();
+			}
+			
+			//parse AML file
+			AMLParser parser = new AMLParser(((DiskFileItem) fileItem).getStoreLocation().getAbsolutePath());
 			parser.parse();
 			Collection<EPC> epcs = new HashSet<EPC>();
 			Iterator<String> ids = parser.getModelIds().iterator();
@@ -131,90 +147,47 @@ public class AMLSupport extends HttpServlet {
 				String modelId = ids.next();
 				epcs.add(parser.getEPC(modelId));
 			}
-			
-			//serialize epcs to eRDF oryx format
-			OryxSerializer oryxSerializer = new OryxSerializer(epcs, oryxBaseUrl);
+
+			// serialize epcs to eRDF oryx format
+			OryxSerializer oryxSerializer = new OryxSerializer(epcs,
+					oryxBaseUrl);
 			oryxSerializer.parse();
 
 			Document outputDocument = oryxSerializer.getDocument();
-			
-			//get document as string
+
+			// get document as string
 			String docAsString = "";
-			
-			try {
-	            Source source = new DOMSource(outputDocument);
-	            StringWriter stringWriter = new StringWriter();
-	            Result result = new StreamResult(stringWriter);
-	            TransformerFactory tfactory = TransformerFactory.newInstance();
-	            Transformer transformer = tfactory.newTransformer();
-	            transformer.transform(source, result);
-	            docAsString = stringWriter.getBuffer().toString();
-	        } catch (TransformerConfigurationException e) {
-	        	handleException(out, e); 
-	    		return;
-	        } catch (TransformerException e) {
-	        	handleException(out, e); 
-	    		return;
-	        }
-	        
-	        //write response
-			out.print("" + docAsString +"");
-			
+
+			Source source = new DOMSource(outputDocument);
+			StringWriter stringWriter = new StringWriter();
+			Result result = new StreamResult(stringWriter);
+			TransformerFactory tfactory = TransformerFactory.newInstance();
+			Transformer transformer = tfactory.newTransformer();
+			transformer.transform(source, result);
+			docAsString = stringWriter.getBuffer().toString();
+
+			// write response
+			out.print("" + docAsString + "");
+
 		} catch (Exception e) {
-			handleException(out, e); 
-    		return;
-		}    
-		
+			handleException(out, e);
+		} finally {
+			if(fileItem != null) {
+				fileItem.delete();
+			}
+		}
+	}
 
-		
-		
-    	/*content = content.replaceAll("<", "&lt;");
-		content = content.replaceAll(">", "&gt;");
-		content = content.replaceAll("\n", "");
-		
-    	String resultString = inputStream.toString();
-    	out.print("{success:true, content:'"+fileName+" -- " + content +"'}"); */
-    	
-    	/*
-    	if (resultString != null){
-    		try {
-    			if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>")){
-    				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>", "");
-    				resultString = resultString.replace("</root>", "");
+	private void printError(PrintWriter out, String err) {
+		if (out != null) {
+			out.print("{success:false, content:'" + err + "'}");
 
-    		        out.print("{success:true, content:'"+resultString+"'}"); 
-    		        return ;
-    			} else if (resultString.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>")) {
-    				resultString = resultString.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>", "");
-    				resultString = resultString.replace("</root>", "");
-    				resultString = resultString.replaceAll("<", "&lt;");
-    				resultString = resultString.replaceAll(">", "&gt;");
-    		        out.print("{success:true, content:'"+resultString+"'}"); 
-    		        return ;
-    			} else {
-    				printError(out, "Error during transformation.");
-    				return ;
-    			}
+		}
+	}
 
-    		} catch (Exception e){
-    			handleException(out, e); 
-    			return;
-    		}
-    	}*/
-    }
-    
-    
-    
-    private void printError(PrintWriter out, String err){
-    	if (out != null){
-    		out.print("{success:false, content:'"+err+"'}");
-
-    	}
-    }
-    
 	private void handleException(PrintWriter out, Exception e) {
 		e.printStackTrace();
 		printError(out, e.getLocalizedMessage());
 	}
-    
+
 }
