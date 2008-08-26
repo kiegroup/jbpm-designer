@@ -180,7 +180,7 @@ public class AMLSupport extends HttpServlet {
 
 	private void printError(PrintWriter out, String err) {
 		if (out != null) {
-			out.print("{success:false, content:'" + err + "'}");
+			out.print("" + err + "");
 
 		}
 	}
