@@ -288,14 +288,14 @@ public abstract class Converter {
 			// TODO multiple start events bound as XOR ??
 			SubProcessPlaces pl = c.getSubprocessPlaces(process);
 	
-			Transition startT = addSilentTransition(net, "start" + process.getId(), process, 1);
-			pl.startP = addPlace(net, "start" + process.getId());
+			Transition startT = addSilentTransition(net, "tStart" + process.getId(), process, 1);
+			pl.startP = addPlace(net, "pStart" + process.getId());
 			addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(process)),
 					startT);
 			addFlowRelationship(net, startT, pl.startP);
 	
-			Transition endT = addSilentTransition(net, "end" + process.getId(), process, 1);
-			pl.endP = addPlace(net, "end" + process.getId());
+			Transition endT = addSilentTransition(net, "tEnd" + process.getId(), process, 1);
+			pl.endP = addPlace(net, "pEnd" + process.getId());
 			addFlowRelationship(net, pl.endP, endT);
 			addFlowRelationship(net, endT, c.map
 					.get(getOutgoingSequenceFlow(process)));

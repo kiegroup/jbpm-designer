@@ -193,6 +193,10 @@ public class BPMNRDFImporter {
 						addEndCompensationEvent(node, c);
 					} else if (result.equals("Message")) {
 						addEndMessageEvent(node, c);
+					} else if (result.equals("Terminate")) {
+						addEndTerminateEvent(node, c);
+					} else if (result.equals("Error")) {
+						addEndErrorEvent(node, c);
 					}
 
 				} else if (type.equals("Exclusive_Databased_Gateway")) {

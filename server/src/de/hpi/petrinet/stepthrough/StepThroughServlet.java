@@ -22,6 +22,7 @@ import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.STConverter;
+import de.hpi.highpetrinet.HighPetriNet;
 import de.hpi.petrinet.PetriNet;
 
 public class StepThroughServlet extends HttpServlet {
@@ -42,7 +43,7 @@ public class StepThroughServlet extends HttpServlet {
 			DocumentBuilder builder;
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
+			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
 			
 			// Check the syntax?
 			if (req.getParameter("checkSyntax").equals("true")) {
@@ -68,7 +69,7 @@ public class StepThroughServlet extends HttpServlet {
 			
 			// Produce a PetriNet and create a StepThroughMapper with it
 			PetriNet net = loadPetriNet(document);
-			STMapper stm = new STMapper((PTNet)net);
+			STMapper stm = new STMapper((HighPetriNet)net);
 		
 			// Automation level is now hard coded
 			stm.setAutoSwitchLevel(AutoSwitchLevel.SemiAuto);

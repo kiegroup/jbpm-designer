@@ -3,20 +3,20 @@ package de.hpi.petrinet.stepthrough;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hpi.PTnet.PTNet;
-import de.hpi.PTnet.verification.PTNetInterpreter;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
+import de.hpi.highpetrinet.HighPetriNet;
+import de.hpi.highpetrinet.verification.HighPNInterpreter;
 import de.hpi.petrinet.Marking;
 import de.hpi.petrinet.Transition;
 
 public class STMapper {
 	// The PetriNet
-	private PTNet petriNet;
+	private HighPetriNet petriNet;
 	// ... with a fitting interpreter
-	private PTNetInterpreter petriNetInterpreter;
+	private HighPNInterpreter petriNetInterpreter;
 	// ... and its marking
 	private Marking petriNetMarking;
 	// A list of transitions that have changed because an object has been fired
@@ -26,10 +26,10 @@ public class STMapper {
 	// The AutoSwitchLevel that is set
 	private AutoSwitchLevel switchLevel = AutoSwitchLevel.SemiAuto;
 	
-	public STMapper(PTNet pn) {
+	public STMapper(HighPetriNet pn) {
 		petriNet = pn;
 		// Get an interpreter
-		petriNetInterpreter = new PTNetInterpreter();
+		petriNetInterpreter = new HighPNInterpreter();
 		// Start with the initial marking
 		petriNetMarking = petriNet.getInitialMarking();
 
