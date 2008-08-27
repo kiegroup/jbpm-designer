@@ -135,6 +135,7 @@
                 <file name='scripts/Core/Controls/magnet.js'/>
                 <file name='scripts/Core/node.js'/>
                 <file name='scripts/Core/edge.js'/>
+				<file name='scripts/Core/command.js'/>
             </filelist>
         </concat>
         <echo>
@@ -159,7 +160,12 @@
         <echo>
             Copied images into oryx build destination
         </echo>
-        
+        <copy todir="build/i18n">
+			<fileset dir="etc/i18n"/>
+		</copy>
+		<echo>
+            Copied language files into oryx build destination
+        </echo>
     </target>
 
     <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server, build-editor-core" />
