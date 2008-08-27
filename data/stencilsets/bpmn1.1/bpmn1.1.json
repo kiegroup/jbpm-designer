@@ -9906,6 +9906,25 @@
 			"icon":"new_sequenceflow.png",
 			"roles": [
 			],
+			"layout":function(shape) {		
+				var incomingShapes = shape.getIncomingShapes();
+				var incomingGateway = incomingShapes.find(function(aShape) {
+						var foundGateway = aShape.getStencil().groups().find(function(group) {
+							if(group == "Gateways") 
+								return group;
+						});
+						if(foundGateway)
+							return foundGateway;
+					});
+					
+				if(!incomingGateway &&
+					(shape.properties["oryx-conditiontype"] == "Expression")) {
+						// show diamond on edge source
+						shape.setProperty("oryx-showdiamondmarker", true);
+				} else {
+					shape.setProperty("oryx-showdiamondmarker", false);
+				}
+ 			},
 			"properties": [
 				{
 					"id":"id",
@@ -9990,7 +10009,7 @@
 							"id":"expression",
 							"title":"expression",
 							"value":"Expression",
-							"refToView":"conditional"
+							"refToView":""
 						},
 						{
 							"id":"default",
@@ -10020,6 +10039,16 @@
 					"optional":false,
 					"refToView":"",
 					"min":"1"
+				},
+				{
+					"id":"showdiamondmarker",
+					"type":"Boolean",
+					"title":"ShowDiamontMarker",
+					"value":"false",
+					"description":"System intern variable to set the Diamond invisible, if sourceShape is a gateway and ConditionType is set to Expression",
+					"readonly":true,
+					"optional":false,
+					"refToView":"conditional"
 				}
 			]
 		},
