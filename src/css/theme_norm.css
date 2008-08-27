@@ -211,7 +211,7 @@ input.text, select, textarea {
 
 input.text:hover, select:hover, textarea:hover,
 input.text.activated, select.activated, textarea.activated {
-	background-color: #FFFBEF;
+	border-color: #fc8b03;
 }
 
 input.text.disabled, input.disabled, select.disabled, textarea.disabled,

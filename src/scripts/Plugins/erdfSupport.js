@@ -146,9 +146,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		var parser	= new DOMParser();			
 		var doc 	=  parser.parseFromString( s ,"text/xml");
 							
-		if( doc.firstChild.tagName == "parsererror"){
-		
-
+		if( doc.firstChild.tagName == "parsererror" ){
 
 			Ext.MessageBox.show({
 					title: 		'Error',
@@ -158,7 +156,13 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 				});
 																
 			if(failed)
-				failed()
+				failed();
+				
+		} else if( !this.hasStencilSet(doc) ){
+			
+			if(failed)
+				failed();		
+		
 		} else {
 			
 			this.facade.importERDF( doc );
@@ -169,6 +173,45 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		}
 	},
 
+	hasStencilSet: function( doc ){
+		
+		var getElementsByClassNameFromDiv 	= function(doc, id){ return $A(doc.getElementsByTagName('div')).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	}
+
+		// Get Canvas Node
+		var editorNode 		= getElementsByClassNameFromDiv( doc, '-oryx-canvas')[0];
+		
+		if( !editorNode ){
+			this.throwWarning('The xml document has no Oryx canvas node included!');
+			return false
+		}
+		
+		var stencilSetNode 	= $A(editorNode.getElementsByTagName('a')).find(function(node){ return node.getAttribute('rel') == 'oryx-stencilset'});
+
+		if( !stencilSetNode ){
+			this.throwWarning('The Oryx canvas node has no stencil set definition included!');
+			return false
+		}
+		
+		var stencilSetUrl	= stencilSetNode.getAttribute('href').split("/")
+		stencilSetUrl		= stencilSetUrl[stencilSetUrl.length-2] + "/" + stencilSetUrl[stencilSetUrl.length-1];
+		
+		var isLoaded = this.facade.getStencilSets().values().any(function(ss){ return ss.source().endsWith( stencilSetUrl ) })
+		if( !isLoaded ){
+			this.throwWarning('The given stencil set does not fit to the current editor!');
+			return false
+		}
+				
+		return true;
+	},
+	
+	throwWarning: function( text ){
+		Ext.MessageBox.show({
+					title: 		'Oryx',
+ 					msg: 		text,
+					buttons: 	Ext.MessageBox.OK,
+					icon: 		Ext.MessageBox.WARNING
+				});
+	},
 	
 	/**
 	 * Opens a new window that shows the given XML content.
@@ -189,57 +232,38 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 	 * 
 	 */
 	_showImportDialog: function( successCallback ){
-
-		var formFile = new Ext.form.FormPanel({
-			title			: 'File',	
-			bodyStyle		: 'padding:5px;',
-			defaultType 	: 'textfield',
-			style			: 'width:100%',
-		  	fileUpload 		: true,
-		  	enctype 		: 'multipart/form-data',
-		  	items 			: [
-							  	{
-							    	text : 		'Select an ERDF (.xml) file to import it!', 
-									style : 	'font-size:12px;margin-bottom:10px;display:block;',
-									xtype : 	'label'
-							  	},{
-							    	fieldLabel : 	'File',
-							    	inputType : 	'file',
-									labelStyle :	'width:50px;',
-									itemCls :		'ext_specific_window_overflow'
-							  	}]
-		});
-
-		var formInput = new Ext.form.FormPanel({
-			title			: 'Input',	
-			bodyStyle		: 'padding:5px;',
-			defaultType 	: 'textarea',
-			anchor			: '100%',
-		  	items 			: [
-							  	{
-							    	text 	: 'Type in ERDF!', 
-									style 	: 'font-size:12px;margin-bottom:10px;display:block;',
-									xtype 	: 'label'
-							  	},{
-									hideLabel	: true,
-									anchor		: '100% -25'
-							  	}]
-		});
-	    var tabs = new Ext.TabPanel({
-			anchor		: '100%',
-	        activeTab	: 0,
-	        frame		: true,
-	        items		: [
-					      	formInput, 
-							formFile            
-					       ]
+	
+	    var form = new Ext.form.FormPanel({
+			baseCls: 		'x-plain',
+	        labelWidth: 	50,
+	        defaultType: 	'textfield',
+	        items: [{
+	            text : 		'Select an ERDF (.xml) file or type in the ERDF to import it!', 
+				style : 	'font-size:12px;margin-bottom:10px;display:block;',
+	            anchor:		'100%',
+				xtype : 	'label' 
+	        },{
+	            fieldLabel: 'File',
+	            name: 		'subject',
+				inputType : 'file',
+				style : 	'margin-bottom:10px;display:block;',
+				itemCls :	'ext_specific_window_overflow'
+	        }, {
+	            xtype: 'textarea',
+	            hideLabel: true,
+	            name: 'msg',
+	            anchor: '100% -63'  
+	        }]
 	    });
+
 
 
 		// Create the panel
 		var dialog = new Ext.Window({ 
 			autoCreate: true, 
 			layout: 	'fit',
+			plain:		true,
+			bodyStyle: 	'padding:5px;',
 			title: 		'Import ERDF', 
 			height: 	350, 
 			width:		500,
@@ -248,7 +272,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 			shadow:		true, 
 			proxyDrag: 	true,
 			resizable:	true,
-			items: [tabs],
+			items: 		[form],
 			buttons:[
 				{
 					text:'Import',
@@ -258,18 +282,12 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 						loadMask.show();
 						
 						window.setTimeout(function(){
+					
 							
-							if(tabs.activeTab == formInput){
-								
-								var erdfString = formInput.form.items.items[0].getValue();
-								this.loadERDF(erdfString, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
+							var erdfString =  form.items.items[2].getValue();
+							this.loadERDF(erdfString, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
 														
-							} else if(tabs.activeTab == formFile){
-								
-								var erdfString = formFile.form.items.items[0].getEl().dom.files[0].getAsBinary();
-								this.loadERDF(erdfString, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
-	
-							}							
+														
 							
 						}.bind(this), 100);
 			
@@ -290,179 +308,18 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 			dialog.destroy(true);
 			delete dialog;
 		});
-		
+
+
 		// Show the panel
 		dialog.show();
-	},
-	
-    _showPanel: function(values, successCallback){
-    
-							
-        // Extract the data
-        var data = [];
-        values.each(function(value){
-            data.push([ value.title, value.data ])
-        });
-        
-        // Create a new Selection Model
-        var sm = new Ext.grid.CheckboxSelectionModel({ 
-			header			:'',
-			//singleSelect	:true
-		});
-        // Create a new Grid with a selection box
-        var grid = new Ext.grid.GridPanel({
-			//ddGroup          	: 'gridPanel',
-			//enableDragDrop   	: true,
-			//cls				: 'ext_specialize_gridPanel_aml',
-            store: new Ext.data.SimpleStore({
-                data: data,
-                fields: ['title']
-            }),
-            cm: new Ext.grid.ColumnModel([sm, {
-                header: "Title",
-                width: 260,
-                sortable: true,
-                dataIndex: 'title'
-            }, ]),
-            sm: sm,
-            frame: true,
-            width: 300,
-			height:300,
-            iconCls: 'icon-grid',
-			//draggable: true
-        });
-        
-        // Create a new Panel
-        var panel = new Ext.Panel({
-            items: [{
-                xtype	: 'label',
-                html	: 'Select the diagram(s) you want to import! <br/> If one model is selected, it will be imported in the current editor, if more than one is selected, those models will directly be stored in the repository.',
-                style	: 'margin:5px;display:block'
-            }, grid],
-			height:'auto',
-            frame: true
-        })
-        
-        // Create a new Window
-        var extWindow = new Ext.Window({
-            width: 327,
-			height:'auto',
-            title: 'Oryx',
-            floating: true,
-            shim: true,
-            modal: true,
-            resizable: false,
-            autoHeight: true,
-            items: [panel],
-            buttons: [{
-                text: "Import",
-                handler: function(){
+		
+				
+		// Adds the change event handler to 
+		form.items.items[1].getEl().dom.addEventListener('change',function(evt){
+				var text = evt.target.files[0].getAsBinary();
+				form.items.items[2].setValue( text );
+			}, true)
 
-					var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Importing..."});
-					loadMask.show();
-							
-                    var selectionModel = grid.getSelectionModel();
-                    var result = selectionModel.selections.items.collect(function(item){
-                        return {name: item.json[0], data: item.json[1]};
-                    })
-                    extWindow.close();
-                
-					window.setTimeout( function(){
-						
-						successCallback(result);
-						loadMask.hide();
-						
-					}.bind(this), 100);		
-
-										
-                }.bind(this)
-            }, {
-                text: "Cancel",
-                handler: function(){
-                    extWindow.close();
-                }.bind(this)
-            }]			
-        })
-        
-        // Show the window
-        extWindow.show();
-        
-    },
-	
-    _showResultPanel: function(values){
-    
-							
-        // Extract the data
-        var data = [];
-        values.each(function(value){
-            data.push([ value.name, '<a href="' + value.url + '" target="_blank">' + value.url + '</a>' ])
-        });
-        
-
-        // Create a new Grid with a selection box
-        var grid = new Ext.grid.GridPanel({
-            store: new Ext.data.SimpleStore({
-                data: data,
-                fields: ['name', 'url' ]
-            }),
-            cm: new Ext.grid.ColumnModel([{
-                header: "Name",
-                width: 260,
-                sortable: true,
-                dataIndex: 'name'
-            }, {
-                header: "URL",
-                width: 300,
-                sortable: true,
-                dataIndex: 'url'
-            }]),
-            frame: true,
-            width: 500,
-			height:300,
-            iconCls: 'icon-grid'
-        });
-        
-        // Create a new Panel
-        var panel = new Ext.Panel({
-            items: [{
-                xtype: 'label',
-                text: 'All imported diagrams!',
-                style: 'margin:5px;display:block'
-            }, grid],
-			height:'auto',
-            frame: true
-        })
-        
-        // Create a new Window
-        var extWindow2 = new Ext.Window({
-            width		: 'auto',
-            title		: 'Oryx',
-            floating	: true,
-            shim		: true,
-            modal		: true,
-            resizable	: false,
-            autoHeight	: true,
-            items: [panel],
-            buttons: [{
-                text: "Ok",
-                handler: function(){
-
-					extWindow2.close()	
-									
-                }.bind(this)
-            }]			
-        })
-        
-        // Show the window
-        extWindow2.show();
-        
-    },	
-	/**
-	 * 
-	 * @param {Object} message
-	 */
-	throwErrorMessage: function(message){
-		Ext.Msg.alert( 'Oryx', message )
-	},		
+	}
 	
 });
