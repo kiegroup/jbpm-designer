@@ -211,7 +211,6 @@ input.text, select, textarea {
 
 input.text:hover, select:hover, textarea:hover,
 input.text.activated, select.activated, textarea.activated {
-	border-color: #fc8b03;
 	background-color: #FFFBEF;
 }
 
