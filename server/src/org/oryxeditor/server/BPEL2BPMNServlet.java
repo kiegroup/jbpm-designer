@@ -50,7 +50,7 @@ public class BPEL2BPMNServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
     	// Get the PrintWriter
-    	res.setContentType("text/html");
+    	res.setContentType("text/plain");
     	PrintWriter out = null;
     	try {
     	    out = res.getWriter();
@@ -81,13 +81,13 @@ public class BPEL2BPMNServlet extends HttpServlet {
 	   		return;
     	} 
     	final FileItem fileItem = (FileItem)items.get(0);	
-    	
+    	    	
     	// try to parse the BPEL file
 		BPELParser parser = new BPELParser();
-		Document doc = parser.parseBPELFile(((DiskFileItem)fileItem).getStoreLocation().getAbsolutePath());
+		Document doc = parser.parseBPELFile(fileItem.getInputStream());
 		
 		if (doc == null) {
-			printError(out, "BPEL could not be parsed.");
+			printError(out, "The file could not be parsed.");
 			return;
 		}
 		
@@ -105,21 +105,24 @@ public class BPEL2BPMNServlet extends HttpServlet {
 			printError(out, "BPMN diagram could not be created.");
 			return;
 		}
-		
+
 		// serialize the resulting BPMN
 		try {
 	    	BPMNeRDFSerializer serializer = new BPMNeRDFSerializer();
-	    	String eRDF = serializer.serializeBPMNDiagram(diagram);
+	    	String eRDF = serializer.serializeBPMNDiagram(diagram).replaceAll("\"", "'");
 
-    		out.print("{success:true, ");
+    		out.print("\"success\":\"true\", ");
+
 			// check for XML schema validation errors
 			if (parser.isSuccessfulValidation()) {
-	    		out.print("successValidation:true, validationError:'', ");
+	    		out.print("\"successValidation\":\"true\", \"validationError\":\"\", ");
 			}
 			else {
-	    		out.print("successValidation:false, validationError:'"+parser.getValidationException()+"', ");
+	    		out.print("\"successValidation\":\"false\", \"validationError\":\""+parser.getValidationException()+"\", ");
 			}
-    		out.print("content:'"+eRDF+"'}");
+			
+    		out.print("\"content\":\""+eRDF+"\"");
+
 		} catch (Exception e) {
 			printError(out, "Resulting BPMN diagram could not be serialized.");
 			return;
@@ -128,7 +131,7 @@ public class BPEL2BPMNServlet extends HttpServlet {
 	
     private void printError(PrintWriter out, String err){
     	if (out != null){
-    		out.print("{success:false, content:'"+err+"'}");
+    		out.print("{\"success\":\"false\", \"content\":\""+err+"\"}");
     	}
     }
     
