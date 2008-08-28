@@ -171,9 +171,7 @@ ORYX.Core.StencilSet.loadStencilSet = function(url, editorId) {
  * according to navigator.language
  */
 ORYX.Core.StencilSet.getTranslation = function(jsonObject, name) {
-	var lang = navigator.language;
-	
-	lang = lang.replace("-", "_").toLowerCase();
+	var lang = ORYX.I18N.Language.toLowerCase();
 	
 	var result = jsonObject[name + "_" + lang];
 	
