@@ -28,5 +28,7 @@ public class ReplyMapping extends BasicActivityMapping {
 		
 		setConnectionPointsWithControlLinks(node, event_throw, event_throw, null, mappingContext);
 		
+		mappingContext.addMappingElementToSet(node,event_throw);
+
 	}
 }

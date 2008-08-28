@@ -23,7 +23,7 @@ public class EndLinkEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#EndLinkEvent");
 		appendOryxField(s,"eventtype","End");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"result","Link");
 		appendResourceEndPattern(s, e, transformationContext);
 		

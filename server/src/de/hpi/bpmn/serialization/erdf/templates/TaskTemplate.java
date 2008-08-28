@@ -24,8 +24,7 @@ public class TaskTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(t));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#Task");
-		appendStandardFields(s);
-		appendOryxField(s,"name",t.getLabel());
+		appendNonConnectorStandardFields(t,s);
 		appendOryxField(s,"activitytype","Task");
 		appendOryxField(s,"startquantity","1");
 		appendOryxField(s,"looptype",t.getLoopType().toString());

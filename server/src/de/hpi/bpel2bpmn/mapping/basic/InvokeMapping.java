@@ -26,6 +26,8 @@ public class InvokeMapping extends BasicActivityMapping {
 		event_throw.setLabel(name);
 		event_throw.setThrowing(true);
 		
+		mappingContext.addMappingElementToSet(node,event_throw);
+		
 		if (BPEL2BPMNMappingUtil.isSynchronousInvoke(node)) {
 			IntermediateMessageEvent event_catch = mappingContext.getFactory().createIntermediateMessageEvent();
 			event_catch.setParent(mappingContext.getDiagram());
@@ -35,6 +37,8 @@ public class InvokeMapping extends BasicActivityMapping {
 			createSequenceFlowBetweenDiagramObjects(event_throw, event_catch, null, mappingContext);
 
 			setConnectionPointsWithControlLinks(node, event_throw, event_catch, null, mappingContext);
+			
+			mappingContext.addMappingElementToSet(node,event_catch);
 		}
 		else {
 			setConnectionPointsWithControlLinks(node, event_throw, event_throw, null, mappingContext);

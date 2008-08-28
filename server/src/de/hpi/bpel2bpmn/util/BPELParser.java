@@ -1,6 +1,8 @@
 package de.hpi.bpel2bpmn.util;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -64,7 +66,7 @@ public class BPELParser {
 				LSInput ret = domImplementationLS.createLSInput();
 				try {
 					// try to get the local copy of the schema
-					ret.setByteStream(this.getClass().getResourceAsStream(FILENAME_XML_DEFINITION_SCHEMA));
+					ret.setByteStream(this.getClass().getResourceAsStream("/"+FILENAME_XML_DEFINITION_SCHEMA));
 				    return ret;
 				} catch (Exception e) {
 					return null;
@@ -75,8 +77,25 @@ public class BPELParser {
 		}
 		
 	}
-		
+	
 	public Document parseBPELFile(String bpelFile) {
+		InputStream bpelStream = null;
+		try {
+			bpelStream = new FileInputStream(bpelFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		if (bpelStream != null) {
+			return parseBPELFile(bpelStream);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	
+		
+	public Document parseBPELFile(InputStream bpelStream) {
 		
        // Get Document Builder Factory
        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -93,7 +112,7 @@ public class BPELParser {
         try {
         	
             DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.parse(new File(bpelFile));
+            doc = builder.parse(bpelStream);
             
             if (doc != null) {
 	            // Validate
@@ -106,10 +125,10 @@ public class BPELParser {
 	            // default is "executable"
 	            Source bpelConstraints;
 	            if (doc.getDocumentElement().getNamespaceURI().equals(BPEL_ABSTRACT_NS)) {
-		            bpelConstraints = new StreamSource(this.getClass().getResourceAsStream(FILENAME_BPEL_ABSTRACT_SCHEMA));
+		            bpelConstraints = new StreamSource(this.getClass().getResourceAsStream("/"+FILENAME_BPEL_ABSTRACT_SCHEMA));
 	            }
 	            else {
-		            bpelConstraints = new StreamSource(this.getClass().getResourceAsStream(FILENAME_BPEL_EXECUTABLE_SCHEMA));
+		            bpelConstraints = new StreamSource(this.getClass().getResourceAsStream("/"+FILENAME_BPEL_EXECUTABLE_SCHEMA));
 	            }
 	            Schema schema = constraintFactory.newSchema(bpelConstraints);
 	            Validator validator = schema.newValidator();
@@ -130,7 +149,7 @@ public class BPELParser {
 	}
 
 	public String getValidationException() {
-		return validationException;
+		return validationException.replaceAll("\"", "'");
 	}
 
 	public boolean isSuccessfulValidation() {

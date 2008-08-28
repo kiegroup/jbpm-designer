@@ -25,7 +25,7 @@ public class StartMessageEventTemplate extends NonConnectorTemplate implements
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#StartMessageEvent");
 		appendOryxField(s,"eventtype","Start");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"trigger","Message");
 		appendResourceEndPattern(s, e, context);
 		

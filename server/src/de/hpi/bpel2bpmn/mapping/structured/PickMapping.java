@@ -23,10 +23,7 @@ public class PickMapping extends StructuredActivityMapping {
 	public void mapElement(Node node, MappingContext mappingContext) {
 				
 		XOREventBasedGateway eventGateway = mappingContext.getFactory().createXOREventBasedGateway();
-		eventGateway.setParent(mappingContext.getDiagram());
-		
 		XORDataBasedGateway dataGateway = mappingContext.getFactory().createXORDataBasedGateway();
-		dataGateway.setParent(mappingContext.getDiagram());
 		
 		setConnectionPointsWithControlLinks(node, eventGateway, dataGateway, null, mappingContext);
 
@@ -49,6 +46,10 @@ public class PickMapping extends StructuredActivityMapping {
 					mappingContext.getMappingConnectionOutExpression().get(child),
 					mappingContext);
 		}
+		
+		mappingContext.addMappingElementToSet(node,eventGateway);
+		mappingContext.addMappingElementToSet(node,dataGateway);
+
 	}
 
 }

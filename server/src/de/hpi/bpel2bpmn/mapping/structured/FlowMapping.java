@@ -22,8 +22,8 @@ public class FlowMapping extends StructuredActivityMapping {
 		
 		// one parallel gateway is always needed to sync all branches inside the flow
 		ANDGateway endANDGateway = mappingContext.getFactory().createANDGateway();
-		endANDGateway.setParent(mappingContext.getDiagram());
-		
+		mappingContext.addMappingElementToSet(node,endANDGateway);
+
 		/*
 		 * Check whether the flow contains start activities
 		 */
@@ -32,7 +32,7 @@ public class FlowMapping extends StructuredActivityMapping {
 		}
 		else {
 			ANDGateway startANDGateway = mappingContext.getFactory().createANDGateway();
-			startANDGateway.setParent(mappingContext.getDiagram());
+			mappingContext.addMappingElementToSet(node,startANDGateway);
 			
 			setConnectionPointsWithControlLinks(node, startANDGateway, endANDGateway, null, mappingContext);
 			

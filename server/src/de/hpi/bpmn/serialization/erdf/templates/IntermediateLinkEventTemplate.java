@@ -28,7 +28,7 @@ public class IntermediateLinkEventTemplate extends NonConnectorTemplate {
 			appendOryxField(s,"type",STENCIL_URI + "#IntermediateLinkEventCatching");
 		}
 		appendOryxField(s,"eventtype","Intermediate");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"trigger","Link");
 		appendResourceEndPattern(s, e, transformationContext);
 		

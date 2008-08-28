@@ -24,7 +24,7 @@ public class PoolTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(p));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#Pool");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(p,s);
 		appendResourceEndPattern(s, diagramObject, transformationContext);
 		return s;
 	}

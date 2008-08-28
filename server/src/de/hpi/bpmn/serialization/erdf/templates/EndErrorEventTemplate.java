@@ -23,7 +23,7 @@ public class EndErrorEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#EndErrorEvent");
 		appendOryxField(s,"eventtype","End");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"result","Error");
 		appendResourceEndPattern(s, e, transformationContext);
 		

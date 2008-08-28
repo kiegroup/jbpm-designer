@@ -23,7 +23,7 @@ public class StartConditionalEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#StartConditionalEvent");
 		appendOryxField(s,"eventtype","Start");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"trigger","Conditional");
 		appendResourceEndPattern(s, e, transformationContext);
 		

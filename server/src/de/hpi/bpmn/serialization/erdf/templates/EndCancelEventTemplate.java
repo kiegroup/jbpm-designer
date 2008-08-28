@@ -23,7 +23,7 @@ public class EndCancelEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#EndCancelEvent");
 		appendOryxField(s,"eventtype","End");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"result","Cancel");
 		appendResourceEndPattern(s, e, transformationContext);
 		

@@ -213,15 +213,13 @@ public final class BPEL2BPMNMappingUtil {
 		return returnNodes;
 	}
 	
-	public static boolean nodeIsMappedToSingleActivity(Node node) {
-		if (node.getNodeName().equalsIgnoreCase("assign")
-				|| node.getNodeName().equalsIgnoreCase("validate")) {
-			return true;
-		}
-		
-		return false;
-	}
-	
+	/**
+	 * Checks wether the BPEL activity represented by the current
+	 * node has incoming control links.
+	 * 
+	 * @param node 
+	 * @return
+	 */
 	public static boolean nodeHasIncomingControlLinks(Node node) {
 		Node targetsNode = getSpecificChildNode(node, "targets");
 		
@@ -238,6 +236,13 @@ public final class BPEL2BPMNMappingUtil {
 		}
 	}
 
+	/**
+	 * Checks wether the BPEL activity represented by the current
+	 * node has outgoing control links.
+	 * 
+	 * @param node 
+	 * @return
+	 */
 	public static boolean nodeHasOutgoingControlLinks(Node node) {
 		Node sourcesNode = getSpecificChildNode(node, "sources");
 		
@@ -285,6 +290,15 @@ public final class BPEL2BPMNMappingUtil {
 		}
 	}
 	
+	/**
+	 * Checks whether the Boolean attribute suppressJoinFailure is set 
+	 * at the BPEL activity represented by the node. If it is not set, the
+	 * value will be determined recursively from one of the parent nodes.
+	 * Default case: false (as in BPEL)
+	 * 
+	 * @param node
+	 * @return
+	 */
 	public static boolean isSuppressJoinFailure(Node node) {
 		boolean result = false;
 
@@ -301,7 +315,12 @@ public final class BPEL2BPMNMappingUtil {
 		return result;
 	}
 	
-	
+	/**
+	 * Get all names of incoming control links of the node. 
+	 * 
+	 * @param node
+	 * @return
+	 */
 	public static Collection<String> getAllIncomingControlLinkNames(Node node) {
 		Collection<String> names = new HashSet<String>();
 		Node targetsNode = getSpecificChildNode(node, "targets");
@@ -311,6 +330,12 @@ public final class BPEL2BPMNMappingUtil {
 		return names;
 	}
 
+	/**
+	 * Get all names of outgoing control links of the node. 
+	 * 
+	 * @param node
+	 * @return
+	 */
 	public static Collection<String> getAllOutgoingControlLinkNames(Node node) {
 		Collection<String> names = new HashSet<String>();
 		Node sourcesNode = getSpecificChildNode(node, "sources");

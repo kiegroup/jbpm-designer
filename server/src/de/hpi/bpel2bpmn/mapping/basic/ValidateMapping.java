@@ -18,9 +18,11 @@ public class ValidateMapping extends BasicActivityMapping {
 	
 	public void mapElement(Node node, MappingContext mappingContext) {
 		Task task = mappingContext.getFactory().createTask();
-		task.setParent(mappingContext.getDiagram());
 		
 		setConnectionPointsWithControlLinks(node, task, task, null, mappingContext);
+		
+		mappingContext.addMappingElementToSet(node,task);
+
 		
 	}
 

@@ -22,7 +22,6 @@ public class ThrowMapping extends BasicActivityMapping {
 		String name = BPEL2BPMNMappingUtil.getRealNameOfNode(node);
 		
 		IntermediateErrorEvent event = mappingContext.getFactory().createIntermediateErrorEvent();
-		event.setParent(mappingContext.getDiagram());
 		event.setLabel(name);
 		
 		Node errorNode = node.getAttributes().getNamedItem("faultName");
@@ -31,6 +30,9 @@ public class ThrowMapping extends BasicActivityMapping {
 		}
 
 		setConnectionPointsWithControlLinks(node, event, event, null, mappingContext);
+		
+		mappingContext.addMappingElementToSet(node,event);
+
 	}
 
 }

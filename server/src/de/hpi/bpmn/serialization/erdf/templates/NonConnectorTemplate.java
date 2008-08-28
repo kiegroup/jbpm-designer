@@ -3,6 +3,7 @@ package de.hpi.bpmn.serialization.erdf.templates;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.IntermediateEvent;
+import de.hpi.bpmn.Node;
 import de.hpi.bpmn.serialization.erdf.ERDFSerializationContext;
 
 
@@ -27,4 +28,10 @@ public abstract class NonConnectorTemplate extends BPMN2ERDFTemplateImpl {
 		s.append(context.getResourceIDForDiagramObject(i.getActivity()));
 		s.append("\"/>");
 	}
+	
+	protected void appendNonConnectorStandardFields(Node n, StringBuilder s) {
+		appendStandardFields(s);
+		appendOryxField(s,"name",n.getLabel());
+	}
+	
 }

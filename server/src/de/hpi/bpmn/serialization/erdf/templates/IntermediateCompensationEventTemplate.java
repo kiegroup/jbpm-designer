@@ -28,7 +28,7 @@ public class IntermediateCompensationEventTemplate extends NonConnectorTemplate 
 			appendOryxField(s,"type",STENCIL_URI + "#IntermediateCompensationEventCatching");
 		}
 		appendOryxField(s,"eventtype","Intermediate");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"trigger","Compensation");
 		appendResourceLinkForBoundaryEvent(s, e, transformationContext);
 		appendResourceEndPattern(s, e, transformationContext);

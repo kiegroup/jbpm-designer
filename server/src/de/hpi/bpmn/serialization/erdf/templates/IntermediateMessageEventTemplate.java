@@ -28,7 +28,7 @@ public class IntermediateMessageEventTemplate extends NonConnectorTemplate {
 			appendOryxField(s,"type",STENCIL_URI + "#IntermediateMessageEventCatching");
 		}
 		appendOryxField(s,"eventtype","Intermediate");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"trigger","Message");
 		appendResourceLinkForBoundaryEvent(s, e, context);
 		appendResourceEndPattern(s, e, context);

@@ -1,7 +1,9 @@
 package de.hpi.bpel2bpmn.mapping;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.w3c.dom.Node;
 
@@ -14,6 +16,8 @@ public class MappingContext {
 	private BPMNDiagram diagram;
 	
 	private BPMNFactory factory;
+
+	private Map<Node, Set<de.hpi.bpmn.Node>> mappingElements;
 
 	private Map<Node, DiagramObject> mappingConnectionIn;
 	
@@ -70,6 +74,19 @@ public class MappingContext {
 	public Map<String, DiagramObject> getControlLinkTarget() {
 		return controlLinkTarget;
 	}
+
+	public Map<Node, Set<de.hpi.bpmn.Node>> getMappingElements() {
+		return mappingElements;
+	}
 	
-	
+	public void addMappingElementToSet(Node domNode, de.hpi.bpmn.Node node) {
+		if (this.mappingElements.containsKey(domNode)) {
+			this.mappingElements.get(domNode).add(node);
+		}
+		else {
+			Set<de.hpi.bpmn.Node> objects = new HashSet<de.hpi.bpmn.Node>();
+			objects.add(node);
+			this.mappingElements.put(domNode,objects);
+		}
+	}
 }

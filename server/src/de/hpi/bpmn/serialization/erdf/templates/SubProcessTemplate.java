@@ -23,9 +23,9 @@ public class SubProcessTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(sp));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#Subprocess");
-		appendStandardFields(s);
-		appendOryxField(s,"name",sp.getLabel());
+		appendNonConnectorStandardFields(sp,s);
 		appendOryxField(s,"activitytype","Sub-Process");
+		appendOryxField(s,"looptype",sp.getLoopType().toString());
 		appendResourceEndPattern(s, diagramObject, context);
 		
 		return s;

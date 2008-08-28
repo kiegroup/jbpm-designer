@@ -24,7 +24,6 @@ public class OnMessageMapping extends StructuredActivityMapping {
 		String name = BPEL2BPMNMappingUtil.getRealNameOfNode(node);
 		
 		IntermediateMessageEvent event = mappingContext.getFactory().createIntermediateMessageEvent();
-		event.setParent(mappingContext.getDiagram());
 		event.setLabel(name);
 		
 		if (BPEL2BPMNMappingUtil.hasActivityChildNode(node)) {
@@ -40,6 +39,8 @@ public class OnMessageMapping extends StructuredActivityMapping {
 		else {
 			setConnectionPoints(node, event, event, null, mappingContext);
 		}
+		
+		mappingContext.addMappingElementToSet(node,event);
 
 	}
 

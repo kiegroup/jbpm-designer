@@ -57,6 +57,9 @@ public class OnAlarmMapping extends StructuredActivityMapping {
 		else {
 			setConnectionPoints(node, event, event, null, mappingContext);
 		}
+		
+		mappingContext.addMappingElementToSet(node,event);
+
 	}
 
 }

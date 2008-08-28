@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -29,8 +30,11 @@ import de.hpi.bpel2bpmn.mapping.structured.SequenceMapping;
 import de.hpi.bpel2bpmn.mapping.structured.WhileMapping;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
+import de.hpi.bpmn.Container;
+import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.Gateway;
+import de.hpi.bpmn.SubProcess;
 
 public class BPEL2BPMNTransformer {
 	
@@ -128,33 +132,81 @@ public class BPEL2BPMNTransformer {
 		}
 	}
 	
+	/**
+	 * Gets the root node of the document and checks whether this
+	 * elements is really a "process".
+	 * 
+	 * @param doc The DOM.
+	 * @return The root node.
+	 */
 	protected Node getRootNode(Document doc) {
 		Node node = doc.getDocumentElement();
 		if (node == null || !node.getNodeName().equalsIgnoreCase("process"))
 			return null;
 		return node;
 	}
+
+	protected void setContainmentRelations(Node domNode, Container parent, MappingContext mappingContext) {
+		/*
+		 * Ignore pure text, e.g. empty lines
+		 */
+		if (domNode instanceof Text)
+			return;
+
+		Container nextContainer = parent;
+		
+		/*
+		 * Set the parent for all BPMN elements that have been created for the 
+		 * domNode to the parent container that was given as a parameter.
+		 * 
+		 * If the mapping of the domNode contains a subprocess, we use it as the new parent.
+		 */
+		for (de.hpi.bpmn.Node node : mappingContext.getMappingElements().get(domNode)) {
+			node.setParent(parent);
+			if (node instanceof SubProcess) {
+				nextContainer = (Container) node;
+			}
+		}
+		
+		/*
+		 * Trigger setting of the containment recursively. 
+		 */
+		for (Node child = domNode.getFirstChild(); child != null; child = child.getNextSibling()) {
+			setContainmentRelations(child,nextContainer,mappingContext);
+		}
+	}
 	
+	/**
+	 * Postprocessing includes the following steps:
+	 * removal of gateways with exactly one incoming and one outgoing flow
+	 * 
+	 * @param mappingContext The mapping context encapsulates the mapping result, i.e. the BPMN diagram.
+	 */
 	protected void postProcessMappingResult(MappingContext mappingContext) {
 		/*
 		 * Remove all gateways with one incoming and one outgoing flow.
-		 * They might have been created because of control links.		 * 
+		 * They might have been created because of control links. 
 		 */
 		Collection<de.hpi.bpmn.Node> gatewaysToRemove = new HashSet<de.hpi.bpmn.Node>();
-		for (de.hpi.bpmn.Node node : mappingContext.getDiagram().getChildNodes()) {
-			if (node instanceof Gateway) {
-				if (node.getIncomingEdges().size() == 1 && node.getOutgoingEdges().size() == 1) {
-					Edge in = node.getIncomingEdges().get(0);
-					Edge out = node.getOutgoingEdges().get(0);
-					// target of first edge is set to target of second edge
-					in.setTarget(out.getTarget());
-					// remove the second edge
-					mappingContext.getDiagram().getEdges().remove(out);
-					gatewaysToRemove.add(node);
+		for (Node domNode : mappingContext.getMappingElements().keySet()) {
+			for (de.hpi.bpmn.Node node : mappingContext.getMappingElements().get(domNode)) {
+				if (node instanceof Gateway) {
+					if (node.getIncomingEdges().size() == 1 && node.getOutgoingEdges().size() == 1) {
+						Edge in = node.getIncomingEdges().get(0);
+						Edge out = node.getOutgoingEdges().get(0);
+						// target of first edge is set to target of second edge
+						in.setTarget(out.getTarget());
+						// remove the second edge
+						mappingContext.getDiagram().getEdges().remove(out);
+						gatewaysToRemove.add(node);
+					}
 				}
 			}
+			// remove the gateways from the diagram
+			mappingContext.getDiagram().getChildNodes().removeAll(gatewaysToRemove);
+			// remove the gateways from the mapping context
+			mappingContext.getMappingElements().get(domNode).removeAll(gatewaysToRemove);
+			gatewaysToRemove.clear();
 		}
-		// remove the gateways
-		mappingContext.getDiagram().getChildNodes().removeAll(gatewaysToRemove);
 	}
 }

@@ -23,7 +23,7 @@ public class XORDataBasedGatewayTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(g));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#Exclusive_Databased_Gateway");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(g,s);
 		
 		appendResourceEndPattern(s, diagramObject, context);
 		return s;

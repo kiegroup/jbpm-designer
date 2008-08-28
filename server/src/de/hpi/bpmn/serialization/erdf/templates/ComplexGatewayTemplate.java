@@ -23,7 +23,7 @@ public class ComplexGatewayTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(g));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#Complex_Gateway");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(g,s);
 		
 		appendResourceEndPattern(s, diagramObject, transformationContext);
 		return s;

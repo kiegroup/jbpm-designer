@@ -23,7 +23,7 @@ public class LaneTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(l));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#Lane");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(l,s);
 		appendResourceEndPattern(s, diagramObject, transformationContext);
 		return s;
 	}

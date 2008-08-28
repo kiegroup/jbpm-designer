@@ -45,7 +45,6 @@ public class WhileMapping extends StructuredActivityMapping {
 
 		SubProcess subProcess = mappingContext.getFactory().createSubProcess();
 		subProcess.setLabel(name);
-		subProcess.setParent(mappingContext.getDiagram());
 		subProcess.setLoopType(LoopType.Standard);
 		
 		if (conditionNode != null) {
@@ -69,5 +68,8 @@ public class WhileMapping extends StructuredActivityMapping {
 		createSequenceFlowBetweenDiagramObjects(out, endEvent, conditionExpression, mappingContext);
 			
 		setConnectionPointsWithControlLinks(node, subProcess, subProcess, null, mappingContext);
+		
+		mappingContext.addMappingElementToSet(node,subProcess);
+
 	}
 }

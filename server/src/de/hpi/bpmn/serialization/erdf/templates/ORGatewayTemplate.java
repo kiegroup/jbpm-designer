@@ -23,7 +23,7 @@ public class ORGatewayTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(g));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#OR_Gateway");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(g,s);
 		
 		appendResourceEndPattern(s, diagramObject, transformationContext);
 		return s;

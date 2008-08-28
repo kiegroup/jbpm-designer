@@ -23,7 +23,7 @@ public class EndCompensationEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#EndCompensationEvent");
 		appendOryxField(s,"eventtype","End");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"result","Compensation");
 		appendResourceEndPattern(s, e, transformationContext);
 		

@@ -23,7 +23,7 @@ public class IntermediateCancelEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#IntermediateCancelEvent");
 		appendOryxField(s,"eventtype","Intermediate");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"trigger","Cancel");
 		appendResourceLinkForBoundaryEvent(s, e, transformationContext);
 		appendResourceEndPattern(s, e, transformationContext);

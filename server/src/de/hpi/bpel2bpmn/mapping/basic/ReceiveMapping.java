@@ -27,7 +27,7 @@ public class ReceiveMapping extends BasicActivityMapping {
 			event.setParent(mappingContext.getDiagram());
 			event.setLabel(name);
 			setConnectionPointsWithControlLinks(node, null, event, null, mappingContext);
-			
+			mappingContext.addMappingElementToSet(node,event);
 		}
 		else {
 			IntermediateMessageEvent event = mappingContext.getFactory().createIntermediateMessageEvent();
@@ -35,6 +35,7 @@ public class ReceiveMapping extends BasicActivityMapping {
 			event.setThrowing(false);
 			event.setLabel(name);
 			setConnectionPointsWithControlLinks(node, event, event, null, mappingContext);
+			mappingContext.addMappingElementToSet(node,event);
 		}
 	}
 }

@@ -23,7 +23,7 @@ public class StartMultipleEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#StartMultipleEvent");
 		appendOryxField(s,"eventtype","Start");
-		appendStandardFields(s);
+		appendNonConnectorStandardFields(e,s);
 		appendOryxField(s,"trigger","Multiple");
 		appendResourceEndPattern(s, e, transformationContext);
 		

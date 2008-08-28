@@ -22,7 +22,6 @@ public class RethrowMapping extends BasicActivityMapping {
 		String name = BPEL2BPMNMappingUtil.getRealNameOfNode(node);
 		
 		IntermediateErrorEvent event = mappingContext.getFactory().createIntermediateErrorEvent();
-		event.setParent(mappingContext.getDiagram());
 		event.setLabel(name);
 		
 		//TODO: find corresponding throw for extracting the fault name
@@ -33,6 +32,9 @@ public class RethrowMapping extends BasicActivityMapping {
 		}
 
 		setConnectionPointsWithControlLinks(node, event, event, null, mappingContext);
+		
+		mappingContext.addMappingElementToSet(node,event);
+
 	}
 
 }

@@ -20,14 +20,15 @@ public class ExitMapping extends BasicActivityMapping {
 	public void mapElement(Node node, MappingContext mappingContext) {
 		
 		XORDataBasedGateway gateway = mappingContext.getFactory().createXORDataBasedGateway();
-		gateway.setParent(mappingContext.getDiagram());
 				
 		EndTerminateEvent event = mappingContext.getFactory().createEndTerminateEvent();
-		event.setParent(mappingContext.getDiagram());
 		
 		createSequenceFlowBetweenDiagramObjects(gateway, event, "true", mappingContext);
 		
 		setConnectionPointsWithControlLinks(node, gateway, gateway, "false", mappingContext);
+		
+		mappingContext.addMappingElementToSet(node,gateway);
+		mappingContext.addMappingElementToSet(node,event);
 
 	}
 

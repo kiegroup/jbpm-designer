@@ -22,7 +22,6 @@ public class WaitMapping extends BasicActivityMapping {
 		String name = BPEL2BPMNMappingUtil.getRealNameOfNode(node);
 		
 		IntermediateTimerEvent event = mappingContext.getFactory().createIntermediateTimerEvent();
-		event.setParent(mappingContext.getDiagram());
 		event.setLabel(name);
 		
 		Node timerNode = BPEL2BPMNMappingUtil.getSpecificChildNode(node, "for");
@@ -35,8 +34,8 @@ public class WaitMapping extends BasicActivityMapping {
 				event.setTimeDate(timerNode.getTextContent());
 			}
 		}
-
-		setConnectionPointsWithControlLinks(node, event, event, null, mappingContext);
 		
+		setConnectionPointsWithControlLinks(node, event, event, null, mappingContext);
+		mappingContext.addMappingElementToSet(node,event);
 	}
 }
