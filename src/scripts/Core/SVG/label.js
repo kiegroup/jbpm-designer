@@ -260,11 +260,12 @@ ORYX.Core.SVG.Label = Clazz.extend({
 							for (var i = 0; i < tspan.textContent.length; i++) {
 								var sslength = tspan.getSubStringLength(startIndex, i - startIndex);
 								
-								if (sslength > refbb.width) {
+								if (sslength > refbb.width - 2) {
 									var newtspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
 									if (lastSeperatorIndex <= startIndex) {
-										newtspan.textContent = tspan.textContent.slice(startIndex, i);
-										lastSeperatorIndex = i;
+										lastSeperatorIndex = (i == 0) ? i : i-1;
+										newtspan.textContent = tspan.textContent.slice(startIndex, lastSeperatorIndex);
+										//lastSeperatorIndex = i;
 									}
 									else {
 										newtspan.textContent = tspan.textContent.slice(startIndex, ++lastSeperatorIndex);
