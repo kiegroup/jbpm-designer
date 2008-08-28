@@ -41,21 +41,21 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 		this.facade = facade;
 		
 		this.facade.offer({
-			'name':"Export EPC",
+			'name':ORYX.I18N.EPCSupport.exp,
 			'functionality': this.exportEPC.bind(this),
-			'group': "epc",
+			'group': ORYX.I18N.EPCSupport.group,
 			'icon': ORYX.PATH + "images/epc_export.png",
-			'description': "Export diagram to EPML",
+			'description': ORYX.I18N.EPCSupport.expDesc,
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0});
 			
 		this.facade.offer({
-			'name':"Import EPC",
+			'name':ORYX.I18N.EPCSupport.imp,
 			'functionality': this.importEPC.bind(this),
-			'group': "epc",
+			'group': ORYX.I18N.EPCSupport.group,
 			'icon': ORYX.PATH + "images/epc_import.png",
-			'description': "Import an EPML file",
+			'description': ORYX.I18N.EPCSupport.impDesc,
 			'index': 2,
 			'minShape': 0,
 			'maxShape': 0});
@@ -76,7 +76,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 */
 	exportEPC: function(){
 
-		this.facade.raiseEvent({type:'loading.enable', text:'Exporting model'});
+		this.facade.raiseEvent({type:'loading.enable', text:ORYX.I18N.EPCSupport.progressExp});
 		var xmlSerializer = new XMLSerializer();
 
 		
@@ -211,11 +211,11 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 		  	enctype : 		'multipart/form-data',
 		  	items : [
 		  	{
-		    	text : 		'Select an EPML (.empl) file to import it!', 
+		    	text : 		ORYX.I18N.EPCSupport.selectFile, 
 				style : 	'font-size:12px;margin-bottom:10px;display:block;',
 				xtype : 	'label'
 		  	},{
-		    	fieldLabel : 	'File',
+		    	fieldLabel : 	ORYX.I18N.EPCSupport.file,
 		    	inputType : 	'file',
 				labelStyle :	'width:50px;',
 				itemCls :		'ext_specific_window_overflow'
@@ -225,7 +225,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 
 		var dialog = new Ext.Window({ 
 			autoCreate: true, 
-			title: 		'Import EPML-File', 
+			title: 		ORYX.I18N.EPCSupport.impPanel, 
 			height: 	'auto', 
 			width: 		'auto', 
 			modal:		true,
@@ -237,11 +237,11 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			items: [form],
 			buttons:[
 				{
-					text:'Import',
+					text:ORYX.I18N.EPCSupport.impBtn,
 					handler: function(){
 						
 							
-						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Import..."});
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.EPCSupport.progressImp});
 						loadMask.show();
 												
 						form.form.submit({
@@ -263,7 +263,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 								dialog.hide();
 								loadMask.hide();
 								Ext.MessageBox.show({
-		           					title: 'Error',
+		           					title: ORYX.I18N.EPCSupport.error,
 		          	 				msg: a.response.responseText.substring(a.response.responseText.indexOf("content:'")+9, a.response.responseText.indexOf("'}")),
 		           					buttons: Ext.MessageBox.OK,
 		           					icon: Ext.MessageBox.ERROR
@@ -272,7 +272,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 				  		});
 					}.bind(this)
 				},{
-					text:'Close',
+					text:ORYX.I18N.EPCSupport.close,
 					handler:function(){
 						dialog.hide();
 					}.bind(this)

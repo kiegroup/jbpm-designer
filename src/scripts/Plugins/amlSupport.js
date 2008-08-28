@@ -41,11 +41,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         this.facade = facade;
         
         this.facade.offer({
-            'name': "Import from AML",
+            'name': ORYX.I18N.AMLSupport.imp,
             'functionality': this.importAML.bind(this),
-            'group': "epc",
+            'group': ORYX.I18N.AMLSupport.group,
             'icon': ORYX.PATH + "images/epc_import.png",
-            'description': "Import an AML file",
+            'description': ORYX.I18N.AMLSupport.impDesc,
             'index': 3,
             'minShape': 0,
             'maxShape': 0
@@ -73,8 +73,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		
 		//if parameter does not start with <, it is an error message.
 		if(!erdf.startsWith("<")) {
-			Ext.Msg.alert("Oryx", "Importing AML file failed. Please check, if the selected file is a valid AML file. Error message: " + erdf);
-            ORYX.log.warn("Import AML failed: " + erdf);
+			Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.failed + erdf);
+            ORYX.Log.warn("Import AML failed: " + erdf);
 			return;
 		}
 		
@@ -230,8 +230,8 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             
         } 
         catch (e) {
-            Ext.Msg.alert("Oryx", "Importing AML file failed: " + e);
-            ORYX.log.warn("Import AML failed: " + e);
+            Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.failed2 + e);
+            ORYX.Log.warn("Import AML failed: " + e);
         }
         
     },
@@ -265,16 +265,16 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             
             onFailure: function(transport){
             
-                Ext.Msg.alert("Oryx", "Importing AML file failed.");
-                ORYX.log.warn("Import AML failed: " + transport.responseText);
+                Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.failed2);
+                ORYX.Log.warn("Import AML failed: " + transport.responseText);
                 
             }
 .bind(this)            ,
             
             on403: function(transport){
             
-                Ext.Msg.alert("Oryx", "You have no rights to import multiple EPC-Diagrams.");
-                ORYX.log.warn("Import AML failed: " + transport.responseText);
+                Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.noRights);
+                ORYX.Log.warn("Import AML failed: " + transport.responseText);
                 
             }
 .bind(this)
@@ -349,7 +349,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             fileUpload: true,
             enctype: 'multipart/form-data',
             items: [{
-                text: 'Select an AML (.xml) file to import it!',
+                text: ORYX.I18N.AMLSupport.panelText,
                 style: 'font-size:12px;margin-bottom:10px;display:block;',
                 xtype: 'label'
             }, {
@@ -362,7 +362,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         
         var dialog = new Ext.Window({
             autoCreate: true,
-            title: 'Import AML-File',
+            title: ORYX.I18N.AMLSupport.importBtn,
             height: 'auto',
             width: 420,
             modal: true,
@@ -373,11 +373,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             resizable: false,
             items: [form],
             buttons: [{
-                text: 'Import',
+                text: ORYX.I18N.AMLSupport.impText,
                 handler: function(){
                 
                     var loadMask = new Ext.LoadMask(Ext.getBody(), {
-                        msg: "Get diagrams..."
+                        msg: ORYX.I18N.AMLSupport.get
                     });
                     loadMask.show();
                     
@@ -407,7 +407,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 }
 .bind(this)
             }, {
-                text: 'Close',
+                text: ORYX.I18N.AMLSupport.close,
                 handler: function(){
                     dialog.hide();
                 }
@@ -446,7 +446,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 fields: ['title']
             }),
             cm: new Ext.grid.ColumnModel([sm, {
-                header: "Title",
+                header: ORYX.I18N.AMLSupport.title,
                 width: 260,
                 sortable: true,
                 dataIndex: 'title'
@@ -463,7 +463,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         var panel = new Ext.Panel({
             items: [{
                 xtype: 'label',
-                html: 'Select the diagram(s) you want to import! <br/> If one model is selected, it will be imported in the current editor, if more than one is selected, those models will directly be stored in the repository.',
+                html: ORYX.I18N.AMLSupport.selectDiagrams,
                 style: 'margin:5px;display:block'
             }, grid],
             height: 'auto',
@@ -482,11 +482,11 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             autoHeight: true,
             items: [panel],
             buttons: [{
-                text: "Import",
+                text: ORYX.I18N.AMLSupport.impText,
                 handler: function(){
                 
                     var loadMask = new Ext.LoadMask(Ext.getBody(), {
-                        msg: "Importing..."
+                        msg: ORYX.I18N.AMLSupport.impProgress
                     });
                     loadMask.show();
                     
@@ -511,7 +511,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 }
 .bind(this)
             }, {
-                text: "Cancel",
+                text: ORYX.I18N.AMLSupport.cancel,
                 handler: function(){
                     extWindow.close();
                 }
@@ -541,7 +541,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 fields: ['name', 'url']
             }),
             cm: new Ext.grid.ColumnModel([{
-                header: "Name",
+                header: ORYX.I18N.AMLSupport.name,
                 width: 260,
                 sortable: true,
                 dataIndex: 'name'
@@ -561,7 +561,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         var panel = new Ext.Panel({
             items: [{
                 xtype: 'label',
-                text: 'All imported diagrams!',
+                text: ORYX.I18N.AMLSupport.allImported,
                 style: 'margin:5px;display:block'
             }, grid],
             height: 'auto',
@@ -579,7 +579,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             autoHeight: true,
             items: [panel],
             buttons: [{
-                text: "Ok",
+                text: ORYX.I18N.AMLSupport.ok,
                 handler: function(){
                 
                     extWindow2.close()

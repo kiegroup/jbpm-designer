@@ -45,22 +45,22 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 			
 			
 		this.facade.offer({
-			'name':				"Export from ERDF",
+			'name':				ORYX.I18N.ERDFSupport.exp,
 			'functionality': 	this.exportERDF.bind(this),
-			'group': 			"erdf",
+			'group': 			ORYX.I18N.ERDFSupport.group,
 			'icon': 			ORYX.PATH + "images/epc_export.png",
-			'description': 		"Export from ERDF",
+			'description': 		ORYX.I18N.ERDFSupport.expDesc,
 			'index': 			0,
 			'minShape': 		0,
 			'maxShape': 		0
 		});
 					
 		this.facade.offer({
-			'name':				"Import from ERDF",
+			'name':				ORYX.I18N.ERDFSupport.imp,
 			'functionality': 	this.importERDF.bind(this),
-			'group': 			"erdf",
+			'group': 			ORYX.I18N.ERDFSupport.group,
 			'icon': 			ORYX.PATH + "images/epc_import.png",
-			'description': 		"Import from ERDF",
+			'description': 		ORYX.I18N.ERDFSupport.impDesc,
 			'index': 			1,
 			'minShape': 		0,
 			'maxShape': 		0
@@ -125,7 +125,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 					failedcallback();
 					
 				} else {
-					Ext.Msg.alert("Oryx", "Request in Import of ERDF failed.");
+					Ext.Msg.alert("Oryx", ORYX.I18N.ERDFSupport.impFailed);
 					ORYX.log.warn("Import ERDF failed: " + transport.responseText);	
 				}
 				
@@ -149,8 +149,8 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		if( doc.firstChild.tagName == "parsererror" ){
 
 			Ext.MessageBox.show({
-					title: 		'Error',
- 					msg: 		"Error: An error while importing occurs! <br/>Please check error message: <br/><br/>" + doc.firstChild.textContent.escapeHTML(),
+					title: 		ORYX.I18N.ERDFSupport.error,
+ 					msg: 		ORYX.I18N.ERDFSupport.impFailed2 + doc.firstChild.textContent.escapeHTML(),
 					buttons: 	Ext.MessageBox.OK,
 					icon: 		Ext.MessageBox.ERROR
 				});
@@ -181,14 +181,14 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		var editorNode 		= getElementsByClassNameFromDiv( doc, '-oryx-canvas')[0];
 		
 		if( !editorNode ){
-			this.throwWarning('The xml document has no Oryx canvas node included!');
+			this.throwWarning(ORYX.I18N.ERDFSupport.noCanvas);
 			return false
 		}
 		
 		var stencilSetNode 	= $A(editorNode.getElementsByTagName('a')).find(function(node){ return node.getAttribute('rel') == 'oryx-stencilset'});
 
 		if( !stencilSetNode ){
-			this.throwWarning('The Oryx canvas node has no stencil set definition included!');
+			this.throwWarning(ORYX.I18N.ERDFSupport.noSS);
 			return false
 		}
 		
@@ -197,7 +197,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		
 		var isLoaded = this.facade.getStencilSets().values().any(function(ss){ return ss.source().endsWith( stencilSetUrl ) })
 		if( !isLoaded ){
-			this.throwWarning('The given stencil set does not fit to the current editor!');
+			this.throwWarning(ORYX.I18N.ERDFSupport.wrongSS);
 			return false
 		}
 				
@@ -238,12 +238,12 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 	        labelWidth: 	50,
 	        defaultType: 	'textfield',
 	        items: [{
-	            text : 		'Select an ERDF (.xml) file or type in the ERDF to import it!', 
+	            text : 		ORYX.I18N.ERDFSupport.selectFile, 
 				style : 	'font-size:12px;margin-bottom:10px;display:block;',
 	            anchor:		'100%',
 				xtype : 	'label' 
 	        },{
-	            fieldLabel: 'File',
+	            fieldLabel: ORYX.I18N.ERDFSupport.file,
 	            name: 		'subject',
 				inputType : 'file',
 				style : 	'margin-bottom:10px;display:block;',
@@ -264,7 +264,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 			layout: 	'fit',
 			plain:		true,
 			bodyStyle: 	'padding:5px;',
-			title: 		'Import ERDF', 
+			title: 		ORYX.I18N.ERDFSupport.impERDF, 
 			height: 	350, 
 			width:		500,
 			modal:		true,
@@ -275,10 +275,10 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 			items: 		[form],
 			buttons:[
 				{
-					text:'Import',
+					text:ORYX.I18N.ERDFSupport.impBtn,
 					handler:function(){
 						
-						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Importing..."});
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.ERDFSupport.impProgress});
 						loadMask.show();
 						
 						window.setTimeout(function(){
@@ -293,7 +293,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 			
 					}.bind(this)
 				},{
-					text:'Close',
+					text:ORYX.I18N.ERDFSupport.close,
 					handler:function(){
 						
 						dialog.hide();

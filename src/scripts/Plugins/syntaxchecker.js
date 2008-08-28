@@ -35,11 +35,11 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 		this.raisedEventIds = [];
 		
         this.facade.offer({
-            'name': "Syntax Checker",
+            'name': ORYX.I18N.SyntaxChecker.name,
             'functionality': this.showOverlay.bind(this),
-            'group': "Verification",
+            'group': ORYX.I18N.SyntaxChecker.group,
             'icon': ORYX.PATH + "images/error_go.png",
-            'description': "Check Syntax",
+            'description': ORYX.I18N.SyntaxChecker.desc,
             'index': 0,
             'minShape': 0,
             'maxShape': 0
@@ -132,11 +132,11 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 	
 							} else {
 	
-								Ext.Msg.alert("Oryx", "There are no syntax errors.");
+								Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.noErrors);
 								
 							}
 						} else {
-							Ext.Msg.alert("Oryx", "Invalid answer from server.");
+							Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.invalid);
 						}
 				}.bind(this)
 			});

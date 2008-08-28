@@ -162,4 +162,127 @@ ORYX.I18N.EPCSupport.close = "Close";
 ORYX.I18N.EPCSupport.error = "Error";
 ORYX.I18N.EPCSupport.progressImp = "Import...";
 
+if(!ORYX.I18N.ERDFSupport) ORYX.I18N.ERDFSupport = {};
 
+ORYX.I18N.ERDFSupport.group = "ERDF";
+ORYX.I18N.ERDFSupport.exp = "Export to ERDF";
+ORYX.I18N.ERDFSupport.expDesc = "Export to ERDF";
+ORYX.I18N.ERDFSupport.imp = "Import from ERDF";
+ORYX.I18N.ERDFSupport.impDesc = "Import from ERDF";
+ORYX.I18N.ERDFSupport.impFailed = "Request for import of ERDF failed.";
+ORYX.I18N.ERDFSupport.impFailed2 = "An error while importing occurs! <br/>Please check error message: <br/><br/>";
+ORYX.I18N.ERDFSupport.error = "Error";
+ORYX.I18N.ERDFSupport.noCanvas = "The xml document has no Oryx canvas node included!";
+ORYX.I18N.ERDFSupport.noSS = "The Oryx canvas node has no stencil set definition included!";
+ORYX.I18N.ERDFSupport.wrongSS = "The given stencil set does not fit to the current editor!";
+ORYX.I18N.ERDFSupport.selectFile = "Select an ERDF (.xml) file or type in the ERDF to import it!";
+ORYX.I18N.ERDFSupport.file = "File";
+ORYX.I18N.ERDFSupport.impERDF = "Import ERDF";
+ORYX.I18N.ERDFSupport.impBtn = "Import";
+ORYX.I18N.ERDFSupport.impProgress = "Importing...";
+ORYX.I18N.ERDFSupport.close = "Close";
+
+if(!ORYX.I18N.Save) ORYX.I18N.Save = {};
+
+ORYX.I18N.Save.group = "File";
+ORYX.I18N.Save.save = "Save";
+ORYX.I18N.Save.saveDesc = "Save";
+ORYX.I18N.Save.saveAs = "Save As...";
+ORYX.I18N.Save.saveAsDesc = "Save As...";
+ORYX.I18N.Save.unsavedData = "There are unsaved data, please save before you leave, otherwise your changes get lost!";
+ORYX.I18N.Save.newProcess = "New Process";
+ORYX.I18N.Save.saveAsTitle = "Save as...";
+ORYX.I18N.Save.saveBtn = "Save";
+ORYX.I18N.Save.close = "Close";
+ORYX.I18N.Save.savedAs = "Saved As";
+ORYX.I18N.Save.saved = "Saved!";
+ORYX.I18N.Save.failed = "Saving failed.";
+ORYX.I18N.Save.noRights = "You have no rights to save changes.";
+ORYX.I18N.Save.saving = "Saving";
+
+if(!ORYX.I18N.File) ORYX.I18N.File = {};
+
+ORYX.I18N.File.group = "File";
+ORYX.I18N.File.print = "Print";
+ORYX.I18N.File.printDesc = "Print current model";
+ORYX.I18N.File.pdf = "Export as PDF";
+ORYX.I18N.File.pdfDesc = "Export as PDF";
+ORYX.I18N.File.info = "Info";
+ORYX.I18N.File.infoDesc = "Info";
+ORYX.I18N.File.genPDF = "Generating PDF";
+ORYX.I18N.File.genPDFFailed = "Generating PDF failed.";
+
+if(!ORYX.I18N.Grouping) ORYX.I18N.Grouping = {};
+
+ORYX.I18N.Grouping.grouping = "Grouping";
+ORYX.I18N.Grouping.group = "Group";
+ORYX.I18N.Grouping.groupDesc = "Groups all selected shapes";
+ORYX.I18N.Grouping.ungroup = "Ungroup";
+ORYX.I18N.Grouping.ungroupDesc = "Deletes the group of all selected Shapes";
+
+if(!ORYX.I18N.Loading) ORYX.I18N.Loading = {};
+
+ORYX.I18N.Loading.waiting ="Waiting...";
+
+if(!ORYX.I18N.Pnmlexport) ORYX.I18N.Pnmlexport = {};
+
+ORYX.I18N.Pnmlexport.group ="Export";
+ORYX.I18N.Pnmlexport.name ="BPMN to PNML";
+ORYX.I18N.Pnmlexport.desc ="Export as executable PNML and deploy";
+
+if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
+
+ORYX.I18N.PropertyWindow.name = "Name";
+ORYX.I18N.PropertyWindow.value = "Value";
+ORYX.I18N.PropertyWindow.clickIcon = "Click Icon";
+ORYX.I18N.PropertyWindow.add = "Add";
+ORYX.I18N.PropertyWindow.rem = "Remove";
+ORYX.I18N.PropertyWindow.complex = "Editor for a Complex Type";
+ORYX.I18N.PropertyWindow.ok = "Ok";
+ORYX.I18N.PropertyWindow.cancel = "Cancel";
+
+if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
+
+ORYX.I18N.SimplePnmlexport.group = "Export";
+ORYX.I18N.SimplePnmlexport.name = "Simple BPMN to PNML Export";
+ORYX.I18N.SimplePnmlexport.desc = "Export as PNML";
+
+if(!ORYX.I18N.StepThroughPlugin) ORYX.I18N.StepThroughPlugin = {};
+
+ORYX.I18N.StepThroughPlugin.group = "Step Through";
+ORYX.I18N.StepThroughPlugin.stepThrough = "Step Through";
+ORYX.I18N.StepThroughPlugin.stepThroughDesc = "Step through your BPMN model";
+ORYX.I18N.StepThroughPlugin.undo = "Undo";
+ORYX.I18N.StepThroughPlugin.undoDesc = "Undo one Step";
+ORYX.I18N.StepThroughPlugin.error = "Can't step through this diagram.";
+
+if(!ORYX.I18N.SyntaxChecker) ORYX.I18N.SyntaxChecker = {};
+
+ORYX.I18N.SyntaxChecker.group = "Verification";
+ORYX.I18N.SyntaxChecker.name = "Syntax Checker";
+ORYX.I18N.SyntaxChecker.desc = "Check Syntax";
+ORYX.I18N.SyntaxChecker.noErrors = "There are no syntax errors.";
+ORYX.I18N.SyntaxChecker.invalid = "Invalid answer from server.";
+
+if(!ORYX.I18N.Undo) ORYX.I18N.Undo = {};
+
+ORYX.I18N.Undo.group = "Undo";
+ORYX.I18N.Undo.undo = "Undo";
+ORYX.I18N.Undo.undoDesc = "Undo the last action";
+ORYX.I18N.Undo.redo = "Redo";
+ORYX.I18N.Undo.redoDesc = "Redo the last undone action";
+
+if(!ORYX.I18N.View) ORYX.I18N.View = {};
+
+ORYX.I18N.View.group = "Zoom";
+ORYX.I18N.View.zoomIn = "Zoom In";
+ORYX.I18N.View.zoomInDesc = "Zoom into the model";
+ORYX.I18N.View.zoomOut = "Zoom Out";
+ORYX.I18N.View.zoomOutDesc = "Zoom out of the model";
+
+
+if(!ORYX.I18N.XFormsExport) ORYX.I18N.XFormsExport = {};
+
+ORYX.I18N.XFormsExport.group = "Export";
+ORYX.I18N.XFormsExport.name = "XForms Export";
+ORYX.I18N.XFormsExport.desc = "Export form to an XForms file";
