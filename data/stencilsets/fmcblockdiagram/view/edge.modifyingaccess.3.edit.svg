@@ -74,7 +74,7 @@
   <g
      id="g9">
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-start:url(#start);marker-end:url(#end)"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#end)"
        d="M 10,50 C 26.242761,37.212722 46.944153,31.826258 66.966728,28.333301 C 101.37888,23.280883 136.99031,24.038507 170.76081,32.754954 C 184.53763,36.574024 198.32603,41.575298 210,50"
        id="edge" />
   </g>
@@ -82,7 +82,7 @@
      id="g2388"
      transform="matrix(-1,0,0,-1,220.50758,105.01416)">
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-start:url(#start);marker-end:url(#end)"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#end)"
        d="M 10,50 C 26.252521,37.221897 46.93769,31.820145 66.966728,28.333301 C 101.37888,23.280883 136.99031,24.038507 170.76081,32.754954 C 184.53763,36.574024 198.32603,41.575298 210,50"
        id="path2390" />
   </g>

@@ -2,7 +2,7 @@
  * Copyright (c) 2008
  * Martin Czuchra, Nicolas Peters, Daniel Polak, Willi Tscheschner
  *
- * Bruno Colaço, Zhen Peng
+ * Bruno Colaï¿½o, Zhen Peng
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -35,11 +35,11 @@ ORYX.Plugins.BpelGenerator = Clazz.extend({
 		this.facade = facade;
 
 	    this.facade.offer({
-			'name':"ExportBPEL",
+			'name':ORYX.I18N.BpelGenerator.name,
 			'functionality': this.download.bind(this),
-			'group': "BPEL",
+			'group': ORYX.I18N.BpelGenerator.group,
 			'icon': ORYX.PATH + "images/BPEL.png",
-			'description': "Export BPEL to XML file",
+			'description': ORYX.I18N.BpelGenerator.desc,
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0});

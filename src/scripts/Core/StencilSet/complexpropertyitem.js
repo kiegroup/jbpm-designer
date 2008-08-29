@@ -96,7 +96,7 @@ ORYX.Core.StencilSet.ComplexPropertyItem = Clazz.extend({
 	},
 
 	name: function() {
-		return this._jsonItem.name;
+		return ORYX.Core.StencilSet.getTranslation(this._jsonItem, "name");
 	},
 	
 	id: function() {

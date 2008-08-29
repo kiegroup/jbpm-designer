@@ -36,6 +36,16 @@
 		fill="white"
 	/>
 	
-    <text x="13" y="125" oryx:rotate="270" font-size="14" id="text_v" oryx:align="middle center" oryx:anchors="left" fill="black" stroke="black"></text>
+    <text 
+		x="13"
+		y="125" 
+		oryx:rotate="270" 
+		font-size="14" 
+		id="text_v" 
+		oryx:align="middle center" 
+		oryx:anchors="left"
+		fill="black" 
+		stroke="black">
+	</text>
   </g>
 </svg>

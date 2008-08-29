@@ -157,6 +157,7 @@ module Helper
   	model << "<script src=\"" + oryx_path + "shared/datamanager.js\" type=\"text/javascript\" />\n"
   	model << "<!-- oryx editor -->\n"
   	model << "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
+  	model << "<script src=\"" + oryx_path + "i18n/translation_en_us.js\" type=\"text/javascript\" />\n"
   	model << "<link rel=\"Stylesheet\" media=\"screen\" href=\"" + oryx_path + "css/theme_norm.css\" type=\"text/css\" />\n"
 
   	model << "<!-- erdf schemas -->\n"

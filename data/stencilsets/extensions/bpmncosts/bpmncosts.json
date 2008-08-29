@@ -7,8 +7,8 @@
 	"properties": [
 		{
 			"roles": [
-				"http://b3mn.org/stencilset/bpmn#Task",
-				"http://b3mn.org/stencilset/bpmn#Subprocess"
+				"Task",
+				"Subprocess"
 			],
 			"properties": [
 				{

@@ -34,6 +34,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Date;
@@ -209,7 +210,7 @@ public class Representation {
 		return representation;
 	}
 	
-	public String getRdf() throws TransformerException {
+	public String getRdf(javax.servlet.ServletContext context) throws TransformerException {
 		String serializedDOM = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
 		"<html xmlns=\"http://www.w3.org/1999/xhtml\" " +
 		"xmlns:b3mn=\"http://b3mn.org/2007/b3mn\" " +
@@ -223,8 +224,10 @@ public class Representation {
 		"<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />" +
 		"<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />" +
 		"</head><body>" + this.getContent() + "</body></html>";
-        File xsltFile = new File("../webapps/backend/extract-rdf.xsl");
-        Source xsltSource = new StreamSource(xsltFile);
+        
+
+		InputStream xsltStream = context.getResourceAsStream("/extract-rdf.xsl");
+        Source xsltSource = new StreamSource(xsltStream);
         Source erdfSource = new StreamSource(new StringReader(serializedDOM));
 
         TransformerFactory transFact =

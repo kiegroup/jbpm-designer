@@ -36,9 +36,12 @@ module Handler
       @servlet.doDelete(interaction.request,  interaction.response,  interaction.subject,  interaction.object, interaction.hostname)
     end
   
-    def handleRequest(interaction, servlet_name)
+    def handleRequest(interaction, servlet_name, context)
       include_class 'org.b3mn.poem.servlets.' + servlet_name
+      # Create new instance of the java plugin
       @servlet = ObjectSpace.const_get(servlet_name).new
+      # Initialize the instance with the servlet context
+      @servlet.setServletContext(context)
       send "do#{interaction.request.getMethod.capitalize}", interaction
     end
   end

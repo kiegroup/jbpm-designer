@@ -18,21 +18,14 @@
        stroke="#000000" 
        stroke-width="1" />
     <path id="path2250"
-       d="M 5.2969035,26.298381 L 5.236011,5.0852655 L 26.449127,5.024373 L 26.510019,26.237489 L 5.2969035,26.298381"
+       d="M 5,26 L 5,5 L 26,5 L 26,26 L 5,26"
        fill="#ffffff"
        stroke="#000000" 
        stroke-width="1"/>
-    <text xml:space="preserve"
-       style="font-size:15px;font-style:normal;font-weight:normal;font-family:Bitstream Vera Sans"
-       fill="#000000"
-       fill-opacity="1"
-       stroke-width="1px"
-       stroke-linecap="butt"
-       stroke-linejoin="miter"
-       stroke-opacity="1"
-       stroke="none"
-       id="text2254">
-      <tspan id="tspan2256" x="11.622245" y="24.413731">*</tspan>
-    </text>
+    <path fill="white" stroke-width="2" stroke="black" d="	M 8.5,16 L 23.5,16
+    								M 16,8.5 L 16,23.5
+    								M 10.5,10.5 L 21.5,21.5
+    								M 10.5,21.5 L 21.5,10.5" />
+
   </g>
 </svg>

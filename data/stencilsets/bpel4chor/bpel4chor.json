@@ -6871,10 +6871,10 @@
 		},
 		{
 			"type": "edge",
-			"id":"messageFlow",
-			"title":"Message Flow",
-			"description":"Defines a Link in a Message Element",
-			"groups":["Message Flow"],
+			"id":"messageLink",
+			"title":"Message Link",
+			"description":"Defines a Message Link",
+			"groups":["Message Link"],
 			"view":"controls/edge.sequenceFlow.svg",
 			"icon":"new_sequence_flow.png",
 			"roles": [],
@@ -6979,7 +6979,7 @@
 				]
 			},
 			{
-				"role":"messageFlow",
+				"role":"messageLink",
 				"connects": [
 					{
 						"from":"Activity",

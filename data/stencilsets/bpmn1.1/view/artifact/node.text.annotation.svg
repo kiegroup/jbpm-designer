@@ -11,10 +11,32 @@
   <oryx:magnets>
   	<oryx:magnet oryx:cx="2" oryx:cy="25" oryx:anchors="left" oryx:default="yes"/>
   </oryx:magnets>
-  <g pointer-events="all" oryx:minimumSize="10 20" oryx:maximumSize="150 200" >
-  <rect id="taskrect" oryx:resize="vertical horizontal" x="1" y="1" width="100" height="50" stroke="none" fill="none" />
-    <path d="M15,1 L1,1 L1,50 L15,50" oryx:resize="vertical horizontal" stroke="black" fill="none" stroke-width="1" />
+  <g pointer-events="all" oryx:minimumSize="10 20" oryx:maximumSize="" >
+  <rect 
+	id="textannotationrect"
+	oryx:resize="vertical horizontal"
+	x="1" 
+	y="1"
+	width="100"
+	height="50"
+	stroke="none"
+	fill="none" />
+  <path 
+	d="M20,1 L1,1 L1,50 L20,50" 
+	oryx:anchors="top bottom left" 
+	stroke="black" 
+	fill="none" 
+	stroke-width="1" />
     
-    <text font-size="14" id="text" x="5" y="20" oryx:align="middle left" stroke="black"></text>
+    <text 
+		font-size="12" 
+		id="text" 
+		x="5" 
+		y="25" 
+		oryx:align="middle left"
+		oryx:fittoelem="textannotationrect"
+		oryx:anchors="left"
+		stroke="black">
+	</text>
   </g>
 </svg>

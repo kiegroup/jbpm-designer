@@ -92,7 +92,7 @@ public class SimplePNMLExporter extends HttpServlet {
 		String type = new StencilSetUtil().getStencilSet(document);
 		if (type.equals("ibpmn.json"))
 			processIBPMN(document, pnmlDoc);
-		else if (type.equals("bpmn.json") || type.equals("bpmnexec.json"))
+		else if (type.equals("bpmn.json") || type.equals("bpmnexec.json") || type.equals("bpmnexecutable.json"))
 			processBPMN(document, pnmlDoc);
 		else if (type.equals("bpmn1.1.json"))
 			processBPMN11(document, pnmlDoc);

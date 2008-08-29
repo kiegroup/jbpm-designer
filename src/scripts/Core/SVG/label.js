@@ -49,9 +49,14 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			throw "Label: Parameter textElement is not an SVGTextElement."	
 		}
 		
+		this.invisibleRenderPoint = -5000;
+		
 		this.node = options.textElement;
+		this.shapeId = options.shapeId;
 		
 		this.id;
+		
+		this.fitToElemId;
 		
 		this.x;
 		this.y;
@@ -62,7 +67,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		this._verticalAlign;
 		this._horizontalAlign;
 		this._rotate;
-		this._fontSize;
 		
 		this.anchors = [];
 		
@@ -75,6 +79,12 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		}
 		
 		//initialization	
+		
+		//set referenced element the text is fit to
+		this.fitToElemId = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'fittoelem');
+		if(this.fitToElemId)
+			this.fitToElemId = this.shapeId + this.fitToElemId;
+		
 		//set alignment	
 		var alignValues = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align');
 		if(alignValues) {
@@ -123,13 +133,13 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		if(!this._horizontalAlign) { this._horizontalAlign = 'left'; }
 		
 		//set line height
-		var fsValue = this.node.getAttributeNS(null, 'font-size');
+/*		var fsValue = this.node.getAttributeNS(null, 'font-size');
 		this._fontSize = parseFloat(fsValue);
 		if(!this._fontSize) {
 			this._fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
 			this.node.setAttributeNS(null, 'font-size', this._fontSize);
 		}
-		
+*/		
 		//TODO temporary deactivate events
 		//this.node.setAttributeNS(null, 'pointer-events', 'none');
 
@@ -153,7 +163,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		this.text(this.node.textContent);
 		
 		//workaround for firefox on mac bug that avoids rendering text fill
-		if(navigator.platform.indexOf("Mac") > -1) {
+		/*if(navigator.platform.indexOf("Mac") > -1) {
 			this.node.setAttributeNS(null, 'stroke', 'black');
 			this.node.setAttributeNS(null, 'stroke-width', '0.5px');
 			this.node.setAttributeNS(null, 'font-family', 'Skia');
@@ -163,7 +173,11 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			if (!this.node.getAttributeNS(null, 'font-family')) {
 				this.node.setAttributeNS(null, 'font-family', 'Verdana');
 			}
-		}
+		}*/
+	},
+	
+	changed: function() {
+		this._isChanged = true;
 	},
 	
 	/**
@@ -177,7 +191,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			this.node.setAttributeNS(null, 'x', this.x);
 			this.node.setAttributeNS(null, 'y', this.y);
 			
-			this.node.setAttributeNS(null, 'font-size', this._fontSize);
+			//this.node.setAttributeNS(null, 'font-size', this._fontSize);
 			//this.node.setAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align', this._horizontalAlign + " " + this._verticalAlign);
 			
 			this.oldX = this.x;
@@ -198,38 +212,107 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				textLines.each((function(textLine, index) {
 					var tspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
 					tspan.textContent = textLine;
-					tspan.setAttributeNS(null, 'x', this.x);
-					tspan.setAttributeNS(null, 'y', this.y);
+					tspan.setAttributeNS(null, 'x', this.invisibleRenderPoint);
+					tspan.setAttributeNS(null, 'y', this.invisibleRenderPoint);
 
 					//append tspan to text node
 					this.node.appendChild(tspan);
-			
-					//set vertical position
-					var dy = 0;
-					switch (this._verticalAlign) {
-						case 'bottom':
-							dy = -(textLines.length - index - 1)*(this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
-							break;
-						case 'middle':
-							dy = -(textLines.length/2 - index - 1)*(this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
-							dy -= ORYX.CONFIG.LABEL_LINE_DISTANCE/2;
-							break;
-						case 'top':
-							dy = index*(this._fontSize + ORYX.CONFIG.LABEL_LINE_DISTANCE);
-							dy += this._fontSize;
-							break;
-					}
-					
-					tspan.setAttributeNS(null, 'dy', dy);
 				}).bind(this));
 				
 				//Work around for Mozilla bug 293581
 				if(this.isVisible) {
 					this.node.setAttributeNS(null, 'visibility', 'hidden');
 				}
-				window.setTimeout(this._positionText.bind(this), 0);
+
+				if(this.fitToElemId)
+					window.setTimeout(this._checkFittingToReferencedElem.bind(this), 0);
+				else
+					window.setTimeout(this._positionText.bind(this), 0);
 			}
 		}
+	},
+	
+	_checkFittingToReferencedElem: function() {
+		try {
+			var tspans = $A(this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan'));
+
+			if (!(navigator.userAgent.match(/2.0.0.\d+$/))) {
+				var newtspans = [];
+				
+				var refNode = this.node.ownerDocument.getElementById(this.fitToElemId);
+				
+				if (refNode) {
+				
+					var refbb = refNode.getBBox();
+					
+					for (var j = 0; j < tspans.length; j++) {
+						var tspan = tspans[j];
+						
+						var textLength = tspan.getComputedTextLength();
+						
+						if (textLength > refbb.width) {
+						
+							var startIndex = 0;
+							var lastSeperatorIndex = 0;
+							
+							//var startX = tspan.getStartPositionOfChar(0).x;
+							//var width = 0;
+							for (var i = 0; i < tspan.textContent.length; i++) {
+								var sslength = tspan.getSubStringLength(startIndex, i - startIndex);
+								
+								if (sslength > refbb.width - 2) {
+									var newtspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
+									if (lastSeperatorIndex <= startIndex) {
+										lastSeperatorIndex = (i == 0) ? i : i-1;
+										newtspan.textContent = tspan.textContent.slice(startIndex, lastSeperatorIndex);
+										//lastSeperatorIndex = i;
+									}
+									else {
+										newtspan.textContent = tspan.textContent.slice(startIndex, ++lastSeperatorIndex);
+									}
+									
+									newtspan.setAttributeNS(null, 'x', this.invisibleRenderPoint);
+									newtspan.setAttributeNS(null, 'y', this.invisibleRenderPoint);
+									
+									//insert tspan to text node
+									//this.node.insertBefore(newtspan, tspan);
+									newtspans.push(newtspan);
+									
+									startIndex = lastSeperatorIndex;
+									
+								}
+								else {
+									var curChar = tspan.textContent.charAt(i);
+									if (curChar == ' ' ||
+									curChar == '-' ||
+									curChar == "." ||
+									curChar == "," ||
+									curChar == ";" ||
+									curChar == ":") {
+										lastSeperatorIndex = i;
+									}
+								}
+							}
+							
+							tspan.textContent = tspan.textContent.slice(startIndex);
+						}
+						
+						newtspans.push(tspan);
+					}
+					
+					while (this.node.hasChildNodes()) 
+						this.node.removeChild(this.node.childNodes[0]);
+					
+					while (newtspans.length > 0) {
+						this.node.appendChild(newtspans.shift());
+					}
+				}
+			}
+		} catch (e) {
+			//console.log(e);
+		}
+		
+		window.setTimeout(this._positionText.bind(this), 0);
 	},
 	
 	/**
@@ -237,10 +320,30 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	 * Before the method getComputedTextLength works, the text has to be rendered.
 	 */
 	_positionText: function() {
-		var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-		
 		try {
-			$A(tspans).each((function(tspan) {
+			var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
+			var fontSize = (!(navigator.userAgent.match(/2.0.0.\d+$/))) ? tspans[0].getExtentOfChar(0).height : 14;
+			
+			$A(tspans).each((function(tspan, index){
+				
+				//set vertical position
+				var dy = 0;
+				switch (this._verticalAlign) {
+					case 'bottom':
+						dy = -(tspans.length - index - 1) * (fontSize);
+						break;
+					case 'middle':
+						dy = -(tspans.length / 2.0 - index - 1) * (fontSize);
+						dy -= ORYX.CONFIG.LABEL_LINE_DISTANCE / 2;
+						break;
+					case 'top':
+						dy = index * (fontSize);
+						dy += fontSize;
+						break;
+				}
+				
+				tspan.setAttributeNS(null, 'dy', dy);
+				
 				//set horizontal position
 				var textLength = tspan.getComputedTextLength();
 				switch (this._horizontalAlign) {
@@ -248,13 +351,18 @@ ORYX.Core.SVG.Label = Clazz.extend({
 						tspan.setAttributeNS(null, 'dx', 0);
 						break;
 					case 'center':
-						tspan.setAttributeNS(null, 'dx', -textLength/2);
+						tspan.setAttributeNS(null, 'dx', -textLength / 2);
 						break;
 					case 'right':
 						tspan.setAttributeNS(null, 'dx', -textLength);
 						break;
 				}
-			}).bind(this));	
+				
+				tspan.setAttributeNS(null, 'x', this.x);
+				tspan.setAttributeNS(null, 'y', this.y);
+				
+			}).bind(this));
+			
 		} catch(e) {
 			this._isChanged = true;
 		}
@@ -324,26 +432,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 					if(this._horizontalAlign !== oldValue) {
 						this._isChanged = true;
 					}	
-				}
-				break;
-				
-			default:
-				//TODO error
-				break;
-		}
-	},
-	
-	fontSize: function() {
-		switch(arguments.length) {
-			case 0:
-				return this._fontSize;
-			case 1:
-				var value = parseFloat(arguments[0]);
-				if(value) {
-					if(arguments[0] !== this._fontSize) {
-						this._fontSize = arguments[0];
-						this._isChanged = true;
-					}
 				}
 				break;
 				

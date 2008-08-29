@@ -27,7 +27,11 @@
         <script src="shared/datamanager.js" type="text/javascript" />
 
         <!-- oryx editor -->
-        <script src="oryx.js" type="text/javascript" />
+        <script src="oryx.debug.js" type="text/javascript" />
+		
+		<script src="i18n/translation_en_us.js" type="text/javascript"/>
+		<script src="i18n/translation_de.js" type="text/javascript"/>
+		
         <link rel="Stylesheet" media="screen" href="css/theme_norm.css" type="text/css" />
 
         <!-- erdf schemas -->
@@ -41,13 +45,14 @@
     </head>
 
     <body style="display: block; overflow: hidden;">
-
-		<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;">
-
-			<a href="./stencilsets/epc/epc.json" rel="oryx-stencilset"></a>
-			
-			<span class="oryx-mode">writeable</span>
-			<span class="oryx-mode">fullscreen</span>
+		<div class="processdata">
+			<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;">
+	
+				<a href="./stencilsets/epc/epc.json" rel="oryx-stencilset"></a>
+				
+				<span class="oryx-mode">writeable</span>
+				<span class="oryx-mode">fullscreen</span>
+			</div>
 		</div>
     </body>
 </html>

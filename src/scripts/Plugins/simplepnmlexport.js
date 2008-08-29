@@ -32,11 +32,11 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
         this.facade = facade;
         
         this.facade.offer({
-            'name': "simplebpmntopnml",
+            'name': ORYX.I18N.SimplePnmlexport.name,
             'functionality': this.export.bind(this),
-            'group': "Export",
+            'group': ORYX.I18N.SimplePnmlexport.group,
             'icon': ORYX.PATH + "images/bpmn2pn.png",
-            'description': "Export as PNML",
+            'description': ORYX.I18N.SimplePnmlexport.desc,
             'index': 1,
             'minShape': 0,
             'maxShape': 0

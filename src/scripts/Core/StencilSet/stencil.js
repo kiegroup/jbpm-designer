@@ -202,15 +202,15 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	},
 
 	title: function() {
-		return this._jsonStencil.title;
+		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "title");
 	},
 
 	description: function() {
-		return this._jsonStencil.description;
+		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "description");
 	},
 	
 	groups: function() {
-		return this._jsonStencil.groups;
+		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "groups");
 	},
 
 	view: function() {
@@ -258,6 +258,16 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 		if(property && namespace) {
 			var oProp = new ORYX.Core.StencilSet.Property(property, namespace, this);
 			this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
+		}
+	},
+	
+	removeProperty: function(propertyId) {
+		if(propertyId) {
+			var oProp = this._properties.values().find(function(prop) {
+				return (propertyId == prop.id());
+			});
+			if(oProp)
+				delete this._properties[oProp.prefix() + "-" + oProp.id()];
 		}
 	},
 

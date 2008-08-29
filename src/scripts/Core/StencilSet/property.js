@@ -173,7 +173,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
     },
     
     title: function(){
-        return this._jsonProp.title;
+        return ORYX.Core.StencilSet.getTranslation(this._jsonProp, "title");
     },
     
     value: function(){
@@ -189,7 +189,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
     },
     
     description: function(){
-        return this._jsonProp.description;
+        return ORYX.Core.StencilSet.getTranslation(this._jsonProp, "description");
     },
     
     /**

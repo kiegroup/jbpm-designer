@@ -6,6 +6,13 @@
 			"description":"BPMN extension for adding a cost attribute to activities",
 			"definition":"bpmncosts/bpmncosts.json",
 			"extends":"http://b3mn.org/stencilset/bpmn#"
+		},
+		{
+			"title":"BPMN Sub Set Extension",
+			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnsubset#",
+			"description":"BPMN extension that reduces the available stencils.",
+			"definition":"bpmnsubset/bpmnsubset.json",
+			"extends":"http://b3mn.org/stencilset/bpmn#"
 		}
 	]
 }

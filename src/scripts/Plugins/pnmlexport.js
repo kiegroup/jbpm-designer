@@ -43,11 +43,11 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         this.facade = facade;
         
         this.facade.offer({
-            'name': 'bpmntopnml',
+            'name': ORYX.I18N.Pnmlexport.name,
             'functionality': this.export.bind(this),
-            'group': "Export",
+            'group': ORYX.I18N.Pnmlexport.group,
             'icon': ORYX.PATH + "images/bpmn2pn_deploy.png",
-            'description': "Export as executable PNML and deploy",
+            'description': ORYX.I18N.Pnmlexport.desc,
             'index': 2,
             'minShape': 0,
             'maxShape': 0
@@ -116,7 +116,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         try {
             var rdf = xsltProcessor.transformToDocument(parsedDOM);
             var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
-            serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
+            serialized_rdf = /* "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +*/ serialized_rdf;
             
             var diagramTitle = gup('resource');
             

@@ -10,7 +10,7 @@ import de.hpi.petrinet.stepthrough.STLabeledTransitionImpl;
 import de.hpi.petrinet.stepthrough.STPetriNetFactoryImpl;
 import de.hpi.petrinet.stepthrough.STSilentTransition;
 
-public class STConverter extends StandardConverter {
+public class STConverter extends HighConverter {
 	public STConverter(BPMNDiagram diagram) {
 		super(diagram, new STPetriNetFactoryImpl());
 	}

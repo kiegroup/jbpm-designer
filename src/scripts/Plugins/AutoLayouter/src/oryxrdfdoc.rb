@@ -83,7 +83,7 @@ class OryxRDFDoc
   
   #Returns the stencilset of the current model
   def get_stencilset
-    triple = @rdf.get_triples("#{@modelname}#oryxcanvas", Stencilset).first
+    triple = @rdf.get_triples("#{@modelname}#oryx-canvas123", Stencilset).first
     if triple.nil? then raise "OryxRDFDoc-No stencilset found for model:#{@modelname}"
     end
     triple[2]
@@ -91,7 +91,7 @@ class OryxRDFDoc
   
   #Returns all resources that are subject to layouting (all resources that can be rendered)
   def get_all_resources
-    @rdf.get_triples("#{@modelname}#oryxcanvas", Render).collect{ |triple| triple[2]}
+    @rdf.get_triples("#{@modelname}#oryx-canvas123", Render).collect{ |triple| triple[2]}
   end
 
   #Returns the type of construct represented by the given resource (e.g. Task, IntermediateEvent, Transition,...)
@@ -171,7 +171,7 @@ private
   def is_node?(resource, type)
     if ( (type =~ /Task/) || (type =~ /Gateway/) || #BPMN
       (type =~ /Event/) || (type =~ /Object/) || 
-      (type =~ /Subprocess/) || 
+      (type =~ /Subprocess/) || (type =~ /Annotation/) || 
       (type =~ /Transition/)|| (type =~ /Place/)) #Petrinets
       return true
     else

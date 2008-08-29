@@ -16,7 +16,7 @@
 	</defs>
 	
 	<g id="edge">
-	    <path d="M10 50 L110 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-start="url(#start)"  />
+	    <path d="M10 50 L110 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 	    <path d="M110 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-start="url(#FALSE)" marker-end="url(#end)" />
 	</g>
 </svg>
