@@ -322,8 +322,12 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	_positionText: function() {
 		try {
 			var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-			var fontSize = (!(navigator.userAgent.match(/2.0.0.\d+$/))) ? tspans[0].getExtentOfChar(0).height : 14;
-			
+			var fontSize; 
+			if(tspans[0])
+				fontSize = (!(navigator.userAgent.match(/2.0.0.\d+$/))) ? tspans[0].getExtentOfChar(0).height : 14;
+			else
+				fontSize = 14;
+				
 			$A(tspans).each((function(tspan, index){
 				
 				//set vertical position
