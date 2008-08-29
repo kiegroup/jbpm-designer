@@ -26,26 +26,5 @@
             "description":"Simple stencil set for Workflow Nets.",
             "uri":"/workflownets/workflownets.json",
             "icon_url":"/workflownets/workflownets.png"
-        },
-        {
-            "title":"FMC Block Diagram",
-            "namespace":"http://www.fmc-modeling.org/stencilsets/fmcblockdiagram#",
-            "description":"FMC Block Diagrams show compositional structures as a composition of collaborating system components.",
-            "uri":"/fmcblockdiagram/fmcblockdiagram.json",
-            "icon_url":"/fmcblockdiagram/fmcblockdiagram.png"
-        },
-        {
-            "title":"BPEL Model",
-            "namespace":"http://b3mn.org/stencilset/bpel#",
-            "description":"BPEL stencil set specification.",
-            "uri":"/bpel/bpel.json",
-            "icon_url":"/bpel/bpel.png"
-        },
-        {
-            "title":"BPEL4Chor Model",
-            "namespace":"http://b3mn.org/stencilset/bpel4chor#",
-            "description":"BPEL4Chor stencil set specification.",
-            "uri":"/bpel4chor/bpel4chor.json",
-            "icon_url":"/bpel4chor/bpel4chor.png"
         }
 ]

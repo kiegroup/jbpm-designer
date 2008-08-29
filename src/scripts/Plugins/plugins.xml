@@ -18,15 +18,10 @@
 		<plugin source="canvasResize.js" name="ORYX.Plugins.CanvasResize" />
 		<plugin source="renameShapes.js" name="ORYX.Plugins.RenameShapes" />
 		<plugin source="erdfSupport.js" name="ORYX.Plugins.ERDFSupport" />
-		<plugin source="undo.js" name="ORYX.Plugins.Undo" />
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
 		</plugin>
-		
-		<plugin source="amlSupport.js" name="ORYX.Plugins.AMLSupport">
-			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
-		</plugin>	
 			
 		<plugin source="arisSupport.js" name="ORYX.Plugins.ARISSupport">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
