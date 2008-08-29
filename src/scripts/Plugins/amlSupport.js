@@ -353,7 +353,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 style: 'font-size:12px;margin-bottom:10px;display:block;',
                 xtype: 'label'
             }, {
-                fieldLabel: 'File',
+                fieldLabel: ORYX.I18N.AMLSupport.file,
                 inputType: 'file',
                 labelStyle: 'width:50px;',
                 itemCls: 'ext_specific_window_overflow'
