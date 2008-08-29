@@ -106,7 +106,12 @@
 		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 		</plugin>
-	
+		
+		<!-- BPMN1.1 specific plugins -->
+		<plugin source="bpmn1.1DiamondSwitch.js" name="ORYX.Plugins.BPMN11DiamondSwitch">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+		</plugin>
+		
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
 		
 		<!--		
