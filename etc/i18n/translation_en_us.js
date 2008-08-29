@@ -8,6 +8,10 @@ if(!ORYX.I18N) ORYX.I18N = {};
 
 ORYX.I18N.Language = "en_us"; //Pattern <ISO language code>_<ISO country code> in lower case!
 
+if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
+
+ORYX.I18N.Oryx.pleaseWait = "Please wait while Oryx is loading...";
+
 if(!ORYX.I18N.AddDocker) ORYX.I18N.AddDocker = {};
 
 ORYX.I18N.AddDocker.group = "Docker";
