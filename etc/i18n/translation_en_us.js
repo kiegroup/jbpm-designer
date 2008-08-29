@@ -2,6 +2,7 @@
  * @author nicolas.peters
  * 
  * Contains all strings for the default language (en-us).
+ * Version 1 - 08/29/08
  */
 if(!ORYX.I18N) ORYX.I18N = {};
 
@@ -17,23 +18,23 @@ ORYX.I18N.AddDocker.delDesc = "Delete a Docker";
 
 if(!ORYX.I18N.SSExtensionLoader) ORYX.I18N.SSExtensionLoader = {};
 
-ORYX.I18N.SSExtensionLoader.group = "StencilSet";
+ORYX.I18N.SSExtensionLoader.group = "Stencil Set";
 ORYX.I18N.SSExtensionLoader.add = "Add Stencil Set Extension";
 ORYX.I18N.SSExtensionLoader.addDesc = "Add a stencil set extension";
 ORYX.I18N.SSExtensionLoader.loading = "Loading Stencil Set Extension";
 ORYX.I18N.SSExtensionLoader.noExt = "There are no extensions available or all available extensions are already loaded.";
 ORYX.I18N.SSExtensionLoader.failed1 = "Loading stencil set extensions configuration failed. The response is not a valid configuration file.";
 ORYX.I18N.SSExtensionLoader.failed2 = "Loading stencil set extension configuration file failed. The request returned an error.";
-ORYX.I18N.SSExtensionLoader.panelTitle = "StencilSet Extensions";
+ORYX.I18N.SSExtensionLoader.panelTitle = "Stencil Set Extensions";
 ORYX.I18N.SSExtensionLoader.panelText = "Select the stencil set extensions you want to load.";
 
 if(!ORYX.I18N.AdHocCC) ORYX.I18N.AdHocCC = {};
 
-ORYX.I18N.AdHocCC.group = "adhoc";
+ORYX.I18N.AdHocCC.group = "Ad Hoc";
 ORYX.I18N.AdHocCC.compl = "Edit Completion Condition";
-ORYX.I18N.AdHocCC.complDesc = "Edit an Ad-Hoc Activity's Completion Condition";
+ORYX.I18N.AdHocCC.complDesc = "Edit an Ad Hoc Activity's Completion Condition";
 ORYX.I18N.AdHocCC.notOne = "Not exactly one element selected!";
-ORYX.I18N.AdHocCC.nodAdHocCC = "Selected element has no ad-hoc completion condition!";
+ORYX.I18N.AdHocCC.nodAdHocCC = "Selected element has no ad hoc completion condition!";
 ORYX.I18N.AdHocCC.selectTask = "Select a task...";
 ORYX.I18N.AdHocCC.selectState = "Select a state...";
 ORYX.I18N.AdHocCC.addExp = "Add Expression";
@@ -51,24 +52,24 @@ ORYX.I18N.AdHocCC.curCond = "Current Completion Condition: ";
 
 if(!ORYX.I18N.AMLSupport) ORYX.I18N.AMLSupport = {};
 
-ORYX.I18N.AMLSupport.group = "epc";
+ORYX.I18N.AMLSupport.group = "EPC";
 ORYX.I18N.AMLSupport.imp = "Import AML file";
 ORYX.I18N.AMLSupport.impDesc = "Import an Aris 7 AML file";
 ORYX.I18N.AMLSupport.failed = "Importing AML file failed. Please check, if the selected file is a valid AML file. Error message: ";
 ORYX.I18N.AMLSupport.failed2 = "Importing AML file failed: ";
-ORYX.I18N.AMLSupport.noRights = "You have no rights to import multiple EPC-Diagrams.";
-ORYX.I18N.AMLSupport.panelText = "Select an AML (.xml) file to import it!";
+ORYX.I18N.AMLSupport.noRights = "You have no rights to import multiple EPC-Diagrams (Login required).";
+ORYX.I18N.AMLSupport.panelText = "Select an AML (.xml) file to import.";
 ORYX.I18N.AMLSupport.file = "File";
 ORYX.I18N.AMLSupport.importBtn = "Import AML-File";
 ORYX.I18N.AMLSupport.get = "Get diagrams...";
 ORYX.I18N.AMLSupport.close = "Close";
 ORYX.I18N.AMLSupport.title = "Title";
-ORYX.I18N.AMLSupport.selectDiagrams = "Select the diagram(s) you want to import! <br/> If one model is selected, it will be imported in the current editor, if more than one is selected, those models will directly be stored in the repository.";
+ORYX.I18N.AMLSupport.selectDiagrams = "Select the diagram(s) you want to import. <br/> If one model is selected, it will be imported in the current editor, if more than one is selected, those models will directly be stored in the repository.";
 ORYX.I18N.AMLSupport.impText = "Import";
 ORYX.I18N.AMLSupport.impProgress = "Importing...";
 ORYX.I18N.AMLSupport.cancel = "Cancel";
 ORYX.I18N.AMLSupport.name = "Name";
-ORYX.I18N.AMLSupport.allImported = "All imported diagrams!";
+ORYX.I18N.AMLSupport.allImported = "All imported diagrams.";
 ORYX.I18N.AMLSupport.ok = "Ok";
 
 if(!ORYX.I18N.Arrangement) ORYX.I18N.Arrangement = {};
@@ -113,8 +114,8 @@ ORYX.I18N.Bpel4ChorTransformation.warning = "Warning";
 ORYX.I18N.Bpel4ChorTransformation.wrongValue = 'The changed name must have the value "1" to avoid errors during the transformation to BPEL4Chor';
 ORYX.I18N.Bpel4ChorTransformation.loopNone = 'The loop type of the receive task must be "None" to be transformable to BPEL4Chor';
 ORYX.I18N.Bpel4ChorTransformation.error = "Error";
-ORYX.I18N.Bpel4ChorTransformation.noSource = "The 1 with id 2 has no source object.";
-ORYX.I18N.Bpel4ChorTransformation.noTarget = "The 1 with id 2 has no target object.";
+ORYX.I18N.Bpel4ChorTransformation.noSource = "1 with id 2 has no source object.";
+ORYX.I18N.Bpel4ChorTransformation.noTarget = "1 with id 2 has no target object.";
 ORYX.I18N.Bpel4ChorTransformation.transCall = "An error occured during the transformation call. 1:2";
 ORYX.I18N.Bpel4ChorTransformation.noResult = "The transformation web service did not return a result.";
 ORYX.I18N.Bpel4ChorTransformation.errorParsing = "Error During the Parsing of the Diagram.";
@@ -126,7 +127,7 @@ ORYX.I18N.Bpel4ChorTransformation.loadingExport = "Export to XPDL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.noGen = "The transformation input could not be generated: 1\n2\n";
 
 if(!ORYX.I18N.DesynchronizabilityOverlay) ORYX.I18N.DesynchronizabilityOverlay = {};
-
+//TODO desynchronizability is not a correct term
 ORYX.I18N.DesynchronizabilityOverlay.group = "Overlay";
 ORYX.I18N.DesynchronizabilityOverlay.name = "Desynchronizability Checker";
 ORYX.I18N.DesynchronizabilityOverlay.desc = "Desynchronizability Checker";
@@ -154,7 +155,7 @@ ORYX.I18N.EPCSupport.expDesc = "Export diagram to EPML";
 ORYX.I18N.EPCSupport.imp = "Import EPC";
 ORYX.I18N.EPCSupport.impDesc = "Import an EPML file";
 ORYX.I18N.EPCSupport.progressExp = "Exporting model";
-ORYX.I18N.EPCSupport.selectFile = "Select an EPML (.empl) file to import it!";
+ORYX.I18N.EPCSupport.selectFile = "Select an EPML (.empl) file to import.";
 ORYX.I18N.EPCSupport.file = "File";
 ORYX.I18N.EPCSupport.impPanel = "Import EPML File";
 ORYX.I18N.EPCSupport.impBtn = "Import";
@@ -222,7 +223,7 @@ ORYX.I18N.Grouping.ungroupDesc = "Deletes the group of all selected Shapes";
 
 if(!ORYX.I18N.Loading) ORYX.I18N.Loading = {};
 
-ORYX.I18N.Loading.waiting ="Waiting...";
+ORYX.I18N.Loading.waiting ="Please wait...";
 
 if(!ORYX.I18N.Pnmlexport) ORYX.I18N.Pnmlexport = {};
 
@@ -266,7 +267,7 @@ ORYX.I18N.SyntaxChecker.invalid = "Invalid answer from server.";
 
 if(!ORYX.I18N.Undo) ORYX.I18N.Undo = {};
 
-ORYX.I18N.Undo.group = "Undo";
+ORYX.I18N.Undo.group = "Edit";
 ORYX.I18N.Undo.undo = "Undo";
 ORYX.I18N.Undo.undoDesc = "Undo the last action";
 ORYX.I18N.Undo.redo = "Redo";
