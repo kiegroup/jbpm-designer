@@ -194,6 +194,19 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			//this.node.setAttributeNS(null, 'font-size', this._fontSize);
 			//this.node.setAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align', this._horizontalAlign + " " + this._verticalAlign);
 			
+			//set horizontal alignment
+			switch (this._horizontalAlign) {
+				case 'left':
+					this.node.setAttributeNS(null, 'text-anchor', 'start');
+					break;
+				case 'center':
+					this.node.setAttributeNS(null, 'text-anchor', 'middle');
+					break;
+				case 'right':
+					this.node.setAttributeNS(null, 'text-anchor', 'end');
+					break;
+			}
+				
 			this.oldX = this.x;
 			this.oldY = this.y;
 			
@@ -347,20 +360,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				}
 				
 				tspan.setAttributeNS(null, 'dy', dy);
-				
-				//set horizontal position
-				var textLength = tspan.getComputedTextLength();
-				switch (this._horizontalAlign) {
-					case 'left':
-						tspan.setAttributeNS(null, 'dx', 0);
-						break;
-					case 'center':
-						tspan.setAttributeNS(null, 'dx', -textLength / 2);
-						break;
-					case 'right':
-						tspan.setAttributeNS(null, 'dx', -textLength);
-						break;
-				}
 				
 				tspan.setAttributeNS(null, 'x', this.x);
 				tspan.setAttributeNS(null, 'y', this.y);
