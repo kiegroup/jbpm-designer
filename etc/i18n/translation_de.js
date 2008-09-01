@@ -214,6 +214,8 @@ ORYX.I18N.File.info = "Über";
 ORYX.I18N.File.infoDesc = "Über";
 ORYX.I18N.File.genPDF = "PDF wird generiert";
 ORYX.I18N.File.genPDFFailed = "Die Generierung der PDF Datei ist fehlgeschlagen.";
+ORYX.I18N.File.printTitle = "Drucken";
+ORYX.I18N.File.printMsg = "Leider arbeitet die Druckfunktion zur Zeit nicht immer korrekt. Bitte nutzen Sie den PDF Export, und drucken Sie das PDF Dokument aus. Möchten Sie dennoch mit dem Drucken fortfahren?";
 
 if(!ORYX.I18N.Grouping) ORYX.I18N.Grouping = {};
 

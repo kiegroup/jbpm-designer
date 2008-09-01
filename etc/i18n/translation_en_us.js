@@ -216,6 +216,8 @@ ORYX.I18N.File.info = "Info";
 ORYX.I18N.File.infoDesc = "Info";
 ORYX.I18N.File.genPDF = "Generating PDF";
 ORYX.I18N.File.genPDFFailed = "Generating PDF failed.";
+ORYX.I18N.File.printTitle = "Print";
+ORYX.I18N.File.printMsg = "We are currently experiencing problems with the printing function. We recommend using the PDF Export to print the diagram. Do you really want to continue printing?";
 
 if(!ORYX.I18N.Grouping) ORYX.I18N.Grouping = {};
 
