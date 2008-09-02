@@ -168,7 +168,15 @@
         </echo>
     </target>
 
-    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server, build-editor-core" />
+    <target name='generate-version-file'>
+        <exec executable="svn" output="build/version.xml">
+            <arg value="info"/>
+            <arg value="--non-interactive"/>
+            <arg value="--xml"/>
+        </exec>
+    </target>
+        
+    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file" />
     
     <target name='compress'>
         

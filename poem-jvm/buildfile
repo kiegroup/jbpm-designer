@@ -67,6 +67,8 @@ define 'poem' do
   # the subprojects
   desc 'Backend Implementation'
   define 'backend' do
+    puts "svn info --xml --non-interactive > backend/src/main/webapp/version.xml"
+    puts %x{svn info --xml --non-interactive > backend/src/main/webapp/version.xml}
     compile.with POEM_JARS
     package(:war).with :libs => POEM_JARS
 	package(:war).libs += artifacts('com.ibm.icu:icu4j:pom:3.4.1')
