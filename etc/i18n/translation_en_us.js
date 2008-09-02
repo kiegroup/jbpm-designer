@@ -248,6 +248,11 @@ ORYX.I18N.PropertyWindow.complex = "Editor for a Complex Type";
 ORYX.I18N.PropertyWindow.ok = "Ok";
 ORYX.I18N.PropertyWindow.cancel = "Cancel";
 
+if(!ORYX.I18N.ShapeMenuPlugin) ORYX.I18N.ShapeMenuPlugin = {};
+
+ORYX.I18N.ShapeMenuPlugin.drag = "Drag";
+ORYX.I18N.ShapeMenuPlugin.clickDrag = "Click or drag";
+
 if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
 
 ORYX.I18N.SimplePnmlexport.group = "Export";

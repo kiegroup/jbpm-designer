@@ -4,6 +4,8 @@
  * Contains all strings for German language.
  * Version 1 - 08/29/08
  */
+if(!ORYX.I18N) ORYX.I18N = {};
+
 ORYX.I18N.Language = "de_DE"; //Pattern <ISO language code>_<ISO country code> in lower case!
 
 if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
@@ -245,6 +247,11 @@ ORYX.I18N.PropertyWindow.rem = "Löschen";
 ORYX.I18N.PropertyWindow.complex = "Editor für komplexe Eigenschaft";
 ORYX.I18N.PropertyWindow.ok = "Ok";
 ORYX.I18N.PropertyWindow.cancel = "Abbrechen";
+
+if(!ORYX.I18N.ShapeMenuPlugin) ORYX.I18N.ShapeMenuPlugin = {};
+
+ORYX.I18N.ShapeMenuPlugin.drag = "Ziehen";
+ORYX.I18N.ShapeMenuPlugin.clickDrag = "Klicken oder ziehen";
 
 if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
 
