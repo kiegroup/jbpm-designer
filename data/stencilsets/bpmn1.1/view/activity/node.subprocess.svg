@@ -20,7 +20,7 @@
     <rect id="taskrect" oryx:anchors="bottom top right left" x="2" y="2" width="96" height="76" rx="8" ry="8" stroke="black" stroke-width="1" fill="white" />
     	<text font-size="14" id="acttext" x="50" y="40" oryx:align="middle center" stroke="black"></text>
     	
- 	<a id="u">
+ 	<a id="u" target="_blank">
 	 	<g id="b" 
 			oryx:anchors="bottom">
 			
