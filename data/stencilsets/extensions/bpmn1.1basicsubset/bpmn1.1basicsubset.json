@@ -49,10 +49,10 @@
 		"EndSignalEvent",
 		"EndMultipleEvent",
 		"EndTerminateEvent",
-//		"MessageFlow",
-//		"Association_Undirected",
-//		"Association_Unidirectional",
-//		"Association_Bidirectional"
+		"MessageFlow",
+		"Association_Undirected",
+		"Association_Unidirectional",
+		"Association_Bidirectional"
 	],
 	"removeproperties": []
 }
