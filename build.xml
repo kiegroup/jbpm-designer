@@ -169,7 +169,7 @@
     </target>
 
     <target name='generate-version-file'>
-        <exec executable="svn" output="build/version.xml">
+        <exec executable="svn" output="build/version.xml" failifexecutionfails="false">
             <arg value="info"/>
             <arg value="--non-interactive"/>
             <arg value="--xml"/>
