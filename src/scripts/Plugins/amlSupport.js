@@ -215,72 +215,14 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 else {
                 
                     var erdfDOM = result[0].data;
-                    // Delete all uri-refs
+                    
+					// Delete all uri-refs
                     $A(this.getNodesByClassName(erdfDOM, "span", "oryx-refuri")).each(function(node){
                         node.textContent = ""
                     });
 					
-					var commandClass = ORYX.Core.Command.extend({
-						construct: function(erdfDOM, facade){
-							this.erdfDOM = erdfDOM;
-							this.facade = facade;
-							this.shapes;
-							this.connections = [];
-							this.parents = new Hash();
-							this.selection = this.facade.getSelection();
-						},			
-						execute: function(){
-							if (!this.shapes) {
-								// Import the erdf strucutre
-								this.shapes = this.facade.importERDF(this.erdfDOM);
-								
-								//store all connections
-								this.shapes.each(function(shape) {
-									if (shape.getDockers) {
-										var dockers = shape.getDockers();
-										if (dockers) {
-											if (dockers.length > 0) {
-												this.connections.push([dockers.first(), dockers.first().getDockedShape(), dockers.first().referencePoint]);
-											}
-											if (dockers.length > 1) {
-												this.connections.push([dockers.last(), dockers.last().getDockedShape(), dockers.last().referencePoint]);
-											}
-										}
-									}
-									
-									//store parents
-									this.parents[shape.id] = shape.parent;
-								}.bind(this));
-							} else {
-								this.shapes.each(function(shape) {
-									this.parents[shape.id].add(shape);
-								}.bind(this));
-								
-								this.connections.each(function(con) {
-									con[0].setDockedShape(con[1]);
-									con[0].setReferencePoint(con[2]);
-									con[0].update();
-								});
-							}
-							
-							this.facade.updateSelection();
-						},
-						rollback: function(){
-							this.shapes.each(function(shape) {
-								this.facade.deleteShape(shape);
-							}.bind(this));
-							
-							this.facade.setSelection(this.selection);
-						}
-					})
-					
-					var command = new commandClass(erdfDOM, this.facade);
-					
-					this.facade.executeCommands([command]);	
-					
-                    
-                    
-                    //this.facade.setSelection( shapes );
+					// Import the erdf strucutre
+					this.facade.importERDF(erdfDOM);
                 
                 }  
                 
