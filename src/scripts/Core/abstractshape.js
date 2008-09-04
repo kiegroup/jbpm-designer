@@ -40,7 +40,7 @@ ORYX.Core.AbstractShape = {
 		
 		arguments.callee.$.construct.apply(this, arguments);
 		
-		this.resourceId = undefined; //Id of resource in DOM
+		this.resourceId = ORYX.Editor.provideId(); //Id of resource in DOM
 		
 		// stencil reference
 		this._stencil = stencil;

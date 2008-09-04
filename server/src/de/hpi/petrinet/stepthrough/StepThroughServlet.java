@@ -88,6 +88,7 @@ public class StepThroughServlet extends HttpServlet {
 				// If necessary, delete all uninteresting changed objects
 				if(onlyChangedObjects) stm.clearChangedObjs();
 				// Check for proper string
+				// THERE IS NO GUARANTEE THAT THIS IS ALWAYS CORRECT!!!
 				if(!objectsToFire[i].startsWith("resource")) continue;
 				// and fire
 				stm.fireObject(objectsToFire[i]);
