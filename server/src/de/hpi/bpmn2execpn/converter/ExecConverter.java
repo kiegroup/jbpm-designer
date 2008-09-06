@@ -42,6 +42,7 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Edge;
+import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
@@ -105,6 +106,28 @@ public class ExecConverter extends Converter {
 			name = e.getName();
 			
 		return addLabeledTransition(net, "option"+e.getId(), e, 0, name);
+	}
+	
+	@Override
+	/* Executable BPMN diagrams shouldn't have a place at the end, because finished
+	 * cases shouldn't leave some tokens in the net
+	 * TODO: this override just copies the code, but don't add a place in the case, if
+	 * there is no subprocess place endP => top processes don't have a endP yet... Is
+	 * there any nicer solution? Perhaps through a configuration flag?
+	 *  */
+	protected void handleEndEvent(PetriNet net, EndEvent event,	ConversionContext c) {
+		Container process = event.getProcess();
+		if (process == null) {
+			process = event.getParent();
+		}
+
+		Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel());
+		handleMessageFlow(net, event, t, t, c);
+		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(event)), t);
+		Place p = c.getSubprocessPlaces(process).endP;
+		addFlowRelationship(net, t, p);
+		if (c.ancestorHasExcpH)
+			handleExceptions(net, event, t, c);
 	}
 
 	// TODO this is a dirty hack...
