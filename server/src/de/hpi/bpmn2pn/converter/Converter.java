@@ -417,7 +417,7 @@ public abstract class Converter {
 				|| gateway.getIncomingEdges().size() == 1) {
 			for (Edge e : gateway.getOutgoingEdges()) {
 				// Here the edge is saved, because each edge represents an option for the user.
-				Transition t2 = addSilentTransition(net, "option"+e.getId(), e, 0);
+				Transition t2 = addXOROptionTransition(net, e);
 				addFlowRelationship(net, p, t2);
 				addFlowRelationship(net, t2, c.map.get(e));
 			}
@@ -621,5 +621,10 @@ public abstract class Converter {
 			newLabel = id;
 		}
 		return newLabel;
+	}
+	
+	/* Mapping XOR Splits creates a transition for each outgoing edge */
+	protected Transition addXOROptionTransition(PetriNet net, Edge e){
+		return addSilentTransition(net, "option"+e.getId(), e, 0);
 	}
 }

@@ -97,6 +97,15 @@ public class ExecConverter extends Converter {
 	protected void createStartPlaces(PetriNet net, ConversionContext c) {
 		// do nothing...: we want start transitions instead of start places
 	}
+	
+	@Override
+	protected Transition addXOROptionTransition(PetriNet net, Edge e) {
+		String name = e.getId();
+		if(e.getName() != null && !e.getName().isEmpty())
+			name = e.getName();
+			
+		return addLabeledTransition(net, "option"+e.getId(), e, 0, name);
+	}
 
 	// TODO this is a dirty hack...
 	@Override

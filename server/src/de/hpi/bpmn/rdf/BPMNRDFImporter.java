@@ -760,6 +760,21 @@ public class BPMNRDFImporter {
 	protected void addSequenceFlow(Node node, ImportContext c) {
 		SequenceFlow flow = factory.createSequenceFlow();
 		c.diagram.getEdges().add(flow);
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+				
+				if (attribute.equals("name")) {
+					String name = getContent(n);
+					if (name != null)
+						flow.setName(name);
+				}
+			}
+		}
 		setConnections(flow, node, c);
 	}
 
