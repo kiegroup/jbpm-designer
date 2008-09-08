@@ -10,5 +10,6 @@
 	</defs>
 	<g id="edge">
 	    <path d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-dasharray="3, 4" marker-end="url(#end)" />
+		<text id="name" x="0" y="0" oryx:edgePosition="midTop"/>
 	</g>
 </svg>

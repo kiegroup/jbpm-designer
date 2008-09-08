@@ -65,6 +65,8 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		this.oldX;
 		this.oldY;
 		
+		this.isVisible = true;
+		
 		this._text;
 		this._verticalAlign;
 		this._horizontalAlign;
@@ -170,65 +172,68 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	 */
 	update: function() {
 		if(this._isChanged || this.x !== this.oldX || this.y !== this.oldY) {
-		//if(true) {
-		 	this._isChanged = false;	
-			
-			this.node.setAttributeNS(null, 'x', this.x);
-			this.node.setAttributeNS(null, 'y', this.y);
-			
-			//this.node.setAttributeNS(null, 'font-size', this._fontSize);
-			//this.node.setAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align', this._horizontalAlign + " " + this._verticalAlign);
-			
-			//set horizontal alignment
-			switch (this._horizontalAlign) {
-				case 'left':
-					this.node.setAttributeNS(null, 'text-anchor', 'start');
-					break;
-				case 'center':
-					this.node.setAttributeNS(null, 'text-anchor', 'middle');
-					break;
-				case 'right':
-					this.node.setAttributeNS(null, 'text-anchor', 'end');
-					break;
-			}
+			if (this.isVisible) {
+				this._isChanged = false;
 				
-			this.oldX = this.x;
-			this.oldY = this.y;
-			
-			//set rotation
-			if(this._rotate) {
-				if(this._rotationPoint)
-					this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this._rotationPoint.x + ' ' + this._rotationPoint.y + ')' );
-				else
-					this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this.x + ' ' + this.y + ')' );	
-			}
-			
-			var textLines = this._text.split("\n");
-			while(textLines.last() == "")
-				textLines.remove(textLines.last());
+				this.node.setAttributeNS(null, 'x', this.x);
+				this.node.setAttributeNS(null, 'y', this.y);
 				
-			this.node.textContent = "";
-
-			if(this.node.ownerDocument) {
-				textLines.each((function(textLine, index) {
-					var tspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-					tspan.textContent = textLine;
-					tspan.setAttributeNS(null, 'x', this.invisibleRenderPoint);
-					tspan.setAttributeNS(null, 'y', this.invisibleRenderPoint);
-
-					//append tspan to text node
-					this.node.appendChild(tspan);
-				}).bind(this));
+				//this.node.setAttributeNS(null, 'font-size', this._fontSize);
+				//this.node.setAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align', this._horizontalAlign + " " + this._verticalAlign);
 				
-				//Work around for Mozilla bug 293581
-				if(this.isVisible) {
-					this.node.setAttributeNS(null, 'visibility', 'hidden');
+				//set horizontal alignment
+				switch (this._horizontalAlign) {
+					case 'left':
+						this.node.setAttributeNS(null, 'text-anchor', 'start');
+						break;
+					case 'center':
+						this.node.setAttributeNS(null, 'text-anchor', 'middle');
+						break;
+					case 'right':
+						this.node.setAttributeNS(null, 'text-anchor', 'end');
+						break;
 				}
-
-				if(this.fitToElemId)
-					window.setTimeout(this._checkFittingToReferencedElem.bind(this), 0);
-				else
-					window.setTimeout(this._positionText.bind(this), 0);
+				
+				this.oldX = this.x;
+				this.oldY = this.y;
+				
+				//set rotation
+				if (this._rotate) {
+					if (this._rotationPoint) 
+						this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this._rotationPoint.x + ' ' + this._rotationPoint.y + ')');
+					else 
+						this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this.x + ' ' + this.y + ')');
+				}
+				
+				var textLines = this._text.split("\n");
+				while (textLines.last() == "") 
+					textLines.remove(textLines.last());
+				
+				this.node.textContent = "";
+				
+				if (this.node.ownerDocument) {
+					textLines.each((function(textLine, index){
+						var tspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
+						tspan.textContent = textLine;
+						tspan.setAttributeNS(null, 'x', this.invisibleRenderPoint);
+						tspan.setAttributeNS(null, 'y', this.invisibleRenderPoint);
+						
+						//append tspan to text node
+						this.node.appendChild(tspan);
+					}).bind(this));
+					
+					//Work around for Mozilla bug 293581
+					if (this.isVisible) {
+						this.node.setAttributeNS(null, 'visibility', 'hidden');
+					}
+					
+					if (this.fitToElemId) 
+						window.setTimeout(this._checkFittingToReferencedElem.bind(this), 0);
+					else 
+						window.setTimeout(this._positionText.bind(this), 0);
+				}
+			} else {
+				this.node.textContent = "";
 			}
 		}
 	},
@@ -455,11 +460,17 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	},
 	
 	hide: function() {
-		
+		if(this.isVisible) {
+			this.isVisible = false;
+			this._isChanged = true;
+		}
 	},
 	
 	show: function() {
-		
+		if(!this.isVisible) {
+			this.isVisible = true;
+			this._isChanged = true;
+		}
 	},
 	
 	toString: function() { return "Label " + this.id }

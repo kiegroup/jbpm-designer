@@ -10008,7 +10008,8 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"length":""
+					"length":"",
+					"refToView":"condition"
 				},
 				{
 					"id":"quantity",
@@ -10086,7 +10087,8 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"length":""
+					"length":"",
+					"refToView":"name"
 				},
 				{
 					"id":"source",
@@ -10175,7 +10177,8 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"length":""
+					"length":"",
+					"refToView":"name"
 				},
 				{
 					"id":"source",
@@ -10262,7 +10265,8 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"length":""
+					"length":"",
+					"refToView":"name"
 				},
 				{
 					"id":"source",
@@ -10349,7 +10353,8 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"length":""
+					"length":"",
+					"refToView":"name"
 				},
 				{
 					"id":"source",
