@@ -102,7 +102,7 @@ public class ExecConverter extends Converter {
 	@Override
 	protected Transition addXOROptionTransition(PetriNet net, Edge e) {
 		String name = e.getId();
-		if(e.getName() != null && !e.getName().isEmpty())
+		if(e.getName() != null && e.getName().length() > 0)
 			name = e.getName();
 			
 		return addLabeledTransition(net, "option"+e.getId(), e, 0, name);
