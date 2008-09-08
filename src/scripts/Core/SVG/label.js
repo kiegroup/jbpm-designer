@@ -437,11 +437,20 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			case 0:
 				return this._rotate;
 			case 1:
-				this._rotate = arguments[0];
-				this._rotationPoint = undefined;
+				if (this._rotate != arguments[0]) {
+					this._rotate = arguments[0];
+					this._rotationPoint = undefined;
+					this._isChanged = true;
+				}
 			case 2:
-				this._rotate = arguments[0];
-				this._rotationPoint = arguments[1];
+				if(this._rotate != arguments[0] ||
+				   this._rotationPoint.x != arguments[1].x ||
+				   this._rotationPoint.y != arguments[1].y) {
+					this._rotate = arguments[0];
+					this._rotationPoint = arguments[1];
+					this._isChanged = true;
+				}
+				
 		}
 	},
 	
