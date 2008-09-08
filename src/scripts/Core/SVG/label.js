@@ -58,6 +58,8 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		
 		this.fitToElemId;
 		
+		this.edgePosition;
+		
 		this.x;
 		this.y;
 		this.oldX;
@@ -67,6 +69,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		this._verticalAlign;
 		this._horizontalAlign;
 		this._rotate;
+		this._rotationPoint;
 		
 		this.anchors = [];
 		
@@ -108,6 +111,12 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			}).bind(this));
 		}
 		
+		//set edge position (only in case the label belongs to an edge)
+		this.edgePosition = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'edgePosition');
+		if(this.edgePosition) {
+			this.edgePosition = this.edgePosition.toLowerCase();
+		}
+		
 		//set rotation
 		var rotateValue = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'rotate');
 		if(rotateValue) {
@@ -121,7 +130,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		}
 		
 		//anchors
-		var anchorAttr = this.node.getAttributeNS(NAMESPACE_ORYX, "anchors");
+		var anchorAttr = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, "anchors");
 		if(anchorAttr) {
 			anchorAttr = anchorAttr.replace("/,/g", " ");
 			this.anchors = anchorAttr.split(" ");
@@ -131,17 +140,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		//if no alignment defined, set default alignment
 		if(!this._verticalAlign) { this._verticalAlign = 'bottom'; }
 		if(!this._horizontalAlign) { this._horizontalAlign = 'left'; }
-		
-		//set line height
-/*		var fsValue = this.node.getAttributeNS(null, 'font-size');
-		this._fontSize = parseFloat(fsValue);
-		if(!this._fontSize) {
-			this._fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
-			this.node.setAttributeNS(null, 'font-size', this._fontSize);
-		}
-*/		
-		//TODO temporary deactivate events
-		//this.node.setAttributeNS(null, 'pointer-events', 'none');
 
 		var xValue = this.node.getAttributeNS(null, 'x');
 		if(xValue) {
@@ -161,19 +159,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		
 		//set initial text
 		this.text(this.node.textContent);
-		
-		//workaround for firefox on mac bug that avoids rendering text fill
-		/*if(navigator.platform.indexOf("Mac") > -1) {
-			this.node.setAttributeNS(null, 'stroke', 'black');
-			this.node.setAttributeNS(null, 'stroke-width', '0.5px');
-			this.node.setAttributeNS(null, 'font-family', 'Skia');
-			this.node.setAttributeNS(null, 'letter-spacing', '2px');
-		} else {
-			this.node.setAttributeNS(null, 'stroke', 'none');
-			if (!this.node.getAttributeNS(null, 'font-family')) {
-				this.node.setAttributeNS(null, 'font-family', 'Verdana');
-			}
-		}*/
 	},
 	
 	changed: function() {
@@ -212,7 +197,10 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			
 			//set rotation
 			if(this._rotate) {
-				this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this.x + ' ' + this.y + ')' );	
+				if(this._rotationPoint)
+					this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this._rotationPoint.x + ' ' + this._rotationPoint.y + ')' );
+				else
+					this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this.x + ' ' + this.y + ')' );	
 			}
 			
 			var textLines = this._text.split("\n");
@@ -441,6 +429,19 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			default:
 				//TODO error
 				break;
+		}
+	},
+	
+	rotate: function() {
+		switch(arguments.length) {
+			case 0:
+				return this._rotate;
+			case 1:
+				this._rotate = arguments[0];
+				this._rotationPoint = undefined;
+			case 2:
+				this._rotate = arguments[0];
+				this._rotationPoint = arguments[1];
 		}
 	},
 	
