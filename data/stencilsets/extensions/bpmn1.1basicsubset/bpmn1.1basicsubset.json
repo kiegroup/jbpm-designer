@@ -1,7 +1,7 @@
 {
-	"title":"BPMN Basic Subset",
-	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnbasicsubset#",
-	"description":"A basic subset of BPMN containing only task, sequence flow, start event, end event, parallel gateway and data-based XOR.",
+	"title":"BPMN 1.1 Basic Subset",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#",
+	"description":"A basic subset of BPMN 1.1 containing only task, sequence flow, start event, end event, parallel gateway and data-based XOR.",
 	"extends":"http://b3mn.org/stencilset/bpmn1.1#",
 	"stencils":[],
 	"properties":[],
