@@ -87,9 +87,10 @@ public class StepThroughServlet extends HttpServlet {
 			for (int i = 0; i < objectsToFire.length; i++) {
 				// If necessary, delete all uninteresting changed objects
 				if(onlyChangedObjects) stm.clearChangedObjs();
-				// Check for proper string
-				// THERE IS NO GUARANTEE THAT THIS IS ALWAYS CORRECT!!!
-				if(!objectsToFire[i].startsWith("resource")) continue;
+				// Check for proper string: While initializing step through, there is 
+				// an post with empty fire header. This seems to result in 
+				// objectsToFire = [""] which cannot be fired.
+				if(objectsToFire[i].trim().equals("")) continue;
 				// and fire
 				stm.fireObject(objectsToFire[i]);
 			}
