@@ -11,10 +11,8 @@
     <target name='examples' depends='build'>
         
         <copy todir='build'>
-            <fileset file="editor.xhtml"/>
-            <fileset file="*.htm"/>
+            <fileset file="test/examples/*.xhtml"/>
             <fileset file="*.php"/>
-			<fileset file="*.xhtml"/>
         </copy>
         <copy todir='build/css'>
             <fileset dir='src/css'/>
@@ -150,7 +148,7 @@
             Copied images into oryx build destination
         </echo>
         <copy todir="build/i18n">
-			<fileset dir="etc/i18n"/>
+			<fileset dir="data/i18n"/>
 		</copy>
 		<echo>
             Copied language files into oryx build destination
@@ -184,7 +182,7 @@
             Compressing Oryx into build destination
         </echo>
         <concat destfile='build/oryx.js'>
-            <fileset file="etc/license"/>
+            <fileset file="license"/>
             <fileset file="${compress.temp}"/>
         </concat>
         
