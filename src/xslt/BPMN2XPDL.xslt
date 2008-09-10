@@ -78,6 +78,25 @@
 		</xpdl:Object>
 	</xsl:template>
 	
+	<!--  **************************** Template for determing containing lane recursively ****************** -->
+	<xsl:template name="getParentLane">
+		<xsl:param name="node" />
+		<xsl:variable name="parentRef" select="$node/a[@rel='raziel-parent']" />
+		<xsl:variable name="parent" select="/div[@class='processdata']/div[@id=concat('#',$parentRef)]" />
+		<xsl:choose>
+	    <xsl:when test="$parent/span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#Lane'">
+	      <xsl:value-of select="$parent/@id"/>
+	    </xsl:when>
+    <xsl:otherwise>
+        <xsl:call-template name="getParentLane">
+          <xsl:with-param name="node" select="$parent"/>
+        </xsl:call-template>
+      </xsl:variable>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+	
+	
 	<!--  **************************** Template for NodeGraphicsInfo element ****************** -->
 	<xsl:template name="nodeGraphicsInfos">
 		<xsl:param name="node" />
@@ -462,10 +481,15 @@
 					<xsl:for-each select="$Pools">
             <!-- <xsl:variable name="id" select="span[@class='oryx-id']" /> -->			
             <xsl:variable name="id" select="@id" />
-						<xpdl:Pool 
+						<!-- <xpdl:Pool 
 							Id="{$id}" 
 							Name="{span[@class='oryx-name']}"
 							Process="{span[@class='oryx-processRef']}"
+							BoundaryVisible="{span[@class='oryx-boundaryvisible']}"> -->
+						<xpdl:Pool 
+							Id="{$id}" 
+							Name="{span[@class='oryx-name']}"
+							Process="{concat($id,'_process')}"
 							BoundaryVisible="{span[@class='oryx-boundaryvisible']}">
 							<xsl:variable name="participantRef" select="span[@class='oryx-participantRef']" />
 							<xsl:if test="string-length(normalize-space($participantRef))>0">
@@ -609,8 +633,11 @@
 					<xsl:variable name="enableInstanceCompensation" select="span[@class='oryx-enableinstancecompensation']"/>
 					<xsl:variable name="queryLanguage" select="span[@class='oryx-querylanguage']"/>
 					<xsl:variable name="expressionLanguage" select="span[@class='oryx-expressionlanguage']"/>
-					<xpdl:WorkflowProcess 
+					<!-- <xpdl:WorkflowProcess 
 						Id="{span[@class='oryx-processRef']}"
+						Name="{span[@class='oryx-processName']}"> -->
+					<xpdl:WorkflowProcess 
+						Id="{concat(@id,'_process')}"
 						Name="{span[@class='oryx-processName']}">
 						<xsl:if test="string-length(normalize-space($suppressJoinFailure))>0">
 							<xsl:attribute name="SuppressJoinFailure">
