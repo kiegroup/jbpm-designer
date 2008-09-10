@@ -5,14 +5,11 @@
 	<classpathentry kind="lib" path="lib/batik-transcoder.jar"/>
 	<classpathentry kind="lib" path="lib/fop.jar"/>
 	<classpathentry kind="lib" path="lib/commons-configuration-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/js.jar"/>
 	<classpathentry kind="lib" path="lib/openid4java.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/oryxAtlas.jar"/>
 	<classpathentry kind="output" path="server/bin"/>
 </classpath>
