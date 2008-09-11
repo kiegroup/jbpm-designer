@@ -22,6 +22,18 @@
         </echo>
         
     </target>
+	
+	 <target name='copy-license'>
+        
+        <copy todir='build'>
+            <fileset file="LICENSE"/>
+            <fileset file="LIBRARIES"/>
+        </copy>
+        <echo>
+            Copied license file into build destination
+        </echo>
+        
+    </target>
     
     <target name="build-plugins">
         
@@ -163,7 +175,7 @@
         </exec>
     </target>
         
-    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file" />
+    <target name="build" depends="copy-license, build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file" />
     
     <target name='compress'>
         
@@ -251,7 +263,9 @@
             </fileset>
             
             <classes dir="build/classes"/>
-            
+			
+			<metainf file="build/LICENSE"/>
+            <metainf file="build/LIBRARIES"/>
         </war>
         
           
