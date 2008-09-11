@@ -30,15 +30,17 @@ commons-httpclient-3.0.jar		Apache 2.0						included in jar file
 commons-io-1.4.jar				Apache 2.0						included in jar file
 commons-lang-2.3.jar			Apache 2.0						included in jar file
 commons-logging-1.1.1.jar		Apache 2.0						included in jar file
-custom_rhino.jar				?								-
+custom_rhino.jar				MPL 1.1							licenses/LICENSE.custom_rhino.jar
+																licenses/LICENSE.custom_rhino.jar.MPL-1.1.html
 dom3-xml-apis.jar				W3C Notice and License			included in jar file
 								Own Public Domain License
 fop.jar							Apache 2.0						included in jar file
 js.jar							MPL 1.1 and GPL 2.0				licenses/LICENSE.js.txt
 openid4java.jar					?								-
 oryxAtlas.jar					NO LICENSE!!!					-
-pdf-transcoder.jar				Apache 2.0						-
-servlet-api.jar					?								-
+pdf-transcoder.jar				Apache 2.0						licenses/LICENSE.pdf-transcoder.txt
+																licenses/LICENSE.apache-2.0
+servlet-api.jar					?								-	(part of J2EE)
 xml-apis.ext.jar				Apache 2.0						included in jar file
 xmlgraphics-commons-1.1.jar		Apache 2.0						included in jar file
 
