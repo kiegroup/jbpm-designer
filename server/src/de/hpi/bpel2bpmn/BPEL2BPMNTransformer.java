@@ -162,7 +162,8 @@ public class BPEL2BPMNTransformer {
 		 * If the mapping of the domNode contains a subprocess, we use it as the new parent.
 		 */
 		for (de.hpi.bpmn.Node node : mappingContext.getMappingElements().get(domNode)) {
-			node.setParent(parent);
+			if (node.getParent() == null)
+				node.setParent(parent);
 			if (node instanceof SubProcess) {
 				nextContainer = (Container) node;
 			}
@@ -172,7 +173,19 @@ public class BPEL2BPMNTransformer {
 		 * Trigger setting of the containment recursively. 
 		 */
 		for (Node child = domNode.getFirstChild(); child != null; child = child.getNextSibling()) {
-			setContainmentRelations(child,nextContainer,mappingContext);
+			if (child.getNodeName().equalsIgnoreCase("faulthandlers") ||
+				child.getNodeName().equalsIgnoreCase("compensationhandler")) {
+				/*
+				 * The elements that result from a mapping of FC-handlers are 
+				 * not contained in the subprocess that corresponds to the BPEL scope.
+				 * Therefore we trigger the setContainmentRelations procedure with the
+				 * parent of the respective subprocess and not with the subprocess itself.
+				 */
+				setContainmentRelations(child,parent,mappingContext);
+			}
+			else {
+				setContainmentRelations(child,nextContainer,mappingContext);
+			}
 		}
 	}
 	
