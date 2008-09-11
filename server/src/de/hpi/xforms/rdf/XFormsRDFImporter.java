@@ -44,7 +44,6 @@ public class XFormsRDFImporter {
 	}
 	
 	public XForm loadXForm() {
-		
 		Node root = getRootNode(doc);
 		if (root == null)
 			return null;
@@ -57,10 +56,11 @@ public class XFormsRDFImporter {
 		c.parentRelationships = new HashMap<XFormsElement, String>();
 		c.bindings = new HashMap<XFormsElement, Bind>();
 		c.form.setModel(factory.createModel());
+		c.form.setResourceId("#oryx-canvas123");
+		c.objects.put("#oryx-canvas123", c.form);
 		
 		if(root.hasChildNodes()) {
-			Node node = root.getFirstChild();
-			while ((node = node.getNextSibling()) != null) {
+			for (Node node = root.getFirstChild(); node != null; node = node.getNextSibling()) {
 				
 				if (node instanceof Text)
 					continue;
@@ -69,9 +69,7 @@ public class XFormsRDFImporter {
 				if (type == null)
 					continue;
 				
-				if (type.equals("XForm")) {
-					handleForm(node, c);
-				} else if (type.equals("Input")) {
+				if (type.equals("Input")) {
 					addInput(node, c);
 				} else if (type.equals("Secret")) {
 					addSecret(node, c);
@@ -103,7 +101,7 @@ public class XFormsRDFImporter {
 					addInsert(node, c);
 				} else if (type.equals("Reset")) {
 					addReset(node, c);
-				}                    
+				}          
 				
 			}
 		}
@@ -111,7 +109,6 @@ public class XFormsRDFImporter {
 		setupParentRelationships(c);
 		addModel(c);
 		setupBinds(c);
-		
 		return c.form;
 	}
 	
@@ -131,7 +128,7 @@ public class XFormsRDFImporter {
 						uiElement.setXPosition(Integer.parseInt(bounds[0]));
 						uiElement.setYPosition(Integer.parseInt(bounds[1]));
 						
-						// TODO: handle width and height of ui elements
+						// TODO: handle width and height of UI elements
 						
 					}
 				} else {
@@ -182,10 +179,11 @@ public class XFormsRDFImporter {
 			String parentResourceId = c.parentRelationships.get(element);
 			if(parentResourceId!=null) {
 				XFormsElement parent = c.objects.get(parentResourceId);
-				
+			
 				if(element instanceof XFormsUIElement) {
 					XFormsUIElement uiElement = (XFormsUIElement) element;
 					if(parent instanceof UIElementContainer) {
+						
 						uiElement.setParent((UIElementContainer) parent);
 					}
 				} else if(element instanceof AbstractAction) {
@@ -301,10 +299,6 @@ public class XFormsRDFImporter {
 			}
 		}
 		return nodesetContext;
-	}
-	
-	private void handleForm(Node node, ImportContext c) {
-		handleAttributes(node, c.form, c);
 	}
 	
 	private void addInput(Node node, ImportContext c) {

@@ -63,31 +63,32 @@ public class XFormsXHTMLExporter {
 	/**
 	 * Generate XForms+XHTML document with additional markup for a button to submit
 	 * data to the instance inspector 
-	 * @param resource destination URI for submitting instance data for debugging
+	 * @param instanceInspectorUrl destination URI for submitting instance data for inspection
 	 * @return XForms+XHTML document with markup for an instance inspector button
 	 */
-	public Document getXHTMLDocumentForInspection(String resource, String cssUrl) {
+	public Document getXHTMLDocumentForInspection(String instanceInspectorUrl, String cssUrl) {
 		if(doc==null) getXHTMLDocument(cssUrl);
 		
 		Element model = (Element) doc.getElementsByTagName("xf:model").item(0);
 		Element instance = (Element) model.appendChild(
 				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:submission"));
-		instance.setAttribute("id", "oryx_xforms_debug_submission");
-		instance.setAttribute("resource", resource);
+		instance.setAttribute("id", "oryx_xforms_instance_inspection_submission");
+		instance.setAttribute("resource", instanceInspectorUrl);
 		instance.setAttribute("method", "post");
 		instance.setAttribute("replace", "all");
 		
+		// add submit button
 		Element body = (Element) doc.getElementsByTagName("body").item(0);
 		Element rowDiv = (Element) body.appendChild(
-				doc.createElementNS("http://www.w3.org/2002/xforms", "div"));
+				doc.createElementNS("http://www.w3.org/1999/xhtml", "div"));
 		rowDiv.setAttribute("class", "form_row");
 		Element submit = (Element) rowDiv.appendChild(
 				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:submit"));
-		submit.setAttribute("id", "oryx_xforms_debug_submit");
-		submit.setAttribute("submission", "oryx_xforms_debug_submission");
+		submit.setAttribute("id", "oryx_xforms_instance_inspection_submit");
+		submit.setAttribute("submission", "oryx_xforms_instance_inspection_submission");
 		Element label = (Element) submit.appendChild(
 				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:label"));
-		label.appendChild(doc.createCDATASection("DEBUG"));
+		label.appendChild(doc.createCDATASection("SHOW INSTANCE DATA"));
 		
 		return doc;
 	}
