@@ -1,37 +1,26 @@
+
 package org.oryxeditor.server;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-
-import de.iaas.bpel.BPELFactory;
-import de.iaas.bpel.models.BPELDiagram;
-import de.iaas.bpel.models.DiagramObject;
-import de.iaas.bpel.models.Process;
-import de.iaas.bpel.rdf.BPELRDFImporter;
 
 
 /**
  * Copyright (c) 2008 
- * 
- * Zhen Peng
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,91 +41,91 @@ import de.iaas.bpel.rdf.BPELRDFImporter;
  * SOFTWARE.
  */
 public class BPELExporter extends HttpServlet {
-	private static final long serialVersionUID = -8374877061121257562L;
+
+	private static final long serialVersionUID = 316274845723034029L;
 	
-	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
-		try {
-			res.setContentType("text/bpel+xml");
-			
-			String rdf = req.getParameter("data");
-
-			DocumentBuilder builder;
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			builder = factory.newDocumentBuilder();
-			Document sourceDocument = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-			Document bpelDoc = builder.newDocument();
-			System.out.println("**********************");
-			System.out.print(sourceDocument);
-		//	processBPEL(sourceDocument, bpelDoc);
-			
-		//	OutputFormat format = new OutputFormat(bpelDoc);
-
-		//	StringWriter stringOut = new StringWriter();
-		//	XMLSerializer serial2 = new XMLSerializer(stringOut, format);
-		//	serial2.asDOMSerializer();
-
-		//	serial2.serialize(bpelDoc.getDocumentElement());
-		//	res.getWriter().print(stringOut.toString());
-			res.getWriter().print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + sourceDocument.toString());
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-	}
-
-	protected void processBPEL(Document sourceDocument, Document bpelDoc) {
-		BPELRDFImporter importer = new BPELRDFImporter(sourceDocument);
-		BPELDiagram diagram = (BPELDiagram) importer.loadBPEL();
-		diagram.identifyProcesses();
-		// we have already limited that, each diagram contains just one bpel process
-		Process process = diagram.getProcess();		
-		Element root = (Element) bpelDoc.appendChild(bpelDoc.createElement("process"));
-		parsingElement(root,(DiagramObject)process);
-	}
+//	private static Configuration config = null;
 	
+    /**
+     * The POST request.
+     */
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
+    	
+    	// BPEL2eRDF XSLT source
+    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
+    	final File RDF2BPELxsltFile = new File(xsltFilename);
+    	final Source bpel2eRDFxsltSource = new StreamSource(RDF2BPELxsltFile);	
+    	
+    	// Transformer Factory
+    	final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-	protected void parsingElement(Element xmlElement, DiagramObject element){
-		parsingProperties (xmlElement, element);
-	}
+    	// Get the rdf source
+    	final Source rdfSource;
+    	String rdf = req.getParameter("data");
+    	rdfSource = new StreamSource(rdf);
+  
+    	// Get the result string
+    	String resultString = null;
+    	try {
+    		Transformer transformer = transformerFactory.newTransformer(bpel2eRDFxsltSource);
+    		StringWriter writer = new StringWriter();
+    		transformer.transform(rdfSource, new StreamResult(writer));
+    		resultString = writer.toString();
+    	} catch (Exception e){
+    		handleException(res, e); 
+    		return;
+    	}
 
-	protected void parsingProperties (Element xmlElement, DiagramObject element){
-		
+    	if (resultString != null){
+    		try {
+    		       printResponse (res, resultString);
+    		       return;
+    		} catch (Exception e){
+    		       handleException(res, e); 
+    		}
+    	}
+    }
+    
+    
+    
+   private void printResponse(HttpServletResponse res, String text){
+    	if (res != null){
+ 
+        	// Get the PrintWriter
+        	res.setContentType("text/plain");
+        	
+        	PrintWriter out = null;
+        	try {
+        	    out = res.getWriter();
+        	} catch (IOException e) {
+        	    e.printStackTrace();
+        	}
+        	
+    		out.print(text);
+    	}
+    }
+    
+    
+    private void printError(HttpServletResponse res, String err){
+    	if (res != null){
+ 
+        	// Get the PrintWriter
+        	res.setContentType("text/html");
+        	
+        	PrintWriter out = null;
+        	try {
+        	    out = res.getWriter();
+        	} catch (IOException e) {
+        	    e.printStackTrace();
+        	}
+        	
+    		out.print("{success:false, content:'"+err+"'}");
+    	}
+    }
+    
+	private void handleException(HttpServletResponse res, Exception e) {
+		e.printStackTrace();
+		printError(res, e.getLocalizedMessage());
 	}
-	
-	protected String getStencilSet(Document doc) {
-		Node node = doc.getDocumentElement();
-		if (node == null || !node.getNodeName().equals("rdf:RDF"))
-			return null;
-		
-		node = node.getFirstChild();
-		while (node != null) {
-			 String about = getAttributeValue(node, "rdf:about");
-			 if (about != null && about.contains("canvas")) break;
-			 node = node.getNextSibling();
-		}
-		String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
-		if (type != null)
-			return type.substring(type.lastIndexOf('/')+1);
-		
-		return null;
-	}
-
-	private String getAttributeValue(Node node, String attribute) {
-		Node item = node.getAttributes().getNamedItem(attribute);
-		if (item != null)
-			return item.getNodeValue();
-		else
-			return null;
-	}
-
-	private Node getChild(Node n, String name) {
-		if (n == null)
-			return null;
-		for (Node node=n.getFirstChild(); node != null; node=node.getNextSibling())
-			if (node.getNodeName().indexOf(name) >= 0) 
-				return node;
-		return null;
-	}
+    
 }

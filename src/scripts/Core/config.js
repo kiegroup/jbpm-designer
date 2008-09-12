@@ -14,8 +14,8 @@ ORYX.CONFIG = {
 	PDF_EXPORT_URL:				"/oryx/pdf",
 	PNML_EXPORT_URL:			"/oryx/pnml",
 	SIMPLE_PNML_EXPORT_URL:		"/oryx/simplepnmlexporter",
-	DESYNCHRONIZABILITY_URL:		"/oryx/desynchronizability",
-	SYNTAXCHECKER_URL:		"/oryx/syntaxchecker",
+	DESYNCHRONIZABILITY_URL:	"/oryx/desynchronizability",
+	SYNTAXCHECKER_URL:			"/oryx/syntaxchecker",
 	AUTO_LAYOUTER_URL:			"/oryx/layouter",
 	SS_EXTENSIONS_FOLDER:		"/oryx/stencilsets/extensions/",
 	SS_EXTENSIONS_CONFIG:		"/oryx/stencilsets/extensions/extensions.json",	
@@ -23,6 +23,7 @@ ORYX.CONFIG = {
 	STEP_THROUGH:				"/oryx/stepthrough",
 	STEP_THROUGH_CHECKER:		"/oryx/stepthroughchecker",
 	XFORMS_EXPORT_URL:			"/oryx/xforms",
+	BPEL_EXPORT_URL:			"/oryx/bpelexporter",
 	
 	/* Namespaces */
 	NAMESPACE_ORYX:				"http://www.b3mn.org/oryx",

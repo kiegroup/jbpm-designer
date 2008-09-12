@@ -89,8 +89,9 @@
 		-->
 				
 		<!-- plugin for BPEL import and export --> 
-		<plugin source="bpel.js" name="ORYX.Plugins.BpelGenerator">
+		<plugin source="bpelSupport.js" name="ORYX.Plugins.BPELSupport">
 			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
+			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>
 		</plugin>
 		
 
