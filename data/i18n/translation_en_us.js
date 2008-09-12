@@ -101,11 +101,23 @@ ORYX.I18N.Arrangement.acDesc = "Center";
 ORYX.I18N.Arrangement.ar = "Alignment Right";
 ORYX.I18N.Arrangement.arDesc = "Right";
 
-if(!ORYX.I18N.BpelGenerator) ORYX.I18N.BpelGenerator = {};
+if(!ORYX.I18N.BPELSupport) ORYX.I18N.BPELSupport = {};
 
-ORYX.I18N.BpelGenerator.group = "BPEL";
-ORYX.I18N.BpelGenerator.name = "Export BPEL";
-ORYX.I18N.BpelGenerator.desc = "Export BPEL to XML file";
+ORYX.I18N.BPELSupport.group = "BPEL";
+ORYX.I18N.BPELSupport.exp = "Export BPEL";
+ORYX.I18N.BPELSupport.expDesc = "Exporr diagram to BPEL";
+ORYX.I18N.BPELSupport.imp = "Import BPEL";
+ORYX.I18N.BPELSupport.impDesc = "Import a BPEL file";
+ORYX.I18N.BPELSupport.selectFile = "Select a BPEL file to import";
+ORYX.I18N.BPELSupport.file = "file";
+ORYX.I18N.BPELSupport.impPanel = "Import BPEL file";
+ORYX.I18N.BPELSupport.impBtn = "Import";
+ORYX.I18N.BPELSupport.content = "content";
+ORYX.I18N.BPELSupport.close = "Close";
+ORYX.I18N.BPELSupport.error = "Error";
+ORYX.I18N.BPELSupport.progressImp = "Import...";
+ORYX.I18N.BPELSupport.progressExp = "Export...";
+ORYX.I18N.BPELSupport.impFailed = "An error while importing occurs! <br/>Please check error message: <br/><br/>";
 
 if(!ORYX.I18N.Bpel4ChorTransformation) ORYX.I18N.Bpel4ChorTransformation = {};
 

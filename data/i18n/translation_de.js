@@ -101,11 +101,23 @@ ORYX.I18N.Arrangement.acDesc = "Vertikal mittig ausrichten";
 ORYX.I18N.Arrangement.ar = "Rechts ausrichten";
 ORYX.I18N.Arrangement.arDesc = "Rechts ausrichten";
 
-if(!ORYX.I18N.BpelGenerator) ORYX.I18N.BpelGenerator = {};
+if(!ORYX.I18N.BPELSupport) ORYX.I18N.BPELSupport = {};
 
-ORYX.I18N.BpelGenerator.group = "BPEL";
-ORYX.I18N.BpelGenerator.name = "BPEL Export";
-ORYX.I18N.BpelGenerator.desc = "Als BPEL Datei exportieren";
+ORYX.I18N.BPELSupport.group = "BPEL";
+ORYX.I18N.BPELSupport.exp = "BPEL Export";
+ORYX.I18N.BPELSupport.expDesc = "Exportieren nach BPEL";
+ORYX.I18N.BPELSupport.imp = "BPEL Import";
+ORYX.I18N.BPELSupport.impDesc = "Importieren einer BPEL Datei";
+ORYX.I18N.BPELSupport.selectFile = "Wählen Sie eine BPEL Datei aus, die Sie importieren möchten.";
+ORYX.I18N.BPELSppport.file = "Datei";
+ORYX.I18N.BPELSupport.impPanel = "BPEL Datei importieren";
+ORYX.I18N.BPELSupport.impBtn = "Importieren";
+ORYX.I18N.BPELSupport.content = "Inhalt";
+ORYX.I18N.BPELSupport.close = "Schließen";
+ORYX.I18N.BPELSupport.error = "Fehler";
+ORYX.I18N.BPELSupport.progressImp = "Importiere...";
+ORYX.I18N.BPELSupport.progressExp = "Exportiere...";
+ORYX.I18N.BPELSupport.impFailed = "Während des Importierens ist ein Fehler aufgetreten. <br/>Fehlermeldung: <br/><br/>";
 
 if(!ORYX.I18N.Bpel4ChorTransformation) ORYX.I18N.Bpel4ChorTransformation = {};
 
