@@ -1,13 +1,8 @@
 package de.hpi.petrinet.stepthrough;
 
-import de.hpi.bpmn.DiagramObject;
-import de.hpi.petrinet.Transition;
+import de.hpi.highpetrinet.HighTransition;
 
-public interface STTransition extends Transition {
-	
-	DiagramObject getBPMNObj();
-	void setBPMNObj(DiagramObject obj);
-	
+public interface STTransition extends HighTransition {
 	AutoSwitchLevel getAutoSwitchLevel();
 	void setAutoSwitchLevel(AutoSwitchLevel level);
 	

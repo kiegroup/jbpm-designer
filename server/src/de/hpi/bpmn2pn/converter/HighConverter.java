@@ -1,26 +1,12 @@
 package de.hpi.bpmn2pn.converter;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.EndErrorEvent;
+import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.EndTerminateEvent;
@@ -28,91 +14,37 @@ import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
-import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.HighConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.highpetrinet.HighFlowRelationship;
+import de.hpi.highpetrinet.HighLabeledTransition;
 import de.hpi.highpetrinet.HighPetriNet;
 import de.hpi.highpetrinet.HighPetriNetFactory;
+import de.hpi.highpetrinet.HighSilentTransition;
+import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.PetriNetFactory;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.Transition;
-import de.hpi.petrinet.serialization.PetriNetPNMLExporter;
 
 public class HighConverter extends StandardConverter {
-
+	protected BPMNFactory factory;
+	
 	public HighConverter(BPMNDiagram diagram) {
 		super(diagram, new HighPetriNetFactory());
+		factory = new BPMNFactory();
 	}
 
 	public HighConverter(BPMNDiagram diagram, PetriNetFactory pnfactory) {
 		super(diagram, pnfactory);
-	}
-
-	public static void main(String[] args) {
-		BPMNDiagram diag = loadRDFDiagram("bpmn.rdf"); 
-		printBPMN(diag);
-		/*HighPetriNet net = new STConverter(diag).convert();
-		STMapper map = new STMapper(net);
-		List<DiagramObject> l = map.getFireableObjects();
-		map.clearChangedObjs();
-		map.fireObject(l.get(0).getResourceId());
-		l = map.getFireableObjects();
-		String s = map.getChangedObjsAsString();*/
+		factory = new BPMNFactory();
 	}
 	
 	@Override
 	public HighPetriNet convert() {
 		return (HighPetriNet)super.convert();
-	}
-	
-	public static BPMNDiagram loadRDFDiagram(String fileName) {
-		try{
-			RandomAccessFile file = new RandomAccessFile("C:\\Dokumente und Einstellungen\\Kai\\Eigene Dateien\\Downloads\\"+fileName, "r");
-			String rdf = "";
-			String zeile;
-			while ( (zeile = file.readLine()) != null){
-				rdf += zeile;
-			}
-			DocumentBuilder builder;
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
-			BPMNRDFImporter importer = new BPMNRDFImporter(document);
-			BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
-			return diagram;
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public static void printBPMN(BPMNDiagram diagram){
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document pnmlDoc = builder.newDocument();
-			PetriNet net = new STConverter(diagram).convert();
-			PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
-			exp.savePetriNet(pnmlDoc, net);
-			OutputFormat format = new OutputFormat(pnmlDoc);
-			StringWriter stringOut = new StringWriter();
-			XMLSerializer serial2 = new XMLSerializer(stringOut, format);
-			serial2.asDOMSerializer();
-			serial2.serialize(pnmlDoc.getDocumentElement());
-			new File("C:\\Dokumente und Einstellungen\\Kai\\Eigene Dateien\\Downloads\\high.pnml").delete();
-			new RandomAccessFile("C:\\Dokumente und Einstellungen\\Kai\\Eigene Dateien\\Downloads\\high.pnml", "rw").writeBytes(stringOut.toString());
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	protected HighFlowRelationship addResetFlowRelationship(PetriNet net,
@@ -123,6 +55,20 @@ public class HighConverter extends StandardConverter {
 		}
 		rel.setType(HighFlowRelationship.ArcType.Reset);
 		return rel;
+	}
+	
+	@Override
+	protected SilentTransition addSilentTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel) {
+		HighSilentTransition t = (HighSilentTransition) addSimpleSilentTransition(net, id);
+		t.setBPMNObj(BPMNObj);
+		return t;
+	}
+	
+	@Override
+	protected LabeledTransition addLabeledTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel, String label) {
+		HighLabeledTransition t = (HighLabeledTransition) addSimpleLabeledTransition(net, id, label);
+		t.setBPMNObj(BPMNObj);
+		return t;
 	}
 	
 	// high Petri net has its own conversion context

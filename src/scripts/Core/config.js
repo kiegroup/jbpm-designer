@@ -16,6 +16,7 @@ ORYX.CONFIG = {
 	SIMPLE_PNML_EXPORT_URL:		"/oryx/simplepnmlexporter",
 	DESYNCHRONIZABILITY_URL:	"/oryx/desynchronizability",
 	SYNTAXCHECKER_URL:			"/oryx/syntaxchecker",
+	VALIDATOR_URL:			"/oryx/bpmnvalidator",
 	AUTO_LAYOUTER_URL:			"/oryx/layouter",
 	SS_EXTENSIONS_FOLDER:		"/oryx/stencilsets/extensions/",
 	SS_EXTENSIONS_CONFIG:		"/oryx/stencilsets/extensions/extensions.json",	

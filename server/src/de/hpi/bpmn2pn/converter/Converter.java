@@ -625,6 +625,6 @@ public abstract class Converter {
 	
 	/* Mapping XOR Splits creates a transition for each outgoing edge */
 	protected Transition addXOROptionTransition(PetriNet net, Edge e){
-		return addSilentTransition(net, "option"+e.getId(), e, 0);
+		return addSilentTransition(net, "option"+e.getId(), e.getSource(), 0);
 	}
 }

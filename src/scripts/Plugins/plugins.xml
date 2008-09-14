@@ -81,6 +81,10 @@
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
+		<!--<plugin source="bpmnValidator.js" name="ORYX.Plugins.BPMNValidator">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+		</plugin>-->
 
 		<!--
 		<plugin source="bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
