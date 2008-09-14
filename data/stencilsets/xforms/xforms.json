@@ -619,6 +619,200 @@
 		},
 		{
 			"type": "node",
+			"id":"Upload",
+			"title":"Upload",
+			"groups":["Controls"],
+			"description":"Renders an upload control",
+			"view":"node.upload.svg",
+			"icon":"new_upload.png",
+			"roles": [
+				"core_form_controls"
+			],
+			"layout":function(shape) {	
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = - label.bounds.height();
+						lr.y = 0;
+						ul.x = 0;
+						lr.x = label.bounds.width();;
+						label.bounds.set(ul, lr);
+					});
+				}
+ 			},
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"ref",
+					"type":"String",
+					"title":"ref",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"readonly",
+					"type":"String",
+					"title":"readonly",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"relevant",
+					"type":"String",
+					"title":"relevant",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"mediatype",
+					"type":"String",
+					"title":"mediatype",
+					"value":"",
+					"description":"A space-separated list of suggested media types",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				}		
+			]
+		},
+		{
+			"type": "node",
+			"id":"Range",
+			"title":"Range",
+			"groups":["Controls"],
+			"description":"Renders a control that allows selection from a sequential range of values",
+			"view":"node.range.svg",
+			"icon":"new_range.png",
+			"roles": [
+				"core_form_controls"
+			],
+			"layout":function(shape) {	
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = - label.bounds.height();
+						lr.y = 0;
+						ul.x = 0;
+						lr.x = label.bounds.width();;
+						label.bounds.set(ul, lr);
+					});
+				}
+ 			},
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"ref",
+					"type":"String",
+					"title":"ref",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"readonly",
+					"type":"String",
+					"title":"readonly",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"relevant",
+					"type":"String",
+					"title":"relevant",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"start",
+					"type":"String",
+					"title":"start",
+					"value":"",
+					"description":"The lexical starting bound for the range",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"end",
+					"type":"String",
+					"title":"end",
+					"value":"",
+					"description":"The lexical ending bound for the range",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"step",
+					"type":"String",
+					"title":"step",
+					"value":"",
+					"description":"Value to use for incrementing or decrementing",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				}			
+			]
+		},
+		{
+			"type": "node",
 			"id":"Trigger",
 			"title":"Trigger",
 			"groups":["Controls"],

@@ -77,6 +77,10 @@ public class XFormsRDFImporter {
 					addTextarea(node, c);
 				} else if (type.equals("Output")) {
 					addOutput(node, c);
+				} else if (type.equals("Upload")) {
+					addUpload(node, c);
+				} else if (type.equals("Range")) {
+					addRange(node, c);
 				} else if (type.equals("Trigger")) {
 					addTrigger(node, c);
 				} else if (type.equals("Submit")) {
@@ -327,6 +331,20 @@ public class XFormsRDFImporter {
 		output.setResourceId(getResourceId(node));
 		c.objects.put(output.getResourceId(), output);
 		handleAttributes(node, output, c);
+	}
+	
+	private void addUpload(Node node, ImportContext c) {
+		Upload upload = factory.createUpload();
+		upload.setResourceId(getResourceId(node));
+		c.objects.put(upload.getResourceId(), upload);
+		handleAttributes(node, upload, c);
+	}
+	
+	private void addRange(Node node, ImportContext c) {
+		Range range = factory.createRange();
+		range.setResourceId(getResourceId(node));
+		c.objects.put(range.getResourceId(), range);
+		handleAttributes(node, range, c);
 	}
 	
 	private void addTrigger(Node node, ImportContext c) {

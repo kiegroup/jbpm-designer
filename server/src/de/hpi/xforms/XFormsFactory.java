@@ -39,6 +39,14 @@ public class XFormsFactory {
 		return new Output();
 	}
 	
+	public Upload createUpload() {
+		return new Upload();
+	}
+	
+	public Range createRange() {
+		return new Range();
+	}
+	
 	public Trigger createTrigger() {
 		return new Trigger();
 	}
