@@ -99,6 +99,18 @@ public class XFormsFactory {
 		return new SetIndex();
 	}
 	
+	public Toggle createToggle() {
+		return new Toggle();
+	}
+	
+	public SetFocus createSetFocus() {
+		return new SetFocus();
+	}
+	
+	public Dispatch createDispatch() {
+		return new Dispatch();
+	}
+	
 	public Reset createReset() {
 		return new Reset();
 	}

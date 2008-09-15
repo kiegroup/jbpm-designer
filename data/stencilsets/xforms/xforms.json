@@ -24,7 +24,7 @@
 					"type":"String",
 					"title":"id",
 					"value":"",
-					"description":"This is a unique Id that distinguishes the Form from other Forms.",
+					"description":"This is a unique Id that distinguishes the form from other forms.",
 					"readonly":false,
 					"optional":false,
 					"length":"50"
@@ -34,7 +34,7 @@
 					"type":"String",
 					"title":"name",
 					"value":"",
-					"description":"Name is an attribute that is text description of the Form.",
+					"description":"Name is an attribute that is text description of the form.",
 					"readonly":false,
 					"optional":false,
 					"length":"50",
@@ -46,7 +46,7 @@
 					"type":"String",
 					"title":"version",
 					"value":"",
-					"description":"This defines the Version number of the Form Model.",
+					"description":"This defines the version number of the form model.",
 					"readonly":false,
 					"optional":true,
 					"length":"50"
@@ -58,7 +58,7 @@
 			"id":"Input",
 			"title":"Input",
 			"groups":["Controls"],
-			"description":"An Input Control.",
+			"description":"An input control.",
 			"view":"node.input.svg",
 			"icon":"new_input.png",
 			"roles": [
@@ -221,7 +221,7 @@
 			"id":"Secret",
 			"title":"Secret",
 			"groups":["Controls"],
-			"description":"A Secret Input Control.",
+			"description":"A secret input control.",
 			"view":"node.secret.svg",
 			"icon":"new_secret.png",
 			"roles": [
@@ -384,7 +384,7 @@
 			"id":"Textarea",
 			"title":"Textarea",
 			"groups":["Controls"],
-			"description":"A Textarea Control.",
+			"description":"A textarea control.",
 			"view":"node.textarea.svg",
 			"icon":"new_textarea.png",
 			"roles": [
@@ -1006,7 +1006,7 @@
 			"id":"Group",
 			"title":"Group",
 			"groups":["Containers"],
-			"description":"A Container for defining a hierarchy of form controls.",
+			"description":"A container for defining a hierarchy of form controls.",
 			"view":"node.group.svg",
 			"icon":"new_group.png",
 			"roles": [
@@ -1137,7 +1137,7 @@
 			"id":"Label",
 			"title":"Label",
 			"groups":["Support Elements"],
-			"description":"A Label for form controls.",
+			"description":"A label for form controls.",
 			"view":"node.label.svg",
 			"icon":"new_label.png",
 			"roles": [
@@ -1802,6 +1802,255 @@
 					"optional":false,
 					"refToView":"",
 					"length":"50"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Toggle",
+			"title":"Toggle",
+			"groups":["Actions"],
+			"description":"This action selects one possible case from an exclusive list of alternatives in a switch.",
+			"view":"node.toggle.svg",
+			"icon":"new_toggle.png",
+			"roles": [
+				"action"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"if",
+					"type":"String",
+					"title":"if",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"while",
+					"type":"String",
+					"title":"while",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"ev:event",
+					"type":"String",
+					"title":"event",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"case",
+					"type":"String",
+					"title":"case",
+					"value":"/",
+					"description":"Optional reference to the case element to select.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"SetFocus",
+			"title":"Set Focus",
+			"groups":["Actions"],
+			"description":"This action dispatches an xforms-focus event to the element identified by attribute control.",
+			"view":"node.setfocus.svg",
+			"icon":"new_setfocus.png",
+			"roles": [
+				"action"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"if",
+					"type":"String",
+					"title":"if",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"while",
+					"type":"String",
+					"title":"while",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"ev:event",
+					"type":"String",
+					"title":"event",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"control",
+					"type":"String",
+					"title":"control",
+					"value":"/",
+					"description":"Optional reference to a form control.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Dispatch",
+			"title":"Dispatch",
+			"groups":["Actions"],
+			"description":"This action dispatches an XML Event to a specific target element.",
+			"view":"node.dispatch.svg",
+			"icon":"new_dispatch.png",
+			"roles": [
+				"action"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"if",
+					"type":"String",
+					"title":"if",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"while",
+					"type":"String",
+					"title":"while",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"ev:event",
+					"type":"String",
+					"title":"event",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"name",
+					"value":"",
+					"description":"Optional name of the event to dispatch.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"target",
+					"value":"/",
+					"description":"Optional reference to the event target.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"delay",
+					"type":"Integer",
+					"title":"delay",
+					"value":0,
+					"description":"Optional attribute that indicates the minimum number of milliseconds to delay dispatching of the event to the target.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"min":0
+				},
+				{
+					"id":"bubbles",
+					"type":"Boolean",
+					"title":"bubbles",
+					"value":true,
+					"description":"Optional boolean indicating if this event bubbles.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"cancelable",
+					"type":"Boolean",
+					"title":"cancelable",
+					"value":true,
+					"description":"Optional boolean indicating if this event is cancelable.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
 				}
 			]
 		},

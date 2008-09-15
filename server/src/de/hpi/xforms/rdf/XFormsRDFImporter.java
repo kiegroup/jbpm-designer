@@ -107,6 +107,12 @@ public class XFormsRDFImporter {
 					addDelete(node, c);
 				} else if (type.equals("SetIndex")) {
 					addSetIndex(node, c);
+				} else if (type.equals("Toggle")) {
+					addToggle(node, c);
+				} else if (type.equals("SetFocus")) {
+					addSetFocus(node, c);
+				} else if (type.equals("Dispatch")) {
+					addDispatch(node, c);
 				} else if (type.equals("Reset")) {
 					addReset(node, c);
 				}          
@@ -444,6 +450,27 @@ public class XFormsRDFImporter {
 		setIndex.setResourceId(getResourceId(node));
 		c.objects.put(setIndex.getResourceId(), setIndex);
 		handleAttributes(node, setIndex, c);
+	}
+	
+	private void addToggle(Node node, ImportContext c) {
+		Toggle toggle = factory.createToggle();
+		toggle.setResourceId(getResourceId(node));
+		c.objects.put(toggle.getResourceId(), toggle);
+		handleAttributes(node, toggle, c);
+	}
+	
+	private void addSetFocus(Node node, ImportContext c) {
+		SetFocus setFocus = factory.createSetFocus();
+		setFocus.setResourceId(getResourceId(node));
+		c.objects.put(setFocus.getResourceId(), setFocus);
+		handleAttributes(node, setFocus, c);
+	}
+	
+	private void addDispatch(Node node, ImportContext c) {
+		Dispatch dispatch = factory.createDispatch();
+		dispatch.setResourceId(getResourceId(node));
+		c.objects.put(dispatch.getResourceId(), dispatch);
+		handleAttributes(node, dispatch, c);
 	}
 	
 	private void addReset(Node node, ImportContext c) {
