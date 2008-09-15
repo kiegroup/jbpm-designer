@@ -1,19 +1,17 @@
 package de.hpi.xforms;
 
-public class Insert extends AbstractAction {
+public class Delete extends AbstractAction {
 
-	public Insert() {
+	public Delete() {
 		super();
 		attributes.put("context", null);
 		attributes.put("nodeset", null);
 		attributes.put("at", null);
-		attributes.put("position", null);
-		attributes.put("origin", null);
 	}
 	
 	@Override
 	public String getTagName() {
-		return "insert";
+		return "delete";
 	}
 
 }

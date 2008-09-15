@@ -1598,6 +1598,30 @@
 					"length":"50"
 				},
 				{
+					"id":"position",
+					"type":"Choice",
+					"title":"position",
+					"value":"After",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"Before",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"After",
+							"refToView":""
+						}
+					]
+				},
+				{
 					"id":"origin",
 					"type":"String",
 					"title":"origin",
@@ -1605,6 +1629,177 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
+					"refToView":"",
+					"length":"50"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Delete",
+			"title":"Delete",
+			"groups":["Actions"],
+			"description":"This action deletes one or more nodes from instance data.",
+			"view":"node.delete.svg",
+			"icon":"new_delete.png",
+			"roles": [
+				"action"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"if",
+					"type":"String",
+					"title":"if",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"while",
+					"type":"String",
+					"title":"while",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"ev:event",
+					"type":"String",
+					"title":"event",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"context",
+					"type":"String",
+					"title":"context",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"nodeset",
+					"type":"String",
+					"title":"nodeset",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"at",
+					"type":"String",
+					"title":"at",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"SetIndex",
+			"title":"Set Index",
+			"groups":["Actions"],
+			"description":"This action marks a specific item as current in a repeating sequence.",
+			"view":"node.setindex.svg",
+			"icon":"new_setindex.png",
+			"roles": [
+				"action"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"if",
+					"type":"String",
+					"title":"if",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"while",
+					"type":"String",
+					"title":"while",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"100",
+					"wrapLines":true
+				},
+				{
+					"id":"ev:event",
+					"type":"String",
+					"title":"event",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"repeat",
+					"type":"String",
+					"title":"repeat",
+					"value":"/",
+					"description":"Required reference to a repeating element.",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"index",
+					"type":"String",
+					"title":"index",
+					"value":"/",
+					"description":"Required XPath expression that evaluates to a 1-based offset into the sequence.",
+					"readonly":false,
+					"optional":false,
 					"refToView":"",
 					"length":"50"
 				}

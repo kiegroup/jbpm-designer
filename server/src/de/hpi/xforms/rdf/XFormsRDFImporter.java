@@ -103,6 +103,10 @@ public class XFormsRDFImporter {
 					addSetValue(node, c);
 				} else if (type.equals("Insert")) {
 					addInsert(node, c);
+				} else if (type.equals("Delete")) {
+					addDelete(node, c);
+				} else if (type.equals("SetIndex")) {
+					addSetIndex(node, c);
 				} else if (type.equals("Reset")) {
 					addReset(node, c);
 				}          
@@ -426,6 +430,20 @@ public class XFormsRDFImporter {
 		insert.setResourceId(getResourceId(node));
 		c.objects.put(insert.getResourceId(), insert);
 		handleAttributes(node, insert, c);
+	}
+	
+	private void addDelete(Node node, ImportContext c) {
+		Delete delete = factory.createDelete();
+		delete.setResourceId(getResourceId(node));
+		c.objects.put(delete.getResourceId(), delete);
+		handleAttributes(node, delete, c);
+	}
+	
+	private void addSetIndex(Node node, ImportContext c) {
+		SetIndex setIndex = factory.createSetIndex();
+		setIndex.setResourceId(getResourceId(node));
+		c.objects.put(setIndex.getResourceId(), setIndex);
+		handleAttributes(node, setIndex, c);
 	}
 	
 	private void addReset(Node node, ImportContext c) {

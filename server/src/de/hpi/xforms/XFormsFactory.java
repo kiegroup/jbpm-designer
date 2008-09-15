@@ -91,6 +91,14 @@ public class XFormsFactory {
 		return new Insert();
 	}
 	
+	public Delete createDelete() {
+		return new Delete();
+	}
+	
+	public SetIndex createSetIndex() {
+		return new SetIndex();
+	}
+	
 	public Reset createReset() {
 		return new Reset();
 	}
