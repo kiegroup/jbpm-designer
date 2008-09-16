@@ -141,6 +141,20 @@
 		<servlet-name>SyntaxChecker</servlet-name>
 		<url-pattern>/syntaxchecker</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<display-name>
+			Oryx BPMN Validator
+		</display-name>
+		<servlet-name>BPMNValidator</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.BPMNValidatorServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPMNValidator</servlet-name>
+		<url-pattern>/bpmnvalidator</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>DownloadServlet</servlet-name>
