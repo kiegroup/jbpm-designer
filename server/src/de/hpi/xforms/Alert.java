@@ -8,6 +8,10 @@ package de.hpi.xforms;
 public class Alert extends UICommon implements PCDataContainer {
 	
 	protected String content;
+	
+	public Alert() {
+		super();
+	}
 
 	public String getContent() {
 		return content;

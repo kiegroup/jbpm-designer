@@ -9,6 +9,10 @@ public class Help extends UICommon implements PCDataContainer {
 	
 	protected String content;
 
+	public Help() {
+		super();
+	}
+
 	public String getContent() {
 		return content;
 	}

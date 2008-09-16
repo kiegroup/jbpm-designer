@@ -1,15 +1,15 @@
 package de.hpi.xforms;
 
-public class Reset extends AbstractAction {
+public class Rebuild extends AbstractAction {
 
-	public Reset() {
+	public Rebuild() {
 		super();
 		attributes.put("model", null);
 	}
 	
 	@Override
 	public String getTagName() {
-		return "reset";
+		return "rebuild";
 	}
 
 }

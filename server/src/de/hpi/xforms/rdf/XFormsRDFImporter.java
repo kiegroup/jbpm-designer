@@ -113,8 +113,22 @@ public class XFormsRDFImporter {
 					addSetFocus(node, c);
 				} else if (type.equals("Dispatch")) {
 					addDispatch(node, c);
+				} else if (type.equals("Rebuild")) {
+					addRebuild(node, c);
+				} else if (type.equals("Recalculate")) {
+					addRecalculate(node, c);
+				} else if (type.equals("Revalidate")) {
+					addRevalidate(node, c);
+				} else if (type.equals("Refresh")) {
+					addRefresh(node, c);
 				} else if (type.equals("Reset")) {
 					addReset(node, c);
+				} else if (type.equals("Load")) {
+					addLoad(node, c);
+				} else if (type.equals("Send")) {
+					addSend(node, c);
+				} else if (type.equals("Message")) {
+					addMessage(node, c);
 				}          
 				
 			}
@@ -473,11 +487,61 @@ public class XFormsRDFImporter {
 		handleAttributes(node, dispatch, c);
 	}
 	
+	private void addRebuild(Node node, ImportContext c) {
+		Rebuild rebuild = factory.createRebuild();
+		rebuild.setResourceId(getResourceId(node));
+		c.objects.put(rebuild.getResourceId(), rebuild);
+		handleAttributes(node, rebuild, c);
+	}
+	
+	private void addRecalculate(Node node, ImportContext c) {
+		Recalculate recalculate = factory.createRecalculate();
+		recalculate.setResourceId(getResourceId(node));
+		c.objects.put(recalculate.getResourceId(), recalculate);
+		handleAttributes(node, recalculate, c);
+	}
+	
+	private void addRevalidate(Node node, ImportContext c) {
+		Revalidate revalidate = factory.createRevalidate();
+		revalidate.setResourceId(getResourceId(node));
+		c.objects.put(revalidate.getResourceId(), revalidate);
+		handleAttributes(node, revalidate, c);
+	}
+	
+	private void addRefresh(Node node, ImportContext c) {
+		Refresh refresh = factory.createRefresh();
+		refresh.setResourceId(getResourceId(node));
+		c.objects.put(refresh.getResourceId(), refresh);
+		handleAttributes(node, refresh, c);
+	}
+	
 	private void addReset(Node node, ImportContext c) {
 		Reset reset = factory.createReset();
 		reset.setResourceId(getResourceId(node));
 		c.objects.put(reset.getResourceId(), reset);
 		handleAttributes(node, reset, c);
+	}
+	
+	private void addLoad(Node node, ImportContext c) {
+		Load load = factory.createLoad();
+		load.setResourceId(getResourceId(node));
+		c.objects.put(load.getResourceId(), load);
+		handleAttributes(node, load, c);
+	}
+	
+	private void addSend(Node node, ImportContext c) {
+		Send send = factory.createSend();
+		send.setResourceId(getResourceId(node));
+		c.objects.put(send.getResourceId(), send);
+		handleAttributes(node, send, c);
+	}
+	
+	private void addMessage(Node node, ImportContext c) {
+		Message message = factory.createMessage();
+		message.setResourceId(getResourceId(node));
+		c.objects.put(message.getResourceId(), message);
+		handleAttributes(node, message, c);
+		message.setContent(getContent(getChild(node, "message")));
 	}
 	
 	private String getContent(Node node) {

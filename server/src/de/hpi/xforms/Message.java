@@ -5,12 +5,14 @@ package de.hpi.xforms;
  * @author jan-felix.schwarz@student.hpi.uni-potsdam.de
  *
  */
-public class Hint extends UICommon implements PCDataContainer {
+public class Message extends AbstractAction implements PCDataContainer {
 	
 	protected String content;
 
-	public Hint() {
+	public Message() {
 		super();
+		attributes.put("ref", null);
+		attributes.put("level", null);
 	}
 
 	public String getContent() {
@@ -22,7 +24,7 @@ public class Hint extends UICommon implements PCDataContainer {
 	}
 	
 	public String getTagName() {
-		return "hint";
+		return "message";
 	}
 
 }

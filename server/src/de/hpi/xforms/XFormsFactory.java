@@ -111,8 +111,36 @@ public class XFormsFactory {
 		return new Dispatch();
 	}
 	
+	public Rebuild createRebuild() {
+		return new Rebuild();
+	}
+	
+	public Recalculate createRecalculate() {
+		return new Recalculate();
+	}
+	
+	public Revalidate createRevalidate() {
+		return new Revalidate();
+	}
+	
+	public Refresh createRefresh() {
+		return new Refresh();
+	}
+	
 	public Reset createReset() {
 		return new Reset();
+	}
+	
+	public Load createLoad() {
+		return new Load();
+	}
+	
+	public Send createSend() {
+		return new Send();
+	}
+	
+	public Message createMessage() {
+		return new Message();
 	}
 
 }
