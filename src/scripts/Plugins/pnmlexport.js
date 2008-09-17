@@ -116,7 +116,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         try {
             var rdf = xsltProcessor.transformToDocument(parsedDOM);
             var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
-            serialized_rdf = /* "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +*/ serialized_rdf;
+            //serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
             
             var diagramTitle = gup('resource');
             

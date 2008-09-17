@@ -38,7 +38,7 @@ ORYX.Plugins.BPMNValidator = Clazz.extend({
             'name': "BPMN Validator",
             'functionality': this.showOverlay.bind(this),
             'group': "Verification",
-            'icon': ORYX.PATH + "images/error_go.png",
+            'icon': ORYX.PATH + "images/checker_validation.png",
             'description': "Validate",
             'index': 1,
             'minShape': 0,

@@ -15,7 +15,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.oryxeditor.server.StencilSetUtil;
 import org.w3c.dom.Document;
 
-import de.hpi.PTnet.PTNet;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;

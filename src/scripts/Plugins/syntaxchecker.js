@@ -38,7 +38,7 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
             'name': ORYX.I18N.SyntaxChecker.name,
             'functionality': this.showOverlay.bind(this),
             'group': ORYX.I18N.SyntaxChecker.group,
-            'icon': ORYX.PATH + "images/error_go.png",
+            'icon': ORYX.PATH + "images/checker_syntax.png",
             'description': ORYX.I18N.SyntaxChecker.desc,
             'index': 0,
             'minShape': 0,
