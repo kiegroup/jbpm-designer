@@ -1,9 +1,8 @@
 package de.hpi.petrinet.stepthrough;
 
 import de.hpi.highpetrinet.HighSilentTransition;
-import de.hpi.highpetrinet.HighTransition;
 
-public class STSilentTransition extends HighSilentTransition implements HighTransition {
+public class STSilentTransition extends HighSilentTransition implements STTransition {
 
 //	private boolean isOnlyTransitionForObj = true;
 	private AutoSwitchLevel level;

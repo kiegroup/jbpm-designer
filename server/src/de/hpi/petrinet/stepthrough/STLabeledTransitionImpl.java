@@ -1,9 +1,8 @@
 package de.hpi.petrinet.stepthrough;
 
 import de.hpi.highpetrinet.HighLabeledTransition;
-import de.hpi.highpetrinet.HighTransition;
 
-public class STLabeledTransitionImpl extends HighLabeledTransition implements HighTransition {
+public class STLabeledTransitionImpl extends HighLabeledTransition implements STTransition {
 
 	private AutoSwitchLevel level;
 	private int timesExecuted = 0;
