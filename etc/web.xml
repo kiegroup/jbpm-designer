@@ -135,16 +135,6 @@
 		<servlet-name>EPCUpload</servlet-name>
 		<url-pattern>/epc-upload</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-            <display-name>Oryx AML Support Servlet</display-name>
-            <servlet-name>AMLSupport</servlet-name>
-            <servlet-class>org.oryxeditor.server.AMLSupport</servlet-class>
-    </servlet>
-    <servlet-mapping>
-            <servlet-name>AMLSupport</servlet-name>
-            <url-pattern>/amlsupport</url-pattern>
-    </servlet-mapping>
 
 	<servlet>
 		<display-name>Step Through</display-name>
