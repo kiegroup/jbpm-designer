@@ -25,6 +25,7 @@ ORYX.CONFIG = {
 	STEP_THROUGH_CHECKER:		"/oryx/stepthroughchecker",
 	XFORMS_EXPORT_URL:			"/oryx/xforms",
 	BPEL_EXPORT_URL:			"/oryx/bpelexporter",
+	TREEGRAPH_SUPPORT:			"/oryx/treegraphsupport",
 	
 	/* Namespaces */
 	NAMESPACE_ORYX:				"http://www.b3mn.org/oryx",

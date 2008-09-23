@@ -36,6 +36,11 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>	
 		</plugin>
 
+		<plugin source="treeGraphSupport.js" name="ORYX.Plugins.TreeGraphSupport">
+			<requires namespace="http://b3mn.org/stencilset/treeGraph#"/>	
+		</plugin>
+		
+		
 		<!-- following plugins don't require Ext -->
 		<plugin source="arrangement.js" name="ORYX.Plugins.Arrangement">
 			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>

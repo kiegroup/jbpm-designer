@@ -310,3 +310,10 @@ if(!ORYX.I18N.XFormsExport) ORYX.I18N.XFormsExport = {};
 ORYX.I18N.XFormsExport.group = "Export";
 ORYX.I18N.XFormsExport.name = "XForms Export";
 ORYX.I18N.XFormsExport.desc = "Export form to an XForms file";
+
+
+if(!ORYX.I18N.TreeGraphSupport) ORYX.I18N.TreeGraphSupport = {};
+
+ORYX.I18N.TreeGraphSupport.syntaxCheckName = "Syntax Check";
+ORYX.I18N.TreeGraphSupport.group = "Tree Graph Support";
+ORYX.I18N.TreeGraphSupport.syntaxCheckDesc = "Check the syntax of an tree graph structure";
