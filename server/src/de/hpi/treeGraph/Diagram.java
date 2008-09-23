@@ -13,11 +13,13 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 public class Diagram {
+	protected boolean isChecked = false;
+	
 	protected Set<Shape> shapes = new HashSet<Shape>();
 	
-	protected Set<Shape> shapesWithTwoParents = new HashSet<Shape>();
+	protected Set<Shape> shapesWithErrors = new HashSet<Shape>();
 	
-	protected Set<Node> rootNodes = new HashSet<Node>();
+	protected Node rootNode = null;
 		
 	protected List<Element> getElementsByIdAndTag(Element rootElement, 
 			String tagName, String attributeName, String attributeValue) {
@@ -40,11 +42,7 @@ public class Diagram {
 	}
 	
 	protected Node getRootNode() {
-		if (this.rootNodes.size() == 1) {
-			return this.rootNodes.iterator().next();
-		} else {
-			return null;
-		}
+		return this.rootNode; 
 	}
 	
 	
@@ -86,7 +84,8 @@ public class Diagram {
 		}
 	}
 	
-	public void deserializeFromeRdf(String eRdf)  throws Exception {
+	public boolean deserializeFromeRdf(String eRdf)  throws Exception {
+		
 		Document doc = DocumentBuilderFactory
 			.newInstance()
 			.newDocumentBuilder()
@@ -130,22 +129,43 @@ public class Diagram {
 					if (shape.getIngoingShape() == null){
 						s.attachShape(shape);
 					} else {
-						this.shapesWithTwoParents.add(shape);
+						this.shapesWithErrors.add(shape);
 					}
 
 				}
 			}
 		}
+		return this.checkSyntax();
 	}
 	
 	public boolean checkSyntax() {
-
+		this.rootNode = null;
+		
+		// Find double root nodes
 		for (Node node : this.getAllNodes()) {
 			if (node.getIngoingShape() == null) {
-				this.rootNodes.add(node);
+				if (this.rootNode == null) {
+					this.rootNode = node;
+				} else {
+					this.shapesWithErrors.add(node);
+					this.shapesWithErrors.add(rootNode);
+				}			
 			}
 		}
-		if (this.rootNodes.size() == 1 && this.shapesWithTwoParents.size() == 0) {
+		
+		// Find edges that aren't connected to exactly two nodes
+		for (Edge edge : this.getAllEdges()) {
+			if ((edge.getIngoingShape() != null) && (edge.getOutgoingShapes().size() == 1)) {
+				if ((edge.getIngoingShape() instanceof Node) && 
+						(edge.getOutgoingShapes().get(0) instanceof Node)) {
+					continue;
+				}
+			}
+			this.shapesWithErrors.add(edge);
+		}
+		
+		if (this.rootNode != null && this.shapesWithErrors.size() == 0) {
+			this.isChecked = true;
 			return true;
 		} else {
 			return false;

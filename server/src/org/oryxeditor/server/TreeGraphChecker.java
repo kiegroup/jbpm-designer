@@ -13,14 +13,13 @@ public class TreeGraphChecker extends HttpServlet {
     	try {
     	Diagram diagram = new Diagram();
     	String eRdf = req.getParameter("data");
-    	eRdf.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><div>");
-    	eRdf.concat("</div>");
-    	diagram.deserializeFromeRdf(eRdf);
+    	String valideRdf = eRdf.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><div>").concat("</div>");
+    	diagram.deserializeFromeRdf(valideRdf);
     	if (diagram.checkSyntax()) {
     		res.getWriter().print("No Errors");
     	} else {
     		res.getWriter().print("Errors");
-    	}
+    	} 
     	} catch (Exception e) {
     		try {
     			res.getWriter().print("Exception: "+e.getMessage());
