@@ -252,6 +252,19 @@
 		<url-pattern>/xforms</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<display-name>TreeGraphChecker</display-name>
+		<servlet-name>TreeGraphChecker</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.TreeGraphChecker
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TreeGraphChecker</servlet-name>
+		<url-pattern>/treegraphsupport</url-pattern>
+	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>/server</welcome-file>
 	</welcome-file-list>
