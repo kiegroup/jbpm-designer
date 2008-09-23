@@ -85,6 +85,8 @@ public class XFormsRDFImporter {
 					addTrigger(node, c);
 				} else if (type.equals("Submit")) {
 					addSubmit(node, c);
+				} else if (type.equals("Select")) {
+					addSelect(node, c);
 				} else if (type.equals("Group")) {
 					addGroup(node, c);
 				} else if (type.equals("Repeat")) {
@@ -97,6 +99,8 @@ public class XFormsRDFImporter {
 					addHint(node, c);
 				} else if (type.equals("Alert")) {
 					addAlert(node, c);
+				} else if (type.equals("Item")) {
+					addItem(node, c);
 				} else if (type.equals("Action")) {
 					addAction(node, c);
 				} else if (type.equals("SetValue")) {
@@ -158,6 +162,10 @@ public class XFormsRDFImporter {
 						
 						// TODO: handle width and height of UI elements
 						
+					} else if(element instanceof ListUICommon) {
+						ListUICommon listUICommon = (ListUICommon) element;
+						String[] bounds = getContent(n).split(",");
+						listUICommon.setYPosition(Integer.parseInt(bounds[1]));
 					}
 				} else {
 					if(element.getAttributes().containsKey(attribute))
@@ -167,8 +175,9 @@ public class XFormsRDFImporter {
 				}
 			}
 		}
-		if(element.getAttributes().get("id")==null)
-			element.getAttributes().put("id", element.getResourceId().substring(1));
+		
+		//if((element.getAttributes().get("id")==null) && (element.getResourceId()!=null))
+		//	element.getAttributes().put("id", element.getResourceId().substring(1));
 	}
 	
 	private void handleModelItemProperty(String attribute, String value, XFormsElement element, ImportContext c) {
@@ -199,6 +208,7 @@ public class XFormsRDFImporter {
 				c.form.getModel().getBinds().add(bind);
 			}
 			
+			//element.getAttributes().put("ref", null);
 		}
 	}
 	
@@ -207,12 +217,16 @@ public class XFormsRDFImporter {
 			String parentResourceId = c.parentRelationships.get(element);
 			if(parentResourceId!=null) {
 				XFormsElement parent = c.objects.get(parentResourceId);
-			
+				
 				if(element instanceof XFormsUIElement) {
-					XFormsUIElement uiElement = (XFormsUIElement) element;
 					if(parent instanceof UIElementContainer) {
-						
+						XFormsUIElement uiElement = (XFormsUIElement) element;
 						uiElement.setParent((UIElementContainer) parent);
+					}
+				} else if(element instanceof ListUICommon) {
+					if(parent instanceof ListUICommonContainer) {
+						ListUICommon listUICommon = (ListUICommon) element;
+						listUICommon.setParent((ListUICommonContainer) parent);
 					}
 				} else if(element instanceof AbstractAction) {
 					if(parent instanceof ActionContainer) {
@@ -385,6 +399,13 @@ public class XFormsRDFImporter {
 		handleAttributes(node, submit, c);
 	}
 	
+	private void addSelect(Node node, ImportContext c) {
+		Select select = factory.createSelect();
+		select.setResourceId(getResourceId(node));
+		c.objects.put(select.getResourceId(), select);
+		handleAttributes(node, select, c);
+	}
+	
 	private void addGroup(Node node, ImportContext c) {
 		Group group = factory.createGroup();
 		group.setResourceId(getResourceId(node));
@@ -429,6 +450,17 @@ public class XFormsRDFImporter {
 		c.objects.put(alert.getResourceId(), alert);
 		handleAttributes(node, alert, c);
 		alert.setContent(getContent(getChild(node, "message")));
+	}
+	
+	private void addItem(Node node, ImportContext c) {
+		Item item = factory.createItem();
+		item.setResourceId(getResourceId(node));
+		c.objects.put(item.getResourceId(), item);
+		handleAttributes(node, item, c);
+		Value value = factory.createValue();
+		handleAttributes(node, value, c); 		// side effect: assigns Item's id to Value object...
+		value.getAttributes().put("id", null); 	// ...so reset Value's id attribute
+		item.setValue(value);
 	}
 	
 	private void addAction(Node node, ImportContext c) {

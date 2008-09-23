@@ -13,6 +13,7 @@ public class Input extends FormControl {
 		attributes.put("incremental", null);
 	}
 	
+	@Override
 	public String getTagName() {
 		return "input";
 	}

@@ -1,33 +1,26 @@
 package de.hpi.xforms;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class Group extends XFormsUIElement implements UIElementContainer, ActionContainer, UICommonContainer, LabelContainer {
-	
-	protected List<XFormsUIElement> childElements;
+/**
+ * 
+ * @author jan-felix.schwarz@student.hpi.uni-potsdam.de
+ *
+ */
+public class Item extends ListUICommon implements UICommonContainer, LabelContainer {
 	
 	protected Help help;
 	protected Hint hint;
 	protected Alert alert;
 	protected List<AbstractAction> actions;
-	
 	protected Label label;
+	protected Value value;
 
-	public Group() {
+	public Item() {
 		super();
-		attributes.put("ref", null);
-		attributes.put("bind", null);
 	}
-
-	public List<XFormsUIElement> getChildElements() {
-		if(childElements==null)
-			childElements = new ArrayList<XFormsUIElement>();
-		Collections.sort(childElements, new UIElementComparator());
-		return childElements;
-	}
-
+	
 	public Help getHelp() {
 		return help;
 	}
@@ -51,7 +44,7 @@ public class Group extends XFormsUIElement implements UIElementContainer, Action
 	public void setAlert(Alert alert) {
 		this.alert = alert;
 	}
-
+	
 	public List<AbstractAction> getActions() {
 		if(actions==null)
 			actions = new ArrayList<AbstractAction>();
@@ -66,9 +59,17 @@ public class Group extends XFormsUIElement implements UIElementContainer, Action
 		this.label = label;
 	}
 	
+	public Value getValue() {
+		return value;
+	}
+
+	public void setValue(Value value) {
+		this.value = value;
+	}
+	
 	@Override
 	public String getTagName() {
-		return "group";
+		return "item";
 	}
 
 }

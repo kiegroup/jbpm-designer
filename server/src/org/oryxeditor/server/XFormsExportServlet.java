@@ -68,7 +68,7 @@ public class XFormsExportServlet extends HttpServlet {
 			format.setPreserveSpace(true);
 			format.setMethod("text/xhtml");
 			
-			// TODO: newlines in serialize output
+			// TODO: newlines in serialize output (weird it doesn't work)
 			
 			XMLSerializer serial = new XMLSerializer(new BufferedWriter(res.getWriter()), format);
 			

@@ -28,7 +28,7 @@ public class XFormsXHTMLExporter {
 	}
 	
 	/**
-	 * Generate XForms+XHTML document to be deployed in BPMN execution engine
+	 * Generate XForms+XHTML document
 	 * @return XForms+XHTML document
 	 */
 	public Document getXHTMLDocument(String cssUrl) {
@@ -49,8 +49,8 @@ public class XFormsXHTMLExporter {
 			addBody(html);
 			
 			/* 
-			 * TODO: adjust submissions to submit instance data to following task
-			 * fitting execution engine's requirements 
+			 * TODO: (for integration in process execution environment) adjust submissions to submit 
+			 * instance data to following task fitting execution engine's requirements
 			 */
 			
 		} catch (ParserConfigurationException e) {
@@ -168,6 +168,12 @@ public class XFormsXHTMLExporter {
 		
 		if(xfElement instanceof LabelContainer) {
 			addElementsRecursive(newXmlElement, ((LabelContainer) xfElement).getLabel());
+		}
+		
+		if(xfElement instanceof ListUICommonContainer) {
+			for(ListUICommon xfChild : ((ListUICommonContainer) xfElement).getListUICommons()) {
+				addElementsRecursive(newXmlElement, xfChild);
+			}
 		}
 		
 		if(xfElement instanceof UIElementContainer) {

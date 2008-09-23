@@ -21,6 +21,7 @@ public class Alert extends UICommon implements PCDataContainer {
 		this.content = content;
 	}
 	
+	@Override
 	public String getTagName() {
 		return "alert";
 	}

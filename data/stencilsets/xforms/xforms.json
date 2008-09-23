@@ -26,7 +26,7 @@
 					"value":"",
 					"description":"This is a unique Id that distinguishes the form from other forms.",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"length":"50"
 				},
 				{
@@ -89,7 +89,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -252,7 +252,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -415,7 +415,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -578,7 +578,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -653,7 +653,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -739,7 +739,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -856,7 +856,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -951,7 +951,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1003,6 +1003,222 @@
 		},
 		{
 			"type": "node",
+			"id":"Select",
+			"title":"Select",
+			"groups":["Controls"],
+			"description":"Renders a multi select control",
+			"view":"node.select.svg",
+			"icon":"new_select.png",
+			"roles": [
+				"core_form_controls",
+				"item_container"
+			],
+			"layout":function(shape) {	
+				
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = - label.bounds.height() - 1;
+						lr.y = - 1;
+						ul.x = 0;
+						lr.x = label.bounds.width();
+						label.bounds.set(ul, lr);
+					});
+				}
+				
+				var items = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Item");
+				});
+				
+				if(items.length > 0) {
+				
+					items = items.sortBy(function(item) {
+						return item.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = 0;
+					items.each(function(item) {
+						var ul = item.bounds.upperLeft();
+						var lr = item.bounds.lowerRight();
+						ul.y = shapeHeight + 5;
+						lr.y = ul.y + item.bounds.height();
+						shapeHeight += item.bounds.height() + 5;
+						ul.x = 20;
+						lr.x = shapeWidth;
+						item.bounds.set(ul, lr);
+					});
+					
+					var upl = shape.bounds.upperLeft();
+					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight + 10);
+				}
+				
+ 			},
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"ref",
+					"type":"String",
+					"title":"ref",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"navindex",
+					"type":"Integer",
+					"title":"navindex",
+					"value":0,
+					"description":"Integer used to define the navigation sequence",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"min":"0"
+				},
+				{
+					"id":"accesskey",
+					"type":"String",
+					"title":"accesskey",
+					"value":"",
+					"description":"Shortcut for moving the input focus to this control",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"1"
+				},
+				{
+					"id":"type",
+					"type":"String",
+					"title":"type",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"readonly",
+					"type":"String",
+					"title":"readonly",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"required",
+					"type":"String",
+					"title":"required",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"relevant",
+					"type":"String",
+					"title":"relevant",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"calculate",
+					"type":"String",
+					"title":"calculate",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"constraint",
+					"type":"String",
+					"title":"constraint",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"selection",
+					"type":"Choice",
+					"title":"selection",
+					"value":"closed",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"closed",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"open",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"incremental",
+					"type":"Boolean",
+					"title":"incremental",
+					"value":true,
+					"description":"When true, this form control will generate additional xforms-value-changed events.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				}
+			]
+		},
+		{
+			"type": "node",
 			"id":"Group",
 			"title":"Group",
 			"groups":["Containers"],
@@ -1042,7 +1258,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1116,7 +1332,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1151,7 +1367,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1188,7 +1404,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1304,7 +1520,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1345,6 +1561,71 @@
 		},
 		{
 			"type": "node",
+			"id":"Item",
+			"title":"Item",
+			"groups":["Support Elements"],
+			"description":"An item for select controls.",
+			"view":"node.item.svg",
+			"icon":"new_item.png",
+			"roles": [
+				"item",
+				"labeled"
+			],
+			"layout":function(shape) {	
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = 2;
+						ul.x = 2;
+						lr.y = 2 + label.bounds.height();
+						lr.x = 2 + label.bounds.width();
+						label.bounds.set(ul, lr);
+					});
+				}
+ 			},
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"value",
+					"type":"String",
+					"title":"value",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"ref",
+					"type":"String",
+					"title":"ref",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				}
+			]
+		},
+		{
+			"type": "node",
 			"id":"Action",
 			"title":"Action",
 			"groups":["Actions"],
@@ -1355,6 +1636,32 @@
 				"actions_container",
 				"action"
 			],
+			"layout":function(shape) {		
+				var actions = shape.getChildNodes(false);
+
+				if(actions.length > 0) {
+					
+					actions = actions.sortBy(function(action) {
+						return action.bounds.upperLeft().y;
+					});
+					
+					var shapeHeight = 5;
+					actions.each(function(action) {
+						var ul = action.bounds.upperLeft();
+						var lr = action.bounds.lowerRight();
+						ul.y = shapeHeight;
+						lr.y = ul.y + action.bounds.height();
+						shapeHeight += action.bounds.height() + 5;
+						ul.x = 2;
+						lr.x = 2 + action.bounds.width();
+						action.bounds.set(ul, lr);
+					});
+					
+					var upl = shape.bounds.upperLeft();
+					var lor = shape.bounds.lowerRight();
+					shape.bounds.set(upl.x, upl.y, lor.x, upl.y + shapeHeight + 15);
+				}
+ 			},
 			"properties": [
 				{
 					"id":"id",
@@ -1363,7 +1670,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1400,33 +1707,7 @@
 					"refToView":"",
 					"length":"50"
 				}		
-			],
-			"layout":function(shape) {		
-				var actions = shape.getChildNodes(false);
-
-				if(actions.length > 0) {
-					
-					actions = actions.sortBy(function(action) {
-						return action.bounds.upperLeft().y;
-					});
-					
-					var shapeHeight = 5;
-					actions.each(function(action) {
-						var ul = action.bounds.upperLeft();
-						var lr = action.bounds.lowerRight();
-						ul.y = shapeHeight;
-						lr.y = ul.y + action.bounds.height();
-						shapeHeight += action.bounds.height() + 5;
-						ul.x = 2;
-						lr.x = 2 + action.bounds.width();
-						action.bounds.set(ul, lr);
-					});
-					
-					var upl = shape.bounds.upperLeft();
-					var lor = shape.bounds.lowerRight();
-					shape.bounds.set(upl.x, upl.y, lor.x, upl.y + shapeHeight + 15);
-				}
- 			}
+			]
 		},
 		{
 			"type": "node",
@@ -1447,7 +1728,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1527,7 +1808,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1653,7 +1934,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1744,7 +2025,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1824,7 +2105,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1893,7 +2174,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -1962,7 +2243,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2073,7 +2354,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2142,7 +2423,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2211,7 +2492,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2280,7 +2561,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2349,7 +2630,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2418,7 +2699,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2522,7 +2803,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2591,7 +2872,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"30"
 				},
@@ -2723,6 +3004,12 @@
 				"role":"actions_container",
 				"contains": [
 					"action"
+				]
+			},
+			{
+				"role":"item_container",
+				"contains": [
+					"item"
 				]
 			}
 		]

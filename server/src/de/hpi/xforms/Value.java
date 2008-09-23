@@ -5,14 +5,14 @@ package de.hpi.xforms;
  * @author jan-felix.schwarz@student.hpi.uni-potsdam.de
  *
  */
-public class Message extends AbstractAction implements PCDataContainer {
+public class Value extends XFormsElement implements PCDataContainer {
 	
 	protected String content;
 
-	public Message() {
+	public Value() {
 		super();
 		attributes.put("ref", null);
-		attributes.put("level", null);
+		attributes.put("value", null);
 	}
 
 	public String getContent() {
@@ -23,9 +23,8 @@ public class Message extends AbstractAction implements PCDataContainer {
 		this.content = content;
 	}
 	
-	@Override
 	public String getTagName() {
-		return "message";
+		return "value";
 	}
 
 }

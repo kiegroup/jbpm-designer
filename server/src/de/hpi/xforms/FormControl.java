@@ -14,7 +14,6 @@ public abstract class FormControl extends XFormsUIElement implements ActionConta
 	protected Hint hint;
 	protected Alert alert;
 	protected List<AbstractAction> actions;
-	
 	protected Label label;
 	
 	public FormControl() {

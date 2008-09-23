@@ -55,6 +55,10 @@ public class XFormsFactory {
 		return new Submit();
 	}
 	
+	public Select createSelect() {
+		return new Select();
+	}
+	
 	public Group createGroup() {
 		return new Group();
 	}
@@ -77,6 +81,18 @@ public class XFormsFactory {
 	
 	public Alert createAlert() {
 		return new Alert();
+	}
+	
+	public Item createItem() {
+		return new Item();
+	}
+	
+	public Value createValue() {
+		return new Value();
+	}
+	
+	public Choices createChoices() {
+		return new Choices();
 	}
 	
 	public Action createAction() {
