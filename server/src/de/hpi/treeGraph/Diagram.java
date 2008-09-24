@@ -24,7 +24,7 @@ public class Diagram {
 	protected List<Element> getElementsByIdAndTag(Element rootElement, 
 			String tagName, String attributeName, String attributeValue) {
 		List<Element> elements = new ArrayList<Element>();
-		
+		  
 		NodeList nodeList = rootElement.getElementsByTagName(tagName); 
 		
 		for (int i = 0; i < nodeList.getLength(); i++) {
@@ -41,11 +41,14 @@ public class Diagram {
 		return elements;
 	}
 	
-	protected Node getRootNode() {
+	public Node getRootNode() {
 		return this.rootNode; 
 	}
 	
-	
+	public Set<Shape> getShapesWithErrors() {
+		return shapesWithErrors;
+	}
+
 	protected Shape getShapeById(String id) {
 		for (Shape shape : this.shapes) {
 			if (shape.getId().equals(id)) {
@@ -85,14 +88,14 @@ public class Diagram {
 	}
 	
 	public boolean deserializeFromeRdf(String eRdf)  throws Exception {
-		
+		   
 		Document doc = DocumentBuilderFactory
 			.newInstance()
 			.newDocumentBuilder()
 			.parse(new StringBufferInputStream(eRdf));
 		
 		NodeList nodeList = doc.getElementsByTagName("div"); 
-		
+		 
 		Element oryxCanvas = this.getElementsByIdAndTag((Element)doc.getFirstChild(), 
 				"div", "class", "-oryx-canvas").get(0);
 		

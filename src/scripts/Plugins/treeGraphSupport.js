@@ -54,7 +54,7 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
 	/**
 	 * 
 	 */
-    syntaxCheck: function(){
+    syntaxCheck: function() {
         
          // Send the request to the server.
         new Ajax.Request(ORYX.CONFIG.TREEGRAPH_SUPPORT, {
@@ -64,12 +64,33 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
                 data: this.facade.getERDF()
             },
             onSuccess: function(request){
-            	Ext.Msg.show({
-				   title	: 'Oryx',
-				   msg		: request.responseText,
-				   icon		: Ext.MessageBox.INFO
-				});
-            },            
+            	var resp = request.responseText.evalJSON();
+
+				if (resp instanceof Array ) {
+					if (resp.length > 0) {
+					
+						// Get all Valid ResourceIDs and collect all shapes
+						resp.each(function( value ){ 
+						
+							var sh = this.facade.getCanvas().getChildShapeByResourceId( value );
+
+							if( sh ){
+								
+								this.highlightShape(sh);
+								
+							}
+						}.bind(this));
+					}
+				}
+	            Ext.Msg.show({
+	            	title	: 'Oryx',
+	            	msg		: request.responseText,
+	            	icon		: Ext.MessageBox.INFO
+	            });
+            }.bind(this),
+            	
+
+                        
 			onFailure: function(request){
             	Ext.Msg.show({
 				   title	: 'Oryx',
@@ -79,5 +100,32 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
             }
         });
 
-    }
+    },
+    
+	highlightShape: function(shape){
+		// Creates overlay for an enabled shape
+		// display is beeing ignored
+		if(!(shape instanceof ORYX.Core.Shape)) return;
+		
+		var attr;
+		if(shape instanceof ORYX.Core.Edge) {
+			attr = {stroke: "red"};
+		}
+		else {
+			attr = {fill: "red", stroke:"black", "stroke-width": 2};
+		}
+		
+		
+		this.facade.raiseEvent({
+				type: 			"overlay.hide",
+				id: 			"st." + shape.resourceId,
+		});
+											
+		this.facade.raiseEvent({
+				type: 			"overlay.show",
+				id: 			"st." + shape.resourceId,
+				shapes: 		[shape],
+				attributes: 	attr,
+			});
+	}
 });
