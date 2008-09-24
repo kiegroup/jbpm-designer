@@ -7229,19 +7229,11 @@
 				"maximumOccurrence":1,
 				"outgoingEdges": [
 					{
-						"role":"sequenceOrder",
-						"maximum":1
-					},
-					{
 						"role":"sequenceFlow",
 						"maximum":undefined
 					}
 				],
 				"incomingEdges": [
-					{
-						"role":"sequenceOrder",
-						"maximum":1
-					},
 					{
 						"role":"sequenceFlow",
 						"maximum":undefined
