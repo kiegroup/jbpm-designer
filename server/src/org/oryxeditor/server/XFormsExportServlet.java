@@ -22,8 +22,8 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.xforms.XForm;
-import de.hpi.xforms.export.XFormsXHTMLExporter;
 import de.hpi.xforms.rdf.XFormsRDFImporter;
+import de.hpi.xforms.serialization.XFormsXHTMLExporter;
 
 /**
  * 

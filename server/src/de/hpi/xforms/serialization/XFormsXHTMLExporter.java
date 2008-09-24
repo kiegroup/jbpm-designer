@@ -1,4 +1,4 @@
-package de.hpi.xforms.export;
+package de.hpi.xforms.serialization;
 
 import java.util.Map.Entry;
 
