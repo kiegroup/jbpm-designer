@@ -1049,13 +1049,13 @@
 						ul.y = shapeHeight + 5;
 						lr.y = ul.y + item.bounds.height();
 						shapeHeight += item.bounds.height() + 5;
-						ul.x = 20;
+						ul.x = 30;
 						lr.x = shapeWidth;
 						item.bounds.set(ul, lr);
 					});
 					
 					var upl = shape.bounds.upperLeft();
-					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight + 10);
+					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight + 5);
 				}
 				
  			},

@@ -66,12 +66,12 @@ public class XFormsExportServlet extends HttpServlet {
 			OutputFormat format = new OutputFormat(xhtmlDoc);
 			format.setIndenting(true);
 			format.setPreserveSpace(true);
+			format.setLineSeparator(System.getProperty("line.separator"));
 			format.setMethod("text/xhtml");
 			
 			// TODO: newlines in serialize output (weird it doesn't work)
 			
 			XMLSerializer serial = new XMLSerializer(new BufferedWriter(res.getWriter()), format);
-			
 			serial.asDOMSerializer();
 			serial.serialize(xhtmlDoc);
 			
