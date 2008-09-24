@@ -55,7 +55,12 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
 	 * 
 	 */
     syntaxCheck: function() {
-        
+		this.facade.raiseEvent({
+			type: 			"overlay.hide",
+			id: 			"treegraph",
+		});
+		
+		
          // Send the request to the server.
         new Ajax.Request(ORYX.CONFIG.TREEGRAPH_SUPPORT, {
             method: 'POST',
@@ -116,14 +121,11 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
 		}
 		
 		
-		this.facade.raiseEvent({
-				type: 			"overlay.hide",
-				id: 			"st." + shape.resourceId,
-		});
+
 											
 		this.facade.raiseEvent({
 				type: 			"overlay.show",
-				id: 			"st." + shape.resourceId,
+				id: 			"treegraph",
 				shapes: 		[shape],
 				attributes: 	attr,
 			});
