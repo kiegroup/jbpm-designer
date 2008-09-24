@@ -115,6 +115,8 @@
 		</plugin>	
 		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+			<!-- BPEL plugin also requires rowlayout -->
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>				
 		</plugin>
 		
 		<!-- BPMN1.1 specific plugins -->

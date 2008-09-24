@@ -1,6 +1,6 @@
 {
 	"title":"Bpel",
-        "title_de":"Bpel",
+	"title_de":"Bpel",
 	"namespace":"http://b3mn.org/stencilset/bpel#",
 	"description":"The stencil set for the BpelProcess.",
  	"description_de":"Die Schablone des BPELs.",
@@ -9,7 +9,7 @@
 			"type":"node",
 			"id":"Process",
 			"title":"Worksheet",
-                        "title_de":"Arbeitszettel",
+			"title_de":"Arbeitszettel",
 			"groups":["Project"],
 			"groups_de":["Projekt"],
 			"description":"",
@@ -5162,30 +5162,8 @@
 			"icon":"new_sequence.png",
 			"roles": ["PoolHolder","Activity","PoolChild"],
 			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30,horizontalLayout:true});	
  			},
 			"properties": [
 				{
@@ -7052,31 +7030,6 @@
 		},
 		{
 			"type": "edge",
-			"id":"sequenceOrder",
-			"title":"Sequence",
-			"description":"Defines a order in Sequence",
-			"groups":["Controls Sequence"],
-			"view":"controls/edge.sequenceOrder.svg",
-			"icon":"new_sequence_flow.png",
-			"roles": ["sequence"],
-			"properties": [
-				{
-					"id":"title",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"Title",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				}
-			]
-		},
-		{
-			"type": "edge",
 			"id":"sequenceFlow",
 			"title":"Bpel Flow",
 			"description":"Defines a Link in a Flow Element",
@@ -7199,15 +7152,6 @@
 			},
 			{
 				"role":"sequenceFlow",
-				"connects": [
-					{
-						"from":"Activity",
-						"to":["Activity"]
-					}
-				]
-			},
-			{
-				"role":"sequenceOrder",
 				"connects": [
 					{
 						"from":"Activity",
@@ -7360,6 +7304,8 @@
 		],
 		canContain: function(args) {return args.result;  },
 		canConnect: function(args) { 
+			// This function is outdated and is not called by the Oryx framework.
+			// Current solution idea: redesign sequence, allow links and do the checking via the syntax checker 
 		
 			if(args.result) {
 			
