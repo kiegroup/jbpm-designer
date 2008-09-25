@@ -45,7 +45,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		
 		if(!options.textElement) {
 			throw "Label: No parameter textElement." 
-		} else if (!options.textElement instanceof SVGTextElement) {
+		} else if (!ORYX.Editor.checkClassType( options.textElement, 'SVGTextElement' ) ) {
 			throw "Label: Parameter textElement is not an SVGTextElement."	
 		}
 		

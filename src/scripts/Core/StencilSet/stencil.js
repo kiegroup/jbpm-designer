@@ -214,7 +214,7 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	},
 
 	view: function() {
-		return this._view.cloneNode(true);
+		return this._view.cloneNode(true) || this._view;
 	},
 
 	icon: function() {
@@ -294,8 +294,9 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 			xml = result.responseXML;
 
 		//check if result is a SVG document
-		if(xml.documentElement instanceof SVGSVGElement) {
-			this._view = xml;
+		if( ORYX.Editor.checkClassType( xml.documentElement, 'SVGSVGElement' )) {
+
+			this._view = xml.documentElement;
 			
 			//updating link to images
 			var imageElems = this._view.getElementsByTagNameNS("http://www.w3.org/2000/svg", "image");

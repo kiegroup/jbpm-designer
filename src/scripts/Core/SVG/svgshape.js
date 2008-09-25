@@ -83,7 +83,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 	init: function() {
 
 		/**initialize position and size*/
-		if(this.element instanceof SVGRectElement || this.element instanceof SVGImageElement) {
+		if(ORYX.Editor.checkClassType(this.element, 'SVGRectElement') || ORYX.Editor.checkClassType(this.element, 'SVGImageElement')) {
 			var xAttr = this.element.getAttributeNS(null, "x");
 			if(xAttr) {
 				this.oldX = parseFloat(xAttr);
@@ -109,7 +109,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 				throw "Missing attribute in element " + this.element;
 			}
 
-		} else if(this.element instanceof SVGCircleElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGCircleElement')) {
 			var cx = undefined;
 			var cy = undefined;
 			var r = undefined;
@@ -137,7 +137,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			this.oldWidth = 2*r;
 			this.oldHeight = 2*r;
 
-		} else if(this.element instanceof SVGEllipseElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGEllipseElement')) {
 			var cx = undefined;
 			var cy = undefined;
 			var rx = undefined;
@@ -171,7 +171,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			this.oldWidth = 2*rx;
 			this.oldHeight = 2*ry;
 
-		} else if(this.element instanceof SVGLineElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGLineElement')) {
 			var x1 = undefined;
 			var y1 = undefined;
 			var x2 = undefined;
@@ -205,7 +205,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			this.oldWidth = Math.abs(x1-x2);
 			this.oldHeight = Math.abs(y1-y2);
 
-		} else if(this.element instanceof SVGPolylineElement || this.element instanceof SVGPolygonElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGPolylineElement') || ORYX.Editor.checkClassType(this.element, 'SVGPolygonElement')) {
 			var points = this.element.getAttributeNS(null, "points");
 
 			if(points) {
@@ -238,7 +238,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 				throw "Missing attribute in element " + this.element;
 			}
 
-		} else if(this.element instanceof SVGPathElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGPathElement')) {
 			var parser = new PathParser();
 			var handler = new ORYX.Core.SVG.MinMaxPathHandler();
 			parser.setHandler(handler);
@@ -286,7 +286,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 		}
 		
 		//allowDockers and resizeMarkerMid
-		if(this.element instanceof SVGPathElement) {
+		if(ORYX.Editor.checkClassType(this.element, 'SVGPathElement')) {
 			var allowDockersAttr = this.element.getAttributeNS(NAMESPACE_ORYX, "allowDockers"); 
 			if(allowDockersAttr) {
 				if(allowDockersAttr.toLowerCase() === "no") {
@@ -317,13 +317,13 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 	 */
 	update: function() {
 		if(this.x !== this.oldX || this.y !== this.oldY || this.width !== this.oldWidth || this.height !== this.oldHeight) {
-			if(this.element instanceof SVGRectElement || this.element instanceof SVGImageElement) {
+			if(ORYX.Editor.checkClassType(this.element, 'SVGRectElement') || ORYX.Editor.checkClassType(this.element, 'SVGImageElement')) {
 				this.element.setAttributeNS(null, "x", this.x);
 				this.element.setAttributeNS(null, "y", this.y);
 			 	this.element.setAttributeNS(null, "width", this.width);
 				this.element.setAttributeNS(null, "height", this.height);
 
-			} else if(this.element instanceof SVGCircleElement) {
+			} else if(ORYX.Editor.checkClassType(this.element, 'SVGCircleElement')) {
 				//calculate the radius
 				var r;
 				if(this.width/this.oldWidth <= this.height/this.oldHeight) {
@@ -339,7 +339,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 				this.element.setAttributeNS(null, "cy", cy);
 				this.element.setAttributeNS(null, "r", r);
 
-			} else if(this.element instanceof SVGEllipseElement) {
+			} else if(ORYX.Editor.checkClassType(this.element, 'SVGEllipseElement')) {
 				var rx = this.width/2;
 				var ry = this.height/2;
 				var cx = this.x + rx;
@@ -350,7 +350,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 				this.element.setAttributeNS(null, "rx", rx);
 				this.element.setAttributeNS(null, "ry", ry);
 
-			} else if(this.element instanceof SVGLineElement) {
+			} else if(ORYX.Editor.checkClassType(this.element, 'SVGLineElement')) {
 				var x2 = this.x + this.width;
 				var y2 = this.y + this.height;
 				this.element.setAttributeNS(null, "x1", this.x);
@@ -358,7 +358,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 				this.element.setAttributeNS(null, "x2", x2);
 				this.element.setAttributeNS(null, "y2", y2);
 
-			} else if(this.element instanceof SVGPolylineElement || this.element instanceof SVGPolygonElement) {
+			} else if(ORYX.Editor.checkClassType(this.element, 'SVGPolylineElement') || ORYX.Editor.checkClassType(this.element, 'SVGPolygonElement')) {
 				var points = this.element.getAttributeNS(null, "points");
 				if(points) {
 					points = points.replace(/,/g, " ");
@@ -386,7 +386,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 					//TODO error
 				}
 
-			} else if(this.element instanceof SVGPathElement) {
+			} else if(ORYX.Editor.checkClassType(this.element, 'SVGPathElement')) {
 
 				//calculate scaling delta
 				//TODO what if oldWidth == 0?
@@ -417,11 +417,11 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			return false;
 		}
 
-		if(this.element instanceof SVGRectElement || this.element instanceof SVGImageElement) {
+		if(ORYX.Editor.checkClassType(this.element, 'SVGRectElement') || ORYX.Editor.checkClassType(this.element, 'SVGImageElement')) {
 			return (pointX >= this.x && pointX <= this.x + this.width &&
 					pointY >= this.y && pointY <= this.y+this.height);
 
-		} else if(this.element instanceof SVGCircleElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGCircleElement')) {
 			//calculate the radius
 			var r;
 			if(this.width/this.oldWidth <= this.height/this.oldHeight) {
@@ -435,7 +435,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			
 			return ORYX.Core.Math.isPointInEllipse({x: pointX, y:pointY}, {x:cx, y:cy, radiusX:r, radiusY:r});
 
-		} else if(this.element instanceof SVGEllipseElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGEllipseElement')) {
 			var rx = this.width/2;
 			var ry = this.height/2;
 			var cx = this.x + rx;
@@ -443,14 +443,14 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 
 			return ORYX.Core.Math.isPointInEllipse({x: pointX, y:pointY}, {x:cx, y:cy, radiusX:rx, radiusY:ry});
 			
-		} else if(this.element instanceof SVGLineElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGLineElement')) {
 			var x2 = this.x + this.width;
 			var y2 = this.y + this.height;
 			
 			return ORYX.Core.Math.isPointInLine({x: pointX, y:pointY}, {point1:{x:this.x, y:this.y},
 												  point2:{x:x2, y:y2}});
 
-		} else if(this.element instanceof SVGPolylineElement || this.element instanceof SVGPolygonElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGPolylineElement') || ORYX.Editor.checkClassType(this.element, 'SVGPolygonElement')) {
 			var points = this.element.getAttributeNS(null, "points");
 
 			if(points) {
@@ -469,7 +469,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 				return false;
 			}
 
-		} else if(this.element instanceof SVGPathElement) {
+		} else if(ORYX.Editor.checkClassType(this.element, 'SVGPathElement')) {
 			var parser = new PathParser();
 			var handler = new ORYX.Core.SVG.PointsPathHandler();
 			parser.setHandler(handler);
@@ -490,8 +490,8 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			elem = this.element;
 		}
 		//console.log(this, elem, elem.getAttributeNS(null, "display"));
-		if (elem instanceof SVGElement) {
-			if (elem instanceof SVGGElement) {
+		if (ORYX.Editor.checkClassType(elem, 'SVG')) {
+			if (ORYX.Editor.checkClassType(elem, 'SVGGElement')) {
 				if (elem.className && elem.className.baseVal == "me") 
 					return true;
 			}

@@ -77,7 +77,7 @@ ORYX.Core.SVG.SVGMarker = Clazz.extend({
 	 */
 	_init: function() {
 		//check if this.element is a SVGMarkerElement
-		if(!(this.element instanceof SVGMarkerElement)) {
+		if(!(ORYX.Editor.checkClassType(this.element, 'SVGMarkerElement'))) {
 			throw "SVGMarker: Argument is not an instance of SVGMarkerElement.";
 		}
 

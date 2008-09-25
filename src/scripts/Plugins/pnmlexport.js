@@ -44,7 +44,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         
         this.facade.offer({
             'name': ORYX.I18N.Pnmlexport.name,
-            'functionality': this.export.bind(this),
+            'functionality': this.exportIt.bind(this),
             'group': ORYX.I18N.Pnmlexport.group,
             'icon': ORYX.PATH + "images/bpmn2pn_deploy.png",
             'description': ORYX.I18N.Pnmlexport.desc,
@@ -55,7 +55,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         
     },
     
-    export: function(){
+    exportIt: function(){
     
         // raise loading enable event
         this.facade.raiseEvent({

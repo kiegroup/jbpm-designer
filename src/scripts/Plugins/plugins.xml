@@ -113,6 +113,7 @@
 		<plugin source="xformsexport.js" name="ORYX.Plugins.XFormsExport">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 		</plugin>	
+		
 		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 			<!-- BPEL plugin also requires rowlayout -->
@@ -140,5 +141,6 @@
 	<properties>
 		<property group="File" index="1" />
 		<property group="Edit" index="2" />	
+		<property group="Undo" index="3" />	
 	</properties>
 </config>

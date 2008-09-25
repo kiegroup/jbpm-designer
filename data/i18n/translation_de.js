@@ -290,7 +290,7 @@ ORYX.I18N.SyntaxChecker.invalid = "Ungültige Antwort vom Server.";
 
 if(!ORYX.I18N.Undo) ORYX.I18N.Undo = {};
 
-ORYX.I18N.Undo.group = "Edit";
+ORYX.I18N.Undo.group = "Undo";
 ORYX.I18N.Undo.undo = "Rückgängig";
 ORYX.I18N.Undo.undoDesc = "Rückgängig";
 ORYX.I18N.Undo.redo = "Wiederherstellen";
