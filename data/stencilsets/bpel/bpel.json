@@ -29,7 +29,7 @@
 			"groups_de":["BPEL"],
 			"view":"others/node.Bpel.svg",
 			"icon":"new_task.png",
-			"roles": ["ActivityHolder","ProcessChild","HandlerHolder"],
+			"roles": ["ActivityHolder","ProcessChild","HandlerHolder","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
 				
@@ -5302,7 +5302,7 @@
 			"groups_de":["Schleife"],
 			"view":"loop/loop.while.svg",
 			"icon":"new_while.png",
-			"roles": ["Activity","PoolChild","ActivityHolder"],
+			"roles": ["Activity","PoolChild","ActivityHolder","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
 				
@@ -7184,6 +7184,10 @@
 		],
 		
 		"cardinalityRules":[
+			{
+				"role":"SingleActivityContainer",
+				"maximumChildren":1
+            },
 			{	
 				"role":"ProcessChild",
 				"maximumOccurrence":1,
@@ -7226,7 +7230,6 @@
 			},
 			{	
 				"role":"Activity",
-				"maximumOccurrence":1,
 				"outgoingEdges": [
 					{
 						"role":"sequenceFlow",
@@ -7268,7 +7271,7 @@
 				"contains": ["onEvent","onAlarm"]
 			},
 			{ 
-			    "role":"forEach",
+				"role":"forEach",
 				"contains": ["scope"]
 			},
 			{
@@ -7281,7 +7284,7 @@
 			},
 			{
 				"role":"HandlerHolder",
-			"contains": ["faultHandlers","terminationHandler", "eventHandlers"]
+				"contains": ["faultHandlers","terminationHandler", "eventHandlers"]
 			},
 			{
 				"role":"compensationHandlerHolder",
