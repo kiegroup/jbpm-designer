@@ -1,8 +1,12 @@
 package de.hpi.bpmn2pn.converter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import de.hpi.BPMNHelpers;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
@@ -14,6 +18,7 @@ import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.ORGateway;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn2pn.model.ConversionContext;
@@ -24,6 +29,7 @@ import de.hpi.highpetrinet.HighLabeledTransition;
 import de.hpi.highpetrinet.HighPetriNet;
 import de.hpi.highpetrinet.HighPetriNetFactory;
 import de.hpi.highpetrinet.HighSilentTransition;
+import de.hpi.highpetrinet.HighTransition;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.PetriNetFactory;
@@ -34,14 +40,24 @@ import de.hpi.petrinet.Transition;
 public class HighConverter extends StandardConverter {
 	protected BPMNFactory factory;
 	
+	protected Map<Transition, List<Edge>> orJoinTransitions;
+	
+	public static void main(String [ ] args){
+		BPMNHelpers.printBPMN(BPMNHelpers.loadRDFDiagram("bpmn.rdf"));
+	}
+	
 	public HighConverter(BPMNDiagram diagram) {
 		super(diagram, new HighPetriNetFactory());
 		factory = new BPMNFactory();
+		
+		orJoinTransitions = new HashMap<Transition, List<Edge>>();
 	}
 
 	public HighConverter(BPMNDiagram diagram, PetriNetFactory pnfactory) {
 		super(diagram, pnfactory);
 		factory = new BPMNFactory();
+		
+		orJoinTransitions = new HashMap<Transition, List<Edge>>();
 	}
 	
 	@Override
@@ -116,35 +132,83 @@ public class HighConverter extends StandardConverter {
 	protected void handleORJoin(PetriNet net, ORGateway gateway,
 			HighConversionContext c) {
 		//handle all combinations how many pathes can terminate
-		for(List<Edge> posEdges : (List<List<Edge>>)de.hpi.bpmn.analysis.Combination.findCombinations(gateway.getIncomingEdges())){
+		List<List<Edge>> incomingPathesComb = (List<List<Edge>>)de.hpi.bpmn.analysis.Combination.findCombinations(gateway.getIncomingEdges());
+		int index = 0;
+		for(List<Edge> posEdges : incomingPathesComb){
 			if(posEdges.size() == 0)
 				continue;
-			Transition t = addSilentTransition(net, "orJoin_"+gateway.getId(), gateway, 1);
+			index++;
+			Transition t = addSilentTransition(net, "orJoin_"+gateway.getId()+String.valueOf(index), gateway, 1);
 			//for each positive edge
 			for(Edge edge : posEdges){
 				addFlowRelationship(net, c.map.get(edge), t);
 			}
-			//for each negative edge (gateway.getIncomingEdges() - posEdges)
-			//TODO performance
+			// negative edges are handled in post processing
+			//TODO performance: howto impl negEdges = incomingEdges -  posEdges 
+			List<Edge> negEdges = new LinkedList<Edge>();
 			for(Edge edge : gateway.getIncomingEdges()){
 				if(!posEdges.contains(edge)){
-					handleUpstream(net, gateway, t, edge, c);
+					negEdges.add(edge);
 				}
 			}
+			orJoinTransitions.put(t, negEdges);
+			
 			addFlowRelationship(net, t, c.map.get(gateway.getOutgoingEdges().get(0)));
 		}
 	}
 	
 	//TODO post dominators
-	//TODO: Some nodes (e.g. MI) need some special handling, because it could be
-	//that they don't have a place yet!
-	private void handleUpstream(PetriNet net, ORGateway gateway, Transition t, Edge edge, HighConversionContext c){
-		addInhibitorFlowRelationship(net, c.map.get(edge), t);
-		//if previous node is no dominator, then handle its incoming edges, too
-		//gateway.getParent() => can be a subprocess or top process (=! gateway.getProcess(), which would return top process)
-		if(!c.getDominatorFinder(gateway.getParent()).getDominators(gateway).contains(edge.getSource())){
-			for(Edge e : edge.getSource().getIncomingEdges()){
-				handleUpstream(net, gateway, t, e, c);
+	private void handleUpstream(PetriNet net, HighTransition gatewayTransition, Place edge, HighConversionContext c, List<de.hpi.petrinet.Node> visitedNodes){
+		if(visitedNodes.contains(edge))
+			return;
+		visitedNodes.add(edge);
+		//if(edge.getId().contains("ok"))
+		//	return;
+		for(HighFlowRelationship relEdge : (List<HighFlowRelationship>)edge.getIncomingFlowRelationships()){
+			if(relEdge.getType() != HighFlowRelationship.ArcType.Plain)
+				continue;
+			HighTransition incomingTransition = (HighTransition)relEdge.getSource();
+			DiagramObject incomingBPMN = incomingTransition.getBPMNObj();
+			//HACK!!!! XorSplits maps to Places!!!!!
+			//better solution: give places getBPMNObj and include in XOR-mapping
+			//that places gets BPM objects
+			if(incomingBPMN instanceof SequenceFlow){
+				incomingBPMN = (DiagramObject)((SequenceFlow)incomingTransition.getBPMNObj()).getSource();
+			}
+
+			addInhibitorFlowRelationship(net, edge, gatewayTransition);
+			
+			if(!checkDominator((Node)incomingBPMN, (Node)gatewayTransition.getBPMNObj(), c)){
+				for(HighFlowRelationship rel : (List<HighFlowRelationship>)incomingTransition.getIncomingFlowRelationships()){
+					handleUpstream(net, gatewayTransition, (Place)rel.getSource(), c, visitedNodes);
+				}
+			}
+		}
+	}
+	
+	/* 
+	 * Checks whether a BPMN node node1 or any of its parents is a 
+	 * dominator of another BPMN node node2
+	 */
+	private boolean checkDominator(Node node1, Node node2, HighConversionContext c ){
+		boolean isDominator = c.getDominatorFinder(node2.getParent()).getDominators(node2).contains(node1);
+		if(!isDominator && node1.getParent() instanceof Node){
+			isDominator = checkDominator((Node)node1.getParent(), node2, c);
+		}
+		return isDominator;
+	}
+	
+	@Override
+	protected void postProcessDiagram(PetriNet net, ConversionContext c) {
+		super.postProcessDiagram(net, c);
+		
+		//post process or-joins
+		for(Transition gatewayTransition : orJoinTransitions.keySet()){
+			//handle the negative edges which hasn't been handled in handleORJoin()
+			List<de.hpi.petrinet.Node> visitedNodes = new ArrayList<de.hpi.petrinet.Node>();
+			List<Edge> negEdges = orJoinTransitions.get(gatewayTransition);
+			for(Edge edge : negEdges){
+				handleUpstream(net, (HighTransition)gatewayTransition, c.map.get(edge), (HighConversionContext)c, visitedNodes);
 			}
 		}
 	}

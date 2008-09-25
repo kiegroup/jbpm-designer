@@ -92,11 +92,17 @@ public abstract class Converter {
 		}
 		// create transitions
 		handleNodesRecursively(net, diagram, c);
+		
+		postProcessDiagram(net, c);
 
 		return net;
 	}
 
 	protected void handleDiagram(PetriNet net, ConversionContext c) {
+		// do nothing
+	}
+	
+	protected void postProcessDiagram(PetriNet net, ConversionContext c){
 		// do nothing
 	}
 

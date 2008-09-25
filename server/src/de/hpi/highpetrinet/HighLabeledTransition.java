@@ -3,7 +3,7 @@ package de.hpi.highpetrinet;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.petrinet.LabeledTransitionImpl;
 
-public class HighLabeledTransition extends LabeledTransitionImpl {
+public class HighLabeledTransition extends LabeledTransitionImpl implements HighTransition {
 	private DiagramObject BPMNObj;
 	
 	public DiagramObject getBPMNObj() {
