@@ -27,8 +27,8 @@ public class STSyntaxChecker extends BPMNSyntaxChecker {
 			ok = false;
 		}
 		if (node instanceof ORGateway) {
-			addError(node, OR_GATEWAY);
-			ok = false;
+			//addError(node, OR_GATEWAY);
+			//ok = false;
 		}
 
 		return ok;

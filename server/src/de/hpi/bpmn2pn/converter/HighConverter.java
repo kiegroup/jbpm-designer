@@ -7,11 +7,13 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DiagramObject;
+import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn2pn.model.ConversionContext;
@@ -57,6 +59,16 @@ public class HighConverter extends StandardConverter {
 		return rel;
 	}
 	
+	protected HighFlowRelationship addInhibitorFlowRelationship(PetriNet net,
+			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {	
+		HighFlowRelationship rel = (HighFlowRelationship)addFlowRelationship(net, source, target);
+		if (rel == null){
+			return null;
+		}
+		rel.setType(HighFlowRelationship.ArcType.Inhibitor);
+		return rel;
+	}
+	
 	@Override
 	protected SilentTransition addSilentTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel) {
 		HighSilentTransition t = (HighSilentTransition) addSimpleSilentTransition(net, id);
@@ -77,10 +89,70 @@ public class HighConverter extends StandardConverter {
 		return new HighConversionContext();
 	}
 	
+	@Override
+	protected void handleORGateway(PetriNet net, ORGateway gateway,
+			ConversionContext c) {
+		if(gateway.getIncomingEdges().size()==1){
+			handleORSplit(net, gateway, (HighConversionContext)c);
+		} else {
+			handleORJoin(net, gateway, (HighConversionContext)c);
+		}
+	}
+	
+	protected void handleORSplit(PetriNet net, ORGateway gateway,
+			HighConversionContext c) {
+		//handle all possible combinations
+		for(List<Edge> edges : (List<List<Edge>>)de.hpi.bpmn.analysis.Combination.findCombinations(gateway.getOutgoingEdges())){
+			if(edges.size() == 0)
+				continue;
+			Transition t = addSilentTransition(net, "orSplit_"+gateway.getId(), gateway, 1);
+			for(Edge edge : edges){
+				addFlowRelationship(net, t, c.map.get(edge));
+			}
+			addFlowRelationship(net, c.map.get(gateway.getIncomingEdges().get(0)), t);
+		}
+	}
+
+	protected void handleORJoin(PetriNet net, ORGateway gateway,
+			HighConversionContext c) {
+		//handle all combinations how many pathes can terminate
+		for(List<Edge> posEdges : (List<List<Edge>>)de.hpi.bpmn.analysis.Combination.findCombinations(gateway.getIncomingEdges())){
+			if(posEdges.size() == 0)
+				continue;
+			Transition t = addSilentTransition(net, "orJoin_"+gateway.getId(), gateway, 1);
+			//for each positive edge
+			for(Edge edge : posEdges){
+				addFlowRelationship(net, c.map.get(edge), t);
+			}
+			//for each negative edge (gateway.getIncomingEdges() - posEdges)
+			//TODO performance
+			for(Edge edge : gateway.getIncomingEdges()){
+				if(!posEdges.contains(edge)){
+					handleUpstream(net, gateway, t, edge, c);
+				}
+			}
+			addFlowRelationship(net, t, c.map.get(gateway.getOutgoingEdges().get(0)));
+		}
+	}
+	
+	//TODO post dominators
+	//TODO: Some nodes (e.g. MI) need some special handling, because it could be
+	//that they don't have a place yet!
+	private void handleUpstream(PetriNet net, ORGateway gateway, Transition t, Edge edge, HighConversionContext c){
+		addInhibitorFlowRelationship(net, c.map.get(edge), t);
+		//if previous node is no dominator, then handle its incoming edges, too
+		//gateway.getParent() => can be a subprocess or top process (=! gateway.getProcess(), which would return top process)
+		if(!c.getDominatorFinder(gateway.getParent()).getDominators(gateway).contains(edge.getSource())){
+			for(Edge e : edge.getSource().getIncomingEdges()){
+				handleUpstream(net, gateway, t, e, c);
+			}
+		}
+	}
+	
 	/* 
 	 * Begin Exc Handling Mapping 
 	 */
-	
+
 	@Override
 	protected void prepareExceptionHandling(PetriNet net, SubProcess process,
 			Transition startT, Transition endT, ConversionContext c){

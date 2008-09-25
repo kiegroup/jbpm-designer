@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.hpi.bpmn.Container;
+import de.hpi.bpmn.analysis.DominatorFinder;
 import de.hpi.petrinet.Transition;
 
 public class HighConversionContext extends ConversionContext {
@@ -43,5 +44,21 @@ public class HighConversionContext extends ConversionContext {
 		excpTransitionMap.get(c).remove(t);
 		if(excpTransitionMap.get(c).size() == 0)
 			removeAncestorExcpTransition(c);
+	}
+	
+	/*
+	 * Each process has its own DominatorFinder needed for OR-Join mapping.
+	 * Dominators aren't needed for overall process, but only for current, local
+	 * process
+	 */
+	protected Map<Container, DominatorFinder> processDomMap = new HashMap<Container, DominatorFinder>();
+	/*
+	 * Applies new dominator finder, if no one has been processes before
+	 */
+	public DominatorFinder getDominatorFinder(Container container) {
+		if(!processDomMap.containsKey(container)){
+			processDomMap.put(container, new DominatorFinder(container));
+		}
+		return processDomMap.get(container);
 	}
 }
