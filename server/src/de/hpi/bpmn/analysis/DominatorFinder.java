@@ -12,8 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.hpi.BPMNHelpers;
-import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.Node;
@@ -140,23 +138,5 @@ public class DominatorFinder {
 			}
 		}
 		return null;
-	}
-	
-	public static void main(String [ ] args){
-		BPMNDiagram diag = BPMNHelpers.loadRDFDiagram("bpmn.rdf");
-		//PetriNet net = new HighConverter(diag).convert();
-		//BPMNHelpers.printBPMN(diag);
-		DominatorFinder domFind = new DominatorFinder(diag);
-		for(Node keyNode : domFind.dominators.keySet()){
-			Collection<Node> domNodes = domFind.dominators.get(keyNode);
-			
-			System.out.print("Dom for " + keyNode.getId() + "\n");
-			
-			for(Node domNode : domNodes){
-				System.out.print(domNode.getId() + " | ");
-			}
-			
-			System.out.print("\n");
-		}
 	}
 }

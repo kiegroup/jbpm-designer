@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.hpi.BPMNHelpers;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
@@ -41,10 +40,6 @@ public class HighConverter extends StandardConverter {
 	protected BPMNFactory factory;
 	
 	protected Map<Transition, List<Edge>> orJoinTransitions;
-	
-	public static void main(String [ ] args){
-		BPMNHelpers.printBPMN(BPMNHelpers.loadRDFDiagram("bpmn.rdf"));
-	}
 	
 	public HighConverter(BPMNDiagram diagram) {
 		super(diagram, new HighPetriNetFactory());
