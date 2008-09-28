@@ -183,11 +183,12 @@ public class HighConverter extends StandardConverter {
 	
 	/* 
 	 * Checks whether a BPMN node node1 or any of its parents is a 
-	 * dominator of another BPMN node node2
+	 * dominator or postdominator of another BPMN node2
 	 */
 	private boolean checkDominator(Node node1, Node node2, HighConversionContext c ){
 		boolean isDominator = c.getDominatorFinder(node2.getParent()).getDominators(node2).contains(node1);
-		if(!isDominator && node1.getParent() instanceof Node){
+		boolean isPostDominator = c.getDominatorFinder(node2.getParent()).getPostDominators(node2).contains(node1);
+		if((!isDominator || !isPostDominator) && node1.getParent() instanceof Node){
 			isDominator = checkDominator((Node)node1.getParent(), node2, c);
 		}
 		return isDominator;

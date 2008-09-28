@@ -17,20 +17,28 @@ import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.Node;
 
 public class DominatorFinder {
-	Map<Node,Collection<Node>> dominators;
-	Container diag;
+	public Map<Node,Collection<Node>> dominators;
+	public Map<Node,Collection<Node>> postDominators;
+	protected Container diag;
+	protected List<Node> reversePostOrder;
+	
+	protected Node endNode;
+	protected Node startNode;
 	
 	public DominatorFinder(Container net){
 		dominators = new HashMap<Node, Collection<Node>>();
+		postDominators = new HashMap<Node, Collection<Node>>();
 		this.diag = net;
 		
-		Node startNode = this.getStartNode();
-		
-		for(Node n : net.getChildNodes()){
-			setDominators((Node)n, net.getChildNodes());
+		calcReversePostOrder();
+		calcDominators();
+		calcPostDominators();
+	}
+	
+	protected void calcDominators(){
+		for(Node n : diag.getChildNodes()){
+			setDominators((Node)n, diag.getChildNodes());
 		}
-		
-		List<Node> reversePostOrder = getReversePostOrder(net.getChildNodes());
 		
 		// iteratively eliminate nodes that are not dominators
 		boolean changed = true;
@@ -59,54 +67,56 @@ public class DominatorFinder {
 		}
 	}
 	
-	protected List<Node> depthFirstSearchIterative(Collection<Node> nodes){
-		Node originNode = getStartNode();
-		Node destinationNode = getEndNode();
-		
-		List<Node> openList = new LinkedList<Node>();
-		List<Node> preOrderList = new LinkedList<Node>();
-		
-		//adding starting point to open list
-		openList.add(originNode);
-		
-		while(openList.size() != 0){
-			//take node from open list
-			Node curNode = openList.get(0);
-			openList.remove(curNode);
-			
-			
-			//TODO if needed, check, if curNode is destinationNode
-			
-			for(Edge rel : curNode.getOutgoingEdges()){
-				//put next node on the beginning of the list
-				openList.add(0, (Node)rel.getTarget());
-			}
-			
-			if(!preOrderList.contains(curNode))
-				preOrderList.add(curNode);
+	/* 
+	 * Algorithm taken from:
+	 * http://www.eecs.umich.edu/~mahlke/483f03/lectures/483L16.pdf, slide 22
+	 */
+	protected void calcPostDominators(){
+		// Initilize
+		// All nodes gets all other nodes as post dominators
+		for(Node n : diag.getChildNodes()){
+			setPostDominators((Node)n, diag.getChildNodes());
 		}
 		
-		return preOrderList;
+		// End node gets only itself as end node
+		List<Node> endNodePostDominators = new LinkedList<Node>();
+		endNodePostDominators.add(this.getEndNode());
+		setPostDominators(this.getEndNode(), endNodePostDominators);
+		
+		// iteratively eliminate nodes that are not post dominators
+		boolean changed = true;
+		while(changed){
+			changed = false;
+			for(Node n : reversePostOrder){
+				if(n.equals(this.getEndNode())) //end node isn't considered here
+					continue;
+				
+				HashSet<Node> newSet = new HashSet<Node>();
+				newSet.add(n); //add node himself
+				
+				//intersection
+				if(n.getOutgoingEdges().size() > 0){
+					HashSet<Node> postDominators = new HashSet<Node>();
+					postDominators.addAll(getPostDominators((Node)n.getOutgoingEdges().get(0).getTarget()));
+					
+					for(Edge outgoingFlow : n.getOutgoingEdges()){
+						postDominators.retainAll(getPostDominators((Node)outgoingFlow.getSource()));
+					}
+					newSet.addAll(postDominators);
+				}
+
+				if(!newSet.equals(getPostDominators(n))){
+					setPostDominators(n, newSet);
+					changed = true;
+				}
+			}
+		}
 	}
 	
-	protected List<Node> getReversePostOrder(Collection<Node> nodes){
+	protected void calcReversePostOrder(){
 		DepthFirstSearch DFS = new DepthFirstSearch(getStartNode());
 		DFS.prepare();
-		List<Node> reversePostOrder = DFS.getReversePostOrder();
-		
-		/*System.out.print("Reverse Post   ");
-		for(Node n : reversePostOrder){
-			System.out.print(n.getId() + " |");
-		}
-		System.out.print("\n");*/
-		
-		return reversePostOrder;
-	}
-	
-	protected void addDominator(Node n, Node dominator){
-		Collection<Node> doms = this.getDominators(n);
-		doms.add(dominator);
-		this.setDominators(n, doms);
+		reversePostOrder = DFS.getReversePostOrder();
 	}
 	
 	public Collection<Node> getDominators(Node n){
@@ -117,26 +127,66 @@ public class DominatorFinder {
 		return set;
 	}
 	
-	public void setDominators(Node n, Collection<Node> list){
+	protected void setDominators(Node n, Collection<Node> list){
 		dominators.put(n, list);
 	}
 	
+	public Collection<Node> getPostDominators(Node n){
+		Collection<Node> set = postDominators.get(n);
+		if(set==null){
+			set = new HashSet<Node>(); 
+		}
+		return set;
+	}
+	
+	protected void setPostDominators(Node n, Collection<Node> list){
+		postDominators.put(n, list);
+	}
+	
 	//finds start node (one single node without any incoming edges)
-	//TODO: cache start node?? move to petri net?? set while mapping bpmn2pn?
-	public Node getStartNode(){
-		for(Node n : diag.getChildNodes()){
-			if(n.getIncomingEdges().size() == 0){
-				return n;
+	protected Node getStartNode(){
+		if(startNode == null){
+			for(Node n : diag.getChildNodes()){
+				if(n.getIncomingEdges().size() == 0){
+					startNode = n;
+					return startNode;
+				}
 			}
+			return null;
+		} else {
+			return startNode;
 		}
-		return null;
 	}
-	public Node getEndNode(){
-		for(Node n : diag.getChildNodes()){
-			if(n.getOutgoingEdges().size() == 0){
-				return n;
+	protected Node getEndNode(){
+		if(endNode == null){
+			for(Node n : diag.getChildNodes()){
+				if(n.getOutgoingEdges().size() == 0){
+					endNode = n;
+					return endNode;
+				}
 			}
+			return null;
+		} else {
+			return endNode;
 		}
-		return null;
 	}
+	
+	/*public static void main(String [ ] args) {
+		DominatorFinder domfind = new DominatorFinder(BPMNHelpers.loadRDFDiagram("bpmn.rdf"));
+		for (Node n : domfind.dominators.keySet()){
+			System.out.println("Dominators for: " + n.getId());
+			for (Node innerN : domfind.dominators.get(n)){
+				System.out.print(innerN.getId() + " | ");
+			}
+			System.out.print("\n\n");
+		}
+		
+		for (Node n : domfind.postDominators.keySet()){
+			System.out.println("Post dominators for: " + n.getId());
+			for (Node innerN : domfind.postDominators.get(n)){
+				System.out.print(innerN.getId() + " | ");
+			}
+			System.out.print("\n\n");
+		}
+	}*/
 }
