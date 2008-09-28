@@ -294,7 +294,7 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 			xml = result.responseXML;
 
 		//check if result is a SVG document
-		if( ORYX.Editor.checkClassType( xml.documentElement, 'SVGSVGElement' )) {
+		if( ORYX.Editor.checkClassType( xml.documentElement, SVGSVGElement )) {
 
 			this._view = xml.documentElement;
 			
