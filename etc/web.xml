@@ -124,18 +124,7 @@
 	<servlet-mapping>
 		<servlet-name>AlternativesRenderer</servlet-name>
 		<url-pattern>/pdf</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<display-name>Oryx AML Support Servlet</display-name>
-		<servlet-name>AMLSupport</servlet-name>
-		<servlet-class>org.oryxeditor.server.AMLSupport</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AMLSupport</servlet-name>
-		<url-pattern>/amlsupport</url-pattern>
-	</servlet-mapping>
-	
+	</servlet-mapping>	
 	
 	<servlet>
 		<display-name>Oryx EPC Upload Servlet</display-name>
