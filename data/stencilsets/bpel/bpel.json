@@ -1930,6 +1930,7 @@
 			]
 		},
 		{
+		    // TODO add .svg file
 			"type": "node",
 			"id":"copy",
 			"title":"Copy",
@@ -3956,6 +3957,110 @@
 						}
 					]
 				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		  // TODO complete perperties
+		  // TODO modify .svg file 
+			"type": "node",
+			"id":"if_branch",
+			"title":"If (/Else-If) Branch",
+			"title_de":"If (/Else-If) Zweig",
+			"groups":["Controls If"],
+			"groups_de":["Controls If"],
+			"description":"One If-Branch",
+			"description_de":"Ein If-Zweig",
+			"view":"controls/node.if_condition.svg",
+			"icon":"if_branch.png",
+			"roles": ["Activity","MultiActivitiesContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
+ 			},
+			"properties": [
+				{
+					"id":"conditionExpressionLanguage",
+					"type":"String",
+					"title":"conditionExpressionLanguage",
+					"title_de":"Ausdruckssprache der Bedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"50",
+					"wrapLines":false
+				},
+				{
+					"id":"conditionBool_expression",
+					"type":"String",
+					"title":"condition_bool_expression",
+					"title_de":"Bool'scher Ausdruck der Bedingung",
+					"value":"",
+					"description":"",
+					"refToView":"label",
+					"readonly":false,
+					"optional":false,
+					"length":undefined
+				},
+				{
+					"id":"If_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"opaque",
+					"title_de":"opak",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		    // TODO complete perperties
+		    // TODO modify .svg file 
+			"type": "node",
+			"id":"else_branch",
+			"title":"else Branch",
+			"title_de":"else-Zweig",
+			"groups":["Controls If"],
+			"groups_de":["Controls If"],
+			"description":"one Else-Branch",
+			"description_de":"Ein Else-Zweig",
+			"view":"controls/node.if_condition.svg",
+			"icon":"else_branch.png",
+			"roles": ["Activity","MultiActivitiesContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
+ 			},
+			"properties": [
 				{
 					"id":"bgColor",
 					"type":"Color",
