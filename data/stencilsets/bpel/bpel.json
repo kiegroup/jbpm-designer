@@ -725,8 +725,8 @@
 			"id":"invoke",
 			"title":"Invoke",
 			"title_de":"Invoke",
-			"groups":["Action (WS)"],
-			"groups_de":["Aktion (WS)"],
+			"groups":["Actions (WS)"],
+			"groups_de":["Aktionen (WS)"],
 			"description":"An Invoke activity.",
 			"description_de":"Eine Invoke-Aktivität.",
 			"view":"action/node.action.invoke.svg",
@@ -1111,8 +1111,8 @@
 			"id":"receive",
 			"title":"Receive",
 			"title_de":"Receive",
-			"groups":["Action (WS)"],
-			"groups_de":["Aktion (WS)"],
+			"groups":["Actions (WS)"],
+			"groups_de":["Aktionen (WS)"],
 			"description":"An Receive activity.",
 			"description_de":"Eine Receive-Aktivität.",
 			"view":"action/node.action.receive.svg",
@@ -1411,8 +1411,8 @@
 			"id":"reply",
 			"title":"Reply",
 			"title_de":"Reply",
-			"groups":["Action (WS)"],
-			"groups_de":["Aktion (WS)"],
+			"groups":["Actions (WS)"],
+			"groups_de":["Aktionen (WS)"],
 			"description":"An Reply activity.",
 			"description_de":"Eine Reply Aktivität.",
 			"view":"action/node.action.reply.svg",
@@ -2591,8 +2591,8 @@
 			"id":"empty",
 			"title":"Empty",
 			"title_de":"Empty",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An Empty activity.",
 			"description_de":"Eine Empty-Aktivität.",
 			"view":"action/node.action.empty.svg",
@@ -2729,8 +2729,8 @@
 			"id":"opaqueActivity",
 			"title":"opaqueActivity",
 			"title_de":"opaqueActivity",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An Opaque activity.",
 			"description_de":"Eine opake Aktivität.",
 			"view":"action/node.action.opaqueActivity.svg",
@@ -2867,8 +2867,8 @@
 			"id":"validate",
 			"title":"Validate",
 			"title_de":"Validate",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An validate activity.",
 			"description_de":"Eine Validate-Aktivität.",
 			"view":"action/node.action.validate.svg",
@@ -3028,8 +3028,8 @@
 			"id":"extensionActivity",
 			"title":"extensionActivity",
 			"title_de":"extensionActivity",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An Extension activity.",
 			"description_de":"Eine Erweiterung-Aktivität.",
 			"view":"action/node.action.extensionActivity.svg",
@@ -3181,8 +3181,8 @@
 			"id":"wait",
 			"title":"wait",
 			"title_de":"wait",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An Wait activity.",
 			"description_de":"Eine Wait-Aktivität.",
 			"view":"action/node.action.wait.svg",
@@ -3393,8 +3393,8 @@
 			"id":"throw",
 			"title":"throw",
 			"title_de":"throw",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An throw activity.",
 			"description_de":"Eine Throw-Aktivität.",
 			"view":"fault/node.fault.throw.svg",
@@ -3560,8 +3560,8 @@
 			"id":"exit",
 			"title":"exit",
 			"title_de":"exit",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An Exit activity.",
 			"description_de":"Eine Exit-Aktivität.",
 			"view":"fault/node.fault.exit.svg",
@@ -3697,8 +3697,8 @@
 			"id":"rethrow",
 			"title":"rethrow",
 			"title_de":"rethrow",
-			"groups":["Action"],
-			"groups_de":["Aktion"],
+			"groups":["Actions"],
+			"groups_de":["Aktionen"],
 			"description":"An rethrow activity.",
 			"description_de":"Eine Rethrow-Aktivität.",
 			"view":"fault/node.fault.rethrow.svg",
@@ -3837,8 +3837,8 @@
 			"title_de":"If-Container",
 			"description":"One If Container",
 			"description_de":"Ein If-Container",
-			"groups":["Controls If"],
-			"groups_de":["Controls If"],
+			"groups":["If"],
+			"groups_de":["If"],
 			"view":"controls/controls.ifHolder.svg",
 			"icon":"if_container.png",
 			"roles": ["Activity"],
@@ -3977,15 +3977,16 @@
 		  // TODO modify .svg file 
 			"type": "node",
 			"id":"if_branch",
-			"title":"If (/Else-If) Branch",
-			"title_de":"If (/Else-If) Zweig",
-			"groups":["Controls If"],
-			"groups_de":["Controls If"],
+			"title":"If (/ else-if) Branch",
+			"title_de":"If (/ else-if) Zweig",
+			"groups":["If"],
+			"groups_de":["If"],
 			"description":"One If-Branch",
 			"description_de":"Ein If-Zweig",
 			"view":"controls/node.if_condition.svg",
 			"icon":"if_branch.png",
-			"roles": ["Activity","MultiActivitiesContainer"],
+			//TODO delete role "Activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -4046,16 +4047,17 @@
 		    // TODO complete perperties
 		    // TODO modify .svg file 
 			"type": "node",
-			"id":"else_branch",
-			"title":"else Branch",
+			"id":"Else_branch",
+			"title":"Else Branch",
 			"title_de":"else-Zweig",
-			"groups":["Controls If"],
-			"groups_de":["Controls If"],
+			"groups":["If"],
+			"groups_de":["If"],
 			"description":"one Else-Branch",
 			"description_de":"Ein Else-Zweig",
 			"view":"controls/node.if_condition.svg",
 			"icon":"else_branch.png",
-			"roles": ["Activity","MultiActivitiesContainer"],
+			//TODO delete role "Activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -4083,11 +4085,11 @@
 			"title_de":"Flow",
 			"description":"One Flow",
 			"description_de":"Ein Flow",
-			"groups":["Controls Flow"],
-			"groups_de":["Controls Flow"],
+			"groups":["Flow and Sequence"],
+			"groups_de":["Flow und Sequence"],
 			"view":"controls/controls.flow.svg",
 			"icon":"flow.png",
-			"roles": ["Activity","MultiActiviesContainer"],
+			"roles": ["Activity","MultiActivitiesContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30,horizontalLayout:true});	
@@ -4225,8 +4227,8 @@
 			"title_de":"pick",
 			"description":"One pick activity",
 			"description_de":"Eine Pick-Aktivität",
-			"groups":["Controls Pick"],
-			"groups_de":["Controls Pick"],
+			"groups":["Pick"],
+			"groups_de":["Pick"],
 			"view":"controls/controls.pick.svg",
 			"icon":"task.png",
 			"roles": ["Activity"],
@@ -4397,11 +4399,11 @@
 			"title_de":"onMessage",
 			"description":"One onMessage from the element Pick",
 			"description_de":"Ein onMessage-Zweig der Aktivität Pick",
-			"groups":["Controls Pick"],
-			"groups_de":["Controls Pick"],
+			"groups":["Pick"],
+			"groups_de":["Pick"],
 			"view":"handler/node.handler.onMessage.svg",
 			"icon":"onMessage.png",
-			"roles": ["MultiActivitiesContainer"],
+			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -4590,11 +4592,11 @@
 			"title_de":"Sequence",
 			"description":"One Sequence",
 			"description_de":"Ein Sequence",
-			"groups":["Controls Sequence"],
-			"groups_de":["Controls Sequence"],
+			"groups":["Flow and Sequence"],
+			"groups_de":["Flow und Sequence"],
 			"view":"controls/controls.sequence.svg",
 			"icon":"sequence.png",
-			"roles": ["Activity","MiltiActivitiesContainer"],
+			"roles": ["Activity","MultiActivitiesContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30,horizontalLayout:true});	
@@ -4732,8 +4734,8 @@
 			"title_de":"While",
 			"description":"One While",
 			"description_de":"Ein While",
-			"groups":["Loop"],
-			"groups_de":["Schleife"],
+			"groups":["Loops"],
+			"groups_de":["Schleifen"],
 			"view":"loop/loop.while.svg",
 			"icon":"while.png",
 			"roles": ["Activity","SingleActivityContainer"],
@@ -4938,8 +4940,8 @@
 			"title_de":"RepeatUntil",
 			"description":"One repeat Until",
 			"description_de":"Ein repeat Until",
-			"groups":["Loop"],
-			"groups_de":["Schleife"],
+			"groups":["Loops"],
+			"groups_de":["Schleifen"],
 			"view":"loop/loop.repeatUntil.svg",
 			"icon":"repeatUntil.png",
 			"roles": ["Activity","SingleActivityContainer"],
@@ -5144,8 +5146,8 @@
 			"title_de":"For Each",
 			"description":"One for each activity",
 			"description_de":"Eine ForEach-Aktivität",
-			"groups":["Loop"],
-			"groups_de":["Schleife"],
+			"groups":["Loops"],
+			"groups_de":["Schleifen"],
 			"view":"loop/loop.foreach.svg",
 			"icon":"forEach.png",
 			"roles": ["Activity","SingleActivityContainer"],
@@ -5420,8 +5422,8 @@
 			"title_de":"compensate",
 			"description":"One Compensate",
 			"description_de":"Ein Compensate",
-			"groups":["Compensate"],
-			"groups_de":["Compensate"],
+			"groups":["Compensation"],
+			"groups_de":["Compensation"],
 			"view":"compensate/node.compensate.compensate.svg",
 			"icon":"compensation.png",
 			"roles": ["Activity"],
@@ -5559,8 +5561,8 @@
 			"title_de":"compensateScope",
 			"description":"one Compensate Scope",
 			"description_de":"Ein Compensate Scope",
-			"groups":["Compensate"],
-			"groups_de":["Compensate"],
+			"groups":["Compensation"],
+			"groups_de":["Compensation"],
 			"view":"compensate/node.compensate.compensateScope.svg",
 			"icon":"compensationScope.png",
 			"roles": ["Activity"],
@@ -5716,7 +5718,7 @@
 			"groups_de":["Scope"],
 			"view":"controls/controls.scope.svg",
 			"icon":"scope.png",
-			"roles": ["Activity","MultiActivitiesContainer","HandlerHolder","CompensationHandlerHolder"],
+			"roles": ["Activity","SingleActivityContainer","HandlerHolder","CompensationHandlerHolder"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -6293,12 +6295,12 @@
 			"title_de":"onAlarm",
 			"description":"One element onAlarm",
 			"description_de":"Ein Element onAlarm",
-			"groups":["Controls Pick","Scope"],
-			"groups_de":["Controls Pick","Scope"],
+			"groups":["Pick","Scope"],
+			"groups_de":["Pick","Scope"],
 			"view":"others/node.shared.onAlarm.svg",
 			"icon":"onAlarm.png",
 			// TODO : delete role "Activity"
-			"roles": ["MultiActivitiesContainer","Activity"],
+			"roles": ["SingleActivityContainer","Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -6461,7 +6463,7 @@
 			"view":"handler/node.handler.onEvent.svg",
 			"icon":"onEvent.png",
 			// TODO : delete role "Activity"
-			"roles": ["MultiActivitiesContainer","Activity"],
+			"roles": ["SingleActivityContainer","Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -6708,7 +6710,7 @@
 			"view":"compensate/node.compensate.compensateHandler.svg",
 			"icon":"compensationHandler.png",
 			// TODO : delete role "Activity"
-			"roles": ["Handler","Activity","MultiActivitiesContainer"],
+			"roles": ["Handler","Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -6756,7 +6758,7 @@
 			"groups_de":["Scope"],
 			"view":"handler/node.handler.terminationHandler.svg",
 			"icon":"termination.png",
-			"roles": ["Handler","MultiActivitiesContainer"],
+			"roles": ["Handler","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -6805,7 +6807,7 @@
 			"view":"handler/node.handler.catch1.svg",
 			"icon":"catch.png",
 			// TODO : delete role "Activity"
-			"roles": ["MultiActivitiesContainer","Activity"],
+			"roles": ["SingleActivityContainer","Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -6912,7 +6914,7 @@
 			"view":"handler/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
 			// TODO : delete role "Activity"
-			"roles": ["Activity","MultiActivitiesContainer"],
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
@@ -6955,8 +6957,8 @@
 			"title_de":"Bpel Link",
 			"description":"Defines a Link in a Flow Element",
 			"description_de":"Definiere eine Kante des Flow-Elements",
-			"groups":["Controls Flow"],
-			"groups_de":["Controls Flow"],
+			"groups":["Flow and Sequence"],
+			"groups_de":["Flow und Sequence"],
 			"view":"controls/edge.sequenceFlow.svg",
 			"icon":"sequence_flow.png",
 			"roles": [],
@@ -7051,11 +7053,25 @@
 		"cardinalityRules":[
 		   	{	
 				"role":"SingleActivityContainer",
-				"maximumChildren":1,
+				"maximumChildren":[
+					{
+					   "quantity":1,
+					   "countingRoles":["Activity"],
+					   "exceptions":[],
+					   "recursive":false
+					}
+				]
 			},
-		   	{	
+			{	
 				"role":"MultiActivitiesContainer",
-				"maximumChildren":undefined,
+				"maximumChildren":[
+					{
+					   "quantity":undefined,
+					   "countingRoles":["Activity"],
+					   "exceptions":[],
+					   "recursive":false
+					}
+				]
 			},
 			{	
 				"role":"BPEL",
@@ -7075,6 +7091,10 @@
 			},
 			{	
 				"role":"else_branch",
+				"maximumOccurrence":1,
+			},
+			{	
+				"role":"copy",
 				"maximumOccurrence":1,
 			},
 			{	
@@ -7102,7 +7122,7 @@
 				"contains": ["if_branch", "else_branch"]			
 			},
 			{ 
-			    	"role":"forEach",
+			    "role":"forEach",
 				"contains": ["scope"]
 			},
 			{
@@ -7128,7 +7148,12 @@
 			{
 				"role":"Process",
 				"contains": ["BPEL"]
+			},
+			{
+				"role":"assign",
+				"contains": ["copy"]
 			}
+			
 		],
 		canContain: function(args) {return args.result;  },
 		canConnect: function(args) { 
