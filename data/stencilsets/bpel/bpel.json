@@ -14,7 +14,7 @@
 			"groups_de":["Projekt"],
 			"description":"",
 			"view":"others/node.Bpel.svg",
-			"icon":"new_task.png",
+			"icon":"diagram.png",
 			"roles": [],
 			"properties": []
 		},
@@ -28,7 +28,7 @@
 			"groups":["BPEL"],
 			"groups_de":["BPEL"],
 			"view":"others/node.Bpel.svg",
-			"icon":"new_task.png",
+			"icon":"task.png",
 			"roles": ["HandlerHolder","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
@@ -730,7 +730,7 @@
 			"description":"An Invoke activity.",
 			"description_de":"Eine Invoke-Aktivität.",
 			"view":"action/node.action.invoke.svg",
-			"icon":"new_invoke.png",
+			"icon":"invoke.png",
 			"roles": ["Activity","CompensationHandlerHolder"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
@@ -1116,7 +1116,7 @@
 			"description":"An Receive activity.",
 			"description_de":"Eine Receive-Aktivität.",
 			"view":"action/node.action.receive.svg",
-			"icon":"new_receive.png",
+			"icon":"receive.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -1416,7 +1416,7 @@
 			"description":"An Reply activity.",
 			"description_de":"Eine Reply Aktivität.",
 			"view":"action/node.action.reply.svg",
-			"icon":"new_reply.png",
+			"icon":"reply.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -1762,7 +1762,7 @@
 			"description":"An Assign activity.",
 			"description_de":"Eine Assign-Aktivität.",
 			"view":"action/node.action.assign.svg",
-			"icon":"new_assign.png",
+			"icon":"assign.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -1938,7 +1938,7 @@
 			"description":"Copy",
 			"description_de":"Copieren.",
 			"view":"action/node.action.empty.svg",
-			"icon":"new_task_none.png",
+			"icon":"copy.png",
 			// TODO : delete role "Activity"
 			"roles": ["Activity"],
 			"properties": [	
@@ -1969,7 +1969,7 @@
 			"description":"An Empty activity.",
 			"description_de":"Eine Empty-Aktivität.",
 			"view":"action/node.action.empty.svg",
-			"icon":"new_task_none.png",
+			"icon":"task_none.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -2107,7 +2107,7 @@
 			"description":"An Opaque activity.",
 			"description_de":"Eine opake Aktivität.",
 			"view":"action/node.action.opaqueActivity.svg",
-			"icon":"new_task.png",
+			"icon":"task.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -2245,7 +2245,7 @@
 			"description":"An validate activity.",
 			"description_de":"Eine Validate-Aktivität.",
 			"view":"action/node.action.validate.svg",
-			"icon":"new_validate.png",
+			"icon":"validate.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -2406,7 +2406,7 @@
 			"description":"An Extension activity.",
 			"description_de":"Eine Erweiterung-Aktivität.",
 			"view":"action/node.action.extensionActivity.svg",
-			"icon":"new_extensionActivity.png",
+			"icon":"extensionActivity.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -2559,7 +2559,7 @@
 			"description":"An Wait activity.",
 			"description_de":"Eine Wait-Aktivität.",
 			"view":"action/node.action.wait.svg",
-			"icon":"new_wait.png",
+			"icon":"wait.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -2771,7 +2771,7 @@
 			"description":"An throw activity.",
 			"description_de":"Eine Throw-Aktivität.",
 			"view":"fault/node.fault.throw.svg",
-			"icon":"new_throw.png",
+			"icon":"throw.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -2938,7 +2938,7 @@
 			"description":"An Exit activity.",
 			"description_de":"Eine Exit-Aktivität.",
 			"view":"fault/node.fault.exit.svg",
-			"icon":"new_exit.png",
+			"icon":"exit.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -3075,7 +3075,7 @@
 			"description":"An rethrow activity.",
 			"description_de":"Eine Rethrow-Aktivität.",
 			"view":"fault/node.fault.rethrow.svg",
-			"icon":"new_throw.png",
+			"icon":"throw.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -3213,7 +3213,7 @@
 			"groups":["Controls If"],
 			"groups_de":["Controls If"],
 			"view":"controls/controls.ifHolder.svg",
-			"icon":"new_ifHolder.png",
+			"icon":"if_container.png",
 			"roles": ["Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -3355,7 +3355,7 @@
 			"groups":["Controls Flow"],
 			"groups_de":["Controls Flow"],
 			"view":"controls/controls.flow.svg",
-			"icon":"new_flow.png",
+			"icon":"flow.png",
 			"roles": ["Activity","MultiActiviesContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -3497,7 +3497,7 @@
 			"groups":["Controls Pick"],
 			"groups_de":["Controls Pick"],
 			"view":"controls/controls.pick.svg",
-			"icon":"new_task.png",
+			"icon":"task.png",
 			"roles": ["Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -3669,7 +3669,7 @@
 			"groups":["Controls Pick"],
 			"groups_de":["Controls Pick"],
 			"view":"handler/node.handler.onMessage.svg",
-			"icon":"new_onMessage.png",
+			"icon":"onMessage.png",
 			"roles": ["MultiActivitiesContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -3862,7 +3862,7 @@
 			"groups":["Controls Sequence"],
 			"groups_de":["Controls Sequence"],
 			"view":"controls/controls.sequence.svg",
-			"icon":"new_sequence.png",
+			"icon":"sequence.png",
 			"roles": ["Activity","MiltiActivitiesContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -4004,7 +4004,7 @@
 			"groups":["Loop"],
 			"groups_de":["Schleife"],
 			"view":"loop/loop.while.svg",
-			"icon":"new_while.png",
+			"icon":"while.png",
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
@@ -4210,7 +4210,7 @@
 			"groups":["Loop"],
 			"groups_de":["Schleife"],
 			"view":"loop/loop.repeatUntil.svg",
-			"icon":"new_repeatUntil.png",
+			"icon":"repeatUntil.png",
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
@@ -4416,7 +4416,7 @@
 			"groups":["Loop"],
 			"groups_de":["Schleife"],
 			"view":"loop/loop.foreach.svg",
-			"icon":"new_for_each.png",
+			"icon":"forEach.png",
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var pools = shape.getChildNodes();
@@ -4692,7 +4692,7 @@
 			"groups":["Compensate"],
 			"groups_de":["Compensate"],
 			"view":"compensate/node.compensate.compensate.svg",
-			"icon":"new_compensation.png",
+			"icon":"compensation.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -4831,7 +4831,7 @@
 			"groups":["Compensate"],
 			"groups_de":["Compensate"],
 			"view":"compensate/node.compensate.compensateScope.svg",
-			"icon":"new_compensationScope.png",
+			"icon":"compensationScope.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -4984,7 +4984,7 @@
 			"groups":["Scope"],
 			"groups_de":["Scope"],
 			"view":"controls/controls.scope.svg",
-			"icon":"new_scope.png",
+			"icon":"scope.png",
 			"roles": ["Activity","MultiActivitiesContainer","HandlerHolder","CompensationHandlerHolder"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -5565,7 +5565,7 @@
 			"groups":["Controls Pick","Scope"],
 			"groups_de":["Controls Pick","Scope"],
 			"view":"others/node.shared.onAlarm.svg",
-			"icon":"new_onAlarm.png",
+			"icon":"onAlarm.png",
 			// TODO : delete role "Activity"
 			"roles": ["MultiActivitiesContainer","Activity"],
 			"layout":function(shape) {		
@@ -5728,7 +5728,7 @@
 			"groups":["Scope"],
 			"groups_de":["Scope"],
 			"view":"handler/node.handler.onEvent.svg",
-			"icon":"new_onEvent.png",
+			"icon":"onEvent.png",
 			// TODO : delete role "Activity"
 			"roles": ["MultiActivitiesContainer","Activity"],
 			"layout":function(shape) {		
@@ -5975,7 +5975,7 @@
 			"groups":["Scope"],
 			"groups_de":["Scope"],
 			"view":"compensate/node.compensate.compensateHandler.svg",
-			"icon":"new_compensationHandler.png",
+			"icon":"compensationHandler.png",
 			// TODO : delete role "Activity"
 			"roles": ["Handler","Activity","MultiActivitiesContainer"],
 			"layout":function(shape) {		
@@ -6024,7 +6024,7 @@
 			"groups":["Scope"],
 			"groups_de":["Scope"],
 			"view":"handler/node.handler.terminationHandler.svg",
-			"icon":"new_termination.png",
+			"icon":"termination.png",
 			"roles": ["Handler","MultiActivitiesContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -6072,7 +6072,7 @@
 			"groups":["Scope"],
 			"groups_de":["Scope"],
 			"view":"handler/node.handler.catch1.svg",
-			"icon":"new_catch.png",
+			"icon":"catch.png",
 			// TODO : delete role "Activity"
 			"roles": ["MultiActivitiesContainer","Activity"],
 			"layout":function(shape) {		
@@ -6179,7 +6179,7 @@
 			"groups":["Scope"],
 			"groups_de":["Scope"],
 			"view":"handler/node.handler.catchAll.svg",
-			"icon":"new_catchAll.png",
+			"icon":"catchAll.png",
 			// TODO : delete role "Activity"
 			"roles": ["Activity","MultiActivitiesContainer"],
 			"layout":function(shape) {		
@@ -6227,7 +6227,7 @@
 			"groups":["Controls Flow"],
 			"groups_de":["Controls Flow"],
 			"view":"controls/edge.sequenceFlow.svg",
-			"icon":"new_sequence_flow.png",
+			"icon":"sequence_flow.png",
 			"roles": [],
 			"properties": [
 				{
