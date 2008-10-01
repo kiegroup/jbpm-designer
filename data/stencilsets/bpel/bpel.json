@@ -31,30 +31,8 @@
 			"icon":"task.png",
 			"roles": ["HandlerHolder","SingleActivityContainer"],
 			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
  			},
 			"properties": [
 				{
@@ -733,30 +711,8 @@
 			"icon":"invoke.png",
 			"roles": ["Activity","CompensationHandlerHolder"],
 			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
  			},
 			"properties": [
 				{
@@ -1765,6 +1721,11 @@
 			"view":"action/node.action.assign.svg",
 			"icon":"assign.png",
 			"roles": ["Activity"],
+			//TODO : fix layout problem
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
+ 			},
 			"properties": [
 				{
 					"id":"name",
@@ -4740,30 +4701,8 @@
 			"icon":"while.png",
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
  			},
 			"properties": [
 				{
@@ -4946,30 +4885,8 @@
 			"icon":"repeatUntil.png",
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
  			},
 			"properties": [
 				{
@@ -5152,30 +5069,8 @@
 			"icon":"forEach.png",
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
-				var pools = shape.getChildNodes();
-				
-				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
-					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
-						var lr = pool.bounds.lowerRight();
-						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
-					
-				}
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
  			},
 			"properties": [
 				{
