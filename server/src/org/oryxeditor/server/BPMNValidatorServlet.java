@@ -12,6 +12,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -22,7 +25,7 @@ import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn.validation.BPMNValidator;
 
 /**
- * Copyright (c) 2008 Gero Decker
+ * Copyright (c) 2008 Kai Schlichting
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -81,25 +84,22 @@ public class BPMNValidatorServlet extends HttpServlet {
 		
 		// { leadToEnd : true/false,  conflicting : [{ id : <id>}, { id : <id>}, ...] } 
 		
-		//TODO java helpers for json objects?
-		
-		writer.print("{ leadsToEnd :" + validator.leadsToEnd + ", conflictingNodes : " );
-		
-		writer.print("[");
-		
-		boolean isFirst = true;
-		for(DiagramObject node: validator.getConflictingBPMNNodes()){
-			if(!isFirst)
-				writer.print(",");
-			else
-				isFirst = false;
-			writer.print("{");
-			writer.print( "'id' : '" + node.getId() + "'" );
-			writer.print("}");
+		try{
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("leadsToEnd", validator.leadsToEnd);
+			
+			JSONArray conflictingNodes = new JSONArray();
+			for(DiagramObject node: validator.getConflictingBPMNNodes()){
+				JSONObject nodeObject = new JSONObject();
+				nodeObject.put("id", node.getId());
+				conflictingNodes.put(nodeObject);
+			}
+			
+			jsonObject.put("conflictingNodes", conflictingNodes);
+			
+			writer.print(jsonObject.toString());
+		} catch (JSONException exception) {
+			exception.printStackTrace();
 		}
-		
-		writer.print("]");
-		
-		writer.print("}");
 	}
 }

@@ -38,5 +38,6 @@
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/org.json.jar"/>
 	<classpathentry kind="output" path="server/bin"/>
 </classpath>
