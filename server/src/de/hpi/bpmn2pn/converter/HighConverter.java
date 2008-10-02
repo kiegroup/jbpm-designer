@@ -116,12 +116,32 @@ public class HighConverter extends StandardConverter {
 		for(List<Edge> edges : (List<List<Edge>>)de.hpi.bpmn.analysis.Combination.findCombinations(gateway.getOutgoingEdges())){
 			if(edges.size() == 0)
 				continue;
-			Transition t = addSilentTransition(net, "orSplit_"+gateway.getId(), gateway, 1);
+			Transition t = addSilentTransition(net, generateOrSplitId(gateway, edges), gateway, 0);
 			for(Edge edge : edges){
 				addFlowRelationship(net, t, c.map.get(edge));
 			}
 			addFlowRelationship(net, c.map.get(gateway.getIncomingEdges().get(0)), t);
 		}
+	}
+	
+	/*
+	 * Overwrite this if other id generation is needed (like in step through mapping)
+	 */
+	public String generateOrSplitId(String gatewayId, String[] firingEdgesIds){
+		String resourceId = "orSplit_"+gatewayId;
+		for(String edgeId : firingEdgesIds){
+			resourceId += edgeId;
+		}
+		return resourceId; 
+	}
+	
+	// Other interfaces to generateOrSplitId(String gatewayId, String[] firingEdgesIds)
+	public String generateOrSplitId(ORGateway gateway, List<Edge> firingEdges){
+		String[] firingEdgesIds = new String[firingEdges.size()];
+		for(int i = 0; i < firingEdges.size(); i++){
+			firingEdgesIds[i] = firingEdges.get(i).getId();
+		}
+		return generateOrSplitId(gateway.getId(), firingEdgesIds);
 	}
 
 	protected void handleORJoin(PetriNet net, ORGateway gateway,

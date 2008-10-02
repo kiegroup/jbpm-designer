@@ -5,8 +5,10 @@ import java.util.List;
 
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
+import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
+import de.hpi.bpmn2pn.converter.STConverter;
 import de.hpi.highpetrinet.HighPetriNet;
 import de.hpi.highpetrinet.verification.HighPNInterpreter;
 import de.hpi.petrinet.Marking;
@@ -17,6 +19,8 @@ public class STMapper {
 	private HighPetriNet petriNet;
 	// ... with a fitting interpreter
 	private HighPNInterpreter petriNetInterpreter;
+	// ... , the used bpmn2pn converter
+	private STConverter converter;
 	// ... and its marking
 	private Marking petriNetMarking;
 	// A list of transitions that have changed because an object has been fired
@@ -26,8 +30,10 @@ public class STMapper {
 	// The AutoSwitchLevel that is set
 	private AutoSwitchLevel switchLevel = AutoSwitchLevel.SemiAuto;
 	
-	public STMapper(HighPetriNet pn) {
-		petriNet = pn;
+	public STMapper(STConverter converter) {
+		this.converter = converter;
+		// Convert the bpmn diagram to petri net
+		petriNet = converter.convert();
 		// Get an interpreter
 		petriNetInterpreter = new HighPNInterpreter();
 		// Start with the initial marking
@@ -108,18 +114,44 @@ public class STMapper {
 		}
 	}
 	
+	// objResourceIDsToFire is needed for OR-Splits
 	public boolean fireObject(String objResourceID) {
+		/*
+		 * For OR-Splits, the id of the bpmn object isn't needed, but the id of the transition which should be fired.
+		 * Here, the id is build up by convention: orSplit_<ORSplitID>#<SeqFlowToFireIds>
+		 */
+		if(objResourceID.contains("#")){ // or-split
+			String orSplitResourceId = objResourceID.split("#")[0];
+			String[] firingEdgesResourceIds = objResourceID.split("#")[1].split(",");
+			
+			objResourceID = converter.generateOrSplitId(orSplitResourceId, firingEdgesResourceIds);
+		}
+		
+		
 		STTransition t = null;
 		// Check if this object can be fired
 		List<STTransition> fireableObjects = getFireableTransitions();
 		boolean isFireable = false;
 		for(int i = 0; i < fireableObjects.size(); i++) {
-			if (fireableObjects.get(i).getBPMNObj().getResourceId() != null) { // Otherwise there is a null-pointer exception when checking an invisble object
-				if (fireableObjects.get(i).getBPMNObj().getResourceId().equals(objResourceID)) {
-					t = fireableObjects.get(i);
+			DiagramObject bpmnObject = fireableObjects.get(i).getBPMNObj();
+			String bpmnObjectId = bpmnObject.getResourceId();
+			
+			if(bpmnObjectId == null){ // Otherwise there is a null-pointer exception when checking an invisble object
+				continue;
+			}
+	
+			// If Or-Split, do special handling (check transitionID == objID instead of bpmnObjId == objId)
+			if ((bpmnObject instanceof ORGateway) && bpmnObject.getOutgoingEdges().size() > 1){
+				if(fireableObjects.get(i).getId().equals(objResourceID)){
 					isFireable = true;
-					break;
 				}
+			} else if (bpmnObjectId.equals(objResourceID)) {
+				isFireable = true;
+			}
+			
+			if(isFireable){
+				t = fireableObjects.get(i);
+				break;
 			}
 		}
 		
