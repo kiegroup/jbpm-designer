@@ -71,7 +71,14 @@ public class HighConverter extends StandardConverter {
 	}
 	
 	protected HighFlowRelationship addInhibitorFlowRelationship(PetriNet net,
-			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {	
+			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {
+		for (HighFlowRelationship rel : (List<HighFlowRelationship>)target.getIncomingFlowRelationships()){
+			if ((Place)rel.getSource() == source){
+				// there is already a connection, perhaps return null or raise error?
+				return rel;
+			}
+		}
+		
 		HighFlowRelationship rel = (HighFlowRelationship)addFlowRelationship(net, source, target);
 		if (rel == null){
 			return null;
@@ -190,7 +197,7 @@ public class HighConverter extends StandardConverter {
 			if(incomingBPMN instanceof SequenceFlow){
 				incomingBPMN = (DiagramObject)((SequenceFlow)incomingTransition.getBPMNObj()).getSource();
 			}
-
+			
 			addInhibitorFlowRelationship(net, edge, gatewayTransition);
 			
 			if(!checkDominator((Node)incomingBPMN, (Node)gatewayTransition.getBPMNObj(), c)){
