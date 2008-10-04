@@ -280,7 +280,7 @@ public class HighConverter extends StandardConverter {
 
 		addFlowRelationship(net, pl.ok, t);
 		addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(event)));
-		((HighConversionContext)c).addAncestorExcpTransition(event.getProcess(), t);
+		((HighConversionContext)c).addAncestorExcpTransition((SubProcess)event.getActivity(), t);
 	}
 
 	@Override
