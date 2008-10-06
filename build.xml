@@ -1,9 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-
+	<!-- Load additional properties -->
     <property file="build.properties" />
     
-    <target name="clean">
+	<!-- Server (poem-jvm) properties *************************************************** -->
+	<property name="server-root-dir" value="poem-jvm" />
+	<property name="java-dir" value="${server-root-dir}/src/java" />
+	<property name="bin-dir" value="build/poem-jvm/bin" />
+	<property name="lib-dir" value="${server-root-dir}/lib" />
+	<property name="data-dir" value="${server-root-dir}/data" />
+	<property name="target-dir" value="dist" />
+	<property name="repository-dir" value="${server-root-dir}/src/javascript/repository" />
+	<property name="repository2-dir" value="${server-root-dir}/src/javascript/repository2" />
+	<property name="config-dir" value="${server-root-dir}/etc" />
+	
+	
+	<!-- Server targets (backend.war) ****************************************************** -->
+	<target name="clean-backend">
+		<delete dir="${bin-dir}" />
+		<delete file="${target-dir}/backend.war" />
+	</target>
+	
+	<target name="compile-backend">
+		<mkdir dir="${bin-dir}"/>
+		<javac srcdir="${java-dir}" destdir="${bin-dir}" debug="${java-debug}" >
+			<classpath id="libs"> 
+				<fileset dir="${lib-dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="build-backend" depends="compile-backend" >
+		<!-- Add Hibernate xml files to the binary classes dir -->
+		<copy file="${config-dir}/hibernate.cfg.xml" todir="${bin-dir}" />
+		<copy file="${data-dir}/Access.hbm.xml" todir="${bin-dir}" />
+		<war destfile="${target-dir}/backend.war"  
+			webxml="${config-dir}/web.xml" 
+			update="true">
+			<!-- Ext files-->
+			<fileset dir="lib" >
+				<include name="ext-2.0.2/" />
+			</fileset>	
+			<!-- Image files-->
+			<fileset dir="${data-dir}" >
+				<include name="images/" />
+			</fileset>
+			<!-- Internationalization files-->
+			<fileset dir="${server-root-dir}" >
+				<include name="i18n/" />
+			</fileset>
+			<!-- Css files-->
+			<fileset dir="${server-root-dir}/src" >
+				<include name="css/" />
+			</fileset>
+			<!-- Javascript files-->
+			<fileset dir="${server-root-dir}/src/javascript" >
+				<include name="repository/" />
+				<include name="repository2/" />
+			</fileset>
+			
+			<lib dir="${lib-dir}" />
+			<classes dir="${bin-dir}" />
+			<metainf file="build/LICENSE"/>
+		</war>
+	</target>
+	
+	<target name="deploy-backend">
+        <copy file="${target-dir}/backend.war" tofile="${deploymentdir}/backend.war" />
+    </target>
+
+    <target name="undeploy-backend">
+        <delete file="${deploymentdir}/backend.war" />
+    </target>
+	
+	<!-- Database targets ****************************************************** -->
+	<target name="create-db">
+		<exec dir="${postgresql-bin-dir}" executable="createdb"> 
+			<arg value="-h ${postgresql-hostname}" />
+			<arg value="-U ${postgresql-username}" />
+			<arg value="-O poem" />
+			<arg value="poem" />
+		</exec>
+	</target>
+	
+	<target name="drop-db">
+		
+	</target>
+	
+	<target name="clean-db">
+		
+	</target>
+	
+	<!-- Oryx  targets (oryx.war) ****************************************************** -->
+    <target name="clean-editor">
         <delete dir="dist"/>
         <delete dir="build"/>
     </target>
@@ -90,7 +181,7 @@
             </fileset>
         </copy>
         
-        <javac srcdir="server/src" destdir="build/classes" debug="on">
+        <javac srcdir="server/src" destdir="build/classes" debug="${java-debug}" >
             <classpath>
 				<fileset dir="lib">
                     <include name="*.jar"/>
@@ -271,10 +362,10 @@
           
     </target>
     
-    <target name="all" depends="build, examples, compress, dist"/>
+    <target name="build-editor" depends="build, examples, compress, dist"/>
 
 
-    <target name="deploy">
+    <target name="deploy-editor">
         <copy file="dist/oryx.war" todir="${deploymentdir}" />
     </target>
 
@@ -287,58 +378,20 @@
         </echo>
     </target>
 
-    <target name="undeploy">
+    <target name="undeploy-editor">
         <delete file="${deploymentdir}/oryx.war" />
     </target>
 
-    <!-- tasks for PoEM Backend -->
-    <target name="clean-backend">
-        <exec executable="buildr" dir="poem-jvm">
-            <arg value="clean"/>
-        </exec>
-    </target>
-
-    <target name="build-backend">
-        <exec executable="buildr" dir="poem-jvm">
-            <arg value="package"/>
-        </exec>
-    </target>
-
-    <target name="deploy-backend">
-        <copy file="poem-jvm/backend/target/poem-backend-1.0.war" tofile="${deploymentdir}/backend.war" />
-    </target>
-
-    <target name="undeploy-backend">
-        <delete file="${deploymentdir}/backend.war" />
-    </target>
-
-    <!-- tasks for backend database -->
-    <target name="clean-db">
-        <exec executable="buildr" dir="poem-jvm">
-            <arg value="clean-postgres"/>
-        </exec>
-    </target>
-
-    <target name="build-db">
-        <exec executable="buildr" dir="poem-jvm">
-            <arg value="migrate"/>
-        </exec>
-    </target>
-
-    <target name="dump-db">
-        <exec executable="buildr" dir="poem-jvm">
-            <arg value="dump-db"/>
-        </exec>
-    </target>
-
+	
+	
     <!-- combined tasks for editor and backend -->
-    <target name="rebuild-all" depends="clean, all, clean-backend, build-backend" />
+    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" />
 
     <target name="rebuild-all-parallel">
         <parallel>
             <sequential>
-                <antcall target="clean" />
-                <antcall target="all" />
+                <antcall target="clean-editor" />
+                <antcall target="build-editor" />
             </sequential>
             <sequential>
                 <antcall target="clean-backend" />
@@ -347,9 +400,9 @@
         </parallel>
     </target>
 
-    <target name="deploy-all" depends="deploy, deploy-backend" /> 
+    <target name="deploy-all" depends="deploy-editor, deploy-backend" /> 
 
-    <target name="undeploy-all" depends="undeploy, undeploy-backend" /> 
+    <target name="undeploy-all" depends="undeploy-editor, undeploy-backend" /> 
 
 	<!--<target name="tomcat-start">
 	    <java jar="${tomcat6}/bin/bootstrap.jar" fork="true">
@@ -363,5 +416,4 @@
 	        <arg line="stop"/>
 	    </java>
 	</target>-->
-
 </project>
