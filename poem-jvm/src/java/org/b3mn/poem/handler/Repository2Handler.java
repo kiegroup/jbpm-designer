@@ -69,7 +69,7 @@ public class Repository2Handler extends  HandlerBase {
 		String[] stylesheet_links = {"openid", "repository", "model_properties"};
 
 		String backend_path = "/backend";
-		String ext_path = backend_path + "/ext/";
+		String ext_path = backend_path + "/ext-2.0.2/";
 
     	response.setStatus(200);
     	response.setContentType("text/html");
@@ -109,7 +109,7 @@ public class Repository2Handler extends  HandlerBase {
     	out.println("<script src=\"" + backend_path + "/i18n/translation_en_us.js\" type=\"text/javascript\" ></script>\n"); 
     	out.println(languageFiles);
     	for (String stylesheet : stylesheet_links) {
-    		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + backend_path + "/stylesheets/" + stylesheet + ".css\">");
+    		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + backend_path + "/css/" + stylesheet + ".css\">");
     	}
     	
     	out.println("<script type=\"text/javascript\">Ext.onReady(function(){new Repository.Core.Repository(" + this.getModelData(new User(subject.getId())) + ", \"" + subject.getUri() + "\");});</script>");  

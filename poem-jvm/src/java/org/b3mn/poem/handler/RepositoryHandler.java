@@ -17,7 +17,7 @@ public class RepositoryHandler extends  HandlerBase {
 		String[] stylesheet_links = {"openid", "repository", "model_properties"};
 
 		String backend_path = "/backend";
-		String ext_path = backend_path + "/ext/";
+		String ext_path = backend_path + "/ext-2.0.2/";
 
     	response.setStatus(200);
     	response.setContentType("text/html");
@@ -32,10 +32,10 @@ public class RepositoryHandler extends  HandlerBase {
     	out.println("<script type=\"text/javascript\" src=\"" + ext_path + "adapter/ext/ext-base.js\"></script>");
     	out.println("<script type=\"text/javascript\" src=\"" + ext_path + "ext-all-debug.js\"></script>");
     	for (String include : java_script_includes) {	
-    		out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/javascripts/" + include + ".js\"></script>");
+    		out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository/" + include + ".js\"></script>");
     	}
     	for (String stylesheet : stylesheet_links) {
-    		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + backend_path + "/stylesheets/" + stylesheet + ".css\">");
+    		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + backend_path + "/css/" + stylesheet + ".css\">");
     	}
     	
     	out.println("<script type=\"text/javascript\">Ext.onReady(function(){Repository.app.init(\"" + subject.getUri() + "\");});</script>");  
