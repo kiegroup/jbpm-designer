@@ -330,10 +330,16 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
 			var fontSize; 
 			if(tspans[0])
-				fontSize = (!(navigator.userAgent.match(/2.0.0.\d+$/))) ? tspans[0].getExtentOfChar(0).height : 14;
+				//handling of unsupported method in firefox 2
+				fontSize = (!(navigator.userAgent.match(/2.0.0.\d+$/))) ? tspans[0].getExtentOfChar(0).height : ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
 			else
-				fontSize = 14;
-				
+				fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
+			
+			//handling of unsupported method in webkit
+			if(fontSize <= 0) {
+				fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
+			}
+			
 			$A(tspans).each((function(tspan, index){
 				
 				//set vertical position
