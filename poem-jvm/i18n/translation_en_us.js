@@ -49,6 +49,10 @@ if(!Repository.I18N.TableView) Repository.I18N.TableView = {};
 
 Repository.I18N.TableView.name = "Table View";
 
+if(!Repository.I18N.IconView) Repository.I18N.IconView = {};
+
+Repository.I18N.IconView.name = "Icon View";
+
 // TypeFilter Plugin
 
 if(!Repository.I18N.TypeFilter) Repository.I18N.TypeFilter = {};

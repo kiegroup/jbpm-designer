@@ -24,34 +24,49 @@
 if(!Repository.Core) Repository.Core = {};
 
 Repository.Core.ViewPlugin = {
+	
+	
+		viewRegion : "view",
+		
+		numOfDisplayedModels : 10,
+		
+		icon : "/backend/images/silk/lightbulb.png",
+		
 		construct : function(facade) {
 			arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
 			this.enabled = false;
-			this.lastDisplayedModel = -1; // index of last displayed model in filteredModels array
-			this.numOfDisplayedModels = 10; //number of models to display in view
-			if(!this.icon) this.icon = "/backend/images/silk/lightbulb.png";
+			this.lastStartIndexOfDisplayedModel = 0; // index of last displayed model in filteredModels array
 	
 			this.facade.registerOnFilterChanged(this.filterChanged.bind(this));
+			this.facade.registerOnViewChanged(this.viewChanged.bind(this));
 		},
 		
-		getNextDisplayedModels : function() {
-			var newLast = this.lastDisplayedModel + this.numOfDisplayedModels;
-			var filteredModels = this.facade.getFilteredModels();
-			newLast = (newLast <= filteredModels.length) ? newLast : filteredModels.length;
+		showNextDisplayedModels : function() {			
+			this.showDisplayedModelsStartingFrom( this.lastStartIndexOfDisplayedModel + this.numOfDisplayedModels);
+		},
+
+		showPreviousDisplayedModels : function() {			
+			this.showDisplayedModelsStartingFrom( this.lastStartIndexOfDisplayedModel - this.numOfDisplayedModels);
+		},
+		
+		showDisplayedModelsStartingFrom: function( index ){
+
+			var filteredModels 	= this.facade.getFilteredModels();
+			var startIndex 	= Math.max( Math.min( index , filteredModels.length-1 ) , 0 );
+			var endIndex 	= Math.max( Math.min( startIndex+this.numOfDisplayedModels, filteredModels.length ) , 0 );
 			
 			var newDisplayedModels = [];
 			
-			for(var i = this.lastDisplayed+1; i < newLast; i++ )
+			for(var i = startIndex; i < endIndex; i++ )
 				newDisplayedModels.push(filteredModels[i]);
 				
-			this.lastDisplayed = newLast;
-			this.facade.setDisplayedModels(newDisplayedModels);
-		},
-		
+			this.lastStartIndexOfDisplayedModel = startIndex;
+			this.facade.setDisplayedModels( newDisplayedModels );		
+		},	
+			
 		enable : function() {
 			// determine models to display
-			this.lastDisplayed = -1;
-			this.getNextDisplayedModels();
+			this.showDisplayedModelsStartingFrom( 0 );
 			// make it visible
 			this.enabled = true;
 			this.panel.setVisible(true);
@@ -60,11 +75,22 @@ Repository.Core.ViewPlugin = {
 		disable : function() {
 			this.enabled = false;
 			this.panel.setVisible(false);
+			this.panel.doLayout();
 		},
 		
 		filterChanged : function(modelIds) {
-			this.preRender(this.facade.getDisplayedModels());
+			if (this == this.facade.getCurrentView()) {
+				this.preRender(this.facade.getDisplayedModels());
+			}
 		},
+
+		viewChanged : function(modelIds) {
+			
+			if( this == this.facade.getCurrentView() ){
+				this.preRender(modelIds);
+			}
+			
+		},		
 		
 		updateModels : function(modelIds) {
 			modelIds.each(function(modelId) {

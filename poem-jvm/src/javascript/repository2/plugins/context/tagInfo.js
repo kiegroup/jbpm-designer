@@ -57,8 +57,17 @@ Repository.Plugins.TagInfo = {
 		var buttons 		= [];
 		
 		var modelTags 		= $H(modelData).values().map(function( tags ){ return tags.userTags }).flatten().compact().uniq();
-		modelTags.each(function(tag){
-			buttons.push( new Ext.LinkButton({text:tag, click:this._onTagClick.bind(this, tag), style:'display:block'}) );
+		modelTags.each(function(tag, index){
+			
+			var label = {text: tag, xtype:'label'};
+			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 2px;', text:'Delete', click:this._onTagClick.bind(this, tag)})
+			
+			buttons.push( label );
+			buttons.push( image );
+			
+			if( index < modelTags.length-1 )
+				buttons.push( {html:', ', width:10, xtype:'label'} );
+				
 		}.bind(this))
 		
 		
@@ -87,11 +96,11 @@ Repository.Plugins.TagInfo = {
 											disabled  : !oneIsSelected,  
 										}),
 								new Ext.Panel({
-											x		: 100, 
+											x		: 105, 
 											y		: 0,
 											border	: false,
 											items:[ new Ext.Button({
-															text 	: 'Add',
+															text 		: 'Add',
 															disabled 	: !oneIsSelected, 
 															listeners	: {
 																click : function(){
@@ -120,7 +129,11 @@ Repository.Plugins.TagInfo = {
 	
 	_onTagClick: function( tag ){
 		
-		// TODO: Implementing the deletion of a tag
+		if( !tag || tag.length <= 0 ){ return }
+		
+		this.facade.getSelectedModels().each(function( id ){
+			this.facade.modelCache.deleteData( id, this.TAG_URL, {tag_name:tag} )
+		}.bind(this))
 		
 	},	
 	
@@ -131,8 +144,6 @@ Repository.Plugins.TagInfo = {
 		this.facade.getSelectedModels().each(function( id ){
 			this.facade.modelCache.setData( id, this.TAG_URL, {tag_name:tagname} )
 		}.bind(this))
-		
-		// TODO: Implementing the adding of a new tag
 		
 	}
 };

@@ -31,6 +31,14 @@ if(!Repository) var Repository = {};
 if(!Repository.Core) Repository.Core = {};
 
 Repository.Core.Plugin = {
+	
+	panel 		: null, 
+	
+	modelTypes 	: null,
+	
+	viewRegion 	: "left",
+	
+	name		: null,
 	/**
 	 * 
 	 */
@@ -41,8 +49,8 @@ Repository.Core.Plugin = {
 		if(!this.facade) this.facade = facade;
 		if(!this.dataUris) this.dataUris = [];
 		if(!this.toolbarButtons) this.toolbarButtons = [];
+		
 		this.panel = this.facade.registerPlugin(this);
-		this.modelTypes = null;
 	},
 	preRender: function(modelIds) {
 		this.facade.modelCache.getDataAsync(this.dataUris, modelIds, this.render.bind(this))

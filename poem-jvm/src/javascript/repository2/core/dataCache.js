@@ -145,27 +145,42 @@ Repository.Core.DataCache = {
 		return this._models.keys();
 	},
 	
-	setData: function( modelId, uriSuffix, params, successHandler ){
+	setData:  function( modelId, uriSuffix, params, successHandler ){
+		this._sendRequest( modelId, uriSuffix, 'post', params, successHandler)
+	}, 
+	
+	deleteData:  function( modelId, uriSuffix, params, successHandler ){
+		this._sendRequest( modelId, uriSuffix, 'delete', params, successHandler)
+	},	
+	
+	_sendRequest: function( modelId, uriSuffix, method, params, successHandler ){
 		uriSuffix = (uriSuffix.startsWith("/") ? uriSuffix : "/" + uriSuffix)
 		var requestUrl = this._models.get(modelId).substring(1) + uriSuffix;
 		
-		new Ajax.Request(requestUrl, {
-							method			: 'post',
-							asynchronous	: false,
-							parameters		: params,
-							onSuccess		: function(res) {
-							
-								var returnedData = new Hash(Ext.util.JSON.decode(res.responseText));
-								
-								returnedData.each(function(pair) {
-									this.updateObject(uriSuffix, pair.key, pair.value);
-								}.bind(this));
-								
-							}.bind(this),
-							onFailure: function(){
-								Ext.Msg.alert('Oryx','Server communication failed!')
-							}
-						});
+		if( method.toLowerCase() == "get" || method.toLowerCase() == "delete" ){
+			requestUrl += "?" + $H(params).toQueryString();
+		}
+		
+		Ext.Ajax.request({
+		   url		: requestUrl,
+		   method	: method,
+		   params	: params,
+		   success	: function(res) {
+					
+						var returnedData = new Hash(Ext.util.JSON.decode(res.responseText));
+						
+						returnedData.each(function(pair) {
+							this.updateObject(uriSuffix, pair.key, pair.value);
+						}.bind(this));
+						
+						if( successHandler ){
+							successHandler( res );
+						}
+			}.bind(this),
+			failure	: function(){
+				Ext.Msg.alert('Oryx','Server communication failed!')
+			}
+		});
 
 	}
 	

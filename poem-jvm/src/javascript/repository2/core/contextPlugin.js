@@ -24,15 +24,16 @@
 if(!Repository.Core) Repository.Core ={};
 
 Repository.Core.ContextPlugin = {
+	
+	viewRegion : "right",
+		
 	/**
 	 * 
 	 */
 	construct: function(facade) {
 		// call Plugin constructor
 		arguments.callee.$.construct.apply(this, arguments);
-		
-		this.panel = this.facade.registerPlugin(this);
-		
+				
 		// register on events SectionChanged and ModelUpdate
 		this.facade.registerOnSelectionChanged(this.selectionChanged.bind(this));
 		this.facade.modelCache.getUpdateHandler().registerCallback(this.modelUpdate.bind(this));

@@ -244,3 +244,43 @@ body, td, input, textarea {
 .test_unselected_text {
 	font-weight: normal;
 }
+
+
+/** REPOSITORY ICON VIEW **/
+
+.repository_iconview dd{
+	width		: 300px;
+	padding		: 10px;
+	border		: 1px solid #EEEEEE;
+	font-family	: tahoma,arial,san-serif;
+	font-size	: 9px;
+	display		: inline-table;
+	margin		: 5px;
+}
+
+.repository_iconview dd.over{
+	background-color	: #fff5e1;
+}
+
+.repository_iconview dd.selected{
+	border-color	: #FC8B03;
+}
+
+.repository_iconview dd img{
+	max-width	: 280px;
+	max-height	: 80px;
+}
+
+.repository_iconview dd .title{
+	font-weight	: bold;
+	font-size	: 11px;
+	color		: #555555;
+}
+
+.repository_iconview dd .author{
+	margin-left	: 5px;
+}
+
+.repository_iconview dd .type{
+
+}

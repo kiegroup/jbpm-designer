@@ -5,9 +5,11 @@
 		
 		<plugin source="newModelPlugin.js" name="Repository.Plugins.NewModel" />
 		<plugin source="contextFree/typeFilter.js" name="Repository.Plugins.TypeFilter" />
+		<plugin source="view/iconView.js" name="Repository.Plugins.IconView" />
 		<plugin source="view/debugView2.js" name="Repository.Plugins.DebugView" />
 		<plugin source="view/tableView.js" name="Repository.Plugins.TableView" />
 		<plugin source="context/tagInfo.js" name="Repository.Plugins.TagInfo" />
+		<plugin source="context/modelRangeSelection.js" name="Repository.Plugins.ModelRangeSelection" />
 				
 	</plugins>
 		

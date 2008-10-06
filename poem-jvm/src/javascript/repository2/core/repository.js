@@ -77,21 +77,22 @@ Repository.Core.Repository = {
 						registerOnSelectionChanged : this._selectionChangedHandler.registerCallback.bind(this._selectionChangedHandler),
 						registerOnFilterChanged : this._filterChangedHandler.registerCallback.bind(this._filterChangedHandler),
 						
-						modelCache : this._modelCache,
+						modelCache 			: this._modelCache,
 						
-						applyFilter : this.applyFilter.bind(this),
-						removeFilter : this.removeFilter.bind(this),
-						getFilteredModels : this.getFilteredModels.bind(this),
+						applyFilter 		: this.applyFilter.bind(this),
+						removeFilter 		: this.removeFilter.bind(this),
+						getFilteredModels 	: this.getFilteredModels.bind(this),
 						
-						changeSelection : this.changeSelection.bind(this),
-						getSelectedModels : this.getSelectedModels.bind(this),
+						changeSelection 	: this.changeSelection.bind(this),
+						getSelectedModels 	: this.getSelectedModels.bind(this),
 						
-						getDisplayedModels: this.getDisplayedModels.bind(this),						
-						setDisplayedModels: this.setDisplayedModels.bind(this),
+						getDisplayedModels	: this.getDisplayedModels.bind(this),						
+						setDisplayedModels	: this.setDisplayedModels.bind(this),
 						
+						getCurrentView 		: this.getCurrentView.bind(this),
 						
-						createNewModel : this.createNewModel.bind(this),
-						openModelInEditor : this.openModelInEditor.bind(this),
+						createNewModel		: this.createNewModel.bind(this),
+						openModelInEditor 	: this.openModelInEditor.bind(this),
 						
 						registerPlugin: this.registerPlugin.bind(this)
 				};
@@ -157,7 +158,11 @@ Repository.Core.Repository = {
 		getViews : function(){
 			return this._views;
 		},
-		
+
+		getCurrentView : function(){
+			return this._currentView;
+		},
+				
 		_switchView : function(view) {
 			if(this._currentView instanceof Repository.Core.ViewPlugin)
 				this._currentView.disable();
@@ -190,6 +195,8 @@ Repository.Core.Repository = {
 				displArray = displArray.reduce(); // remove double entries
 			}
 			this._displayedModels = displArray;
+			
+			this._viewChangedHandler.invoke( displArray )
 		},
 		
 		createNewModel : function(stencilsetUrl) {
@@ -232,22 +239,19 @@ Repository.Core.Repository = {
 		 * @param {Object} plugin
 		 */
 		registerPlugin: function(plugin) {
-			var pluginPanel = null;
-			if(plugin instanceof Repository.Core.ContextPlugin) {
-				pluginPanel = this._registerPluginOnPanel(plugin.name, "right");
+			
+			var pluginPanel
+			
+			if( plugin.viewRegion == "view" ) { 
+				pluginPanel = this._registerPluginOnView(plugin, "view");
 			} else {
-				if(plugin instanceof Repository.Core.ContextFreePlugin) {
-					pluginPanel = this._registerPluginOnPanel(plugin.name, "left");
-				} else {
-					if(plugin instanceof Repository.Core.ViewPlugin) {
-						return pluginPanel = this._registerPluginOnView(plugin, "view");
-					}
-				}
+				pluginPanel = this._registerPluginOnPanel(plugin.name, plugin.viewRegion);
 			}
 			
-			plugin.toolbarButtons.each(function(button) {
-				this._registerButtonOnToolbar(button);
-			}.bind(this));
+			if( plugin.toolbarButtons )
+				plugin.toolbarButtons.each(function(button) {
+					this._registerButtonOnToolbar(button);
+				}.bind(this));
 			
 			return pluginPanel;
 		},
@@ -404,7 +408,8 @@ Repository.Core.Repository = {
 			// View panel
 			this._controls.viewPanel = new Ext.Panel({ 
                 region: 'north',
-                height : 400
+				autoHeight: true,
+				border:false
             });
 			// Left panel
 			this._controls.leftPanel = new Ext.Panel({ 
