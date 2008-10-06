@@ -165,6 +165,7 @@ body, td, input, textarea {
 	color:#AA0000;
 	cursor:pointer;
 	font-weight:bold;
+	width:auto;
 }
 
 #openid_login input.text {
@@ -223,3 +224,23 @@ body, td, input, textarea {
 	background-image: url(/backend/images/silk/delete.png) !important;
 }
 
+/* Some test stuff for the new repository
+*/
+
+.test_selected_item {
+	border-color:#FF0000;
+	border-width: 2px;	
+}
+
+.test_unselected_item {
+	border-color:#000000;
+	border-width: 2px;	
+}
+
+.test_selected_text {
+	font-weight: bold;
+}
+
+.test_unselected_text {
+	font-weight: normal;
+}

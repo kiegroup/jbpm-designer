@@ -13,13 +13,13 @@
 	</session-config>
 	
     <servlet>
-        <display-name>PoEM Servlet</display-name>
-        <servlet-name>PoEMServlet</servlet-name>
-        <servlet-class>org.b3mn.poem.PoEMServlet</servlet-class>
+        <display-name>Oryx Dispatcher</display-name>
+        <servlet-name>Dispatcher</servlet-name>
+        <servlet-class>org.b3mn.poem.Dispatcher</servlet-class>
     </servlet>
 	
     <servlet-mapping>
-        <servlet-name>PoEMServlet</servlet-name>
+        <servlet-name>Dispatcher</servlet-name>
         <url-pattern>/poem/*</url-pattern>
     </servlet-mapping>
 	

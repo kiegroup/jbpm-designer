@@ -1,4 +1,4 @@
-package org.b3mn.poem.servlets;
+package org.b3mn.poem.handler;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,20 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.fop.svg.PDFTranscoder;
 
-public class PngRenderer extends ImageRenderer {
-	
-	@Override
+public class PdfRenderer extends ImageRenderer{
+
+    @Override
     protected void setResponseHeaders(HttpServletResponse res) {
-  		res.setContentType("image/png");
+  		res.setContentType("application/pdf");
+  		res.setHeader("Content-Disposition", "filename=process.pdf");
   		res.setStatus(200);
     }
 
     @Override
     protected void transcode(String in_s, OutputStream out) throws TranscoderException, IOException {
     	InputStream in = new ByteArrayInputStream(in_s.getBytes());
-	  	PNGTranscoder transcoder = new PNGTranscoder();
+	  	PDFTranscoder transcoder = new PDFTranscoder();
 	  	try {
 	    	TranscoderInput input = new TranscoderInput(in);
 

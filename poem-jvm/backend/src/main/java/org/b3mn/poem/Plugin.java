@@ -30,9 +30,12 @@ public class Plugin {
 
 	@Id
 	private String rel;
-	private String scheme;
-	private String term;
 	private String title;
+	private String description;
+	@Column(name="java_class")
+	private String javaClass;
+	@Column(name="is_export")
+	private boolean isExport;
 	
 	public String getRel() {
 		return rel;
@@ -40,22 +43,34 @@ public class Plugin {
 	public void setRel(String rel) {
 		this.rel = rel;
 	}
-	public String getScheme() {
-		return scheme;
-	}
-	public void setScheme(String scheme) {
-		this.scheme = scheme;
-	}
-	public String getTerm() {
-		return term;
-	}
-	public void setTerm(String term) {
-		this.term = term;
-	}
+	
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getDescription() {
+		return this.description;
+	}
+	public void setDescription(String decription) {
+		this.description = description;
+	}
+
+	public String getJavaClass() {
+		return this.javaClass;
+	}
+	public void setJavaClass(String javaClass) {
+		this.javaClass = javaClass;
+	}
+	
+
+	public void setExport(boolean isExport) {
+		this.isExport = isExport;
+	}
+	public boolean isExport() {
+		return isExport;
+	}
+
 }

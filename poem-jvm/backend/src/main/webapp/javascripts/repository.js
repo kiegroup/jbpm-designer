@@ -717,7 +717,7 @@ Repository.render = {
                 '</a>',
 		
 				'<tpl if="this.isAnonymousUser(current_user) || this.isPublicUser(current_user)">',
-					'<form action="/backend/consumer" method="post" id="openid_login">',
+					'<form action="/backend/poem/login" method="post" id="openid_login">',
 						'<div>',
 							'<span>',
 								'<img src="/backend/images/repository/hpi.png" onclick="Repository.render.openid_tpl.changeOpenId(\'https://openid.hpi.uni-potsdam.de/user/username\', 39, 8)"/>',
@@ -1204,7 +1204,7 @@ Repository.render = {
 								{
 									from: Repository.app.dateFormat(new Date().getTime() - 7*24*60*60*1000), // today - one week  (in milliseconds)
 								}, 
-								this.this_weeks_models_container, 
+								this.eval("var usr = "+ response.responseText);, 
 								10),
 	                        expand: Repository.app.expandPanel
 	                    }

@@ -1,4 +1,4 @@
-package org.b3mn.poem.servlets;
+package org.b3mn.poem.handler;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.batik.transcoder.TranscoderException;
 import org.b3mn.poem.Identity;
 
-public class ImageRenderer extends PluginBase {
+public class ImageRenderer extends HandlerBase {
 	
-	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object, String hostname) throws IOException {
+	@Override
+	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object)  {
     	setResponseHeaders(res);
     	try {
     		String SvgRepresentation = object.read().getSvg();
@@ -28,24 +29,10 @@ public class ImageRenderer extends PluginBase {
     		transcode(SvgRepresentation, res.getOutputStream());
 		} catch (TranscoderException e) {
 			e.printStackTrace();
+		} catch (Exception ie) {
+			ie.printStackTrace();
 		}
     }
-    public void doPost(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object, String hostname) throws IOException {
-  		res.setStatus(403);
-	   	PrintWriter out = res.getWriter();
-	   	out.write("Forbidden!");
-	}
-    public void doPut(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object, String hostname) throws IOException {
-  		res.setStatus(403);
-	   	PrintWriter out = res.getWriter();
-	   	out.write("Forbidden!");
-	}
-    public void doDelete(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object, String hostname) throws IOException {
-  		res.setStatus(403);
-	   	PrintWriter out = res.getWriter();
-	   	out.write("Forbidden!");
-	}
-
     protected void setResponseHeaders(HttpServletResponse res) {
   		res.setContentType("image/svg+xml");
   		res.setStatus(200);

@@ -44,7 +44,7 @@ public class Representation {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
-	private long ident_id;
+	private int ident_id;
     private String mime_type;
     private String language;
     private String title;
@@ -134,10 +134,10 @@ public class Representation {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public long getIdent_id() {
+	public int getIdent_id() {
 		return ident_id;
 	}
-	public void setIdent_id(long ident_id) {
+	public void setIdent_id(int ident_id) {
 		this.ident_id = ident_id;
 	}
 	public String getLanguage() {

@@ -35,7 +35,7 @@ import java.util.Date;
 public class Identity {
         
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	private int id; 
 	private String uri;
 	
 	public int getId() {
@@ -70,20 +70,20 @@ public class Identity {
 		return identity;
 	}
 	
-	public static Identity newModel(Identity owner, String title, String type, String mime_type, String language, String summary, String svg, String content) {
+	public static Identity newModel(Identity owner, String title, String type, String summary, String svg, String content) {
 			Session session = Persistance.getSession();
 			Identity identity = (Identity) session.
 			createSQLQuery("select {identity.*} from identity(?)")
 			.addEntity("identity", Identity.class).setString(0, "/model/new").uniqueResult();
 			identity.setUri("/model/" + identity.getId());
-			session.save(identity);
+			session.save(identity); 
 			
 			Representation representation = Representation.instance(identity);
 			representation.setType(type);
 			representation.setTitle(title);
-			representation.setSummary(summary);
-			representation.setLanguage(language);
-			representation.setMime_type(mime_type);
+			representation.setLanguage("deprecated");
+			representation.setMime_type("deprecated");			
+			representation.setSummary(summary);  
 			session.save(representation);
 			Persistance.commit();
 			
@@ -158,7 +158,7 @@ public class Identity {
 		Persistance.commit();
 		return list;
 	}
-	
+	/*
 	@SuppressWarnings("unchecked")
 	public Access access(String openId, String rel) {
 		List<Access> access = Persistance.getSession().
@@ -189,7 +189,7 @@ public class Identity {
 		}
 		return null;
 
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	public List<Plugin> getServlets() {

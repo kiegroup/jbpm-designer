@@ -3,6 +3,7 @@ package org.oryxeditor.server.auth;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -202,16 +203,12 @@ public class OpenIDAuthenticationServlet extends HttpServlet {
            } else {
                // Option 2: HTML FORM Redirection (Allows payloads >2048 bytes)
 
-               RequestDispatcher dispatcher = getServletContext()
-                       .getRequestDispatcher("/formredirection.jsp");
-               httpReq.setAttribute("prameterMap", httpReq.getParameterMap());
-               httpReq.setAttribute("message", authReq);
-               // httpReq.setAttribute("destinationUrl", httpResp
-               // .getDestinationUrl(false));
-               dispatcher.forward(httpReq, httpResp);
+        	   httpResp.getWriter().println(
+        			   this.getRedirectPage(authReq, authReq.getDestinationUrl(true)));
            }
        } catch (OpenIDException e) {
            // present error to the user
+    	   OpenIDException test = e;
            throw new ServletException(e);
        }
 
@@ -276,6 +273,30 @@ public class OpenIDAuthenticationServlet extends HttpServlet {
        }
 
        return null;
+   }
+   // Returns a string containing a Html page with the necessary OpenID parameter encoded as Html form
+   // This may look stupid but it's recommended in the OpenID standard. The page automatically redirects to the 
+   // OpenID provider. 
+   protected String getRedirectPage(AuthRequest authReq, String destinationUrl) {
+	   String page = 
+	   "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
+	   "<head>" +
+	       "<title>OpenID HTML FORM Redirection</title>" +
+	   "</head>" +
+	   "<body onload=\"document.forms['openid-form-redirection'].submit();\">" +
+	       "<form name=\"openid-form-redirection\" action=\""+destinationUrl+"\" method=\"post\" accept-charset=\"utf-8\" >";
+       // Create hidden input field for each key value pair
+	   for (Object key : authReq.getParameterMap().keySet()) {
+    	   String strKey = (String) key;
+    	   page += "<input type=\"hidden\" name\"" + strKey + "\" value=\"" + authReq.getParameterValue(strKey) + "\"/>";
+       }
+	   page += "<button type=\"submit\">Continue...</button>" +
+	       "</form>" +
+	   "</body>" +
+	   "</html>";
+
+	   
+	   return page;
    }
 
 }

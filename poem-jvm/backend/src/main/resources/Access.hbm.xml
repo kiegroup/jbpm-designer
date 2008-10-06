@@ -15,10 +15,7 @@
         	<key-property name="object_id" 		 type="long"   			 column="object_id"/>
         	<key-property name="object_name" 	 type="java.lang.String" column="object_name"/>
         	<key-property name="access_term" 	 type="java.lang.String" column="access_term"/>
-        	<key-property name="access_scheme" 	 type="java.lang.String" column="access_scheme"/>
-        	<key-property name="plugin_relation" type="java.lang.String" column="plugin_relation"/>
-        	<key-property name="scheme" 		 type="java.lang.String" column="scheme"/>
-        	<key-property name="term"  			 type="java.lang.String" column="term"/>       
+        	<key-property name="access_scheme" 	 type="java.lang.String" column="access_scheme"/>      
     	</composite-id>
     </class>
 </hibernate-mapping>

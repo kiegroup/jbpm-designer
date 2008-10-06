@@ -45,22 +45,30 @@ class Dbroot < ActiveRecord::Migration
     
     # create basic plugin relation
     execute %q{
-      insert into plugin (rel, scheme, term, title)
-      	select '/self', 'ruby', 'ModelHandler', 'Oryx Editor';
-      insert into plugin (rel, scheme, term, title)
-      	select '/info', 'ruby', 'InfoHandler', 'edit info';
-      insert into plugin (rel, scheme, term, title)
-        select '/access', 'ruby', 'AccessHandler', 'edit access';
-      insert into plugin (rel, scheme, term, title)
-        select '/info-access', 'ruby', 'MetaHandler', 'About';
-      insert into plugin (rel, scheme, term, title) 
-        select '/svg', 'java', 'ImageRenderer', 'Model as SVG';
-      insert into plugin (rel, scheme, term, title) 
-        select '/pdf', 'java', 'PdfRenderer', 'Model as PDF';
-      insert into plugin (rel, scheme, term, title) 
-        select '/png', 'java', 'PngRenderer', 'Model as PNG'; 
-      insert into plugin (rel, scheme, term, title) 
-        select '/rdf', 'java', 'RdfExporter', 'Model as RDF'; 
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+      	SELECT '/self', 'ModelHandler', 'Open model in the editor', 'org.b3mn.poem.handler.ModelHandler', true;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+      	SELECT '/repository', 'RepositoryHandler', 'Returns the Repository base', 'org.b3mn.poem.handler.RepositoryHandler', false;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+      	SELECT '/model_types', 'ModelHandler', 'Open model in the editor', 'org.b3mn.poem.handler.ModelHandler', false;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+      	SELECT '/model', 'CollectionHandler', 'Open model in the editor', 'org.b3mn.poem.handler.CollectionHandler', false;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+      	SELECT '/new', 'NewModelHandler', 'Open model in the editor', 'org.b3mn.poem.handler.NewModelHandler', false;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+      	select '/info', 'InfoHandler', 'edit info', 'org.b3mn.poem.handler.InfoHandler', false;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+        select '/access', 'AccessHandler', 'edit access', 'org.b3mn.poem.handler.AccessHandler', false;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export)
+        select '/info-access', 'MetaHandler', 'About','org.b3mn.poem.handler.MetaHandler', true ;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export) 
+        select '/svg', 'ImageRenderer', 'Model as SVG','org.b3mn.poem.handler.ImageRenderer', true;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export) 
+        select '/pdf', 'PdfRenderer', 'Model as PDF','org.b3mn.poem.handler.PdfRenderer', true;
+      INSERT INTO plugin (rel,  title, description, java_class, is_export) 
+        select '/png', 'PngRenderer', 'Model as PNG','org.b3mn.poem.handler.PngRenderer', true; 
+      INSERT INTO plugin (rel,  title, description, java_class, is_export) 
+        select '/rdf', 'RdfExporter', 'Model as RDF','org.b3mn.poem.handler.RdfExporter', true; 
           
     }
 

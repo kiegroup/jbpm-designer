@@ -1,0 +1,190 @@
+/***************************************
+ * Copyright (c) 2008
+ * Bjoern Wagner
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+****************************************/
+
+package org.b3mn.poem;
+
+import javax.persistence.*;
+
+import org.hibernate.Session;
+
+import java.util.List;
+import java.util.Iterator;
+import java.util.Date;
+
+@Entity @Table(name="subject")
+public class Subject {
+        
+	@Id 
+	private int ident_id;
+	
+	// OpenID Attributes
+	private String nickname;
+	private String email;
+	private String fullname;
+	private Date dob;
+	private String gender;
+	private String postcode;
+	private String country;
+	private String language;
+	
+	// Oryx Server Attributes
+	@Column(name="first_login")
+	private Date firstLogin;
+	
+	@Column(name="last_login")
+	private Date lastLogin;
+	
+	@Column(name="login_count")
+	private int loginCount;
+	
+	@Column(name="language_code")
+	private String languageCode;
+	
+	@Column(name="country_code")
+	private String countryCode;
+	
+	private String password;
+	private String visibility;
+	
+	@Column(name="voters_count")
+	private int votersCount;
+	
+	@Column(name="votes_sum")
+	private int voteSum;
+	
+	public int getIdent_id() {
+		return ident_id;
+	}
+	public void setIdent_id(int ident_id) {
+		this.ident_id = ident_id;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getFullname() {
+		return fullname;
+	}
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+	public Date getDob() {
+		return dob;
+	}
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPostcode() {
+		return postcode;
+	}
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	public Date getFirstLogin() {
+		return firstLogin;
+	}
+	public void setFirstLogin(Date firstLogin) {
+		this.firstLogin = firstLogin;
+	}
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+	public int getLoginCount() {
+		return loginCount;
+	}
+	public void setLoginCount(int loginCount) {
+		this.loginCount = loginCount;
+	}
+	public String getLanguageCode() {
+		return languageCode;
+	}
+	public void setLanguageCode(String languageCode) {
+		this.languageCode = languageCode;
+	}
+	public String getCountryCode() {
+		return countryCode;
+	}
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getVisibility() {
+		return visibility;
+	}
+	public void setVisibility(String visisbility) {
+		this.visibility = visisbility;
+	}
+
+	// Returns the open id of the user from the identity table
+	public String getOpenId() {
+		return Identity.instance(this.getIdent_id()).getUri();
+	}
+	public int getVotersCount() {
+		return votersCount;
+	}
+	public void setVotersCount(int votersCount) {
+		this.votersCount = votersCount;
+	}
+	public int getVoteSum() {
+		return voteSum;
+	}
+	public void setVoteSum(int voteSum) {
+		this.voteSum = voteSum;
+	}
+	
+
+}
