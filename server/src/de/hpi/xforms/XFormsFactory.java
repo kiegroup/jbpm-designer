@@ -39,12 +39,24 @@ public class XFormsFactory {
 		return new Output();
 	}
 	
+	public Upload createUpload() {
+		return new Upload();
+	}
+	
+	public Range createRange() {
+		return new Range();
+	}
+	
 	public Trigger createTrigger() {
 		return new Trigger();
 	}
 	
 	public Submit createSubmit() {
 		return new Submit();
+	}
+	
+	public Select createSelect() {
+		return new Select();
 	}
 	
 	public Group createGroup() {
@@ -71,6 +83,18 @@ public class XFormsFactory {
 		return new Alert();
 	}
 	
+	public Item createItem() {
+		return new Item();
+	}
+	
+	public Value createValue() {
+		return new Value();
+	}
+	
+	public Choices createChoices() {
+		return new Choices();
+	}
+	
 	public Action createAction() {
 		return new Action();
 	}
@@ -83,8 +107,56 @@ public class XFormsFactory {
 		return new Insert();
 	}
 	
+	public Delete createDelete() {
+		return new Delete();
+	}
+	
+	public SetIndex createSetIndex() {
+		return new SetIndex();
+	}
+	
+	public Toggle createToggle() {
+		return new Toggle();
+	}
+	
+	public SetFocus createSetFocus() {
+		return new SetFocus();
+	}
+	
+	public Dispatch createDispatch() {
+		return new Dispatch();
+	}
+	
+	public Rebuild createRebuild() {
+		return new Rebuild();
+	}
+	
+	public Recalculate createRecalculate() {
+		return new Recalculate();
+	}
+	
+	public Revalidate createRevalidate() {
+		return new Revalidate();
+	}
+	
+	public Refresh createRefresh() {
+		return new Refresh();
+	}
+	
 	public Reset createReset() {
 		return new Reset();
+	}
+	
+	public Load createLoad() {
+		return new Load();
+	}
+	
+	public Send createSend() {
+		return new Send();
+	}
+	
+	public Message createMessage() {
+		return new Message();
 	}
 
 }

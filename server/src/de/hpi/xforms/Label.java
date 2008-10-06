@@ -21,6 +21,7 @@ public class Label extends XFormsElement implements PCDataContainer {
 		this.content = content;
 	}
 	
+	@Override
 	public String getTagName() {
 		return "label";
 	}

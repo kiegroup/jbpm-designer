@@ -7,6 +7,7 @@ public class Insert extends AbstractAction {
 		attributes.put("context", null);
 		attributes.put("nodeset", null);
 		attributes.put("at", null);
+		attributes.put("position", null);
 		attributes.put("origin", null);
 	}
 	

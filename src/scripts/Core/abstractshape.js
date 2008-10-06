@@ -40,7 +40,7 @@ ORYX.Core.AbstractShape = {
 		
 		arguments.callee.$.construct.apply(this, arguments);
 		
-		this.resourceId = undefined; //Id of resource in DOM
+		this.resourceId = ORYX.Editor.provideId(); //Id of resource in DOM
 		
 		// stencil reference
 		this._stencil = stencil;
@@ -263,7 +263,8 @@ ORYX.Core.AbstractShape = {
 			var prefix = property.prefix();	// Get prefix
 			var name = property.id();		// Get name
 			
-			serializedObject.push({name: name, prefix: prefix, value: this.properties[prefix+'-'+name], type: 'literal'});
+			//if(typeof this.properties[prefix+'-'+name] == 'boolean' || this.properties[prefix+'-'+name] != "")
+				serializedObject.push({name: name, prefix: prefix, value: this.properties[prefix+'-'+name], type: 'literal'});
 
 		}).bind(this));
 		

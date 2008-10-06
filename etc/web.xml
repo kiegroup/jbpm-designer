@@ -44,6 +44,17 @@
 		</servlet-class>
 	</servlet>
 
+<!--	<servlet>
+		<servlet-name>EngineProxy</servlet-name>
+		<servlet-class>org.oryxeditor.server.EngineProxy</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>EngineProxy</servlet-name>
+		<url-pattern>/engineproxy</url-pattern>
+	</servlet-mapping>
+-->
+
 	<servlet>
 		<display-name>BPEL Export</display-name>
 		<servlet-name>BPEL</servlet-name>
@@ -82,6 +93,40 @@
 		<servlet-name>SimplePNMLExporter</servlet-name>
 		<url-pattern>/simplepnmlexporter</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Oryx BPEL IMPORTER</display-name>
+		<servlet-name>BPELImporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPELImporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPELImporter</servlet-name>
+		<url-pattern>/bpelimporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Oryx BPEL EXPORTER</display-name>
+		<servlet-name>BPELExporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPELExporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPELExporter</servlet-name>
+		<url-pattern>/bpelexporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>
+			Oryx Desynchronizability Checker
+		</display-name>
+		<servlet-name>DesynchronizabilityServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.DesynchronizabilityServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DesynchronizabilityServlet</servlet-name>
+		<url-pattern>/desynchronizability</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<display-name>
@@ -95,6 +140,20 @@
 	<servlet-mapping>
 		<servlet-name>SyntaxChecker</servlet-name>
 		<url-pattern>/syntaxchecker</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>
+			Oryx BPMN Validator
+		</display-name>
+		<servlet-name>BPMNValidator</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.BPMNValidatorServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPMNValidator</servlet-name>
+		<url-pattern>/bpmnvalidator</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -124,8 +183,18 @@
 	<servlet-mapping>
 		<servlet-name>AlternativesRenderer</servlet-name>
 		<url-pattern>/pdf</url-pattern>
-	</servlet-mapping>	
-	
+	</servlet-mapping>
+
+<!--	<servlet>
+		<display-name>Worklist</display-name>
+		<servlet-name>Worklist</servlet-name>
+		<servlet-class>org.oryxeditor.server.Worklist</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Worklist</servlet-name>
+		<url-pattern>/worklist</url-pattern>
+	</servlet-mapping>
+-->
 	<servlet>
 		<display-name>Oryx EPC Upload Servlet</display-name>
 		<servlet-name>EPCUpload</servlet-name>
@@ -136,6 +205,29 @@
 		<url-pattern>/epc-upload</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<display-name>Oryx AML Support Servlet</display-name>
+		<servlet-name>AMLSupport</servlet-name>
+		<servlet-class>org.oryxeditor.server.AMLSupport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AMLSupport</servlet-name>
+		<url-pattern>/amlsupport</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<display-name>Automatic Layouter Servlet</display-name>
+		<servlet-name>AutoLayouter</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.AutoLayouterServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AutoLayouter</servlet-name>
+		<url-pattern>/layouter</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<display-name>Step Through</display-name>
 		<servlet-name>StepThrough</servlet-name>
@@ -158,6 +250,19 @@
 	<servlet-mapping>
 		<servlet-name>XFormsExportServlet</servlet-name>
 		<url-pattern>/xforms</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>TreeGraphChecker</display-name>
+		<servlet-name>TreeGraphChecker</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.TreeGraphChecker
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TreeGraphChecker</servlet-name>
+		<url-pattern>/treegraphsupport</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>

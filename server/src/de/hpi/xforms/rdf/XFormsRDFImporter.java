@@ -44,7 +44,6 @@ public class XFormsRDFImporter {
 	}
 	
 	public XForm loadXForm() {
-		
 		Node root = getRootNode(doc);
 		if (root == null)
 			return null;
@@ -57,10 +56,11 @@ public class XFormsRDFImporter {
 		c.parentRelationships = new HashMap<XFormsElement, String>();
 		c.bindings = new HashMap<XFormsElement, Bind>();
 		c.form.setModel(factory.createModel());
+		c.form.setResourceId("#oryx-canvas123");
+		c.objects.put("#oryx-canvas123", c.form);
 		
 		if(root.hasChildNodes()) {
-			Node node = root.getFirstChild();
-			while ((node = node.getNextSibling()) != null) {
+			for (Node node = root.getFirstChild(); node != null; node = node.getNextSibling()) {
 				
 				if (node instanceof Text)
 					continue;
@@ -69,9 +69,7 @@ public class XFormsRDFImporter {
 				if (type == null)
 					continue;
 				
-				if (type.equals("XForm")) {
-					handleForm(node, c);
-				} else if (type.equals("Input")) {
+				if (type.equals("Input")) {
 					addInput(node, c);
 				} else if (type.equals("Secret")) {
 					addSecret(node, c);
@@ -79,10 +77,16 @@ public class XFormsRDFImporter {
 					addTextarea(node, c);
 				} else if (type.equals("Output")) {
 					addOutput(node, c);
+				} else if (type.equals("Upload")) {
+					addUpload(node, c);
+				} else if (type.equals("Range")) {
+					addRange(node, c);
 				} else if (type.equals("Trigger")) {
 					addTrigger(node, c);
 				} else if (type.equals("Submit")) {
 					addSubmit(node, c);
+				} else if (type.equals("Select")) {
+					addSelect(node, c);
 				} else if (type.equals("Group")) {
 					addGroup(node, c);
 				} else if (type.equals("Repeat")) {
@@ -95,15 +99,41 @@ public class XFormsRDFImporter {
 					addHint(node, c);
 				} else if (type.equals("Alert")) {
 					addAlert(node, c);
+				} else if (type.equals("Item")) {
+					addItem(node, c);
 				} else if (type.equals("Action")) {
 					addAction(node, c);
 				} else if (type.equals("SetValue")) {
 					addSetValue(node, c);
 				} else if (type.equals("Insert")) {
 					addInsert(node, c);
+				} else if (type.equals("Delete")) {
+					addDelete(node, c);
+				} else if (type.equals("SetIndex")) {
+					addSetIndex(node, c);
+				} else if (type.equals("Toggle")) {
+					addToggle(node, c);
+				} else if (type.equals("SetFocus")) {
+					addSetFocus(node, c);
+				} else if (type.equals("Dispatch")) {
+					addDispatch(node, c);
+				} else if (type.equals("Rebuild")) {
+					addRebuild(node, c);
+				} else if (type.equals("Recalculate")) {
+					addRecalculate(node, c);
+				} else if (type.equals("Revalidate")) {
+					addRevalidate(node, c);
+				} else if (type.equals("Refresh")) {
+					addRefresh(node, c);
 				} else if (type.equals("Reset")) {
 					addReset(node, c);
-				}                    
+				} else if (type.equals("Load")) {
+					addLoad(node, c);
+				} else if (type.equals("Send")) {
+					addSend(node, c);
+				} else if (type.equals("Message")) {
+					addMessage(node, c);
+				}          
 				
 			}
 		}
@@ -111,7 +141,6 @@ public class XFormsRDFImporter {
 		setupParentRelationships(c);
 		addModel(c);
 		setupBinds(c);
-		
 		return c.form;
 	}
 	
@@ -131,8 +160,12 @@ public class XFormsRDFImporter {
 						uiElement.setXPosition(Integer.parseInt(bounds[0]));
 						uiElement.setYPosition(Integer.parseInt(bounds[1]));
 						
-						// TODO: handle width and height of ui elements
+						// TODO: handle width and height of UI elements
 						
+					} else if(element instanceof ListUICommon) {
+						ListUICommon listUICommon = (ListUICommon) element;
+						String[] bounds = getContent(n).split(",");
+						listUICommon.setYPosition(Integer.parseInt(bounds[1]));
 					}
 				} else {
 					if(element.getAttributes().containsKey(attribute))
@@ -142,8 +175,9 @@ public class XFormsRDFImporter {
 				}
 			}
 		}
-		if(element.getAttributes().get("id")==null)
-			element.getAttributes().put("id", element.getResourceId().substring(1));
+		
+		//if((element.getAttributes().get("id")==null) && (element.getResourceId()!=null))
+		//	element.getAttributes().put("id", element.getResourceId().substring(1));
 	}
 	
 	private void handleModelItemProperty(String attribute, String value, XFormsElement element, ImportContext c) {
@@ -174,6 +208,7 @@ public class XFormsRDFImporter {
 				c.form.getModel().getBinds().add(bind);
 			}
 			
+			//element.getAttributes().put("ref", null);
 		}
 	}
 	
@@ -184,9 +219,14 @@ public class XFormsRDFImporter {
 				XFormsElement parent = c.objects.get(parentResourceId);
 				
 				if(element instanceof XFormsUIElement) {
-					XFormsUIElement uiElement = (XFormsUIElement) element;
 					if(parent instanceof UIElementContainer) {
+						XFormsUIElement uiElement = (XFormsUIElement) element;
 						uiElement.setParent((UIElementContainer) parent);
+					}
+				} else if(element instanceof ListUICommon) {
+					if(parent instanceof ListUICommonContainer) {
+						ListUICommon listUICommon = (ListUICommon) element;
+						listUICommon.setParent((ListUICommonContainer) parent);
 					}
 				} else if(element instanceof AbstractAction) {
 					if(parent instanceof ActionContainer) {
@@ -303,10 +343,6 @@ public class XFormsRDFImporter {
 		return nodesetContext;
 	}
 	
-	private void handleForm(Node node, ImportContext c) {
-		handleAttributes(node, c.form, c);
-	}
-	
 	private void addInput(Node node, ImportContext c) {
 		Input input = factory.createInput();
 		input.setResourceId(getResourceId(node));
@@ -335,6 +371,20 @@ public class XFormsRDFImporter {
 		handleAttributes(node, output, c);
 	}
 	
+	private void addUpload(Node node, ImportContext c) {
+		Upload upload = factory.createUpload();
+		upload.setResourceId(getResourceId(node));
+		c.objects.put(upload.getResourceId(), upload);
+		handleAttributes(node, upload, c);
+	}
+	
+	private void addRange(Node node, ImportContext c) {
+		Range range = factory.createRange();
+		range.setResourceId(getResourceId(node));
+		c.objects.put(range.getResourceId(), range);
+		handleAttributes(node, range, c);
+	}
+	
 	private void addTrigger(Node node, ImportContext c) {
 		Trigger trigger = factory.createTrigger();
 		trigger.setResourceId(getResourceId(node));
@@ -347,6 +397,13 @@ public class XFormsRDFImporter {
 		submit.setResourceId(getResourceId(node));
 		c.objects.put(submit.getResourceId(), submit);
 		handleAttributes(node, submit, c);
+	}
+	
+	private void addSelect(Node node, ImportContext c) {
+		Select select = factory.createSelect();
+		select.setResourceId(getResourceId(node));
+		c.objects.put(select.getResourceId(), select);
+		handleAttributes(node, select, c);
 	}
 	
 	private void addGroup(Node node, ImportContext c) {
@@ -395,6 +452,17 @@ public class XFormsRDFImporter {
 		alert.setContent(getContent(getChild(node, "message")));
 	}
 	
+	private void addItem(Node node, ImportContext c) {
+		Item item = factory.createItem();
+		item.setResourceId(getResourceId(node));
+		c.objects.put(item.getResourceId(), item);
+		handleAttributes(node, item, c);
+		Value value = factory.createValue();
+		handleAttributes(node, value, c); 		// side effect: assigns Item's id to Value object...
+		value.getAttributes().put("id", null); 	// ...so reset Value's id attribute
+		item.setValue(value);
+	}
+	
 	private void addAction(Node node, ImportContext c) {
 		Action action = factory.createAction();
 		action.setResourceId(getResourceId(node));
@@ -416,11 +484,96 @@ public class XFormsRDFImporter {
 		handleAttributes(node, insert, c);
 	}
 	
+	private void addDelete(Node node, ImportContext c) {
+		Delete delete = factory.createDelete();
+		delete.setResourceId(getResourceId(node));
+		c.objects.put(delete.getResourceId(), delete);
+		handleAttributes(node, delete, c);
+	}
+	
+	private void addSetIndex(Node node, ImportContext c) {
+		SetIndex setIndex = factory.createSetIndex();
+		setIndex.setResourceId(getResourceId(node));
+		c.objects.put(setIndex.getResourceId(), setIndex);
+		handleAttributes(node, setIndex, c);
+	}
+	
+	private void addToggle(Node node, ImportContext c) {
+		Toggle toggle = factory.createToggle();
+		toggle.setResourceId(getResourceId(node));
+		c.objects.put(toggle.getResourceId(), toggle);
+		handleAttributes(node, toggle, c);
+	}
+	
+	private void addSetFocus(Node node, ImportContext c) {
+		SetFocus setFocus = factory.createSetFocus();
+		setFocus.setResourceId(getResourceId(node));
+		c.objects.put(setFocus.getResourceId(), setFocus);
+		handleAttributes(node, setFocus, c);
+	}
+	
+	private void addDispatch(Node node, ImportContext c) {
+		Dispatch dispatch = factory.createDispatch();
+		dispatch.setResourceId(getResourceId(node));
+		c.objects.put(dispatch.getResourceId(), dispatch);
+		handleAttributes(node, dispatch, c);
+	}
+	
+	private void addRebuild(Node node, ImportContext c) {
+		Rebuild rebuild = factory.createRebuild();
+		rebuild.setResourceId(getResourceId(node));
+		c.objects.put(rebuild.getResourceId(), rebuild);
+		handleAttributes(node, rebuild, c);
+	}
+	
+	private void addRecalculate(Node node, ImportContext c) {
+		Recalculate recalculate = factory.createRecalculate();
+		recalculate.setResourceId(getResourceId(node));
+		c.objects.put(recalculate.getResourceId(), recalculate);
+		handleAttributes(node, recalculate, c);
+	}
+	
+	private void addRevalidate(Node node, ImportContext c) {
+		Revalidate revalidate = factory.createRevalidate();
+		revalidate.setResourceId(getResourceId(node));
+		c.objects.put(revalidate.getResourceId(), revalidate);
+		handleAttributes(node, revalidate, c);
+	}
+	
+	private void addRefresh(Node node, ImportContext c) {
+		Refresh refresh = factory.createRefresh();
+		refresh.setResourceId(getResourceId(node));
+		c.objects.put(refresh.getResourceId(), refresh);
+		handleAttributes(node, refresh, c);
+	}
+	
 	private void addReset(Node node, ImportContext c) {
 		Reset reset = factory.createReset();
 		reset.setResourceId(getResourceId(node));
 		c.objects.put(reset.getResourceId(), reset);
 		handleAttributes(node, reset, c);
+	}
+	
+	private void addLoad(Node node, ImportContext c) {
+		Load load = factory.createLoad();
+		load.setResourceId(getResourceId(node));
+		c.objects.put(load.getResourceId(), load);
+		handleAttributes(node, load, c);
+	}
+	
+	private void addSend(Node node, ImportContext c) {
+		Send send = factory.createSend();
+		send.setResourceId(getResourceId(node));
+		c.objects.put(send.getResourceId(), send);
+		handleAttributes(node, send, c);
+	}
+	
+	private void addMessage(Node node, ImportContext c) {
+		Message message = factory.createMessage();
+		message.setResourceId(getResourceId(node));
+		c.objects.put(message.getResourceId(), message);
+		handleAttributes(node, message, c);
+		message.setContent(getContent(getChild(node, "message")));
 	}
 	
 	private String getContent(Node node) {

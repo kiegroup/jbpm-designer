@@ -33,7 +33,7 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
         
         this.facade.offer({
             'name': ORYX.I18N.SimplePnmlexport.name,
-            'functionality': this.export.bind(this),
+            'functionality': this.exportIt.bind(this),
             'group': ORYX.I18N.SimplePnmlexport.group,
             'icon': ORYX.PATH + "images/bpmn2pn.png",
             'description': ORYX.I18N.SimplePnmlexport.desc,
@@ -44,7 +44,7 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
         
     },
 
-    export: function(){
+    exportIt: function(){
 
 		// raise loading enable event
         this.facade.raiseEvent({

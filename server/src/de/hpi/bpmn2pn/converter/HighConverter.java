@@ -1,118 +1,63 @@
 package de.hpi.bpmn2pn.converter;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import java.util.Map;
 
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.EndErrorEvent;
+import de.hpi.bpmn.DiagramObject;
+import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.ORGateway;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
-import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.HighConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.highpetrinet.HighFlowRelationship;
+import de.hpi.highpetrinet.HighLabeledTransition;
 import de.hpi.highpetrinet.HighPetriNet;
 import de.hpi.highpetrinet.HighPetriNetFactory;
+import de.hpi.highpetrinet.HighSilentTransition;
+import de.hpi.highpetrinet.HighTransition;
+import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.PetriNetFactory;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.Transition;
-import de.hpi.petrinet.serialization.PetriNetPNMLExporter;
 
 public class HighConverter extends StandardConverter {
-
+	protected BPMNFactory factory;
+	
+	protected Map<Transition, List<Edge>> orJoinTransitions;
+	
 	public HighConverter(BPMNDiagram diagram) {
 		super(diagram, new HighPetriNetFactory());
+		factory = new BPMNFactory();
+		
+		orJoinTransitions = new HashMap<Transition, List<Edge>>();
 	}
 
 	public HighConverter(BPMNDiagram diagram, PetriNetFactory pnfactory) {
 		super(diagram, pnfactory);
-	}
-
-	public static void main(String[] args) {
-		BPMNDiagram diag = loadRDFDiagram("bpmn.rdf"); 
-		printBPMN(diag);
-		/*HighPetriNet net = new STConverter(diag).convert();
-		STMapper map = new STMapper(net);
-		List<DiagramObject> l = map.getFireableObjects();
-		map.clearChangedObjs();
-		map.fireObject(l.get(0).getResourceId());
-		l = map.getFireableObjects();
-		String s = map.getChangedObjsAsString();*/
+		factory = new BPMNFactory();
+		
+		orJoinTransitions = new HashMap<Transition, List<Edge>>();
 	}
 	
 	@Override
 	public HighPetriNet convert() {
 		return (HighPetriNet)super.convert();
-	}
-	
-	public static BPMNDiagram loadRDFDiagram(String fileName) {
-		try{
-			RandomAccessFile file = new RandomAccessFile("C:\\Dokumente und Einstellungen\\Kai\\Eigene Dateien\\Downloads\\"+fileName, "r");
-			String rdf = "";
-			String zeile;
-			while ( (zeile = file.readLine()) != null){
-				rdf += zeile;
-			}
-			DocumentBuilder builder;
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
-			BPMNRDFImporter importer = new BPMNRDFImporter(document);
-			BPMNDiagram diagram = (BPMNDiagram) importer.loadBPMN();
-			return diagram;
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public static void printBPMN(BPMNDiagram diagram){
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document pnmlDoc = builder.newDocument();
-			PetriNet net = new STConverter(diagram).convert();
-			PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
-			exp.savePetriNet(pnmlDoc, net);
-			OutputFormat format = new OutputFormat(pnmlDoc);
-			StringWriter stringOut = new StringWriter();
-			XMLSerializer serial2 = new XMLSerializer(stringOut, format);
-			serial2.asDOMSerializer();
-			serial2.serialize(pnmlDoc.getDocumentElement());
-			new File("C:\\Dokumente und Einstellungen\\Kai\\Eigene Dateien\\Downloads\\high.pnml").delete();
-			new RandomAccessFile("C:\\Dokumente und Einstellungen\\Kai\\Eigene Dateien\\Downloads\\high.pnml", "rw").writeBytes(stringOut.toString());
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	protected HighFlowRelationship addResetFlowRelationship(PetriNet net,
@@ -125,16 +70,176 @@ public class HighConverter extends StandardConverter {
 		return rel;
 	}
 	
+	protected HighFlowRelationship addInhibitorFlowRelationship(PetriNet net,
+			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {
+		for (HighFlowRelationship rel : (List<HighFlowRelationship>)target.getIncomingFlowRelationships()){
+			if ((Place)rel.getSource() == source){
+				// there is already a connection, perhaps return null or raise error?
+				return rel;
+			}
+		}
+		
+		HighFlowRelationship rel = (HighFlowRelationship)addFlowRelationship(net, source, target);
+		if (rel == null){
+			return null;
+		}
+		rel.setType(HighFlowRelationship.ArcType.Inhibitor);
+		return rel;
+	}
+	
+	@Override
+	protected SilentTransition addSilentTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel) {
+		HighSilentTransition t = (HighSilentTransition) addSimpleSilentTransition(net, id);
+		t.setBPMNObj(BPMNObj);
+		return t;
+	}
+	
+	@Override
+	protected LabeledTransition addLabeledTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel, String label) {
+		HighLabeledTransition t = (HighLabeledTransition) addSimpleLabeledTransition(net, id, label);
+		t.setBPMNObj(BPMNObj);
+		return t;
+	}
+	
 	// high Petri net has its own conversion context
 	@Override
 	protected ConversionContext setupConversionContext() {
 		return new HighConversionContext();
 	}
 	
+	@Override
+	protected void handleORGateway(PetriNet net, ORGateway gateway,
+			ConversionContext c) {
+		if(gateway.getIncomingEdges().size()==1){
+			handleORSplit(net, gateway, (HighConversionContext)c);
+		} else {
+			handleORJoin(net, gateway, (HighConversionContext)c);
+		}
+	}
+	
+	protected void handleORSplit(PetriNet net, ORGateway gateway,
+			HighConversionContext c) {
+		//handle all possible combinations
+		for(List<Edge> edges : (List<List<Edge>>)de.hpi.bpmn.analysis.Combination.findCombinations(gateway.getOutgoingEdges())){
+			if(edges.size() == 0)
+				continue;
+			Transition t = addSilentTransition(net, generateOrSplitId(gateway, edges), gateway, 0);
+			for(Edge edge : edges){
+				addFlowRelationship(net, t, c.map.get(edge));
+			}
+			addFlowRelationship(net, c.map.get(gateway.getIncomingEdges().get(0)), t);
+		}
+	}
+	
+	/*
+	 * Overwrite this if other id generation is needed (like in step through mapping)
+	 */
+	public String generateOrSplitId(String gatewayId, String[] firingEdgesIds){
+		String resourceId = "orSplit_"+gatewayId;
+		for(String edgeId : firingEdgesIds){
+			resourceId += edgeId;
+		}
+		return resourceId; 
+	}
+	
+	// Other interfaces to generateOrSplitId(String gatewayId, String[] firingEdgesIds)
+	public String generateOrSplitId(ORGateway gateway, List<Edge> firingEdges){
+		String[] firingEdgesIds = new String[firingEdges.size()];
+		for(int i = 0; i < firingEdges.size(); i++){
+			firingEdgesIds[i] = firingEdges.get(i).getId();
+		}
+		return generateOrSplitId(gateway.getId(), firingEdgesIds);
+	}
+
+	protected void handleORJoin(PetriNet net, ORGateway gateway,
+			HighConversionContext c) {
+		//handle all combinations how many pathes can terminate
+		List<List<Edge>> incomingPathesComb = (List<List<Edge>>)de.hpi.bpmn.analysis.Combination.findCombinations(gateway.getIncomingEdges());
+		int index = 0;
+		for(List<Edge> posEdges : incomingPathesComb){
+			if(posEdges.size() == 0)
+				continue;
+			index++;
+			Transition t = addSilentTransition(net, "orJoin_"+gateway.getId()+String.valueOf(index), gateway, 1);
+			//for each positive edge
+			for(Edge edge : posEdges){
+				addFlowRelationship(net, c.map.get(edge), t);
+			}
+			// negative edges are handled in post processing
+			//TODO performance: howto impl negEdges = incomingEdges -  posEdges 
+			List<Edge> negEdges = new LinkedList<Edge>();
+			for(Edge edge : gateway.getIncomingEdges()){
+				if(!posEdges.contains(edge)){
+					negEdges.add(edge);
+				}
+			}
+			orJoinTransitions.put(t, negEdges);
+			
+			addFlowRelationship(net, t, c.map.get(gateway.getOutgoingEdges().get(0)));
+		}
+	}
+	
+	//TODO post dominators
+	private void handleUpstream(PetriNet net, HighTransition gatewayTransition, Place edge, HighConversionContext c, List<de.hpi.petrinet.Node> visitedNodes){
+		if(visitedNodes.contains(edge))
+			return;
+		visitedNodes.add(edge);
+		//if(edge.getId().contains("ok"))
+		//	return;
+		for(HighFlowRelationship relEdge : (List<HighFlowRelationship>)edge.getIncomingFlowRelationships()){
+			if(relEdge.getType() != HighFlowRelationship.ArcType.Plain)
+				continue;
+			HighTransition incomingTransition = (HighTransition)relEdge.getSource();
+			DiagramObject incomingBPMN = incomingTransition.getBPMNObj();
+			//HACK!!!! XorSplits maps to Places!!!!!
+			//better solution: give places getBPMNObj and include in XOR-mapping
+			//that places gets BPM objects
+			if(incomingBPMN instanceof SequenceFlow){
+				incomingBPMN = (DiagramObject)((SequenceFlow)incomingTransition.getBPMNObj()).getSource();
+			}
+			
+			addInhibitorFlowRelationship(net, edge, gatewayTransition);
+			
+			if(!checkDominator((Node)incomingBPMN, (Node)gatewayTransition.getBPMNObj(), c)){
+				for(HighFlowRelationship rel : (List<HighFlowRelationship>)incomingTransition.getIncomingFlowRelationships()){
+					handleUpstream(net, gatewayTransition, (Place)rel.getSource(), c, visitedNodes);
+				}
+			}
+		}
+	}
+	
+	/* 
+	 * Checks whether a BPMN node node1 or any of its parents is a 
+	 * dominator or postdominator of another BPMN node2
+	 */
+	private boolean checkDominator(Node node1, Node node2, HighConversionContext c ){
+		boolean isDominator = c.getDominatorFinder(node2.getParent()).getDominators(node2).contains(node1);
+		boolean isPostDominator = c.getDominatorFinder(node2.getParent()).getPostDominators(node2).contains(node1);
+		if((!isDominator || !isPostDominator) && node1.getParent() instanceof Node){
+			isDominator = checkDominator((Node)node1.getParent(), node2, c);
+		}
+		return isDominator;
+	}
+	
+	@Override
+	protected void postProcessDiagram(PetriNet net, ConversionContext c) {
+		super.postProcessDiagram(net, c);
+		
+		//post process or-joins
+		for(Transition gatewayTransition : orJoinTransitions.keySet()){
+			//handle the negative edges which hasn't been handled in handleORJoin()
+			List<de.hpi.petrinet.Node> visitedNodes = new ArrayList<de.hpi.petrinet.Node>();
+			List<Edge> negEdges = orJoinTransitions.get(gatewayTransition);
+			for(Edge edge : negEdges){
+				handleUpstream(net, (HighTransition)gatewayTransition, c.map.get(edge), (HighConversionContext)c, visitedNodes);
+			}
+		}
+	}
+	
 	/* 
 	 * Begin Exc Handling Mapping 
 	 */
-	
+
 	@Override
 	protected void prepareExceptionHandling(PetriNet net, SubProcess process,
 			Transition startT, Transition endT, ConversionContext c){
@@ -182,7 +287,7 @@ public class HighConverter extends StandardConverter {
 
 		addFlowRelationship(net, pl.ok, t);
 		addFlowRelationship(net, t, c.map.get(getOutgoingSequenceFlow(event)));
-		((HighConversionContext)c).addAncestorExcpTransition(event.getProcess(), t);
+		((HighConversionContext)c).addAncestorExcpTransition((SubProcess)event.getActivity(), t);
 	}
 
 	@Override

@@ -43,6 +43,7 @@ ORYX.Core.StencilSet.Rules = {
 	construct: function() {
 		arguments.callee.$.construct.apply(this, arguments);
 
+		this._stencilSets = [];
 		this._stencils = [];
 		
 		this._cachedConnectSET = new Hash();
@@ -58,121 +59,163 @@ ORYX.Core.StencilSet.Rules = {
 	},
 
 	initializeRules: function(stencilSet) {
-
-		var jsonRules = stencilSet.jsonRules();
-		var namespace = stencilSet.namespace();
 		
-		this._stencils = this._stencils.concat(stencilSet.stencils());
-
-		//init connection rules
-		var cr = this._connectionRules;
-		if(jsonRules.connectionRules) {
-			jsonRules.connectionRules.each((function(rules) {
-				if(this._isRoleOfOtherNamespace(rules.role)) {
-					if(!cr[rules.role]) {
-						cr[rules.role] = new Hash();
-					}
-				} else {
-					if(!cr[namespace + rules.role])
-						cr[namespace + rules.role] = new Hash();
-				}
-				
-				rules.connects.each((function(connect) {
-					var toRoles = [];
-					if(connect.to) {
-						if(!(connect.to instanceof Array)) {
-							connect.to = [connect.to];
+		var existingSS = this._stencilSets.find(function(ss) {
+							return (ss.namespace() == stencilSet.namespace());
+						});
+		if (existingSS) {
+			//reinitialize all rules
+			var stencilsets = this._stencilSets.clone();
+			stencilsets = stencilsets.without(existingSS);
+			stencilsets.push(stencilSet);
+			
+			this._stencilSets = [];
+			this._stencils = [];
+			
+			this._cachedConnectSET = new Hash();
+			this._cachedConnectSE = new Hash();
+			this._cachedConnectTE = new Hash();
+			this._cachedCardSE = new Hash();
+			this._cachedCardTE = new Hash();
+			this._cachedContainPC = new Hash();
+			
+			this._connectionRules = new Hash();
+			this._cardinalityRules = new Hash();
+			this._containmentRules = new Hash();
+			
+			stencilsets.each(function(ss){
+				this.initializeRules(ss);
+			}.bind(this));
+			return;
+		}
+		else {
+			this._stencilSets.push(stencilSet);
+			
+			var jsonRules = stencilSet.jsonRules();
+			var namespace = stencilSet.namespace();
+			
+			this._stencils = this._stencils.concat(stencilSet.stencils());
+			
+			//init connection rules
+			var cr = this._connectionRules;
+			if (jsonRules.connectionRules) {
+				jsonRules.connectionRules.each((function(rules){
+					if (this._isRoleOfOtherNamespace(rules.role)) {
+						if (!cr[rules.role]) {
+							cr[rules.role] = new Hash();
 						}
-						connect.to.each((function(to) {
-							if(this._isRoleOfOtherNamespace(to)) {
-								toRoles.push(to);
-							} else {
-								toRoles.push(namespace + to);
+					}
+					else {
+						if (!cr[namespace + rules.role]) 
+							cr[namespace + rules.role] = new Hash();
+					}
+					
+					rules.connects.each((function(connect){
+						var toRoles = [];
+						if (connect.to) {
+							if (!(connect.to instanceof Array)) {
+								connect.to = [connect.to];
+							}
+							connect.to.each((function(to){
+								if (this._isRoleOfOtherNamespace(to)) {
+									toRoles.push(to);
+								}
+								else {
+									toRoles.push(namespace + to);
+								}
+							}).bind(this));
+						}
+						
+						var role, from;
+						if (this._isRoleOfOtherNamespace(rules.role)) 
+							role = rules.role;
+						else 
+							role = namespace + rules.role;
+						
+						if (this._isRoleOfOtherNamespace(connect.from)) 
+							from = connect.from;
+						else 
+							from = namespace + connect.from;
+						
+						if (!cr[role][from]) 
+							cr[role][from] = toRoles;
+						else 
+							cr[role][from] = cr[role][from].concat(toRoles);
+						
+					}).bind(this));
+				}).bind(this));
+			}
+			
+			//init cardinality rules
+			var cardr = this._cardinalityRules;
+			if (jsonRules.cardinalityRules) {
+				jsonRules.cardinalityRules.each((function(rules){
+					var cardrKey;
+					if (this._isRoleOfOtherNamespace(rules.role)) {
+						cardrKey = rules.role;
+					}
+					else {
+						cardrKey = namespace + rules.role;
+					}
+					
+					if (!cardr[cardrKey]) {
+						cardr[cardrKey] = {};
+						for (i in rules) {
+							cardr[cardrKey][i] = rules[i];
+						}
+					}
+					
+					var oe = new Hash();
+					if (rules.outgoingEdges) {
+						rules.outgoingEdges.each((function(rule){
+							if (this._isRoleOfOtherNamespace(rule.role)) {
+								oe[rule.role] = rule;
+							}
+							else {
+								oe[namespace + rule.role] = rule;
 							}
 						}).bind(this));
-					} 
-					
-					var role, from;
-					if(this._isRoleOfOtherNamespace(rules.role))
-						role = rules.role;
-					else
-						role = namespace + rules.role;
-						  
-					if(this._isRoleOfOtherNamespace(connect.from))
-						from = connect.from;
-					else
-						from = namespace + connect.from;
-					
-					if(!cr[role][from])	
-						cr[role][from] = toRoles;
-					else
-						cr[role][from] = cr[role][from].concat(toRoles);
-				
-				}).bind(this));
-			}).bind(this));
-		}
-
-		//init cardinality rules
-		var cardr = this._cardinalityRules;
-		if(jsonRules.cardinalityRules) {
-			jsonRules.cardinalityRules.each((function(rules) {
-				var cardrKey;
-				if(this._isRoleOfOtherNamespace(rules.role)) {
-					cardrKey = rules.role;
-				} else {
-					cardrKey = namespace + rules.role;
-				}
-		
-				if(!cardr[cardrKey]) {
-					cardr[cardrKey] = rules;
-				}
-				
-				var oe = new Hash();
-				if(rules.outgoingEdges) {
-					rules.outgoingEdges.each((function(rule) {
-						if(this._isRoleOfOtherNamespace(rule.role)) {
-							oe[rule.role] = rule;
-						} else {
-							oe[namespace + rule.role] = rule;
-						}
-					}).bind(this));
-				}
-				cardr[cardrKey].outgoingEdges = oe;
-				var ie = new Hash();
-				if(rules.incomingEdges) {
-					rules.incomingEdges.each((function(rule) {
-						if(this._isRoleOfOtherNamespace(rule.role)) {
-							ie[rule.role] = rule;
-						} else {
-							ie[namespace + rule.role] = rule;
-						}
-					}).bind(this));
-				}
-				cardr[cardrKey].incomingEdges = ie;
-			}).bind(this));
-		}
-	
-		//init containment rules
-		var conr = this._containmentRules;
-		if(jsonRules.containmentRules) {
-			jsonRules.containmentRules.each((function(rules) {
-				var conrKey;
-				if(this._isRoleOfOtherNamespace(rules.role)) {
-					conrKey = rules.role;
-				} else {
-					conrKey = namespace + rules.role;
-				}
-				if(!conr[conrKey]) {
-					conr[conrKey] = [];
-				}
-				rules.contains.each((function(containRole) {
-					if(this._isRoleOfOtherNamespace(containRole)) {
-						conr[conrKey].push(containRole);
-					} else {
-						conr[conrKey].push(namespace + containRole);
 					}
+					cardr[cardrKey].outgoingEdges = oe;
+					var ie = new Hash();
+					if (rules.incomingEdges) {
+						rules.incomingEdges.each((function(rule){
+							if (this._isRoleOfOtherNamespace(rule.role)) {
+								ie[rule.role] = rule;
+							}
+							else {
+								ie[namespace + rule.role] = rule;
+							}
+						}).bind(this));
+					}
+					cardr[cardrKey].incomingEdges = ie;
 				}).bind(this));
-			}).bind(this));
+			}
+			
+			//init containment rules
+			var conr = this._containmentRules;
+			if (jsonRules.containmentRules) {
+				jsonRules.containmentRules.each((function(rules){
+					var conrKey;
+					if (this._isRoleOfOtherNamespace(rules.role)) {
+						conrKey = rules.role;
+					}
+					else {
+						conrKey = namespace + rules.role;
+					}
+					if (!conr[conrKey]) {
+						conr[conrKey] = [];
+					}
+					rules.contains.each((function(containRole){
+						if (this._isRoleOfOtherNamespace(containRole)) {
+							conr[conrKey].push(containRole);
+						}
+						else {
+							conr[conrKey].push(namespace + containRole);
+						}
+					}).bind(this));
+				}).bind(this));
+			}
 		}
 	},
 	

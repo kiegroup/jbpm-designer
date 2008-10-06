@@ -41,6 +41,7 @@ public class Model extends XFormsElement implements ActionContainer {
 		return binds;
 	}
 	
+	@Override
 	public String getTagName() {
 		return "model";
 	}

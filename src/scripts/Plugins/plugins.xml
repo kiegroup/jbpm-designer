@@ -18,15 +18,29 @@
 		<plugin source="canvasResize.js" name="ORYX.Plugins.CanvasResize" />
 		<plugin source="renameShapes.js" name="ORYX.Plugins.RenameShapes" />
 		<plugin source="erdfSupport.js" name="ORYX.Plugins.ERDFSupport" />
+		<plugin source="undo.js" name="ORYX.Plugins.Undo" />
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
 		</plugin>
-				
+		
+		<plugin source="amlSupport.js" name="ORYX.Plugins.AMLSupport">
+			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
+		</plugin>	
+			
 		<plugin source="arisSupport.js" name="ORYX.Plugins.ARISSupport">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
 		</plugin>	
+				
+		<plugin source="adHocCC.js" name="ORYX.Plugins.AdHocCC">
+			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>	
+		</plugin>
 
+		<plugin source="treeGraphSupport.js" name="ORYX.Plugins.TreeGraphSupport">
+			<requires namespace="http://b3mn.org/stencilset/treeGraph#"/>	
+		</plugin>
+		
+		
 		<!-- following plugins don't require Ext -->
 		<plugin source="arrangement.js" name="ORYX.Plugins.Arrangement">
 			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
@@ -48,7 +62,10 @@
 		<plugin source="overlay.js" name="ORYX.Plugins.Overlay" />		
 		<plugin source="edit.js" name="ORYX.Plugins.Edit" />
 
-		<!-- plugin for PNML export and deployment -->		
+		<!-- plugin for PNML export and deployment -->
+		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport">
+			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>	
+		</plugin>		
 		<plugin source="simplepnmlexport.js" name="ORYX.Plugins.SimplePnmlexport">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
@@ -57,6 +74,10 @@
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 		</plugin>	
 
+		<plugin source="desynchronizabilityOverlay.js" name="ORYX.Plugins.DesynchronizabilityOverlay">
+			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>	
+			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
+		</plugin>
 		<plugin source="syntaxchecker.js" name="ORYX.Plugins.SyntaxChecker">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
@@ -65,7 +86,24 @@
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
+		<plugin source="bpmnValidator.js" name="ORYX.Plugins.BPMNValidator">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+		</plugin>
+
+		<!--
+		<plugin source="bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
+		</plugin>
+		-->
+				
+		<!-- plugin for BPEL import and export --> 
+		<plugin source="bpelSupport.js" name="ORYX.Plugins.BPELSupport">
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
+			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>
+		</plugin>
 		
+
 		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.StepThroughPlugin">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
@@ -75,14 +113,34 @@
 		<plugin source="xformsexport.js" name="ORYX.Plugins.XFormsExport">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 		</plugin>	
+		
 		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+			<!-- BPEL plugin also requires rowlayout -->
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>				
 		</plugin>
+		
+		<!-- BPMN1.1 specific plugins -->
+		<plugin source="bpmn1.1DiamondSwitch.js" name="ORYX.Plugins.BPMN11DiamondSwitch">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+		</plugin>
+		
+		<!-- Following Plugins are examples to demonstrate certain functionality -->
+		
+		<!--		
+		<plugin source="epc2bpmn.js" name="ORYX.Plugins.EPC2BPMN">
+			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
+		</plugin>
+		<plugin source="autoLayout.js" name="ORYX.Plugins.AutoLayout" />
+		<plugin source="overlayexample.js" name="ORYX.Plugins.OverlayExample" />
+		-->
+		
 
 	</plugins>
 	
 	<properties>
 		<property group="File" index="1" />
 		<property group="Edit" index="2" />	
+		<property group="Undo" index="3" />	
 	</properties>
 </config>

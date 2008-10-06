@@ -1,0 +1,125 @@
+{
+	"title":"Tree Graph",
+	"namespace":"http://b3mn.org/stencilset/treeGraph#",
+	"description":"This is the specification of a tree graph (mainly for workshop purpose).",
+ 	"stencils" : [
+  		{
+			"type"		: "node",
+			"id"		: "Diagram",
+			"title"		: "Diagram",
+			"groups"	: ["Tree Graph"],
+			"description":"A Diagram",
+			"view"		: "node.diagram.svg",
+			"icon"		: "new_diagram.png",
+			"mayBeRoot"	: true,
+			"roles"		: [],
+			"properties": [
+				{
+					"id"		: "title",
+					"type"		: "String",
+					"title"		: "Title",
+					"value"		: "",
+					"description":"",
+					"tooltip"	: "",
+					"readonly"	: false,
+					"optional"	: true,
+					"refToView"	: "",
+					"length"	: "",
+					"wrapLines"	: true
+				}			
+			]
+		},		
+		{
+			"type"		: "node",
+			"id"		: "Node",
+			"title"		: "Node",
+			"groups"	: ["Tree Graph"],
+			"description":"A node.",
+			"view"		:"node.place.svg",
+			"icon"		:"new_place.png",
+			"intersectionType":"ellipse",			
+			"roles"		: [
+							"node"
+							],
+			"properties": [		
+				{
+					"id"		: "title",
+					"type"		: "String",
+					"title"		: "Title",
+					"value"		: "",
+					"description":"",
+					"tooltip"	: "",
+					"readonly"	: false,
+					"optional"	: true,
+					"refToView"	: "text",
+					"length"	: ""
+				}							
+			]
+		},
+		{
+			"type"		: "edge",
+			"id"		: "Edge",
+			"title"		: "Edge",
+			"description":"",
+			"groups"	: ["Tree Graph"],
+			"view"		: "connection.flow.svg",
+			"icon"		: "new_flow.png",
+			"roles": [
+						"edge"
+						],
+			"properties": [				
+				{
+					"id"		: "label",
+					"type"		: "String",
+					"title"		: "Label",
+					"value"		: "",
+					"description":"",
+					"tooltip"	: "",
+					"readonly"	: false,
+					"optional"	: true,
+					"refToView"	: "text",
+					"length"	: ""
+				}							
+			]
+		}
+	],	
+	"rules": {
+			"cardinalityRules": [ 
+				{ 
+					"role"		: "node", 
+					"outgoingEdges": [ 
+										{ 
+											"role":"edge", 
+											"maximum":2 
+										} 
+									],					
+					"incomingEdges": [ 
+										{ 
+											"role":"edge", 
+											"maximum":1 
+										} 
+									] 
+				}
+			],
+			"connectionRules": [
+				{
+					"role":"edge",
+					"connects": [
+						{
+							"from":"node",
+							"to":["node"]
+						}
+					]
+				}	
+			],
+			"containmentRules": [
+				{
+					"role":"Diagram",
+					"contains": [
+						"edge",
+						"node"
+					]
+				}
+			]
+	}
+}

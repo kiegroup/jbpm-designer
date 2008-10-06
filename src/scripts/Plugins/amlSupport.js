@@ -44,7 +44,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             'name': ORYX.I18N.AMLSupport.imp,
             'functionality': this.importAML.bind(this),
             'group': ORYX.I18N.AMLSupport.group,
-            'icon': ORYX.PATH + "images/epc_import.png",
+            'icon': ORYX.PATH + "images/aris_import_icon.png",
             'description': ORYX.I18N.AMLSupport.impDesc,
             'index': 3,
             'minShape': 0,
@@ -215,14 +215,14 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 else {
                 
                     var erdfDOM = result[0].data;
-                    // Delete all uri-refs
+                    
+					// Delete all uri-refs
                     $A(this.getNodesByClassName(erdfDOM, "span", "oryx-refuri")).each(function(node){
                         node.textContent = ""
                     });
-                    // Import the erdf strucutre
-                    this.facade.importERDF(erdfDOM);
-                    
-                    //this.facade.setSelection( shapes );
+					
+					// Import the erdf strucutre
+					this.facade.importERDF(erdfDOM);
                 
                 }  
                 
@@ -353,7 +353,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
                 style: 'font-size:12px;margin-bottom:10px;display:block;',
                 xtype: 'label'
             }, {
-                fieldLabel: 'File',
+                fieldLabel: ORYX.I18N.AMLSupport.file,
                 inputType: 'file',
                 labelStyle: 'width:50px;',
                 itemCls: 'ext_specific_window_overflow'

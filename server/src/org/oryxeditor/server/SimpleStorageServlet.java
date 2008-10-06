@@ -207,7 +207,7 @@ public class SimpleStorageServlet extends HttpServlet {
 
 	out.println("<!-- libraries -->");
 	out
-		.println("<script src=\"lib/prototype-1.5.1_rc3.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/prototype-1.5.1.js\" type=\"text/javascript\" />");
 	out
 		.println("<script src=\"lib/path_parser.js\" type=\"text/javascript\" />");
 	out

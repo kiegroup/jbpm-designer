@@ -66,6 +66,7 @@ public class Group extends XFormsUIElement implements UIElementContainer, Action
 		this.label = label;
 	}
 	
+	@Override
 	public String getTagName() {
 		return "group";
 	}

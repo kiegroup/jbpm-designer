@@ -4,8 +4,8 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:oryx="http://www.b3mn.org/oryx"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   width="102"
-   height="82"
+   width="152"
+   height="102"
    version="1.0">
   <defs></defs>
    <g oryx:minimumSize="32 20" oryx:maximumSize="350 400" >

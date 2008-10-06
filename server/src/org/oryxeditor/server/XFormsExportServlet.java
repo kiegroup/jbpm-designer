@@ -22,8 +22,8 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.xforms.XForm;
-import de.hpi.xforms.export.XFormsXHTMLExporter;
 import de.hpi.xforms.rdf.XFormsRDFImporter;
+import de.hpi.xforms.serialization.XFormsXHTMLExporter;
 
 /**
  * 
@@ -66,12 +66,12 @@ public class XFormsExportServlet extends HttpServlet {
 			OutputFormat format = new OutputFormat(xhtmlDoc);
 			format.setIndenting(true);
 			format.setPreserveSpace(true);
+			format.setLineSeparator(System.getProperty("line.separator"));
 			format.setMethod("text/xhtml");
 			
-			// TODO: newlines in serialize output
+			// TODO: newlines in serialize output (weird it doesn't work)
 			
 			XMLSerializer serial = new XMLSerializer(new BufferedWriter(res.getWriter()), format);
-			
 			serial.asDOMSerializer();
 			serial.serialize(xhtmlDoc);
 			

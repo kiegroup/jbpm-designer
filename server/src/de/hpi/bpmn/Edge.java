@@ -11,6 +11,7 @@ public abstract class Edge extends DiagramObject {
 	
 	protected DiagramObject source;
 	protected DiagramObject target;
+	protected String name;
 	
 	public String toString() {
 		return (id != null ? id : resourceId);
@@ -42,6 +43,14 @@ public abstract class Edge extends DiagramObject {
 				target.getIncomingEdges().add(this);
 		}		
 		this.target = target;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

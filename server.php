@@ -176,7 +176,7 @@ function template($body) {
 					        <title>'.$resource.' - Oryx</title>
 
         <!-- libraries -->
-        <script src="lib/prototype-1.5.1_rc3.js" type="text/javascript" />
+        <script src="lib/prototype-1.5.1.js" type="text/javascript" />
         <script src="lib/path_parser.js" type="text/javascript" />
         <script src="lib/ext-1.0/adapter/yui/yui-utilities.js" type="text/javascript" />
         <script src="lib/ext-1.0/adapter/yui/ext-yui-adapter.js" type="text/javascript" />

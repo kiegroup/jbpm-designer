@@ -7,6 +7,7 @@ package de.hpi.xforms;
  */
 public class Trigger extends FormControl {
 	
+	@Override
 	public String getTagName() {
 		return "trigger";
 	}

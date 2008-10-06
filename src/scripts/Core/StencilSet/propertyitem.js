@@ -94,5 +94,5 @@ ORYX.Core.StencilSet.PropertyItem = Clazz.extend({
 		return this._jsonItem.refToView;
 	},
 
-	toString: function() { return "PropertyItem " + this.title() + " (" + this.value() + ")"; }
+	toString: function() { return "PropertyItem " + this.property() + " (" + this.value() + ")"; }
 });

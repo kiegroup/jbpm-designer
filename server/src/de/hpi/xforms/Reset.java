@@ -4,6 +4,7 @@ public class Reset extends AbstractAction {
 
 	public Reset() {
 		super();
+		attributes.put("model", null);
 	}
 	
 	@Override

@@ -15,15 +15,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.oryxeditor.server.StencilSetUtil;
 import org.w3c.dom.Document;
 
-import de.hpi.PTnet.PTNet;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.STConverter;
-import de.hpi.highpetrinet.HighPetriNet;
-import de.hpi.petrinet.PetriNet;
 
 public class StepThroughServlet extends HttpServlet {
 	// The servlet is responsible for getting the Ajax request,
@@ -67,9 +64,8 @@ public class StepThroughServlet extends HttpServlet {
 				}
 			}
 			
-			// Produce a PetriNet and create a StepThroughMapper with it
-			PetriNet net = loadPetriNet(document);
-			STMapper stm = new STMapper((HighPetriNet)net);
+			// Produce a BPMN2PN converter and create a StepThroughMapper with it
+			STMapper stm = new STMapper(loadConverter(document));
 		
 			// Automation level is now hard coded
 			stm.setAutoSwitchLevel(AutoSwitchLevel.SemiAuto);
@@ -87,8 +83,10 @@ public class StepThroughServlet extends HttpServlet {
 			for (int i = 0; i < objectsToFire.length; i++) {
 				// If necessary, delete all uninteresting changed objects
 				if(onlyChangedObjects) stm.clearChangedObjs();
-				// Check for proper string
-				if(!objectsToFire[i].startsWith("resource")) continue;
+				// Check for proper string: While initializing step through, there is 
+				// an post with empty fire header. This seems to result in 
+				// objectsToFire = [""] which cannot be fired.
+				if(objectsToFire[i].trim().equals("")) continue;
 				// and fire
 				stm.fireObject(objectsToFire[i]);
 			}
@@ -100,7 +98,7 @@ public class StepThroughServlet extends HttpServlet {
 		}
 	}
 
-	private PetriNet loadPetriNet(Document document) {
+	private STConverter loadConverter(Document document) {
 		BPMNDiagram diagram = null;
 		String type = new StencilSetUtil().getStencilSet(document);
 		if (type.equals("bpmn.json")) {
@@ -110,7 +108,7 @@ public class StepThroughServlet extends HttpServlet {
 		}
 		
 		new Preprocessor(diagram, new BPMNFactory()).process();
-		return new STConverter(diagram).convert();
+		return new STConverter(diagram);
 	}
 	
 	private BPMNDiagram loadBPMN(Document document) {

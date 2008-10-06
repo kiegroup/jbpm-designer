@@ -45,7 +45,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		
 		if(!options.textElement) {
 			throw "Label: No parameter textElement." 
-		} else if (!options.textElement instanceof SVGTextElement) {
+		} else if (!ORYX.Editor.checkClassType( options.textElement, SVGTextElement ) ) {
 			throw "Label: Parameter textElement is not an SVGTextElement."	
 		}
 		
@@ -58,15 +58,20 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		
 		this.fitToElemId;
 		
+		this.edgePosition;
+		
 		this.x;
 		this.y;
 		this.oldX;
 		this.oldY;
 		
+		this.isVisible = true;
+		
 		this._text;
 		this._verticalAlign;
 		this._horizontalAlign;
 		this._rotate;
+		this._rotationPoint;
 		
 		this.anchors = [];
 		
@@ -108,6 +113,12 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			}).bind(this));
 		}
 		
+		//set edge position (only in case the label belongs to an edge)
+		this.edgePosition = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'edgePosition');
+		if(this.edgePosition) {
+			this.edgePosition = this.edgePosition.toLowerCase();
+		}
+		
 		//set rotation
 		var rotateValue = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'rotate');
 		if(rotateValue) {
@@ -121,7 +132,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		}
 		
 		//anchors
-		var anchorAttr = this.node.getAttributeNS(NAMESPACE_ORYX, "anchors");
+		var anchorAttr = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, "anchors");
 		if(anchorAttr) {
 			anchorAttr = anchorAttr.replace("/,/g", " ");
 			this.anchors = anchorAttr.split(" ");
@@ -131,17 +142,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		//if no alignment defined, set default alignment
 		if(!this._verticalAlign) { this._verticalAlign = 'bottom'; }
 		if(!this._horizontalAlign) { this._horizontalAlign = 'left'; }
-		
-		//set line height
-/*		var fsValue = this.node.getAttributeNS(null, 'font-size');
-		this._fontSize = parseFloat(fsValue);
-		if(!this._fontSize) {
-			this._fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
-			this.node.setAttributeNS(null, 'font-size', this._fontSize);
-		}
-*/		
-		//TODO temporary deactivate events
-		//this.node.setAttributeNS(null, 'pointer-events', 'none');
 
 		var xValue = this.node.getAttributeNS(null, 'x');
 		if(xValue) {
@@ -161,19 +161,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		
 		//set initial text
 		this.text(this.node.textContent);
-		
-		//workaround for firefox on mac bug that avoids rendering text fill
-		/*if(navigator.platform.indexOf("Mac") > -1) {
-			this.node.setAttributeNS(null, 'stroke', 'black');
-			this.node.setAttributeNS(null, 'stroke-width', '0.5px');
-			this.node.setAttributeNS(null, 'font-family', 'Skia');
-			this.node.setAttributeNS(null, 'letter-spacing', '2px');
-		} else {
-			this.node.setAttributeNS(null, 'stroke', 'none');
-			if (!this.node.getAttributeNS(null, 'font-family')) {
-				this.node.setAttributeNS(null, 'font-family', 'Verdana');
-			}
-		}*/
 	},
 	
 	changed: function() {
@@ -185,49 +172,68 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	 */
 	update: function() {
 		if(this._isChanged || this.x !== this.oldX || this.y !== this.oldY) {
-		//if(true) {
-		 	this._isChanged = false;	
-			
-			this.node.setAttributeNS(null, 'x', this.x);
-			this.node.setAttributeNS(null, 'y', this.y);
-			
-			//this.node.setAttributeNS(null, 'font-size', this._fontSize);
-			//this.node.setAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align', this._horizontalAlign + " " + this._verticalAlign);
-			
-			this.oldX = this.x;
-			this.oldY = this.y;
-			
-			//set rotation
-			if(this._rotate) {
-				this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this.x + ' ' + this.y + ')' );	
-			}
-			
-			var textLines = this._text.split("\n");
-			while(textLines.last() == "")
-				textLines.remove(textLines.last());
+			if (this.isVisible) {
+				this._isChanged = false;
 				
-			this.node.textContent = "";
-
-			if(this.node.ownerDocument) {
-				textLines.each((function(textLine, index) {
-					var tspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-					tspan.textContent = textLine;
-					tspan.setAttributeNS(null, 'x', this.invisibleRenderPoint);
-					tspan.setAttributeNS(null, 'y', this.invisibleRenderPoint);
-
-					//append tspan to text node
-					this.node.appendChild(tspan);
-				}).bind(this));
+				this.node.setAttributeNS(null, 'x', this.x);
+				this.node.setAttributeNS(null, 'y', this.y);
 				
-				//Work around for Mozilla bug 293581
-				if(this.isVisible) {
-					this.node.setAttributeNS(null, 'visibility', 'hidden');
+				//this.node.setAttributeNS(null, 'font-size', this._fontSize);
+				//this.node.setAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align', this._horizontalAlign + " " + this._verticalAlign);
+				
+				//set horizontal alignment
+				switch (this._horizontalAlign) {
+					case 'left':
+						this.node.setAttributeNS(null, 'text-anchor', 'start');
+						break;
+					case 'center':
+						this.node.setAttributeNS(null, 'text-anchor', 'middle');
+						break;
+					case 'right':
+						this.node.setAttributeNS(null, 'text-anchor', 'end');
+						break;
 				}
-
-				if(this.fitToElemId)
-					window.setTimeout(this._checkFittingToReferencedElem.bind(this), 0);
-				else
-					window.setTimeout(this._positionText.bind(this), 0);
+				
+				this.oldX = this.x;
+				this.oldY = this.y;
+				
+				//set rotation
+				if (this._rotate) {
+					if (this._rotationPoint) 
+						this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this._rotationPoint.x + ' ' + this._rotationPoint.y + ')');
+					else 
+						this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this.x + ' ' + this.y + ')');
+				}
+				
+				var textLines = this._text.split("\n");
+				while (textLines.last() == "") 
+					textLines.remove(textLines.last());
+				
+				this.node.textContent = "";
+				
+				if (this.node.ownerDocument) {
+					textLines.each((function(textLine, index){
+						var tspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
+						tspan.textContent = textLine;
+						tspan.setAttributeNS(null, 'x', this.invisibleRenderPoint);
+						tspan.setAttributeNS(null, 'y', this.invisibleRenderPoint);
+						
+						//append tspan to text node
+						this.node.appendChild(tspan);
+					}).bind(this));
+					
+					//Work around for Mozilla bug 293581
+					if (this.isVisible) {
+						this.node.setAttributeNS(null, 'visibility', 'hidden');
+					}
+					
+					if (this.fitToElemId) 
+						window.setTimeout(this._checkFittingToReferencedElem.bind(this), 0);
+					else 
+						window.setTimeout(this._positionText.bind(this), 0);
+				}
+			} else {
+				this.node.textContent = "";
 			}
 		}
 	},
@@ -322,10 +328,12 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	_positionText: function() {
 		try {
 			var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-			var fontSize;
+			var fontSize; 
 			if(tspans[0])
 				fontSize = (!(navigator.userAgent.match(/2.0.0.\d+$/))) ? tspans[0].getExtentOfChar(0).height : 14;
-			
+			else
+				fontSize = 14;
+				
 			$A(tspans).each((function(tspan, index){
 				
 				//set vertical position
@@ -345,20 +353,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				}
 				
 				tspan.setAttributeNS(null, 'dy', dy);
-				
-				//set horizontal position
-				var textLength = tspan.getComputedTextLength();
-				switch (this._horizontalAlign) {
-					case 'left':
-						tspan.setAttributeNS(null, 'dx', 0);
-						break;
-					case 'center':
-						tspan.setAttributeNS(null, 'dx', -textLength / 2);
-						break;
-					case 'right':
-						tspan.setAttributeNS(null, 'dx', -textLength);
-						break;
-				}
 				
 				tspan.setAttributeNS(null, 'x', this.x);
 				tspan.setAttributeNS(null, 'y', this.y);
@@ -443,12 +437,40 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		}
 	},
 	
+	rotate: function() {
+		switch(arguments.length) {
+			case 0:
+				return this._rotate;
+			case 1:
+				if (this._rotate != arguments[0]) {
+					this._rotate = arguments[0];
+					this._rotationPoint = undefined;
+					this._isChanged = true;
+				}
+			case 2:
+				if(this._rotate != arguments[0] ||
+				   this._rotationPoint.x != arguments[1].x ||
+				   this._rotationPoint.y != arguments[1].y) {
+					this._rotate = arguments[0];
+					this._rotationPoint = arguments[1];
+					this._isChanged = true;
+				}
+				
+		}
+	},
+	
 	hide: function() {
-		
+		if(this.isVisible) {
+			this.isVisible = false;
+			this._isChanged = true;
+		}
 	},
 	
 	show: function() {
-		
+		if(!this.isVisible) {
+			this.isVisible = true;
+			this._isChanged = true;
+		}
 	},
 	
 	toString: function() { return "Label " + this.id }

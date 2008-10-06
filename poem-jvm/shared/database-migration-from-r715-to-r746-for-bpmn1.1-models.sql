@@ -1,0 +1,11 @@
+UPDATE content SET erdf = REPLACE(erdf, 'collapsedSubprocess',            'CollapsedSubprocess');
+UPDATE content SET erdf = REPLACE(erdf, 'expandedSubprocess',             'Subprocess');
+UPDATE content SET erdf = REPLACE(erdf, 'IntermediateEventCatching',      'IntermediateEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'IntermediateTimerEventCatching', 'IntermediateTimerEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'MessageEndEvent',                'EndMessageEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'ErrorEndEvent',                  'ErrorEndEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'CancelEndEvent',                 'EndCancelEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'CompensationEndEvent',           'EndCompensationEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'SignalEndEvent',                 'EndSignalEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'MultipleEndEvent',               'EndMultipleEvent');
+UPDATE content SET erdf = REPLACE(erdf, 'TerminateEndEvent',              'EndTerminateEvent');

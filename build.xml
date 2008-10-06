@@ -11,16 +11,26 @@
     <target name='examples' depends='build'>
         
         <copy todir='build'>
-            <fileset file="editor.xhtml"/>
-            <fileset file="*.htm"/>
+            <fileset file="test/examples/*.xhtml"/>
             <fileset file="*.php"/>
-			<fileset file="*.xhtml"/>
         </copy>
         <copy todir='build/css'>
             <fileset dir='src/css'/>
         </copy>
         <echo>
             Copied example files into build destination
+        </echo>
+        
+    </target>
+	
+	 <target name='copy-license'>
+        
+        <copy todir='build'>
+            <fileset file="LICENSE"/>
+            <fileset file="LIBRARIES"/>
+        </copy>
+        <echo>
+            Copied license file into build destination
         </echo>
         
     </target>
@@ -82,21 +92,9 @@
         
         <javac srcdir="server/src" destdir="build/classes" debug="on">
             <classpath>
-                <fileset dir="lib">
-                    <include name="mysql-connector-java-5.1.5-bin.jar"/>
-                    <include name="batik-*.jar"/>
-                    <include name="fop.jar"/>
-                    <include name="avalon-framework-4.2.0.jar"/>
-                    <include name="commons-*.jar"/>
-                    <include name="serializer-2.7.0.jar"/>
-                    <include name="xalan-2.7.0.jar"/>
-                    <include name="xercesImpl-2.7.1.jar"/>
-                    <include name="xml-apis-1.3.02.jar"/>
-                    <include name="xmlgraphics-commons-1.1.jar"/>
-                    <include name="servlet-api.jar"/>
-                    <include name="openid4java.jar"/>
-                    <include name="js.jar"/>
-					<include name="oryxAtlas.jar"/>
+				<fileset dir="lib">
+                    <include name="*.jar"/>
+                    <exclude name="deprecated/**" />
                 </fileset>
             </classpath>
         </javac>
@@ -145,6 +143,7 @@
         <copy todir='build/lib'>
             <fileset dir='lib' includes='**/*'>
 				<exclude name="**/*.jar"/>
+				<exclude name="deprecated/**"/>
 			</fileset>
         </copy>
         <copy todir='build/shared'>
@@ -161,14 +160,22 @@
             Copied images into oryx build destination
         </echo>
         <copy todir="build/i18n">
-			<fileset dir="etc/i18n"/>
+			<fileset dir="data/i18n"/>
 		</copy>
 		<echo>
             Copied language files into oryx build destination
         </echo>
     </target>
 
-    <target name="build" depends="build-plugins, build-stencilsets, build-execution, build-server, build-editor-core" />
+    <target name='generate-version-file'>
+        <exec executable="svn" output="build/version.xml" failifexecutionfails="false">
+            <arg value="info"/>
+            <arg value="--non-interactive"/>
+            <arg value="--xml"/>
+        </exec>
+    </target>
+        
+    <target name="build" depends="copy-license, build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file" />
     
     <target name='compress'>
         
@@ -187,7 +194,7 @@
             Compressing Oryx into build destination
         </echo>
         <concat destfile='build/oryx.js'>
-            <fileset file="etc/license"/>
+            <fileset file="license"/>
             <fileset file="${compress.temp}"/>
         </concat>
         
@@ -215,7 +222,9 @@
         <war destfile="dist/oryx.war" webxml="etc/web.xml">
             
             <lib dir="lib">
-                <include name="batik-*.jar"/>
+                <include name="*.jar"/>
+				<exclude name="deprecated/**"/>
+				<!--<include name="batik-*.jar"/>
                 <include name="js.jar"/>
                 <include name="fop.jar"/>
                 <include name="pdf-transcoder.jar"/>
@@ -225,27 +234,27 @@
                 <include name="xerces-2.5.0.jar"/>
                 <include name="xml-apis.jar"/>
                 <include name="xml-apis-ext.jar"/>
-                <include name="xmlgraphics-commons-1.1.jar"/>
+                <include name="xmlgraphics-commons-1.1.jar"/>-->
                 
                 <!-- jsp and servlet development dependencies -->
-                <include name="jstl.jar"/>
-                <include name="standard.jar"/>
+                <!--<include name="jstl.jar"/>
+                <include name="standard.jar"/>-->
                 
                 <!-- needed for openid authentication -->
-                <include name="openid4java.jar"/>
+                <!--<include name="openid4java.jar"/>
                 <include name="openxri-*.jar"/>
                 <include name="htmlparser.jar"/>
                 <include name="dom3-*.jar"/>
                 <include name="icu4j_3_4_1.jar"/>
                 <include name="jug-1.1.jar"/>
                 <include name="xmlsec-1.1.jar"/>
-                <include name="infocard/*.jar"/>
+                <include name="infocard/*.jar"/>-->
                 
                 <!-- database connectors. consider moving this to users responsibility -->
-                <include name="mysql-connector-java-5.1.5-bin.jar"/>
+                <!--<include name="mysql-connector-java-5.1.5-bin.jar"/>-->
                 <!-- <include name="postgresql-8.3dev-602.jdbc3.jar"/> -->
 				
-				<include name="oryxAtlas.jar"/>
+				<!--<include name="oryxAtlas.jar"/>-->
             </lib>
             
             <fileset dir="build">
@@ -254,7 +263,9 @@
             </fileset>
             
             <classes dir="build/classes"/>
-            
+			
+			<metainf file="build/LICENSE"/>
+            <metainf file="build/LIBRARIES"/>
         </war>
         
           
@@ -339,5 +350,18 @@
     <target name="deploy-all" depends="deploy, deploy-backend" /> 
 
     <target name="undeploy-all" depends="undeploy, undeploy-backend" /> 
+
+	<!--<target name="tomcat-start">
+	    <java jar="${tomcat6}/bin/bootstrap.jar" fork="true">
+	        <jvmarg value="-Dcatalina.home=${tomcat6}"/>
+	    </java>
+	</target>
+	
+	<target name="tomcat-stop">
+	    <java jar="${tomcat6}/bin/bootstrap.jar" fork="true">
+	        <jvmarg value="-Dcatalina.home=${tomcat6}"/>
+	        <arg line="stop"/>
+	    </java>
+	</target>-->
 
 </project>

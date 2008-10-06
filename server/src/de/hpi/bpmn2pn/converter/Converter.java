@@ -8,7 +8,6 @@ import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
@@ -20,6 +19,7 @@ import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
@@ -92,11 +92,17 @@ public abstract class Converter {
 		}
 		// create transitions
 		handleNodesRecursively(net, diagram, c);
+		
+		postProcessDiagram(net, c);
 
 		return net;
 	}
 
 	protected void handleDiagram(PetriNet net, ConversionContext c) {
+		// do nothing
+	}
+	
+	protected void postProcessDiagram(PetriNet net, ConversionContext c){
 		// do nothing
 	}
 
@@ -417,7 +423,7 @@ public abstract class Converter {
 				|| gateway.getIncomingEdges().size() == 1) {
 			for (Edge e : gateway.getOutgoingEdges()) {
 				// Here the edge is saved, because each edge represents an option for the user.
-				Transition t2 = addSilentTransition(net, "option"+e.getId(), e, 0);
+				Transition t2 = addXOROptionTransition(net, e);
 				addFlowRelationship(net, p, t2);
 				addFlowRelationship(net, t2, c.map.get(e));
 			}
@@ -621,5 +627,10 @@ public abstract class Converter {
 			newLabel = id;
 		}
 		return newLabel;
+	}
+	
+	/* Mapping XOR Splits creates a transition for each outgoing edge */
+	protected Transition addXOROptionTransition(PetriNet net, Edge e){
+		return addSilentTransition(net, "option"+e.getId(), e, 0);
 	}
 }
