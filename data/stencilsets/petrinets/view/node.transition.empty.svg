@@ -9,10 +9,7 @@
    version="1.0">
   <defs></defs>
   <oryx:magnets>
-  	<oryx:magnet oryx:cx="0" oryx:cy="4" oryx:anchors="left" />
-  	<oryx:magnet oryx:cx="24" oryx:cy="9" oryx:anchors="bottom" />
-  	<oryx:magnet oryx:cx="49" oryx:cy="4" oryx:anchors="right" />
-  	<oryx:magnet oryx:cx="24" oryx:cy="0" oryx:anchors="top" />
+	<oryx:magnet oryx:cx="25" oryx:cy="5" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill" oryx:minimumSize="20 5" oryx:maximumSize="50 20" >
     <rect id="taskrect" oryx:resize="vertical horizontal" x="0" y="0" width="50" height="10" stroke="black" stroke-width="1" fill="white" />
