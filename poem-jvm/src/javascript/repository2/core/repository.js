@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008
- * Bjšrn Wagner, Sven Wagner-Boysen
+ * Bjï¿½rn Wagner, Sven Wagner-Boysen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -72,12 +72,15 @@ Repository.Core.Repository = {
 		getFacade : function() {
 			if (!this._facade) {
 				this._facade = {
+						
 						// Event handler
-						registerOnViewChanged : this._viewChangedHandler.registerCallback.bind(this._viewChangedHandler),
-						registerOnSelectionChanged : this._selectionChangedHandler.registerCallback.bind(this._selectionChangedHandler),
-						registerOnFilterChanged : this._filterChangedHandler.registerCallback.bind(this._filterChangedHandler),
+						registerOnViewChanged 		: this._viewChangedHandler.registerCallback.bind(this._viewChangedHandler),
+						registerOnSelectionChanged 	: this._selectionChangedHandler.registerCallback.bind(this._selectionChangedHandler),
+						registerOnFilterChanged 	: this._filterChangedHandler.registerCallback.bind(this._filterChangedHandler),
 						
 						modelCache 			: this._modelCache,
+						
+						isPublicUser 				: this.isPublicUser.bind(this),
 						
 						applyFilter 		: this.applyFilter.bind(this),
 						removeFilter 		: this.removeFilter.bind(this),
@@ -102,7 +105,7 @@ Repository.Core.Repository = {
 		
 		
 		isPublicUser: function() {
-			return this._currentUser == this.publicUser;
+			return this._currentUser == this._publicUser;
 		},
 		
 		applyFilter : function(name, parameters) {

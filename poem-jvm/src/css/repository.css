@@ -249,7 +249,8 @@ body, td, input, textarea {
 /** REPOSITORY ICON VIEW **/
 
 .repository_iconview dd{
-	width		: 300px;
+	width		: 200px;
+	height		: 80px; 
 	padding		: 10px;
 	border		: 1px solid #EEEEEE;
 	font-family	: tahoma,arial,san-serif;
@@ -263,11 +264,12 @@ body, td, input, textarea {
 }
 
 .repository_iconview dd.selected{
+	background-color	: #fff5e1;
 	border-color	: #FC8B03;
 }
 
 .repository_iconview dd img{
-	max-width	: 280px;
+	max-width	: 180px;
 	max-height	: 80px;
 }
 

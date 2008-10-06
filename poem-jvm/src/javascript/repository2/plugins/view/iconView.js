@@ -28,15 +28,15 @@ if(!Repository.Plugins) Repository.Plugins = {};
 Repository.Plugins.IconView = {
 	
 	
-	construct: function(fascade) {
+	construct: function(facade) {
 		this.name = Repository.I18N.IconView.name;
+		arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
 		this.icon = '/backend/images/silk/table.png';
 		this.numOfDisplayedModels = 10;
 		
 		// define required data uris
 		this.dataUris = ["/meta"];
 		
-		arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
 	},
 	
 	
@@ -50,8 +50,17 @@ Repository.Plugins.IconView = {
 		
 		var data = [];
 		modelData.each(function( pair ){
-			data.push( [ pair.key, pair.value.thumbnailUri, pair.value.title, pair.value.type, pair.value.author || 'Unknown' ] )
-		})
+			var stencilset = pair.value.type;
+			// Try to display stencilset title instead of uri
+			this.facade.modelCache.getModelTypes().each(function(type){
+				if (stencilset == type.namespace) {
+					stencilset = type.title;
+					return;
+				}
+			}.bind(this));
+			
+			data.push( [ pair.key, pair.value.thumbnailUri, pair.value.title, stencilset, pair.value.author || 'Unknown' ] )
+		}.bind(this));
 		
 		var store = new Ext.data.SimpleStore({
 	        fields	: ['id', 'icon', 'title', 'type', 'author'],
@@ -83,7 +92,7 @@ Repository.Plugins.IconView = {
 		// Get the uri from the clicked model
 		var id 	= dataGrid.getRecord( node ).data.id
 		var uri = this.facade.modelCache.getModelUri( id )
-		uri 	= uri.slice(1);
+		uri 	= uri.slice(1) + "/self";
 		
 		// Select the new range
 		dataGrid.selectRange(index, index)
@@ -110,8 +119,8 @@ DataGridPanel = Ext.extend(Ext.DataView, {
             '<tpl for=".">',
 				'<dd>',
 				'<img src="{icon}" title="{title}"/>',
-	            '<div><span class="title">{title}</span><span class="author">({author})</span></div>',
-	            '<div><span class="type">{type}</span></div>',
+	            '<div><span class="title">{title}</span><span class="author">({type})</span></div>',
+	            '<div><span class="type">{author}</span></div>',
 				'</dd>',
             '</tpl>',
 			'</dl>',

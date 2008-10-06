@@ -63,7 +63,7 @@ Repository.Plugins.TagInfo = {
 			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 2px;', text:'Delete', click:this._onTagClick.bind(this, tag)})
 			
 			buttons.push( label );
-			buttons.push( image );
+			if (!this.facade.isPublicUser()) buttons.push( image ); // Don't display remove buttons to the public user
 			
 			if( index < modelTags.length-1 )
 				buttons.push( {html:', ', width:10, xtype:'label'} );

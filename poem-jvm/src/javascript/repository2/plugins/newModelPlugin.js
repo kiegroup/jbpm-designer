@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008
- * Bjšrn Wagner, Sven Wagner-Boysen
+ * Bjï¿½rn Wagner, Sven Wagner-Boysen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -34,12 +34,11 @@ Repository.Plugins.NewModel = {
 	construct: function(facade) {
 		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class
 		this.name = Repository.I18N.NewModel.name;
-		this.facade = facade;
 		
 		// define Create New Model menu
 		this.toolbarButtons = new Array();
 		
-		this.getModelTypes().each(function(type) {
+		this.facade.modelCache.getModelTypes().each(function(type) {
 			this.toolbarButtons.push({
 				text : type.title,
 				menu : this.name,

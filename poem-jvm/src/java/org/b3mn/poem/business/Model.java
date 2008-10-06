@@ -36,6 +36,9 @@ import org.hibernate.classic.Session;
 
 public class Model extends BusinessObject {
 	
+	// Cache data
+	protected String author = null;
+	
 	protected Representation representation;
 	
 	protected TagDefinition getTagDefintion(User user, String name) {
@@ -136,6 +139,20 @@ public class Model extends BusinessObject {
 	
 	public void setSvg(String svg) {
 		representation.setSvg(svg);
+	}
+	
+	public String getAuthor() {
+		if (this.author == null) {
+			this.author = (String) Persistance.getSession().createSQLQuery(
+					"SELECT identity.uri FROM access, identity WHERE " +
+					"access.object_id=:object_id AND " +
+					"access.subject_id=identity.id AND " +
+					"access.access_term='owner'")
+					.setInteger("object_id", getId())
+					.uniqueResult();
+			Persistance.commit();
+		}
+		return this.author;
 	}
 	
 	public Collection<String> getPublicTags(User user) {

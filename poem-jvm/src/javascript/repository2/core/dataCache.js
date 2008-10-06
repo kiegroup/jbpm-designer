@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008
- * Bjšrn Wagner, Sven Wagner-Boysen
+ * Bjï¿½rn Wagner, Sven Wagner-Boysen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,9 @@ if(!Repository) var Repository = {};
 if(!Repository.Core) Repository.Core = {};
 
 Repository.Core.DataCache = {
+		
+	oryxUrl : '/oryx',
+	stencilsetUrl : '/stencilsets',
 
 	construct : function(models) {
 		
@@ -182,8 +185,27 @@ Repository.Core.DataCache = {
 			}
 		});
 
-	}
+	},
 	
+	getModelTypes : function() {
+		// lazy loading
+		if (!this.modelTypes) {
+			new Ajax.Request("/oryx/stencilsets/stencilsets.json", 
+			 {
+				method: "get",
+				asynchronous : false,
+				onSuccess: function(transport) {
+					this.modelTypes = transport.responseText.evalJSON();
+					this.modelTypes.each(function(type) {
+						type.iconUrl = this._oryxUrl + this.stencilsetUrl + type.icon_url;
+						type.url = this.stencilsetUrl + type.uri
+					}.bind(this));
+				}.bind(this),
+				onFailure: function() {alert("Fehler modelTypes")}
+			});
+		}
+		return this.modelTypes;
+	},
 	
 };
 

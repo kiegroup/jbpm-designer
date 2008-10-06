@@ -31,6 +31,7 @@ public class ModelInfoHandler extends  HandlerBase {
 			attributes.add("type");
 			attributes.add("creationDate");
 			attributes.add("lastUpdate");
+			attributes.add("author");
 			JSONObject data = JavaBeanJsonTransformation.toJsonObject(model, attributes);
 			data.put("thumbnailUri", this.getServerPath(request) + model.getUri() + "/png");
 			// Create an envelop to be able to return results for more than one model later

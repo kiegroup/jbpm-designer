@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008
- * Bjšrn Wagner
+ * Bjï¿½rn Wagner
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -37,7 +37,7 @@ Repository.Plugins.TypeFilter = {
 
 		this.buttons = new Array();
 		// Add buttons to the panel
-		this.getModelTypes().each(function(stencilset) {
+		this.facade.modelCache.getModelTypes().each(function(stencilset) {
 			var button = new Ext.Button({ 
 				text : stencilset.title, 
 				selected : false, 
