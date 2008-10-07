@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.b3mn.poem.Access;
 import org.b3mn.poem.Identity;
+import org.b3mn.poem.Interaction;
 import org.b3mn.poem.Persistance;
 import org.b3mn.poem.Representation;
 import org.b3mn.poem.TagDefinition;
@@ -240,6 +241,56 @@ public class Model extends BusinessObject {
 			accessRights.put(row[0].toString(), row[1].toString());
 		}
 		return accessRights;
+	}
+	
+	public String getAccessRight(String openId) {
+		String term = (String) Persistance.getSession().createSQLQuery(
+				"SELECT access.access_term FROM access, identity WHERE " +
+				"access.object_id=:object_id AND access.subject_id=identity.id AND identity.id=:opend_id")
+				.setInteger("object_id", this.getId())
+				.setString("open_id", openId)
+				.uniqueResult();
+		
+		Persistance.commit();
+		
+		return term;
+	}
+	
+	public boolean addAccessRight(String openId, String term) {
+		Identity sub = Identity.ensureSubject(openId);
+		String subject_hierarchy = sub.getUserHierarchy();
+		String object_hierarchy = this.identity.getModelHierarchy();
+		Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term);
+		if (right == null) {
+			right = new Interaction();
+			right.setSubject(subject_hierarchy);
+			right.setObject(object_hierarchy);
+			right.setScheme("http://b3mn.org/http");
+			right.setTerm(term);
+			right.setObject_self(true);
+			right.save();
+			return true; // Created
+		} else {
+			right.setTerm(term); // Overwrite old term
+			right.save();
+			return false; // Already exists
+		}
+		
+	}
+	
+	public boolean removeAccessRight(String openId) {
+		String term = this.getAccessRight(openId);
+		// Term has to exist and owner rights cannot be removed
+		if ((term != null) && (!"owner".equals(term))){
+			Identity sub = Identity.ensureSubject(openId);
+			String subject_hierarchy = sub.getUserHierarchy();
+			String object_hierarchy = this.identity.getModelHierarchy();
+			Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term);
+			right.delete();
+			return true; // Deleted
+		} else {
+			return false; // Doesn't exist
+		}
 	}
 	
 }

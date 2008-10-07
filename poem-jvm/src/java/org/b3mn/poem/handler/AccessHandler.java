@@ -14,9 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AccessHandler extends  HandlerBase {
-
-	@Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
+	
+	private void writeAccessRights(HttpServletResponse response, Identity object)
+			throws JSONException, IOException {
 		Model model = new Model(object.getId());
 		
 		Map<String, String> accessRights = model.getAccessRights();
@@ -26,47 +26,43 @@ public class AccessHandler extends  HandlerBase {
 	}
 	
 	@Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
-		Identity sub = Identity.ensureSubject(request.getParameter("subject"));
-		String subject_hierarchy = sub.getUserHierarchy();
-		String object_hierarchy = object.getModelHierarchy();
-		String term = request.getParameter("predicate");
-		Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term);
-		if (right == null) {
-			right = new Interaction();
-			right.setSubject(subject_hierarchy);
-			right.setObject(object_hierarchy);
-			right.setScheme("http://b3mn.org/http");
-			right.setTerm(term);
-			right.setObject_self(true);
-			right.save();
-			response.setStatus(201);
-		}
-		else {
-			response.setStatus(200);
-		}
+    public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
+		writeAccessRights(response, object);
+	}
 
-		String location = this.getServerPath(request) +  object.getUri() + right.getUri();
-		try {
-			JSONObject output = new JSONObject();
-			output.put("predicate", right.getPredicate());
-			output.put("subject", sub.getUri());
-			output.put("uri", location);
-			response.addHeader("Location", location);
-			output.write(response.getWriter());
-	      } catch (JSONException e) {e.printStackTrace();}
+
+	
+	@Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
+
+		String openId = request.getParameter("subject");
+		String term = request.getParameter("predicate");
+		if ((openId != null) && (term.equals("read") || term.equals("write"))) {
+			Model model = new Model(object.getId());
+			if (model.addAccessRight(openId, term)) {
+				response.setStatus(201);
+			} else {
+				response.setStatus(200);
+			}
+			this.writeAccessRights(response, object);
+		} else {
+			response.setStatus(409);
+			response.getWriter().println("AccessHandler : Invalid Parameters!");
+		}
 	}
 	
 	@Override
-    public void doDelete(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws IOException {
-		Interaction right = Interaction.exist(Integer.parseInt(request.getParameter("id")));
-		if (right != null) {
-			right.delete();
-			response.setStatus(200);
+    public void doDelete(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
+		String openId = request.getParameter("subject");
+		if (openId != null) {
+			Model model = new Model(object.getId());
+			if (model.removeAccessRight(openId)) {
+				response.setStatus(200);
+				this.writeAccessRights(response, object);
+			}
 		}
-		else {
-			response.setStatus(400);
-		}
+		response.setStatus(409);
+		response.getWriter().println("AccessHandler : Invalid Parameters!");
 	}
 	
 	
