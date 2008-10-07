@@ -32,7 +32,7 @@ Repository.Plugins.IconView = {
 		this.name = Repository.I18N.IconView.name;
 		arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
 		this.icon = '/backend/images/silk/table.png';
-		this.numOfDisplayedModels = 10;
+		this.numOfDisplayedModels = 12;
 		
 		// define required data uris
 		this.dataUris = ["/meta"];
@@ -118,7 +118,7 @@ DataGridPanel = Ext.extend(Ext.DataView, {
 			'<dl>',
             '<tpl for=".">',
 				'<dd>',
-				'<img src="{icon}" title="{title}"/>',
+				'<div class="image"><img src="{icon}" title="{title}"/></div>',
 	            '<div><span class="title">{title}</span><span class="author">({type})</span></div>',
 	            '<div><span class="type">{author}</span></div>',
 				'</dd>',

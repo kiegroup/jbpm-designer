@@ -6,10 +6,26 @@ body {
 }
 
 body, td, input, textarea {
-	font-family: Arial;
 	font-size: 12px;
 }
 
+body {
+	font-family	: tahoma,arial,san-serif;
+	font-size	: 11px;
+}
+
+a {
+	color	: #FC8B03;
+}
+
+a.x-item-disabled:hover, a.x-item-disabled:focus, a.x-item-disabled:active {
+	color	: gray;	
+}
+
+a:hover, a:focus, a:active {
+	color	: #febc6f;
+}
+	
 /** removes icons from treepanel */
 /*.x-tree-node-icon {*/
 .no-icon {
@@ -248,15 +264,22 @@ body, td, input, textarea {
 
 /** REPOSITORY ICON VIEW **/
 
+.repository_iconview dl {
+	width		: 100%;
+	max-width	: 1000px;
+}
+
 .repository_iconview dd{
 	width		: 200px;
-	height		: 80px; 
+	height		: 105px; 
 	padding		: 10px;
 	border		: 1px solid #EEEEEE;
 	font-family	: tahoma,arial,san-serif;
 	font-size	: 9px;
-	display		: inline-table;
+	display		: block;
 	margin		: 5px;
+	text-align	: left;
+	float		: left;
 }
 
 .repository_iconview dd.over{
@@ -264,15 +287,22 @@ body, td, input, textarea {
 }
 
 .repository_iconview dd.selected{
-	background-color	: #fff5e1;
-	border-color	: #FC8B03;
+	border-color: #FC8B03;
 }
 
 .repository_iconview dd img{
-	max-width	: 180px;
-	max-height	: 80px;
+	max-width	: 190px;
+	max-height	: 70px;
 }
 
+.repository_iconview dd .image{
+	width	: 200px;
+	height	: 80px;
+	padding-bottom	: 10px;
+	text-align		: center;
+	vertical-align	: middle;
+	display	:table-cell;
+}
 .repository_iconview dd .title{
 	font-weight	: bold;
 	font-size	: 11px;
