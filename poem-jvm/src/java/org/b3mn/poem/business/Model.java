@@ -26,7 +26,11 @@ package org.b3mn.poem.business;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.b3mn.poem.Access;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Persistance;
 import org.b3mn.poem.Representation;
@@ -218,5 +222,24 @@ public class Model extends BusinessObject {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getAccessRights() {
+		List<Object[]> results = Persistance.getSession().createSQLQuery(
+				"SELECT identity.uri, access.access_term FROM access, identity WHERE " +
+				"access.object_id=:object_id AND access.subject_id=identity.id")
+				.setInteger("object_id", this.getId())
+				.list();
+		
+		Persistance.commit();
+		
+		Map<String, String> accessRights = new HashMap<String, String>();
+		
+		
+		for(Object rowObj : results) {
+			Object[] row = (Object[]) rowObj;
+			accessRights.put(row[0].toString(), row[1].toString());
+		}
+		return accessRights;
+	}
 	
 }
