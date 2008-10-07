@@ -56,7 +56,24 @@ Repository.Plugins.TagInfo = {
 		var oneIsSelected 	= $H(modelData).keys().length !== 0;
 		var buttons 		= [];
 		
-		var modelTags 		= $H(modelData).values().map(function( tags ){ return tags.userTags }).flatten().compact().uniq();
+		// Add a Headline
+		buttons.push( {text: 'Common Tags:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"} );
+		
+		// Find every tag which are available in all selected models
+		var modelTags 		= []
+		
+		$H(modelData).each(function( pair ){ 
+						pair.value.userTags.each(function( tag ){
+							if( modelData.every(function( spair ){
+									return spair.value.userTags.include( tag )
+								}) ){
+								modelTags.push( tag )
+							} 
+						})
+					})
+		
+		modelTags = modelTags.uniq();
+								
 		modelTags.each(function(tag, index){
 			
 			var label = {text: tag, xtype:'label'};
@@ -69,7 +86,12 @@ Repository.Plugins.TagInfo = {
 				buttons.push( {html:', ', width:10, xtype:'label'} );
 				
 		}.bind(this))
-		
+
+		if( buttons.length == 1 ){
+			// Add a 'none'
+			buttons.push( {text: 'none', xtype:'label', style:"font-style:italic;color:gray;"} );				
+		}
+	
 		
 		var buttonsPanel
 		if( buttons.length > 0 ){
