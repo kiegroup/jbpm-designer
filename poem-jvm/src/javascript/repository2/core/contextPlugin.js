@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008
- * Bjšrn Wagner, Sven Wagner-Boysen
+ * Bjï¿½rn Wagner, Sven Wagner-Boysen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -38,7 +38,7 @@ Repository.Core.ContextPlugin = {
 		this.facade.registerOnSelectionChanged(this.selectionChanged.bind(this));
 		this.facade.modelCache.getUpdateHandler().registerCallback(this.modelUpdate.bind(this));
 		
-		this.preRender( this.facade.getSelectedModels() )
+		this.preRender( this.facade.getDisplayedModels() )
 		
 	},
 	selectionChanged : function(modelIds) {

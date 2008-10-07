@@ -44,6 +44,7 @@ Repository.Core.ViewPlugin = {
 	
 			this.facade.registerOnFilterChanged(this.filterChanged.bind(this));
 			this.facade.registerOnViewChanged(this.viewChanged.bind(this));
+			this.facade.registerOnSelectionChanged(this.selectionChanged.bind(this));
 		},
 		
 		showNextDisplayedModels : function() {			
@@ -66,7 +67,17 @@ Repository.Core.ViewPlugin = {
 				newDisplayedModels.push(filteredModels[i]);
 				
 			this.lastStartIndexOfDisplayedModel = startIndex;
-			this.facade.setDisplayedModels( newDisplayedModels );		
+			this.facade.setDisplayedModels( newDisplayedModels );	
+			
+			
+			// Reset the selection
+			var ds = this.facade.getSelectedModels();
+			var dd = this.facade.getDisplayedModels();
+			
+			var newSelection = ds.findAll(function(old){ return dd.include( old )})
+			
+			this.facade.changeSelection( newSelection );
+				
 		},	
 			
 		enable : function() {
@@ -84,9 +95,12 @@ Repository.Core.ViewPlugin = {
 		},
 		
 		filterChanged : function(modelIds) {
-			if (this == this.facade.getCurrentView()) {
-				this.preRender(this.facade.getDisplayedModels());
+			
+			if (this !== this.facade.getCurrentView()) {
+				return
 			}
+				
+			this.showDisplayedModelsStartingFrom( this.lastStartIndexOfDisplayedModel );
 		},
 
 		viewChanged : function(modelIds) {
@@ -96,6 +110,10 @@ Repository.Core.ViewPlugin = {
 			}
 			
 		},		
+		
+		selectionChanged: function( modelIds ) {
+			
+		},
 		
 		updateModels : function(modelIds) {
 			modelIds.each(function(modelId) {

@@ -31,41 +31,65 @@ if(!Repository.Plugins) Repository.Plugins = {};
  */
 
 Repository.Plugins.TypeFilter = {
+	
+	filter : [],
+	
 	construct: function(facade) {
 		this.name = Repository.I18N.TypeFilter.name;
 		arguments.callee.$.construct.apply(this, arguments); // call Plugin super class
 
-		this.buttons = new Array();
+		var types =[];
 		// Add buttons to the panel
 		this.facade.modelCache.getModelTypes().each(function(stencilset) {
-			var button = new Ext.Button({ 
-				text : stencilset.title, 
-				selected : false, 
-				namespace : stencilset.namespace
+			var button = new Ext.LinkButton({ 
+					text 		: stencilset.title, 
+					toggle 		: true, 
+					toggleStyle	: 'font-weight:bold;display:block;',
+					namespace 	: stencilset.namespace,
+					click		: this._onButtonClick.bind(this),
+					style		: 'display:block;'
 				});
-			button.addListener('click', this._onButtonClick.bind(this));
-			this.panel.add(button);
-			this.buttons.push(button);
+				
+			types.push( [ stencilset.namespace , stencilset.title] )
+
+			//this.panel.add(button);
+			
+			
 		}.bind(this));
+		
+		
+		
+		var sm 		= new Ext.grid.CheckboxSelectionModel({listeners :  { selectionchange: this._onButtonClick.bind(this) }});
+		var store 	= new Ext.data.SimpleStore({
+	        fields	: ['namespace', 'title'],
+	        data	: types
+	    });
+		
+	    var grid = new Ext.grid.GridPanel({
+	        store	: store,
+			width	: 200,
+	        cm		: new Ext.grid.ColumnModel([
+			            sm,
+			            {
+							dataIndex	: 'title',
+							width		: 178
+						}
+			        ]),
+	        sm		: sm,
+			hideHeaders :true,
+			border	: false
+	    });
+
+
+		this.panel.add( grid )
 		this.panel.doLayout();
 	},
 	
-	_onButtonClick : function(button, EventArgs) {
-		if (button.selected) {
-			button.addClass('test_unselected_text');
-		} else {
-			button.addClass('test_selected_text');
-		}
+	_onButtonClick : function( selectModel ) {
+				
+		var filter = $A(selectModel.selections.items).map(function(item){ return item.data.namespace });
+		this.facade.applyFilter('type', filter.join(","));
 		
-		button.selected = !button.selected;
-		var params = '';
-		this.buttons.each(function(button) {
-			if (button.selected) {
-				params += button.namespace.escapeHTML() + ',';
-			}
-		}.bind(this));
-		params[params.length - 1] = ' '; // remove last comma
-		this.facade.applyFilter('type', params);
 	}
 };
 

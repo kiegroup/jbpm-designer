@@ -30,15 +30,16 @@ if(!Repository.Plugins) Repository.Plugins = {};
  * Note: Only stencil sets defined in the stencilsets.json can be selected as filter
  */
 
-Repository.Plugins.TagInfo = {
+Repository.Plugins.AccessInfo = {
 	
-	TAG_URL : "/tags",
+	ACCESS_URL : "/access",
 	
 	construct: function( facade ) {
 		// Set the name
-		this.name = Repository.I18N.TagInfo.name;
+		this.name = Repository.I18N.AccessInfo.name;
 
-		this.dataUris = [this.TAG_URL];
+		// Set the data uris
+		this.dataUris = [this.ACCESS_URL];
 				
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 
@@ -47,17 +48,19 @@ Repository.Plugins.TagInfo = {
 	
 	render: function( modelData ){
 
+		console.log( modelData )
+		return
+	
 		// Try to removes the old child ...
-		var child = Ext.getCmp( 'repository_taginfo_mainpanel' );
-		if( child )
-			this.panel.remove( child );
+		if( this.myPanel )
+			this.panel.remove( this.myPanel );
 			
 					
 		var oneIsSelected 	= $H(modelData).keys().length !== 0;
 		var buttons 		= [];
 		
 		// Add a Headline
-		buttons.push( {text: 'Shared tags:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"} );
+		buttons.push( {text: 'Common Tags:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"} );
 		
 		// Find every tag which are available in all selected models
 		var modelTags 		= []
@@ -134,7 +137,7 @@ Repository.Plugins.TagInfo = {
 				});
 
 
-		var newPanel = new Ext.Panel({
+		this.myPanel = new Ext.Panel({
 					id		: 'repository_taginfo_mainpanel',
 					style	: 'padding:10px;', 
 					border	: false,
@@ -142,7 +145,7 @@ Repository.Plugins.TagInfo = {
 				})
 						
 		// ... before the new child gets added		
-		this.panel.add( newPanel );
+		this.panel.add( this.myPanel );
 		// Update layouting
 		this.panel.doLayout();
 
@@ -170,4 +173,4 @@ Repository.Plugins.TagInfo = {
 	}
 };
 
-Repository.Plugins.TagInfo = Repository.Core.ContextPlugin.extend(Repository.Plugins.TagInfo);
+Repository.Plugins.AccessInfo = Repository.Core.ContextPlugin.extend(Repository.Plugins.AccessInfo);

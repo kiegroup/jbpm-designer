@@ -119,7 +119,7 @@ Repository.Core.Repository = {
 						method: "get",
 						asynchronous : false,
 						onSuccess: function(transport) {
-							this._filteredModels = eval(response.responseText);
+							this._filteredModels = eval(transport.responseText);
 							this._filterChangedHandler.invoke(this._filteredModels);
 						}.bind(this),
 						parameters : params,
@@ -267,6 +267,7 @@ Repository.Core.Repository = {
                 title: pluginName,
                 collapsible: true,
                 collapsed: false,
+				border:false,
                 split : true
 			});
 			pluginPanel = panel.add(pluginPanel);
@@ -378,7 +379,9 @@ Repository.Core.Repository = {
 				this._switchView( firstView );
 			}
 
-
+			this._viewChangedHandler.invoke( this._displayedModels );
+			this._selectionChangedHandler.invoke( this._selectedModels );
+			
 		}, 
 		
 		_intializePluginFiles: function( files ){

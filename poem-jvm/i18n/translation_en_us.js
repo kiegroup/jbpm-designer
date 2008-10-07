@@ -67,6 +67,8 @@ Repository.I18N.TypeFilter.name = "Type Filter";
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
 Repository.I18N.TagInfo.name = "Tags"
 
+if(!Repository.I18N.AccessInfo) Repository.I18N.AccessInfo = {};
+Repository.I18N.AccessInfo.name = "Access Rights"
 
 
 

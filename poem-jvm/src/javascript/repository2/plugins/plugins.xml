@@ -9,6 +9,7 @@
 		<plugin source="view/debugView2.js" name="Repository.Plugins.DebugView" />
 		<plugin source="view/tableView.js" name="Repository.Plugins.TableView" />
 		<plugin source="context/tagInfo.js" name="Repository.Plugins.TagInfo" />
+		<plugin source="context/accessInfo.js" name="Repository.Plugins.AccessInfo" />
 		<plugin source="context/modelRangeSelection.js" name="Repository.Plugins.ModelRangeSelection" />
 				
 	</plugins>

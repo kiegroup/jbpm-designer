@@ -21,6 +21,12 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
 	// Image style (only if an image url is setted) 
     imageStyle: null,
 
+	toggle:false, 
+	
+	toggleStyle:null,
+
+	selected:false,
+
     // private
     onRender : function(ct, position){
         if(!this.el){
@@ -30,8 +36,8 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
 			if( !this.disabled )
             	this.el.href = "#" + this.text;
 
-            if( !this.disabled && this.click instanceof Function ){
-                this.el.addEventListener( 'click', function(e){ this.click.apply(this.click, arguments); Event.stop(e)}.bind(this), true);
+            if( !this.disabled ){
+                this.el.addEventListener( 'click', this.onClick.bind(this), true);
             }
 			
 			if( this.image ){
@@ -46,6 +52,30 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
         }
         Ext.LinkButton.superclass.onRender.call(this, ct, position);
     },
+	
+	onClick: function(e){
+		
+		if( this.disabled ){ return }
+		
+		// Toggle the button
+		if( this.toggle ){
+			this.selected = !this.selected;
+			if( this.toggleStyle ){
+				this.el.dom.setAttribute('style','')
+				if( this.selected ){
+					this.el.applyStyles( this.toggleStyle )
+				} else {
+					this.el.applyStyles( this.initialConfig.style )
+				}
+			}
+		}
+
+		
+		if( this.click instanceof Function )
+			this.click.apply(this.click, [this, e]); 
+		 
+		Event.stop(e)
+	},
     
     setText: function(t, encode){
         this.text = t;

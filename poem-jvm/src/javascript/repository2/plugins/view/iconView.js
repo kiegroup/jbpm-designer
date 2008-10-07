@@ -42,6 +42,8 @@ Repository.Plugins.IconView = {
 	
 	
 	render : function(modelData) {
+		
+		this.isRendering = true;
 				
 		if( this.myPanel ){
 			this.panel.remove( this.myPanel )
@@ -73,10 +75,15 @@ Repository.Plugins.IconView = {
 
 		this.panel.add( this.myPanel );
 		this.panel.doLayout(); 
+		
+		
+		this.isRendering = false;
 	},
 	
 	_onSelectionChange: function(dataGrid){
-		
+
+		if( this.isRendering || this.isSelecting ){ return }
+
 		var ids = [];
 		// Get the selection
 		dataGrid.getSelectedRecords().each(function(data){
@@ -96,10 +103,33 @@ Repository.Plugins.IconView = {
 		
 		// Select the new range
 		dataGrid.selectRange(index, index)
+		this.facade.changeSelection( [id] );
 		
 		// Open the model in a new window
 		window.open( uri )
 		
+	},
+	
+	selectionChanged: function(modelIds) {
+		
+		if( !this.myPanel || this.isRendering ){ return }
+		
+		var dg		= this.myPanel.items.get(0);
+		var data  	= dg.store.data;
+		
+		if( dg.events.selectionchange.firing ){ return }
+		
+		this.isSelecting = true;
+		
+		var selectingIndices = [];
+		
+		data.each(function(d, index ){
+			if( modelIds.include( d.data.id )){ selectingIndices.push( index ) }
+		})
+		
+		dg.select( selectingIndices );
+		
+		this.isSelecting = false;
 	}	
 };
 
