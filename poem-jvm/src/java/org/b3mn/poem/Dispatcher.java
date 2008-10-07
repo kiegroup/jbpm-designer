@@ -80,6 +80,7 @@ public class Dispatcher extends HttpServlet {
 
 	public Dispatcher() {
 		HandlerBase.setDispatcher(this);
+		loadHandlerInfo();
 	}
 	
 	protected String getErrorPage(String stacktrace) {
@@ -105,56 +106,13 @@ public class Dispatcher extends HttpServlet {
 	public void loadHandlerInfo() {
 		for (String className : this.getHandlerClassNames()) {
 			try {
-				Class<?> handlerClass = Class.forName(className);
-				if (handlerClass.getAnnotation(HandlerWithoutModelContext.class) != null) {
-					HandlerInfo handlerInfo = new HandlerInfo(
-						handlerClass.getAnnotation(HandlerWithoutModelContext.class));
-					
-					// Add new Handler info class
-					this.knownHandlers.put(handlerInfo.getUri(), handlerInfo);
+				HandlerInfo info = new HandlerInfo(className);
+				if (info != null) {
+					// The reflection logic is implemented in the HandlerInfo.load() method
+					this.knownHandlers.put(info.getUri(), info);
 				}
-				if (handlerClass.getAnnotation(HandlerWithModelContext.class) != null) {
-					HandlerInfo handlerInfo = new HandlerInfo(
-							handlerClass.getAnnotation(HandlerWithModelContext.class));
-						
-						// Add new Handler info class
-						this.knownHandlers.put(handlerInfo.getUri(), handlerInfo);
-				}
-				if (handlerClass.getAnnotation(ExportHandler.class) != null) {
-					ExportHandler annotation = 
-						handlerClass.getAnnotation(ExportHandler.class);
-					// Add new Handler info class
-					HandlerInfo handlerInfo = new HandlerInfo(annotation);
-					ExportInfo exportInfo = new ExportInfo(annotation);
-					this.knownHandlers.put(handlerInfo.getUri(), handlerInfo);
-					this.exportInfos.add(exportInfo);
-				}
-				
-			} catch (Exception e) {
-				// Igonore Exceptions
-			}
-			
+			} catch (Exception e) {}	// Ignore handler if an exception occurs
 		}
-	}
-	
-	// Returns the actual instance of the requested handler
-	// TODO: insert better exception handling
-	protected HandlerBase getHandlerInstance(String className) {
-		if (className != null) {
-			try {
-				// Create new handler instance with Java reflection
-				Class handlerClass = Class.forName(className);
-				// TODO: Check if handlerClass is derived from HandlerBase and use 
-				// java.lang.reflect.Constructor.newInstance() to create the instance
-				HandlerBase handler = (HandlerBase) handlerClass.newInstance();
-				handler.setServletContext(this.getServletContext()); // Initialize handler with ServletContext
-				handler.init(); // Initialize the handler
-				
-				return handler;
-			} catch(Exception e) {
-				return null;
-			}
-		} else return null;
 	}
 	
 	// Returns the identity of the model that is referenced in the request URL or null if 
@@ -180,29 +138,32 @@ public class Dispatcher extends HttpServlet {
 	// Returns an initialized instance of the requested handler  
 	protected HandlerBase getHandler(String path) {
 		try {
-			// Extract handler name from the request URL 
+			// Extract handler uri from the request URL 
 			Pattern pattern = Pattern.compile("(\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
 			Matcher matcher = pattern.matcher(new StringBuffer(path));
 			matcher.find();
-			String name = matcher.group(3);
+			String uri = matcher.group(3);
 			// If the request doesn't contain an id
-			if (name == null) {
+			if (uri == null) {
 				return null;
 			}
 			else {
-				// Has the handler already been loaded?
-				if (this.knownHandlers.get(name) != null) {
-					return this.knownHandlers.get(name);
+				// Does a handler with the given uri exist?
+				if (this.knownHandlers.get(uri) != null) {
+					// Is the handler instance already initalized?
+					if (this.knownHandlers.get(uri).getHandlerInstance() != null) {
+						return this.knownHandlers.get(uri).getHandlerInstance();
+					} else {
+						// TODO: Check if handlerClass is derived from HandlerBase and use 
+						// java.lang.reflect.Constructor.newInstance() to create the instance
+						HandlerBase handler = (HandlerBase)  this.knownHandlers.get(uri).getHandlerClass().newInstance();
+						handler.setServletContext(this.getServletContext()); // Initialize handler with ServletContext
+						handler.init(); // Initialize the handler
+						this.knownHandlers.get(uri).setHandlerInstance(handler); // Store the handler instance in ModelInfo
+						return handler;
+					}
 				} else {
-					// Get class name of the handler from the database
-					String className = (String) Persistance.getSession().
-					createSQLQuery("SELECT java_class FROM plugin WHERE rel= :rel")
-					.setString("rel", name)
-					.uniqueResult();
-					Persistance.commit();
-					HandlerBase handler = this.getHandlerInstance(className);
-					this.knownHandlers.put(name, handler);
-					return handler;
+					return null;
 				}
 			}
 		} catch (Exception e) { return null; }	

@@ -23,7 +23,6 @@
 
 package org.b3mn.poem.handler;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,13 +31,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.business.Model;
 import org.b3mn.poem.business.User;
+import org.b3mn.poem.util.HandlerWithModelContext;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
+@HandlerWithModelContext(uri="/tags")
 public class TagHandler extends HandlerBase {
 	
-
 	protected void tagsToJson(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
 		Model model = new Model(object.getId());
 		Collection<String> tags = null;
