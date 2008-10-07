@@ -157,11 +157,13 @@ public class SortFilterHandler extends HandlerBase {
 		Enumeration<String> e = request.getParameterNames();
 		while (e.hasMoreElements()) {
 			String filterName = (String) e.nextElement();
-			if (!filterName.equals("sort")) {
+			String params = request.getParameter(filterName);
+			// Ignore Filters without parameters
+			if (!filterName.equals("sort") && (params != null) && (params.length() > 0)) {
 				Method filterMethod = this.filterMapping.get(filterName.toLowerCase());
 				// If the filter method exists
 				if (filterMethod != null) {
-					Object[] args = { subject, request.getParameter(filterName) };
+					Object[] args = { subject,  };
 					// Invoke the filter method an add the filtered ids to the result set
 					orderedIds.retainAll((Collection<Integer>) filterMethod.invoke(null, args)); 
 				}
