@@ -163,7 +163,7 @@ public class SortFilterHandler extends HandlerBase {
 				Method filterMethod = this.filterMapping.get(filterName.toLowerCase());
 				// If the filter method exists
 				if (filterMethod != null) {
-					Object[] args = { subject,  };
+					Object[] args = { subject,  params };
 					// Invoke the filter method an add the filtered ids to the result set
 					orderedIds.retainAll((Collection<Integer>) filterMethod.invoke(null, args)); 
 				}
