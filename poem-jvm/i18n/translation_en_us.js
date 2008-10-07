@@ -49,6 +49,11 @@ if(!Repository.I18N.TableView) Repository.I18N.TableView = {};
 
 Repository.I18N.TableView.name = "Table View";
 
+if(!Repository.I18N.TableView.columns) Repository.I18N.TableView.columns = {};
+Repository.I18N.TableView.columns.title = "Title";
+Repository.I18N.TableView.columns.type = "Model Type";
+Repository.I18N.TableView.columns.author = "Author";
+
 if(!Repository.I18N.IconView) Repository.I18N.IconView = {};
 
 Repository.I18N.IconView.name = "Icon View";
@@ -61,6 +66,7 @@ Repository.I18N.TypeFilter.name = "Type Filter";
 
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
 Repository.I18N.TagInfo.name = "Tags"
+
 
 
 
