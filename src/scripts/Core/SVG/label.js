@@ -241,8 +241,9 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	_checkFittingToReferencedElem: function() {
 		try {
 			var tspans = $A(this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan'));
-
-			if (!(navigator.userAgent.match(/2.0.0.\d+$/))) {
+			
+			//only do this in firefox 3. all other browsers do not support word wrapping!!!!!
+			if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent) && new Number(RegExp.$1)>=3) {
 				var newtspans = [];
 				
 				var refNode = this.node.ownerDocument.getElementById(this.fitToElemId);
@@ -329,11 +330,13 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		try {
 			var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
 			var fontSize; 
-			if(tspans[0])
-				//handling of unsupported method in firefox 2
-				fontSize = (!(navigator.userAgent.match(/2.0.0.\d+$/))) ? tspans[0].getExtentOfChar(0).height : ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
-			else
+			
+			//because this only works in firefox 3, all other browser use the default line height
+			if (tspans[0] && /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent) && new Number(RegExp.$1)>=3) {
+				fontSize = tspans[0].getExtentOfChar(0).height;
+			} else {
 				fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
+			}
 			
 			//handling of unsupported method in webkit
 			if(fontSize <= 0) {
