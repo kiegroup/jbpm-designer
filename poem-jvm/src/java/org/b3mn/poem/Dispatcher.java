@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -39,6 +40,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.manager.UserManager;
+import org.b3mn.poem.util.AccessRight;
+import org.b3mn.poem.util.ExportHandler;
+import org.b3mn.poem.util.ExportInfo;
+import org.b3mn.poem.util.HandlerInfo;
+import org.b3mn.poem.util.HandlerWithModelContext;
+import org.b3mn.poem.util.HandlerWithoutModelContext;
+
+import com.sun.tools.javac.tree.Tree.Annotation;
 
 
 public class Dispatcher extends HttpServlet {
@@ -48,8 +57,10 @@ public class Dispatcher extends HttpServlet {
 	private static String backendRootPath = "/backend/"; // Root path of the backend war file
 	private static String oryxRootPath = "/oryx/"; // Root path of the oryx war file
 	private static String handlerRootPath = backendRootPath + "poem/"; // Root url of all server handlers
+
+	protected Map<String, HandlerInfo> knownHandlers = new Hashtable<String, HandlerInfo>();
 	
-	protected Map<String, HandlerBase> loadedHandlers = new Hashtable<String, HandlerBase>();
+	protected Collection<ExportInfo> exportInfos = new ArrayList<ExportInfo>();
 	
 	public static String getPublicUser() {
 		return publicUser;
@@ -76,6 +87,10 @@ public class Dispatcher extends HttpServlet {
 		return page;
 	}
 	
+	public Collection<ExportInfo> getExportInfos() {
+		return this.exportInfos;
+	}
+	
 	public Collection<String> getHandlerClassNames() {
 		// Get class names of the handlers from the database
 		Collection<String> result = Persistance.getSession()
@@ -83,6 +98,43 @@ public class Dispatcher extends HttpServlet {
 			.list();
 		Persistance.commit();
 		return result;
+	}
+	
+	
+	// Read all annotation data of all handler, but do not initialize them
+	public void loadHandlerInfo() {
+		for (String className : this.getHandlerClassNames()) {
+			try {
+				Class<?> handlerClass = Class.forName(className);
+				if (handlerClass.getAnnotation(HandlerWithoutModelContext.class) != null) {
+					HandlerInfo handlerInfo = new HandlerInfo(
+						handlerClass.getAnnotation(HandlerWithoutModelContext.class));
+					
+					// Add new Handler info class
+					this.knownHandlers.put(handlerInfo.getUri(), handlerInfo);
+				}
+				if (handlerClass.getAnnotation(HandlerWithModelContext.class) != null) {
+					HandlerInfo handlerInfo = new HandlerInfo(
+							handlerClass.getAnnotation(HandlerWithModelContext.class));
+						
+						// Add new Handler info class
+						this.knownHandlers.put(handlerInfo.getUri(), handlerInfo);
+				}
+				if (handlerClass.getAnnotation(ExportHandler.class) != null) {
+					ExportHandler annotation = 
+						handlerClass.getAnnotation(ExportHandler.class);
+					// Add new Handler info class
+					HandlerInfo handlerInfo = new HandlerInfo(annotation);
+					ExportInfo exportInfo = new ExportInfo(annotation);
+					this.knownHandlers.put(handlerInfo.getUri(), handlerInfo);
+					this.exportInfos.add(exportInfo);
+				}
+				
+			} catch (Exception e) {
+				// Igonore Exceptions
+			}
+			
+		}
 	}
 	
 	// Returns the actual instance of the requested handler
@@ -139,8 +191,8 @@ public class Dispatcher extends HttpServlet {
 			}
 			else {
 				// Has the handler already been loaded?
-				if (this.loadedHandlers.get(name) != null) {
-					return this.loadedHandlers.get(name);
+				if (this.knownHandlers.get(name) != null) {
+					return this.knownHandlers.get(name);
 				} else {
 					// Get class name of the handler from the database
 					String className = (String) Persistance.getSession().
@@ -149,7 +201,7 @@ public class Dispatcher extends HttpServlet {
 					.uniqueResult();
 					Persistance.commit();
 					HandlerBase handler = this.getHandlerInstance(className);
-					this.loadedHandlers.put(name, handler);
+					this.knownHandlers.put(name, handler);
 					return handler;
 				}
 			}
