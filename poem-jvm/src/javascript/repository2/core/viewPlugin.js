@@ -34,6 +34,11 @@ Repository.Core.ViewPlugin = {
 		
 		construct : function(facade) {
 			arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
+			
+			this.parentPanel = this.panel;
+			this.panel = new Ext.Panel({border: false, autoHeight: true});
+			this.parentPanel.add(this.panel);
+			
 			this.enabled = false;
 			this.lastStartIndexOfDisplayedModel = 0; // index of last displayed model in filteredModels array
 	

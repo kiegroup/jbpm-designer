@@ -32,7 +32,7 @@ if(!Repository.Core) Repository.Core = {};
 
 Repository.Core.Plugin = {
 	
-	panel 		: null, 
+	panel 		: null,
 	
 	modelTypes 	: null,
 	

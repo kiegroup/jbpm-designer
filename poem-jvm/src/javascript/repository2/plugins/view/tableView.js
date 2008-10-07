@@ -41,50 +41,64 @@ Repository.Plugins.TableView = {
 	
 	render : function(modelData) {
 		
-		if (this.panel.items) {
-			this.panel.items.clear; // remove all items
-		}
-		if (this.panel.findById('debug_view_container')) {
-			this.panel.remove('debug_view_container');
+		if( this.tablePanel ){
+			this.panel.remove( this.tablePanel )
 		}
 		
-		
-		
-		
-		
-		// this.viewPanel.getEl().update('');
-		var container = new Ext.Panel({id : 'table_view_container'});
-		console.log(modelData.values);
-		modelData.each(function (pair){
-			var damnButton = new Ext.Button({text : 'Select model!'});
-			
-			var dataPanel = new Ext.Panel({
-				html: '<h1>Title: ' + pair.value.title + '</h1><img src="'+ pair.value.thumbnailUri +'" height="50" /> <br />', 
-				modelId : pair.key, 
-				facade : this.facade, // quick and dirty
-				isSelected : this.facade.getSelectedModels().indexOf(pair.key) != -1 });
-			
-			damnButton.addListener('click', function() {
-				if (this.isSelected) {					
-					this.removeClass('test_selected_item');
-					this.addClass('test_unselected_item');
-					this.facade.changeSelection(this.facade.getSelectedModels().without(this.modelId));
-				} else {
-					this.removeClass('test_unselected_item');
-					this.addClass('test_selected_item');	
-					this.facade.getSelectedModels().push(this.modelId)
-					this.facade.changeSelection(this.facade.getSelectedModels());
+		var data = [];
+		modelData.each(function( pair ){
+			var stencilset = pair.value.type;
+			// Try to display stencilset title instead of uri
+			this.facade.modelCache.getModelTypes().each(function(type){
+				if (stencilset == type.namespace) {
+					stencilset = type.title;
+					return;
 				}
-				this.isSelected = !this.isSelected;
-				this.doLayout();
-			}.bind(dataPanel));
+			}.bind(this));
 			
-			dataPanel.add(damnButton);
-			container.add(dataPanel); // v<br />'});
+			data.push( [ pair.key, pair.value.thumbnailUri, pair.value.title, stencilset, pair.value.author || 'Unknown' ] )
 		}.bind(this));
-		this.panel.add(container);
+		
+		var store = new Ext.data.SimpleStore({
+	        fields	: ['id', 'icon', 'title', 'type', 'author'],
+	        data	: data
+	    });
+		
+		this.tablePanel = new Ext.grid.GridPanel({
+			store: store,
+			columns: [ 
+				{id: "id", header: "id", sortable: false, dataIndex: "id"},
+				{id: "title", header: Repository.I18N.TableView.columns.title, sortable: false, dataIndex: "title"},
+				{id: "type", header: Repository.I18N.TableView.columns.type, sortable: false, dataIndex: "type"},
+				{id: "author", header: Repository.I18N.TableView.columns.author, sortable: false, dataIndex: "author"}
+			],
+			listeners:{rowdblclick:this._onDblClick.bind(this)}		
+		});
+		
+		this.panel.add(this.tablePanel);
 		this.panel.doLayout(); // Force rendering to show the panel
 	},
+	
+	_onSelectionChange: function(table){
+		
+		var ids = [];
+		// Get the selection
+		table.getSelectedRecords().each(function(data){
+			ids.push( data.data.id )
+		})
+		
+		// Change the selection
+		this.facade.changeSelection( ids );
+	},
+	
+	_onDblClick: function(grid, rowIndex, e){
+		
+		
+		// Get the uri from the clicked model
+		var id = grid.getStore().getAt(rowIndex).data.id;
+		
+		this.facade.openModelInEditor(id);
+	}
 };
 
 Repository.Plugins.TableView = Repository.Core.ViewPlugin.extend(Repository.Plugins.TableView);
