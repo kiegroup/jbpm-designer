@@ -63,7 +63,8 @@ public class AccessHandler extends  HandlerBase {
 
 		String openId = request.getParameter("subject");
 		String term = request.getParameter("predicate");
-		if ((openId != null) && (term.equals("read") || term.equals("write"))) {
+		// It's only allowed to set read and write rights and the public user cannot get a write right
+		if ((openId != null) && (term.equals("read") || (term.equals("write") && !subject.getUri().equals(getPublicUser())))) {
 			Model model = new Model(object.getId());
 			if (model.addAccessRight(openId, term)) {
 				response.setStatus(201);
