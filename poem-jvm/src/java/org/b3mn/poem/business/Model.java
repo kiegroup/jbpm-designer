@@ -71,14 +71,18 @@ public class Model extends BusinessObject {
 		return tagRelation;
 	}
 	
-	public Model(int id) {
+	public Model(int id) throws Exception {
 		identity = Identity.instance(id);
 		representation = identity.read();
+		if ((identity != null) || (representation != null)) 
+			throw new Exception("Model cannot be initalized");
 	}
 	
-	public Model(String uri) {
+	public Model(String uri) throws Exception {
 		identity = Identity.instance(uri);
-		representation = identity.read();
+		representation = identity.read();	
+		if ((identity != null) || (representation != null)) 
+			throw new Exception("Model cannot be initalized");
 	}
 	
 	public int getId() {

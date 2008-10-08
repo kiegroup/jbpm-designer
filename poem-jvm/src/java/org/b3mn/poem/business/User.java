@@ -66,7 +66,9 @@ public class User extends BusinessObject {
 		Persistance.commit();
 		for (Object o : identities) {
 			if (o instanceof Identity) {
-				models.add(new Model(((Identity) o).getId()));
+				try {
+					models.add(new Model(((Identity) o).getId()));
+				} catch (Exception e) {}
 			}
 		}
 		return models;

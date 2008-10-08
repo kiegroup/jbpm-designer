@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse; 
 
+import org.b3mn.poem.business.Model;
 import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.manager.UserManager;
 import org.b3mn.poem.util.AccessRight;
@@ -57,7 +58,8 @@ public class Dispatcher extends HttpServlet {
 	private static String backendRootPath = "/backend/"; // Root path of the backend war file
 	private static String oryxRootPath = "/oryx/"; // Root path of the oryx war file
 	private static String handlerRootPath = backendRootPath + "poem/"; // Root url of all server handlers
-
+	private static String filterBrowserRedirectUrl = handlerRootPath + "repository2";
+	
 	protected Map<String, HandlerInfo> knownHandlers = new Hashtable<String, HandlerInfo>();
 	
 	protected Collection<ExportInfo> exportInfos = new ArrayList<ExportInfo>();
@@ -117,63 +119,88 @@ public class Dispatcher extends HttpServlet {
 	
 	// Returns the identity of the model that is referenced in the request URL or null if 
 	// the request doesn't contain an id
-	protected Identity getObjectIdentity(String path) {
-		try {
-			// Extract id from the request URL 
-			Pattern pattern = Pattern.compile("(\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
-			Matcher matcher = pattern.matcher(new StringBuffer(path));
-			matcher.find();			
-			String id = matcher.group(2);
-			// If the request doesn't contain an id
-			if (id == null) {
-				return null;
-			}
-			else {
-				// TODO: Seems to be quick and dirty
-				return Identity.instance(Integer.parseInt(id));
-			}
-		} catch (Exception e) { return null; }
+	protected Identity getObjectIdentity(String modelUri) {
+
+		if (modelUri != null) return Identity.instance(Integer.parseInt(modelUri));
+		else return null;
+	}
+
+	private String getModelUri(String path) {
+		// Extract id from the request URL 
+		Pattern pattern = Pattern.compile("(\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
+		Matcher matcher = pattern.matcher(new StringBuffer(path));
+		matcher.find();			
+		String modelUri = matcher.group(2);
+		return modelUri;
+	}
+	
+	private String getHandlerUri(String path) {
+		// Extract handler uri from the request URL 
+		Pattern pattern = Pattern.compile("(\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
+		Matcher matcher = pattern.matcher(new StringBuffer(path));
+		matcher.find();
+		String uri = matcher.group(3);
+		return uri;
 	}
 	
 	// Returns an initialized instance of the requested handler  
-	protected HandlerBase getHandler(String path) {
+	protected HandlerBase getHandler(String uri) {
 		try {
-			// Extract handler uri from the request URL 
-			Pattern pattern = Pattern.compile("(\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
-			Matcher matcher = pattern.matcher(new StringBuffer(path));
-			matcher.find();
-			String uri = matcher.group(3);
-			// If the request doesn't contain an id
-			if (uri == null) {
-				return null;
-			}
-			else {
-				// Does a handler with the given uri exist?
-				if (this.knownHandlers.get(uri) != null) {
-					// Is the handler instance already initalized?
-					if (this.knownHandlers.get(uri).getHandlerInstance() != null) {
-						return this.knownHandlers.get(uri).getHandlerInstance();
-					} else {
-						// TODO: Check if handlerClass is derived from HandlerBase and use 
-						// java.lang.reflect.Constructor.newInstance() to create the instance
-						HandlerBase handler = (HandlerBase)  this.knownHandlers.get(uri).getHandlerClass().newInstance();
-						handler.setServletContext(this.getServletContext()); // Initialize handler with ServletContext
-						handler.init(); // Initialize the handler
-						this.knownHandlers.get(uri).setHandlerInstance(handler); // Store the handler instance in ModelInfo
-						return handler;
-					}
-				} else {
-					return null;
-				}
+			// Is the handler instance already initalized?
+			if (this.knownHandlers.get(uri).getHandlerInstance() != null) {
+				return this.knownHandlers.get(uri).getHandlerInstance();
+			} else {
+				// TODO: Check if handlerClass is derived from HandlerBase and use 
+				// java.lang.reflect.Constructor.newInstance() to create the instance
+				HandlerBase handler = (HandlerBase)  this.knownHandlers.get(uri).getHandlerClass().newInstance();
+				handler.setServletContext(this.getServletContext()); // Initialize handler with ServletContext
+				handler.init(); // Initialize the handler
+				this.knownHandlers.get(uri).setHandlerInstance(handler); // Store the handler instance in ModelInfo
+				return handler;
 			}
 		} catch (Exception e) { return null; }	
+	}
+
+	// Checks if the request satisfies all requirements of the handler info
+	public boolean validateRequest(HandlerInfo handlerInfo, HttpServletRequest request, HttpServletResponse response) {
+		// Validate Browser
+		if (handlerInfo.isFilterBrowser()) {
+			// Extract handler uri from the request URL 
+			Pattern pattern = Pattern.compile("MSIE \\d+\\.\\d+;");
+			if (pattern.matcher(new StringBuffer((String)request.getAttribute("User-agent0"))).find()); {
+				try {
+					response.sendRedirect(filterBrowserRedirectUrl);
+					return false;
+				} catch (IOException e) {
+					
+				}
+			}
+		}
+		return true;
 	}
 
 	// The dispatching magic goes here. Each exception is caught and the tomcat stackstrace page 
 	// is replaced by a custom oryx error page.
 	protected void dispatch(HttpServletRequest request, HttpServletResponse response) 
 		throws ServletException, IOException {
-		try {
+		try { 
+			// Parse request uri to extract handler uri and model uri
+			String modelUri = this.getModelUri(request.getPathInfo());
+			String handlerUri  = this.getHandlerUri(request.getPathInfo());
+			
+			// Validate request: handler uri has to be different from null
+			if (handlerUri == null) throw new Exception("Dispatching failed: Handler uri is missing!");
+			
+			Model model = null;
+			// Try to get the model if an handler uri is provided by the request
+			if (handlerUri != null) {
+				try {
+					model = new Model(modelUri);
+				} catch (Exception e) {
+					throw new Exception("Dispatching failed: Invalid model uri", e);
+				}
+			}
+			
 			String openId =  (String) request.getSession().getAttribute("openid"); 
 			// If the user isn't logged in, set the OpenID to public
 			if (openId == null) {
@@ -181,9 +208,15 @@ public class Dispatcher extends HttpServlet {
 				request.getSession().setAttribute("openid", openId);
 				UserManager.getInstance().login(openId, request, response); // Login public user to handle language selection
 			}
-			Identity subject = Identity.ensureSubject(openId);
-			Identity object = this.getObjectIdentity(request.getPathInfo());
+			// Create user if open id isn't already in the database
+			Identity subject = Identity.ensureSubject(openId); 
+			Identity object = model.getIdentity();
+			
+			HandlerInfo handlerInfo = this.knownHandlers.get(handlerUri);
+			if (handlerInfo == null) throw new Exception("Dispatching failed: The requested handler doesn't exist.");
+			
 			HandlerBase handler = this.getHandler(request.getPathInfo()); 
+			
 			if (request.getMethod().equals("GET")) {
 				handler.doGet(request, response, subject, object);
 			}

@@ -43,7 +43,7 @@ import org.json.JSONObject;
 public class AccessHandler extends  HandlerBase {
 	
 	private void writeAccessRights(HttpServletResponse response, Identity object)
-			throws JSONException, IOException {
+			throws Exception {
 		Model model = new Model(object.getId());
 		
 		Map<String, String> accessRights = model.getAccessRights();

@@ -90,7 +90,5 @@ public class TagHandler extends HandlerBase {
 		}
 		// Return all tags of the model
 		this.tagsToJson(request, response, subject, object);
-	}	
-
-	
+	}		
 }

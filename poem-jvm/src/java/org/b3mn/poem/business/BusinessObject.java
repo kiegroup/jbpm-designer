@@ -43,6 +43,10 @@ public abstract class BusinessObject {
 		Persistance.commit();
 	}
 	
+	public Identity getIdentity() {
+		return this.identity;
+	}
+	
 	protected  static <T> Collection<T> toStringCollection(Collection<? extends Object> collection) {
 		ArrayList<T> list = new ArrayList<T>();
 		for (Object o: collection) {
