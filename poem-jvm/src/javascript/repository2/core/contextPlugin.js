@@ -42,18 +42,20 @@ Repository.Core.ContextPlugin = {
 		
 	},
 	selectionChanged : function(modelIds) {
-		if (modelIds.length != 0) {
-			this.facade.modelCache.getDataAsync(this.dataUris, modelIds, this.render.bind(this));
-		} else {
-			this.render(null); // Just clear the panel
-		}
+		
+		this.preRender( modelIds )
+	
 	},
 	
 	modelUpdate : function(modelId) {
-		if (this.facade.getSelectedModels().indexOf(modelId) != -1) {
-			var a = new Array();
-			a.push(modelId);
-			this.facade.modelCache.getDataAsync(this.dataUris, a, this.render.bind(this));
+		if( modelId instanceof Array ){
+			this.preRender( modelId )
+		} else {
+			if (this.facade.getSelectedModels().indexOf(modelId) != -1) {
+				var a = new Array();
+				a.push(modelId);
+				this.preRender( a )
+			}	
 		}
 	}
 };

@@ -39,29 +39,29 @@ Repository.Plugins.TagInfo = {
 		this.name = Repository.I18N.TagInfo.name;
 
 		this.dataUris = [this.TAG_URL];
-				
+										
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 
+		
+		this._generateGUI();
 
 	},
 	
 	render: function( modelData ){
 
+		if( !this.tagPanel ){ return }
+
 		// Try to removes the old child ...
-		var child = Ext.getCmp( 'repository_taginfo_mainpanel' );
-		if( child )
-			this.panel.remove( child );
+		if( this.tagPanelContent )
+			this.tagPanel.remove( this.tagPanelContent );
 			
 					
 		var oneIsSelected 	= $H(modelData).keys().length !== 0;
+		var isPublic		= this.facade.isPublicUser();
 		var buttons 		= [];
-		
-		// Add a Headline
-		buttons.push( {text: 'Shared tags:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"} );
 		
 		// Find every tag which are available in all selected models
 		var modelTags 		= []
-		
 		$H(modelData).each(function( pair ){ 
 						pair.value.userTags.each(function( tag ){
 							if( modelData.every(function( spair ){
@@ -73,35 +73,70 @@ Repository.Plugins.TagInfo = {
 					})
 		
 		modelTags = modelTags.uniq();
-								
+		
+		// For each modeltag create a label						
 		modelTags.each(function(tag, index){
 			
 			var label = {text: tag, xtype:'label'};
 			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 2px;', text:'Delete', click:this._onTagClick.bind(this, tag)})
 			
 			buttons.push( label );
-			if (!this.facade.isPublicUser()) buttons.push( image ); // Don't display remove buttons to the public user
+			if (!isPublic) buttons.push( image ); // Don't display remove buttons to the public user
 			
 			if( index < modelTags.length-1 )
 				buttons.push( {html:', ', width:10, xtype:'label'} );
 				
 		}.bind(this))
 
-		if( buttons.length == 1 ){
+		if( buttons.length == 0 ){
 			// Add a 'none'
 			buttons.push( {text: 'none', xtype:'label', style:"font-style:italic;color:gray;"} );				
 		}
 	
 		
-		var buttonsPanel
-		if( buttons.length > 0 ){
-			// Generate a new panel for the buttons
-			buttonsPanel = new Ext.Panel({
-						items	: buttons,
-						border	: false
-					})			
+		this.tagPanelContent = new Ext.Panel({
+									items	: buttons,
+									border	: false
+								})			
+
+		if( this.controls ){
+			this.controls.each(function(co){
+				co.setDisabled( isPublic || !oneIsSelected )
+			}.bind(this))
+			
+			this.controls[0].setValue("")
 		}
 
+		this.tagPanel.add( this.tagPanelContent );
+		this.tagPanel.doLayout();
+
+	},
+	
+	
+	_generateGUI: function(){
+
+		var label 		= {text: 'Shared tags:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"};
+		this.tagPanel	= new Ext.Panel({border:false})
+		this.controls	= [
+								new Ext.form.TextField({
+											id		: 'repository_taginfo_textfield',
+											x		: 0, 
+											y		: 0, 
+											width	: 100,
+											emptyText : 'New Tag',
+											disabled  : true,  
+										}),
+								 new Ext.Button({
+											text 		: 'Add',
+											disabled 	: true, 
+											listeners	: {
+												click : function(){
+													this._addTag(Ext.getCmp('repository_taginfo_textfield').getValue())
+												}.bind(this)
+											}
+										})
+							]
+							
 		// Generate a new panel for the add form
 		var addPanel = new Ext.Panel({
 					style	: 'padding-top:10px;',
@@ -109,63 +144,42 @@ Repository.Plugins.TagInfo = {
 					border	: false,
 					height	: 40,
 					items	: [
-								new Ext.form.TextField({
-											id		: 'repository_taginfo_textfield',
-											x		: 0, 
-											y		: 0, 
-											width	: 100,
-											emptyText : 'New Tag',
-											disabled  : !oneIsSelected,  
-										}),
+								this.controls[0],
 								new Ext.Panel({
 											x		: 105, 
 											y		: 0,
 											border	: false,
-											items:[ new Ext.Button({
-															text 		: 'Add',
-															disabled 	: !oneIsSelected, 
-															listeners	: {
-																click : function(){
-																	this._addTag(Ext.getCmp('repository_taginfo_textfield').getValue())
-																}.bind(this)
-															}
-														}) ]})
-							]
+											items	: [this.controls[1]]
+										})
+								]
 				});
 
 
-		var newPanel = new Ext.Panel({
-					id		: 'repository_taginfo_mainpanel',
+		this.myPanel = new Ext.Panel({
 					style	: 'padding:10px;', 
 					border	: false,
-					items	: buttonsPanel ? [buttonsPanel, addPanel] : [addPanel]
+					items	: [label, this.tagPanel, addPanel]
 				})
 						
 		// ... before the new child gets added		
-		this.panel.add( newPanel );
+		this.panel.add( this.myPanel );
 		// Update layouting
 		this.panel.doLayout();
-
-
+				
 	},
 	
 	_onTagClick: function( tag ){
 		
 		if( !tag || tag.length <= 0 ){ return }
 		
-		this.facade.getSelectedModels().each(function( id ){
-			this.facade.modelCache.deleteData( id, this.TAG_URL, {tag_name:tag} )
-		}.bind(this))
-		
+		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tag} )
 	},	
 	
 	_addTag: function( tagname ){
 		
 		if( !tagname || tagname.length <= 0 ){ return }
 		
-		this.facade.getSelectedModels().each(function( id ){
-			this.facade.modelCache.setData( id, this.TAG_URL, {tag_name:tagname} )
-		}.bind(this))
+		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tagname} )
 		
 	}
 };

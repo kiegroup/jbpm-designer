@@ -71,8 +71,8 @@ Repository.Core.DataCache = {
 		return this._models.get(modelId);
 	},
 	
-	getDataAsync : function(fetchDataUri, id, callback) {
-		var modelIds = $A(id); // Ensure that ids is an array
+	getDataAsync : function(fetchDataUri, ids, callback) {
+		var modelIds = $A(ids); // Ensure that ids is an array
 		var cacheMisses = []; // Stores ids of models that aren't cached
 		if (this._data.get(fetchDataUri)) {
 			// Check if all models 
@@ -98,49 +98,46 @@ Repository.Core.DataCache = {
 		}
 		// Build query object
 		var query = {};
-		query.id = id;
-		query.fetchDataUri = fetchDataUri;
-		query.callback = callback;
-		query.updateMethod = this.updateObject.bind(this);
-		query.allIds = modelIds;
-		query.missingIds = cacheMisses;
-		query.cachedData = this._data.get(fetchDataUri);
+		query.modelIds 		= modelIds;
+		query.fetchDataUri 	= fetchDataUri;
+		query.callback 		= callback;
+		query.cacheMisses 	= cacheMisses;
 		
 		cacheMisses.each(function(modelId) {
 			// Remove leading slash from model uri
 			var requestUrl = this._models.get(modelId).substring(1) +  fetchDataUri // + "?id=" + id;
-			Ext.Ajax.request({url : requestUrl,  success : this.getDefaultReturnHandler(query) });
+			Ext.Ajax.request({url : requestUrl,  success : this.defaultReturnHandler.bind(this, query, modelId)});
 		}.bind(this));
 	},
 	
-	updateObject : function(fetchDataUri, id, data) {
+	updateObject : function(fetchDataUri, id, data, forceNotUpdate) {
 		if (!this._data.get(fetchDataUri)) {
 			this._data.set(fetchDataUri, new Hash())
 		}
 		this._data.get(fetchDataUri).set(id, data);
-		this._updateHandler.invoke(id);
+		if( !forceNotUpdate )
+			this._updateHandler.invoke(id);
 	},
 	
-	getDefaultReturnHandler : function(binding) { 
-		// Returns function which handles the Ext.Ajax.Request success response
-		// The function has to be in a query context
-		return function(response, options) {
-			// Decode JSON
-			var returnedData = new Hash(Ext.util.JSON.decode(response.responseText));
-			// Server returns JSON object. model id is the key and the data the value of the object,
-			returnedData.each(function(pair) {
-				this.missingIds = this.missingIds.without(pair.key);
-				this.updateMethod(this.fetchDataUri, pair.key, pair.value);
+	defaultReturnHandler : function(queryData, modelId, response, options) { 
+
+		// Decode JSON
+		var returnedData = Ext.util.JSON.decode(response.responseText);
+
+		queryData.cacheMisses = queryData.cacheMisses.without( modelId );
+		this.updateObject(queryData.fetchDataUri, modelId, returnedData, true); // Force update event only when at last request 
+
+		// Everything returned from server
+		if (queryData.cacheMisses.length == 0) {
+			var queriedData = new Hash()
+			
+			queryData.modelIds.each(function (id){
+				queriedData.set(id, this._data.get(queryData.fetchDataUri).get(id) ); // Write data to output hash
 			}.bind(this));
-			// Everything returned from server
-			if (this.missingIds.length == 0) {
-				queriedData = new Hash()
-				this.allIds.each(function (modelId){
-					queriedData.set(modelId, this.cachedData.get(modelId)); // Write data to output hash
-				}.bind(this));
-				this.callback(queriedData); 
-			}
-		}.bind(binding);
+			
+			if( queryData.callback )
+				queryData.callback(queriedData, response); 
+		}
 	},
 	
 	getIds : function() {
@@ -148,42 +145,54 @@ Repository.Core.DataCache = {
 		return this._models.keys();
 	},
 	
-	setData:  function( modelId, uriSuffix, params, successHandler ){
-		this._sendRequest( modelId, uriSuffix, 'post', params, successHandler)
+	setData:  function( modelIds, uriSuffix, params, successHandler ){
+		this._sendRequest( modelIds, uriSuffix, 'post', params, successHandler)
 	}, 
 	
-	deleteData:  function( modelId, uriSuffix, params, successHandler ){
-		this._sendRequest( modelId, uriSuffix, 'delete', params, successHandler)
+	deleteData:  function( modelIds, uriSuffix, params, successHandler ){
+		this._sendRequest( modelIds, uriSuffix, 'delete', params, successHandler)
 	},	
 	
-	_sendRequest: function( modelId, uriSuffix, method, params, successHandler ){
-		uriSuffix = (uriSuffix.startsWith("/") ? uriSuffix : "/" + uriSuffix)
-		var requestUrl = this._models.get(modelId).substring(1) + uriSuffix;
+	_sendRequest: function( modelIds, uriSuffix, method, params, successHandler ){
 		
-		if( method.toLowerCase() == "get" || method.toLowerCase() == "delete" ){
-			requestUrl += "?" + $H(params).toQueryString();
+		if( !(modelIds instanceof Array) ){
+			modelIds = [ modelIds ]
 		}
+
+		uriSuffix = (uriSuffix.startsWith("/") ? uriSuffix : "/" + uriSuffix)	
 		
-		Ext.Ajax.request({
-		   url		: requestUrl,
-		   method	: method,
-		   params	: params,
-		   success	: function(res) {
-					
-						var returnedData = new Hash(Ext.util.JSON.decode(res.responseText));
+		// Build query object
+		var query = {};
+		query.modelIds 		= modelIds;
+		query.fetchDataUri 	= uriSuffix;
+		query.callback 		= function(){
+			
+			this._updateHandler.invoke( modelIds );
+			
+			if( successHandler )
+				successHandler.apply( successHandler , arguments)
+		}.bind(this);
 						
-						returnedData.each(function(pair) {
-							this.updateObject(uriSuffix, pair.key, pair.value);
-						}.bind(this));
-						
-						if( successHandler ){
-							successHandler( res );
-						}
-			}.bind(this),
-			failure	: function(){
-				Ext.Msg.alert('Oryx','Server communication failed!')
+		query.cacheMisses 	= modelIds;
+		
+		modelIds.each(function(modelId) {
+			var requestUrl = this._models.get(modelId).substring(1) + uriSuffix;
+			
+			if( method.toLowerCase() == "get" || method.toLowerCase() == "delete" ){
+				requestUrl += "?" + $H(params).toQueryString();
 			}
-		});
+			
+			Ext.Ajax.request({
+				    url		: requestUrl,
+				    method	: method,
+				    params	: params,
+				    success	: this.defaultReturnHandler.bind(this, query, modelId),
+					failure	: function(){
+						Ext.Msg.alert('Oryx','Server communication failed!')
+					}
+				});
+		
+		}.bind(this));
 
 	},
 	

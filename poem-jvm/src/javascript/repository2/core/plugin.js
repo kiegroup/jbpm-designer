@@ -39,19 +39,30 @@ Repository.Core.Plugin = {
 	viewRegion 	: "left",
 	
 	name		: null,
+	
+	dataUris	: [],
+	
 	/**
 	 * 
 	 */
 	construct: function(facade) {
 		arguments.callee.$.construct.apply(this, arguments);
 		this.facade = facade;
-		if(!this.dataUris) this.dataUris = [];
+		
 		if(!this.toolbarButtons) this.toolbarButtons = [];
 		
 		this.panel = this.facade.registerPlugin(this);
 	},
 	preRender: function(modelIds) {
-		this.facade.modelCache.getDataAsync(this.dataUris, modelIds, this.render.bind(this))
+		if( this.dataUris.length <= 0 ){
+			var o = $H();
+			modelIds.each(function(el){ o.set( el, null)})
+			this.render( o )
+		} else if( modelIds.length <= 0) {
+			this.render( $H() )
+		} else {
+			this.facade.modelCache.getDataAsync(this.dataUris, modelIds, this.render.bind(this))	
+		}
 	},
 	render: function(modelData) {
 		
