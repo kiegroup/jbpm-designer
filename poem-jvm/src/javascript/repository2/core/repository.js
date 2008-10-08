@@ -233,8 +233,22 @@ Repository.Core.Repository = {
 			}
 		},
 		
+		/**
+		 * opens model with "model_id" in editor
+		 * @param {Object} model_id
+		 */
 		openModelInEditor : function (model_id) {
-		
+			var uri = this._modelCache.getModelUri( model_id );
+			uri	= uri.slice(1) + "/self";
+			
+			// Open the model in a new window
+			var editor = window.open( uri );
+			window.setTimeout(
+                        function() {
+                                if(!editor || !editor.opener || editor.closed) {
+                                        Ext.MessageBox.alert(Repository.I18N.Repository.windowTitle, Repository.I18N.Repository.windowTimeoutMessage).setIcon(Ext.MessageBox.QUESTION)
+                                }
+                        }, 5000);			
 		},
 		
 		/**
@@ -293,7 +307,12 @@ Repository.Core.Repository = {
 									//id : buttonConfig.menu,
 									iconCls: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
 									text : buttonConfig.menu, 
-									menu : menu
+									menu : menu,
+									icon : buttonConfig.menuIcon,
+									tooltip: {
+										text: buttonConfig.tooltipText,
+                                        autoHide: true
+                                    },
 								});
 							menu.render();
 						}
@@ -321,7 +340,9 @@ Repository.Core.Repository = {
 			this._registerButtonOnToolbar({
 				text : plugin.name, 
 				icon : plugin.icon, 
+				tooltipText : Repository.I18N.Repository.viewMenuTooltip,
 				menu : Repository.I18N.Repository.viewMenu, 
+				menuIcon : '/backend/images/silk/application.png',
 				handler : function() {this._switchView(plugin)}.bind(this)
 			});
 			
@@ -413,9 +434,11 @@ Repository.Core.Repository = {
 			
 			// View panel
 			this._controls.viewPanel = new Ext.Panel({ 
-                region: 'north',
-				autoHeight: true,
-				border:false
+                region: 'center',
+				id: "ourtoolbar",
+				autoScroll: true,
+				border:false,
+				bbar: [ "" ]
             });
 			// Left panel
 			this._controls.leftPanel = new Ext.Panel({ 
@@ -440,9 +463,9 @@ Repository.Core.Repository = {
                 region: 'south',
                 title: Repository.I18N.Repository.bottomPanelTitle,
                 collapsible: true,
-                collapsed: false,
-                split : true,
-                hidden : true,		            		
+				//titleCollapse: true,
+                //collapsed: true,
+		        height: 100	            		
             });
 			// Toolbar
 			this._controls.toolbar = new Ext.Toolbar({
@@ -454,6 +477,7 @@ Repository.Core.Repository = {
 			// center panel, contains view panel and bottom panel
 			this._controls.centerPanel = new Ext.Panel({
 				region : 'center',
+				layout: 'border',
 				items : [this._controls.viewPanel, this._controls.bottomPanel]
 			});
 			

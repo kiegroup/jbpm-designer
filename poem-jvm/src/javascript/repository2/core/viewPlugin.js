@@ -36,7 +36,7 @@ Repository.Core.ViewPlugin = {
 			arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
 			
 			this.parentPanel = this.panel;
-			this.panel = new Ext.Panel({border: false, autoHeight: true});
+			this.panel = new Ext.Panel({border: false, autoScroll: true, region: 'center'});
 			this.parentPanel.add(this.panel);
 			
 			this.enabled = false;

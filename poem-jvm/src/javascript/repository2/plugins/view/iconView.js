@@ -30,12 +30,14 @@ Repository.Plugins.IconView = {
 	
 	construct: function(facade) {
 		this.name = Repository.I18N.IconView.name;
-		arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
-		this.icon = '/backend/images/silk/table.png';
+		
+		this.icon = '/backend/images/silk/application_view_icons.png';
 		this.numOfDisplayedModels = 12;
 		
 		// define required data uris
 		this.dataUris = ["/meta"];
+		
+		arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
 		
 	},
 	
@@ -98,15 +100,13 @@ Repository.Plugins.IconView = {
 		
 		// Get the uri from the clicked model
 		var id 	= dataGrid.getRecord( node ).data.id
-		var uri = this.facade.modelCache.getModelUri( id )
-		uri 	= uri.slice(1) + "/self";
-		
+				
 		// Select the new range
 		dataGrid.selectRange(index, index)
 		this.facade.changeSelection( [id] );
 		
-		// Open the model in a new window
-		window.open( uri )
+		// Open the model in Editor
+		this.facade.openModelInEditor(id);
 		
 	},
 	

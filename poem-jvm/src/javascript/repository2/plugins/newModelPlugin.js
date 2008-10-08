@@ -32,22 +32,27 @@ if(!Repository.Plugins) Repository.Plugins = {};
 
 Repository.Plugins.NewModel = {
 	construct: function(facade) {
-		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class
+		
 		this.name = Repository.I18N.NewModel.name;
 		
 		// define Create New Model menu
 		this.toolbarButtons = new Array();
+		this.facade = facade;
 		
 		this.facade.modelCache.getModelTypes().each(function(type) {
+			console.log(type);
 			this.toolbarButtons.push({
 				text : type.title,
 				menu : this.name,
+				menuIcon : "/backend/images/silk/shape_square_add.png",
+				tooltipText : Repository.I18N.NewModel.tooltipText,
 				icon : type.iconUrl,
 				handler: function(){
 					this.facade.createNewModel(type.url)
 				}.bind(this)				
 			});
 		}.bind(this));
+		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class
 	}
 };
 

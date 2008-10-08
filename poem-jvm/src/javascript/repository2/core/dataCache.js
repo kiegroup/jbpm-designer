@@ -197,7 +197,7 @@ Repository.Core.DataCache = {
 				onSuccess: function(transport) {
 					this.modelTypes = transport.responseText.evalJSON();
 					this.modelTypes.each(function(type) {
-						type.iconUrl = this._oryxUrl + this.stencilsetUrl + type.icon_url;
+						type.iconUrl = this.oryxUrl + this.stencilsetUrl + type.icon_url;
 						type.url = this.stencilsetUrl + type.uri
 					}.bind(this));
 				}.bind(this),

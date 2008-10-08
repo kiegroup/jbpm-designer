@@ -26,9 +26,9 @@
 if(!Repository.Plugins) Repository.Plugins = {};
 
 Repository.Plugins.TableView = {
-	construct: function(fascade) {
+	construct: function(facade) {
 		this.name = Repository.I18N.TableView.name;
-		this.icon = '/backend/images/silk/table.png';
+		this.icon = '/backend/images/silk/application_view_columns.png';
 		this.numOfDisplayedModels = 30;
 		
 		// define required data uris
@@ -72,6 +72,7 @@ Repository.Plugins.TableView = {
 				{id: "type", header: Repository.I18N.TableView.columns.type, sortable: false, dataIndex: "type"},
 				{id: "author", header: Repository.I18N.TableView.columns.author, sortable: false, dataIndex: "author"}
 			],
+			sm: new Ext.grid.RowSelectionModel({listeners: {selectionchange: this._onSelectionChange.bind(this)}}),
 			listeners:{rowdblclick:this._onDblClick.bind(this)}		
 		});
 		
@@ -82,9 +83,10 @@ Repository.Plugins.TableView = {
 	_onSelectionChange: function(table){
 		
 		var ids = [];
+		
 		// Get the selection
-		table.getSelectedRecords().each(function(data){
-			ids.push( data.data.id )
+		table.getSelections().each(function(entry){
+			ids.push( entry.data.id );
 		})
 		
 		// Change the selection
@@ -92,7 +94,6 @@ Repository.Plugins.TableView = {
 	},
 	
 	_onDblClick: function(grid, rowIndex, e){
-		
 		
 		// Get the uri from the clicked model
 		var id = grid.getStore().getAt(rowIndex).data.id;
