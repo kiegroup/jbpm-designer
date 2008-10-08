@@ -46,10 +46,8 @@ public class TagHandler extends HandlerBase {
 		JSONArray jsonUserTags = new JSONArray(model.getUserTags(user));
 		JSONObject jsonAllTags = new JSONObject();
 		jsonAllTags.put("publicTags", jsonPublicTags);
-		jsonAllTags.put("userTags", jsonUserTags);
-		JSONObject jsonEnvelop = new JSONObject();
-		jsonEnvelop.put(String.valueOf(object.getId()), jsonAllTags);	
-		jsonEnvelop.write(response.getWriter());
+		jsonAllTags.put("userTags", jsonUserTags);	
+		jsonAllTags.write(response.getWriter());
 	}
 	
 	@Override
