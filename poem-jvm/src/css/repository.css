@@ -38,6 +38,22 @@ a:hover, a:focus, a:active {
 	background-position: center center;
 }
 
+
+/**  FIXES FOR EXT 2.0.2 **/
+
+.x-date-middle {
+width: 160px;
+}
+
+.x-grid3 table {
+table-layout:fixed;
+}
+
+
+.x-grid3-row-table {
+	table-layout: fixed;
+}
+
 /******************************************************************************
  * the central widget that contains the list of all models of a user
  */
