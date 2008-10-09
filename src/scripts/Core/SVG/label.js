@@ -262,9 +262,8 @@ ORYX.Core.SVG.Label = Clazz.extend({
 							var startIndex = 0;
 							var lastSeperatorIndex = 0;
 							
-							//var startX = tspan.getStartPositionOfChar(0).x;
-							//var width = 0;
-							for (var i = 0; i < tspan.textContent.length; i++) {
+							var numOfChars = this.getTrimmedTextLength(tspan.textContent);
+							for (var i = 0; i < numOfChars; i++) {
 								var sslength = tspan.getSubStringLength(startIndex, i - startIndex);
 								
 								if (sslength > refbb.width - 2) {
@@ -329,18 +328,24 @@ ORYX.Core.SVG.Label = Clazz.extend({
 	_positionText: function() {
 		try {
 			var tspans = this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
-			var fontSize; 
 			
-			//because this only works in firefox 3, all other browser use the default line height
-			if (tspans[0] && /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent) && new Number(RegExp.$1)>=3) {
-				fontSize = tspans[0].getExtentOfChar(0).height;
-			} else {
-				fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
-			}
+			//trying to get an inherited font-size attribute
+			//NO CSS CONSIDERED!
+			var fontSize = this.getInheritedFontSize(this.node); 
 			
-			//handling of unsupported method in webkit
-			if(fontSize <= 0) {
-				fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
+			if (!fontSize) {
+				//because this only works in firefox 3, all other browser use the default line height
+				if (tspans[0] && /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent) && new Number(RegExp.$1) >= 3) {
+					fontSize = tspans[0].getExtentOfChar(0).height;
+				}
+				else {
+					fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
+				}
+				
+				//handling of unsupported method in webkit
+				if (fontSize <= 0) {
+					fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
+				}
 			}
 			
 			$A(tspans).each((function(tspan, index){
@@ -480,6 +485,40 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			this.isVisible = true;
 			this._isChanged = true;
 		}
+	},
+	
+	/**
+	 * iterates parent nodes till it finds a SVG font-size
+	 * attribute.
+	 * @param {SVGElement} node
+	 */
+	getInheritedFontSize: function(node) {
+		if(!node || !node.getAttributeNS)
+			return;
+			
+		var attr = node.getAttributeNS(null, "font-size");
+		if(attr) {
+			return attr;
+		} else if(!ORYX.Editor.checkClassType(node, SVGSVGElement)) {
+			return this.getInheritedFontSize(node.parentNode);
+		}
+	},
+	
+	/**
+	 * Get trimmed text length for use with
+	 * getExtentOfChar and getSubStringLength.
+	 * @param {String} text
+	 */
+	getTrimmedTextLength: function(text) {
+		text = text.strip().gsub('  ', ' ');
+		
+		var oldLength;
+		do {
+			oldLength = text.length;
+			text = text.gsub('  ', ' ');
+		} while (oldLength > text.length);
+
+		return text.length;
 	},
 	
 	toString: function() { return "Label " + this.id }
