@@ -72,16 +72,23 @@ public class Model extends BusinessObject {
 	}
 	
 	public Model(int id) throws Exception {
-		identity = Identity.instance(id);
+		super(Identity.instance(id));
 		representation = identity.read();
-		if ((identity != null) || (representation != null)) 
+		if ((identity == null) || (representation == null)) 
 			throw new Exception("Model cannot be initalized");
 	}
 	
 	public Model(String uri) throws Exception {
-		identity = Identity.instance(uri);
+		super(Identity.instance(uri));
 		representation = identity.read();	
-		if ((identity != null) || (representation != null)) 
+		if ((identity == null) || (representation == null)) 
+			throw new Exception("Model cannot be initalized");
+	}
+	
+	public Model(Identity identity) throws Exception {
+		super(identity);
+		representation = identity.read();	
+		if ((identity == null) || (representation == null)) 
 			throw new Exception("Model cannot be initalized");
 	}
 	
@@ -250,7 +257,7 @@ public class Model extends BusinessObject {
 	public String getAccessRight(String openId) {
 		String term = (String) Persistance.getSession().createSQLQuery(
 				"SELECT access.access_term FROM access, identity WHERE " +
-				"access.object_id=:object_id AND access.subject_id=identity.id AND identity.id=:opend_id")
+				"access.object_id=:object_id AND access.subject_id=identity.id AND identity.uri=:open_id")
 				.setInteger("object_id", this.getId())
 				.setString("open_id", openId)
 				.uniqueResult();

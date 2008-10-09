@@ -38,6 +38,10 @@ public abstract class BusinessObject {
 		return identity.getId();
 	}
 	
+	public BusinessObject(Identity identity) {
+		this.identity = identity;
+	}
+	
 	protected void updateDBObject(Object o) {
 		Persistance.getSession().update(o);
 		Persistance.commit();

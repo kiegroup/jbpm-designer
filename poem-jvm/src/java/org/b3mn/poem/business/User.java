@@ -37,16 +37,28 @@ public class User extends BusinessObject {
 	
 	protected Subject subject;
 	
-	public User(int id) {
-		this.identity = Identity.instance(id);
+	public User(int id) throws Exception {
+		super(Identity.instance(id));
 		// TODO: implement get user in this class
-		this.subject = UserManager.getInstance().getUser(identity);
+		this.subject = UserManager.getInstance().getUser(id);
+		if ((identity == null) || (subject == null)) 
+			throw new Exception("User cannot be initalized");
 	}
 	
-	public User(String openId) {
-		this.identity = Identity.instance(openId);
+	public User(String openId) throws Exception {
+		super(Identity.instance(openId));
 		// TODO: implement get user in this class
 		this.subject = UserManager.getInstance().getUser(openId);
+		if ((identity == null) || (subject == null)) 
+			throw new Exception("User cannot be initalized");
+	}
+	
+	public User(Identity identity) throws Exception {
+		super(identity);
+		// TODO: implement get user in this class
+		this.subject = UserManager.getInstance().getUser(identity.getId());
+		if ((identity == null) || (subject == null)) 
+			throw new Exception("User cannot be initalized");
 	}
 	
 	

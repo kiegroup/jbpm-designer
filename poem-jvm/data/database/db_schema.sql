@@ -169,13 +169,29 @@ ALTER TABLE public.comment OWNER TO poem;
 CREATE TABLE content (
     id integer NOT NULL,
     erdf text NOT NULL,
-    svg text
+    svg text,
+    png_large bytea,
+    png_small bytea
 );
 ALTER TABLE ONLY content ALTER COLUMN erdf SET STORAGE MAIN;
 ALTER TABLE ONLY content ALTER COLUMN svg SET STORAGE MAIN;
 
 
 ALTER TABLE public.content OWNER TO poem;
+
+--
+-- Name: model_rating; Type: TABLE; Schema: public; Owner: poem; Tablespace: 
+--
+
+CREATE TABLE model_rating (
+    id integer NOT NULL,
+    subject_id integer NOT NULL,
+    object_id integer NOT NULL,
+    score integer NOT NULL
+);
+
+
+ALTER TABLE public.model_rating OWNER TO poem;
 
 --
 -- Name: plugin; Type: TABLE; Schema: public; Owner: poem; Tablespace: 
@@ -235,7 +251,6 @@ ALTER TABLE public.schema_info OWNER TO poem;
 --
 
 CREATE SEQUENCE setting_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -248,7 +263,7 @@ ALTER TABLE public.setting_id_seq OWNER TO poem;
 -- Name: setting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: poem
 --
 
-SELECT pg_catalog.setval('setting_id_seq', 1, false);
+SELECT pg_catalog.setval('setting_id_seq', 3, true);
 
 
 --
@@ -277,17 +292,13 @@ CREATE TABLE subject (
     dob date,
     gender text,
     postcode text,
-    country text,
-    language text,
     first_login date NOT NULL,
     last_login date NOT NULL,
     login_count integer DEFAULT 0 NOT NULL,
     language_code text,
     country_code text,
     password text,
-    visibility text,
-    voters_count integer DEFAULT 0 NOT NULL,
-    votes_sum integer DEFAULT 0 NOT NULL
+    visibility text
 );
 
 
@@ -728,7 +739,35 @@ ALTER SEQUENCE interaction_id_seq OWNED BY interaction.id;
 -- Name: interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: poem
 --
 
-SELECT pg_catalog.setval('interaction_id_seq', 2, true);
+SELECT pg_catalog.setval('interaction_id_seq', 1, true);
+
+
+--
+-- Name: model_rating_id_seq; Type: SEQUENCE; Schema: public; Owner: poem
+--
+
+CREATE SEQUENCE model_rating_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.model_rating_id_seq OWNER TO poem;
+
+--
+-- Name: model_rating_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: poem
+--
+
+ALTER SEQUENCE model_rating_id_seq OWNED BY model_rating.id;
+
+
+--
+-- Name: model_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: poem
+--
+
+SELECT pg_catalog.setval('model_rating_id_seq', 1, false);
 
 
 --
@@ -783,6 +822,13 @@ ALTER TABLE interaction ALTER COLUMN id SET DEFAULT nextval('interaction_id_seq'
 -- Name: id; Type: DEFAULT; Schema: public; Owner: poem
 --
 
+ALTER TABLE model_rating ALTER COLUMN id SET DEFAULT nextval('model_rating_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: poem
+--
+
 ALTER TABLE representation ALTER COLUMN id SET DEFAULT nextval('representation_id_seq'::regclass);
 
 
@@ -798,7 +844,7 @@ COPY comment (id, subject_id, title, content) FROM stdin;
 -- Data for Name: content; Type: TABLE DATA; Schema: public; Owner: poem
 --
 
-COPY content (id, erdf, svg) FROM stdin;
+COPY content (id, erdf, svg, png_large, png_small) FROM stdin;
 \.
 
 
@@ -821,6 +867,14 @@ COPY identity (id, uri) FROM stdin;
 
 COPY interaction (id, subject, subject_descend, object, object_self, object_descend, object_restrict_to_parent, scheme, term) FROM stdin;
 1	U2	t	U2	f	t	t	http://b3mn.org/http	owner
+\.
+
+
+--
+-- Data for Name: model_rating; Type: TABLE DATA; Schema: public; Owner: poem
+--
+
+COPY model_rating (id, subject_id, object_id, score) FROM stdin;
 \.
 
 
@@ -872,8 +926,8 @@ COPY schema_info (version) FROM stdin;
 --
 
 COPY setting (subject_id, id, key, value) FROM stdin;
-0	2	UserManager.DefaultLanguageCode	de
 0	1	UserManager.DefaultCountryCode	us
+0	2	UserManager.DefaultLanguageCode	en
 \.
 
 
@@ -886,7 +940,6 @@ U	1
 U1	2
 U2	4
 U3	3
-U26	2
 \.
 
 
@@ -894,7 +947,8 @@ U26	2
 -- Data for Name: subject; Type: TABLE DATA; Schema: public; Owner: poem
 --
 
-COPY subject (ident_id, nickname, email, fullname, dob, gender, postcode, country, language, first_login, last_login, login_count, language_code, country_code, password, visibility, voters_count, votes_sum) FROM stdin;
+COPY subject (ident_id, nickname, email, fullname, dob, gender, postcode, first_login, last_login, login_count, language_code, country_code, password, visibility) FROM stdin;
+2	\N	\N	\N	\N	\N	\N	2008-01-01	2008-01-01	0	\N	\N	\N	\N
 \.
 
 
@@ -944,6 +998,14 @@ ALTER TABLE ONLY identity
 
 ALTER TABLE ONLY interaction
     ADD CONSTRAINT interaction_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: model_rating_pkey; Type: CONSTRAINT; Schema: public; Owner: poem; Tablespace: 
+--
+
+ALTER TABLE ONLY model_rating
+    ADD CONSTRAINT model_rating_pkey PRIMARY KEY (id);
 
 
 --
@@ -1052,6 +1114,22 @@ ALTER TABLE ONLY interaction
 
 ALTER TABLE ONLY interaction
     ADD CONSTRAINT interaction_subject_fkey FOREIGN KEY (subject) REFERENCES structure(hierarchy) ON DELETE CASCADE;
+
+
+--
+-- Name: model_rating_object_fkey; Type: FK CONSTRAINT; Schema: public; Owner: poem
+--
+
+ALTER TABLE ONLY model_rating
+    ADD CONSTRAINT model_rating_object_fkey FOREIGN KEY (object_id) REFERENCES identity(id) ON DELETE CASCADE;
+
+
+--
+-- Name: model_rating_subject_fkey; Type: FK CONSTRAINT; Schema: public; Owner: poem
+--
+
+ALTER TABLE ONLY model_rating
+    ADD CONSTRAINT model_rating_subject_fkey FOREIGN KEY (subject_id) REFERENCES identity(id) ON DELETE CASCADE;
 
 
 --

@@ -36,7 +36,8 @@
 		<mapping class="org.b3mn.poem.Subject"/>
 		<mapping class="org.b3mn.poem.Setting"/>	
 		<mapping class="org.b3mn.poem.TagDefinition"/>
-		<mapping class="org.b3mn.poem.TagRelation"/>	
+		<mapping class="org.b3mn.poem.TagRelation"/>
+		<mapping class="org.b3mn.poem.ModelRating"/>	
 		<mapping resource="Access.hbm.xml"/>		
     </session-factory>
 

@@ -22,16 +22,12 @@
 ****************************************/
 
 package org.b3mn.poem;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,15 +38,9 @@ import org.b3mn.poem.business.Model;
 import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.manager.UserManager;
 import org.b3mn.poem.util.AccessRight;
-import org.b3mn.poem.util.ExportHandler;
 import org.b3mn.poem.util.ExportInfo;
 import org.b3mn.poem.util.HandlerInfo;
-import org.b3mn.poem.util.HandlerWithModelContext;
-import org.b3mn.poem.util.HandlerWithoutModelContext;
-
-import com.sun.tools.javac.tree.Tree.Annotation;
-
-
+ 
 public class Dispatcher extends HttpServlet {
 	private static final long serialVersionUID = -9128262564769832181L;
 	
@@ -59,6 +49,7 @@ public class Dispatcher extends HttpServlet {
 	private static String oryxRootPath = "/oryx/"; // Root path of the oryx war file
 	private static String handlerRootPath = backendRootPath + "poem/"; // Root url of all server handlers
 	private static String filterBrowserRedirectUrl = handlerRootPath + "repository2";
+	private static String filterBrowserRegexPattern = "MSIE \\d+\\.\\d+;";
 	
 	protected Map<String, HandlerInfo> knownHandlers = new Hashtable<String, HandlerInfo>();
 	
@@ -127,16 +118,16 @@ public class Dispatcher extends HttpServlet {
 
 	private String getModelUri(String path) {
 		// Extract id from the request URL 
-		Pattern pattern = Pattern.compile("(\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
+		Pattern pattern = Pattern.compile("(\\/model\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
 		Matcher matcher = pattern.matcher(new StringBuffer(path));
 		matcher.find();			
-		String modelUri = matcher.group(2);
+		String modelUri = matcher.group(1);
 		return modelUri;
 	}
 	
 	private String getHandlerUri(String path) {
 		// Extract handler uri from the request URL 
-		Pattern pattern = Pattern.compile("(\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
+		Pattern pattern = Pattern.compile("(\\/model\\/([0-9]+))?(\\/[^\\/]+\\/?)$");
 		Matcher matcher = pattern.matcher(new StringBuffer(path));
 		matcher.find();
 		String uri = matcher.group(3);
@@ -161,28 +152,32 @@ public class Dispatcher extends HttpServlet {
 		} catch (Exception e) { return null; }	
 	}
 
-	// Checks if the request satisfies all requirements of the handler info
-	public boolean validateRequest(HandlerInfo handlerInfo, HttpServletRequest request, HttpServletResponse response) {
+	protected boolean checkAccess(HandlerInfo handlerInfo, Identity subject, Model model, String requestMethod) {
+		try {
+			// Read access right for the user from the requested model
+			AccessRight userRight = Enum.valueOf(AccessRight.class, 
+					model.getAccessRight(subject.getUri()).toUpperCase());
+			// Read required access right from the handler
+			AccessRight modelRestriction = handlerInfo.getAccessRestriction(requestMethod);
+			// User needs the same or a higher privilege then required by the handler
+			return userRight.compareTo(modelRestriction) >= 0;
+		} catch(Exception e) { return false; }
+	}
+	
+	
+	protected boolean checkBrowser(HandlerInfo handlerInfo, HttpServletRequest request, HttpServletResponse response) {
 		// Validate Browser
 		if (handlerInfo.isFilterBrowser()) {
 			// Extract handler uri from the request URL 
-			Pattern pattern = Pattern.compile("MSIE \\d+\\.\\d+;");
-			if (pattern.matcher(new StringBuffer((String)request.getAttribute("User-agent0"))).find()); {
-				try {
-					response.sendRedirect(filterBrowserRedirectUrl);
-					return false;
-				} catch (IOException e) {
-					
-				}
-			}
-		}
-		return true;
+			Pattern pattern = Pattern.compile(filterBrowserRegexPattern); 
+			return !pattern.matcher(new StringBuffer((String)request.getHeader("user-agent"))).find();
+		} return true;
 	}
 
 	// The dispatching magic goes here. Each exception is caught and the tomcat stackstrace page 
 	// is replaced by a custom oryx error page.
 	protected void dispatch(HttpServletRequest request, HttpServletResponse response) 
-		throws ServletException, IOException {
+		throws ServletException {
 		try { 
 			// Parse request uri to extract handler uri and model uri
 			String modelUri = this.getModelUri(request.getPathInfo());
@@ -192,10 +187,12 @@ public class Dispatcher extends HttpServlet {
 			if (handlerUri == null) throw new Exception("Dispatching failed: Handler uri is missing!");
 			
 			Model model = null;
+			Identity object = null;
 			// Try to get the model if an handler uri is provided by the request
-			if (handlerUri != null) {
+			if (modelUri != null) {
 				try {
 					model = new Model(modelUri);
+					object = model.getIdentity();
 				} catch (Exception e) {
 					throw new Exception("Dispatching failed: Invalid model uri", e);
 				}
@@ -210,23 +207,46 @@ public class Dispatcher extends HttpServlet {
 			}
 			// Create user if open id isn't already in the database
 			Identity subject = Identity.ensureSubject(openId); 
-			Identity object = model.getIdentity();
+			
+			String requestMethod = request.getMethod();
 			
 			HandlerInfo handlerInfo = this.knownHandlers.get(handlerUri);
+
 			if (handlerInfo == null) throw new Exception("Dispatching failed: The requested handler doesn't exist.");
+
+			// If the requesting browser cannot handler the response
+			if (!this.checkBrowser(handlerInfo, request, response)) {
+				response.sendRedirect(filterBrowserRedirectUrl);
+				return; 
+			}
 			
-			HandlerBase handler = this.getHandler(request.getPathInfo()); 
+			// Verify that the handler is only executed if the context is valid
+			if ((model == null) && (handlerInfo.isNeedsModelContext())) {
+				throw new Exception("Dispatching failed: The handler requires a model context.");
+			}
+			if ((model != null) && (!handlerInfo.isNeedsModelContext())) {
+				throw new Exception("Dispatching failed: The handler cannot be called in a model context.");
+			}
 			
-			if (request.getMethod().equals("GET")) {
+			// Check if the user is allowed to do this operation on this model with the requested handler
+			if ((model != null) && (!checkAccess(handlerInfo, subject, model, requestMethod)) || 
+					(handlerInfo.isPermitPublicUserAccess() && openId.equals(publicUser))) {
+				response.setStatus(403);
+				return;
+			}
+			
+			HandlerBase handler = this.getHandler(handlerUri); // Retrieve handler instance
+			
+			if (requestMethod.equals("GET")) {
 				handler.doGet(request, response, subject, object);
 			}
-			if (request.getMethod().equals("POST")) {
+			if (requestMethod.equals("POST")) {
 				handler.doPost(request, response, subject, object);
 			}
-			if (request.getMethod().equals("PUT")) {
+			if (requestMethod.equals("PUT")) {
 				handler.doPut(request, response, subject, object);
 			}
-			if (request.getMethod().equals("DELETE")) {
+			if (requestMethod.equals("DELETE")) {
 				handler.doDelete(request, response, subject, object);
 			}
 		} catch (Exception e) {
@@ -237,25 +257,25 @@ public class Dispatcher extends HttpServlet {
 	}
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+		throws ServletException {
 		dispatch(request,response);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+		throws ServletException {
 		dispatch(request,response);
 	}
 	
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+		throws ServletException {
 		dispatch(request,response);
 	}
 	
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+		throws ServletException {
 		dispatch(request,response);
 	}
 

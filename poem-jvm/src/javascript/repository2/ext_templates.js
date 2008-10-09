@@ -8,7 +8,7 @@ Repository.Templates = {
 					    '</a>'+
 					
 						'<tpl if="isPublicUser">'+
-							'<form action="/backend/poem/login" method="post" id="openid_login">'+
+							'<form action="login" method="post" id="openid_login">'+
 								'<div>'+
 									'<span>'+
 										'<img src="/backend/images/repository/hpi.png" onclick="Repository.Templates.login.changeOpenId(\'https://openid.hpi.uni-potsdam.de/user/username\' , 39, 8)"/>'+
@@ -22,9 +22,9 @@ Repository.Templates = {
 						'</tpl>'+
 						
 						'<tpl if="!isPublicUser">'+
-							'<form action="/backend/logout.jsp" method="post" id="openid_login">'+
+							'<form action="login?logout=true" method="post" id="openid_login">'+
 								'<div>'+
-									'{Repository.I18N.Repository.SayHello}, {currentUser}'+
+									'{Repository.I18N.Repository.sayHello}, {currentUser}'+
 									'<input type="submit" class="button" value={Repository.I18N.Repository.logout} />'+
 								'</div>'+
 							'</form>'+

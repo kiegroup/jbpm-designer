@@ -70,8 +70,6 @@ public class UserManager {
 		user.setDob(dob);
 		user.setGender(gender);
 		user.setPostcode(postcode);
-		user.setCountry(country);
-		user.setLanguage(language);
 		user.setLanguageCode(languageCode);
 		user.setCountryCode(countryCode);
 		user.setPassword(password);
@@ -101,8 +99,8 @@ public class UserManager {
 	public Subject getUser(int id) {
 		Subject user = (Subject) Persistance.getSession()
 			.createSQLQuery("SELECT {subject.*} FROM {subject} WHERE ident_id=:id")
-			.addEntity("user", Subject.class)
-			.setInteger("openid", id)
+			.addEntity("subject", Subject.class)
+			.setInteger("id", id)
 			.uniqueResult();
 		
 		Persistance.commit();

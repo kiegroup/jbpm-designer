@@ -64,7 +64,7 @@ public class AccessHandler extends  HandlerBase {
 		String openId = request.getParameter("subject");
 		String term = request.getParameter("predicate");
 		// It's only allowed to set read and write rights and the public user cannot get a write right
-		if ((openId != null) && (term.equals("read") || (term.equals("write") && !subject.getUri().equals(getPublicUser())))) {
+		if ((openId != null) && (term.equals("read") || (term.equals("write") || !subject.getUri().equals(getPublicUser())))) {
 			Model model = new Model(object.getId());
 			if (model.addAccessRight(openId, term)) {
 				response.setStatus(201);
@@ -79,14 +79,15 @@ public class AccessHandler extends  HandlerBase {
 	}
 	
 	@Override
+	@RestrictAccess(AccessRight.WRITE)
     public void doDelete(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
 		String openId = request.getParameter("subject");
 		if (openId != null) {
 			Model model = new Model(object.getId());
-			if (model.removeAccessRight(openId)) {
-				response.setStatus(200);
-				this.writeAccessRights(response, object);
-			}
+			model.removeAccessRight(openId);
+			response.setStatus(201);
+			this.writeAccessRights(response, object);
+			return;
 		}
 		response.setStatus(409);
 		response.getWriter().println("AccessHandler : Invalid Parameters!");

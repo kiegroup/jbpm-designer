@@ -63,7 +63,7 @@ public class LoginHandler extends HandlerBase {
 	*/
 	
 	public static final String OPENID_SESSION_IDENTIFIER = "openid";
-	public static final String REPOSITORY_REDIRECT = "/poem/repository2";
+	public static final String REPOSITORY_REDIRECT = "repository2";
 
 	private ConsumerManager manager;
 	
@@ -86,7 +86,14 @@ public class LoginHandler extends HandlerBase {
 	
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object) throws Exception {
-        if ("true".equals(req.getParameter("is_return"))) {
+        // If logout is true remove session attribute and redirect to the repository
+    	// which will force a new login as public user
+    	if ("true".equals(req.getParameter("logout"))) {
+    		req.getSession().removeAttribute("openid");
+    		res.sendRedirect(REPOSITORY_REDIRECT);
+    		return;
+    	}
+    	if ("true".equals(req.getParameter("is_return"))) {
             processReturn(req, res);
         } else {
      	   // Convert OpenID identifier to lower case in order to prevent creating 	   
@@ -111,7 +118,7 @@ public class LoginHandler extends HandlerBase {
     				user.getOpenId());
 
     		req.setAttribute("identifier", user.getOpenId());
-    		resp.sendRedirect(req.getContextPath() + REPOSITORY_REDIRECT);
+    		resp.sendRedirect(REPOSITORY_REDIRECT);
     	}
     }
 

@@ -92,7 +92,7 @@ public class HandlerInfo {
 		if (handlerClass.getAnnotation(HandlerWithModelContext.class) != null) {
 			HandlerWithModelContext annotation = handlerClass.getAnnotation(HandlerWithModelContext.class);
 			this.uri = annotation.uri();
-			this.needsModelContext = false;
+			this.needsModelContext = true;
 			this.permitPublicUserAccess = annotation.permitPublicUserAccess();
 			this.filterBrowser = annotation.filterBrowser();
 			this.handlerClass = handlerClass;
@@ -121,7 +121,7 @@ public class HandlerInfo {
 		if (handlerClass.getAnnotation(ExportHandler.class) != null) {
 			ExportHandler annotation = handlerClass.getAnnotation(ExportHandler.class);
 			this.uri = annotation.uri();
-			this.needsModelContext = false;
+			this.needsModelContext = true;
 			this.permitPublicUserAccess = annotation.permitPublicUserAccess();
 			this.filterBrowser = annotation.filterBrowser();
 			this.handlerClass = handlerClass;
@@ -137,6 +137,6 @@ public class HandlerInfo {
 		if ((right == null) && operation != null) {
 			right = this.accessRights.get(null);
 		}
-		return this.accessRights.get(operation);
+		return right;
 	}
 }

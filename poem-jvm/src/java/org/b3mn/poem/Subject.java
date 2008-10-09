@@ -44,8 +44,7 @@ public class Subject {
 	private Date dob;
 	private String gender;
 	private String postcode;
-	private String country;
-	private String language;
+
 	
 	// Oryx Server Attributes
 	@Column(name="first_login")
@@ -65,12 +64,6 @@ public class Subject {
 	
 	private String password;
 	private String visibility;
-	
-	@Column(name="voters_count")
-	private int votersCount;
-	
-	@Column(name="votes_sum")
-	private int voteSum;
 	
 	public int getIdent_id() {
 		return ident_id;
@@ -113,18 +106,6 @@ public class Subject {
 	}
 	public void setPostcode(String postcode) {
 		this.postcode = postcode;
-	}
-	public String getCountry() {
-		return country;
-	}
-	public void setCountry(String country) {
-		this.country = country;
-	}
-	public String getLanguage() {
-		return language;
-	}
-	public void setLanguage(String language) {
-		this.language = language;
 	}
 	public Date getFirstLogin() {
 		return firstLogin;
@@ -173,18 +154,4 @@ public class Subject {
 	public String getOpenId() {
 		return Identity.instance(this.getIdent_id()).getUri();
 	}
-	public int getVotersCount() {
-		return votersCount;
-	}
-	public void setVotersCount(int votersCount) {
-		this.votersCount = votersCount;
-	}
-	public int getVoteSum() {
-		return voteSum;
-	}
-	public void setVoteSum(int voteSum) {
-		this.voteSum = voteSum;
-	}
-	
-
 }
