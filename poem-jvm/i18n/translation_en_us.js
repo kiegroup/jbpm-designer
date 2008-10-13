@@ -57,13 +57,15 @@ Repository.I18N.TableView.columns.type = "Model Type";
 Repository.I18N.TableView.columns.author = "Author";
 
 if(!Repository.I18N.IconView) Repository.I18N.IconView = {};
-
 Repository.I18N.IconView.name = "Icon View";
+
+
+if(!Repository.I18N.FullView) Repository.I18N.FullView = {};
+Repository.I18N.FullView.name = "Full View";
 
 // TypeFilter Plugin
 
 if(!Repository.I18N.TypeFilter) Repository.I18N.TypeFilter = {};
-
 Repository.I18N.TypeFilter.name = "Type Filter";
 
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};

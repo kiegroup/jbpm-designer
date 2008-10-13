@@ -119,7 +119,11 @@ input.text, select, textarea {
 input.text:hover, select:hover, textarea:hover,
 input.text.activated, select.activated, textarea.activated {
 	border-color: #fc8b03;
-	background-color: #FFFBEF;
+}
+
+input.text.x-item-disabled:hover, select.x-item-disabled:hover, textarea.x-item-disabled:hover,
+input.text.x-item-disabled.activated, select.x-item-disabled.activated, textarea.x-item-disabled.activated {
+	border-color: #B5B8C8;
 }
 
 input.text.disabled, input.disabled, select.disabled, textarea.disabled,

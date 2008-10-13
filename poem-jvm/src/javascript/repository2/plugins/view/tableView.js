@@ -65,7 +65,8 @@ Repository.Plugins.TableView = {
 	    });
 		
 		this.tablePanel = new Ext.grid.GridPanel({
-			store: store,
+			store	: store,
+			border	:false,
 			columns: [ 
 				{id: "id", header: "id", sortable: false, dataIndex: "id"},
 				{id: "title", header: Repository.I18N.TableView.columns.title, sortable: false, dataIndex: "title"},

@@ -32,7 +32,7 @@ if(!Repository.Plugins) Repository.Plugins = {};
 
 Repository.Plugins.ModelRangeSelection = {
 	
-	viewRegion : "view",
+	viewRegion : "bottom",
 	
 	construct: function( facade ) {
 
@@ -64,11 +64,12 @@ Repository.Plugins.ModelRangeSelection = {
 		// First
 		buttons.push( new Ext.LinkButton({text:"First", click:this._setRange.bind(this, 0), style:buttonStyle, disabled:isFirstPage}) );
 		
+			
 		// Generate Page Buttons
-		var firstIndex 	= Math.max( index - (2*pageSize) , 0)
+		var firstIndex 	= Math.max( index - (2*pageSize), 0)
 		var startPage	= Math.floor( firstIndex / pageSize );
 		var currentPage	= Math.max( Math.floor( index / pageSize ) , 0)
-		var endPage		= startPage + 5;
+		var endPage		= startPage + 5;//(((currentPage-startPage) * 2) + 1);
 		
 		if( startPage != 0 ){
 			buttons.push( {xtype:'label', text:'...', style:buttonStyle} )
@@ -93,7 +94,8 @@ Repository.Plugins.ModelRangeSelection = {
 		this.myPanel = new Ext.Panel({
 					style	: 'padding:10px;white-space:nowrap;text-align:center;', 
 					border	: false,
-					items	: buttons
+					items	: buttons,
+					height	: 40
 				})
 						
 		// ... before the new child gets added		

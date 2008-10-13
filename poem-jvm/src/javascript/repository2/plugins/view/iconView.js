@@ -51,7 +51,6 @@ Repository.Plugins.IconView = {
 			this.panel.remove( this.myPanel )
 		}
 		
-		
 		var data = [];
 		modelData.each(function( pair ){
 			var stencilset = pair.value.type;
@@ -72,7 +71,8 @@ Repository.Plugins.IconView = {
 	    });
 	
 	    this.myPanel = new Ext.Panel({
-	        items		: new DataGridPanel({store: store, listeners:{selectionchange:this._onSelectionChange.bind(this), dblclick:this._onDblClick.bind(this)}})
+			border	:false,
+	        items	: new DataGridPanel({store: store, listeners:{selectionchange:this._onSelectionChange.bind(this), dblclick:this._onDblClick.bind(this)}})
 	    });
 
 		this.panel.add( this.myPanel );

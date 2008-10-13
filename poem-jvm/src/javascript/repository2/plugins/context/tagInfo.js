@@ -67,7 +67,7 @@ Repository.Plugins.TagInfo = {
 							if( modelData.every(function( spair ){
 									return spair.value.userTags.include( tag )
 								}) ){
-								modelTags.push( tag )
+								modelTags.push( unescape( tag ) )
 							} 
 						})
 					})
@@ -154,11 +154,17 @@ Repository.Plugins.TagInfo = {
 								]
 				});
 
-
+		var isPublicUser	= this.facade.isPublicUser();
+		
+		var panels	= [label, this.tagPanel]
+		if( !isPublicUser ){
+			panels.push( addPanel )
+		}
+		
 		this.myPanel = new Ext.Panel({
 					style	: 'padding:10px;', 
 					border	: false,
-					items	: [label, this.tagPanel, addPanel]
+					items	: panels
 				})
 						
 		// ... before the new child gets added		
@@ -172,12 +178,16 @@ Repository.Plugins.TagInfo = {
 		
 		if( !tag || tag.length <= 0 ){ return }
 		
+		tag = escape( tag )
+		
 		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tag} )
 	},	
 	
 	_addTag: function( tagname ){
 		
 		if( !tagname || tagname.length <= 0 ){ return }
+		
+		tagname = escape( tagname )
 		
 		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tagname} )
 		

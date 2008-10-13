@@ -106,7 +106,7 @@ Repository.Core.DataCache = {
 		cacheMisses.each(function(modelId) {
 			// Remove leading slash from model uri
 			var requestUrl = this._models.get(modelId).substring(1) +  fetchDataUri // + "?id=" + id;
-			Ext.Ajax.request({url : requestUrl,  success : this.defaultReturnHandler.bind(this, query, modelId)});
+			Ext.Ajax.request({url : requestUrl,  success : this.defaultReturnHandler.bind(this, query, modelId), failure:function(){/*console.log(arguments)*/}});
 		}.bind(this));
 	},
 	

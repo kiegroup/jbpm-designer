@@ -55,7 +55,7 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
 	
 	onClick: function(e){
 		
-		if( this.disabled ){ return }
+		if( this.disabled ){ Event.stop(e); return; }
 		
 		// Toggle the button
 		if( this.toggle ){

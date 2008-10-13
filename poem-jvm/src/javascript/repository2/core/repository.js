@@ -32,7 +32,7 @@ if(!Repository.Core) Repository.Core = {};
 Repository.Core.Repository = {
 		construct : function(modelUris, currentUser) {
 			arguments.callee.$.construct.apply(this, arguments); // call super class constructor
-			this._currentUser = currentUser;
+			this._currentUser = decodeURI( currentUser );
 			this._publicUser = 'public';
 			this._modelCache = new Repository.Core.DataCache(modelUris);
 
@@ -80,7 +80,7 @@ Repository.Core.Repository = {
 						
 						modelCache 			: this._modelCache,
 						
-						isPublicUser 				: this.isPublicUser.bind(this),
+						isPublicUser 		: this.isPublicUser.bind(this),
 						
 						applyFilter 		: this.applyFilter.bind(this),
 						removeFilter 		: this.removeFilter.bind(this),
@@ -169,10 +169,11 @@ Repository.Core.Repository = {
 		_switchView : function(view) {
 			if(this._currentView instanceof Repository.Core.ViewPlugin)
 				this._currentView.disable();
-			
-			view.enable();
-			view.preRender(this.getDisplayedModels());
-			this._currentView = view;
+
+			this._currentView = view;			
+			this._currentView.enable();
+			//view.preRender(this.getDisplayedModels());
+
 		},
 		
 		changeSelection : function(selectedIds) {
@@ -277,12 +278,14 @@ Repository.Core.Repository = {
 			panel = this._controls[panelName + 'Panel'];
 			if (!panel) return null; // Panel doesn't exist
 			var pluginPanel = new Ext.Panel({
-				pluginName : pluginName,
-                title: pluginName,
-                collapsible: true,
-                collapsed: false,
-				border:false,
-                split : true
+				pluginName 	: pluginName,
+                title		: pluginName,
+                collapsible	: true,
+                collapsed	: false,
+				border		: false,
+                split 		: true,
+				layout		: 'anchor'
+				
 			});
 			pluginPanel = panel.add(pluginPanel);
 			panel.doLayout(); // Force rendering to display image and generate body
@@ -346,7 +349,7 @@ Repository.Core.Repository = {
 				handler : function() {this._switchView(plugin)}.bind(this)
 			});
 			
-			return this._controls.viewPanel;
+			return this._registerPluginOnPanel( null, 'view' );
 		},
 		
 		_loadPlugins : function() {
@@ -403,6 +406,11 @@ Repository.Core.Repository = {
 			this._viewChangedHandler.invoke( this._displayedModels );
 			this._selectionChangedHandler.invoke( this._selectedModels );
 			
+			// HACK
+			// Added a unvisible last child so that every view gets displayed
+			this._controls.viewPanel.add( {xtype:'label'} )
+			this._controls.viewPanel.doLayout();
+			
 		}, 
 		
 		_intializePluginFiles: function( files ){
@@ -434,76 +442,75 @@ Repository.Core.Repository = {
 			
 			// View panel
 			this._controls.viewPanel = new Ext.Panel({ 
-                region: 'center',
-				id: "ourtoolbar",
-				autoScroll: true,
-				border:false,
-				bbar: [ "" ]
+                region		: 'center',
+				autoScroll	: true,
+				border		: false
             });
 			// Left panel
 			this._controls.leftPanel = new Ext.Panel({ 
-                region: 'west',
-                title: Repository.I18N.Repository.leftPanelTitle,
-                collapsible: true,
-                collapsed: false,
-                split : true,	
-				width:200			            		
+                region		: 'west',
+                title		: Repository.I18N.Repository.leftPanelTitle,
+                collapsible	: true,
+                collapsed	: false,
+                split 		: true,	
+				width		: 200			            		
             });
 			// Right panel
 			this._controls.rightPanel = new Ext.Panel({ 
-                region: 'east',
-                title: Repository.I18N.Repository.rightPanelTitle,
-                collapsible: true,
-                collapsed: false,
-                split : true,
-				width:200		            		
+                region		: 'east',
+                title		: Repository.I18N.Repository.rightPanelTitle,
+                collapsible	: true,
+                collapsed	: false,
+                split 		: true,
+				width		: 200		            		
             });			
 			// Bottom panel
 			this._controls.bottomPanel = new Ext.Panel({ 
-                region: 'south',
-                title: Repository.I18N.Repository.bottomPanelTitle,
-                collapsible: true,
+                region		: 'south',
+                //title: Repository.I18N.Repository.bottomPanelTitle,
+                collapsible	: true,
+				height		: 40,
+				border		: false,
 				//titleCollapse: true,
-                //collapsed: true,
-		        height: 100	            		
+                //collapsed: true,            		
             });
 			// Toolbar
 			this._controls.toolbar = new Ext.Toolbar({
-				region : "south",
-				items : []
+				region 		: "south",
+				items 		: []
 			});
 			
 			
 			// center panel, contains view panel and bottom panel
 			this._controls.centerPanel = new Ext.Panel({
-				region : 'center',
-				layout: 'border',
-				items : [this._controls.viewPanel, this._controls.bottomPanel]
+				region 		: 'center',
+				layout		: 'border',
+				items 		: [this._controls.viewPanel, this._controls.bottomPanel]
 			});
 			
 			this._viewport = new Ext.Viewport({
-					layout: 'border',
-					margins : '0 0 0 0',
-					defaults: {}, // default config for all child widgets
-					items: [ 
-					        new Ext.Panel({ // Header panel for login and toolbar
-								region : 'north',
-								height : 60,
-								margins : '0 0 0 0',
-								border : true,
-								items :[{ // Header with logo and login
-							                region: 'north',
-							                html: Repository.Templates.login.apply({currentUser : this._currentUser, isPublicUser : this._currentUser=='public'}),
-							                height: 30
-							           },
-							           this._controls.toolbar
-							    ] // Toolbar
-							}), // Panel 
-							this._controls.centerPanel,
-				            this._controls.leftPanel,	
-						    this._controls.rightPanel
-					       ]
-			});
+					layout		: 'border',
+					margins 	: '0 0 0 0',
+					defaults	: {}, // default config for all child widgets
+					items		: [ 
+							        new Ext.Panel({ // Header panel for login and toolbar
+										region : 'north',
+										height : 60,
+										margins : '0 0 0 0',
+										border : true,
+										items :[{ // Header with logo and login
+									                region: 'north',
+									                html: Repository.Templates.login.apply({currentUser : this._currentUser, isPublicUser : this._currentUser=='public'}),
+									                height: 30
+									           },
+									           this._controls.toolbar
+									    ] // Toolbar
+									}), // Panel 
+									this._controls.centerPanel,
+						            this._controls.leftPanel,	
+								    this._controls.rightPanel
+							       ]
+					});
 		}
 };
 

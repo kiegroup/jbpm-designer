@@ -81,11 +81,13 @@ Repository.Core.ViewPlugin = {
 		},	
 			
 		enable : function() {
-			// determine models to display
-			this.showDisplayedModelsStartingFrom( 0 );
+
 			// make it visible
 			this.enabled = true;
 			this.panel.setVisible(true);
+			//this.panel.doLayout();
+			// determine models to display
+			this.showDisplayedModelsStartingFrom( 0 );
 		},
 		
 		disable : function() {
