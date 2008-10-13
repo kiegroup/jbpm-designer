@@ -259,6 +259,7 @@ ORYX.I18N.PropertyWindow.rem = "Löschen";
 ORYX.I18N.PropertyWindow.complex = "Editor für komplexe Eigenschaft";
 ORYX.I18N.PropertyWindow.ok = "Ok";
 ORYX.I18N.PropertyWindow.cancel = "Abbrechen";
+ORYX.I18N.PropertyWindow.dateFormat = "d/m/y";
 
 if(!ORYX.I18N.ShapeMenuPlugin) ORYX.I18N.ShapeMenuPlugin = {};
 
