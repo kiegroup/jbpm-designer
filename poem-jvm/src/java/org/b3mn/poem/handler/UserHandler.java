@@ -31,6 +31,7 @@ import org.b3mn.poem.Subject;
 import org.b3mn.poem.manager.UserManager;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
 import org.b3mn.poem.util.JavaBeanJsonTransformation;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -40,20 +41,22 @@ public class UserHandler extends  HandlerBase {
 
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
+		JSONArray jsonLanguages = new JSONArray(this.getLanguageFiles(
+				this.getBackendRootDirectory() + "/i18n").keySet());
+		
+		JSONObject userObject = new JSONObject();
+		userObject.put("languages", jsonLanguages);
+		userObject.put("languagecode", request.getSession().getAttribute("languagecode"));
+		userObject.put("countrycode", request.getSession().getAttribute("countrycode"));
+
 		// if the user is public read  data from session
 		if (subject.getUri().equals(getPublicUser())) {
-			JSONObject publicObject = new JSONObject();
-			publicObject.put("languagecode", request.getSession().getAttribute("languagecode"));
-			publicObject.put("countrycode", request.getSession().getAttribute("countrycode"));
-			publicObject.put("fullname", "public");
-			publicObject.write(response.getWriter());
+			userObject.put("fullname", getPublicUser());
 		} else {
 			UserManager um = UserManager.getInstance();
-			String[] attributes = {"fullname", "email", "languagecode", "countrycode"};
-			String jsonString = JavaBeanJsonTransformation.toJsonObject(
-					um.getUser(subject), Arrays.asList(attributes)).toString();
-			response.getWriter().print(jsonString);
+			userObject.put("fullname", um.getUser(subject).getFullname());	
 		}
+		response.getWriter().print(userObject.toString());
 		response.setStatus(200);
 	}
 	
@@ -63,14 +66,24 @@ public class UserHandler extends  HandlerBase {
 		if (jsonString != null) {	
 			// Write language data to session			
 			JSONObject jsonObject = new JSONObject(jsonString);
-			request.getSession().setAttribute("languagecode", jsonObject.get("languagecode"));
-			request.getSession().setAttribute("countrycode", jsonObject.get("countrycode"));
-			// If the user isn't public update database too
-			if (subject.getUri().equals(getPublicUser())) {
-				UserManager um = UserManager.getInstance();
-				Subject user = (Subject) JavaBeanJsonTransformation.
-				updateJavaBean(jsonString, um.getUser(subject));
-				if (user != null) {
+			
+			String languageCode = null; 
+			if (jsonObject.has("languagecode"))
+				languageCode = (String) jsonObject.get("languagecode");
+			
+			String contrycode = null; 
+			if (jsonObject.has("countrycode")) 
+					contrycode = (String) jsonObject.get("countrycode");
+			
+			if (languageCode != null) {
+				request.getSession().setAttribute("languagecode", languageCode);
+				request.getSession().setAttribute("countrycode", contrycode);
+				// If the user isn't public update database too
+				if (!subject.getUri().equals(getPublicUser())) {
+					UserManager um = UserManager.getInstance();
+					Subject user =  um.getUser(subject);
+					user.setLanguageCode(languageCode);
+					user.setCountryCode(contrycode);
 					um.updateUser(user);
 					response.setStatus(200);
 				}
