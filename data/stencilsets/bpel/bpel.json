@@ -4008,7 +4008,7 @@
 		    // TODO complete perperties
 		    // TODO modify .svg file 
 			"type": "node",
-			"id":"Else_branch",
+			"id":"else_branch",
 			"title":"Else Branch",
 			"title_de":"else-Zweig",
 			"groups":["If"],
@@ -7013,7 +7013,7 @@
 		],
 		"containmentRules": [
 			{
-				"role":"If",
+				"role":"if",
 				"contains": ["if_branch", "else_branch"]			
 			},
 			{ 
