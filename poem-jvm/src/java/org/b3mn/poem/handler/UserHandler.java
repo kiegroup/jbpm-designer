@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Subject;
-import org.b3mn.poem.manager.UserManager;
+import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
 import org.b3mn.poem.util.JavaBeanJsonTransformation;
 import org.json.JSONArray;
@@ -42,21 +42,15 @@ public class UserHandler extends  HandlerBase {
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
 
+		User user = new User(subject);
 		
 		JSONObject userObject = new JSONObject();
 		JSONObject currentLanguage = new JSONObject();
-		currentLanguage.put("languagecode", request.getSession().getAttribute("languagecode"));
-		currentLanguage.put("countrycode", request.getSession().getAttribute("countrycode"));
+		currentLanguage.put("languagecode", user.getLanguageCode(request));
+		currentLanguage.put("countrycode", user.getCountryCode(request));
 
 		userObject.put("currentLanguage", currentLanguage);
 		
-		// if the user is public read  data from session
-		if (subject.getUri().equals(getPublicUser())) {
-			userObject.put("fullname", getPublicUser());
-		} else {
-			UserManager um = UserManager.getInstance();
-			userObject.put("fullname", um.getUser(subject).getFullname());	
-		}
 		response.getWriter().print(userObject.toString());
 		response.setStatus(200);
 	}
@@ -66,21 +60,10 @@ public class UserHandler extends  HandlerBase {
 		String languageCode = request.getParameter("languagecode");
 		String contrycode = request.getParameter("countrycode");
 		
-		if (languageCode != null) {	
-			
-			if (languageCode != null) {
-				request.getSession().setAttribute("languagecode", languageCode);
-				request.getSession().setAttribute("countrycode", contrycode);
-				// If the user isn't public update database too
-				if (!subject.getUri().equals(getPublicUser())) {
-					UserManager um = UserManager.getInstance();
-					Subject user =  um.getUser(subject);
-					user.setLanguageCode(languageCode);
-					user.setCountryCode(contrycode);
-					um.updateUser(user);
-					response.setStatus(200);
-				}
-			}
+		if (languageCode != null) {
+			User user = new User(subject);
+			user.setLanguage(languageCode, contrycode, request, response);
+			response.setStatus(200);
 		}
 	}
 }

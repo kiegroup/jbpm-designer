@@ -37,8 +37,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse; 
 
 import org.b3mn.poem.business.Model;
+import org.b3mn.poem.business.User;
 import org.b3mn.poem.handler.HandlerBase;
-import org.b3mn.poem.manager.UserManager;
 import org.b3mn.poem.util.AccessRight;
 import org.b3mn.poem.util.ExportInfo;
 import org.b3mn.poem.util.HandlerInfo;
@@ -223,14 +223,16 @@ public class Dispatcher extends HttpServlet {
 			}
 			
 			String openId =  (String) request.getSession().getAttribute("openid"); // Retrieve open id from session
+
+			User user = null;
+			
 			// If the user isn't logged in, set the OpenID to public
 			if (openId == null) {
 				openId = HandlerBase.getPublicUser();
 				request.getSession().setAttribute("openid", openId);
-				UserManager.getInstance().login(openId, request, response); // Login public user to handle language selection
-			}
-			// Create user if open id isn't already in the database
-			Identity subject = Identity.ensureSubject(openId); 
+				user = new User(openId);
+				user.login(request, response);
+			} else user = new User(openId);
 			
 			String requestMethod = request.getMethod();
 			
@@ -253,7 +255,7 @@ public class Dispatcher extends HttpServlet {
 			}
 			
 			// Check if the user is allowed to do this operation on this model with the requested handler
-			if ((model != null) && (!checkAccess(handlerInfo, subject, model, requestMethod)) || 
+			if ((model != null) && (!checkAccess(handlerInfo, user.getIdentity(), model, requestMethod)) || 
 					(handlerInfo.isPermitPublicUserAccess() && openId.equals(publicUser))) {
 				response.setStatus(403); // Access forbidden
 				return;
@@ -265,16 +267,16 @@ public class Dispatcher extends HttpServlet {
 			if (model != null) object =  model.getIdentity();
 			
 			if (requestMethod.equals("GET")) {
-				handler.doGet(request, response, subject, object);
+				handler.doGet(request, response, user.getIdentity(), object);
 			}
 			if (requestMethod.equals("POST")) {
-				handler.doPost(request, response, subject, object);
+				handler.doPost(request, response, user.getIdentity(), object);
 			}
 			if (requestMethod.equals("PUT")) {
-				handler.doPut(request, response, subject, object);
+				handler.doPut(request, response, user.getIdentity(), object);
 			}
 			if (requestMethod.equals("DELETE")) {
-				handler.doDelete(request, response, subject, object);
+				handler.doDelete(request, response, user.getIdentity(), object);
 			}
 		} catch (Exception e) {
 			//response.reset(); // Undo all changes --> this may cause some trouble because of a SUN bug

@@ -31,8 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.Subject;
-import org.b3mn.poem.manager.UserManager;
+import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
 import org.openid4java.OpenIDException;
 import org.openid4java.consumer.ConsumerException;
@@ -105,7 +104,7 @@ public class LoginHandler extends HandlerBase {
 	}
 
     private void processReturn(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	Subject user = this.verifyResponse(req, resp);
+    	User user = this.verifyResponse(req, resp);
     	if (user == null) {
     		this.getServletContext().getRequestDispatcher("/index.jsp")
     		.forward(req, resp);
@@ -201,7 +200,7 @@ public class LoginHandler extends HandlerBase {
 
     // --- processing the authentication response ---
     @SuppressWarnings("unchecked")
-    public Subject verifyResponse(HttpServletRequest httpReq, HttpServletResponse httpResponse)
+    public User verifyResponse(HttpServletRequest httpReq, HttpServletResponse httpResponse)
             throws ServletException {
         try {
             // extract the parameters from the authentication response
@@ -231,7 +230,7 @@ public class LoginHandler extends HandlerBase {
                 AuthSuccess authSuccess = (AuthSuccess) verification
                         .getAuthResponse();
 
-                UserManager um = UserManager.getInstance();
+                Identity subject = Identity.instance(verified.getIdentifier());
                 
                 // Check weather the response contains additional open id attributes
                 if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
@@ -254,9 +253,9 @@ public class LoginHandler extends HandlerBase {
 					um.updateUser(user);
 					*/
                     // if the user doesn't exists
-                    if (!um.userExists(verified.getIdentifier())) {
+                    if (subject == null) {
 						// Create new user with open id attributes
-						um.CreateNewUser(verified.getIdentifier(), 
+						User.CreateNewUser(verified.getIdentifier(), 
 								(String)fetchResp.getAttributeValues("nickname").get(0), 
 								(String)fetchResp.getAttributeValues("fullname").get(0),
 								(String)fetchResp.getAttributeValues("email").get(0),
@@ -272,13 +271,13 @@ public class LoginHandler extends HandlerBase {
 					}
                 }
                 // No additional attributes are passed
-                if (!um.userExists(verified.getIdentifier())) {
+                if (subject == null) {
                 	// Create new user without open id attributes
-                	um.CreateNewUser(verified.getIdentifier(), null, null, null, null, null, null, null, null, null, null, null, null);
+                	User.CreateNewUser(verified.getIdentifier());
                 }
-                return UserManager.getInstance().login(verified.getIdentifier(), httpReq, httpResponse);
+                return new User(verified.getIdentifier());
             }
-        } catch (OpenIDException e) {
+        } catch (Exception e) {
             // present error to the user
             throw new ServletException(e);
         }

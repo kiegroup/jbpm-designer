@@ -65,6 +65,50 @@ public class Subject {
 	private String password;
 	private String visibility;
 	
+	public Subject() {
+		
+	}
+	
+	public static Subject createNewSubject() {
+		
+		Subject subject = new Subject();
+
+		subject.firstLogin = new Date();
+		subject.lastLogin = new Date();
+		subject.loginCount = 0;
+
+		Persistance.getSession().persist(subject);
+		return subject;
+	}
+	
+	public static Subject createNewSubject(String countryCode, Date dob, String email, 
+			String fullname, String gender, String languageCode,
+			String nickname, String password, String postcode, String visibility) {
+		
+		Subject subject = new Subject();
+		
+		subject.countryCode = countryCode;
+		subject.dob = dob;
+		subject.email = email;
+		subject.firstLogin = new Date();
+		subject.lastLogin = new Date();
+		subject.loginCount = 0;
+		subject.fullname = fullname;
+		subject.gender = gender;
+		subject.languageCode = languageCode;
+		subject.nickname = nickname;
+		subject.password = password;
+		subject.postcode = postcode;
+		subject.visibility = visibility;
+		Persistance.getSession().persist(subject);
+		return subject;
+	}
+
+	public void update() {
+		Persistance.getSession().update(this);
+		Persistance.commit();
+	}
+
 	public int getIdent_id() {
 		return ident_id;
 	}
