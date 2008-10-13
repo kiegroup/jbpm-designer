@@ -41,14 +41,15 @@ public class UserHandler extends  HandlerBase {
 
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
-		JSONArray jsonLanguages = new JSONArray(this.getLanguageFiles(
-				this.getBackendRootDirectory() + "/i18n").keySet());
+
 		
 		JSONObject userObject = new JSONObject();
-		userObject.put("languages", jsonLanguages);
-		userObject.put("languagecode", request.getSession().getAttribute("languagecode"));
-		userObject.put("countrycode", request.getSession().getAttribute("countrycode"));
+		JSONObject currentLanguage = new JSONObject();
+		currentLanguage.put("languagecode", request.getSession().getAttribute("languagecode"));
+		currentLanguage.put("countrycode", request.getSession().getAttribute("countrycode"));
 
+		userObject.put("currentLanguage", currentLanguage);
+		
 		// if the user is public read  data from session
 		if (subject.getUri().equals(getPublicUser())) {
 			userObject.put("fullname", getPublicUser());
@@ -62,18 +63,10 @@ public class UserHandler extends  HandlerBase {
 	
 	@Override
     public void doPost(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
-		String jsonString = request.getParameter("json_data");
-		if (jsonString != null) {	
-			// Write language data to session			
-			JSONObject jsonObject = new JSONObject(jsonString);
-			
-			String languageCode = null; 
-			if (jsonObject.has("languagecode"))
-				languageCode = (String) jsonObject.get("languagecode");
-			
-			String contrycode = null; 
-			if (jsonObject.has("countrycode")) 
-					contrycode = (String) jsonObject.get("countrycode");
+		String languageCode = request.getParameter("languagecode");
+		String contrycode = request.getParameter("countrycode");
+		
+		if (languageCode != null) {	
 			
 			if (languageCode != null) {
 				request.getSession().setAttribute("languagecode", languageCode);

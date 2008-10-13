@@ -23,6 +23,7 @@
 
 package org.b3mn.poem;
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -90,6 +91,18 @@ public class Dispatcher extends HttpServlet {
 	
 	public Collection<ExportInfo> getExportInfos() {
 		return this.exportInfos;
+	}
+	
+	public Method getFilterMethod(String filterName) {
+		if (HandlerInfo.getFilterMapping() != null) {
+			return HandlerInfo.getFilterMapping().get(filterName);
+		} else return null;
+	}
+	
+	public Method getSortMethod(String sortName) {
+		if (HandlerInfo.getSortMapping() != null) {
+			return HandlerInfo.getSortMapping().get(sortName);
+		} else return null;
 	}
 	
 	public Collection<String> getHandlerClassNames() {

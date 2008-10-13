@@ -24,12 +24,16 @@
 package org.b3mn.poem.util;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.b3mn.poem.Dispatcher;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.handler.HandlerBase;
 
@@ -40,8 +44,19 @@ public class HandlerInfo {
 	protected boolean filterBrowser;
 	protected Map<String, AccessRight> accessRights = new HashMap<String, AccessRight>();
 	
+	private static Map<String, Method> filterMapping = new HashMap<String, Method>();
+	private static Map<String, Method> sortMapping = new HashMap<String, Method>();
+	
 	protected Class<? extends HandlerBase> handlerClass = null;
 	protected HandlerBase handlerInstance = null;
+
+	public static Map<String, Method> getFilterMapping() {
+		return filterMapping;
+	}
+
+	public static Map<String, Method> getSortMapping() {
+		return sortMapping;
+	}
 
 	public String getUri() {
 		return uri;
@@ -80,7 +95,7 @@ public class HandlerInfo {
 		init(handlerClass);
 	}
 	
-	private void init(Class<? extends HandlerBase> handlerClass) {
+	private void init(Class<? extends HandlerBase> handlerClass)  {
 		if (handlerClass.getAnnotation(HandlerWithoutModelContext.class) != null) {
 			HandlerWithoutModelContext annotation = handlerClass.getAnnotation(HandlerWithoutModelContext.class);
 			this.uri = annotation.uri();
@@ -126,6 +141,65 @@ public class HandlerInfo {
 			this.filterBrowser = annotation.filterBrowser();
 			this.handlerClass = handlerClass;
 			this.accessRights.put(null, annotation.accessRestriction());
+		}
+		
+		try {
+			loadSortAndFilterMethods();
+		} catch (Exception e) {} // igonore exceptions
+	}
+	
+	private static boolean isSuperclass(Class<?> subClass, Class<?> parentClass) {
+		if (subClass.equals(parentClass)) return true;
+		if (subClass.getSuperclass() == null) return false;
+		return isSuperclass(subClass.getSuperclass(), parentClass);
+	}
+	
+	// Search all handlers for static methods that are annotated with FilterMethod or SortMethod  
+	private void loadSortAndFilterMethods() throws Exception{
+		for (String handlerName : HandlerBase.getDispatcher().getHandlerClassNames()) {
+			Class<?> handlerClass = Class.forName(handlerName);
+			// Iterate over all public methods of the class
+			for (Method method : handlerClass.getMethods()) {  
+				// Find filtering methods ************************************************************
+				// Check if the method is static, annotated with the FilterMethod annotation,
+				// returns a collection and has the right parameters
+				if ((method.getAnnotation(FilterMethod.class) != null) && 
+						(isSuperclass(method.getReturnType(),Collection.class)) && 
+						(method.getParameterTypes().length == 2) &&
+						((method.getModifiers() & Modifier.STATIC) != 0)) {
+					// Check: 1st parameter: Identity, 2nd String
+					if ((method.getParameterTypes()[0].equals(Identity.class)) && 
+							(method.getGenericParameterTypes()[1].equals(String.class))) {
+						// If no filter name is supplied by the annotation, use the method name
+						// Note: filter names are case-insensitive
+						String filterName = method.getName().toLowerCase();
+						
+						if (!method.getAnnotation(FilterMethod.class).FilterName().equals("")) {
+							filterName = method.getAnnotation(FilterMethod.class).FilterName().toLowerCase();
+						}
+						this.filterMapping.put(filterName, method);
+					}
+				}
+				// Find sorting methods ************************************************************
+				// Check if the method is static, annotated with the SortMethod annotation,
+				// returns a list and has the right parameters  
+				if ((method.getAnnotation(SortMethod.class) != null) && 
+						(isSuperclass(method.getReturnType(),List.class)) && 
+						(method.getParameterTypes().length == 1) &&
+						((method.getModifiers() & Modifier.STATIC) != 0)) {
+					// Check: 1st and only parameter: Identity
+					if (method.getParameterTypes()[0].equals(Identity.class)) {			
+						// If no filter name is supplied by the annotation, use the method name
+						// Note: filter names are case-insensitive
+						String sortName = method.getName().toLowerCase();
+
+						if (!method.getAnnotation(SortMethod.class).SortName().equals("")) {
+							sortName = method.getAnnotation(SortMethod.class).SortName().toLowerCase();
+						}
+						this.sortMapping.put(sortName, method);
+					}
+				}											
+			}
 		}
 	}
 
