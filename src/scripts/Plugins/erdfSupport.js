@@ -88,7 +88,8 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		s		= s.gsub('><div', ">\n<div");		
 		s		= '<?xml version="1.0" encoding="utf-8"?>\n<div class="processdata">\n' + s + "\n</div>"; 
 
-		this.openXMLWindow( s );
+		//this.openXMLWindow( s );
+		this.openDownloadWindow(window.document.title + ".xml", s);
 	},	
 
 	
@@ -225,6 +226,44 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		   ),
 		   '_blank', "resizable=yes,width=600,height=600,toolbar=0,scrollbars=yes"
 		);
+	},
+	
+	/**
+	 * Opens a download window for downloading the given content.
+	 * 
+	 */
+	openDownloadWindow: function(file, content) {
+		var win = window.open("");
+		if (win != null) {
+			win.document.open();
+			win.document.write("<html><body>");
+			var submitForm = win.document.createElement("form");
+			win.document.body.appendChild(submitForm);
+			
+			submitForm.appendChild( this.createHiddenElement("download", content));
+			submitForm.appendChild( this.createHiddenElement("file", file));
+			
+			
+			submitForm.method = "POST";
+			win.document.write("</body></html>");
+			win.document.close();
+			submitForm.action= ORYX.PATH + "/download";
+			submitForm.submit();
+		}		
+	},
+	
+	/**
+	 * Creates a hidden form element to communicate parameter values.
+	 * 
+	 * @param {Object} name  The name of the hidden field
+	 * @param {Object} value The value of the hidden field
+	 */
+	createHiddenElement: function(name, value) {
+		var newElement = document.createElement("input");
+		newElement.name=name;
+		newElement.type="hidden";
+		newElement.value = value;
+		return newElement
 	},
 
 	/**
