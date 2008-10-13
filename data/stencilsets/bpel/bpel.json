@@ -1721,7 +1721,6 @@
 			"view":"action/node.action.assign.svg",
 			"icon":"assign.png",
 			"roles": ["Activity"],
-			//TODO : fix layout problem
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30});	
