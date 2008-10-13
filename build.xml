@@ -403,17 +403,14 @@
     <target name="deploy-all" depends="deploy-editor, deploy-backend" /> 
 
     <target name="undeploy-all" depends="undeploy-editor, undeploy-backend" /> 
-
-	<!--<target name="tomcat-start">
-	    <java jar="${tomcat6}/bin/bootstrap.jar" fork="true">
-	        <jvmarg value="-Dcatalina.home=${tomcat6}"/>
-	    </java>
-	</target>
 	
-	<target name="tomcat-stop">
-	    <java jar="${tomcat6}/bin/bootstrap.jar" fork="true">
-	        <jvmarg value="-Dcatalina.home=${tomcat6}"/>
-	        <arg line="stop"/>
-	    </java>
-	</target>-->
+	<target name="oryx-on-a-stick" depends="build, examples, compress">
+		<copy todir='build/stick'>
+            <fileset dir="stick">
+			</fileset>
+        </copy>
+		<move todir='build/Plugins'>
+            <fileset dir="build/stick/src/oryxplugin"/>
+        </move>
+	</target>
 </project>
