@@ -37,6 +37,7 @@ import org.b3mn.poem.Persistance;
 import org.b3mn.poem.Representation;
 import org.b3mn.poem.TagDefinition;
 import org.b3mn.poem.TagRelation;
+import org.b3mn.poem.util.AccessRight;
 import org.hibernate.classic.Session;
 
 public class Model extends BusinessObject {
@@ -254,7 +255,7 @@ public class Model extends BusinessObject {
 		return accessRights;
 	}
 	
-	public String getAccessRight(String openId) {
+	public AccessRight getAccessRight(String openId) {
 		String term = (String) Persistance.getSession().createSQLQuery(
 				"SELECT access.access_term FROM access, identity WHERE " +
 				"access.object_id=:object_id AND access.subject_id=identity.id AND identity.uri=:open_id")
@@ -263,8 +264,9 @@ public class Model extends BusinessObject {
 				.uniqueResult();
 		
 		Persistance.commit();
-		
-		return term;
+		if (term==null) term="none"; // Set right to none if nothing else is defined
+		AccessRight accessRight = Enum.valueOf(AccessRight.class, term.toUpperCase());
+		return accessRight;
 	}
 	
 	public boolean addAccessRight(String openId, String term) {
@@ -290,13 +292,13 @@ public class Model extends BusinessObject {
 	}
 	
 	public boolean removeAccessRight(String openId) {
-		String term = this.getAccessRight(openId);
-		// Term has to exist and owner rights cannot be removed
-		if ((term != null) && (!"owner".equals(term))){
+		AccessRight term = this.getAccessRight(openId);
+		// None and owner rights cannot be removed
+		if ((term != AccessRight.NONE) && (term != AccessRight.OWNER)){
 			Identity sub = Identity.ensureSubject(openId);
 			String subject_hierarchy = sub.getUserHierarchy();
 			String object_hierarchy = this.identity.getModelHierarchy();
-			Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term);
+			Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term.toString().toLowerCase());
 			right.delete();
 			return true; // Deleted
 		} else {

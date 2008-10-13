@@ -61,16 +61,15 @@ public class AccessHandler extends  HandlerBase {
 	@RestrictAccess(AccessRight.WRITE)
     public void doPost(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
 
-		String openId = request.getParameter("subject");
+		String openIds = request.getParameter("subject");
 		String term = request.getParameter("predicate");
 		// It's only allowed to set read and write rights and the public user cannot get a write right
-		if ((openId != null) && (term.equals("read") || (term.equals("write") || !subject.getUri().equals(getPublicUser())))) {
-			Model model = new Model(object.getId());
-			if (model.addAccessRight(openId, term)) {
-				response.setStatus(201);
-			} else {
-				response.setStatus(200);
+		if ((openIds != null) && (term.equals("read") || (term.equals("write") || !subject.getUri().equals(getPublicUser())))) {
+			for (String openId : openIds.split(",")) {
+				Model model = new Model(object.getId());
+				model.addAccessRight(openId, term);
 			}
+			response.setStatus(200);
 			this.writeAccessRights(response, object);
 		} else {
 			response.setStatus(409);

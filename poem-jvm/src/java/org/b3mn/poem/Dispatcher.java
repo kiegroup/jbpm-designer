@@ -155,8 +155,7 @@ public class Dispatcher extends HttpServlet {
 	protected boolean checkAccess(HandlerInfo handlerInfo, Identity subject, Model model, String requestMethod) {
 		try {
 			// Read access right for the user from the requested model
-			AccessRight userRight = Enum.valueOf(AccessRight.class, 
-					model.getAccessRight(subject.getUri()).toUpperCase());
+			AccessRight userRight = model.getAccessRight(subject.getUri());
 			// Read required access right from the handler
 			AccessRight modelRestriction = handlerInfo.getAccessRestriction(requestMethod);
 			// User needs the same or a higher privilege then required by the handler
