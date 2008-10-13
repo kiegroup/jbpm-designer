@@ -31,22 +31,10 @@ Repository.Core.DataCache = {
 	oryxUrl : '/oryx',
 	stencilsetUrl : '/stencilsets',
 
-	construct : function(models) {
-		
-		// Stores the id of all models available to the user as key and their uri as value
-		this._models = new Hash(models); 
-		// Stores cache type as key and the corresponding hash as value
-		this._data = new Hash();
-	
-		
-		this._addHandler = new EventHandler();
-		this._updateHandler = new EventHandler();
-		this._removeHandler = new EventHandler();
-		
+	construct : function() {
+				
 		// stores meta data of available modeltypes
 		this.model_types = [];	
-		// Stores the id of all models available to the user as key and their uri as value
-		this._models = new Hash(models); 
 		// Stores cache type as key and the corresponding hash as value
 		this._data = new Hash();
 	
@@ -105,7 +93,7 @@ Repository.Core.DataCache = {
 		
 		cacheMisses.each(function(modelId) {
 			// Remove leading slash from model uri
-			var requestUrl = this._models.get(modelId).substring(1) +  fetchDataUri // + "?id=" + id;
+			var requestUrl = modelId.substring(1) +  fetchDataUri 
 			Ext.Ajax.request({url : requestUrl,  success : this.defaultReturnHandler.bind(this, query, modelId), failure:function(){/*console.log(arguments)*/}});
 		}.bind(this));
 	},
@@ -140,11 +128,6 @@ Repository.Core.DataCache = {
 		}
 	},
 	
-	getIds : function() {
-		// May be clone it before return
-		return this._models.keys();
-	},
-	
 	setData:  function( modelIds, uriSuffix, params, successHandler ){
 		this._sendRequest( modelIds, uriSuffix, 'post', params, successHandler)
 	}, 
@@ -176,7 +159,7 @@ Repository.Core.DataCache = {
 		query.cacheMisses 	= modelIds;
 		
 		modelIds.each(function(modelId) {
-			var requestUrl = this._models.get(modelId).substring(1) + uriSuffix;
+			var requestUrl = modelId.substring(1) + uriSuffix;
 			
 			if( method.toLowerCase() == "get" || method.toLowerCase() == "delete" ){
 				requestUrl += "?" + $H(params).toQueryString();

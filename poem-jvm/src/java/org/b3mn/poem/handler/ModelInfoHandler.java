@@ -67,9 +67,9 @@ public class ModelInfoHandler extends  HandlerBase {
 
 	}
 
-	@SuppressWarnings({ "unchecked", "static-access" })
+	@SuppressWarnings({ "unchecked" })
 	@FilterMethod(FilterName="type")
-	public static Collection<Integer> filterByModelType(Identity subject, String params) {
+	public static Collection<String> filterByModelType(Identity subject, String params) {
 		String typeQuery = "";
 		for (String type : params.split(",")) {
 			type = removeSpaces(type);
@@ -80,8 +80,8 @@ public class ModelInfoHandler extends  HandlerBase {
 			typeQuery = typeQuery.substring(0, typeQuery.length() - 4);
 		}
 		
-		List<Integer> results = Persistance.getSession()
-			.createSQLQuery("SELECT identity.id FROM identity, access, representation "
+		List<String> results = Persistance.getSession()
+			.createSQLQuery("SELECT identity.uri FROM identity, access, representation "
 			+ "WHERE access.subject_id=:subject_id AND access.object_id=identity.id AND representation.ident_id=access.object_id "
 			+ "AND (" + typeQuery + ")")
 			.setInteger("subject_id", subject.getId())
@@ -94,9 +94,9 @@ public class ModelInfoHandler extends  HandlerBase {
 	
 	@SuppressWarnings("unchecked")
 	@SortMethod(SortName="lastChange")	
-	public static List<Integer> sortByLastChange(Identity subject) {
-		List<Integer> results = Persistance.getSession()
-		.createSQLQuery("SELECT identity.id FROM identity, access, representation "
+	public static List<String> sortByLastChange(Identity subject) {
+		List<String> results = Persistance.getSession()
+		.createSQLQuery("SELECT identity.uri FROM identity, access, representation "
 		+ "WHERE access.subject_id=:subject_id AND access.object_id=identity.id AND representation.ident_id=access.object_id " 
 		+ "ORDER BY representation.updated")
 		.setInteger("subject_id", subject.getId())

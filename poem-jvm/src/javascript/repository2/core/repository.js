@@ -30,11 +30,12 @@ if(!Repository.Core) Repository.Core = {};
 
 
 Repository.Core.Repository = {
-		construct : function(modelUris, currentUser) {
+		
+		construct : function(currentUser) {
 			arguments.callee.$.construct.apply(this, arguments); // call super class constructor
 			this._currentUser = decodeURI( currentUser );
 			this._publicUser = 'public';
-			this._modelCache = new Repository.Core.DataCache(modelUris);
+			this._modelCache = new Repository.Core.DataCache();
 
 			
 			// Event handler
@@ -46,13 +47,12 @@ Repository.Core.Repository = {
 			this._facade = null;
 			
 			// Model arrays
-			this._filteredModels = this._modelCache.getIds();
+			this._filteredModels = new Array();
 			this._selectedModels = new Array();
 			this._displayedModels = new Array();
 			
 			this._filters = new Hash();
-			this._sorts = new Array();
-			this._currentSort = -1;
+			this._currentSort = null;
 			
 			// UI
 			this._controls = new Object();
@@ -66,6 +66,9 @@ Repository.Core.Repository = {
 			// Loads all required plugins which 
 			// are specified in the plugins.xml
 			this._loadPlugins();
+			
+			this.setSort('lastChange');
+			this.applyFilter();
 			
 		},
 		
@@ -81,6 +84,9 @@ Repository.Core.Repository = {
 						modelCache 			: this._modelCache,
 						
 						isPublicUser 		: this.isPublicUser.bind(this),
+						
+						setSort				: this.setSort.bind(this),
+						getSort				: this.getSort.bind(this),
 						
 						applyFilter 		: this.applyFilter.bind(this),
 						removeFilter 		: this.removeFilter.bind(this),
@@ -108,11 +114,19 @@ Repository.Core.Repository = {
 			return this._currentUser == this._publicUser;
 		},
 		
+		setSort : function(sort) {
+			this._currentSort = sort;
+		},
+		
+		getSort : function() {
+			return this._currentSort;
+		},
+		
 		applyFilter : function(name, parameters) {
-			this._filters.set(name, parameters);
+			if (name) this._filters.set(name, parameters);
 			var params = this._filters.clone();
-			if (this._currentSort != -1) {
-				params.put('sort', this._sorts[this._currentSort]);
+			if (this._currentSort) {
+				params.set('sort', this._currentSort);
 			}
 			new Ajax.Request("filter", 
 					 {
@@ -130,27 +144,6 @@ Repository.Core.Repository = {
 			if (this._filters.get(name) != undefined) {
 				this._filters.unset(name);
 				this.updateFilteredIds();
-			}
-		},
-		
-		updateFilteredIds : function() {
-			if (this._filters.keys().length > 0) {
-				var filterResult = this._filters.get(this._filters.keys()[0]);
-				// filterresult is somehow an intersection between the results of all filters
-				filterResult.each(function(pair) {
-					var modelId = pair.value;
-					this._filters.each(function(filterPair){
-						var result = filterPair.value;
-						if (result.indexOf(modelId) == -1) {
-							filterResult = filterResult.without(modelId);
-							return;
-						}
-					}.bind(this));
-				}.bind(this));
-				this._filterChangedHandler.invoke(filterResult);
-				this._filteredModels = filterResult;
-			} else {
-
 			}
 		},
 		

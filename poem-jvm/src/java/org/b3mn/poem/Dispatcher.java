@@ -199,18 +199,17 @@ public class Dispatcher extends HttpServlet {
 			if (handlerUri == null) throw new Exception("Dispatching failed: Handler uri is missing!");
 			
 			Model model = null;
-			Identity object = null;
+
 			// Try to get the model if an handler uri is provided by the request
 			if (modelUri != null) {
 				try {
 					model = new Model(modelUri);
-					object = model.getIdentity();
 				} catch (Exception e) {
 					throw new Exception("Dispatching failed: Invalid model uri", e);
 				}
 			}
 			
-			String openId =  (String) request.getSession().getAttribute("openid"); 
+			String openId =  (String) request.getSession().getAttribute("openid"); // Retrieve open id from session
 			// If the user isn't logged in, set the OpenID to public
 			if (openId == null) {
 				openId = HandlerBase.getPublicUser();
@@ -222,11 +221,11 @@ public class Dispatcher extends HttpServlet {
 			
 			String requestMethod = request.getMethod();
 			
-			HandlerInfo handlerInfo = this.knownHandlers.get(handlerUri);
+			HandlerInfo handlerInfo = this.knownHandlers.get(handlerUri); // Get meta information of the requested handler
 
 			if (handlerInfo == null) throw new Exception("Dispatching failed: The requested handler doesn't exist.");
 
-			// If the requesting browser cannot handler the response
+			// If the requesting browser cannot handle the response (IE)
 			if (!this.checkBrowser(handlerInfo, request, response)) {
 				response.sendRedirect(filterBrowserRedirectUrl);
 				return; 
@@ -243,11 +242,14 @@ public class Dispatcher extends HttpServlet {
 			// Check if the user is allowed to do this operation on this model with the requested handler
 			if ((model != null) && (!checkAccess(handlerInfo, subject, model, requestMethod)) || 
 					(handlerInfo.isPermitPublicUserAccess() && openId.equals(publicUser))) {
-				response.setStatus(403);
+				response.setStatus(403); // Access forbidden
 				return;
 			}
 			
 			HandlerBase handler = this.getHandler(handlerUri); // Retrieve handler instance
+			
+			Identity object = null;
+			if (model != null) object =  model.getIdentity();
 			
 			if (requestMethod.equals("GET")) {
 				handler.doGet(request, response, subject, object);

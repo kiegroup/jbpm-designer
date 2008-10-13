@@ -40,14 +40,7 @@ import org.json.JSONObject;
 @HandlerWithoutModelContext(uri="/repository2")
 public class Repository2Handler extends  HandlerBase {
 
-	protected String getModelData(User user) throws JSONException {
-		Collection<Model> models = user.getModels();
-		JSONObject jsonModels = new JSONObject();
-		for (Model model : models) {
-			jsonModels.put(String.valueOf(model.getId()), model.getUri());
-		}
-		return jsonModels.toString();
-	}
+
 	
 	// Return the HTML code for the repository
 	@Override
@@ -112,7 +105,7 @@ public class Repository2Handler extends  HandlerBase {
     		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + backend_path + "/css/" + stylesheet + ".css\">");
     	}
     	
-    	out.println("<script type=\"text/javascript\">Ext.onReady(function(){new Repository.Core.Repository(" + this.getModelData(new User(subject.getId())) + ", \"" + subject.getUri() + "\");});</script>");  
+    	out.println("<script type=\"text/javascript\">Ext.onReady(function(){new Repository.Core.Repository(\"" + subject.getUri() + "\");});</script>");  
     	out.println("<title>Oryx - Repository RELOADED</title>");
     	out.println("</head>");
     	out.println("<body>");

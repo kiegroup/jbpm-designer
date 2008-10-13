@@ -75,9 +75,6 @@ public class SortFilterHandler extends HandlerBase {
 				// Find filtering methods ************************************************************
 				// Check if the method is static, annotated with the FilterMethod annotation,
 				// returns a collection and has the right parameters
-				for (java.lang.annotation.Annotation annotation : method.getAnnotations()) {
-					System.out.println("Oryx:"  + method.getDeclaringClass().getName() + "  -   "+ annotation.getClass().getName());
-				}
 				if ((method.getAnnotation(FilterMethod.class) != null) && 
 						(isSuperclass(method.getReturnType(),Collection.class)) && 
 						(method.getParameterTypes().length == 2) &&
@@ -141,7 +138,7 @@ public class SortFilterHandler extends HandlerBase {
 		}
 
 		Object[] arg = { subject };
-		List<Integer> orderedIds= (List<Integer>) sortMethod.invoke(null, arg);
+		List<String> orderedUris= (List<String>) sortMethod.invoke(null, arg);
 		
 		// Iterate over http parameters
 		Enumeration<String> e = request.getParameterNames();
@@ -155,12 +152,12 @@ public class SortFilterHandler extends HandlerBase {
 				if (filterMethod != null) {
 					Object[] args = { subject,  params };
 					// Invoke the filter method an add the filtered ids to the result set
-					orderedIds.retainAll((Collection<Integer>) filterMethod.invoke(null, args)); 
+					orderedUris.retainAll((Collection<String>) filterMethod.invoke(null, args)); 
 				}
 			}
 		}
 		
-		JSONArray jsonArray = new JSONArray(orderedIds); // Transform List to json
+		JSONArray jsonArray = new JSONArray(orderedUris); // Transform List to json
 		jsonArray.write(response.getWriter()); // Write json to http response
 		response.setStatus(200);
 	}
