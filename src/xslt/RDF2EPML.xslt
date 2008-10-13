@@ -380,7 +380,7 @@
 	<!-- Returns the ID without leading #resource -->
 	<xsl:template name="get-id-string">
 		<xsl:param name="id_" />
-		<xsl:value-of select="substring-after($id_, '#resource')+1" />
+		<xsl:value-of select="substring-after($id_, '#oryx')" />
 	</xsl:template>
 
 	<!-- Blocking Template -->
