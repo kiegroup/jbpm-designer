@@ -22,6 +22,7 @@
 ****************************************/
 
 package org.b3mn.poem;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -73,9 +74,15 @@ public class Dispatcher extends HttpServlet {
 
 	public Dispatcher() {
 		HandlerBase.setDispatcher(this);
-		loadHandlerInfo();
+
 	}
 	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		loadHandlerInfo();
+	}
+
 	protected String getErrorPage(String stacktrace) {
 		String page = "<html><head><title>ORYX: Error</title><body><h1>We're sorry, but an server error occurred.</h1>" + stacktrace +"</body></head></html>";
 		return page;
@@ -86,12 +93,18 @@ public class Dispatcher extends HttpServlet {
 	}
 	
 	public Collection<String> getHandlerClassNames() {
-		// Get class names of the handlers from the database
-		Collection<String> result = Persistance.getSession()
-			.createSQLQuery("SELECT java_class FROM plugin")
-			.list();
-		Persistance.commit();
-		return result;
+		File handlerDir = new File(this.getServletContext().
+				getRealPath("/WEB-INF/classes/org/b3mn/poem/handler"));
+		
+		Collection<String> classNames = new ArrayList<String>();
+		
+		for (File source : handlerDir.listFiles()) {
+			if (source.getName().endsWith(".class")) {
+				classNames.add("org.b3mn.poem.handler." + 
+						source.getName().substring(0, source.getName().lastIndexOf(".")));
+			}
+		}
+		return classNames;
 	}
 	
 	

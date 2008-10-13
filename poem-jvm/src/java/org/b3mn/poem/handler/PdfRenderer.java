@@ -34,6 +34,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.fop.svg.PDFTranscoder;
+import org.b3mn.poem.Representation;
 import org.b3mn.poem.util.ExportHandler;
 
 @ExportHandler(uri="/pdf", formatName="PDF", iconUrl="")
@@ -47,7 +48,7 @@ public class PdfRenderer extends ImageRenderer{
     }
 
     @Override
-    protected void transcode(String in_s, OutputStream out) throws TranscoderException, IOException {
+    protected void transcode(String in_s, OutputStream out, Representation representation) throws TranscoderException, IOException {
     	InputStream in = new ByteArrayInputStream(in_s.getBytes());
 	  	PDFTranscoder transcoder = new PDFTranscoder();
 	  	try {

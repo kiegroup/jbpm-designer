@@ -122,6 +122,40 @@ public class Representation {
 		}
 	}
 	
+	public byte[] getPngLarge() {
+    	byte[] pngData = (byte[]) Persistance.getSession().
+		createSQLQuery("SELECT content.png_large FROM content WHERE id=:id").
+		setLong("id", id).uniqueResult();
+	Persistance.commit();
+	return pngData;
+	}
+	
+	public void setPngLarge(byte[] pngData) {
+		// Create and execute UPDATE query
+		Persistance.getSession().
+		createSQLQuery("UPDATE content SET png_large=:data WHERE id=:id").
+		setBinary("data", pngData).
+		setLong("id", id).executeUpdate();
+		Persistance.commit();
+	}
+	
+	public byte[] getPngSmall() {
+    	byte[] pngData = (byte[]) Persistance.getSession().
+		createSQLQuery("SELECT content.png_small FROM content WHERE id=:id").
+		setLong("id", id).uniqueResult();
+	Persistance.commit();
+	return pngData;
+	}
+	
+	public void setPngSmall(byte[] pngData) {
+		// Create and execute UPDATE query
+		Persistance.getSession().
+		createSQLQuery("UPDATE content SET png_small=:data WHERE id=:id").
+		setBinary("data", pngData).
+		setLong("id", id).executeUpdate();
+		Persistance.commit();
+	}
+	
 	public Date getCreated() {
 		return created;
 	}
@@ -195,7 +229,12 @@ public class Representation {
 	        Persistance.commit();
 	        
 	        if(content != null) rep.setContent(content);
-	        if(svg != null) rep.setSvg(svg);
+	        if(svg != null) {
+	        	rep.setSvg(svg);
+	        	rep.setPngLarge(null); // Pngs has to be rerendered on the next request
+	        	rep.setPngSmall(null);
+	        }
+	        
 	    }
         catch(HibernateException ex) {
             System.err.println(ex.getMessage());

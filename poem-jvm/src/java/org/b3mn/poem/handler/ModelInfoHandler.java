@@ -55,7 +55,8 @@ public class ModelInfoHandler extends  HandlerBase {
 			attributes.add("lastUpdate");
 			attributes.add("author");
 			JSONObject data = JavaBeanJsonTransformation.toJsonObject(model, attributes);
-			data.put("thumbnailUri", this.getServerPath(request) + model.getUri() + "/png");
+			data.put("thumbnailUri", this.getServerPath(request) + model.getUri() + "/thumbnail");
+			data.put("pngUri", this.getServerPath(request) + model.getUri() + "/png");
 			data.write(response.getWriter());
 			response.setStatus(200);
 		}

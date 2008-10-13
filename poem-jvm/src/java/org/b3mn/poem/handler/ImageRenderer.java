@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.batik.transcoder.TranscoderException;
 import org.b3mn.poem.Identity;
+import org.b3mn.poem.Representation;
 import org.b3mn.poem.util.ExportHandler;
 
 @ExportHandler(uri="/svg", formatName="SVG", iconUrl="")
@@ -40,8 +41,10 @@ public class ImageRenderer extends HandlerBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object)  {
     	setResponseHeaders(res);
     	try {
-    		String SvgRepresentation = object.read().getSvg();
-    		if(SvgRepresentation == null) {
+    		
+    		Representation representation = object.read();
+			String SvgRepresentation = representation.getSvg();
+    		if ((SvgRepresentation == null) || (SvgRepresentation.length() == 0)){
     			SvgRepresentation = "<svg xmlns=\"http://www.w3.org/2000/svg\" " +
     					"xmlns:oryx=\"http://oryx-editor.org\" id=\"oryx_1\" width=\"800\" " +
     					"height=\"400\" xlink=\"http://www.w3.org/1999/xlink\" " +
@@ -49,7 +52,7 @@ public class ImageRenderer extends HandlerBase {
     					"Sorry, there is no graphical representation available on the server.<tspan x=\"30\" y=\"50\">" +
     					"Please load the process with the Oryx Editor and push the Save button.</tspan></text></svg>";
     		}
-    		transcode(SvgRepresentation, res.getOutputStream());
+    		transcode(SvgRepresentation, res.getOutputStream(), representation);
 		} catch (TranscoderException e) {
 			e.printStackTrace();
 		} catch (Exception ie) {
@@ -61,7 +64,7 @@ public class ImageRenderer extends HandlerBase {
   		res.setStatus(200);
     }
     
-    protected void transcode(String in_s, OutputStream out) throws TranscoderException, IOException {
+    protected void transcode(String in_s, OutputStream out, Representation representation) throws TranscoderException, IOException {
     	out.write(in_s.getBytes());
     }
 

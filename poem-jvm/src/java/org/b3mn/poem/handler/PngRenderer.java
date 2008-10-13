@@ -23,7 +23,9 @@
 
 package org.b3mn.poem.handler;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,6 +36,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.b3mn.poem.Representation;
 import org.b3mn.poem.util.ExportHandler;
 
 @ExportHandler(uri="/png", formatName="PNG", iconUrl="")
@@ -46,24 +49,31 @@ public class PngRenderer extends ImageRenderer {
     }
 
     @Override
-    protected void transcode(String in_s, OutputStream out) throws TranscoderException, IOException {
-    	InputStream in = new ByteArrayInputStream(in_s.getBytes());
-	  	PNGTranscoder transcoder = new PNGTranscoder();
-	  	try {
-	    	TranscoderInput input = new TranscoderInput(in);
+    protected void transcode(String in_s, OutputStream out, Representation representation) throws TranscoderException, IOException {
+    	
+    	byte[] pngData = representation.getPngLarge();
+    	if (pngData != null) {
+			out.write(pngData);
+		} else {    	
+	    	InputStream in = new ByteArrayInputStream(in_s.getBytes());
+		  	PNGTranscoder transcoder = new PNGTranscoder();
+		  	try {
+		    	TranscoderInput input = new TranscoderInput(in);
 
-	    	// Setup output
-	    	out = new java.io.BufferedOutputStream(out);
-	    	try {
-		    	TranscoderOutput output = new TranscoderOutput(out);
-		    	// Do the transformation
-				transcoder.transcode(input, output);
-	    	} finally {
-				out.close();
-	    	}
-	  	} finally {
-	    	in.close();
+		    	// Setup output
+		    	ByteArrayOutputStream outBytes = new ByteArrayOutputStream();
+		    	try {
+			    	TranscoderOutput output = new TranscoderOutput(outBytes);
+			    	// Do the transformation
+					transcoder.transcode(input, output);
+					representation.setPngLarge(outBytes.toByteArray());
+					out.write(outBytes.toByteArray());
+		    	} finally {
+					out.close();
+		    	}
+		  	} finally {
+		    	in.close();
+			}
 		}
     }
-
 }
