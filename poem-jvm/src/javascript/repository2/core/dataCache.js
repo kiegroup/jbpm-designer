@@ -32,9 +32,15 @@ Repository.Core.DataCache = {
 	stencilsetUrl : '/stencilsets',
 
 	construct : function() {
-				
+		
+		// Stores data returned from /config handler
+		this._configData = null;
+		
+		// Stores data returned from /user handler
+		this._userData = null;
+		
 		// stores meta data of available modeltypes
-		this.model_types = [];	
+		this._model_types = [];	
 		// Stores cache type as key and the corresponding hash as value
 		this._data = new Hash();
 	
@@ -187,8 +193,8 @@ Repository.Core.DataCache = {
 				method: "get",
 				asynchronous : false,
 				onSuccess: function(transport) {
-					this.modelTypes = transport.responseText.evalJSON();
-					this.modelTypes.each(function(type) {
+					this._modelTypes = transport.responseText.evalJSON();
+					this._modelTypes.each(function(type) {
 						type.iconUrl = this.oryxUrl + this.stencilsetUrl + type.icon_url;
 						type.url = this.stencilsetUrl + type.uri
 					}.bind(this));
@@ -196,8 +202,79 @@ Repository.Core.DataCache = {
 				onFailure: function() {alert("Fehler modelTypes")}
 			});
 		}
-		return this.modelTypes;
+		return this._modelTypes;
 	},
+	
+	/* The following functions handle the requests to the /config server handler
+	 * 
+	 */
+	
+	_ensureConfigData : function() {
+		// lazy loading
+		if (!this._configData) {
+			new Ajax.Request("config", 
+			 {
+				method: "get",
+				asynchronous : false,
+				onSuccess: function(transport) {
+					this._configData = transport.responseText.evalJSON();
+				}.bind(this),
+				onFailure: function() {alert("Error loading config data.")}
+			});
+		}
+	},
+	
+	getAvailableLanguages : function() {
+		this._ensureConfigData();
+		return this._configData.availableLanguages;
+	},
+	
+	getAvailableSorts : function() {
+		this._ensureConfigData();
+		return this._configData.availableSorts;
+	},
+	
+	/* The following functions handle the requests to the /user server handler
+	 * 
+	 */
+	
+	_ensureUserData : function() {
+		// lazy loading
+		if (!this._userData) {
+			new Ajax.Request("user", 
+			 {
+				method: "get",
+				asynchronous : false,
+				onSuccess: function(transport) {
+					this._userData = transport.responseText.evalJSON();
+				}.bind(this),
+				onFailure: function() {alert("Error loading user data.")}
+			});
+		}
+	},
+	
+	getLanguage : function() {
+		this._ensureUserData();
+		return this._userData.currentLanguage;
+	},
+	
+	setLanguage : function(languagecode, countrycode) {
+		new Ajax.Request("user", 
+				 {
+					method: "post",
+					asynchronous : false,
+					parameters : { 
+						"languagecode" : languagecode,
+						"countrycode" : countrycode
+					},
+					onSuccess: function(transport) {
+						window.location.reload(); // reload repository to 
+					}.bind(this),
+					onFailure: function() {alert("Changing langauge failed!")}
+				});
+	},
+
+	
 	
 };
 
