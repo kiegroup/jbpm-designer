@@ -53,17 +53,11 @@ Repository.Core.DataCache = {
 		
 	},
 	
-	addModel : function(id, uri) {
-		this._models.set(id, uri);
-	},
 	
 	getAddHandler : function() {return this._addHandler;},
 	getUpdateHandler : function() {return this._updateHandler;},
 	getRemoveHandler : function() {return this._removeHandler;},
-	
-	getModelUri : function(modelId) {
-		return this._models.get(modelId);
-	},
+
 	
 	getDataAsync : function(fetchDataUri, ids, callback) {
 		var modelIds = $A(ids); // Ensure that ids is an array
@@ -233,7 +227,12 @@ Repository.Core.DataCache = {
 		this._ensureConfigData();
 		return this._configData.availableSorts;
 	},
-	
+
+	getAvailableExports : function() {
+		this._ensureConfigData();
+		return this._configData.availableExports;
+	},
+		
 	/* The following functions handle the requests to the /user server handler
 	 * 
 	 */

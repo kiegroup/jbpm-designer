@@ -13,6 +13,9 @@ if(window.Repository.I18N == undefined) Repository.I18N = {};
 
 Repository.I18N.Language = "en_us"; //Pattern <ISO language code>_<ISO country code> in lower case!
 
+
+Repository.I18N.en_us = "English";
+Repository.I18N.de = "Deutsch";
 // Repository strings
 
 if(!Repository.I18N.Repository) Repository.I18N.Repository = {};
@@ -99,5 +102,12 @@ Repository.I18N.AccessInfo.addReader = "Add as Reader"
 Repository.I18N.AccessInfo.addContributer = "Add as Contributer"
 
 
+if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
+Repository.I18N.SortingSupport.name = "Sorting";
+Repository.I18N.SortingSupport.lastchange = "By last change"
 
+if(!Repository.I18N.Export) Repository.I18N.Export = {};
+Repository.I18N.Export.name = "Export";
+Repository.I18N.Export.title = "Available export formats:"
+Repository.I18N.Export.onlyOne = "Only one has to be selected!"
 

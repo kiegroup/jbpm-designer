@@ -30,13 +30,7 @@ if(!Repository.Plugins) Repository.Plugins = {};
  * Note: Only stencil sets defined in the stencilsets.json can be selected as filter
  */
 
-Repository.Plugins.LanguageSupport = {
-	
-	IMAGE_URLS: {
-		de: '/backend/images/flags/de.png',
-		en_us: '/backend/images/flags/us.png',
-		en: '/backend/images/flags/us.png',
-	},
+Repository.Plugins.SortingSupport = {
 	
 	construct: function( facade ) {
 		
@@ -44,22 +38,16 @@ Repository.Plugins.LanguageSupport = {
 		this.toolbarButtons = [];
 		this.facade 		= facade;
 		
-		var currentLanguage	= this.facade.modelCache.getLanguage();
-		currentLanguage		= currentLanguage.languagecode + ( currentLanguage.countrycode ? "_" + currentLanguage.countrycode : "");
 		
-		
-		this.facade.modelCache.getAvailableLanguages().each(function(type) {
-			
-			var language = type.languagecode + ( type.countrycode ? "_" + type.countrycode : "");
+		this.facade.modelCache.getAvailableSorts().each(function(type) {
 			
 			this.toolbarButtons.push({
-				text 		: Repository.I18N[language],
-				region		: 'right',
-				menu 		: Repository.I18N[currentLanguage],
-				menuIcon 	: this.IMAGE_URLS[currentLanguage],
-				tooltipText : Repository.I18N[currentLanguage],
-				icon 		: this.IMAGE_URLS[language],
-				handler		: this._setLanguage.bind(this, type)				
+				text 		: Repository.I18N.SortingSupport[type],
+				menu 		: Repository.I18N.SortingSupport.name,
+				menuIcon 	: "/backend/images/silk/table_sort.png",
+				tooltipText : Repository.I18N.SortingSupport.name,
+				//icon 		: type,
+				handler		: this._setSorting.bind(this, type)				
 			});
 		}.bind(this));
 					
@@ -68,9 +56,9 @@ Repository.Plugins.LanguageSupport = {
 
 	},
 	
-	_setLanguage: function( type ){
-		this.facade.modelCache.setLanguage( type.languagecode, type.countrycode )
+	_setSorting: function( type ){
+		
 	}
 };
 
-Repository.Plugins.LanguageSupport = Repository.Core.ContextPlugin.extend(Repository.Plugins.LanguageSupport);
+Repository.Plugins.SortingSupport = Repository.Core.ContextPlugin.extend(Repository.Plugins.SortingSupport);

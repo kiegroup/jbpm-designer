@@ -66,3 +66,13 @@ Repository.I18N.AccessInfo.reader = "Leserechte:"
 Repository.I18N.AccessInfo.openid = "OpenID"
 Repository.I18N.AccessInfo.addReader = "Leserechte hinzufügen"
 Repository.I18N.AccessInfo.addContributer = "Schreibrechte hinzufügen"
+
+
+if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
+Repository.I18N.SortingSupport.name = "Sortierung";
+Repository.I18N.SortingSupport.lastchange = "Nach letzter Änderung"
+
+if(!Repository.I18N.Export) Repository.I18N.Export = {};
+Repository.I18N.Export.name = "Export";
+Repository.I18N.Export.title = "Verfügbare Export Formate:"
+Repository.I18N.Export.onlyOne = "Es darf nur ein Modell selektiert sein"

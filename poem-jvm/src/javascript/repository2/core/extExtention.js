@@ -26,6 +26,8 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
 	toggleStyle:null,
 
 	selected:false,
+	
+	href:false,
 
     // private
     onRender : function(ct, position){
@@ -34,7 +36,7 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
             this.el.id = this.getId();
 			
 			if( !this.disabled )
-            	this.el.href = "#" + this.text;
+            	this.el.href = this.href ? this.href : "#" + this.text;
 
             if( !this.disabled ){
                 this.el.addEventListener( 'click', this.onClick.bind(this), true);

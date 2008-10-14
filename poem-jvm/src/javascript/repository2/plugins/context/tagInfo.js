@@ -122,18 +122,19 @@ Repository.Plugins.TagInfo = {
 											id		: 'repository_taginfo_textfield',
 											x		: 0, 
 											y		: 0, 
-											width	: 100,
+											width	: 150,
 											emptyText : Repository.I18N.TagInfo.newTag ,
 											disabled  : true,  
 										}),
-								 new Ext.Button({
+								new Ext.LinkButton({
+											image		:'../images/silk/add.png',
 											text 		: Repository.I18N.TagInfo.addTag,
 											disabled 	: true, 
-											listeners	: {
+											//listeners	: {
 												click : function(){
 													this._addTag(Ext.getCmp('repository_taginfo_textfield').getValue())
 												}.bind(this)
-											}
+											//}
 										})
 							]
 							
@@ -146,8 +147,8 @@ Repository.Plugins.TagInfo = {
 					items	: [
 								this.controls[0],
 								new Ext.Panel({
-											x		: 105, 
-											y		: 0,
+											x		: 155, 
+											y		: 3,
 											border	: false,
 											items	: [this.controls[1]]
 										})

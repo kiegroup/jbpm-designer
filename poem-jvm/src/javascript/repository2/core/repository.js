@@ -232,8 +232,8 @@ Repository.Core.Repository = {
 		 * @param {Object} model_id
 		 */
 		openModelInEditor : function (model_id) {
-			var uri = this._modelCache.getModelUri( model_id );
-			uri	= uri.slice(1) + "/self";
+
+			var uri	= model_id.slice(1) + "/self";
 			
 			// Open the model in a new window
 			var editor = window.open( uri );
