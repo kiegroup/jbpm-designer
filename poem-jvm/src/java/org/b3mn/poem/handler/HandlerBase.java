@@ -183,15 +183,13 @@ public abstract class HandlerBase {
     // Returns the absolute path to the root directory of the oryx webapp
     protected String getOryxRootDirectory() {
     	String realPath = this.getServletContext().getRealPath("");
-    	realPath = realPath.substring(0, realPath.indexOf("/backend"));
-    	return realPath + "/oryx";
+    	File backendDir = new File(realPath);
+    	return backendDir.getParent();
     }
     
     // Returns the absolute path to the root directory of the backend webapp
     protected String getBackendRootDirectory() {
-    	String realPath = this.getServletContext().getRealPath("");
-    	realPath = realPath.substring(0, realPath.indexOf("/backend"));
-    	return realPath + "/backend";
+    	return this.getServletContext().getRealPath("");
     }
     
     // Convenience method to get the language data from the session
