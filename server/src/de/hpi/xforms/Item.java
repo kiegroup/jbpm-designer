@@ -68,6 +68,11 @@ public class Item extends ListUICommon implements UICommonContainer, LabelContai
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Item";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "item";
 	}

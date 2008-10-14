@@ -27,6 +27,11 @@ public class Select extends FormControl implements ListUICommonContainer {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Select";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "select";
 	}

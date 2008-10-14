@@ -114,6 +114,10 @@
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 		</plugin>	
 		
+		<plugin source="xformsimport.js" name="ORYX.Plugins.XFormsImport">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+		</plugin>
+
 		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 			<!-- BPEL plugin also requires rowlayout -->

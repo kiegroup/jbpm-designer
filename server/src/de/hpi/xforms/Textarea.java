@@ -14,6 +14,11 @@ public class Textarea extends FormControl {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Textarea";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "textarea";
 	}

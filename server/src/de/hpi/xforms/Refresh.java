@@ -8,6 +8,11 @@ public class Refresh extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Refresh";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "refresh";
 	}

@@ -8,6 +8,11 @@ public class Rebuild extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Rebuild";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "rebuild";
 	}

@@ -57,6 +57,10 @@ public abstract class XFormsElement {
 		return true;
 	}
 	
+	public String getStencilId() {
+		return null;
+	}
+	
 	public abstract String getTagName();
 	
 }

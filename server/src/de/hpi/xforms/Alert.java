@@ -22,6 +22,11 @@ public class Alert extends UICommon implements PCDataContainer {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Alert";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "alert";
 	}

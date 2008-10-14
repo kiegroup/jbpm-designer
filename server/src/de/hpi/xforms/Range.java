@@ -16,6 +16,11 @@ public class Range extends FormControl {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Range";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "range";
 	}

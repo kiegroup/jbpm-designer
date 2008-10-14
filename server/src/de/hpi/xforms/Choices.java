@@ -23,6 +23,11 @@ public class Choices extends ListUICommon implements ListUICommonContainer {
 		Collections.sort(listUICommons, new ListUICommonComparator());
 		return listUICommons;
 	}
+	
+	@Override
+	public String getStencilId() {
+		return "Choices";
+	}
 
 	@Override
 	public String getTagName() {

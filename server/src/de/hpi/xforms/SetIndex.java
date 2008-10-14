@@ -9,6 +9,11 @@ public class SetIndex extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "SetIndex";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "setindex";
 	}

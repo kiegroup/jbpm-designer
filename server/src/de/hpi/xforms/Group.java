@@ -67,6 +67,11 @@ public class Group extends XFormsUIElement implements UIElementContainer, Action
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Group";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "group";
 	}

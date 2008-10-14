@@ -249,7 +249,19 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>XFormsExportServlet</servlet-name>
-		<url-pattern>/xforms</url-pattern>
+		<url-pattern>/xformsexport</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>XForms Import</display-name>
+		<servlet-name>XFormsImportServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.XFormsImportServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>XFormsImportServlet</servlet-name>
+		<url-pattern>/xformsimport</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

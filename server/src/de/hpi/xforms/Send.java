@@ -8,6 +8,11 @@ public class Send extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Send";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "send";
 	}

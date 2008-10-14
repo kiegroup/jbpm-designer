@@ -33,7 +33,7 @@ import de.hpi.xforms.serialization.XFormsXHTMLExporter;
 public class XFormsExportServlet extends HttpServlet {
 	
 	private static Configuration config = null;
-	private static final long serialVersionUID = 4834190238245012967L;
+	private static final long serialVersionUID = 6084194342174761093L;
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
@@ -55,6 +55,7 @@ public class XFormsExportServlet extends HttpServlet {
 		try {
 			
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
 			XFormsRDFImporter importer = new XFormsRDFImporter(document);

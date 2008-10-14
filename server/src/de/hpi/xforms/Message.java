@@ -24,6 +24,11 @@ public class Message extends AbstractAction implements PCDataContainer {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Message";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "message";
 	}

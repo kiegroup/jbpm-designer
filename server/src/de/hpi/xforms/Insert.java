@@ -12,6 +12,11 @@ public class Insert extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Insert";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "insert";
 	}

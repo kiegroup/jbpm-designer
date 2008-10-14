@@ -8,6 +8,11 @@ public class SetFocus extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "SetFocus";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "setfocus";
 	}

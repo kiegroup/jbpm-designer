@@ -32,6 +32,11 @@ public class Repeat extends XFormsUIElement implements UIElementContainer, Actio
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Repeat";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "repeat";
 	}

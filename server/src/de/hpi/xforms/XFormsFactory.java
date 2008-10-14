@@ -19,6 +19,10 @@ public class XFormsFactory {
 		return new Instance();
 	}
 	
+	public Bind createBind() {
+		return new Bind();
+	}
+	
 	public Submission createSubmission() {
 		return new Submission();
 	}
@@ -157,6 +161,87 @@ public class XFormsFactory {
 	
 	public Message createMessage() {
 		return new Message();
+	}
+	
+	public XFormsElement createElementByTagName(String tagName) {
+		tagName = tagName.toLowerCase();
+		if(tagName.equals("model"))
+			return createModel();
+		else if(tagName.equals("instance"))
+			return createInstance();
+		else if(tagName.equals("bind"))
+			return createBind();
+		else if(tagName.equals("submission"))
+			return createSubmission();
+		else if(tagName.equals("input"))
+			return createInput();
+		else if(tagName.equals("secret"))
+			return createSecret();
+		else if(tagName.equals("textarea"))
+			return createTextarea();
+		else if(tagName.equals("output"))
+			return createOutput();
+		else if(tagName.equals("upload"))
+			return createUpload();
+		else if(tagName.equals("range"))
+			return createRange();
+		else if(tagName.equals("trigger"))
+			return createTrigger();
+		else if(tagName.equals("submit"))
+			return createSubmit();
+		else if(tagName.equals("select"))
+			return createSelect();
+		else if(tagName.equals("group"))
+			return createGroup();
+		else if(tagName.equals("repeat"))
+			return createRepeat();
+		else if(tagName.equals("label"))
+			return createLabel();
+		else if(tagName.equals("help"))
+			return createHelp();
+		else if(tagName.equals("hint"))
+			return createHint();
+		else if(tagName.equals("alert"))
+			return createAlert();
+		else if(tagName.equals("item"))
+			return createItem();
+		else if(tagName.equals("value"))
+			return createValue();
+		else if(tagName.equals("choices"))
+			return createChoices();
+		else if(tagName.equals("action"))
+			return createAction();
+		else if(tagName.equals("setvalue"))
+			return createSetValue();
+		else if(tagName.equals("insert"))
+			return createInsert();
+		else if(tagName.equals("delete"))
+			return createDelete();
+		else if(tagName.equals("setindex"))
+			return createSetIndex();
+		else if(tagName.equals("toggle"))
+			return createToggle();
+		else if(tagName.equals("setfocus"))
+			return createSetFocus();
+		else if(tagName.equals("dispatch"))
+			return createDispatch();
+		else if(tagName.equals("rebuild"))
+			return createRebuild();
+		else if(tagName.equals("recalculate"))
+			return createRecalculate();
+		else if(tagName.equals("revalidate"))
+			return createRevalidate();
+		else if(tagName.equals("refresh"))
+			return createRefresh();
+		else if(tagName.equals("reset"))
+			return createReset();
+		else if(tagName.equals("load"))
+			return createLoad();
+		else if(tagName.equals("send"))
+			return createSend();
+		else if(tagName.equals("message"))
+			return createMessage();
+		else return null;
 	}
 
 }
