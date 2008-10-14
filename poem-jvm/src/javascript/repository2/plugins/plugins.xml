@@ -13,6 +13,7 @@
 		
 		<!-- CONTEXT-FREE PLUGINS -->
 		<plugin source="newModelPlugin.js" name="Repository.Plugins.NewModel" />
+		<plugin source="contextFree/languageSupport.js" name="Repository.Plugins.LanguageSupport" />
 		<plugin source="contextFree/typeFilter.js" name="Repository.Plugins.TypeFilter" />
 		
 		<!-- CONTEXT PLUGINS -->

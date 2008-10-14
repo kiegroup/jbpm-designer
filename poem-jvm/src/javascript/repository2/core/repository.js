@@ -299,24 +299,38 @@ Repository.Core.Repository = {
 						// If no menu exists
 						if (menu == null) {
 							menu = new Ext.menu.Menu({items : []});
-							this._controls.toolbar.addButton({
-									//id : buttonConfig.menu,
-									iconCls: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
-									text : buttonConfig.menu, 
-									menu : menu,
-									icon : buttonConfig.menuIcon,
-									tooltip: {
-										text: buttonConfig.tooltipText,
-                                        autoHide: true
-                                    },
-								});
+							
+							// Depending on if there is already a spacer, add the following element befor or behind this
+							var spacer 		= this._controls.toolbar.items.find(function(item){ return item instanceof Ext.Toolbar.Spacer})
+							var indexSpacer	= spacer ? this._controls.toolbar.items.indexOf(space) : null;
+							var region		= buttonConfig.region && buttonConfig.region.toLowerCase() == "right" ? "right" : "left";
+							
+							if( !indexSpacer && region == "right" ){
+								this._controls.toolbar.addFill();
+								indexSpacer =  this._controls.toolbar.items.length-1;
+							}
+							
+							// Insert the button to the particular place
+							this._controls.toolbar.insertButton(
+									indexSpacer ? (region == "right" ? indexSpacer+1 : indexSpacer-1) : this._controls.toolbar.items.length,
+									{
+										//id : buttonConfig.menu,
+										iconCls: 'some_class_that_does_not_exist_but_fixes-rendering repository_ext_btn_align_center', // do not remove!
+										text : buttonConfig.menu, 
+										menu : menu,
+										icon : buttonConfig.menuIcon,
+										tooltip: {
+											text: buttonConfig.tooltipText,
+	                                        autoHide: true
+	                                    },
+									});
 							menu.render();
 						}
 						menu.addMenuItem({
-							text : buttonConfig.text,
+							text 	: buttonConfig.text,
 							handler : buttonConfig.handler,
-							icon : buttonConfig.icon,
-							
+							icon 	: buttonConfig.icon,
+							iconCls	: 'repository_ext_icon_align_center'
 						});
 					} else {
 						this._controls.toolbar.addButton(new Ext.Toolbar.Button({

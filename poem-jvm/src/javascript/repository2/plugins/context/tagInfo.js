@@ -78,7 +78,7 @@ Repository.Plugins.TagInfo = {
 		modelTags.each(function(tag, index){
 			
 			var label = {text: tag, xtype:'label'};
-			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 2px;', text:'Delete', click:this._onTagClick.bind(this, tag)})
+			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 2px;', text:Repository.I18N.TagInfo.deleteText, click:this._onTagClick.bind(this, tag)})
 			
 			buttons.push( label );
 			if (!isPublic) buttons.push( image ); // Don't display remove buttons to the public user
@@ -90,7 +90,7 @@ Repository.Plugins.TagInfo = {
 
 		if( buttons.length == 0 ){
 			// Add a 'none'
-			buttons.push( {text: 'none', xtype:'label', style:"font-style:italic;color:gray;"} );				
+			buttons.push( {text: Repository.I18N.TagInfo.none, xtype:'label', style:"font-style:italic;color:gray;"} );				
 		}
 	
 		
@@ -115,7 +115,7 @@ Repository.Plugins.TagInfo = {
 	
 	_generateGUI: function(){
 
-		var label 		= {text: 'Shared tags:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"};
+		var label 		= {text: Repository.I18N.TagInfo.shared, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"};
 		this.tagPanel	= new Ext.Panel({border:false})
 		this.controls	= [
 								new Ext.form.TextField({
@@ -123,11 +123,11 @@ Repository.Plugins.TagInfo = {
 											x		: 0, 
 											y		: 0, 
 											width	: 100,
-											emptyText : 'New Tag',
+											emptyText : Repository.I18N.TagInfo.newTag ,
 											disabled  : true,  
 										}),
 								 new Ext.Button({
-											text 		: 'Add',
+											text 		: Repository.I18N.TagInfo.addTag,
 											disabled 	: true, 
 											listeners	: {
 												click : function(){

@@ -39,6 +39,15 @@ a:hover, a:focus, a:active {
 }
 
 
+.repository_ext_btn_align_center {
+	background-position: 0px center !important;	
+	padding: 2px 0 3px 18px !important;
+}
+
+.repository_ext_icon_align_center {
+	height:auto;
+	vertical-align:middle;
+}
 /**  FIXES FOR EXT 2.0.2 **/
 
 .x-date-middle {

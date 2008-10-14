@@ -32,8 +32,37 @@ if(!Repository.I18N.NewModel) Repository.I18N.NewModel = {};
 
 Repository.I18N.NewModel.name = "Neues Model";
 
-//TypeFilter Plugin
+// TypeFilter Plugin
 
 if(!Repository.I18N.TypeFilter) Repository.I18N.TypeFilter = {};
-
 Repository.I18N.TypeFilter.name = "Typ Filter";
+
+if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
+Repository.I18N.TagInfo.name = "Tags"
+Repository.I18N.TagInfo.deleteText = "Löschen"
+Repository.I18N.TagInfo.none = "keine"
+Repository.I18N.TagInfo.shared = "Gemeinsame Tags:"
+Repository.I18N.TagInfo.newTag = "Neuer Tag"
+Repository.I18N.TagInfo.addTag = "Hinzufügen"
+		
+if(!Repository.I18N.ModelRangeSelection) Repository.I18N.ModelRangeSelection = {};
+Repository.I18N.ModelRangeSelection.previous = "<< Vorherige Seite"
+Repository.I18N.ModelRangeSelection.next = "Nächste Seite >>"
+Repository.I18N.ModelRangeSelection.last = "Erste"
+Repository.I18N.ModelRangeSelection.first = "Letzte"
+
+if(!Repository.I18N.AccessInfo) Repository.I18N.AccessInfo = {};
+Repository.I18N.AccessInfo.name = "Rechteverwaltung"
+Repository.I18N.AccessInfo.publicText = "Öffentlich";
+Repository.I18N.AccessInfo.notPublicText  = "Nicht öffentlich";
+Repository.I18N.AccessInfo.noneIsSelected  = "Kein Model selektiert";
+Repository.I18N.AccessInfo.none  = "kein";
+Repository.I18N.AccessInfo.deleteText  = "Löschen";
+Repository.I18N.AccessInfo.publish  = "Veröffentlichen";
+Repository.I18N.AccessInfo.unPublish  = "Veröffenlichung zurückziehen";
+Repository.I18N.AccessInfo.owner = "Besitzer:"
+Repository.I18N.AccessInfo.contributer = "Schreibrechte:"
+Repository.I18N.AccessInfo.reader = "Leserechte:"
+Repository.I18N.AccessInfo.openid = "OpenID"
+Repository.I18N.AccessInfo.addReader = "Leserechte hinzufügen"
+Repository.I18N.AccessInfo.addContributer = "Schreibrechte hinzufügen"

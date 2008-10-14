@@ -95,16 +95,16 @@ Repository.Plugins.AccessInfo = {
 		if( oneIsSelected ){
 			var button, label;
 			if( isPublic ){
-				button 	= new Ext.LinkButton({image:'../images/silk/user_delete.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:'Unpublish', click:this._deleteOpenID.bind(this, this.PUBLIC_USER)})
-				label	= {text: 'Public', xtype:'label', style:"font-weight:bold;"};
+				button 	= new Ext.LinkButton({image:'../images/silk/user_delete.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:Repository.I18N.AccessInfo.unPublish , click:this._deleteOpenID.bind(this, this.PUBLIC_USER)})
+				label	= {text: Repository.I18N.AccessInfo.publicText, xtype:'label', style:"font-weight:bold;"};
 			} else {
-				button 	= new Ext.LinkButton({image:'../images/silk/user_add.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:'Publish', click:this._addOpenID.bind(this, this.PUBLIC_USER, 'read')})
-				label	= {text: 'Not Public', xtype:'label', style:"font-style:italic;color:gray;"};			
+				button 	= new Ext.LinkButton({image:'../images/silk/user_add.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:Repository.I18N.AccessInfo.publish , click:this._addOpenID.bind(this, this.PUBLIC_USER, 'read')})
+				label	= {text: Repository.I18N.AccessInfo.notPublicText , xtype:'label', style:"font-style:italic;color:gray;"};			
 			}
 			// Add the content to the panel		
 			this._addItems( this.myPublicPanel, isPublicUser ? [label] : [label, button] )			
 		} else {
-			this._addItems( this.myPublicPanel, [ {text: 'None is selected', xtype:'label', style:"font-style:italic;color:gray;"}] )	
+			this._addItems( this.myPublicPanel, [ {text: Repository.I18N.AccessInfo.noneIsSelected, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		}
 
 		
@@ -112,7 +112,7 @@ Repository.Plugins.AccessInfo = {
 		if( owner ){
 			this._addItems( this.myOwnerPanel, [ {text: owner, xtype:'label'}] )	
 		} else {
-			this._addItems( this.myOwnerPanel, [ {text: 'none', xtype:'label', style:"font-style:italic;color:gray;"}] )	
+			this._addItems( this.myOwnerPanel, [ {text: Repository.I18N.AccessInfo.none, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		}
 				
 		
@@ -158,14 +158,14 @@ Repository.Plugins.AccessInfo = {
 		// Set Contributer as Links		
 		if( data.length <= 0 ){
 			// If there is no contributer, add a 'none'
-			buttons.push( {text: 'none', xtype:'label', style:"font-style:italic;color:gray;"} );				
+			buttons.push( {text: Repository.I18N.AccessInfo.none, xtype:'label', style:"font-style:italic;color:gray;"} );				
 		}	
 		
 		// Generate Contributer Buttons			
 		data.each(function(openid){
 			
 			var label = {text: openid, xtype:'label'};
-			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:'Delete', click:this._deleteOpenID.bind(this, openid)})
+			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:Repository.I18N.AccessInfo.deleteText, click:this._deleteOpenID.bind(this, openid)})
 
 			buttons.push( new Ext.Panel({border:false, items: editable ? [label, image] : [label] , style:""}))			
 				
@@ -176,10 +176,10 @@ Repository.Plugins.AccessInfo = {
 	},
 	
 	_generateGUI: function(){
-		
-		var owner	= {text: 'Owner:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;"};
-		var contr	= {text: 'Contributers:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;margin-top:8px;"};
-		var readr	= {text: 'Readers:', xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;margin-top:8px;"};
+				
+		var owner	= {text: Repository.I18N.AccessInfo.owner, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;"};
+		var contr	= {text: Repository.I18N.AccessInfo.contributer, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;margin-top:8px;"};
+		var readr	= {text: Repository.I18N.AccessInfo.reader, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;margin-top:8px;"};
 
 		this.controls	= [		new Ext.form.TextArea({
 											id		: 'repository_accessinfo_textfield',
@@ -190,13 +190,13 @@ Repository.Plugins.AccessInfo = {
 											grow	: true,
 											growMax	: 120,
 											growMin	: 45,
-											emptyText : 'OpenID',
+											emptyText : Repository.I18N.AccessInfo.openid,
 											disabled  : true,  
 										}),
 								new Ext.LinkButton({
 											image		: '../images/silk/page_white_magnify.png', 
 											imageStyle	: 'margin:2px;',
-											text		: 'Add as Reader', 
+											text		: Repository.I18N.AccessInfo.addReader, 
 											click		:  function(){
 																this._addOpenID(Ext.getCmp('repository_accessinfo_textfield').getValue(), "read")
 															}.bind(this)
@@ -204,29 +204,11 @@ Repository.Plugins.AccessInfo = {
 								new Ext.LinkButton({
 											image		: '../images/silk/page_white_edit.png', 
 											imageStyle	: 'margin:2px;',
-											text		: 'Add as Contributer', 
+											text		: Repository.I18N.AccessInfo.addContributer, 
 											click		: function(){
 																this._addOpenID(Ext.getCmp('repository_accessinfo_textfield').getValue(), "write")
 															}.bind(this)
-										})			
-								 /*new Ext.Button({
-											text 		: 'Add as Contributer',
-											disabled 	: true, 
-											listeners	: {
-												click : function(){
-													this._addOpenID(Ext.getCmp('repository_accessinfo_textfield').getValue(), "write")
-												}.bind(this)
-											}
-										}),
-								 new Ext.Button({
-											text 		: 'Add as Reader',
-											disabled 	: true, 
-											listeners	: {
-												click : function(){
-													this._addOpenID(Ext.getCmp('repository_accessinfo_textfield').getValue(), "read")
-												}.bind(this)
-											}
-										})	*/		
+										})				
 							]
 							
 		// Generate a new panel for the add form

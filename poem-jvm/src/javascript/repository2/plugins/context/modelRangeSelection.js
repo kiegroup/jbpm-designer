@@ -59,10 +59,10 @@ Repository.Plugins.ModelRangeSelection = {
 		var isLastPage	= index >= size - pageSize;
 				
 		// Previous
-		buttons.push( new Ext.LinkButton({text:"<< Previous Page", click:this._previous.bind(this), style:buttonStyle+"margin-right:15%;", disabled:isFirstPage}) );
+		buttons.push( new Ext.LinkButton({text:Repository.I18N.ModelRangeSelection.previous, click:this._previous.bind(this), style:buttonStyle+"margin-right:15%;", disabled:isFirstPage}) );
 		
 		// First
-		buttons.push( new Ext.LinkButton({text:"First", click:this._setRange.bind(this, 0), style:buttonStyle, disabled:isFirstPage}) );
+		buttons.push( new Ext.LinkButton({text:Repository.I18N.ModelRangeSelection.first, click:this._setRange.bind(this, 0), style:buttonStyle, disabled:isFirstPage}) );
 		
 			
 		// Generate Page Buttons
@@ -86,9 +86,9 @@ Repository.Plugins.ModelRangeSelection = {
 		}
 				
 		// Last
-		buttons.push( new Ext.LinkButton({text:"Last", click:this._setRange.bind(this, size - (size % pageSize)), style:buttonStyle, disabled:isLastPage}) );
+		buttons.push( new Ext.LinkButton({text:Repository.I18N.ModelRangeSelection.last, click:this._setRange.bind(this, size - (size % pageSize)), style:buttonStyle, disabled:isLastPage}) );
 		// Next
-		buttons.push( new Ext.LinkButton({text:"Next Page >>", click:this._next.bind(this), style:buttonStyle+"margin-left:15%;", disabled:isLastPage}) );
+		buttons.push( new Ext.LinkButton({text:Repository.I18N.ModelRangeSelection.next, click:this._next.bind(this), style:buttonStyle+"margin-left:15%;", disabled:isLastPage}) );
 		
 
 		this.myPanel = new Ext.Panel({

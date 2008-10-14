@@ -70,10 +70,33 @@ Repository.I18N.TypeFilter.name = "Type Filter";
 
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
 Repository.I18N.TagInfo.name = "Tags"
+Repository.I18N.TagInfo.deleteText = "Delete"
+Repository.I18N.TagInfo.none = "none"
+Repository.I18N.TagInfo.shared = "Shared tags:"
+Repository.I18N.TagInfo.newTag = "New Tag"
+Repository.I18N.TagInfo.addTag = "Add"
+		
+if(!Repository.I18N.ModelRangeSelection) Repository.I18N.ModelRangeSelection = {};
+Repository.I18N.ModelRangeSelection.previous = "<< Previous Page"
+Repository.I18N.ModelRangeSelection.next = "Next Page >>"
+Repository.I18N.ModelRangeSelection.last = "Last"
+Repository.I18N.ModelRangeSelection.first = "First"
 
 if(!Repository.I18N.AccessInfo) Repository.I18N.AccessInfo = {};
 Repository.I18N.AccessInfo.name = "Access Rights"
-
+Repository.I18N.AccessInfo.publicText = "Public";
+Repository.I18N.AccessInfo.notPublicText  = "Not Public";
+Repository.I18N.AccessInfo.noneIsSelected  = "None is selected";
+Repository.I18N.AccessInfo.none  = "none";
+Repository.I18N.AccessInfo.deleteText  = "Delete";
+Repository.I18N.AccessInfo.publish  = "Publishing";
+Repository.I18N.AccessInfo.unPublish  = "Stop Publishing";
+Repository.I18N.AccessInfo.owner = "Owner:"
+Repository.I18N.AccessInfo.contributer = "Contributers:"
+Repository.I18N.AccessInfo.reader = "Readers:"
+Repository.I18N.AccessInfo.openid = "OpenID"
+Repository.I18N.AccessInfo.addReader = "Add as Reader"
+Repository.I18N.AccessInfo.addContributer = "Add as Contributer"
 
 
 
