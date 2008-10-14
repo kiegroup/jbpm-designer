@@ -69,7 +69,7 @@ public class User extends BusinessObject {
 		Persistance.commit();
 		
 		if (this.subject == null) {
-			this.subject = Subject.createNewSubject();
+			this.subject = Subject.createNewSubject(this.getId());
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class User extends BusinessObject {
 		
 		// Create identity and put it at the right place in the tree
 		Identity identity =  Identity.ensureSubject(openid);
-		Subject.createNewSubject(countryCode, dob, email, fullname, gender, languageCode, nickname, password, postcode, visibility);
+		Subject.createNewSubject(identity.getId(), countryCode, dob, email, fullname, gender, languageCode, nickname, password, postcode, visibility);
 		
 		return new User(identity);
 	}
@@ -88,7 +88,7 @@ public class User extends BusinessObject {
 		
 		// Create identity and put it at the right place in the tree
 		Identity identity =  Identity.ensureSubject(openid);
-		Subject.createNewSubject();
+		Subject.createNewSubject(identity.getId());
 		
 		return new User(identity);
 	}

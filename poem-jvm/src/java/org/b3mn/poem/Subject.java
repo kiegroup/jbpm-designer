@@ -69,24 +69,26 @@ public class Subject {
 		
 	}
 	
-	public static Subject createNewSubject() {
+	public static Subject createNewSubject(int subjectId) {
 		
 		Subject subject = new Subject();
 
+		subject.ident_id = subjectId;
 		subject.firstLogin = new Date();
 		subject.lastLogin = new Date();
 		subject.loginCount = 0;
 
-		Persistance.getSession().persist(subject);
+		Persistance.getSession().save(subject);
 		return subject;
 	}
 	
-	public static Subject createNewSubject(String countryCode, Date dob, String email, 
+	public static Subject createNewSubject(int subjectId, String countryCode, Date dob, String email, 
 			String fullname, String gender, String languageCode,
 			String nickname, String password, String postcode, String visibility) {
 		
 		Subject subject = new Subject();
 		
+		subject.ident_id = subjectId;
 		subject.countryCode = countryCode;
 		subject.dob = dob;
 		subject.email = email;
@@ -100,7 +102,7 @@ public class Subject {
 		subject.password = password;
 		subject.postcode = postcode;
 		subject.visibility = visibility;
-		Persistance.getSession().persist(subject);
+		Persistance.getSession().save(subject);
 		return subject;
 	}
 
