@@ -32,6 +32,7 @@ if(!Repository.Plugins) Repository.Plugins = {};
 
 Repository.Plugins.SortingSupport = {
 	
+	
 	construct: function( facade ) {
 		
 		// define Create New Model menu
@@ -56,7 +57,25 @@ Repository.Plugins.SortingSupport = {
 
 	},
 	
-	_setSorting: function( type ){
+	_setSorting: function( type, menuItem ){
+	
+		menuItem.sort = menuItem.sort && menuItem.sort == Repository.Config.SORT_DESC ? Repository.Config.SORT_ASC : Repository.Config.SORT_DESC
+		
+		if( menuItem.sort == Repository.Config.SORT_ASC ){
+			menuItem.setIconClass('repository_ext_icon_arrow_up')
+		} else {
+			menuItem.setIconClass('repository_ext_icon_arrow_down')
+		}
+		
+		menuItem.parentMenu.items.each(function(menuIt){ 
+			if( menuIt !== menuItem ){
+				menuIt.sort = null; 
+				menuIt.setIconClass('');
+			}
+		})
+		
+
+		this.facade.setSort( type, menuItem.sort);
 		
 	}
 };

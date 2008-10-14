@@ -53,7 +53,7 @@ Repository.Core.Repository = {
 			
 			this._filters = new Hash();
 			this._currentSort = null;
-			
+			this._currentSortDirection = null;
 			// UI
 			this._controls = new Object();
 			
@@ -67,8 +67,7 @@ Repository.Core.Repository = {
 			// are specified in the plugins.xml
 			this._loadPlugins();
 			
-			this.setSort('lastChange');
-			this.applyFilter();
+			this.setSort('lastChange', Repository.Config.SORT_DESC);
 			
 		},
 		
@@ -114,8 +113,10 @@ Repository.Core.Repository = {
 			return this._currentUser == this._publicUser;
 		},
 		
-		setSort : function(sort) {
-			this._currentSort = sort;
+		setSort : function(sort, direction) {
+			this._currentSort 			= sort;
+			this._currentSortDirection	= direction ? direction : Repository.Config.SORT_DESC;
+			this.applyFilter();
 		},
 		
 		getSort : function() {
@@ -134,6 +135,9 @@ Repository.Core.Repository = {
 						asynchronous : false,
 						onSuccess: function(transport) {
 							this._filteredModels = eval(transport.responseText);
+							if( this._currentSortDirection == Repository.Config.SORT_ASC)
+								this._filteredModels.reverse()
+								
 							this._filterChangedHandler.invoke(this._filteredModels);
 						}.bind(this),
 						parameters : params,
@@ -330,6 +334,7 @@ Repository.Core.Repository = {
 							text 	: buttonConfig.text,
 							handler : buttonConfig.handler,
 							icon 	: buttonConfig.icon,
+							hideOnClick : false,
 							iconCls	: 'repository_ext_icon_align_center'
 						});
 					} else {

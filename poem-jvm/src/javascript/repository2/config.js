@@ -21,3 +21,7 @@ if( !Repository.Config ){ Repository.Config = {} }
 Repository.Config.PATH 				= '/backend/repository2/'
 Repository.Config.PLUGIN_PATH 		= 'plugins/'
 Repository.Config.PLUGIN_CONFIG 	= 'plugins.xml'
+
+
+Repository.Config.SORT_DESC 		= 'desc'
+Repository.Config.SORT_ASC 			= 'asc'

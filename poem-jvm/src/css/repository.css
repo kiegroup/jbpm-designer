@@ -48,6 +48,15 @@ a:hover, a:focus, a:active {
 	height:auto;
 	vertical-align:middle;
 }
+
+.repository_ext_icon_arrow_up {
+	background-image:url(/backend/images/silk/arrow_up.png);
+}
+
+.repository_ext_icon_arrow_down {
+	background-image:url(/backend/images/silk/arrow_down.png);
+}
+
 /**  FIXES FOR EXT 2.0.2 **/
 
 .x-date-middle {
