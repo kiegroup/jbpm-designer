@@ -181,8 +181,8 @@ Repository.Core.DataCache = {
 	
 	getModelTypes : function() {
 		// lazy loading
-		if (!this.modelTypes) {
-			new Ajax.Request("/oryx/stencilsets/stencilsets.json", 
+		if (!this._modelTypes) {
+			new Ajax.Request( Repository.Config.STENCILSET_URI, 
 			 {
 				method: "get",
 				asynchronous : false,

@@ -50,6 +50,7 @@ Repository.I18N.ModelRangeSelection.previous = "<< Vorherige Seite"
 Repository.I18N.ModelRangeSelection.next = "Nächste Seite >>"
 Repository.I18N.ModelRangeSelection.last = "Erste"
 Repository.I18N.ModelRangeSelection.first = "Letzte"
+Repository.I18N.ModelRangeSelection.modelsOf = "(#{number} von #{size} Modellen)" 
 
 if(!Repository.I18N.AccessInfo) Repository.I18N.AccessInfo = {};
 Repository.I18N.AccessInfo.name = "Rechteverwaltung"

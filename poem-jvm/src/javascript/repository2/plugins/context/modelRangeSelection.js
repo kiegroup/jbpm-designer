@@ -52,6 +52,7 @@ Repository.Plugins.ModelRangeSelection = {
 		var buttonStyle	= "padding:5px;"
 				
 		var size		= this.facade.getFilteredModels().length;
+		var shownModels	= this.facade.getDisplayedModels().length;
 		var index		= this.facade.getCurrentView().lastStartIndexOfDisplayedModel;
 		var pageSize	= this.facade.getCurrentView().numOfDisplayedModels;
 
@@ -66,16 +67,18 @@ Repository.Plugins.ModelRangeSelection = {
 		
 			
 		// Generate Page Buttons
-		var firstIndex 	= Math.max( index - (2*pageSize), 0)
-		var startPage	= Math.floor( firstIndex / pageSize );
-		var currentPage	= Math.max( Math.floor( index / pageSize ) , 0)
-		var endPage		= startPage + 5;//(((currentPage-startPage) * 2) + 1);
+
+		var currentPage	= Math.max( Math.floor( index / pageSize ) , 0);
+		var lastPage	= Math.floor( size / pageSize );
+		var endPage		= Math.max( Math.min( currentPage + 2, lastPage-1 ), 0);
+		var startPage	= Math.max( endPage - 4, 0);
+		endPage			= Math.max(  Math.min( startPage + 4, lastPage-1 ), 0);
 		
 		if( startPage != 0 ){
 			buttons.push( {xtype:'label', text:'...', style:buttonStyle} )
 		}
 		
-		for( startPage; startPage*pageSize < size && startPage < endPage; startPage++ ){
+		for( startPage; startPage <= endPage; startPage++ ){
 			var style = currentPage == startPage ? buttonStyle + "font-size:13px;font-weight:bold;color:#000000;": buttonStyle;
 			buttons.push( new Ext.LinkButton({text:(startPage+1)+"", click:this._setRange.bind(this, startPage*pageSize), style:style, disabled: currentPage == startPage}) );
 		}
@@ -84,9 +87,13 @@ Repository.Plugins.ModelRangeSelection = {
 		if( !(startPage*pageSize > size-pageSize)){
 			buttons.push( {xtype:'label', text:'...', style:buttonStyle} )
 		}
-				
+						
 		// Last
 		buttons.push( new Ext.LinkButton({text:Repository.I18N.ModelRangeSelection.last, click:this._setRange.bind(this, size - (size % pageSize)), style:buttonStyle, disabled:isLastPage}) );
+		
+		var labelModelOf = new Template(Repository.I18N.ModelRangeSelection.modelsOf).evaluate({number: shownModels, size: size });
+		buttons.push( {xtype:'label', text:labelModelOf, style:'margin-left:30px;'} )
+		
 		// Next
 		buttons.push( new Ext.LinkButton({text:Repository.I18N.ModelRangeSelection.next, click:this._next.bind(this), style:buttonStyle+"margin-left:15%;", disabled:isLastPage}) );
 		

@@ -61,8 +61,8 @@ public class ThumbnailRenderer extends PngRenderer {
 				try {
 					TranscoderOutput output = new TranscoderOutput(outBytes);
 					
-					transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, WIDTH);
-					transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, HEIGHT);
+					transcoder.addTranscodingHint(PNGTranscoder.KEY_MAX_WIDTH, WIDTH);
+					transcoder.addTranscodingHint(PNGTranscoder.KEY_MAX_HEIGHT, HEIGHT);
 					// Do the transformation
 					transcoder.transcode(input, output);
 					representation.setPngSmall(outBytes.toByteArray());
