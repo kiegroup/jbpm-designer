@@ -6,20 +6,20 @@
  * Save and triple generation behaviour. Use this area to configure
  * data management to your needs.
  */
-const USE_ASYNCHRONOUS_REQUESTS =		true;
-const DISCARD_UNUSED_TRIPLES =			true;
-const PREFER_SPANS_OVER_DIVS =			true;
-const PREFER_TITLE_OVER_TEXTNODE =		false;
-const RESOURCE_ID_PREFIX =				'resource';
+var USE_ASYNCHRONOUS_REQUESTS =		true;
+var DISCARD_UNUSED_TRIPLES =			true;
+var PREFER_SPANS_OVER_DIVS =			true;
+var PREFER_TITLE_OVER_TEXTNODE =		false;
+var RESOURCE_ID_PREFIX =				'resource';
 
-const SHOW_DEBUG_ALERTS_WHEN_SAVING =	false;
-const SHOW_EXTENDED_DEBUG_INFORMATION =	false;
+var SHOW_DEBUG_ALERTS_WHEN_SAVING =	false;
+var SHOW_EXTENDED_DEBUG_INFORMATION =	false;
 
 /*
  * Back end specific workarounds.
  */
 
-const USE_ARESS_WORKAROUNDS =		true;
+var USE_ARESS_WORKAROUNDS =		true;
 
 /*
  * Data management constants. Do not change these, as they are used
@@ -28,19 +28,19 @@ const USE_ARESS_WORKAROUNDS =		true;
  */
 
 // Resource constants
-const RESOURCE_CREATED =			0x01;
-const RESOURCE_REMOVED =			0x02;
-const RESOURCE_SAVED =				0x04;
-const RESOURCE_RELOADED =			0x08;
-const RESOURCE_SYNCHRONIZED = 		0x10;
+var RESOURCE_CREATED =			0x01;
+var RESOURCE_REMOVED =			0x02;
+var RESOURCE_SAVED =				0x04;
+var RESOURCE_RELOADED =			0x08;
+var RESOURCE_SYNCHRONIZED = 		0x10;
 
 // Triple constants
-const TRIPLE_REMOVE =	0x01;
-const TRIPLE_ADD =		0x02;
-const TRIPLE_RELOAD =	0x04;
-const TRIPLE_SAVE =		0x08;
+var TRIPLE_REMOVE =	0x01;
+var TRIPLE_ADD =		0x02;
+var TRIPLE_RELOAD =	0x04;
+var TRIPLE_SAVE =		0x08;
 
-const PROCESSDATA_REF = 'processdata';
+var PROCESSDATA_REF = 'processdata';
 
 // HTTP status code constants
 //

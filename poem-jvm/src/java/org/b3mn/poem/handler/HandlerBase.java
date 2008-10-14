@@ -259,8 +259,7 @@ public abstract class HandlerBase {
       	  	+ "<!-- libraries -->\n"
       	  	+ "<script src=\"" + oryx_path + "lib/prototype-1.5.1.js\" type=\"text/javascript\" />\n"
       	  	+ "<script src=\"" + oryx_path + "lib/path_parser.js\" type=\"text/javascript\" />\n"
-      	  	+ "<script src=\"" + oryx_path + "lib/ext-2.0.2/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />\n"
-      	  	+ "<script src=\"" + oryx_path + "lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />\n"
+      	  	+ "<script src=\"" + oryx_path + "lib/ext-2.0.2/adapter/ext/ext-base.js\" type=\"text/javascript\" />\n"
       	  	+ "<script src=\"" + oryx_path + "lib/ext-2.0.2/ext-all.js\" type=\"text/javascript\" />\n"
       	  	+ "<script src=\"" + oryx_path + "lib/ext-2.0.2/color-field.js\" type=\"text/javascript\" />\n"
       	  	+ "<style media=\"screen\" type=\"text/css\">\n"
@@ -268,9 +267,6 @@ public abstract class HandlerBase {
       	  	+ "@import url(\"" + oryx_path + "lib/ext-2.0.2/resources/css/xtheme-gray.css\");\n"
       	  	+ "</style>\n"
 
-      	  	+ "<script src=\"" + oryx_path + "shared/kickstart.js\" type=\"text/javascript\" />\n"
-      	  	+ "<script src=\"" + oryx_path + "shared/erdfparser.js\" type=\"text/javascript\" />\n"
-      	  	+ "<script src=\"" + oryx_path + "shared/datamanager.js\" type=\"text/javascript\" />\n"
       	  	+ "<!-- oryx editor -->\n"
       	  	+ "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
       	  	// EN_US is default an base language

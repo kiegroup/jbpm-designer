@@ -197,7 +197,10 @@
         <copy todir='build' file='src/scripts/Core/config.js'/>
         <concat destfile='build/oryx.debug.js'>
             <filelist id="coresourcefiles" dir="src">
-                <file name='scripts/oryx.js'/>
+                <file name='scripts/kickstart.js'/>
+				<file name='scripts/erdfparser.js'/>
+				<file name='scripts/datamanager.js'/>
+				<file name='scripts/oryx.js'/>
                 <file name='scripts/Core/SVG/editpathhandler.js'/>
                 <file name='scripts/Core/SVG/minmaxpathhandler.js'/>
                 <file name='scripts/Core/SVG/pointspathhandler.js'/>
@@ -236,9 +239,6 @@
 				<exclude name="**/*.jar"/>
 				<exclude name="deprecated/**"/>
 			</fileset>
-        </copy>
-        <copy todir='build/shared'>
-            <fileset dir='shared' includes='**/*.js'/>
         </copy>
         <echo>
             Copied dependencies into library destination
