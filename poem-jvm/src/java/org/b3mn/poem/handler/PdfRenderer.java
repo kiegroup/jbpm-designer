@@ -37,7 +37,7 @@ import org.apache.fop.svg.PDFTranscoder;
 import org.b3mn.poem.Representation;
 import org.b3mn.poem.util.ExportHandler;
 
-@ExportHandler(uri="/pdf", formatName="PDF", iconUrl="")
+@ExportHandler(uri="/pdf", formatName="PDF", iconUrl="/backend/images/silk/page_white_acrobat.png")
 public class PdfRenderer extends ImageRenderer{
 
     @Override

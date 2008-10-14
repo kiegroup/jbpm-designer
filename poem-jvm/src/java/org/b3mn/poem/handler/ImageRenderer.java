@@ -34,7 +34,7 @@ import org.b3mn.poem.Identity;
 import org.b3mn.poem.Representation;
 import org.b3mn.poem.util.ExportHandler;
 
-@ExportHandler(uri="/svg", formatName="SVG", iconUrl="")
+@ExportHandler(uri="/svg", formatName="SVG", iconUrl="/backend/images/silk/page_white_vector.png")
 public class ImageRenderer extends HandlerBase {
 	
 	@Override

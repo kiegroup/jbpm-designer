@@ -39,7 +39,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.b3mn.poem.Representation;
 import org.b3mn.poem.util.ExportHandler;
 
-@ExportHandler(uri="/png", formatName="PNG", iconUrl="")
+@ExportHandler(uri="/png", formatName="PNG", iconUrl="/backend/images/silk/picture.png")
 public class PngRenderer extends ImageRenderer {
 	
 	@Override

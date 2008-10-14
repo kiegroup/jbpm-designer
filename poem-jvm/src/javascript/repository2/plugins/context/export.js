@@ -76,15 +76,15 @@ Repository.Plugins.Export = {
 				
 				var panel = new Ext.Panel({
 					layout	: 'absolute',
-					height	: 40,
+					height	: 35,
 					border	: false,
 					items	: [
 								// IMAGE
-								new Ext.Panel({border:false, html:"<img src='"+extention.iconUrl+"/>", x:0,y:0}),
+								new Ext.Panel({border:false, html:"<img src='"+extention.iconUrl+"'/>", x:0,y:0}),
 								// TITLE
-								new Ext.Panel({border:false, items:[{xtype:'label', text:extention.name, style:'font-weight:bold;'}], x:40,y:0}),
+								new Ext.Panel({border:false, items:[{xtype:'label', text:extention.name, style:'font-weight:bold;'}], x:25,y:0}),
 								// LINK
-								new Ext.Panel({border:false, items:[button], x:40,y:15})								
+								new Ext.Panel({border:false, items:[button], x:25,y:12})								
 								]
 				})
 				

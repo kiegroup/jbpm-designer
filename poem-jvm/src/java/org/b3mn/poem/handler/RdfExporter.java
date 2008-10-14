@@ -33,7 +33,7 @@ import javax.xml.transform.TransformerException;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.util.ExportHandler;
 
-@ExportHandler(uri="/rdf", formatName="RDF", iconUrl="")
+@ExportHandler(uri="/rdf", formatName="RDF", iconUrl="/backend/images/silk/page_white_code.png")
 public class RdfExporter extends HandlerBase {
 	
 	@Override

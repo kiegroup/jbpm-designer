@@ -105,6 +105,7 @@ Repository.I18N.AccessInfo.addContributer = "Add as Contributer"
 if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
 Repository.I18N.SortingSupport.name = "Sorting";
 Repository.I18N.SortingSupport.lastchange = "By last change"
+Repository.I18N.SortingSupport.title = "By title"
 
 if(!Repository.I18N.Export) Repository.I18N.Export = {};
 Repository.I18N.Export.name = "Export";

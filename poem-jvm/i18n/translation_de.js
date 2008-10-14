@@ -71,6 +71,7 @@ Repository.I18N.AccessInfo.addContributer = "Schreibrechte hinzufügen"
 if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
 Repository.I18N.SortingSupport.name = "Sortierung";
 Repository.I18N.SortingSupport.lastchange = "Nach letzter Änderung"
+Repository.I18N.SortingSupport.title = "Nach Titel"
 
 if(!Repository.I18N.Export) Repository.I18N.Export = {};
 Repository.I18N.Export.name = "Export";

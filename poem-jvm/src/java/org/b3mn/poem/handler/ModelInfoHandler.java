@@ -106,5 +106,18 @@ public class ModelInfoHandler extends  HandlerBase {
 		return results;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@SortMethod(SortName="title")	
+	public static List<String> sortByTitle(Identity subject) {
+		List<String> results = Persistance.getSession()
+		.createSQLQuery("SELECT identity.uri FROM identity, access, representation "
+		+ "WHERE access.subject_id=:subject_id AND access.object_id=identity.id AND representation.ident_id=access.object_id " 
+		+ "ORDER BY representation.title")
+		.setInteger("subject_id", subject.getId())
+		.list();
+	
+		Persistance.commit();
+		return results;
+	}
 	
 }
