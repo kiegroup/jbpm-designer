@@ -42,6 +42,8 @@ public class HandlerInfo {
 	protected boolean needsModelContext;
 	protected boolean permitPublicUserAccess;
 	protected boolean filterBrowser;
+	protected ExportInfo exportInfo;
+
 	protected Map<String, AccessRight> accessRights = new HashMap<String, AccessRight>();
 	
 	private static Map<String, Method> filterMapping = new HashMap<String, Method>();
@@ -58,6 +60,10 @@ public class HandlerInfo {
 		return sortMapping;
 	}
 
+	public ExportInfo getExportInfo() {
+		return exportInfo;
+	}
+	
 	public String getUri() {
 		return uri;
 	}
@@ -100,7 +106,7 @@ public class HandlerInfo {
 			HandlerWithoutModelContext annotation = handlerClass.getAnnotation(HandlerWithoutModelContext.class);
 			this.uri = annotation.uri();
 			this.needsModelContext = false;
-			this.permitPublicUserAccess = annotation.permitPublicUserAccess();
+			this.permitPublicUserAccess = annotation.denyPublicUserAccess();
 			this.filterBrowser = annotation.filterBrowser();
 			this.handlerClass = handlerClass;
 		}
@@ -108,7 +114,7 @@ public class HandlerInfo {
 			HandlerWithModelContext annotation = handlerClass.getAnnotation(HandlerWithModelContext.class);
 			this.uri = annotation.uri();
 			this.needsModelContext = true;
-			this.permitPublicUserAccess = annotation.permitPublicUserAccess();
+			this.permitPublicUserAccess = annotation.denyPublicUserAccess();
 			this.filterBrowser = annotation.filterBrowser();
 			this.handlerClass = handlerClass;
 			this.accessRights.put(null, annotation.accessRestriction());
@@ -137,10 +143,12 @@ public class HandlerInfo {
 			ExportHandler annotation = handlerClass.getAnnotation(ExportHandler.class);
 			this.uri = annotation.uri();
 			this.needsModelContext = true;
-			this.permitPublicUserAccess = annotation.permitPublicUserAccess();
+			this.permitPublicUserAccess = annotation.denyPublicUserAccess();
 			this.filterBrowser = annotation.filterBrowser();
 			this.handlerClass = handlerClass;
 			this.accessRights.put(null, annotation.accessRestriction());
+			this.exportInfo = new ExportInfo(annotation);
+
 		}
 		
 		try {

@@ -23,17 +23,15 @@
 
 package org.b3mn.poem.handler;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.manager.ConfigurationManager;
+import org.b3mn.poem.util.ExportInfo;
 import org.b3mn.poem.util.HandlerInfo;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
+import org.b3mn.poem.util.JavaBeanJsonTransformation;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,11 +58,25 @@ public class ConfigurationHandler extends  HandlerBase {
 		return new JSONArray(HandlerInfo.getSortMapping().keySet());
 	}
 	
+	private JSONArray getAvailableExports() throws Exception {
+		JSONArray availableExports = new JSONArray();
+		for (ExportInfo info : getDispatcher().getExportInfos()) {
+			JSONObject export = new JSONObject();
+			export.put("name", info.getFormatName());
+			export.put("uri", info.getUri());
+			export.put("iconUrl", info.getIconUrl());
+			
+			availableExports.put(export);
+		}
+		return availableExports;
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
 		JSONObject envelope = new JSONObject();
 		envelope.put("availableLanguages", getAvailableLanguages());
 		envelope.put("availableSorts", getAvailableSorts());
+		envelope.put("availableExports", getAvailableExports());
 		response.getWriter().println(envelope.toString());
 	}
 	

@@ -23,6 +23,7 @@
 
 package org.b3mn.poem;
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -129,6 +130,8 @@ public class Dispatcher extends HttpServlet {
 				if (info != null) {
 					// The reflection logic is implemented in the HandlerInfo.load() method
 					this.knownHandlers.put(info.getUri(), info);
+					if  (info.getExportInfo() != null)
+						this.exportInfos.add(info.getExportInfo());
 				}
 			} catch (Exception e) {}	// Ignore handler if an exception occurs
 		}
@@ -167,9 +170,8 @@ public class Dispatcher extends HttpServlet {
 			if (this.knownHandlers.get(uri).getHandlerInstance() != null) {
 				return this.knownHandlers.get(uri).getHandlerInstance();
 			} else {
-				// TODO: Check if handlerClass is derived from HandlerBase and use 
-				// java.lang.reflect.Constructor.newInstance() to create the instance
-				HandlerBase handler = (HandlerBase)  this.knownHandlers.get(uri).getHandlerClass().newInstance();
+				Constructor<? extends HandlerBase> constructor = this.knownHandlers.get(uri).getHandlerClass().getConstructor((Class[])null);
+				HandlerBase handler = (HandlerBase)  constructor.newInstance();
 				handler.setServletContext(this.getServletContext()); // Initialize handler with ServletContext
 				handler.init(); // Initialize the handler
 				this.knownHandlers.get(uri).setHandlerInstance(handler); // Store the handler instance in ModelInfo

@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 public @interface HandlerWithModelContext {
 	
 	String uri();
-	boolean permitPublicUserAccess() default false;
+	boolean denyPublicUserAccess() default false;
 	boolean filterBrowser() default false;
 	AccessRight accessRestriction() default AccessRight.READ;
 }

@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
 public @interface HandlerWithoutModelContext {
 
 	String uri();
-	boolean permitPublicUserAccess() default false;
+	boolean denyPublicUserAccess() default false;
 	boolean filterBrowser() default false;
 }
