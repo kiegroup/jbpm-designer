@@ -38,7 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@HandlerWithoutModelContext(uri="/config", permitPublicUserAccess=true)
+@HandlerWithoutModelContext(uri="/config")
 public class ConfigurationHandler extends  HandlerBase {
 	
 	private JSONArray getAvailableLanguages() throws Exception {
