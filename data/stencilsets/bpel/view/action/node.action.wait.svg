@@ -2,15 +2,18 @@
 <svg
    xmlns="http://www.w3.org/2000/svg"
    xmlns:oryx="http://www.b3mn.org/oryx"
-   width="40"
-   height="40"
+   width="102"
+   height="82"
    version="1.0">
   <defs></defs>
   <oryx:magnets>
   	<oryx:magnet oryx:cx="16" oryx:cy="16" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill">
-    <circle oryx:resize="vertical horizontal" id="mainBody" cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1" />
+  	<rect id="mainBody" oryx:resize="vertical horizontal" x="0" y="0" width="100" height="80" rx="10" ry="10" stroke="black" stroke-width="1" fill="white" />
+    	<text font-size="14" id="label" x="50" y="50" oryx:align="middle center" stroke="black"></text>
+    
+    <circle oryx:resize="vertical horizontal" cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1" />
     <circle oryx:resize="vertical horizontal" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
     
     <circle oryx:resize="vertical horizontal" cx="16" cy="16" r="10" stroke="black" fill="none" stroke-width="1"/>

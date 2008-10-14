@@ -707,7 +707,7 @@
 			"groups_de":["Aktionen (WS)"],
 			"description":"An Invoke activity.",
 			"description_de":"Eine Invoke-Aktivität.",
-			"view":"action/node.action.invoke.svg",
+			"view":"action(ws)/node.action.invoke.svg",
 			"icon":"invoke.png",
 			"roles": ["Activity","CompensationHandlerHolder"],
 			"layout":function(shape) {		
@@ -1071,7 +1071,7 @@
 			"groups_de":["Aktionen (WS)"],
 			"description":"An Receive activity.",
 			"description_de":"Eine Receive-Aktivität.",
-			"view":"action/node.action.receive.svg",
+			"view":"action(ws)/node.action.receive.svg",
 			"icon":"receive.png",
 			"roles": ["Activity"],
 			"properties": [
@@ -1371,7 +1371,7 @@
 			"groups_de":["Aktionen (WS)"],
 			"description":"An Reply activity.",
 			"description_de":"Eine Reply Aktivität.",
-			"view":"action/node.action.reply.svg",
+			"view":"action(ws)/node.action.reply.svg",
 			"icon":"reply.png",
 			"roles": ["Activity"],
 			"properties": [
@@ -1900,7 +1900,7 @@
 			"groups_de":["Assignment"],
 			"description":"Copy",
 			"description_de":"Copieren.",
-			"view":"action/node.action.empty.svg",
+			"view":"assignment/node.action.copy.svg",
 			"icon":"copy.png",
 			// TODO : delete role "Activity"
 			"roles": ["Activity"],
@@ -3357,7 +3357,7 @@
 			"groups_de":["Aktionen"],
 			"description":"An throw activity.",
 			"description_de":"Eine Throw-Aktivität.",
-			"view":"fault/node.fault.throw.svg",
+			"view":"action/node.action.throw.svg",
 			"icon":"throw.png",
 			"roles": ["Activity"],
 			"properties": [
@@ -3524,7 +3524,7 @@
 			"groups_de":["Aktionen"],
 			"description":"An Exit activity.",
 			"description_de":"Eine Exit-Aktivität.",
-			"view":"fault/node.fault.exit.svg",
+			"view":"action/node.action.exit.svg",
 			"icon":"exit.png",
 			"roles": ["Activity"],
 			"properties": [
@@ -3661,7 +3661,7 @@
 			"groups_de":["Aktionen"],
 			"description":"An rethrow activity.",
 			"description_de":"Eine Rethrow-Aktivität.",
-			"view":"fault/node.fault.rethrow.svg",
+			"view":"action/node.action.rethrow.svg",
 			"icon":"throw.png",
 			"roles": ["Activity"],
 			"properties": [
@@ -3799,7 +3799,7 @@
 			"description_de":"Ein If-Container",
 			"groups":["If"],
 			"groups_de":["If"],
-			"view":"controls/controls.ifHolder.svg",
+			"view":"if/node.if_container.svg",
 			"icon":"if_container.png",
 			"roles": ["Activity"],
 			"layout":function(shape) {		
@@ -3943,7 +3943,7 @@
 			"groups_de":["If"],
 			"description":"One If-Branch",
 			"description_de":"Ein If-Zweig",
-			"view":"controls/node.if_condition.svg",
+			"view":"if/node.if_branch.svg",
 			"icon":"if_branch.png",
 			//TODO delete role "Activity"
 			"roles": ["Activity","SingleActivityContainer"],
@@ -4014,7 +4014,7 @@
 			"groups_de":["If"],
 			"description":"one Else-Branch",
 			"description_de":"Ein Else-Zweig",
-			"view":"controls/node.if_condition.svg",
+			"view":"if/node.else_branch.svg",
 			"icon":"else_branch.png",
 			//TODO delete role "Activity"
 			"roles": ["Activity","SingleActivityContainer"],
@@ -4047,7 +4047,7 @@
 			"description_de":"Ein Flow",
 			"groups":["Flow and Sequence"],
 			"groups_de":["Flow und Sequence"],
-			"view":"controls/controls.flow.svg",
+			"view":"flow and sequence/node.flow.svg",
 			"icon":"flow.png",
 			"roles": ["Activity","MultiActivitiesContainer"],
 			"layout":function(shape) {		
@@ -4189,7 +4189,7 @@
 			"description_de":"Eine Pick-Aktivität",
 			"groups":["Pick"],
 			"groups_de":["Pick"],
-			"view":"controls/controls.pick.svg",
+			"view":"pick/node.pick.svg",
 			"icon":"task.png",
 			"roles": ["Activity"],
 			"layout":function(shape) {		
@@ -4361,7 +4361,7 @@
 			"description_de":"Ein onMessage-Zweig der Aktivität Pick",
 			"groups":["Pick"],
 			"groups_de":["Pick"],
-			"view":"handler/node.handler.onMessage.svg",
+			"view":"pick/node.handler.onMessage.svg",
 			"icon":"onMessage.png",
 			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
@@ -4554,7 +4554,7 @@
 			"description_de":"Ein Sequence",
 			"groups":["Flow and Sequence"],
 			"groups_de":["Flow und Sequence"],
-			"view":"controls/controls.sequence.svg",
+			"view":"flow and sequence/node.sequence.svg",
 			"icon":"sequence.png",
 			"roles": ["Activity","MultiActivitiesContainer"],
 			"layout":function(shape) {		
@@ -5610,7 +5610,7 @@
 			"description_de":"Ein Scope",
 			"groups":["Scope"],
 			"groups_de":["Scope"],
-			"view":"controls/controls.scope.svg",
+			"view":"scope/node.scope.svg",
 			"icon":"scope.png",
 			"roles": ["Activity","SingleActivityContainer","HandlerHolder","CompensationHandlerHolder"],
 			"layout":function(shape) {		
@@ -6354,7 +6354,7 @@
 			"description_de":"Ein onEvent in der Aktivität EventHandlers",
 			"groups":["Scope"],
 			"groups_de":["Scope"],
-			"view":"handler/node.handler.onEvent.svg",
+			"view":"scope/node.handler.onEvent.svg",
 			"icon":"onEvent.png",
 			// TODO : delete role "Activity"
 			"roles": ["SingleActivityContainer","Activity"],
@@ -6601,7 +6601,7 @@
 			"description_de":"Ein Compensationsbehandlung",
 			"groups":["Scope"],
 			"groups_de":["Scope"],
-			"view":"compensate/node.compensate.compensateHandler.svg",
+			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"compensationHandler.png",
 			// TODO : delete role "Activity"
 			"roles": ["Handler","Activity","SingleActivityContainer"],
@@ -6650,7 +6650,7 @@
 			"description_de":"Ein Termination-Behandlung",
 			"groups":["Scope"],
 			"groups_de":["Scope"],
-			"view":"handler/node.handler.terminationHandler.svg",
+			"view":"scope/node.handler.terminationHandler.svg",
 			"icon":"termination.png",
 			"roles": ["Handler","SingleActivityContainer"],
 			"layout":function(shape) {		
@@ -6698,7 +6698,7 @@
 			"description_de":"Ein catch",
 			"groups":["Scope"],
 			"groups_de":["Scope"],
-			"view":"handler/node.handler.catch1.svg",
+			"view":"scope/node.handler.catch.svg",
 			"icon":"catch.png",
 			// TODO : delete role "Activity"
 			"roles": ["SingleActivityContainer","Activity"],
@@ -6805,7 +6805,7 @@
 			"description_de":"Ein Catch All",
 			"groups":["Scope"],
 			"groups_de":["Scope"],
-			"view":"handler/node.handler.catchAll.svg",
+			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
 			// TODO : delete role "Activity"
 			"roles": ["Activity","SingleActivityContainer"],
@@ -6853,7 +6853,7 @@
 			"description_de":"Definiere eine Kante des Flow-Elements",
 			"groups":["Flow and Sequence"],
 			"groups_de":["Flow und Sequence"],
-			"view":"controls/edge.sequenceFlow.svg",
+			"view":"edges/edge.BPELLink.svg",
 			"icon":"sequence_flow.png",
 			"roles": [],
 			"properties": [
