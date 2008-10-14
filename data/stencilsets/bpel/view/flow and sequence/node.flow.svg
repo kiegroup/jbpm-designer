@@ -9,22 +9,23 @@
   
   <defs >
   </defs>
+  
   <oryx:magnets>
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:default="yes" />
     <oryx:magnet
        oryx:cx="0"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="left" />
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="250"
+       oryx:cy="140"
        oryx:anchors="bottom" />
     <oryx:magnet
        oryx:cx="300"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="right" />
     <oryx:magnet
        oryx:cx="150"
@@ -36,9 +37,8 @@
     <rect
        y="0"
        x="0"
-       height="250"
+       height="140"
        width="300"
-       
        id="mainBody"
 	   oryx:resize="vertical horizontal"
        stroke="black" fill="white" stroke-width="1" />
@@ -49,11 +49,14 @@
        x="10"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
        xml:space="preserve"></text>
-
-    <path  oryx:anchors="top left" fill="none" stroke="black" stroke-width="2" 
-    d="M 30.668537,20.668537 L 60.668537,20.668537 L 60.668537,30.668537 L 30.668537,30.668537 L 30.668537,20.668537 z 
-    M 60.668537,40.668537 L 90.668537,40.668537 L 90.668537,50.668537 L 60.668537,50.668537 L 60.668537,40.668537 z 
-    M 30.668537,60.668537 L 60.668537,60.668537 L 60.668537,70.668537 L 30.668537,70.668537 L 30.668537,60.668537 z 
-    M 54.626402,31.085418 L 69.809774,40.63307" />
+    <path  
+    	oryx:anchors="top left" 
+    	fill="none" 
+    	stroke="black" 
+    	stroke-width="2" 
+	    d="M 30.668537,20.668537 L 60.668537,20.668537 L 60.668537,30.668537 L 30.668537,30.668537 L 30.668537,20.668537 z 
+	    M 60.668537,40.668537 L 90.668537,40.668537 L 90.668537,50.668537 L 60.668537,50.668537 L 60.668537,40.668537 z 
+	    M 30.668537,60.668537 L 60.668537,60.668537 L 60.668537,70.668537 L 30.668537,70.668537 L 30.668537,60.668537 z 
+	    M 54.626402,31.085418 L 69.809774,40.63307" />
   </g>
 </svg>

@@ -9,30 +9,29 @@
   
   <defs >
   </defs>
+  
   <oryx:magnets>
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:default="yes" />
     <oryx:magnet
        oryx:cx="0"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="left" />
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="250"
+       oryx:cy="140"
        oryx:anchors="bottom" />
     <oryx:magnet
        oryx:cx="300"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="right" />
     <oryx:magnet
        oryx:cx="150"
        oryx:cy="0"
        oryx:anchors="top" />
   </oryx:magnets>
-
-
 
   <g>
     <rect
@@ -41,9 +40,9 @@
        height="140"
        width="300"
        id="mainBody"
-	oryx:resize="vertical horizontal"
+	   oryx:resize="vertical horizontal"
 	   fill="white"
-    stroke="black" stroke-width="1"  />
+       stroke="black" stroke-width="1"  />
     <text
        oryx:rotate="270"
        id="label"
@@ -53,13 +52,14 @@
        xml:space="preserve"></text>
     <rect
        y="20"
-		x="30"
+	   x="30"
        height="10"
        width="30"
        id="rect11259"
 	   oryx:anchors="top left"
-	    fill="white"
-    stroke="black" stroke-width="1"  />
+	   fill="white"
+   	   stroke="black" 
+   	   stroke-width="1"  />
     <rect
        y="40"
        x="30"
@@ -67,17 +67,19 @@
        width="30"
        id="rect11263"
 	   oryx:anchors="top left"
-	      fill="white"
-       stroke="black" stroke-width="1" />
+	   fill="white"
+       stroke="black" 
+       stroke-width="1" />
     <rect
        y="60"
-		x="30"
+	   x="30"
        height="10"
        width="30"
        id="rect11265"
 	   oryx:anchors="top left"
-	    fill="white"
-       stroke="black" stroke-width="1" />
+	   fill="white"
+       stroke="black" 
+       stroke-width="1" />
     <path
        id="path11269"
        d="M 45,30 L 45,40"
@@ -86,7 +88,7 @@
     <path
        id="path11271"
        d="M 45,50 L 45,60"
-	  	 oryx:anchors="top left"
+	   oryx:anchors="top left"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

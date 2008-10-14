@@ -5,29 +5,27 @@
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   width="300"
-   height="250"
-   >
+   xmlns="http://www.w3.org/2000/svg">
   
   <defs >
   </defs>
+  
   <oryx:magnets>
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:default="yes" />
     <oryx:magnet
        oryx:cx="0"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="left" />
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="250"
+       oryx:cy="140"
        oryx:anchors="bottom" />
     <oryx:magnet
        oryx:cx="300"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="right" />
     <oryx:magnet
        oryx:cx="150"
@@ -35,39 +33,16 @@
        oryx:anchors="top" />
   </oryx:magnets>
 
-
-
-  <g >
+  <g>
     <rect
        y="0"
        x="0"
-       height="250"
+       height="140"
        width="300"
        id="mainBody"
 	   oryx:resize="vertical horizontal"
 	   fill="white"
-    stroke="black" stroke-width="1"  />
-    <path
-       d="M 19.273802,10.187935 C 20.557593,13.978344 18.281917,18.098969 14.543865,19.334734 C 10.342387,20.723703 5.7913956,18.195558 4.4473749,14.047413 C 2.9529234,9.4349836 5.7337743,4.4532715 10.292079,3.0012312 C 11.043892,2.7617424 11.826229,2.619522 12.61412,2.5777225"
-	  	 oryx:anchors="top left"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-
-     <path
-       d="M 11.62943,3.956265 L 12.170325,0.3622452 L 15.996404,2.5876356 L 11.62943,3.956265 z "
-	  	 oryx:anchors="top left"
-       style="fill:black;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-    
-     <path
-       d="M 16.202629,13.235142 C 15.543349,15.699198 12.879628,17.079915 10.460318,16.413676 C 7.7410742,15.66484 6.2213823,12.715069 6.9751997,10.040001 C 7.8133889,7.0655229 11.04946,5.4067523 13.980239,6.2482973 C 14.46362,6.3870955 14.928799,6.58827 15.361419,6.844664"
-	  	 oryx:anchors="top left"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-
-     <path
-       d="M 14.175901,8.4894412 L 15.712625,5.4309725 L 18.238501,8.4920278 L 14.175901,8.4894412 z "
-	  	 oryx:anchors="top left"
-       style="fill:black;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-    
-    
+       stroke="black" stroke-width="1"  />
     <text
        oryx:rotate="270"
        id="label"
@@ -75,7 +50,21 @@
        x="10"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
        xml:space="preserve"></text>
-  
-   
+    <path
+       d="M 19.273802,10.187935 C 20.557593,13.978344 18.281917,18.098969 14.543865,19.334734 C 10.342387,20.723703 5.7913956,18.195558 4.4473749,14.047413 C 2.9529234,9.4349836 5.7337743,4.4532715 10.292079,3.0012312 C 11.043892,2.7617424 11.826229,2.619522 12.61412,2.5777225"
+	   oryx:anchors="top left"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     <path
+       d="M 11.62943,3.956265 L 12.170325,0.3622452 L 15.996404,2.5876356 L 11.62943,3.956265 z "
+	   oryx:anchors="top left"
+       style="fill:black;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     <path
+       d="M 16.202629,13.235142 C 15.543349,15.699198 12.879628,17.079915 10.460318,16.413676 C 7.7410742,15.66484 6.2213823,12.715069 6.9751997,10.040001 C 7.8133889,7.0655229 11.04946,5.4067523 13.980239,6.2482973 C 14.46362,6.3870955 14.928799,6.58827 15.361419,6.844664"
+	   oryx:anchors="top left"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     <path
+       d="M 14.175901,8.4894412 L 15.712625,5.4309725 L 18.238501,8.4920278 L 14.175901,8.4894412 z "
+	   oryx:anchors="top left"
+       style="fill:black;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

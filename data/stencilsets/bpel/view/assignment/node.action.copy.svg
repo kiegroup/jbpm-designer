@@ -56,46 +56,31 @@
     	y="50" 
     	oryx:align="middle center" 
     	stroke="black"></text>
-    <circle 
-    	oryx:resize="vertical horizontal" 
-    	cx="16" 
-    	cy="16" 
-    	r="15" 
-    	stroke="black" 
-    	fill="white" 
-    	stroke-width="1" />
-    <circle 
-    	oryx:resize="vertical horizontal" 
-    	cx="16" 
-    	cy="16" 
-    	r="12" 
-    	stroke="black" 
-    	fill="none" 
-    	stroke-width="1"/>
-    <circle 
-    	oryx:resize="vertical horizontal" 
-    	cx="16" 
-    	cy="16" 
-    	r="10" 
-    	stroke="black" 
-    	fill="none" 
-    	stroke-width="1"/>
-    <path 
-    	oryx:resize="vertical horizontal" 
-    	d="	M 16 6 L 16 9
-    		M 21 7 L 19.5 10
-    		M 25 11 L 22 12.5
-    		M 26 16 L 23 16
-    		M 25 21 L 22 19.5
-    		M 21 25 L 19.5 22
-    		M 16 26 L 16 23
-    		M 11 25 L 12.5 22
-    		M 7 21 L 10 19.5
-    		M 6 16 L 9 16
-    		M 7 11 L 10 12.5
-    		M 11 7 L 12.5 10
-    		M 18 9 L 16 16 L 20 16" 
-    	fill="none" 
-    	stroke="black"/>
+    <rect
+		 style="opacity:1;fill-opacity:0.89019607999999983;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-rule:evenodd;fill:none"
+		 id="rect3354"
+		 width="13.3125"
+		 height="7.875"
+		 x="9.75"
+		 y="11.125"
+		 rx="0"
+		 ry="3.1875" />
+  	<rect
+		 style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+		 id="rect4810"
+		 width="13.3125"
+		 height="7.875"
+		 x="12.84375"
+		 y="8.5"
+		 rx="0"
+		 ry="3.1875" />
+  	<path
+	     style="fill:#f9f9f9;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+	     d="M 13.191961,15.576157 L 13.12567,15.642448"
+	     id="path4940" />
+  	<path
+	     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+	     d="M 13.258252,16.272215 C 13.247204,16.272215 13.236155,16.272215 13.258252,16.272215 z"
+	     id="path4942" /> 
   </g>
 </svg>
