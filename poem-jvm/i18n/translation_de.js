@@ -21,8 +21,8 @@ Repository.I18N.Repository.sayHello = "Hallo";
 Repository.I18N.Repository.login = "Anmelden";
 Repository.I18N.Repository.logout = "Abmelden";
 
-Repository.I18N.Repository.leftPanelTitle = "Modelorganisation";
-Repository.I18N.Repository.rightPanelTitle = "Modelinfo";
+Repository.I18N.Repository.leftPanelTitle = "Modellorganisation";
+Repository.I18N.Repository.rightPanelTitle = "Modellinfo";
 Repository.I18N.Repository.bottomPanelTitle = "Kommentare";
 
 // Plugins here
@@ -48,8 +48,8 @@ Repository.I18N.TagInfo.addTag = "Hinzufügen"
 if(!Repository.I18N.ModelRangeSelection) Repository.I18N.ModelRangeSelection = {};
 Repository.I18N.ModelRangeSelection.previous = "<< Vorherige Seite"
 Repository.I18N.ModelRangeSelection.next = "Nächste Seite >>"
-Repository.I18N.ModelRangeSelection.last = "Erste"
-Repository.I18N.ModelRangeSelection.first = "Letzte"
+Repository.I18N.ModelRangeSelection.last = "Letzte"
+Repository.I18N.ModelRangeSelection.first = "Erste"
 Repository.I18N.ModelRangeSelection.modelsOf = "(#{number} von #{size} Modellen)" 
 
 if(!Repository.I18N.AccessInfo) Repository.I18N.AccessInfo = {};
@@ -78,3 +78,6 @@ if(!Repository.I18N.Export) Repository.I18N.Export = {};
 Repository.I18N.Export.name = "Export";
 Repository.I18N.Export.title = "Verfügbare Export Formate:"
 Repository.I18N.Export.onlyOne = "Es darf nur ein Modell selektiert sein"
+
+if(!Repository.I18N.UpdateButton) Repository.I18N.UpdateButton = {};
+Repository.I18N.UpdateButton.name = "Aktualisieren"

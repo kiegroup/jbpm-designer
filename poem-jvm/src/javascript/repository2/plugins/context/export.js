@@ -55,9 +55,12 @@ Repository.Plugins.Export = {
 	},
 	
 	render: function( modelData ){
-	
+			
+		// If modelData hasnt changed, return
 		if( !this.exportPanel ){ return }
-	
+
+		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
+			
 		// Try to removes the old child ...
 		this._deleteItems( this.exportPanel );
 
@@ -99,6 +102,7 @@ Repository.Plugins.Export = {
 		}
 
 		
+		this.panel.getEl().setHeight()
 		this.exportPanel.doLayout();
 
 	},

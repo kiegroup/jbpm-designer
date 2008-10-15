@@ -44,6 +44,7 @@ public class ModelHandler extends  HandlerBase {
 				representation.getContent(), this.getLanguageCode(request), 
 				this.getCountryCode(request)));
 		response.setStatus(200);
+		response.setContentType("application/xhtml+xml");
 	}
 	
 	@Override

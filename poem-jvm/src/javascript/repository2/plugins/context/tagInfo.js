@@ -48,18 +48,10 @@ Repository.Plugins.TagInfo = {
 	},
 	
 	render: function( modelData ){
-
-		if( !this.tagPanel ){ return }
-
-		// Try to removes the old child ...
-		if( this.tagPanelContent )
-			this.tagPanel.remove( this.tagPanelContent );
-			
-					
-		var oneIsSelected 	= $H(modelData).keys().length !== 0;
-		var isPublic		= this.facade.isPublicUser();
-		var buttons 		= [];
 		
+		// If modelData hasnt changed, return
+		if( !this.tagPanel ){ return }
+						
 		// Find every tag which are available in all selected models
 		var modelTags 		= []
 		$H(modelData).each(function( pair ){ 
@@ -73,7 +65,44 @@ Repository.Plugins.TagInfo = {
 					})
 		
 		modelTags = modelTags.uniq();
+
+
+		var oneIsSelected 	= $H(modelData).keys().length !== 0;
+		var isPublic		= this.facade.isPublicUser();
 		
+		// Hide/Show the controls
+		if( this.controls ){
+			this.controls.each(function(co){
+				co.setDisabled( isPublic || !oneIsSelected )
+			}.bind(this))
+			
+			this.controls[0].setValue("")
+		}
+		
+		
+		// Set the tags		
+		this._setModelTag( modelTags );
+	},
+	
+	_setModelTag: function( modelTags ){
+
+		if( this._lastModelTags && this._lastModelTags.toString() == modelTags.toString() ){
+			return
+		} else {
+			this._lastModelTags = modelTags;
+		}
+
+		var isPublic		= this.facade.isPublicUser();
+		var buttons 		= [];
+		
+		// Hold the height of the panel
+		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
+		this.tagPanel.getEl().setHeight( this.tagPanel.getEl().getHeight() )
+		
+		// Try to removes the old child ...
+		if( this.tagPanelContent )
+			this.tagPanel.remove( this.tagPanelContent );
+			
 		// For each modeltag create a label						
 		modelTags.each(function(tag, index){
 			
@@ -99,19 +128,18 @@ Repository.Plugins.TagInfo = {
 									border	: false
 								})			
 
-		if( this.controls ){
-			this.controls.each(function(co){
-				co.setDisabled( isPublic || !oneIsSelected )
-			}.bind(this))
-			
-			this.controls[0].setValue("")
-		}
 
+		// Add the new content
 		this.tagPanel.add( this.tagPanelContent );
+		
+		// Reset the height
+		this.tagPanel.getEl().setHeight( )
+		this.panel.getEl().setHeight()
+		
+		// Force for layouting
 		this.tagPanel.doLayout();
-
+				
 	},
-	
 	
 	_generateGUI: function(){
 
@@ -129,12 +157,10 @@ Repository.Plugins.TagInfo = {
 								new Ext.LinkButton({
 											image		:'../images/silk/add.png',
 											text 		: Repository.I18N.TagInfo.addTag,
-											disabled 	: true, 
-											//listeners	: {
-												click : function(){
-													this._addTag(Ext.getCmp('repository_taginfo_textfield').getValue())
-												}.bind(this)
-											//}
+											click 		: function(){
+																this._addTag(Ext.getCmp('repository_taginfo_textfield').getValue())
+															}.bind(this)
+											
 										})
 							]
 							

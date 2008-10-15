@@ -291,8 +291,19 @@ Repository.Core.Repository = {
 		
 		_registerButtonOnToolbar : function(buttonConfig) {
 			if (buttonConfig) {
-				if ((buttonConfig.text != undefined) && (typeof(buttonConfig.handler) == "function")) {
+				if ( buttonConfig instanceof Ext.Toolbar.Button || (buttonConfig.text != undefined) && (typeof(buttonConfig.handler) == "function")) {
 					var menu = null;
+										
+					// Depending on if there is already a spacer, add the following element befor or behind this
+					var spacer 		= this._controls.toolbar.items.find(function(item){ return item instanceof Ext.Toolbar.Spacer})
+					var indexSpacer	= spacer ? this._controls.toolbar.items.indexOf(spacer) : null;
+					var region		= buttonConfig.region && buttonConfig.region.toLowerCase() == "right" ? "right" : "left";
+					
+					if( !indexSpacer && region == "right" ){
+						this._controls.toolbar.addFill();
+						indexSpacer =  this._controls.toolbar.items.length-1;
+					}
+					
 					// if the button should be added to a sub menu try to find it and create it if it isn't there
 					if (buttonConfig.menu != undefined) {
 						this._controls.toolbar.items.each(function(item) {
@@ -303,16 +314,6 @@ Repository.Core.Repository = {
 						// If no menu exists
 						if (menu == null) {
 							menu = new Ext.menu.Menu({items : []});
-							
-							// Depending on if there is already a spacer, add the following element befor or behind this
-							var spacer 		= this._controls.toolbar.items.find(function(item){ return item instanceof Ext.Toolbar.Spacer})
-							var indexSpacer	= spacer ? this._controls.toolbar.items.indexOf(space) : null;
-							var region		= buttonConfig.region && buttonConfig.region.toLowerCase() == "right" ? "right" : "left";
-							
-							if( !indexSpacer && region == "right" ){
-								this._controls.toolbar.addFill();
-								indexSpacer =  this._controls.toolbar.items.length-1;
-							}
 							
 							// Insert the button to the particular place
 							this._controls.toolbar.insertButton(
@@ -334,16 +335,29 @@ Repository.Core.Repository = {
 							text 	: buttonConfig.text,
 							handler : buttonConfig.handler,
 							icon 	: buttonConfig.icon,
-							hideOnClick : false,
+							//hideOnClick : false,
 							iconCls	: 'repository_ext_icon_align_center'
 						});
+					} else if( buttonConfig instanceof Ext.Toolbar.Button){
+						
+							// Insert the button to the particular place
+							this._controls.toolbar.insertButton(
+									indexSpacer ? (region == "right" ? indexSpacer+1 : indexSpacer-1) : this._controls.toolbar.items.length,
+									buttonConfig
+							);
+							
 					} else {
-						this._controls.toolbar.addButton(new Ext.Toolbar.Button({
-							text : buttonConfig.text,
-							handler : buttonConfig.handler,
-							iconCls: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
-							icon : buttonConfig.icon
-						}));
+							// Insert the button to the particular place
+							this._controls.toolbar.insertButton(
+									indexSpacer ? (region == "right" ? indexSpacer+1 : indexSpacer-1) : this._controls.toolbar.items.length,
+									
+									new Ext.Toolbar.Button({
+										text : buttonConfig.text,
+										handler : buttonConfig.handler,
+										iconCls: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
+										icon : buttonConfig.icon
+									})
+							);
 					}
 				}
 			}

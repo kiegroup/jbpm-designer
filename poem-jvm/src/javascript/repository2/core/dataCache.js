@@ -45,9 +45,11 @@ Repository.Core.DataCache = {
 		this._data = new Hash();
 	
 		
-		this._addHandler = new EventHandler();
+		this._addHandler 	= new EventHandler();
 		this._updateHandler = new EventHandler();
 		this._removeHandler = new EventHandler();
+		
+		this._busyHandler 	= { start: new EventHandler(), end:new EventHandler() };
 		
 		
 		
@@ -57,9 +59,13 @@ Repository.Core.DataCache = {
 	getAddHandler : function() {return this._addHandler;},
 	getUpdateHandler : function() {return this._updateHandler;},
 	getRemoveHandler : function() {return this._removeHandler;},
+	getBusyHandler : function() {return this._busyHandler;},
 
 	
 	getDataAsync : function(fetchDataUri, ids, callback) {
+		
+		this._busyHandler.start.invoke();
+		
 		var modelIds = $A(ids); // Ensure that ids is an array
 		var cacheMisses = []; // Stores ids of models that aren't cached
 		if (this._data.get(fetchDataUri)) {
@@ -81,7 +87,11 @@ Repository.Core.DataCache = {
 			modelIds.each(function(id) {
 				result.set(id, this._data.get(fetchDataUri).get(id));
 			}.bind(this));
-			callback(result);
+			
+			if( callback )
+				callback(result);
+			
+			this._busyHandler.end.invoke();
 			return;
 		}
 		// Build query object
@@ -125,6 +135,10 @@ Repository.Core.DataCache = {
 			
 			if( queryData.callback )
 				queryData.callback(queriedData, response); 
+			
+			
+			this._busyHandler.end.invoke();
+		
 		}
 	},
 	
@@ -137,6 +151,8 @@ Repository.Core.DataCache = {
 	},	
 	
 	_sendRequest: function( modelIds, uriSuffix, method, params, successHandler ){
+		
+		this._busyHandler.start.invoke();
 		
 		if( !(modelIds instanceof Array) ){
 			modelIds = [ modelIds ]
@@ -182,6 +198,9 @@ Repository.Core.DataCache = {
 	getModelTypes : function() {
 		// lazy loading
 		if (!this._modelTypes) {
+			
+			this._busyHandler.start.invoke();
+			
 			new Ajax.Request( Repository.Config.STENCILSET_URI, 
 			 {
 				method: "get",
@@ -192,6 +211,10 @@ Repository.Core.DataCache = {
 						type.iconUrl = this.oryxUrl + this.stencilsetUrl + type.icon_url;
 						type.url = this.stencilsetUrl + type.uri
 					}.bind(this));
+					
+					
+					this._busyHandler.end.invoke();
+			
 				}.bind(this),
 				onFailure: function() {alert("Fehler modelTypes")}
 			});
@@ -206,12 +229,16 @@ Repository.Core.DataCache = {
 	_ensureConfigData : function() {
 		// lazy loading
 		if (!this._configData) {
+			
+			this._busyHandler.start.invoke();
+		
 			new Ajax.Request("config", 
 			 {
 				method: "get",
 				asynchronous : false,
 				onSuccess: function(transport) {
 					this._configData = transport.responseText.evalJSON();
+					this._busyHandler.end.invoke();
 				}.bind(this),
 				onFailure: function() {alert("Error loading config data.")}
 			});
@@ -240,12 +267,15 @@ Repository.Core.DataCache = {
 	_ensureUserData : function() {
 		// lazy loading
 		if (!this._userData) {
+			
+			this._busyHandler.start.invoke();
 			new Ajax.Request("user", 
 			 {
 				method: "get",
 				asynchronous : false,
 				onSuccess: function(transport) {
 					this._userData = transport.responseText.evalJSON();
+					this._busyHandler.end.invoke();
 				}.bind(this),
 				onFailure: function() {alert("Error loading user data.")}
 			});
@@ -258,6 +288,10 @@ Repository.Core.DataCache = {
 	},
 	
 	setLanguage : function(languagecode, countrycode) {
+		
+		
+		this._busyHandler.start.invoke();
+			
 		new Ajax.Request("user", 
 				 {
 					method: "post",
@@ -267,6 +301,8 @@ Repository.Core.DataCache = {
 						"countrycode" : countrycode
 					},
 					onSuccess: function(transport) {
+						
+						this._busyHandler.end.invoke();
 						window.location.reload(); // reload repository to 
 					}.bind(this),
 					onFailure: function() {alert("Changing langauge failed!")}

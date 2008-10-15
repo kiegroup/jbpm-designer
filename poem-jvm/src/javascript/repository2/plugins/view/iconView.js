@@ -62,7 +62,7 @@ Repository.Plugins.IconView = {
 				}
 			}.bind(this));
 			
-			data.push( [ pair.key, pair.value.thumbnailUri, pair.value.title, stencilset, pair.value.author || 'Unknown' ] )
+			data.push( [ pair.key, pair.value.thumbnailUri + "?" + Math.random(), pair.value.title, stencilset, pair.value.author || 'Unknown' ] )
 		}.bind(this));
 		
 		var store = new Ext.data.SimpleStore({
@@ -72,7 +72,7 @@ Repository.Plugins.IconView = {
 	
 	    this.myPanel = new Ext.Panel({
 			border	:false,
-	        items	: new DataGridPanel({store: store, listeners:{selectionchange:this._onSelectionChange.bind(this), dblclick:this._onDblClick.bind(this)}})
+	        items	: new DataGridPanel({store: store, listeners:{click:this._onSelectionChange.bind(this), dblclick:this._onDblClick.bind(this)}})
 	    });
 
 		this.panel.add( this.myPanel );
@@ -117,7 +117,7 @@ Repository.Plugins.IconView = {
 		var dg		= this.myPanel.items.get(0);
 		var data  	= dg.store.data;
 		
-		if( dg.events.selectionchange.firing ){ return }
+		if( dg.events.click.firing ){ return }
 		
 		this.isSelecting = true;
 		
@@ -138,7 +138,7 @@ Repository.Plugins.IconView = Repository.Core.ViewPlugin.extend(Repository.Plugi
 
 DataGridPanel = Ext.extend(Ext.DataView, {
 	multiSelect		: true,
-	simpleSelect	: true, 
+	//simpleSelect	: true, 
     cls				: 'repository_iconview',
     itemSelector	: 'dd',
     overClass		: 'over',

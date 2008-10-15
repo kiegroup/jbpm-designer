@@ -113,3 +113,5 @@ Repository.I18N.Export.name = "Export";
 Repository.I18N.Export.title = "Available export formats:"
 Repository.I18N.Export.onlyOne = "Only one has to be selected!"
 
+if(!Repository.I18N.UpdateButton) Repository.I18N.UpdateButton = {};
+Repository.I18N.UpdateButton.name = "Refresh"

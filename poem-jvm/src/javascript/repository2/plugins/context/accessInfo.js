@@ -51,23 +51,20 @@ Repository.Plugins.AccessInfo = {
 	},
 	
 	render: function( modelData ){
-	
+		
+		// If modelData hasnt changed, return
 		if( !this.myContrPanel || !this.myReadrPanel || !this.myPublicPanel ){ return }
-	
-		// Try to removes the old child ...
-		this._deleteItems( this.myContrPanel );
-		this._deleteItems( this.myReadrPanel );
-		this._deleteItems( this.myPublicPanel );
-		this._deleteItems( this.myOwnerPanel );
+		
+		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
+		
 
 		var oneIsSelected 	= $H(modelData).keys().length !== 0;
 		var isPublicUser	= this.facade.isPublicUser();
-		var buttons 		= [];
 		
 		// Find every openids which are available in all selected models
 		var contributers 	= [];
 		var readers 		= [];
-		var owner			= null;
+		var owner			= "";
 		var isPublic		= false;
 			
 		$H(modelData).each(function( pair ){ 
@@ -91,6 +88,37 @@ Repository.Plugins.AccessInfo = {
 					})
 				
 		
+		this._setPublic( isPublic, oneIsSelected )
+		this._setOwner( owner )
+		this._setContributer( contributers.uniq() )
+		this._setReader( readers.uniq() )		
+	
+
+		// Enable/Disable the controls
+		if( this.controls ){
+			this.controls.each(function(co){
+				co.setDisabled( isPublicUser || !oneIsSelected )
+			}.bind(this))
+			// Reset textfield
+			this.controls[0].setValue("")
+		}
+
+		// Reset Height;
+		this.panel.getEl().setHeight()	
+	},
+	
+	_setPublic: function( isPublic, oneIsSelected ){
+
+		// Check is the values has been changed
+		if( this._lastPublicAnSelected && this._lastPublicAnSelected == isPublic + "" + oneIsSelected ){
+			return
+		} else {
+			this._lastPublicAnSelected = isPublic + "" + oneIsSelected;
+		}
+		
+		// Remove children
+		this._deleteItems( this.myPublicPanel );
+
 		// Generate the public panel
 		if( oneIsSelected ){
 			var button, label;
@@ -102,11 +130,24 @@ Repository.Plugins.AccessInfo = {
 				label	= {text: Repository.I18N.AccessInfo.notPublicText , xtype:'label', style:"font-style:italic;color:gray;"};			
 			}
 			// Add the content to the panel		
-			this._addItems( this.myPublicPanel, isPublicUser ? [label] : [label, button] )			
+			this._addItems( this.myPublicPanel, this.facade.isPublicUser() ? [label] : [label, button] )			
 		} else {
 			this._addItems( this.myPublicPanel, [ {text: Repository.I18N.AccessInfo.noneIsSelected, xtype:'label', style:"font-style:italic;color:gray;"}] )	
-		}
+		}	
+	},
 
+	_setOwner: function( owner ){
+
+		// Check is the values has been changed
+		if( this._lastOwner && this._lastOwner.toString() == owner.toString() ){
+			return
+		} else {
+			this._lastOwner = owner;
+		}
+		
+				
+		// Remove children
+		this._deleteItems( this.myOwnerPanel );	
 		
 		// Set the owner
 		if( owner ){
@@ -114,41 +155,55 @@ Repository.Plugins.AccessInfo = {
 		} else {
 			this._addItems( this.myOwnerPanel, [ {text: Repository.I18N.AccessInfo.none, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		}
-				
-		
-				
-		// Set as uniq
-		contributers 			= contributers.uniq();
-		var contributerButtons 	= this._generateButtons( contributers, !isPublicUser );
-		readers 				= readers.uniq();
-		var readerButtons 		= this._generateButtons( readers, !isPublicUser );
+							
+	},
 
+	_setContributer: function( contributers ){
 		
-
-		// Enable/Disable the controls
-		if( this.controls ){
-			this.controls.each(function(co){
-				co.setDisabled( isPublicUser || !oneIsSelected )
-			}.bind(this))
-			// Reset textfield
-			this.controls[0].setValue("")
+		// Check is the values has been changed
+		if( this._lastContributers && this._lastContributers.toString() == contributers.toString() ){
+			return
+		} else {
+			this._lastContributers = contributers;
 		}
 		
-		
-		// Add the items to the specific panel
-		this._addItems( this.myContrPanel,  contributerButtons )
-		this._addItems( this.myReadrPanel,  readerButtons )
+		// Remove children
+		this._deleteItems( this.myContrPanel );
 
+		var contributerButtons 	= this._generateButtons( contributers, !this.facade.isPublicUser() );
+		this._addItems( this.myContrPanel,  contributerButtons )
+						
 	},
+
+	_setReader: function( readers ){
+
+		// Check is the values has been changed
+		if( this._lastReaders && this._lastReaders.toString() == readers.toString() ){
+			return
+		} else {
+			this._lastReaders = readers;
+		}
+				
+		// Remove children
+		this._deleteItems( this.myReadrPanel );		
+		
+		var readerButtons 		= this._generateButtons( readers, !this.facade.isPublicUser() );
+		this._addItems( this.myReadrPanel,  readerButtons )
+	},
+				
 	
 	_addItems: function( panel, items ){
-		panel.add(new Ext.Panel({items:items, border: false})) 			
+		panel.add(new Ext.Panel({items:items, border: false})) 		
+		panel.getEl().setHeight()
 		panel.doLayout();
 	},
 	
 	_deleteItems: function( panel ){
-		if( panel.items )
+		if( panel && panel.items ){
+			panel.getEl().setHeight( panel.getEl().getHeight() )
 			panel.items.each(function(item){ panel.remove( item ) }.bind(this));
+		}
+			
 	},
 	
 	_generateButtons:function( data, editable ){
@@ -262,6 +317,8 @@ Repository.Plugins.AccessInfo = {
 		
 		// Replaces ';' and '\n' to ',' ;and stripes and decodes 
 		var decoded = openid.gsub(';', ',').gsub('\n', ',').split(',').map(function(s){ s = s.strip(); return s.blank() ? null : encodeURI(s)}).uniq().compact().join(',')
+		
+		if( decoded.length <= 0 ){ return }
 		
 		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.ACCESS_URL, { subject:decoded, predicate:access } )
 		
