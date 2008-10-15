@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="server/src"/>
+	<classpathentry kind="src" path="editor/server/src"/>
+	<classpathentry kind="src" path="poem-jvm/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/batik-anim.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
@@ -39,5 +40,5 @@
 	<classpathentry kind="lib" path="lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/org.json.jar"/>
-	<classpathentry kind="output" path="server/bin"/>
+	<classpathentry kind="output" path="editor/server/bin"/>
 </classpath>

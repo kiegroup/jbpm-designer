@@ -40,7 +40,8 @@
 			webxml="${config-dir}/web.xml" 
 			update="true">
 			<!-- Ext files-->
-			<fileset dir="lib" >
+			<!--TODO the backend should not reference anything in folder editor-->
+			<fileset dir="editor/lib" >
 				<include name="ext-2.0.2/" />
 			</fileset>	
 			<!-- Image files-->
@@ -93,20 +94,26 @@
 		
 	</target>
 	
+	<!-- Editor properties *************************************************** -->
+	<property name="editor-src-root" value="editor" />
+	<property name="editor-src-client" value="${editor-src-root}/client" />
+	<property name="editor-src-server" value="${editor-src-root}/server" />
+	<property name="editor-build-root" value="build/editor" />
+	<property name="editor-build-oryx" value="${editor-build-root}/oryx" />
+	
 	<!-- Oryx  targets (oryx.war) ****************************************************** -->
     <target name="clean-editor">
-        <delete dir="dist"/>
-        <delete dir="build"/>
+        <delete file="${target-dir}/oryx.war" />
+		<delete dir="${editor-build-root}"/>
     </target>
     
     <target name='examples' depends='build'>
         
-        <copy todir='build'>
-            <fileset file="test/examples/*.xhtml"/>
-            <fileset file="*.php"/>
+        <copy todir='${editor-build-root}'>
+            <fileset file="${editor-src-root}/test/examples/*.xhtml"/>
         </copy>
-        <copy todir='build/css'>
-            <fileset dir='src/css'/>
+        <copy todir='${editor-build-root}/css'>
+            <fileset dir='${editor-src-client}/css'/>
         </copy>
         <echo>
             Copied example files into build destination
@@ -116,7 +123,7 @@
 	
 	 <target name='copy-license'>
         
-        <copy todir='build'>
+        <copy todir='${editor-build-root}'>
             <fileset file="LICENSE"/>
             <fileset file="LIBRARIES"/>
         </copy>
@@ -128,14 +135,14 @@
     
     <target name="build-plugins">
         
-        <copy todir='build/Plugins'>
-            <fileset dir="src/scripts/Plugins"/>
+        <copy todir='${editor-build-root}/Plugins'>
+            <fileset dir="${editor-src-client}/scripts/Plugins"/>
         </copy>
         <echo>
             Copied plugins into build destination
         </echo>
-        <copy todir='build/xslt'>
-            <fileset dir="src/xslt"/>
+        <copy todir='${editor-build-root}/xslt'>
+            <fileset dir="${editor-src-client}/xslt"/>
         </copy>
         <echo>
             Copied XSL stylesheets into build destination
@@ -145,8 +152,8 @@
     
     <target name="build-stencilsets">
         
-        <copy todir='build/stencilsets'>
-            <fileset dir="data/stencilsets"/>
+        <copy todir='${editor-build-root}/stencilsets'>
+            <fileset dir="${editor-src-root}/data/stencilsets"/>
         </copy>
         <echo>
             Copied stencilsets into build destination
@@ -156,8 +163,8 @@
     
    <target name="build-execution">
         
-        <copy todir='build/execution'>
-            <fileset dir="data/execution"/>
+        <copy todir='${editor-build-root}/execution'>
+            <fileset dir="${editor-src-root}/data/execution"/>
         </copy>
         <echo>
             Copied execution data into build destination
@@ -167,23 +174,24 @@
     
     <target name="build-server">
         
-        <mkdir dir="build/classes"/>
+        <mkdir dir="${editor-build-root}/classes"/>
         
-        <copy todir='build/classes'>
-            <fileset dir="etc">
+        <copy todir='${editor-build-root}/classes'>
+            <fileset dir="${editor-src-root}/etc">
                 <include name="*.properties"/>
             </fileset>
         </copy>
         
-        <copy todir='build'>
+		<!--JSP files deprecated, right?-->
+        <!--<copy todir='${editor-build-root}'>
             <fileset dir="server">
                 <include name="*.jsp"/>
             </fileset>
-        </copy>
+        </copy>-->
         
-        <javac srcdir="server/src" destdir="build/classes" debug="${java-debug}" >
+        <javac srcdir="${editor-src-server}/src" destdir="${editor-build-root}/classes" debug="${java-debug}" >
             <classpath>
-				<fileset dir="lib">
+				<fileset dir="${editor-src-root}/lib">
                     <include name="*.jar"/>
                     <exclude name="deprecated/**" />
                 </fileset>
@@ -193,10 +201,9 @@
     
     <target name="build-editor-core">
         
-        <mkdir dir="build/tmp"/>
-        <copy todir='build' file='src/scripts/Core/config.js'/>
-        <concat destfile='build/oryx.debug.js'>
-            <filelist id="coresourcefiles" dir="src">
+        <copy todir='${editor-build-root}' file='${editor-src-client}/scripts/Core/config.js'/>
+        <concat destfile='${editor-build-root}/oryx.debug.js'>
+            <filelist id="coresourcefiles" dir="${editor-src-client}">
                 <file name='scripts/kickstart.js'/>
 				<file name='scripts/erdfparser.js'/>
 				<file name='scripts/datamanager.js'/>
@@ -234,24 +241,25 @@
             Concatenated source files into oryx.js
         </echo>
         
-        <copy todir='build/lib'>
-            <fileset dir='lib' includes='**/*'>
+        <copy todir='${editor-build-root}/lib'>
+            <fileset dir='${editor-src-root}/lib' includes='**/*'>
 				<exclude name="**/*.jar"/>
 				<exclude name="deprecated/**"/>
+				<exclude name="sources/**"/>
 			</fileset>
         </copy>
         <echo>
             Copied dependencies into library destination
         </echo>
-        <copy todir='build/images'>
-            <fileset dir='src/images' includes='**/*.png'/>
-            <fileset dir='src/images' includes='**/*.gif'/>
+        <copy todir='${editor-build-root}/images'>
+            <fileset dir='${editor-src-client}/images' includes='**/*.png'/>
+            <fileset dir='${editor-src-client}/images' includes='**/*.gif'/>
         </copy>
         <echo>
             Copied images into oryx build destination
         </echo>
-        <copy todir="build/i18n">
-			<fileset dir="data/i18n"/>
+        <copy todir="${editor-build-root}/i18n">
+			<fileset dir="${editor-src-root}/data/i18n"/>
 		</copy>
 		<echo>
             Copied language files into oryx build destination
@@ -259,7 +267,7 @@
     </target>
 
     <target name='generate-version-file'>
-        <exec executable="svn" output="build/version.xml" failifexecutionfails="false">
+        <exec executable="svn" output="${editor-build-root}/version.xml" failifexecutionfails="false">
             <arg value="info"/>
             <arg value="--non-interactive"/>
             <arg value="--xml"/>
@@ -270,12 +278,12 @@
     
     <target name='compress'>
         
-        <tempfile property="compress.temp" destDir="build"/>
+        <tempfile property="compress.temp" destDir="${editor-build-root}"/>
         
-        <java dir="build" jar="lib/custom_rhino.jar" fork="true"
+        <java dir="${editor-build-root}" jar="${editor-src-root}/lib/custom_rhino.jar" fork="true"
          failonerror="true" output='${compress.temp}'>
             <arg value="-c"/>
-            <arg file='build/oryx.debug.js'/>
+            <arg file='${editor-build-root}/oryx.debug.js'/>
         </java>
         <echo>
             Using ${compress.temp} for compression
@@ -284,7 +292,7 @@
         <echo>
             Compressing Oryx into build destination
         </echo>
-        <concat destfile='build/oryx.js'>
+        <concat destfile='${editor-build-root}/oryx.js'>
             <fileset file="license"/>
             <fileset file="${compress.temp}"/>
         </concat>
@@ -294,7 +302,7 @@
     </target>
     
     <target name="dist">
-        <mkdir dir="dist"/>
+        <mkdir dir="${target-dir}"/>
         
         <!--
         <echo>Creating zip for offline or php use, and online war file.</echo>
@@ -308,13 +316,14 @@
         -->
         
         <echo>
-            Creating web application archive.
+            Creating web application archive. ${deploy-xhtml}
         </echo>
-        <war destfile="dist/oryx.war" webxml="etc/web.xml">
+        <war destfile="${target-dir}/oryx.war" webxml="${editor-src-root}/etc/web.xml">
             
-            <lib dir="lib">
+            <lib dir="${editor-src-root}/lib">
                 <include name="*.jar"/>
 				<exclude name="deprecated/**"/>
+				<exclude name="sources/**"/>
 				<!--<include name="batik-*.jar"/>
                 <include name="js.jar"/>
                 <include name="fop.jar"/>
@@ -347,16 +356,22 @@
 				
 				<!--<include name="oryxAtlas.jar"/>-->
             </lib>
-            
-            <fileset dir="build">
-                <exclude name="classes/"/>
-                <exclude name="*.php"/>
-            </fileset>
-            
-            <classes dir="build/classes"/>
 			
-			<metainf file="build/LICENSE"/>
-            <metainf file="build/LIBRARIES"/>
+			
+			
+			<fileset dir="${editor-build-root}">
+				<exclude name="classes/**"/>
+				<exclude name="*.xhtml"/>
+			</fileset>
+			
+			<fileset dir="${editor-build-root}">
+				<include name="${deploy-xhtml}"/>
+			</fileset>
+			
+            <classes dir="${editor-build-root}/classes"/>
+			
+			<metainf file="${editor-build-root}/LICENSE"/>
+            <metainf file="${editor-build-root}/LIBRARIES"/>
         </war>
         
           
@@ -366,12 +381,12 @@
 
 
     <target name="deploy-editor">
-        <copy file="dist/oryx.war" todir="${deploymentdir}" />
+        <copy file="${target-dir}/oryx.war" todir="${deploymentdir}" />
     </target>
 
     <target name="deploy-stencilsets">
         <copy todir='${deploymentdir}/oryx/stencilsets'>
-            <fileset dir="data/stencilsets"/>
+            <fileset dir="${editor-src-root}/stencilsets"/>
         </copy>
         <echo>
             Copied stencilsets into deployment destination
@@ -382,6 +397,9 @@
         <delete file="${deploymentdir}/oryx.war" />
     </target>
 
+	<target name="deploy-xhtml">
+		<property name="deploy-xhtml" value="*.xhtml" />
+	</target>
 	
 	
     <!-- combined tasks for editor and backend -->
@@ -409,7 +427,7 @@
             <fileset dir="stick">
 			</fileset>
         </copy>
-		<move todir='build/Plugins'>
+		<move todir='${editor-build-root}/Plugins'>
             <fileset dir="build/stick/src/oryxplugin"/>
         </move>
 	</target>
