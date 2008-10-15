@@ -41,9 +41,12 @@ Repository.Plugins.BusyIndicator = {
 
 		this.indicator = new Ext.Toolbar.Button({
 										iconCls		: 'some_class_that_does_not_exist_but_fixes-rendering', // do not remove!
-										icon 		: "/backend/images/large-loading.gif",
+										//icon 		: "/backend/images/large-loading.gif",
 										region		: 'right',
-										template	: new Ext.Template('<img src="/backend/images/large-loading.gif" width="16" style="padding:0 10px;"/>')
+										disabled	: true,
+										disabledClass : 'another_style_class_so_that_the_image_is_shown_proper',
+										hidden		: true,
+										text		: '<img src="/backend/images/large-loading.gif" width="15" />'
 									})
 
 

@@ -106,6 +106,10 @@ Repository.Core.DataCache = {
 			var requestUrl = modelId.substring(1) +  fetchDataUri 
 			Ext.Ajax.request({url : requestUrl,  success : this.defaultReturnHandler.bind(this, query, modelId), failure:function(){/*console.log(arguments)*/}});
 		}.bind(this));
+		
+		if( cacheMisses.length <= 0){
+			this._busyHandler.end.invoke();
+		}
 	},
 	
 	updateObject : function(fetchDataUri, id, data, forceNotUpdate) {
@@ -193,6 +197,9 @@ Repository.Core.DataCache = {
 		
 		}.bind(this));
 
+		if( modelIds.length <= 0){
+			this._busyHandler.end.invoke();
+		}
 	},
 	
 	getModelTypes : function() {
@@ -216,7 +223,10 @@ Repository.Core.DataCache = {
 					this._busyHandler.end.invoke();
 			
 				}.bind(this),
-				onFailure: function() {alert("Fehler modelTypes")}
+				onFailure: function() {
+						alert("Fehler modelTypes");
+						this._busyHandler.end.invoke();
+					}.bind(this)
 			});
 		}
 		return this._modelTypes;
@@ -240,7 +250,10 @@ Repository.Core.DataCache = {
 					this._configData = transport.responseText.evalJSON();
 					this._busyHandler.end.invoke();
 				}.bind(this),
-				onFailure: function() {alert("Error loading config data.")}
+				onFailure: function() {
+						alert("Error loading config data.")
+						this._busyHandler.end.invoke();
+					}.bind(this)
 			});
 		}
 	},
@@ -277,7 +290,10 @@ Repository.Core.DataCache = {
 					this._userData = transport.responseText.evalJSON();
 					this._busyHandler.end.invoke();
 				}.bind(this),
-				onFailure: function() {alert("Error loading user data.")}
+				onFailure: function() {
+						alert("Error loading user data.")
+						this._busyHandler.end.invoke();
+					}.bind(this)
 			});
 		}
 	},
@@ -305,7 +321,10 @@ Repository.Core.DataCache = {
 						this._busyHandler.end.invoke();
 						window.location.reload(); // reload repository to 
 					}.bind(this),
-					onFailure: function() {alert("Changing langauge failed!")}
+					onFailure: function() {
+						alert("Changing langauge failed!")
+						this._busyHandler.end.invoke();
+					}.bind(this)
 				});
 	},
 
