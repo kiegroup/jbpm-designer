@@ -136,6 +136,9 @@
 			<a rel="raziel-outgoing">
 				<xsl:attribute name="href"><xsl:value-of select="concat('#resource', ./flow/@target)" /></xsl:attribute>
 			</a>
+			<a rel="raziel-target">
+				<xsl:attribute name="href"><xsl:value-of select="concat('#resource', ./flow/@target)" /></xsl:attribute>
+			</a>
 			<!-- dockers -->
 			<span class="oryx-dockers">
 				<xsl:call-template  name="coordinates-of-node">
@@ -363,17 +366,20 @@
 	<!-- Adds the coordinates of a node's centrum -->
 	<xsl:template name="edge-bounds">
 		<xsl:if test="count(./graphics/position) > 0" >
+			<xsl:variable name="x" select="./graphics/position/@x"/>
+			<xsl:variable name="y" select="./graphics/position/@y"/>
+			
 			<xsl:variable name="x1">
-				<xsl:call-template name="min"><xsl:with-param name="set" select="./graphics/position/@x" /></xsl:call-template>
+				<xsl:value-of select="$x[position()=1]"/>
 			</xsl:variable>
 			<xsl:variable name="y1">
-				<xsl:call-template name="min"><xsl:with-param name="set" select="./graphics/position/@y" /></xsl:call-template>
+				<xsl:value-of select="$y[position()=1]"/>
 			</xsl:variable>		
 			<xsl:variable name="x2">
-				<xsl:call-template name="max"><xsl:with-param name="set" select="./graphics/position/@x" /></xsl:call-template>
+				<xsl:value-of select="$x[position()=2]"/>
 			</xsl:variable>
 			<xsl:variable name="y2">
-				<xsl:call-template name="max"><xsl:with-param name="set" select="./graphics/position/@y" /></xsl:call-template>
+				<xsl:value-of select="$y[position()=2]"/>
 			</xsl:variable>
 			<xsl:value-of select="concat($x1 div 3, ',', $y1 div 3, ',', $x2 div 3, ',', $y2 div 3)" />
 		</xsl:if>
