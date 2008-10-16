@@ -56,16 +56,10 @@
     	y="50" 
     	oryx:align="middle center" 
     	stroke="black"></text>
-     <text
-	     xml:space="preserve"
-	     style="font-size:8px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-	     x="10.969001"
-	     y="17.307821"
-	     id="text2401">
-     	<tspan
-	       sodipodi:role="line"
-	       id="tspan2403"
-	       x="10.969001"
-	       y="17.307821">EXT</tspan></text>
+    <text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="15" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">extension</text>
   </g>
 </svg>

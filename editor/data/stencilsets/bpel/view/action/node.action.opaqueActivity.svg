@@ -4,11 +4,9 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:oryx="http://www.b3mn.org/oryx"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"width="102"
+   width="102"
    height="82"
-   version="1.0"
-   sodipodi:version="0.32"
-   sodipodi:docname="ex.svg">
+   version="1.0">
 	
   <defs></defs>
   
@@ -58,16 +56,10 @@
     	y="50" 
     	oryx:align="middle center" 
     	stroke="black"></text>
-     <text
-	     xml:space="preserve"
-	     style="font-size:8px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-	     x="10.969001"
-	     y="17.307821"
-	     id="text2401">
-     	<tspan
-	       sodipodi:role="line"
-	       id="tspan2403"
-	       x="10.969001"
-	       y="17.307821">OPA</tspan></text>
+    <text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="15" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">opaque</text>
   </g>
 </svg>

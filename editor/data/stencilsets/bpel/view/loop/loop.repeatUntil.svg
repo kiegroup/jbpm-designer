@@ -58,5 +58,11 @@
        d="M 6.31241,21.03338 L 8.93528,17.24202 L 11.71537,21.80334 L 6.31241,21.03338 z "
 	   oryx:anchors="top left"
        style="fill:black;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     <text 
+     	oryx:anchors="top left"
+     	x="35" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">repeat until</text>
+  
   </g>
 </svg>

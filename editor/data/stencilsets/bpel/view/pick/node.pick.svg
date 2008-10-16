@@ -54,5 +54,10 @@
        x="10"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
        xml:space="preserve"></text>
+    <text 
+    	oryx:anchors="top left"
+    	x="15" 
+    	y="25" 
+    	style="font-family:Arial; font-size: 15pt; fill:black;">Pick</text>
   </g>
 </svg>

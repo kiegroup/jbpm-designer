@@ -58,5 +58,10 @@
        d="M 12.3032,5.6605751 L 11.589354,1.1059859 L 16.747784,2.4934805 L 12.3032,5.6605751 z "
 	   oryx:anchors="top left"
        style="fill:black;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     <text 
+     	oryx:anchors="top left"
+     	x="30" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">while</text>
   </g>
 </svg>
