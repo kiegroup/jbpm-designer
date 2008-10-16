@@ -39,7 +39,6 @@
     	stroke="black"></text>
     <path 
     	oryx:anchors="top left"
-    	oryx:resize="vertical horizontal" 
     	fill="white" 
     	stroke-width="1" 
     	stroke="black" 

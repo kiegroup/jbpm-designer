@@ -12,7 +12,7 @@
   
   <oryx:magnets>
     <oryx:magnet
-       oryx:cx="150"
+       oryx:cx="80"
        oryx:cy="70"
        oryx:default="yes" />
     <oryx:magnet
@@ -20,15 +20,15 @@
        oryx:cy="70"
        oryx:anchors="left" />
     <oryx:magnet
-       oryx:cx="150"
+       oryx:cx="80"
        oryx:cy="140"
        oryx:anchors="bottom" />
     <oryx:magnet
-       oryx:cx="300"
+       oryx:cx="160"
        oryx:cy="70"
        oryx:anchors="right" />
     <oryx:magnet
-       oryx:cx="150"
+       oryx:cx="80"
        oryx:cy="0"
        oryx:anchors="top" />
   </oryx:magnets>
@@ -38,7 +38,7 @@
        y="0"
        x="0"
        height="140"
-       width="300"
+       width="160"
        id="mainBody"
 	   oryx:resize="vertical horizontal"
        stroke="black" fill="white" stroke-width="1" />
@@ -53,10 +53,10 @@
     	oryx:anchors="top left" 
     	fill="none" 
     	stroke="black" 
-    	stroke-width="2" 
-	    d="M 30.668537,20.668537 L 60.668537,20.668537 L 60.668537,30.668537 L 30.668537,30.668537 L 30.668537,20.668537 z 
-	    M 60.668537,40.668537 L 90.668537,40.668537 L 90.668537,50.668537 L 60.668537,50.668537 L 60.668537,40.668537 z 
-	    M 30.668537,60.668537 L 60.668537,60.668537 L 60.668537,70.668537 L 30.668537,70.668537 L 30.668537,60.668537 z 
-	    M 54.626402,31.085418 L 69.809774,40.63307" />
+    	stroke-width="1" 
+	    d="M 10.668537,10.668537 L 40.668537,10.668537 L 40.668537,20.668537 L 10.668537,20.668537 L 10.668537,10.668537 z 
+	    M 40.668537,30.668537 L 70.668537,30.668537 L 70.668537,40.668537 L 40.668537,40.668537 L 40.668537,30.668537 z 
+	    M 10.668537,50.668537 L 40.668537,50.668537 L 40.668537,60.668537 L 10.668537,60.668537 L 10.668537,50.668537 z 
+	    M 34.626402,21.085418 L 49.809774,30.63307" />
   </g>
 </svg>
