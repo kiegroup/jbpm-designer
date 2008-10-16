@@ -64,7 +64,7 @@ ORYX.Plugins.SaveOffline = Clazz.extend({
 		
 		var scr = document.createElement("script");
 		scr.setAttribute("type", "text/javascript");
-		scr.setAttribute("src", "./stick/lib/gears_init.js");
+		scr.setAttribute("src", "../stick/lib/gears_init.js");
 		document.body.insertBefore(scr, document.body.childNodes[0]);
 	},
 	
