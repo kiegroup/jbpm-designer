@@ -8,6 +8,8 @@ public abstract class ConnectorTemplate extends BPMN2ERDFTemplateImpl {
 	protected void appendResourceEndPattern(StringBuilder s, Edge e, ERDFSerializationContext context) {
 		s.append("<a rel=\"raziel-outgoing\" href=\"#resource" + 
 				context.getResourceIDForDiagramObject(e.getTarget()) + "\"/>");
+		s.append("<a rel=\"raziel-target\" href=\"#resource" + 
+				context.getResourceIDForDiagramObject(e.getTarget()) + "\"/>");
 		s.append("</div>");
 	}
 
