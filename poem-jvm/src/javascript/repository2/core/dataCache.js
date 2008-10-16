@@ -303,6 +303,11 @@ Repository.Core.DataCache = {
 		return this._userData.currentLanguage;
 	},
 	
+	getUserTags : function() {
+		this._ensureUserData();
+		return this._userData.userTags;
+	},
+	
 	setLanguage : function(languagecode, countrycode) {
 		
 		

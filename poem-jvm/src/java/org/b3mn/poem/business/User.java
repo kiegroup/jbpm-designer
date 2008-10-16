@@ -221,4 +221,15 @@ public class User extends BusinessObject {
 		return models;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Collection<String> getTags() {
+		List<String> tags = Persistance.getSession()
+				.createSQLQuery("SELECT DISTINCT tag_definition.name FROM tag_definition "
+						+ "WHERE tag_definition.subject_id=:id") 
+						.setInteger("id", getId())
+						.list();
+		Persistance.commit();
+		return tags;
+	}
+	
 }

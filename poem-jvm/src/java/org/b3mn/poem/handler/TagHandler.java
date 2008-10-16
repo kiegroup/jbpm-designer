@@ -23,16 +23,23 @@
 
 package org.b3mn.poem.handler;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
+import org.b3mn.poem.Persistance;
 import org.b3mn.poem.business.Model;
 import org.b3mn.poem.business.User;
+import org.b3mn.poem.util.FilterMethod;
 import org.b3mn.poem.util.HandlerWithModelContext;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 @HandlerWithModelContext(uri="/tags")
@@ -91,4 +98,39 @@ public class TagHandler extends HandlerBase {
 		// Return all tags of the model
 		this.tagsToJson(request, response, subject, object);
 	}		
+	
+	/* Returns all modelIds of the input which are tagged with the tags passed in the params 
+	 * parameter. params must be an JSON array of tags
+	 */
+	@SuppressWarnings("unchecked")
+	@FilterMethod(FilterName="tags")
+	public static Collection<String> tagFilter(Identity subject, String params) throws Exception {
+		
+		List<String> finalUris = Persistance.getSession()
+				.createSQLQuery("SELECT DISTINCT access.object_name "
+						+ "FROM  access "
+						+ "WHERE access.subject_id=:subject_id ")
+						.setInteger("subject_id", subject.getId())
+						.list();
+		
+		for (String tag : params.split(",")) {
+			tag = removeSpaces(tag);
+			List<String> tagUris = Persistance.getSession()
+			.createSQLQuery("SELECT access.object_name "
+					+ "FROM tag_relation, tag_definition, access "
+					+ "WHERE tag_relation.tag_id=tag_definition.id "
+					+ "AND access.subject_id=:subject_id "
+					+ "AND tag_relation.object_id=access.object_id " 
+					+ "AND tag_definition.name=:tag_name")
+					.setInteger("subject_id", subject.getId())
+					.setString("tag_name", tag)
+					.list();
+			
+			Persistance.commit();
+
+			finalUris.retainAll(tagUris);
+		}
+		return finalUris;
+	}
+
 }

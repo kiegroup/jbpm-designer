@@ -71,6 +71,11 @@ Repository.I18N.FullView.name = "Full View";
 if(!Repository.I18N.TypeFilter) Repository.I18N.TypeFilter = {};
 Repository.I18N.TypeFilter.name = "Type Filter";
 
+// TagFilter Plugin
+
+if(!Repository.I18N.TagFilter) Repository.I18N.TagFilter = {};
+Repository.I18N.TagFilter.name = "Tag Filter";
+
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
 Repository.I18N.TagInfo.name = "Tags"
 Repository.I18N.TagInfo.deleteText = "Delete"

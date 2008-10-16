@@ -50,6 +50,7 @@ public class UserHandler extends  HandlerBase {
 		currentLanguage.put("countrycode", user.getCountryCode(request));
 
 		userObject.put("currentLanguage", currentLanguage);
+		userObject.put("userTags", new JSONArray(user.getTags()));
 		
 		response.getWriter().print(userObject.toString());
 		response.setStatus(200);

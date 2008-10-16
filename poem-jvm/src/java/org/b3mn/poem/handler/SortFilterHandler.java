@@ -88,47 +88,5 @@ public class SortFilterHandler extends HandlerBase {
 		JSONArray jsonArray = new JSONArray(orderedUris); // Transform List to json
 		jsonArray.write(response.getWriter()); // Write json to http response
 		response.setStatus(200);
-	}
-	
-
-	
-	/* Returns all modelIds of the input which are tagged with the tags passed in the params 
-	 * parameter. params must be an JSON array of tags
-	 */
-	@FilterMethod(FilterName="tags")
-	public Collection<Integer> tagFilter(int subjectId, Collection<Integer> modelIds, String params) throws Exception {
-		
-		JSONArray jsonArray = new JSONArray(params);
-		String sqlTagQuery = "";
-		for (int i = 0; i < jsonArray.length() - 1; i++) {
-			try {
-				sqlTagQuery += " tag_definition.name='" + jsonArray.getString(i) + "' OR ";
-			} catch (JSONException e) {}
-		}
-		try {
-			sqlTagQuery += " tag_definition.name='" + jsonArray.getString(jsonArray.length() - 1) + "' ";
-		} catch (JSONException e) {}
-			
-		// Access database directly to minimize performance impact
-		List<?> databaseIds = Persistance.getSession()
-				.createSQLQuery("SELECT tag_relation.object_id "
-				+ "FROM tag_relation, tag_definition, access "
-				+ "WHERE tag_relation.tag_id=tag_definition.id "
-				+ "AND access.subject_id=:subject_id "
-				+ "AND tag_relation.object_id=access.object_id " 
-				+ "AND(" + sqlTagQuery + ")")
-				//.addEntity("tag_relation", TagRelation.class)
-				.setInteger("subject_id", subjectId) 
-				.list();
-		
-		Persistance.commit();
-		ArrayList<Integer> outputIds = new ArrayList<Integer>();
-		for (Integer modelId : modelIds) {
-			if (databaseIds.contains(modelId)) {
-				outputIds.add(modelId);
-			}
-		}
-		
-		return outputIds;
-	}
+	}	
 }
