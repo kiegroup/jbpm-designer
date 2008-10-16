@@ -182,7 +182,7 @@ Repository.Core.DataCache = {
 			var requestUrl = modelId.substring(1) + uriSuffix;
 			
 			if( method.toLowerCase() == "get" || method.toLowerCase() == "delete" ){
-				requestUrl += "?" + $H(params).toQueryString();
+				requestUrl += params ? "?" + $H(params).toQueryString() : "";
 			}
 			
 			Ext.Ajax.request({

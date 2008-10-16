@@ -115,3 +115,11 @@ Repository.I18N.Export.onlyOne = "Only one has to be selected!"
 
 if(!Repository.I18N.UpdateButton) Repository.I18N.UpdateButton = {};
 Repository.I18N.UpdateButton.name = "Refresh"
+
+if(!Repository.I18N.Edit) Repository.I18N.Edit = {};
+Repository.I18N.Edit.name = "Edit"
+Repository.I18N.Edit.editSummary = "Edit summary"
+Repository.I18N.Edit.editName = "Edit name"
+Repository.I18N.Edit.editText = "Store changes"
+Repository.I18N.Edit.deleteText = "Delete"
+
