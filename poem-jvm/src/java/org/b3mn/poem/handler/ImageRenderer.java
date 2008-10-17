@@ -37,15 +37,7 @@ import org.b3mn.poem.util.ExportHandler;
 @ExportHandler(uri="/svg", formatName="SVG", iconUrl="/backend/images/silk/page_white_vector.png")
 public class ImageRenderer extends HandlerBase {
 	
-	// HACK !!! remove width and height from svg to prevent over sized images
-	public String removeHeightAndWidth(String svg) {
-		String svgTag = svg.substring(0, svg.indexOf(">") + 1);
-		String svgRest = svg.substring(svg.indexOf(">") + 1);
-		svgTag = svgTag.replaceAll("width=\"[0-9]*\"", "");
-		svgTag = svgTag.replaceAll("height=\"[0-9]*\"", "");
-		return svgTag + svgRest;
-	}
-	
+
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object)  {
     	setResponseHeaders(res);
@@ -53,7 +45,6 @@ public class ImageRenderer extends HandlerBase {
     		
     		Representation representation = object.read();
 			String SvgRepresentation = representation.getSvg();
-			SvgRepresentation = removeHeightAndWidth(SvgRepresentation);
     		if ((SvgRepresentation == null) || (SvgRepresentation.length() == 0)){
     			SvgRepresentation = "<svg xmlns=\"http://www.w3.org/2000/svg\" " +
     					"xmlns:oryx=\"http://oryx-editor.org\" id=\"oryx_1\" width=\"800\" " +

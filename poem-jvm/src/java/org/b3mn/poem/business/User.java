@@ -23,6 +23,9 @@
 
 package org.b3mn.poem.business;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -71,6 +74,17 @@ public class User extends BusinessObject {
 		if (this.subject == null) {
 			this.subject = Subject.createNewSubject(this.getId());
 		}
+	}
+	
+	public static boolean openIdExists(String openId) {
+		/*try {
+			URL url = new URL(openId.split("?")[0]); // Remove possible query parameters
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			connection.connect();
+			return true;
+		} catch (Exception e) {};
+		return false;*/
+		return true;
 	}
 	
 	public static User CreateNewUser(String openid, String nickname, String fullname, String email, Date dob, String gender, 

@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.fop.datatypes.Length;
 import org.b3mn.poem.Access;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Interaction;
@@ -270,6 +271,7 @@ public class Model extends BusinessObject {
 	}
 	
 	public boolean addAccessRight(String openId, String term) {
+		if (!User.openIdExists(openId)) return false;
 		Identity sub = Identity.ensureSubject(openId);
 		String subject_hierarchy = sub.getUserHierarchy();
 		String object_hierarchy = this.identity.getModelHierarchy();
@@ -282,12 +284,11 @@ public class Model extends BusinessObject {
 			right.setTerm(term);
 			right.setObject_self(true);
 			right.save();
-			return true; // Created
 		} else {
 			right.setTerm(term); // Overwrite old term
 			right.save();
-			return false; // Already exists
 		}
+		return true;
 		
 	}
 	

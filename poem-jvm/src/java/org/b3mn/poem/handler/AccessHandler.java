@@ -25,6 +25,7 @@ package org.b3mn.poem.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ import org.b3mn.poem.business.Model;
 import org.b3mn.poem.util.AccessRight;
 import org.b3mn.poem.util.HandlerWithModelContext;
 import org.b3mn.poem.util.RestrictAccess;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,12 +67,20 @@ public class AccessHandler extends  HandlerBase {
 		String term = request.getParameter("predicate");
 		// It's only allowed to set read and write rights and the public user cannot get a write right
 		if ((openIds != null) && (term.equals("read") || (term.equals("write") || !subject.getUri().equals(getPublicUser())))) {
+			JSONArray invalidOpenIds = new JSONArray();
 			Model model = new Model(object.getId());
 			for (String openId : openIds.split(",")) {
-				model.addAccessRight(openId, term);
+				if (!model.addAccessRight(openId, term)) {
+					invalidOpenIds.put(openId);
+				}
 			}
-			response.setStatus(200);
-			this.writeAccessRights(response, object);
+			if (invalidOpenIds.length() == 0) {
+				response.setStatus(200);
+				this.writeAccessRights(response, object);
+			} else {
+				response.setStatus(404);
+				response.getWriter().println(invalidOpenIds.toString());
+			}
 		} else {
 			response.setStatus(409);
 			response.getWriter().println("AccessHandler : Invalid Parameters!");

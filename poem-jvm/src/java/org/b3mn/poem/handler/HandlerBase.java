@@ -34,7 +34,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.b3mn.poem.Access;
 import org.b3mn.poem.Dispatcher;
 import org.b3mn.poem.Identity;
@@ -204,6 +203,7 @@ public abstract class HandlerBase {
     
     // Removes spaces in the beginning and in the end of the string
     protected static String removeSpaces(String str) {
+    	
     	if (str.length() < 1) return str;
     	int start = 0;
     	int end= str.length() - 1;

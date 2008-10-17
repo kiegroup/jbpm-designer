@@ -32,6 +32,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Persistance;
 import org.b3mn.poem.business.Model;
@@ -114,7 +115,9 @@ public class TagHandler extends HandlerBase {
 						.list();
 		
 		for (String tag : params.split(",")) {
+			tag = StringEscapeUtils.unescapeHtml(tag);
 			tag = removeSpaces(tag);
+			
 			List<String> tagUris = Persistance.getSession()
 			.createSQLQuery("SELECT access.object_name "
 					+ "FROM tag_relation, tag_definition, access "

@@ -34,7 +34,7 @@ Repository.Core.Plugin = {
 	
 	panel 		: null,
 	
-	modelTypes 	: null,
+	modelTypes 	: null, 
 	
 	viewRegion 	: "left",
 	
@@ -66,7 +66,7 @@ Repository.Core.Plugin = {
 	},
 	render: function(modelData) {
 		
-	},
+	}
 
 };
 

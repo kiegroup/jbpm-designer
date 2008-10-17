@@ -43,6 +43,7 @@ Repository.Plugins.TagInfo = {
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 
 		
+		this._createDataStore();
 		this._generateGUI();
 
 	},
@@ -141,18 +142,32 @@ Repository.Plugins.TagInfo = {
 				
 	},
 	
+	_createDataStore : function() {
+		var types = this.facade.modelCache.getUserTags().map(function(item) { return [ unescape(item) ];}.bind(this));
+
+		
+		this.dataStore =  new Ext.data.SimpleStore({
+	        fields	: ['tag'],
+	        data	: types
+	    });
+	},
+	
 	_generateGUI: function(){
 
 		var label 		= {text: Repository.I18N.TagInfo.shared, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"};
 		this.tagPanel	= new Ext.Panel({border:false})
 		this.controls	= [
-								new Ext.form.TextField({
+								new Ext.form.ComboBox({
 											id		: 'repository_taginfo_textfield',
 											x		: 0, 
 											y		: 0, 
 											width	: 150,
 											emptyText : Repository.I18N.TagInfo.newTag ,
-											disabled  : true,  
+											disabled  : true,
+											mode 	: 'local',
+											store 	: this.dataStore,
+											displayField : 'tag',
+											editable: true
 										}),
 								new Ext.LinkButton({
 											image		:'../images/silk/add.png',
@@ -213,6 +228,8 @@ Repository.Plugins.TagInfo = {
 	_addTag: function( tagname ){
 		
 		if( !tagname || tagname.length <= 0 ){ return }
+		
+		this.dataStore.add(tagname);
 		
 		tagname = escape( tagname )
 		

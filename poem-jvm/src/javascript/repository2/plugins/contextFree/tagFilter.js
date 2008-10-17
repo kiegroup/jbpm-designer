@@ -38,7 +38,7 @@ Repository.Plugins.TagFilter = {
 		this.name = Repository.I18N.TagFilter.name;
 		arguments.callee.$.construct.apply(this, arguments); // call Plugin super class
 
-		var types = this.facade.modelCache.getUserTags().map(function(item) { return [ item ];}.bind(this));
+		var types = this.facade.modelCache.getUserTags().map(function(item) { return [ unescape(item) ];}.bind(this));
 		
 		var sm 		= new Ext.grid.CheckboxSelectionModel({listeners :  { selectionchange: this._onButtonClick.bind(this) }});
 		var store 	= new Ext.data.SimpleStore({
