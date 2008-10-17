@@ -182,10 +182,14 @@ public class XFormsRDFImporter {
 				} else if (n.getNamespaceURI().equals("http://xforms-editor.org/")) {
 					// handle attributes of namespace xforms
 					
-					if(element.getAttributes().containsKey(attribute))
+					if(element.getAttributes().containsKey(attribute)) {
 						element.getAttributes().put(attribute, getContent(n));
-					else
+					} else {
 						handleModelItemProperty(attribute, getContent(n), element, c);
+						if(element instanceof Submit)
+							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
+					}
+						
 					
 				}
 				
@@ -203,6 +207,22 @@ public class XFormsRDFImporter {
 		c.bindings.put(element, bind);
 	}
 	
+	private void handleSubmissionProperty(String attribute, String value, Submit submit, ImportContext c) {
+		if(submit.getSubmission()==null) {
+			Submission submission = new Submission();
+			String submissionId = "bind_";
+			if(submit.getAttributes().get("id")==null)
+				submissionId += submit.getResourceId().substring(1);
+			else 
+				submissionId += submit.getAttributes().get("id");
+			submission.getAttributes().put("id", submissionId);
+			submit.setSubmission(submission);
+			c.form.getModel().getSubmissions().add(submission);
+		}
+		if(!submit.getSubmission().getAttributes().containsKey(attribute)) return;
+		submit.getSubmission().getAttributes().put(attribute, value);
+	}
+	
 	private void setupBinds(ImportContext c) {
 		for(XFormsElement element : c.bindings.keySet()) {
 			
@@ -212,7 +232,7 @@ public class XFormsRDFImporter {
 				Bind bind = c.bindings.get(element);
 				String bindId = "bind_";
 				if(element.getAttributes().get("id")==null)
-					bindId += element.getResourceId();
+					bindId += element.getResourceId().substring(1);
 				else 
 					bindId += element.getAttributes().get("id");
 				bind.getAttributes().put("id", bindId);
@@ -414,6 +434,9 @@ public class XFormsRDFImporter {
 		submit.setResourceId(getResourceId(node));
 		c.objects.put(submit.getResourceId(), submit);
 		handleAttributes(node, submit, c);
+		// reassign ref attribute -> oryx property 'ref' of submit stencil specifies the 'ref' attribute of the submission element
+		submit.getSubmission().getAttributes().put("ref", submit.getAttributes().get("ref"));
+		submit.getAttributes().put("ref", null);
 	}
 	
 	private void addSelect(Node node, ImportContext c) {

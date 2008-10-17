@@ -1017,6 +1017,18 @@
 					"length":"30"
 				},
 				{
+					"id":"resource",
+					"type":"String",
+					"title":"resource",
+					"prefix":"xforms",
+					"value":"",
+					"description":"Attribute indicating the destination URI for submitting instance data.",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"300"
+				},
+				{
 					"id":"ref",
 					"type":"String",
 					"title":"ref",
@@ -1029,36 +1041,238 @@
 					"length":"50"
 				},
 				{
-					"id":"readonly",
-					"type":"String",
-					"title":"readonly",
+					"id":"mode",
+					"type":"Choice",
+					"title":"mode",
 					"prefix":"xforms",
-					"value":"",
-					"description":"Any expression that is convertible to XPath boolean",
+					"value":"asynchronous",
+					"description":"This attribute controls whether or not the submission response processing is performed as part of the default processing of event xforms-submit.",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"asynchronous",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"synchronous",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"method",
+					"type":"String",
+					"title":"method",
+					"prefix":"xforms",
+					"value":"",
+					"description":"Optional attribute specifying the protocol operation to be used to transmit the serialized instance data.",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
 					"length":"100"
+				},
+				{
+					"id":"validate",
+					"type":"Boolean",
+					"title":"validate",
+					"prefix":"xforms",
+					"value":false,
+					"description":"Optional boolean attribute that indicates whether or not the data validation checks of the submission are performed.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
 				},
 				{
 					"id":"relevant",
-					"type":"String",
+					"type":"Boolean",
 					"title":"relevant",
 					"prefix":"xforms",
+					"value":false,
+					"description":"Optional boolean attribute that indicates whether or not the relevance pruning of the submission is performed.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"serialization",
+					"type":"String",
+					"title":"serialization",
+					"prefix":"xforms",
 					"value":"",
-					"description":"Any expression that is convertible to XPath boolean",
+					"description":"Optional attribute that controls how and whether to serialize instance data as part of the submission.",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
 					"length":"100"
 				},
 				{
-					"id":"calculate",
+					"id":"version",
 					"type":"String",
-					"title":"calculate",
+					"title":"version",
+					"prefix":"xforms",
+					"value":"1.0",
+					"description":"Optional attribute specifying the version of XML to be serialized.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"indent",
+					"type":"Boolean",
+					"title":"indent",
+					"prefix":"xforms",
+					"value":false,
+					"description":"Optional attribute specifying whether the serializer should add extra white space nodes for readability.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"mediatype",
+					"type":"String",
+					"title":"mediatype",
+					"prefix":"xforms",
+					"value":"application/xml",
+					"description":"Optional attribute specifying the mediatype for XML serialization of instance data.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"encoding",
+					"type":"String",
+					"title":"encoding",
+					"prefix":"xforms",
+					"value":"UTF-8",
+					"description":"Optional attribute specifying an encoding for serialization.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"omit-xml-declaration",
+					"type":"Boolean",
+					"title":"omit-xml-declaration",
+					"prefix":"xforms",
+					"value":false,
+					"description":"Optional attribute specifying whether to omit the XML declaration on the serialized instance data.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"standalone",
+					"type":"String",
+					"title":"standalone",
 					"prefix":"xforms",
 					"value":"",
-					"description":"An expression used to calculate a string value for the associated instance data node",
+					"description":"Optional attribute specifying whether to include a standalone declaration in the serialized XML.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"cdata-section-elements",
+					"type":"String",
+					"title":"cdata-section-elements",
+					"prefix":"xforms",
+					"value":"",
+					"description":"Optional attribute specifying element names to be serialized with CDATA sections.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"replace",
+					"type":"Choice",
+					"title":"replace",
+					"prefix":"xforms",
+					"value":"all",
+					"description":"Optional attribute specifying how the information returned after submit should be applied.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"all",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"instance",
+							"refToView":""
+						},
+						{
+							"id":"c3",
+							"title":"c3",
+							"value":"text",
+							"refToView":""
+						},
+						{
+							"id":"c4",
+							"title":"c4",
+							"value":"none",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"instance",
+					"type":"String",
+					"title":"instance",
+					"prefix":"xforms",
+					"value":"",
+					"description":"Optional attribute specifying the instance to replace when the replace attribute value is 'instance'.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"target",
+					"prefix":"xforms",
+					"value":"",
+					"description":"Optional attribute containing an XPath expression that indicates the target node for data replacement.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"separator",
+					"type":"String",
+					"title":"separator",
+					"prefix":"xforms",
+					"value":"",
+					"description":"Optional attribute specifying the separator character between name/value pairs in urlencoding.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"1"
+				},
+				{
+					"id":"includenamespaceprefixes",
+					"type":"String",
+					"title":"includenamespaceprefixes",
+					"prefix":"xforms",
+					"value":"",
+					"description":"Optional attribute providing control over namespace serialization.",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",

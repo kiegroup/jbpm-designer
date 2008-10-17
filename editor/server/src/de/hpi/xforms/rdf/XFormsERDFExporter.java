@@ -18,6 +18,7 @@ import de.hpi.xforms.LabelContainer;
 import de.hpi.xforms.ListUICommon;
 import de.hpi.xforms.ListUICommonContainer;
 import de.hpi.xforms.PCDataContainer;
+import de.hpi.xforms.Submission;
 import de.hpi.xforms.UICommonContainer;
 import de.hpi.xforms.UIElementContainer;
 import de.hpi.xforms.XForm;
@@ -173,7 +174,7 @@ public class XFormsERDFExporter {
 		appendOryxField(writer,"type",STENCILSET_URI + "#" + element.getStencilId());
 		
 		for(String field : element.getAttributes().keySet()) {
-			if(!field.equals("bind"))
+			if(!(field.equals("bind")||field.equals("submission")))
 				appendXFormsField(writer, field, element.getAttributes().get(field));
 		}
 		
@@ -195,6 +196,18 @@ public class XFormsERDFExporter {
 				for(String field : bind.getAttributes().keySet()) {
 					if(!field.equals("id"))
 						appendXFormsField(writer, field, bind.getAttributes().get(field));
+				}
+			}
+		}
+		
+		// handle submission properties
+		String submissionId = element.getAttributes().get("submission");
+		if(submissionId!=null) {
+			Submission submission = getSubmissionById(submissionId);
+			if(submission!=null) {
+				for(String field : submission.getAttributes().keySet()) {
+					if(!field.equals("id"))
+						appendXFormsField(writer, field, submission.getAttributes().get(field));
 				}
 			}
 		}
@@ -239,6 +252,14 @@ public class XFormsERDFExporter {
 		for(Bind bind : context.getForm().getModel().getBinds()) {
 			if(bind.getAttributes().get("id")!=null && bind.getAttributes().get("id").equals(id))
 				return bind;
+		}
+		return null;
+	}
+	
+	private Submission getSubmissionById(String id) {
+		for(Submission submission : context.getForm().getModel().getSubmissions()) {
+			if(submission.getAttributes().get("id")!=null && submission.getAttributes().get("id").equals(id))
+				return submission;
 		}
 		return null;
 	}

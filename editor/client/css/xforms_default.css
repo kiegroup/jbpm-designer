@@ -6,7 +6,8 @@ xf|secret,
 xf|textarea, 
 xf|output, 
 xf|trigger, 
-xf|submit {
+xf|submit,
+xf|select {
 	display: table-cell;
 	line-height: 1em;
 	padding-right: 10px;
@@ -18,10 +19,11 @@ xf|secret > xf|label,
 xf|textarea > xf|label, 
 xf|output > xf|label, 
 xf|trigger > xf|label, 
-xf|submit > xf|label {
+xf|submit > xf|label
+xf|select > xf|label {
 	display: table-caption;
 	text-align: left;
-	font-family: Ariel, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: small;
 }
@@ -36,7 +38,7 @@ xf|group {
 xf|group > xf|label {
 	display: table-caption;
 	text-align: left;
-	font-family: Ariel, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: small;
 }
@@ -48,5 +50,3 @@ xf|group > xf|label {
 *:invalid  {
 	background-color: pink;
 }	
-
-

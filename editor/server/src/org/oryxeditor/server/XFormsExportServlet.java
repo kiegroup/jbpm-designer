@@ -12,9 +12,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -32,25 +29,14 @@ import de.hpi.xforms.serialization.XFormsXHTMLExporter;
  */
 public class XFormsExportServlet extends HttpServlet {
 	
-	private static Configuration config = null;
 	private static final long serialVersionUID = 6084194342174761093L;
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
 		res.setContentType("text/xhtml");
 		
-		try {
-			if (config == null) {
-				config = new PropertiesConfiguration("xforms.properties");
-			}
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-		}
-		
-		String instanceInspectorUrl = config.getString("xforms.instance_inspector_url");
-		String cssUrl = config.getString("xforms.css_url");
-		
 		String rdf = req.getParameter("data");
+		String cssUrl = req.getParameter("css");
 		
 		try {
 			
@@ -58,11 +44,12 @@ public class XFormsExportServlet extends HttpServlet {
 			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
+			
 			XFormsRDFImporter importer = new XFormsRDFImporter(document);
 			XForm form = importer.loadXForm();
 			
 			XFormsXHTMLExporter exporter = new XFormsXHTMLExporter(form);
-			Document xhtmlDoc = exporter.getXHTMLDocumentForInspection(instanceInspectorUrl, cssUrl);
+			Document xhtmlDoc = exporter.getXHTMLDocument(cssUrl);
 			
 			OutputFormat format = new OutputFormat(xhtmlDoc);
 			format.setIndenting(true);
