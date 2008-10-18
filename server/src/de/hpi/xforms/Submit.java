@@ -24,6 +24,11 @@ public class Submit extends FormControl {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Submit";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "submit";
 	}

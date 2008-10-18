@@ -22,6 +22,11 @@ public class Label extends XFormsElement implements PCDataContainer {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Label";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "label";
 	}

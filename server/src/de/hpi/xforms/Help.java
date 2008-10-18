@@ -22,6 +22,11 @@ public class Help extends UICommon implements PCDataContainer {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Help";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "help";
 	}

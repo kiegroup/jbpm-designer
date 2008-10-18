@@ -22,6 +22,11 @@ public class Hint extends UICommon implements PCDataContainer {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Hint";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "hint";
 	}

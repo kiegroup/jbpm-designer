@@ -8,6 +8,11 @@ public class Reset extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Reset";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "reset";
 	}

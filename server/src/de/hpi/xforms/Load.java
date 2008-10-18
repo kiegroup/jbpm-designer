@@ -10,6 +10,11 @@ public class Load extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Load";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "load";
 	}

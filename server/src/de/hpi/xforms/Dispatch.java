@@ -12,6 +12,11 @@ public class Dispatch extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Dispatch";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "dispatch";
 	}

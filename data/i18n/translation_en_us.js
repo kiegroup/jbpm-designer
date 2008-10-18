@@ -4,6 +4,8 @@
  * Contains all strings for the default language (en-us).
  * Version 1 - 08/29/08
  */
+if(!ORYX) var ORYX = {};
+
 if(!ORYX.I18N) ORYX.I18N = {};
 
 ORYX.I18N.Language = "en_us"; //Pattern <ISO language code>_<ISO country code> in lower case!
@@ -259,6 +261,7 @@ ORYX.I18N.PropertyWindow.rem = "Remove";
 ORYX.I18N.PropertyWindow.complex = "Editor for a Complex Type";
 ORYX.I18N.PropertyWindow.ok = "Ok";
 ORYX.I18N.PropertyWindow.cancel = "Cancel";
+ORYX.I18N.PropertyWindow.dateFormat = "m/d/y";
 
 if(!ORYX.I18N.ShapeMenuPlugin) ORYX.I18N.ShapeMenuPlugin = {};
 
@@ -305,11 +308,23 @@ ORYX.I18N.View.zoomOut = "Zoom Out";
 ORYX.I18N.View.zoomOutDesc = "Zoom out of the model";
 
 
-if(!ORYX.I18N.XFormsExport) ORYX.I18N.XFormsExport = {};
+if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
 
-ORYX.I18N.XFormsExport.group = "Export";
-ORYX.I18N.XFormsExport.name = "XForms Export";
-ORYX.I18N.XFormsExport.desc = "Export form to an XForms file";
+ORYX.I18N.XFormsSerialization.group = "XForms Serialization";
+ORYX.I18N.XFormsSerialization.exportXForms = "XForms Export";
+ORYX.I18N.XFormsSerialization.exportXFormsDesc = "Export XForms+XHTML markup";
+ORYX.I18N.XFormsSerialization.importXForms = "XForms Import";
+ORYX.I18N.XFormsSerialization.importXFormsDesc = "Import XForms+XHTML markup";
+ORYX.I18N.XFormsSerialization.noClientXFormsSupport = "No XForms support";
+ORYX.I18N.XFormsSerialization.noClientXFormsSupportDesc = "<h2>Your browser does not support XForms. Please install the <a href=\"https://addons.mozilla.org/firefox/addon/824\" target=\"_blank\">Mozilla XForms Add-on</a> for Firefox.</h2>";
+ORYX.I18N.XFormsSerialization.ok = "Ok";
+ORYX.I18N.XFormsSerialization.selectFile = "Select a XHTML (.xhtml) file or type in the XForms+XHTML markup to import it!";
+ORYX.I18N.XFormsSerialization.file = "File";
+ORYX.I18N.XFormsSerialization.impFailed = "Request for import of document failed.";
+ORYX.I18N.XFormsSerialization.impTitl = "Import XForms+XHTML document";
+ORYX.I18N.XFormsSerialization.impButton = "Import";
+ORYX.I18N.XFormsSerialization.impProgress = "Importing...";
+ORYX.I18N.XFormsSerialization.close = "Close";
 
 
 if(!ORYX.I18N.TreeGraphSupport) ORYX.I18N.TreeGraphSupport = {};

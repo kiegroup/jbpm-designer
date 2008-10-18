@@ -8,6 +8,11 @@ public class Revalidate extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Revalidate";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "revalidate";
 	}

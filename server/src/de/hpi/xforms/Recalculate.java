@@ -8,6 +8,11 @@ public class Recalculate extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Recalculate";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "recalculate";
 	}

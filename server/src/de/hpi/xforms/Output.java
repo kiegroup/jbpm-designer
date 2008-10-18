@@ -14,6 +14,11 @@ public class Output extends FormControl {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Output";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "output";
 	}

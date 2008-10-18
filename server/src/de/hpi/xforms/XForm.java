@@ -34,6 +34,10 @@ public class XForm extends XFormsElement implements UIElementContainer {
 		this.model = model;
 	}
 	
+	public String getStencilId() {
+		return "XForm";
+	}
+	
 	public String getTagName() {
 		return null;
 	}

@@ -8,6 +8,11 @@ public class Toggle extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Toggle";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "toggle";
 	}

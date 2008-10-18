@@ -9,6 +9,11 @@ public class SetValue extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "SetValue";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "setvalue";
 	}

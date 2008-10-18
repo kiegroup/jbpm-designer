@@ -14,6 +14,11 @@ public class Secret extends FormControl {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Secret";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "secret";
 	}

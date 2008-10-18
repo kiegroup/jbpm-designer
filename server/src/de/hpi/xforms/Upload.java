@@ -14,6 +14,11 @@ public class Upload extends FormControl {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Upload";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "upload";
 	}

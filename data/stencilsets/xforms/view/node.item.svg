@@ -8,7 +8,7 @@
    height="26"
    version="1.0">
   <defs></defs>
-   <g oryx:minimumSize="32 24" oryx:maximumSize="350 24" >
+   <g>
     <rect oryx:anchor="top" oryx:resize="horizontal" x="0" y="0" width="140" height="24" stroke-width="0" fill="#aaaaaa" />
     
   </g>

@@ -23,7 +23,8 @@ ORYX.CONFIG = {
 	ORYX_NEW_URL:				"/new",	
 	STEP_THROUGH:				"/oryx/stepthrough",
 	STEP_THROUGH_CHECKER:		"/oryx/stepthroughchecker",
-	XFORMS_EXPORT_URL:			"/oryx/xforms",
+	XFORMS_EXPORT_URL:			"/oryx/xformsexport",
+	XFORMS_IMPORT_URL:			"/oryx/xformsimport",
 	BPEL_EXPORT_URL:			"/oryx/bpelexporter",
 	TREEGRAPH_SUPPORT:			"/oryx/treegraphsupport",
 	

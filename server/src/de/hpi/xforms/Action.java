@@ -19,6 +19,11 @@ public class Action extends AbstractAction implements ActionContainer {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Action";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "action";
 	}

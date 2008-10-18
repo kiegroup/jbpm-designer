@@ -10,6 +10,11 @@ public class Delete extends AbstractAction {
 	}
 	
 	@Override
+	public String getStencilId() {
+		return "Delete";
+	}
+	
+	@Override
 	public String getTagName() {
 		return "delete";
 	}
