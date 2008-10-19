@@ -236,6 +236,17 @@ public class User extends BusinessObject {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public Collection<String> getModelUris() {
+		Collection<String> modelUris = Persistance.getSession()
+			.createSQLQuery("SELECT identity.uri FROM identity, access WHERE " +
+					"identity.id=access.object_id AND access.subject_id=:subject_id")
+			.setInteger("subject_id", getId())
+			.list();
+		Persistance.commit();
+		return modelUris;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public Collection<String> getTags() {
 		List<String> tags = Persistance.getSession()
 				.createSQLQuery("SELECT DISTINCT tag_definition.name FROM tag_definition "
@@ -244,6 +255,35 @@ public class User extends BusinessObject {
 						.list();
 		Persistance.commit();
 		return tags;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<String> getFriendOpenIds() {
+		List<String> friends = Persistance.getSession()
+		.createSQLQuery("SELECT DISTINCT identity.uri FROM friend, identity WHERE " +
+				"(friend.subject_id=:subject_id AND friend.friend_id=identity.id) OR " +
+				"(friend.subject_id=identity.id AND friend.friend_id=:subject_id)")
+				.setInteger("subject_id", this.getId())
+				.list();
+		
+		Persistance.commit();
+		return friends;
+	}
+	
+	public void addFriend(String openId) {
+		if (this.getFriendOpenIds().contains(openId) || 
+				openId.equals(HandlerBase.getPublicUser()) ||
+				openId.equals("ownership") || 
+				openId.equals(this.getOpenId()))
+			return;
+		
+		Identity friend = Identity.instance(openId);
+		Persistance.getSession()
+		.createSQLQuery("INSERT INTO friend (subject_id, friend_id) VALUES (:subject_id, :friend_id)")
+			.setInteger("subject_id", this.getId())
+			.setInteger("friend_id", friend.getId())
+			.executeUpdate();
+		Persistance.commit();
 	}
 	
 }

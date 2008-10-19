@@ -76,6 +76,11 @@ Repository.I18N.TypeFilter.name = "Type Filter";
 if(!Repository.I18N.TagFilter) Repository.I18N.TagFilter = {};
 Repository.I18N.TagFilter.name = "Tag Filter";
 
+// Friend Filter Plugin
+
+if(!Repository.I18N.FriendFilter) Repository.I18N.FriendFilter = {};
+Repository.I18N.FriendFilter.name = "Friend Filter";
+
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
 Repository.I18N.TagInfo.name = "Tags"
 Repository.I18N.TagInfo.deleteText = "Delete"

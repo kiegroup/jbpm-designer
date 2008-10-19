@@ -25,7 +25,9 @@ package org.b3mn.poem.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +35,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Interaction;
+import org.b3mn.poem.Persistance;
 import org.b3mn.poem.business.Model;
+import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.AccessRight;
+import org.b3mn.poem.util.FilterMethod;
 import org.b3mn.poem.util.HandlerWithModelContext;
 import org.b3mn.poem.util.RestrictAccess;
 import org.json.JSONArray;
@@ -102,5 +107,25 @@ public class AccessHandler extends  HandlerBase {
 		response.getWriter().println("AccessHandler : Invalid Parameters!");
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	@FilterMethod(FilterName="friend")
+	public static Collection<String> filterByFriends(Identity subject, String params) throws Exception {
+		String typeQuery = "";
+		User user = new User(subject);
+		Collection<String> modelUris = user.getModelUris(); // get all models of the user
+		for (String friend : params.split(",")) {
+			friend = removeSpaces(friend);
+			Collection<String> friendModelUris =  Persistance.getSession()
+			.createSQLQuery("SELECT access.object_name FROM access "
+					+ "WHERE access.subject_name=:friend_openId")
+					.setString("friend_openId", friend)
+					.list();
+			Persistance.commit();
+			
+			modelUris.retainAll(friendModelUris);
+			if (modelUris.size() == 0) break;
+		}
+		
+		return modelUris;
+	}
 }

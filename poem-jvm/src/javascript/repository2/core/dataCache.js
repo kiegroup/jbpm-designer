@@ -298,14 +298,19 @@ Repository.Core.DataCache = {
 		}
 	},
 	
-	getLanguage : function() {
-		this._ensureUserData();
-		return this._userData.currentLanguage;
-	},
-	
 	getUserTags : function() {
 		this._ensureUserData();
 		return this._userData.userTags;
+	},
+	
+	getFriends : function() {
+		this._ensureUserData();
+		return this._userData.friends;
+	},
+	
+	getLanguage : function() {
+		this._ensureUserData();
+		return this._userData.currentLanguage;
 	},
 	
 	setLanguage : function(languagecode, countrycode) {

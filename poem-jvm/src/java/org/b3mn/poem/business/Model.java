@@ -288,6 +288,16 @@ public class Model extends BusinessObject {
 			right.setTerm(term); // Overwrite old term
 			right.save();
 		}
+		
+		for (String friendOpenId : this.getAccessRights().keySet()) {
+			User user;
+			try {
+				user = new User(friendOpenId);
+				user.addFriend(openId);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
 		return true;
 		
 	}
