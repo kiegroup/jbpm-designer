@@ -1947,7 +1947,7 @@
 			"groups":["Actions"],
 			"description":"Causes its child actions to be invoked in the order that they are specified.",
 			"view":"node.action.svg",
-			"icon":"new_action.png",
+			"icon":"new_action_container.png",
 			"roles": [
 				"actions_container",
 				"action"
@@ -2036,7 +2036,7 @@
 			"groups":["Actions"],
 			"description":"This action explicitly sets the value of the specified instance data node.",
 			"view":"node.setvalue.svg",
-			"icon":"new_setvalue.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2122,7 +2122,7 @@
 			"groups":["Actions"],
 			"description":"This action is used to create one or more nodes of instance data by cloning one or more existing instance nodes.",
 			"view":"node.insert.svg",
-			"icon":"new_insert.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2257,7 +2257,7 @@
 			"groups":["Actions"],
 			"description":"This action deletes one or more nodes from instance data.",
 			"view":"node.delete.svg",
-			"icon":"new_delete.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2355,7 +2355,7 @@
 			"groups":["Actions"],
 			"description":"This action marks a specific item as current in a repeating sequence.",
 			"view":"node.setindex.svg",
-			"icon":"new_setindex.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2441,7 +2441,7 @@
 			"groups":["Actions"],
 			"description":"This action selects one possible case from an exclusive list of alternatives in a switch.",
 			"view":"node.toggle.svg",
-			"icon":"new_toggle.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2515,7 +2515,7 @@
 			"groups":["Actions"],
 			"description":"This action dispatches an xforms-focus event to the element identified by attribute control.",
 			"view":"node.setfocus.svg",
-			"icon":"new_setfocus.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2589,7 +2589,7 @@
 			"groups":["Actions"],
 			"description":"This action dispatches an XML Event to a specific target element.",
 			"view":"node.dispatch.svg",
-			"icon":"new_dispatch.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2709,7 +2709,7 @@
 			"groups":["Actions"],
 			"description":"This action results in rebuilding any internal data structures used to track computational dependencies among instance data nodes.",
 			"view":"node.rebuild.svg",
-			"icon":"new_rebuild.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2783,7 +2783,7 @@
 			"groups":["Actions"],
 			"description":"This action causes that instance data nodes whose values need to be recalculated are updated.",
 			"view":"node.recalculate.svg",
-			"icon":"new_recalculate.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2857,7 +2857,7 @@
 			"groups":["Actions"],
 			"description":"This action results in the instance data being revalidated as specified by the processing model.",
 			"view":"node.revalidate.svg",
-			"icon":"new_revalidate.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -2931,7 +2931,7 @@
 			"groups":["Actions"],
 			"description":"This action results in the XForms user interface being refreshed.",
 			"view":"node.refresh.svg",
-			"icon":"new_refresh.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -3005,7 +3005,7 @@
 			"groups":["Actions"],
 			"description":"This action is used to reset the instance data.",
 			"view":"node.reset.svg",
-			"icon":"new_reset.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -3079,7 +3079,7 @@
 			"groups":["Actions"],
 			"description":"This action traverses the specified link.",
 			"view":"node.load.svg",
-			"icon":"new_load.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -3190,7 +3190,7 @@
 			"groups":["Actions"],
 			"description":"This action initiates submit processing.",
 			"view":"node.send.svg",
-			"icon":"new_send.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
@@ -3264,7 +3264,7 @@
 			"groups":["Actions"],
 			"description":"This action encapsulates a message to be displayed to the to the user.",
 			"view":"node.message.svg",
-			"icon":"new_message.png",
+			"icon":"new_action.png",
 			"roles": [
 				"action"
 			],
