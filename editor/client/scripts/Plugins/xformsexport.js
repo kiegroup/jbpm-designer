@@ -26,8 +26,7 @@ if(!ORYX.Plugins)
 
 ORYX.Plugins.XFormsExport = Clazz.extend({
 	
-	CSS_URL: "http://localhost:8081/oryx/css/xforms_default.css",
-	//CSS_URL: "http://oryx-editor.org/oryx/css/xforms_default.css",
+	CSS_URL: "http://oryx-editor.org/oryx/css/xforms_default.css",
 
 	facade: undefined,
 
