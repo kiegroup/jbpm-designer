@@ -266,11 +266,12 @@ public abstract class HandlerBase {
       	  	+ "</style>\n"
 
       	  	+ "<!-- oryx editor -->\n"
-      	  	+ "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
       	  	// EN_US is default an base language
       	  	+ "<!-- language files -->\n"
       	  	+ "<script src=\"" + oryx_path + "i18n/translation_en_us.js\" type=\"text/javascript\" />\n"      	  	
       	  	+ languageFiles
+      	  	+ "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
+      	  	
       	  	+ "<link rel=\"Stylesheet\" media=\"screen\" href=\"" + oryx_path + "css/theme_norm.css\" type=\"text/css\" />\n"
 
       	  	+ "<!-- erdf schemas -->\n"

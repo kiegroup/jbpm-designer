@@ -135,11 +135,11 @@
     
     <target name="build-plugins">
         
-        <copy todir='${editor-build-root}/Plugins'>
-            <fileset dir="${editor-src-client}/scripts/Plugins"/>
+        <copy todir='${editor-build-root}' file="${editor-src-client}/scripts/Plugins/plugins.xml">
+  			
         </copy>
         <echo>
-            Copied plugins into build destination
+            Copied plugins.xml into build destination
         </echo>
         <copy todir='${editor-build-root}/xslt'>
             <fileset dir="${editor-src-client}/xslt"/>
@@ -201,13 +201,14 @@
     
     <target name="build-editor-core">
         
-        <copy todir='${editor-build-root}' file='${editor-src-client}/scripts/Core/config.js'/>
+        <!--<copy todir='${editor-build-root}' file='${editor-src-client}/scripts/Core/config.js'/>-->
         <concat destfile='${editor-build-root}/oryx.debug.js'>
             <filelist id="coresourcefiles" dir="${editor-src-client}">
                 <file name='scripts/kickstart.js'/>
 				<file name='scripts/erdfparser.js'/>
 				<file name='scripts/datamanager.js'/>
 				<file name='scripts/oryx.js'/>
+				<file name='scripts/config.js'/>
                 <file name='scripts/Core/SVG/editpathhandler.js'/>
                 <file name='scripts/Core/SVG/minmaxpathhandler.js'/>
                 <file name='scripts/Core/SVG/pointspathhandler.js'/>
@@ -236,6 +237,7 @@
                 <file name='scripts/Core/edge.js'/>
 				<file name='scripts/Core/command.js'/>
             </filelist>
+			<fileset dir="${editor-src-client}/scripts/Plugins" includes="**/*.js"/>
         </concat>
         <echo>
             Concatenated source files into oryx.js

@@ -9,7 +9,7 @@ ORYX.CONFIG = {
 		
 	/* Plugins */
 	PLUGINS_ENABLED:			true,
-	PLUGINS_CONFIG:				"Plugins/plugins.xml",
+	PLUGINS_CONFIG:				"plugins.xml",
 	PLUGINS_FOLDER:				"Plugins/",
 	PDF_EXPORT_URL:				"/oryx/pdf",
 	PNML_EXPORT_URL:			"/oryx/pnml",

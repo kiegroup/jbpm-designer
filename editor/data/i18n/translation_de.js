@@ -4,6 +4,8 @@
  * Contains all strings for German language.
  * Version 1 - 08/29/08
  */
+if(!ORYX) var ORYX = {};
+
 if(!ORYX.I18N) ORYX.I18N = {};
 
 ORYX.I18N.Language = "de_DE"; //Pattern <ISO language code>_<ISO country code> in lower case!
