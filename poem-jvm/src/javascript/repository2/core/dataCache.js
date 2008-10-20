@@ -124,7 +124,8 @@ Repository.Core.DataCache = {
 	defaultReturnHandler : function(queryData, modelId, response, options) { 
 
 		// Decode JSON
-		var returnedData = Ext.util.JSON.decode(response.responseText);
+		var respText 		= response.responseText;
+		var returnedData 	= respText.length > 0 ? Ext.util.JSON.decode(respText) : null;
 
 		queryData.cacheMisses = queryData.cacheMisses.without( modelId );
 		this.updateObject(queryData.fetchDataUri, modelId, returnedData, true); // Force update event only when at last request 

@@ -130,6 +130,11 @@ if(!Repository.I18N.Edit) Repository.I18N.Edit = {};
 Repository.I18N.Edit.name = "Edit"
 Repository.I18N.Edit.editSummary = "Edit summary"
 Repository.I18N.Edit.editName = "Edit name"
+Repository.I18N.Edit.nameText = "Name"
+Repository.I18N.Edit.summaryText = "Summary"
 Repository.I18N.Edit.editText = "Store changes"
 Repository.I18N.Edit.deleteText = "Delete"
+
+Repository.I18N.Edit.deleteOneText = "'#{title}'" 
+Repository.I18N.Edit.deleteMoreText = "All #{size} selected models" 
 

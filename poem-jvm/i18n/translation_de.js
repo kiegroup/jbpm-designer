@@ -81,3 +81,15 @@ Repository.I18N.Export.onlyOne = "Es darf nur ein Modell selektiert sein"
 
 if(!Repository.I18N.UpdateButton) Repository.I18N.UpdateButton = {};
 Repository.I18N.UpdateButton.name = "Aktualisieren"
+
+if(!Repository.I18N.Edit) Repository.I18N.Edit = {};
+Repository.I18N.Edit.name = "Editieren"
+Repository.I18N.Edit.editSummary = "Beschreibung ändern"
+Repository.I18N.Edit.editName = "Name ändern"
+Repository.I18N.Edit.nameText = "Name"
+Repository.I18N.Edit.summaryText = "Beschreibung"
+Repository.I18N.Edit.editText = "Änderung speichern"
+Repository.I18N.Edit.deleteText = "Löschen"
+
+Repository.I18N.Edit.deleteOneText = "'#{title}'" 
+Repository.I18N.Edit.deleteMoreText = "Alle #{size} selektierten Modelle" 

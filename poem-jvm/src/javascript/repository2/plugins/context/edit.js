@@ -69,7 +69,7 @@ Repository.Plugins.Edit = {
 		
 		// Set Textfields
 		this._enableTextFields( oneIsSelected, data.title, data.summary );
-		this._enableDelete( $H(modelData).keys().length )
+		this._enableDelete( $H(modelData).keys().length,  modelData)
 		
 		// Reset Height;
 		this.panel.getEl().setHeight();
@@ -91,10 +91,21 @@ Repository.Plugins.Edit = {
 		this.controls[2].setDisabled( !enable )
 	},
 	
-	_enableDelete: function( size ){
+	_enableDelete: function( size, modelData ){
 		
 		this.controls[3].setDisabled( size <= 0 )
 		
+		var innerText = '<b>' + Repository.I18N.Edit.deleteText + ':</b> ';
+		if( size == 1 ){
+			innerText += new Template(Repository.I18N.Edit.deleteOneText).evaluate({title: modelData.get( modelData.keys()[0] ).title });
+		} else if( size > 1 ){
+			innerText += new Template(Repository.I18N.Edit.deleteMoreText).evaluate({size: size });			
+		} else {
+			innerText = '<span style="font-style:italic;color:gray;">' + Repository.I18N.Edit.deleteText + '</span>'
+		}
+		
+		if( this.controls[4].getEl() )
+		this.controls[4].getEl().dom.innerHTML = innerText
 	},
 	
 	_generateGUI: function(){
@@ -105,7 +116,7 @@ Repository.Plugins.Edit = {
 											x			: 0, 
 											y			: 0, 
 											width		: 105,
-											fieldLabel	: "Name",
+											fieldLabel	: Repository.I18N.Edit.nameText,
 											labelStyle	: "font-size:11px;font-weight:bold;width:60px;",
 											emptyText 	: Repository.I18N.Edit.editName ,
 											disabled  	: true,  
@@ -115,9 +126,9 @@ Repository.Plugins.Edit = {
 											x			: 0, 
 											y			: 0, 
 											width		: 105,
-											fieldLabel	: "Summary",
+											fieldLabel	: Repository.I18N.Edit.summaryText,
 											labelStyle	: "font-size:11px;font-weight:bold;width:60px;",
-											emptyText 	: Repository.I18N.Edit.editSummary ,
+											emptyText 	: Repository.I18N.Edit.editSummary,
 											disabled  	: true,  
 										}),		
 								new Ext.LinkButton({
@@ -132,7 +143,11 @@ Repository.Plugins.Edit = {
 											text 		: Repository.I18N.Edit.deleteText,
 											click 		: this._deleteModels.bind(this)
 											
-										})		
+										}),
+								new Ext.form.Label({
+											style		:'display:block;width:100%;text-align:left;',
+											text		:''
+										})
 							]
 							
 		// Generate a new panel for the add form
@@ -152,10 +167,9 @@ Repository.Plugins.Edit = {
 											items	: [this.controls[2]]
 										}),
 								new Ext.Panel({
-											width	: 170,
-											style	: 'text-align:right;margin-top:20px;padding:5px 5px 5px 20px;border-top:1px solid silver;',
+											style	: 'text-align:right;margin-top:20px;margin-right:5px;padding:5px 5px 5px 0px;border-top:1px solid silver;',
 											border	: false,
-											items	: [this.controls[3]]
+											items	: [this.controls[4],this.controls[3]]
 										})
 								]
 				});
@@ -175,13 +189,13 @@ Repository.Plugins.Edit = {
 	
 	_deleteModels: function() {
 		
-		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), "/self", null );
+		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), "/self", null, function(){ this.facade.applyFilter() }.bind(this) );
 		 
 	},
 	
 	_storeChanges: function(name, summary){
 
-		this.facade.modelCache.setData( this.facade.getSelectedModels(), "/info", { title:name, summary:summary } )
+		this.facade.modelCache.setData( this.facade.getSelectedModels(), "/meta", { title:name, summary:summary } )
 		
 	}
 };
