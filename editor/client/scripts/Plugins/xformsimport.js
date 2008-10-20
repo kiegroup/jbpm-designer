@@ -33,7 +33,7 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 
 		this.facade.offer({
 			'name':ORYX.I18N.XFormsSerialization.importXForms,
-			'functionality': this.import.bind(this),
+			'functionality': this.importXForms.bind(this),
 			'group': ORYX.I18N.XFormsSerialization.group,
 			'icon': ORYX.PATH + "images/xforms_import.png",
 			'description': ORYX.I18N.XFormsSerialization.importXFormsDesc,
@@ -47,7 +47,7 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 	 * Imports a XForms+XHTML document
 	 * 
 	 */
-	import: function(){
+	importXForms: function(){
 		this._showImportDialog();
 	},		
 
