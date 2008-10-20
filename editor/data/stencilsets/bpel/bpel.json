@@ -1890,7 +1890,6 @@
 			]
 		},
 		{
-		    // TODO add .svg file
 			"type": "node",
 			"id":"copy",
 			"title":"Copy",
@@ -3804,7 +3803,7 @@
 			"roles": ["Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30,horizontalLayout:true});	
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30,horizontalLayout:true});	
  			},
 			"properties": [
 				{
@@ -3934,7 +3933,6 @@
 		},
 		{
 		  // TODO complete perperties
-		  // TODO modify .svg file 
 			"type": "node",
 			"id":"if_branch",
 			"title":"If (/ else-if) Branch",
@@ -4005,7 +4003,6 @@
 		},
 		{
 		    // TODO complete perperties
-		    // TODO modify .svg file 
 			"type": "node",
 			"id":"else_branch",
 			"title":"Else Branch",
@@ -4020,7 +4017,7 @@
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:50,spacingX:30,spacingY:30});	
  			},
 			"properties": [
 				{
@@ -4050,10 +4047,31 @@
 			"view":"flow and sequence/node.flow.svg",
 			"icon":"flow.png",
 			"roles": ["Activity","MultiActivitiesContainer"],
-			//TODO: fix layout fault
 			"layout":function(shape) {		
-				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
+				var pools = shape.getChildNodes();
+				
+				if(pools.length > 0) {
+				
+					pools = pools.sortBy(function(pool) {
+						return pool.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = shape.bounds.height();
+					var topBound = 0;
+					pools.each(function(pool) {
+						var ul = pool.bounds.upperLeft();
+						var lr = pool.bounds.lowerRight();
+						
+						if (ul.x < 0) ul.x = 0 ;
+						if (lr.x > shapeWidth) lr.x  = shapeWidth;
+						
+						if (lr.y > shapeHeight) lr.y = shapeHeight;
+						if (ul.y < 0) ul.y = 0 ;
+						pool.bounds.set(ul, lr);
+					});
+					
+				}
  			},
 			"properties": [
 				{
@@ -6847,15 +6865,15 @@
 		},
 		{
 			"type": "edge",
-			"id":"bpelLink",
-			"title":"Bpel Link",
-			"title_de":"Bpel Link",
+			"id":"link",
+			"title":"link",
+			"title_de":"link",
 			"description":"Defines a Link in a Flow Element",
 			"description_de":"Definiere eine Kante des Flow-Elements",
 			"groups":["Flow and Sequence"],
 			"groups_de":["Flow und Sequence"],
-			"view":"edges/edge.BPELLink.svg",
-			"icon":"sequence_flow.png",
+			"view":"edges/edge.link.svg",
+			"icon":"link.png",
 			"roles": [],
 			"properties": [
 				{
@@ -6935,7 +6953,7 @@
 	"rules": {
 		"connectionRules": [
 			{
-				"role":"bpelLink",
+				"role":"link",
 				"connects": [
 					{
 						"from":"Activity",
@@ -6952,8 +6970,6 @@
 					{
 					   "quantity":1,
 					   "countingRoles":["Activity"],
-					   "exceptions":[],
-					   "recursive":false
 					}
 				]
 			},
@@ -6963,8 +6979,6 @@
 					{
 					   "quantity":undefined,
 					   "countingRoles":["Activity"],
-					   "exceptions":[],
-					   "recursive":false
 					}
 				]
 			},
@@ -6989,20 +7003,16 @@
 				"maximumOccurrence":1,
 			},
 			{	
-				"role":"copy",
-				"maximumOccurrence":1,
-			},
-			{	
 				"role":"Activity",
 				"outgoingEdges": [
 					{
-						"role":"bpelLink",
+						"role":"link",
 						"maximum":undefined
 					}
 				],
 				"incomingEdges": [
 					{
-						"role":"bpelLink",
+						"role":"link",
 						"maximum":undefined
 					}
 				]
