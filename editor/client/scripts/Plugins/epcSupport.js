@@ -76,7 +76,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 	 */
 	exportEPC: function(){
 
-		this.facade.raiseEvent({type:'loading.enable', text:ORYX.I18N.EPCSupport.progressExp});
+		this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_ENABLE, text:ORYX.I18N.EPCSupport.progressExp});
 		var xmlSerializer = new XMLSerializer();
 
 		
@@ -144,7 +144,7 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 			}
 		}
 		
-		this.facade.raiseEvent({type:'loading.disable'});
+		this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
 		
 		// At the moment, only EPML is going to be returned.
 		this.openDownloadWindow(resource + ".epml", epmlResultString);

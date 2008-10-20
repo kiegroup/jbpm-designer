@@ -56,7 +56,7 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
 	 */
     syntaxCheck: function() {
 		this.facade.raiseEvent({
-			type: 			"overlay.hide",
+			type: 			ORYX.CONFIG.EVENT_OVERLAY_HIDE,
 			id: 			"treegraph",
 		});
 		
@@ -124,7 +124,7 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
 
 											
 		this.facade.raiseEvent({
-				type: 			"overlay.show",
+				type: 			ORYX.CONFIG.EVENT_OVERLAY_SHOW,
 				id: 			"treegraph",
 				shapes: 		[shape],
 				attributes: 	attr,

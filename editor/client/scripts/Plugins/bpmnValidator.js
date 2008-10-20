@@ -53,7 +53,7 @@ ORYX.Plugins.BPMNValidator = Clazz.extend({
         
             this.raisedEventIds.each(function(id){
                 this.facade.raiseEvent({
-                    type: "overlay.hide",
+                    type: ORYX.CONFIG.EVENT_OVERLAY_HIDE,
                     id: id
                 });
             }.bind(this));
@@ -134,7 +134,7 @@ ORYX.Plugins.BPMNValidator = Clazz.extend({
             //} 
             //catch (error) {
             //    this.facade.raiseEvent({
-            //        type: 'loading.disable'
+            //        type: ORYX.CONFIG.EVENT_LOADING_DISABLE
             //    });
             //    Ext.Msg.alert("Oryx", error);
             //}
@@ -156,7 +156,7 @@ ORYX.Plugins.BPMNValidator = Clazz.extend({
         }]);
         
         this.facade.raiseEvent({
-            type: "overlay.show",
+            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
             id: id,
             shapes: [shape],
             node: cross,

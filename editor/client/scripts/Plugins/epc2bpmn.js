@@ -86,7 +86,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		if( !options || !options.url ){ return }
 
 
-		//this.facade.raiseEvent({ type: 'loading.enable',text: 'Import' });
+		//this.facade.raiseEvent({ type: ORYX.CONFIG.EVENT_LOADING_ENABLE,text: 'Import' });
 				
 		var url = "./engineproxy?url=" + options.url;
 				
@@ -108,7 +108,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					// If autolayout is needed, it will be calles 'asychronly'
 					if (options.autolayout) {
 						window.setTimeout((function(){
-							this.facade.raiseEvent({type: 'autolayout.layout'});
+							this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_AUTOLAYOUT_LAYOUT});
 						}).bind(this), 100);
 					}
 	            }).bind(this), 100);
@@ -118,7 +118,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			onFailure: function(request){
 				
 				// Disable the loading panel
-				this.facade.raiseEvent({ type: 'loading.disable'});	
+				this.facade.raiseEvent({ type: ORYX.CONFIG.EVENT_LOADING_DISABLE});	
 				
 				Ext.Msg.alert("Oryx", "Request to server failed!");
 			

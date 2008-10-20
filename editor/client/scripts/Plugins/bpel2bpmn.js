@@ -104,7 +104,7 @@ ORYX.Plugins.BPEL2BPMN = Clazz.extend({
 						
 						this.facade.importERDF(parser.parseFromString(eRDF ,"text/xml"));
 						
-						this.facade.raiseEvent({type: 'autolayout.layout'});
+						this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_AUTOLAYOUT_LAYOUT});
 
 						
 		      		}.bind(this),

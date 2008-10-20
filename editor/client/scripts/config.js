@@ -86,8 +86,10 @@ ORYX.CONFIG = {
 	EVENT_MOUSEUP:				"mouseup",
 	EVENT_MOUSEOVER:			"mouseover",
 	EVENT_MOUSEOUT:				"mouseout",
+	EVENT_MOUSEMOVE:			"mousemove",
 	EVENT_DBLCLICK:				"dblclick",
 	EVENT_KEYDOWN:				"keydown",
+	EVENT_KEYUP:				"keyup",
 	
 	EVENT_EXECUTE_COMMANDS:			"executeCommands",
 	EVENT_STENCIL_SET_LOADED:		"stencilSetLoaded",

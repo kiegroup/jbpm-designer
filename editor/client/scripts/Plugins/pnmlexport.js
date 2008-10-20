@@ -59,7 +59,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
     
         // raise loading enable event
         this.facade.raiseEvent({
-            type: 'loading.enable'
+            type: ORYX.CONFIG.EVENT_LOADING_ENABLE
         });
         
         // asynchronously ...
@@ -70,7 +70,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
             
             // raise loading disable event.
             this.facade.raiseEvent({
-                type: 'loading.disable'
+                type: ORYX.CONFIG.EVENT_LOADING_DISABLE
             });
             
         }).bind(this), 10);
@@ -167,7 +167,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
         } 
         catch (error) {
             this.facade.raiseEvent({
-                type: 'loading.disable'
+                type: ORYX.CONFIG.EVENT_LOADING_DISABLE
             });
             alert(error);
         }

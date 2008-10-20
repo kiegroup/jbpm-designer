@@ -41,7 +41,7 @@ ORYX.Plugins.ARISSupport = Clazz.extend({
 
 		this.facade = facade;
 		
-		this.facade.registerOnEvent('propertyChanged', this.propertyChanged.bind(this) );
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPERTY_CHANGED, this.propertyChanged.bind(this) );
 		
 	},
 
@@ -105,7 +105,7 @@ ORYX.Plugins.ARISSupport = Clazz.extend({
 		
 		// Shows the link in the overlay					
 		this.facade.raiseEvent({
-					type: 			"overlay.show",
+					type: 			ORYX.CONFIG.EVENT_OVERLAY_SHOW,
 					id: 			"arissupport.urlref_" + shape.id,
 					shapes: 		[shape],
 					node:			link,
@@ -122,7 +122,7 @@ ORYX.Plugins.ARISSupport = Clazz.extend({
 	hide: function( shape ){
 
 		this.facade.raiseEvent({
-					type: 			"overlay.hide",
+					type: 			ORYX.CONFIG.EVENT_OVERLAY_HIDE,
 					id: 			"arissupport.urlref_" + shape.id
 				});	
 							

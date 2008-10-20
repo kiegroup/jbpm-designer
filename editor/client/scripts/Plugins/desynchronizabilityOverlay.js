@@ -53,7 +53,7 @@ ORYX.Plugins.DesynchronizabilityOverlay = Clazz.extend({
 		if (this.active) {
 			
 			this.facade.raiseEvent({
-				type: 	"overlay.hide",
+				type: 	ORYX.CONFIG.EVENT_OVERLAY_HIDE,
 				id: 	"desynchronizability"
 			});
 			this.active = !this.active;				
@@ -115,7 +115,7 @@ ORYX.Plugins.DesynchronizabilityOverlay = Clazz.extend({
 							var transitionshapes = resp.conflicttransitions.collect(function(res){ return this.facade.getCanvas().getChildShapeByResourceId( res ) }.bind(this)).compact();
 
 							this.facade.raiseEvent({
-								type: 			"overlay.show",
+								type: 			ORYX.CONFIG.EVENT_OVERLAY_SHOW,
 								id: 			"desynchronizability",
 								shapes: 		transitionshapes,
 								attributes: 	{fill: "red", stroke: "black"}
@@ -144,7 +144,7 @@ ORYX.Plugins.DesynchronizabilityOverlay = Clazz.extend({
 			});
 			
 		} catch (error){
-			this.facade.raiseEvent({type:'loading.disable'});
+			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
 			Ext.Msg.alert("Oryx", error);
 	 	}
 

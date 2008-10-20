@@ -224,7 +224,7 @@ ORYX.Core.AbstractShape = {
 			window.setTimeout( function(){
 
 				this._delegateEvent({
-						type	: 'propertyChanged', 
+						type	: ORYX.CONFIG.EVENT_PROPERTY_CHANGED, 
 						name	: key, 
 						value	: value,
 						oldValue: oldValue

@@ -53,7 +53,7 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 			
 			this.raisedEventIds.each(function(id){
 				this.facade.raiseEvent({
-						type: 	"overlay.hide",
+						type: 	ORYX.CONFIG.EVENT_OVERLAY_HIDE,
 						id: 	id
 					});
 			}.bind(this))
@@ -142,7 +142,7 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 			});
 			
 		} catch (error){
-			this.facade.raiseEvent({type:'loading.disable'});
+			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
 			Ext.Msg.alert("Oryx", error);
 	 	}
 
@@ -160,7 +160,7 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 				}]);
 
 		this.facade.raiseEvent({
-			type: 			"overlay.show",
+			type: 			ORYX.CONFIG.EVENT_OVERLAY_SHOW,
 			id: 			id,
 			shapes: 		[shape],
 			node:			cross,
