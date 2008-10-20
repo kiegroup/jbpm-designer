@@ -108,6 +108,7 @@ public class Model extends BusinessObject {
 	
 	public void setTitle(String title) {
 		this.representation.setTitle(title);
+		updateDBObject(representation);
 	}
 	
 	public String getSummary() {
@@ -116,6 +117,7 @@ public class Model extends BusinessObject {
 	
 	public void setSummary(String summary) {
 		this.representation.setSummary(summary);
+		updateDBObject(representation);
 	}
 	
 	public String getType() {

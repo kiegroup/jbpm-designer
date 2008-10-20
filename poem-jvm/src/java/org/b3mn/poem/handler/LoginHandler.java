@@ -186,7 +186,7 @@ public class LoginHandler extends HandlerBase {
                 return null;
             } else {
                 // Option 2: HTML FORM Redirection (Allows payloads >2048 bytes)
-
+            	httpResp.setContentType("text/html");
          	   httpResp.getWriter().println(
          			   this.getRedirectPage(authReq, authReq.getDestinationUrl(true)));
             }

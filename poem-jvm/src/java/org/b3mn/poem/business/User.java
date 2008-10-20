@@ -274,7 +274,8 @@ public class User extends BusinessObject {
 		if (this.getFriendOpenIds().contains(openId) || 
 				openId.equals(HandlerBase.getPublicUser()) ||
 				openId.equals("ownership") || 
-				openId.equals(this.getOpenId()))
+				openId.equals(this.getOpenId()) ||
+				this.getOpenId().equals(HandlerBase.getPublicUser()))
 			return;
 		
 		Identity friend = Identity.instance(openId);
