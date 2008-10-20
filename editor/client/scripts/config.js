@@ -82,7 +82,35 @@ ORYX.CONFIG = {
 	EDITOR_ALIGN_RIGHT:			0x20,
 
 	/* Event types */
-	EVENT_SELECTION_CHANGED:	0x10,
+	EVENT_MOUSEDOWN:			"mousedown",
+	EVENT_MOUSEUP:				"mouseup",
+	EVENT_MOUSEOVER:			"mouseover",
+	EVENT_MOUSEOUT:				"mouseout",
+	EVENT_DBLCLICK:				"dblclick",
+	EVENT_KEYDOWN:				"keydown",
+	
+	EVENT_EXECUTE_COMMANDS:			"executeCommands",
+	EVENT_STENCIL_SET_LOADED:		"stencilSetLoaded",
+	EVENT_SELECTION_CHANGED:		"selectionchanged",
+	
+	EVENT_PROPERTY_CHANGED:			"propertyChanged",
+	EVENT_DRAGDROP_START:			"dragdrop.start",
+	EVENT_DRAGDROP_END:				"dragdrop.end",
+	EVENT_DRAGDOCKER_DOCKED:		"dragDocker.docked",
+	EVENT_HIGHLIGHT_SHOW:			"highlight.showHighlight",
+	EVENT_HIGHLIGHT_HIDE:			"highlight.hideHighlight",
+	EVENT_LOADING_ENABLE:			"loading.enable",
+	EVENT_LOADING_DISABLE:			"loading.disable",
+	EVENT_LOADING_STATUS:			"loading.status",
+	EVENT_OVERLAY_SHOW:				"overlay.show",
+	EVENT_OVERLAY_HIDE:				"overlay.hide",
+	EVENT_ARRANGEMENT_TOP:			"arrangement.setToTop",
+	EVENT_ARRANGEMENT_BACK:			"arrangement.setToBack",
+	EVENT_ARRANGEMENT_FORWARD:		"arrangement.setForward",
+	EVENT_ARRANGEMENT_BACKWARD:		"arrangement.setBackward",
+	EVENT_PROPWINDOW_PROP_CHANGED:	"propertyWindow.propertyChanged",
+	EVENT_LAYOUT_ROWS:				"layout.rows",
+	EVENT_AUTOLAYOUT_LAYOUT:		"autolayout.layout",
 	
 	/* Selection Shapes Highlights */
 	SELECTION_HIGHLIGHT_SIZE:				5,
