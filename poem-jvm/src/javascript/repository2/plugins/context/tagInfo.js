@@ -148,7 +148,7 @@ Repository.Plugins.TagInfo = {
 		
 		this.dataStore =  new Ext.data.SimpleStore({
 	        fields	: ['tag'],
-	        data	: types
+	        data	: types ? types : []
 	    });
 	},
 	
@@ -157,17 +157,18 @@ Repository.Plugins.TagInfo = {
 		var label 		= {text: Repository.I18N.TagInfo.shared, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:5px;"};
 		this.tagPanel	= new Ext.Panel({border:false})
 		this.controls	= [
-								new Ext.form.ComboBox({
-											id		: 'repository_taginfo_textfield',
-											x		: 0, 
-											y		: 0, 
-											width	: 150,
-											emptyText : Repository.I18N.TagInfo.newTag ,
-											disabled  : true,
-											mode 	: 'local',
-											store 	: this.dataStore,
+								new Ext.form.ComboBoxMulti({
+											id			: 'repository_taginfo_textfield',
+											x			: 0, 
+											y			: 0, 
+											width		: 150,
+											emptyText 	: Repository.I18N.TagInfo.newTag ,
+											disabled  	: true,
+											mode 		: 'local',
+											store 		: this.dataStore,
 											displayField : 'tag',
-											editable: true
+											editable	: true,
+											sep			: ","
 										}),
 								new Ext.LinkButton({
 											image		:'../images/silk/add.png',
@@ -229,11 +230,19 @@ Repository.Plugins.TagInfo = {
 		
 		if( !tagname || tagname.length <= 0 ){ return }
 		
-		this.dataStore.add(tagname);
 		
-		tagname = escape( tagname )
+		tagname = tagname.split(",").map(function(text){ return escape( text.strip() ) }).compact().join(",")
 		
 		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tagname} )
+		
+		// Add the new tags to the data store
+		//	Create a new record-class
+		var Tag = Ext.data.Record.create([{name: 'tag'}])
+		//	Add every tag to the store
+		tagname.split(",").each(function( tagText ){
+			this.dataStore.add( new Tag({tag: unescape(tagText) }) );
+		}.bind(this))
+	
 		
 	}
 };

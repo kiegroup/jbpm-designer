@@ -45,6 +45,7 @@ Repository.Plugins.AccessInfo = {
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 
 		
+		this._generateData();
 		this._generateGUI();
 		
 
@@ -230,23 +231,40 @@ Repository.Plugins.AccessInfo = {
 				
 	},
 	
+	_generateData: function(){
+
+		var types = this.facade.modelCache.getFriends().map(function(item) { return [ unescape(item) ]; }.bind(this));
+
+		this.dataStore =  new Ext.data.SimpleStore({
+	        fields	: ['friend'],
+	        data	: types ? types : []
+	    });
+				
+	},
+	
 	_generateGUI: function(){
 				
 		var owner	= {text: Repository.I18N.AccessInfo.owner, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;"};
 		var contr	= {text: Repository.I18N.AccessInfo.contributer, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;margin-top:8px;"};
 		var readr	= {text: Repository.I18N.AccessInfo.reader, xtype:'label', style:"display:block;font-weight:bold;margin-bottom:3px;margin-top:8px;"};
 
-		this.controls	= [		new Ext.form.TextArea({
-											id		: 'repository_accessinfo_textfield',
-											x		: 0, 
-											y		: 0, 
-											width	: 160,
-											height	: 39,
-											grow	: true,
-											growMax	: 120,
-											growMin	: 45,
-											emptyText : Repository.I18N.AccessInfo.openid,
-											disabled  : true,  
+		this.controls	= [		new Ext.form.ComboBoxMulti({
+											id			: 'repository_accessinfo_textfield',
+											x			: 0, 
+											y			: 0, 
+											width		: 160,
+											height		: 39,
+											grow		: true,
+											growMax		: 120,
+											growMin		: 45,
+											emptyText 	: Repository.I18N.AccessInfo.openid,
+											disabled  	: true,  
+											mode 		: 'local',
+											store 		: this.dataStore,
+											displayField : 'friend',
+											editable	: true,
+											sep			: "\n",
+											renderAsTextArea : true
 										}),
 								new Ext.LinkButton({
 											image		: '../images/silk/page_white_magnify.png', 
@@ -321,7 +339,15 @@ Repository.Plugins.AccessInfo = {
 		if( decoded.length <= 0 ){ return }
 		
 		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.ACCESS_URL, { subject:decoded, predicate:access } )
-		
+
+		// Add the new friends to the data store
+		//	Create a new record-class
+		var Tag = Ext.data.Record.create([{name: 'friend'}])
+		//	Add every friend to the store
+		decoded.split(",").each(function( friend ){
+			this.dataStore.add( new Tag({friend: unescape(friend) }) );
+		}.bind(this))
+				
 	}
 };
 
