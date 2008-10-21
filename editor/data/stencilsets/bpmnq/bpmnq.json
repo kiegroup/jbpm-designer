@@ -3948,7 +3948,8 @@
 					"description":"A comma separated list of nodes or node types that must not be on the path from source to destination",
 					"readonly":false,
 					"optional":true,
-					"length":""
+					"length":"",
+					"refToView":"excltext"
 				},
 				{
 					"id":"temporalproperty",
@@ -3963,19 +3964,19 @@
 							"id":"none",
 							"title":"c1",
 							"value":"None",
-							"refToView":""
+							"refToView":"tempnone"
 						},
 						{
 							"id":"precedes",
 							"title":"c2",
 							"value":"Precedes",
-							"refToView":""
+							"refToView":"tempprecedes"
 						},
 						{
 							"id":"leadsto",
 							"title":"c3",
 							"value":"Leads to",
-							"refToView":""
+							"refToView":"templeadsto"
 						}
 					]
 					

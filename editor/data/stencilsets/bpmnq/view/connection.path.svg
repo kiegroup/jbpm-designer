@@ -13,6 +13,7 @@
       <path d="M 0 0 L 15 5 L 0 10 L 0 0" fill="black" stroke="black" id="path2218" />
     </marker>
   </defs>
+
   <g id="edge">
     <!-- number of commands in d attribute defines the number of dockers that Oryx will show -->
     <path
@@ -26,5 +27,9 @@
        marker-mid="url(#mid)"
        marker-end="url(#end)"
        id="path2221" />
+       <text id="excltext" x="10" y="40" oryx:edgePosition="startTop">Excludes</text>
+       <text id="tempnone" x="10" y="70" oryx:edgePosition="startBottom"/>
+       <text id="tempprecedes" x="10" y="70" oryx:edgePosition="startBottom">&lt;&lt;Precedes&gt;&gt;</text>
+       <text id="templeadsto" x="10" y="70" oryx:edgePosition="startBottom">&lt;&lt;Leads to&gt;&gt;</text>
   </g>
 </svg>
