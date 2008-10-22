@@ -6,6 +6,135 @@
  */
 
 /**
+ * Implementation of a Star-Rating Component
+ * 
+ * 
+ */
+Ext.Rating = Ext.extend(Ext.BoxComponent, {
+
+	// Defines the max score value
+	maxScore			: 5,
+
+	// Defines the min score value
+	minScore			: 1,
+	
+	// Defines both imgs
+	scoreImgEnabled		: '../images/silk/star.png',
+	scoreImgDisabled	: '../images/silk/star_gray.png',
+	
+	imgStyle			: 'width:12px;margin:2px;',
+	imgEditStyle		: 'cursor:pointer;',
+	textStyle			: 'margin-left:5px;position:relative;top:-4px;',
+	
+	// Defines a disabled img
+	disabledImg			: '../images/silk/bullet_black.png',	
+
+	value				: 0,
+	
+	text				: '',
+	
+	stars				: [],
+	
+	editable			: false,
+	
+    // private
+    onRender : function(ct, position){
+        if(!this.el){
+            this.el = document.createElement('div');
+            this.el.id = this.getId();
+			
+			this.stars = [];
+			for (var i = this.minScore; i <= this.maxScore; i++){
+				var img = document.createElement('img')
+				
+				if( this.editable ){
+					img.addEventListener( 'mouseover', this.onMouseOverStar.bind(this), true);
+					img.addEventListener( 'mouseout', this.onMouseOutStar.bind(this), true);
+					img.addEventListener( 'click', this.onClickStar.bind(this), true);	
+					img.setAttribute('style', this.imgStyle + '' + this.imgEditStyle );			
+				} else {
+					img.setAttribute('style', this.imgStyle );	
+				}
+				this.stars.push( img );
+			}
+			
+			// Add all the imgs
+			this.stars.each(function(star){
+				this.el.appendChild( star );
+			}.bind(this))
+			
+			// Add a text behind
+			this.textEl = document.createElement('span');
+			this.textEl.setAttribute('style', this.textStyle );	
+			this.textEl.innerHTML = this.text;
+			this.el.appendChild( this.textEl );
+					
+			if(this.forId){
+                this.el.setAttribute('htmlFor', this.forId);
+            }
+        }
+
+		// Set the imgs
+		this.setStars();
+
+        Ext.Rating.superclass.onRender.call(this, ct, position);
+    },
+	
+	setStars: function( value ){
+						
+		if( !value ){
+			value = this.value;
+		}
+
+		var isDisabled = this.disabled || value <= 0;
+				
+		this.stars.each(function(star, index){
+			
+			var pos = index + this.minScore;
+			
+			var isBelowScore = pos <= value;
+			var imgScr 	= isBelowScore 	? this.scoreImgEnabled 	: this.scoreImgDisabled;
+			imgScr 		= isDisabled 	? this.disabledImg 		: imgScr ;
+			
+			star.setAttribute('src', 	imgScr);
+			star.setAttribute('title', 	pos);
+			
+		}.bind(this));
+	},
+	
+	onMouseOverStar: function(e){
+		this.setStars( this.stars.indexOf( e.target ) + this.minScore )
+	},
+
+	onMouseOutStar: function(e){
+		this.setStars()
+	},
+	
+	onClickStar: function(e){
+		if( this.changed instanceof Function ){
+			this.changed( this.stars.indexOf( e.target ) + this.minScore )
+		}
+	},
+			
+    
+    setValue: function(t){
+        this.value = t;
+		this.setStars();
+    },
+	    
+    setText: function(t){
+        this.text = t;
+		
+		if( this.textEl )
+			this.textEl.innerHTML = t;
+    }	
+});
+
+Ext.reg('rating', Ext.Rating);
+
+
+
+/**
  * Implementation of an Ext-LinkButton
  * 
  * 

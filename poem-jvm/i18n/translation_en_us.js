@@ -138,3 +138,9 @@ Repository.I18N.Edit.deleteText = "Delete"
 Repository.I18N.Edit.deleteOneText = "'#{title}'" 
 Repository.I18N.Edit.deleteMoreText = "All #{size} selected models" 
 
+
+if(!Repository.I18N.Rating) Repository.I18N.Rating = {};
+Repository.I18N.Rating.name = "Rating"
+Repository.I18N.Rating.total = "Total Rating"
+Repository.I18N.Rating.my = "My Rating"
+

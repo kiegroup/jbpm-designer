@@ -22,10 +22,12 @@
 		<plugin source="contextFree/busyIndicator.js" name="Repository.Plugins.BusyIndicator" />
 		
 		<!-- CONTEXT PLUGINS -->
+		<plugin source="context/modelRangeSelection.js" name="Repository.Plugins.ModelRangeSelection" />
+		
 		<plugin source="context/accessInfo.js" name="Repository.Plugins.AccessInfo" />
 		<plugin source="context/edit.js" name="Repository.Plugins.Edit" />
 		<plugin source="context/tagInfo.js" name="Repository.Plugins.TagInfo" />
-		<plugin source="context/modelRangeSelection.js" name="Repository.Plugins.ModelRangeSelection" />
+		<plugin source="context/rating.js" name="Repository.Plugins.Rating" />
 		<plugin source="context/export.js" name="Repository.Plugins.Export" />
 				
 	</plugins>
