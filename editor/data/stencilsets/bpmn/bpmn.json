@@ -754,7 +754,7 @@
 			"id":"Subprocess",
 			"title":"Sub-Process",
 			"groups":["Activities"],
-			"description":"An subprocess.",
+			"description":"A subprocess.",
 			"view":"activity/node.subprocess.svg",
 			"icon":"new_subprocess.png",
 			"roles": [
