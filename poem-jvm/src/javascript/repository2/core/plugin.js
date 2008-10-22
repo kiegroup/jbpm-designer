@@ -66,7 +66,18 @@ Repository.Core.Plugin = {
 	},
 	render: function(modelData) {
 		
-	}
+	},
+	
+	deletePanelItems: function( panel ){
+		
+		if( !panel )
+			panel = this.panel;
+			
+		if( panel ){
+			panel.items.each(function(item){ panel.remove( item ) }.bind(this));
+		}
+			
+	},	
 
 };
 

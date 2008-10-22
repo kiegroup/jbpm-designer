@@ -327,7 +327,7 @@ Repository.Plugins.AccessInfo = {
 		
 		if( !openID ){ return }
 		
-		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.ACCESS_URL, {subject:encodeURI(openID)} );
+		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.ACCESS_URL, {subject:encodeURI(openID)}, null, true );
 		
 	},	
 	
@@ -338,7 +338,7 @@ Repository.Plugins.AccessInfo = {
 		
 		if( decoded.length <= 0 ){ return }
 		
-		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.ACCESS_URL, { subject:decoded, predicate:access } )
+		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.ACCESS_URL, { subject:decoded, predicate:access }, null, true )
 
 		// Add the new friends to the data store
 		//	Create a new record-class

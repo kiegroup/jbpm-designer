@@ -37,8 +37,26 @@ Repository.Plugins.TagFilter = {
 	construct: function(facade) {
 		this.name = Repository.I18N.TagFilter.name;
 		arguments.callee.$.construct.apply(this, arguments); // call Plugin super class
+		
+		this._generateGUI();
+		
+		this.facade.modelCache.getUserUpdateHandler().registerCallback(this._generateGUI.bind(this));
+
+	
+	},
+	
+	_generateGUI: function(){
 
 		var types = this.facade.modelCache.getUserTags().map(function(item) { return [ unescape(item) ];}.bind(this));
+		if( this.types && types && types instanceof Array && types.length > 0 && types.toString() == this.types.toString() ){
+			return 
+		}
+
+		this.types = types;
+
+		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
+		this.deletePanelItems();
+				
 		
 		var sm 		= new Ext.grid.CheckboxSelectionModel({listeners :  { selectionchange: this._onButtonClick.bind(this) }});
 		var store 	= new Ext.data.SimpleStore({
@@ -62,7 +80,9 @@ Repository.Plugins.TagFilter = {
 	    });
 
 		this.panel.add( grid )
+		this.panel.getEl().setHeight()
 		this.panel.doLayout();
+				
 	},
 	
 	_onButtonClick : function( selectModel ) {

@@ -223,7 +223,8 @@ Repository.Plugins.TagInfo = {
 		
 		tag = escape( tag )
 		
-		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tag} )
+		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tag}, null, true )
+
 	},	
 	
 	_addTag: function( tagname ){
@@ -233,7 +234,7 @@ Repository.Plugins.TagInfo = {
 		
 		tagname = tagname.split(",").map(function(text){ return escape( text.strip() ) }).compact().join(",")
 		
-		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tagname} )
+		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tagname}, null, true )
 		
 		// Add the new tags to the data store
 		//	Create a new record-class
@@ -243,7 +244,6 @@ Repository.Plugins.TagInfo = {
 			this.dataStore.add( new Tag({tag: unescape(tagText) }) );
 		}.bind(this))
 	
-		
 	}
 };
 

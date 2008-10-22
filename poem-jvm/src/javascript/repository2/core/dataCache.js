@@ -45,21 +45,23 @@ Repository.Core.DataCache = {
 		this._data = new Hash();
 	
 		
-		this._addHandler 	= new EventHandler();
-		this._updateHandler = new EventHandler();
-		this._removeHandler = new EventHandler();
+		this._addHandler 		= new EventHandler();
+		this._updateHandler 	= new EventHandler();
+		this._removeHandler 	= new EventHandler();
+		this._userUpdateHandler = new EventHandler();
 		
-		this._busyHandler 	= { start: new EventHandler(), end:new EventHandler() };
+		this._busyHandler 		= { start: new EventHandler(), end:new EventHandler() };
 		
 		
 		
 	},
 	
 	
-	getAddHandler : function() {return this._addHandler;},
-	getUpdateHandler : function() {return this._updateHandler;},
-	getRemoveHandler : function() {return this._removeHandler;},
-	getBusyHandler : function() {return this._busyHandler;},
+	getAddHandler 		: function() {return this._addHandler;},
+	getUpdateHandler 	: function() {return this._updateHandler;},
+	getRemoveHandler 	: function() {return this._removeHandler;},
+	getBusyHandler 		: function() {return this._busyHandler;},
+	getUserUpdateHandler : function() {return this._userUpdateHandler;},
 
 	
 	getDataAsync : function(fetchDataUri, ids, callback) {
@@ -147,15 +149,15 @@ Repository.Core.DataCache = {
 		}
 	},
 	
-	setData:  function( modelIds, uriSuffix, params, successHandler ){
-		this._sendRequest( modelIds, uriSuffix, 'post', params, successHandler)
+	setData:  function( modelIds, uriSuffix, params, successHandler, raiseUserUpdateEvent ){
+		this._sendRequest( modelIds, uriSuffix, 'post', params, successHandler, raiseUserUpdateEvent)
 	}, 
 	
-	deleteData:  function( modelIds, uriSuffix, params, successHandler ){
-		this._sendRequest( modelIds, uriSuffix, 'delete', params, successHandler)
+	deleteData:  function( modelIds, uriSuffix, params, successHandler,  raiseUserUpdateEvent){
+		this._sendRequest( modelIds, uriSuffix, 'delete', params, successHandler, raiseUserUpdateEvent)
 	},	
 	
-	_sendRequest: function( modelIds, uriSuffix, method, params, successHandler ){
+	_sendRequest: function( modelIds, uriSuffix, method, params, successHandler, raiseUserUpdateEvent ){
 		
 		this._busyHandler.start.invoke();
 		
@@ -175,6 +177,10 @@ Repository.Core.DataCache = {
 			
 			if( successHandler )
 				successHandler.apply( successHandler , arguments)
+				
+			if( raiseUserUpdateEvent )
+				this.updateUserData()
+			
 		}.bind(this);
 						
 		query.cacheMisses 	= modelIds;
@@ -237,6 +243,7 @@ Repository.Core.DataCache = {
 	 * 
 	 */
 	
+	
 	_ensureConfigData : function() {
 		// lazy loading
 		if (!this._configData) {
@@ -277,7 +284,18 @@ Repository.Core.DataCache = {
 	/* The following functions handle the requests to the /user server handler
 	 * 
 	 */
-	
+
+	updateUserData: function(useCache){
+		
+		if( !useCache ){
+			this._userData = null;
+			this._ensureConfigData();
+		}
+		
+		this._userUpdateHandler.invoke();
+				
+	},
+		
 	_ensureUserData : function() {
 		// lazy loading
 		if (!this._userData) {
