@@ -56,26 +56,41 @@ Repository.Plugins.TableView = {
 				}
 			}.bind(this));
 			
-			data.push( [ pair.key, pair.value.thumbnailUri, pair.value.title, stencilset, pair.value.author || 'Unknown' ] )
+			data.push( [ pair.key, pair.value.title, stencilset, pair.value.author || 'Unknown', pair.value.summary, pair.value.creationDate, pair.value.lastUpdate ] )
 		}.bind(this));
 		
+		/*var reader = new Ext.data.ArrayReader({},[
+			{name: 'id'},
+			{name: 'title'},
+			{name: 'type'},
+			{name: 'author'},
+			{name: 'summary'},
+			{name: 'creationDate', type: 'date', dateFormat: 'Y-M-D H:i:s.u'},
+			{name: 'lastUpdate'}
+		]);*/
+		
 		var store = new Ext.data.SimpleStore({
-	        fields	: ['id', 'icon', 'title', 'type', 'author'],
-	        data	: data
+	        fields	: ['id', 'title', 'type', 'author', 'summary', 'creationDate', 'lastUpdate'],
+	        //reader 	: reader,
+			data	: data
 	    });
 		
 		this.tablePanel = new Ext.grid.GridPanel({
 			store	: store,
 			border	:false,
 			columns: [ 
-				{id: "id", header: "id", sortable: false, dataIndex: "id"},
 				{id: "title", header: Repository.I18N.TableView.columns.title, sortable: false, dataIndex: "title"},
 				{id: "type", header: Repository.I18N.TableView.columns.type, sortable: false, dataIndex: "type"},
-				{id: "author", header: Repository.I18N.TableView.columns.author, sortable: false, dataIndex: "author"}
+				{id: "author", header: Repository.I18N.TableView.columns.author, sortable: false, dataIndex: "author"},
+				{id: "summary", header: Repository.I18N.TableView.columns.summary, sortable: false, dataIndex: "summary"},
+				{id: "creationDate", header: Repository.I18N.TableView.columns.creationDate, sortable: false, renderer: Ext.util.Format.dateRenderer('d/m/Y'), dataIndex: "creationDate"},
+				{id: "lastUpdate", header: Repository.I18N.TableView.columns.lastUpdate, sortable: false, dataIndex: "lastUpdate"},
+				{id: "id", header: Repository.I18N.TableView.columns.id, sortable: false, dataIndex: "id"}
 			],
 			viewConfig: {
 				forceFit : true
 			},
+			enableHdMenu : false,
 			sm: new Ext.grid.RowSelectionModel({listeners: {selectionchange: this._onSelectionChange.bind(this)}}),
 			listeners:{rowdblclick:this._onDblClick.bind(this)}		
 		});
