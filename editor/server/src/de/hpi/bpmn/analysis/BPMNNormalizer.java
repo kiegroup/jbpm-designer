@@ -3,6 +3,7 @@ package de.hpi.bpmn.analysis;
 import java.util.Vector;
 
 import de.hpi.bpmn.ANDGateway;
+import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.EndCancelEvent;
@@ -36,6 +37,7 @@ import de.hpi.bpmn.StartPlainEvent;
 import de.hpi.bpmn.StartSignalEvent;
 import de.hpi.bpmn.StartTimerEvent;
 import de.hpi.bpmn.SubProcess;
+import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
 
 public class BPMNNormalizer {
@@ -61,6 +63,7 @@ public class BPMNNormalizer {
 		Vector<EndTerminateEvent> endTerminateEvents = new Vector<EndTerminateEvent>();
 		Vector<Node> nodesWithoutIncomingSequenceFlow = new Vector<Node>();
 		Vector<Node> nodesWithoutOutgoingSequenceFlow = new Vector<Node>();
+		Vector<Node> activities = new Vector<Node>();
 
 		for (Node node : process.getChildNodes()) {
 			if (node instanceof StartEvent)
@@ -80,6 +83,14 @@ public class BPMNNormalizer {
 					&& node.getOutgoingSequenceFlows().size() == 0) {
 				nodesWithoutOutgoingSequenceFlow.add(node);
 			}
+			
+			if(node instanceof Activity){
+				activities.add(node);
+			}
+		}
+		
+		for(Node activity : activities){
+			normalizeMultipleFlowsForActivity(process, activity);
 		}
 
 		if (startEvents.size() > 1) {
@@ -197,6 +208,26 @@ public class BPMNNormalizer {
 			connectNodes(iEvent, gateway).setId(
 					"seq" + String.valueOf(index) + e.getId());
 			index++;
+		}
+	}
+	
+	// Handles multiple incoming or outgoing flows of activities (mapping to gateways)
+	protected void normalizeMultipleFlowsForActivity(Container process, Node activity){
+		if(activity.getIncomingSequenceFlows().size() > 1){
+			XORDataBasedGateway gateway = new XORDataBasedGateway();
+			addNode(gateway, process);
+			for(SequenceFlow seqFlow : activity.getIncomingSequenceFlows()){
+				seqFlow.setTarget(gateway);
+			}
+			connectNodes(gateway, activity);
+		}
+		if(activity.getOutgoingSequenceFlows().size() > 1){
+			ANDGateway gateway = new ANDGateway();
+			addNode(gateway, process);
+			for(SequenceFlow seqFlow : activity.getOutgoingSequenceFlows()){
+				seqFlow.setSource(gateway);
+			}
+			connectNodes(activity, gateway);
 		}
 	}
 
