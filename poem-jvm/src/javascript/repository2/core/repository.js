@@ -470,7 +470,11 @@ Repository.Core.Repository = {
 			this._controls.viewPanel = new Ext.Panel({ 
                 region		: 'center',
 				autoScroll	: true,
-				border		: false
+				border		: false,
+				listeners	: {resize: function(panel, adjWidth, adjHeigth, rawWidth, rawHeight){
+					if(this.getCurrentView())
+						this._switchView(this.getCurrentView())
+				}.bind(this)}
             });
 			// Left panel
 			this._controls.leftPanel = new Ext.Panel({ 

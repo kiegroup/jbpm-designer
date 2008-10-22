@@ -73,6 +73,9 @@ Repository.Plugins.TableView = {
 				{id: "type", header: Repository.I18N.TableView.columns.type, sortable: false, dataIndex: "type"},
 				{id: "author", header: Repository.I18N.TableView.columns.author, sortable: false, dataIndex: "author"}
 			],
+			viewConfig: {
+				forceFit : true
+			},
 			sm: new Ext.grid.RowSelectionModel({listeners: {selectionchange: this._onSelectionChange.bind(this)}}),
 			listeners:{rowdblclick:this._onDblClick.bind(this)}		
 		});
