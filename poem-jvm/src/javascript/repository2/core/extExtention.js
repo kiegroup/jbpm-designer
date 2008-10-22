@@ -117,6 +117,7 @@ Ext.form.ComboBoxMulti = function(config){
     this.typeAhead 		= false;
     // these options customize behavior
     this.minChars 		= 1;
+	this.validationEvent = true;
     this.hideTrigger = true;
     this.defaultAutoCreate = {
         tag: config.renderAsTextArea ? "textarea" : "input",
@@ -146,7 +147,7 @@ Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
         var v = this.getRawValue();
 		var d = v.split( this.sep );
         var left = p;
-        while (left > 0 && (v.charAt(left) != s  || v.slice(left+1).blank())) {
+        while (left > 0 && (v.charAt(left) != s  /* || v.slice(left+1).blank()*/)) {
             --left;
         }
         if (left > 0) {
@@ -190,10 +191,102 @@ Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
             this.fireEvent('select', this, record, index);
         }
     },
-    
+
+    // private
+    initEvents : function(){
+        Ext.form.ComboBoxMulti.superclass.initEvents.call(this);
+		
+		this.keyNav.doRelay = function(foo, bar, hname){
+                if(this.scope.isExpanded()){
+                   return Ext.KeyNav.prototype.doRelay.apply(this, arguments);
+                }
+                return true;
+            }
+	},	    
     initQuery: function(){
         this.doQuery(this.sep ? this.getActiveEntry() : this.getRawValue());
-    }
+    },
+
+    selectText : function(start, end){
+        var v = this.sep ? this.getActiveEntry() : this.getRawValue();
+        if(v.length > 0){
+            start = start === undefined ? this.getRawValue().indexOf(v) : start;
+            end = end === undefined ? v.length : end;
+            var d = this.el.dom;
+            if(d.setSelectionRange){
+                d.setSelectionRange(start, end);
+            }else if(d.createTextRange){
+                var range = d.createTextRange();
+                range.moveStart("character", start);
+                range.moveEnd("character", end-v.length);
+                range.select();
+            }
+        }
+    },
+	
+    // private
+    onLoad : function(){
+        if(!this.hasFocus){
+            return;
+        }
+        if(this.store.getCount() > 0){
+            this.expand();
+            this.restrictHeight();
+            if(this.lastQuery == this.allQuery){
+                if(this.editable){
+                    this.selectText()
+                }
+                if(!this.selectByValue(this.value, true)){
+                    this.select(0, true);
+                }
+            }else{
+                this.selectNext();
+                if(this.typeAhead && this.lastKey != Ext.EventObject.BACKSPACE && this.lastKey != Ext.EventObject.DELETE){
+                    this.taTask.delay(this.typeAheadDelay);
+                }
+            }
+        }else{
+            this.onEmptyResults();
+        }
+        //this.el.focus();
+    },	
+
+    /**
+     * @cfg {Number} growMin The minimum height to allow when grow = true (defaults to 60)
+     */
+    growMin : 60,
+    /**
+     * @cfg {Number} growMax The maximum height to allow when grow = true (defaults to 1000)
+     */
+    growMax: 1000,
+	
+    // private
+    onKeyUp : function(e){
+        if(!e.isNavKeyPress() || e.getKey() == e.ENTER){          		
+			Ext.form.ComboBoxMulti.superclass.onKeyUp.call(this, e);
+			this.autoSize();
+        }
+    },
+
+    /**
+     * Automatically grows the field to accomodate the height of the text up to the maximum field height allowed.
+     * This only takes effect if grow = true, and fires the autosize event if the height changes.
+     */
+    autoSize : function(){
+        if(!this.grow || this.defaultAutoCreate.tag !== "textarea" || !this.el ){
+            return;
+        }
+		
+        var el 	= this.el;
+        var v 	= el.dom.value;
+		var h 	= Number(el.getStyle('line-height').replace("px", "")) * (v.split("\n").length+1);
+		h		-= 6;
+        h = Math.min(this.growMax, Math.max(h, this.growMin));
+        if(h != this.lastHeight){
+            this.lastHeight = h;
+            this.el.setHeight(h);
+        }
+    }	
 });
 
 Ext.reg('combomulti', Ext.form.ComboBoxMulti);
