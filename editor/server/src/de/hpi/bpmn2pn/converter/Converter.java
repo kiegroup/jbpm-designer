@@ -25,6 +25,7 @@ import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.Task;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
+import de.hpi.bpmn.analysis.BPMNNormalizer;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
 import de.hpi.petrinet.FlowRelationship;
@@ -97,9 +98,9 @@ public abstract class Converter {
 
 		return net;
 	}
-
+	
 	protected void handleDiagram(PetriNet net, ConversionContext c) {
-		// do nothing
+		(new BPMNNormalizer(diagram)).normalize();
 	}
 	
 	protected void postProcessDiagram(PetriNet net, ConversionContext c){

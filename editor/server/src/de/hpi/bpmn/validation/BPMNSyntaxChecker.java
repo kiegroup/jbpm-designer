@@ -6,7 +6,6 @@ import java.util.Map;
 import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
@@ -16,6 +15,7 @@ import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.Pool;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XOREventBasedGateway;
@@ -54,6 +54,7 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 //	private static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An intermediate event must have incoming sequence flow.";
 	private static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "Start events must not have incoming sequence flow.";
 	private static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "Attached intermediate events must not have incoming sequence flow.";
+	private static final String ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "Attached intermediate events must have outgoing sequence flow.";
 	private static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "End events must not have outgoing sequence flow.";
 	private static final String EVENTBASEDGATEWAY_BADCONTINUATION = "Event-based gateways must not be followed by gateways or subprocesses.";
 
@@ -126,52 +127,38 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 		for (Node node: container.getChildNodes()) {
 			
 			checkNode(node);
-//			if (!checkNode(node))
-//				return false;
 			
 			if ((node instanceof Activity || node instanceof Event || node instanceof Gateway)
 					&& node.getProcess() == null) {
 				addError(node, FLOWOBJECT_NOT_CONTAINED_IN_PROCESS);
-//				return false;
 			}
 
 			// cardinality of control flow
 			if ((node instanceof EndEvent) // || node instanceof Gateway)
 					&& !hasIncomingControlFlow(node)) {
 				addError(node, ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW);
-//				return false;
 			}
 			if ((node instanceof StartEvent) // || node instanceof Gateway)
 					&& !hasOutgoingControlFlow(node)) {
 				addError(node, STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW);
-//				return false;
 			}
-//			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() == null 
-//					&& !hasIncomingControlFlow(node)) {
-//				addError(node, INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW);
-////				return false;
-//			}
-//			if ((node instanceof Activity || node instanceof EndEvent || node instanceof Gateway)
-//					&& !hasIncomingControlFlow(node)) return false;
-//			if ((node instanceof Activity || node instanceof StartEvent || node instanceof IntermediateEvent || node instanceof Gateway)
-//					&& !hasOutgoingControlFlow(node)) return false;
-//			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() == null 
-//					&& !hasIncomingControlFlow(node)) return false;
-			
+
 			if (node instanceof StartEvent 
 					&& hasIncomingControlFlow(node)) {
 				addError(node, STARTEVENT_WITH_INCOMING_CONTROL_FLOW);
-//				return false;
 			}
+			
 			if (node instanceof EndEvent 
 					&& hasOutgoingControlFlow(node)) {
 				addError(node, ENDEVENT_WITH_OUTGOING_CONTROL_FLOW);
-//				return false;
 			}
-			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() != null 
-					&& hasIncomingControlFlow(node)) {
-				addError(node, ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW);
-//				return false;
+			
+			//attached intermediate events
+			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() != null ) {
+				if(hasIncomingControlFlow(node))
+					addError(node, ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW);
+				if(!hasOutgoingControlFlow(node))
+					addError(node, ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW);
 			}
 			
 			if (node instanceof XOREventBasedGateway) {
@@ -180,8 +167,6 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 			
 			if (node instanceof Container)
 				checkNodesRecursively((Container)node);
-//				if (!checkNodesRecursively((Container)node))
-//					return false;
 		}
 		return (errors.size() == 0);
 	}

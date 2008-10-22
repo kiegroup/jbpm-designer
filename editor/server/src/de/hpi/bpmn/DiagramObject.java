@@ -1,6 +1,7 @@
 package de.hpi.bpmn;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.hpi.bpmn.serialization.BPMNSerialization;
@@ -42,12 +43,31 @@ public abstract class DiagramObject implements Comparable{
 			incomingEdges = new ArrayList<Edge>();
 		return incomingEdges;
 	}
+	
+	public List<SequenceFlow> getIncomingSequenceFlows(){
+		List<SequenceFlow> seqList = new LinkedList<SequenceFlow>();
+		for(Edge edge : this.getIncomingEdges()){
+			if(edge instanceof SequenceFlow)
+				seqList.add((SequenceFlow)edge);
+		}
+		return seqList;
+	}
 
 	public List<Edge> getOutgoingEdges() {
 		if (outgoingEdges == null)
 			outgoingEdges = new ArrayList<Edge>();
 		return outgoingEdges;
 	}
+	
+	public List<SequenceFlow> getOutgoingSequenceFlows(){
+		List<SequenceFlow> seqList = new LinkedList<SequenceFlow>();
+		for(Edge edge : this.getOutgoingEdges()){
+			if(edge instanceof SequenceFlow)
+				seqList.add((SequenceFlow)edge);
+		}
+		return seqList;
+	}
+	
 //	Added by Ahmed Awad
 	public boolean equals(Object other) {
 		if (resourceId != null && other instanceof DiagramObject)

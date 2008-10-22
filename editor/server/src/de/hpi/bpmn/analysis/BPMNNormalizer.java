@@ -1,0 +1,279 @@
+package de.hpi.bpmn.analysis;
+
+import java.util.Vector;
+
+import de.hpi.bpmn.ANDGateway;
+import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.Container;
+import de.hpi.bpmn.EndCancelEvent;
+import de.hpi.bpmn.EndCompensationEvent;
+import de.hpi.bpmn.EndErrorEvent;
+import de.hpi.bpmn.EndEvent;
+import de.hpi.bpmn.EndLinkEvent;
+import de.hpi.bpmn.EndMessageEvent;
+import de.hpi.bpmn.EndMultipleEvent;
+import de.hpi.bpmn.EndPlainEvent;
+import de.hpi.bpmn.EndSignalEvent;
+import de.hpi.bpmn.EndTerminateEvent;
+import de.hpi.bpmn.IntermediateCancelEvent;
+import de.hpi.bpmn.IntermediateCompensationEvent;
+import de.hpi.bpmn.IntermediateErrorEvent;
+import de.hpi.bpmn.IntermediateEvent;
+import de.hpi.bpmn.IntermediateLinkEvent;
+import de.hpi.bpmn.IntermediateMessageEvent;
+import de.hpi.bpmn.IntermediateMultipleEvent;
+import de.hpi.bpmn.IntermediatePlainEvent;
+import de.hpi.bpmn.IntermediateSignalEvent;
+import de.hpi.bpmn.IntermediateTimerEvent;
+import de.hpi.bpmn.Node;
+import de.hpi.bpmn.ORGateway;
+import de.hpi.bpmn.SequenceFlow;
+import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn.StartLinkEvent;
+import de.hpi.bpmn.StartMessageEvent;
+import de.hpi.bpmn.StartMultipleEvent;
+import de.hpi.bpmn.StartPlainEvent;
+import de.hpi.bpmn.StartSignalEvent;
+import de.hpi.bpmn.StartTimerEvent;
+import de.hpi.bpmn.SubProcess;
+import de.hpi.bpmn.XOREventBasedGateway;
+
+public class BPMNNormalizer {
+	BPMNDiagram diagram;
+
+	public BPMNNormalizer(BPMNDiagram diagram) {
+		this.diagram = diagram;
+	}
+
+	/*
+	 * BPMNDiagram#identifyProcesses must be called before!!
+	 */
+	public void normalize() {
+		for (Container process : diagram.getProcesses()) {
+			normalizeRecursively(process);
+		}
+		// diagram.identifyProcesses();
+	}
+
+	private void normalizeRecursively(Container process) {
+		Vector<StartEvent> startEvents = new Vector<StartEvent>();
+		Vector<EndEvent> endEvents = new Vector<EndEvent>();
+		Vector<EndTerminateEvent> endTerminateEvents = new Vector<EndTerminateEvent>();
+		Vector<Node> nodesWithoutIncomingSequenceFlow = new Vector<Node>();
+		Vector<Node> nodesWithoutOutgoingSequenceFlow = new Vector<Node>();
+
+		for (Node node : process.getChildNodes()) {
+			if (node instanceof StartEvent)
+				startEvents.add((StartEvent) node);
+			else if (node instanceof EndTerminateEvent)
+				endTerminateEvents.add((EndTerminateEvent) node);
+			else if (node instanceof EndEvent)
+				endEvents.add((EndEvent) node);
+			else if (node instanceof SubProcess)
+				normalizeRecursively((SubProcess) node);
+			// TODO CompensationActivities shouldn't be counted here
+			else if (!(node instanceof IntermediateEvent)
+					&& node.getIncomingSequenceFlows().size() == 0)
+				nodesWithoutIncomingSequenceFlow.add(node);
+			// TODO CompensationActivities shouldn't be counted here
+			else if (!(node instanceof IntermediateEvent)
+					&& node.getOutgoingSequenceFlows().size() == 0) {
+				nodesWithoutOutgoingSequenceFlow.add(node);
+			}
+		}
+
+		if (startEvents.size() > 1) {
+			normalizeMultipleStartEvents(process, startEvents);
+		//Merge all nodes which have no incoming seq flow
+		} else if (nodesWithoutIncomingSequenceFlow.size() > 0) { 
+			normalizeNodesWithoutIncomingSequenceFlow(process,
+					nodesWithoutIncomingSequenceFlow);
+		}
+		if (endEvents.size() > 1) {
+			normalizeMultipleEndEvents(process, endEvents);
+		} else if (nodesWithoutOutgoingSequenceFlow.size() > 0) {
+			normalizeNodesWithoutOutgoingSequenceFlow(process,
+					nodesWithoutOutgoingSequenceFlow);
+		}
+	}
+
+	// Gives all nodes one start event
+	protected void normalizeNodesWithoutIncomingSequenceFlow(Container process,
+			Vector<Node> nodes) {
+		if (nodes.size() < 1)
+			return;
+
+		StartPlainEvent start = new StartPlainEvent();
+		addNode(start, process);
+
+		if (nodes.size() == 1) {
+			connectNodes(start, nodes.get(0));
+		} else { // node splitting gateway is needed
+			ANDGateway gateway = new ANDGateway();
+			addNode(gateway, process);
+
+			connectNodes(start, gateway);
+
+			for (Node node : nodes) {
+				connectNodes(gateway, node);
+			}
+		}
+	}
+
+	// Gives all nodes one start event
+	protected void normalizeNodesWithoutOutgoingSequenceFlow(Container process,
+			Vector<Node> nodes) {
+		if (nodes.size() < 1)
+			return;
+
+		EndPlainEvent end = new EndPlainEvent();
+		addNode(end, process);
+
+		if (nodes.size() == 1) { // node splitting gateway is needed
+			connectNodes(nodes.get(0), end);
+		} else {
+			ANDGateway gateway = new ANDGateway();
+			addNode(gateway, process);
+
+			connectNodes(gateway, end);
+
+			for (Node node : nodes) {
+				connectNodes(node, gateway);
+			}
+		}
+	}
+
+	protected void normalizeMultipleStartEvents(Container process,
+			Vector<StartEvent> startEvents) {
+		if (startEvents.size() < 2)
+			return;
+
+		StartPlainEvent start = new StartPlainEvent();
+		addNode(start, process);
+
+		XOREventBasedGateway gateway = new XOREventBasedGateway();
+		addNode(gateway, process);
+
+		connectNodes(start, gateway);
+
+		for (StartEvent s : startEvents) {
+			removeNode(s);
+
+			IntermediateEvent iEvent = convertToIntermediateEvent(s);
+
+			addNode(iEvent, process);
+
+			// Connect new intermediate event with outgoing from replacing start
+			// event
+			s.getOutgoingEdges().get(0).setSource(iEvent);
+
+			connectNodes(gateway, iEvent);
+		}
+	}
+
+	// Do not pass any terminate events!
+	private void normalizeMultipleEndEvents(Container process,
+			Vector<EndEvent> endEvents) {
+		EndPlainEvent end = new EndPlainEvent();
+		addNode(end, process);
+
+		ORGateway gateway = new ORGateway();
+		addNode(gateway, process);
+
+		connectNodes(gateway, end);
+
+		int index = 0;
+		for (EndEvent e : endEvents) {
+			removeNode(e);
+
+			IntermediateEvent iEvent = convertToIntermediateEvent(e);
+
+			addNode(iEvent, process);
+
+			e.getIncomingEdges().get(0).setTarget(iEvent);
+
+			// Id is needed because incoming edges of or-join needs ids to find
+			// all combinations
+			connectNodes(iEvent, gateway).setId(
+					"seq" + String.valueOf(index) + e.getId());
+			index++;
+		}
+	}
+
+	private SequenceFlow connectNodes(Node source, Node target) {
+		SequenceFlow seqFlow = new SequenceFlow();
+		seqFlow.setSource(source);
+		seqFlow.setTarget(target);
+		diagram.getEdges().add(seqFlow);
+		return seqFlow;
+	}
+
+	private void addNode(Node node, Container process) {
+		diagram.getChildNodes().add(node);
+		node.setParent(process);
+		node.setProcess(process);
+	}
+
+	private void removeNode(Node node) {
+		diagram.getChildNodes().remove(node);
+		node.setParent(null);
+		node.setProcess(null);
+	}
+
+	static public IntermediateEvent convertToIntermediateEvent(StartEvent sEvent) {
+		IntermediateEvent iEvent = null;
+
+		// Find corresponding class
+		if (sEvent instanceof StartPlainEvent) {
+			iEvent = new IntermediatePlainEvent();
+		} else if (sEvent instanceof StartLinkEvent) {
+			iEvent = new IntermediateLinkEvent();
+		} else if (sEvent instanceof StartMessageEvent) {
+			iEvent = new IntermediateMessageEvent();
+		} else if (sEvent instanceof StartMultipleEvent) {
+			iEvent = new IntermediateMultipleEvent();
+		} else if (sEvent instanceof StartSignalEvent) {
+			iEvent = new IntermediateSignalEvent();
+		} else if (sEvent instanceof StartTimerEvent) {
+			iEvent = new IntermediateTimerEvent();
+		}
+
+		copyNodeValues(sEvent, iEvent);
+
+		return iEvent;
+	}
+
+	static public IntermediateEvent convertToIntermediateEvent(EndEvent eEvent) {
+		IntermediateEvent iEvent = null;
+
+		// Find corresponding class
+		if (eEvent instanceof EndPlainEvent) {
+			iEvent = new IntermediatePlainEvent();
+		} else if (eEvent instanceof EndCancelEvent) {
+			iEvent = new IntermediateCancelEvent();
+		} else if (eEvent instanceof EndCompensationEvent) {
+			iEvent = new IntermediateCompensationEvent();
+		} else if (eEvent instanceof EndErrorEvent) {
+			iEvent = new IntermediateErrorEvent();
+		} else if (eEvent instanceof EndLinkEvent) {
+			iEvent = new IntermediateLinkEvent();
+		} else if (eEvent instanceof EndMessageEvent) {
+			iEvent = new IntermediateMessageEvent();
+		} else if (eEvent instanceof EndMultipleEvent) {
+			iEvent = new IntermediateMultipleEvent();
+		} else if (eEvent instanceof EndSignalEvent) {
+			iEvent = new IntermediateSignalEvent();
+		}
+
+		copyNodeValues(eEvent, iEvent);
+
+		return iEvent;
+	}
+
+	// Does not copy parent and process attribute!
+	static public void copyNodeValues(Node source, Node target) {
+		target.setId("i" + source.getId());
+		target.setLabel(source.getLabel());
+		target.setResourceId(source.getResourceId());
+	}
+}

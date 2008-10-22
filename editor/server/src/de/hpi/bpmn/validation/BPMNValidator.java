@@ -8,15 +8,14 @@ import java.util.Map;
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.verification.WeakTerminationChecker;
 import de.hpi.bpmn.BPMNDiagram;
-import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.EndEvent;
-import de.hpi.bpmn.Node;
+import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn2pn.converter.HighConverter;
 import de.hpi.highpetrinet.HighLabeledTransition;
 import de.hpi.highpetrinet.HighPetriNet;
 import de.hpi.highpetrinet.HighSilentTransition;
-import de.hpi.petrinet.FlowRelationship;
+import de.hpi.highpetrinet.HighTransition;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 
@@ -52,7 +51,7 @@ public class BPMNValidator {
 		this.errors = new HashMap<String,String>();
 		conflictingBPMNNodes = new ArrayList<DiagramObject>();
 	}
-
+	
 	//Use leadsToGoodMarking and bpmnNodes to see Validation results
 	public void validate() {
 		HighPetriNet net = new HighConverter(this.diagram).convert();
@@ -75,30 +74,26 @@ public class BPMNValidator {
 		}
 	}
 	
+	/* Process must have been normalized before, so that each process each extacly one
+	 * end event
+	 */
 	public List<Marking> getFinalMarking(HighPetriNet net){
-		this.diagram.identifyProcesses();
-		
-		//find all end events on highest level
+		//find end events in each process on highest level
 		//List<EndEvent> endEvents = new ArrayList<EndEvent>();
 		Marking m = new Marking(net);
 		List<Marking> markings = new ArrayList<Marking>();
 		markings.add(m);
 		
-		
-		//TODO should be all end events be in the final marking? perhaps calculate
-		//all combininations of end events, where at least one occurs?
-		for(Container p : this.diagram.getProcesses()){
-			for(Node n : p.getChildNodes()){
-				//TODO terminate event shouldn't count for final marking?
-				if(n instanceof EndEvent){
-					for(Transition t : net.getTransitions()){
-						if(t.getId().equals(n.getId())){
-							for(FlowRelationship rel : t.getOutgoingFlowRelationships()){
-								m.addToken((Place)rel.getTarget());
-							}
-						}
-					}
-				}
+		for(Transition transition : net.getTransitions()){
+			DiagramObject bpmnObject = ((HighTransition)transition).getBPMNObj();
+			if(		//it's an end event ...
+					bpmnObject instanceof EndEvent && 
+					// ..., not a terminate end event, ...
+					!(bpmnObject instanceof EndTerminateEvent) && 
+					// and part of the top-level process
+					diagram.getProcesses().contains(((EndEvent)bpmnObject).getProcess()) 
+			){
+				m.addToken((Place)transition.getOutgoingFlowRelationships().get(0).getTarget());
 			}
 		}
 		
