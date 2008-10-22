@@ -42,9 +42,12 @@ public abstract class BusinessObject {
 		this.identity = identity;
 	}
 	
+	protected void persistDBObject(Object o) {
+		Persistance.getSession().save(o);
+	}
+	
 	protected void updateDBObject(Object o) {
 		Persistance.getSession().update(o);
-		Persistance.commit();
 	}
 	
 	public Identity getIdentity() {

@@ -32,8 +32,10 @@ import java.util.Map;
 
 import org.apache.fop.datatypes.Length;
 import org.b3mn.poem.Access;
+import org.b3mn.poem.Dispatcher;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Interaction;
+import org.b3mn.poem.ModelRating;
 import org.b3mn.poem.Persistance;
 import org.b3mn.poem.Representation;
 import org.b3mn.poem.TagDefinition;
@@ -319,4 +321,77 @@ public class Model extends BusinessObject {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	private List<ModelRating> getRatingList() {
+		List<ModelRating> scores = Persistance.getSession()
+			.createSQLQuery("SELECT {model_rating.*} FROM {model_rating} " +
+			"WHERE model_rating.object_id=:object_id")
+			.addEntity("model_rating", ModelRating.class)
+			.setInteger("object_id", this.getId())
+			.list();
+		
+		Persistance.commit();
+		return scores;
+	}
+	
+	public float getTotalScore() {
+		List<ModelRating> scores = getRatingList();
+		int sum=0;
+		for (ModelRating score : scores)
+			sum+=score.getScore();
+		
+		if (scores.size() > 0) return ((float)sum) / ((float)scores.size());
+		else return 0;
+	}
+
+	@SuppressWarnings("unchecked")
+	public int getTotalVotes() {
+		List<ModelRating> scores = getRatingList();
+		return scores.size();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public int getUserScore(Identity subject) {
+		if (subject.getUri().equals(Dispatcher.getPublicUser())) return 0;
+		ModelRating rating = (ModelRating) Persistance.getSession()
+			.createSQLQuery("SELECT {model_rating.*} FROM {model_rating} " +
+			"WHERE model_rating.object_id=:object_id AND model_rating.subject_id=:subject_id")
+			.addEntity("model_rating", ModelRating.class)
+			.setInteger("object_id", this.getId())
+			.setInteger("subject_id", subject.getId())
+			.uniqueResult();
+		
+		Persistance.commit();
+		if (rating != null)
+			return rating.getScore();
+		else return 0;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setUserScore(Identity subject, int score) {
+		if (subject.getUri().equals(Dispatcher.getPublicUser())) return;
+		if (score > 5) score=5;
+		if (score < 0) score=0;
+		
+		ModelRating rating = (ModelRating) Persistance.getSession()
+			.createSQLQuery("SELECT {model_rating.*} FROM {model_rating} " +
+			"WHERE model_rating.object_id=:object_id AND model_rating.subject_id=:subject_id")
+			.addEntity("model_rating", ModelRating.class)
+			.setInteger("object_id", this.getId())
+			.setInteger("subject_id", subject.getId())
+			.uniqueResult();
+		
+		Persistance.commit();
+		
+		if (rating == null) {
+			rating = new ModelRating();
+			rating.setObject_id(this.getId());
+			rating.setSubject_id(subject.getId());
+			rating.setScore(score);
+			persistDBObject(rating);
+		} else {
+			rating.setScore(score);
+			updateDBObject(rating);
+		}
+	}
 }

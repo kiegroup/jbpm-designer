@@ -46,9 +46,12 @@ import org.json.JSONObject;
 public class ModelInfoHandler extends  HandlerBase {
 
 	private void writeResponse(HttpServletRequest request,
-			HttpServletResponse response, Identity object) throws Exception,
+			HttpServletResponse response, Identity object, Identity subject) throws Exception,
 			JSONException, IOException {
+		
 		Model model = new Model(object.getId());
+
+		
 		Collection<String> attributes = new ArrayList<String>();
 		attributes.add("title");			
 		attributes.add("summary");
@@ -66,7 +69,7 @@ public class ModelInfoHandler extends  HandlerBase {
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
 		if (object != null) {
-			writeResponse(request, response, object);
+			writeResponse(request, response, object, subject);
 		}
 	}
 	
@@ -77,7 +80,7 @@ public class ModelInfoHandler extends  HandlerBase {
 		Model model = new Model(object);
 		if (title != null) model.setTitle(title);
 		if (summary != null) model.setSummary(summary);
-		this.writeResponse(request, response, object);
+		this.writeResponse(request, response, object, subject);
 	}
 
 	@SuppressWarnings({ "unchecked" })
