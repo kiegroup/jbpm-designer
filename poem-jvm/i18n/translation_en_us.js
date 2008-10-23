@@ -118,6 +118,7 @@ if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
 Repository.I18N.SortingSupport.name = "Sorting";
 Repository.I18N.SortingSupport.lastchange = "By last change"
 Repository.I18N.SortingSupport.title = "By title"
+Repository.I18N.SortingSupport.rating = "By rating"
 
 if(!Repository.I18N.Export) Repository.I18N.Export = {};
 Repository.I18N.Export.name = "Export";
@@ -148,3 +149,5 @@ Repository.I18N.Rating.totalNoneText = "no votes"
 Repository.I18N.Rating.totalOneText = "#{totalScore} (#{totalVotes})" 
 Repository.I18N.Rating.totalMoreText = "From  #{modelCount} are #{voteCount} voted in average with #{totalScore} (#{totalVotes})"
 
+if(!Repository.I18N.RatingFilter) Repository.I18N.RatingFilter = {};
+Repository.I18N.RatingFilter.name = "Rating Filter"
