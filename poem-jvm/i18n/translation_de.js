@@ -21,6 +21,16 @@ Repository.I18N.Repository.sayHello = "Hallo";
 Repository.I18N.Repository.login = "Anmelden";
 Repository.I18N.Repository.logout = "Abmelden";
 
+Repository.I18N.Repository.viewMenu = "Ansicht";
+Repository.I18N.Repository.viewMenuTooltip = "Ansicht wechseln";
+
+Repository.I18N.Repository.windowTimeoutMessage = "Es scheint als ob der Oryx-Editor sich nicht gestartet hat. Bitte überprüfen sie, ob sie nicht evtl. ein PopUp-Blocker angeschaltet haben, der das Öffnen des Editors möglicherweise verhindert.";
+Repository.I18N.Repository.windowTitle = "Oryx";
+
+Repository.I18N.Repository.noSaveTitle = "Oryx";
+Repository.I18N.Repository.noSaveMessage = "Als Public-User haben sie nicht die Rechte um Modelle zu speichern oder neu anzulegen. Möchten sie dennoch den Oryx-Editor öffnen?";
+Repository.I18N.Repository.yes = "Ja";
+
 Repository.I18N.Repository.leftPanelTitle = "Modellorganisation";
 Repository.I18N.Repository.rightPanelTitle = "Modellinfo";
 Repository.I18N.Repository.bottomPanelTitle = "Kommentare";
@@ -29,8 +39,24 @@ Repository.I18N.Repository.bottomPanelTitle = "Kommentare";
  
 // NewModel Plugin
 if(!Repository.I18N.NewModel) Repository.I18N.NewModel = {};
-
 Repository.I18N.NewModel.name = "Neues Model";
+Repository.I18N.NewModel.tooltipText = "Erstellen eines neuen Modells mit dem selektierten StencilSets";
+
+// VIEW PLUGINS
+
+if(!Repository.I18N.TableView) Repository.I18N.TableView = {};
+Repository.I18N.TableView.name = "Tabellen Ansicht";
+
+if(!Repository.I18N.TableView.columns) Repository.I18N.TableView.columns = {};
+Repository.I18N.TableView.columns.title = "Titel";
+Repository.I18N.TableView.columns.type = "Modell Typ";
+Repository.I18N.TableView.columns.author = "Author";
+
+if(!Repository.I18N.IconView) Repository.I18N.IconView = {};
+Repository.I18N.IconView.name = "Kachel Ansicht";
+
+if(!Repository.I18N.FullView) Repository.I18N.FullView = {};
+Repository.I18N.FullView.name = "Einzel Ansicht";
 
 // TypeFilter Plugin
 
@@ -50,7 +76,9 @@ Repository.I18N.ModelRangeSelection.previous = "<< Vorherige Seite"
 Repository.I18N.ModelRangeSelection.next = "Nächste Seite >>"
 Repository.I18N.ModelRangeSelection.last = "Letzte"
 Repository.I18N.ModelRangeSelection.first = "Erste"
-Repository.I18N.ModelRangeSelection.modelsOf = "(#{number} von #{size} Modellen)" 
+Repository.I18N.ModelRangeSelection.modelsOfZero = "(0 Modelle)" 
+Repository.I18N.ModelRangeSelection.modelsOfOne = "(#{from} von #{size} Modellen)" 
+Repository.I18N.ModelRangeSelection.modelsOfMore = "(#{from}-#{to} von #{size} Modellen)" 
 
 if(!Repository.I18N.AccessInfo) Repository.I18N.AccessInfo = {};
 Repository.I18N.AccessInfo.name = "Rechteverwaltung"

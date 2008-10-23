@@ -29,7 +29,7 @@ Repository.I18N.Repository.viewMenu = "View";
 Repository.I18N.Repository.viewMenuTooltip = "Changes View";
 
 Repository.I18N.Repository.windowTimeoutMessage = "The editor does not seem to be started yet. Please check, whether you have a popup blocker enabled and disable it or allow popups for this site. We will never display any commercials on this site.";
-Repository.I18N.Repository.windowTitle = "Editor not started.";
+Repository.I18N.Repository.windowTitle = "Oryx";
 
 Repository.I18N.Repository.noSaveTitle = "Message";
 Repository.I18N.Repository.noSaveMessage = "As a public user, you can not save a model. Do you want to model anyway?";
@@ -51,7 +51,6 @@ Repository.I18N.NewModel.tooltipText = "Create a new model of the selected type"
 // TableView Plugin
 
 if(!Repository.I18N.TableView) Repository.I18N.TableView = {};
-
 Repository.I18N.TableView.name = "Table View";
 
 if(!Repository.I18N.TableView.columns) Repository.I18N.TableView.columns = {};
@@ -94,7 +93,9 @@ Repository.I18N.ModelRangeSelection.previous = "<< Previous Page"
 Repository.I18N.ModelRangeSelection.next = "Next Page >>"
 Repository.I18N.ModelRangeSelection.last = "Last"
 Repository.I18N.ModelRangeSelection.first = "First"
-Repository.I18N.ModelRangeSelection.modelsOf = "(#{number} of #{size} Models)" 
+Repository.I18N.ModelRangeSelection.modelsOfZero = "(0 models)" 
+Repository.I18N.ModelRangeSelection.modelsOfOne = "(#{from} from #{size} models)" 
+Repository.I18N.ModelRangeSelection.modelsOfMore = "(#{from}-#{to} from #{size} models)" 
 
 if(!Repository.I18N.AccessInfo) Repository.I18N.AccessInfo = {};
 Repository.I18N.AccessInfo.name = "Access Rights"

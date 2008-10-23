@@ -33,7 +33,7 @@ if(!Repository.Plugins) Repository.Plugins = {};
 Repository.Plugins.NewModel = {
 	construct: function(facade) {
 
-		this.name = Repository.I18N.NewModel.name;
+		//this.name = Repository.I18N.NewModel.name;
 
 		// define Create New Model menu
 		this.toolbarButtons = new Array();

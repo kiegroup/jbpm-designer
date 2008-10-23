@@ -102,7 +102,7 @@ Repository.Core.ViewPlugin = {
 				return
 			}
 				
-			this.showDisplayedModelsStartingFrom( this.lastStartIndexOfDisplayedModel );
+			this.showDisplayedModelsStartingFrom( 0 );
 		},
 
 		viewChanged : function(modelIds) {

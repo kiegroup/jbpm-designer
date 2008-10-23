@@ -69,29 +69,33 @@ Repository.Plugins.ModelRangeSelection = {
 		// Generate Page Buttons
 
 		var currentPage	= Math.max( Math.floor( index / pageSize ) , 0);
-		var lastPage	= Math.floor( size / pageSize );
-		var endPage		= Math.max( Math.min( currentPage + 2, lastPage-1 ), 0);
+		var lastPage	= Math.max( Math.floor( (size-1) / pageSize ) , 0);
+		var endPage		= Math.max( Math.min( currentPage + 2, lastPage ), 0);
 		var startPage	= Math.max( endPage - 4, 0);
-		endPage			= Math.max(  Math.min( startPage + 4, lastPage-1 ), 0);
+		endPage			= Math.max(  Math.min( startPage + 4, lastPage ), 0);
 		
 		if( startPage != 0 ){
 			buttons.push( {xtype:'label', text:'...', style:buttonStyle} )
 		}
 		
-		for( startPage; startPage <= endPage; startPage++ ){
-			var style = currentPage == startPage ? buttonStyle + "font-size:13px;font-weight:bold;color:#000000;": buttonStyle;
-			buttons.push( new Ext.LinkButton({text:(startPage+1)+"", click:this._setRange.bind(this, startPage*pageSize), style:style, disabled: currentPage == startPage}) );
+		for( var i=startPage; i <= endPage; i++ ){
+			var style = currentPage == i ? buttonStyle + "font-size:13px;font-weight:bold;color:#000000;": buttonStyle;
+			buttons.push( new Ext.LinkButton({text:(i+1)+"", click:this._setRange.bind(this, i*pageSize), style:style, disabled: currentPage == i}) );
 		}
 
-		// Checks if the last shown page is realy the last page
-		if( !(startPage*pageSize > size-pageSize)){
+		// Checks if the last shown page is really the last page
+		if( endPage !== lastPage ){
 			buttons.push( {xtype:'label', text:'...', style:buttonStyle} )
 		}
 						
 		// Last
 		buttons.push( new Ext.LinkButton({text:Repository.I18N.ModelRangeSelection.last, click:this._setRange.bind(this, size - (size % pageSize)), style:buttonStyle, disabled:isLastPage}) );
 		
-		var labelModelOf = new Template(Repository.I18N.ModelRangeSelection.modelsOf).evaluate({number: shownModels, size: size });
+		var labelModelOf = 	size == 0 ?
+								Repository.I18N.ModelRangeSelection.modelsOfZero :
+								(shownModels == 1 ? 
+									new Template(Repository.I18N.ModelRangeSelection.modelsOfOne).evaluate({size: size, from: index+1}) : 					
+									new Template(Repository.I18N.ModelRangeSelection.modelsOfMore).evaluate({size: size, from: index+1, to: index+shownModels}) );
 		buttons.push( {xtype:'label', text:labelModelOf, style:'margin-left:30px;'} )
 		
 		// Next

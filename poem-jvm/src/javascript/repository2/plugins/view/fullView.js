@@ -48,6 +48,11 @@ Repository.Plugins.FullView = {
 			this.panel.remove( this.myPanel )
 		}
 		
+		// If there are no models, return
+		if( $H(modelData).keys().length <= 0 ){
+			return
+		}
+		
 		var data			= modelData.get( modelData.keys()[0] );
 		data['typeShort'] 	= this.facade.modelCache.getModelTypes().find(function(type){ return data.type == type.namespace }.bind(this)).title;
 		
