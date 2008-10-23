@@ -59,7 +59,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
 				}
 			]
@@ -89,7 +89,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
                 },
                 {
@@ -141,7 +141,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
                 },
                 {
@@ -196,7 +196,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
                 },
                 {
@@ -292,7 +292,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
-					"length":"20",
+					"length":"",
 					"wrapLines":true
 				},
                 {
