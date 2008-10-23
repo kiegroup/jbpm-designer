@@ -154,12 +154,12 @@ public class XFormsERDFExporter {
 		if(name==null) name = "";
 		
 		writer.append("<div id=\""+ context.getForm().getResourceId() +"\" class=\"-oryx-canvas\">");
-		writer.append("<span class=\"oryx-type\">" + STENCILSET_URI + "#" + context.getForm().getStencilId() + "</span>");
-		writer.append("<span class=\"xforms-id\"></span>");
-		writer.append("<span class=\"xforms-name\">" + name + "</span>");
-		writer.append("<span class=\"xforms-version\"></span>");
-		writer.append("<span class=\"oryx-mode\">writable</span>");
-		writer.append("<span class=\"oryx-mode\">fullscreen</span>");
+		appendOryxField(writer, "type", STENCILSET_URI + "#" + context.getForm().getStencilId());
+		appendXFormsField(writer, "id", "");
+		appendXFormsField(writer, "name", name);
+		appendXFormsField(writer, "version", "");
+		appendOryxField(writer, "mode", "writable");
+		appendOryxField(writer, "mode", "fullscreen");
 		writer.append("<a rel=\"oryx-stencilset\" href=\"./stencilsets/xforms/xforms.json\"/>");
 
 		for(String id : context.getResourceIds()){
@@ -214,7 +214,7 @@ public class XFormsERDFExporter {
 		
 		if(element instanceof XFormsUIElement) {
 			int x = ((XFormsUIElement) element).getXPosition();
-			int y = ((XFormsUIElement) element).getYPosition() * DISTANCE_FACTOR;
+			int y = (((XFormsUIElement) element).getYPosition() + 10) * DISTANCE_FACTOR;
 			appendOryxField(writer, "bounds", x + "," + y + "," + x + "," + y );
 		}
 		
@@ -236,7 +236,7 @@ public class XFormsERDFExporter {
 	}
 	
 	private void appendXFormsField(PrintWriter writer, String field, String entry) {
-		writer.append("<span class=\"xforms-");
+		writer.append("<span class=\"oryx-xf_");
 		writer.append(field);
 		if (entry != null) {
 			writer.append("\">");
