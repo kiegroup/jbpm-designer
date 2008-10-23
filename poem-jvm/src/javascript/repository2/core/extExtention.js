@@ -92,7 +92,7 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 			
 			var pos = index + this.minScore;
 			
-			var isBelowScore = pos <= value;
+			var isBelowScore = pos <= (value+0.5);
 			var imgScr 	= isBelowScore 	? this.scoreImgEnabled 	: this.scoreImgDisabled;
 			imgScr 		= isDisabled 	? this.disabledImg 		: imgScr ;
 			

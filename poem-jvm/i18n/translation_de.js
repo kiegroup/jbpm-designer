@@ -93,3 +93,11 @@ Repository.I18N.Edit.deleteText = "Löschen"
 
 Repository.I18N.Edit.deleteOneText = "'#{title}'" 
 Repository.I18N.Edit.deleteMoreText = "Alle #{size} selektierten Modelle" 
+
+if(!Repository.I18N.Rating) Repository.I18N.Rating = {};
+Repository.I18N.Rating.name = "Bewertung"
+Repository.I18N.Rating.total = "Gesamte Bewertung:"
+Repository.I18N.Rating.my = "Meine Bewertung:"
+Repository.I18N.Rating.totalNoneText = "keine Bewertung" 
+Repository.I18N.Rating.totalOneText = "#{totalScore} (#{totalVotes})" 
+Repository.I18N.Rating.totalMoreText = "Von #{modelCount} Modellen sind #{voteCount} bewertet mit einem Durchschnitt von #{totalScore} (#{totalVotes})"

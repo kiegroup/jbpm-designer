@@ -55,26 +55,43 @@ Repository.Plugins.Rating = {
 		
 		var totalScore 	= 0;
 		var userScore	= 0; 
-		var totalVote	= 0; 
+		var totalVotes	= 0; 
 		var modelCount	= $H(modelData).keys().length; 
+		var voteCount	= 0;
 		
 		$H(modelData).values().each(function( score ){
 			totalScore 	+= score.totalScore;
-			totalVote 	+= score.totalVotes;
+			totalVotes 	+= score.totalVotes;
 			userScore 	+= score.userScore;
+			
+			if( score.totalScore > 0 )
+				voteCount++
+			
 		});
 		
-		totalScore 	/= modelCount;
-		totalVote 	/= modelCount;
-		userScore 	/= modelCount;
+		// Get the avarage
+		totalScore 	/= voteCount || 1;
+		totalVotes 	/= voteCount || 1;
+		userScore 	/= voteCount || 1;
+		
+		// Define the text beneath the stars, depeding on the model vote counts
+		var totalText;
+		switch( modelCount * voteCount ){
+			case 0:		totalText = Repository.I18N.Rating.totalNoneText;
+						break;
+			case 1: 	totalText = new Template(Repository.I18N.Rating.totalOneText).evaluate({totalScore: totalScore, totalVotes: totalVotes });
+						break;
+			default:	totalText = new Template(Repository.I18N.Rating.totalMoreText).evaluate({totalScore: totalScore, totalVotes: totalVotes, modelCount: modelCount, voteCount: voteCount });
+						break;
+		}
 
 		this.controls[0].setDisabled( modelCount <= 0 )		
 		this.controls[0].setValue( totalScore )
-		this.controls[0].setText( modelCount <= 0 ? '' : totalScore + ' (' + totalVote + ')' )
+		this.controls[0].setText( modelCount <= 0 ? '' : totalText )
 		
 		if( this.controls[1].rendered ){
-			this.controls[1].setDisabled( modelCount != 1 )	
-			this.controls[1].setValue( userScore )		
+			this.controls[1].setDisabled( modelCount <= 0 )	
+			this.controls[1].setValue( modelCount > 1 ? 0 : userScore )		
 		}
 		
 	},

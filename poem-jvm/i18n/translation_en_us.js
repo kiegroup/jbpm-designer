@@ -141,6 +141,9 @@ Repository.I18N.Edit.deleteMoreText = "All #{size} selected models"
 
 if(!Repository.I18N.Rating) Repository.I18N.Rating = {};
 Repository.I18N.Rating.name = "Rating"
-Repository.I18N.Rating.total = "Total Rating"
-Repository.I18N.Rating.my = "My Rating"
+Repository.I18N.Rating.total = "Total Rating:"
+Repository.I18N.Rating.my = "My Rating:"
+Repository.I18N.Rating.totalNoneText = "no votes" 
+Repository.I18N.Rating.totalOneText = "#{totalScore} (#{totalVotes})" 
+Repository.I18N.Rating.totalMoreText = "From  #{modelCount} are #{voteCount} voted in average with #{totalScore} (#{totalVotes})"
 
