@@ -483,7 +483,8 @@ Repository.Core.Repository = {
                 collapsible	: true,
                 collapsed	: false,
                 split 		: true,	
-				width		: 200			            		
+				width		: 200,
+				autoScroll	: true			            		
             });
 			// Right panel
 			this._controls.rightPanel = new Ext.Panel({ 
@@ -492,7 +493,8 @@ Repository.Core.Repository = {
                 collapsible	: true,
                 collapsed	: false,
                 split 		: true,
-				width		: 200		            		
+				width		: 200,
+				autoScroll	: true		            		
             });			
 			// Bottom panel
 			this._controls.bottomPanel = new Ext.Panel({ 
