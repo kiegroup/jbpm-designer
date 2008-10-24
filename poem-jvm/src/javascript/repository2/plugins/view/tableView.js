@@ -56,6 +56,9 @@ Repository.Plugins.TableView = {
 				}
 			}.bind(this));
 			
+			pair.value.lastUpdate = pair.value.lastUpdate.substring(0,19);
+			pair.value.creationDate = pair.value.creationDate.substring(0,19);
+			
 			data.push( [ pair.key, pair.value.title, stencilset, pair.value.author || 'Unknown', pair.value.summary, pair.value.creationDate, pair.value.lastUpdate ] )
 		}.bind(this));
 		
@@ -80,12 +83,12 @@ Repository.Plugins.TableView = {
 			border	:false,
 			columns: [ 
 				{id: "title", header: Repository.I18N.TableView.columns.title, sortable: false, dataIndex: "title"},
-				{id: "type", header: Repository.I18N.TableView.columns.type, sortable: false, dataIndex: "type"},
+				{id: "type", width: 50, header: Repository.I18N.TableView.columns.type, sortable: false, dataIndex: "type"},
 				{id: "author", header: Repository.I18N.TableView.columns.author, sortable: false, dataIndex: "author"},
 				{id: "summary", header: Repository.I18N.TableView.columns.summary, sortable: false, dataIndex: "summary"},
-				{id: "creationDate", header: Repository.I18N.TableView.columns.creationDate, sortable: false, renderer: Ext.util.Format.dateRenderer('d/m/Y'), dataIndex: "creationDate"},
-				{id: "lastUpdate", header: Repository.I18N.TableView.columns.lastUpdate, sortable: false, dataIndex: "lastUpdate"},
-				{id: "id", header: Repository.I18N.TableView.columns.id, sortable: false, dataIndex: "id"}
+				{id: "creationDate", width: 70, header: Repository.I18N.TableView.columns.creationDate, sortable: false, dataIndex: "creationDate"},
+				{id: "lastUpdate", width: 70, header: Repository.I18N.TableView.columns.lastUpdate, sortable: false, dataIndex: "lastUpdate"},
+				{id: "id", width: 45, header: Repository.I18N.TableView.columns.id, sortable: false, dataIndex: "id"}
 			],
 			viewConfig: {
 				forceFit : true
