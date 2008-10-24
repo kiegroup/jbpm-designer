@@ -57,6 +57,10 @@ if(!Repository.I18N.TableView.columns) Repository.I18N.TableView.columns = {};
 Repository.I18N.TableView.columns.title = "Title";
 Repository.I18N.TableView.columns.type = "Model Type";
 Repository.I18N.TableView.columns.author = "Author";
+Repository.I18N.TableView.columns.summary = "Summary";
+Repository.I18N.TableView.columns.creationDate = "Creation Date";
+Repository.I18N.TableView.columns.lastUpdate = "Last Update";
+Repository.I18N.TableView.columns.id = "ID";
 
 if(!Repository.I18N.IconView) Repository.I18N.IconView = {};
 Repository.I18N.IconView.name = "Icon View";

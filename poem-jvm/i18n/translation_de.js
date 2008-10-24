@@ -50,7 +50,11 @@ Repository.I18N.TableView.name = "Tabellen Ansicht";
 if(!Repository.I18N.TableView.columns) Repository.I18N.TableView.columns = {};
 Repository.I18N.TableView.columns.title = "Titel";
 Repository.I18N.TableView.columns.type = "Modell Typ";
-Repository.I18N.TableView.columns.author = "Author";
+Repository.I18N.TableView.columns.author = "Autor";
+Repository.I18N.TableView.columns.summary = "Beschreibung";
+Repository.I18N.TableView.columns.creationDate = "Erstellt am";
+Repository.I18N.TableView.columns.lastUpdate = "Geändert am";
+Repository.I18N.TableView.columns.id = "ID";
 
 if(!Repository.I18N.IconView) Repository.I18N.IconView = {};
 Repository.I18N.IconView.name = "Kachel Ansicht";
