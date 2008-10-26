@@ -493,7 +493,7 @@ Repository.Core.Repository = {
                 collapsible	: true,
                 collapsed	: false,
                 split 		: true,
-				width		: 200,
+				width		: 210,
 				autoScroll	: true		            		
             });			
 			// Bottom panel
