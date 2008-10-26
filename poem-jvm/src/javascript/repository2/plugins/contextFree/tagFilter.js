@@ -54,40 +54,47 @@ Repository.Plugins.TagFilter = {
 
 		this.types = types;
 
-		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
+		//this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
 		this.deletePanelItems();
-				
+			
 		
-		var sm 		= new Ext.grid.CheckboxSelectionModel({listeners :  { selectionchange: this._onButtonClick.bind(this) }});
+		//var sm 		= new Ext.grid.CheckboxSelectionModel({listeners :  { selectionchange: this._onButtonClick.bind(this) }});
 		var store 	= new Ext.data.SimpleStore({
 	        fields	: ['tag'],
 	        data	: types
 	    });
+		console.log(store)
+	    var tpl 	= new Ext.XTemplate(
+			'<tpl for=".">',
+				'<div class="x-grid3-row" UNSELECTABLE = "on" style="clear:left;">',
+					'<div class="x-grid3-row-checker" style="width: 18px; float:left;"></div>',
+					'<div class="x-grid3-cell-inner x-grid3-col-1">{tag}</div>',
+				'</div>',
+			'</tpl>'
+		);
 		
-	    var grid = new Ext.grid.GridPanel({
+	    var grid = new Ext.DataView({
 	        store	: store,
-			width	: 200,
-	        cm		: new Ext.grid.ColumnModel([
-			            sm,
-			            {
-							dataIndex	: 'tag',
-							width		: 178
-						}
-			        ]),
-	        sm		: sm,
-			hideHeaders :true,
-			border	: false
+			tpl 	: tpl,
+	       	autoHight: true,
+			listeners: {selectionchange: this._onSelectionChange.bind(this)},
+			itemSelector	: 'div.x-grid3-row',
+    		overClass		: 'x-grid3-row-over',
+			selectedClass	: 'x-grid3-row x-grid3-row-selected',
+			multiSelect	: true,
+			simpleSelect : true
 	    });
 
-		this.panel.add( grid )
-		this.panel.getEl().setHeight()
+		this.panel.add( grid );
 		this.panel.doLayout();
 				
 	},
 	
-	_onButtonClick : function( selectModel ) {
-				
-		var filter = $A(selectModel.selections.items).map(function(item){ return item.data.tag; });
+	_onSelectionChange : function( dataView, selection ) {
+		
+		console.log(selection);		
+		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return item.data.tag });
+		
 		this.facade.applyFilter('tags', filter.join(","));	
 	}
 };

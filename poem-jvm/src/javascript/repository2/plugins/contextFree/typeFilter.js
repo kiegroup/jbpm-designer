@@ -39,55 +39,52 @@ Repository.Plugins.TypeFilter = {
 		arguments.callee.$.construct.apply(this, arguments); // call Plugin super class
 
 		var types =[];
-		// Add buttons to the panel
+		
+		// load types
 		this.facade.modelCache.getModelTypes().each(function(stencilset) {
-			var button = new Ext.LinkButton({ 
-					text 		: stencilset.title, 
-					toggle 		: true, 
-					toggleStyle	: 'font-weight:bold;display:block;',
-					namespace 	: stencilset.namespace,
-					click		: this._onButtonClick.bind(this),
-					style		: 'display:block;'
-				});
-				
 			types.push( [ stencilset.namespace , stencilset.title] )
-
-			//this.panel.add(button);
-			
-			
 		}.bind(this));
 		
 		
-		
-		var sm 		= new Ext.grid.CheckboxSelectionModel({listeners :  { selectionchange: this._onButtonClick.bind(this) }});
+		// prepare data for dataView
 		var store 	= new Ext.data.SimpleStore({
 	        fields	: ['namespace', 'title'],
 	        data	: types
 	    });
 		
-	    var grid = new Ext.grid.GridPanel({
+		var tpl 	= new Ext.XTemplate(
+			'<tpl for=".">',
+				'<div class="x-grid3-row" UNSELECTABLE = "on" style="clear:left;">',
+					'<div class="x-grid3-row-checker" style="width: 18px; float:left;"></div>',
+					'<div class="x-grid3-cell-inner x-grid3-col-1">{title}</div>',
+				'</div>',
+			'</tpl>'
+		);
+		
+	    var grid = new Ext.DataView({
 	        store	: store,
-			width	: 200,
-	        cm		: new Ext.grid.ColumnModel([
-			            sm,
-			            {
-							dataIndex	: 'title',
-							width		: 178
-						}
-			        ]),
-	        sm		: sm,
-			hideHeaders :true,
-			border	: false
+			tpl 	: tpl,
+	       	autoHight: true,
+			listeners: {selectionchange: this._onSelectionChange.bind(this)},
+			itemSelector	: 'div.x-grid3-row',
+    		overClass		: 'x-grid3-row-over',
+			selectedClass	: 'x-grid3-row x-grid3-row-selected',
+			multiSelect	: true,
+			simpleSelect : true
 	    });
 
-
+		
 		this.panel.add( grid )
 		this.panel.doLayout();
 	},
-	
-	_onButtonClick : function( selectModel ) {
-				
-		var filter = $A(selectModel.selections.items).map(function(item){ return item.data.namespace });
+	/**
+	 * apply typ filter, if selection has changed 
+	 * @param {Object} dataView
+	 * @param {Object} selection
+	 */
+	_onSelectionChange : function( dataView, selection ) {
+		
+		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return item.data.namespace });
 		this.facade.applyFilter('type', filter.join(","));
 		
 	}
