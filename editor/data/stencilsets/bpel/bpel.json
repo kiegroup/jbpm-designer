@@ -1901,8 +1901,7 @@
 			"description_de":"Copieren.",
 			"view":"assignment/node.action.copy.svg",
 			"icon":"copy.png",
-			// TODO : delete role "Activity"
-			"roles": ["Activity"],
+			"roles": [],
 			"properties": [	
 				{
 					"id":"keepSrcElementName",
@@ -3943,8 +3942,7 @@
 			"description_de":"Ein If-Zweig",
 			"view":"if/node.if_branch.svg",
 			"icon":"if_branch.png",
-			//TODO delete role "Activity"
-			"roles": ["Activity","SingleActivityContainer"],
+			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
@@ -4013,8 +4011,7 @@
 			"description_de":"Ein Else-Zweig",
 			"view":"if/node.else_branch.svg",
 			"icon":"else_branch.png",
-			//TODO delete role "Activity"
-			"roles": ["Activity","SingleActivityContainer"],
+			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:50,spacingX:30,spacingY:30});	
@@ -6212,8 +6209,7 @@
 			"groups_de":["Pick","Scope"],
 			"view":"others/node.shared.onAlarm.svg",
 			"icon":"onAlarm.png",
-			// TODO : delete role "Activity"
-			"roles": ["SingleActivityContainer","Activity"],
+			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
@@ -6376,7 +6372,7 @@
 			"view":"scope/node.handler.onEvent.svg",
 			"icon":"onEvent.png",
 			// TODO : delete role "Activity"
-			"roles": ["SingleActivityContainer","Activity"],
+			"roles": ["Activity", "SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
@@ -6622,8 +6618,7 @@
 			"groups_de":["Scope"],
 			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"compensationHandler.png",
-			// TODO : delete role "Activity"
-			"roles": ["Handler","Activity","SingleActivityContainer"],
+			"roles": ["Handler","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
@@ -6720,7 +6715,7 @@
 			"view":"scope/node.handler.catch.svg",
 			"icon":"catch.png",
 			// TODO : delete role "Activity"
-			"roles": ["SingleActivityContainer","Activity"],
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
@@ -6827,7 +6822,7 @@
 			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
 			// TODO : delete role "Activity"
-			"roles": ["Activity","SingleActivityContainer"],
+			"roles": ["SingleActivityContainer", "Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	

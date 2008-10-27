@@ -1,6 +1,7 @@
 
 package org.oryxeditor.server;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,23 +52,24 @@ public class BPELExporter extends HttpServlet {
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     	
-    	// BPEL2eRDF XSLT source
+    	// RDF2BPEL XSLT source
     	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
-    	final File RDF2BPELxsltFile = new File(xsltFilename);
-    	final Source bpel2eRDFxsltSource = new StreamSource(RDF2BPELxsltFile);	
+    	final File xsltFile = new File(xsltFilename);
+    	final Source xsltSource = new StreamSource(xsltFile);	
     	
     	// Transformer Factory
     	final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
     	// Get the rdf source
     	final Source rdfSource;
-    	String rdf = req.getParameter("data");
+    	String rdfString = req.getParameter("data");
+    	InputStream rdf = new ByteArrayInputStream(rdfString.getBytes());
     	rdfSource = new StreamSource(rdf);
   
     	// Get the result string
     	String resultString = null;
     	try {
-    		Transformer transformer = transformerFactory.newTransformer(bpel2eRDFxsltSource);
+    		Transformer transformer = transformerFactory.newTransformer(xsltSource);
     		StringWriter writer = new StringWriter();
     		transformer.transform(rdfSource, new StreamResult(writer));
     		resultString = writer.toString();
