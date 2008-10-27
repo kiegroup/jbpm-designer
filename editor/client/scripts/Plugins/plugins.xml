@@ -52,10 +52,16 @@
 		
 		<plugin source="view.js" name="ORYX.Plugins.View" />
 		<plugin source="dragdropresize.js" name="ORYX.Plugins.DragDropResize" />
-		<plugin source="grouping.js" name="ORYX.Plugins.Grouping" />	
+		<plugin source="grouping.js" name="ORYX.Plugins.Grouping">
+			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#" />
+		</plugin>	
 		<plugin source="shapeHighlighting.js" name="ORYX.Plugins.HighlightingSelectedShapes" />
-		<plugin source="dragDocker.js" name="ORYX.Plugins.DragDocker" />	
-		<plugin source="addDocker.js" name="ORYX.Plugins.AddDocker" />
+		<plugin source="dragDocker.js" name="ORYX.Plugins.DragDocker">
+			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#" />
+		</plugin>		
+		<plugin source="addDocker.js" name="ORYX.Plugins.AddDocker">
+			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#" />
+		</plugin>	
 		<plugin source="addssextension.js" name="ORYX.Plugins.SSExtensionLoader" />
 		<plugin source="selectionframe.js" name="ORYX.Plugins.SelectionFrame" />
 		<plugin source="shapeHighlighting.js" name="ORYX.Plugins.ShapeHighlighting" />
