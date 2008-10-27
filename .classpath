@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="editor/server/src"/>
 	<classpathentry kind="src" path="poem-jvm/src/java"/>
 	<classpathentry kind="src" path="buildApps/src"/>
-	<classpathentry kind="output" path="build/buildApps/bin"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="editor/lib/batik-anim.jar"/>
 	<classpathentry kind="lib" path="editor/lib/batik-awt-util.jar"/>
