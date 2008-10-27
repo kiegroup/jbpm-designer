@@ -54,7 +54,7 @@ public class RatingHandler extends HandlerBase {
 		+ "access LEFT JOIN model_rating ON access.object_id=model_rating.object_id "
 		+ "WHERE access.subject_id=:subject_id  " 
 		+ "GROUP BY access.object_name "
-		+ "ORDER BY avg(model_rating.score) NULLS FIRST")
+		+ "ORDER BY avg(model_rating.score) DESC NULLS LAST")
 		.setInteger("subject_id", subject.getId())
 		.list();
 	
