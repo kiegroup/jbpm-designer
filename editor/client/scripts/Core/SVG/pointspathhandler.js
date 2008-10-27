@@ -58,7 +58,9 @@ ORYX.Core.SVG.PointsPathHandler = Clazz.extend({
 				i++;
 				y = parseFloat(points[i]);
 				
-				this.points.push({x:x, y:y});
+				this.points.push(x);
+				this.points.push(y);
+				//this.points.push({x:x, y:y});
 					
 				this._lastAbsX = x;
 				this._lastAbsY = y;

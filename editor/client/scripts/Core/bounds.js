@@ -107,40 +107,48 @@ ORYX.Core.Bounds = Clazz.extend({
 				break;
 			
 			case 2:
-				if(this.a.x !== arguments[0].x) {
+				var ax = Math.min(arguments[0].x, arguments[1].x);
+				var ay = Math.min(arguments[0].y, arguments[1].y);
+				var bx = Math.max(arguments[0].x, arguments[1].x);
+				var by = Math.max(arguments[0].y, arguments[1].y);
+				if(this.a.x !== ax) {
 					changed = true;
-					this.a.x = arguments[0].x;
+					this.a.x = ax;
 				}
-				if(this.a.y !== arguments[0].y) {
+				if(this.a.y !== ay) {
 					changed = true;
-					this.a.y = arguments[0].y;
+					this.a.y = ay;
 				}
-				if(this.b.x !== arguments[1].x) {
+				if(this.b.x !== bx) {
 					changed = true;
-					this.b.x = arguments[1].x;
+					this.b.x = bx;
 				}
-				if(this.b.y !== arguments[1].y) {
+				if(this.b.y !== by) {
 					changed = true;
-					this.b.y = arguments[1].y;
+					this.b.y = by;
 				}
 				break;
 			
 			case 4:
-				if(this.a.x !== arguments[0]) {
+				var ax = Math.min(arguments[0], arguments[2]);
+				var ay = Math.min(arguments[1], arguments[3]);
+				var bx = Math.max(arguments[0], arguments[2]);
+				var by = Math.max(arguments[1], arguments[3]);
+				if(this.a.x !== ax) {
 					changed = true;
-					this.a.x = arguments[0];
+					this.a.x = ax;
 				}
-				if(this.a.y !== arguments[1]) {
+				if(this.a.y !== ay) {
 					changed = true;
-					this.a.y = arguments[1];
+					this.a.y = ay;
 				}
-				if(this.b.x !== arguments[2]) {
+				if(this.b.x !== bx) {
 					changed = true;
-					this.b.x = arguments[2];
+					this.b.x = bx;
 				}
-				if(this.b.y !== arguments[3]) {
+				if(this.b.y !== by) {
 					changed = true;
-					this.b.y = arguments[3];
+					this.b.y = by;
 				}
 				break;
 		}
@@ -232,32 +240,14 @@ ORYX.Core.Bounds = Clazz.extend({
 			return b;
 		};
 		
-		var c = {
-			x: Math.min(
-				Math.min(this.a.x, this.b.x),
-				Math.min(b.a.x, b.b.x)
-			),
-			y: Math.min(
-				Math.min(this.a.y, this.b.y),
-				Math.min(b.a.y, b.b.y)
-		)};
+		var cx = Math.min(this.a.x,b.a.x);
+		var cy = Math.min(this.a.y,b.a.y);
 		
-		var d = {
-			x: Math.max(
-				Math.max(this.a.x, this.b.x),
-				Math.max(b.a.x, b.b.x)
-			),
-			y: Math.max(
-				Math.max(this.a.y, this.b.y),
-				Math.max(b.a.y, b.b.y)
-		)};
+		var dx = Math.max(this.b.x,b.b.x);
+		var dy = Math.max(this.b.y,b.b.y);
+
 		
-		if(this.a.x !== c.x || this.a.y !== c.y || this.b.x !== d.x || this.b.y !== d.y) {
-			this.a = c;
-			this.b = d;
-			
-			this._changed(true);
-		}
+		this.set(cx, cy, dx, dy);
 	},
 	
 	/**
@@ -268,8 +258,10 @@ ORYX.Core.Bounds = Clazz.extend({
 		
 		if(p.x !== 0 || p.y !== 0) {
 			// this is over cross for the case that a and b have same coordinates.
-			((this.a.x > this.b.x) ? this.a : this.b).x += p.x;
-			((this.b.y > this.a.y) ? this.b : this.a).y += p.y;
+			//((this.a.x > this.b.x) ? this.a : this.b).x += p.x;
+			//((this.b.y > this.a.y) ? this.b : this.a).y += p.y;
+			this.b.x += p.x;
+			this.b.y += p.y;
 			
 			this._changed(true);
 		}
@@ -297,10 +289,7 @@ ORYX.Core.Bounds = Clazz.extend({
 	 */
 	upperLeft: function() {
 		
-		return {
-			x: Math.min(this.a.x, this.b.x),
-			y: Math.min(this.a.y, this.b.y)
-		};
+		return {x:this.a.x, y:this.a.y};
 	},
 	
 	/**
@@ -309,24 +298,21 @@ ORYX.Core.Bounds = Clazz.extend({
 	 */
 	lowerRight: function() {
 		
-		return {
-			x: Math.max(this.a.x, this.b.x),
-			y: Math.max(this.a.y, this.b.y)
-		};
+		return {x:this.b.x, y:this.b.y};
 	},
 	
 	/**
 	 * @return {Number} Width of bounds.
 	 */
 	width: function() {
-		return Math.abs(this.a.x - this.b.x);
+		return this.b.x - this.a.x;
 	},
 	
 	/**
 	 * @return {Number} Height of bounds.
 	 */
 	height: function() {
-		return Math.abs(this.a.y - this.b.y);
+		return this.b.y - this.a.y;
 	},
 	
 	/**
@@ -334,14 +320,14 @@ ORYX.Core.Bounds = Clazz.extend({
 	 */
 	center: function() {
 		return {
-			x: this.a.x + ((this.b.x - this.a.x)/2.0), 
-			y: this.a.y + ((this.b.y - this.a.y)/2.0)
+			x: (this.a.x + this.b.x)/2.0, 
+			y: (this.a.y + this.b.y)/2.0
 		};
 	},
 
 	
 	/**
-	 * @return {Point} The center point of this bounds.
+	 * @return {Point} The center point of this bounds relative to upperLeft.
 	 */
 	midPoint: function() {
 		return {
@@ -363,17 +349,13 @@ ORYX.Core.Bounds = Clazz.extend({
 		switch (arguments.length) {
 			
 			case 1:
-				this.moveBy({
-							x: arguments[0].x - currentPosition.x,
-							y: arguments[0].y - currentPosition.y
-				});
+				this.moveBy(arguments[0].x - currentPosition.x,
+							arguments[0].y - currentPosition.y);
 				break;
 			
 			case 2:
-				this.moveBy({
-					x: arguments[0] - currentPosition.x,
-					y: arguments[1] - currentPosition.y
-				});
+				this.moveBy(arguments[0] - currentPosition.x,
+							arguments[1] - currentPosition.y);
 				break;
 		}
 	},
@@ -393,7 +375,7 @@ ORYX.Core.Bounds = Clazz.extend({
 				pointY = arguments[1];
 				break;
 			default:
-				throw "getIntersectionPoints needs two or four arguments";
+				throw "isIncluded needs one or two arguments";
 		}
 				
 		var ul = this.upperLeft();

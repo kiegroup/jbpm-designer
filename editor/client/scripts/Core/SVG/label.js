@@ -73,7 +73,11 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		this._rotate;
 		this._rotationPoint;
 		
-		this.anchors = [];
+		//this.anchors = [];
+		this.anchorLeft;
+		this.anchorRight;
+		this.anchorTop;
+		this.anchorBottom;
 		
 		this._isChanged = true;
 
@@ -135,8 +139,24 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		var anchorAttr = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, "anchors");
 		if(anchorAttr) {
 			anchorAttr = anchorAttr.replace("/,/g", " ");
-			this.anchors = anchorAttr.split(" ");
-			this.anchors = this.anchors.without("");
+			var anchors = anchorAttr.split(" ").without("");
+			
+			for(var i = 0; i < anchors.length; i++) {
+				switch(anchors[i].toLowerCase()) {
+					case "left":
+						this.anchorLeft = true;
+						break;
+					case "right":
+						this.anchorRight = true;
+						break;
+					case "top":
+						this.anchorTop = true;
+						break;
+					case "bottom":
+						this.anchorBottom = true;
+						break;
+				}
+			}
 		}
 		
 		//if no alignment defined, set default alignment

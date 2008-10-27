@@ -42,7 +42,7 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	 */
 	construct: function(jsonStencil, namespace, source, stencilSet, propertyPackages) {
 		arguments.callee.$.construct.apply(this, arguments); // super();
-
+		
 		// check arguments and set defaults.
 		if(!jsonStencil) throw "Stencilset seems corrupt.";
 		if(!namespace) throw "Stencil does not provide namespace.";
@@ -139,12 +139,35 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 		// else just do it.
 		} else
 		*/
+		
+		if(this._jsonStencil.view.trim().match(/</)) {
+			var parser	= new DOMParser();		
+			var xml 	= parser.parseFromString( this._jsonStencil.view ,"text/xml");
+			
+			//check if result is a SVG document
+			if( ORYX.Editor.checkClassType( xml.documentElement, SVGSVGElement )) {
+	
+				this._view = xml.documentElement;
+				
+				//updating link to images
+				var imageElems = this._view.getElementsByTagNameNS("http://www.w3.org/2000/svg", "image");
+				$A(imageElems).each((function(imageElem) {
+					var link = imageElem.getAttributeNodeNS("http://www.w3.org/1999/xlink", "href");
+					if(link && link.value.indexOf("://") == -1) {
+						link.textContent = this._source + "view/" + link.value;
+					}
+				}).bind(this));
+			} else {
+				throw "ORYX.Core.StencilSet.Stencil(_loadSVGOnSuccess): The response is not a SVG document."
+			}
+		} else {
 			new Ajax.Request(
 				url, {
 					asynchronous:false, method:'get',
 					onSuccess:this._loadSVGOnSuccess.bind(this),
 					onFailure:this._loadSVGOnFailure.bind(this)
 			});
+		}
 	},
 
 	postProcessProperties: function() {
