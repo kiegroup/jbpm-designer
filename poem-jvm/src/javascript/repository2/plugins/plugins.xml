@@ -16,6 +16,7 @@
 		<plugin source="contextFree/typeFilter.js" name="Repository.Plugins.TypeFilter" />
 		<plugin source="contextFree/tagFilter.js" name="Repository.Plugins.TagFilter" />
 		<plugin source="contextFree/friendFilter.js" name="Repository.Plugins.FriendFilter" />
+		<plugin source="contextFree/ratingFilter.js" name="Repository.Plugins.RatingFilter" />
 		<plugin source="contextFree/sortingSupport.js" name="Repository.Plugins.SortingSupport" />
 		<plugin source="contextFree/languageSupport.js" name="Repository.Plugins.LanguageSupport" />
 		<plugin source="contextFree/updateButton.js" name="Repository.Plugins.UpdateButton" />

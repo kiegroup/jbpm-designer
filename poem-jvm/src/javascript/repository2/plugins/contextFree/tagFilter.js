@@ -93,7 +93,7 @@ Repository.Plugins.TagFilter = {
 	_onSelectionChange : function( dataView, selection ) {
 		
 		console.log(selection);		
-		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return item.data.tag });
+		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return escape(item.data.tag) });
 		
 		this.facade.applyFilter('tags', filter.join(","));	
 	}

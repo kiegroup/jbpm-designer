@@ -77,7 +77,8 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 		// Set the imgs
 		this.setStars();
 
-        Ext.Rating.superclass.onRender.call(this, ct, position);
+		if( ct )
+       		Ext.Rating.superclass.onRender.call(this, ct, position);
     },
 	
 	setStars: function( value ){
@@ -111,8 +112,12 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 	},
 	
 	onClickStar: function(e){
+		var index = this.stars.indexOf( e.target ) + this.minScore
+		
+		this.setValue( index );
+		 
 		if( this.changed instanceof Function ){
-			this.changed( this.stars.indexOf( e.target ) + this.minScore )
+			this.changed( index )
 		}
 	},
 			
@@ -127,7 +132,17 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 		
 		if( this.textEl )
 			this.textEl.innerHTML = t;
-    }	
+    },
+	
+	startEdit: function(){
+		this.el.dom.setAttribute('style', 'left:22px;position:absolute;top:2px;')
+	},
+	completeEdit: function(){
+		
+	},
+	cancelEdit: function(){
+		
+	},		
 });
 
 Ext.reg('rating', Ext.Rating);

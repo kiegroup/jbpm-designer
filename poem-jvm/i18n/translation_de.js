@@ -39,7 +39,7 @@ Repository.I18N.Repository.bottomPanelTitle = "Kommentare";
  
 // NewModel Plugin
 if(!Repository.I18N.NewModel) Repository.I18N.NewModel = {};
-Repository.I18N.NewModel.name = "Neues Model";
+Repository.I18N.NewModel.name = "Neues Modell";
 Repository.I18N.NewModel.tooltipText = "Erstellen eines neuen Modells mit dem selektierten StencilSets";
 
 // VIEW PLUGINS
