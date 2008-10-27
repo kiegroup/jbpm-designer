@@ -54,7 +54,8 @@ Repository.Plugins.FullView = {
 		}
 		
 		var data			= modelData.get( modelData.keys()[0] );
-		data['typeShort'] 	= this.facade.modelCache.getModelTypes().find(function(type){ return data.type == type.namespace }.bind(this)).title;
+		var ssName			= this.facade.modelCache.getModelTypes().find(function(type){ return data.type == type.namespace }.bind(this));
+		data['typeShort'] 	= ssName ? ssName.title : data.type;
 		
 		data['imgHeight']	= this.panel.getEl().parent().parent().parent().parent().getComputedHeight() - 100;
 		
