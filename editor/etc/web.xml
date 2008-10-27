@@ -298,5 +298,12 @@
 		<extension>svg</extension>
 		<mime-type>image/svg+xml</mime-type>
 	</mime-mapping>
-
+	<mime-mapping>
+		<extension>json</extension>
+		<mime-type>text/plain</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>css</extension>
+		<mime-type>text/css</mime-type>
+	</mime-mapping>
 </web-app>
