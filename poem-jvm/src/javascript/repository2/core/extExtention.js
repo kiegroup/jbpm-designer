@@ -272,7 +272,12 @@ Ext.form.ComboBoxMulti = function(config){
 };
 
 Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
-    getPosition: function(){
+    
+	// True to match any part not just the 
+	// beginning of the filters autocomplete
+	anyMatch: false,
+	
+	getPosition: function(){
         if (document.selection) { // IE
             var r = document.selection.createRange();
             var d = r.duplicate();
@@ -412,6 +417,46 @@ Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
         }
     },
 
+    doQuery : function(q, forceAll){
+        if(q === undefined || q === null){
+            q = '';
+        }
+        var qe = {
+            query: q,
+            forceAll: forceAll,
+            combo: this,
+            cancel:false
+        };
+        if(this.fireEvent('beforequery', qe)===false || qe.cancel){
+            return false;
+        }
+        q = qe.query;
+        forceAll = qe.forceAll;
+        if(forceAll === true || (q.length >= this.minChars)){
+            if(this.lastQuery !== q){
+                this.lastQuery = q;
+                if(this.mode == 'local'){
+                    this.selectedIndex = -1;
+                    if(forceAll){
+                        this.store.clearFilter();
+                    }else{
+                        this.store.filter(this.displayField, q, this.anyMatch);
+                    }
+                    this.onLoad();
+                }else{
+                    this.store.baseParams[this.queryParam] = q;
+                    this.store.load({
+                        params: this.getParams(q)
+                    });
+                    this.expand();
+                }
+            }else{
+                this.selectedIndex = -1;
+                this.onLoad();
+            }
+        }
+    },
+	
     /**
      * Automatically grows the field to accomodate the height of the text up to the maximum field height allowed.
      * This only takes effect if grow = true, and fires the autosize event if the height changes.

@@ -263,6 +263,7 @@ Repository.Plugins.AccessInfo = {
 											store 		: this.dataStore,
 											displayField : 'friend',
 											editable	: true,
+											anyMatch	: true,
 											sep			: "\n",
 											renderAsTextArea : true
 										}),

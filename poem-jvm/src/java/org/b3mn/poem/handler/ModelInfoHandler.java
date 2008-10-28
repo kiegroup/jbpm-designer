@@ -114,7 +114,7 @@ public class ModelInfoHandler extends  HandlerBase {
 		List<String> results = Persistance.getSession()
 		.createSQLQuery("SELECT identity.uri FROM identity, access, representation "
 		+ "WHERE access.subject_id=:subject_id AND access.object_id=identity.id AND representation.ident_id=access.object_id " 
-		+ "ORDER BY representation.updated")
+		+ "ORDER BY representation.updated DESC")
 		.setInteger("subject_id", subject.getId())
 		.list();
 	

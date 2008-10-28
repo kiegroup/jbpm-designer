@@ -1,51 +1,66 @@
 [
         {
+            "title":"BPMN 1.0",
+            "namespace":"http://b3mn.org/stencilset/bpmn#",
+            "description":"BPMN 1.0 stencil set specification.",
+            "uri":"/bpmn/bpmn.json",
+            "icon_url":"/bpmn/bpmn.png",
+            "visible":false
+        },
+        {
             "title":"BPMN 1.1",
             "namespace":"http://b3mn.org/stencilset/bpmn1.1#",
             "description":"BPMN 1.1 stencil set specification.",
             "uri":"/bpmn1.1/bpmn1.1.json",
-            "icon_url":"/bpmn1.1/bpmn1.1.png"
+            "icon_url":"/bpmn1.1/bpmn1.1.png",
+            "visible":true
         },
         {
             "title":"EPC",
             "namespace":"http://b3mn.org/stencilset/epc#",
             "description":"Event-driven Process Chain specification.",
             "uri":"/epc/epc.json",
-            "icon_url":"/epc/epc.png"
+            "icon_url":"/epc/epc.png",
+            "visible":true
         },
         {
             "title":"Petrinets",
             "namespace":"http://b3mn.org/stencilset/petrinet#",
             "description":"Petrinets specification.",
             "uri":"/petrinets/petrinet.json",
-            "icon_url":"/petrinets/petrinets.png"
+            "icon_url":"/petrinets/petrinets.png",
+            "visible":true
         },
         {
             "title":"Workflow Nets",
             "namespace":"http://www.example.org/workflownets#",
             "description":"Simple stencil set for Workflow Nets.",
             "uri":"/workflownets/workflownets.json",
-            "icon_url":"/workflownets/workflownets.png"
+            "icon_url":"/workflownets/workflownets.png",
+            "visible":true
         },
         {
             "title":"FMC Block Diagram",
             "namespace":"http://www.fmc-modeling.org/stencilsets/fmcblockdiagram#",
             "description":"FMC Block Diagrams show compositional structures as a composition of collaborating system components.",
             "uri":"/fmcblockdiagram/fmcblockdiagram.json",
-            "icon_url":"/fmcblockdiagram/fmcblockdiagram.png"
+            "icon_url":"/fmcblockdiagram/fmcblockdiagram.png",
+            "visible":true
         },
         {
             "title":"BPEL Model",
             "namespace":"http://b3mn.org/stencilset/bpel#",
             "description":"BPEL stencil set specification.",
             "uri":"/bpel/bpel.json",
-            "icon_url":"/bpel/bpel.png"
+            "icon_url":"/bpel/bpel.png",
+            "visible":true
         },
         {
             "title":"BPEL4Chor Model",
             "namespace":"http://b3mn.org/stencilset/bpel4chor#",
             "description":"BPEL4Chor stencil set specification.",
             "uri":"/bpel4chor/bpel4chor.json",
-            "icon_url":"/bpel4chor/bpel4chor.png"
+            "icon_url":"/bpel4chor/bpel4chor.png",
+            "visible":true
         }
 ]

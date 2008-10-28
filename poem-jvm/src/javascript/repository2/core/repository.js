@@ -331,13 +331,12 @@ Repository.Core.Repository = {
 									});
 							menu.render();
 						}
-						menu.addMenuItem({
-							text 	: buttonConfig.text,
-							handler : buttonConfig.handler,
-							icon 	: buttonConfig.icon,
-							//hideOnClick : false,
-							iconCls	: 'repository_ext_icon_align_center'
-						});
+						
+						if( !buttonConfig.iconCls ){
+							buttonConfig.iconCls = 'repository_ext_icon_align_center';
+						}
+						
+						menu.addMenuItem( buttonConfig );
 					} else if( buttonConfig instanceof Ext.Toolbar.Button){
 						
 							// Insert the button to the particular place

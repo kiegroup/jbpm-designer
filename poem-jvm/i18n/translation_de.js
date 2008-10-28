@@ -45,7 +45,7 @@ Repository.I18N.NewModel.tooltipText = "Erstellen eines neuen Modells mit dem se
 // VIEW PLUGINS
 
 if(!Repository.I18N.TableView) Repository.I18N.TableView = {};
-Repository.I18N.TableView.name = "Tabellen Ansicht";
+Repository.I18N.TableView.name = "Tabellenansicht";
 
 if(!Repository.I18N.TableView.columns) Repository.I18N.TableView.columns = {};
 Repository.I18N.TableView.columns.title = "Titel";
@@ -57,10 +57,10 @@ Repository.I18N.TableView.columns.lastUpdate = "Geändert am";
 Repository.I18N.TableView.columns.id = "ID";
 
 if(!Repository.I18N.IconView) Repository.I18N.IconView = {};
-Repository.I18N.IconView.name = "Kachel Ansicht";
+Repository.I18N.IconView.name = "Kachelansicht";
 
 if(!Repository.I18N.FullView) Repository.I18N.FullView = {};
-Repository.I18N.FullView.name = "Einzel Ansicht";
+Repository.I18N.FullView.name = "Einzelansicht";
 
 // TypeFilter Plugin
 

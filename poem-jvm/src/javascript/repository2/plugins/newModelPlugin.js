@@ -40,6 +40,11 @@ Repository.Plugins.NewModel = {
 		this.facade = facade;
 		
 		this.facade.modelCache.getModelTypes().each(function(type) {
+			
+			if( !type.visible ){
+				return
+			}
+			
 			this.toolbarButtons.push({
 				text 		: type.title,
 				menu 		: Repository.I18N.NewModel.name,
