@@ -245,8 +245,12 @@ public class Dispatcher extends HttpServlet {
 				}
 			}
 			
+			// If you want to disable OpenID login, hard code the openId here. 
+			// You can use any name without spaces as openId   
+			// For example: 
+			// String openId = "OryxUser";
 			String openId =  (String) request.getSession().getAttribute("openid"); // Retrieve open id from session
-
+			
 			User user = null;
 			
 			// If the user isn't logged in, set the OpenID to public
@@ -255,7 +259,10 @@ public class Dispatcher extends HttpServlet {
 				request.getSession().setAttribute("openid", openId);
 				user = new User(openId);
 				user.login(request, response);
-			} else user = new User(openId);
+			} else {
+				Identity subject = Identity.ensureSubject(openId);
+				user = new User(subject);
+			}
 			
 			String requestMethod = request.getMethod();
 			
