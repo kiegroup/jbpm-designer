@@ -88,7 +88,6 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 		'<link rel="schema.b3mn" href="http://b3mn.org" />' +
 		'<link rel="schema.oryx" href="http://oryx-editor.org/" />' +
 		'<link rel="schema.raziel" href="http://raziel.org/" />' +
-		'<link rel="schema.xforms" href="http://xforms-editor.org/" />' +
 		'<base href="' +
 		location.href.split("?")[0] +
 		'" />' +
