@@ -51,7 +51,7 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
             type: ORYX.CONFIG.EVENT_LOADING_ENABLE
         });
 		
-		this.checkClientXFormsSupport();
+		//this.checkClientXFormsSupport();
             
 		// asynchronously ...
         window.setTimeout((function(){
