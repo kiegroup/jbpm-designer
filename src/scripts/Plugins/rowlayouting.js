@@ -37,12 +37,12 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 		this.currentShapes = [];			// Current selected Shapes
 		this.toMoveShapes = [];				// Shapes that are moved
 	
-		this.faktorXY = {x:1, y:1};
-		//this.dragBounds = undefined;
-		this.offset = {x:0, y:0};
+		this.dragBounds = undefined;
+		this.offSetPosition = {x:0, y:0};
+		this.evCoord = {x:0, y:0};
 
-		this.facade.registerEventType('layout.rows');
-		this.facade.registerOnEvent('layout.rows', this.handleLayoutRows.bind(this));
+		this.facade.registerOnEvent("layout.rows", this.handleLayoutRows.bind(this));
+		this.facade.registerOnEvent("mousedown", this.handleMouseDown.bind(this));
 	},
 	
 	
@@ -51,6 +51,11 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 	 *
 	 */
 	onSelectionChanged: function(event) {
+		
+		if(this.blockOnSelectionChangedHandling) {
+			this.blockOnSelectionChangedHandling = false;
+			return;
+		}
 		
 		var elements = event.elements;
 
@@ -70,7 +75,7 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 			
 			this.toMoveShapes = this.toMoveShapes.findAll( function(shape) { return shape instanceof ORYX.Core.Node && 
 																			(shape.dockers.length === 0 || !elements.member(shape.dockers.first().getDockedShape()))});		
-		/*
+		
 			// Calculate the area-bounds of the selection
 			var newBounds = undefined;
 			elements.each(function(value) {
@@ -82,17 +87,51 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 
 			// Set the new bounds
 			this.dragBounds = newBounds;
-		*/
+
 		}
+		
+		/*if(!this.dragBounds) {return};
+		
+		
+		var ul = this.dragBounds.upperLeft();
+		
+		var offSetPosition = {
+			x: this.evCoord.x - ul.x,
+			y: this.evCoord.y - ul.y
+		}
+		
+		this.toMoveShapes.each(function(shape) {
+			shape.bounds.moveBy(offSetPosition);
+		});*/
 		
 		return;
 	},
+	
+	handleMouseDown: function(event, uiObj) {
+		if(!this.dragBounds || !this.toMoveShapes.member(uiObj)) {return};
+		
+		var evCoord 	= this.facade.eventCoordinates( event );
+		var ul = this.dragBounds.upperLeft();
+		
+		this.offSetPosition = {
+			x: evCoord.x - ul.x,
+			y: evCoord.y - ul.y
+		}
+		
+		return;
+	},	
 	
 	/**
 	 * On Layout Rows
 	 *
 	 */
 	handleLayoutRows: function(event) {
+		
+		var offsetPos = this.offSetPosition;
+		
+		this.toMoveShapes.each(function(shape) {
+			shape.bounds.moveBy(offsetPos);
+		});
 
 		var marginLeft = event.marginLeft;
 		var marginTop = event.marginTop;
@@ -103,10 +142,10 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 		// exclude specified stencils from layouting
 		if(event.exclude) {
 			elements = elements.filter(function(element) {
-											return ! event.exclude.some(function(value){
-												return element.getStencil().id()==value;
-											}) 
-										});
+				return ! event.exclude.some(function(value){
+					return element.getStencil().id()==value;
+				});
+			});
 		}
 		
 		var rowTop = marginTop;
@@ -122,8 +161,8 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 		
 		// Sort top-down
 		elements = elements.sortBy(function(element) {
-						return element.bounds.upperLeft().y;
-					});
+			return element.bounds.upperLeft().y;
+		});
 		
 		var insertRowOffset = 0;
 		var deleteRowOffset = 0;
@@ -153,12 +192,13 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 					rowTop = rowBottom + spacingY;
 					if(ul.y < rowTop) {
 						// insert new row
-						insertRowOffset += element.bounds.height();
+						//insertRowOffset += element.bounds.height() + 1;
 						isNewRow = true;
 					}
 				}
 			} else {
 				ul.y += insertRowOffset;
+				ul.y -= deleteRowOffset;
 				
 				if(ul.y > rowTop) {
 					// next row
@@ -173,6 +213,7 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 			
 			if (lr.y > rowBottom) {
 				// extend row height and inserted rows offset
+			// following lines don't work as required
 				if(isNewRow) insertRowOffset += lr.y - rowBottom;
 				else if(movedShapes.include(element)) insertRowOffset += lr.y - rowBottom;
 				rowBottom = lr.y;
@@ -181,7 +222,7 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 			if( (ul.x!=oldUlX) || (ul.y!=oldUlY) || (lr.x!=oldLrX) || (lr.y!=oldLrY) ) {
 				// only set bounds if ul or lr updated
 				if(!movedShapes.include(element)) {
-					// if non-moved elements are repositioned upwards also move following moved elements upwards
+					// if non-moved elements are repositioned upwards also move following [moved] elements upwards
 					// (otherwise dropping the moved element to a row below wouldn't work correctly)
 					if((oldUlY-ul.y) > deleteRowOffset) deleteRowOffset = oldUlY - ul.y;
 				}
@@ -191,8 +232,8 @@ ORYX.Plugins.RowLayouting = Clazz.extend({
 		
 		// Sort top-down from left to right
 		elements = elements.sortBy(function(element) {
-						return element.bounds.upperLeft().y * 10000 + element.bounds.upperLeft().x;
-					});
+			return element.bounds.upperLeft().y * 10000 + element.bounds.upperLeft().x;
+		});
 					
 		rowTop = marginTop;
 		var rowRight = marginLeft - spacingX;

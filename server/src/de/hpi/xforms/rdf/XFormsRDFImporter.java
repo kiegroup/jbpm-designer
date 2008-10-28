@@ -156,9 +156,22 @@ public class XFormsRDFImporter {
 				
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 				
-				if (n.getNamespaceURI().equals("http://oryx-editor.org/")) {
-					// handle attributes of namespace oryx
+				if (attribute.startsWith("xf_")) {
+					// handle xforms attributes
 					
+					attribute = attribute.substring(3);
+					
+					if(element.getAttributes().containsKey(attribute)) {
+						element.getAttributes().put(attribute, getContent(n));
+					} else {
+						handleModelItemProperty(attribute, getContent(n), element, c);
+						if(element instanceof Submit)
+							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
+					}
+					
+				} else {
+					// handle oryx attributes
+						
 					if (attribute.equals("bounds")) {
 						if(element instanceof XFormsUIElement) {
 							XFormsUIElement uiElement = (XFormsUIElement) element;
@@ -171,25 +184,9 @@ public class XFormsRDFImporter {
 							listUICommon.setYPosition(Integer.parseInt(bounds[1]));
 						}
 					}
-					
-				} else if (n.getNamespaceURI().equals("http://raziel.org/")) {
-					// handle attributes of namespace raziel
-					
 					if (attribute.equals("parent")) {
 						c.parentRelationships.put(element, getResourceId(getAttributeValue(n, "rdf:resource")));
 					}
-					
-				} else if (n.getNamespaceURI().equals("http://xforms-editor.org/")) {
-					// handle attributes of namespace xforms
-					
-					if(element.getAttributes().containsKey(attribute)) {
-						element.getAttributes().put(attribute, getContent(n));
-					} else {
-						handleModelItemProperty(attribute, getContent(n), element, c);
-						if(element instanceof Submit)
-							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
-					}
-						
 					
 				}
 				
@@ -349,7 +346,7 @@ public class XFormsRDFImporter {
 				
 				for(String tagName : xPath.split("/")) {
 					if(tagName.length()>0) {
-						Node child = getChild(instanceModelNode, tagName, null);
+						Node child = getChild(instanceModelNode, tagName);
 						if(child==null) {
 							// create new element
 							child = (Node) instanceModelDoc.createElement(tagName);
@@ -465,7 +462,7 @@ public class XFormsRDFImporter {
 		label.setResourceId(getResourceId(node));
 		c.objects.put(label.getResourceId(), label);
 		handleAttributes(node, label, c);
-		label.setContent(getContent(getChild(node, "text", "http://xforms-editor.org/")));
+		label.setContent(getContent(getChild(node, "text")));
 	}
 	
 	private void addHelp(Node node, ImportContext c) {
@@ -473,7 +470,7 @@ public class XFormsRDFImporter {
 		help.setResourceId(getResourceId(node));
 		c.objects.put(help.getResourceId(), help);
 		handleAttributes(node, help, c);
-		help.setContent(getContent(getChild(node, "message", "http://xforms-editor.org/")));
+		help.setContent(getContent(getChild(node, "message")));
 	}
 	
 	private void addHint(Node node, ImportContext c) {
@@ -481,7 +478,7 @@ public class XFormsRDFImporter {
 		hint.setResourceId(getResourceId(node));
 		c.objects.put(hint.getResourceId(), hint);
 		handleAttributes(node, hint, c);
-		hint.setContent(getContent(getChild(node, "message", "http://xforms-editor.org/")));
+		hint.setContent(getContent(getChild(node, "message")));
 	}
 	
 	private void addAlert(Node node, ImportContext c) {
@@ -489,7 +486,7 @@ public class XFormsRDFImporter {
 		alert.setResourceId(getResourceId(node));
 		c.objects.put(alert.getResourceId(), alert);
 		handleAttributes(node, alert, c);
-		alert.setContent(getContent(getChild(node, "message", "http://xforms-editor.org/")));
+		alert.setContent(getContent(getChild(node, "message")));
 	}
 	
 	private void addItem(Node node, ImportContext c) {
@@ -613,7 +610,7 @@ public class XFormsRDFImporter {
 		message.setResourceId(getResourceId(node));
 		c.objects.put(message.getResourceId(), message);
 		handleAttributes(node, message, c);
-		message.setContent(getContent(getChild(node, "message", "http://xforms-editor.org/")));
+		message.setContent(getContent(getChild(node, "message")));
 	}
 	
 	private String getContent(Node node) {
@@ -631,7 +628,7 @@ public class XFormsRDFImporter {
 	}
 
 	private String getType(Node node) {
-		String type = getContent(getChild(node, "type", "http://oryx-editor.org/"));
+		String type = getContent(getChild(node, "type"));
 		if (type != null)
 			return type.substring(type.indexOf('#') + 1);
 		else
@@ -650,13 +647,12 @@ public class XFormsRDFImporter {
 		return id.substring(id.indexOf('#'));
 	}
 
-	private Node getChild(Node n, String name, String namespace) {
+	protected Node getChild(Node n, String name) {
 		if (n == null)
 			return null;
 		for (Node node=n.getFirstChild(); node != null; node=node.getNextSibling())
 			if (node.getNodeName().indexOf(name) >= 0) 
-				if(namespace==null||node.getNamespaceURI().equals(namespace))
-					return node;
+				return node;
 		return null;
 	}
 

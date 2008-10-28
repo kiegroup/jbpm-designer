@@ -26,7 +26,6 @@ if(!ORYX.Plugins)
 
 ORYX.Plugins.XFormsExport = Clazz.extend({
 	
-	//CSS_URL: "http://localhost:8080/oryx/css/xforms_default.css",
 	CSS_URL: "http://oryx-editor.org/oryx/css/xforms_default.css",
 
 	facade: undefined,
@@ -49,7 +48,7 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 
 		// raise loading enable event
         this.facade.raiseEvent({
-            type: 'loading.enable'
+            type: ORYX.CONFIG.EVENT_LOADING_ENABLE
         });
 		
 		this.checkClientXFormsSupport();
@@ -62,7 +61,7 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 			
 			// raise loading disable event.
             this.facade.raiseEvent({
-                type: 'loading.disable'
+                type: ORYX.CONFIG.EVENT_LOADING_DISABLE
             });
 			
         }).bind(this), 10);
@@ -89,7 +88,6 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 		'<link rel="schema.b3mn" href="http://b3mn.org" />' +
 		'<link rel="schema.oryx" href="http://oryx-editor.org/" />' +
 		'<link rel="schema.raziel" href="http://raziel.org/" />' +
-		'<link rel="schema.xforms" href="http://xforms-editor.org/" />' +
 		'<base href="' +
 		location.href.split("?")[0] +
 		'" />' +
@@ -130,7 +128,7 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 			});
 			
 		} catch (error){
-			this.facade.raiseEvent({type:'loading.disable'});
+			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
 			Ext.Msg.alert("Oryx", error);
 	 	}
 	},
