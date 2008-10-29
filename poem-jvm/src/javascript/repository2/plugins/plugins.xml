@@ -12,7 +12,7 @@
 		-->
 		
 		<!-- CONTEXT-FREE PLUGINS -->
-		<plugin source="newModelPlugin.js" name="Repository.Plugins.NewModel" />
+		<plugin source="contextFree/newModelPlugin.js" name="Repository.Plugins.NewModel" />
 		<plugin source="contextFree/typeFilter.js" name="Repository.Plugins.TypeFilter" />
 		<plugin source="contextFree/tagFilter.js" name="Repository.Plugins.TagFilter" />
 		<plugin source="contextFree/friendFilter.js" name="Repository.Plugins.FriendFilter" />
