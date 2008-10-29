@@ -63,8 +63,6 @@ Repository.Plugins.FriendFilter = {
 	        data	: types
 	    });
 		
-		console.log(store);
-		
 	    var tpl 	= new Ext.XTemplate(
 			'<tpl for=".">',
 				'<div class="x-grid3-row" UNSELECTABLE = "on" style="clear:left;">',
