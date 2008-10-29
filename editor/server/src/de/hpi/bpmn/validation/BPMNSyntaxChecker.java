@@ -103,11 +103,23 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 					addError(edge, DIFFERENT_PROCESS);
 			}
 			else if (edge instanceof MessageFlow) {
-				if (getPool(((Node)edge.getSource()).getParent()) == getPool(((Node)edge.getTarget()).getParent()))
+				if (getPool(((Node)edge.getSource())) == getPool(((Node)edge.getTarget())))
 					addError(edge, SAME_PROCESS);
 			}
 		}
 		return true;
+	}
+	
+	protected Pool getPool(DiagramObject obj){
+		// if object itself is a Pool (for message flows coming from or going to pools)
+		if(obj instanceof Pool){
+			return (Pool)obj; 
+		// if object itself is a Node (for message flows coming from or going to activities)
+		} else if (obj instanceof Node) {
+			return getPool(((Node)obj).getParent());
+		} else {
+			return null;
+		}
 	}
 
 	protected Pool getPool(Container container) {
