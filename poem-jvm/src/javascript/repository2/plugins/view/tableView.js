@@ -79,9 +79,9 @@ Repository.Plugins.TableView = {
 	    });
 		
 		this.tablePanel = new Ext.grid.GridPanel({
-			store	: store,
-			border	:false,
-			columns: [ 
+			store		: store,
+			border		:false,
+			columns		: [ 
 				{id: "title", header: Repository.I18N.TableView.columns.title, sortable: false, dataIndex: "title"},
 				{id: "type", width: 50, header: Repository.I18N.TableView.columns.type, sortable: false, dataIndex: "type"},
 				{id: "author", header: Repository.I18N.TableView.columns.author, sortable: false, dataIndex: "author"},
@@ -91,15 +91,25 @@ Repository.Plugins.TableView = {
 				{id: "id", width: 45, header: Repository.I18N.TableView.columns.id, sortable: false, dataIndex: "id"}
 			],
 			viewConfig: {
-				forceFit : true
+				forceFit 	: true
 			},
-			enableHdMenu : false,
-			sm: new Ext.grid.RowSelectionModel({listeners: {selectionchange: this._onSelectionChange.bind(this)}}),
-			listeners:{rowdblclick:this._onDblClick.bind(this)}		
+			enableHdMenu 	: false,
+			sm				: new Ext.grid.RowSelectionModel({listeners: {selectionchange: this._onSelectionChange.bind(this)}}),
+			listeners		: {rowdblclick:this._onDblClick.bind(this)}		
 		});
 		
 		this.panel.add(this.tablePanel);
 		this.panel.doLayout(); // Force rendering to show the panel
+		
+		
+		
+	},
+	
+	setWidth: function(width){
+		if( this.tablePanel ){
+			this.tablePanel.setWidth( width );
+			this.tablePanel.doLayout();
+		}
 	},
 	
 	_onSelectionChange: function(table){

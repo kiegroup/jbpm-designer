@@ -167,8 +167,18 @@ Repository.Core.Repository = {
 			if(this._currentView instanceof Repository.Core.ViewPlugin)
 				this._currentView.disable();
 
+			// Get the current index of displayed models
+			var currentDisplayedIndex 	= this._currentView.lastStartIndexOfDisplayedModel || 0;
+			// Get the current selection index within the displayed models
+			var currentSelectedIndex 	= this.getSelectedModels().length > 0 ? this.getDisplayedModels().indexOf(this.getSelectedModels()[0]) : 0;
+			
 			this._currentView = view;			
 			this._currentView.enable();
+			
+			var newIndex = currentDisplayedIndex + currentSelectedIndex ;
+			var size	 = view.numOfDisplayedModels;			
+			
+			this._currentView.showDisplayedModelsStartingFrom( newIndex-(newIndex%size) );
 			//view.preRender(this.getDisplayedModels());
 
 		},
@@ -471,8 +481,8 @@ Repository.Core.Repository = {
 				autoScroll	: true,
 				border		: false,
 				listeners	: {resize: function(panel, adjWidth, adjHeigth, rawWidth, rawHeight){
-					if(this.getCurrentView())
-						this._switchView(this.getCurrentView())
+					if(this.getCurrentView().setWidth)
+						this.getCurrentView().setWidth( adjWidth )
 				}.bind(this)}
             });
 			// Left panel

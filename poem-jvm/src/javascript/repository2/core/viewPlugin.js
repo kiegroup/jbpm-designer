@@ -87,7 +87,7 @@ Repository.Core.ViewPlugin = {
 			this.panel.setVisible(true);
 			//this.panel.doLayout();
 			// determine models to display
-			this.showDisplayedModelsStartingFrom( 0 );
+			//this.showDisplayedModelsStartingFrom( 0 );
 		},
 		
 		disable : function() {
