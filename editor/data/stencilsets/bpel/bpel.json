@@ -4540,6 +4540,22 @@
 					]
 				},
 				{
+					"id":"messageExchange",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"messageExchanges","searchPropertieScope":"messageExchanges",
+					"title":"messageExchange",
+					"title_de":"Nachrichtenaustauschliste",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -6583,6 +6599,22 @@
 							]
 						}
 					]
+				},
+				{
+					"id":"messageExchange",
+					"prefix":"oryx",
+					"type":"searcher",
+					"searchBPELId":"BPEL","searchScopeId":"Scope",
+					"searchPropertieBPEL":"messageExchanges","searchPropertieScope":"messageExchanges",
+					"title":"messageExchange",
+					"title_de":"Nachrichtenaustauschliste",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined
 				},
 				{
 					"id":"bgColor",
