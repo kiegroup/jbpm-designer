@@ -24,11 +24,9 @@
 				<xsl:call-template name="add-documentation-element"/>
 				
 				<xsl:variable name="targetNamespace" select="./oryx:targetnamespace" />
-				<xsl:if test="$targetNamespace!=''">
-					<xsl:attribute name="targetNamespace">
-						<xsl:value-of select="$targetNamespace" />
-					</xsl:attribute>
-				</xsl:if>		
+				<xsl:attribute name="targetNamespace">
+					<xsl:value-of select="$targetNamespace" />
+				</xsl:attribute>		
 				
 				<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
 				<xsl:if test="$abstractProcessProfile!=''">
@@ -84,11 +82,9 @@
 	
 	<xsl:template name="find-children-nodes">
 		<xsl:param name="searchedParentID" />
-		<xsl:variable name="childrenCounter" select="0" />
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="currentParentID"><xsl:value-of select="*/@rdf:resource" /></xsl:variable>         
 			<xsl:if test="$currentParentID = $searchedParentID">
-				<xsl:variable name="childrenCounter" select="$childrenCounter + 1" />
       		  	<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
 				<xsl:variable name="typeString" select="./oryx:type" />	
 				<xsl:variable name="type">
@@ -246,14 +242,13 @@
 					<validate>
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
-						<xsl:call-template name="add-standard-elements"/>
 						
 						<xsl:variable name="variables" select="./oryx:variables" />
-						<xsl:if test="$variables!=''">
-							<xsl:attribute name="variables">
-								<xsl:value-of select="$variables" />
-							</xsl:attribute>
-						</xsl:if>							
+						<xsl:attribute name="variables">
+							<xsl:value-of select="$variables" />
+						</xsl:attribute>
+						
+						<xsl:call-template name="add-standard-elements"/>							
 		            </validate>
 				</xsl:if>
 				
@@ -263,6 +258,14 @@
 						<xsl:variable name="elementName" select="./oryx:elementname" />
 						<xsl:if test="$elementName!=''">
 							<xsl:element name="{$elementName}">
+								<xsl:call-template name="add-standard-attributes"/>
+								<xsl:call-template name="add-documentation-element"/>
+								<xsl:call-template name="add-standard-elements"/>								
+							</xsl:element>
+						</xsl:if>
+						
+						<xsl:if test="$elementName=''">
+							<xsl:element name="anyElementQName">
 								<xsl:call-template name="add-standard-attributes"/>
 								<xsl:call-template name="add-documentation-element"/>
 								<xsl:call-template name="add-standard-elements"/>								
@@ -324,28 +327,21 @@
 				
 				<!--if_branch-->
 				<xsl:if test="$type='if_branch'">
-					<xsl:if test="$childrenCounter=1">
+					<xsl:if test="position()=1">
 						<xsl:call-template name="add-condition-element"/>
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
-					    <xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
-					    </xsl:call-template>
 		            </xsl:if>
 
-					<xsl:if test="not($childrenCounter=1)">
+					<xsl:if test="not(position()=1)">
 						<elseif>
 							<xsl:call-template name="add-condition-element"/>
 							<xsl:call-template name="find-children-nodes">
 								<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 						    </xsl:call-template>
-							<xsl:call-template name="find-children-nodes">
-						    	<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
-					    	</xsl:call-template>
 						</elseif>
 		            </xsl:if>					
-					
 				</xsl:if>
 				
 				<!--else_branch-->
@@ -443,18 +439,15 @@
 						<xsl:call-template name="add-standard-elements"/>
 						
 						<xsl:variable name="counterName" select="./oryx:countername" />
-						<xsl:if test="$counterName!=''">
-							<xsl:attribute name="counterName">
-								<xsl:value-of select="$counterName" />
-							</xsl:attribute>
-						</xsl:if>
+						<xsl:attribute name="counterName">
+							<xsl:value-of select="$counterName" />
+						</xsl:attribute>
+
 						
 						<xsl:variable name="parallel" select="./oryx:parallel" />
-						<xsl:if test="$parallel!=''">
-							<xsl:attribute name="parallel">
-								<xsl:value-of select="$parallel" />
-							</xsl:attribute>
-						</xsl:if>
+						<xsl:attribute name="parallel">
+							<xsl:value-of select="$parallel" />
+						</xsl:attribute>
 						
 						<xsl:call-template name="add-counterValue-elements"/>
 						
@@ -526,6 +519,7 @@
 						<xsl:call-template name="add-fromParts-element"/>
 						<xsl:call-template name="add-variable-attribute"/>
 						<xsl:call-template name="add-messageExchange-attribute"/>
+						<xsl:call-template name="add-faultMessageOrFaultElement-attribute"/>
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>	
@@ -563,6 +557,8 @@
 						
 						<xsl:call-template name="add-faultMessageType-attribute"/>
 						
+						<xsl:call-template name="add-faultElement-attribute"/>
+						
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
@@ -584,9 +580,9 @@
 		
 
 	<xsl:template name="add-completionCondition-element">
-		<xsl:variable name="expressionLanguage" select="./oryx:compCond_expLang" />
+		<xsl:variable name="expressionLanguage" select="./oryx:compcond_explang" />
 		<xsl:variable name="successfulBranchesOnly" select="./oryx:successfulbranchesonly" />
-		<xsl:variable name="branches_counter" select="./oryx:branches_intExp" />
+		<xsl:variable name="branches_counter" select="./oryx:branches_intexp" />
 		
 		<xsl:if test="$expressionLanguage!='' or $successfulBranchesOnly!='' or $branches_counter!=''">
 			<completionCondition>
@@ -619,7 +615,7 @@
 					<xsl:value-of select="$expressionLanguage" />
 				</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="$opaque!=''">
+			<xsl:if test="$opaque!='true'">
 				<xsl:attribute name="opaque">
 					<xsl:value-of select="$opaque" />
 				</xsl:attribute>
@@ -748,6 +744,34 @@
 	</xsl:template>
 	
 
+	<xsl:template name="add-faultElement-attribute">
+		<xsl:variable name="faultElement" select="./oryx:faultelement" />
+
+		<xsl:if test="$faultElement!=''">
+			<xsl:attribute name="faultElement">
+				<xsl:value-of select="$faultElement" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-faultMessageOrFaultElement-attribute">
+		<xsl:variable name="type" select="./oryx:choicetype" />
+		<xsl:variable name="value" select="./oryx:choicevalue" />
+		
+		<xsl:if test="$type='messageType'">
+			<xsl:attribute name="faultMessageType">
+				<xsl:value-of select="$value" />
+			</xsl:attribute>
+		</xsl:if>	
+		
+		<xsl:if test="$type='element'">
+			<xsl:attribute name="element">
+				<xsl:value-of select="$value" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+
 	<xsl:template name="add-faultMessageType-attribute">
 		<xsl:variable name="faultMessageType" select="./oryx:faultmessagetype" />
 
@@ -789,24 +813,32 @@
 		
 		<xsl:if test="$ForOrUntil='for'">
 			<for>
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$expressionLanguage" />
-				</xsl:attribute>
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
+				<xsl:if test="$expressionLanguage!=''">
+					<xsl:attribute name="expressionLanguage">
+						<xsl:value-of select="$expressionLanguage" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$opaque='true'">
+					<xsl:attribute name="opaque">
+						<xsl:value-of select="$opaque" />
+					</xsl:attribute>
+				</xsl:if>
 				<xsl:value-of select="$expression" />	
 			</for>
 		</xsl:if>	
 		
 		<xsl:if test="$ForOrUntil='until'">
 			<until>
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$expressionLanguage" />
-				</xsl:attribute>
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
+				<xsl:if test="$expressionLanguage!=''">
+					<xsl:attribute name="expressionLanguage">
+						<xsl:value-of select="$expressionLanguage" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$opaque='true'">
+					<xsl:attribute name="opaque">
+						<xsl:value-of select="$opaque" />
+					</xsl:attribute>
+				</xsl:if>
 				<xsl:value-of select="$expression" />	
 			</until>
 		</xsl:if>	
@@ -826,8 +858,8 @@
 		<xsl:variable name="fromspecexpression" select="./oryx:fromspecexpression" />
 		<xsl:variable name="fromspecliteral" select="./oryx:fromspecliteral" />	
 		
-		<xsl:if test="$fromspecvariablename!='' and $fromspecpart!=''">
-			<from>
+		<from>
+			<xsl:if test="$fromspecvariablename!='' and $fromspecpart!=''">
 				<xsl:attribute name="variable">
 					<xsl:value-of select="$fromspecvariablename" />
 				</xsl:attribute>
@@ -842,47 +874,39 @@
 						<xsl:value-of select="$fromspecquery" />
 					</quary>	
 				</xsl:if>	
-			</from>
-		</xsl:if>
+			</xsl:if>
 		
-		<xsl:if test="$fromspecpartnerLink!='' or $fromspecendpointReference!=''">
-			<from>
+			<xsl:if test="$fromspecpartnerLink!='' or $fromspecendpointReference!=''">
 				<xsl:attribute name="partnerLink">
 					<xsl:value-of select="$fromspecpartnerLink" />
 				</xsl:attribute>
 				<xsl:attribute name="endpointReference">
 					<xsl:value-of select="$fromspecendpointReference" />
 				</xsl:attribute>
-			</from>
-		</xsl:if>		
+			</xsl:if>		
 		
-		<xsl:if test="$fromspecvariablename!='' and $fromspecproperty!=''">
-			<from>
+			<xsl:if test="$fromspecvariablename!='' and $fromspecproperty!=''">
 				<xsl:attribute name="variable">
 					<xsl:value-of select="$fromspecvariablename" />
 				</xsl:attribute>
 				<xsl:attribute name="property">
 					<xsl:value-of select="$fromspecproperty" />
 				</xsl:attribute>
-			</from>
-		</xsl:if>	
+			</xsl:if>	
 		
-		<xsl:if test="$fromspecexpressionlanguage!='' or $fromspecexpression!=''">
-			<from>
+			<xsl:if test="$fromspecexpressionlanguage!='' or $fromspecexpression!=''">
 				<xsl:attribute name="expressionLanguage">
 					<xsl:value-of select="$fromspecexpressionlanguage" />
 				</xsl:attribute>
 				<xsl:value-of select="$fromspecexpression" />						
-			</from>
-		</xsl:if>	
+			</xsl:if>	
 		
-		<xsl:if test="$fromspecliteral!=''">
-			<from>
+			<xsl:if test="$fromspecliteral!=''">
 				<literal>
 					<xsl:value-of select="$fromspecliteral" />
 				</literal>
-			</from>
-		</xsl:if>	
+			</xsl:if>	
+		</from>
     </xsl:template>
 	
 		
@@ -999,21 +1023,19 @@
 		<xsl:variable name="portType" select="./oryx:porttype" />
 		<xsl:variable name="operation" select="./oryx:operation" />
 		
-		<xsl:if test="$partnerLink!=''">
-			<xsl:attribute name="partnerLink">
-				<xsl:value-of select="$partnerLink" />
-			</xsl:attribute>
-		</xsl:if>
+		<xsl:attribute name="partnerLink">
+			<xsl:value-of select="$partnerLink" />
+		</xsl:attribute>
+
 		<xsl:if test="$portType!=''">
 			<xsl:attribute name="portType">
 				<xsl:value-of select="$portType" />
 			</xsl:attribute>
 		</xsl:if>
-		<xsl:if test="$operation!=''">
-			<xsl:attribute name="operation">
-				<xsl:value-of select="$operation" />
-			</xsl:attribute>
-		</xsl:if>
+
+		<xsl:attribute name="operation">
+			<xsl:value-of select="$operation" />
+		</xsl:attribute>
 	</xsl:template>	
 	
 
@@ -1022,19 +1044,21 @@
 		<xsl:variable name="expression" select="./oryx:repeattimeexpression" />
 		<xsl:variable name="opaque" select="./oryx:repeat_opaque" />
 		
-		<repeatEvery>
-			<xsl:if test="$expressionLanguage!=''">
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$expressionLanguage" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="$opaque!=''">
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:value-of select="$expression" />
-		</repeatEvery>
+		<xsl:if test="$expressionLanguage!='' or $opaque!='' or $expression!=''">
+			<repeatEvery>
+				<xsl:if test="$expressionLanguage!=''">
+					<xsl:attribute name="expressionLanguage">
+						<xsl:value-of select="$expressionLanguage" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$opaque!='true'">
+					<xsl:attribute name="opaque">
+						<xsl:value-of select="$opaque" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:value-of select="$expression" />
+			</repeatEvery>
+		</xsl:if>
 	</xsl:template>
 	
 							
@@ -1087,8 +1111,8 @@
 		<xsl:variable name="tospecexpressionlanguage" select="./oryx:tospecexpressionlanguage" />
 		<xsl:variable name="tospecexpression" select="./oryx:tospecexpression" />
 		
-		<xsl:if test="$tospecvariablename!='' and $tospecpart!=''">
-			<to>
+		<to>
+			<xsl:if test="$tospecvariablename!='' and $tospecpart!=''">
 				<xsl:attribute name="variable">
 					<xsl:value-of select="$tospecvariablename" />
 				</xsl:attribute>
@@ -1102,37 +1126,31 @@
 						</xsl:attribute>
 						<xsl:value-of select="$tospecquery" />
 					</quary>	
-				</xsl:if>	
-			</to>
-		</xsl:if>
+				</xsl:if>
+			</xsl:if>
 					
-		<xsl:if test="$tospecpartnerLink!=''">
-			<to>
+			<xsl:if test="$tospecpartnerLink!=''">
 				<xsl:attribute name="partnerLink">
 					<xsl:value-of select="$tospecpartnerLink" />
 				</xsl:attribute>
-			</to>
-		</xsl:if>		
+			</xsl:if>		
 		
-		<xsl:if test="$tospecvariablename!='' and $tospecproperty!=''">
-			<to>
+			<xsl:if test="$tospecvariablename!='' and $tospecproperty!=''">
 				<xsl:attribute name="variable">
 					<xsl:value-of select="$tospecvariablename" />
 				</xsl:attribute>
 				<xsl:attribute name="property">
 					<xsl:value-of select="$tospecproperty" />
 				</xsl:attribute>
-			</to>
-		</xsl:if>	
+			</xsl:if>	
 		
-		<xsl:if test="$tospecexpressionlanguage!='' or $tospecexpression!=''">
-			<to>
+			<xsl:if test="$tospecexpressionlanguage!='' or $tospecexpression!=''">
 				<xsl:attribute name="expressionLanguage">
 					<xsl:value-of select="$tospecexpressionlanguage" />
 				</xsl:attribute>
-				<xsl:value-of select="$tospecexpression" />						
-			</to>
-		</xsl:if>		
+				<xsl:value-of select="$tospecexpression" />	
+			</xsl:if>	
+		</to>	
     </xsl:template>
 	
 	
