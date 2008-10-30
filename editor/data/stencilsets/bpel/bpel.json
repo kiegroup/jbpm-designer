@@ -583,8 +583,8 @@
 							"optional":false 
 						},
 						{
-							"id":"PartnetLinkType",
-							"name":"PartnetLinkType",
+							"id":"PartnerLinkType",
+							"name":"PartnerLinkType",
 							"type":"String",
 							"value":"",
 							"width":100,
@@ -746,7 +746,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -1106,7 +1106,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -1406,7 +1406,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -1714,8 +1714,7 @@
 			"title":"Assign",
 			"title_de":"Assign",
 			"groups":["Assignment"],
-			//TODO : german translation
-			"groups_de":["Assignment"],
+			"groups_de":["Zuweisung"],
 			"description":"An Assign activity.",
 			"description_de":"Eine Assign-Aktivität.",
 			"view":"assignment/node.action.assign.svg",
@@ -1757,7 +1756,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -1895,8 +1894,7 @@
 			"title":"Copy",
 			"title_de":"Copy",
 			"groups":["Assignment"],
-			//TODO : german translation
-			"groups_de":["Assignment"],
+			"groups_de":["Zuweisung"],
 			"description":"Copy",
 			"description_de":"Copieren.",
 			"view":"assignment/node.action.copy.svg",
@@ -1908,10 +1906,9 @@
 					"prefix":"oryx",
 					"type":"Choice",
 					"title":"keepSrcElementName",
-					//TODO : german translation
 					"title_de":"keepSrcElementName",
 					"value":"",
-					"tooltip":"",
+					"tooltip":"behalte Name des Quellelements",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -1939,10 +1936,9 @@
 					"prefix":"oryx",
 					"type":"Choice",
 					"title":"ignoreMissingFromData",
-					//TODO : german translation
 					"title_de":"ignoreMissingFromData",
 					"value":"fromParent",
-					"tooltip":"",
+					"tooltip":"Ignoriere fehlende von_Daten",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -1977,8 +1973,7 @@
 					"prefix":"oryx",
 					"type":"Choice",
 					"title":"FromSpecType",
-					//TODO : german translation
-					"title_de":"FromSpecType",
+					"title_de":"Von_Type",
 					"value":"Variable",
 					"tooltip":"",
 					"readonly":false,
@@ -2141,8 +2136,7 @@
 					"searchBPELId":"BPEL","searchScopeId":"Scope",
 					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
 					"title":"FS_VariableName",
-					//TODO german translation
-					"title_de":"FS_Variablename",
+					"title_de":"vonVariable",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -2185,8 +2179,7 @@
 					"prefix":"oryx",
 					"type":"String",
 					"title":"FS_endpointReference",
-					//TODO:german translation
-					"title_de":"FS_ReferenzDesEndpunkts",
+					"title_de":"Von_Endpunktreferenz",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -2231,8 +2224,7 @@
 					"prefix":"oryx",
 					"type":"String",
 					"title":"FS_Property",
-					//TODO:german translation
-					"title_de":"FS_Eigentum",
+					"title_de":"von_Eigenschaft",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -2292,8 +2284,7 @@
 					"prefix":"oryx",
 					"type":"Choice",
 					"title":"ToSpecType",
-					//TODO:german translation
-					"title_de":"ToSpecType",
+					"title_de":"Zu_Type",
 					"value":"Variable",
 					"tooltip":"",
 					"readonly":false,
@@ -2414,8 +2405,7 @@
 					"searchBPELId":"BPEL","searchScopeId":"Scope",
 					"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
 					"title":"TS_VariableName",
-					// TODO german translation
-					"title_de":"TS_Variablenname",
+					"title_de":"Zu_Variablenname",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -2488,8 +2478,7 @@
 					"prefix":"oryx",
 					"type":"String",
 					"title":"TS_Property",
-					// TODO german translation
-					"title_de":"TS_Eigentum",
+					"title_de":"Zu_Eigenschaft",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -2588,7 +2577,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -2726,7 +2715,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -2864,7 +2853,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -3040,7 +3029,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -3178,7 +3167,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -3389,7 +3378,7 @@
 					"length":undefined,
 					"wrapLines":true
 				},{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -3556,7 +3545,7 @@
 					"length":undefined,
 					"wrapLines":true
 				},{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -3694,7 +3683,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -3836,7 +3825,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -3931,7 +3920,6 @@
 			]
 		},
 		{
-		  // TODO complete perperties
 			"type": "node",
 			"id":"if_branch",
 			"title":"If (/ else-if) Branch",
@@ -3949,35 +3937,41 @@
  			},
 			"properties": [
 				{
-					"id":"conditionExpressionLanguage",
+					"id":"condition_expressionLanguage",
+					"prefix":"oryx",
 					"type":"String",
-					"title":"conditionExpressionLanguage",
-					"title_de":"Ausdruckssprache der Bedingung",
+					"title":"cond_expressionLanguage",
+					"title_de":"Bedingungsausdruckssprache",
 					"value":"",
 					"description":"",
+					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"length":"50",
+					"refToView":"",
+					"length":undefined,
 					"wrapLines":false
 				},
 				{
-					"id":"conditionBool_expression",
+					"id":"condition_booleanExpression",
+					"prefix":"oryx",
 					"type":"String",
-					"title":"condition_bool_expression",
-					"title_de":"Bool'scher Ausdruck der Bedingung",
+					"title":"cond_booleanExpression",
+					"title_de":"Bedingung:bool'scher Ausdruck",
 					"value":"",
 					"description":"",
-					"refToView":"label",
+					"tooltip":"",
 					"readonly":false,
 					"optional":false,
-					"length":undefined
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				},
 				{
-					"id":"If_opaque",
+					"id":"condition_opaque",
 					"prefix":"oryx",
 					"type":"boolean",
-					"title":"opaque",
-					"title_de":"opak",
+					"title":"cond_Opaque",
+					"title_de":"Opale Bedingung",
 					"value":false,
 					"description":"",
 					"tooltip":"",
@@ -4000,7 +3994,6 @@
 			]
 		},
 		{
-		    // TODO complete perperties
 			"type": "node",
 			"id":"else_branch",
 			"title":"Else Branch",
@@ -4102,7 +4095,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -4244,7 +4237,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -4609,7 +4602,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -4751,7 +4744,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -4935,7 +4928,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -5119,7 +5112,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -5369,7 +5362,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -5508,7 +5501,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -5665,7 +5658,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"JC_expLang",
+					"id":"JoinCond_expLang",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"JoinCond_expLang",
@@ -6080,8 +6073,8 @@
 							"optional":false 
 						},
 						{
-							"id":"PartnetLinkType",
-							"name":"PartnetLinkType",
+							"id":"PartnerLinkType",
+							"name":"PartnerLinkType",
 							"type":"String",
 							"value":"",
 							"width":100,
@@ -6822,7 +6815,7 @@
 			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
 			// TODO : delete role "Activity"
-			"roles": ["SingleActivityContainer", "Activity"],
+			"roles": ["Activity", "SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
