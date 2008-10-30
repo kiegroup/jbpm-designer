@@ -261,7 +261,7 @@
 				<xsl:if test="$type='extensionActivity'">
 					<extensionActivity>
 						<xsl:variable name="elementName" select="./oryx:elementname" />
-						<xsl:if test="$variables!=''">
+						<xsl:if test="$elementName!=''">
 							<xsl:element name="{$elementName}">
 								<xsl:call-template name="add-standard-attributes"/>
 								<xsl:call-template name="add-documentation-element"/>
@@ -555,14 +555,13 @@
 				<!--catch-->
 				<xsl:if test="$type='catch'">
 					<catch>
-						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="add-documentation-element"/>	
+								
 						<xsl:call-template name="add-faultName-attribute"/>
+						
 						<xsl:call-template name="add-faultVariable-attribute"/>
 						
-						<xsl:variable name="faultMessageType" select="./oryx:faultmessagetype" />
-						<xsl:attribute name="faultMessageType">
-							<xsl:value-of select="$faultMessageType" />
-						</xsl:attribute>
+						<xsl:call-template name="add-faultMessageType-attribute"/>
 						
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
@@ -583,7 +582,462 @@
 		</xsl:for-each>
 	</xsl:template>
 		
+
+	<xsl:template name="add-completionCondition-element">
+		<xsl:variable name="expressionLanguage" select="./oryx:compCond_expLang" />
+		<xsl:variable name="successfulBranchesOnly" select="./oryx:successfulbranchesonly" />
+		<xsl:variable name="branches_counter" select="./oryx:branches_intExp" />
 		
+		<xsl:if test="$expressionLanguage!='' or $successfulBranchesOnly!='' or $branches_counter!=''">
+			<completionCondition>
+				<branches>
+					<xsl:if test="$expressionLanguage!=''">
+						<xsl:attribute name="expressionLanguage">
+							<xsl:value-of select="$expressionLanguage" />
+						</xsl:attribute>
+					</xsl:if>
+					<xsl:if test="$successfulBranchesOnly!=''">
+						<xsl:attribute name="successfulBranchesOnly">
+							<xsl:value-of select="$successfulBranchesOnly" />
+						</xsl:attribute>
+					</xsl:if>
+					<xsl:value-of select="$branches_counter" />
+				</branches>
+			</completionCondition>
+		</xsl:if>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-condition-element">
+		<xsl:variable name="expressionLanguage" select="./condition_expressionlanguage" />
+		<xsl:variable name="expression" select="./oryx:condition_booleanexpression" />
+		<xsl:variable name="opaque" select="./oryx:condition_opaque" />
+		
+		<condition>
+			<xsl:if test="$expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="$opaque!=''">
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$expression" />
+		</condition>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-correlations-element">
+		<xsl:variable name="correlations" select="./oryx:correlations" />
+		<xsl:if test="$correlations!=''">
+			<correlations>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$correlations" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-correlations-element">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$correlations" />
+				</xsl:call-template>
+			</correlations>	
+		</xsl:if>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-correlationSets-element">
+		<xsl:variable name="correlationSets" select="./oryx:correlationsets" />
+		<xsl:if test="$correlationSets!=''">
+			<correlationSets>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$correlationSets" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-correlationSets-element">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$correlationSets" />
+				</xsl:call-template>
+			</correlationSets>	
+		</xsl:if>
+	</xsl:template>
+	
+
+	<xsl:template name="add-counterValue-elements">
+		<xsl:variable name="s_expressionLanguage" select="./oryx:start_explang" />
+		<xsl:variable name="s_expression" select="./oryx:start_intexp" />		
+		
+		<startCounterValue>
+			<xsl:if test="$s_expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$s_expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$s_expression" />
+		</startCounterValue>
+		
+		<xsl:variable name="f_expressionLanguage" select="./oryx:final_explang" />
+		<xsl:variable name="f_expression" select="./oryx:final_intexp" />		
+		
+		<finalCounterValue>
+			<xsl:if test="$f_expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$f_expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$f_expression" />
+		</finalCounterValue>	
+	</xsl:template>
+
+
+
+	<xsl:template name="add-createInstance-attribute">
+		<xsl:variable name="createInstance" select="./oryx:createinstance" />
+
+		<xsl:if test="$createInstance!=''">
+			<xsl:attribute name="createInstance">
+				<xsl:value-of select="$createInstance" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+			
+	<xsl:template name="add-documentation-element">
+		<xsl:variable name="documentation" select="./oryx:documentation" />
+		<xsl:if test="$documentation!=''">
+			<documentation>
+				<xsl:value-of select="$documentation" />
+			</documentation>
+		</xsl:if>
+	</xsl:template>
+		
+
+	<xsl:template name="add-exitOnStandardFault-attribute">
+		<xsl:variable name="exitOnStandardFault" select="./oryx:exitonstandardfault" />
+		<xsl:if test="$exitOnStandardFault!=''">
+			<xsl:attribute name="exitOnStandardFault">
+				<xsl:value-of select="$exitOnStandardFault" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+
+	<xsl:template name="add-extension-declaration">
+		<xsl:variable name="extensions" select="./oryx:extensions" />
+		<xsl:if test="$extensions!=''">
+			<extensions>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$extensions" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-extension-declaration">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$extensions" />
+				</xsl:call-template>
+			</extensions>	
+		</xsl:if>
+	</xsl:template>
+	
+
+	<xsl:template name="add-faultMessageType-attribute">
+		<xsl:variable name="faultMessageType" select="./oryx:faultmessagetype" />
+
+		<xsl:if test="$faultMessageType!=''">
+			<xsl:attribute name="faultMessageType">
+				<xsl:value-of select="$faultMessageType" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-faultName-attribute">
+		<xsl:variable name="faultName" select="./oryx:faultname" />
+
+		<xsl:if test="$faultName!=''">
+			<xsl:attribute name="faultName">
+				<xsl:value-of select="$faultName" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+
+	<xsl:template name="add-faultVariable-attribute">
+		<xsl:variable name="faultVariable" select="./oryx:faultvariable" />
+
+		<xsl:if test="$faultVariable!=''">
+			<xsl:attribute name="faultVariable">
+				<xsl:value-of select="$faultVariable" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-ForOrUntil-element">
+		<xsl:variable name="expressionLanguage" select="./oryx:comum_expressionlanguage" />
+		<xsl:variable name="expression" select="./oryx:expressionfororuntil" />
+		<xsl:variable name="opaque" select="./oryx:foruntil_opaque" />
+		<xsl:variable name="ForOrUntil" select="./oryx:fororuntil" />
+		
+		<xsl:if test="$ForOrUntil='for'">
+			<for>
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+				<xsl:value-of select="$expression" />	
+			</for>
+		</xsl:if>	
+		
+		<xsl:if test="$ForOrUntil='until'">
+			<until>
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+				<xsl:value-of select="$expression" />	
+			</until>
+		</xsl:if>	
+	</xsl:template>
+	
+	
+	<xsl:template name="add-from-spec-elements">
+		<xsl:variable name="fromspectype" select="./oryx:fromspectype" />
+		<xsl:variable name="fromspecvariablename" select="./oryx:fromspecvariablename" />
+		<xsl:variable name="fromspecpart" select="./oryx:fromspecpart" />
+		<xsl:variable name="fromspecpartnerLink" select="./oryx:fromspecpartnerLink" />
+		<xsl:variable name="fromspecendpointReference" select="./oryx:fromspecendpointReference" />
+		<xsl:variable name="fromspecquerylanguage" select="./oryx:fromspecquerylanguage" />
+		<xsl:variable name="fromspecquery" select="./oryx:fromspecquery" />
+		<xsl:variable name="fromspecproperty" select="./oryx:fromspecproperty" />
+		<xsl:variable name="fromspecexpressionlanguage" select="./oryx:fromspecexpressionlanguage" />
+		<xsl:variable name="fromspecexpression" select="./oryx:fromspecexpression" />
+		<xsl:variable name="fromspecliteral" select="./oryx:fromspecliteral" />	
+		
+		<xsl:if test="$fromspecvariablename!='' and $fromspecpart!=''">
+			<from>
+				<xsl:attribute name="variable">
+					<xsl:value-of select="$fromspecvariablename" />
+				</xsl:attribute>
+				<xsl:attribute name="part">
+					<xsl:value-of select="$fromspecpart" />
+				</xsl:attribute>
+				<xsl:if test="$fromspecquery!='' or $fromspecquerylanguage!=''">
+					<quary>
+						<xsl:attribute name="queryLanguage">
+							<xsl:value-of select="$fromspecquerylanguage" />
+						</xsl:attribute>
+						<xsl:value-of select="$fromspecquery" />
+					</quary>	
+				</xsl:if>	
+			</from>
+		</xsl:if>
+		
+		<xsl:if test="$fromspecpartnerLink!='' or $fromspecendpointReference!=''">
+			<from>
+				<xsl:attribute name="partnerLink">
+					<xsl:value-of select="$fromspecpartnerLink" />
+				</xsl:attribute>
+				<xsl:attribute name="endpointReference">
+					<xsl:value-of select="$fromspecendpointReference" />
+				</xsl:attribute>
+			</from>
+		</xsl:if>		
+		
+		<xsl:if test="$fromspecvariablename!='' and $fromspecproperty!=''">
+			<from>
+				<xsl:attribute name="variable">
+					<xsl:value-of select="$fromspecvariablename" />
+				</xsl:attribute>
+				<xsl:attribute name="property">
+					<xsl:value-of select="$fromspecproperty" />
+				</xsl:attribute>
+			</from>
+		</xsl:if>	
+		
+		<xsl:if test="$fromspecexpressionlanguage!='' or $fromspecexpression!=''">
+			<from>
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$fromspecexpressionlanguage" />
+				</xsl:attribute>
+				<xsl:value-of select="$fromspecexpression" />						
+			</from>
+		</xsl:if>	
+		
+		<xsl:if test="$fromspecliteral!=''">
+			<from>
+				<literal>
+					<xsl:value-of select="$fromspecliteral" />
+				</literal>
+			</from>
+		</xsl:if>	
+    </xsl:template>
+	
+		
+	<xsl:template name="add-fromParts-element">
+		<xsl:variable name="fromParts" select="./oryx:fromparts" />
+		<xsl:if test="$fromParts!=''">
+			<fromParts>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$fromParts" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-fromParts-element">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$fromParts" />
+				</xsl:call-template>
+			</fromParts>	
+		</xsl:if>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-import-element">
+		<xsl:variable name="import" select="./oryx:import" />
+		<xsl:if test="$import!=''">
+			
+			<xsl:variable name="count">
+				<xsl:call-template name="get-number-of-elements-in-complex-type">
+					<xsl:with-param name="original_content" select="$import" />
+				</xsl:call-template>
+			</xsl:variable>	
+			
+			<xsl:call-template name="loop-for-adding-import-element">
+				<xsl:with-param name="i">1</xsl:with-param>
+				<xsl:with-param name="count" select="$count" />
+				<xsl:with-param name="data-set" select="$import" />
+			</xsl:call-template>		
+		</xsl:if>
+	</xsl:template>
+	
+
+	<xsl:template name="add-messageExchange-attribute">
+		<xsl:variable name="messageExchange" select="./oryx:messageexchange" />
+
+		<xsl:if test="$messageExchange!=''">
+			<xsl:attribute name="messageExchange">
+				<xsl:value-of select="$messageExchange" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-messageExchanges-element">
+		<xsl:variable name="messageExchanges" select="./oryx:messageexchanges" />
+		<xsl:if test="$messageExchanges!=''">
+			<messageExchanges>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$messageExchanges" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-messageExchanges-element">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$messageExchanges" />
+				</xsl:call-template>
+			</messageExchanges>	
+		</xsl:if>
+	</xsl:template>
+	
+						
+	<xsl:template name="add-otherxmlns-attribute">
+		<xsl:variable name="otherxmlns" select="./oryx:otherxmlns" />
+		<xsl:if test="$otherxmlns!=''">
+			<xsl:variable name="count">
+				<xsl:call-template name="get-number-of-elements-in-complex-type">
+					<xsl:with-param name="original_content" select="$otherxmlns" />
+				</xsl:call-template>
+			</xsl:variable>
+			
+			<xsl:call-template name="loop-for-adding-otherxmlns-attribute">
+				<xsl:with-param name="i">1</xsl:with-param>
+				<xsl:with-param name="count" select="$count" />
+				<xsl:with-param name="data-set" select="$otherxmlns" />
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+	
+
+	<xsl:template name="add-partnerLinks-element">
+		<xsl:variable name="partnerLinks" select="./oryx:partnerlinks" />
+		<xsl:if test="$partnerLinks!=''">
+			<partnerLinks>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$partnerLinks" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-partnerLinks-element">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$partnerLinks" />
+				</xsl:call-template>
+			</partnerLinks>	
+		</xsl:if>
+	</xsl:template>
+	
+
+	<xsl:template name="add-partnerLink-portType-operation-attributes">
+		<xsl:variable name="partnerLink" select="./oryx:partnerlink" />
+		<xsl:variable name="portType" select="./oryx:porttype" />
+		<xsl:variable name="operation" select="./oryx:operation" />
+		
+		<xsl:if test="$partnerLink!=''">
+			<xsl:attribute name="partnerLink">
+				<xsl:value-of select="$partnerLink" />
+			</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="$portType!=''">
+			<xsl:attribute name="portType">
+				<xsl:value-of select="$portType" />
+			</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="$operation!=''">
+			<xsl:attribute name="operation">
+				<xsl:value-of select="$operation" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>	
+	
+
+	<xsl:template name="add-repeatEvery-element">
+		<xsl:variable name="expressionLanguage" select="./oryx:repeatexpressionlanguage" />
+		<xsl:variable name="expression" select="./oryx:repeattimeexpression" />
+		<xsl:variable name="opaque" select="./oryx:repeat_opaque" />
+		
+		<repeatEvery>
+			<xsl:if test="$expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="$opaque!=''">
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$expression" />
+		</repeatEvery>
+	</xsl:template>
+	
+							
 	<xsl:template name="add-standard-attributes">			
 		<xsl:variable name="name" select="./oryx:name" />
 		<xsl:if test="$name!=''">
@@ -621,59 +1075,167 @@
 		</xsl:if>					   		
 	</xsl:template>
 	
+
+	<xsl:template name="add-to-spec-elements">
+		<xsl:variable name="tospectype" select="./oryx:tospectype" />
+		<xsl:variable name="tospecvariablename" select="./oryx:tospecvariablename" />
+		<xsl:variable name="tospecpart" select="./oryx:tospecpart" />
+		<xsl:variable name="tospecpartnerLink" select="./oryx:tospecpartnerLink" />
+		<xsl:variable name="tospecquerylanguage" select="./oryx:tospecquerylanguage" />
+		<xsl:variable name="tospecquery" select="./oryx:tospecquery" />
+		<xsl:variable name="tospecproperty" select="./oryx:tospecproperty" />
+		<xsl:variable name="tospecexpressionlanguage" select="./oryx:tospecexpressionlanguage" />
+		<xsl:variable name="tospecexpression" select="./oryx:tospecexpression" />
+		
+		<xsl:if test="$tospecvariablename!='' and $tospecpart!=''">
+			<to>
+				<xsl:attribute name="variable">
+					<xsl:value-of select="$tospecvariablename" />
+				</xsl:attribute>
+				<xsl:attribute name="part">
+					<xsl:value-of select="$tospecpart" />
+				</xsl:attribute>
+				<xsl:if test="$tospecquery!='' or $tospecquerylanguage!=''">
+					<quary>
+						<xsl:attribute name="queryLanguage">
+							<xsl:value-of select="$tospecquerylanguage" />
+						</xsl:attribute>
+						<xsl:value-of select="$tospecquery" />
+					</quary>	
+				</xsl:if>	
+			</to>
+		</xsl:if>
+					
+		<xsl:if test="$tospecpartnerLink!=''">
+			<to>
+				<xsl:attribute name="partnerLink">
+					<xsl:value-of select="$tospecpartnerLink" />
+				</xsl:attribute>
+			</to>
+		</xsl:if>		
+		
+		<xsl:if test="$tospecvariablename!='' and $tospecproperty!=''">
+			<to>
+				<xsl:attribute name="variable">
+					<xsl:value-of select="$tospecvariablename" />
+				</xsl:attribute>
+				<xsl:attribute name="property">
+					<xsl:value-of select="$tospecproperty" />
+				</xsl:attribute>
+			</to>
+		</xsl:if>	
+		
+		<xsl:if test="$tospecexpressionlanguage!='' or $tospecexpression!=''">
+			<to>
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$tospecexpressionlanguage" />
+				</xsl:attribute>
+				<xsl:value-of select="$tospecexpression" />						
+			</to>
+		</xsl:if>		
+    </xsl:template>
 	
-	<xsl:template name="add-documentation-element">
-		<xsl:variable name="documentation" select="./oryx:documentation" />
-		<xsl:if test="$documentation!=''">
-			<documentation>
-				<xsl:value-of select="$documentation" />
-			</documentation>
+	
+	<xsl:template name="add-toParts-element">
+		<xsl:variable name="toParts" select="./oryx:toparts" />
+		<xsl:if test="$toParts!=''">
+			<toParts>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$toParts" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-toParts-element">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$toParts" />
+				</xsl:call-template>
+			</toParts>	
 		</xsl:if>
 	</xsl:template>
 	
-	
-	<xsl:template name="add-exitOnStandardFault-attribute">
-		<xsl:variable name="exitOnStandardFault" select="./oryx:exitonstandardfault" />
-		<xsl:if test="$exitOnStandardFault!=''">
-			<xsl:attribute name="exitOnStandardFault">
-				<xsl:value-of select="$exitOnStandardFault" />
+
+	<xsl:template name="add-variable-attribute">
+		<xsl:variable name="variable" select="./oryx:variable" />
+
+		<xsl:if test="$variable!=''">
+			<xsl:attribute name="variable">
+				<xsl:value-of select="$variable" />
 			</xsl:attribute>
 		</xsl:if>
 	</xsl:template>
 	
-	
-	<xsl:template name="add-otherxmlns-attribute">
-		<xsl:variable name="otherxmlns" select="./oryx:otherxmlns" />
-		<xsl:if test="$otherxmlns!=''">
-			<xsl:variable name="count">
-				<xsl:call-template name="get-number-of-elements-in-complex-type">
-					<xsl:with-param name="original_content" select="$otherxmlns" />
-				</xsl:call-template>
-			</xsl:variable>
 			
-			<xsl:call-template name="loop-for-adding-otherxmlns-attribute">
-				<xsl:with-param name="i">1</xsl:with-param>
-				<xsl:with-param name="count" select="$count" />
-				<xsl:with-param name="data-set" select="$otherxmlns" />
-			</xsl:call-template>
+	<xsl:template name="add-variables-element">
+		<xsl:variable name="variables" select="./oryx:variables" />
+		<xsl:if test="$variables!=''">
+			<variables>
+				<xsl:variable name="count">
+					<xsl:call-template name="get-number-of-elements-in-complex-type">
+						<xsl:with-param name="original_content" select="$variables" />
+					</xsl:call-template>
+				</xsl:variable>	
+				
+				<xsl:call-template name="loop-for-adding-variables-element">
+					<xsl:with-param name="i">1</xsl:with-param>
+					<xsl:with-param name="count" select="$count" />
+					<xsl:with-param name="data-set" select="$variables" />
+				</xsl:call-template>
+			</variables>	
 		</xsl:if>
 	</xsl:template>
-		
-		
-	<xsl:template name="loop-for-adding-otherxmlns-attribute">
+	
+	
+	
+	<xsl:template name="get-exact-type">
+		<xsl:param name="typeString" />
+		<xsl:value-of select="substring-after($typeString, 'bpel#')" />
+	</xsl:template>
+
+	
+	<xsl:template name="get-id-string">
+		<xsl:param name="id_" />
+		<xsl:value-of select="substring-after($id_, '#oryx')" />
+	</xsl:template>
+	
+	
+	<xsl:template name="get-number-of-elements-in-complex-type">
+		<xsl:param name="original_content" />
+		<xsl:value-of select="substring-before(substring-after($original_content, 'totalCount%27%3A'), '%2C%20%27items') " />
+	</xsl:template>	
+	
+	
+	
+	<xsl:template name="loop-for-adding-correlations-element">
 		<xsl:param name="i"/>
  		<xsl:param name="count"/>
 		<xsl:param name="data-set"/>
 			
  		<xsl:if test="$i &lt;= $count">
- 			<xsl:variable name="prefix" select="substring-before(substring-after($data-set, 'prefix%3A%22'), '%22%2C%20namespace') " />
-			<xsl:variable name="namespace" select="substring-before(substring-after($data-set, 'namespace%3A%22'), '%22%7D') " />
-			<xsl:variable name="attribute-name" select="concat('xmlns:',$prefix)" />
-			<xsl:attribute name="{$attribute-name}">
-				<xsl:value-of select="$namespace"/>
-			</xsl:attribute>
+ 			<xsl:variable name="set" select="substring-before(substring-after($data-set, 'Correlation%3A%22'), '%22%2C%20initiate') " />
+ 			<xsl:variable name="initiate" select="substring-before(substring-after($data-set, 'initiate%3A%22'), '%22%2C%20pattern') " />
+ 			<xsl:variable name="pattern" select="substring-before(substring-after($data-set, 'pattern%3A%22'), '%22%7D') " />
 			
-  			<xsl:call-template name="loop-for-adding-otherxmlns-attribute">
+			<correlation>
+				<xsl:if test="$set!=''">
+					<xsl:attribute name="set">
+						<xsl:value-of select="$set" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$initiate!=''">
+					<xsl:attribute name="initiate">
+						<xsl:value-of select="$initiate" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$pattern!=''">
+					<xsl:attribute name="pattern">
+						<xsl:value-of select="$pattern" />
+					</xsl:attribute>
+				</xsl:if>			
+			</correlation>
+			
+  			<xsl:call-template name="loop-for-adding-correlations-element">
    				<xsl:with-param name="i" select="$i + 1"/>
    				<xsl:with-param name="count" select="$count"/>
    				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
@@ -682,25 +1244,32 @@
     </xsl:template>
 	
 	
-	<xsl:template name="add-extension-declaration">
-		<xsl:variable name="extensions" select="./oryx:extensions" />
-		<xsl:if test="$extensions!=''">
-			<extensions>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$extensions" />
-					</xsl:call-template>
-				</xsl:variable>	
-				
-				<xsl:call-template name="loop-for-adding-extension-declaration">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$extensions" />
-				</xsl:call-template>
-			</extensions>	
-		</xsl:if>
-	</xsl:template>
-		
+	<xsl:template name="loop-for-adding-correlationSets-element">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+		<xsl:param name="data-set"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+ 			<xsl:variable name="name" select="substring-before(substring-after($data-set, 'name%3A%22'), '%22%2C%20properties') " />
+ 			<xsl:variable name="properties" select="substring-before(substring-after($data-set, 'properties%3A%22'), '%22%7D') " />
+			
+			<correlationSet>
+				<xsl:attribute name="name">
+					<xsl:value-of select="$name" />
+				</xsl:attribute>
+				<xsl:attribute name="properties">
+					<xsl:value-of select="$properties" />
+				</xsl:attribute>				
+			</correlationSet>
+			
+  			<xsl:call-template name="loop-for-adding-correlationSets-element">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
+	
 		
 	<xsl:template name="loop-for-adding-extension-declaration">
 		<xsl:param name="i"/>
@@ -728,27 +1297,34 @@
  		</xsl:if>
     </xsl:template>
 	
+		
+	<xsl:template name="loop-for-adding-fromParts-element">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+		<xsl:param name="data-set"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+  			<xsl:variable name="part" select="substring-before(substring-after($data-set, 'part%3A%22'), '%22%2C%20toVariable') " />
+ 			<xsl:variable name="toVariable" select="substring-before(substring-after($data-set, 'toVariable%3A%22'), '%22%7D') " />
+			
+			<fromPart>
+				<xsl:attribute name="part">
+					<xsl:value-of select="$part" />
+				</xsl:attribute>	
+				<xsl:attribute name="toVariable">
+					<xsl:value-of select="$toVariable" />
+				</xsl:attribute>		
+			</fromPart>
+			
+  			<xsl:call-template name="loop-for-adding-fromParts-element">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
 	
-	<xsl:template name="add-import-element">
-		<xsl:variable name="import" select="./oryx:import" />
-		<xsl:if test="$import!=''">
-			
-			<xsl:variable name="count">
-				<xsl:call-template name="get-number-of-elements-in-complex-type">
-					<xsl:with-param name="original_content" select="$import" />
-				</xsl:call-template>
-			</xsl:variable>	
-			
-			<xsl:call-template name="loop-for-adding-import-element">
-				<xsl:with-param name="i">1</xsl:with-param>
-				<xsl:with-param name="count" select="$count" />
-				<xsl:with-param name="data-set" select="$import" />
-			</xsl:call-template>
-				
-		</xsl:if>
-	</xsl:template>
-		
-		
+	
 	<xsl:template name="loop-for-adding-import-element">
 		<xsl:param name="i"/>
  		<xsl:param name="count"/>
@@ -779,27 +1355,133 @@
  		</xsl:if>
     </xsl:template>
 	
+
+	<xsl:template name="loop-for-adding-messageExchanges-element">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+		<xsl:param name="data-set"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+ 			<xsl:variable name="name" select="substring-before(substring-after($data-set, 'name%3A%22'), '%22%7D') " />
+			
+			<messageExchange>
+				<xsl:attribute name="name">
+					<xsl:value-of select="$name" />
+				</xsl:attribute>			
+			</messageExchange>
+			
+  			<xsl:call-template name="loop-for-adding-messageExchanges-element">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
 	
-	<xsl:template name="add-variables-element">
-		<xsl:variable name="variables" select="./oryx:variables" />
-		<xsl:if test="$variables!=''">
-			<variables>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$variables" />
-					</xsl:call-template>
-				</xsl:variable>	
+	
+	<xsl:template name="loop-for-adding-otherxmlns-attribute">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+		<xsl:param name="data-set"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+ 			<xsl:variable name="prefix" select="substring-before(substring-after($data-set, 'prefix%3A%22'), '%22%2C%20namespace') " />
+			<xsl:variable name="namespace" select="substring-before(substring-after($data-set, 'namespace%3A%22'), '%22%7D') " />
+			<xsl:variable name="attribute-name" select="concat('xmlns:',$prefix)" />
+			<xsl:attribute name="{$attribute-name}">
+				<xsl:value-of select="$namespace"/>
+			</xsl:attribute>
+			
+  			<xsl:call-template name="loop-for-adding-otherxmlns-attribute">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
+
+
+	<xsl:template name="loop-for-adding-partnerLinks-element">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+		<xsl:param name="data-set"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+ 			<xsl:variable name="name" select="substring-before(substring-after($data-set, 'name%3A%22'), '%22%2C%20PartnerLinkType') " />
+ 			<xsl:variable name="partnerLinkType" select="substring-before(substring-after($data-set, 'PartnerLinkType%3A%22'), '%22%2C%20myRole') " />
+ 			<xsl:variable name="myRole" select="substring-before(substring-after($data-set, 'myRole%3A%22'), '%22%2C%20partnerRole') " />
+ 			<xsl:variable name="partnerRole" select="substring-before(substring-after($data-set, 'partnerRole%3A%22'), '%22%2C%20initializePartnerRole') " />
+			<xsl:variable name="initializePartnerRole" select="substring-before(substring-after($data-set, 'initializePartnerRole%3A%22'), '%22%7D') " />
+			
+			<partnerLink>
+				<xsl:if test="$name!=''">
+					<xsl:attribute name="name">
+						<xsl:value-of select="$name" />
+					</xsl:attribute>
+				</xsl:if>
 				
-				<xsl:call-template name="loop-for-adding-variables-element">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$variables" />
-				</xsl:call-template>
-			</variables>	
-		</xsl:if>
-	</xsl:template>
-		
-		
+				<xsl:if test="$partnerLinkType!=''">
+					<xsl:attribute name="partnerLinkType">
+						<xsl:value-of select="$partnerLinkType" />
+					</xsl:attribute>
+				</xsl:if>
+				
+				<xsl:if test="$myRole!=''">
+					<xsl:attribute name="myRole">
+						<xsl:value-of select="$myRole" />
+					</xsl:attribute>
+				</xsl:if>
+				
+				<xsl:if test="$partnerRole!=''">
+					<xsl:attribute name="partnerRole">
+						<xsl:value-of select="$partnerRole" />
+					</xsl:attribute>
+				</xsl:if>
+				
+				<xsl:if test="$initializePartnerRole!=''">
+					<xsl:attribute name="initializePartnerRole">
+						<xsl:value-of select="$initializePartnerRole" />
+					</xsl:attribute>
+				</xsl:if>	
+					
+			</partnerLink>
+			
+  			<xsl:call-template name="loop-for-adding-partnerLinks-element">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
+	
+
+	<xsl:template name="loop-for-adding-toParts-element">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+		<xsl:param name="data-set"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+  			<xsl:variable name="part" select="substring-before(substring-after($data-set, 'part%3A%22'), '%22%2C%20Correlation') " />
+ 			<xsl:variable name="fromVariable" select="substring-before(substring-after($data-set, 'Correlation%3A%22'), '%22%7D') " />
+			
+			<toPart>
+				<xsl:attribute name="part">
+					<xsl:value-of select="$part" />
+				</xsl:attribute>	
+				<xsl:attribute name="fromVariable">
+					<xsl:value-of select="$fromVariable" />
+				</xsl:attribute>		
+			</toPart>
+			
+  			<xsl:call-template name="loop-for-adding-toParts-element">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
+	
+				
 	<xsl:template name="loop-for-adding-variables-element">
 		<xsl:param name="i"/>
  		<xsl:param name="count"/>
@@ -902,670 +1584,6 @@
   			</xsl:call-template>
  		</xsl:if>
     </xsl:template>
-	
-	
-	<xsl:template name="add-partnerLinks-element">
-		<xsl:variable name="partnerLinks" select="./oryx:partnerlinks" />
-		<xsl:if test="$partnerLinks!=''">
-			<partnerLinks>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$partnerLinks" />
-					</xsl:call-template>
-				</xsl:variable>	
-				
-				<xsl:call-template name="loop-for-adding-partnerLinks-element">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$partnerLinks" />
-				</xsl:call-template>
-			</partnerLinks>	
-		</xsl:if>
-	</xsl:template>
-		
-		
-	<xsl:template name="loop-for-adding-partnerLinks-element">
-		<xsl:param name="i"/>
- 		<xsl:param name="count"/>
-		<xsl:param name="data-set"/>
-			
- 		<xsl:if test="$i &lt;= $count">
- 			<xsl:variable name="name" select="substring-before(substring-after($data-set, 'name%3A%22'), '%22%2C%20PartnerLinkType') " />
- 			<xsl:variable name="partnerLinkType" select="substring-before(substring-after($data-set, 'PartnerLinkType%3A%22'), '%22%2C%20myRole') " />
- 			<xsl:variable name="myRole" select="substring-before(substring-after($data-set, 'myRole%3A%22'), '%22%2C%20partnerRole') " />
- 			<xsl:variable name="partnerRole" select="substring-before(substring-after($data-set, 'partnerRole%3A%22'), '%22%2C%20initializePartnerRole') " />
-			<xsl:variable name="initializePartnerRole" select="substring-before(substring-after($data-set, 'initializePartnerRole%3A%22'), '%22%7D') " />
-			
-			<partnerLink>
-				<xsl:if test="$name!=''">
-					<xsl:attribute name="name">
-						<xsl:value-of select="$name" />
-					</xsl:attribute>
-				</xsl:if>
-				
-				<xsl:if test="$partnerLinkType!=''">
-					<xsl:attribute name="partnerLinkType">
-						<xsl:value-of select="$partnerLinkType" />
-					</xsl:attribute>
-				</xsl:if>
-				
-				<xsl:if test="$myRole!=''">
-					<xsl:attribute name="myRole">
-						<xsl:value-of select="$myRole" />
-					</xsl:attribute>
-				</xsl:if>
-				
-				<xsl:if test="$partnerRole!=''">
-					<xsl:attribute name="partnerRole">
-						<xsl:value-of select="$partnerRole" />
-					</xsl:attribute>
-				</xsl:if>
-				
-				<xsl:if test="$initializePartnerRole!=''">
-					<xsl:attribute name="initializePartnerRole">
-						<xsl:value-of select="$initializePartnerRole" />
-					</xsl:attribute>
-				</xsl:if>	
-					
-			</partnerLink>
-			
-  			<xsl:call-template name="loop-for-adding-partnerLinks-element">
-   				<xsl:with-param name="i" select="$i + 1"/>
-   				<xsl:with-param name="count" select="$count"/>
-   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
-  			</xsl:call-template>
- 		</xsl:if>
-    </xsl:template>
-	
-	
-	<xsl:template name="add-correlationSets-element">
-		<xsl:variable name="correlationSets" select="./oryx:correlationsets" />
-		<xsl:if test="$correlationSets!=''">
-			<correlationSets>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$correlationSets" />
-					</xsl:call-template>
-				</xsl:variable>	
-				
-				<xsl:call-template name="loop-for-adding-correlationSets-element">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$correlationSets" />
-				</xsl:call-template>
-			</correlationSets>	
-		</xsl:if>
-	</xsl:template>
-		
-		
-	<xsl:template name="loop-for-adding-correlationSets-element">
-		<xsl:param name="i"/>
- 		<xsl:param name="count"/>
-		<xsl:param name="data-set"/>
-			
- 		<xsl:if test="$i &lt;= $count">
- 			<xsl:variable name="name" select="substring-before(substring-after($data-set, 'name%3A%22'), '%22%2C%20properties') " />
- 			<xsl:variable name="properties" select="substring-before(substring-after($data-set, 'properties%3A%22'), '%22%7D') " />
-			
-			<correlationSet>
-				<xsl:attribute name="name">
-					<xsl:value-of select="$name" />
-				</xsl:attribute>
-				<xsl:attribute name="properties">
-					<xsl:value-of select="$properties" />
-				</xsl:attribute>				
-			</correlationSet>
-			
-  			<xsl:call-template name="loop-for-adding-correlationSets-element">
-   				<xsl:with-param name="i" select="$i + 1"/>
-   				<xsl:with-param name="count" select="$count"/>
-   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
-  			</xsl:call-template>
- 		</xsl:if>
-    </xsl:template>
-	
-	
-	<xsl:template name="add-messageExchanges-element">
-		<xsl:variable name="messageExchanges" select="./oryx:messageexchanges" />
-		<xsl:if test="$messageExchanges!=''">
-			<messageExchanges>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$messageExchanges" />
-					</xsl:call-template>
-				</xsl:variable>	
-				
-				<xsl:call-template name="loop-for-adding-messageExchanges-element">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$messageExchanges" />
-				</xsl:call-template>
-			</messageExchanges>	
-		</xsl:if>
-	</xsl:template>
-		
-		
-	<xsl:template name="loop-for-adding-messageExchanges-element">
-		<xsl:param name="i"/>
- 		<xsl:param name="count"/>
-		<xsl:param name="data-set"/>
-			
- 		<xsl:if test="$i &lt;= $count">
- 			<xsl:variable name="name" select="substring-before(substring-after($data-set, 'name%3A%22'), '%22%7D') " />
-			
-			<messageExchange>
-				<xsl:attribute name="name">
-					<xsl:value-of select="$name" />
-				</xsl:attribute>			
-			</messageExchange>
-			
-  			<xsl:call-template name="loop-for-adding-messageExchanges-element">
-   				<xsl:with-param name="i" select="$i + 1"/>
-   				<xsl:with-param name="count" select="$count"/>
-   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
-  			</xsl:call-template>
- 		</xsl:if>
-    </xsl:template>
-	
-	
-	<xsl:template name="add-partnerLink-portType-operation-attributes">
-		<xsl:variable name="partnerLink" select="./oryx:partnerlink" />
-		<xsl:variable name="portType" select="./oryx:porttype" />
-		<xsl:variable name="operation" select="./oryx:operation" />
-		
-		<xsl:if test="$partnerLink!=''">
-			<xsl:attribute name="partnerLink">
-				<xsl:value-of select="$partnerLink" />
-			</xsl:attribute>
-		</xsl:if>
-		<xsl:if test="$portType!=''">
-			<xsl:attribute name="portType">
-				<xsl:value-of select="$portType" />
-			</xsl:attribute>
-		</xsl:if>
-		<xsl:if test="$operation!=''">
-			<xsl:attribute name="operation">
-				<xsl:value-of select="$operation" />
-			</xsl:attribute>
-		</xsl:if>
-	</xsl:template>	
-	
-	
-	<xsl:template name="add-correlations-element">
-		<xsl:variable name="correlations" select="./oryx:correlations" />
-		<xsl:if test="$correlations!=''">
-			<correlations>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$correlations" />
-					</xsl:call-template>
-				</xsl:variable>	
-				
-				<xsl:call-template name="loop-for-adding-correlations-element">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$correlations" />
-				</xsl:call-template>
-			</correlations>	
-		</xsl:if>
-	</xsl:template>
-		
-		
-	<xsl:template name="loop-for-adding-correlations-element">
-		<xsl:param name="i"/>
- 		<xsl:param name="count"/>
-		<xsl:param name="data-set"/>
-			
- 		<xsl:if test="$i &lt;= $count">
- 			<xsl:variable name="set" select="substring-before(substring-after($data-set, 'Correlation%3A%22'), '%22%2C%20initiate') " />
- 			<xsl:variable name="initiate" select="substring-before(substring-after($data-set, 'initiate%3A%22'), '%22%2C%20pattern') " />
- 			<xsl:variable name="pattern" select="substring-before(substring-after($data-set, 'pattern%3A%22'), '%22%7D') " />
-			
-			<correlation>
-				<xsl:if test="$set!=''">
-					<xsl:attribute name="set">
-						<xsl:value-of select="$set" />
-					</xsl:attribute>
-				</xsl:if>
-				<xsl:if test="$initiate!=''">
-					<xsl:attribute name="initiate">
-						<xsl:value-of select="$initiate" />
-					</xsl:attribute>
-				</xsl:if>
-				<xsl:if test="$pattern!=''">
-					<xsl:attribute name="pattern">
-						<xsl:value-of select="$pattern" />
-					</xsl:attribute>
-				</xsl:if>			
-			</correlation>
-			
-  			<xsl:call-template name="loop-for-adding-correlations-element">
-   				<xsl:with-param name="i" select="$i + 1"/>
-   				<xsl:with-param name="count" select="$count"/>
-   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
-  			</xsl:call-template>
- 		</xsl:if>
-    </xsl:template>
-	
-	
-	<xsl:template name="add-toParts-element">
-		<xsl:variable name="toParts" select="./oryx:toparts" />
-		<xsl:if test="$toParts!=''">
-			<toParts>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$toParts" />
-					</xsl:call-template>
-				</xsl:variable>	
-				
-				<xsl:call-template name="loop-for-adding-toParts-element">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$toParts" />
-				</xsl:call-template>
-			</toParts>	
-		</xsl:if>
-	</xsl:template>
-		
-		
-	<xsl:template name="loop-for-adding-toParts-element">
-		<xsl:param name="i"/>
- 		<xsl:param name="count"/>
-		<xsl:param name="data-set"/>
-			
- 		<xsl:if test="$i &lt;= $count">
-  			<xsl:variable name="part" select="substring-before(substring-after($data-set, 'part%3A%22'), '%22%2C%20Correlation') " />
- 			<xsl:variable name="fromVariable" select="substring-before(substring-after($data-set, 'Correlation%3A%22'), '%22%7D') " />
-			
-			<toPart>
-				<xsl:attribute name="part">
-					<xsl:value-of select="$part" />
-				</xsl:attribute>	
-				<xsl:attribute name="fromVariable">
-					<xsl:value-of select="$fromVariable" />
-				</xsl:attribute>		
-			</toPart>
-			
-  			<xsl:call-template name="loop-for-adding-toParts-element">
-   				<xsl:with-param name="i" select="$i + 1"/>
-   				<xsl:with-param name="count" select="$count"/>
-   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
-  			</xsl:call-template>
- 		</xsl:if>
-    </xsl:template>
-	
-	
-	<xsl:template name="add-fromParts-element">
-		<xsl:variable name="fromParts" select="./oryx:fromparts" />
-		<xsl:if test="$fromParts!=''">
-			<fromParts>
-				<xsl:variable name="count">
-					<xsl:call-template name="get-number-of-elements-in-complex-type">
-						<xsl:with-param name="original_content" select="$fromParts" />
-					</xsl:call-template>
-				</xsl:variable>	
-				
-				<xsl:call-template name="loop-for-adding-fromParts-element">
-					<xsl:with-param name="i">1</xsl:with-param>
-					<xsl:with-param name="count" select="$count" />
-					<xsl:with-param name="data-set" select="$fromParts" />
-				</xsl:call-template>
-			</fromParts>	
-		</xsl:if>
-	</xsl:template>
-		
-		
-	<xsl:template name="loop-for-adding-fromParts-element">
-		<xsl:param name="i"/>
- 		<xsl:param name="count"/>
-		<xsl:param name="data-set"/>
-			
- 		<xsl:if test="$i &lt;= $count">
-  			<xsl:variable name="part" select="substring-before(substring-after($data-set, 'part%3A%22'), '%22%2C%20toVariable') " />
- 			<xsl:variable name="toVariable" select="substring-before(substring-after($data-set, 'toVariable%3A%22'), '%22%7D') " />
-			
-			<fromPart>
-				<xsl:attribute name="part">
-					<xsl:value-of select="$part" />
-				</xsl:attribute>	
-				<xsl:attribute name="toVariable">
-					<xsl:value-of select="$toVariable" />
-				</xsl:attribute>		
-			</fromPart>
-			
-  			<xsl:call-template name="loop-for-adding-fromParts-element">
-   				<xsl:with-param name="i" select="$i + 1"/>
-   				<xsl:with-param name="count" select="$count"/>
-   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
-  			</xsl:call-template>
- 		</xsl:if>
-    </xsl:template>
-	
-	
-	<xsl:template name="add-variable-attribute">
-		<xsl:variable name="variable" select="./oryx:variable" />
 
-		<xsl:if test="$variable!=''">
-			<xsl:attribute name="variable">
-				<xsl:value-of select="$variable" />
-			</xsl:attribute>
-		</xsl:if>
-	</xsl:template>
-	
-	
-	<xsl:template name="add-createInstance-attribute">
-		<xsl:variable name="createInstance" select="./oryx:createinstance" />
-
-		<xsl:if test="$createInstance!=''">
-			<xsl:attribute name="createInstance">
-				<xsl:value-of select="$createInstance" />
-			</xsl:attribute>
-		</xsl:if>
-	</xsl:template>
-	
-	
-	<xsl:template name="add-messageExchange-attribute">
-		<xsl:variable name="messageExchange" select="./oryx:messageexchange" />
-
-		<xsl:if test="$messageExchange!=''">
-			<xsl:attribute name="messageExchange">
-				<xsl:value-of select="$messageExchange" />
-			</xsl:attribute>
-		</xsl:if>
-	</xsl:template>
-	
-	
-	<xsl:template name="add-faultName-attribute">
-		<xsl:variable name="faultName" select="./oryx:faultname" />
-
-		<xsl:if test="$faultName!=''">
-			<xsl:attribute name="faultName">
-				<xsl:value-of select="$faultName" />
-			</xsl:attribute>
-		</xsl:if>
-	</xsl:template>
-	
-	
-	<xsl:template name="add-from-spec-elements">
-		<xsl:variable name="fromspectype" select="./oryx:fromspectype" />
-		<xsl:variable name="fromspecvariablename" select="./oryx:fromspecvariablename" />
-		<xsl:variable name="fromspecpart" select="./oryx:fromspecpart" />
-		<xsl:variable name="fromspecpartnerLink" select="./oryx:fromspecpartnerLink" />
-		<xsl:variable name="fromspecendpointReference" select="./oryx:fromspecendpointReference" />
-		<xsl:variable name="fromspecquerylanguage" select="./oryx:fromspecquerylanguage" />
-		<xsl:variable name="fromspecquery" select="./oryx:fromspecquery" />
-		<xsl:variable name="fromspecproperty" select="./oryx:fromspecproperty" />
-		<xsl:variable name="fromspecexpressionlanguage" select="./oryx:fromspecexpressionlanguage" />
-		<xsl:variable name="fromspecexpression" select="./oryx:fromspecexpression" />
-		<xsl:variable name="fromspecliteral" select="./oryx:fromspecliteral" />	
-		
-		<xsl:if test="$fromspecvariablename!='' and $fromspecpart!=''">
-			<from>
-				<xsl:attribute name="variable">
-					<xsl:value-of select="$fromspecvariablename" />
-				</xsl:attribute>
-				<xsl:attribute name="part">
-					<xsl:value-of select="$fromspecpart" />
-				</xsl:attribute>
-				<xsl:if test="$fromspecquery!='' or $fromspecquerylanguage!=''">
-					<quary>
-						<xsl:attribute name="queryLanguage">
-							<xsl:value-of select="$fromspecquerylanguage" />
-						</xsl:attribute>
-						<xsl:value-of select="$fromspecquery" />
-					</quary>	
-				</xsl:if>	
-			</from>
-		</xsl:if>
-		
-		<xsl:if test="$fromspecpartnerLink!='' or $fromspecendpointReference!=''">
-			<from>
-				<xsl:attribute name="partnerLink">
-					<xsl:value-of select="$fromspecpartnerLink" />
-				</xsl:attribute>
-				<xsl:attribute name="endpointReference">
-					<xsl:value-of select="$fromspecendpointReference" />
-				</xsl:attribute>
-			</from>
-		</xsl:if>		
-		
-		<xsl:if test="$fromspecvariablename!='' and $fromspecproperty!=''">
-			<from>
-				<xsl:attribute name="variable">
-					<xsl:value-of select="$fromspecvariablename" />
-				</xsl:attribute>
-				<xsl:attribute name="property">
-					<xsl:value-of select="$fromspecproperty" />
-				</xsl:attribute>
-			</from>
-		</xsl:if>	
-		
-		<xsl:if test="$fromspecexpressionlanguage!='' or $fromspecexpression!=''">
-			<from>
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$fromspecexpressionlanguage" />
-				</xsl:attribute>
-				<xsl:value-of select="$fromspecexpression" />						
-			</from>
-		</xsl:if>	
-		
-		<xsl:if test="$fromspecliteral!=''">
-			<from>
-				<literal>
-					<xsl:value-of select="$fromspecliteral" />
-				</literal>
-			</from>
-		</xsl:if>	
-    </xsl:template>
-	
-	
-	<xsl:template name="add-to-spec-elements">
-		<xsl:variable name="tospectype" select="./oryx:tospectype" />
-		<xsl:variable name="tospecvariablename" select="./oryx:tospecvariablename" />
-		<xsl:variable name="tospecpart" select="./oryx:tospecpart" />
-		<xsl:variable name="tospecpartnerLink" select="./oryx:tospecpartnerLink" />
-		<xsl:variable name="tospecquerylanguage" select="./oryx:tospecquerylanguage" />
-		<xsl:variable name="tospecquery" select="./oryx:tospecquery" />
-		<xsl:variable name="tospecproperty" select="./oryx:tospecproperty" />
-		<xsl:variable name="tospecexpressionlanguage" select="./oryx:tospecexpressionlanguage" />
-		<xsl:variable name="tospecexpression" select="./oryx:tospecexpression" />
-		
-		<xsl:if test="$tospecvariablename!='' and $tospecpart!=''">
-			<to>
-				<xsl:attribute name="variable">
-					<xsl:value-of select="$tospecvariablename" />
-				</xsl:attribute>
-				<xsl:attribute name="part">
-					<xsl:value-of select="$tospecpart" />
-				</xsl:attribute>
-				<xsl:if test="$tospecquery!='' or $tospecquerylanguage!=''">
-					<quary>
-						<xsl:attribute name="queryLanguage">
-							<xsl:value-of select="$tospecquerylanguage" />
-						</xsl:attribute>
-						<xsl:value-of select="$tospecquery" />
-					</quary>	
-				</xsl:if>	
-			</to>
-		</xsl:if>
-					
-		<xsl:if test="$tospecpartnerLink!=''">
-			<to>
-				<xsl:attribute name="partnerLink">
-					<xsl:value-of select="$tospecpartnerLink" />
-				</xsl:attribute>
-			</to>
-		</xsl:if>		
-		
-		<xsl:if test="$tospecvariablename!='' and $tospecproperty!=''">
-			<to>
-				<xsl:attribute name="variable">
-					<xsl:value-of select="$tospecvariablename" />
-				</xsl:attribute>
-				<xsl:attribute name="property">
-					<xsl:value-of select="$tospecproperty" />
-				</xsl:attribute>
-			</to>
-		</xsl:if>	
-		
-		<xsl:if test="$tospecexpressionlanguage!='' or $tospecexpression!=''">
-			<to>
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$tospecexpressionlanguage" />
-				</xsl:attribute>
-				<xsl:value-of select="$tospecexpression" />						
-			</to>
-		</xsl:if>		
-    </xsl:template>
-	
-	
-	<xsl:template name="add-ForOrUntil-element">
-		<xsl:variable name="expressionLanguage" select="./oryx:comum_expressionlanguage" />
-		<xsl:variable name="expression" select="./oryx:expressionfororuntil" />
-		<xsl:variable name="opaque" select="./oryx:foruntil_opaque" />
-		<xsl:variable name="ForOrUntil" select="./oryx:fororuntil" />
-		
-		<xsl:if test="$ForOrUntil='for'">
-			<for>
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$expressionLanguage" />
-				</xsl:attribute>
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
-				<xsl:value-of select="$expression" />	
-			</for>
-		</xsl:if>	
-		
-		<xsl:if test="$ForOrUntil='until'">
-			<until>
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$expressionLanguage" />
-				</xsl:attribute>
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
-				<xsl:value-of select="$expression" />	
-			</until>
-		</xsl:if>	
-	</xsl:template>
-	
-	
-	<xsl:template name="add-faultVariable-attribute">
-		<xsl:variable name="faultVariable" select="./oryx:faultvariable" />
-
-		<xsl:if test="$faultVariable!=''">
-			<xsl:attribute name="faultVariable">
-				<xsl:value-of select="$faultVariable" />
-			</xsl:attribute>
-		</xsl:if>
-	</xsl:template>
-	
-	<xsl:template name="add-condition-element">
-		<xsl:variable name="expressionLanguage" select="./condition_expressionlanguage" />
-		<xsl:variable name="expression" select="./oryx:condition_booleanexpression" />
-		<xsl:variable name="opaque" select="./oryx:condition_opaque" />
-		
-		<condition>
-			<xsl:if test="$expressionLanguage!=''">
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$expressionLanguage" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="$opaque!=''">
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:value-of select="$expression" />
-		</condition>
-	</xsl:template>
-	
-	<xsl:template name="add-counterValue-elements">
-		<xsl:variable name="s_expressionLanguage" select="./oryx:startcounter_expressionlanguage" />
-		<xsl:variable name="s_expression" select="./oryx:startcountervalue_integer_expression" />		
-		
-		<startCounterValue>
-			<xsl:if test="$s_expressionLanguage!=''">
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$s_expressionLanguage" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:value-of select="$s_expression" />
-		</startCounterValue>
-		
-		<xsl:variable name="f_expressionLanguage" select="./oryx:finalcountervalue_expressionlanguage" />
-		<xsl:variable name="f_expression" select="./oryx:finalcountervalue_integer_expression" />		
-		
-		<startCounterValue>
-			<xsl:if test="$f_expressionLanguage!=''">
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$f_expressionLanguage" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:value-of select="$f_expression" />
-		</startCounterValue>	
-	</xsl:template>
-	
-	<xsl:template name="add-completionCondition-element">
-		<xsl:variable name="expressionLanguage" select="./oryx:expressionLanguage" />
-		<xsl:variable name="successfulBranchesOnly" select="./oryx:successfulBranchesOnly" />
-		<xsl:variable name="branches_counter" select="./oryx:branches_counter" />
-		
-		<completionCondition>
-			<branches>
-				<xsl:if test="$expressionLanguage!=''">
-					<xsl:attribute name="expressionLanguage">
-						<xsl:value-of select="$expressionLanguage" />
-					</xsl:attribute>
-				</xsl:if>
-				<xsl:if test="$successfulBranchesOnly!=''">
-					<xsl:attribute name="successfulBranchesOnly">
-						<xsl:value-of select="$successfulBranchesOnly" />
-					</xsl:attribute>
-				</xsl:if>
-				<xsl:value-of select="$branches_counter" />
-			</branches>
-		</completionCondition>
-	</xsl:template>
-	
-	
-	<xsl:template name="add-repeatEvery-element">
-		<xsl:variable name="expressionLanguage" select="./oryx:repeatexpressionlanguage" />
-		<xsl:variable name="expression" select="./oryx:repeattimeexpression" />
-		<xsl:variable name="opaque" select="./oryx:repeat_opaque" />
-		
-		<repeatEvery>
-			<xsl:if test="$expressionLanguage!=''">
-				<xsl:attribute name="expressionLanguage">
-					<xsl:value-of select="$expressionLanguage" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="$opaque!=''">
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:value-of select="$expression" />
-		</repeatEvery>
-	</xsl:template>
-	
-	
-	<xsl:template name="get-id-string">
-		<xsl:param name="id_" />
-		<xsl:value-of select="substring-after($id_, '#oryx')" />
-	</xsl:template>
-	
-	
-	<xsl:template name="get-exact-type">
-		<xsl:param name="typeString" />
-		<xsl:value-of select="substring-after($typeString, 'bpel#')" />
-	</xsl:template>
-	
-	
-	<xsl:template name="get-number-of-elements-in-complex-type">
-		<xsl:param name="original_content" />
-		<xsl:value-of select="substring-before(substring-after($original_content, 'totalCount%27%3A'), '%2C%20%27items') " />
-	</xsl:template>	
 			
 </xsl:stylesheet>
