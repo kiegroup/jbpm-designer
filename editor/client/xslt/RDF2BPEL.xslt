@@ -247,15 +247,27 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						
+						<xsl:variable name="variables" select="./oryx:variables" />
+						<xsl:if test="$variables!=''">
+							<xsl:attribute name="variables">
+								<xsl:value-of select="$variables" />
+							</xsl:attribute>
+						</xsl:if>							
 		            </validate>
 				</xsl:if>
 				
 				<!--extensionActivity-->
 				<xsl:if test="$type='extensionActivity'">
 					<extensionActivity>
-						<xsl:call-template name="add-standard-attributes"/>
-						<xsl:call-template name="add-documentation-element"/>
-						<xsl:call-template name="add-standard-elements"/>
+						<xsl:variable name="elementName" select="./oryx:elementname" />
+						<xsl:if test="$variables!=''">
+							<xsl:element name="{$elementName}">
+								<xsl:call-template name="add-standard-attributes"/>
+								<xsl:call-template name="add-documentation-element"/>
+								<xsl:call-template name="add-standard-elements"/>								
+							</xsl:element>
+						</xsl:if>	
 		            </extensionActivity>
 				</xsl:if>
 				
@@ -265,6 +277,7 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						<xsl:call-template name="add-ForOrUntil-element"/>
 		            </wait>
 				</xsl:if>
 				
@@ -275,6 +288,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-faultName-attribute"/>
+						<xsl:call-template name="add-faultVariable-attribute"/>
 		            </throw>
 				</xsl:if>
 				
@@ -311,16 +325,24 @@
 				<!--if_branch-->
 				<xsl:if test="$type='if_branch'">
 					<xsl:if test="$childrenCounter=1">
+						<xsl:call-template name="add-condition-element"/>
 						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
+					    <xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </xsl:if>
 
 					<xsl:if test="not($childrenCounter=1)">
 						<elseif>
+							<xsl:call-template name="add-condition-element"/>
 							<xsl:call-template name="find-children-nodes">
 								<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 						    </xsl:call-template>
+							<xsl:call-template name="find-children-nodes">
+						    	<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    	</xsl:call-template>
 						</elseif>
 		            </xsl:if>					
 					
@@ -341,6 +363,9 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+					 	<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </flow>
 				</xsl:if>
 				
@@ -351,6 +376,9 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-createInstance-attribute"/>
+				        <xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </pick>
 				</xsl:if>
 				
@@ -363,6 +391,9 @@
 						<xsl:call-template name="add-fromParts-element"/>
 						<xsl:call-template name="add-variable-attribute"/>	
 						<xsl:call-template name="add-messageExchange-attribute"/>
+					    <xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 					</onMessage>
 				</xsl:if>
 				
@@ -372,6 +403,9 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </sequence>
 				</xsl:if>
 				
@@ -381,6 +415,10 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						<xsl:call-template name="add-condition-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </while>
 				</xsl:if>
 				
@@ -390,6 +428,10 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						<xsl:call-template name="add-condition-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </repeatUntil>
 				</xsl:if>
 				
@@ -399,6 +441,28 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						
+						<xsl:variable name="counterName" select="./oryx:countername" />
+						<xsl:if test="$counterName!=''">
+							<xsl:attribute name="counterName">
+								<xsl:value-of select="$counterName" />
+							</xsl:attribute>
+						</xsl:if>
+						
+						<xsl:variable name="parallel" select="./oryx:parallel" />
+						<xsl:if test="$parallel!=''">
+							<xsl:attribute name="parallel">
+								<xsl:value-of select="$parallel" />
+							</xsl:attribute>
+						</xsl:if>
+						
+						<xsl:call-template name="add-counterValue-elements"/>
+						
+						<xsl:call-template name="add-completionCondition-element"/>
+						
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </forEach>
 				</xsl:if>
 				
@@ -414,7 +478,11 @@
 				<!--compensateScope-->
 				<xsl:if test="$type='compensateScope'">
 					<compensateScope>
-						<xsl:call-template name="add-standard-attributes"/>
+						<xsl:variable name="target" select="./oryx:target" />
+						<xsl:attribute name="target">
+							<xsl:value-of select="$target" />
+						</xsl:attribute>
+						<xsl:call-template name="add-standard-attributes"/>						
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 		            </compensateScope>
@@ -431,6 +499,9 @@
 						<xsl:call-template name="add-correlationSets-element"/>
 						<xsl:call-template name="add-messageExchanges-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </scope>
 				</xsl:if>
 				
@@ -438,6 +509,11 @@
 				<xsl:if test="$type='onAlarm'">
 					<onAlarm>
 						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="add-ForOrUntil-element"/>
+						<xsl:call-template name="add-repeatEvery-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </onAlarm>
 				</xsl:if>
 				
@@ -449,7 +525,10 @@
 		            	<xsl:call-template name="add-correlations-element"/>
 						<xsl:call-template name="add-fromParts-element"/>
 						<xsl:call-template name="add-variable-attribute"/>
-						<xsl:call-template name="add-messageExchange-attribute"/>	
+						<xsl:call-template name="add-messageExchange-attribute"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>	
 					</onEvent>
 				</xsl:if>
 				
@@ -457,6 +536,9 @@
 				<xsl:if test="$type='compensationHandler'">
 					<compensationHandler>
 						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </compensationHandler>
 				</xsl:if>
 				
@@ -464,6 +546,9 @@
 				<xsl:if test="$type='terminationHandler'">
 					<terminationHandler>
 						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </terminationHandler>
 				</xsl:if>
 				
@@ -472,6 +557,16 @@
 					<catch>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-faultName-attribute"/>
+						<xsl:call-template name="add-faultVariable-attribute"/>
+						
+						<xsl:variable name="faultMessageType" select="./oryx:faultmessagetype" />
+						<xsl:attribute name="faultMessageType">
+							<xsl:value-of select="$faultMessageType" />
+						</xsl:attribute>
+						
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </catch>
 				</xsl:if>
 				
@@ -479,6 +574,9 @@
 				<xsl:if test="$type='catchAll'">
 					<catchAll>
 						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 		            </catchAll>
 				</xsl:if>				
 			</xsl:if>
@@ -1319,6 +1417,138 @@
 			</to>
 		</xsl:if>		
     </xsl:template>
+	
+	
+	<xsl:template name="add-ForOrUntil-element">
+		<xsl:variable name="expressionLanguage" select="./oryx:comum_expressionlanguage" />
+		<xsl:variable name="expression" select="./oryx:expressionfororuntil" />
+		<xsl:variable name="opaque" select="./oryx:foruntil_opaque" />
+		<xsl:variable name="ForOrUntil" select="./oryx:fororuntil" />
+		
+		<xsl:if test="$ForOrUntil='for'">
+			<for>
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+				<xsl:value-of select="$expression" />	
+			</for>
+		</xsl:if>	
+		
+		<xsl:if test="$ForOrUntil='until'">
+			<until>
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+				<xsl:value-of select="$expression" />	
+			</until>
+		</xsl:if>	
+	</xsl:template>
+	
+	
+	<xsl:template name="add-faultVariable-attribute">
+		<xsl:variable name="faultVariable" select="./oryx:faultvariable" />
+
+		<xsl:if test="$faultVariable!=''">
+			<xsl:attribute name="faultVariable">
+				<xsl:value-of select="$faultVariable" />
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="add-condition-element">
+		<xsl:variable name="expressionLanguage" select="./condition_expressionlanguage" />
+		<xsl:variable name="expression" select="./oryx:condition_booleanexpression" />
+		<xsl:variable name="opaque" select="./oryx:condition_opaque" />
+		
+		<condition>
+			<xsl:if test="$expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="$opaque!=''">
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$expression" />
+		</condition>
+	</xsl:template>
+	
+	<xsl:template name="add-counterValue-elements">
+		<xsl:variable name="s_expressionLanguage" select="./oryx:startcounter_expressionlanguage" />
+		<xsl:variable name="s_expression" select="./oryx:startcountervalue_integer_expression" />		
+		
+		<startCounterValue>
+			<xsl:if test="$s_expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$s_expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$s_expression" />
+		</startCounterValue>
+		
+		<xsl:variable name="f_expressionLanguage" select="./oryx:finalcountervalue_expressionlanguage" />
+		<xsl:variable name="f_expression" select="./oryx:finalcountervalue_integer_expression" />		
+		
+		<startCounterValue>
+			<xsl:if test="$f_expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$f_expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$f_expression" />
+		</startCounterValue>	
+	</xsl:template>
+	
+	<xsl:template name="add-completionCondition-element">
+		<xsl:variable name="expressionLanguage" select="./oryx:expressionLanguage" />
+		<xsl:variable name="successfulBranchesOnly" select="./oryx:successfulBranchesOnly" />
+		<xsl:variable name="branches_counter" select="./oryx:branches_counter" />
+		
+		<completionCondition>
+			<branches>
+				<xsl:if test="$expressionLanguage!=''">
+					<xsl:attribute name="expressionLanguage">
+						<xsl:value-of select="$expressionLanguage" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="$successfulBranchesOnly!=''">
+					<xsl:attribute name="successfulBranchesOnly">
+						<xsl:value-of select="$successfulBranchesOnly" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:value-of select="$branches_counter" />
+			</branches>
+		</completionCondition>
+	</xsl:template>
+	
+	
+	<xsl:template name="add-repeatEvery-element">
+		<xsl:variable name="expressionLanguage" select="./oryx:repeatexpressionlanguage" />
+		<xsl:variable name="expression" select="./oryx:repeattimeexpression" />
+		<xsl:variable name="opaque" select="./oryx:repeat_opaque" />
+		
+		<repeatEvery>
+			<xsl:if test="$expressionLanguage!=''">
+				<xsl:attribute name="expressionLanguage">
+					<xsl:value-of select="$expressionLanguage" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="$opaque!=''">
+				<xsl:attribute name="opaque">
+					<xsl:value-of select="$opaque" />
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="$expression" />
+		</repeatEvery>
+	</xsl:template>
 	
 	
 	<xsl:template name="get-id-string">
