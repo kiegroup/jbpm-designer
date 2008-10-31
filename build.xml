@@ -453,12 +453,12 @@
 
     <target name="undeploy-all" depends="undeploy-editor, undeploy-backend" /> 
 	
-	<target name="oryx-on-a-stick" depends="build, examples, compress">
+	<target name="oryx-on-a-stick">
 		<copy todir='build/stick'>
             <fileset dir="stick">
 			</fileset>
         </copy>
-		<move todir='${editor-build-root}/Plugins'>
+		<move todir='${editor-src-client}/scripts/Plugins'>
             <fileset dir="build/stick/src/oryxplugin"/>
         </move>
 	</target>
