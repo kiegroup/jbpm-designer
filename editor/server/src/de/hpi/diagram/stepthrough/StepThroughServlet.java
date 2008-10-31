@@ -15,7 +15,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.oryxeditor.server.StencilSetUtil;
 import org.w3c.dom.Document;
 
-import de.hpi.BPMNHelpers;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
@@ -65,7 +64,6 @@ public class StepThroughServlet extends HttpServlet {
 				// Check the syntax?
 				if (req.getParameter("checkSyntax").equals("true")) {
 					BPMNDiagram diagram = loadBPMN(document);
-					BPMNHelpers.printBPMN(diagram);
 					// Check Diagram in Syntax and Compatibility
 					STSyntaxChecker checker = new STSyntaxChecker(diagram);
 					checker.checkSyntax(true);
