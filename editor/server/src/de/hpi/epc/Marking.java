@@ -65,19 +65,17 @@ public class Marking implements Cloneable {
 		while (changed) {
 			changed = false;
 			for (DiagramNode node : diag.getNodes()) {
-				for (DiagramEdge edge : node.getIncomingEdges()) {
-					if (context.get(edge) == Context.DEAD) {
-						for (DiagramEdge outEdge : node.getOutgoingEdges()) {
-							// Only put new dead context if there is no token
-							if (state.get(outEdge) == State.NO_TOKEN) {
-								context.put(outEdge, Context.DEAD);
-								changed = true;
-							}
-						}
-						// if an incoming edge have dead context, search
-						// can be stopped
-						break;
-					}
+				if ( // if one incoming edge have dead context ...
+				filterByContext(node.getIncomingEdges(), Context.DEAD).size() > 0
+						&&
+						// ... and if one of outgoing edges without token have
+						// wait context
+						filterByContext(
+								filterByState(node.getOutgoingEdges(),
+										State.NO_TOKEN), Context.WAIT).size() > 0) {
+					applyContext(filterByState(node.getOutgoingEdges(),
+							State.NO_TOKEN), Context.DEAD);
+					changed = true;
 				}
 			}
 		}
@@ -90,7 +88,9 @@ public class Marking implements Cloneable {
 			for (DiagramNode node : diag.getNodes()) {
 				// If event, function or split-connector
 				if (node.getIncomingEdges().size() == 1) {
-					if (context.get(node.getIncomingEdges().get(0)) == Context.WAIT) {
+					if (context.get(node.getIncomingEdges().get(0)) == Context.WAIT
+							&& filterByContext(node.getOutgoingEdges(),
+									Context.DEAD).size() > 0) {
 						for (DiagramEdge outEdge : node.getOutgoingEdges()) {
 							// Only put new dead context if there is no token
 							if (state.get(outEdge) == State.NO_TOKEN) {
@@ -102,12 +102,11 @@ public class Marking implements Cloneable {
 					// AND Join
 				} else if (AND_CONNECTOR.equals(node.getType())) {
 					if (filterByContext(node.getIncomingEdges(), Context.WAIT)
-							.size() == node.getIncomingEdges().size()) {
-						if (state.get(node.getOutgoingEdges().get(0)) == State.NO_TOKEN) {
-							context.put(node.getOutgoingEdges().get(0),
-									Context.WAIT);
-							changed = true;
-						}
+							.size() == node.getIncomingEdges().size()
+							&& context.get(node.getOutgoingEdges().get(0)) == Context.DEAD
+							&& state.get(node.getOutgoingEdges().get(0)) == State.NO_TOKEN) {
+						applyContext(node.getOutgoingEdges(), Context.WAIT);
+						changed = true;
 					}
 					// Xor/ Or Join
 				} else if (XOR_CONNECTOR.equals(node.getType())
@@ -132,8 +131,10 @@ public class Marking implements Cloneable {
 			for (DiagramNode node : diag.getNodes()) {
 				// if all input arcs hold negative tokens and if there is no
 				// positive token on the output arc
-				if (filterByState(node.getIncomingEdges(), State.NEG_TOKEN)
-						.size() == node.getIncomingEdges().size()
+				if (node.getIncomingEdges().size() > 0
+						&& filterByState(node.getIncomingEdges(),
+								State.NEG_TOKEN).size() == node
+								.getIncomingEdges().size()
 						&& filterByState(node.getOutgoingEdges(),
 								State.POS_TOKEN).size() == 0) {
 					applyState(node.getIncomingEdges(), State.NO_TOKEN);
@@ -175,7 +176,7 @@ public class Marking implements Cloneable {
 							.getOutgoingEdges(), State.POS_TOKEN);
 
 					nodeNewMarkings.add(nodeNewMarking);
-				// (e)
+					// (e)
 				} else if (XOR_CONNECTOR.equals(node.getType())) {
 					// Each of the outgoing edges can receive a token
 					for (DiagramEdge edge : node.getOutgoingEdges()) {
@@ -199,12 +200,13 @@ public class Marking implements Cloneable {
 
 						nodeNewMarkings.add(nodeNewMarking);
 					}
-				//(g)
-				} else if (OR_CONNECTOR.equals(node.getType())){
-					for(List<DiagramEdge> edges : (List<List<DiagramEdge>>)de.hpi.bpmn.analysis.Combination.findCombinations(node.getOutgoingEdges())){
-						if(edges.size() == 0)
+					// (g)
+				} else if (OR_CONNECTOR.equals(node.getType())) {
+					for (List<DiagramEdge> edges : (List<List<DiagramEdge>>) de.hpi.bpmn.analysis.Combination
+							.findCombinations(node.getOutgoingEdges())) {
+						if (edges.size() == 0)
 							continue;
-						
+
 						NodeNewMarkingPair nodeNewMarking = new NodeNewMarkingPair(
 								node, this.clone());
 
@@ -226,10 +228,13 @@ public class Marking implements Cloneable {
 						nodeNewMarkings.add(nodeNewMarking);
 					}
 				}
-			// join connectors
-			} else if (node.getOutgoingEdges().size() == 1){
-				//(d)
-				if(AND_CONNECTOR.equals(node.getType()) && filterByState(node.getIncomingEdges(), State.POS_TOKEN).size() == node.getIncomingEdges().size()){
+				// join connectors
+			} else if (node.getOutgoingEdges().size() == 1) {
+				// (d)
+				if (AND_CONNECTOR.equals(node.getType())
+						&& filterByState(node.getIncomingEdges(),
+								State.POS_TOKEN).size() == node
+								.getIncomingEdges().size()) {
 					NodeNewMarkingPair nodeNewMarking = new NodeNewMarkingPair(
 							node, this.clone());
 
@@ -244,11 +249,16 @@ public class Marking implements Cloneable {
 							.getOutgoingEdges(), State.POS_TOKEN);
 
 					nodeNewMarkings.add(nodeNewMarking);
-				} else if (XOR_CONNECTOR.equals(node.getType()) && filterByState(node.getIncomingEdges(), State.POS_TOKEN).size() == 1){
+				} else if (XOR_CONNECTOR.equals(node.getType())
+						&& filterByState(node.getIncomingEdges(),
+								State.POS_TOKEN).size() == 1) {
 					NodeNewMarkingPair nodeNewMarking = new NodeNewMarkingPair(
 							node, this.clone());
 
-					nodeNewMarking.newMarking.applyContext(filterByState(node.getIncomingEdges(), State.NEG_TOKEN), Context.DEAD);
+					nodeNewMarking.newMarking
+							.applyContext(filterByState(
+									node.getIncomingEdges(), State.NEG_TOKEN),
+									Context.DEAD);
 					nodeNewMarking.newMarking.applyState(node
 							.getIncomingEdges(), State.NO_TOKEN);
 
@@ -258,8 +268,10 @@ public class Marking implements Cloneable {
 							.getOutgoingEdges(), State.POS_TOKEN);
 
 					nodeNewMarkings.add(nodeNewMarking);
-				//(h)
-				} else if (OR_CONNECTOR.equals(node.getType()) && filterByState(node.getIncomingEdges(), State.POS_TOKEN).size() == 1){
+					// (h)
+				} else if (OR_CONNECTOR.equals(node.getType())
+						&& filterByState(node.getIncomingEdges(),
+								State.POS_TOKEN).size() == 1) {
 					// TODO
 				}
 			}
@@ -289,23 +301,23 @@ public class Marking implements Cloneable {
 		return filtered;
 	}
 
-	private void applyState(List<DiagramEdge> edges, State type) {
+	public void applyState(List<DiagramEdge> edges, State type) {
 		for (DiagramEdge edge : edges) {
 			applyState(edge, type);
 		}
 	}
 
-	private void applyState(DiagramEdge edge, State type) {
+	public void applyState(DiagramEdge edge, State type) {
 		state.put(edge, type);
 	}
 
-	private void applyContext(List<DiagramEdge> edges, Context type) {
+	public void applyContext(List<DiagramEdge> edges, Context type) {
 		for (DiagramEdge edge : edges) {
 			applyContext(edge, type);
 		}
 	}
 
-	private void applyContext(DiagramEdge edge, Context type) {
+	public void applyContext(DiagramEdge edge, Context type) {
 		context.put(edge, type);
 	}
 }

@@ -9,12 +9,13 @@ import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn2pn.converter.STConverter;
+import de.hpi.diagram.stepthrough.IStepThroughInterpreter;
 import de.hpi.highpetrinet.HighPetriNet;
 import de.hpi.highpetrinet.verification.HighPNInterpreter;
 import de.hpi.petrinet.Marking;
 import de.hpi.petrinet.Transition;
 
-public class STMapper {
+public class STMapper implements IStepThroughInterpreter {
 	// The PetriNet
 	private HighPetriNet petriNet;
 	// ... with a fitting interpreter

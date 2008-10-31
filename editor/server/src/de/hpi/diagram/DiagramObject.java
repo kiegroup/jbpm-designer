@@ -1,6 +1,7 @@
 package de.hpi.diagram;
 
-public abstract class DiagramObject {
+
+public abstract class DiagramObject implements Comparable {
 
 	protected String resourceId;
 	protected String type;
@@ -21,4 +22,7 @@ public abstract class DiagramObject {
 		this.type = type;
 	}
 	
+	public int compareTo(Object o){
+		return this.getResourceId().compareTo(((DiagramObject)o).getResourceId());
+	}
 }

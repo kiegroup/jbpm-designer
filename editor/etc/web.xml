@@ -232,7 +232,7 @@
 		<display-name>Step Through</display-name>
 		<servlet-name>StepThrough</servlet-name>
 		<servlet-class>
-			de.hpi.petrinet.stepthrough.StepThroughServlet
+			de.hpi.diagram.stepthrough.StepThroughServlet
 		</servlet-class>
 	</servlet>
 	<servlet-mapping>
