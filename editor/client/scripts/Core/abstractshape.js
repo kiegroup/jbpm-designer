@@ -44,17 +44,34 @@ ORYX.Core.AbstractShape = {
 		
 		// stencil reference
 		this._stencil = stencil;
+		// if the stencil defines a super stencil that should be used for its instances, set it.
+		if (this._stencil._jsonStencil.superId){
+			stencilId = this._stencil.id()
+			superStencilId = stencilId.substring(0, stencilId.indexOf("#") + 1) + stencil._jsonStencil.superId;
+			stencilSet =  this._stencil.stencilSet();
+			this._stencil = stencilSet.stencil(superStencilId);
+		}
 		
 		//Hash map for all properties. Only stores the values of the properties.
 		this.properties = new Hash();
 		this.propertiesChanged = new Hash();
 		
+		// CORE_ORYX_CHANGE : OK
 		//Initialization of property map and initial value.
 		this._stencil.properties().each((function(property) {
 			var key = property.prefix() + "-" + property.id();
 			this.properties[key] = property.value();
 			this.propertiesChanged[key] = true;
 		}).bind(this));
+		
+		// if super stencil was defined, also regard stencil's properties:
+		stencil.properties().each((function(property) {
+			var key = property.prefix() + "-" + property.id();
+			this.properties[key] = property.value();
+			this.propertiesChanged[key] = true;
+		}).bind(this));
+		
+		
 	},
 
 	layout: function() {
