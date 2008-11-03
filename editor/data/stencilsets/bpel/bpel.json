@@ -3783,7 +3783,7 @@
 			"roles": ["Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:100,spacingX:30,spacingY:30,horizontalLayout:true});	
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30,horizontalLayout:true});	
  			},
 			"properties": [
 				{
@@ -3934,7 +3934,7 @@
 					"type":"String",
 					"title":"cond_expressionLanguage",
 					"title_de":"Bedingungsausdruckssprache",
-					"value":"",
+					"value":"anyURI",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -3949,7 +3949,7 @@
 					"type":"String",
 					"title":"cond_booleanExpression",
 					"title_de":"Bedingung:bool'scher Ausdruck",
-					"value":"",
+					"value":"bool-expr",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -3999,7 +3999,7 @@
 			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:50,spacingX:30,spacingY:30});	
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:30,spacingX:30,spacingY:30});	
  			},
 			"properties": [
 				{
@@ -4033,26 +4033,22 @@
 				var pools = shape.getChildNodes();
 				
 				if(pools.length > 0) {
-				
-					pools = pools.sortBy(function(pool) {
-						return pool.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = shape.bounds.height();
-					var topBound = 0;
+
+					var rightBound = 0;
+					var lowerBound = 0;
+			
 					pools.each(function(pool) {
-						var ul = pool.bounds.upperLeft();
 						var lr = pool.bounds.lowerRight();
 						
-						if (ul.x < 0) ul.x = 0 ;
-						if (lr.x > shapeWidth) lr.x  = shapeWidth;
-						
-						if (lr.y > shapeHeight) lr.y = shapeHeight;
-						if (ul.y < 0) ul.y = 0 ;
-						pool.bounds.set(ul, lr);
-					});
+						if (lr.x > rightBound) rightBound = lr.x;
+						if (lr.y > lowerBound) lowerBound = lr.y;
+
+					});					
 					
+					var ul = shape.bounds.upperLeft();
+					rightBound = rightBound + 60;
+					lowerBound = lowerBound + 60;
+					shape.bounds.set(ul.x, ul.y,rightBound,lowerBound);
 				}
  			},
 			"properties": [
@@ -6912,7 +6908,7 @@
 					"type":"String",
 					"title":"Name",
 					"title_de":"Name",
-					"value":"",
+					"value":"NCName",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,

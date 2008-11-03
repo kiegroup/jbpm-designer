@@ -83,7 +83,7 @@
 	<xsl:template name="find-children-nodes">
 		<xsl:param name="searchedParentID" />
         <xsl:for-each select="//rdf:Description">
-			<xsl:variable name="currentParentID"><xsl:value-of select="*/@rdf:resource" /></xsl:variable>         
+			<xsl:variable name="currentParentID"><xsl:value-of select="(*/@rdf:resource)[last()]" /></xsl:variable>         
 			<xsl:if test="$currentParentID = $searchedParentID">
       		  	<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
 				<xsl:variable name="typeString" select="./oryx:type" />	
@@ -359,6 +359,9 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
+						<xsl:call-template name="add-link-elements">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
 					 	<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
@@ -578,6 +581,37 @@
 		</xsl:for-each>
 	</xsl:template>
 		
+  	<xsl:template name="add-link-elements">
+    	<xsl:param name="searchedParentID" />
+		
+		<links>
+	        <xsl:for-each select="//rdf:Description">
+	    		<xsl:variable name="typeString" select="./oryx:type" />	
+				<xsl:variable name="type">
+					<xsl:call-template name="get-exact-type">
+						<xsl:with-param name="typeString" select="$typeString" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:if test="$type='link'">
+					<xsl:variable name="targetID" select="(*/@rdf:resource)[last()]"/>
+					<xsl:variable name="linkName" select="./oryx:linkname"/>
+					<xsl:for-each select="//rdf:Description">
+						<xsl:variable name="currentID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+						<xsl:if test="$currentID=$targetID">
+							<xsl:variable name="currentParentID" select="(*/@rdf:resource)[last()]" />         
+				            <xsl:if test="$currentParentID=$searchedParentID">
+				            	<link>
+				            		<xsl:attribute name="name">
+				            			<xsl:value-of select="$linkName"/>
+									</xsl:attribute>
+								</link>
+							</xsl:if>
+						</xsl:if>
+					</xsl:for-each>				
+				</xsl:if>	
+       		 </xsl:for-each>	
+		</links>	 
+	</xsl:template>
 
 	<xsl:template name="add-completionCondition-element">
 		<xsl:variable name="expressionLanguage" select="./oryx:compcond_explang" />
@@ -615,7 +649,7 @@
 					<xsl:value-of select="$expressionLanguage" />
 				</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="$opaque!='true'">
+			<xsl:if test="$opaque='true'">
 				<xsl:attribute name="opaque">
 					<xsl:value-of select="$opaque" />
 				</xsl:attribute>
@@ -949,6 +983,8 @@
 	</xsl:template>
 	
 
+
+				
 	<xsl:template name="add-messageExchange-attribute">
 		<xsl:variable name="messageExchange" select="./oryx:messageexchange" />
 
@@ -1211,12 +1247,6 @@
 		<xsl:value-of select="substring-after($typeString, 'bpel#')" />
 	</xsl:template>
 
-	
-	<xsl:template name="get-id-string">
-		<xsl:param name="id_" />
-		<xsl:value-of select="substring-after($id_, '#oryx')" />
-	</xsl:template>
-	
 	
 	<xsl:template name="get-number-of-elements-in-complex-type">
 		<xsl:param name="original_content" />
