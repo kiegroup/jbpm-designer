@@ -56,7 +56,6 @@ ORYX.Core.AbstractShape = {
 		this.properties = new Hash();
 		this.propertiesChanged = new Hash();
 		
-		// CORE_ORYX_CHANGE : OK
 		//Initialization of property map and initial value.
 		this._stencil.properties().each((function(property) {
 			var key = property.prefix() + "-" + property.id();
