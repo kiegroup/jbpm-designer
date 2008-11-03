@@ -71,6 +71,14 @@ public class XFormsFactory {
 		return new Repeat();
 	}
 	
+	public Switch createSwitch() {
+		return new Switch();
+	}
+	
+	public Case createCase() {
+		return new Case();
+	}
+	
 	public Label createLabel() {
 		return new Label();
 	}
@@ -195,6 +203,10 @@ public class XFormsFactory {
 			return createGroup();
 		else if(tagName.equals("repeat"))
 			return createRepeat();
+		else if(tagName.equals("switch"))
+			return createSwitch();
+		else if(tagName.equals("case"))
+			return createCase();
 		else if(tagName.equals("label"))
 			return createLabel();
 		else if(tagName.equals("help"))

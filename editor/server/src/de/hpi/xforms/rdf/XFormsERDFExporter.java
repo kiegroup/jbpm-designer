@@ -11,6 +11,7 @@ import de.hpi.xforms.AbstractAction;
 import de.hpi.xforms.ActionContainer;
 import de.hpi.xforms.Alert;
 import de.hpi.xforms.Bind;
+import de.hpi.xforms.Case;
 import de.hpi.xforms.Help;
 import de.hpi.xforms.Hint;
 import de.hpi.xforms.Label;
@@ -19,6 +20,7 @@ import de.hpi.xforms.ListUICommon;
 import de.hpi.xforms.ListUICommonContainer;
 import de.hpi.xforms.PCDataContainer;
 import de.hpi.xforms.Submission;
+import de.hpi.xforms.Switch;
 import de.hpi.xforms.UICommonContainer;
 import de.hpi.xforms.UIElementContainer;
 import de.hpi.xforms.XForm;
@@ -119,6 +121,11 @@ public class XFormsERDFExporter {
 		}
 		if(element instanceof ActionContainer) {
 			for(AbstractAction child : ((ActionContainer) element).getActions()) {
+				registerResourcesRecursive(child, element);
+			}
+		}
+		if(element instanceof Switch) {
+			for(Case child : ((Switch) element).getCases()) {
 				registerResourcesRecursive(child, element);
 			}
 		}

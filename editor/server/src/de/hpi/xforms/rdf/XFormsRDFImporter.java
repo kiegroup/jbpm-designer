@@ -94,6 +94,10 @@ public class XFormsRDFImporter {
 					addGroup(node, c);
 				} else if (type.equals("Repeat")) {
 					addRepeat(node, c);
+				} else if (type.equals("Switch")) {
+					addSwitch(node, c);
+				} else if (type.equals("Case")) {
+					addCase(node, c);
 				} else if (type.equals("Label")) {
 					addLabel(node, c);
 				} else if (type.equals("Help")) {
@@ -267,6 +271,11 @@ public class XFormsRDFImporter {
 						ActionContainer actionContainer = (ActionContainer) parent;
 						actionContainer.getActions().add((AbstractAction) element);
 					}
+				} else if(element instanceof Case) {
+					if(parent instanceof Switch) {
+						Case caseObj = (Case) element;
+						caseObj.setSwitch((Switch) parent);
+					}
 				} else if(element instanceof Label) {
 					if(parent instanceof LabelContainer) {
 						LabelContainer labelContainer = (LabelContainer) parent;
@@ -364,7 +373,10 @@ public class XFormsRDFImporter {
 	private String getNodesetContext(XFormsUIElement element) {
 		String nodesetContext = "";
 		while(element.getParent()!=null && !(element.getParent() instanceof XForm)) {
-			element = (XFormsUIElement) element.getParent();
+			if(element.getParent() instanceof XFormsUIElement)
+				element = (XFormsUIElement) element.getParent();
+			else if(element.getParent() instanceof Case)
+				element = ((Case) element.getParent()).getSwitch();
 			String nodeset = element.getAttributes().get("nodeset");
 			if(nodeset!=null) {
 				nodesetContext += nodeset + "/";
@@ -455,6 +467,20 @@ public class XFormsRDFImporter {
 		repeat.setResourceId(getResourceId(node));
 		c.objects.put(repeat.getResourceId(), repeat);
 		handleAttributes(node, repeat, c);
+	}
+	
+	private void addSwitch(Node node, ImportContext c) {
+		Switch switchObj = factory.createSwitch();
+		switchObj.setResourceId(getResourceId(node));
+		c.objects.put(switchObj.getResourceId(), switchObj);
+		handleAttributes(node, switchObj, c);
+	}
+	
+	private void addCase(Node node, ImportContext c) {
+		Case caseObj = factory.createCase();
+		caseObj.setResourceId(getResourceId(node));
+		c.objects.put(caseObj.getResourceId(), caseObj);
+		handleAttributes(node, caseObj, c);
 	}
 	
 	private void addLabel(Node node, ImportContext c) {

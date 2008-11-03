@@ -9,9 +9,7 @@
   version="1.0">
   <defs></defs>
   <g pointer-events="fill" oryx:minimumSize="60 50">
-    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="120" height="90" rx="5" ry="5" stroke="black" stroke-dasharray="2, 4, 10, 4" stroke-width="1" fill="none" />
-	<g id="loop">
-		<path oryx:anchors="bottom" fill="none" stroke="black" stroke-width="2" d="M51,80 L54,80 L54,77 M54,80 C43,68 68,68 57,80" />
-	</g>
+    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="120" height="90" stroke="black" stroke-dasharray="2, 4, 10, 4" stroke-width="1" fill="none" />
+
   </g>
 </svg>

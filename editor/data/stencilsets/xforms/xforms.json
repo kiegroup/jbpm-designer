@@ -13,7 +13,7 @@
 			"icon":				"new_form.png",
 			"mayBeRoot":		true,
 			"hide":				true,
-			"roles":			["form"],
+			"roles":			["standard_container"],
 			"layout":function(shape) {
 				 var raiseEvent = shape._delegateEvent.bind(shape);
 				 raiseEvent({type:'layout.rows',target:shape.rootNode,shape:shape,marginTop:50,marginLeft:50,spacingX:30,spacingY:30});
@@ -1518,9 +1518,9 @@
 			"view":"node.group.svg",
 			"icon":"new_group.png",
 			"roles": [
-				"container_form_controls",
-				"ui_common_container",
-				"labeled"
+				"core_form_controls",
+				"standard_container",
+				"ui_common_container"
 			],
 			"layout":function(shape) {
 				var raiseEvent = shape._delegateEvent.bind(shape);
@@ -1614,7 +1614,8 @@
 			"view":"node.repeat.svg",
 			"icon":"new_repeat.png",
 			"roles": [
-				"container_form_controls",
+				"additional_form_controls",
+				"standard_container",
 				"actions_container"
 			],
 			"layout":function(shape) {
@@ -1645,6 +1646,142 @@
 					"optional":false,
 					"length":"200"
 				}	
+			]
+		},
+		{
+			"type": "node",
+			"id":"Switch",
+			"title":"Switch",
+			"groups":["Containers"],
+			"description":"This element contains one or more case elements, any one of which is rendered at a given time.",
+			"view":"node.switch.svg",
+			"icon":"new_switch.png",
+			"roles": [
+				"additional_form_controls",
+				"case_container"
+			],
+			"layout":function(shape) {		
+				var cases = shape.getChildNodes(false);
+				
+				var maxWidth = 0;
+				cases.each(function(c) {
+					if(c.bounds.width()>maxWidth) maxWidth = c.bounds.width();
+				});
+
+				if(cases.length > 0) {
+					
+					cases = cases.sortBy(function(c) {
+						return c.bounds.upperLeft().y;
+					});
+					
+					var shapeHeight = 5;
+					cases.each(function(c) {
+						var ul = c.bounds.upperLeft();
+						var lr = c.bounds.lowerRight();
+						ul.y = shapeHeight;
+						lr.y = ul.y + c.bounds.height();
+						shapeHeight += c.bounds.height() + 5;
+						ul.x = 0;
+						lr.x = maxWidth;
+						c.bounds.set(ul, lr);
+					});
+					
+					var upl = shape.bounds.upperLeft();
+					shape.bounds.set(upl.x, upl.y, upl.x + maxWidth, upl.y + shapeHeight + 20);
+				}
+ 			},
+			"properties": [
+				{
+					"id":"xf_id",
+					"type":"String",
+					"title":"id",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"xf_ref",
+					"type":"String",
+					"title":"ref",
+					"prefix":"oryx",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"200"
+				},
+				{
+					"id":"xf_navindex",
+					"type":"Integer",
+					"title":"navindex",
+					"prefix":"oryx",
+					"value":0,
+					"description":"Integer used to define the navigation sequence",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"min":"0"
+				},
+				{
+					"id":"xf_accesskey",
+					"type":"String",
+					"title":"accesskey",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Shortcut for moving the input focus to this control",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"1"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Case",
+			"title":"Case",
+			"groups":["Containers"],
+			"description":"This element encloses markup to be conditionally rendered.",
+			"view":"node.case.svg",
+			"icon":"new_case.png",
+			"roles": [
+				"case",
+				"labeled",
+				"standard_container",
+				"actions_container"
+			],
+			"layout":function(shape) {
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:10,spacingX:30,spacingY:30});
+ 			},
+			"properties": [
+				{
+					"id":"xf_id",
+					"type":"String",
+					"title":"id",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"xf_selected",
+					"type":"Boolean",
+					"title":"selected",
+					"prefix":"oryx",
+					"value":false,
+					"description":"Optional selection status for the case.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				}
 			]
 		},
 		{
@@ -2499,7 +2636,7 @@
 					"type":"String",
 					"title":"case",
 					"prefix":"oryx",
-					"value":"/",
+					"value":"",
 					"description":"Optional reference to the case element to select.",
 					"readonly":false,
 					"optional":true,
@@ -3378,17 +3515,10 @@
 	"rules": {
 		"containmentRules": [
 			{
-				"role":"form",
+				"role":"standard_container",
 				"contains": [
 					"core_form_controls",
-					"container_form_controls"
-				]
-			},
-			{
-				"role":"container_form_controls",
-				"contains": [
-					"core_form_controls",
-					"container_form_controls"
+					"additional_form_controls"
 				]
 			},
 			{
@@ -3421,6 +3551,12 @@
 				"role":"item_container",
 				"contains": [
 					"item"
+				]
+			},
+			{
+				"role":"case_container",
+				"contains": [
+					"case"
 				]
 			}
 		]
