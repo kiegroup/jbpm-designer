@@ -17,12 +17,13 @@ public class Marking implements Cloneable {
 		WAIT, DEAD
 	}
 
-	String FUNCTION = "Function";
-	String XOR_CONNECTOR = "XorConnector";
-	String OR_CONNECTOR = "OrConnector";
-	String AND_CONNECTOR = "AndConnector";
-	String EVENT = "Event";
-	String PROCESS_INTERFACE = "ProcessInterface";
+	public static final String FUNCTION = "Function";
+	public static final String XOR_CONNECTOR = "XorConnector";
+	public static final String OR_CONNECTOR = "OrConnector";
+	public static final String AND_CONNECTOR = "AndConnector";
+	public static final String EVENT = "Event";
+	public static final String PROCESS_INTERFACE = "ProcessInterface";
+	public static final String CONTROL_FLOW = "ControlFlow";
 
 	public class NodeNewMarkingPair {
 		public DiagramNode node;
@@ -111,13 +112,12 @@ public class Marking implements Cloneable {
 					// Xor/ Or Join
 				} else if (XOR_CONNECTOR.equals(node.getType())
 						|| OR_CONNECTOR.equals(node.getType())) {
-					if (filterByContext(node.getIncomingEdges(), Context.WAIT)
-							.size() > 0) {
-						if (state.get(node.getOutgoingEdges().get(0)) == State.NO_TOKEN) {
-							context.put(node.getOutgoingEdges().get(0),
-									Context.WAIT);
-							changed = true;
-						}
+					if (filterByContext(node.getIncomingEdges(), Context.WAIT).size() > 0 &&
+							state.get(node.getOutgoingEdges().get(0)) == State.NO_TOKEN &&
+							context.get(node.getOutgoingEdges().get(0)) != Context.WAIT) {
+						context.put(node.getOutgoingEdges().get(0),
+								Context.WAIT);
+						changed = true;
 					}
 				}
 			}
@@ -319,5 +319,9 @@ public class Marking implements Cloneable {
 
 	public void applyContext(DiagramEdge edge, Context type) {
 		context.put(edge, type);
+	}
+	
+	public boolean hasToken(DiagramEdge edge){
+		return state.get(edge).equals(State.POS_TOKEN);
 	}
 }
