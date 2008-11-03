@@ -603,11 +603,11 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			// Set the docker
 			shape.dockers.first().setDockedShape( from );
 			shape.dockers.first().setReferencePoint({x: from.bounds.width() / 2.0, y: from.bounds.height() / 2.0});
-			shape.dockers.first().update()
+			//shape.dockers.first().update()
 
 			shape.dockers.last().setDockedShape( to );
 			shape.dockers.last().setReferencePoint({x: to.bounds.width() / 2.0, y: to.bounds.height() / 2.0});
-			shape.dockers.last().update()
+			//shape.dockers.last().update()
 			
 			// If there is an expression, it will be setted
 			if( edge.edge.expression ){

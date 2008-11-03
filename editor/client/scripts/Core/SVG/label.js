@@ -483,6 +483,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				}
 			case 2:
 				if(this._rotate != arguments[0] ||
+				   !this._rotationPoint ||
 				   this._rotationPoint.x != arguments[1].x ||
 				   this._rotationPoint.y != arguments[1].y) {
 					this._rotate = arguments[0];
@@ -518,7 +519,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			
 		var attr = node.getAttributeNS(null, "font-size");
 		if(attr) {
-			return attr;
+			return parseFloat(attr);
 		} else if(!ORYX.Editor.checkClassType(node, SVGSVGElement)) {
 			return this.getInheritedFontSize(node.parentNode);
 		}

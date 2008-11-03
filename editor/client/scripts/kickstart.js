@@ -14,7 +14,7 @@ XMLNS = {
 };
 
 //TODO kann kickstart sich vielleicht auch um die erzeugung von paketen/
-// namespaces kŸmmern? z.b. requireNamespace("ORYX.Core.SVG");
+// namespaces kï¿½mmern? z.b. requireNamespace("ORYX.Core.SVG");
 var Kickstart = {
  	started: false,
 	callbacks: [],
@@ -24,14 +24,13 @@ var Kickstart = {
 	load: function() { Kickstart.kick(); },
 
 	kick: function() {
-		with(Kickstart) {
-			if(!started) {
-				started = true;
-				callbacks.each(function(callback){
-					// call the registered callback asynchronously.
-					window.setTimeout(callback, 1);
-				});
-			}
+		//console.profile("loading");
+		if(!Kickstart.started) {
+			Kickstart.started = true;
+			Kickstart.callbacks.each(function(callback){
+				// call the registered callback asynchronously.
+				window.setTimeout(callback, 1);
+			});
 		}
 	},
 

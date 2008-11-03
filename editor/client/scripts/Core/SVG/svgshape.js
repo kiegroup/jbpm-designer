@@ -282,15 +282,13 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 		//resize
 		var resizeAttr = this.element.getAttributeNS(NAMESPACE_ORYX, "resize");
 		if(resizeAttr) {
-			var values = resizeAttr.split(" ");
-			//TODO use reg exp instead
-			if(values.include("horizontal")) {
+			resizeAttr = resizeAttr.toLowerCase();
+			if(resizeAttr.match(/horizontal/)) {
 				this.isHorizontallyResizable = true;
 			} else {
 				this.isHorizontallyResizable = false;
 			}
-			//TODO use reg exp instead
-			if(values.include("vertical")) {
+			if(resizeAttr.match(/vertical/)) {
 				this.isVerticallyResizable = true;
 			} else {
 				this.isVerticallyResizable = false;
@@ -505,9 +503,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 	},
 
 	isVisible: function(elem) {
-		
-		return true;
-		
+			
 		if (!elem) {
 			elem = this.element;
 		}
