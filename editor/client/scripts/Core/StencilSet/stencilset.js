@@ -194,74 +194,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
             method: 'GET',
             asynchronous: false,
 			onSuccess: (function(transport) {
-				
-				try {
-					
-					eval("var jsonExtension = " + transport.responseText);
-
-					if(!(jsonExtension["extends"].endsWith("#")))
-							jsonExtension["extends"] += "#";
-							
-					if(jsonExtension["extends"] == this.namespace()) {
-						this._extensions[jsonExtension.namespace] = jsonExtension;
-				
-						//load new stencils
-						/*if(jsonExtension.stencils) {
-							$A(jsonExtension.stencils).each(function(stencil) {
-								var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this);            
-								this._stencils[oStencil.id()] = oStencil;
-								this._availableStencils[oStencil.id()] = oStencil;
-							}.bind(this));
-							
-							
-						}*/
-						
-						//load additional properties
-						if (jsonExtension.properties) {
-							var stencils = this._stencils.values();
-							
-							stencils.each(function(stencil){
-								var roles = stencil.roles();
-								
-								jsonExtension.properties.each(function(prop){
-									prop.roles.any(function(role){
-										role = jsonExtension["extends"] + role;
-										if (roles.member(role)) {
-											prop.properties.each(function(property){
-												stencil.addProperty(property, jsonExtension.namespace);
-											});
-											
-											return true;
-										}
-										else 
-											return false;
-									})
-								})
-							}.bind(this));
-						}
-						
-						//remove stencil properties
-						if(jsonExtension.removeproperties) {
-							jsonExtension.removeproperties.each(function(remprop) {
-								var stencil = this.stencil(jsonExtension["extends"] + remprop.stencil);
-								if(stencil) {
-									remprop.properties.each(function(propId) {
-										stencil.removeProperty(propId);
-									});
-								}
-							}.bind(this));
-						}
-						
-						//remove stencils
-						if(jsonExtension.removestencils) {
-							$A(jsonExtension.removestencils).each(function(remstencil) {
-								delete this._availableStencils[jsonExtension["extends"] + remstencil];
-							}.bind(this));
-						}
-					}
-				} catch (e) {
-					ORYX.Log.debug("StencilSet.addExtension: Something went wrong when initialising the stencil set extension. " + e);
-				}	
+				this.addExtensionDirectly(transport.responseText);
 			}).bind(this),
 			onFailure: (function(transport) {
 				ORYX.Log.debug("Loading stencil set extension file failed. The request returned an error." + transport);
@@ -271,6 +204,76 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 			}).bind(this)
 		
 		});
+	},
+	
+	addExtensionDirectly: function(str){
+
+		try {
+			eval("var jsonExtension = " + str);
+
+			if(!(jsonExtension["extends"].endsWith("#")))
+					jsonExtension["extends"] += "#";
+					
+			if(jsonExtension["extends"] == this.namespace()) {
+				this._extensions[jsonExtension.namespace] = jsonExtension;
+		
+				//load new stencils
+				if(jsonExtension.stencils) {
+					$A(jsonExtension.stencils).each(function(stencil) {
+						var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this);            
+						this._stencils[oStencil.id()] = oStencil;
+						this._availableStencils[oStencil.id()] = oStencil;
+					}.bind(this));
+					
+					
+				}
+				
+				//load additional properties
+				if (jsonExtension.properties) {
+					var stencils = this._stencils.values();
+					
+					stencils.each(function(stencil){
+						var roles = stencil.roles();
+						
+						jsonExtension.properties.each(function(prop){
+							prop.roles.any(function(role){
+								role = jsonExtension["extends"] + role;
+								if (roles.member(role)) {
+									prop.properties.each(function(property){
+										stencil.addProperty(property, jsonExtension.namespace);
+									});
+									
+									return true;
+								}
+								else 
+									return false;
+							})
+						})
+					}.bind(this));
+				}
+				
+				//remove stencil properties
+				if(jsonExtension.removeproperties) {
+					jsonExtension.removeproperties.each(function(remprop) {
+						var stencil = this.stencil(jsonExtension["extends"] + remprop.stencil);
+						if(stencil) {
+							remprop.properties.each(function(propId) {
+								stencil.removeProperty(propId);
+							});
+						}
+					}.bind(this));
+				}
+				
+				//remove stencils
+				if(jsonExtension.removestencils) {
+					$A(jsonExtension.removestencils).each(function(remstencil) {
+						delete this._availableStencils[jsonExtension["extends"] + remstencil];
+					}.bind(this));
+				}
+			}
+		} catch (e) {
+			ORYX.Log.debug("StencilSet.addExtension: Something went wrong when initialising the stencil set extension. " + e);
+		}	
 	},
     
     __handleStencilset: function(response){
