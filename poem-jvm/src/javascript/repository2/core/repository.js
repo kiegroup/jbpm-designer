@@ -87,6 +87,8 @@ Repository.Core.Repository = {
 						setSort				: this.setSort.bind(this),
 						getSort				: this.getSort.bind(this),
 						
+						updateView			: this.updateView.bind(this),
+						 
 						applyFilter 		: this.applyFilter.bind(this),
 						removeFilter 		: this.removeFilter.bind(this),
 						getFilteredModels 	: this.getFilteredModels.bind(this),
@@ -108,6 +110,9 @@ Repository.Core.Repository = {
 			return this._facade;
 		},
 		
+		updateView: function(){
+			this._viewChangedHandler.invoke( this.getDisplayedModels() )	
+		},
 		
 		isPublicUser: function() {
 			return this._currentUser == this._publicUser;

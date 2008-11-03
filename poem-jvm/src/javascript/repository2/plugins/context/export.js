@@ -44,7 +44,7 @@ Repository.Plugins.Export = {
 		this.dataUris = [];
 		
 		this.extentions = facade.modelCache.getAvailableExports()
-		
+		this.extentions.unshift( {name: 'Editor', uri: '/self', iconUrl: '/backend/images/silk/application_edit.png' } )
 				
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 

@@ -59,7 +59,7 @@ Repository.Plugins.TableView = {
 			pair.value.lastUpdate = pair.value.lastUpdate.substring(0,19);
 			pair.value.creationDate = pair.value.creationDate.substring(0,19);
 			
-			data.push( [ pair.key, pair.value.title, stencilset, pair.value.author || 'Unknown', pair.value.summary, pair.value.creationDate, pair.value.lastUpdate ] )
+			data.push( [ pair.key, unescape(pair.value.title), stencilset, pair.value.author || 'Unknown', unescape(pair.value.summary).gsub('\n', ''), pair.value.creationDate, pair.value.lastUpdate ] )
 		}.bind(this));
 		
 		/*var reader = new Ext.data.ArrayReader({},[
@@ -101,7 +101,9 @@ Repository.Plugins.TableView = {
 		this.panel.add(this.tablePanel);
 		this.panel.doLayout(); // Force rendering to show the panel
 		
-		
+		// Select the selected models
+		var selIndicies = this.facade.getSelectedModels().map(function(modelid){ var id = this.facade.getDisplayedModels().indexOf(modelid); return id >= 0 ? id : null }.bind(this)).compact()
+		this.tablePanel.getSelectionModel().selectRows( selIndicies )
 		
 	},
 	

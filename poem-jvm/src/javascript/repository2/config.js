@@ -17,6 +17,7 @@ XMLNS = {
 if( !Repository ){ Repository = {} }
 if( !Repository.Config ){ Repository.Config = {} }
 
+Repository.Config.BACKEND_PATH		= '/backend/';
 Repository.Config.STENCILSET_URI	= "/oryx/stencilsets/stencilsets.json"
 Repository.Config.PATH 				= '/backend/repository2/'
 Repository.Config.PLUGIN_PATH 		= 'plugins/'

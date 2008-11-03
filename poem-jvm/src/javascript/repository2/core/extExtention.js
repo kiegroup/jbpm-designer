@@ -470,6 +470,7 @@ Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
         var v 	= el.dom.value;
 		var h 	= Number(el.getStyle('line-height').replace("px", "")) * (v.split("\n").length+1);
 		h		-= 6;
+		h		+= el.isScrollable() ? 20 : 0;
         h = Math.min(this.growMax, Math.max(h, this.growMin));
         if(h != this.lastHeight){
             this.lastHeight = h;

@@ -62,7 +62,7 @@ Repository.Plugins.IconView = {
 				}
 			}.bind(this));
 			
-			data.push( [ pair.key, pair.value.thumbnailUri + "?" + Math.random(), pair.value.title, stencilset, pair.value.author || 'Unknown' ] )
+			data.push( [ pair.key, pair.value.thumbnailUri + "?" + Math.random(), unescape(pair.value.title), stencilset, pair.value.author || 'Unknown' ] )
 		}.bind(this));
 		
 		var store = new Ext.data.SimpleStore({

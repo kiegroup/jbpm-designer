@@ -62,6 +62,12 @@ Repository.I18N.IconView.name = "Kachelansicht";
 if(!Repository.I18N.FullView) Repository.I18N.FullView = {};
 Repository.I18N.FullView.name = "Einzelansicht";
 
+Repository.I18N.FullView.createdLabel = "Erstellt";
+Repository.I18N.FullView.fromLabel = "Von";
+Repository.I18N.FullView.changeLabel = "Letzte Änderung";
+Repository.I18N.FullView.descriptionLabel = "Beschreibung";
+Repository.I18N.FullView.editorLabel = "Editor öffnen";
+
 // TypeFilter Plugin
 
 if(!Repository.I18N.TypeFilter) Repository.I18N.TypeFilter = {};

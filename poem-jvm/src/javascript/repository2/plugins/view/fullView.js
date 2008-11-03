@@ -53,18 +53,37 @@ Repository.Plugins.FullView = {
 			return
 		}
 		
-		var data			= modelData.get( modelData.keys()[0] );
-		var ssName			= this.facade.modelCache.getModelTypes().find(function(type){ return data.type == type.namespace }.bind(this));
-		data['typeShort'] 	= ssName ? ssName.title : data.type;
+		var rawData			= modelData.get( modelData.keys()[0] );
 		
-		data['imgHeight']	= this.panel.getEl().parent().parent().parent().parent().getComputedHeight() - 100;
+		var data			= {};
 		
+		var ssName			= this.facade.modelCache.getModelTypes().find(function(type){ return rawData.type == type.namespace }.bind(this));
+		data.type 			= ssName ? ssName.title : rawData.type;
+		
+		data.imgHeight		= this.panel.getEl().parent().parent().parent().parent().getComputedHeight() - 100;
+
+		data.title			= unescape(rawData.title)
+		data.summary		= unescape(rawData.summary).gsub('\n', '<br/>');
+		data.creationDate	= rawData.creationDate;
+		data.lastUpdate		= rawData.lastUpdate;
+		data.author			= rawData.author;
+		data.pngUri			= rawData.pngUri;
+		
+		data.editUri			= Repository.Config.BACKEND_PATH + modelData.keys()[0] + "/self";
+		
+		// Define the labels
+		data.createdLabel		= Repository.I18N.FullView.createdLabel;
+		data.fromLabel			= Repository.I18N.FullView.fromLabel;
+		data.descriptionLabel	= Repository.I18N.FullView.descriptionLabel;
+		data.changeLabel		= Repository.I18N.FullView.changeLabel;
+		data.editLabel			= Repository.I18N.FullView.editorLabel;
+	
 		var newHTML = new Ext.Template(
 							    '<div>',
-							   		'<div><span style="font-weight:bold;font-size:12px">{title}</span> ({typeShort})</div>',
-									'<div><span style="width:100px;font-weight:bold;display:inline-table;">Created: </span>{creationDate} <span style="width:100px;font-weight:bold;margin-left:50px;display:inline-table;">Last Change: </span>{lastUpdate}</div>',
-							   		'<div><span style="width:100px;font-weight:bold;display:inline-table;">From: </span>{author}</div>',
-									'<div><span style="width:100px;font-weight:bold;display:inline-table;">Description: </span>{summary}</div>',
+							   		'<div style="margin-bottom:10px;"><span style="font-weight:bold;font-size:15px;margin-right:5px;">{title}</span> ({type}) <a href="{editUri}" style="text-decoration:none;margin-left:20px;"><img src="/backend/images/silk/application_edit.png" style="margin-right:5px;margin-bottom:-4px;"/>{editLabel}</a></div>',
+									'<div><span style="width:100px;font-weight:bold;display:inline-table;">{createdLabel}: </span>{creationDate} <span style="width:100px;font-weight:bold;margin-left:50px;display:inline-table;">{changeLabel}: </span>{lastUpdate}</div>',
+							   		'<div><span style="width:100px;font-weight:bold;display:inline-table;">{fromLabel}: </span>{author}</div>',
+									'<div><span style="width:100px;font-weight:bold;display:inline-table;">{descriptionLabel}: </span><div style="display:inline-table;">{summary}</div></div>',
 									'<iframe src="{pngUri}" title="{title}" style="width:99%;border:none;margin-top:20px;" height="{imgHeight}"/>',
 							    '</div>'
 							);

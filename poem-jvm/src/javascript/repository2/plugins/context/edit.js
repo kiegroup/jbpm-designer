@@ -80,8 +80,8 @@ Repository.Plugins.Edit = {
 	_enableTextFields: function( enable, name, summary ){
 		
 		// Set initial values
-		this.controls[0].setValue( enable ? name : '' )
-		this.controls[1].setValue( enable ? summary : '' )
+		this.controls[0].setValue( enable ? unescape(name) : '' )
+		this.controls[1].setValue( enable ? unescape(summary) : '' )
 		
 		// Enable/Disable Textfield
 		this.controls[0].setDisabled( !enable )
@@ -97,7 +97,7 @@ Repository.Plugins.Edit = {
 		
 		var innerText = '<b>' + Repository.I18N.Edit.deleteText + ':</b> ';
 		if( size == 1 ){
-			innerText += new Template(Repository.I18N.Edit.deleteOneText).evaluate({title: modelData.get( modelData.keys()[0] ).title });
+			innerText += new Template(Repository.I18N.Edit.deleteOneText).evaluate({title: unescape(modelData.get( modelData.keys()[0] ).title) });
 		} else if( size > 1 ){
 			innerText += new Template(Repository.I18N.Edit.deleteMoreText).evaluate({size: size });			
 		} else {
@@ -113,21 +113,18 @@ Repository.Plugins.Edit = {
 		this.controls	= [		
 								new Ext.form.TextField({
 											id			: 'repository_edit_textfield_name',
-											x			: 0, 
-											y			: 0, 
-											width		: 105,
-											fieldLabel	: Repository.I18N.Edit.nameText,
-											labelStyle	: "font-size:11px;font-weight:bold;width:60px;",
+											width		: 165,
 											emptyText 	: Repository.I18N.Edit.editName ,
 											disabled  	: true,  
 										}),
-								new Ext.form.TextField({
+								new Ext.form.TextArea({
 											id			: 'repository_edit_textfield_summary',
-											x			: 0, 
-											y			: 0, 
-											width		: 105,
-											fieldLabel	: Repository.I18N.Edit.summaryText,
-											labelStyle	: "font-size:11px;font-weight:bold;width:60px;",
+											width		: 165,
+											height		: 39,
+											growMax		: 120,
+											growMin		: 55,
+											growPad		: -10,
+											grow		: true,
 											emptyText 	: Repository.I18N.Edit.editSummary,
 											disabled  	: true,  
 										}),		
@@ -154,15 +151,19 @@ Repository.Plugins.Edit = {
 		var panels = new Ext.Panel({
 					style	: 'padding-top:10px;',
 					border	: false,
-					items	: [
-								new Ext.form.FormPanel({
+					items	: [								
+								new Ext.Panel({
 											border		: false,
-											labelWidth 	: 60,
-											items		: [this.controls[0],this.controls[1]]
+											items		: [
+															{xtype:'label', text: Repository.I18N.Edit.nameText, style: "display:block;font-weight:bold;margin-bottom:5px;"},
+															this.controls[0],
+															{xtype:'label', text: Repository.I18N.Edit.summaryText, style: "display:block;font-weight:bold;margin-bottom:5px;margin-top:10px;"},
+															this.controls[1]
+														]
 										}),
 								new Ext.Panel({
-											width	: 170,
-											style	: 'text-align:right;',
+											width	: 165,
+											style	: 'text-align:right;margin-top:5px;',
 											border	: false,
 											items	: [this.controls[2]]
 										}),
@@ -189,13 +190,13 @@ Repository.Plugins.Edit = {
 	
 	_deleteModels: function() {
 		
-		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), "/self", null, function(){ this.facade.applyFilter() }.bind(this) );
+		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), "/self", null, function(){ this.facade.updateView() }.bind(this) );
 		 
 	},
 	
 	_storeChanges: function(name, summary){
 
-		this.facade.modelCache.setData( this.facade.getSelectedModels(), "/meta", { title:name, summary:summary },  function(){ this.facade.applyFilter() }.bind(this) )
+		this.facade.modelCache.setData( this.facade.getSelectedModels(), "/meta", { title:escape(name), summary:escape(summary) },  function(){  this.facade.updateView() }.bind(this) )
 		
 	}
 };
