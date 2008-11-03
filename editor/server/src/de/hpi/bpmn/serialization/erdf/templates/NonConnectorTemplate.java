@@ -5,6 +5,7 @@ import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.serialization.erdf.ERDFSerializationContext;
+import de.hpi.util.Bounds;
 
 
 public abstract class NonConnectorTemplate extends BPMN2ERDFTemplateImpl {
@@ -32,6 +33,10 @@ public abstract class NonConnectorTemplate extends BPMN2ERDFTemplateImpl {
 	protected void appendNonConnectorStandardFields(Node n, StringBuilder s) {
 		appendStandardFields(s);
 		appendOryxField(s,"name",n.getLabel());
+		Bounds b = n.getBounds();
+		if (b != null){
+			appendOryxField(s,"bounds",b.toString());
+		}
 	}
 	
 }

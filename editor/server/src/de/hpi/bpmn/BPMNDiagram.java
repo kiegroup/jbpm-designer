@@ -14,6 +14,7 @@ import de.hpi.bpmn.validation.BPMNSyntaxChecker;
 public class BPMNDiagram implements Container {
 	
 	protected String title;
+	protected String id;
 	protected List<Node> childNodes;
 	protected List<DataObject> dataObjects;
 	protected List<Edge> edges;
@@ -132,6 +133,14 @@ public class BPMNDiagram implements Container {
 				getAllNodesRecursively((Container)node, allNodes);
 			}
 		}
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

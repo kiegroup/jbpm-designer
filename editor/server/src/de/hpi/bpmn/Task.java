@@ -10,6 +10,15 @@ public class Task extends Activity {
 	protected String rightSkipTask;
 	protected String rightDelegateTask;
 	protected String form;
+	protected String color;
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
 
 	public boolean isSkippable() {
 		return skippable;

@@ -26,6 +26,10 @@ public class TaskTemplate extends NonConnectorTemplate {
 		appendOryxField(s,"type",STENCIL_URI + "#Task");
 		appendNonConnectorStandardFields(t,s);
 		appendOryxField(s,"activitytype","Task");
+		String color = t.getColor();
+		if (color != null && color.length() > 0){
+			appendOryxField(s,"bgcolor",color);
+		}
 		appendOryxField(s,"startquantity","1");
 		appendOryxField(s,"looptype",t.getLoopType().toString());
 		

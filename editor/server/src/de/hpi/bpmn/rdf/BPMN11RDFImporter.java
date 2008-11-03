@@ -324,6 +324,8 @@ public class BPMN11RDFImporter {
 				// TODO: add further attributes...
 				if (attribute.equals("title")) {
 					c.diagram.setTitle(getContent(n));
+				} else if (attribute.equals("id")) {
+					c.diagram.setId(getContent(n));
 					// } else {
 					// handleStandardAttributes(attribute, n, pool, c, "Name");
 				}
@@ -455,9 +457,13 @@ public class BPMN11RDFImporter {
 				// TODO: add further attributes...
 				// if (attribute.equals("poolId")) {
 				// pool.setId(getContent(n));
-				// } else {
-				handleStandardAttributes(attribute, n, task, c, "name");
-				// }
+				// } else 
+				if (attribute.equals("bgcolor")){
+					
+					task.setColor(getContent(n));
+				} else {
+					handleStandardAttributes(attribute, n, task, c, "name");
+				}
 				
 
 			}
@@ -941,13 +947,20 @@ public class BPMN11RDFImporter {
 		return id.substring(id.indexOf('#')+1);
 	}
 
+	
+	// bugfix
 	protected Node getChild(Node n, String name) {
 		if (n == null)
 			return null;
+		Node result = null;
 		for (Node node=n.getFirstChild(); node != null; node=node.getNextSibling())
-			if (node.getNodeName().indexOf(name) >= 0) 
+			if (node.getNodeName().indexOf(name) == 0){
 				return node;
-		return null;
+			} else if (node.getNodeName().indexOf(name) > 0){ 
+				// backup
+				result = node;
+			}
+		return result;
 	}
 
 	protected Node getRootNode(Document doc) {

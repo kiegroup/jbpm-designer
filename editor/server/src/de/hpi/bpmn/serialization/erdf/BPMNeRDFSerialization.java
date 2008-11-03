@@ -99,8 +99,8 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 	public StringBuilder getSerializationHeader() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">");
-		sb.append("<span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn#BPMNDiagram</span>");
-		sb.append("<span class=\"oryx-id\"></span>");
+		sb.append("<span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#BPMNDiagram</span>");
+		sb.append("<span class=\"oryx-id\">" + this.context.getDiagramId() + "</span>");
 		sb.append("<span class=\"oryx-name\">" + this.context.getDiagramName() + "</span>");
 		sb.append("<span class=\"oryx-version\"></span><span class=\"oryx-author\"></span><span class=\"oryx-language\">English</span>");
 		sb.append("<span class=\"oryx-expressionlanguage\"></span><span class=\"oryx-querylanguage\"></span>");
@@ -112,7 +112,7 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 		sb.append("<span class=\"oryx-pools\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-mode\">writable</span>");
 		sb.append("<span class=\"oryx-mode\">fullscreen</span>");
 //		sb.append("<a rel=\"oryx-stencilset\" href=\"http://oryx-editor.org:80/oryx/stencilsets/bpmn/bpmn.json\"/>");
-		sb.append("<a rel=\"oryx-stencilset\" href=\"http://localhost:8080/oryx/stencilsets/bpmn/bpmn.json\"/>");
+		sb.append("<a rel=\"oryx-stencilset\" href=\"http://localhost:8080/oryx/stencilsets/bpmn1.1/bpmn1.1.json\"/>");
 
 		
 		for (Integer i : this.context.getResourceIDs()){

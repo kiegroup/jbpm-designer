@@ -12,6 +12,7 @@ import de.hpi.bpmn.Node;
 public class ERDFSerializationContext {
 	
 	private String diagramName;
+	private String diagramId;
 	
 	private int resourceID;
 	
@@ -19,6 +20,7 @@ public class ERDFSerializationContext {
 	
 	public ERDFSerializationContext(BPMNDiagram bpmnDiagram) {
 		this.diagramName = bpmnDiagram.getTitle();
+		this.diagramId = bpmnDiagram.getId();
 		this.resourceID = 0;
 		this.resourceIDs = new HashMap<DiagramObject, Integer>();
 		
@@ -46,6 +48,10 @@ public class ERDFSerializationContext {
 
 	public String getDiagramName() {
 		return this.diagramName;
+	}
+	
+	public String getDiagramId() {
+		return this.diagramId;
 	}
 	
 }

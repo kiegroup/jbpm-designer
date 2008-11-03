@@ -1,11 +1,14 @@
 package de.hpi.bpmn;
 
+import de.hpi.util.Bounds;
+
 
 public abstract class Node extends DiagramObject {
 	
 	protected String label;
 	protected Container parent;
 	protected Container process;
+	protected Bounds bounds;
 	
 	public String toString() {
 		return (label != null ? label : resourceId);
@@ -47,6 +50,14 @@ public abstract class Node extends DiagramObject {
 				process.getChildNodes().add(this);
 		}
 		this.process = process;
+	}
+	
+	public Bounds getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(Bounds bounds) {
+		this.bounds = bounds;
 	}
 
 }
