@@ -40,7 +40,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'name':ORYX.I18N.BPELSupport.exp,
 			'functionality': this.exportProcess.bind(this),
 			'group': ORYX.I18N.BPELSupport.group,
-			'icon': ORYX.PATH + "images/BPEL.png",
+			'icon': ORYX.PATH + "images/bpel_export_icon.png",
 			'description': ORYX.I18N.BPELSupport.expDesc,
 			'index': 0,
 			'minShape': 0,
@@ -51,7 +51,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'name':ORYX.I18N.BPELSupport.imp,
 			'functionality': this.importProcess.bind(this),
 			'group': ORYX.I18N.BPELSupport.group,
-			'icon': ORYX.PATH + "images/folder_page_white.png",
+			'icon': ORYX.PATH + "images/bpel_import_icon.png",
 			'description': ORYX.I18N.BPELSupport.impDesc,
 			'index': 1,
 			'minShape': 0,
@@ -224,7 +224,6 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 				      		success: function(f,a){
 								
 								dialog.hide();
-								
 								// Get the erdf string					
 								var erdf = a.result;
 								erdf = erdf.startsWith('<?xml') ? erdf : '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
@@ -270,13 +269,11 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 	},
 	
 	loadERDF: function(erdfString){
-		
-		var s = erdfString;
-		s 	  = s.startsWith('<?xml') ? s : '<?xml version="1.0" encoding="utf-8"?>'+s+'';	
-						
+								
 		var parser = new DOMParser();			
-		var doc    = parser.parseFromString( s ,"text/xml");
-							
+		var doc    = parser.parseFromString(erdfString ,"text/xml");
+		
+		alert(erdfString);
 		this.facade.importERDF( doc );
 
 	}
