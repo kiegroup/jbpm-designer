@@ -72,6 +72,11 @@ public class XFormsXHTMLImporter {
 				ActionContainer actionContainer = (ActionContainer) parent;
 				actionContainer.getActions().add((AbstractAction) element);
 			}
+		} else if(element instanceof Case) {
+			if(parent instanceof Switch) {
+				Switch switchObj = (Switch) parent;
+				switchObj.getCases().add((Case) element);
+			}
 		} else if(element instanceof Label) {
 			if(parent instanceof LabelContainer) {
 				LabelContainer labelContainer = (LabelContainer) parent;

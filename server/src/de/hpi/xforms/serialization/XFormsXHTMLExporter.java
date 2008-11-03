@@ -166,6 +166,12 @@ public class XFormsXHTMLExporter {
 			}
 		}
 		
+		if(xfElement instanceof Switch) {
+			for(Case xfChild : ((Switch) xfElement).getCases()) {
+				addElementsRecursive(newXmlElement, xfChild);
+			}
+		}
+		
 		if(xfElement instanceof LabelContainer) {
 			addElementsRecursive(newXmlElement, ((LabelContainer) xfElement).getLabel());
 		}
