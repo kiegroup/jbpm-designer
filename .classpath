@@ -41,6 +41,7 @@
 	<classpathentry kind="lib" path="editor/lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="editor/lib/xmlgraphics-commons-1.1.jar"/>
 	<classpathentry kind="lib" path="editor/lib/org.json.jar"/>
+  <classpathentry kind="lib" path="editor/lib/jbpt.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/asm-1.5.3.jar"/>
