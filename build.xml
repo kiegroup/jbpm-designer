@@ -140,6 +140,7 @@
         <copy todir='${editor-build-root}'>
             <fileset file="LICENSE"/>
             <fileset file="LIBRARIES"/>
+			<fileset file="VERSION"/>
         </copy>
         <echo>
             Copied license file into build destination

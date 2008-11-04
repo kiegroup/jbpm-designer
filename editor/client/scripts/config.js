@@ -3,6 +3,9 @@
  */
 ORYX.CONFIG = {
 	
+	VERSION_URL:				ORYX.PATH + "VERSION",
+	LICENSE_URL:				ORYX.PATH + "LICENSE",
+	
 	/* Editor-Mode */
 	MODE_READONLY:				"readonly",
 	MODE_FULLSCREEN:			"fullscreen",
