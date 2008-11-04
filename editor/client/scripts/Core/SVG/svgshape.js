@@ -347,8 +347,6 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 		this.y = this.oldY;
 		this.width = this.oldWidth;
 		this.height = this.oldHeight;
-		
-		console.log(this);
 	},
 
 	/**
