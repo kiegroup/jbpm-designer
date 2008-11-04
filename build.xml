@@ -404,6 +404,7 @@
 			
 			<metainf file="${editor-build-root}/LICENSE"/>
             <metainf file="${editor-build-root}/LIBRARIES"/>
+			<metainf file="${editor-build-root}/VERSION"/>
         </war>
         
           
