@@ -182,7 +182,7 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			this.oldX = cx - this.radiusX;
 			this.oldY = cy - this.radiusY;
 			this.oldWidth = 2*this.radiusX;
-			this.oldHeight = 2*this.radiusX;
+			this.oldHeight = 2*this.radiusY;
 
 		} else if(ORYX.Editor.checkClassType(this.element, SVGLineElement)) {
 			this.type = "Line";
@@ -347,6 +347,8 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 		this.y = this.oldY;
 		this.width = this.oldWidth;
 		this.height = this.oldHeight;
+		
+		console.log(this);
 	},
 
 	/**
