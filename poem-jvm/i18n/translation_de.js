@@ -30,10 +30,13 @@ Repository.I18N.Repository.windowTitle = "Oryx";
 Repository.I18N.Repository.noSaveTitle = "Oryx";
 Repository.I18N.Repository.noSaveMessage = "Als Public-User haben sie nicht die Rechte um Modelle zu speichern oder neu anzulegen. Möchten sie dennoch den Oryx-Editor öffnen?";
 Repository.I18N.Repository.yes = "Ja";
+Repository.I18N.Repository.no = "Nein";
 
 Repository.I18N.Repository.leftPanelTitle = "Modellorganisation";
 Repository.I18N.Repository.rightPanelTitle = "Modellinfo";
 Repository.I18N.Repository.bottomPanelTitle = "Kommentare";
+
+Repository.I18N.Repository.loadingText = "Repository wird geladen..."
 
 // Plugins here
  
@@ -105,7 +108,8 @@ Repository.I18N.AccessInfo.reader = "Leserechte:"
 Repository.I18N.AccessInfo.openid = "OpenID"
 Repository.I18N.AccessInfo.addReader = "Leserechte hinzufügen"
 Repository.I18N.AccessInfo.addContributer = "Schreibrechte hinzufügen"
-
+Repository.I18N.AccessInfo.several = "verschiedene"
+Repository.I18N.AccessInfo.noWritePermission = "Keine Schreibrechte"
 
 if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
 Repository.I18N.SortingSupport.name = "Sortierung";
@@ -129,7 +133,7 @@ Repository.I18N.Edit.nameText = "Name"
 Repository.I18N.Edit.summaryText = "Beschreibung"
 Repository.I18N.Edit.editText = "Änderung speichern"
 Repository.I18N.Edit.deleteText = "Löschen"
-
+Repository.I18N.Edit.noWriteAccess = "Nur der Besitzer des Modells kann diese Löschen"
 Repository.I18N.Edit.deleteOneText = "'#{title}'" 
 Repository.I18N.Edit.deleteMoreText = "Alle #{size} selektierten Modelle" 
 

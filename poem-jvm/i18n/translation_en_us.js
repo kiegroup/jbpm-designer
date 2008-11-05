@@ -33,12 +33,14 @@ Repository.I18N.Repository.windowTitle = "Oryx";
 
 Repository.I18N.Repository.noSaveTitle = "Message";
 Repository.I18N.Repository.noSaveMessage = "As a public user, you can not save a model. Do you want to model anyway?";
-Repository.I18N.Repository.yes = "yes";
+Repository.I18N.Repository.yes = "Yes";
+Repository.I18N.Repository.no = "No";
 
 Repository.I18N.Repository.leftPanelTitle = "Organize Models";
 Repository.I18N.Repository.rightPanelTitle = "Model Info";
 Repository.I18N.Repository.bottomPanelTitle = "Comments";
 
+Repository.I18N.Repository.loadingText = "Repository is loading..."
 
 // Plugin strings
  
@@ -122,7 +124,9 @@ Repository.I18N.AccessInfo.reader = "Readers:"
 Repository.I18N.AccessInfo.openid = "OpenID"
 Repository.I18N.AccessInfo.addReader = "Add as Reader"
 Repository.I18N.AccessInfo.addContributer = "Add as Contributer"
-
+Repository.I18N.AccessInfo.several = "several"
+Repository.I18N.AccessInfo.noWritePermission = "No write permissions"
+ 
 
 if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
 Repository.I18N.SortingSupport.name = "Sorting";
@@ -146,7 +150,7 @@ Repository.I18N.Edit.nameText = "Name"
 Repository.I18N.Edit.summaryText = "Summary"
 Repository.I18N.Edit.editText = "Store changes"
 Repository.I18N.Edit.deleteText = "Delete"
-
+Repository.I18N.Edit.noWriteAccess = "Only the owner has the permission to delete"
 Repository.I18N.Edit.deleteOneText = "'#{title}'" 
 Repository.I18N.Edit.deleteMoreText = "All #{size} selected models" 
 
