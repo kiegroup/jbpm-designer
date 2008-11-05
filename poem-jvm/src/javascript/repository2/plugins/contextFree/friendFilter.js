@@ -46,7 +46,7 @@ Repository.Plugins.FriendFilter = {
 	
 	_generateGUI: function(){
 		
-		var types = $H(this.facade.modelCache.getFriends()).map(function(item) { return Number(item.value) > 0 ? [ unescape(item.key) + " (" +  item.value + ")"] : null }.bind(this)).compact();
+		var types = $H(this.facade.modelCache.getFriends()).map(function(item) { return Number(item.value) > 0 ? [ unescape(item.key), item.value ] : null }.bind(this)).compact();
 
 		if( this.types && types && types instanceof Array && types.length > 0 && types.toString() == this.types.toString() ){
 			return 
@@ -59,7 +59,7 @@ Repository.Plugins.FriendFilter = {
 				
 		
 		var store 	= new Ext.data.SimpleStore({
-	        fields	: ['friend'],
+	        fields	: ['friend', 'count'],
 	        data	: types
 	    });
 		
@@ -67,7 +67,7 @@ Repository.Plugins.FriendFilter = {
 			'<tpl for=".">',
 				'<div class="x-grid3-row" UNSELECTABLE = "on" style="clear:left;">',
 					'<div class="x-grid3-row-checker" style="width: 18px; float:left;"></div>',
-					'<div class="x-grid3-cell-inner x-grid3-col-1">{friend}</div>',
+					'<div class="x-grid3-cell-inner x-grid3-col-1">{friend} ({count})</div>',
 				'</div>',
 			'</tpl>'
 		);
