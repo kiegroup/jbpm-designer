@@ -111,7 +111,7 @@ Repository.Plugins.Rating = {
 											value		: 0,
 											editable	: true,
 											changed 	: this._setUserRating.bind(this)
-										}),
+										})
 							]
 
 		var items = [];

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008
- * Bj�rn Wagner, Sven Wagner-Boysen
+ * Bjoern Wagner, Sven Wagner-Boysen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -234,7 +234,7 @@ Repository.Core.Repository = {
 								
 							this._filterChangedHandler.invoke(this._filteredModels);
 						}.bind(this),
-						parameters : params,
+						parameters : params
 					});
 		},
 		
@@ -434,7 +434,7 @@ Repository.Core.Repository = {
 										tooltip: {
 											text: buttonConfig.tooltipText,
 	                                        autoHide: true
-	                                    },
+	                                    }
 									});
 							menu.render();
 						}
@@ -488,7 +488,7 @@ Repository.Core.Repository = {
 			
 			var source = Repository.Config.PATH + Repository.Config.PLUGIN_PATH	+ Repository.Config.PLUGIN_CONFIG
 	
-			new Ajax.Request(source, {
+			var sdfsfsd = new Ajax.Request(source, {
 				asynchronous: false,
 				method: 'get',
 				onSuccess: function(result){
@@ -617,7 +617,7 @@ Repository.Core.Repository = {
                 //title: Repository.I18N.Repository.bottomPanelTitle,
                 collapsible	: true,
 				height		: 40,
-				border		: false,
+				border		: false
 				//titleCollapse: true,
                 //collapsed: true,            		
             });

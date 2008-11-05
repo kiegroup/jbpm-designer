@@ -118,7 +118,7 @@ Repository.Plugins.Edit = {
 											id			: 'repository_edit_textfield_name',
 											width		: 165,
 											emptyText 	: Repository.I18N.Edit.editName ,
-											disabled  	: true,  
+											disabled  	: true
 										}),
 								new Ext.form.TextArea({
 											id			: 'repository_edit_textfield_summary',
@@ -129,7 +129,7 @@ Repository.Plugins.Edit = {
 											growPad		: -10,
 											grow		: true,
 											emptyText 	: Repository.I18N.Edit.editSummary,
-											disabled  	: true,  
+											disabled  	: true
 										}),		
 								new Ext.LinkButton({
 											image		:'../images/silk/disk.png',
