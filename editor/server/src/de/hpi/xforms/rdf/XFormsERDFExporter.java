@@ -243,8 +243,13 @@ public class XFormsERDFExporter {
 	}
 	
 	private void appendXFormsField(PrintWriter writer, String field, String entry) {
-		writer.append("<span class=\"oryx-xf_");
-		writer.append(field);
+		if(field.startsWith("ev:")) {
+			writer.append("<span class=\"oryx-ev_");
+			writer.append(field.substring(3));
+		} else {
+			writer.append("<span class=\"oryx-xf_");
+			writer.append(field);
+		}
 		if (entry != null) {
 			writer.append("\">");
 			writer.append(entry);

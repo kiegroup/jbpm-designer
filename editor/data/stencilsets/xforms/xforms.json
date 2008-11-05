@@ -2153,7 +2153,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2215,7 +2215,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2301,7 +2301,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2436,7 +2436,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2534,7 +2534,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2620,7 +2620,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2694,7 +2694,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2768,7 +2768,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2888,7 +2888,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -2962,7 +2962,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -3036,7 +3036,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -3110,7 +3110,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -3184,7 +3184,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -3258,7 +3258,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -3369,7 +3369,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",
@@ -3443,7 +3443,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"xf_ev:event",
+					"id":"ev_event",
 					"type":"String",
 					"title":"event",
 					"prefix":"oryx",

@@ -209,8 +209,13 @@ public class XFormsXHTMLExporter {
 	
 	private void addAttributes(Element xmlElement, XFormsElement xfElement) {
 		for(Entry<String, String> attribute : xfElement.getAttributes().entrySet()) {
-			if(attribute.getValue()!=null) 
-				xmlElement.setAttribute(attribute.getKey(), attribute.getValue());
+			if((attribute.getValue()!=null) && !attribute.getValue().equals("/") && !attribute.getValue().equals("")) {
+				String namespace = "http://www.w3.org/2002/xforms";
+				if(attribute.getKey().startsWith("ev:"))
+					namespace = "http://www.w3.org/2001/xml-events";
+				xmlElement.setAttributeNS(namespace, attribute.getKey(), attribute.getValue());
+			}
+				
 		}
 		if(xfElement instanceof PCDataContainer) {
 			PCDataContainer pcDataContainer = (PCDataContainer) xfElement;

@@ -160,8 +160,8 @@ public class XFormsRDFImporter {
 				
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 				
-				if (attribute.startsWith("xf_")) {
-					// handle xforms attributes
+				if(attribute.startsWith("xf_")) {
+					// handle attributes of xforms namespace
 					
 					attribute = attribute.substring(3);
 					
@@ -172,7 +172,16 @@ public class XFormsRDFImporter {
 						if(element instanceof Submit)
 							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
 					}
-					
+				} else if(attribute.startsWith("ev_")) {
+					// handle attributes of xml events namespace
+					attribute = "ev:" + attribute.substring(3);
+					if(element.getAttributes().containsKey(attribute)) {
+						element.getAttributes().put(attribute, getContent(n));
+					} else {
+						handleModelItemProperty(attribute, getContent(n), element, c);
+						if(element instanceof Submit)
+							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
+					}
 				} else {
 					// handle oryx attributes
 						
@@ -199,11 +208,12 @@ public class XFormsRDFImporter {
 	}
 	
 	private void handleModelItemProperty(String attribute, String value, XFormsElement element, ImportContext c) {
-		if(!element.getAttributes().containsKey("bind")) return;
+		//if(!element.getAttributes().containsKey("bind")) return;
+		if((value==null) || value.equals("") || value.equals("/")) return;
 		Bind bind = new Bind();
-		if(!bind.getAttributes().containsKey(attribute)) return;
 		if(c.bindings.containsKey(element))
 			bind = c.bindings.get(element);
+		if(!bind.getAttributes().containsKey(attribute)) return;
 		bind.getAttributes().put(attribute, value);
 		c.bindings.put(element, bind);
 	}
@@ -231,13 +241,14 @@ public class XFormsRDFImporter {
 			String xPath = element.getAttributes().get("ref");
 			if(xPath!=null) {
 				Bind bind = c.bindings.get(element);
-				String bindId = "bind_";
+				 
+				/*String bindId = "bind_";
 				if(element.getAttributes().get("id")==null)
 					bindId += element.getResourceId().substring(1);
 				else 
 					bindId += element.getAttributes().get("id");
 				bind.getAttributes().put("id", bindId);
-				element.getAttributes().put("bind", bindId);
+				element.getAttributes().put("bind", bindId);*/
 				
 				if((element instanceof XFormsUIElement) && (!xPath.startsWith("/")))
 					xPath = getNodesetContext((XFormsUIElement) element) + xPath;
@@ -246,7 +257,6 @@ public class XFormsRDFImporter {
 				c.form.getModel().getBinds().add(bind);
 			}
 			
-			//element.getAttributes().put("ref", null);
 		}
 	}
 	
@@ -378,13 +388,10 @@ public class XFormsRDFImporter {
 			else if(element.getParent() instanceof Case)
 				element = ((Case) element.getParent()).getSwitch();
 			String nodeset = element.getAttributes().get("nodeset");
-			if(nodeset!=null) {
-				nodesetContext += nodeset + "/";
-			} else {
-				// for children of group elements
+			if((nodeset==null) || nodeset.equals("") || nodeset.equals("/"))
 				nodeset = element.getAttributes().get("ref");
-				if(nodeset!=null) nodesetContext += nodeset + "/";
-			}
+			if((nodeset!=null) && !nodeset.equals("") && !nodeset.equals("/"))
+				nodesetContext = nodeset + "/" + nodesetContext;
 		}
 		return nodesetContext;
 	}
