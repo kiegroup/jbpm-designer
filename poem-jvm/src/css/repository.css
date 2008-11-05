@@ -57,6 +57,9 @@ a:hover, a:focus, a:active {
 	background-image:url(/backend/images/silk/arrow_down.png);
 }
 
+.repository_rating_filter .x-grid3-scroller{
+	overflow: hidden;
+}
 /**  FIXES FOR EXT 2.0.2 **/
 
 .x-date-middle {
@@ -190,6 +193,7 @@ table-layout:fixed;
 	position:relative;
 	right:6px;
 	margin-right:6px;
+	width:16px;
 }
 
 #oryx_repository_header.mouseover span{

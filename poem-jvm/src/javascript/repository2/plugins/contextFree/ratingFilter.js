@@ -62,6 +62,7 @@ Repository.Plugins.RatingFilter = {
 									})
 		
 	    this.grid = new Ext.grid.EditorGridPanel({
+			cls		: 'repository_rating_filter',
 	        store	: store,
 			width	: 200,
 			clicksToEdit : 0,
