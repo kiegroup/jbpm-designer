@@ -92,13 +92,14 @@ public class Repository2Handler extends  HandlerBase {
     	out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
     	out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ext_path + "resources/css/ext-all.css\">");
     	out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ext_path + "resources/css/xtheme-gray.css\">");     	  	
-    	out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository2/prototype.js\"></script>");
+    	/*out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository2/prototype.js\"></script>");
     	out.println("<script type=\"text/javascript\" src=\"" + ext_path + "adapter/ext/ext-base.js\"></script>");
     	//out.println("<script type=\"text/javascript\" src=\"" + ext_path + "ext-all.js\"></script>");
     	out.println("<script type=\"text/javascript\" src=\"" + ext_path + "ext-all-debug.js\"></script>");
     	for (String include : java_script_includes) {	
     		out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository2/" + include + ".js\"></script>");
-    	}
+    	}*/
+    	out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository2/repository2.js\"></script>");
     	out.println("<script src=\"" + backend_path + "/i18n/translation_en_us.js\" type=\"text/javascript\" ></script>\n"); 
     	out.println(languageFiles);
     	for (String stylesheet : stylesheet_links) {

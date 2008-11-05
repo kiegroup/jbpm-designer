@@ -21,7 +21,8 @@
 	<!-- Server (poem-jvm) properties *************************************************** -->
 	<property name="server-root-dir" value="poem-jvm" />
 	<property name="java-dir" value="${server-root-dir}/src/java" />
-	<property name="bin-dir" value="build/poem-jvm/bin" />
+	<property name="poem-build-dir" value="build/poem-jvm" />
+	<property name="bin-dir" value="${poem-build-dir}/bin" />
 	<property name="lib-dir" value="${server-root-dir}/lib" />
 	<property name="data-dir" value="${server-root-dir}/data" />
 	<property name="target-dir" value="dist" />
@@ -47,7 +48,29 @@
 		</javac>
 	</target>
 	
-	<target name="build-backend" depends="compile-backend" >
+	<target name="compress-repository-javascript">
+		<concat destfile='${poem-build-dir}/repository2/repository2.js'>
+            <fileset file="${server-root-dir}/src/javascript/repository2/prototype.js"/>
+			<fileset file="editor/lib/ext-2.0.2/adapter/ext/ext-base.js"/>
+			<fileset file="editor/lib/ext-2.0.2/ext-all.js"/>
+			<filelist id="repsourcefiles" dir="${server-root-dir}/src/javascript/repository2">
+                <file name='ext_templates.js'/>
+				<file name='core/clazz.js'/>
+				<file name='config.js'/>
+				<file name='core/extExtention.js'/>
+				<file name='core/eventHandler.js'/>
+                <file name='core/dataCache.js'/>
+                <file name='core/repository.js'/>
+                <file name='core/plugin.js'/>
+                <file name='core/viewPlugin.js'/>
+                <file name='core/contextFreePlugin.js'/>
+                <file name='core/contextPlugin.js'/>
+            </filelist>
+			<fileset dir="${server-root-dir}/src/javascript/repository2/Plugins" includes="**/*.js"/>
+        </concat>
+	</target>
+	
+	<target name="build-backend" depends="compile-backend, compress-repository-javascript" >
 		<!-- Add Hibernate xml files to the binary classes dir -->
 		<copy file="${config-dir}/hibernate.cfg.xml" todir="${bin-dir}" />
 		<copy file="${data-dir}/Access.hbm.xml" todir="${bin-dir}" />
@@ -74,6 +97,9 @@
 			<!-- Javascript files-->
 			<fileset dir="${server-root-dir}/src/javascript" >
 				<include name="repository/" />
+				<include name="repository2/" />
+			</fileset>
+			<fileset dir="${poem-build-dir}" >
 				<include name="repository2/" />
 			</fileset>
 			

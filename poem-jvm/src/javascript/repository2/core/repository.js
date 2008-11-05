@@ -405,8 +405,8 @@ Repository.Core.Repository = {
 					var resultXml = result.responseXML;
 					
 					// Get all source names
-					var files = $A(resultXml.getElementsByTagName("plugin")).map(function(p){ return p.getAttribute('source') }).compact()
-					this._intializePluginFiles( files );
+					//var files = $A(resultXml.getElementsByTagName("plugin")).map(function(p){ return p.getAttribute('source') }).compact()
+					//this._intializePluginFiles( files );
 					
 					// Get all plugin names
 					var names = $A(resultXml.getElementsByTagName("plugin")).map(function(p){ return p.getAttribute('name') }).compact()
