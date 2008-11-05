@@ -46,7 +46,7 @@ Repository.Core.Repository = {
 			var loadMask = this.showMask();
 			
 			// After 300 milsec after initialized, hide loading panel
-			this.on('initialized', setTimeout.bind( null, function(){ this.hideMask( loadMask )}.bind(this), 300) );
+			this.on('initialized', window.setTimeout.bind( null, function(){ this.hideMask( loadMask )}.bind(this), 300) );
 			
 			// Event handler
 			this._viewChangedHandler = new EventHandler();
@@ -101,7 +101,7 @@ Repository.Core.Repository = {
 			// For each start while loading time, raise the count
 			bh.start.registerCallback( increase )
 			// For each finishing while loading time, remove a count, and if complete finished, raise event
-			bh.end.registerCallback( setTimeout.bind( null, decrease, 250) )	
+			bh.end.registerCallback( window.setTimeout.bind( null, decrease, 250) )	
 		},
 		
 	
