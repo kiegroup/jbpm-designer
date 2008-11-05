@@ -101,7 +101,7 @@ Repository.Core.Repository = {
 			// For each start while loading time, raise the count
 			bh.start.registerCallback( increase )
 			// For each finishing while loading time, remove a count, and if complete finished, raise event
-			bh.end.registerCallback( window.setTimeout.bind( null, decrease, 250) )	
+			bh.end.registerCallback( function(){ window.setTimeout(decrease, 250) }.bind(this) )	
 		},
 		
 	
