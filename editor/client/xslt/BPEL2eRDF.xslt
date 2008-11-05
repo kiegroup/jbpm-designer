@@ -35,42 +35,42 @@
 		<xsl:param name="parentID"/>
 		<xsl:param name="parentBoundLeftUpperX"/>
 		<xsl:param name="parentBoundLeftUpperY"/>
-		
-		<!--invoke-->	
-		<xsl:template match="invoke">
-			<xsl:variable name="id">	
-				<xsl:value-of select="concat($parentID,'_',position())" />
-			</xsl:variable>
-			<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()+ 30" />
-			<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()+ 30" />
+	
+		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|terminationHandler|catch|catchAll|compensationHandler">
+			<xsl:variable name="id" select="concat($parentID,'_',position())" />
+			<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()*3+ 10" />
+			<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()*3+ 10" />
 			<xsl:variable name="BoundRLX" select="$BoundLUX + 100" />
 			<xsl:variable name="BoundRLY" select="$BoundLUY + 80" />
-	
-			<div id="$id">
-				<span class="oryx-type">http://b3mn.org/stencilset/bpel#invoke</span>
-				<span class="oryx-bounds">$BoundLUX,$BoundLUY,$BoundRLX,$BoundRLY</span>
-				<a rel="raziel-parent" href="concat('#',$parentID)"/>
+			
+			<div>		
+		 		<xsl:attribute name="id">
+		 			<xsl:value-of select="$id"/>
+		 		</xsl:attribute>		
+		   		<span class="oryx-type">
+					<xsl:value-of select="concat('http://b3mn.org/stencilset/bpel#',name())" />
+				</span>
+				<span class="oryx-bounds">
+					<xsl:value-of select="concat($BoundLUX,',',$BoundLUY,',',$BoundRLX,',',$BoundRLY)" />
+				</span>
+				<a rel="raziel-parent">
+					<xsl:attribute name="href">
+						<xsl:value-of select="concat('#',$parentID)"/>
+					</xsl:attribute>
+				</a>		
+					
 				<xsl:call-template name="add-attributes"/>
-			</div>
-		</xsl:template>	
-		
-		<!--receive-->	
-		<xsl:template match="receive">
-			<xsl:variable name="id">	
-				<xsl:value-of select="concat($parentID,'_',position())" />
-			</xsl:variable>
-			<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()+ 30" />
-			<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()+ 30" />
-			<xsl:variable name="BoundRLX" select="$BoundLUX + 100" />
-			<xsl:variable name="BoundRLY" select="$BoundLUY + 80" />
-	
-			<div id="$id">
-				<span class="oryx-type">http://b3mn.org/stencilset/bpel#receive</span>
-				<span class="oryx-bounds">$BoundLUX,$BoundLUY,$BoundRLX,$BoundRLY</span>
-				<a rel="raziel-parent" href="concat('#',$parentID)"/>
-				<xsl:call-template name="add-attributes"/>
-			</div>
-		</xsl:template>	
+				
+			</div>	
+			
+			<xsl:if test="name()='assign' or name()='if' or name()='elseif' or name()='else' or name()='flow' or name()='pick' or name()='onMessage' or name()='sequence' or name()='while' or name()='repeatUntil' or name()='forEach' or name()='scope' or name()='onAlarm' or name()='onEvent' or name()='compensationHandler' or name()='terminationHandler' or name()='catch' or name()='catchAll'">
+			    <xsl:call-template name="add-children-nodes">
+					<xsl:with-param name="parentID" select="$id"/>	
+					<xsl:with-param name="parentBoundLeftUpperX" select="$BoundLUX"/>
+					<xsl:with-param name="parentBoundLeftUpperY" select="$BoundLUY"/>
+				</xsl:call-template>	
+			</xsl:if>				
+		</xsl:for-each>	
 	</xsl:template>
 				
 	<xsl:template name="add-render">
@@ -83,8 +83,8 @@
 	<xsl:template name="DFS-for-adding-render">
 		<xsl:param name="parentID"/>
 		
-		<xsl:template match="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|terminationHandler|catch|catchAll|compensationHandler" >	
- 		    <xsl:variable name="id">
+		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|terminationHandler|catch|catchAll|compensationHandler"> 
+		    <xsl:variable name="id">
  		    	<xsl:value-of select="concat($parentID,'_',position())"/>
 			</xsl:variable>	
  		    		
@@ -95,10 +95,9 @@
 			</a>
 			
   			<xsl:call-template name="DFS-for-adding-render">
-   				<xsl:with-param name="parentID" select="id"/>
+   				<xsl:with-param name="parentID" select="$id"/>
   			</xsl:call-template>
- 		
-		</xsl:template>
+		</xsl:for-each>
     </xsl:template>		
 
 </xsl:stylesheet>
