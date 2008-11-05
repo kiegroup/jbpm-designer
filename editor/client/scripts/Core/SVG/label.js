@@ -55,7 +55,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		
 		
 		this.node.setAttributeNS(null, 'stroke-width', '0pt');
-		this.node.setAttributeNS(null, 'letter-spacing', '-1px');
+		this.node.setAttributeNS(null, 'letter-spacing', '-0.8px');
 		
 		this.shapeId = options.shapeId;
 		
