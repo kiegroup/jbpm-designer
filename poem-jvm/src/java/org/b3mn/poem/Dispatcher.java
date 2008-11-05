@@ -83,27 +83,13 @@ public class Dispatcher extends HttpServlet {
 	public void init() throws ServletException {
 		super.init();
 		loadHandlerInfo();
-		try {reloadFriendTable();}catch(Exception e) {} // ToDo: implement a bootloader. this operation isn't necessary at each start
+		//reloadFriendTable(); // ToDo: implement a bootloader. this operation isn't necessary at each start
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected void reloadFriendTable() throws Exception {
-		Persistance.getSession().createSQLQuery("DELETE FROM friend").executeUpdate();
+	protected void reloadFriendTable()  {
+		Persistance.getSession().createSQLQuery("SELECT * FROM friend_init()").list();
 		Persistance.commit();
-		Collection<Access> accessList = Persistance.getSession().createSQLQuery("SELECT {access.*} FROM {access}").addEntity("access", Access.class).list();
-		Persistance.commit();
-		Map<String, Collection<String>> modelAccess = new Hashtable<String, Collection<String>>(5000);
-		for (Access access : accessList) {
-			String object = access.getObject_name();
-			if (modelAccess.get(object) == null)
-				modelAccess.put(object, new ArrayList<String>());
-			modelAccess.get(object).add(access.getSubject());
-		}
-		
-		for (Collection<String> friends : modelAccess.values()) 
-			for (String friend1 : friends)
-				for (String friend2 : friends)
-					(new User(friend2)).addFriend(friend1);		
+
 	}
 
 	protected String getErrorPage(String stacktrace) {

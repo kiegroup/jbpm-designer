@@ -29,12 +29,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.b3mn.poem.Friend;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Persistance;
 import org.b3mn.poem.Subject;
@@ -258,33 +261,26 @@ public class User extends BusinessObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<String> getFriendOpenIds() {
-		List<String> friends = Persistance.getSession()
-		.createSQLQuery("SELECT DISTINCT identity.uri FROM friend, identity WHERE " +
-				"(friend.subject_id=:subject_id AND friend.friend_id=identity.id) OR " +
-				"(friend.subject_id=identity.id AND friend.friend_id=:subject_id)")
+	public Map<String, Integer> getFriendOpenIds()  throws Exception {
+		List<Friend> friends = Persistance.getSession()
+		.createSQLQuery("SELECT {friend.*} FROM {friend} WHERE " +
+				"(friend.subject_id=:subject_id) OR " +
+				"(friend.friend_id=:subject_id)")
+				.addEntity("friend", Friend.class)
 				.setInteger("subject_id", this.getId())
 				.list();
 		
 		Persistance.commit();
-		return friends;
-	}
-	
-	public void addFriend(String openId) {
-		if (this.getFriendOpenIds().contains(openId) || 
-				openId.equals(HandlerBase.getPublicUser()) ||
-				openId.equals("ownership") || 
-				openId.equals(this.getOpenId()) ||
-				this.getOpenId().equals(HandlerBase.getPublicUser()))
-			return;
-		
-		Identity friend = Identity.instance(openId);
-		Persistance.getSession()
-		.createSQLQuery("INSERT INTO friend (subject_id, friend_id) VALUES (:subject_id, :friend_id)")
-			.setInteger("subject_id", this.getId())
-			.setInteger("friend_id", friend.getId())
-			.executeUpdate();
-		Persistance.commit();
-	}
-	
+		Map<String, Integer> result = new Hashtable<String, Integer>();
+		for (Friend friend : friends) {
+			User friendUser = null;
+			if (friend.getSubjectId() == this.getId())
+				friendUser = new User(friend.getFriendId());
+			else 
+				friendUser = new User(friend.getSubjectId());
+			
+			result.put(friendUser.getOpenId(), friend.getModelCount());
+		}
+		return result;
+	}	
 }

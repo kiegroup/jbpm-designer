@@ -11,7 +11,7 @@
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="connection.url">jdbc:postgresql://localhost/poem</property>
         <property name="connection.username">poem</property>
-        <property name="connection.password">123456</property>
+        <property name="connection.password"></property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">20</property>
@@ -37,7 +37,8 @@
 		<mapping class="org.b3mn.poem.Setting"/>	
 		<mapping class="org.b3mn.poem.TagDefinition"/>
 		<mapping class="org.b3mn.poem.TagRelation"/>
-		<mapping class="org.b3mn.poem.ModelRating"/>	
+		<mapping class="org.b3mn.poem.ModelRating"/>
+		<mapping class="org.b3mn.poem.Friend"/>	
 		<mapping resource="Access.hbm.xml"/>		
     </session-factory>
 

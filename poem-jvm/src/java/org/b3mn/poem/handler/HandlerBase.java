@@ -235,12 +235,12 @@ public abstract class HandlerBase {
     	String oryx_path = "/oryx/";
     	String languageFiles = "";
     	
-    	if (new File(this.getOryxRootDirectory() + "/i18n/translation_"+languageCode+".js").exists()) {
+    	if (new File(this.getOryxRootDirectory() + "/oryx/i18n/translation_"+languageCode+".js").exists()) {
     		languageFiles += "<script src=\"" + oryx_path 
     		+ "i18n/translation_"+languageCode+".js\" type=\"text/javascript\" />\n";
     	}
     	
-    	if (new File(this.getOryxRootDirectory() + "/i18n/translation_" + languageCode+"_" + countryCode + ".js").exists()) {
+    	if (new File(this.getOryxRootDirectory() + "/oryx/i18n/translation_" + languageCode+"_" + countryCode + ".js").exists()) {
     		languageFiles += "<script src=\"" + oryx_path 
     		+ "i18n/translation_" + languageCode+"_" + countryCode 
     		+ ".js\" type=\"text/javascript\" />\n";

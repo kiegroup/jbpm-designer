@@ -29,6 +29,24 @@ ALTER PROCEDURAL LANGUAGE plpythonu OWNER TO poem;
 SET search_path = public, pg_catalog;
 
 --
+-- Name: is_parent(text, text); Type: FUNCTION; Schema: public; Owner: poem
+--
+
+CREATE FUNCTION is_parent(node text, subnode text) RETURNS boolean
+    AS $$BEGIN
+ PERFORM * FROM poem_path(subnode) WHERE poem_path=node;
+ IF NOT FOUND THEN 
+	RETURN FALSE;
+ ELSE
+	RETURN TRUE;
+ END IF;
+END;$$
+    LANGUAGE plpgsql IMMUTABLE;
+
+
+ALTER FUNCTION public.is_parent(node text, subnode text) OWNER TO poem;
+
+--
 -- Name: parent(text); Type: FUNCTION; Schema: public; Owner: poem
 --
 
@@ -118,14 +136,14 @@ ALTER TABLE ONLY structure ALTER COLUMN hierarchy SET STORAGE MAIN;
 ALTER TABLE public.structure OWNER TO poem;
 
 --
--- Name: access; Type: VIEW; Schema: public; Owner: poem
+-- Name: access; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW access AS
-    SELECT context_name.id AS context_id, context_name.uri AS context_name, subject_name.id AS subject_id, subject_name.uri AS subject_name, object_name.id AS object_id, object_name.uri AS object_name, access.id AS access_id, access.scheme AS access_scheme, access.term AS access_term FROM interaction access, structure context, identity context_name, structure subject_axis, identity subject_name, structure object_axis, identity object_name WHERE ((((((access.subject = context.hierarchy) AND (context.ident_id = context_name.id)) AND ((access.subject = subject_axis.hierarchy) OR (access.subject_descend AND (subject_axis.hierarchy ~~ (access.subject || '_%'::text))))) AND ((((((NOT access.object_restrict_to_parent) AND access.object_self) AND (access.object = object_axis.hierarchy)) OR (((NOT access.object_restrict_to_parent) AND access.object_descend) AND (object_axis.hierarchy ~~ (access.object || '_%'::text)))) OR ((access.object_restrict_to_parent AND access.object_self) AND (object_axis.hierarchy = subject_axis.hierarchy))) OR ((access.object_restrict_to_parent AND access.object_descend) AND (parent(object_axis.hierarchy) = subject_axis.hierarchy)))) AND (subject_axis.ident_id = subject_name.id)) AND (object_axis.ident_id = object_name.id));
+    SELECT context_name.id AS context_id, context_name.uri AS context_name, subject_name.id AS subject_id, subject_name.uri AS subject_name, object_name.id AS object_id, object_name.uri AS object_name, access.id AS access_id, access.scheme AS access_scheme, access.term AS access_term FROM interaction access, structure context, identity context_name, structure subject_axis, identity subject_name, structure object_axis, identity object_name WHERE ((((((access.subject = context.hierarchy) AND (context.ident_id = context_name.id)) AND ((access.subject = subject_axis.hierarchy) OR (access.subject_descend AND is_parent(subject_axis.hierarchy, access.subject)))) AND ((((((NOT access.object_restrict_to_parent) AND access.object_self) AND (access.object = object_axis.hierarchy)) OR (((NOT access.object_restrict_to_parent) AND access.object_descend) AND is_parent(object_axis.hierarchy, access.object))) OR ((access.object_restrict_to_parent AND access.object_self) AND (object_axis.hierarchy = subject_axis.hierarchy))) OR ((access.object_restrict_to_parent AND access.object_descend) AND (parent(object_axis.hierarchy) = subject_axis.hierarchy)))) AND (subject_axis.ident_id = subject_name.id)) AND (object_axis.ident_id = object_name.id));
 
 
-ALTER TABLE public.access OWNER TO poem;
+ALTER TABLE public.access OWNER TO postgres;
 
 --
 -- Name: comment_id_seq; Type: SEQUENCE; Schema: public; Owner: poem
@@ -178,6 +196,20 @@ ALTER TABLE ONLY content ALTER COLUMN svg SET STORAGE MAIN;
 
 
 ALTER TABLE public.content OWNER TO poem;
+
+--
+-- Name: friend; Type: TABLE; Schema: public; Owner: poem; Tablespace: 
+--
+
+CREATE TABLE friend (
+    id integer NOT NULL,
+    subject_id integer NOT NULL,
+    friend_id integer NOT NULL,
+    model_count integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.friend OWNER TO poem;
 
 --
 -- Name: model_rating; Type: TABLE; Schema: public; Owner: poem; Tablespace: 
@@ -536,6 +568,151 @@ CREATE FUNCTION ensure_descendant(root_hierarchy text, target integer) RETURNS s
 ALTER FUNCTION public.ensure_descendant(root_hierarchy text, target integer) OWNER TO poem;
 
 --
+-- Name: friend_dec_counter(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: poem
+--
+
+CREATE FUNCTION friend_dec_counter(subject_id1 integer, subject_id2 integer, count integer) RETURNS void
+    AS $$ DECLARE
+	result friend;
+BEGIN
+	SELECT friend.* INTO result FROM friend WHERE 
+		(friend.subject_id=subject_id1 AND friend.friend_id=subject_id2)
+		OR (friend.friend_id=subject_id1 AND friend.subject_id=subject_id2);
+
+	IF FOUND AND result.model_count > 0 THEN 
+		UPDATE friend SET model_count=result.model_count - count 
+		WHERE friend.subject_id=result.subject_id
+		AND friend.friend_id=result.friend_id;
+	END IF;
+END;$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION public.friend_dec_counter(subject_id1 integer, subject_id2 integer, count integer) OWNER TO poem;
+
+--
+-- Name: friend_inc_counter(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: poem
+--
+
+CREATE FUNCTION friend_inc_counter(subject_id1 integer, subject_id2 integer, count integer) RETURNS void
+    AS $$ DECLARE
+	result friend;
+BEGIN
+	PERFORM * FROM identity WHERE ((identity.id=subject_id2 OR identity.id=subject_id1) AND identity.uri='public');
+	IF (subject_id1=subject_id2 OR FOUND) THEN
+		RETURN;
+	END IF;
+	
+	SELECT friend.* INTO result FROM friend WHERE 
+		(friend.subject_id=subject_id1 AND friend.friend_id=subject_id2)
+		OR (friend.friend_id=subject_id1 AND friend.subject_id=subject_id2);
+
+	IF NOT FOUND THEN 
+		INSERT INTO friend (subject_id, friend_id, model_count) 
+		VALUES (subject_id1, subject_id2, 1);
+	ELSE 
+		UPDATE friend SET model_count=result.model_count + count 
+		WHERE friend.subject_id=result.subject_id
+		AND friend.friend_id=result.friend_id;
+	END IF;
+END;$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION public.friend_inc_counter(subject_id1 integer, subject_id2 integer, count integer) OWNER TO poem;
+
+--
+-- Name: friend_init(); Type: FUNCTION; Schema: public; Owner: poem
+--
+
+CREATE FUNCTION friend_init() RETURNS void
+    AS $$ DECLARE
+	user_pair record;
+BEGIN
+	DELETE FROM friend;
+	PERFORM friend_inc_counter(get_identity_id_from_hierarchy(user1.subject), 
+			get_identity_id_from_hierarchy(user2.subject), 1)
+		FROM interaction as user1, interaction as user2 
+		WHERE user1.object=user2.object;
+	-- halve the counter since all friends are counted twice
+	UPDATE friend SET model_count=model_count / 2;
+END;$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION public.friend_init() OWNER TO poem;
+
+--
+-- Name: friend_trigger_interaction(); Type: FUNCTION; Schema: public; Owner: poem
+--
+
+CREATE FUNCTION friend_trigger_interaction() RETURNS trigger
+    AS $$ DECLARE
+	model_hierarchy text;
+	user_hierarchy text;
+	subject identity;
+	friend_id integer;
+BEGIN
+	IF (TG_OP = 'INSERT') THEN 
+		model_hierarchy := NEW.object;
+		user_hierarchy := NEW.subject;
+	ELSEIF (TG_OP = 'DELETE') THEN
+		model_hierarchy := OLD.object;
+		user_hierarchy := OLD.subject;
+	END IF;
+
+	SELECT * INTO subject FROM get_identity_from_hierarchy(user_hierarchy);
+	
+	FOR friend_id IN SELECT identity.id FROM identity, structure, interaction 
+			WHERE (identity.id=structure.ident_id AND interaction.object=model_hierarchy 
+					AND structure.hierarchy=interaction.subject) LOOP
+		
+		IF (TG_OP = 'INSERT') THEN 
+			PERFORM friend_inc_counter(subject.id, friend_id, 1);
+		ELSEIF (TG_OP = 'DELETE') THEN
+			PERFORM friend_inc_counter(subject.id, friend_id, 1);
+		END IF;		
+	END LOOP;
+	RETURN NULL;
+END;$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION public.friend_trigger_interaction() OWNER TO poem;
+
+--
+-- Name: get_identity_from_hierarchy(text); Type: FUNCTION; Schema: public; Owner: poem
+--
+
+CREATE FUNCTION get_identity_from_hierarchy(hierarchy text) RETURNS identity
+    AS $$ DECLARE
+	result identity;
+BEGIN
+	SELECT identity.* INTO result FROM identity, structure WHERE identity.id=structure.ident_id AND structure.hierarchy=hierarchy;
+	RETURN result;
+END;$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION public.get_identity_from_hierarchy(hierarchy text) OWNER TO poem;
+
+--
+-- Name: get_identity_id_from_hierarchy(text); Type: FUNCTION; Schema: public; Owner: poem
+--
+
+CREATE FUNCTION get_identity_id_from_hierarchy(hierarchy text) RETURNS integer
+    AS $$ DECLARE
+	result integer;
+BEGIN
+	SELECT identity.id INTO result FROM identity, structure WHERE identity.id=structure.ident_id AND structure.hierarchy=hierarchy;
+	RETURN result;
+END;$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION public.get_identity_id_from_hierarchy(hierarchy text) OWNER TO poem;
+
+--
 -- Name: identity(text); Type: FUNCTION; Schema: public; Owner: poem
 --
 
@@ -689,6 +866,34 @@ SELECT pg_catalog.setval('content_id_seq', 1, false);
 
 
 --
+-- Name: friend_id_seq; Type: SEQUENCE; Schema: public; Owner: poem
+--
+
+CREATE SEQUENCE friend_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friend_id_seq OWNER TO poem;
+
+--
+-- Name: friend_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: poem
+--
+
+ALTER SEQUENCE friend_id_seq OWNED BY friend.id;
+
+
+--
+-- Name: friend_id_seq; Type: SEQUENCE SET; Schema: public; Owner: poem
+--
+
+SELECT pg_catalog.setval('friend_id_seq', 1, false);
+
+
+--
 -- Name: identity_id_seq; Type: SEQUENCE; Schema: public; Owner: poem
 --
 
@@ -808,6 +1013,13 @@ ALTER TABLE content ALTER COLUMN id SET DEFAULT nextval('content_id_seq'::regcla
 -- Name: id; Type: DEFAULT; Schema: public; Owner: poem
 --
 
+ALTER TABLE friend ALTER COLUMN id SET DEFAULT nextval('friend_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: poem
+--
+
 ALTER TABLE identity ALTER COLUMN id SET DEFAULT nextval('identity_id_seq'::regclass);
 
 
@@ -845,6 +1057,14 @@ COPY comment (id, subject_id, title, content) FROM stdin;
 --
 
 COPY content (id, erdf, svg, png_large, png_small) FROM stdin;
+\.
+
+
+--
+-- Data for Name: friend; Type: TABLE DATA; Schema: public; Owner: poem
+--
+
+COPY friend (id, subject_id, friend_id, model_count) FROM stdin;
 \.
 
 
@@ -985,6 +1205,14 @@ ALTER TABLE ONLY content
 
 
 --
+-- Name: friend_pkey; Type: CONSTRAINT; Schema: public; Owner: poem; Tablespace: 
+--
+
+ALTER TABLE ONLY friend
+    ADD CONSTRAINT friend_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: identity_pkey; Type: CONSTRAINT; Schema: public; Owner: poem; Tablespace: 
 --
 
@@ -1057,6 +1285,13 @@ ALTER TABLE ONLY subject
 
 
 --
+-- Name: friend_identity_idx; Type: INDEX; Schema: public; Owner: poem; Tablespace: 
+--
+
+CREATE INDEX friend_identity_idx ON friend USING btree (subject_id, friend_id);
+
+
+--
 -- Name: object_idx; Type: INDEX; Schema: public; Owner: poem; Tablespace: 
 --
 
@@ -1085,6 +1320,16 @@ CREATE INDEX subject_idx ON interaction USING btree (subject);
 
 
 --
+-- Name: friend_interaction; Type: TRIGGER; Schema: public; Owner: poem
+--
+
+CREATE TRIGGER friend_interaction
+    AFTER INSERT OR DELETE ON interaction
+    FOR EACH ROW
+    EXECUTE PROCEDURE friend_trigger_interaction();
+
+
+--
 -- Name: comment_identity_fkey; Type: FK CONSTRAINT; Schema: public; Owner: poem
 --
 
@@ -1098,6 +1343,22 @@ ALTER TABLE ONLY comment
 
 ALTER TABLE ONLY content
     ADD CONSTRAINT content_id_fkey FOREIGN KEY (id) REFERENCES representation(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fkey_friend_identity2; Type: FK CONSTRAINT; Schema: public; Owner: poem
+--
+
+ALTER TABLE ONLY friend
+    ADD CONSTRAINT fkey_friend_identity2 FOREIGN KEY (friend_id) REFERENCES identity(id) ON DELETE CASCADE;
+
+
+--
+-- Name: friends_fkey_identity1; Type: FK CONSTRAINT; Schema: public; Owner: poem
+--
+
+ALTER TABLE ONLY friend
+    ADD CONSTRAINT friends_fkey_identity1 FOREIGN KEY (subject_id) REFERENCES identity(id) ON DELETE CASCADE;
 
 
 --
@@ -1196,30 +1457,6 @@ REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
--- Table: friend
-
--- DROP TABLE friend;
-
-CREATE TABLE friend
-(
-  id serial NOT NULL,
-  subject_id integer NOT NULL,
-  friend_id integer NOT NULL,
-  CONSTRAINT friend_pkey PRIMARY KEY (id),
-  CONSTRAINT fkey_friend_identity2 FOREIGN KEY (friend_id)
-      REFERENCES identity (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT friends_fkey_identity1 FOREIGN KEY (subject_id)
-      REFERENCES identity (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE
-)
-WITH (OIDS=FALSE);
-ALTER TABLE friend OWNER TO poem;
-
-CREATE INDEX friend_identity_idx
-   ON friend USING btree (subject_id, friend_id);
 
 
 --

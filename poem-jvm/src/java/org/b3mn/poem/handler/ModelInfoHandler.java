@@ -75,6 +75,7 @@ public class ModelInfoHandler extends  HandlerBase {
 	
 	@Override
     public void doPost(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws Exception {
+
 		String title = request.getParameter("title");
 		String summary = request.getParameter("summary");
 		Model model = new Model(object);

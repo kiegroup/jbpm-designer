@@ -51,7 +51,7 @@ public class UserHandler extends  HandlerBase {
 
 		userObject.put("currentLanguage", currentLanguage);
 		userObject.put("userTags", new JSONArray(user.getTags()));
-		userObject.put("friends", new JSONArray(user.getFriendOpenIds()));
+		userObject.put("friends", new JSONObject(user.getFriendOpenIds()));
 		
 		response.getWriter().print(userObject.toString());
 		response.setStatus(200);
