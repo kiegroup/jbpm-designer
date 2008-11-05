@@ -31,9 +31,9 @@ if(!Repository.Core) Repository.Core = {};
 
 Repository.Core.Repository = {
 		
-		construct : function(currentUser) {
+		construct : function() {
 			arguments.callee.$.construct.apply(this, arguments); // call super class constructor
-			this._currentUser = decodeURI( currentUser );
+			this._currentUser = decodeURI( Repository.currentUser );
 			this._publicUser = 'public';
 			this._modelCache = new Repository.Core.DataCache();
 
@@ -631,3 +631,4 @@ Repository.Core.graft = function(namespace, parent, t, doc) {
     return e; // return the topmost created node
 };
 
+Ext.onReady(function(){new Repository.Core.Repository();});

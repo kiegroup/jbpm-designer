@@ -99,6 +99,7 @@ public class Repository2Handler extends  HandlerBase {
     	for (String include : java_script_includes) {	
     		out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository2/" + include + ".js\"></script>");
     	}*/
+    	out.println("<script type=\"text/javascript\">if(!Repository) var Repository = {}; Repository.currentUser='" + subject.getUri() + "';</script>");  
     	out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository2/repository2.js\"></script>");
     	out.println("<script src=\"" + backend_path + "/i18n/translation_en_us.js\" type=\"text/javascript\" ></script>\n"); 
     	out.println(languageFiles);
@@ -109,7 +110,7 @@ public class Repository2Handler extends  HandlerBase {
     	//out.println("<script type=\"text/javascript\">Ext.onReady(function(){new Repository.Core.Repository(\"" + subject.getUri() + "\");});</script>");  
     	out.println("<title>ORYX - Repository 2.0 (BETA)</title>");
     	out.println("</head>");
-    	out.println("<body onLoad=\"Ext.onReady(function(){new Repository.Core.Repository('" + subject.getUri() + "');});\">");
+    	out.println("<body>");
     	out.println("</body>");
     	out.println("</html>");
 	}
