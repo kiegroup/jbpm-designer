@@ -72,14 +72,47 @@ public class EPCStepThroughInterpreter implements IStepThroughInterpreter {
 			}
 			
 			if(fire){
-				changedObjects.add(changedObject);
-				nodeNewMarkings = nodeNewMarking.newMarking.propagate(epcDiag);
-				changedObjects.addAll(getFireableNodes());
+				fireMarking(nodeNewMarking.newMarking, changedObject);
 				return true;
 			}
 		}
 		
 		return false;
+	}
+	
+	/* Fire given marking. Normally, marking.node would be added to changedObjects,
+	 * but by giving a change object directly, this behavior can be avoided. 
+	 * This method performs automatic execution of Events, XOR-Joins and AND-Connectors,
+	 * depending on auto swtich level
+	 */
+	//TODO implement auto switch level
+	protected void fireMarking(Marking marking, DiagramObject changedObject){
+		changedObjects.add(changedObject);
+		nodeNewMarkings = marking.propagate(epcDiag);
+		
+		boolean changed = true;
+		
+		// Perform some automatic execution of AND connectors, XOR-joins and events
+		while(changed && this.getFireableNodes().size() > 0){
+			NodeNewMarkingPair markingPairToFire = null;
+			for(NodeNewMarkingPair nodeNewMarking : nodeNewMarkings){
+				DiagramNode node = nodeNewMarking.node;
+				if(node.getType().equals(Marking.AND_CONNECTOR) ||
+						node.getType().equals(Marking.EVENT) ||
+						(node.getType().equals(Marking.XOR_CONNECTOR)) && node.getOutgoingEdges().size() == 1){
+					markingPairToFire = nodeNewMarking;
+					break; //leave for loop because markings have changed
+				}
+			}
+			changed = (markingPairToFire != null);
+			
+			if(markingPairToFire != null){
+				changedObjects.add(markingPairToFire.node);
+				nodeNewMarkings = markingPairToFire.newMarking.propagate(epcDiag);
+			}
+		}
+		
+		changedObjects.addAll(getFireableNodes());
 	}
 
 	protected List<DiagramNode> getFireableNodes() {
@@ -107,13 +140,18 @@ public class EPCStepThroughInterpreter implements IStepThroughInterpreter {
 			} else {
 				sb.append(buildChangedObjsString(object.getResourceId(), 1, fireableObjects.contains(object)));
 			}
+			
+			// For deactivating control flows coming from xor connectors
+			//TODO this should be changed for OR Splits!!!!
+			if(Marking.CONTROL_FLOW.equals(object.getType())) {
+				DiagramEdge cf = (DiagramEdge)object;
+				for(DiagramEdge edge : cf.getSource().getOutgoingEdges()){
+					if(edge != cf){
+						sb.append(buildChangedObjsString(edge.getResourceId(), 0, false));
+					}
+				}
+			}
 		}
-		// XOR Splits
-		/*
-		 * for(DiagramObject d : changedXORSplits) {
-		 * sb.append(d.getResourceId()); // TimesExecuted is not calculated for
-		 * these sb.append(",-1,f;"); }
-		 */
 
 		return sb.toString();
 	}
