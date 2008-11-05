@@ -232,7 +232,7 @@ Repository.Plugins.TagInfo = {
 		if( !tagname || tagname.length <= 0 ){ return }
 		
 		
-		tagname = tagname.split(",").map(function(text){ return escape( text.strip() ) }).compact().join(",")
+		tagname = tagname.split(",").map(function(text){ return text.blank() ? null : escape( text.strip() ) }).compact().join(",")
 		
 		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tagname}, null, true )
 		
