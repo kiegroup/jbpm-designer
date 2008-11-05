@@ -77,7 +77,7 @@ Repository.Core.Plugin = {
 			panel.items.each(function(item){ panel.remove( item ) }.bind(this));
 		}
 			
-	},	
+	}
 
 };
 

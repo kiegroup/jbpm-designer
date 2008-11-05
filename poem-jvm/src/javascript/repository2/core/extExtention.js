@@ -142,7 +142,7 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 	},
 	cancelEdit: function(){
 		
-	},		
+	}
 });
 
 Ext.reg('rating', Ext.Rating);

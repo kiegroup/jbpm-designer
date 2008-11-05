@@ -355,7 +355,7 @@ Repository.Core.DataCache = {
 						this._busyHandler.end.invoke();
 					}.bind(this)
 				});
-	},
+	}
 
 	
 	
