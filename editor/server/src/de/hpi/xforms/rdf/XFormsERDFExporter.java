@@ -196,12 +196,12 @@ public class XFormsERDFExporter {
 		}
 		
 		// handle model item properties
-		String bindId = element.getAttributes().get("bind");
-		if(bindId!=null) {
-			Bind bind = getBindById(bindId);
+		String ref = element.getAttributes().get("ref");
+		if(ref!=null) {
+			Bind bind = getBindByNodeset(ref);
 			if(bind!=null) {
 				for(String field : bind.getAttributes().keySet()) {
-					if(!field.equals("id"))
+					if(!field.equals("id") && !field.equals("nodeset"))
 						appendXFormsField(writer, field, bind.getAttributes().get(field));
 				}
 			}
@@ -260,9 +260,9 @@ public class XFormsERDFExporter {
 		}
 	}
 	
-	private Bind getBindById(String id) {
+	private Bind getBindByNodeset(String nodeset) {
 		for(Bind bind : context.getForm().getModel().getBinds()) {
-			if(bind.getAttributes().get("id")!=null && bind.getAttributes().get("id").equals(id))
+			if(bind.getAttributes().get("nodeset")!=null && bind.getAttributes().get("nodeset").equals(nodeset))
 				return bind;
 		}
 		return null;

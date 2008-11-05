@@ -635,6 +635,42 @@
 					"length":"50"
 				},
 				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
 					"id":"xf_relevant",
 					"type":"String",
 					"title":"relevant",
@@ -653,6 +689,30 @@
 					"prefix":"oryx",
 					"value":"",
 					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -714,9 +774,45 @@
 					"length":"50"
 				},
 				{
+					"id":"xf_mediatype",
+					"type":"String",
+					"title":"mediatype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A space-separated list of suggested media types",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
 					"id":"xf_readonly",
 					"type":"String",
 					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
 					"prefix":"oryx",
 					"value":"",
 					"description":"Any expression that is convertible to XPath boolean",
@@ -738,12 +834,36 @@
 					"length":"100"
 				},
 				{
-					"id":"xf_mediatype",
+					"id":"xf_calculate",
 					"type":"String",
-					"title":"mediatype",
+					"title":"calculate",
 					"prefix":"oryx",
 					"value":"",
-					"description":"A space-separated list of suggested media types",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -805,30 +925,6 @@
 					"length":"50"
 				},
 				{
-					"id":"xf_readonly",
-					"type":"String",
-					"title":"readonly",
-					"prefix":"oryx",
-					"value":"",
-					"description":"Any expression that is convertible to XPath boolean",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"100"
-				},
-				{
-					"id":"xf_relevant",
-					"type":"String",
-					"title":"relevant",
-					"prefix":"oryx",
-					"value":"",
-					"description":"Any expression that is convertible to XPath boolean",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"100"
-				},
-				{
 					"id":"xf_start",
 					"type":"String",
 					"title":"start",
@@ -863,6 +959,90 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50"
+				},
+				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_relevant",
+					"type":"String",
+					"title":"relevant",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_calculate",
+					"type":"String",
+					"title":"calculate",
+					"prefix":"oryx",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
 				}			
 			]
 		},
@@ -929,9 +1109,33 @@
 					"length":"50"
 				},
 				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
 					"id":"xf_readonly",
 					"type":"String",
 					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
 					"prefix":"oryx",
 					"value":"",
 					"description":"Any expression that is convertible to XPath boolean",
@@ -963,7 +1167,31 @@
 					"optional":true,
 					"refToView":"",
 					"length":"100"
-				}		
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				}
 			]
 		},
 		{
@@ -1388,6 +1616,42 @@
 					"length":"1"
 				},
 				{
+					"id":"xf_selection",
+					"type":"Choice",
+					"title":"selection",
+					"prefix":"oryx",
+					"value":"closed",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"closed",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"open",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"xf_incremental",
+					"type":"Boolean",
+					"title":"incremental",
+					"prefix":"oryx",
+					"value":true,
+					"description":"When true, this form control will generate additional xforms-value-changed events.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
 					"id":"xf_type",
 					"type":"String",
 					"title":"type",
@@ -1470,42 +1734,6 @@
 					"optional":true,
 					"refToView":"",
 					"length":"100"
-				},
-				{
-					"id":"xf_selection",
-					"type":"Choice",
-					"title":"selection",
-					"prefix":"oryx",
-					"value":"closed",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"c1",
-							"value":"closed",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"value":"open",
-							"refToView":""
-						}
-					]
-				},
-				{
-					"id":"xf_incremental",
-					"type":"Boolean",
-					"title":"incremental",
-					"prefix":"oryx",
-					"value":true,
-					"description":"When true, this form control will generate additional xforms-value-changed events.",
-					"readonly":false,
-					"optional":true,
-					"refToView":""
 				}
 			]
 		},
@@ -1568,9 +1796,33 @@
 					"length":"50"
 				},
 				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
 					"id":"xf_readonly",
 					"type":"String",
 					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
 					"prefix":"oryx",
 					"value":"",
 					"description":"Any expression that is convertible to XPath boolean",
@@ -1598,6 +1850,30 @@
 					"prefix":"oryx",
 					"value":"",
 					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -1737,6 +2013,90 @@
 					"optional":true,
 					"refToView":"",
 					"length":"1"
+				},
+				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_relevant",
+					"type":"String",
+					"title":"relevant",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_calculate",
+					"type":"String",
+					"title":"calculate",
+					"prefix":"oryx",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
 				}
 			]
 		},
@@ -1872,12 +2232,84 @@
 					"length":"50"
 				},
 				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
 					"id":"xf_relevant",
 					"type":"String",
 					"title":"relevant",
 					"prefix":"oryx",
 					"value":"",
 					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_calculate",
+					"type":"String",
+					"title":"calculate",
+					"prefix":"oryx",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -1934,12 +2366,84 @@
 					"length":"50"
 				},
 				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
 					"id":"xf_relevant",
 					"type":"String",
 					"title":"relevant",
 					"prefix":"oryx",
 					"value":"",
 					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_calculate",
+					"type":"String",
+					"title":"calculate",
+					"prefix":"oryx",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -1996,12 +2500,84 @@
 					"length":"50"
 				},
 				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
 					"id":"xf_relevant",
 					"type":"String",
 					"title":"relevant",
 					"prefix":"oryx",
 					"value":"",
 					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_calculate",
+					"type":"String",
+					"title":"calculate",
+					"prefix":"oryx",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
@@ -2070,6 +2646,90 @@
 					"prefix":"oryx",
 					"value":"/",
 					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_relevant",
+					"type":"String",
+					"title":"relevant",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_calculate",
+					"type":"String",
+					"title":"calculate",
+					"prefix":"oryx",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
