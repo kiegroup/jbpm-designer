@@ -23,21 +23,19 @@ public class EPCStepThroughInterpreter implements IStepThroughInterpreter {
 	public EPCStepThroughInterpreter(Diagram epcDiag) {
 		this.epcDiag = epcDiag;
 
-		DiagramNode startNode = null;
-		for (DiagramNode node : epcDiag.getNodes()) {
-			if (node.getIncomingEdges().size() == 0) {
-				startNode = node;
-			}
-		}
-
 		Marking marking = new Marking();
 		for (DiagramEdge edge : epcDiag.getEdges()) {
 			marking.applyContext(edge, Marking.Context.WAIT);
 			marking.applyState(edge, Marking.State.NEG_TOKEN);
 		}
-		// TODO what about several startNodes
-		marking.applyState(startNode.getOutgoingEdges().get(0),
-				Marking.State.POS_TOKEN);
+		
+		for (DiagramNode node : epcDiag.getNodes()) {
+			if (node.getIncomingEdges().size() == 0) {
+				marking.applyState(node.getOutgoingEdges().get(0),
+						Marking.State.POS_TOKEN);
+			}
+		}
+
 
 		nodeNewMarkings = marking.propagate(epcDiag);
 
