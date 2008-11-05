@@ -81,7 +81,7 @@ Repository.Plugins.RatingFilter = {
 		// Add grid to panel
 		this.panel.add( this.grid )
 		// Do Layouting
-		this.panel.getEl().setHeight()
+		this.panel.getEl().setHeight();
 		this.panel.doLayout();
 		// Start Editing
 		this.grid.startEditing(0, 1)

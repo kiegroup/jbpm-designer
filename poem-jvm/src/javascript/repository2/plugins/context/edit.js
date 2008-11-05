@@ -60,16 +60,16 @@ Repository.Plugins.Edit = {
 		
 		if( !this.enabled ){ return }
 		
-		
 		// Set absolute Height
 		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
 		
 		var oneIsSelected 	= $H(modelData).keys().length == 1;
 		var data			= oneIsSelected ? modelData.get( modelData.keys()[0] ) : {title:"",summary:""};
+		var hasWriteAccess	= $H(modelData).keys().every( function(key){ return modelData.get( key ).author == this.facade.getCurrentUser() }.bind(this) );
 		
 		// Set Textfields
-		this._enableTextFields( oneIsSelected, data.title, data.summary );
-		this._enableDelete( $H(modelData).keys().length,  modelData)
+		this._enableTextFields( oneIsSelected && hasWriteAccess, data.title, data.summary );
+		this._enableDelete( $H(modelData).keys().length, hasWriteAccess, modelData)
 		
 		// Reset Height;
 		this.panel.getEl().setHeight();
@@ -91,8 +91,11 @@ Repository.Plugins.Edit = {
 		this.controls[2].setDisabled( !enable )
 	},
 	
-	_enableDelete: function( size, modelData ){
+	_enableDelete: function( size, hasWriteAccess, modelData ){
 		
+		size = !hasWriteAccess ? 0 : size;
+		
+		// Disable the button
 		this.controls[3].setDisabled( size <= 0 )
 		
 		var innerText = '<b>' + Repository.I18N.Edit.deleteText + ':</b> ';
@@ -101,7 +104,7 @@ Repository.Plugins.Edit = {
 		} else if( size > 1 ){
 			innerText += new Template(Repository.I18N.Edit.deleteMoreText).evaluate({size: size });			
 		} else {
-			innerText = '<span style="font-style:italic;color:gray;">' + Repository.I18N.Edit.deleteText + '</span>'
+			innerText = '<span style="font-style:italic;color:gray;">' + Repository.I18N.Edit.deleteText + ( !hasWriteAccess ? ": " +  Repository.I18N.Edit.noWriteAccess : '') + '</span>'
 		}
 		
 		if( this.controls[4].getEl() )

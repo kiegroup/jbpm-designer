@@ -31,12 +31,22 @@ if(!Repository.Core) Repository.Core = {};
 
 Repository.Core.Repository = {
 		
+		initialized: false,
+	
 		construct : function() {
+
 			arguments.callee.$.construct.apply(this, arguments); // call super class constructor
 			this._currentUser = decodeURI( Repository.currentUser );
 			this._publicUser = 'public';
 			this._modelCache = new Repository.Core.DataCache();
 
+			this._eventListeners = new Hash();
+			
+			this._initializeLoadEvent();
+			var loadMask = this.showMask();
+			
+			// After 300 milsec after initialized, hide loading panel
+			this.on('initialized', setTimeout.bind( null, function(){ this.hideMask( loadMask )}.bind(this), 300) );
 			
 			// Event handler
 			this._viewChangedHandler = new EventHandler();
@@ -60,15 +70,90 @@ Repository.Core.Repository = {
 			this._plugins = [];
 			this._views = new Hash();
 			this._currentView = "";
-			
+									
 			this._bootstrapUI();
-			
+					
 			// Loads all required plugins which 
 			// are specified in the plugins.xml
 			this._loadPlugins();
 			
 			this.setSort('lastChange', Repository.Config.SORT_DESC);
 			
+			
+ 		},
+		
+		_initializeLoadEvent: function(){
+			
+			var bh = this._modelCache.getBusyHandler();
+			
+			var startCount = 0;
+			
+			var increase = function(){ startCount++ };
+			var decrease = function(){startCount--; if(startCount <= 0){ finished() } }.bind(this) 
+			var finished = function(){ 
+				if( this.initialized ){ return }
+				bh.start.unregisterCallback(increase)
+				bh.end.unregisterCallback(decrease)
+				this.initialized = true;
+				this.raise('initialized') 
+			}.bind(this)
+			
+			// For each start while loading time, raise the count
+			bh.start.registerCallback( increase )
+			// For each finishing while loading time, remove a count, and if complete finished, raise event
+			bh.end.registerCallback( setTimeout.bind( null, decrease, 250) )	
+		},
+		
+	
+		/**
+		 * Implementation of an event listener
+		 * @param {Object} event
+		 * @param {Object} fn
+		 */
+		on: function(event, fn){
+			if( !(fn instanceof Function &&  typeof event == "string") ){ return }
+			
+			if( !this._eventListeners.get( event )){
+				this._eventListeners.set( event, [])
+			}
+			
+			this._eventListeners.get( event ).push( fn )			
+		},
+		
+		/**
+		 * Raises the event and call every listener
+		 * @param {Object} event
+		 */
+		raise: function(event){
+			if( !(typeof event == "string" && this._eventListeners.get( event )) ){ return }
+						
+			this._eventListeners.get( event ).each(function(fn){
+				fn.apply(fn)
+			})			
+		},
+		
+		
+		showMask: function() {
+			
+			var loadMask = new Ext.LoadMask(Ext.getBody(), {
+                        msg: Repository.I18N.Repository.loadingText
+                    });
+           	loadMask.show();
+			loadMask.el._mask.applyStyles('background-color:#FFFFFF;opacity:1.0;')
+			
+			return loadMask;
+		},
+		
+		hideMask: function( mask ){
+			
+			var duration = 0.5;
+			
+			mask.el._mask.fadeOut({
+									duration	: duration, 
+									useDisplay	: true, 
+									easing		: 'easeOut',
+									callback	: function(){ mask.hide() }
+								})			
 		},
 		
 		getFacade : function() {
@@ -83,7 +168,7 @@ Repository.Core.Repository = {
 						modelCache 			: this._modelCache,
 						
 						isPublicUser 		: this.isPublicUser.bind(this),
-						
+						getCurrentUser		: this.getCurrentUser.bind(this),
 						setSort				: this.setSort.bind(this),
 						getSort				: this.getSort.bind(this),
 						
@@ -117,7 +202,11 @@ Repository.Core.Repository = {
 		isPublicUser: function() {
 			return this._currentUser == this._publicUser;
 		},
-		
+
+		getCurrentUser: function() {
+			return this._currentUser;
+		},
+				
 		setSort : function(sort, direction) {
 			this._currentSort 			= sort;
 			this._currentSortDirection	= direction ? direction : Repository.Config.SORT_DESC;
@@ -229,16 +318,19 @@ Repository.Core.Repository = {
 			}
 		
 			if(this.isPublicUser()){
-	
+				
+				Ext.MessageBox.buttonText.yes 	= Repository.I18N.Repository.yes;
+				Ext.MessageBox.buttonText.no 	= Repository.I18N.Repository.no;
+				
 				Ext.Msg.show({
-				   title: Repository.I18N.Repository.noSaveTitle,
-				   msg: Repository.I18N.Repository.noSaveMessage,
-				   buttons: Ext.Msg.YESNO,
-				   fn: function(btn, text){
-				   		if(btn == Repository.I18N.Repository.yes){
-							callback();
-						}
-				   }
+				   title	: Repository.I18N.Repository.noSaveTitle,
+				   msg		: Repository.I18N.Repository.noSaveMessage,
+				   buttons	: Ext.Msg.YESNO,
+				   fn		: function(btn, text){
+							   		if(btn == "yes"){
+										callback();
+									}
+							   }
 				});
 						
 			} else {
@@ -460,12 +552,21 @@ Repository.Core.Repository = {
 			files.each(function(file){
 
 				// prepare a script tag and place it in html head.
-				var head = document.getElementsByTagName('head')[0];
+				/*var head = document.getElementsByTagName('head')[0];
 				var s = document.createElementNS(XMLNS.XHTML, "script");
 				s.setAttributeNS(XMLNS.XHTML, 'type', 'text/javascript');
 			   	s.src = prefixURL + file;
 		
-			   	head.appendChild(s);
+			   	head.appendChild(s);*/
+				
+				new Ajax.Request( prefixURL + file ,{
+					method: 'get',
+					asynchronous : false,
+					onSuccess: function(resp){
+						eval( resp.responseText )
+					}
+				})
+				
 							
 			});
 			
@@ -555,8 +656,9 @@ Repository.Core.Repository = {
 									this._controls.centerPanel,
 						            this._controls.leftPanel,	
 								    this._controls.rightPanel
-							       ]
-					});
+							       ]});
+			
+			this._viewport.doLayout();		
 		}
 };
 

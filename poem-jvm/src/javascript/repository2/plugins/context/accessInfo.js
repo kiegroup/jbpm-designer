@@ -67,54 +67,72 @@ Repository.Plugins.AccessInfo = {
 		var readers 		= [];
 		var owner			= "";
 		var isPublic		= false;
-			
-		$H(modelData).each(function( pair ){ 
+		
+		var currentUser		= this.facade.getCurrentUser();
+		var hasWriteAccess	= true;
+		
+		// FOR EACH Model			
+		$H(modelData).each(function( pair ){ 	
+		
+						var hasWriteAccessForThatModel = false;
+		
+						// FOR EACH Access-Rights
 						$H(pair.value).each(function( access ){
+							
+							var value = decodeURI( access.key );
+							
+							hasWriteAccessForThatModel = hasWriteAccessForThatModel || ( value == currentUser && (access.value == "write" || access.value == "owner" ))
+							
 							if( modelData.every(function( spair ){
 									return $H(spair.value).some(function(saccess){ return access.key == saccess.key && access.value == saccess.value})
 								}) ){
 								
-								var value = decodeURI( access.key );
 								if( access.key == "public" ){
 									isPublic = true;
 								} else if( access.value == "write" ){
 									contributers.push( value )
-								} else if( access.value == "owner" ) {
-									owner = value
 								} else if( access.value == "read" ){
 									readers.push( value )
+								} else if( access.value == "owner" ) {
+									owner = value
 								}
 							} 
+							
 						})
+						
+						hasWriteAccess = hasWriteAccess && hasWriteAccessForThatModel;
 					})
 				
 		
-		this._setPublic( isPublic, oneIsSelected )
-		this._setOwner( owner )
-		this._setContributer( contributers.uniq() )
-		this._setReader( readers.uniq() )		
+		// Get the write access
+		owner == this.facade.getCurrentUser() || contributers.include( this.facade.getCurrentUser() )
+		
+		this._setPublic( isPublic, oneIsSelected, !this.facade.isPublicUser() && hasWriteAccess )
+		this._setOwner( owner, $H(modelData).keys().length > 1 )
+		this._setContributer( contributers.uniq(), !this.facade.isPublicUser() &&  hasWriteAccess)
+		this._setReader( readers.uniq(), !this.facade.isPublicUser() &&  hasWriteAccess )		
 	
 
 		// Enable/Disable the controls
 		if( this.controls ){
 			this.controls.each(function(co){
-				co.setDisabled( isPublicUser || !oneIsSelected )
+				co.setDisabled( isPublicUser || !oneIsSelected || !hasWriteAccess )
 			}.bind(this))
 			// Reset textfield
-			this.controls[0].setValue("")
+			this.controls[0].setValue( oneIsSelected && !hasWriteAccess ? Repository.I18N.AccessInfo.noWritePermission : '')
 		}
 
 		// Reset Height;
 		this.panel.getEl().setHeight()	
 	},
 	
-	_setPublic: function( isPublic, oneIsSelected ){
+	_setPublic: function( isPublic, oneIsSelected, writeAccess ){
 
 		// Check is the values has been changed
-		if( this._lastPublicAnSelected && this._lastPublicAnSelected == isPublic + "" + oneIsSelected ){
+		if( this._lastPublicAndSelected && this._lastPublicAndSelected == isPublic + "" + oneIsSelected + "" + writeAccess ){
 			return
 		} else {
-			this._lastPublicAnSelected = isPublic + "" + oneIsSelected;
+			this._lastPublicAndSelected = isPublic + "" + oneIsSelected + "" + writeAccess;
 		}
 		
 		// Remove children
@@ -131,13 +149,13 @@ Repository.Plugins.AccessInfo = {
 				label	= {text: Repository.I18N.AccessInfo.notPublicText , xtype:'label', style:"font-style:italic;color:gray;"};			
 			}
 			// Add the content to the panel		
-			this._addItems( this.myPublicPanel, this.facade.isPublicUser() ? [label] : [label, button] )			
+			this._addItems( this.myPublicPanel, !writeAccess ? [label] : [label, button] )			
 		} else {
 			this._addItems( this.myPublicPanel, [ {text: Repository.I18N.AccessInfo.noneIsSelected, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		}	
 	},
 
-	_setOwner: function( owner ){
+	_setOwner: function( owner, moreThanOneIsSelected ){
 
 		// Check is the values has been changed
 		if( this._lastOwner && this._lastOwner.toString() == owner.toString() ){
@@ -153,42 +171,46 @@ Repository.Plugins.AccessInfo = {
 		// Set the owner
 		if( owner ){
 			this._addItems( this.myOwnerPanel, [ {text: owner, xtype:'label'}] )	
+		} else if( moreThanOneIsSelected ) {
+			this._addItems( this.myOwnerPanel, [ {text: Repository.I18N.AccessInfo.several, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		} else {
 			this._addItems( this.myOwnerPanel, [ {text: Repository.I18N.AccessInfo.none, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		}
 							
 	},
 
-	_setContributer: function( contributers ){
+	_setContributer: function( contributers, writeAccess ){
 		
 		// Check is the values has been changed
-		if( this._lastContributers && this._lastContributers.toString() == contributers.toString() ){
+		if( this._lastContributers && this._lastContributers.toString() == contributers.toString() && this._lastContributersWrite == writeAccess ){
 			return
 		} else {
-			this._lastContributers = contributers;
+			this._lastContributers 		= contributers;
+			this._lastContributersWrite = writeAccess;
 		}
 		
 		// Remove children
 		this._deleteItems( this.myContrPanel );
 
-		var contributerButtons 	= this._generateButtons( contributers, !this.facade.isPublicUser() );
+		var contributerButtons 	= this._generateButtons( contributers, writeAccess );
 		this._addItems( this.myContrPanel,  contributerButtons )
 						
 	},
 
-	_setReader: function( readers ){
+	_setReader: function( readers, writeAccess ){
 
 		// Check is the values has been changed
-		if( this._lastReaders && this._lastReaders.toString() == readers.toString() ){
+		if( this._lastReaders && this._lastReaders.toString() == readers.toString() && this._lastReadersWrite == writeAccess ){
 			return
 		} else {
-			this._lastReaders = readers;
+			this._lastReaders 		= readers;
+			this._lastReadersWrite 	= writeAccess;
 		}
 				
 		// Remove children
 		this._deleteItems( this.myReadrPanel );		
 		
-		var readerButtons 		= this._generateButtons( readers, !this.facade.isPublicUser() );
+		var readerButtons 		= this._generateButtons( readers, writeAccess );
 		this._addItems( this.myReadrPanel,  readerButtons )
 	},
 				
@@ -233,7 +255,7 @@ Repository.Plugins.AccessInfo = {
 	
 	_generateData: function(){
 
-		var types = this.facade.modelCache.getFriends().map(function(item) { return [ unescape(item) ]; }.bind(this));
+		var types = $H(this.facade.modelCache.getFriends()).keys().map(function(item) { return [ unescape(item) ]; }.bind(this));
 
 		this.dataStore =  new Ext.data.SimpleStore({
 	        fields	: ['friend'],
