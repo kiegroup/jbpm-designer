@@ -46,7 +46,7 @@ Repository.Plugins.FriendFilter = {
 	
 	_generateGUI: function(){
 		
-		var types = $H(this.facade.modelCache.getFriends()).map(function(item) { return int(item.value) > 0 ? [ unescape(item.key) + " (" +  item.value + ")"] : null }.bind(this)).compact();
+		var types = $H(this.facade.modelCache.getFriends()).map(function(item) { return Number(item.value) > 0 ? [ unescape(item.key) + " (" +  item.value + ")"] : null }.bind(this)).compact();
 
 		if( this.types && types && types instanceof Array && types.length > 0 && types.toString() == this.types.toString() ){
 			return 
