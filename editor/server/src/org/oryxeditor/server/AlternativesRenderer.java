@@ -40,7 +40,13 @@ public class AlternativesRenderer extends HttpServlet {
 	
 	String tmpPath = this.getServletContext().getRealPath("/")
 	+ File.separator + "tmp" + File.separator;
-
+	
+	//create tmp folder
+	File tmpFolder = new File(tmpPath);
+	if(!tmpFolder.exists()) {
+		tmpFolder.mkdirs();
+	}
+	
 	this.baseFilename = String.valueOf(System.currentTimeMillis());
 	this.inFile = tmpPath + this.baseFilename + ".svg";
 	this.outFile = tmpPath + this.baseFilename + ".pdf";
