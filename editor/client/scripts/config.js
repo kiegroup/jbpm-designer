@@ -115,6 +115,8 @@ ORYX.CONFIG = {
 	EVENT_ARRANGEMENT_BACKWARD:		"arrangement.setBackward",
 	EVENT_PROPWINDOW_PROP_CHANGED:	"propertyWindow.propertyChanged",
 	EVENT_LAYOUT_ROWS:				"layout.rows",
+	EVENT_LAYOUT_BPEL:				"layout.BPEL",
+	EVENT_LAYOUT_BPEL_SINGLECHILD:  "layout.BPEL.singlechild",
 	EVENT_AUTOLAYOUT_LAYOUT:		"autolayout.layout",
 	
 	/* Selection Shapes Highlights */
