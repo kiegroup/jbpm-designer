@@ -107,7 +107,7 @@ if(!ORYX.I18N.BPELSupport) ORYX.I18N.BPELSupport = {};
 
 ORYX.I18N.BPELSupport.group = "BPEL";
 ORYX.I18N.BPELSupport.exp = "Export BPEL";
-ORYX.I18N.BPELSupport.expDesc = "Exporr diagram to BPEL";
+ORYX.I18N.BPELSupport.expDesc = "Export diagram to BPEL";
 ORYX.I18N.BPELSupport.imp = "Import BPEL";
 ORYX.I18N.BPELSupport.impDesc = "Import a BPEL file";
 ORYX.I18N.BPELSupport.selectFile = "Select a BPEL file to import";
