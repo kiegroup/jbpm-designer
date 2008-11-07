@@ -7,6 +7,12 @@
 
 	<xsl:output method="xml" />
 
+		 <xsl:message>
+		 hallooo
+      <xsl:copy-of select="$type"/>
+    </xsl:message>
+
+
 	<xsl:template match="rdf:Description">	
 		<xsl:variable name="typeString" select="./oryx:type" />	
 		<xsl:variable name="type">
@@ -14,8 +20,10 @@
 				<xsl:with-param name="typeString" select="$typeString" />
 			</xsl:call-template>
 		</xsl:variable>
+		
+		
 			
-		<xsl:if test="$type='BPEL'">
+		<xsl:if test="$type='process'">
 			<!-- BPEL -->
 			<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
 			<process>
