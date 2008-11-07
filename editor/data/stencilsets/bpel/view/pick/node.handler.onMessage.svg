@@ -53,5 +53,10 @@
 		fill="none" 
 		stroke-width="1" 
 		points="279,45 279,55 295,55 295,45 279,45 287,51 295,45" />
+  	<text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">onMessage</text>
   </g>
 </svg> 

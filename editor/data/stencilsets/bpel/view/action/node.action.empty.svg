@@ -49,12 +49,13 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
-    <text 
-    	font-size="14" 
-    	id="label" 
-    	x="50" 
-    	y="50" 
-    	oryx:align="middle center" 
-    	stroke="black"></text>
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="40" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>
   </g>
 </svg>

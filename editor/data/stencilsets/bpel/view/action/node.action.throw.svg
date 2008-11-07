@@ -49,32 +49,22 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
-    <text 
-    	font-size="14" 
-    	id="label" 
-    	x="50" 
-    	y="50" 
-    	oryx:align="middle center" 
-    	stroke="black"></text>
-    <circle
-       r="15"
-       cy="16"
-       cx="16"
-       oryx:resize="vertical horizontal"
-       id="mainBody"
-       stroke="black" fill="white" stroke-width="1"/>
-    <circle
-       r="12"
-       cy="16"
-       cx="16"
-       oryx:resize="vertical horizontal"
-       stroke="black" fill="white" stroke-width="1"  />      
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="40" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>   
     <path
-       oryx:resize="vertical horizontal"
-       d="M 21.053986,23.281636 L 21.053986,18.671446 L 24.302916,20.840946 L 21.053986,23.281636 z 
-       M 7.6972361,21.112146 L 20.692986,21.112146
-       M 15.424312,16.657936 L 15.424312,19.464656
-       M 15.492135,4.5036074 L 15.492135,15.212115"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34357333px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+         style="fill:black;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10"
+         d="M 22.820839,11.171502 L 19.36734,24.58992 L 13.54138,14.281819 L 9.3386512,20.071607 L 13.048949,6.8323057 L 18.996148,16.132659 L 22.820839,11.171502 z"
+         id="errorPolygon" />
+    <text 
+    	oryx:anchors="top left"
+    	x="35" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">throw</text> 
   </g>
 </svg>

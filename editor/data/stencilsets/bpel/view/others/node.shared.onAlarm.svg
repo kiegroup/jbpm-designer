@@ -47,14 +47,14 @@
 	   fill="white"
        stroke="black" 
        stroke-width="1"  />
-	<circle 
-		oryx:anchors="right" 
-		cx="284" 
-		cy="50" 
-		r="10" 
-		stroke="black" 
-		fill="none" 
-		stroke-width="1" />
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="70" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>
     <path 
     	oryx:anchors="right" 
     	d="	M 284 40 L 284 43.5
@@ -72,5 +72,10 @@
     		M 286 43 L 284 50 L 288 50" 
     	fill="none" 
     	stroke="black" />
+    <text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">onAlarm</text>
   </g>
 </svg> 

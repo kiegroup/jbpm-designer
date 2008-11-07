@@ -49,38 +49,32 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="40" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>
+     <rect
+       y="10"
+       x="12"
+       height="7.5"
+       width="20"
+       oryx:anchors="top left"
+       style="fill:#ffffff;stroke:#000000;stroke-width:1" />
+	 <rect
+	     y="13"
+	     x="9"
+	     height="7.5"
+	     width="20"
+	     oryx:anchors="top left"
+	     style="fill:#ffffff;stroke:#000000;stroke-width:1" /> 
     <text 
-    	font-size="14" 
-    	id="label" 
-    	x="50" 
-    	y="50" 
-    	oryx:align="middle center" 
-    	stroke="black"></text>
-    <rect
-		 style="opacity:1;fill-opacity:0.89019607999999983;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-rule:evenodd;fill:none"
-		 id="rect3354"
-		 width="13.3125"
-		 height="7.875"
-		 x="9.75"
-		 y="11.125"
-		 rx="0"
-		 ry="3.1875" />
-  	<rect
-		 style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-		 id="rect4810"
-		 width="13.3125"
-		 height="7.875"
-		 x="12.84375"
-		 y="8.5"
-		 rx="0"
-		 ry="3.1875" />
-  	<path
-	     style="fill:#f9f9f9;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-	     d="M 13.191961,15.576157 L 13.12567,15.642448"
-	     id="path4940" />
-  	<path
-	     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-	     d="M 13.258252,16.272215 C 13.247204,16.272215 13.236155,16.272215 13.258252,16.272215 z"
-	     id="path4942" /> 
+    	oryx:anchors="top left"
+    	x="35" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">copy</text>
   </g>
 </svg>

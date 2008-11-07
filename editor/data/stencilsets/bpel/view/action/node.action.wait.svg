@@ -49,21 +49,14 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
-    <text 
-    	font-size="14" 
-    	id="label" 
-    	x="50" 
-    	y="50" 
-    	oryx:align="middle center" 
-    	stroke="black"></text>
-    <circle 
-    	oryx:resize="vertical horizontal" 
-    	cx="16" 
-    	cy="16" 
-    	r="15" 
-    	stroke="black" 
-    	fill="white" 
-    	stroke-width="1" />
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="40" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>
     <circle 
     	oryx:resize="vertical horizontal" 
     	cx="16" 
@@ -97,5 +90,10 @@
     		M 18 9 L 16 16 L 20 16" 
     	fill="none" 
     	stroke="black"/>
+   	<text 
+    	oryx:anchors="top left"
+    	x="35" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">wait</text> 
   </g>
 </svg>

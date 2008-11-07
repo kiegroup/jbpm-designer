@@ -65,12 +65,18 @@
       	stroke-linecap="butt" 
       	stroke-linejoin="miter" 
       	stroke-miterlimit="10" />
-    <text 
-    	font-size="14" 
-    	id="label" 
-    	x="15" 
-    	y="30" 
-    	oryx:align="top center" 
-    	stroke="black"></text>
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="70" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>
+     <text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">comp.Handler</text>
   </g>
 </svg> 

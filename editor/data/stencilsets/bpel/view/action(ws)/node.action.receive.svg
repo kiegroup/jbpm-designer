@@ -49,17 +49,23 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
-    <text 
-    	font-size="14" 
-    	id="label" 
-    	x="50" 
-    	y="50" 
-    	oryx:align="middle center" 
-    	stroke="black"></text>
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="40" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>
 	<path
 	     style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.56707478px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
 	     d="M 10.602343,13.844244 L 21.601132,13.844244 L 21.601132,10.283537 L 28.614853,16.811499 L 21.760535,23.191104 L 21.760535,19.036944 L 10.283537,19.036944 L 10.602343,13.844244 z "
 	     id="path8532" 
-	     oryx:anchors="top left"/>  
+	     oryx:anchors="top left"/>
+	 <text 
+    	oryx:anchors="top left"
+    	x="35" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">receive</text>  
   </g>
 </svg>
