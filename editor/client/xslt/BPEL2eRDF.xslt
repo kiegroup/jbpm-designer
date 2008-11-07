@@ -28,8 +28,20 @@
 		</div>	 
 	</xsl:template>
 	
-	<xsl:template name="add-attributes">
+	
+	<xsl:template name="add-attributes">		
+		<xsl:for-each select="@*">
+			<xsl:variable name="attributeName" select="translate(concat('oryx-',name()),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+				
+			<span>
+				<xsl:attribute name="class">
+					<xsl:value-of select="$attributeName"/>
+				</xsl:attribute>	
+				<xsl:value-of select="."/>
+			</span>	
+		</xsl:for-each>			
 	</xsl:template>
+	
 	
 	<xsl:template name="add-children-nodes">
 		<xsl:param name="parentID"/>
@@ -50,6 +62,11 @@
 		   		<span class="oryx-type">
 					<xsl:value-of select="concat('http://b3mn.org/stencilset/bpel#',name())" />
 				</span>
+				
+				<xsl:call-template name="add-attributes"/>
+				
+				<xsl:call-template name="add-elements"/>			
+						
 				<span class="oryx-bounds">
 					<xsl:value-of select="concat($BoundLUX,',',$BoundLUY,',',$BoundRLX,',',$BoundRLY)" />
 				</span>
@@ -58,8 +75,6 @@
 						<xsl:value-of select="concat('#',$parentID)"/>
 					</xsl:attribute>
 				</a>		
-					
-				<xsl:call-template name="add-attributes"/>
 				
 			</div>	
 			
@@ -72,13 +87,47 @@
 			</xsl:if>				
 		</xsl:for-each>	
 	</xsl:template>
-				
+
+
+	<xsl:template name="add-complex-type-elements">
+	</xsl:template>
+
+
+	<xsl:template name="add-elements">
+		
+		<xsl:call-template name="add-standard-element">
+			<xsl:with-param name="elementName" select="./documentation"/>
+		</xsl:call-template>	
+		
+		<xsl:call-template name="add-complex-type-elements"/>
+	</xsl:template>
+	
+			
 	<xsl:template name="add-render">
 		 <a rel="oryx-render" href="#oryx_1" />
 		<xsl:call-template name="DFS-for-adding-render">
 			<xsl:with-param name="parentID">#oryx_1</xsl:with-param>
 	    </xsl:call-template>
 	</xsl:template>
+	
+	
+	<xsl:template name="add-standard-element">
+		<xsl:param name="elementName"/>
+			
+		<!--???xsl:variable name="valueOfElement" select="$elementName"/>
+		
+		<xsl:if test="not($valueOfElement='')">
+	 		<xsl:variable name="oryxElementName" select="translate(concat('oryx-',$elementName),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+				
+			<span>
+				<xsl:attribute name="class">
+					<xsl:value-of select="$oryxElementName"/>
+				</xsl:attribute>	
+				<xsl:value-of select="$valueOfElement"/>
+			</span>	
+		</xsl:if-->	
+	</xsl:template>
+		
 		
 	<xsl:template name="DFS-for-adding-render">
 		<xsl:param name="parentID"/>
