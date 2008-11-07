@@ -47,7 +47,6 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'maxShape': 0});
 			
         this.facade.offer({
-
 			'name':ORYX.I18N.BPELSupport.imp,
 			'functionality': this.importProcess.bind(this),
 			'group': ORYX.I18N.BPELSupport.group,
@@ -55,7 +54,10 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'description': ORYX.I18N.BPELSupport.impDesc,
 			'index': 1,
 			'minShape': 0,
-			'maxShape': 0}); 
+			'maxShape': 0});
+        
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL, this.handleLayoutEvent.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD, this.handleSingleChildLayoutEvent.bind(this));
 	},
 	
 	exportProcess: function(){
@@ -276,8 +278,21 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		alert(erdfString);
 		this.facade.importERDF( doc );
 
-	}
+	},
 	
+	handleLayoutRows: function(event) {
+		// TODO: realize special BPEL layouting here
+		// main activity: placed left. Handler: Place right.
+		// resize box to size of contained shapes
+		return;
+	},
+	
+	handleSingleChildLayoutEvent: function(event) {
+		// TODO
+		// single child: move to upper left corner
+		// resize box to size of contained shape
+		return;
+	}
 	
 });
 	
