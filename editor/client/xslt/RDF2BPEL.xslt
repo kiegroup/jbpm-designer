@@ -7,12 +7,6 @@
 
 	<xsl:output method="xml" />
 
-		 <xsl:message>
-		 hallooo
-      <xsl:copy-of select="$type"/>
-    </xsl:message>
-
-
 	<xsl:template match="rdf:Description">	
 		<xsl:variable name="typeString" select="./oryx:type" />	
 		<xsl:variable name="type">
