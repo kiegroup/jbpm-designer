@@ -21,8 +21,9 @@ import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Preprocessor;
 import de.hpi.bpmn2pn.converter.STConverter;
-import de.hpi.diagram.Diagram;
-import de.hpi.epc.rdf.EPCDiagramRDFImporter;
+import de.hpi.bpt.process.epc.EPCFactory;
+import de.hpi.bpt.process.epc.IEPC;
+import de.hpi.bpt.process.epc.util.OryxParser;
 import de.hpi.epc.stepthrough.EPCStepThroughInterpreter;
 import de.hpi.petrinet.stepthrough.AutoSwitchLevel;
 import de.hpi.petrinet.stepthrough.STMapper;
@@ -89,8 +90,12 @@ public class StepThroughServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		} else if (type.equals("epc.json")){
-			Diagram diagram = new EPCDiagramRDFImporter(document).loadEPCDiagram();
-			stm = new EPCStepThroughInterpreter(diagram);
+			try{
+				IEPC epcDiagram = new OryxParser(new EPCFactory()).parse(document).get(0); 
+				stm = new EPCStepThroughInterpreter(epcDiagram);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 		
 		try{

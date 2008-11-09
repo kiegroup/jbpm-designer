@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import de.hpi.diagram.Diagram;
-import de.hpi.diagram.DiagramNode;
+import de.hpi.bpt.process.epc.EPC;
+import de.hpi.bpt.process.epc.INode;
 import de.hpi.epc.Marking;
 import de.hpi.epc.Marking.NodeNewMarkingPair;
 
@@ -15,9 +15,9 @@ import de.hpi.epc.Marking.NodeNewMarkingPair;
  * Implementation as proposed by Jan Mendling, p. 90 
  */
 public class ReachabilityGraph {
-	Diagram diag;
+	EPC diag;
 	
-	public ReachabilityGraph(Diagram diag){
+	public ReachabilityGraph(EPC diag){
 		this.diag = diag;
 	}
 	
@@ -41,7 +41,7 @@ public class ReachabilityGraph {
 		}
 	}
 	
-	public void add(Marking fromMarking, DiagramNode node, Marking toMarking){
+	public void add(Marking fromMarking, INode node, Marking toMarking){
 		
 	}
 }
