@@ -101,10 +101,119 @@
 			</xsl:call-template>	
 		</xsl:for-each>	
 		
+		<xsl:for-each select="targets">
+			<xsl:for-each select="joinCondition">
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">joincond_explang"</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
+				</xsl:call-template>
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">joincond_boolexp"</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="."/>
+				</xsl:call-template>
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">joincond_opaque"</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="@opaque"/>
+				</xsl:call-template>
+			</xsl:for-each>		
+		</xsl:for-each>
+		
+		<xsl:if test="name()='copy'">
+			<xsl:call-template name="add-from-spec-elements"/>				
+			<xsl:call-template name="add-to-spec-elements"/>
+		</xsl:if>	
+		
+		<xsl:if test="name()='extensionActivity'">
+			<xsl:for-each select="*">
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">elementname</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="name()"/>
+				</xsl:call-template>
+				
+				<xsl:call-template name="add-attributes"/>
+				
+				<xsl:call-template name="add-elements"/>		
+			</xsl:for-each>	
+		</xsl:if>
+		
+		<xsl:if test="name()='wait'">
+			<xsl:for-each select="*">
+				<xsl:if test="name()='for'">
+					<xsl:call-template name="add-standard-element">
+						<xsl:with-param name="elementName">forOrUntil</xsl:with-param>
+						<xsl:with-param name="valueOfElement">for</xsl:with-param>
+					</xsl:call-template>
+				</xsl:if>
+				<xsl:if test="name()='until'">
+					<xsl:call-template name="add-standard-element">
+						<xsl:with-param name="elementName">forOrUntil</xsl:with-param>
+						<xsl:with-param name="valueOfElement">until</xsl:with-param>
+					</xsl:call-template>
+				</xsl:if>		
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">comum_expressionLanguage</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
+				</xsl:call-template>
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">expressionForOrUntil</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="."/>
+				</xsl:call-template>
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">ForUntil_opaque</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="@opaque"/>
+				</xsl:call-template>
+			</xsl:for-each>	
+		</xsl:if>
+
+		
 		<xsl:call-template name="add-complex-type-elements"/>
 	</xsl:template>
 	
-			
+	<xsl:template name="add-from-spec-elements">
+		<xsl:for-each select="from">
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecvariablename</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@variable"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecpart</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@part"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecpartnerlink</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@partnerLink"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecendpointreference</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@endpointReference"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecquerylanguage</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="query/@queryLanguage"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecquery</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="query"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecproperty</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@property"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecexpressionlanguage</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecexpression</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="."/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">fromspecliteral</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="literal"/>
+			</xsl:call-template>
+		</xsl:for-each>
+	</xsl:template>	
+	
 	<xsl:template name="add-render">
 		 <a rel="oryx-render" href="#oryx_1" />
 		<xsl:call-template name="DFS-for-adding-render">
@@ -129,7 +238,39 @@
 		</xsl:if>	
 	</xsl:template>
 		
-		
+	<xsl:template name="add-to-spec-elements">
+		<xsl:for-each select="to">
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">tospecvariablename</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@variable"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">tospecpart</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@part"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">tospecpartnerlink</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@partnerLink"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">tospecquerylanguage</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="query/@queryLanguage"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">tospecquery</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="query"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">tospecproperty</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="@property"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName">tospecexpression"</xsl:with-param>
+				<xsl:with-param name="valueOfElement" select="."/>
+			</xsl:call-template>
+		</xsl:for-each>
+	</xsl:template>	
+	
 	<xsl:template name="DFS-for-adding-render">
 		<xsl:param name="parentID"/>
 		
