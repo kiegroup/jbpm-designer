@@ -1,0 +1,38 @@
+TODOs for the BPEL stencil set:
+
+fromParent
+----------
+BPEL offers default values of the attributes exitOnStandardFault, suppressJoinFailure.
+The default value is the value of the parent's attribute (and "no" in the case of "process").
+
+Bruno's solution: display "fromParent" as value.
+Drawback: User does not know, which value "fromParent" actually is.
+
+Solution:
+Climb hierarchy tree up and display
+no (fromParent) | yes (fromParent)
+as value.
+
+(And the drop-down filed has three values. E.g.
+no (fromParent)
+yes
+no
+)
+
+invoke is not a structured activity
+-----------------------------------
+Compensationhandler should not be nested in the invoke
+Solution: attached Compensationhandler (e.g. like in BPMN)
+
+
+onAlarm @ scope may only take a scope as child
+----------------------------------------------
+That property is not reflected in bpel.json, since onAlarm is used at pick
+and at scope.
+
+Possible solution:
+Introduce two onAlarms
+
+Drawback: Confusion of the modeler?!
+
+--> will not be realized

@@ -25,11 +25,10 @@
 			"title_de":"process",
 			"description":"Root-Node of a Process",
 			"description_de":"Wurzelknoten des Prozesses",
-			"groups":["Process"],
-			"groups_de":["Process"],
+			"groups":["Process and Scope"],
 			"view":"others/node.Bpel.svg",
 			"icon":"task.png",
-			"roles": ["HandlerHolder","SingleActivityContainer"],
+			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL});
@@ -3085,7 +3084,7 @@
 			"groups_de":["Schleifen"],
 			"view":"loop/loop.foreach.svg",
 			"icon":"forEach.png",
-			"roles": ["Activity","SingleActivityContainer"],
+			"roles": ["Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLEACTIVITY});
@@ -4177,11 +4176,10 @@
 			"title_de":"scope",
 			"description":"One Scope",
 			"description_de":"Ein Scope",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Process and Scope"],
 			"view":"scope/node.scope.svg",
 			"icon":"scope.png",
-			"roles": ["Activity","SingleActivityContainer","HandlerHolder","CompensationHandlerHolder"],
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL});
@@ -4758,8 +4756,8 @@
 			"title_de":"onAlarm",
 			"description":"One element onAlarm",
 			"description_de":"Ein onAlarm-Element",
-			"groups":["Pick","Scope"],
-			"groups_de":["Pick","Scope"],
+			"groups":["Pick","Event Handling"],
+			"groups_de":["Pick","Event Handling"],
 			"view":"others/node.shared.onAlarm.svg",
 			"icon":"onAlarm.png",
 			"roles": ["SingleActivityContainer"],
@@ -4920,12 +4918,10 @@
 			"title_de":"onEvent",
 			"description":"One onEvent from the element EventHandlers",
 			"description_de":"Ein onEvent in der Aktivität EventHandlers",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Event Handling"],
 			"view":"scope/node.handler.onEvent.svg",
 			"icon":"onEvent.png",
-			// TODO : delete role "Activity"
-			"roles": ["SingleActivityContainer"],
+			"roles": [],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5178,16 +5174,62 @@
 		{
 		
 			"type": "node",
+			"id":"compensationHandler",
+			"title":"compensationHandler",
+			"title_de":"CompensationHandler",
+			"description":"One compensationHandler",
+			"description_de":"Ein Compensationsbehandlung",
+			"groups":["Exception Handling"],
+			"view":"scope/node.compensate.compensateHandler.svg",
+			"icon":"compensationHandler.png",
+			"roles": ["SingleActivityContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
 			"id":"terminationHandler",
 			"title":"terminationHandler",
 			"title_de":"terminationHandler",
 			"description":"One terminationHandler",
 			"description_de":"Ein Termination-Behandlung",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Exception Handling"],
 			"view":"scope/node.handler.terminationHandler.svg",
 			"icon":"termination.png",
-			"roles": ["Handler","SingleActivityContainer"],
+			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5231,8 +5273,7 @@
 			"title_de":"catch",
 			"description":"One catch",
 			"description_de":"Ein catch",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Exception Handling"],
 			"view":"scope/node.handler.catch.svg",
 			"icon":"catch.png",
 			"roles": ["SingleActivityContainer"],
@@ -5337,59 +5378,10 @@
 			"title_de":"catchAll",
 			"description":"One Catch All",
 			"description_de":"Ein Catch All",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Exception Handling"],
 			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
 			"roles": ["SingleActivityContainer"],
-			"layout":function(shape) {		
-				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
- 			},
-			"properties": [
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"title_de":"Dokumentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"title_de":"Hintergrundfarbe",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-		
-			"type": "node",
-			"id":"compensationHandler",
-			"title":"compensationHandler",
-			"title_de":"CompensationHandler",
-			"description":"One compensationHandler",
-			"description_de":"Ein Compensationsbehandlung",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
-			"view":"scope/node.compensate.compensateHandler.svg",
-			"icon":"compensationHandler.png",
-			"roles": ["Handler","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5430,7 +5422,7 @@
 			"id":"throw",
 			"title":"throw",
 			"title_de":"throw",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"description":"An throw activity.",
 			"description_de":"Eine Throw-Aktivität.",
 			"view":"action/node.action.throw.svg",
@@ -5596,7 +5588,7 @@
 			"id":"rethrow",
 			"title":"rethrow",
 			"title_de":"rethrow",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"description":"An rethrow activity.",
 			"description_de":"Eine Rethrow-Aktivität.",
 			"view":"action/node.action.rethrow.svg",
@@ -5736,7 +5728,7 @@
 			"title_de":"compensate",
 			"description":"One Compensate",
 			"description_de":"Ein Compensate",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"view":"compensate/node.compensate.compensate.svg",
 			"icon":"compensation.png",
 			"roles": ["Activity"],
@@ -5874,7 +5866,7 @@
 			"title_de":"compensateScope",
 			"description":"one Compensate Scope",
 			"description_de":"Ein Compensate Scope",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"view":"compensate/node.compensate.compensateScope.svg",
 			"icon":"compensationScope.png",
 			"roles": ["Activity"],
@@ -7064,6 +7056,10 @@
 			{
 				"role":"scope",
 				"contains": ["onEvent","onAlarm","catch","catchAll","terminationHandler","compensationHandler"]
+			},
+			{
+				"role":"onEvent",
+				"contains":["scope"]
 			}
 		]
 	}
