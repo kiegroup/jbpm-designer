@@ -7,27 +7,28 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    width="300"
-   height="250"
+   height="140"
    >
   
   <defs >
   </defs>
+  
   <oryx:magnets>
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:default="yes" />
     <oryx:magnet
        oryx:cx="0"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="left" />
     <oryx:magnet
        oryx:cx="150"
-       oryx:cy="250"
+       oryx:cy="140"
        oryx:anchors="bottom" />
     <oryx:magnet
        oryx:cx="300"
-       oryx:cy="125"
+       oryx:cy="70"
        oryx:anchors="right" />
     <oryx:magnet
        oryx:cx="150"
@@ -38,22 +39,25 @@
 
 
   <g>
-    <rect
-       y="0"
-       x="0"
-       height="250"
-       width="300"
-       id="mainBody"
-	   oryx:resize="vertical horizontal"
-	   fill="white"
-    stroke="black" stroke-width="1"  />
-    <text
-       oryx:rotate="270"
-       id="label"
-       y="125"
-       x="10"
-       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       xml:space="preserve"></text>
+	 <rect
+	     width="300"
+	     height="140"
+	     rx="8"
+	     ry="8"
+	     x="0"
+	     y="0"
+	     id="mainBody"
+	     stroke="#d731d3" 
+	     fill="white" 
+	     stroke-width="1"
+	     oryx:resize="vertical horizontal"
+	     style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
+	  <text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">eventHandler</text>
+    
   
    
   </g>

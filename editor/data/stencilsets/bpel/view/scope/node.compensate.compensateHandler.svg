@@ -45,8 +45,9 @@
        id="mainBody"
 	   oryx:resize="vertical horizontal"
 	   fill="white"
-       stroke="black" 
-       stroke-width="1"  />
+       stroke="#f6f61b" 
+       stroke-width="1"
+       style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
     <polygon 
 		oryx:anchors="right" 
 		stroke="black" 
@@ -54,7 +55,8 @@
 		stroke-width="1" 
       	points="285,42 285,58 275,50"
       	stroke-linecap="butt" 
-      	stroke-linejoin="miter" 
+      	stroke-linejoin="miter"
+      	transform="translate(0,10)"
       	stroke-miterlimit="10" /> 
     <polygon 
 		oryx:anchors="right" 
@@ -63,16 +65,9 @@
 		stroke-width="1" 
       	points="295,42 295,58 285,50"
       	stroke-linecap="butt" 
-      	stroke-linejoin="miter" 
+      	stroke-linejoin="miter"
+      	transform="translate(0,10)"
       	stroke-miterlimit="10" />
-    <text
-       oryx:rotate="270"
-       id="label"
-	   x="10" 
-	   y="70" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>
      <text 
     	oryx:anchors="top left"
     	x="10" 

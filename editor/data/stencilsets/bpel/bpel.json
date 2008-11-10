@@ -5181,7 +5181,7 @@
 			"description_de":"Ein Ereignisbehandlung",
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.eventHandler.svg",
-			"icon":"eventHandler.png",
+			"icon":"handler.png",
 			//TODO:delete role "activity"
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
@@ -5229,7 +5229,7 @@
 			"description_de":"Ein Fehlerbehandlung",
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.faultHandler.svg",
-			"icon":"faultHandler.png",
+			"icon":"handler.png",
 			//TODO:delete role "activity"
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
@@ -5277,7 +5277,7 @@
 			"description_de":"Ein Compensationsbehandlung",
 			"groups":["Exception Handling"],
 			"view":"scope/node.compensate.compensateHandler.svg",
-			"icon":"compensationHandler.png",
+			"icon":"handler.png",
 			//TODO:delete role "activity"
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
@@ -5325,7 +5325,7 @@
 			"description_de":"Ein Termination-Behandlung",
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.terminationHandler.svg",
-			"icon":"termination.png",
+			"icon":"handler.png",
 			//TODO:delete role "activity"
 			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
@@ -6761,7 +6761,7 @@
 			"description":"An Opaque activity.",
 			"description_de":"Eine opake Aktivität.",
 			"view":"action/node.action.opaqueActivity.svg",
-			"icon":"task.png",
+			"icon":"opaqueActivity.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
