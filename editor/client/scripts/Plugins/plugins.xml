@@ -101,11 +101,10 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 		</plugin>
 
-		<!--
-		<plugin source="bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
-			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
+		<!-- plugin for BPMN+ to BPEL4Chor transformation -->
+		<plugin source="bpmnplus2bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
+			<requires namespace="http://b3mn.org/stencilset/bpmnplus#"/>	
 		</plugin>
-		-->
 				
 		<!-- plugin for BPEL import and export --> 
 		<plugin source="bpelSupport.js" name="ORYX.Plugins.BPELSupport">
