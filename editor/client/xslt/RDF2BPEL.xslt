@@ -531,6 +531,26 @@
 					</onEvent>
 				</xsl:if>
 				
+				<!--eventHandler-->
+				<xsl:if test="$type='eventHandler'">
+					<eventHandler>
+						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
+		            </eventHandler>
+				</xsl:if>
+				
+				<!--faultHandler-->
+				<xsl:if test="$type='faultHandler'">
+					<faultHandler>
+						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
+		            </faultHandler>
+				</xsl:if>
+				
 				<!--compensationHandler-->
 				<xsl:if test="$type='compensationHandler'">
 					<compensationHandler>
