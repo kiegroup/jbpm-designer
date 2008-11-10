@@ -290,7 +290,7 @@
 					"id":"variables",
 					"type":"Complex",
 					"title":"variables",
-					"title":"Variablen",
+					"title_de":"Variablen",
 					"value":"",
 					"description":"",
 					"readonly":false,

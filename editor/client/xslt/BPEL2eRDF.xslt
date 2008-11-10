@@ -15,7 +15,7 @@
 				<xsl:call-template name="add-render"/>
 			</div>	
 	         <div id="oryx_1">
-				<span class="oryx-type">http://b3mn.org/stencilset/bpel#BPEL</span>
+				<span class="oryx-type">http://b3mn.org/stencilset/bpel#process</span>
 				<span class="oryx-bounds">114,18,714,518</span>
 				<a rel="raziel-parent" href="#oryx-canvas123"/>
 				<xsl:call-template name="add-attributes"/>
@@ -94,10 +94,12 @@
 
 
 	<xsl:template name="add-elements">
-		
-		<xsl:call-template name="add-standard-element">
-			<xsl:with-param name="elementName" select="./documentation"/>
-		</xsl:call-template>	
+		<xsl:for-each select="documentation">
+			<xsl:call-template name="add-standard-element">
+				<xsl:with-param name="elementName" select="name()"/>
+				<xsl:with-param name="valueOfElement" select="."/>
+			</xsl:call-template>	
+		</xsl:for-each>	
 		
 		<xsl:call-template name="add-complex-type-elements"/>
 	</xsl:template>
@@ -112,9 +114,8 @@
 	
 	
 	<xsl:template name="add-standard-element">
-		<xsl:param name="elementName"/>
-			
-		<!--???xsl:variable name="valueOfElement" select="$elementName"/>
+		<xsl:param name="elementName"/>			
+		<xsl:param name="valueOfElement"/>
 		
 		<xsl:if test="not($valueOfElement='')">
 	 		<xsl:variable name="oryxElementName" select="translate(concat('oryx-',$elementName),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
@@ -125,7 +126,7 @@
 				</xsl:attribute>	
 				<xsl:value-of select="$valueOfElement"/>
 			</span>	
-		</xsl:if-->	
+		</xsl:if>	
 	</xsl:template>
 		
 		
