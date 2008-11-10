@@ -20,7 +20,7 @@
 		<xsl:if test="$type='process'">
 			<!-- BPEL -->
 			<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
-			<process>
+			<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/abstract">
                 <xsl:call-template name="add-standard-attributes"/>
 				
 				<xsl:call-template name="add-documentation-element"/>
