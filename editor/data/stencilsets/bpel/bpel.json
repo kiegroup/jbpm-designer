@@ -117,14 +117,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -799,14 +791,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -1159,14 +1143,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -1458,14 +1434,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -1807,14 +1775,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -2189,14 +2149,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -2330,14 +2282,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -2558,14 +2502,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -2807,14 +2743,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -2991,14 +2919,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -3174,14 +3094,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -3446,14 +3358,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -3483,14 +3387,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -3573,7 +3469,7 @@
 					"type":"Choice",
 					"title":"ignoreMissingFromData",
 					"title_de":"ignoreMissingFromData",
-					"value":"fromParent",
+					"value":"",
 					"tooltip":"Ignoriere fehlende von_Daten",
 					"readonly":false,
 					"optional":true,
@@ -3582,25 +3478,20 @@
 					"wrapLines":false,
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"title_de":"c2",
+							"id":"yes",
+							"title":"yes",
+							"title_de":"ja",
 							"value":"yes",
-							"refToView":""
+							"tooltip":"",
+							"refToView":"none"
 						},
 						{
-							"id":"c3",
-							"title":"c3",
-							"title_de":"c3",
+							"id":"no",
+							"title":"no",
+							"title_de":"nein",
 							"value":"no",
-							"refToView":""
+							"tooltip":"",
+							"refToView":"none"
 						}
 					]
 				},
@@ -4284,14 +4175,6 @@
 							"value":"no",
 							"tooltip":"",
 							"refToView":"none"
-						},
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
 						}
 					]
 				},
@@ -4300,21 +4183,13 @@
 					"type":"Choice",
 					"title":"exitOnStandardFault",
 					"title_de":"beendenMitStandardfehler",
-					"value":"fromParent",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -5613,14 +5488,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -5780,14 +5647,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -5918,14 +5777,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -6055,14 +5906,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -6209,14 +6052,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -6346,14 +6181,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -6559,14 +6386,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -6711,14 +6530,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -6848,14 +6659,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -7001,14 +6804,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
