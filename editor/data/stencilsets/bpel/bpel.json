@@ -5174,6 +5174,102 @@
 		{
 		
 			"type": "node",
+			"id":"eventHandler",
+			"title":"eventHandler",
+			"title_de":"eventHandler",
+			"description":"One eventHandler",
+			"description_de":"Ein Ereignisbehandlung",
+			"groups":["Exception Handling"],
+			"view":"scope/node.handler.eventHandler.svg",
+			"icon":"eventHandler.png",
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"faultHandler",
+			"title":"faultHandler",
+			"title_de":"faultHandler",
+			"description":"One faultHandler",
+			"description_de":"Ein Fehlerbehandlung",
+			"groups":["Exception Handling"],
+			"view":"scope/node.handler.faultHandler.svg",
+			"icon":"faultHandler.png",
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},	
+		{
+		
+			"type": "node",
 			"id":"compensationHandler",
 			"title":"compensationHandler",
 			"title_de":"CompensationHandler",
@@ -5182,7 +5278,8 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"compensationHandler.png",
-			"roles": ["SingleActivityContainer"],
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5229,7 +5326,8 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.terminationHandler.svg",
 			"icon":"termination.png",
-			"roles": ["SingleActivityContainer"],
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5276,7 +5374,8 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.catch.svg",
 			"icon":"catch.png",
-			"roles": ["SingleActivityContainer"],
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5381,7 +5480,8 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
-			"roles": ["SingleActivityContainer"],
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
