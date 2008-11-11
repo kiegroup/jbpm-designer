@@ -73,16 +73,48 @@
 					"value":"http://bpel.com/process",
 					"readonly":false,
 					"optional":false
-				},
+				},			
 				{
 					"id":"abstractProcessProfile",
-					"prefix":"oryx",
-					"type":"String",
+					"type":"Choice",
 					"title":"abstractProcessProfile",
 					"title_de":"abstraktesProzessprofil",
 					"value":"",
+					"description":"observableBehavior - http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08; \ntemplates - http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08",
+					"tooltip":"",
 					"readonly":false,
-					"optional":false
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"observableBehavior",
+							"title_de":"observableBehavior",
+							"value":"observableBehavior",
+							"refToView":"observableBehavior"
+						},
+						{
+							"id":"c2",
+							"title":"templates",
+							"title_de":"templates",
+							"value":"templates",
+							"refToView":"templates"
+						},
+						{
+							"id":"c3",
+							"title":"your Definition",
+							"title_de":"your Definition",
+							"value":"your Definition",
+							"refToView":""
+						},
+						{
+							"id":"c4",
+							"title":"null",
+							"title_de":"leer",
+							"value":"null",
+							"refToView":""
+						}
+					]
 				},
 				{
 					"id":"queryLanguage",
@@ -158,16 +190,6 @@
 							"tooltip":""
 						}
 					]
-				},
-				{
-					"id":"xmlns",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"xmlns",
-					"title_de":"xmlns",
-					"value":"http://docs.oasis-open.org/wsbpel/2.0/process/executable",
-					"readonly":false,
-					"optional":false
 				},
 				{
 					"id":"otherxmlns",

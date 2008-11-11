@@ -48,7 +48,7 @@
 		<xsl:param name="parentBoundLeftUpperX"/>
 		<xsl:param name="parentBoundLeftUpperY"/>
 	
-		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|terminationHandler|catch|catchAll|compensationHandler">
+		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandler|faultHandler|compensationHandler|terminationHandler|catch|catchAll">
 			<xsl:variable name="id" select="concat($parentID,'_',position())" />
 			<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()*3+ 10" />
 			<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()*3+ 10" />
@@ -78,7 +78,7 @@
 				
 			</div>	
 			
-			<xsl:if test="name()='assign' or name()='if' or name()='elseif' or name()='else' or name()='flow' or name()='pick' or name()='onMessage' or name()='sequence' or name()='while' or name()='repeatUntil' or name()='forEach' or name()='scope' or name()='onAlarm' or name()='onEvent' or name()='compensationHandler' or name()='terminationHandler' or name()='catch' or name()='catchAll'">
+			<xsl:if test="name()='assign' or name()='if' or name()='elseif' or name()='else' or name()='flow' or name()='pick' or name()='onMessage' or name()='sequence' or name()='while' or name()='repeatUntil' or name()='forEach' or name()='scope' or name()='onAlarm' or name()='onEvent' or name()='eventHandler'or name()='faultHandler'or name()='compensationHandler' or name()='terminationHandler' or name()='catch' or name()='catchAll'">
 			    <xsl:call-template name="add-children-nodes">
 					<xsl:with-param name="parentID" select="$id"/>	
 					<xsl:with-param name="parentBoundLeftUpperX" select="$BoundLUX"/>
@@ -90,6 +90,7 @@
 
 
 	<xsl:template name="add-complex-type-elements">
+
 	</xsl:template>
 
 
@@ -104,11 +105,11 @@
 		<xsl:for-each select="targets">
 			<xsl:for-each select="joinCondition">
 				<xsl:call-template name="add-standard-element">
-					<xsl:with-param name="elementName">joincond_explang"</xsl:with-param>
+					<xsl:with-param name="elementName">joincond_explang</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
 				</xsl:call-template>
 				<xsl:call-template name="add-standard-element">
-					<xsl:with-param name="elementName">joincond_boolexp"</xsl:with-param>
+					<xsl:with-param name="elementName">joincond_boolexp</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="."/>
 				</xsl:call-template>
 				<xsl:call-template name="add-standard-element">
@@ -166,7 +167,7 @@
 		</xsl:if>
 
 		
-		<xsl:call-template name="add-complex-type-elements"/>
+	<xsl:call-template name="add-complex-type-elements"/>
 	</xsl:template>
 	
 	<xsl:template name="add-from-spec-elements">
@@ -274,7 +275,7 @@
 	<xsl:template name="DFS-for-adding-render">
 		<xsl:param name="parentID"/>
 		
-		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|terminationHandler|catch|catchAll|compensationHandler"> 
+		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandler|faultHandler|compensationHandler|terminationHandler|catch|catchAll"> 
 		    <xsl:variable name="id">
  		    	<xsl:value-of select="concat($parentID,'_',position())"/>
 			</xsl:variable>	
