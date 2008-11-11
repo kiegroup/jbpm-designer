@@ -925,8 +925,8 @@
 		<xsl:variable name="fromspectype" select="./oryx:fromspectype" />
 		<xsl:variable name="fromspecvariablename" select="./oryx:fromspecvariablename" />
 		<xsl:variable name="fromspecpart" select="./oryx:fromspecpart" />
-		<xsl:variable name="fromspecpartnerLink" select="./oryx:fromspecpartnerLink" />
-		<xsl:variable name="fromspecendpointReference" select="./oryx:fromspecendpointReference" />
+		<xsl:variable name="fromspecpartnerLink" select="./oryx:fromspecpartnerlink" />
+		<xsl:variable name="fromspecendpointReference" select="./oryx:fromspecendpointreference" />
 		<xsl:variable name="fromspecquerylanguage" select="./oryx:fromspecquerylanguage" />
 		<xsl:variable name="fromspecquery" select="./oryx:fromspecquery" />
 		<xsl:variable name="fromspecproperty" select="./oryx:fromspecproperty" />
@@ -943,12 +943,12 @@
 					<xsl:value-of select="$fromspecpart" />
 				</xsl:attribute>
 				<xsl:if test="$fromspecquery!='' or $fromspecquerylanguage!=''">
-					<quary>
+					<query>
 						<xsl:attribute name="queryLanguage">
 							<xsl:value-of select="$fromspecquerylanguage" />
 						</xsl:attribute>
 						<xsl:value-of select="$fromspecquery" />
-					</quary>	
+					</query>	
 				</xsl:if>	
 			</xsl:if>
 		
@@ -1182,7 +1182,7 @@
 		<xsl:variable name="tospectype" select="./oryx:tospectype" />
 		<xsl:variable name="tospecvariablename" select="./oryx:tospecvariablename" />
 		<xsl:variable name="tospecpart" select="./oryx:tospecpart" />
-		<xsl:variable name="tospecpartnerLink" select="./oryx:tospecpartnerLink" />
+		<xsl:variable name="tospecpartnerLink" select="./oryx:tospecpartnerlink" />
 		<xsl:variable name="tospecquerylanguage" select="./oryx:tospecquerylanguage" />
 		<xsl:variable name="tospecquery" select="./oryx:tospecquery" />
 		<xsl:variable name="tospecproperty" select="./oryx:tospecproperty" />
@@ -1198,12 +1198,12 @@
 					<xsl:value-of select="$tospecpart" />
 				</xsl:attribute>
 				<xsl:if test="$tospecquery!='' or $tospecquerylanguage!=''">
-					<quary>
+					<query>
 						<xsl:attribute name="queryLanguage">
 							<xsl:value-of select="$tospecquerylanguage" />
 						</xsl:attribute>
 						<xsl:value-of select="$tospecquery" />
-					</quary>	
+					</query>	
 				</xsl:if>
 			</xsl:if>
 					
@@ -1552,7 +1552,7 @@
 			
  		<xsl:if test="$i &lt;= $count">
   			<xsl:variable name="part" select="substring-before(substring-after($data-set, 'part%3A%22'), '%22%2C%20Correlation') " />
- 			<xsl:variable name="fromVariable" select="substring-before(substring-after($data-set, 'Correlation%3A%22'), '%22%7D') " />
+ 			<xsl:variable name="fromVariable" select="substring-before(substring-after($data-set, 'fromVariable%3A%22'), '%22%7D') " />
 			
 			<toPart>
 				<xsl:attribute name="part">

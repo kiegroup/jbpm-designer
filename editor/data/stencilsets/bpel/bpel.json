@@ -1009,8 +1009,8 @@
 							"optional":false 
 						},
 						{
-							"id":"Correlation",
-							"name":"Correlation",
+							"id":"fromVariable",
+							"name":"fromVariable",
 							"type":"searcher",
 							"searchBPELId":"process","searchScopeId":"Scope",
 							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
@@ -1669,8 +1669,8 @@
 							"optional":false 
 						},
 						{
-							"id":"Correlation",
-							"name":"Correlation",
+							"id":"fromVariable",
+							"name":"fromVariable",
 							"type":"searcher",
 							"searchBPELId":"process","searchScopeId":"Scope",
 							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
