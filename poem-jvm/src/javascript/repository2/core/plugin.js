@@ -42,6 +42,8 @@ Repository.Core.Plugin = {
 	
 	dataUris	: [],
 	
+	hidePanel	: false,
+	
 	/**
 	 * 
 	 */
@@ -52,6 +54,10 @@ Repository.Core.Plugin = {
 		if(!this.toolbarButtons) this.toolbarButtons = [];
 		
 		this.panel = this.facade.registerPlugin(this);
+		
+		if( this.hidePanel && this.panel){
+			this.panel.hide();
+		}
 	},
 	preRender: function(modelIds) {
 		if( this.dataUris.length <= 0 ){

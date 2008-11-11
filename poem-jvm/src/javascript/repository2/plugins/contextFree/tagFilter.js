@@ -48,7 +48,8 @@ Repository.Plugins.TagFilter = {
 	_generateGUI: function(){
 
 		var types = this.facade.modelCache.getUserTags().map(function(item) { return [ unescape(item) ];}.bind(this));
-		if( this.types && types && types instanceof Array && types.length > 0 && types.toString() == this.types.toString() ){
+		
+		if( this.types && types && types instanceof Array && types.length > 0 && types.toString() == this.types.toString() ){		
 			return 
 		}
 
@@ -56,6 +57,11 @@ Repository.Plugins.TagFilter = {
 
 		//this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
 		this.deletePanelItems();
+		
+		// Hide the body if there is no tags
+		if( types.length <= 0 && this.panel ){
+				this.panel.collapse();
+		}	
 			
 		
 		//var sm 		= new Ext.grid.CheckboxSelectionModel({listeners :  { selectionchange: this._onButtonClick.bind(this) }});

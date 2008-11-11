@@ -46,7 +46,13 @@ Repository.Core.Repository = {
 			var loadMask = this.showMask();
 			
 			// After 300 milsec after initialized, hide loading panel
-			this.on('initialized', window.setTimeout.bind( null, function(){ this.hideMask( loadMask )}.bind(this), 300) );
+			this.on('initialized', function(){ 
+					
+					this._viewport.doLayout();	
+			
+					window.setTimeout(function(){ this.hideMask(loadMask) }.bind(this), 300) 
+				
+				}.bind(this));
 			
 			// Event handler
 			this._viewChangedHandler = new EventHandler();
@@ -89,9 +95,9 @@ Repository.Core.Repository = {
 			var startCount = 0;
 			
 			var increase = function(){ startCount++ };
-			var decrease = function(){startCount--; if(startCount <= 0){ finished() } }.bind(this) 
+			var decrease = function(){startCount--;  finished() }.bind(this) 
 			var finished = function(){ 
-				if( this.initialized ){ return }
+				if( startCount > 0 || this.initialized ){ return }
 				bh.start.unregisterCallback(increase)
 				bh.end.unregisterCallback(decrease)
 				this.initialized = true;
@@ -102,6 +108,8 @@ Repository.Core.Repository = {
 			bh.start.registerCallback( increase )
 			// For each finishing while loading time, remove a count, and if complete finished, raise event
 			bh.end.registerCallback( function(){ window.setTimeout(decrease, 250) }.bind(this) )	
+			
+			window.setTimeout( finished.bind(this), 200 );
 		},
 		
 	
@@ -397,8 +405,10 @@ Repository.Core.Repository = {
 		},
 		
 		_registerButtonOnToolbar : function(buttonConfig) {
+					
 			if (buttonConfig) {
 				if ( buttonConfig instanceof Ext.Toolbar.Button || (buttonConfig.text != undefined) && (typeof(buttonConfig.handler) == "function")) {
+					
 					var menu = null;
 										
 					// Depending on if there is already a spacer, add the following element befor or behind this
@@ -410,21 +420,28 @@ Repository.Core.Repository = {
 						this._controls.toolbar.addFill();
 						indexSpacer =  this._controls.toolbar.items.length-1;
 					}
-					
+				
+
 					// if the button should be added to a sub menu try to find it and create it if it isn't there
 					if (buttonConfig.menu != undefined) {
+					
+
 						this._controls.toolbar.items.each(function(item) {
 							if ((item.text == buttonConfig.menu) && (item.menu != undefined)) {
 								menu = item.menu;
 							}
 						});
+						
 						// If no menu exists
 						if (menu == null) {
+							
 							menu = new Ext.menu.Menu({items : []});
 							
 							// Insert the button to the particular place
-							this._controls.toolbar.insertButton(
-									indexSpacer ? (region == "right" ? indexSpacer+1 : indexSpacer-1) : this._controls.toolbar.items.length,
+							//this._controls.toolbar.insertButton(
+									//indexSpacer ? (region == "right" ? indexSpacer+1 : indexSpacer-1) : this._controls.toolbar.items.length,
+							// TODO: Add at the particular place --> Like it was the IE raises Errors
+							this._controls.toolbar.add(
 									{
 										//id : buttonConfig.menu,
 										iconCls: 'some_class_that_does_not_exist_but_fixes-rendering repository_ext_btn_align_center', // do not remove!
@@ -436,16 +453,18 @@ Repository.Core.Repository = {
 	                                        autoHide: true
 	                                    }
 									});
+							
 							menu.render();
 						}
 						
 						if( !buttonConfig.iconCls ){
 							buttonConfig.iconCls = 'repository_ext_icon_align_center';
 						}
-						
+
 						menu.addMenuItem( buttonConfig );
-					} else if( buttonConfig instanceof Ext.Toolbar.Button){
 						
+					} else if( buttonConfig instanceof Ext.Toolbar.Button){
+
 							// Insert the button to the particular place
 							this._controls.toolbar.insertButton(
 									indexSpacer ? (region == "right" ? indexSpacer+1 : indexSpacer-1) : this._controls.toolbar.items.length,
@@ -453,6 +472,7 @@ Repository.Core.Repository = {
 							);
 							
 					} else {
+						
 							// Insert the button to the particular place
 							this._controls.toolbar.insertButton(
 									indexSpacer ? (region == "right" ? indexSpacer+1 : indexSpacer-1) : this._controls.toolbar.items.length,
@@ -465,8 +485,10 @@ Repository.Core.Repository = {
 									})
 							);
 					}
+					
 				}
 			}
+			
 		},
 		
 		_registerPluginOnView : function(plugin) {
@@ -515,7 +537,7 @@ Repository.Core.Repository = {
 		},
 		
 		_initializePlugins: function( names ){
-			
+			 
 			names.each(function( name ){
 				
 				// Try to initialize a new plugin-class
@@ -657,8 +679,7 @@ Repository.Core.Repository = {
 						            this._controls.leftPanel,	
 								    this._controls.rightPanel
 							       ]});
-			
-			this._viewport.doLayout();		
+				
 		}
 };
 

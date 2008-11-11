@@ -33,7 +33,9 @@ if(!Repository.Plugins) Repository.Plugins = {};
 Repository.Plugins.BusyIndicator = {
 	
 	startedCount: 0,
-	
+
+	hidePanel: true,
+		
 	construct: function( facade ) {
 		
 		// define Create New Model menu
@@ -57,8 +59,7 @@ Repository.Plugins.BusyIndicator = {
 		bh.start.registerCallback( this._start.bind(this) )
 		bh.end.registerCallback( this._end.bind(this) )
 							
-		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class
-		
+		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class	
 
 	},
 	

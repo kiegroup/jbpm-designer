@@ -49,6 +49,9 @@ Repository.Plugins.FriendFilter = {
 		var types = $H(this.facade.modelCache.getFriends()).map(function(item) { return Number(item.value) > 0 ? [ unescape(item.key), item.value ] : null }.bind(this)).compact();
 
 		if( this.types && types && types instanceof Array && types.length > 0 && types.toString() == this.types.toString() ){
+			if( this.panel && this.panel.body ){
+				this.panel.body.hide();
+			}
 			return 
 		}
 
@@ -56,7 +59,12 @@ Repository.Plugins.FriendFilter = {
 				
 		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
 		this.deletePanelItems();
-				
+
+		// Hide the body if there are no friends
+		if( types.length <= 0 && this.panel ){
+				this.panel.collapse();
+		}	
+						
 		
 		var store 	= new Ext.data.SimpleStore({
 	        fields	: ['friend', 'count'],

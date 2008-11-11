@@ -31,6 +31,9 @@ if(!Repository.Plugins) Repository.Plugins = {};
  */
 
 Repository.Plugins.NewModel = {
+	
+	hidePanel: true,
+	
 	construct: function(facade) {
 
 		//this.name = Repository.I18N.NewModel.name;

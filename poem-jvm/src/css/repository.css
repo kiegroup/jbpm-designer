@@ -1,8 +1,5 @@
 body {
-	background-color: #0102ac;
-	background-image: url(/backend/images/style/bluescreen.jpg);
-	background-position: top center;
-	background-repeat: no-repeat;
+	background-color: #ffffff;
 }
 
 body, td, input, textarea {
