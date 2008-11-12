@@ -108,6 +108,8 @@
 			<lib dir="${lib-dir}" />
 			<classes dir="${bin-dir}" />
 			<metainf file="build/LICENSE"/>
+			
+			<fileset file="favicon.ico"/>
 		</war>
 	</target>
 	
@@ -432,8 +434,9 @@
 			
 			<metainf file="${editor-build-root}/LICENSE"/>
             <metainf file="${editor-build-root}/LIBRARIES"/>
-			<metainf file="etc/context.xml"/>
 			<metainf file="${editor-build-root}/VERSION"/>
+			
+			<fileset file="favicon.ico"/>
         </war>
         
           

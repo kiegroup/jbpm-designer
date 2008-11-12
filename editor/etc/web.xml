@@ -306,4 +306,11 @@
 		<extension>css</extension>
 		<mime-type>text/css</mime-type>
 	</mime-mapping>
+	
+	<!-- Set Favourites Icon MIME-Type --> 
+	<mime-mapping>
+	    <extension>ico</extension>
+	    <mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+
 </web-app>
