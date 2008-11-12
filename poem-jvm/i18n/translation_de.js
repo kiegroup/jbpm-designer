@@ -38,6 +38,10 @@ Repository.I18N.Repository.bottomPanelTitle = "Kommentare";
 
 Repository.I18N.Repository.loadingText = "Repository wird geladen..."
 
+Repository.I18N.Repository.errorText = "<b style='font-size:13px'>Upps!</b><br/>Diagramme können nur im <a href='http://www.mozilla.com/en-US/products/firefox/' target='_blank'>Firefox Browser</a> editiert werden.";
+Repository.I18N.Repository.errorAuthor = "Autor:"
+Repository.I18N.Repository.errorTitle = "Titel:"
+
 // Plugins here
  
 // NewModel Plugin

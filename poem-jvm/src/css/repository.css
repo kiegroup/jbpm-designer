@@ -1,14 +1,13 @@
 body {
 	background-color: #ffffff;
+	font-family	: tahoma,arial,san-serif;
+	font-size	: 11px;
+	margin: 0px;
+	padding:0px;
 }
 
 body, td, input, textarea {
 	font-size: 12px;
-}
-
-body {
-	font-family	: tahoma,arial,san-serif;
-	font-size	: 11px;
 }
 
 a {
@@ -172,6 +171,43 @@ table-layout:fixed;
  * login area for the repository
  */
 
+#header {
+	background-image:url(../images/style/header_bg.orange.png);
+	background-position:center bottom;
+	background-repeat:repeat-x;
+	padding:5px 0 30px;
+	width:100%;
+	position:fixed;
+	top:0px;
+	z-index:100;
+}
+
+#header a {
+	margin-left:40px
+}
+
+#header img {
+	border:none;
+}
+
+.content {
+	margin:10px;
+	margin-top:60px;
+}
+.content img {
+	margin:5px;
+}
+
+.content .label {
+	width:50px;
+	float:left;
+}
+.content .value {
+	font-weight:bold;
+}
+.content .model {
+	margin-top:30px;
+}
 #oryx_repository_header {
 	background: url(../images/style/header_bg.small.gif) repeat-x center top;
 	height:30px;

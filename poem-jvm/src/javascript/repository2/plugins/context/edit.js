@@ -193,7 +193,7 @@ Repository.Plugins.Edit = {
 	
 	_deleteModels: function() {
 		
-		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), "/self", null, function(){ this.facade.updateView() }.bind(this) );
+		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), "/self", null, function(){ this.facade.applyFilter() }.bind(this) );
 		 
 	},
 	
