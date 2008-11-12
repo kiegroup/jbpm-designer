@@ -48,19 +48,11 @@
             "visible":true
         },
         {
-            "title":"BPEL Model",
-            "namespace":"http://b3mn.org/stencilset/bpel#",
-            "description":"BPEL stencil set specification.",
-            "uri":"/bpel/bpel.json",
-            "icon_url":"/bpel/bpel.png",
-            "visible":true
-        },
-        {
-            "title":"BPEL4Chor Model",
-            "namespace":"http://b3mn.org/stencilset/bpel4chor#",
-            "description":"BPEL4Chor stencil set specification.",
-            "uri":"/bpel4chor/bpel4chor.json",
-            "icon_url":"/bpel4chor/bpel4chor.png",
+            "title":"XForms",
+            "namespace":"http://b3mn.org/stencilset/xforms#",
+            "description":"This is the XForms stencil set specification.",
+            "uri":"/xforms/xforms.json",
+            "icon_url":"/xforms/xforms.png",
             "visible":true
         }
 ]

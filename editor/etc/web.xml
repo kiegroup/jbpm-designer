@@ -54,18 +54,6 @@
 		<url-pattern>/engineproxy</url-pattern>
 	</servlet-mapping>
 -->
-
-	<servlet>
-		<display-name>XPDL4Chor to BPEL4Chor transformation</display-name>
-		<servlet-name>XPDL4Chor2BPEL4Chor</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.XPDL4Chor2BPEL4ChorServlet
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>XPDL4Chor2BPEL4Chor</servlet-name>
-		<url-pattern>/xpdl4chor2bpel4chor</url-pattern>
-	</servlet-mapping>
 	
 
 	<servlet>
@@ -204,29 +192,6 @@
 		<servlet-name>EPCUpload</servlet-name>
 		<url-pattern>/epc-upload</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<display-name>Oryx AML Support Servlet</display-name>
-		<servlet-name>AMLSupport</servlet-name>
-		<servlet-class>org.oryxeditor.server.AMLSupport</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AMLSupport</servlet-name>
-		<url-pattern>/amlsupport</url-pattern>
-	</servlet-mapping>
-	
-	
-	<servlet>
-		<display-name>Automatic Layouter Servlet</display-name>
-		<servlet-name>AutoLayouter</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.AutoLayouterServlet
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AutoLayouter</servlet-name>
-		<url-pattern>/layouter</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<display-name>Step Through</display-name>
@@ -262,19 +227,6 @@
 	<servlet-mapping>
 		<servlet-name>XFormsImportServlet</servlet-name>
 		<url-pattern>/xformsimport</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<display-name>TreeGraphChecker</display-name>
-		<servlet-name>TreeGraphChecker</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.TreeGraphChecker
-		</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>TreeGraphChecker</servlet-name>
-		<url-pattern>/treegraphsupport</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>
