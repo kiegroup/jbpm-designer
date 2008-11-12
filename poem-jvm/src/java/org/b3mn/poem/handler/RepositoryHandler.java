@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
 
-@HandlerWithoutModelContext(uri="/repository")
+@HandlerWithoutModelContext(uri="/repository-old")
 public class RepositoryHandler extends  HandlerBase {
 
 	// Return the HTML code for the repository

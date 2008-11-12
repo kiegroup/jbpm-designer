@@ -23,6 +23,7 @@
 
 package org.b3mn.poem;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Dispatcher extends HttpServlet {
 	private static String backendRootPath = "/backend/"; // Root path of the backend war file
 	private static String oryxRootPath = "/oryx/"; // Root path of the oryx war file
 	private static String handlerRootPath = backendRootPath + "poem/"; // Root url of all server handlers
-	private static String filterBrowserRedirectUrl = handlerRootPath + "repository2";
+	private static String filterBrowserRedirectUrl = handlerRootPath + "repository";
 	private static String filterModelRedirectErrorUrl = "/error";
 	private static String filterBrowserRegexPattern = "MSIE \\d+\\.\\d+;";
 	
@@ -302,9 +303,13 @@ public class Dispatcher extends HttpServlet {
 				handler.doDelete(request, response, user.getIdentity(), object);
 			}
 		} catch (Exception e) {
-			//response.reset(); // Undo all changes --> this may cause some trouble because of a SUN bug
-			// response.getWriter().print(this.getErrorPage(e.getStackTrace().toString()));
-			throw new ServletException(e);
+			// response.reset(); // Undo all changes --> this may cause some trouble because of a SUN bug
+			try {
+				response.sendRedirect("http://bpt.hpi.uni-potsdam.de/Oryx/503");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			// throw new ServletException(e);
 		}
 	}
 	@Override

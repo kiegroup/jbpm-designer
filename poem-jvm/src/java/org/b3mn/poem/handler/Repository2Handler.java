@@ -37,7 +37,7 @@ import org.b3mn.poem.util.HandlerWithoutModelContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@HandlerWithoutModelContext(uri="/repository2")
+@HandlerWithoutModelContext(uri="/repository")
 public class Repository2Handler extends  HandlerBase {
 
 
