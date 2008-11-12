@@ -265,7 +265,7 @@ public class Representation {
 		"</head><body>" + this.getContent() + "</body></html>";
         
 
-		InputStream xsltStream = context.getResourceAsStream("/extract-rdf.xsl");
+		InputStream xsltStream = context.getResourceAsStream("/WEB-INF/lib/extract-rdf.xsl");
         Source xsltSource = new StreamSource(xsltStream);
         Source erdfSource = new StreamSource(new StringReader(serializedDOM));
 
