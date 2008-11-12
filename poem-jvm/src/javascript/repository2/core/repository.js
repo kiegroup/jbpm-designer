@@ -47,10 +47,8 @@ Repository.Core.Repository = {
 			
 			// After 300 milsec after initialized, hide loading panel
 			this.on('initialized', function(){ 
-					
-					this._viewport.doLayout();	
-			
-					window.setTimeout(function(){ this.hideMask(loadMask) }.bind(this), 300) 
+								
+					window.setTimeout(function(){ this.hideMask(loadMask) }.bind(this), 200) 
 				
 				}.bind(this));
 			
@@ -93,10 +91,14 @@ Repository.Core.Repository = {
 			var bh = this._modelCache.getBusyHandler();
 			
 			var startCount = 0;
+			var timer;
+			var nothingTimer;
 			
-			var increase = function(){ startCount++ };
-			var decrease = function(){startCount--;  finished() }.bind(this) 
-			var finished = function(){ 
+			
+			var increase 	= function(){ clearTimer();if(nothingTimer){ window.clearTimeout(nothingTimer); nothingTimer = null} startCount++; };
+			var decrease 	= function(){ startCount--; finished() }.bind(this);
+			var clearTimer 	= function(){ if(timer){ startCount--; window.clearTimeout(timer);timer=null;} }.bind(this);
+			var finished 	= function(){ 
 				if( startCount > 0 || this.initialized ){ return }
 				bh.start.unregisterCallback(increase)
 				bh.end.unregisterCallback(decrease)
@@ -107,9 +109,11 @@ Repository.Core.Repository = {
 			// For each start while loading time, raise the count
 			bh.start.registerCallback( increase )
 			// For each finishing while loading time, remove a count, and if complete finished, raise event
-			bh.end.registerCallback( function(){ window.setTimeout(decrease, 250) }.bind(this) )	
-			
-			window.setTimeout( finished.bind(this), 200 );
+			bh.end.registerCallback( function(){ clearTimer(); timer = window.setTimeout(decrease, 250) }.bind(this) )	
+
+
+			nothingTimer = window.setTimeout( finished.bind(this), 200 );
+						
 		},
 		
 	
@@ -153,15 +157,23 @@ Repository.Core.Repository = {
 		},
 		
 		hideMask: function( mask ){
-			
+			console.log('hide')
 			var duration = 0.5;
-			
+
+			// Fade out the background
 			mask.el._mask.fadeOut({
 									duration	: duration, 
 									useDisplay	: true, 
 									easing		: 'easeOut',
 									callback	: function(){ mask.hide() }
-								})			
+								})		
+								
+			
+			//Fade out the message
+			mask.el._maskMsg.fadeOut({
+									duration	: duration, 
+									useDisplay	: true
+								})										
 		},
 		
 		getFacade : function() {
@@ -231,19 +243,15 @@ Repository.Core.Repository = {
 			if (this._currentSort) {
 				params.set('sort', this._currentSort);
 			}
-			new Ajax.Request("filter", 
-					 {
-						method: "get",
-						asynchronous : false,
-						onSuccess: function(transport) {
-							this._filteredModels = eval(transport.responseText);
-							if( this._currentSortDirection == Repository.Config.SORT_ASC)
-								this._filteredModels.reverse()
-								
-							this._filterChangedHandler.invoke(this._filteredModels);
-						}.bind(this),
-						parameters : params
-					});
+			
+			this._modelCache.doRequest("filter", function(transport) {
+														this._filteredModels = eval(transport.responseText);
+														if( this._currentSortDirection == Repository.Config.SORT_ASC)
+															this._filteredModels.reverse()
+															
+														this._filterChangedHandler.invoke(this._filteredModels);
+													}.bind(this), params, 'get', false )
+
 		},
 		
 		removeFilter : function(name) {
@@ -510,29 +518,22 @@ Repository.Core.Repository = {
 			
 			var source = Repository.Config.PATH + Repository.Config.PLUGIN_PATH	+ Repository.Config.PLUGIN_CONFIG
 	
-			var sdfsfsd = new Ajax.Request(source, {
-				asynchronous: false,
-				method: 'get',
-				onSuccess: function(result){
-				
-					// get plugins.xml content
-					var resultXml = result.responseXML;
-					
-					// Get all source names
-					//var files = $A(resultXml.getElementsByTagName("plugin")).map(function(p){ return p.getAttribute('source') }).compact()
-					//this._intializePluginFiles( files );
-					
-					// Get all plugin names
-					var names = $A(resultXml.getElementsByTagName("plugin")).map(function(p){ return p.getAttribute('name') }).compact()
-					window.setTimeout(this._initializePlugins.bind(this, names), 200);
-					 					
-				}.bind(this),
-				onFailure: function(){
-				
-					Ext.Msg.alert('Oryx', 'Plugin config could not be loaded!')
-					
-				}
-			});
+			this._modelCache.doRequest(		source, 
+											function(result){
+												
+													// get plugins.xml content
+													var resultXml = result.responseXML;
+													
+													// Get all source names
+													//var files = $A(resultXml.getElementsByTagName("plugin")).map(function(p){ return p.getAttribute('source') }).compact()
+													//this._intializePluginFiles( files );
+													
+													// Get all plugin names
+													var names = $A(resultXml.getElementsByTagName("plugin")).map(function(p){ return p.getAttribute('name') }).compact()
+													window.setTimeout(this._initializePlugins.bind(this, names), 200);
+													 					
+												}.bind(this),
+											null, 'get', false);
 			
 		},
 		
@@ -579,16 +580,7 @@ Repository.Core.Repository = {
 				s.setAttributeNS(XMLNS.XHTML, 'type', 'text/javascript');
 			   	s.src = prefixURL + file;
 		
-			   	head.appendChild(s);*/
-				
-				new Ajax.Request( prefixURL + file ,{
-					method: 'get',
-					asynchronous : false,
-					onSuccess: function(resp){
-						eval( resp.responseText )
-					}
-				})
-				
+			   	head.appendChild(s);	*/			
 							
 			});
 			
@@ -679,6 +671,10 @@ Repository.Core.Repository = {
 						            this._controls.leftPanel,	
 								    this._controls.rightPanel
 							       ]});
+						
+			
+			this._viewport.doLayout();	
+										   
 				
 		}
 };

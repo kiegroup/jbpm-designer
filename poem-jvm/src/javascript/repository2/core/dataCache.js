@@ -355,6 +355,60 @@ Repository.Core.DataCache = {
 						this._busyHandler.end.invoke();
 					}.bind(this)
 				});
+	},
+	
+	
+	doRequest: function( url, successHandler, params,  method, asynchronous ){
+		
+		if(!url){
+			return
+		}
+		
+		// Set Busy
+		this._busyHandler.start.invoke();
+		
+		// Define successcallback
+		var callback = function(){
+		
+			this._busyHandler.end.invoke();
+			
+			if( successHandler )
+				successHandler.apply( successHandler , arguments)
+			
+		}.bind(this);
+		
+		// Check URL
+		method = method ? method : "get";
+		if( method.toLowerCase() == "get" || method.toLowerCase() == "delete" ){
+			url += params ? "?" + $H(params).toQueryString() : "";
+		}				
+
+		if( !asynchronous ){
+			new Ajax.Request(url, 
+				 {
+					method			: "get",
+					asynchronous 	: false,
+					onSuccess		: callback,
+					onFailure		: function(){
+						Ext.Msg.alert('Oryx','Server communication failed!')
+					},
+					parameters 		: params
+				});
+		} else {
+			// Send request	
+			Ext.Ajax.request({
+				    url		: url,
+				    method	: method,
+				    params	: params,
+				    success	: callback,
+					failure	: function(){
+						Ext.Msg.alert('Oryx','Server communication failed!')
+					}
+				});			
+		}
+
+		
+
 	}
 
 	

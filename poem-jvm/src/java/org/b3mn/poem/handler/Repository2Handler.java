@@ -59,8 +59,9 @@ public class Repository2Handler extends  HandlerBase {
 				"core/contextPlugin",
 				};
 
-		String[] stylesheet_links = {"openid", "repository", "model_properties"};
-
+		String[] stylesheet_links 	= {"openid", "repository", "model_properties"};
+		String stylesheet_ie_fix 	= "repository_ie_fixes";
+		
 		String backend_path = "/backend";
 		String ext_path = backend_path + "/ext-2.0.2/";
 
@@ -90,6 +91,10 @@ public class Repository2Handler extends  HandlerBase {
     	out.println("<html>");
     	out.println("<head>");
     	out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+    	// This prevents no caching of the repository site for IE
+    	out.println("<meta http-equiv=\"Pragma\" content=\"no-cache\">");
+    	out.println("<meta http-equiv=\"Expires\" content=\"-1\">");
+    	
     	out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ext_path + "resources/css/ext-all.css\">");
     	out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ext_path + "resources/css/xtheme-gray.css\">");     	  	
     	/*out.println("<script type=\"text/javascript\" src=\"" + backend_path + "/repository2/prototype.js\"></script>");
@@ -106,7 +111,14 @@ public class Repository2Handler extends  HandlerBase {
     	for (String stylesheet : stylesheet_links) {
     		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + backend_path + "/css/" + stylesheet + ".css\">");
     	}
-    	
+
+    	// Added a css-fix for IE
+    	out.println("<!--[if IE]>");
+    	out.println("<style type=\"text/css\">");
+    	out.println("@import url(" + backend_path + "/css/" + stylesheet_ie_fix + ".css);");
+    	out.println("</style>");
+    	out.println("<![endif]-->");
+
     	//out.println("<script type=\"text/javascript\">Ext.onReady(function(){new Repository.Core.Repository(\"" + subject.getUri() + "\");});</script>");  
     	out.println("<title>ORYX - Repository 2.0 (BETA)</title>");
     	out.println("</head>");
