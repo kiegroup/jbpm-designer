@@ -1,10 +1,12 @@
 
 package org.oryxeditor.server;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -22,7 +24,8 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 
-import de.hpi.bpel4chor.transformation.BPMN2BPEL4ChorImpl;
+import de.hpi.bpel4chor.transformation.TransformationResult;
+import de.hpi.bpel4chor.transformation.XPDL4Chor2BPEL4Chor;
 
 
 /**
@@ -46,11 +49,23 @@ import de.hpi.bpel4chor.transformation.BPMN2BPEL4ChorImpl;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class BPEL4CHOR extends HttpServlet {
+public class XPDL4Chor2BPEL4ChorServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 316274845723034029L;
 	
 //	private static Configuration config = null;
+	
+	private static String escapeJSON(String json) {
+		// escape (some) JSON special characters
+		// sorry, this is code and fix. 
+		// TODO a JSON-library should be used here...
+		String res = json.replaceAll("\"", "\\\"");
+		res = res.replaceAll("\n","\\\\n");
+		res = res.replaceAll("\r","\\\\r");
+		res = res.replaceAll("\t","\\\\t");
+		return res;
+	}
+	
 	
     /**
      * The POST request.
@@ -58,19 +73,49 @@ public class BPEL4CHOR extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
 
 		try {
-			res.setContentType("text/bpel+xml");
+			res.setContentType("application/json");
 
 			String xpdl = req.getParameter("data");
-			
-	    	String[] result  = new BPMN2BPEL4ChorImpl().transform(xpdl, false);
+
+	    	List<TransformationResult> result = new XPDL4Chor2BPEL4Chor().transform(xpdl, false);
+
+	    	// generate result JSON
+	    	res.getWriter().print("{\"res\":[");
 	    	
-			for (int i = 0; i < result.length; i++) {
-				res.getWriter().print(result[i]);
-			}	    	
+	    	Iterator<TransformationResult> it = result.iterator();
+	    	
+	    	while (it.hasNext()) {
+	    		TransformationResult tr = it.next();
 
+	    		String trres = escapeJSON(tr.result);
+	    		
+	    		res.getWriter().print("{\"successs\": ");
+	    		res.getWriter().print(tr.success);
+	    		res.getWriter().print(",");
+	    		res.getWriter().print("\"content\": \"");
+	    		res.getWriter().print(trres);
+	    		
+	    		if (it.hasNext()) {
+	    			res.getWriter().print("\"},");
+	    		} else {
+	    			res.getWriter().print("\"}");
+	    		}	    		
+	    	}
+	    	res.getWriter().print("]}");
 		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				res.getWriter().print("{\"res\":[{\"success\":false,\"content\":\"");
+				res.getWriter().print(escapeJSON(e.toString()));
+				res.getWriter().print("\\r\\n");
+				StackTraceElement[] trace = e.getStackTrace();
+				for (int i = 0; i < trace.length; i++) {
+					res.getWriter().print(escapeJSON(trace[i].toString()));
+					res.getWriter().print("\\r\\n");
+				}
+				res.getWriter().print("\"}]}");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
-
     }    
 }

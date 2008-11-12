@@ -56,15 +56,15 @@
 -->
 
 	<servlet>
-		<display-name>BPEL Export</display-name>
-		<servlet-name>BPEL</servlet-name>
+		<display-name>XPDL4Chor to BPEL4Chor transformation</display-name>
+		<servlet-name>XPDL4Chor2BPEL4Chor</servlet-name>
 		<servlet-class>
-			org.oryxeditor.server.BPEL4CHOR
+			org.oryxeditor.server.XPDL4Chor2BPEL4ChorServlet
 		</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>BPEL</servlet-name>
-		<url-pattern>/bpel</url-pattern>
+		<servlet-name>XPDL4Chor2BPEL4Chor</servlet-name>
+		<url-pattern>/xpdl4chor2bpel4chor</url-pattern>
 	</servlet-mapping>
 	
 

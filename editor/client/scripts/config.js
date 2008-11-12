@@ -30,6 +30,7 @@ ORYX.CONFIG = {
 	XFORMS_IMPORT_URL:			"/oryx/xformsimport",
 	BPEL_EXPORT_URL:			"/oryx/bpelexporter",
 	TREEGRAPH_SUPPORT:			"/oryx/treegraphsupport",
+	XPDL4CHOR2BPEL4CHOR_TRANSFORMATION_URL: "/oryx/xpdl4chor2bpel4chor",
 	
 	/* Namespaces */
 	NAMESPACE_ORYX:				"http://www.b3mn.org/oryx",
@@ -157,8 +158,4 @@ ORYX.CONFIG = {
 	KEY_Code_right:				39,
 	KEY_Code_top:				38,
 	KEY_Code_bottom:			40,
-	
-	/* Transformation to BPEL4Chor web service */
-	TRANS_URI: 					"http://localhost/BPMN2BPEL4Chor/services/BPMN2BPEL4Chor",
-	TRANS_SERVER:				"http://localhost"
 };

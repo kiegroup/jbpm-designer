@@ -3,6 +3,7 @@ package de.hpi.bpel4chor.transformation;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class Test {
 	
@@ -33,11 +34,13 @@ public class Test {
 			input.close();
 			
 			//String[] result  = new BPMN2BPELImpl().transform(myString, true);
-			String[] result  = new BPMN2BPEL4ChorImpl().transform(myString, false);
+			List<TransformationResult> result  = new XPDL4Chor2BPEL4Chor().transform(myString, false);
 			
-			for (int i = 0; i < result.length; i++) {
-				System.out.println(result[i]);
+			for (TransformationResult tr: result) {
+				System.out.println(tr.success);
+				System.out.println(tr.result);
 			}
+
 			System.out.println("Finished Test.");
 		} catch (IOException e) {
 			e.printStackTrace();
