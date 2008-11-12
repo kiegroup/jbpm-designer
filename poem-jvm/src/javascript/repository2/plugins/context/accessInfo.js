@@ -242,10 +242,10 @@ Repository.Plugins.AccessInfo = {
 		// Generate Contributer Buttons			
 		data.each(function(openid){
 			
-			var label = {text: openid, xtype:'label'};
-			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:Repository.I18N.AccessInfo.deleteText, click:this._deleteOpenID.bind(this, openid)})
+			var label = {text: openid, xtype:'label', style:'white-space:nowrap;'};
+			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;position:absolute;right:0px;top:1px;', text:Repository.I18N.AccessInfo.deleteText, click:this._deleteOpenID.bind(this, openid)})
 
-			buttons.push( new Ext.Panel({border:false, items: editable ? [label, image] : [label] , style:""}))			
+			buttons.push( new Ext.Panel({border:false, items: editable ? [image, label] : [label] , style:""}))			
 				
 		}.bind(this))
 		

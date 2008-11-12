@@ -38,10 +38,14 @@ Repository.Plugins.TagFilter = {
 		this.name = Repository.I18N.TagFilter.name;
 		arguments.callee.$.construct.apply(this, arguments); // call Plugin super class
 		
-		this._generateGUI();
-		
-		this.facade.modelCache.getUserUpdateHandler().registerCallback(this._generateGUI.bind(this));
 
+		if (!this.facade.isPublicUser()) {
+			this._generateGUI();
+			this.facade.modelCache.getUserUpdateHandler().registerCallback(this._generateGUI.bind(this));
+		} else {
+			this.panel.hide();
+		}
+		
 	
 	},
 	

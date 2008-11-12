@@ -38,9 +38,13 @@ Repository.Plugins.FriendFilter = {
 		this.name = Repository.I18N.FriendFilter.name;
 		arguments.callee.$.construct.apply(this, arguments); // call Plugin super class
 
-		this._generateGUI();
-		
-		this.facade.modelCache.getUserUpdateHandler().registerCallback(this._generateGUI.bind(this));
+
+		if (!this.facade.isPublicUser()) {
+			this._generateGUI();
+			this.facade.modelCache.getUserUpdateHandler().registerCallback(this._generateGUI.bind(this));
+		} else {
+			this.panel.hide();
+		}
 
 	},
 	

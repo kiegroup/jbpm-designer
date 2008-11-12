@@ -43,15 +43,21 @@ Repository.Plugins.TagInfo = {
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 
 		
-		this._createDataStore();
-		this._generateGUI();
+		
+		if (!this.facade.isPublicUser()) {
+			this._createDataStore();
+			this._generateGUI();
+		} else {
+			this.panel.hide();
+		}
+
 
 	},
 	
 	render: function( modelData ){
 		
 		// If modelData hasnt changed, return
-		if( !this.tagPanel ){ return }
+		if( this.facade.isPublicUser() || !this.tagPanel ){ return }
 						
 		// Find every tag which are available in all selected models
 		var modelTags 		= []

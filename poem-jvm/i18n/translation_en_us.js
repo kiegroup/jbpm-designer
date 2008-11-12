@@ -168,3 +168,10 @@ Repository.I18N.Rating.totalMoreText = "From  #{modelCount} are #{voteCount} vot
 
 if(!Repository.I18N.RatingFilter) Repository.I18N.RatingFilter = {};
 Repository.I18N.RatingFilter.name = "Rating Filter"
+
+if(!Repository.I18N.AccessFilter) Repository.I18N.AccessFilter = {};
+Repository.I18N.AccessFilter.name = "Access Filter"
+Repository.I18N.AccessFilter.mine = "Mine"
+Repository.I18N.AccessFilter.reader = "Me as a reader"
+Repository.I18N.AccessFilter.writer = "Me as a writer"
+Repository.I18N.AccessFilter.publicText = "Public"
