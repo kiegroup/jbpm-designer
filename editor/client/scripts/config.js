@@ -120,6 +120,8 @@ ORYX.CONFIG = {
 	EVENT_LAYOUT_BPEL_SINGLECHILD:  "layout.BPEL.singlechild",
 	EVENT_LAYOUT_BPEL_AUTORESIZE:	"layout.BPEL.autoresize",
 	EVENT_AUTOLAYOUT_LAYOUT:		"autolayout.layout",
+	EVENT_UNDO_EXECUTE:				"undo.execute",
+	EVENT_UNDO_ROLLBACK:			"undo.rollback",
 	
 	/* Selection Shapes Highlights */
 	SELECTION_HIGHLIGHT_SIZE:				5,
