@@ -199,7 +199,7 @@ Repository.Plugins.Edit = {
 	
 	_storeChanges: function(name, summary){
 
-		this.facade.modelCache.setData( this.facade.getSelectedModels(), "/meta", { title:escape(name), summary:escape(summary) },  function(){  this.facade.updateView() }.bind(this) )
+		this.facade.modelCache.setData( this.facade.getSelectedModels(), "/meta", { title:(name), summary:(summary) },  function(){  this.facade.updateView() }.bind(this) )
 		
 	}
 };

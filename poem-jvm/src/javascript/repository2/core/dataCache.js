@@ -381,6 +381,7 @@ Repository.Core.DataCache = {
 		method = method ? method : "get";
 		if( method.toLowerCase() == "get" || method.toLowerCase() == "delete" ){
 			url += params ? "?" + $H(params).toQueryString() : "";
+			params = null;
 		}				
 
 		if( !asynchronous ){
