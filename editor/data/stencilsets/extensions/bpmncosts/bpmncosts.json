@@ -1,0 +1,26 @@
+{
+	"title":"BPMN Cost Extension",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmncosts#",
+	"description":"BPMN 1.1 extension for adding a cost attribute to activities",
+	"extends":"http://b3mn.org/stencilset/bpmn1.1#",
+	"stencils":[],
+	"properties": [
+		{
+			"roles": [
+				"Task",
+				"Subprocess"
+			],
+			"properties": [
+				{
+					"id":"cost",
+					"type":"Integer",
+					"title":"Cost",
+					"description":"Activity costs.",
+					"readonly":false,
+					"optional":true,
+					"min":0
+				}
+			]
+		}
+	]
+}

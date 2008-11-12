@@ -96,17 +96,18 @@ class Poem < ActiveRecord::Migration
     
     
     create_table 'plugin', :id => false do |t|
-      t.column :rel,		:text, :null => false
-      t.column :scheme,		:text, :null => false
-      t.column :term,		:text, :null => false
-      t.column :title, :text, :null => false
+      t.column :rel,			:text,	:null => false
+      t.column :title,			:text,	:null => false
+      t.column :description,	:text,	:null => false
+      t.column :java_class,		:text,	:null => false
+	  t.column :is_export,		:boolean,	:null => false
     end
     
     execute %q{
       alter table "plugin" alter column rel set storage main;
-      alter table "plugin" alter column scheme set storage main;
-      alter table "plugin" alter column term set storage main; 
+      alter table "plugin" alter column description set storage main; 
       alter table "plugin" alter column title set storage main;
+	  alter table "plugin" alter column java_class set storage main;
       create index rel_idx on "plugin"(rel);
     }
     

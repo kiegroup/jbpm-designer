@@ -1,0 +1,389 @@
+body {
+	background-color: #ffffff;
+	font-family	: tahoma,arial,san-serif;
+	font-size	: 11px;
+	margin: 0px;
+	padding:0px;
+}
+
+body, td, input, textarea {
+	font-size: 12px;
+}
+
+a {
+	color	: #FC8B03;
+}
+
+a.x-item-disabled:hover, a.x-item-disabled:focus, a.x-item-disabled:active {
+	color	: gray;	
+}
+
+a:hover, a:focus, a:active {
+	color	: #febc6f;
+}
+	
+/** removes icons from treepanel */
+/*.x-tree-node-icon {*/
+.no-icon {
+	display: none;
+}
+
+.ajax_loader {
+	background-image: url(/backend/images/repository/ajax-loader.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+
+.repository_ext_btn_align_center {
+	background-position: 0px center !important;	
+	padding: 2px 0 3px 18px !important;
+}
+
+.repository_ext_icon_align_center {
+	height:auto;
+	vertical-align:middle;
+}
+
+.repository_ext_icon_arrow_up {
+	background-image:url(/backend/images/silk/arrow_up.png);
+}
+
+.repository_ext_icon_arrow_down {
+	background-image:url(/backend/images/silk/arrow_down.png);
+}
+
+.repository_rating_filter .x-grid3-scroller{
+	overflow: hidden;
+}
+/**  FIXES FOR EXT 2.0.2 **/
+
+.x-date-middle {
+width: 160px;
+}
+
+.x-grid3 table {
+table-layout:fixed;
+}
+
+
+.x-grid3-row-table {
+	table-layout: fixed;
+}
+
+/******************************************************************************
+ * the central widget that contains the list of all models of a user
+ */
+
+.no_items {
+	text-align: center;
+	color: #999;
+	font-style: italic;
+	font-size: 10px;
+	padding: 15px;
+}
+
+.oryx_repository_list_container {
+
+	padding: 0% 0 0 2%;
+}
+
+.oryx_repository_list_item {
+	width: 47%;
+	min-width: 300px;
+	margin: 1% 2% 1% 0;
+	float: left;
+	font-size: 11px;
+	position:relative;
+	
+	border: 1px solid #D0D0D0;
+}
+
+.oryx_repository_list_item:hover {
+	border-color: #aaa;
+}
+
+.oryx_repository_list_item .ctrl {
+	display: none;
+	position: absolute;
+	right: 0px;
+	height: 20px;
+}
+
+.oryx_repository_list_item:hover .ctrl {
+	display: block;
+}
+
+.oryx_repository_list_item h3 {
+	padding: 3px 60px 3px 0px;
+	background-color: #D0D0D0;
+	min-height: 12px;
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.oryx_repository_list_item h3,
+.oryx_repository_list_item h3 a {
+	color: #222;
+	text-decoration: none;
+}
+
+.oryx_repository_list_item h3:hover a:hover {
+	color: #fff;
+}
+
+.oryx_repository_list_item:hover h3 a{ 
+	color: #dedede;
+}
+
+.oryx_repository_list_item:hover h3{
+	border-color: #888;
+	background-color: #888;
+}
+
+.oryx_repository_list_item p { 
+	padding: 3px 3px 3px 0px;
+	margin-top: 3px;
+	color: #222;
+}
+
+.oryx_repository_list_item .owner {
+	color: #666;
+}
+
+
+
+.oryx_repository_list_item img {
+	float: left; 
+	margin: 5px;
+	max-width: 80px;
+}
+
+.oryx_repository_list_item h3,
+.oryx_repository_list_item p,
+.oryx_repository_list_item span,
+.oryx_repository_list_item div,
+.oryx_repository_list_item em {
+	padding-left: 90px;
+}
+
+
+/*******************************************************************
+ * login area for the repository
+ */
+
+#header {
+	background-image:url(../images/style/header_bg.orange.png);
+	background-position:center bottom;
+	background-repeat:repeat-x;
+	padding:5px 0 30px;
+	width:100%;
+	position:fixed;
+	top:0px;
+	z-index:100;
+}
+
+#header a {
+	margin-left:40px
+}
+
+#header img {
+	border:none;
+}
+
+.content {
+	margin:10px;
+	margin-top:60px;
+}
+.content img {
+	margin:5px;
+}
+
+.content .label {
+	width:50px;
+	float:left;
+}
+.content .value {
+	font-weight:bold;
+}
+.content .model {
+	margin-top:30px;
+}
+#oryx_repository_header {
+	background: url(../images/style/header_bg.small.gif) repeat-x center top;
+	height:30px;
+	position:absolute;
+	width:100%;
+}
+
+#oryx_repository_header span{
+	left:-70px;
+	position:absolute;
+	display:none;
+	top:1px;
+}
+
+#oryx_repository_header span img{
+	position:relative;
+	right:6px;
+	margin-right:6px;
+	width:16px;
+}
+
+#oryx_repository_header.mouseover span{
+	display:inline;
+}
+
+#openid_login {
+	position:absolute;
+	right:10px;
+	top:5px;	
+}
+
+#openid_login input {
+	font-size:12px;
+	margin:0px 1px;
+	padding:1px;
+	width:40px;
+}
+
+#openid_login input.button {
+	background-color:transparent;
+	border-width:0px;
+	color:#AA0000;
+	cursor:pointer;
+	font-weight:bold;
+	width:auto;
+}
+
+#openid_login input.text {
+	background:#FFFFFF url(../images/style/openid_login_bg.gif) no-repeat scroll 5px 50%;
+	border:1px solid #AA0000;
+	padding-left:25px;
+	width:200px;
+}
+
+#openid_login input.text.logged_id {
+	background-color:#F1F1F1;
+	color:#333333;
+}
+
+/*******************************************************************
+ * some ext extensions
+ */
+
+.create_model_menu {
+	background-image: url(/backend/images/silk/shape_square_add.png) !important;
+	background-repeat: no-repeat;
+}
+
+.start_model_button,
+.edit_model_button,
+.delete_model_button,
+.view_model_button {
+	background-image: url(/backend/images/silk/pencil.png) !important;
+	background-repeat: no-repeat;
+	position: absolute;
+	right: 20px;
+	height: 18px;
+	width: 18px;
+	background-position: 1px 1px;
+	text-decoration: none;
+}
+
+.start_model_button:hover,
+.edit_model_button:hover,
+.view_model_button:hover,
+.delete_model_button:hover {
+	background-color: #eee;
+} 
+
+.view_model_button {
+	background-image: url(/backend/images/silk/magnifier.png) !important;
+}
+
+.start_model_button {
+	right: 40px;
+	background-image: url(/backend/images/silk/shape_square_go.png) !important;
+}
+
+.delete_model_button {
+	right: 0px;
+	background-image: url(/backend/images/silk/delete.png) !important;
+}
+
+/* Some test stuff for the new repository
+*/
+
+.test_selected_item {
+	border-color:#FF0000;
+	border-width: 2px;	
+}
+
+.test_unselected_item {
+	border-color:#000000;
+	border-width: 2px;	
+}
+
+.test_selected_text {
+	font-weight: bold;
+}
+
+.test_unselected_text {
+	font-weight: normal;
+}
+
+
+/** REPOSITORY ICON VIEW **/
+
+.repository_iconview dl {
+	width		: 100%;
+	max-width	: 1000px;
+}
+
+.repository_iconview dd{
+	width		: 200px;
+	height		: 105px; 
+	padding		: 10px;
+	border		: 1px solid #EEEEEE;
+	font-family	: tahoma,arial,san-serif;
+	font-size	: 9px;
+	display		: block;
+	margin		: 5px;
+	text-align	: left;
+	float		: left;
+}
+
+.repository_iconview dd.over{
+	background-color	: #fff5e1;
+}
+
+.repository_iconview dd.selected{
+	border-color: #FC8B03;
+}
+
+.repository_iconview dd img{
+	max-width	: 190px;
+	max-height	: 70px;
+}
+
+.repository_iconview dd .image{
+	width	: 200px;
+	height	: 80px;
+	padding-bottom	: 10px;
+	text-align		: center;
+	vertical-align	: middle;
+	display	:table-cell;
+}
+.repository_iconview dd .title{
+	font-weight	: bold;
+	font-size	: 11px;
+	color		: #555555;
+}
+
+.repository_iconview dd .author{
+	margin-left	: 5px;
+}
+
+.repository_iconview dd .type{
+
+}

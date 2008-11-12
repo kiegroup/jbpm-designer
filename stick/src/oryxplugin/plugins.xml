@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+
+	<plugins>
+		
+		<!-- following plugins require Ext -->		
+		<plugin source="toolbar.js" name="ORYX.Plugins.Toolbar" />
+		
+		<plugin source="shapemenu.js" name="ORYX.Plugins.ShapeMenuPlugin">			
+			<property group="Z-Order" align="Oryx_Top" />
+			<property group="Alignment" align="Oryx_Top" />
+			<property group="Grouping" align="Oryx_Top" />
+			<property group="Edit" align="Oryx_Left" />					
+		</plugin>
+		<plugin source="shaperepository.js" name="ORYX.Plugins.ShapeRepository" />
+		<plugin source="propertywindow.js" name="ORYX.Plugins.PropertyWindow" />
+		<plugin source="loading.js" name="ORYX.Plugins.Loading" />
+		<plugin source="canvasResize.js" name="ORYX.Plugins.CanvasResize" />
+		<plugin source="renameShapes.js" name="ORYX.Plugins.RenameShapes" />
+		<plugin source="erdfSupport.js" name="ORYX.Plugins.ERDFSupport" />
+		<plugin source="undo.js" name="ORYX.Plugins.Undo" />
+		
+		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
+			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
+		</plugin>	
+			
+		<plugin source="arisSupport.js" name="ORYX.Plugins.ARISSupport">
+			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
+		</plugin>	
+				
+		<plugin source="adHocCC.js" name="ORYX.Plugins.AdHocCC">
+			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>	
+		</plugin>
+
+		<plugin source="treeGraphSupport.js" name="ORYX.Plugins.TreeGraphSupport">
+			<requires namespace="http://b3mn.org/stencilset/treeGraph#"/>	
+		</plugin>
+		
+		
+		<!-- following plugins don't require Ext -->
+		<plugin source="arrangement.js" name="ORYX.Plugins.Arrangement">
+			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
+		</plugin>
+		<plugin source="file.js" name="ORYX.Plugins.File" />
+		<plugin source="saveOffline.js" name="ORYX.Plugins.SaveOffline" />
+		
+		<plugin source="view.js" name="ORYX.Plugins.View" />
+		<plugin source="dragdropresize.js" name="ORYX.Plugins.DragDropResize" />
+		<plugin source="grouping.js" name="ORYX.Plugins.Grouping" />	
+		<plugin source="shapeHighlighting.js" name="ORYX.Plugins.HighlightingSelectedShapes" />
+		<plugin source="dragDocker.js" name="ORYX.Plugins.DragDocker" />	
+		<plugin source="addDocker.js" name="ORYX.Plugins.AddDocker" />
+		<plugin source="addssextension.js" name="ORYX.Plugins.SSExtensionLoader" />
+		<plugin source="selectionframe.js" name="ORYX.Plugins.SelectionFrame" />
+		<plugin source="shapeHighlighting.js" name="ORYX.Plugins.ShapeHighlighting" />
+		<plugin source="overlay.js" name="ORYX.Plugins.Overlay" />		
+		<plugin source="edit.js" name="ORYX.Plugins.Edit" />
+
+		<plugin source="rowlayouting.js" name="ORYX.Plugins.RowLayouting">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+			<!-- BPEL plugin also requires rowlayout -->
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>				
+		</plugin>
+		
+		<!-- BPMN1.1 specific plugins -->
+		<plugin source="bpmn1.1DiamondSwitch.js" name="ORYX.Plugins.BPMN11DiamondSwitch">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+		</plugin>
+
+	</plugins>
+	
+	<properties>
+		<property group="File" index="1" />
+		<property group="Edit" index="2" />	
+		<property group="Undo" index="3" />	
+	</properties>
+</config>

@@ -1,0 +1,145 @@
+/******************************************************************************
+ * forms
+ */
+
+form {
+	font-size: 12px;
+}
+
+form p, form ul {
+	padding: 0px;
+	margin: 10px 0px 0px 10px;
+	list-style-type: none;
+}
+
+form p.info {
+	color: #fc8b03;
+	font-style: italic;
+	text-align : center;
+}
+
+hr {
+	margin: 3px 10px;
+	border: 0px solid #444;
+	border-bottom-width: 1px;
+}
+
+form ul.access li {
+	margin: 0px 3px 3px 3px;
+}
+
+fieldset {
+	border-width: 0px;
+	border-top: 12px solid transparent;
+	padding: 0px 20px;
+	margin: 5px;
+	background-color: #fff;
+}
+
+fieldset legend {
+	margin-left: -17px;
+	font-weight: bold;
+	background-color: #fff;
+}
+
+fieldset .description {
+	color: #666;
+	margin: 0px 0px 3px -17px;
+	font-weight: normal;
+	margin-left: -15px;
+	font-size: 11px;
+	padding-bottom: 2px;
+}
+
+fieldset label {
+	width: 80px;
+	float: left;
+	text-align: right;
+	display: block;
+	margin-top: 3px;
+}
+
+fieldset p {
+	margin: 2px;
+}
+
+fieldset input, 
+fieldset select, 
+fieldset textarea,
+fieldset .field_with_error_msg,
+fieldset span.input {
+	display: block;
+	margin-left: 90px;
+}
+
+fieldset input.text, 
+fieldset select, 
+fieldset textarea,
+fieldset .field_with_error_msg,
+fieldset span.input {
+	width: 400px;
+	padding: 2px;
+}
+
+fieldset p.inline {
+	margin-left: 90px;
+	margin-bottom: 4px;
+}
+
+fieldset p.inline label {
+	display: inline;
+	float: none;
+	width: default;
+	padding-left: 5px;
+	padding-right: 20px;
+	text-align: left;
+}
+
+fieldset p.inline input {
+	display: inline;
+	margin-left: auto;
+}
+
+fieldset p.inline input.button {
+	margin-right: 20px;
+}
+
+fieldset p.inline .field_with_error_msg {
+	margin-left: 0px;
+}
+
+
+
+
+input.text, select, textarea {
+	border: 1px solid #efefef;
+	background-color: #efefef;
+}
+
+input.text:hover, select:hover, textarea:hover,
+input.text.activated, select.activated, textarea.activated {
+	border-color: #fc8b03;
+}
+
+input.text.x-item-disabled:hover, select.x-item-disabled:hover, textarea.x-item-disabled:hover,
+input.text.x-item-disabled.activated, select.x-item-disabled.activated, textarea.x-item-disabled.activated {
+	border-color: #B5B8C8;
+}
+
+input.text.disabled, input.disabled, select.disabled, textarea.disabled,
+input.text.disabled:hover, input.disabled:hover, select.disabled:hover, textarea.disabled:hover {
+	background-color: #fff;
+	border-color: #fff;
+	color: #000;
+}
+
+.field_with_error {
+	background-color: #f7d4d4 !important;
+	border-color: #c00 !important;
+}
+
+.field_with_error_msg {
+	padding: 2px 0px;
+	font-size: 9pt;
+	color: #c00;
+}

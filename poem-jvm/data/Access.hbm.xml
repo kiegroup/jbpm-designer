@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping package = "org.b3mn.poem">
+    <class name="Access" table="access">
+		<composite-id>
+			<key-property name="access_id"		 type="long"			 column="access_id"/>
+        	<key-property name="context_id" 	 type="long"   			 column="context_id"/>
+        	<key-property name="context_name" 	 type="java.lang.String" column="context_name"/>
+        	<key-property name="subject_id" 	 type="long"   			 column="subject_id"/>
+        	<key-property name="subject_name" 	 type="java.lang.String" column="subject_name"/>
+        	<key-property name="object_id" 		 type="long"   			 column="object_id"/>
+        	<key-property name="object_name" 	 type="java.lang.String" column="object_name"/>
+        	<key-property name="access_term" 	 type="java.lang.String" column="access_term"/>
+        	<key-property name="access_scheme" 	 type="java.lang.String" column="access_scheme"/>      
+    	</composite-id>
+    </class>
+</hibernate-mapping>

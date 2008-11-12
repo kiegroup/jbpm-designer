@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+ id="oryx" version="2.4">
+    
+    <display-name>PoEM</display-name>
+    
+	<!-- the number within the session-timout element must be expressed in
+		minutes. it is now 24 hours. -->
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
+	
+    <servlet>
+        <display-name>Oryx Dispatcher</display-name>
+        <servlet-name>Dispatcher</servlet-name>
+        <servlet-class>org.b3mn.poem.Dispatcher</servlet-class>
+    </servlet>
+	
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/poem/*</url-pattern>
+    </servlet-mapping>
+	
+	<!-- Registering OpenID Consumer Servlet for Authentication -->
+	<servlet>
+        <display-name>Oryx OpenID Authentication Servlet</display-name>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>org.oryxeditor.server.auth.OpenIDAuthenticationServlet</servlet-class>
+        <init-param>
+            <param-name>proxy-host-name</param-name>
+            <param-value></param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxy-port</param-name>
+            <param-value></param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/consumer</url-pattern>
+    </servlet-mapping>
+
+	<!-- Load jstl, needed for OpenID Authentication -->
+    <jsp-config>
+        <taglib>
+            <taglib-uri>
+                http://java.sun.com/jstl/core
+            </taglib-uri>
+            <taglib-location>
+                /WEB-INF/c.tld
+            </taglib-location>
+        </taglib>
+    </jsp-config>
+
+	<mime-mapping>
+		<extension>svg</extension>
+		<mime-type>image/svg+xml</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>json</extension>
+		<mime-type>text/plain</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>css</extension>
+		<mime-type>text/css</mime-type>
+	</mime-mapping>
+	
+	<!-- Set Favourites Icon MIME-Type --> 
+	<mime-mapping>
+	    <extension>ico</extension>
+	    <mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+
+</web-app>

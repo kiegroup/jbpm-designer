@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="300"
+   height="250"
+   >
+  
+  <defs >
+  </defs>
+  <oryx:magnets>
+    <oryx:magnet
+       oryx:cx="150"
+       oryx:cy="125"
+       oryx:default="yes" />
+    <oryx:magnet
+       oryx:cx="0"
+       oryx:cy="125"
+       oryx:anchors="left" />
+    <oryx:magnet
+       oryx:cx="150"
+       oryx:cy="250"
+       oryx:anchors="bottom" />
+    <oryx:magnet
+       oryx:cx="300"
+       oryx:cy="125"
+       oryx:anchors="right" />
+    <oryx:magnet
+       oryx:cx="150"
+       oryx:cy="0"
+       oryx:anchors="top" />
+  </oryx:magnets>
+
+
+
+  <g>
+    <rect
+       y="0"
+       x="0"
+       height="200"
+       width="300"
+       id="mainBody"
+	   oryx:resize="vertical horizontal"
+	   fill="white"
+       stroke="black" stroke-width="1"  />
+    <text
+       oryx:rotate="270"
+       id="label"
+	   x="10" 
+	   y="100" 
+	   oryx:align="middle left"
+       style="font-family:Arial; font-size: 8pt; fill:black;"
+       xml:space="preserve"></text>
+    <text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">pick</text>
+  </g>
+</svg>
