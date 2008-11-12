@@ -12,7 +12,7 @@
 			],
 			"properties": [
 				{
-					"id":"wikiref",
+					"id":"refuri",
 					"type":"url",
 					"title":"Wiki Reference",
 					"title_de":"Wiki Referenz",
