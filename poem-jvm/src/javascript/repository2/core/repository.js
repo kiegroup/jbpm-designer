@@ -157,7 +157,6 @@ Repository.Core.Repository = {
 		},
 		
 		hideMask: function( mask ){
-			console.log('hide')
 			var duration = 0.5;
 
 			// Fade out the background
