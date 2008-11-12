@@ -581,10 +581,14 @@ BEGIN
 		(friend.subject_id=subject_id1 AND friend.friend_id=subject_id2)
 		OR (friend.friend_id=subject_id1 AND friend.subject_id=subject_id2);
 
-	IF FOUND AND result.model_count > 0 THEN 
+	IF FOUND AND result.model_count > count THEN 
 		UPDATE friend SET model_count=result.model_count - count 
 		WHERE friend.subject_id=result.subject_id
 		AND friend.friend_id=result.friend_id;
+	ELSE
+		UPDATE friend SET model_count=0
+		WHERE friend.subject_id=result.subject_id
+		AND friend.friend_id=result.friend_id;	
 	END IF;
 END;$$
     LANGUAGE plpgsql;
@@ -648,8 +652,8 @@ ALTER FUNCTION public.friend_init() OWNER TO poem;
 -- Name: friend_trigger_interaction(); Type: FUNCTION; Schema: public; Owner: poem
 --
 
-CREATE FUNCTION friend_trigger_interaction() RETURNS trigger
-    AS $$ DECLARE
+CREATE OR REPLACE FUNCTION friend_trigger_interaction() RETURNS TRIGGER AS
+$BODY$ DECLARE
 	model_hierarchy text;
 	user_hierarchy text;
 	subject identity;
@@ -665,20 +669,19 @@ BEGIN
 
 	SELECT * INTO subject FROM get_identity_from_hierarchy(user_hierarchy);
 	
-	FOR friend_id IN SELECT identity.id FROM identity, structure, interaction 
-			WHERE (identity.id=structure.ident_id AND interaction.object=model_hierarchy 
-					AND structure.hierarchy=interaction.subject) LOOP
+	FOR friend_id IN SELECT access.subject_id FROM access, structure
+			WHERE (access.object_id=structure.ident_id AND structure.hierarchy=model_hierarchy) LOOP
 		
 		IF (TG_OP = 'INSERT') THEN 
 			PERFORM friend_inc_counter(subject.id, friend_id, 1);
 		ELSEIF (TG_OP = 'DELETE') THEN
-			PERFORM friend_inc_counter(subject.id, friend_id, 1);
+			PERFORM friend_dec_counter(subject.id, friend_id, 1);
 		END IF;		
 	END LOOP;
 	RETURN NULL;
-END;$$
-    LANGUAGE plpgsql;
-
+END;$BODY$
+LANGUAGE 'plpgsql' VOLATILE
+COST 100;
 
 ALTER FUNCTION public.friend_trigger_interaction() OWNER TO poem;
 

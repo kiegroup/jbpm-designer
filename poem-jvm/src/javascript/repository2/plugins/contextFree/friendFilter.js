@@ -100,7 +100,7 @@ Repository.Plugins.FriendFilter = {
 	
 	_onSelectionChange : function( dataView, selection ) {
 				
-		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return escape(item.data.friend); });
+		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return item.data.friend; });
 		this.facade.applyFilter('friend', filter.join(","));	
 	}
 };
