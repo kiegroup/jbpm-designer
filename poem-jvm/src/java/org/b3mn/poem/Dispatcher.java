@@ -52,6 +52,7 @@ public class Dispatcher extends HttpServlet {
 	private static String oryxRootPath = "/oryx/"; // Root path of the oryx war file
 	private static String handlerRootPath = backendRootPath + "poem/"; // Root url of all server handlers
 	private static String filterBrowserRedirectUrl = handlerRootPath + "repository2";
+	private static String filterModelRedirectErrorUrl = "/error";
 	private static String filterBrowserRegexPattern = "MSIE \\d+\\.\\d+;";
 	
 	protected Map<String, HandlerInfo> knownHandlers = new Hashtable<String, HandlerInfo>();
@@ -260,7 +261,11 @@ public class Dispatcher extends HttpServlet {
 
 			// If the requesting browser cannot handle the response (IE)
 			if (!this.checkBrowser(handlerInfo, request, response)) {
-				response.sendRedirect(filterBrowserRedirectUrl);
+				if( model == null ){
+					response.sendRedirect(filterBrowserRedirectUrl);
+				} else {
+					response.sendRedirect(handlerRootPath + model.getUri() + filterModelRedirectErrorUrl);
+				}
 				return; 
 			}
 			
