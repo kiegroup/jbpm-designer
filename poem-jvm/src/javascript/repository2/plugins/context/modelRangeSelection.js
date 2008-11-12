@@ -34,8 +34,6 @@ Repository.Plugins.ModelRangeSelection = {
 	
 	viewRegion : "bottom",
 	
-	hidePanel: true,
-	
 	construct: function( facade ) {
 
 		// call Plugin super class
