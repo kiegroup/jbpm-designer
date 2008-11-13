@@ -5,7 +5,7 @@
 	<xsl:output method="xml" />
 	
 	<!-- Root element -->
-	<xsl:template match="*:process">
+	<xsl:template match="process">
 		<div class="processdata">
 			<div id="oryxcanvas" class="-oryx-canvas">
 				<span class="oryx-type">http://b3mn.org/stencilset/bpel#Process</span>
@@ -14,7 +14,7 @@
 				<a rel="oryx-stencilset" href="./stencilsets/bpel/bpel.json"/>
 				<xsl:call-template name="add-render"/>
 			</div>	
-      <div id="oryx_1">
+	         <div id="oryx_1">
 				<span class="oryx-type">http://b3mn.org/stencilset/bpel#process</span>
 				<span class="oryx-bounds">114,18,714,518</span>
 				<a rel="raziel-parent" href="#oryx-canvas123"/>
@@ -29,9 +29,9 @@
 		</div>	 
 	</xsl:template>
 	
+	
 	<xsl:template name="add-attributes">		
 		<xsl:for-each select="@*">
-		  
 			<xsl:variable name="attributeName" select="translate(concat('oryx-',name()),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
 				
 			<span>
@@ -49,7 +49,7 @@
 		<xsl:param name="parentBoundLeftUpperX"/>
 		<xsl:param name="parentBoundLeftUpperY"/>
 	
-		<xsl:for-each select="*:invoke|*:receive|*:reply|*:assign|*:copy|*:empty|*:opaqueActivity|*:validate|*:extensionActivity|*:wait|*:throw|*:exit|*:rethrow|*:if|*:elseif|*:else|*:flow|*:sequence|*:link|*:pick|*:onMessage|*:onAlarm|*:while|*:repeatUntil|*:forEach|*:compensate|*:compensateScope|*:scope|*:onEvent|*:eventHandlers|*:faultHandlers|*:compensationHandler|*:terminationHandler|*:catch|*:catchAll">
+		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandlers|faultHandlers|compensationHandler|terminationHandler|catch|catchAll">
 			<xsl:variable name="id" select="concat($parentID,'_',position())" />
 			<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()*3+ 10" />
 			<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()*3+ 10" />
@@ -96,15 +96,15 @@
 		<!-- in <process> -->
 		<xsl:if test="name()='process'">	
 			<!--<oryx-extensions>-->
-			<xsl:for-each select="*:extensions">
-				<xsl:variable name="numberOfExtensionElement" select="count(*:extension)"/>
+			<xsl:for-each select="extensions">
+				<xsl:variable name="numberOfExtensionElement" select="count(extension)"/>
 				<xsl:if test="not($numberOfExtensionElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-extensions</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfExtensionElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:extension[not(position()=last())]">
+						<xsl:for-each select="extension[not(position()=last())]">
 							<xsl:variable name="namespace" select='@namespace'/>
 							<xsl:variable name="mustUnderstand" select='@mustUnderstand'/>
 							
@@ -122,14 +122,14 @@
 			</xsl:for-each>	
 			
 			<!--<oryx-import>-->
-			<xsl:variable name="numberOfImportElement" select="count(*:import)"/>
+			<xsl:variable name="numberOfImportElement" select="count(import)"/>
 			<xsl:if test="not($numberOfImportElement=0)">
 				<span>
 					<xsl:attribute name="class">oryx-import</xsl:attribute>	
 					
 					<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfImportElement,'%2C%20%27items%27%3A%5B%7B')"/>
 					
-					<xsl:for-each select="*:import[not(position()=last())]">
+					<xsl:for-each select="import[not(position()=last())]">
 						<xsl:variable name="namespace" select='@namespace'/>
 						<xsl:variable name="location" select='@location'/>
 						<xsl:variable name="importType" select='@importType'/>
@@ -137,7 +137,7 @@
 						<xsl:value-of select="concat('namespace%3A%22',$namespace,'%22%2C%20location%3A%22',$location,'%22%2C%20importType%3A%22',$location,'%22%7D%2C%20%7B')"/>				
 					</xsl:for-each>	
 					
-					<xsl:for-each select="*:import[position()=last()]">
+					<xsl:for-each select="import[position()=last()]">
 						<xsl:variable name="namespace" select='@namespace'/>
 						<xsl:variable name="location" select='@location'/>
 						<xsl:variable name="importType" select='@importType'/>
@@ -151,15 +151,15 @@
 		<!--- in <process> or <scope> -->
 		<xsl:if test="name()='process' or name()='scope'">
 			<!--<oryx-variables>-->
-			<xsl:for-each select="*:variables">
-				<xsl:variable name="numberOfVariableElement" select="count(*:variable)"/>
+			<xsl:for-each select="variables">
+				<xsl:variable name="numberOfVariableElement" select="count(variable)"/>
 				<xsl:if test="not($numberOfVariableElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-variables</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfVariableElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:variable[not(position()=last())]">
+						<xsl:for-each select="variable[not(position()=last())]">
 							<xsl:variable name="name" select='@name'/>
 							<xsl:variable name="messageType" select='@messageType'/>
 							<xsl:variable name="type" select='@type'/>
@@ -179,7 +179,7 @@
 							<xsl:value-of select="concat('name%3A%22',$name,'%22%2C%20messageType%3A%22',$messageType,'%22%2C%20type%3A%22',$type,'%22%2C%20element%3A%22',$element,'%22%2C%20fromspectype%3A%22',$fromspectype,'%22%2C%20fromspecvariablename%3A%22',$fromspecvariablename,'%22%2C%20fromspecpart%3A%22',$fromspecpart,'%22%2C%20fromspecpartnerLink%3A%22',$fromspecpartnerLink,'%22%2C%20fromspecendpointReference%3A%22',$fromspecendpointReference,'%22%2C%20fromspecquerylanguage%3A%22',$fromspecquerylanguage,'%22%2C%20fromspecquery%3A%22',$fromspecquery,'%22%2C%20fromspecproperty%3A%22',$fromspecproperty,'%22%2C%20fromspecexpressionlanguage%3A%22',$fromspecexpressionlanguage,'%22%2C%20fromspecexpression%3A%22',$fromspecexpression,'%22%2C%20fromspecliteral%3A%22',$fromspecliteral,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:variable[position()=last()]">
+						<xsl:for-each select="variable[position()=last()]">
 							<xsl:variable name="name" select='@name'/>
 							<xsl:variable name="messageType" select='@messageType'/>
 							<xsl:variable name="type" select='@type'/>
@@ -203,15 +203,15 @@
 			</xsl:for-each>
 			
 			<!--<oryx-PartnerLinks>-->
-			<xsl:for-each select="*:partnerLinks">
-				<xsl:variable name="numberOfPartnerLinkElement" select="count(*:partnerLink)"/>
+			<xsl:for-each select="partnerLinks">
+				<xsl:variable name="numberOfPartnerLinkElement" select="count(partnerLink)"/>
 				<xsl:if test="not($numberOfPartnerLinkElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-partnerlinks</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfPartnerLinkElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:partnerLink[not(position()=last())]">
+						<xsl:for-each select="partnerLink[not(position()=last())]">
 							<xsl:variable name="name" select='@name'/>
 							<xsl:variable name="PartnerLinkType" select='@partnerLinkType'/>
 							<xsl:variable name="myRole" select='@myRole'/>
@@ -221,7 +221,7 @@
 							<xsl:value-of select="concat('name%3A%22',$name,'%22%2C%20PartnerLinkType%3A%22',$PartnerLinkType,'%22%2C%20myRole%3A%22',$myRole,'%22%2C%20partnerRole%3A%22',$partnerRole,'%22%2C%20initializePartnerRole%3A%22',$initializePartnerRole,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:partnerLink[position()=last()]">
+						<xsl:for-each select="partnerLink[position()=last()]">
 							<xsl:variable name="name" select='@name'/>
 							<xsl:variable name="PartnerLinkType" select='@partnerLinkType'/>
 							<xsl:variable name="myRole" select='@myRole'/>
@@ -235,22 +235,22 @@
 			</xsl:for-each>	
 			
 			<!--<oryx-CorrelationSets>-->
-			<xsl:for-each select="*:correlationSets">
-				<xsl:variable name="numberOfCorrelationSetElement" select="count(*:correlationSet)"/>
+			<xsl:for-each select="correlationSets">
+				<xsl:variable name="numberOfCorrelationSetElement" select="count(correlationSet)"/>
 				<xsl:if test="not($numberOfCorrelationSetElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-correlationsets</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfCorrelationSetElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:correlationSet[not(position()=last())]">
+						<xsl:for-each select="correlationSet[not(position()=last())]">
 							<xsl:variable name="name" select='@name'/>
 							<xsl:variable name="properties" select='@properties'/>
 							
 							<xsl:value-of select="concat('name%3A%22',$name,'%22%2C%20properties%3A%22',$properties,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:correlationSet[position()=last()]">
+						<xsl:for-each select="correlationSet[position()=last()]">
 							<xsl:variable name="name" select='@name'/>
 							<xsl:variable name="properties" select='@properties'/>
 							
@@ -261,21 +261,21 @@
 			</xsl:for-each>	
 			
 			<!--<oryx-MessageExchanges>-->
-			<xsl:for-each select="*:messageExchanges">
-				<xsl:variable name="numberOfMessageExchangeElement" select="count(*:messageExchange)"/>
+			<xsl:for-each select="messageExchanges">
+				<xsl:variable name="numberOfMessageExchangeElement" select="count(messageExchange)"/>
 				<xsl:if test="not($numberOfMessageExchangeElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-messageexchanges</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfMessageExchangeElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:messageExchange[not(position()=last())]">
+						<xsl:for-each select="messageExchange[not(position()=last())]">
 							<xsl:variable name="name" select='@name'/>
 							
 							<xsl:value-of select="concat('name%3A%22',$name,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:messageExchange[position()=last()]">
+						<xsl:for-each select="messageExchange[position()=last()]">
 							<xsl:variable name="name" select='@name'/>
 							
 							<xsl:value-of select="concat('name%3A%22',$name,'%22%7D%5D%7D')"/>				
@@ -288,15 +288,15 @@
 		<!-- in <invoke> or <receive> or <reply> -->
 		<xsl:if test="name()='invoke' or name()='receive' or name()='reply'">
 			<!--<oryx-Correlations>-->
-			<xsl:for-each select="*:correlations">
-				<xsl:variable name="numberOfCorrelationElement" select="count(*:correlation)"/>
+			<xsl:for-each select="correlations">
+				<xsl:variable name="numberOfCorrelationElement" select="count(correlation)"/>
 				<xsl:if test="not($numberOfCorrelationElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-correlations</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfCorrelationElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:correlation[not(position()=last())]">
+						<xsl:for-each select="correlation[not(position()=last())]">
 							<xsl:variable name="Correlation" select='@set'/>
 							<xsl:variable name="initiate" select='@initiate'/>
 							<xsl:variable name="pattern" select='@pattern'/>
@@ -304,7 +304,7 @@
 							<xsl:value-of select="concat('Correlation%3A%22',$Correlation,'%22%2C%20initiate%3A%22',$initiate,'%22%2C%20pattern%3A%22',$pattern,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:correlation[position()=last()]">
+						<xsl:for-each select="correlation[position()=last()]">
 							<xsl:variable name="Correlation" select='@set'/>
 							<xsl:variable name="initiate" select='@initiate'/>
 							<xsl:variable name="pattern" select='@pattern'/>
@@ -319,22 +319,22 @@
 		<!-- in <onMessage> or <onEvent> -->
 		<xsl:if test="name()='onMessage' or name()='onEvent'">
 			<!--<oryx-Correlations>-->
-			<xsl:for-each select="*:correlations">
-				<xsl:variable name="numberOfCorrelationElement" select="count(*:correlation)"/>
+			<xsl:for-each select="correlations">
+				<xsl:variable name="numberOfCorrelationElement" select="count(correlation)"/>
 				<xsl:if test="not($numberOfCorrelationElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-correlations</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfCorrelationElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:correlation[not(position()=last())]">
+						<xsl:for-each select="correlation[not(position()=last())]">
 							<xsl:variable name="Correlation" select='@set'/>
 							<xsl:variable name="initiate" select='@initiate'/>
 							
 							<xsl:value-of select="concat('Correlation%3A%22',$Correlation,'%22%2C%20initiate%3A%22',$initiate,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:correlation[position()=last()]">
+						<xsl:for-each select="correlation[position()=last()]">
 							<xsl:variable name="Correlation" select='@set'/>
 							<xsl:variable name="initiate" select='@initiate'/>
 							
@@ -348,22 +348,22 @@
 		<!-- in <invoke> or <reply> -->
 		<xsl:if test="name()='invoke' or name()='reply'">
 			<!--<oryx-toParts>-->
-			<xsl:for-each select="*:toParts">
-				<xsl:variable name="numberOfToPartElement" select="count(*:toPart)"/>
+			<xsl:for-each select="toParts">
+				<xsl:variable name="numberOfToPartElement" select="count(toPart)"/>
 				<xsl:if test="not($numberOfToPartElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-toparts</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfToPartElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:toPart[not(position()=last())]">
+						<xsl:for-each select="toPart[not(position()=last())]">
 							<xsl:variable name="part" select='@part'/>
 							<xsl:variable name="fromVariable" select='@fromVariable'/>
 							
 							<xsl:value-of select="concat('part%3A%22',$part,'%22%2C%20fromVariable%3A%22',$fromVariable,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:toPart[position()=last()]">
+						<xsl:for-each select="toPart[position()=last()]">
 							<xsl:variable name="part" select='@part'/>
 							<xsl:variable name="fromVariable" select='@fromVariable'/>
 							
@@ -377,22 +377,22 @@
 		<!-- in <invoke> or <onEvent>  or <onMessage>-->
 		<xsl:if test="name()='invoke' or name()='onEvent' or name()='onMessage'">
 			<!--<oryx-fromParts>-->
-			<xsl:for-each select="*:fromParts">
-				<xsl:variable name="numberOfFromPartElement" select="count(*:fromPart)"/>
+			<xsl:for-each select="fromParts">
+				<xsl:variable name="numberOfFromPartElement" select="count(fromPart)"/>
 				<xsl:if test="not($numberOfFromPartElement=0)">
 					<span>
 						<xsl:attribute name="class">oryx-fromparts</xsl:attribute>	
 						
 						<xsl:value-of select="concat('%7B%27totalCount%27%3A',$numberOfFromPartElement,'%2C%20%27items%27%3A%5B%7B')"/>
 						
-						<xsl:for-each select="*:fromPart[not(position()=last())]">
+						<xsl:for-each select="fromPart[not(position()=last())]">
 							<xsl:variable name="part" select='@part'/>
 							<xsl:variable name="toVariable" select='@toVariable'/>
 							
 							<xsl:value-of select="concat('part%3A%22',$part,'%22%2C%20toVariable%3A%22',$toVariable,'%22%7D%2C%20%7B')"/>				
 						</xsl:for-each>	
 						
-						<xsl:for-each select="*:fromPart[position()=last()]">
+						<xsl:for-each select="fromPart[position()=last()]">
 							<xsl:variable name="part" select='@part'/>
 							<xsl:variable name="toVariable" select='@toVariable'/>
 							
@@ -407,7 +407,7 @@
 
 	<xsl:template name="add-elements">
 		<!--<documentation>-->
-		<xsl:for-each select="*:documentation">
+		<xsl:for-each select="documentation">
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName" select="name()"/>
 				<xsl:with-param name="valueOfElement" select="."/>
@@ -415,8 +415,8 @@
 		</xsl:for-each>	
 		
 		<!--<targets>-->
-		<xsl:for-each select="*:targets">
-			<xsl:for-each select="*:joinCondition">
+		<xsl:for-each select="targets">
+			<xsl:for-each select="joinCondition">
 				<xsl:call-template name="add-standard-element">
 					<xsl:with-param name="elementName">joincond_explang</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
@@ -454,7 +454,7 @@
 		
 		<!--<for>|<Until> element in <wait> or <onAlarm>  -->
 		<xsl:if test="name()='wait' or name()='onAlarm'">
-			<xsl:for-each select="*:for|*:until">
+			<xsl:for-each select="for|until">
 				<xsl:if test="name()='for'">
 					<xsl:call-template name="add-standard-element">
 						<xsl:with-param name="elementName">forOrUntil</xsl:with-param>
@@ -484,7 +484,7 @@
 
 		<!--<condition> element in <while> or <repeatUntil>-->
 		<xsl:if test="name()='while' or name()='repeatUntil'">
-        	<xsl:for-each select="*:condition">
+        	<xsl:for-each select="condition">
         		<xsl:call-template name="add-standard-element">
 					<xsl:with-param name="elementName">condition_expressionLanguage</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
@@ -502,7 +502,7 @@
 		
 		<!--<startCounterValue> <finalCounterValue> <compleationCondition> elements in <forEach>-->
 		<xsl:if test="name()='forEach'">
-			<xsl:for-each select="*:startCounterValue">
+			<xsl:for-each select="startCounterValue">
         		<xsl:call-template name="add-standard-element">
 					<xsl:with-param name="elementName">start_expLang</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
@@ -512,7 +512,7 @@
 					<xsl:with-param name="valueOfElement" select="."/>
 				</xsl:call-template>				
 			</xsl:for-each>
-			<xsl:for-each select="*:finalCounterValue">
+			<xsl:for-each select="finalCounterValue">
         		<xsl:call-template name="add-standard-element">
 					<xsl:with-param name="elementName">final_expLang</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
@@ -522,7 +522,7 @@
 					<xsl:with-param name="valueOfElement" select="."/>
 				</xsl:call-template>				
 			</xsl:for-each>
-			<xsl:for-each select="*:completionCondition">
+			<xsl:for-each select="completionCondition">
 				<xsl:for-each select="branches">
 	        		<xsl:call-template name="add-standard-element">
 						<xsl:with-param name="elementName">compCond_expLang</xsl:with-param>
@@ -542,7 +542,7 @@
 		
 		<!--<repeatEvery> element in <onAlarm>-->
 		<xsl:if test="name()='onAlarm'">
-			<xsl:for-each select="*:repeatEvery">
+			<xsl:for-each select="repeatEvery">
 				<xsl:call-template name="add-standard-element">
 					<xsl:with-param name="elementName">repeatExpressionLanguage</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="@expressionLanguage"/>
@@ -589,7 +589,7 @@
 	</xsl:template>
 	
 	<xsl:template name="add-from-spec-elements">
-		<xsl:for-each select="*:from">
+		<xsl:for-each select="from">
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName">fromspecvariablename</xsl:with-param>
 				<xsl:with-param name="valueOfElement" select="@variable"/>
@@ -612,7 +612,7 @@
 			</xsl:call-template>
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName">fromspecquery</xsl:with-param>
-				<xsl:with-param name="valueOfElement" select="*:query"/>
+				<xsl:with-param name="valueOfElement" select="query"/>
 			</xsl:call-template>
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName">fromspecproperty</xsl:with-param>
@@ -628,7 +628,7 @@
 			</xsl:call-template>
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName">fromspecliteral</xsl:with-param>
-				<xsl:with-param name="valueOfElement" select="*:literal"/>
+				<xsl:with-param name="valueOfElement" select="literal"/>
 			</xsl:call-template>
 		</xsl:for-each>
 	</xsl:template>	
@@ -658,7 +658,7 @@
 	</xsl:template>
 		
 	<xsl:template name="add-to-spec-elements">
-		<xsl:for-each select="*:to">
+		<xsl:for-each select="to">
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName">tospecvariablename</xsl:with-param>
 				<xsl:with-param name="valueOfElement" select="@variable"/>
@@ -677,7 +677,7 @@
 			</xsl:call-template>
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName">tospecquery</xsl:with-param>
-				<xsl:with-param name="valueOfElement" select="*:query"/>
+				<xsl:with-param name="valueOfElement" select="query"/>
 			</xsl:call-template>
 			<xsl:call-template name="add-standard-element">
 				<xsl:with-param name="elementName">tospecproperty</xsl:with-param>
@@ -693,7 +693,7 @@
 	<xsl:template name="DFS-for-adding-render">
 		<xsl:param name="parentID"/>
 		
-		<xsl:for-each select="*:invoke|*:receive|*:reply|*:assign|*:copy|*:empty|*:opaqueActivity|*:validate|*:extensionActivity|*:wait|*:throw|*:exit|*:rethrow|*:if|*:elseif|*:else|*:flow|*:sequence|*:link|*:pick|*:onMessage|*:onAlarm|*:while|*:repeatUntil|*:forEach|*:compensate|*:compensateScope|*:scope|*:onEvent|*:eventHandlers|*:faultHandlers|*:compensationHandler|*:terminationHandler|*:catch|*:catchAll"> 
+		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandlers|faultHandlers|compensationHandler|terminationHandler|catch|catchAll"> 
 		    <xsl:variable name="id">
  		    	<xsl:value-of select="concat($parentID,'_',position())"/>
 			</xsl:variable>	
