@@ -304,6 +304,7 @@ public class Dispatcher extends HttpServlet {
 			}
 		} catch (Exception e) {
 			// response.reset(); // Undo all changes --> this may cause some trouble because of a SUN bug
+			e.printStackTrace();
 			try {
 				response.sendRedirect("http://bpt.hpi.uni-potsdam.de/Oryx/503");
 			} catch (IOException e1) {
