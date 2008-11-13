@@ -3,6 +3,7 @@ package de.hpi.diagram.stepthrough;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
@@ -58,6 +59,8 @@ public class StepThroughServlet extends HttpServlet {
 	protected void processDocument(Document document, HttpServletRequest req, HttpServletResponse res) {
 		String type = new StencilSetUtil().getStencilSet(document);
 		
+		String initialMarking = req.getParameter("initialMarking");
+		
 		IStepThroughInterpreter stm = null;
 		
 		if (type.equals("bpmn.json") || type.equals("bpmn1.1.json")){
@@ -92,7 +95,9 @@ public class StepThroughServlet extends HttpServlet {
 		} else if (type.equals("epc.json")){
 			try{
 				IEPC epcDiagram = new OryxParser(new EPCFactory()).parse(document).get(0); 
-				stm = new EPCStepThroughInterpreter(epcDiagram);
+				EPCStepThroughInterpreter epcStm = new EPCStepThroughInterpreter(epcDiagram);
+				epcStm.setInitialMarking(Arrays.asList(initialMarking.split(";")));
+				stm = epcStm;
 			} catch (Exception e){
 				e.printStackTrace();
 			}

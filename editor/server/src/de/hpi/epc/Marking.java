@@ -227,7 +227,7 @@ public class Marking implements Cloneable {
 					nodeNewMarkings.add(nodeNewMarking);
 				} else if (this.isXorConnector(node)
 						&& filterByState(diag.getIncomingControlFlow(node),
-								State.POS_TOKEN).size() == 1) {
+								State.POS_TOKEN).size() >= 1) {
 					NodeNewMarkingPair nodeNewMarking = new NodeNewMarkingPair(
 							node, this.clone());
 
