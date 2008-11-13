@@ -12,6 +12,7 @@ import de.hpi.bpt.process.epc.Function;
 import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
+import de.hpi.bpt.process.epc.ProcessInterface;
 
 public class Marking implements Cloneable {
 	public enum State {
@@ -153,7 +154,7 @@ public class Marking implements Cloneable {
 			// Event, functions and split connectors
 			if (diag.getIncomingControlFlow(node).size() == 1 && state.get(diag.getIncomingControlFlow(node).iterator().next()) == State.POS_TOKEN) {
 				// (a), (b), (c)
-				if ( node instanceof Function || node instanceof Event || isAndConnector(node) ) {
+				if (node instanceof ProcessInterface || node instanceof Function || node instanceof Event || isAndConnector(node) ) {
 					NodeNewMarkingPair nodeNewMarking = new NodeNewMarkingPair(node, this.clone());
 
 					nodeNewMarking.newMarking.applyContext(diag.getIncomingControlFlow(node), Context.DEAD);

@@ -38,6 +38,10 @@ Repository.I18N.Repository.bottomPanelTitle = "Kommentare";
 
 Repository.I18N.Repository.loadingText = "Repository wird geladen..."
 
+Repository.I18N.Repository.errorText = "<b style='font-size:13px'>Upps!</b><br/>Diagramme können nur im <a href='http://www.mozilla.com/en-US/products/firefox/' target='_blank'>Firefox Browser</a> editiert werden.";
+Repository.I18N.Repository.errorAuthor = "Autor:"
+Repository.I18N.Repository.errorTitle = "Titel:"
+
 // Plugins here
  
 // NewModel Plugin
@@ -144,3 +148,13 @@ Repository.I18N.Rating.my = "Meine Bewertung:"
 Repository.I18N.Rating.totalNoneText = "keine Bewertung" 
 Repository.I18N.Rating.totalOneText = "#{totalScore} (#{totalVotes})" 
 Repository.I18N.Rating.totalMoreText = "Von #{modelCount} Modellen sind #{voteCount} bewertet mit einem Durchschnitt von #{totalScore} (#{totalVotes})"
+
+if(!Repository.I18N.RatingFilter) Repository.I18N.RatingFilter = {};
+Repository.I18N.RatingFilter.name = "Bewertungs Filter"
+
+if(!Repository.I18N.AccessFilter) Repository.I18N.AccessFilter = {};
+Repository.I18N.AccessFilter.name = "Rechte Filter"
+Repository.I18N.AccessFilter.mine = "Meine"
+Repository.I18N.AccessFilter.reader = "Alle mit Leserechte"
+Repository.I18N.AccessFilter.writer = "Alle mit Schreibrechte"
+Repository.I18N.AccessFilter.publicText = "Public"

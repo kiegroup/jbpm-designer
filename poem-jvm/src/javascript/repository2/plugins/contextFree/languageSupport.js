@@ -37,6 +37,8 @@ Repository.Plugins.LanguageSupport = {
 		en_us: '/backend/images/flags/us.png',
 		en: '/backend/images/flags/us.png'
 	},
+
+	hidePanel: true,
 	
 	construct: function( facade ) {
 		
@@ -64,7 +66,6 @@ Repository.Plugins.LanguageSupport = {
 		}.bind(this));
 					
 		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class
-		
 
 	},
 	

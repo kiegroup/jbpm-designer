@@ -35,6 +35,8 @@
 	<target name="clean-backend">
 		<delete dir="${bin-dir}" />
 		<delete file="${target-dir}/backend.war" />
+		<delete file="${deploymentdir}/backend.war" />
+		<delete dir="${deploymentdir}/backend" />
 	</target>
 	
 	<target name="compile-backend">
@@ -106,6 +108,8 @@
 			<lib dir="${lib-dir}" />
 			<classes dir="${bin-dir}" />
 			<metainf file="build/LICENSE"/>
+			
+			<fileset file="favicon.ico"/>
 		</war>
 	</target>
 	
@@ -431,6 +435,8 @@
 			<metainf file="${editor-build-root}/LICENSE"/>
             <metainf file="${editor-build-root}/LIBRARIES"/>
 			<metainf file="${editor-build-root}/VERSION"/>
+			
+			<fileset file="favicon.ico"/>
         </war>
         
           

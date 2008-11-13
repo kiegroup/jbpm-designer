@@ -60,12 +60,14 @@ BEGIN
 		(friend.subject_id=subject_id1 AND friend.friend_id=subject_id2)
 		OR (friend.friend_id=subject_id1 AND friend.subject_id=subject_id2);
 
-	IF FOUND AND result.model_count - count > 0 THEN 
+	IF FOUND AND result.model_count > count THEN 
 		UPDATE friend SET model_count=result.model_count - count 
 		WHERE friend.subject_id=result.subject_id
 		AND friend.friend_id=result.friend_id;
 	ELSE
-		UPDATE friend SET model_count=0;
+		UPDATE friend SET model_count=0
+		WHERE friend.subject_id=result.subject_id
+		AND friend.friend_id=result.friend_id;	
 	END IF;
 END;$BODY$
 LANGUAGE 'plpgsql' VOLATILE
@@ -111,10 +113,9 @@ $BODY$ DECLARE
 	user_pair record;
 BEGIN
 	DELETE FROM friend;
-	PERFORM friend_inc_counter(get_identity_id_from_hierarchy(user1.subject), 
-			get_identity_id_from_hierarchy(user2.subject), 1)
-		FROM interaction as user1, interaction as user2 
-		WHERE user1.object=user2.object;
+	PERFORM friend_inc_counter(friend1.subject_id, friend2.subject_id, 1)
+		FROM access as friend1, access as friend2 
+		WHERE friend1.object_id=friend1.object_id AND friend1 <> friend2;
 	-- halve the counter since all friends are counted twice
 	UPDATE friend SET model_count=model_count / 2;
 END;$BODY$

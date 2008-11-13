@@ -29,7 +29,7 @@ if(!ORYX.Plugins)
  * 
  * 
  */
-ORYX.Plugins.ARISSupport = Clazz.extend({
+ORYX.Plugins.ProcessLink = Clazz.extend({
 
 	facade: undefined,
 
@@ -100,7 +100,7 @@ ORYX.Plugins.ARISSupport = Clazz.extend({
 							
 	
 		// Set the link with the special namespace
-		link.setAttributeNS("http://www.w3.org/1999/xlink", "href", url);
+		link.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", url);
 		
 		
 		// Shows the link in the overlay					

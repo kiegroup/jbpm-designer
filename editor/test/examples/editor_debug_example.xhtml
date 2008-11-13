@@ -1,0 +1,2665 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:b3mn="http://b3mn.org/2007/b3mn" xmlns:ext="http://b3mn.org/2007/ext" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:atom="http://b3mn.org/2007/atom+xhtml">
+    <head profile="http://purl.org/NET/erdf/profile">
+        <title>Oryx</title>
+        <!-- libraries --><script src="lib/prototype-1.5.1.js" type="text/javascript" /><script src="lib/path_parser.js" type="text/javascript" /><script src="lib/ext-2.0.2/adapter/ext/ext-base.js" type="text/javascript" /><script src="lib/ext-2.0.2/ext-all-debug.js" type="text/javascript" /><script src="lib/ext-2.0.2/color-field.js" type="text/javascript" />
+        <style media="screen" type="text/css">
+            @import url("lib/ext-2.0.2/resources/css/ext-all.css");
+            @import url("lib/ext-2.0.2/resources/css/xtheme-gray.css");
+        </style>
+        <!-- oryx editor --><script src="i18n/translation_en_us.js" type="text/javascript"/><script src="../../editor/client/scripts/kickstart.js" type="text/javascript" /><script src="../../editor/client/scripts/erdfparser.js" type="text/javascript" /><script src="../../editor/client/scripts/datamanager.js" type="text/javascript" /><script src="../../editor/client/scripts/oryx.js" type="text/javascript" /><script src="../../editor/client/scripts/config.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/SVG/editpathhandler.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/SVG/minmaxpathhandler.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/SVG/pointspathhandler.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/SVG/svgmarker.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/SVG/svgshape.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/SVG/label.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/Math/math.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/StencilSet/stencil.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/StencilSet/property.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/StencilSet/propertyitem.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/StencilSet/complexpropertyitem.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/StencilSet/rules.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/StencilSet/stencilset.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/StencilSet/stencilsets.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/bounds.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/uiobject.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/abstractshape.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/canvas.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/main.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/svgDrag.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/shape.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/Controls/control.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/Controls/docker.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/Controls/magnet.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/node.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/edge.js" type="text/javascript" /><script src="../../editor/client/scripts/Core/command.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/addDocker.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/addssextension.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/addstencilset.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/adHocCC.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/amlSupport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/arisSupport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/arrangement.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/autoLayout.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/bpel2bpmn.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/bpel4chor.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/bpelSupport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/bpmn1.1DiamondSwitch.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/bpmnValidator.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/canvasResize.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/desynchronizabilityOverlay.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/dragDocker.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/dragdropresize.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/edit.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/epc2bpmn.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/epcSupport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/erdfSupport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/file.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/grouping.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/loading.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/overlay.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/overlayexample.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/pnmlexport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/propertywindow.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/renameShapes.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/rowlayouting.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/selectionframe.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/shapeHighlighting.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/shapemenu.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/shaperepository.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/simplepnmlexport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/stepThroughPlugin.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/syntaxchecker.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/toolbar.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/treeGraphSupport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/undo.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/view.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/xformsexport.js" type="text/javascript" /><script src="../../editor/client/scripts/Plugins/xformsimport.js" type="text/javascript" />
+        <link rel="Stylesheet" media="screen" href="css/theme_norm.css" type="text/css" />
+        <!-- erdf schemas -->
+        <link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
+        <link rel="schema.dcTerms" href="http://purl.org/dc/terms/ " />
+        <link rel="schema.b3mn" href="http://b3mn.org" />
+        <link rel="schema.oryx" href="http://oryx-editor.org/" />
+        <link rel="schema.raziel" href="http://raziel.org/" />
+    </head>
+    <body style="display: block; overflow: hidden;">
+        <div class="processdata">
+            <div id="oryx-canvas123" class="-oryx-canvas">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#BPMNDiagram</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-version"></span>
+                <span class="oryx-author"></span>
+                <span class="oryx-language">English</span>
+                <span class="oryx-expressionlanguage"></span>
+                <span class="oryx-querylanguage"></span>
+                <span class="oryx-creationdate"></span>
+                <span class="oryx-modificationdate"></span>
+                <span class="oryx-pools"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-mode">writable</span>
+                <span class="oryx-mode">fullscreen</span>
+                <a rel="oryx-stencilset" href="./stencilsets/bpmn1.1/bpmn1.1.json"/><a rel="oryx-render" href="#oryx_9B44361C-82C1-46AD-9246-7C65FB69B356"/><a rel="oryx-render" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/><a rel="oryx-render" href="#oryx_E3C541B0-3DE3-4CBE-A047-04209F5A5F26"/><a rel="oryx-render" href="#oryx_3827B267-5A23-4692-A6AC-20D468E80255"/><a rel="oryx-render" href="#oryx_573C51D3-4696-4BB5-B324-EC5CE0A5D35A"/><a rel="oryx-render" href="#oryx_ACE60144-8A54-4CD1-A00C-EAE0DB46F17E"/><a rel="oryx-render" href="#oryx_83CB5F1A-7159-4CC9-98AA-01EF90F8FA82"/><a rel="oryx-render" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/><a rel="oryx-render" href="#oryx_B94F9A99-ECF2-4AE6-85D2-E194E6D75921"/><a rel="oryx-render" href="#oryx_C729A10A-BCAE-4C54-A64B-402C17781258"/><a rel="oryx-render" href="#oryx_0B3F164A-89F4-477D-88C8-7C2853366CB2"/><a rel="oryx-render" href="#oryx_A477F57E-1B83-4CB6-82DF-FC206F2F57FB"/><a rel="oryx-render" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/><a rel="oryx-render" href="#oryx_F7890F8B-EA0B-4E23-86F9-96636A44F127"/><a rel="oryx-render" href="#oryx_E27ADE72-D4FC-4EFA-9039-EFF8C1731F4A"/><a rel="oryx-render" href="#oryx_C35E764B-2A38-4263-9186-E2855E590284"/><a rel="oryx-render" href="#oryx_F44A274E-00FD-4F63-BF7E-1E87DAB5FCC3"/><a rel="oryx-render" href="#oryx_CED405AA-B055-4C2C-8D4D-7F053CF11E2B"/><a rel="oryx-render" href="#oryx_014327A3-AB53-40F7-AC93-1B54A9945ADB"/><a rel="oryx-render" href="#oryx_49245A9F-2EC4-481F-937F-2885A0575462"/><a rel="oryx-render" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/><a rel="oryx-render" href="#oryx_40554EBC-D2AF-406D-8C49-9FDCF7448F11"/><a rel="oryx-render" href="#oryx_2F0B40D8-41EC-4C8A-BBAF-878836073BEA"/><a rel="oryx-render" href="#oryx_F284EF1D-6190-4736-A1D1-97A4567B9D79"/><a rel="oryx-render" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/><a rel="oryx-render" href="#oryx_3FB361D4-4295-4815-9B8B-E9BEC0185709"/><a rel="oryx-render" href="#oryx_23609691-3567-4328-A199-F69B2314EFFA"/><a rel="oryx-render" href="#oryx_0BE94606-C400-4D37-A01D-5E7EE467004D"/><a rel="oryx-render" href="#oryx_03C9C600-81E8-4E14-85D6-36F5A97C9D7B"/><a rel="oryx-render" href="#oryx_44B48DD1-50AB-42C0-A823-9D1FCC47412D"/><a rel="oryx-render" href="#oryx_0BBC87E8-E291-4B19-BABD-3CE53762F982"/><a rel="oryx-render" href="#oryx_E137BE91-48DF-46DE-AB89-B83E0BB62419"/><a rel="oryx-render" href="#oryx_1BEC1E98-8B11-4447-A837-EDF5BE848EBC"/><a rel="oryx-render" href="#oryx_6C944031-A030-4120-BCD1-CC495F8E87EB"/><a rel="oryx-render" href="#oryx_D2C6FFF4-5AB7-4AC1-9BCC-0A93AD7302CB"/><a rel="oryx-render" href="#oryx_5DED7E5A-6753-4E07-8CA1-3779CC828495"/><a rel="oryx-render" href="#oryx_564940AE-E4A2-4CCA-BD23-5B5B39CD83D5"/><a rel="oryx-render" href="#oryx_D3154268-C7FB-42BB-8DAC-43F9CAFE446B"/><a rel="oryx-render" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/><a rel="oryx-render" href="#oryx_E4F35A04-A235-4E47-AE92-0227DB1F5A6F"/><a rel="oryx-render" href="#oryx_B904B845-B873-44D0-B4D0-488A27DACE12"/><a rel="oryx-render" href="#oryx_DADD8460-4EA1-4697-AEA2-E42EED4D9394"/><a rel="oryx-render" href="#oryx_D668D5CB-9849-4D3D-8BC5-93B21828D411"/><a rel="oryx-render" href="#oryx_202FB8BF-92CB-49D5-AC9B-1441CDC51801"/><a rel="oryx-render" href="#oryx_4885E8AC-7DD7-45A0-8DF1-D9F0F516C288"/><a rel="oryx-render" href="#oryx_B3E152DF-1EE9-4AA2-B006-54BBB88E0243"/><a rel="oryx-render" href="#oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE"/><a rel="oryx-render" href="#oryx_79F467F5-29D8-4398-8AB2-3E53616DD2EB"/><a rel="oryx-render" href="#oryx_C3D3DC5A-4D8D-42DC-9AF4-440BDD51EB7E"/><a rel="oryx-render" href="#oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E"/><a rel="oryx-render" href="#oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B"/><a rel="oryx-render" href="#oryx_2B7378FC-39BC-4EDB-BC1C-AA8AC6ECC56E"/><a rel="oryx-render" href="#oryx_3F21C3A3-60BE-4A2E-B852-CF99586E506E"/><a rel="oryx-render" href="#oryx_F8745104-1638-4D6A-9A44-02D02DA80389"/><a rel="oryx-render" href="#oryx_02750D41-DAC3-4830-B75A-D88DA59700FA"/><a rel="oryx-render" href="#oryx_BF24AEA1-7C10-4013-ACC9-35B5EFC6ECB1"/><a rel="oryx-render" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/><a rel="oryx-render" href="#oryx_40B401E0-6AA7-432E-AF5C-691C5325D4BA"/><a rel="oryx-render" href="#oryx_6CECEB89-2D85-4ABB-B182-93CFA42B30C9"/><a rel="oryx-render" href="#oryx_5EE22F50-C1D6-4AA3-B0DE-91936118C460"/><a rel="oryx-render" href="#oryx_48467598-3AAD-495D-B7BF-CC3C143EA217"/><a rel="oryx-render" href="#oryx_C743CB4E-636F-4C63-8323-FDB1FC26DC0A"/><a rel="oryx-render" href="#oryx_1E8448C9-1741-4DFC-B343-DB2E6D01DD34"/><a rel="oryx-render" href="#oryx_E254B3B9-A918-4B9F-BC81-F9E410216EBA"/><a rel="oryx-render" href="#oryx_AF31FEB1-7B6B-4B99-AA87-0B14544D1D91"/><a rel="oryx-render" href="#oryx_D806009B-D360-4B28-87CF-3A0F40FCEBB8"/><a rel="oryx-render" href="#oryx_A719B541-01FB-4A74-B5AB-5948D690A40C"/><a rel="oryx-render" href="#oryx_68947264-E773-4D0A-9177-18AC04CC1072"/><a rel="oryx-render" href="#oryx_95687567-0C54-4C02-AF98-A013C81C62B4"/><a rel="oryx-render" href="#oryx_74673594-1AFB-4766-A069-F590D11C9759"/><a rel="oryx-render" href="#oryx_C27148EB-73CF-43E1-862E-AA2BECD979A9"/><a rel="oryx-render" href="#oryx_7C1CA734-4496-47C7-928C-E91FDE3DB046"/><a rel="oryx-render" href="#oryx_36BA08E9-FC23-4A39-B587-51DCE9534339"/><a rel="oryx-render" href="#oryx_E6AF9F64-8E89-4D88-992C-07B7F186FB3C"/><a rel="oryx-render" href="#oryx_75D35968-637A-4689-A6C8-FC875DAF0FB9"/><a rel="oryx-render" href="#oryx_4D874C04-6BE0-4F37-B03A-1C3E98BEE7CC"/><a rel="oryx-render" href="#oryx_54D1AA58-2F97-436A-BAA4-310CA87DA628"/><a rel="oryx-render" href="#oryx_C86BBFCE-007F-4FA3-B2B1-7E63452C2CD5"/><a rel="oryx-render" href="#oryx_3344B0F4-8EC2-4CFB-89AB-53B6F6B40BFE"/><a rel="oryx-render" href="#oryx_B2C1C2CE-D800-4E02-B49F-6A8E85CA4828"/><a rel="oryx-render" href="#oryx_B989A74E-B787-4ED4-8EBC-31B244A0F4EB"/><a rel="oryx-render" href="#oryx_D01FA501-9FAD-44E4-9F65-605E4619C29F"/><a rel="oryx-render" href="#oryx_71C49F47-B892-40CD-8796-E2DC74EB2BA5"/><a rel="oryx-render" href="#oryx_E6C02B9C-3009-4531-82B2-F7A773C5EA2F"/><a rel="oryx-render" href="#oryx_5E30A472-3F65-4FA7-BB02-C9ED873F40CC"/><a rel="oryx-render" href="#oryx_1F5BF8F0-363F-426C-8BB0-AB6AFF6827B6"/><a rel="oryx-render" href="#oryx_50BE0E9C-47E7-4496-AA8A-81D7E2433D0C"/><a rel="oryx-render" href="#oryx_79D20005-F262-4C32-941D-31E98B970F7F"/><a rel="oryx-render" href="#oryx_49C7B88F-6296-4221-9EEA-362304B19FFA"/><a rel="oryx-render" href="#oryx_EFE8A219-F467-443D-BAD9-6D0D26695040"/><a rel="oryx-render" href="#oryx_9C1DBFB0-2F81-435E-A465-C526337FD4AC"/><a rel="oryx-render" href="#oryx_DD548AAB-915C-40DF-BBE7-018A662062EB"/><a rel="oryx-render" href="#oryx_55025893-94C4-46B3-9A19-16AF780BE7C2"/><a rel="oryx-render" href="#oryx_9330E98A-AC40-4946-894A-3703F16A49C8"/><a rel="oryx-render" href="#oryx_DFA0CB6A-0DA2-47BB-81ED-877C5BFADB32"/><a rel="oryx-render" href="#oryx_6957F618-A504-4184-B619-48FF9334D0D0"/><a rel="oryx-render" href="#oryx_6FDC578D-15F3-4DCE-9253-C6DB52986AEC"/><a rel="oryx-render" href="#oryx_4CDAC92E-4184-41D5-A9A9-C0521F5572EC"/><a rel="oryx-render" href="#oryx_78BA0F33-B4EC-4D0C-93E5-7FE416A6DE35"/><a rel="oryx-render" href="#oryx_798C0F27-CB9A-4149-B9CC-0A057E113A37"/><a rel="oryx-render" href="#oryx_4EB4E2F5-01E2-44AA-9D2A-9E0183661FE2"/><a rel="oryx-render" href="#oryx_45293759-C06B-4355-8FED-8D7A5F8B0CCA"/><a rel="oryx-render" href="#oryx_A35F82CC-4F1F-47ED-B341-E2D67FA66C9E"/><a rel="oryx-render" href="#oryx_F63EC8E2-89D8-4FB4-9D3C-B5D3D0FDDFBC"/><a rel="oryx-render" href="#oryx_4E0BCD00-7719-49F9-B25A-2ED733EAC84A"/><a rel="oryx-render" href="#oryx_77648708-0E02-44C6-A233-38AFE47F84D1"/><a rel="oryx-render" href="#oryx_FCC93180-8B22-4E7E-B59B-C3422130767F"/><a rel="oryx-render" href="#oryx_B067F4CC-7FEF-4F51-B69E-8B291189C8E8"/><a rel="oryx-render" href="#oryx_A4BA2F61-5B18-43E8-97E8-E981861CACCC"/><a rel="oryx-render" href="#oryx_F221C2A3-7B47-4EA5-A085-EAB7174A11E2"/><a rel="oryx-render" href="#oryx_BBAC78C4-40BD-43F0-AAFE-59E32DC99A81"/><a rel="oryx-render" href="#oryx_079A0638-E343-45A4-894B-02E410CC3A5B"/><a rel="oryx-render" href="#oryx_C8D89DF1-2BC2-4F16-8E03-EABC858573D7"/><a rel="oryx-render" href="#oryx_520BD932-1D84-468C-B4F1-912B63A84AA0"/><a rel="oryx-render" href="#oryx_B7186EC0-55F8-4AFB-921C-E71950DFC9C6"/><a rel="oryx-render" href="#oryx_BC6B6D23-A289-4726-822E-BF81A902BBB7"/><a rel="oryx-render" href="#oryx_41124579-93A2-430C-8863-B5D978E562D4"/><a rel="oryx-render" href="#oryx_30907C1F-4F6C-4687-B2ED-AFFDCA23C8C6"/><a rel="oryx-render" href="#oryx_C0545551-82B8-42A8-90A5-44B1F54759D1"/><a rel="oryx-render" href="#oryx_D795FBE4-A2D4-424B-BC6E-0D260DA63766"/><a rel="oryx-render" href="#oryx_63A92BE1-F1DD-42A0-8824-FA2FB932A603"/><a rel="oryx-render" href="#oryx_05BDA871-F284-49D5-B493-46888C81A914"/>
+            </div>
+            <div id="oryx_9B44361C-82C1-46AD-9246-7C65FB69B356">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Pool</span>
+                <span class="oryx-poolid"></span>
+                <span class="oryx-poolcategories"></span>
+                <span class="oryx-pooldocumentation"></span>
+                <span class="oryx-name">Procedimiento%20de%20Subsidio%20Local%20Largo%20%28GTZ%29</span>
+                <span class="oryx-participantref"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-boundaryvisible">true</span>
+                <span class="oryx-mainpool"></span>
+                <span class="oryx-processref"></span>
+                <span class="oryx-processname"></span>
+                <span class="oryx-processtype">None</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-adhoc"></span>
+                <span class="oryx-adhocordering">Parallel</span>
+                <span class="oryx-adhoccompletioncondition"></span>
+                <span class="oryx-suppressjoinfailure"></span>
+                <span class="oryx-enableinstancecompensation"></span>
+                <span class="oryx-processcategories"></span>
+                <span class="oryx-processdocumentation"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">0,140,4432,946</span>
+                <a rel="raziel-parent" href="#oryx-canvas123"/>
+            </div>
+            <div id="oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Lane</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Solicitante/Ejecutor</span>
+                <span class="oryx-parentpool"></span>
+                <span class="oryx-parentlane"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-showcaption">true</span>
+                <span class="oryx-bounds">30,0,4432,250</span>
+                <a rel="raziel-parent" href="#oryx_9B44361C-82C1-46AD-9246-7C65FB69B356"/>
+            </div>
+            <div id="oryx_E3C541B0-3DE3-4CBE-A047-04209F5A5F26">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateConditionalEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Rule</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-condition"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">330,115,360,145</span>
+                <a rel="raziel-outgoing" href="#oryx_7C1CA734-4496-47C7-928C-E91FDE3DB046"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_3827B267-5A23-4692-A6AC-20D468E80255">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id">que</span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Solicitud%20de%20apoyo%20-%20AP</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">619,40,641,70</span>
+                <a rel="raziel-outgoing" href="#oryx_A719B541-01FB-4A74-B5AB-5948D690A40C"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_573C51D3-4696-4BB5-B324-EC5CE0A5D35A">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Lista%20de%20beneficiarios%20%28INICIAL%29</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">618,100,640,130</span>
+                <a rel="raziel-outgoing" href="#oryx_68947264-E773-4D0A-9177-18AC04CC1072"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_ACE60144-8A54-4CD1-A00C-EAE0DB46F17E">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Proyecto%20%28Antec%2C%20Intro%29</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">619,145,640,176</span>
+                <a rel="raziel-outgoing" href="#oryx_95687567-0C54-4C02-AF98-A013C81C62B4"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_83CB5F1A-7159-4CC9-98AA-01EF90F8FA82">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Curr%C3%ADculum%20Institucional</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">621,190,641,218</span>
+                <a rel="raziel-outgoing" href="#oryx_74673594-1AFB-4766-A069-F590D11C9759"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Solicitud%20formal%20de%20atenci%C3%B3n</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">440,45,540,125</span>
+                <a rel="raziel-outgoing" href="#oryx_C27148EB-73CF-43E1-862E-AA2BECD979A9"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_B94F9A99-ECF2-4AE6-85D2-E194E6D75921">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateConditionalEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Rule</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-condition"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">1165,85,1195,115</span>
+                <a rel="raziel-outgoing" href="#oryx_D01FA501-9FAD-44E4-9F65-605E4619C29F"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_C729A10A-BCAE-4C54-A64B-402C17781258">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Apertura%20de%20Cuenta%20Bancaria</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">1240,20,1340,100</span>
+                <a rel="raziel-outgoing" href="#oryx_71C49F47-B892-40CD-8796-E2DC74EB2BA5"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_0B3F164A-89F4-477D-88C8-7C2853366CB2">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#AND_Gateway</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-gatewaytype">AND</span>
+                <span class="oryx-gates"></span>
+                <span class="oryx-gates_outgoingsequenceflow"></span>
+                <span class="oryx-gates_assignments"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">2120,145,2160,185</span>
+                <a rel="raziel-outgoing" href="#oryx_DFA0CB6A-0DA2-47BB-81ED-877C5BFADB32"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_A477F57E-1B83-4CB6-82DF-FC206F2F57FB">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Firma%20Solicitante</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">2092,49,2187,91</span>
+                <a rel="raziel-outgoing" href="#oryx_9330E98A-AC40-4946-894A-3703F16A49C8"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_4F526F06-E330-4D83-8982-C9584F040AB3">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Subprocess</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Ejecui%C3%B3n/Instalaci%C3%B3n</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Sub-Process</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-isadhoc"></span>
+                <span class="oryx-adhocordering">Sequential</span>
+                <span class="oryx-adhoccompletioncondition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-subprocesstype">Embedded</span>
+                <span class="oryx-isatransaction"></span>
+                <span class="oryx-transaction"></span>
+                <span class="raziel-entry"></span>
+                <span class="oryx-diagramref"></span>
+                <span class="oryx-processref"></span>
+                <span class="oryx-inputmaps"></span>
+                <span class="oryx-outputmaps"></span>
+                <span class="oryx-bgcolor">white</span>
+                <span class="oryx-bounds">2250,28,2516,224</span>
+                <a rel="raziel-outgoing" href="#oryx_798C0F27-CB9A-4149-B9CC-0A057E113A37"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_F7890F8B-EA0B-4E23-86F9-96636A44F127">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">10,51,40,81</span>
+                <a rel="raziel-outgoing" href="#oryx_6957F618-A504-4184-B619-48FF9334D0D0"/><a rel="raziel-parent" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/>
+            </div>
+            <div id="oryx_E27ADE72-D4FC-4EFA-9039-EFF8C1731F4A">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Instalaci%C3%B3n/Ejecuci%C3%B3n</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">84,38,175,90</span>
+                <a rel="raziel-outgoing" href="#oryx_6FDC578D-15F3-4DCE-9253-C6DB52986AEC"/><a rel="raziel-outgoing" href="#oryx_4CDAC92E-4184-41D5-A9A9-C0521F5572EC"/><a rel="raziel-outgoing" href="#oryx_78BA0F33-B4EC-4D0C-93E5-7FE416A6DE35"/><a rel="raziel-parent" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/>
+            </div>
+            <div id="oryx_C35E764B-2A38-4263-9186-E2855E590284">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#EndTerminateEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">End</span>
+                <span class="oryx-result">Terminate</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">221,50,249,78</span>
+                <a rel="raziel-parent" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/>
+            </div>
+            <div id="oryx_F44A274E-00FD-4F63-BF7E-1E87DAB5FCC3">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Informe%20de%20Ejecuci%C3%B3n</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">60,112,80,145</span>
+                <a rel="raziel-parent" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/>
+            </div>
+            <div id="oryx_CED405AA-B055-4C2C-8D4D-7F053CF11E2B">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Lista%20de%20Beneficirios%20%28FINAL%29</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">155,145,175,176</span>
+                <a rel="raziel-parent" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/>
+            </div>
+            <div id="oryx_014327A3-AB53-40F7-AC93-1B54A9945ADB">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Cobro%20en%20Banco</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">4120,60,4220,140</span>
+                <a rel="raziel-outgoing" href="#oryx_D795FBE4-A2D4-424B-BC6E-0D260DA63766"/><a rel="raziel-outgoing" href="#oryx_63A92BE1-F1DD-42A0-8824-FA2FB932A603"/><a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_49245A9F-2EC4-481F-937F-2885A0575462">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#EndEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">End</span>
+                <span class="oryx-result">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">4306,86,4334,114</span>
+                <a rel="raziel-parent" href="#oryx_8A7EAEEE-CA74-4E98-9517-06285C47ED28"/>
+            </div>
+            <div id="oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Lane</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">AP/Administraci%C3%B3n-Contabilidad</span>
+                <span class="oryx-parentpool"></span>
+                <span class="oryx-parentlane"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-showcaption">true</span>
+                <span class="oryx-bounds">30,500,4432,806</span>
+                <a rel="raziel-parent" href="#oryx_9B44361C-82C1-46AD-9246-7C65FB69B356"/>
+            </div>
+            <div id="oryx_40554EBC-D2AF-406D-8C49-9FDCF7448F11">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">AP%3A%20Revisi%C3%B3n/An%C3%A1lisis%20de%20propuesta</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">570,80,711,164</span>
+                <a rel="raziel-outgoing" href="#oryx_C86BBFCE-007F-4FA3-B2B1-7E63452C2CD5"/><a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_2F0B40D8-41EC-4C8A-BBAF-878836073BEA">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#AND_Gateway</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-gatewaytype">AND</span>
+                <span class="oryx-gates"></span>
+                <span class="oryx-gates_outgoingsequenceflow"></span>
+                <span class="oryx-gates_assignments"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">1160,102,1200,142</span>
+                <a rel="raziel-outgoing" href="#oryx_E6C02B9C-3009-4531-82B2-F7A773C5EA2F"/><a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_F284EF1D-6190-4736-A1D1-97A4567B9D79">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateConditionalEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Rule</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-condition"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">795,107,825,137</span>
+                <a rel="raziel-outgoing" href="#oryx_3344B0F4-8EC2-4CFB-89AB-53B6F6B40BFE"/><a rel="raziel-outgoing" href="#oryx_B2C1C2CE-D800-4E02-B49F-6A8E85CA4828"/><a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_1797D907-3922-4A5E-B890-9FC646114C7D">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Subprocess</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Revisi%C3%B3n%20Responsable%20SL</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Sub-Process</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-isadhoc"></span>
+                <span class="oryx-adhocordering">Sequential</span>
+                <span class="oryx-adhoccompletioncondition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-subprocesstype">Embedded</span>
+                <span class="oryx-isatransaction"></span>
+                <span class="oryx-transaction"></span>
+                <span class="raziel-entry"></span>
+                <span class="oryx-diagramref"></span>
+                <span class="oryx-processref"></span>
+                <span class="oryx-inputmaps"></span>
+                <span class="oryx-outputmaps"></span>
+                <span class="oryx-bgcolor">white</span>
+                <span class="oryx-bounds">1380,27,1924,253</span>
+                <a rel="raziel-outgoing" href="#oryx_DD548AAB-915C-40DF-BBE7-018A662062EB"/><a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_3FB361D4-4295-4815-9B8B-E9BEC0185709">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Revisi%C3%B3n%3A%20TDRs/Cronograma</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">107,71,240,120</span>
+                <a rel="raziel-outgoing" href="#oryx_5E30A472-3F65-4FA7-BB02-C9ED873F40CC"/><a rel="raziel-parent" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_23609691-3567-4328-A199-F69B2314EFFA">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Adecuar%20a%20formato%20GTZ</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">284,64,382,119</span>
+                <a rel="raziel-outgoing" href="#oryx_1F5BF8F0-363F-426C-8BB0-AB6AFF6827B6"/><a rel="raziel-parent" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_0BE94606-C400-4D37-A01D-5E7EE467004D">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Elaboraci%C3%B3n%20Contrato%20SL</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">428,68,517,120</span>
+                <a rel="raziel-outgoing" href="#oryx_49C7B88F-6296-4221-9EEA-362304B19FFA"/><a rel="raziel-parent" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_03C9C600-81E8-4E14-85D6-36F5A97C9D7B">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateConditionalEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Rule</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-condition"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">458,152,488,182</span>
+                <a rel="raziel-outgoing" href="#oryx_50BE0E9C-47E7-4496-AA8A-81D7E2433D0C"/><a rel="raziel-parent" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_44B48DD1-50AB-42C0-A823-9D1FCC47412D">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Contrato%20SL%20%28largo%29</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">372,149,392,184</span>
+                <a rel="raziel-parent" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_0BBC87E8-E291-4B19-BABD-3CE53762F982">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Anexos</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">418,22,438,53</span>
+                <a rel="raziel-outgoing" href="#oryx_79D20005-F262-4C32-941D-31E98B970F7F"/><a rel="raziel-parent" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_E137BE91-48DF-46DE-AB89-B83E0BB62419">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">19.20001220703125,83.20001220703125,49.20001220703125,113.20001220703125</span>
+                <a rel="raziel-outgoing" href="#oryx_05BDA871-F284-49D5-B493-46888C81A914"/><a rel="raziel-parent" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_1BEC1E98-8B11-4447-A837-EDF5BE848EBC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">AP%3A%20Firma%20Contrato%20SL</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">1980,114,2079,159</span>
+                <a rel="raziel-outgoing" href="#oryx_55025893-94C4-46B3-9A19-16AF780BE7C2"/><a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_6C944031-A030-4120-BCD1-CC495F8E87EB">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">AP%3A%20Deriva</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">2594,114,2745,154</span>
+                <a rel="raziel-outgoing" href="#oryx_4EB4E2F5-01E2-44AA-9D2A-9E0183661FE2"/><a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_D2C6FFF4-5AB7-4AC1-9BCC-0A93AD7302CB">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Subprocess</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Revisi%C3%B3n%20Responsable%20SL</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Sub-Process</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-isadhoc"></span>
+                <span class="oryx-adhocordering">Sequential</span>
+                <span class="oryx-adhoccompletioncondition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-subprocesstype">Embedded</span>
+                <span class="oryx-isatransaction"></span>
+                <span class="oryx-transaction"></span>
+                <span class="raziel-entry"></span>
+                <span class="oryx-diagramref"></span>
+                <span class="oryx-processref"></span>
+                <span class="oryx-inputmaps"></span>
+                <span class="oryx-outputmaps"></span>
+                <span class="oryx-bgcolor">white</span>
+                <span class="oryx-bounds">3272,97,3524,264</span>
+                <a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_5DED7E5A-6753-4E07-8CA1-3779CC828495">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">24,44,54,74</span>
+                <a rel="raziel-outgoing" href="#oryx_A4BA2F61-5B18-43E8-97E8-E981861CACCC"/><a rel="raziel-parent" href="#oryx_D2C6FFF4-5AB7-4AC1-9BCC-0A93AD7302CB"/>
+            </div>
+            <div id="oryx_564940AE-E4A2-4CCA-BD23-5B5B39CD83D5">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Revisi%C3%B3n%20Informe%20Administrativo</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">83,35,189,91</span>
+                <a rel="raziel-outgoing" href="#oryx_F221C2A3-7B47-4EA5-A085-EAB7174A11E2"/><a rel="raziel-parent" href="#oryx_D2C6FFF4-5AB7-4AC1-9BCC-0A93AD7302CB"/>
+            </div>
+            <div id="oryx_D3154268-C7FB-42BB-8DAC-43F9CAFE446B">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateConditionalEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Rule</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-condition"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">121,118,151,148</span>
+                <a rel="raziel-outgoing" href="#oryx_BBAC78C4-40BD-43F0-AAFE-59E32DC99A81"/><a rel="raziel-parent" href="#oryx_D2C6FFF4-5AB7-4AC1-9BCC-0A93AD7302CB"/>
+            </div>
+            <div id="oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Subprocess</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Pago%20Adm/Cont</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Sub-Process</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-isadhoc"></span>
+                <span class="oryx-adhocordering">Sequential</span>
+                <span class="oryx-adhoccompletioncondition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-subprocesstype">Embedded</span>
+                <span class="oryx-isatransaction"></span>
+                <span class="oryx-transaction"></span>
+                <span class="raziel-entry"></span>
+                <span class="oryx-diagramref"></span>
+                <span class="oryx-processref"></span>
+                <span class="oryx-inputmaps"></span>
+                <span class="oryx-outputmaps"></span>
+                <span class="oryx-bgcolor">white</span>
+                <span class="oryx-bounds">3600,32,4048,279</span>
+                <a rel="raziel-outgoing" href="#oryx_B3E152DF-1EE9-4AA2-B006-54BBB88E0243"/><a rel="raziel-outgoing" href="#oryx_C0545551-82B8-42A8-90A5-44B1F54759D1"/><a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/>
+            </div>
+            <div id="oryx_E4F35A04-A235-4E47-AE92-0227DB1F5A6F">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">23,56,53,86</span>
+                <a rel="raziel-outgoing" href="#oryx_079A0638-E343-45A4-894B-02E410CC3A5B"/><a rel="raziel-parent" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/>
+            </div>
+            <div id="oryx_B904B845-B873-44D0-B4D0-488A27DACE12">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#OR_Gateway</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-gatewaytype">OR</span>
+                <span class="oryx-gates"></span>
+                <span class="oryx-gates_outgoingsequenceflow"></span>
+                <span class="oryx-gates_assignments"></span>
+                <span class="oryx-defaultgate"></span>
+                <span class="oryx-gate_outgoingsequenceflow"></span>
+                <span class="oryx-gate_assignments"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">133,51,173,91</span>
+                <a rel="raziel-outgoing" href="#oryx_C8D89DF1-2BC2-4F16-8E03-EABC858573D7"/><a rel="raziel-outgoing" href="#oryx_520BD932-1D84-468C-B4F1-912B63A84AA0"/><a rel="raziel-parent" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/>
+            </div>
+            <div id="oryx_DADD8460-4EA1-4697-AEA2-E42EED4D9394">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Desembolso</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">220,51,319,91</span>
+                <a rel="raziel-outgoing" href="#oryx_41124579-93A2-430C-8863-B5D978E562D4"/><a rel="raziel-parent" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/>
+            </div>
+            <div id="oryx_D668D5CB-9849-4D3D-8BC5-93B21828D411">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Reembolso</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">223,147,323,187</span>
+                <a rel="raziel-outgoing" href="#oryx_30907C1F-4F6C-4687-B2ED-AFFDCA23C8C6"/><a rel="raziel-parent" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/>
+            </div>
+            <div id="oryx_202FB8BF-92CB-49D5-AC9B-1441CDC51801">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#EndTerminateEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">End</span>
+                <span class="oryx-result">Terminate</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">362,58,390,86</span>
+                <a rel="raziel-parent" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/>
+            </div>
+            <div id="oryx_4885E8AC-7DD7-45A0-8DF1-D9F0F516C288">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#EndTerminateEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">End</span>
+                <span class="oryx-result">Terminate</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">362,155,390,183</span>
+                <a rel="raziel-parent" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/>
+            </div>
+            <div id="oryx_B3E152DF-1EE9-4AA2-B006-54BBB88E0243">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateTimerEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Timer</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-timedate">20/04/07</span>
+                <span class="oryx-timecycle"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">3975.014958921737,20.087915596888138,4005.014958921737,50.08791559688814</span>
+                <a rel="raziel-parent" href="#oryx_188F1ED4-9C7F-41B1-83F5-E6CF2EAFBEB8"/><span class="oryx-docker">386,6</span>
+            </div>
+            <div id="oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Lane</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Unidad%20de%20Trabajo</span>
+                <span class="oryx-parentpool"></span>
+                <span class="oryx-parentlane"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-showcaption">true</span>
+                <span class="oryx-bounds">30,250,4432,500</span>
+                <a rel="raziel-parent" href="#oryx_9B44361C-82C1-46AD-9246-7C65FB69B356"/>
+            </div>
+            <div id="oryx_79F467F5-29D8-4398-8AB2-3E53616DD2EB">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">60,60,90,90</span>
+                <a rel="raziel-outgoing" href="#oryx_AF31FEB1-7B6B-4B99-AA87-0B14544D1D91"/><a rel="raziel-parent" href="#oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE"/>
+            </div>
+            <div id="oryx_C3D3DC5A-4D8D-42DC-9AF4-440BDD51EB7E">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Explicaci%C3%B3n%20de%20Metodolog%C3%ADa/Oferta%20a%20Solicitantes</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">138,41,281,108</span>
+                <a rel="raziel-outgoing" href="#oryx_D806009B-D360-4B28-87CF-3A0F40FCEBB8"/><a rel="raziel-parent" href="#oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE"/>
+            </div>
+            <div id="oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Subprocess</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Evaluaci%C3%B3n%20UT</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Sub-Process</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-isadhoc"></span>
+                <span class="oryx-adhocordering">Sequential</span>
+                <span class="oryx-adhoccompletioncondition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-subprocesstype">Embedded</span>
+                <span class="oryx-isatransaction"></span>
+                <span class="oryx-transaction"></span>
+                <span class="raziel-entry"></span>
+                <span class="oryx-diagramref"></span>
+                <span class="oryx-processref"></span>
+                <span class="oryx-inputmaps"></span>
+                <span class="oryx-outputmaps"></span>
+                <span class="oryx-bgcolor">white</span>
+                <span class="oryx-bounds">734.9309229931282,19,1069.9309229931282,219</span>
+                <a rel="raziel-outgoing" href="#oryx_02750D41-DAC3-4830-B75A-D88DA59700FA"/><a rel="raziel-outgoing" href="#oryx_4D874C04-6BE0-4F37-B03A-1C3E98BEE7CC"/><a rel="raziel-parent" href="#oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE"/>
+            </div>
+            <div id="oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Evaluaci%C3%B3n%20T%C3%A9cnica/financiera%0A</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">127,19,252,73</span>
+                <a rel="raziel-parent" href="#oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E"/>
+            </div>
+            <div id="oryx_2B7378FC-39BC-4EDB-BC1C-AA8AC6ECC56E">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Requisitos</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">132,91,155,128</span>
+                <a rel="raziel-outgoing" href="#oryx_36BA08E9-FC23-4A39-B587-51DCE9534339"/><a rel="raziel-parent" href="#oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E"/>
+            </div>
+            <div id="oryx_3F21C3A3-60BE-4A2E-B852-CF99586E506E">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">Solicitud%20Elaboraci%C3%B3n%20SL%20%28TDRs%2CCronograma%29</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">132,143,155,183</span>
+                <a rel="raziel-outgoing" href="#oryx_E6AF9F64-8E89-4D88-992C-07B7F186FB3C"/><a rel="raziel-parent" href="#oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E"/>
+            </div>
+            <div id="oryx_F8745104-1638-4D6A-9A44-02D02DA80389">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">12,43,42,73</span>
+                <a rel="raziel-outgoing" href="#oryx_75D35968-637A-4689-A6C8-FC875DAF0FB9"/><a rel="raziel-parent" href="#oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E"/>
+            </div>
+            <div id="oryx_02750D41-DAC3-4830-B75A-D88DA59700FA">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateTimerEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Timer</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-timedate">20/04/07</span>
+                <span class="oryx-timecycle"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">1055.4883042840113,57.734575875163216,1085.4883042840113,87.73457587516322</span>
+                <a rel="raziel-parent" href="#oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE"/><span class="oryx-docker">325.7458563535912,56.43564356435643</span>
+            </div>
+            <div id="oryx_BF24AEA1-7C10-4013-ACC9-35B5EFC6ECB1">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#OR_Gateway</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-gatewaytype">OR</span>
+                <span class="oryx-gates"></span>
+                <span class="oryx-gates_outgoingsequenceflow"></span>
+                <span class="oryx-gates_assignments"></span>
+                <span class="oryx-defaultgate"></span>
+                <span class="oryx-gate_outgoingsequenceflow"></span>
+                <span class="oryx-gate_assignments"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">1160,99,1200,139</span>
+                <a rel="raziel-outgoing" href="#oryx_54D1AA58-2F97-436A-BAA4-310CA87DA628"/><a rel="raziel-outgoing" href="#oryx_B989A74E-B787-4ED4-8EBC-31B244A0F4EB"/><a rel="raziel-parent" href="#oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE"/>
+            </div>
+            <div id="oryx_2647B415-0142-4ED3-80BA-956FD716219F">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Subprocess</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Revisi%C3%B3n%20UT%20/%20Aprobaci%C3%B3n%20Informe%20T%C3%A9cnico</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Sub-Process</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-isadhoc"></span>
+                <span class="oryx-adhocordering">Sequential</span>
+                <span class="oryx-adhoccompletioncondition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-subprocesstype">Embedded</span>
+                <span class="oryx-isatransaction"></span>
+                <span class="oryx-transaction"></span>
+                <span class="raziel-entry"></span>
+                <span class="oryx-diagramref"></span>
+                <span class="oryx-processref"></span>
+                <span class="oryx-inputmaps"></span>
+                <span class="oryx-outputmaps"></span>
+                <span class="oryx-bgcolor">white</span>
+                <span class="oryx-bounds">2820,11,3219,237</span>
+                <a rel="raziel-outgoing" href="#oryx_B067F4CC-7FEF-4F51-B69E-8B291189C8E8"/><a rel="raziel-parent" href="#oryx_CD4F9F40-C8F3-49CB-AEAF-B508B9FADBDE"/>
+            </div>
+            <div id="oryx_40B401E0-6AA7-432E-AF5C-691C5325D4BA">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Revisi%C3%B3n%20de%20Informe%20T%C3%A9cnico</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">70,70,171,130.00000000000006</span>
+                <a rel="raziel-outgoing" href="#oryx_F63EC8E2-89D8-4FB4-9D3C-B5D3D0FDDFBC"/><a rel="raziel-parent" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_6CECEB89-2D85-4ABB-B182-93CFA42B30C9">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Inspecciones%20IN%20SITU</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">72,171,170,211</span>
+                <a rel="raziel-outgoing" href="#oryx_4E0BCD00-7719-49F9-B25A-2ED733EAC84A"/><a rel="raziel-parent" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_5EE22F50-C1D6-4AA3-B0DE-91936118C460">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">None</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">15,69,45,99</span>
+                <a rel="raziel-outgoing" href="#oryx_45293759-C06B-4355-8FED-8D7A5F8B0CCA"/><a rel="raziel-parent" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_48467598-3AAD-495D-B7BF-CC3C143EA217">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#StartConditionalEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Start</span>
+                <span class="oryx-trigger">Rule</span>
+                <span class="oryx-conditionref"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">19,171,49,201</span>
+                <a rel="raziel-outgoing" href="#oryx_A35F82CC-4F1F-47ED-B341-E2D67FA66C9E"/><a rel="raziel-parent" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_C743CB4E-636F-4C63-8323-FDB1FC26DC0A">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#AND_Gateway</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-gatewaytype">AND</span>
+                <span class="oryx-gates"></span>
+                <span class="oryx-gates_outgoingsequenceflow"></span>
+                <span class="oryx-gates_assignments"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">200,130,240,170</span>
+                <a rel="raziel-outgoing" href="#oryx_77648708-0E02-44C6-A233-38AFE47F84D1"/><a rel="raziel-parent" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_1E8448C9-1741-4DFC-B343-DB2E6D01DD34">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#IntermediateConditionalEvent</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-eventtype">Intermediate</span>
+                <span class="oryx-trigger">Rule</span>
+                <span class="oryx-target"></span>
+                <span class="oryx-condition"></span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">270,136,300,166</span>
+                <a rel="raziel-outgoing" href="#oryx_FCC93180-8B22-4E7E-B59B-C3422130767F"/><a rel="raziel-parent" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_E254B3B9-A918-4B9F-BC81-F9E410216EBA">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#DataObject</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-artifacttype">DataObject</span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-state">VoBo%20Informe%20T%C3%A9cnico</span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-requiredforstart">true</span>
+                <span class="oryx-producedatcompletion">true</span>
+                <span class="oryx-bgcolor">%23ffffff</span>
+                <span class="oryx-bounds">320,177,340,205</span>
+                <a rel="raziel-parent" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_AF31FEB1-7B6B-4B99-AA87-0B14544D1D91">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">120.71093059027214,464.76934244643223,167.04688190972786,464.94159505356777</span>
+                <a rel="raziel-outgoing" href="#oryx_C3D3DC5A-4D8D-42DC-9AF4-440BDD51EB7E"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 71.49999999999999 33.5  # </span>
+                <a rel="raziel-target" href="#oryx_C3D3DC5A-4D8D-42DC-9AF4-440BDD51EB7E"/>
+            </div>
+            <div id="oryx_D806009B-D360-4B28-87CF-3A0F40FCEBB8">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">311.42578125,285.435546875,375,464.5</span>
+                <a rel="raziel-outgoing" href="#oryx_E3C541B0-3DE3-4CBE-A047-04209F5A5F26"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">71.5 33.5 375 464.5 15 15  # </span>
+                <a rel="raziel-target" href="#oryx_E3C541B0-3DE3-4CBE-A047-04209F5A5F26"/>
+            </div>
+            <div id="oryx_A719B541-01FB-4A74-B5AB-5948D690A40C">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">570.4375,195,648.9375,195</span>
+                <a rel="raziel-outgoing" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">11 15 98 10  # </span>
+                <a rel="raziel-target" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/>
+            </div>
+            <div id="oryx_68947264-E773-4D0A-9177-18AC04CC1072">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">570.4609375,220,662,239.78490335095825</span>
+                <a rel="raziel-outgoing" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">11 15 662 220 77 35  # </span>
+                <a rel="raziel-target" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/>
+            </div>
+            <div id="oryx_95687567-0C54-4C02-AF98-A013C81C62B4">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">558,265.953125,648.984375,300.5</span>
+                <a rel="raziel-outgoing" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">10.5 15.5 558 300.5 88 70  # </span>
+                <a rel="raziel-target" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/>
+            </div>
+            <div id="oryx_74673594-1AFB-4766-A069-F590D11C9759">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">543,265.546875,650.78125,344</span>
+                <a rel="raziel-outgoing" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">10 14 543 344 73 69  # </span>
+                <a rel="raziel-target" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/>
+            </div>
+            <div id="oryx_C27148EB-73CF-43E1-862E-AA2BECD979A9">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">520,265.85546875,599.541015625,762</span>
+                <a rel="raziel-outgoing" href="#oryx_40554EBC-D2AF-406D-8C49-9FDCF7448F11"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">50 40 520 762 70.5 42  # </span>
+                <a rel="raziel-target" href="#oryx_40554EBC-D2AF-406D-8C49-9FDCF7448F11"/>
+            </div>
+            <div id="oryx_7C1CA734-4496-47C7-928C-E91FDE3DB046">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">375,236,469.234375,254.125</span>
+                <a rel="raziel-outgoing" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 375 236 11 51  # </span>
+                <a rel="raziel-target" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/>
+            </div>
+            <div id="oryx_36BA08E9-FC23-4A39-B587-51DCE9534339">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">920.6265432142403,482.203125,941,518.5</span>
+                <a rel="raziel-outgoing" href="#oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">11.5 18.5 941 518.5 49.069077006871794 52  # </span>
+                <a rel="raziel-target" href="#oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B"/>
+            </div>
+            <div id="oryx_E6AF9F64-8E89-4D88-992C-07B7F186FB3C">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">920.7746729931282,482.2578125,968.9309229931282,572</span>
+                <a rel="raziel-outgoing" href="#oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">11.5 20 968.9309229931282 572 77 43  # </span>
+                <a rel="raziel-target" href="#oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B"/>
+            </div>
+            <div id="oryx_75D35968-637A-4689-A6C8-FC875DAF0FB9">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">807.6965479931282,467,891.3371729931282,467</span>
+                <a rel="raziel-outgoing" href="#oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 26 39  # </span>
+                <a rel="raziel-target" href="#oryx_CB72D6B1-BF4C-4C12-955B-E73C1B68855B"/>
+            </div>
+            <div id="oryx_4D874C04-6BE0-4F37-B03A-1C3E98BEE7CC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1100.7068505134707,509.3025793614516,1189.948269639558,509.4630456385484</span>
+                <a rel="raziel-outgoing" href="#oryx_BF24AEA1-7C10-4013-ACC9-35B5EFC6ECB1"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">167.5 100 20.5 20.5  # </span>
+                <a rel="raziel-target" href="#oryx_BF24AEA1-7C10-4013-ACC9-35B5EFC6ECB1"/>
+            </div>
+            <div id="oryx_54D1AA58-2F97-436A-BAA4-310CA87DA628">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1210.5,529.27734375,1210.5,741.734375</span>
+                <a rel="raziel-outgoing" href="#oryx_2F0B40D8-41EC-4C8A-BBAF-878836073BEA"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">20.5 20.5 20.5 20.5  # </span>
+                <a rel="raziel-target" href="#oryx_2F0B40D8-41EC-4C8A-BBAF-878836073BEA"/>
+            </div>
+            <div id="oryx_C86BBFCE-007F-4FA3-B2B1-7E63452C2CD5">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">741.68359375,762,824.43359375,762</span>
+                <a rel="raziel-outgoing" href="#oryx_F284EF1D-6190-4736-A1D1-97A4567B9D79"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">70.5 42 15 15  # </span>
+                <a rel="raziel-target" href="#oryx_F284EF1D-6190-4736-A1D1-97A4567B9D79"/>
+            </div>
+            <div id="oryx_3344B0F4-8EC2-4CFB-89AB-53B6F6B40BFE">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">840,609.6015625,840,746.390625</span>
+                <a rel="raziel-outgoing" href="#oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 75.0690770068718 183  # </span>
+                <a rel="raziel-target" href="#oryx_2DEDEDD3-FFEE-455E-9855-8017EC52665E"/>
+            </div>
+            <div id="oryx_B2C1C2CE-D800-4E02-B49F-6A8E85CA4828">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">855.51953125,762,1190.234375,762</span>
+                <a rel="raziel-outgoing" href="#oryx_2F0B40D8-41EC-4C8A-BBAF-878836073BEA"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 4 20  # </span>
+                <a rel="raziel-target" href="#oryx_2F0B40D8-41EC-4C8A-BBAF-878836073BEA"/>
+            </div>
+            <div id="oryx_B989A74E-B787-4ED4-8EBC-31B244A0F4EB">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1210.0291990343765,255.73827952895846,1210.4610353406235,488.49804859604154</span>
+                <a rel="raziel-outgoing" href="#oryx_B94F9A99-ECF2-4AE6-85D2-E194E6D75921"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">20.5 20.5 15 15  # </span>
+                <a rel="raziel-target" href="#oryx_B94F9A99-ECF2-4AE6-85D2-E194E6D75921"/>
+            </div>
+            <div id="oryx_D01FA501-9FAD-44E4-9F65-605E4619C29F">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">527,154,1210,224.21875</span>
+                <a rel="raziel-outgoing" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 1210 154 527 154 57 9  # </span>
+                <a rel="raziel-target" href="#oryx_3C9A5BB3-8853-4707-8A2F-27E689248AD2"/>
+            </div>
+            <div id="oryx_71C49F47-B892-40CD-8796-E2DC74EB2BA5">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1370.9349212646484,228,1581,737.6953125</span>
+                <a rel="raziel-outgoing" href="#oryx_3FB361D4-4295-4815-9B8B-E9BEC0185709"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">49.97265625 68 1581 228 64 14  # </span>
+                <a rel="raziel-target" href="#oryx_3FB361D4-4295-4815-9B8B-E9BEC0185709"/>
+            </div>
+            <div id="oryx_E6C02B9C-3009-4531-82B2-F7A773C5EA2F">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1229.8999380180137,761.3767691823839,1409.599514915033,762.3905541871814</span>
+                <a rel="raziel-outgoing" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">20.5 20.5 94.8992628992629 93.8391304347826  # </span>
+                <a rel="raziel-target" href="#oryx_1797D907-3922-4A5E-B890-9FC646114C7D"/>
+            </div>
+            <div id="oryx_5E30A472-3F65-4FA7-BB02-C9ED873F40CC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1650.5426544359336,759.7438204874215,1693.4026580640664,760.8186795125785</span>
+                <a rel="raziel-outgoing" href="#oryx_23609691-3567-4328-A199-F69B2314EFFA"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">66.49999999999999 24.5 49 27.5  # </span>
+                <a rel="raziel-target" href="#oryx_23609691-3567-4328-A199-F69B2314EFFA"/>
+            </div>
+            <div id="oryx_1F5BF8F0-363F-426C-8BB0-AB6AFF6827B6">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1792.398392151611,758.9704608776344,1837.156295348389,759.3967266223656</span>
+                <a rel="raziel-outgoing" href="#oryx_0BE94606-C400-4D37-A01D-5E7EE467004D"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">49 27.5 10 24.5  # </span>
+                <a rel="raziel-target" href="#oryx_0BE94606-C400-4D37-A01D-5E7EE467004D"/>
+            </div>
+            <div id="oryx_50BE0E9C-47E7-4496-AA8A-81D7E2433D0C">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">1802.9531099055464,833.560181922558,1867.7812650944536,833.916380577442</span>
+                <a rel="raziel-outgoing" href="#oryx_44B48DD1-50AB-42C0-A823-9D1FCC47412D"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 10 17.5  # </span>
+                <a rel="raziel-target" href="#oryx_44B48DD1-50AB-42C0-A823-9D1FCC47412D"/>
+            </div>
+            <div id="oryx_79D20005-F262-4C32-941D-31E98B970F7F">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">1848.546875,704.5,1885.695227098864,734.0471517017208</span>
+                <a rel="raziel-outgoing" href="#oryx_0BE94606-C400-4D37-A01D-5E7EE467004D"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">10 15.5 1885 704.5 48 12  # </span>
+                <a rel="raziel-target" href="#oryx_0BE94606-C400-4D37-A01D-5E7EE467004D"/>
+            </div>
+            <div id="oryx_49C7B88F-6296-4221-9EEA-362304B19FFA">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1883.0842339954092,787.8747637888239,1883.7438910045908,818.2189862111761</span>
+                <a rel="raziel-outgoing" href="#oryx_03C9C600-81E8-4E14-85D6-36F5A97C9D7B"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">44.5 26 16 11  # </span>
+                <a rel="raziel-target" href="#oryx_03C9C600-81E8-4E14-85D6-36F5A97C9D7B"/>
+            </div>
+            <div id="oryx_EFE8A219-F467-443D-BAD9-6D0D26695040">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Firma%20Agencia%20GTZ</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">1742,980,1842,1020</span>
+                <a rel="raziel-outgoing" href="#oryx_9C1DBFB0-2F81-435E-A465-C526337FD4AC"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+            </div>
+            <div id="oryx_9C1DBFB0-2F81-435E-A465-C526337FD4AC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">1792,852,1792,979.2109375</span>
+                <a rel="raziel-outgoing" href="#oryx_44B48DD1-50AB-42C0-A823-9D1FCC47412D"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">50 20 10 35  # </span>
+                <a rel="raziel-target" href="#oryx_44B48DD1-50AB-42C0-A823-9D1FCC47412D"/>
+            </div>
+            <div id="oryx_DD548AAB-915C-40DF-BBE7-018A662062EB">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1954.98828125,780,2009.26171875,780</span>
+                <a rel="raziel-outgoing" href="#oryx_1BEC1E98-8B11-4447-A837-EDF5BE848EBC"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">272 113 15 26  # </span>
+                <a rel="raziel-target" href="#oryx_1BEC1E98-8B11-4447-A837-EDF5BE848EBC"/>
+            </div>
+            <div id="oryx_55025893-94C4-46B3-9A19-16AF780BE7C2">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2110,324.8984172158186,2170.376443202447,776.5</span>
+                <a rel="raziel-outgoing" href="#oryx_0B3F164A-89F4-477D-88C8-7C2853366CB2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">99 22.5 2167.5 776.5 20.5 20.5  # </span>
+                <a rel="raziel-target" href="#oryx_0B3F164A-89F4-477D-88C8-7C2853366CB2"/>
+            </div>
+            <div id="oryx_9330E98A-AC40-4946-894A-3703F16A49C8">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2169.6351561279334,231.6249804693222,2169.9703126220666,285.25001953067783</span>
+                <a rel="raziel-outgoing" href="#oryx_0B3F164A-89F4-477D-88C8-7C2853366CB2"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">47.5 21 20 5  # </span>
+                <a rel="raziel-target" href="#oryx_0B3F164A-89F4-477D-88C8-7C2853366CB2"/>
+            </div>
+            <div id="oryx_DFA0CB6A-0DA2-47BB-81ED-877C5BFADB32">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2190.57421875,305.5,2279.9296875,305.5</span>
+                <a rel="raziel-outgoing" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">20.5 20.5 19 137.5  # </span>
+                <a rel="raziel-target" href="#oryx_4F526F06-E330-4D83-8982-C9584F040AB3"/>
+            </div>
+            <div id="oryx_6957F618-A504-4184-B619-48FF9334D0D0">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2320.4375,234,2363.5546875,234</span>
+                <a rel="raziel-outgoing" href="#oryx_E27ADE72-D4FC-4EFA-9039-EFF8C1731F4A"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 18 28  # </span>
+                <a rel="raziel-target" href="#oryx_E27ADE72-D4FC-4EFA-9039-EFF8C1731F4A"/>
+            </div>
+            <div id="oryx_6FDC578D-15F3-4DCE-9253-C6DB52986AEC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2455.0078125,232,2500.8125,232</span>
+                <a rel="raziel-outgoing" href="#oryx_C35E764B-2A38-4263-9186-E2855E590284"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">45.5 26 14 14  # </span>
+                <a rel="raziel-target" href="#oryx_C35E764B-2A38-4263-9186-E2855E590284"/>
+            </div>
+            <div id="oryx_4CDAC92E-4184-41D5-A9A9-C0521F5572EC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">2350,257,2364,279.453125</span>
+                <a rel="raziel-outgoing" href="#oryx_F44A274E-00FD-4F63-BF7E-1E87DAB5FCC3"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">18 51 2350 257 10 16.500000000000004  # </span>
+                <a rel="raziel-target" href="#oryx_F44A274E-00FD-4F63-BF7E-1E87DAB5FCC3"/>
+            </div>
+            <div id="oryx_78BA0F33-B4EC-4D0C-93E5-7FE416A6DE35">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">2441,258.0625,2441,312.78125</span>
+                <a rel="raziel-outgoing" href="#oryx_CED405AA-B055-4C2C-8D4D-7F053CF11E2B"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">77 49 6 8  # </span>
+                <a rel="raziel-target" href="#oryx_CED405AA-B055-4C2C-8D4D-7F053CF11E2B"/>
+            </div>
+            <div id="oryx_798C0F27-CB9A-4149-B9CC-0A057E113A37">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2546.515625,266,2670,753.0312614039825</span>
+                <a rel="raziel-outgoing" href="#oryx_6C944031-A030-4120-BCD1-CC495F8E87EB"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">133 98 2670 266 43.641618497109825 5.818181818181818  # </span>
+                <a rel="raziel-target" href="#oryx_6C944031-A030-4120-BCD1-CC495F8E87EB"/>
+            </div>
+            <div id="oryx_4EB4E2F5-01E2-44AA-9D2A-9E0183661FE2">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2776,516,2849.316281962854,774</span>
+                <a rel="raziel-outgoing" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">151 20 2808 774 2808 516 12.164634146341465 115.97368421052632  # </span>
+                <a rel="raziel-target" href="#oryx_2647B415-0142-4ED3-80BA-956FD716219F"/>
+            </div>
+            <div id="oryx_45293759-C06B-4355-8FED-8D7A5F8B0CCA">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2895.437241835545,485.3508464053533,2919.562758164455,485.8991535946467</span>
+                <a rel="raziel-outgoing" href="#oryx_40B401E0-6AA7-432E-AF5C-691C5325D4BA"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 4 15  # </span>
+                <a rel="raziel-target" href="#oryx_40B401E0-6AA7-432E-AF5C-691C5325D4BA"/>
+            </div>
+            <div id="oryx_A35F82CC-4F1F-47ED-B341-E2D67FA66C9E">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">2899.6233399416756,584.8544715350966,2921.1891600583244,586.0986534649034</span>
+                <a rel="raziel-outgoing" href="#oryx_6CECEB89-2D85-4ABB-B182-93CFA42B30C9"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 14 12  # </span>
+                <a rel="raziel-target" href="#oryx_6CECEB89-2D85-4ABB-B182-93CFA42B30C9"/>
+            </div>
+            <div id="oryx_F63EC8E2-89D8-4FB4-9D3C-B5D3D0FDDFBC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3021.4999500037497,500,3070.5,530.3828125</span>
+                <a rel="raziel-outgoing" href="#oryx_C743CB4E-636F-4C63-8323-FDB1FC26DC0A"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">50.5 30.00000000000003 3070.5 500 20.5 20.5  # </span>
+                <a rel="raziel-target" href="#oryx_C743CB4E-636F-4C63-8323-FDB1FC26DC0A"/>
+            </div>
+            <div id="oryx_4E0BCD00-7719-49F9-B25A-2ED733EAC84A">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3020.49978750531,569.0625,3068,590.9793858246328</span>
+                <a rel="raziel-outgoing" href="#oryx_C743CB4E-636F-4C63-8323-FDB1FC26DC0A"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">49 20 3068 590 18 33  # </span>
+                <a rel="raziel-target" href="#oryx_C743CB4E-636F-4C63-8323-FDB1FC26DC0A"/>
+            </div>
+            <div id="oryx_77648708-0E02-44C6-A233-38AFE47F84D1">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3090.6484074550826,551.6561892050781,3119.8906550449174,551.8828732949219</span>
+                <a rel="raziel-outgoing" href="#oryx_1E8448C9-1741-4DFC-B343-DB2E6D01DD34"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">20.5 20.5 15 15  # </span>
+                <a rel="raziel-target" href="#oryx_1E8448C9-1741-4DFC-B343-DB2E6D01DD34"/>
+            </div>
+            <div id="oryx_FCC93180-8B22-4E7E-B59B-C3422130767F">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Association_Unidirectional</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-source"></span>
+                <span class="oryx-target"></span>
+                <span class="oryx-direction">To</span>
+                <span class="oryx-bounds">3150.0625,552,3180,578</span>
+                <a rel="raziel-outgoing" href="#oryx_E254B3B9-A918-4B9F-BC81-F9E410216EBA"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 3180 552 10 0  # </span>
+                <a rel="raziel-target" href="#oryx_E254B3B9-A918-4B9F-BC81-F9E410216EBA"/>
+            </div>
+            <div id="oryx_B067F4CC-7FEF-4F51-B69E-8B291189C8E8">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3249.544921875,514,3301.6094638770387,818.8147928516938</span>
+                <a rel="raziel-outgoing" href="#oryx_D2C6FFF4-5AB7-4AC1-9BCC-0A93AD7302CB"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">199.49999999999994 112.99999999999999 3278 514 3278 818.5 126 83.5  # </span>
+                <a rel="raziel-target" href="#oryx_D2C6FFF4-5AB7-4AC1-9BCC-0A93AD7302CB"/>
+            </div>
+            <div id="oryx_A4BA2F61-5B18-43E8-97E8-E981861CACCC">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3356.25,796,3384.53125,796</span>
+                <a rel="raziel-outgoing" href="#oryx_564940AE-E4A2-4CCA-BD23-5B5B39CD83D5"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 13 24  # </span>
+                <a rel="raziel-target" href="#oryx_564940AE-E4A2-4CCA-BD23-5B5B39CD83D5"/>
+            </div>
+            <div id="oryx_F221C2A3-7B47-4EA5-A085-EAB7174A11E2">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3438,828.34375,3438,854.78125</span>
+                <a rel="raziel-outgoing" href="#oryx_D3154268-C7FB-42BB-8DAC-43F9CAFE446B"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">53.00000000000001 28 15 15  # </span>
+                <a rel="raziel-target" href="#oryx_D3154268-C7FB-42BB-8DAC-43F9CAFE446B"/>
+            </div>
+            <div id="oryx_BBAC78C4-40BD-43F0-AAFE-59E32DC99A81">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3438,885.8359375,3837.569927641718,975.5</span>
+                <a rel="raziel-outgoing" href="#oryx_B7186EC0-55F8-4AFB-921C-E71950DFC9C6"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 3438 975.5 15.165523395900005 0.6875  # </span>
+                <a rel="raziel-target" href="#oryx_B7186EC0-55F8-4AFB-921C-E71950DFC9C6"/>
+            </div>
+            <div id="oryx_079A0638-E343-45A4-894B-02E410CC3A5B">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3683.4374906299927,743.0668289637662,3762.6484468700073,743.4097335362338</span>
+                <a rel="raziel-outgoing" href="#oryx_B904B845-B873-44D0-B4D0-488A27DACE12"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">15 15 20.5 20.5  # </span>
+                <a rel="raziel-target" href="#oryx_B904B845-B873-44D0-B4D0-488A27DACE12"/>
+            </div>
+            <div id="oryx_C8D89DF1-2BC2-4F16-8E03-EABC858573D7">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3803.531240710593,743.215247804787,3849.562509289407,743.413658445213</span>
+                <a rel="raziel-outgoing" href="#oryx_DADD8460-4EA1-4697-AEA2-E42EED4D9394"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">20.5 20.5 49.5 20  # </span>
+                <a rel="raziel-target" href="#oryx_DADD8460-4EA1-4697-AEA2-E42EED4D9394"/>
+            </div>
+            <div id="oryx_520BD932-1D84-468C-B4F1-912B63A84AA0">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3783.5,763.34765625,3852.519566261554,840</span>
+                <a rel="raziel-outgoing" href="#oryx_D668D5CB-9849-4D3D-8BC5-93B21828D411"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">20.5 20.5 3783.5 840 50 20  # </span>
+                <a rel="raziel-target" href="#oryx_D668D5CB-9849-4D3D-8BC5-93B21828D411"/>
+            </div>
+            <div id="oryx_B7186EC0-55F8-4AFB-921C-E71950DFC9C6">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#Task</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name">Revisi%C3%B3n%20Agencia%20GTZ</span>
+                <span class="oryx-assignments"></span>
+                <span class="oryx-pool"></span>
+                <span class="oryx-lanes"></span>
+                <span class="oryx-activitytype">Task</span>
+                <span class="oryx-status">None</span>
+                <span class="oryx-performers"></span>
+                <span class="oryx-properties"></span>
+                <span class="oryx-inputsets"></span>
+                <span class="oryx-inputs"></span>
+                <span class="oryx-outputsets"></span>
+                <span class="oryx-outputs"></span>
+                <span class="oryx-iorules"></span>
+                <span class="oryx-startquantity">1</span>
+                <span class="oryx-completionquantity">1</span>
+                <span class="oryx-looptype">None</span>
+                <span class="oryx-loopcondition"></span>
+                <span class="oryx-loopcounter">1</span>
+                <span class="oryx-loopmaximum">1</span>
+                <span class="oryx-testtime">After</span>
+                <span class="oryx-mi_condition"></span>
+                <span class="oryx-mi_ordering">Sequential</span>
+                <span class="oryx-mi_flowcondition">All</span>
+                <span class="oryx-complexmi_condition"></span>
+                <span class="oryx-iscompensation"></span>
+                <span class="oryx-tasktype">None</span>
+                <span class="oryx-inmessage"></span>
+                <span class="oryx-outmessage"></span>
+                <span class="oryx-implementation">Webservice</span>
+                <span class="oryx-messageref"></span>
+                <span class="oryx-instantiate"></span>
+                <span class="oryx-script"></span>
+                <span class="oryx-taskref"></span>
+                <span class="oryx-bgcolor">%23ffffcc</span>
+                <span class="oryx-bounds">3838,970,3949,1010</span>
+                <a rel="raziel-outgoing" href="#oryx_BC6B6D23-A289-4726-822E-BF81A902BBB7"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+            </div>
+            <div id="oryx_BC6B6D23-A289-4726-822E-BF81A902BBB7">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3903.2128332803254,919.9218278735361,3903.6934167196746,969.4219221264639</span>
+                <a rel="raziel-outgoing" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">66 31 273 226  # </span>
+                <a rel="raziel-target" href="#oryx_72D97590-9CF5-4C17-9755-8B8378AA66B5"/>
+            </div>
+            <div id="oryx_41124579-93A2-430C-8863-B5D978E562D4">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3949.34375,746,3991.28125,746</span>
+                <a rel="raziel-outgoing" href="#oryx_202FB8BF-92CB-49D5-AC9B-1441CDC51801"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">81 23 13 16  # </span>
+                <a rel="raziel-target" href="#oryx_202FB8BF-92CB-49D5-AC9B-1441CDC51801"/>
+            </div>
+            <div id="oryx_30907C1F-4F6C-4687-B2ED-AFFDCA23C8C6">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3953.8904365341104,839.9881638161963,3991.3205009658896,840.7149611838037</span>
+                <a rel="raziel-outgoing" href="#oryx_4885E8AC-7DD7-45A0-8DF1-D9F0F516C288"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">50 20 14 14  # </span>
+                <a rel="raziel-target" href="#oryx_4885E8AC-7DD7-45A0-8DF1-D9F0F516C288"/>
+            </div>
+            <div id="oryx_C0545551-82B8-42A8-90A5-44B1F54759D1">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">4078.15625,240,4149.3125,801</span>
+                <a rel="raziel-outgoing" href="#oryx_014327A3-AB53-40F7-AC93-1B54A9945ADB"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">415 129 4094 801 4094 240 50 40  # </span>
+                <a rel="raziel-target" href="#oryx_014327A3-AB53-40F7-AC93-1B54A9945ADB"/>
+            </div>
+            <div id="oryx_D795FBE4-A2D4-424B-BC6E-0D260DA63766">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">4250.21875,240,4335.5234375,240</span>
+                <a rel="raziel-outgoing" href="#oryx_49245A9F-2EC4-481F-937F-2885A0575462"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">50 40 14 14  # </span>
+                <a rel="raziel-target" href="#oryx_49245A9F-2EC4-481F-937F-2885A0575462"/>
+            </div>
+            <div id="oryx_63A92BE1-F1DD-42A0-8824-FA2FB932A603">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">3899.5,280.1015625,4200,722.50390625</span>
+                <a rel="raziel-outgoing" href="#oryx_DADD8460-4EA1-4697-AEA2-E42EED4D9394"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">50 40 4200 526 3899.5 526 49.5 20  # </span>
+                <a rel="raziel-target" href="#oryx_DADD8460-4EA1-4697-AEA2-E42EED4D9394"/>
+            </div>
+            <div id="oryx_05BDA871-F284-49D5-B493-46888C81A914">
+                <span class="oryx-type">http://b3mn.org/stencilset/bpmn1.1#SequenceFlow</span>
+                <span class="oryx-id"></span>
+                <span class="oryx-categories"></span>
+                <span class="oryx-documentation"></span>
+                <span class="oryx-name"></span>
+                <span class="oryx-sourceref"></span>
+                <span class="oryx-targetref"></span>
+                <span class="oryx-conditiontype">None</span>
+                <span class="oryx-conditionexpression"></span>
+                <span class="oryx-quantity">1</span>
+                <span class="oryx-showdiamondmarker">false</span>
+                <span class="oryx-bounds">1459.1843299865723,762.5,1517,762.5</span>
+                <a rel="raziel-outgoing" href="#oryx_3FB361D4-4295-4815-9B8B-E9BEC0185709"/><a rel="raziel-parent" href="#oryx-canvas123"/><span class="oryx-dockers">23.99993896484375 12.29998779296875 0 24.5  # </span>
+                <a rel="raziel-target" href="#oryx_3FB361D4-4295-4815-9B8B-E9BEC0185709"/>
+            </div>
+        </div>
+    </body>
+</html>

@@ -34,6 +34,8 @@ Repository.Plugins.SortingSupport = {
 	
 	defaultSort: 'lastchange',
 	
+	hidePanel: true,
+	
 	construct: function( facade ) {
 		
 		// define Create New Model menu
@@ -59,7 +61,6 @@ Repository.Plugins.SortingSupport = {
 		}.bind(this));
 					
 		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class
-		
 
 	},
 	

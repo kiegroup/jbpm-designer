@@ -61,34 +61,34 @@ public class Transformation {
 	 * 
 	 * @param diagram The diagram to transform.
 	 * 
-	 * @return A string array containing the topology as first element 
-	 * followed by the processes. If an error occured during the 
-	 * transformation the string array has only one element that contains 
-	 * this error serialized as string. 
+	 * @return A list of pairs of (boolean,string). 
+	 * boolean denotes whether the transformation was successful
+	 * string contains either the error message or the result
+	 * The first element of the list is the topology, subsequent elements are BPEL processes
 	 */
-	public String[] transform(Diagram diagram) {
-		List<String> result = new ArrayList<String>();
+	public List<TransformationResult> transform(Diagram diagram) {
+		List<TransformationResult> result = new ArrayList<TransformationResult>();
 		
 		if (diagram == null) {
-			result.add("Now diagram found.");
+			result.add(new TransformationResult(false,"Now diagram found."));
 		} else {
 			TransformationErrors topOutput = new TransformationErrors();
 			Document topology = new TopologyFactory(diagram, topOutput).transformTopology();
 			
 			ProcessFactory factory = new ProcessFactory(diagram);
 			if (topOutput.isEmpty()) {
-				result.add(domToString(topology, topOutput));
+				result.add(new TransformationResult(true, domToString(topology, topOutput)));
 			} else {
-				result.add(topOutput.getErrors());				
+				result.add(new TransformationResult(false, topOutput.getErrors()));				
 			}
 			
 			for (Iterator<Pool> it = diagram.getPools().iterator(); it.hasNext();) {
 				TransformationErrors processOutput = new TransformationErrors();
 				Document process = factory.transformProcess(it.next(), processOutput);
 				if (processOutput.isEmpty()) {
-					result.add(domToString(process, processOutput));
+					result.add(new TransformationResult(true, domToString(process, processOutput)));
 				} else {
-					result.add(processOutput.getErrors());
+					result.add(new TransformationResult(false, processOutput.getErrors()));				
 				}
 			}
 			
@@ -96,13 +96,13 @@ public class Transformation {
 				TransformationErrors processOutput = new TransformationErrors();
 				Document process = factory.transformProcess(it.next(), processOutput);
 				if (processOutput.isEmpty()) {
-					result.add(domToString(process, processOutput));
+					result.add(new TransformationResult(true, domToString(process, processOutput)));
 				} else {
-					result.add(processOutput.getErrors());
+					result.add(new TransformationResult(false, processOutput.getErrors()));				
 				}
 			}
 		}
 		
-		return result.toArray(new String[result.size()]);
+		return result;
 	}	
 }

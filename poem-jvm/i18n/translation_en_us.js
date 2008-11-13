@@ -42,6 +42,9 @@ Repository.I18N.Repository.bottomPanelTitle = "Comments";
 
 Repository.I18N.Repository.loadingText = "Repository is loading..."
 
+Repository.I18N.Repository.errorText = "<b style='font-size:13px'>Upps!</b><br/>Diagrams can only be edited with a <a href='http://www.mozilla.com/en-US/products/firefox/' target='_blank'>Firefox Browser</a>.";
+Repository.I18N.Repository.errorAuthor = "Author:"
+Repository.I18N.Repository.errorTitle = "Title:"
 // Plugin strings
  
 // NewModel Plugin
@@ -165,3 +168,10 @@ Repository.I18N.Rating.totalMoreText = "From  #{modelCount} are #{voteCount} vot
 
 if(!Repository.I18N.RatingFilter) Repository.I18N.RatingFilter = {};
 Repository.I18N.RatingFilter.name = "Rating Filter"
+
+if(!Repository.I18N.AccessFilter) Repository.I18N.AccessFilter = {};
+Repository.I18N.AccessFilter.name = "Access Filter"
+Repository.I18N.AccessFilter.mine = "Mine"
+Repository.I18N.AccessFilter.reader = "Me as a reader"
+Repository.I18N.AccessFilter.writer = "Me as a writer"
+Repository.I18N.AccessFilter.publicText = "Public"

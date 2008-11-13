@@ -141,7 +141,8 @@ ORYX.I18N.Bpel4ChorTransformation.transResult = "Transformationsergebnisse";
 ORYX.I18N.Bpel4ChorTransformation.showFile = "Ergebnisdatei anzeigen";
 ORYX.I18N.Bpel4ChorTransformation.downloadFile = "Ergebnisdatei herunterladen";
 ORYX.I18N.Bpel4ChorTransformation.downloadAll = "Alle Ergebnisdateien herunterladen";
-ORYX.I18N.Bpel4ChorTransformation.loadingExport = "Exportieren nach XPDL4Chor";
+ORYX.I18N.Bpel4ChorTransformation.loadingXPDL4ChorExport = "Exportiere nach XPDL4Chor";
+ORYX.I18N.Bpel4ChorTransformation.loadingBPEL4ChorExport = "Exportiere nach BPEL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.noGen = "Die Transformationseingabedaten konnten nicht erzeugt werden: 1\n2\n";
 
 if(!ORYX.I18N.DesynchronizabilityOverlay) ORYX.I18N.DesynchronizabilityOverlay = {};

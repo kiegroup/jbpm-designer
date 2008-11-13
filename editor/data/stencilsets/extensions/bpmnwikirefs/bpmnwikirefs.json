@@ -1,0 +1,27 @@
+{
+	"title":"BPMN Cost Extension",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnwikirefs#",
+	"description":"BPMN 1.1 extension for adding a wikiRef attribute to all nodes",
+	"extends":"http://b3mn.org/stencilset/bpmn1.1#",
+	"stencils":[],
+	"properties": [
+		{
+			"roles": [
+				"fromtoall",
+				"TextAnnotation"
+			],
+			"properties": [
+				{
+					"id":"refuri",
+					"type":"url",
+					"title":"Wiki Reference",
+					"title_de":"Wiki Referenz",
+					"description":"Reference to a wiki resource.",
+					"description_de":"Referenz zu einer Wiki-Seite.",
+					"readonly":false,
+					"optional":true
+				}
+			]
+		}
+	]
+}

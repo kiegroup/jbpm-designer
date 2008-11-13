@@ -2,8 +2,7 @@
 <xsl:stylesheet version="1.0" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:oryx="http://oryx-editor.org/"
-	xmlns:raziel="http://raziel.org/">
+	xmlns:oryx="http://oryx-editor.org/">
 
 	<xsl:output method="xml" />
 
@@ -14,73 +13,88 @@
 				<xsl:with-param name="typeString" select="$typeString" />
 			</xsl:call-template>
 		</xsl:variable>
-		
-		
-			
+
 		<xsl:if test="$type='process'">
-			<!-- BPEL -->
-			<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
-			<process>
-                <xsl:call-template name="add-standard-attributes"/>
-				
-				<xsl:call-template name="add-documentation-element"/>
-				
-				<xsl:variable name="targetNamespace" select="./oryx:targetnamespace" />
-				<xsl:attribute name="targetNamespace">
-					<xsl:value-of select="$targetNamespace" />
-				</xsl:attribute>		
-				
-				<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
-				<xsl:if test="$abstractProcessProfile!=''">
-					<xsl:attribute name="abstractProcessProfile">
-						<xsl:value-of select="$abstractProcessProfile" />
-					</xsl:attribute>
-				</xsl:if>
-				
-				<xsl:variable name="queryLanguage" select="./oryx:querylanguage" />
-				<xsl:if test="$queryLanguage!=''">
-					<xsl:attribute name="queryLanguage">
-						<xsl:value-of select="$queryLanguage" />
-					</xsl:attribute>
-				</xsl:if>	
-				
-				<xsl:variable name="expressionLanguage" select="./oryx:expressionlanguage" />
-				<xsl:if test="$expressionLanguage!=''">
-					<xsl:attribute name="expressionLanguage">
-						<xsl:value-of select="$expressionLanguage" />
-					</xsl:attribute>
-				</xsl:if>	
-				
-          		<xsl:call-template name="add-exitOnStandardFault-attribute"/>
-				
-				<!--xsl:variable name="xmlns" select="./oryx:xmlns" />
-				<xsl:if test="$xmlns!=''">
-					<xsl:attribute name="xmlns">
-						<xsl:value-of select="$xmlns" />
-					</xsl:attribute>
-				</xsl:if-->
+			<!-- process -->
+			<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
+			
+			<xsl:if test="$abstractProcessProfile='' or $abstractProcessProfile='null'">
+				<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+					<xsl:call-template name="add-children-of-process-element"/>
+				</process>	
+			</xsl:if>
+			
+			<xsl:if test="$abstractProcessProfile!='' and $abstractProcessProfile!='null'">
+				<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/abstract">
 					
-				<xsl:call-template name="add-otherxmlns-attribute"/>
-				
-				<xsl:call-template name="add-extension-declaration"/>		
-				
-				<xsl:call-template name="add-import-element"/>
-				
-				<xsl:call-template name="add-variables-element"/>	
-				
-				<xsl:call-template name="add-partnerLinks-element"/>	
-				
-				<xsl:call-template name="add-correlationSets-element"/>
-				
-				<xsl:call-template name="add-messageExchanges-element"/>
-				
-				<xsl:call-template name="find-children-nodes">
-					<xsl:with-param name="searchedParentID" select="$realID" />
-			    </xsl:call-template>
-			</process>
+					<xsl:if test="$abstractProcessProfile='observableBehavior'">
+						<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08</xsl:attribute>
+					</xsl:if>	
+					
+					<xsl:if test="$abstractProcessProfile='templates'">
+						<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08</xsl:attribute>
+					</xsl:if>	
+					
+					<xsl:if test="$abstractProcessProfile!='observableBehavior' and $abstractProcessProfile!='templates'">
+						<xsl:attribute name="abstractProcessProfile">
+							<xsl:value-of select="$abstractProcessProfile"/>
+						</xsl:attribute>	
+					</xsl:if>
+					
+					<xsl:call-template name="add-children-of-process-element"/>
+				</process>	
+			</xsl:if>
 	 	</xsl:if>
 	</xsl:template>
 	
+	<xsl:template name="add-children-of-process-element">
+		<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+		
+        <xsl:call-template name="add-standard-attributes"/>
+		
+		<xsl:call-template name="add-documentation-element"/>
+		
+		<xsl:variable name="targetNamespace" select="./oryx:targetnamespace" />
+		<xsl:if test="$targetNamespace!=''">
+			<xsl:attribute name="targetNamespace">
+				<xsl:value-of select="$targetNamespace" />
+			</xsl:attribute>	
+		</xsl:if>		
+		
+		<xsl:variable name="queryLanguage" select="./oryx:querylanguage" />
+		<xsl:if test="$queryLanguage!=''">
+			<xsl:attribute name="queryLanguage">
+				<xsl:value-of select="$queryLanguage" />
+			</xsl:attribute>
+		</xsl:if>	
+		
+		<xsl:variable name="expressionLanguage" select="./oryx:expressionlanguage" />
+		<xsl:if test="$expressionLanguage!=''">
+			<xsl:attribute name="expressionLanguage">
+				<xsl:value-of select="$expressionLanguage" />
+			</xsl:attribute>
+		</xsl:if>	
+		
+  		<xsl:call-template name="add-exitOnStandardFault-attribute"/>
+
+		<xsl:call-template name="add-otherxmlns-attribute"/>
+		
+		<xsl:call-template name="add-extension-declaration"/>		
+		
+		<xsl:call-template name="add-import-element"/>
+		
+		<xsl:call-template name="add-variables-element"/>	
+		
+		<xsl:call-template name="add-partnerLinks-element"/>	
+		
+		<xsl:call-template name="add-correlationSets-element"/>
+		
+		<xsl:call-template name="add-messageExchanges-element"/>
+		
+		<xsl:call-template name="find-children-nodes">
+			<xsl:with-param name="searchedParentID" select="$realID" />
+	    </xsl:call-template>
+	</xsl:template>
 	
 	<xsl:template name="find-children-nodes">
 		<xsl:param name="searchedParentID" />
@@ -246,9 +260,11 @@
 						<xsl:call-template name="add-documentation-element"/>
 						
 						<xsl:variable name="variables" select="./oryx:variables" />
-						<xsl:attribute name="variables">
-							<xsl:value-of select="$variables" />
-						</xsl:attribute>
+						<xsl:if test="$variables!=''">
+							<xsl:attribute name="variables">
+								<xsl:value-of select="$variables" />
+							</xsl:attribute>
+						</xsl:if>	
 						
 						<xsl:call-template name="add-standard-elements"/>							
 		            </validate>
@@ -444,15 +460,19 @@
 						<xsl:call-template name="add-standard-elements"/>
 						
 						<xsl:variable name="counterName" select="./oryx:countername" />
-						<xsl:attribute name="counterName">
-							<xsl:value-of select="$counterName" />
-						</xsl:attribute>
+						<xsl:if test="$counterName!=''">
+							<xsl:attribute name="counterName">
+								<xsl:value-of select="$counterName" />
+							</xsl:attribute>
+						</xsl:if>	
 
 						
 						<xsl:variable name="parallel" select="./oryx:parallel" />
-						<xsl:attribute name="parallel">
-							<xsl:value-of select="$parallel" />
-						</xsl:attribute>
+						<xsl:if test="$parallel!=''">
+							<xsl:attribute name="parallel">
+								<xsl:value-of select="$parallel" />
+							</xsl:attribute>
+						</xsl:if>	
 						
 						<xsl:call-template name="add-counterValue-elements"/>
 						
@@ -529,6 +549,26 @@
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>	
 					</onEvent>
+				</xsl:if>
+				
+				<!--eventHandler-->
+				<xsl:if test="$type='eventHandler'">
+					<eventHandler>
+						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
+		            </eventHandler>
+				</xsl:if>
+				
+				<!--faultHandler-->
+				<xsl:if test="$type='faultHandler'">
+					<faultHandler>
+						<xsl:call-template name="add-documentation-element"/>
+						<xsl:call-template name="find-children-nodes">
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+					    </xsl:call-template>
+		            </faultHandler>
 				</xsl:if>
 				
 				<!--compensationHandler-->
@@ -885,8 +925,8 @@
 		<xsl:variable name="fromspectype" select="./oryx:fromspectype" />
 		<xsl:variable name="fromspecvariablename" select="./oryx:fromspecvariablename" />
 		<xsl:variable name="fromspecpart" select="./oryx:fromspecpart" />
-		<xsl:variable name="fromspecpartnerLink" select="./oryx:fromspecpartnerLink" />
-		<xsl:variable name="fromspecendpointReference" select="./oryx:fromspecendpointReference" />
+		<xsl:variable name="fromspecpartnerLink" select="./oryx:fromspecpartnerlink" />
+		<xsl:variable name="fromspecendpointReference" select="./oryx:fromspecendpointreference" />
 		<xsl:variable name="fromspecquerylanguage" select="./oryx:fromspecquerylanguage" />
 		<xsl:variable name="fromspecquery" select="./oryx:fromspecquery" />
 		<xsl:variable name="fromspecproperty" select="./oryx:fromspecproperty" />
@@ -903,12 +943,12 @@
 					<xsl:value-of select="$fromspecpart" />
 				</xsl:attribute>
 				<xsl:if test="$fromspecquery!='' or $fromspecquerylanguage!=''">
-					<quary>
+					<query>
 						<xsl:attribute name="queryLanguage">
 							<xsl:value-of select="$fromspecquerylanguage" />
 						</xsl:attribute>
 						<xsl:value-of select="$fromspecquery" />
-					</quary>	
+					</query>	
 				</xsl:if>	
 			</xsl:if>
 		
@@ -1142,7 +1182,7 @@
 		<xsl:variable name="tospectype" select="./oryx:tospectype" />
 		<xsl:variable name="tospecvariablename" select="./oryx:tospecvariablename" />
 		<xsl:variable name="tospecpart" select="./oryx:tospecpart" />
-		<xsl:variable name="tospecpartnerLink" select="./oryx:tospecpartnerLink" />
+		<xsl:variable name="tospecpartnerLink" select="./oryx:tospecpartnerlink" />
 		<xsl:variable name="tospecquerylanguage" select="./oryx:tospecquerylanguage" />
 		<xsl:variable name="tospecquery" select="./oryx:tospecquery" />
 		<xsl:variable name="tospecproperty" select="./oryx:tospecproperty" />
@@ -1158,12 +1198,12 @@
 					<xsl:value-of select="$tospecpart" />
 				</xsl:attribute>
 				<xsl:if test="$tospecquery!='' or $tospecquerylanguage!=''">
-					<quary>
+					<query>
 						<xsl:attribute name="queryLanguage">
 							<xsl:value-of select="$tospecquerylanguage" />
 						</xsl:attribute>
 						<xsl:value-of select="$tospecquery" />
-					</quary>	
+					</query>	
 				</xsl:if>
 			</xsl:if>
 					
@@ -1512,7 +1552,7 @@
 			
  		<xsl:if test="$i &lt;= $count">
   			<xsl:variable name="part" select="substring-before(substring-after($data-set, 'part%3A%22'), '%22%2C%20Correlation') " />
- 			<xsl:variable name="fromVariable" select="substring-before(substring-after($data-set, 'Correlation%3A%22'), '%22%7D') " />
+ 			<xsl:variable name="fromVariable" select="substring-before(substring-after($data-set, 'fromVariable%3A%22'), '%22%7D') " />
 			
 			<toPart>
 				<xsl:attribute name="part">

@@ -41,7 +41,7 @@
 	<classpathentry kind="lib" path="editor/lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="editor/lib/xmlgraphics-commons-1.1.jar"/>
 	<classpathentry kind="lib" path="editor/lib/org.json.jar"/>
-  <classpathentry kind="lib" path="editor/lib/jbpt.jar"/>
+	<classpathentry kind="lib" path="editor/lib/jbpt.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/asm-1.5.3.jar"/>
@@ -99,7 +99,6 @@
 	<classpathentry kind="lib" path="poem-jvm/lib/org.json.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/persistence-api-1.0.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/postgresql-8.3-603.jdbc3.jar"/>
-	<classpathentry kind="lib" path="poem-jvm/lib/servlet-api-2.3.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/servlet-api-2.5.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/spring-beans-2.0.6.jar"/>
@@ -115,4 +114,5 @@
 	<classpathentry kind="lib" path="poem-jvm/lib/xmlgraphics-commons-1.3.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xmlsec-1.3.0.jar"/>
 	<classpathentry kind="lib" path="buildApps/lib/org.json.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

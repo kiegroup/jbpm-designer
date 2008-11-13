@@ -24,22 +24,15 @@
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
-		</plugin>
-		
-		<plugin source="amlSupport.js" name="ORYX.Plugins.AMLSupport">
-			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
 		</plugin>	
 			
-		<plugin source="arisSupport.js" name="ORYX.Plugins.ARISSupport">
+		<plugin source="processLink.js" name="ORYX.Plugins.ProcessLink">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>	
 				
 		<plugin source="adHocCC.js" name="ORYX.Plugins.AdHocCC">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>	
-		</plugin>
-
-		<plugin source="treeGraphSupport.js" name="ORYX.Plugins.TreeGraphSupport">
-			<requires namespace="http://b3mn.org/stencilset/treeGraph#"/>	
 		</plugin>
 		
 		
@@ -48,9 +41,7 @@
 			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
 		</plugin>
 		<plugin source="file.js" name="ORYX.Plugins.File" />
-		<plugin source="file.js" name="ORYX.Plugins.Save">
-			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
-		</plugin>
+		<plugin source="file.js" name="ORYX.Plugins.Save"/>
 		
 		<plugin source="view.js" name="ORYX.Plugins.View" />
 		<plugin source="dragdropresize.js" name="ORYX.Plugins.DragDropResize" />
@@ -100,24 +91,10 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 		</plugin>
-
-		<!--
-		<plugin source="bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
-			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
-		</plugin>
-		-->
-				
-		<!-- plugin for BPEL import and export --> 
-		<plugin source="bpelSupport.js" name="ORYX.Plugins.BPELSupport">
-			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
-			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>
-		</plugin>
 		
-
 		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.StepThroughPlugin">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
-		    <requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
 		
 		<!-- plugins for XForms editor --> 

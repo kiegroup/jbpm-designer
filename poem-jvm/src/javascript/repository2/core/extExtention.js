@@ -37,6 +37,14 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 	
 	editable			: false,
 	
+	_setStyle: function(node, style){
+		if( Ext.isIE ){
+			node.style.setAttribute('cssText', style );	
+		} else {
+			node.setAttribute('style', style );	
+		}
+	},
+	
     // private
     onRender : function(ct, position){
         if(!this.el){
@@ -48,12 +56,12 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 				var img = document.createElement('img')
 				
 				if( this.editable ){
-					img.addEventListener( 'mouseover', this.onMouseOverStar.bind(this), true);
-					img.addEventListener( 'mouseout', this.onMouseOutStar.bind(this), true);
-					img.addEventListener( 'click', this.onClickStar.bind(this), true);	
-					img.setAttribute('style', this.imgStyle + '' + this.imgEditStyle );			
+					Element.observe( img, 'mouseover', this.onMouseOverStar.bind(this), true);
+					Element.observe( img, 'mouseout', this.onMouseOutStar.bind(this), true);
+					Element.observe( img, 'click', this.onClickStar.bind(this), true);	
+					this._setStyle( img, this.imgStyle + '' + this.imgEditStyle );			
 				} else {
-					img.setAttribute('style', this.imgStyle );	
+					this._setStyle( img, this.imgStyle );					
 				}
 				this.stars.push( img );
 			}
@@ -65,7 +73,7 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
 			
 			// Add a text behind
 			this.textEl = document.createElement('span');
-			this.textEl.setAttribute('style', this.textStyle );	
+			this._setStyle( this.textEl, this.textStyle );	
 			this.textEl.innerHTML = this.text;
 			this.el.appendChild( this.textEl );
 					
@@ -135,7 +143,7 @@ Ext.Rating = Ext.extend(Ext.BoxComponent, {
     },
 	
 	startEdit: function(){
-		this.el.dom.setAttribute('style', 'left:22px;position:absolute;top:2px;')
+		this._setStyle( this.el.dom, 'left:22px;position:absolute;top:2px;')
 	},
 	completeEdit: function(){
 		
@@ -173,19 +181,25 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
 	
 	href:false,
 
+	el: null, 
+	
     // private
     onRender : function(ct, position){
-        if(!this.el){
+				
+        if( this.el == null ){	
+
             this.el = document.createElement('a');
+
             this.el.id = this.getId();
+
 			
 			if( !this.disabled )
             	this.el.href = this.href ? this.href : "#" + this.text;
 
             if( !this.disabled ){
-                this.el.addEventListener( 'click', this.onClick.bind(this), true);
+                Element.observe( this.el, 'click', this.onClick.bind(this));
             }
-			
+	
 			if( this.image ){
 				this.el.innerHTML = '<img src="' + this.image + '" title="' + this.text + '"' + ( this.imageStyle ? ' style="' + this.imageStyle + '"/>': '/>')
 			} else {
@@ -195,8 +209,11 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
             if(this.forId){
                 this.el.setAttribute('htmlFor', this.forId);
             }
+
         }
+
         Ext.LinkButton.superclass.onRender.call(this, ct, position);
+
     },
 	
 	onClick: function(e){
@@ -207,6 +224,7 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
 		if( this.toggle ){
 			this.selected = !this.selected;
 			if( this.toggleStyle ){
+				this._setStyle( this.el.dom, '')
 				this.el.dom.setAttribute('style','')
 				if( this.selected ){
 					this.el.applyStyles( this.toggleStyle )
@@ -229,7 +247,15 @@ Ext.LinkButton = Ext.extend(Ext.BoxComponent, {
             this.el.dom.innerHTML = encode !== false ? Ext.util.Format.htmlEncode(t) : t;
         }
         return this;
-    }
+    },
+	
+	_setStyle: function(node, style){
+		if( Ext.isIE ){
+			node.style.setAttribute('cssText', style );	
+		} else {
+			node.setAttribute('style', style );	
+		}
+	}
 });
 
 Ext.reg('linkbutton', Ext.LinkButton);
@@ -255,6 +281,7 @@ Ext.form.ComboBoxMulti = function(config){
     /**
      * @cfg {Boolean} preventDuplicates indicates whether repeated selections of the same option will generate extra entries
      */
+		
     Ext.apply(config);
     
     // this option will interfere will expected operation
@@ -269,6 +296,7 @@ Ext.form.ComboBoxMulti = function(config){
     };
     
     Ext.form.ComboBoxMulti.superclass.constructor.call(this, config);
+	
 };
 
 Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
@@ -375,6 +403,7 @@ Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
 	
     // private
     onLoad : function(){
+	
         if(!this.hasFocus){
             return;
         }
@@ -397,6 +426,7 @@ Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
         }else{
             this.onEmptyResults();
         }
+		
         //this.el.focus();
     },	
 
@@ -462,16 +492,25 @@ Ext.form.ComboBoxMulti = Ext.extend(Ext.form.ComboBoxMulti, Ext.form.ComboBox, {
      * This only takes effect if grow = true, and fires the autosize event if the height changes.
      */
     autoSize : function(){
+		
         if(!this.grow || this.defaultAutoCreate.tag !== "textarea" || !this.el ){
             return;
         }
 		
+		// Get the el and the value
         var el 	= this.el;
         var v 	= el.dom.value;
-		var h 	= Number(el.getStyle('line-height').replace("px", "")) * (v.split("\n").length+1);
+		
+		// Get the line height (in IE the line-height is normal)
+		var lineHeight = el.getStyle('line-height') == "normal" ? 14.4 : el.getStyle('line-height').replace("px", "");
+		
+		// Calc the new height
+		var h 	= Number( lineHeight ) * (v.split("\n").length+1);
 		h		-= 6;
 		h		+= el.isScrollable() ? 20 : 0;
         h = Math.min(this.growMax, Math.max(h, this.growMin));
+		
+		// Set the height
         if(h != this.lastHeight){
             this.lastHeight = h;
             this.el.setHeight(h);

@@ -139,8 +139,10 @@ ALTER TABLE public.structure OWNER TO poem;
 -- Name: access; Type: VIEW; Schema: public; Owner: postgres
 --
 
-CREATE VIEW access AS
-    SELECT context_name.id AS context_id, context_name.uri AS context_name, subject_name.id AS subject_id, subject_name.uri AS subject_name, object_name.id AS object_id, object_name.uri AS object_name, access.id AS access_id, access.scheme AS access_scheme, access.term AS access_term FROM interaction access, structure context, identity context_name, structure subject_axis, identity subject_name, structure object_axis, identity object_name WHERE ((((((access.subject = context.hierarchy) AND (context.ident_id = context_name.id)) AND ((access.subject = subject_axis.hierarchy) OR (access.subject_descend AND is_parent(subject_axis.hierarchy, access.subject)))) AND ((((((NOT access.object_restrict_to_parent) AND access.object_self) AND (access.object = object_axis.hierarchy)) OR (((NOT access.object_restrict_to_parent) AND access.object_descend) AND is_parent(object_axis.hierarchy, access.object))) OR ((access.object_restrict_to_parent AND access.object_self) AND (object_axis.hierarchy = subject_axis.hierarchy))) OR ((access.object_restrict_to_parent AND access.object_descend) AND (parent(object_axis.hierarchy) = subject_axis.hierarchy)))) AND (subject_axis.ident_id = subject_name.id)) AND (object_axis.ident_id = object_name.id));
+CREATE OR REPLACE VIEW access AS 
+ SELECT context_name.id AS context_id, context_name.uri AS context_name, subject_name.id AS subject_id, subject_name.uri AS subject_name, object_name.id AS object_id, object_name.uri AS object_name, access.id AS access_id, access.scheme AS access_scheme, access.term AS access_term
+   FROM interaction access, structure context, identity context_name, structure subject_axis, identity subject_name, structure object_axis, identity object_name
+  WHERE access.subject = context.hierarchy AND context.ident_id = context_name.id AND (access.subject = subject_axis.hierarchy OR access.subject_descend AND is_parent( access.subject, subject_axis.hierarchy)) AND (NOT access.object_restrict_to_parent AND access.object_self AND access.object = object_axis.hierarchy OR NOT access.object_restrict_to_parent AND access.object_descend AND is_parent(access.object, object_axis.hierarchy) OR access.object_restrict_to_parent AND access.object_self AND object_axis.hierarchy = subject_axis.hierarchy OR access.object_restrict_to_parent AND access.object_descend AND parent(object_axis.hierarchy) = subject_axis.hierarchy) AND subject_axis.ident_id = subject_name.id AND object_axis.ident_id = object_name.id;
 
 
 ALTER TABLE public.access OWNER TO postgres;
@@ -579,10 +581,14 @@ BEGIN
 		(friend.subject_id=subject_id1 AND friend.friend_id=subject_id2)
 		OR (friend.friend_id=subject_id1 AND friend.subject_id=subject_id2);
 
-	IF FOUND AND result.model_count > 0 THEN 
+	IF FOUND AND result.model_count > count THEN 
 		UPDATE friend SET model_count=result.model_count - count 
 		WHERE friend.subject_id=result.subject_id
 		AND friend.friend_id=result.friend_id;
+	ELSE
+		UPDATE friend SET model_count=0
+		WHERE friend.subject_id=result.subject_id
+		AND friend.friend_id=result.friend_id;	
 	END IF;
 END;$$
     LANGUAGE plpgsql;
@@ -646,8 +652,8 @@ ALTER FUNCTION public.friend_init() OWNER TO poem;
 -- Name: friend_trigger_interaction(); Type: FUNCTION; Schema: public; Owner: poem
 --
 
-CREATE FUNCTION friend_trigger_interaction() RETURNS trigger
-    AS $$ DECLARE
+CREATE OR REPLACE FUNCTION friend_trigger_interaction() RETURNS TRIGGER AS
+$BODY$ DECLARE
 	model_hierarchy text;
 	user_hierarchy text;
 	subject identity;
@@ -663,20 +669,19 @@ BEGIN
 
 	SELECT * INTO subject FROM get_identity_from_hierarchy(user_hierarchy);
 	
-	FOR friend_id IN SELECT identity.id FROM identity, structure, interaction 
-			WHERE (identity.id=structure.ident_id AND interaction.object=model_hierarchy 
-					AND structure.hierarchy=interaction.subject) LOOP
+	FOR friend_id IN SELECT access.subject_id FROM access, structure
+			WHERE (access.object_id=structure.ident_id AND structure.hierarchy=model_hierarchy) LOOP
 		
 		IF (TG_OP = 'INSERT') THEN 
 			PERFORM friend_inc_counter(subject.id, friend_id, 1);
 		ELSEIF (TG_OP = 'DELETE') THEN
-			PERFORM friend_inc_counter(subject.id, friend_id, 1);
+			PERFORM friend_dec_counter(subject.id, friend_id, 1);
 		END IF;		
 	END LOOP;
 	RETURN NULL;
-END;$$
-    LANGUAGE plpgsql;
-
+END;$BODY$
+LANGUAGE 'plpgsql' VOLATILE
+COST 100;
 
 ALTER FUNCTION public.friend_trigger_interaction() OWNER TO poem;
 

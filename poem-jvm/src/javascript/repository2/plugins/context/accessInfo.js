@@ -242,10 +242,10 @@ Repository.Plugins.AccessInfo = {
 		// Generate Contributer Buttons			
 		data.each(function(openid){
 			
-			var label = {text: openid, xtype:'label'};
-			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;', text:Repository.I18N.AccessInfo.deleteText, click:this._deleteOpenID.bind(this, openid)})
+			var label = {text: openid, xtype:'label', style:'white-space:nowrap;'};
+			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;position:absolute;right:0px;top:1px;', text:Repository.I18N.AccessInfo.deleteText, click:this._deleteOpenID.bind(this, openid)})
 
-			buttons.push( new Ext.Panel({border:false, items: editable ? [label, image] : [label] , style:""}))			
+			buttons.push( new Ext.Panel({border:false, items: editable ? [image, label] : [label] , style:""}))			
 				
 		}.bind(this))
 		
@@ -350,14 +350,14 @@ Repository.Plugins.AccessInfo = {
 		
 		if( !openID ){ return }
 		
-		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.ACCESS_URL, {subject:encodeURI(openID)}, null, true );
+		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.ACCESS_URL, {subject:openID}, null, true );
 		
 	},	
 	
 	_addOpenID: function( openid, access ){
 		
 		// Replaces ';' and '\n' to ',' ;and stripes and decodes 
-		var decoded = openid.gsub(';', ',').gsub('\n', ',').split(',').map(function(s){ s = s.strip(); return s.blank() ? null : encodeURI(s)}).uniq().compact().join(',')
+		var decoded = openid.gsub(';', ',').gsub('\n', ',').split(',').map(function(s){ s = s.strip(); return s.blank() ? null : s}).uniq().compact().join(',')
 		
 		if( decoded.length <= 0 ){ return }
 		

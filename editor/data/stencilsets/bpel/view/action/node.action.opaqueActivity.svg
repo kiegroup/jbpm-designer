@@ -48,7 +48,7 @@
     	ry="10" 
     	stroke="black" 
     	stroke-width="1" 
-    	fill="white" />
+    	style="fill:silver;fill-opacity:0.3"/>
     <text
        oryx:rotate="270"
        id="label"

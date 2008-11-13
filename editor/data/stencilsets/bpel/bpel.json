@@ -25,11 +25,10 @@
 			"title_de":"process",
 			"description":"Root-Node of a Process",
 			"description_de":"Wurzelknoten des Prozesses",
-			"groups":["Process"],
-			"groups_de":["Process"],
+			"groups":["Process and Scope"],
 			"view":"others/node.Bpel.svg",
 			"icon":"task.png",
-			"roles": ["HandlerHolder","SingleActivityContainer"],
+			"roles": ["SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL});
@@ -74,16 +73,48 @@
 					"value":"http://bpel.com/process",
 					"readonly":false,
 					"optional":false
-				},
+				},			
 				{
 					"id":"abstractProcessProfile",
-					"prefix":"oryx",
-					"type":"String",
+					"type":"Choice",
 					"title":"abstractProcessProfile",
 					"title_de":"abstraktesProzessprofil",
 					"value":"",
+					"description":"observableBehavior - http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08; \ntemplates - http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08",
+					"tooltip":"",
 					"readonly":false,
-					"optional":false
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"observableBehavior",
+							"title_de":"observableBehavior",
+							"value":"observableBehavior",
+							"refToView":"observableBehavior"
+						},
+						{
+							"id":"c2",
+							"title":"templates",
+							"title_de":"templates",
+							"value":"templates",
+							"refToView":"templates"
+						},
+						{
+							"id":"c3",
+							"title":"your Definition",
+							"title_de":"your Definition",
+							"value":"your Definition",
+							"refToView":""
+						},
+						{
+							"id":"c4",
+							"title":"null",
+							"title_de":"leer",
+							"value":"null",
+							"refToView":""
+						}
+					]
 				},
 				{
 					"id":"queryLanguage",
@@ -117,14 +148,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -167,16 +190,6 @@
 							"tooltip":""
 						}
 					]
-				},
-				{
-					"id":"xmlns",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"xmlns",
-					"title_de":"xmlns",
-					"value":"http://docs.oasis-open.org/wsbpel/2.0/process/executable",
-					"readonly":false,
-					"optional":false
 				},
 				{
 					"id":"otherxmlns",
@@ -800,14 +813,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -1004,8 +1009,8 @@
 							"optional":false 
 						},
 						{
-							"id":"Correlation",
-							"name":"Correlation",
+							"id":"fromVariable",
+							"name":"fromVariable",
 							"type":"searcher",
 							"searchBPELId":"process","searchScopeId":"Scope",
 							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
@@ -1159,14 +1164,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -1460,14 +1457,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -1680,8 +1669,8 @@
 							"optional":false 
 						},
 						{
-							"id":"Correlation",
-							"name":"Correlation",
+							"id":"fromVariable",
+							"name":"fromVariable",
 							"type":"searcher",
 							"searchBPELId":"process","searchScopeId":"Scope",
 							"searchPropertieBPEL":"variables","searchPropertieScope":"variables",
@@ -1808,14 +1797,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -2190,14 +2171,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -2331,14 +2304,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -2559,14 +2524,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -2808,14 +2765,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -2992,14 +2941,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -3085,7 +3026,7 @@
 			"groups_de":["Schleifen"],
 			"view":"loop/loop.foreach.svg",
 			"icon":"forEach.png",
-			"roles": ["Activity","SingleActivityContainer"],
+			"roles": ["Activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLEACTIVITY});
@@ -3175,14 +3116,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -3447,14 +3380,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -3484,14 +3409,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -3574,7 +3491,7 @@
 					"type":"Choice",
 					"title":"ignoreMissingFromData",
 					"title_de":"ignoreMissingFromData",
-					"value":"fromParent",
+					"value":"",
 					"tooltip":"Ignoriere fehlende von_Daten",
 					"readonly":false,
 					"optional":true,
@@ -3583,25 +3500,20 @@
 					"wrapLines":false,
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"title_de":"c2",
+							"id":"yes",
+							"title":"yes",
+							"title_de":"ja",
 							"value":"yes",
-							"refToView":""
+							"tooltip":"",
+							"refToView":"none"
 						},
 						{
-							"id":"c3",
-							"title":"c3",
-							"title_de":"c3",
+							"id":"no",
+							"title":"no",
+							"title_de":"nein",
 							"value":"no",
-							"refToView":""
+							"tooltip":"",
+							"refToView":"none"
 						}
 					]
 				},
@@ -4177,11 +4089,10 @@
 			"title_de":"scope",
 			"description":"One Scope",
 			"description_de":"Ein Scope",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Process and Scope"],
 			"view":"scope/node.scope.svg",
 			"icon":"scope.png",
-			"roles": ["Activity","SingleActivityContainer","HandlerHolder","CompensationHandlerHolder"],
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL});
@@ -4286,14 +4197,6 @@
 							"value":"no",
 							"tooltip":"",
 							"refToView":"none"
-						},
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
 						}
 					]
 				},
@@ -4302,21 +4205,13 @@
 					"type":"Choice",
 					"title":"exitOnStandardFault",
 					"title_de":"beendenMitStandardfehler",
-					"value":"fromParent",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -4758,8 +4653,8 @@
 			"title_de":"onAlarm",
 			"description":"One element onAlarm",
 			"description_de":"Ein onAlarm-Element",
-			"groups":["Pick","Scope"],
-			"groups_de":["Pick","Scope"],
+			"groups":["Pick","Event Handling"],
+			"groups_de":["Pick","Event Handling"],
 			"view":"others/node.shared.onAlarm.svg",
 			"icon":"onAlarm.png",
 			"roles": ["SingleActivityContainer"],
@@ -4920,12 +4815,10 @@
 			"title_de":"onEvent",
 			"description":"One onEvent from the element EventHandlers",
 			"description_de":"Ein onEvent in der Aktivität EventHandlers",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Event Handling"],
 			"view":"scope/node.handler.onEvent.svg",
 			"icon":"onEvent.png",
-			// TODO : delete role "Activity"
-			"roles": ["SingleActivityContainer"],
+			"roles": [],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5178,16 +5071,160 @@
 		{
 		
 			"type": "node",
+			"id":"eventHandler",
+			"title":"eventHandler",
+			"title_de":"eventHandler",
+			"description":"One eventHandler",
+			"description_de":"Ein Ereignisbehandlung",
+			"groups":["Exception Handling"],
+			"view":"scope/node.handler.eventHandler.svg",
+			"icon":"handler.png",
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
+			"id":"faultHandler",
+			"title":"faultHandler",
+			"title_de":"faultHandler",
+			"description":"One faultHandler",
+			"description_de":"Ein Fehlerbehandlung",
+			"groups":["Exception Handling"],
+			"view":"scope/node.handler.faultHandler.svg",
+			"icon":"handler.png",
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},	
+		{
+		
+			"type": "node",
+			"id":"compensationHandler",
+			"title":"compensationHandler",
+			"title_de":"CompensationHandler",
+			"description":"One compensationHandler",
+			"description_de":"Ein Compensationsbehandlung",
+			"groups":["Exception Handling"],
+			"view":"scope/node.compensate.compensateHandler.svg",
+			"icon":"handler.png",
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
+			"layout":function(shape) {		
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
+ 			},
+			"properties": [
+				{
+					"id":"documentation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"mainBody",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+		
+			"type": "node",
 			"id":"terminationHandler",
 			"title":"terminationHandler",
 			"title_de":"terminationHandler",
 			"description":"One terminationHandler",
 			"description_de":"Ein Termination-Behandlung",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Exception Handling"],
 			"view":"scope/node.handler.terminationHandler.svg",
-			"icon":"termination.png",
-			"roles": ["Handler","SingleActivityContainer"],
+			"icon":"handler.png",
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5231,11 +5268,11 @@
 			"title_de":"catch",
 			"description":"One catch",
 			"description_de":"Ein catch",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Exception Handling"],
 			"view":"scope/node.handler.catch.svg",
 			"icon":"catch.png",
-			"roles": ["SingleActivityContainer"],
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5337,59 +5374,11 @@
 			"title_de":"catchAll",
 			"description":"One Catch All",
 			"description_de":"Ein Catch All",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
+			"groups":["Exception Handling"],
 			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
-			"roles": ["SingleActivityContainer"],
-			"layout":function(shape) {		
-				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
- 			},
-			"properties": [
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"title_de":"Dokumentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"title_de":"Hintergrundfarbe",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"mainBody",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-		
-			"type": "node",
-			"id":"compensationHandler",
-			"title":"compensationHandler",
-			"title_de":"CompensationHandler",
-			"description":"One compensationHandler",
-			"description_de":"Ein Compensationsbehandlung",
-			"groups":["Scope"],
-			"groups_de":["Scope"],
-			"view":"scope/node.compensate.compensateHandler.svg",
-			"icon":"compensationHandler.png",
-			"roles": ["Handler","SingleActivityContainer"],
+			//TODO:delete role "activity"
+			"roles": ["Activity","SingleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD});
@@ -5430,7 +5419,7 @@
 			"id":"throw",
 			"title":"throw",
 			"title_de":"throw",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"description":"An throw activity.",
 			"description_de":"Eine Throw-Aktivität.",
 			"view":"action/node.action.throw.svg",
@@ -5521,14 +5510,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -5596,7 +5577,7 @@
 			"id":"rethrow",
 			"title":"rethrow",
 			"title_de":"rethrow",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"description":"An rethrow activity.",
 			"description_de":"Eine Rethrow-Aktivität.",
 			"view":"action/node.action.rethrow.svg",
@@ -5688,14 +5669,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -5736,7 +5709,7 @@
 			"title_de":"compensate",
 			"description":"One Compensate",
 			"description_de":"Ein Compensate",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"view":"compensate/node.compensate.compensate.svg",
 			"icon":"compensation.png",
 			"roles": ["Activity"],
@@ -5826,14 +5799,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -5874,7 +5839,7 @@
 			"title_de":"compensateScope",
 			"description":"one Compensate Scope",
 			"description_de":"Ein Compensate Scope",
-			"groups":["Throw and Compensate"],
+			"groups":["Exception Handling"],
 			"view":"compensate/node.compensate.compensateScope.svg",
 			"icon":"compensationScope.png",
 			"roles": ["Activity"],
@@ -5963,14 +5928,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -6117,14 +6074,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -6254,14 +6203,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -6467,14 +6408,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -6619,14 +6552,6 @@
 					"refToView":"",
 					"items": [
 						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
-						{
 							"id":"yes",
 							"title":"yes",
 							"title_de":"ja",
@@ -6669,7 +6594,7 @@
 			"description":"An Opaque activity.",
 			"description_de":"Eine opake Aktivität.",
 			"view":"action/node.action.opaqueActivity.svg",
-			"icon":"task.png",
+			"icon":"opaqueActivity.png",
 			"roles": ["Activity"],
 			"properties": [
 				{
@@ -6756,14 +6681,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -6909,14 +6826,6 @@
 					"optional":true,
 					"refToView":"",
 					"items": [
-						{
-							"id":"fromParent",
-							"title":"fromParent",
-							"title_de":"vonEltern",
-							"value":"fromParent",
-							"tooltip":"",
-							"refToView":"none"
-						},
 						{
 							"id":"yes",
 							"title":"yes",
@@ -7064,6 +6973,10 @@
 			{
 				"role":"scope",
 				"contains": ["onEvent","onAlarm","catch","catchAll","terminationHandler","compensationHandler"]
+			},
+			{
+				"role":"onEvent",
+				"contains":["scope"]
 			}
 		]
 	}

@@ -8,6 +8,13 @@
 			"extends":"http://b3mn.org/stencilset/bpmn1.1#"
 		},
 		{
+			"title":"BPMN WikiRef Extension",
+			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnwikirefs#",
+			"description":"BPMN 1.1 extension for adding a WikiRef attribute to all nodes.",
+			"definition":"bpmnwikirefs/bpmnwikirefs.json",
+			"extends":"http://b3mn.org/stencilset/bpmn1.1#"
+		},
+		{
 			"title":"BPMN Sub Set Extension",
 			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnsubset#",
 			"description":"BPMN extension that reduces the available stencils.",

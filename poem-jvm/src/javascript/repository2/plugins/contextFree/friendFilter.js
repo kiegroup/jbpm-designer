@@ -38,9 +38,13 @@ Repository.Plugins.FriendFilter = {
 		this.name = Repository.I18N.FriendFilter.name;
 		arguments.callee.$.construct.apply(this, arguments); // call Plugin super class
 
-		this._generateGUI();
-		
-		this.facade.modelCache.getUserUpdateHandler().registerCallback(this._generateGUI.bind(this));
+
+		if (!this.facade.isPublicUser()) {
+			this._generateGUI();
+			this.facade.modelCache.getUserUpdateHandler().registerCallback(this._generateGUI.bind(this));
+		} else {
+			this.panel.hide();
+		}
 
 	},
 	
@@ -49,6 +53,9 @@ Repository.Plugins.FriendFilter = {
 		var types = $H(this.facade.modelCache.getFriends()).map(function(item) { return Number(item.value) > 0 ? [ unescape(item.key), item.value ] : null }.bind(this)).compact();
 
 		if( this.types && types && types instanceof Array && types.length > 0 && types.toString() == this.types.toString() ){
+			if( this.panel && this.panel.body ){
+				this.panel.body.hide();
+			}
 			return 
 		}
 
@@ -56,7 +63,12 @@ Repository.Plugins.FriendFilter = {
 				
 		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
 		this.deletePanelItems();
-				
+
+		// Hide the body if there are no friends
+		if( types.length <= 0 && this.panel ){
+				this.panel.collapse();
+		}	
+						
 		
 		var store 	= new Ext.data.SimpleStore({
 	        fields	: ['friend', 'count'],
@@ -92,7 +104,7 @@ Repository.Plugins.FriendFilter = {
 	
 	_onSelectionChange : function( dataView, selection ) {
 				
-		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return escape(item.data.friend); });
+		var filter = $A(dataView.getSelectedRecords()).map(function(item){ return item.data.friend; });
 		this.facade.applyFilter('friend', filter.join(","));	
 	}
 };

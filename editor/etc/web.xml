@@ -54,18 +54,6 @@
 		<url-pattern>/engineproxy</url-pattern>
 	</servlet-mapping>
 -->
-
-	<servlet>
-		<display-name>BPEL Export</display-name>
-		<servlet-name>BPEL</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.BPEL4CHOR
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>BPEL</servlet-name>
-		<url-pattern>/bpel</url-pattern>
-	</servlet-mapping>
 	
 
 	<servlet>
@@ -204,29 +192,6 @@
 		<servlet-name>EPCUpload</servlet-name>
 		<url-pattern>/epc-upload</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<display-name>Oryx AML Support Servlet</display-name>
-		<servlet-name>AMLSupport</servlet-name>
-		<servlet-class>org.oryxeditor.server.AMLSupport</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AMLSupport</servlet-name>
-		<url-pattern>/amlsupport</url-pattern>
-	</servlet-mapping>
-	
-	
-	<servlet>
-		<display-name>Automatic Layouter Servlet</display-name>
-		<servlet-name>AutoLayouter</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.AutoLayouterServlet
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AutoLayouter</servlet-name>
-		<url-pattern>/layouter</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<display-name>Step Through</display-name>
@@ -264,19 +229,6 @@
 		<url-pattern>/xformsimport</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
-		<display-name>TreeGraphChecker</display-name>
-		<servlet-name>TreeGraphChecker</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.TreeGraphChecker
-		</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>TreeGraphChecker</servlet-name>
-		<url-pattern>/treegraphsupport</url-pattern>
-	</servlet-mapping>
-	
 	<welcome-file-list>
 		<welcome-file>/server</welcome-file>
 	</welcome-file-list>
@@ -306,4 +258,11 @@
 		<extension>css</extension>
 		<mime-type>text/css</mime-type>
 	</mime-mapping>
+	
+	<!-- Set Favourites Icon MIME-Type --> 
+	<mime-mapping>
+	    <extension>ico</extension>
+	    <mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+
 </web-app>

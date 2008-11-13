@@ -1,6 +1,6 @@
 
 if(!Repository) var Repository = {};
-
+ 
 Repository.Templates = {
 		login :  new Ext.XTemplate(		'<div id="oryx_repository_header" onmouseover="this.className = \'mouseover\'" onmouseout="this.className = \'\'">'+
 					        '<a href="http://oryx-editor.org" target="_blank">'+
@@ -24,7 +24,7 @@ Repository.Templates = {
 						'<tpl if="!isPublicUser">'+
 							'<form action="login?logout=true" method="post" id="openid_login">'+
 								'<div>'+
-									'{Repository.I18N.Repository.sayHello}, {currentUser}'+
+									'<div style="display:inline;" class="login_name">{Repository.I18N.Repository.sayHello}, {currentUser}</div>'+
 									'<input type="submit" class="button" value={Repository.I18N.Repository.logout} />'+
 								'</div>'+
 							'</form>'+

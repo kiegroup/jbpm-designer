@@ -43,15 +43,21 @@ Repository.Plugins.TagInfo = {
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 
 		
-		this._createDataStore();
-		this._generateGUI();
+		
+		if (!this.facade.isPublicUser()) {
+			this._createDataStore();
+			this._generateGUI();
+		} else {
+			this.panel.hide();
+		}
+
 
 	},
 	
 	render: function( modelData ){
 		
 		// If modelData hasnt changed, return
-		if( !this.tagPanel ){ return }
+		if( this.facade.isPublicUser() || !this.tagPanel ){ return }
 						
 		// Find every tag which are available in all selected models
 		var modelTags 		= []
@@ -221,8 +227,6 @@ Repository.Plugins.TagInfo = {
 		
 		if( !tag || tag.length <= 0 ){ return }
 		
-		tag = escape( tag )
-		
 		this.facade.modelCache.deleteData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tag}, null, true )
 
 	},	
@@ -232,7 +236,7 @@ Repository.Plugins.TagInfo = {
 		if( !tagname || tagname.length <= 0 ){ return }
 		
 		
-		tagname = tagname.split(",").map(function(text){ return text.blank() ? null : escape( text.strip() ) }).compact().join(",")
+		tagname = tagname.split(",").map(function(text){ return text.blank() ? null :  text.strip() }).compact().join(",")
 		
 		this.facade.modelCache.setData( this.facade.getSelectedModels(), this.TAG_URL, {tag_name:tagname}, null, true )
 		

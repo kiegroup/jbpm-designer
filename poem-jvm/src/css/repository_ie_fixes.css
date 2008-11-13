@@ -1,0 +1,9 @@
+/**
+ * THIS FILE IS FOR IE - CSS FIXES
+ * 
+ */
+
+#openid_login .login_name {
+	position:relative;
+	top:-2px;
+}

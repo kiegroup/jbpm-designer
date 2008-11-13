@@ -62,7 +62,7 @@ public class LoginHandler extends HandlerBase {
 	*/
 	
 	public static final String OPENID_SESSION_IDENTIFIER = "openid";
-	public static final String REPOSITORY_REDIRECT = "repository2";
+	public static final String REPOSITORY_REDIRECT = "repository";
 
 	private ConsumerManager manager;
 	
