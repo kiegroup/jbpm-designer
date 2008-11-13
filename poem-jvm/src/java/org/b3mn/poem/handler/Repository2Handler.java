@@ -82,7 +82,7 @@ public class Repository2Handler extends  HandlerBase {
     	// Add language file for country and language code if it exists
     	if (new File(this.getBackendRootDirectory() + "/i18n/translation_" + languageCode+"_" + countryCode + ".js").exists()) {
     		languageFiles += "<script src=\"" + backend_path 
-    		+ "i18n/translation_" + languageCode+"_" + countryCode 
+    		+ "/i18n/translation_" + languageCode+"_" + countryCode 
     		+ ".js\" type=\"text/javascript\" ></script>\n";
     	}
     	
