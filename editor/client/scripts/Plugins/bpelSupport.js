@@ -55,12 +55,14 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0});
+			
+		this.offSetPosition = {x:0, y:0};	
         
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL, this.handleLayoutEvent.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL, this.handleLayoutVerticalEvent.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL, this.handleLayoutHorizontalEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD, this.handleSingleChildLayoutEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_AUTORESIZE, this.handleAutoResizeLayoutEvent.bind(this));
-		// TODO: add ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL and ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL
-		// These should not be based on rowlayout, but a self-made implementation
 	},
 	
 	exportProcess: function(){
@@ -283,17 +285,40 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 
 	},
 	
-	handleLayoutRows: function(event) {
+	handleLayoutEvent: function(event) {
 		// TODO: realize special BPEL layouting here
 		// main activity: placed left. Handler: Place right.
 		// resize box to size of contained shapes
 		return;
 	},
 	
+	handleLayoutVerticalEvent: function(event) {
+		return;
+	},
+	
+	handleLayoutHorizontalEvent: function(event) {
+		return;
+	},
+	
+	
+	
 	handleSingleChildLayoutEvent: function(event) {
-		// TODO
-		// single child: move to upper left corner
-		// resize box to size of contained shape
+      /*
+		var shape = event.shape;
+		var element = shape.getChildShapes(false).first();
+		
+		if (element==null){
+			return;
+		}
+	
+		var shapeUL = shape.bounds.upperLeft();
+		
+		element.bounds.moveTo(shapeUL.x + 30, shapeUL.y + 30);
+		
+		var elementLR = element.bounds.lowerRight();
+		
+		shape.bounds.set(shapeUL.x, shapeUL.y, elementLR.x + 30, elementLR.y + 30);
+        */
 		return;
 	},
 	
@@ -301,34 +326,41 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 	 * Resizes the shape to the bounds of the child shapes
 	 */
 	handleAutoResizeLayoutEvent: function(event) {
-		// TODO
 		/*
-	var pools = shape.getChildNodes();
-	
-	if(pools.length > 0) {
-
-		var leftBound = 0;
-		var upperBound = 0;
-		var rightBound = 0;
-		var lowerBound = 0;
-
-		pools.each(function(pool) {
-			var ul = pool.bounds.upperRight();
-			var lr = pool.bounds.lowerRight();
-			
-			if (ul.x < leftBound)  leftBound  = ul.x;
-			if (ul.y < upperBound) upperBound = ul.y;
-			if (lr.x > rightBound) rightBound = lr.x;
-			if (lr.y > lowerBound) lowerBound = lr.y;
-
-		});					
+		var children = event.shape.getChildShapes(false);
 		
-		rightBound = rightBound + 60;
-		lowerBound = lowerBound + 60;
-		shape.bounds.set(leftBound, upperBound, rightBound, lowerBound);
+		if(children.length > 0) {
+			var leftBound = 10000;
+			var upperBound = 10000;
+			var rightBound = 0;
+			var lowerBound = 0;
+	
+			children.each(function(child) {
+				var ul = child.bounds.upperLeft();
+				var lr = child.bounds.lowerRight();
+				
+				alert(ul.x);
+				alert(ul.y);
+				alert(lr.x);
+				alert(lr.y);
+				
+				if (ul.x < leftBound)  leftBound  = ul.x;
+				if (ul.y < upperBound) upperBound = ul.y;
+				if (lr.x > rightBound) rightBound = lr.x;
+				if (lr.y > lowerBound) lowerBound = lr.y;
+			});		
+			
+			leftBound = leftBound - 30;
+			upperBound = upperBound - 30;
+			rightBound = rightBound + 30;
+			lowerBound = lowerBound + 30;
+			
+			event.shape.bounds.set(leftBound, upperBound, rightBound, lowerBound);
+		};
+		*/
+		return;
 	}
-	*/
-	}
+
 
 	
 	
