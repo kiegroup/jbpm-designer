@@ -31,4 +31,13 @@ public class StartTimerEvent extends StartEvent {
 	public StringBuilder getSerialization(BPMNSerialization serialization) {
 		return serialization.getSerializationForDiagramObject(this);
 	}
+	
+	@Override
+	public Node getCopy() {
+		StartTimerEvent newnode = (StartTimerEvent)super.getCopy();
+		newnode.setTimeCycle(this.getTimeCycle());
+		newnode.setTimeDate(this.getTimeDate());
+		return newnode;
+	}
+
 }

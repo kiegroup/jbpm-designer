@@ -60,4 +60,19 @@ public abstract class Node extends DiagramObject {
 		this.bounds = bounds;
 	}
 
+
+	public Node getCopy() {
+		try {
+			Node newnode = (Node)this.getClass().newInstance();
+			newnode.setId(this.getId());
+			newnode.setLabel(this.getLabel());
+			newnode.setResourceId(this.getResourceId());
+			return newnode;
+		} catch (InstantiationException e) {
+			return null;
+		} catch (IllegalAccessException e) {
+			return null;
+		}
+	}
+
 }

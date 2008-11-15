@@ -15,7 +15,6 @@ import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndCancelEvent;
@@ -38,6 +37,7 @@ import de.hpi.bpmn.IntermediatePlainEvent;
 import de.hpi.bpmn.IntermediateTimerEvent;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartLinkEvent;
 import de.hpi.bpmn.StartMultipleEvent;
@@ -53,12 +53,15 @@ import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.IBPMNFactory;
 import de.hpi.ibpmn.Interaction;
 import de.hpi.ibpmn.IntermediateInteraction;
+import de.hpi.ibpmn.OwnedGateway;
 import de.hpi.ibpmn.StartInteraction;
 
 /**
  * main method: loadBPMN()
  * 
  * remark: bidirectional associations are interpreted as two separate associations
+ * 
+ * TODO handle decision ownership properly
  * 
  * @author gero.decker
  *
@@ -484,6 +487,9 @@ public class IBPMNRDFImporter {
 		gateway.setParent(c.diagram);
 		c.objects.put(gateway.getResourceId(), gateway);
 		
+		if (gateway instanceof OwnedGateway)
+			determineDecisionOwner(gateway);
+		
 		for (Node n=node.getFirstChild(); n != null; n=n.getNextSibling()) {
 			if (n instanceof Text) continue;
 			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
@@ -491,6 +497,13 @@ public class IBPMNRDFImporter {
 		}
 		if (gateway.getId() == null)
 			gateway.setId(gateway.getResourceId());
+	}
+
+	protected void determineDecisionOwner(Gateway gateway) {
+		for (Edge e: gateway.getIncomingEdges())
+			if (e instanceof Association && e.getSource() instanceof Pool) {
+				((OwnedGateway)gateway).setDecisionOwner((Pool)e.getSource());
+			}
 	}
 
 	protected void addDataObject(Node node, ImportContext c) {

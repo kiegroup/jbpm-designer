@@ -18,4 +18,12 @@ public class DataObject extends Node {
 	public StringBuilder getSerialization(BPMNSerialization serialization) {
 		return serialization.getSerializationForDiagramObject(this);
 	}
+
+	@Override
+	public Node getCopy() {
+		DataObject newnode = (DataObject)super.getCopy();
+		newnode.setState(this.getState());
+		return newnode;
+	}
+
 }

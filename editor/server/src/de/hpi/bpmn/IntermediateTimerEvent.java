@@ -32,4 +32,13 @@ public class IntermediateTimerEvent extends IntermediateEvent {
 	public StringBuilder getSerialization(BPMNSerialization serialization) {
 		return serialization.getSerializationForDiagramObject(this);
 	}
+	
+	@Override
+	public Node getCopy() {
+		IntermediateTimerEvent newnode = (IntermediateTimerEvent)super.getCopy();
+		newnode.setTimeCycle(this.getTimeCycle());
+		newnode.setTimeDate(this.getTimeDate());
+		return newnode;
+	}
+
 }

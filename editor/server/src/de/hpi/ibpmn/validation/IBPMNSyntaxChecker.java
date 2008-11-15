@@ -17,11 +17,6 @@ public class IBPMNSyntaxChecker extends BPMNSyntaxChecker {
 	}
 
 	@Override
-	public boolean checkSyntax() {
-		return super.checkSyntax();
-	}
-
-	@Override
 	protected boolean checkNode(Node node) {
 		if (node instanceof Interaction) {
 			Interaction i = (Interaction) node;

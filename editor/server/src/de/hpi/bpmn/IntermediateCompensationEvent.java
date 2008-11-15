@@ -18,4 +18,12 @@ public class IntermediateCompensationEvent extends IntermediateEvent {
 	public StringBuilder getSerialization(BPMNSerialization serialization) {
 		return serialization.getSerializationForDiagramObject(this);
 	}
+	
+	@Override
+	public Node getCopy() {
+		IntermediateCompensationEvent newnode = (IntermediateCompensationEvent)super.getCopy();
+		newnode.setThrowing(this.isThrowing());
+		return newnode;
+	}
+
 }

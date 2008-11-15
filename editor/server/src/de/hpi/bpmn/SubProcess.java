@@ -46,4 +46,14 @@ public class SubProcess extends Activity implements Container {
 	public StringBuilder getSerialization(BPMNSerialization serialization) {
 		return serialization.getSerializationForDiagramObject(this);
 	}
+
+	@Override
+	public Node getCopy() {
+		SubProcess newnode = (SubProcess)super.getCopy();
+		newnode.setAdhoc(this.isAdhoc());
+		newnode.setParallelOrdering(this.isParallelOrdering());
+		newnode.setCompletionCondition(this.getCompletionCondition());
+		return newnode;
+	}
+
 }
