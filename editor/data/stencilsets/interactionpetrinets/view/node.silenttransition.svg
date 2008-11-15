@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   version="1.0">
+  <oryx:magnets>
+  	<oryx:magnet oryx:cx="12" oryx:cy="25" oryx:default="yes"/>
+  	<oryx:magnet oryx:cx="12" oryx:cy="0"/>
+  	<oryx:magnet oryx:cx="12" oryx:cy="50"/>
+  	<oryx:magnet oryx:cx="0" oryx:cy="25"/>
+  	<oryx:magnet oryx:cx="25" oryx:cy="25"/>
+  </oryx:magnets>
+  <g>
+    <rect
+       id="descriptionline"
+       oryx:anchor="top bottom left right"
+       oryx:resize="vertical horizontal"
+       width="25" height="50"
+       x="0" y="0"
+       stroke="black" fill="white" stroke-width="2"/>
+  </g>
+</svg>

@@ -121,6 +121,66 @@
 			]
 		},
 		{
+			"type":		"node",
+			"id":			"ControlledSilentTransition",
+			"title":		"Controlled Silent Transition",	
+			"groups":		["Interaction Petri Nets"],
+			"description":	"",
+			"view":		"node.controlledsilenttransition.svg",
+			"icon":		"node.controlledsilenttransition.png",
+			"roles":		["transition"],
+			"properties": [
+				{
+					"id":	"id",
+					"type":	"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"refToView":"label",
+					"wrapLines":false
+				},
+				{
+					"id":		"roles",
+					"type":	"String",
+					"title":	"Roles",
+					"value":	"A",
+					"description":"",
+					"readonly":	false,
+					"optional":	true,
+					"length":	"",
+					"refToView":"roles",
+					"wrapLines":false
+				}
+			]
+		},
+		{
+			"type":		"node",
+			"id":			"SilentTransition",
+			"title":		"Silent Transition",	
+			"groups":		["Interaction Petri Nets"],
+			"description":	"",
+			"view":		"node.silenttransition.svg",
+			"icon":		"node.silenttransition.png",
+			"roles":		["transition"],
+			"properties": [
+				{
+					"id":	"id",
+					"type":	"String",
+					"title":"id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"refToView":"label",
+					"wrapLines":false
+				}
+			]
+		},
+		{
 			"type":		"edge",
 			"id":			"Arc",
 			"title":		"Arc",	
