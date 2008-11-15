@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="editor/server/src"/>
+	<classpathentry kind="src" path="editor/server/test"/>
 	<classpathentry kind="src" path="poem-jvm/src/java"/>
 	<classpathentry kind="src" path="buildApps/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -114,5 +115,6 @@
 	<classpathentry kind="lib" path="poem-jvm/lib/xmlgraphics-commons-1.3.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xmlsec-1.3.0.jar"/>
 	<classpathentry kind="lib" path="buildApps/lib/org.json.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

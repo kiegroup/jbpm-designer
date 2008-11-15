@@ -118,6 +118,20 @@
 
 	<servlet>
 		<display-name>
+			Oryx IBPMN 2 BPMN Converter
+		</display-name>
+		<servlet-name>IBPMN2BPMNServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.IBPMN2BPMNServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>IBPMN2BPMNServlet</servlet-name>
+		<url-pattern>/ibpmn2bpmn</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>
 			Oryx syntax checker
 		</display-name>
 		<servlet-name>SyntaxChecker</servlet-name>

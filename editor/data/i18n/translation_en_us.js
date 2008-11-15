@@ -242,6 +242,12 @@ ORYX.I18N.Grouping.groupDesc = "Groups all selected shapes";
 ORYX.I18N.Grouping.ungroup = "Ungroup";
 ORYX.I18N.Grouping.ungroupDesc = "Deletes the group of all selected Shapes";
 
+if(!ORYX.I18N.IBPMN2BPMN) ORYX.I18N.IBPMN2BPMN = {};
+
+ORYX.I18N.IBPMN2BPMN.group ="Export";
+ORYX.I18N.IBPMN2BPMN.name ="IBPMN 2 BPMN Mapping";
+ORYX.I18N.IBPMN2BPMN.desc ="Convert IBPMN to BPMN";
+
 if(!ORYX.I18N.Loading) ORYX.I18N.Loading = {};
 
 ORYX.I18N.Loading.waiting ="Please wait...";

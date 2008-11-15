@@ -242,6 +242,12 @@ ORYX.I18N.Grouping.groupDesc = "Gruppierung der selektierten Elemente";
 ORYX.I18N.Grouping.ungroup = "Gruppierung aufheben";
 ORYX.I18N.Grouping.ungroupDesc = "Aufheben aller Gruppierungen der selektierten Elemente";
 
+if(!ORYX.I18N.IBPMN2BPMN) ORYX.I18N.IBPMN2BPMN = {};
+
+ORYX.I18N.IBPMN2BPMN.group ="Export";
+ORYX.I18N.IBPMN2BPMN.name ="IBPMN 2 BPMN Mapping";
+ORYX.I18N.IBPMN2BPMN.desc ="IBPMN nach BPMN konvertieren";
+
 if(!ORYX.I18N.Loading) ORYX.I18N.Loading = {};
 
 ORYX.I18N.Loading.waiting ="Bitte warten...";
