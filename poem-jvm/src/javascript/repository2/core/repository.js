@@ -43,14 +43,14 @@ Repository.Core.Repository = {
 			this._eventListeners = new Hash();
 			
 			this._initializeLoadEvent();
-			var loadMask = this.showMask();
+			/*var loadMask = this.showMask();
 			
 			// After 300 milsec after initialized, hide loading panel
 			this.on('initialized', function(){ 
 								
 					window.setTimeout(function(){ this.hideMask(loadMask) }.bind(this), 200) 
 				
-				}.bind(this));
+				}.bind(this));*/
 			
 			// Event handler
 			this._viewChangedHandler = new EventHandler();
