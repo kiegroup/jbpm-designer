@@ -314,7 +314,7 @@ public class Dispatcher extends HttpServlet {
 				e1.printStackTrace();
 			}
 			*/
-			// throw new ServletException(e);
+			throw new ServletException(e);
 		} finally {
 			// This might be a hibernate design crime but should fix some problems 
 			Persistance.getSession().close();
