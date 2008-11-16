@@ -191,162 +191,6 @@
 					"length":""
 				},
 				{
-					"id":"participants",
-					"type":"String",
-					"title":"Participants",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"boundaryVisible",
-					"type":"Boolean",
-					"title":"BoundaryVisible",
-					"value":true,
-					"description":"Defines, if the rectangular boundary for the Pool is visible.",
-					"readonly":false,
-					"optional":false,
-					"refToView":"border"
-				},
-				{
-					"id":"processId",
-					"type":"String",
-					"title":"ProcessId",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"processName",
-					"type":"String",
-					"title":"ProcessName",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"processType",
-					"type":"Choice",
-					"title":"ProcessType",
-					"value":"None",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"processtype",
-					"items": [
-						{
-							"id":"c1",
-							"title":"c1",
-							"value":"None",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"value":"Private",
-							"refToView":""
-						},
-						{
-							"id":"c3",
-							"title":"c3",
-							"value":"Abstract",
-							"refToView":""
-						},
-						{
-							"id":"c4",
-							"title":"c4",
-							"value":"Collaboration",
-							"refToView":""
-						}
-					]
-				},
-				{
-					"id":"adHoc",
-					"type":"Boolean",
-					"title":"AdHoc",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"adHocOrdering",
-					"type":"Choice",
-					"title":"AdHocOrdering",
-					"value":"Parallel",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"c1",
-							"value":"Sequential",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"value":"Parallel",
-							"refToView":""
-						}
-					]
-				},
-				{
-					"id":"adHocCompletionCondition",
-					"type":"String",
-					"title":"AdHocCompletionCondition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"suppressJoinFailure",
-					"type":"Boolean",
-					"title":"SuppressJoinFailure",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"processCategories",
-					"type":"String",
-					"title":"ProcessCategories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"processDocumentation",
-					"type":"String",
-					"title":"ProcessDocumentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},				
-				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -421,126 +265,6 @@
 					"length":""
 				},
 				{
-					"id":"participants",
-					"type":"String",
-					"title":"Participants",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"boundaryVisible",
-					"type":"Boolean",
-					"title":"BoundaryVisible",
-					"value":true,
-					"description":"Defines, if the rectangular boundary for the Pool is visible.",
-					"readonly":false,
-					"optional":false,
-					"refToView":"border"
-				},
-				{
-					"id":"processId",
-					"type":"String",
-					"title":"ProcessId",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"processName",
-					"type":"String",
-					"title":"ProcessName",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"adHoc",
-					"type":"Boolean",
-					"title":"AdHoc",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"adHocOrdering",
-					"type":"Choice",
-					"title":"AdHocOrdering",
-					"value":"Parallel",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"c1",
-							"value":"Sequential",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"value":"Parallel",
-							"refToView":""
-						}
-					]
-				},
-				{
-					"id":"adHocCompletionCondition",
-					"type":"String",
-					"title":"AdHocCompletionCondition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"suppressJoinFailure",
-					"type":"Boolean",
-					"title":"SuppressJoinFailure",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"processCategories",
-					"type":"String",
-					"title":"ProcessCategories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"processDocumentation",
-					"type":"String",
-					"title":"ProcessDocumentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},				
-				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -556,18 +280,17 @@
 		},
 		{
 			"type": "node",
-			"id":"StartMessageEvent",
+			"id":"StartInteraction",
 			"title":"Start interaction",
 			"groups":["Pools and Interactions"],
-			"description":"An interaction without incoming edges.",
-			"view":"startevent/node.event.message.start.svg",
+			"description":"An interaction that starts a conversation.",
+			"view":"startevent/node.event.interaction.start.svg",
 			"icon":"new_messageevent.png",
 			"roles": [
 				"sequence_start",
 				"interaction",
 				"to_task_event",
 				"from_task_event",
-				"tc",
 				"fromtoall",
 				"Startevents_all"
 			],
@@ -584,18 +307,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -605,27 +316,6 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Start",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Message",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
 				},
 				{
 					"id":"message",
@@ -693,7 +383,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -710,18 +399,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -732,197 +409,6 @@
 					"refToView":"",
 					"length":"30"
 				},
-				{
-					"id":"gatewayType",
-					"type":"String",
-					"title":"GatewayType",
-					"value":"AND",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"gates",
-					"type":"String",
-					"title":"Gates",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_outgoingSequenceFlow",
-					"type":"String",
-					"title":"[Gates] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_Assignments",
-					"type":"String",
-					"title":"[Gates] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"OR_Gateway",
-			"title":"OR Gateway",
-			"groups":["Control Flow"],
-			"description":"A decision point.",
-			"view":"gateway/node.gateway.or.svg",
-			"icon":"new_gateway_or.png",
-			"roles": [
-				"sequence_start",
-				"sequence_end",
-				"conditional_start",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"gatewayType",
-					"type":"String",
-					"title":"GatewayType",
-					"value":"OR",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"gates",
-					"type":"String",
-					"title":"Gates",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_outgoingSequenceFlow",
-					"type":"String",
-					"title":"[Gates] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_Assignments",
-					"type":"String",
-					"title":"[Gates] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"defaultGate",
-					"type":"String",
-					"title":"DefaultGate",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gate_outgoingSequenceFlow",
-					"type":"String",
-					"title":"[Gate] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"gate_Assignments",
-					"type":"String",
-					"title":"[Gate] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},				
 				{
 					"id":"bgColor",
 					"type":"Color",
@@ -949,8 +435,6 @@
 				"sequence_start",
 				"sequence_end",
 				"tc",
-				"conditional_start",
-				"default_start",
 				"fromtoall"
 			],
 			"properties": [
@@ -966,18 +450,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -989,24 +461,15 @@
 					"length":"30"
 				},
 				{
-					"id":"gatewayType",
+					"id":"owningRoles",
 					"type":"String",
-					"title":"GatewayType",
-					"value":"XOR",
+					"title":"OwningRoles",
+					"value":"",
 					"description":"",
-					"readonly":true,
+					"readonly":false,
 					"optional":false,
-					"length":""
-				},
-				{
-					"id":"xorType",
-					"type":"String",
-					"title":"XORType",
-					"value":"Data",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
+					"refToView":"",
+					"length":"30"
 				},
 				{
 					"id":"markerVisible",
@@ -1033,42 +496,6 @@
 					]
 				},
 				{
-					"id":"gates",
-					"type":"String",
-					"title":"Gates",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_outgoingSequenceFlow",
-					"type":"String",
-					"title":"[Gates] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_Assignments",
-					"type":"String",
-					"title":"[Gates] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"defaultGate",
 					"type":"String",
 					"title":"DefaultGate",
@@ -1080,29 +507,6 @@
 					"length":"50",
 					"wrapLines":true
 				},
-				{
-					"id":"gate_outgoingSequenceFlow",
-					"type":"String",
-					"title":"[Gate] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"gate_Assignments",
-					"type":"String",
-					"title":"[Gate] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},				
 				{
 					"id":"bgColor",
 					"type":"Color",
@@ -1128,7 +532,6 @@
 			"roles": [
 				"sequence_start",
 				"sequence_end",
-				"conditional_start",
 				"tc",
 				"fromtoall"
 			],
@@ -1145,18 +548,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -1167,456 +558,6 @@
 					"refToView":"",
 					"length":"30"
 				},
-				{
-					"id":"gatewayType",
-					"type":"String",
-					"title":"GatewayType",
-					"value":"XOR",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"xorType",
-					"type":"String",
-					"title":"XORType",
-					"value":"Event",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"gates",
-					"type":"String",
-					"title":"Gates",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_outgoingSequenceFlow",
-					"type":"String",
-					"title":"[Gates] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_Assignments",
-					"type":"String",
-					"title":"[Gates] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"Complex_Gateway",
-			"title":"Complex Gateway",
-			"groups":["Control Flow"],
-			"description":"A decision point.",
-			"view":"gateway/node.gateway.complex.svg",
-			"icon":"new_gateway_complex.png",
-			"roles": [
-				"sequence_start",
-				"sequence_end",
-				"conditional_start",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"gatewayType",
-					"type":"String",
-					"title":"GatewayType",
-					"value":"Complex",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"gates",
-					"type":"String",
-					"title":"Gates",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_outgoingSequenceFlow",
-					"type":"String",
-					"title":"[Gates] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_Assignments",
-					"type":"String",
-					"title":"[Gates] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"incomingCondition",
-					"type":"String",
-					"title":"IncomingCondition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"outgoingCondition",
-					"type":"String",
-					"title":"OutgoingCondition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
- 		{
-			"type": "node",
-			"id":"Group",
-			"title":"Group",
-			"groups":["Artifacts"],
-			"description":"A group box element",
-			"view":"artifact/node.group.svg",
-			"icon":"new_group.png",
-			"roles": [
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"artifactType",
-					"type":"String",
-					"title":"ArtifactType",
-					"value":"Group",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":"20"
-				}
-			]
-		},
- 		{
-			"type": "node",
-			"id":"TextAnnotation",
-			"title":"Text Annotation",
-			"groups":["Artifacts"],
-			"description":"A text annotation",
-			"view":"artifact/node.text.annotation.svg",
-			"icon":"new_text_annotation.png",
-			"roles": [
-				"from_artifact",
-				"to_artifact"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"artifactType",
-					"type":"String",
-					"title":"ArtifactType",
-					"value":"Annotation",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"text",
-					"type":"String",
-					"title":"Text",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":"20",
-					"wrapLines":true
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"DataObject",
-			"title":"Data Object",
-			"description":"A data object",
-			"groups":["Artifacts"],
-			"view":"artifact/node.data.object.svg",
-			"icon":"new_data_object.png",
-			"roles": [
-				"from_artifact",
-				"to_artifact",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"artifactType",
-					"type":"String",
-					"title":"ArtifactType",
-					"value":"DataObject",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"Text description",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"state",
-					"type":"String",
-					"title":"State",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true
-				},
-				{
-					"id":"properties",
-					"type":"String",
-					"title":"Properties",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"requiredForStart",
-					"type":"Boolean",
-					"title":"Required for start",
-					"value":true,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-				},
-				{
-					"id":"producedAtCompletion",
-					"type":"Boolean",
-					"title":"Produced at completion",
-					"value":true,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-				},				
 				{
 					"id":"bgColor",
 					"type":"Color",
@@ -1635,7 +576,7 @@
 			"type": "node",
 			"id":"StartEvent",
 			"title":"Start event",
-			"groups":["Start Events"],
+			"groups":["Events"],
 			"description":"An event without incoming edges.",
 			"view":"startevent/node.event.start.svg",
 			"icon":"new_startevent.png",		
@@ -1660,18 +601,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -1682,27 +611,6 @@
 					"refToView":"",
 					"length":"30"
 				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Start",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},				
 				{
 					"id":"bgColor",
 					"type":"Color",
@@ -1721,7 +629,7 @@
 			"type": "node",
 			"id":"StartTimerEvent",
 			"title":"Start timer event",
-			"groups":["Start Events"],
+			"groups":["Events"],
 			"description":"A timer event without incoming edges.",
 			"view":"startevent/node.event.timer.start.svg",
 			"icon":"new_timerevent.png",
@@ -1729,7 +637,6 @@
 				"sequence_start",
 				"to_task_event",
 				"from_task_event",
-				"tc",
 				"fromtoall",
 				"Startevents_all"
 			],
@@ -1746,18 +653,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -1769,25 +664,15 @@
 					"length":"30"
 				},
 				{
-					"id":"eventType",
+					"id":"owningRoles",
 					"type":"String",
-					"title":"EventType",
-					"value":"Start",
+					"title":"OwningRoles",
+					"value":"",
 					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Timer",
-					"description":"",
-					"readonly":true,
+					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":""
+					"length":"30"
 				},
 				{
 					"id":"timeDate",
@@ -1826,411 +711,11 @@
 		},
 		{
 			"type": "node",
-			"id":"StartRuleEvent",
-			"title":"Start rule event",
-			"groups":["Start Events"],
-			"description":"A rule event without incoming edges.",
-			"view":"startevent/node.event.rule.start.svg",
-			"icon":"new_ruleevent.png",
-			"roles": [
-				"sequence_start",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Startevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Start",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Rule",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"ruleName",
-					"type":"String",
-					"title":"RuleName",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"StartLinkEvent",
-			"title":"Start link event",
-			"groups":["Start Events"],
-			"description":"A link event without incoming edges.",
-			"view":"startevent/node.event.link.start.svg",
-			"icon":"new_linkevent.png",
-			"roles": [
-				"sequence_start",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Startevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Start",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Link",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"linkId",
-					"type":"String",
-					"title":"LinkId",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"processRef",
-					"type":"String",
-					"title":"ProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"StartMultipleEvent",
-			"title":"Start multiple event",
-			"groups":["Start Events"],
-			"description":"A multiple event without incoming edges.",
-			"view":"startevent/node.event.multiple.start.svg",
-			"icon":"new_multipleevent.png",
-			"roles": [
-				"sequence_start",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Startevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Start",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"triggers",
-					"type":"String",
-					"title":"Triggers",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"IntermediateEvent",
-			"title":"Intermediate event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.intermediate.svg",
-			"icon":"new_intermediateevent.png",
-			"roles":[
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"IntermediateMessageEvent",
+			"id":"IntermediateInteraction",
 			"title":"Intermediate interaction",
 			"groups":["Pools and Interactions"],
 			"description":"An intermediate interaction with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.message.intermediate.svg",
+			"view":"intermediateevent/node.event.interaction.intermediate.svg",
 			"icon":"new_messageevent.png",
 			"roles":[
 				"sequence_start",
@@ -2254,18 +739,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -2275,38 +748,6 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Message",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
 				},
 				{
 					"id":"message",
@@ -2367,7 +808,7 @@
 			"type": "node",
 			"id":"IntermediateTimerEvent",
 			"title":"Intermediate timer event",
-			"groups":["Intermediate Events"],
+			"groups":["Events"],
 			"description":"An intermediate timer event with incoming and outgoing edges.",
 			"view":"intermediateevent/node.event.timer.intermediate.svg",
 			"icon":"new_timerevent.png",
@@ -2392,18 +833,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -2415,36 +844,15 @@
 					"length":"30"
 				},
 				{
-					"id":"eventType",
+					"id":"owningRoles",
 					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Timer",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
+					"title":"OwningRoles",
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":false,
 					"refToView":"",
-					"length":""
+					"length":"30"
 				},
 				{
 					"id":"timeDate",
@@ -2483,550 +891,9 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateErrorEvent",
-			"title":"Intermediate error event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate error event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.error.intermediate.svg",
-			"icon":"new_errorevent.png",
-			"roles":[
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Error",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"errorCode",
-					"type":"String",
-					"title":"ErrorCode",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"IntermediateCancelEvent",
-			"title":"Intermediate cancel event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate cancel event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.cancel.intermediate.svg",
-			"icon":"new_cancelevent.png",
-			"roles":[
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Cancel",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"IntermediateRuleEvent",
-			"title":"Intermediate rule event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate rule event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.rule.intermediate.svg",
-			"icon":"new_ruleevent.png",
-			"roles":[
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Rule",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"ruleName",
-					"type":"String",
-					"title":"RuleName",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"IntermediateLinkEvent",
-			"title":"Intermediate link event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate link event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.link.intermediate.svg",
-			"icon":"new_linkevent.png",
-			"roles":[
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Link",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"linkId",
-					"type":"String",
-					"title":"LinkId",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"processRef",
-					"type":"String",
-					"title":"ProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"IntermediateMultipleEvent",
-			"title":"Intermediate multiple event",
-			"groups":["Intermediate Events"],
-			"description":"An intermediate multiple event with incoming and outgoing edges.",
-			"view":"intermediateevent/node.event.multiple.intermediate.svg",
-			"icon":"new_multipleevent.png",
-			"roles":[
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"Intermediate",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"triggers",
-					"type":"String",
-					"title":"Triggers",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
 			"id":"EndEvent",
 			"title":"End event",
-			"groups":["End Events"],
+			"groups":["Events"],
 			"description":"An event without outgoing edges.",
 			"view":"endevent/node.event.end.svg",
 			"icon":"new_event_end.png",
@@ -3051,18 +918,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -3072,625 +927,12 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
 				},
 				{
 					"id":"result",
 					"type":"String",
 					"title":"Result",
 					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"EndMessageEvent",
-			"title":"End interaction",
-			"groups":["Pools and Interactions"],
-			"description":"An interaction without outgoing edges.",
-			"view":"endevent/node.event.message.end.svg",
-			"icon":"new_messageevent.png",
-			"roles":[
-				"sequence_end",
-				"interaction",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Endevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"result",
-					"type":"String",
-					"title":"Result",
-					"value":"Message",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"message",
-					"type":"String",
-					"title":"Message",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"implementation",
-					"type":"Choice",
-					"title":"Implementation",
-					"value":"Web Service",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"webservice",
-							"title":"c1",
-							"value":"Web Service",
-							"refToView":""
-						},
-						{
-							"id":"other",
-							"title":"c2",
-							"value":"Other",
-							"refToView":""
-						},
-						{
-							"id":"unspecified",
-							"title":"c3",
-							"value":"Unspecified",
-							"refToView":""
-						}
-					]
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"EndErrorEvent",
-			"title":"End error event",
-			"groups":["End Events"],
-			"description":"An error event without outgoing edges.",
-			"view":"endevent/node.event.error.end.svg",
-			"icon":"new_errorevent.png",
-			"roles":[
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Endevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"result",
-					"type":"String",
-					"title":"Result",
-					"value":"Error",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"errorCode",
-					"type":"String",
-					"title":"ErrorCode",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"EndCancelEvent",
-			"title":"End cancel event",
-			"groups":["End Events"],
-			"description":"A cancel event without outgoing edges.",
-			"view":"endevent/node.event.cancel.end.svg",
-			"icon":"new_cancelevent.png",
-			"roles":[
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Endevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"result",
-					"type":"String",
-					"title":"Result",
-					"value":"Cancel",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"EndLinkEvent",
-			"title":"End link event",
-			"groups":["End Events"],
-			"description":"An link event without outgoing edges.",
-			"view":"endevent/node.event.link.end.svg",
-			"icon":"new_linkevent.png",
-			"roles":[
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Endevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"result",
-					"type":"String",
-					"title":"Result",
-					"value":"Link",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"linkId",
-					"type":"String",
-					"title":"LinkId",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"processRef",
-					"type":"String",
-					"title":"ProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"EndMultipleEvent",
-			"title":"End multiple event",
-			"groups":["End Events"],
-			"description":"An multiple event without outgoing edges.",
-			"view":"endevent/node.event.multiple.end.svg",
-			"icon":"new_multipleevent.png",
-			"roles":[
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Endevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"result",
-					"type":"String",
-					"title":"Result",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"results",
-					"type":"String",
-					"title":"Results",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"EndTerminateEvent",
-			"title":"End terminate event",
-			"groups":["End Events"],
-			"description":"An terminate event without outgoing edges.",
-			"view":"endevent/node.event.terminate.end.svg",
-			"icon":"new_terminateevent.png",
-			"roles":[
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"tc",
-				"fromtoall",
-				"Endevents_all"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"eventType",
-					"type":"String",
-					"title":"EventType",
-					"value":"End",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"result",
-					"type":"String",
-					"title":"Result",
-					"value":"Terminate",
 					"description":"",
 					"readonly":true,
 					"optional":false,
@@ -3713,19 +955,17 @@
 		},
  		{
 			"type": "node",
-			"id":"Subprocess",
-			"title":"Complex interaction",
+			"id":"ComplexInteractionCollapsed",
+			"title":"Complex interaction (collapsed)",
 			"groups":["Pools and Interactions"],
 			"description":"A complex interaction.",
-			"view":"activity/node.task.svg",
-			"icon":"new_task.png",
+			"view":"activity/node.complexinteraction.collapsed.svg",
+			"icon":"new_complexinteractioncollapsed.png",
 			"roles": [
 				"sequence_start",
 				"sequence_end",
 				"to_task_event",
 				"from_task_event",
-				"conditional_start",
-				"default_start",
 				"tc",
 				"fromtoall"
 			],
@@ -3742,18 +982,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -3765,145 +993,15 @@
 					"length":"30"
 				},
 				{
-					"id":"activityType",
+					"id":"controllingRoles",
 					"type":"String",
-					"title":"ActivityType",
-					"value":"Sub-Process",
-					"description":"The Type of Activity.",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"status",
-					"type":"Choice",
-					"title":"Status",
-					"value":"None",
-					"description":"The Status of an activity is determined when the activity is being executed by a process engine.",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"c1",
-							"value":"None",
-							"refToView":"None"
-						},
-						{
-							"id":"c2",
-							"title":"c2",
-							"value":"Ready",
-							"refToView":"Ready"
-						},
-						{
-							"id":"c3",
-							"title":"c3",
-							"value":"Active",
-							"refToView":"Active"
-						},
-						{
-							"id":"c4",
-							"title":"c4",
-							"value":"Cancelled",
-							"refToView":"Cancelled"
-						},
-						{
-							"id":"c5",
-							"title":"c5",
-							"value":"Aborting",
-							"refToView":"Aborting"
-						},
-						{
-							"id":"c6",
-							"title":"c6",
-							"value":"Aborted",
-							"refToView":"Aborted"
-						},
-						{
-							"id":"c7",
-							"title":"c7",
-							"value":"Completing",
-							"refToView":"Completing"
-						},
-						{
-							"id":"c8",
-							"title":"c8",
-							"value":"Completed",
-							"refToView":"Completed"
-						}
-					]
-				},
-				{
-					"id":"inputSets",
-					"type":"String",
-					"title":"InputSets",
+					"title":"ControllingRoles",
 					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"inputs",
-					"type":"String",
-					"title":"Inputs",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"outputSets",
-					"type":"String",
-					"title":"OutputSets",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"outputs",
-					"type":"String",
-					"title":"Outputs",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"ioRules",
-					"type":"String",
-					"title":"IORules",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"startQuantity",
-					"type":"Integer",
-					"title":"StartQuantity",
-					"value":1,
 					"description":"",
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"min":"1"
+					"length":"30"
 				},
 				{
 					"id":"loopType",
@@ -4062,16 +1160,6 @@
 					]
 				},
 				{
-					"id":"isAdHoc",
-					"type":"Boolean",
-					"title":"isAdHoc",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"adhoc"
-				},
-				{
 					"id":"subProcessType",
 					"type":"String",
 					"title":"subProcessType",
@@ -4082,27 +1170,6 @@
 					"refToView":"",
 					"length":"50"
 				},
-				{
-					"id":"isATransaction",
-					"type":"Boolean",
-					"title":"isATransaction",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"border"
-				},
-				{
-					"id":"transaction",
-					"type":"String",
-					"title":"Transaction",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},				
 				{
 					"id":"entry",
 					"prefix":"raziel",
@@ -4128,15 +1195,21 @@
 				}
 			]
 		},
-		{
-			"type": "edge",
-			"id":"MessageFlowFrom",
-			"title":"Message flow from",
-			"description":"",
+ 		{
+			"type": "node",
+			"id":"ComplexInteraction",
+			"title":"Complex interaction",
 			"groups":["Pools and Interactions"],
-			"view":"connection/connection.messageflowfrom.svg",
-			"icon":"new_messageflow.png",
+			"description":"A complex interaction.",
+			"view":"activity/node.complexinteraction.svg",
+			"icon":"new_complexinteraction.png",
 			"roles": [
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"tc",
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -4151,16 +1224,229 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
+					"id":"documentation",
 					"type":"String",
-					"title":"Categories",
+					"title":"Documentation",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"50",
-					"wrapLines":true
+					"length":"30"
+				},
+				{
+					"id":"controllingRoles",
+					"type":"String",
+					"title":"ControllingRoles",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"loopType",
+					"type":"Choice",
+					"title":"LoopType",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"None",
+							"refToView":"none"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"Standard",
+							"refToView":"loop"
+						},
+						{
+							"id":"c3",
+							"title":"c3",
+							"value":"MultiInstance",
+							"refToView":"multiple"
+						}
+					]
+				},
+				{
+					"id":"loopCondition",
+					"type":"String",
+					"title":"LoopCondition",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"loopCounter",
+					"type":"Integer",
+					"title":"LoopCounter",
+					"value":1,
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"loopMaximum",
+					"type":"Integer",
+					"title":"LoopMaximum",
+					"value":1,
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"testTime",
+					"type":"Choice",
+					"title":"TestTime",
+					"value":"After",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"Before",
+							"refToView":"Before"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"After",
+							"refToView":"After"
+						}
+					]
+				},
+				{
+					"id":"MI_Condition",
+					"type":"String",
+					"title":"MI_Condition",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"MI_Ordering",
+					"type":"Choice",
+					"title":"MI_Ordering",
+					"value":"Sequential",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"Sequential",
+							"refToView":"Sequential"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"Parallel",
+							"refToView":"Parallel"
+						}
+					]
+				},
+				{
+					"id":"MI_FlowCondition",
+					"type":"Choice",
+					"title":"MI_FlowCondition",
+					"value":"All",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"None",
+							"refToView":"None"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"One",
+							"refToView":"One"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"All",
+							"refToView":"All"
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"Complex",
+							"refToView":"Complex"
+						}
+					]
+				},
+				{
+					"id":"subProcessType",
+					"type":"String",
+					"title":"subProcessType",
+					"value":"Embedded",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"taskrect",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"MessageFlowFrom",
+			"title":"Message flow from",
+			"description":"",
+			"groups":["Pools and Interactions"],
+			"view":"connection/connection.messageflowfrom.svg",
+			"icon":"new_messageflow_from.png",
+			"roles": [
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
 				},
 				{
 					"id":"documentation",
@@ -4177,26 +1463,6 @@
 					"id":"name",
 					"type":"String",
 					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -4224,7 +1490,7 @@
 			"description":"",
 			"groups":["Pools and Interactions"],
 			"view":"connection/connection.messageflowto.svg",
-			"icon":"new_messageflow.png",
+			"icon":"new_messageflow_to.png",
 			"roles": [
 			],
 			"properties": [
@@ -4238,18 +1504,6 @@
 					"optional":false,
 					"refToView":"",
 					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -4266,26 +1520,6 @@
 					"id":"name",
 					"type":"String",
 					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -4329,18 +1563,6 @@
 					"length":"30"
 				},
 				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -4355,26 +1577,6 @@
 					"id":"name",
 					"type":"String",
 					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -4386,484 +1588,6 @@
 					"type":"String",
 					"title":"ConditionType",
 					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"quantity",
-					"type":"Integer",
-					"title":"Quantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"ConditionalFlow",
-			"title":"Conditional flow",
-			"description":"",
-			"groups":["Control Flow"],
-			"view":"connection/connection.sequenceflow.conditional.svg",
-			"icon":"new_conditionalflow.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"ConditionType",
-					"type":"String",
-					"title":"ConditionType",
-					"value":"Expression",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"ConditionExpression",
-					"type":"String",
-					"title":"ConditionExpression",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"quantity",
-					"type":"Integer",
-					"title":"Quantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"DefaultFlow",
-			"title":"Default flow",
-			"description":"",
-			"groups":["Control Flow"],
-			"view":"connection/connection.sequenceflow.default.svg",
-			"icon":"new_defaultflow.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"ConditionType",
-					"type":"String",
-					"title":"ConditionType",
-					"value":"Default",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"quantity",
-					"type":"Integer",
-					"title":"Quantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"Association_Undirected",
-			"title":"Association Undirected",
-			"description":"",
-			"groups":["Artifacts"],
-			"view":"connection/connection.association.undirected.svg",
-			"icon":"new_association_undirected.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"direction",
-					"type":"String",
-					"title":"Direction",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"Association_Unidirectional",
-			"title":"Association Unidirectional",
-			"description":"",
-			"groups":["Artifacts"],
-			"view":"connection/connection.association.unidirectional.svg",
-			"icon":"new_association_unidirectional.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"direction",
-					"type":"String",
-					"title":"Direction",
-					"value":"To",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				}
-			]
-		},
-		{
-			"type": "edge",
-			"id":"Association_Bidirectional",
-			"title":"Association Bidirectional",
-			"description":"",
-			"groups":["Artifacts"],
-			"view":"connection/connection.association.bidirectional.svg",
-			"icon":"new_association_bidirectional.png",
-			"roles": [
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"Source",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"Target",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"direction",
-					"type":"String",
-					"title":"Direction",
-					"value":"Both",
 					"description":"",
 					"readonly":true,
 					"optional":false,
@@ -4880,7 +1604,7 @@
 				"connects": [
 					{
 						"from":"Pool",
-						"to":["interaction"]
+						"to":["interaction","ComplexInteractionCollapsed"]
 					}
 				]
 			},
@@ -4899,83 +1623,6 @@
 					{
 						"from":"sequence_start",
 						"to":["sequence_end"]
-					}
-				]
-			},
-			{
-				"role":"DefaultFlow",
-				"connects": [
-					{
-						"from":"default_start",
-						"to":["sequence_end"]
-					}
-				]
-			},
-			{
-				"role":"ConditionalFlow",
-				"connects": [
-					{
-						"from":"conditional_start",
-						"to":["sequence_end"]
-					}
-				]
-			},
-			{
-				"role":"Association_Unidirectional",
-				"connects": [
-					{
-						"from":"from_task_event",
-						"to":["DataObject"]
-					},
-					{
-						"from":"DataObject",
-						"to":["to_task_event"]
-					},
-					{
-						"from":"Pool",
-						"to":["Exclusive_Databased_Gateway","OR_Gateway","Complex_Gateway"]
-					}
-				]
-			},
-			{
-				"role":"Association_Bidirectional",
-				"connects": [
-					{
-						"from":"from_task_event",
-						"to":["DataObject"]
-					},
-					{
-						"from":"DataObject",
-						"to":["to_task_event"]
-					},
-				]
-			},
-			{
-				"role":"Association_Undirected",
-				"connects": [
-					{
-						"from":"SequenceFlow",
-						"to":["DataObject"]
-					},
-					{
-						"from":"DataObject",
-						"to":["SequenceFlow"]
-					},
-					{
-						"from":"MessageFlow",
-						"to":["DataObject"]
-					},
-					{
-						"from":"DataObject",
-						"to":["MessageFlow"]
-					},
-					{
-						"from":"fromtoall",
-						"to":["TextAnnotation"]
-					},
-					{
-						"from":"TextAnnotation",
-						"to":["fromtoall"]
 					}
 				]
 			},
@@ -5095,11 +1742,13 @@
 				"role":"iBPMNDiagram",
 				"contains": [
 					"Pool",
-					"tc"
+					"tc",
+					"StartInteraction",
+					"StartTimerEvent"
 				]
 			},
 			{
-				"role":"Subprocess",
+				"role":"ComplexInteraction",
 				"contains": [
 					"tc"
 				]
@@ -5122,14 +1771,6 @@
 					"TextAnnotation"
 				]
 			}
-		],
-//		canConnect: function(args) { 
-//			if(args.result) {
-//				if(args.sourceShape.parent.parent.id == args.targetShape.parent.parent.id) {
-//						args.result = false;
-//				}
-//			}
-//			return args.result; 
-//		}
+		]
 	}
 }

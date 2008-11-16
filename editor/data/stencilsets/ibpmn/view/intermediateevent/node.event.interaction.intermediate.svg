@@ -13,39 +13,9 @@
   <g pointer-events="fill">
     <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1"/>
     <circle cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
-
-    <polygon stroke="black" fill="black" stroke-width="1" points="9,13 19,13 19,10 25,16 19,22 19,19 9,19" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
+    <polyline stroke="black" fill="none" stroke-width="1" points="16,21 24,21 24,11 16,11" />
+    <polyline stroke="black" fill="none" stroke-width="1" points="16,17 24,11" />
+    <path stroke="white" fill="black" stroke-width="1" d="M8,11 L8,22 L16,22 L16,17z"/>
+    <path stroke="white" fill="black" stroke-width="1" d="M7,10 L16,17 L16,10z"/>
   </g>
 </svg>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
