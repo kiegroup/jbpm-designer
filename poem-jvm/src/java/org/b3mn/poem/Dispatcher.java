@@ -191,12 +191,14 @@ public class Dispatcher extends HttpServlet {
 
 	protected boolean checkAccess(HandlerInfo handlerInfo, Identity subject, Model model, String requestMethod) {
 		try {
+			// Explicitly check right of the public user
+			AccessRight publicRight = model.getAccessRight(publicUser);
 			// Read access right for the user from the requested model
 			AccessRight userRight = model.getAccessRight(subject.getUri());
 			// Read required access right from the handler
 			AccessRight modelRestriction = handlerInfo.getAccessRestriction(requestMethod);
 			// User needs the same or a higher privilege then required by the handler
-			return userRight.compareTo(modelRestriction) >= 0;
+			return (userRight.compareTo(modelRestriction) >= 0 || publicRight.compareTo(modelRestriction) >= 0);
 		} catch(Exception e) { return false; }
 	}
 	
@@ -305,12 +307,17 @@ public class Dispatcher extends HttpServlet {
 		} catch (Exception e) {
 			// response.reset(); // Undo all changes --> this may cause some trouble because of a SUN bug
 			e.printStackTrace();
+			/*
 			try {
 				response.sendRedirect("http://bpt.hpi.uni-potsdam.de/Oryx/503");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			*/
 			// throw new ServletException(e);
+		} finally {
+			// This might be a hibernate design crime but should fix some problems 
+			Persistance.getSession().close();
 		}
 	}
 	@Override
