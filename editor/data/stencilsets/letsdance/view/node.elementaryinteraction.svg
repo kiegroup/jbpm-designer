@@ -30,8 +30,8 @@
        width="150" height="25"
        x="0" y="50"
        stroke="black" fill="white" stroke-width="2"/>
-	<text id="messageType" x="75" y="60" oryx:align="middle center"></text>		
-	<text id="senderText" x="4" y="28" oryx:algin="middle center"></text>
-	<text id="receiverText" x="146" y="28" text-anchor="end"></text>	
+	<text id="messageType" x="75" y="62.5" oryx:align="middle center"></text>		
+	<text id="senderText" x="4" y="25" oryx:align="middle left"></text>
+	<text id="receiverText" x="146" y="25" oryx:align="middle right"></text>	
   </g>
 </svg>
