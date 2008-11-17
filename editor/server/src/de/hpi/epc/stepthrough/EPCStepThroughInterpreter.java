@@ -145,10 +145,7 @@ public class EPCStepThroughInterpreter implements IStepThroughInterpreter {
 		while(changed && this.getFireableNodes().size() > 0){
 			NodeNewMarkingPair markingPairToFire = null;
 			for(NodeNewMarkingPair nodeNewMarking : nodeNewMarkings){
-				IFlowObject node = nodeNewMarking.node;
-				if( Marking.isAndConnector(node) ||
-						node instanceof Event ||
-						(Marking.isJoin(node, epcDiag) && (Marking.isXorConnector(node)) || Marking.isOrConnector(node)) ){
+				if( shouldBeAutomaticallyExecuted(nodeNewMarking.node) ){
 					markingPairToFire = nodeNewMarking;
 					break; //leave loop because markings have changed
 				}
@@ -220,4 +217,9 @@ public class EPCStepThroughInterpreter implements IStepThroughInterpreter {
 		return resourceId + "," + String.valueOf(timesExecuted) + "," + (fireable ? "t" : "f") + ";";
 	}
 
+	private boolean shouldBeAutomaticallyExecuted(IFlowObject node){
+		return Marking.isAndConnector(node) ||
+			node instanceof Event ||
+			(Marking.isJoin(node, epcDiag) && (Marking.isXorConnector(node) || Marking.isOrConnector(node)));
+	}
 }
