@@ -136,7 +136,7 @@ public class AccessHandler extends  HandlerBase {
 
 		Collection<String> result =  Persistance.getSession()
 		.createSQLQuery("SELECT access.object_name FROM access "
-				+ "WHERE access.subject_id=:subject_id  AND :params LIKE '%' || access.term  || '%' "
+				+ "WHERE access.subject_id=:subject_id  AND (:params LIKE ('%'||access.access_term||'%')) "
 				+ "OR access.subject_name='public' AND :params LIKE '%public%'")
 				.setInteger("subject_id", subject.getId())
 				.setString("params", params)
