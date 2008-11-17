@@ -55,9 +55,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0});
-			
-		this.offSetPosition = {x:0, y:0};	
-        
+
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL, this.handleLayoutEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL, this.handleLayoutVerticalEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL, this.handleLayoutHorizontalEvent.bind(this));
@@ -285,25 +283,154 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 
 	},
 	
+	
+	/**************************** Layout ****************************/
+	
+	
+	dropShapesDown: function(){
+		alert("dropShapesDown");
+				
+        /*this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_MOUSEDOWN
+        });*/
+		return;
+		
+	}, 
+	
+	/**
+	 *  realize special BPEL layouting:
+	 *  main activity: placed left,
+	 *  Handler: placed right.
+	 */
 	handleLayoutEvent: function(event) {
-		// TODO: realize special BPEL layouting here
-		// main activity: placed left. Handler: Place right.
-		// resize box to size of contained shapes
+		alert("handleLayoutEvent");
+		this.dropShapesDown();
+		
+     	var shape = event.shape;
+     	var elements = shape.getChildShapes(false);
+     	
+     	var activity;
+     	var eventHandlers;
+     	var faultHandlers;
+     	var compensationHandler;
+     	var terminationHandler;
+     	
+     	elements.each(function(element) {
+     		if (element.getStelcil().roles()=="activity"){
+     			activity = element;
+     		};
+     		if (element.getStelcil().id()=="eventHandlers"){
+     			eventHandlers = element;
+     		};
+     		if (element.getStelcil().id()=="faultHandlers"){
+     			faultHandlers = element;
+     		};
+     		if (element.getStelcil().id()=="compensationHandler"){
+     			compensationHandler = element;
+     		};
+     		if (element.getStelcil().id()=="terminationHandler"){
+     			terminationHandler = element;
+     		};
+		});
+		
+		var nextLeftBound = shape.bounds.upperLeft().x + 30;
+		var nextUpperBound = shape.bounds.upperLeft().y + 30;
+		
+		// handle Activity
+		if (activity !== null){
+			activity.bound.moveTo(nextLeftBound, nextUpperBound);
+			nextLeftBound = activity.bounds.lowerRight().x + 30;
+		}
+		// handle EventHanlders
+		if (eventHandlers !== null){
+			eventHandlers.bound.moveTo(nextLeftBound, nextUpperBound);
+			nextUpperBound = eventHandlers.bounds.lowerRight().y;
+		}
+		// handle FaultHandlers
+		if (faultHandlers !== null){
+			faultHandlers.bound.moveTo(nextLeftBound, nextUpperBound);
+			nextUpperBound = faultHandlers.bounds.lowerRight().y;
+		}
+		// handle CompensationHandler
+		if (compensationHandler !== null){
+			compensationHandler.bound.moveTo(nextLeftBound, nextUpperBound);
+			nextUpperBound = compensationHandler.bounds.lowerRight().y;
+		}
+		// handle TerminationHandler
+     	if (terminationHandler !== null){
+			terminationHandler.bound.moveTo(nextLeftBound, nextUpperBound);
+		}
+		
+		this.autoResizeLayout(event);
+		
 		return;
 	},
 	
 	handleLayoutVerticalEvent: function(event) {
+		this.dropShapesDown();
+		
+		var shape= event.shape;
+		var elements = shape.getChildShapes(false);
+		
+		if (elements == null){
+			return;
+		}
+		
+		// Sort top-down
+		elements = elements.sortBy(function(element) {
+			return element.bounds.upperLeft().y;
+		});
+	
+		var shapeUL = shape.bounds.upperLeft();
+		var lastUpperYPosition = shapeUL.y;
+		
+		elements.each(function(element) {
+		   element.bounds.moveTo(shapeUL.x + 30,lastUpperYPosition + 30);
+		   lastUpperYPosition = element.bounds.lowerRight().y;
+		});
+		
+		this.autoResizeLayout(event);
+		
 		return;
 	},
 	
 	handleLayoutHorizontalEvent: function(event) {
+		this.dropShapesDown();
+		
+		var shape= event.shape;
+		var elements = shape.getChildShapes(false);
+		
+		if (elements == null){
+			return;
+		}
+		
+		// Sort left-right
+		elements = elements.sortBy(function(element) {
+			return element.bounds.upperLeft().x;
+		});
+		
+		var i = 0;
+		var shapeUL = shape.bounds.upperLeft();
+		var lastLeftXPosition = shapeUL.x;
+		
+		elements.each(function(element) {
+		   i++;
+		   element.bounds.moveTo(lastLeftXPosition + 30, shapeUL.y + 30);
+		   lastLeftXPosition = element.bounds.lowerRight().x;
+		});
+		
+		this.autoResizeLayout(event);
+		
 		return;
 	},
 	
 	
 	
 	handleSingleChildLayoutEvent: function(event) {
-      /*
+     	//alert("handleSingleChildLayoutEvent");
+     	
+     	this.dropShapesDown();
+     	
 		var shape = event.shape;
 		var element = shape.getChildShapes(false).first();
 		
@@ -318,18 +445,29 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		var elementLR = element.bounds.lowerRight();
 		
 		shape.bounds.set(shapeUL.x, shapeUL.y, elementLR.x + 30, elementLR.y + 30);
-        */
+        
 		return;
+	},
+	
+	handleAutoResizeLayoutEvent: function(event) {
+		this.dropShapesDown();
+		
+		this.autoResizeLayout(event);
 	},
 	
 	/**
 	 * Resizes the shape to the bounds of the child shapes
 	 */
-	handleAutoResizeLayoutEvent: function(event) {
-		/*
+	autoResizeLayout: function(event) {
+		
+		//alert("handleAutoResizeLayoutEvent");
+
 		var children = event.shape.getChildShapes(false);
 		
+		//alert("handleAutoResizeLayoutEvent 2");
+		
 		if(children.length > 0) {
+			//alert("handleAutoResizeLayoutEvent 3");
 			var leftBound = 10000;
 			var upperBound = 10000;
 			var rightBound = 0;
@@ -338,11 +476,6 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			children.each(function(child) {
 				var ul = child.bounds.upperLeft();
 				var lr = child.bounds.lowerRight();
-				
-				alert(ul.x);
-				alert(ul.y);
-				alert(lr.x);
-				alert(lr.y);
 				
 				if (ul.x < leftBound)  leftBound  = ul.x;
 				if (ul.y < upperBound) upperBound = ul.y;
@@ -357,7 +490,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			
 			event.shape.bounds.set(leftBound, upperBound, rightBound, lowerBound);
 		};
-		*/
+		
 		return;
 	}
 

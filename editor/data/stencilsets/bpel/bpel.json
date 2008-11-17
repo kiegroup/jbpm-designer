@@ -29,7 +29,7 @@
 			"view":"others/node.Bpel.svg",
 			"icon":"task.png",
 			"roles": ["SingleActivityContainer"],
-			"layout":function(shape) {		
+			"layout":function(shape) {
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
  			},
@@ -104,7 +104,7 @@
 							"id":"c3",
 							"title":"your Definition",
 							"title_de":"your Definition",
-							"value":"your Definition",
+							"value":"please type your definition below",
 							"refToView":""
 						},
 						{
@@ -114,7 +114,32 @@
 							"value":"null",
 							"refToView":""
 						}
+					],
+					"disable":[
+						{
+							"value":"http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08",
+							"items": [
+								"appURI"
+							]
+						},
+						{
+							"value":"http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08",
+							"items": [
+								"appURI"
+							]
+						}
 					]
+					
+				},
+				{
+					"id":"appURI",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"user's definition of abstractProcessProfile",
+					"title_de":"von Benutzer eingegebene Definition des abstractProcessProfiles",
+					"value":"",
+					"readonly":false,
+					"optional":true
 				},
 				{
 					"id":"queryLanguage",
