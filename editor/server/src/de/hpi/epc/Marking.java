@@ -33,8 +33,8 @@ public class Marking implements Cloneable {
 		}
 	}
 
-	HashMap<IControlFlow, State> state;
-	HashMap<IControlFlow, Context> context;
+	public HashMap<IControlFlow, State> state;
+	public HashMap<IControlFlow, Context> context;
 
 	public Marking() {
 		this(new HashMap<IControlFlow, State>(),
@@ -293,6 +293,39 @@ public class Marking implements Cloneable {
 			}
 		}
 		return filtered;
+	}
+	
+	public static Marking getInitialMarking(IEPC diag, List<IFlowObject> startNodes){
+		Marking marking = new Marking();
+		for (IControlFlow edge : diag.getControlFlow()) {
+			marking.applyContext(edge, Marking.Context.WAIT);
+			marking.applyState(edge, Marking.State.NEG_TOKEN);
+		}
+		
+		for (IFlowObject fo : startNodes){
+			marking.applyState(diag.getOutgoingControlFlow(fo).iterator().next(),
+					Marking.State.POS_TOKEN);
+		}
+		return marking;
+	}
+	
+	// Adapted from Mendling, p. 80
+	public boolean isFinalMarking(IEPC diag){
+		// at least one end arc should have pos token, 
+		// and no intermediate arc should have a pos token 
+		boolean tokenForEndArcFound = false;
+		for(IControlFlow cf : state.keySet()){
+			if(diag.getOutgoingControlFlow(cf.getTarget()).size() == 0){
+				if(state.get(cf.getTarget()) == State.POS_TOKEN){
+					tokenForEndArcFound = true;
+				}
+			} else {
+				if(state.get(cf.getTarget()) == State.POS_TOKEN){
+					return false;
+				}
+			}
+		}
+		return tokenForEndArcFound; 
 	}
 
 	public void applyState(Collection<IControlFlow> edges, State type) {
