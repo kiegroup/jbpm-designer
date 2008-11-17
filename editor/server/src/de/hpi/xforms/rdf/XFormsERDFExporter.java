@@ -1,11 +1,17 @@
 package de.hpi.xforms.rdf;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang.StringEscapeUtils;
+
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.xforms.AbstractAction;
 import de.hpi.xforms.ActionContainer;
@@ -160,11 +166,27 @@ public class XFormsERDFExporter {
 		String name = context.getForm().getAttributes().get("name");
 		if(name==null) name = "";
 		
+		String head = "";
+		if(context.getForm().getHead()!=null) {
+			try {
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				XMLSerializer serializer = new XMLSerializer();
+				serializer.setOutputByteStream(stream);
+				serializer.asDOMSerializer();
+				serializer.setNamespaces(true);
+				serializer.serialize(context.getForm().getHead());
+				head = StringEscapeUtils.escapeXml(stream.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		writer.append("<div id=\""+ context.getForm().getResourceId() +"\" class=\"-oryx-canvas\">");
 		appendOryxField(writer, "type", STENCILSET_URI + "#" + context.getForm().getStencilId());
 		appendXFormsField(writer, "id", "");
 		appendXFormsField(writer, "name", name);
 		appendXFormsField(writer, "version", "");
+		appendXFormsField(writer, "head", head);
 		appendOryxField(writer, "mode", "writable");
 		appendOryxField(writer, "mode", "fullscreen");
 		writer.append("<a rel=\"oryx-stencilset\" href=\"./stencilsets/xforms/xforms.json\"/>");
@@ -181,7 +203,7 @@ public class XFormsERDFExporter {
 		appendOryxField(writer,"type",STENCILSET_URI + "#" + element.getStencilId());
 		
 		for(String field : element.getAttributes().keySet()) {
-			if(!(field.equals("bind")||field.equals("submission")))
+			if(!field.equals("bind"))
 				appendXFormsField(writer, field, element.getAttributes().get(field));
 		}
 		
@@ -261,6 +283,7 @@ public class XFormsERDFExporter {
 	}
 	
 	private Bind getBindByNodeset(String nodeset) {
+		if(context.getForm().getModel()==null) return null;
 		for(Bind bind : context.getForm().getModel().getBinds()) {
 			if(bind.getAttributes().get("nodeset")!=null && bind.getAttributes().get("nodeset").equals(nodeset))
 				return bind;
@@ -269,6 +292,7 @@ public class XFormsERDFExporter {
 	}
 	
 	private Submission getSubmissionById(String id) {
+		if(context.getForm().getModel()==null) return null;
 		for(Submission submission : context.getForm().getModel().getSubmissions()) {
 			if(submission.getAttributes().get("id")!=null && submission.getAttributes().get("id").equals(id))
 				return submission;

@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import de.hpi.xforms.*;
 
@@ -94,8 +95,69 @@ public class XFormsXHTMLExporter {
 	}
 	
 	private void addHead(Element html, String cssUrl) {
-		Element head = (Element) html.appendChild(
-				doc.createElementNS("http://www.w3.org/1999/xhtml", "head"));
+		if(form.getHead()!=null) {
+			form.setHead((Element) doc.importNode(form.getHead(), true));
+			html.appendChild(form.getHead());
+			modifyHead(form.getHead());
+		} else {
+			Element head = (Element) html.appendChild(
+					doc.createElementNS("http://www.w3.org/1999/xhtml", "head"));
+			generateHead(cssUrl, head);
+		}
+	}
+	
+	private void modifyHead(Element head) {
+		if(head.getElementsByTagName("title").getLength()>0) {
+			head.getElementsByTagName("title").item(0).setTextContent(form.getAttributes().get("name"));
+		} else {
+			Element title = (Element) head.appendChild(doc.createElement("title"));
+			title.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
+			head.appendChild(title);
+		}
+		
+		Element model;
+		if(head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:model").getLength()>0) {
+			model = (Element) head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:model").item(0);
+		} else {
+			model = (Element) head.appendChild(
+					doc.createElementNS("http://www.w3.org/2002/xforms", "xf:model"));
+			addAttributes(model, form.getModel());
+		}
+		
+		for(Bind bind : form.getModel().getBinds()) {
+			NodeList bindNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:bind");
+			for(int i=0; i<bindNodes.getLength(); i++) {
+				boolean replaced = false;
+				String nodeset = ((Element) bindNodes.item(i)).getAttribute("nodeset");
+				if((nodeset!=null) && nodeset.equals(bind.getAttributes().get("nodeset"))) {
+					model.replaceChild(getElement(bind), bindNodes.item(i));
+					replaced = true;
+				}
+				if(!replaced) 
+					addElementsRecursive(model, bind);
+			}
+		}
+		
+		for(Submission submission : form.getModel().getSubmissions()) {
+			boolean replaced = false;
+			NodeList submissionNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:submission");
+			for(int i=0; i<submissionNodes.getLength(); i++) {
+				String id = ((Element) submissionNodes.item(i)).getAttribute("id");
+				if((id!=null) && id.equals(submission.getAttributes().get("id"))) {
+					model.replaceChild(getElement(submission), submissionNodes.item(i));
+					replaced = true;
+				}
+			}
+			if(!replaced) 
+				addElementsRecursive(model, submission);
+		}
+			
+	}
+
+	private void generateHead(String cssUrl, Element head) {
+		Element title = (Element) head.appendChild(doc.createElement("title"));
+		title.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
+		
 		Element link = (Element) head.appendChild(
 				doc.createElementNS("http://www.w3.org/1999/xhtml", "link"));
 		link.setAttribute("rel", "stylesheet");
@@ -120,8 +182,6 @@ public class XFormsXHTMLExporter {
 		for(Submission submission : form.getModel().getSubmissions())
 			addElementsRecursive(model, submission);
 		
-		Element title = (Element) head.appendChild(doc.createElement("title"));
-		title.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
 	}
 	
 	private void addBody(Element html) {

@@ -13,6 +13,7 @@ public class Submission extends XFormsElement {
 		super();
 		attributes.put("ref", null);
 		attributes.put("resource", null);
+		attributes.put("action", null);
 		attributes.put("mode", null);
 		attributes.put("method", null);
 		attributes.put("validate", null);

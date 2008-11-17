@@ -53,7 +53,19 @@
 					"readonly":false,
 					"optional":true,
 					"length":"50"
-				}
+				},
+				{
+					"id":"xf_head",
+					"type":"String",
+					"title":"head",
+					"prefix":"oryx",
+					"value":"",
+					"description":"The form page's head markup.",
+					"readonly":true,
+					"optional":true,
+					"length":"10000",
+					"wrapLines":true
+				},
 			]
 		},	
  		{
@@ -1245,6 +1257,18 @@
 					"length":"30"
 				},
 				{
+					"id":"xf_submission",
+					"type":"String",
+					"title":"submission",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
 					"id":"xf_resource",
 					"type":"String",
 					"title":"resource",
@@ -1252,7 +1276,19 @@
 					"value":"",
 					"description":"Attribute indicating the destination URI for submitting instance data.",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
+					"refToView":"",
+					"length":"300"
+				},
+				{
+					"id":"xf_action",
+					"type":"String",
+					"title":"action",
+					"prefix":"oryx",
+					"value":"",
+					"description":"DEPRECATED optional attribute indicating the destination URI for submitting instance data. Use resource attribute instead.",
+					"readonly":false,
+					"optional":true,
 					"refToView":"",
 					"length":"300"
 				},

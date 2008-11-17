@@ -29,6 +29,11 @@ public class XFormsXHTMLImporter {
 		form = factory.createXForm();
 		Element root = doc.getDocumentElement();
 		addElementsRecursive(form, root, 0);
+		
+		if(doc.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "head").getLength()>0) {
+			form.setHead((Element) doc.getElementsByTagName("head").item(0));
+		}
+		
 		return form;
 	}
 	

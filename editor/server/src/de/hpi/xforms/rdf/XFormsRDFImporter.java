@@ -1,5 +1,6 @@
 package de.hpi.xforms.rdf;
 
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,10 +8,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.net.URLCodec;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
 
 import de.hpi.xforms.*;
 
@@ -61,7 +65,7 @@ public class XFormsRDFImporter {
 		c.form.setModel(factory.createModel());
 		c.form.setResourceId("#oryx-canvas123");
 		c.objects.put("#oryx-canvas123", c.form);
-		
+
 		if(root.hasChildNodes()) {
 			for (Node node = root.getFirstChild(); node != null; node = node.getNextSibling()) {
 				
@@ -72,7 +76,9 @@ public class XFormsRDFImporter {
 				if (type == null)
 					continue;
 				
-				if (type.equals("Input")) {
+				if (type.equals("XForm")) {
+					handleAttributes(node, c.form, c);
+				} else if (type.equals("Input")) {
 					addInput(node, c);
 				} else if (type.equals("Secret")) {
 					addSecret(node, c);
@@ -168,9 +174,12 @@ public class XFormsRDFImporter {
 					if(element.getAttributes().containsKey(attribute)) {
 						element.getAttributes().put(attribute, getContent(n));
 					} else {
-						handleModelItemProperty(attribute, getContent(n), element, c);
 						if(element instanceof Submit)
 							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
+						else if((element instanceof XForm) && attribute.equals("head"))
+							addHead(getContent(n), c);
+						else
+							handleModelItemProperty(attribute, getContent(n), element, c);
 					}
 				} else if(attribute.startsWith("ev_")) {
 					// handle attributes of xml events namespace
@@ -178,9 +187,10 @@ public class XFormsRDFImporter {
 					if(element.getAttributes().containsKey(attribute)) {
 						element.getAttributes().put(attribute, getContent(n));
 					} else {
-						handleModelItemProperty(attribute, getContent(n), element, c);
 						if(element instanceof Submit)
 							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
+						else
+							handleModelItemProperty(attribute, getContent(n), element, c);
 					}
 				} else {
 					// handle oryx attributes
@@ -219,17 +229,6 @@ public class XFormsRDFImporter {
 	}
 	
 	private void handleSubmissionProperty(String attribute, String value, Submit submit, ImportContext c) {
-		if(submit.getSubmission()==null) {
-			Submission submission = new Submission();
-			String submissionId = "bind_";
-			if(submit.getAttributes().get("id")==null)
-				submissionId += submit.getResourceId().substring(1);
-			else 
-				submissionId += submit.getAttributes().get("id");
-			submission.getAttributes().put("id", submissionId);
-			submit.setSubmission(submission);
-			c.form.getModel().getSubmissions().add(submission);
-		}
 		if(!submit.getSubmission().getAttributes().containsKey(attribute)) return;
 		submit.getSubmission().getAttributes().put(attribute, value);
 	}
@@ -306,13 +305,7 @@ public class XFormsRDFImporter {
 						UICommonContainer uiCommonContainer = (UICommonContainer) parent;
 						uiCommonContainer.setAlert((Alert) element);
 					}
-				}  else if(element instanceof Submission) {
-					// note: Submission not implemented in stencilset atm
-					c.form.getModel().getSubmissions().add((Submission) element);
-					if(parent instanceof Submit) {
-						((Submit) parent).setSubmission((Submission) element);
-					}
-				}
+				} 
 				
 			} else {
 				// no parent relationship found: set form as parent
@@ -327,7 +320,7 @@ public class XFormsRDFImporter {
 	
 	private void addModel(ImportContext c) {
 		c.form.getModel().setInstance(factory.createInstance());
-		if(instanceModelDoc==null)
+		if((c.form.getHead()==null) && (instanceModelDoc==null))
 			generateInstanceModelDoc(c);
 		c.form.getModel().getInstance().setContent(instanceModelDoc);
 	}
@@ -448,8 +441,19 @@ public class XFormsRDFImporter {
 	private void addSubmit(Node node, ImportContext c) {
 		Submit submit = factory.createSubmit();
 		submit.setResourceId(getResourceId(node));
+		submit.setSubmission(factory.createSubmission());
+		c.form.getModel().getSubmissions().add(submit.getSubmission());
 		c.objects.put(submit.getResourceId(), submit);
 		handleAttributes(node, submit, c);
+		if(submit.getAttributes().get("submission")==null) {
+			String submissionId = "subm_";
+			if(submit.getAttributes().get("id")==null)
+				submissionId += submit.getResourceId().substring(1);
+			else 
+				submissionId += submit.getAttributes().get("id");
+			submit.getAttributes().put("submission", submissionId);
+		}
+		submit.getSubmission().getAttributes().put("id", submit.getAttributes().get("submission"));
 		// reassign ref attribute -> oryx property 'ref' of submit stencil specifies the 'ref' attribute of the submission element
 		submit.getSubmission().getAttributes().put("ref", submit.getAttributes().get("ref"));
 		submit.getAttributes().put("ref", null);
@@ -495,7 +499,7 @@ public class XFormsRDFImporter {
 		label.setResourceId(getResourceId(node));
 		c.objects.put(label.getResourceId(), label);
 		handleAttributes(node, label, c);
-		label.setContent(getContent(getChild(node, "text")));
+		label.setContent(getContent(getChild(node, "xf_text")));
 	}
 	
 	private void addHelp(Node node, ImportContext c) {
@@ -503,7 +507,7 @@ public class XFormsRDFImporter {
 		help.setResourceId(getResourceId(node));
 		c.objects.put(help.getResourceId(), help);
 		handleAttributes(node, help, c);
-		help.setContent(getContent(getChild(node, "message")));
+		help.setContent(getContent(getChild(node, "xf_message")));
 	}
 	
 	private void addHint(Node node, ImportContext c) {
@@ -511,7 +515,7 @@ public class XFormsRDFImporter {
 		hint.setResourceId(getResourceId(node));
 		c.objects.put(hint.getResourceId(), hint);
 		handleAttributes(node, hint, c);
-		hint.setContent(getContent(getChild(node, "message")));
+		hint.setContent(getContent(getChild(node, "xf_message")));
 	}
 	
 	private void addAlert(Node node, ImportContext c) {
@@ -519,7 +523,7 @@ public class XFormsRDFImporter {
 		alert.setResourceId(getResourceId(node));
 		c.objects.put(alert.getResourceId(), alert);
 		handleAttributes(node, alert, c);
-		alert.setContent(getContent(getChild(node, "message")));
+		alert.setContent(getContent(getChild(node, "xf_message")));
 	}
 	
 	private void addItem(Node node, ImportContext c) {
@@ -643,7 +647,25 @@ public class XFormsRDFImporter {
 		message.setResourceId(getResourceId(node));
 		c.objects.put(message.getResourceId(), message);
 		handleAttributes(node, message, c);
-		message.setContent(getContent(getChild(node, "message")));
+		message.setContent(getContent(getChild(node, "xf_message")));
+	}
+	
+	private void addHead(String head, ImportContext c) {
+		URLCodec codec = new URLCodec();
+		try {
+			head = codec.decode(head);
+		} catch (DecoderException e) {	
+			e.printStackTrace();
+		}
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document headDoc = builder.parse(new InputSource(new StringReader(head)));
+			c.form.setHead(headDoc.getDocumentElement());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private String getContent(Node node) {
@@ -684,7 +706,7 @@ public class XFormsRDFImporter {
 		if (n == null)
 			return null;
 		for (Node node=n.getFirstChild(); node != null; node=node.getNextSibling())
-			if (node.getNodeName().indexOf(name) >= 0) 
+			if (node.getNodeName().equals(name)) 
 				return node;
 		return null;
 	}
