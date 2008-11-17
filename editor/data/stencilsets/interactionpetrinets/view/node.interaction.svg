@@ -32,7 +32,7 @@
        x="0" y="50"
        stroke="black" fill="white" stroke-width="2"/>
 	<text id="messageType" x="50" y="60" oryx:align="middle center"></text>		
-	<text id="sender" x="8" y="28" oryx:algin="middle center"></text>
-	<text id="receiver" x="92" y="28" oryx:algin="middle center"></text>	
+	<text id="sender" x="8" y="28" oryx:align="middle left"></text>
+	<text id="receiver" x="92" y="28" oryx:align="middle right"></text>	
   </g>
 </svg>
