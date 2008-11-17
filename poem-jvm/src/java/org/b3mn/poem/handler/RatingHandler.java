@@ -52,7 +52,7 @@ public class RatingHandler extends HandlerBase {
 		List<String> results = Persistance.getSession()
 		.createSQLQuery("SELECT access.object_name FROM " 	
 		+ "access LEFT JOIN model_rating ON access.object_id=model_rating.object_id "
-		+ "WHERE access.subject_id=:subject_id  " 
+		+ "WHERE (access.subject_name='public' OR access.subject_id=:subject_id)  " 
 		+ "GROUP BY access.object_name "
 		+ "ORDER BY avg(model_rating.score) DESC NULLS LAST")
 		.setInteger("subject_id", subject.getId())
@@ -69,7 +69,7 @@ public class RatingHandler extends HandlerBase {
 		
 		List<String> results = Persistance.getSession()
 			.createSQLQuery("SELECT access.object_name FROM access, model_rating " 	
-			+ "WHERE access.subject_id=:subject_id  AND access.object_id=model_rating.object_id " 
+			+ "WHERE (access.subject_name='public' OR access.subject_id=:subject_id)  AND access.object_id=model_rating.object_id " 
 			+ "GROUP BY access.object_name "
 			+ "HAVING avg(model_rating.score) >= :score")
 			.setFloat("score", score)

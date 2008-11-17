@@ -24,6 +24,8 @@
     </servlet-mapping>
 	
 	<!-- Registering OpenID Consumer Servlet for Authentication -->
+	<!-- 
+	
 	<servlet>
         <display-name>Oryx OpenID Authentication Servlet</display-name>
         <servlet-name>AuthServlet</servlet-name>
@@ -41,9 +43,11 @@
         <servlet-name>AuthServlet</servlet-name>
         <url-pattern>/consumer</url-pattern>
     </servlet-mapping>
+	-->
 
 	<!-- Load jstl, needed for OpenID Authentication -->
-    <jsp-config>
+    <!--
+	<jsp-config>
         <taglib>
             <taglib-uri>
                 http://java.sun.com/jstl/core
@@ -53,6 +57,8 @@
             </taglib-location>
         </taglib>
     </jsp-config>
+	
+	-->
 
 	<mime-mapping>
 		<extension>svg</extension>

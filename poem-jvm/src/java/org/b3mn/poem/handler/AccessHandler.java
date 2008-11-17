@@ -117,7 +117,7 @@ public class AccessHandler extends  HandlerBase {
 			friend = removeSpaces(friend);
 			Collection<String> friendModelUris =  Persistance.getSession()
 			.createSQLQuery("SELECT access.object_name FROM access "
-					+ "WHERE access.subject_name=:friend_openId")
+					+ "WHERE access.subject_name=:friend_openId ")
 					.setString("friend_openId", friend)
 					.list();
 			Persistance.commit();
@@ -127,5 +127,21 @@ public class AccessHandler extends  HandlerBase {
 		}
 		
 		return modelUris;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@FilterMethod(FilterName="access")
+	public static Collection<String> filterByAccessRight(Identity subject, String params) throws Exception {
+
+		Collection<String> result =  Persistance.getSession()
+		.createSQLQuery("SELECT access.object_name FROM access "
+				+ "WHERE access.subject_id=:subject_id  AND :params LIKE '%' || access.term  || '%' "
+				+ "OR access.subject_name='public' AND :params LIKE '%public%'")
+				.setInteger("subject_id", subject.getId())
+				.setString("params", params)
+				.list();
+		Persistance.commit();
+		return result;
 	}
 }

@@ -207,7 +207,7 @@ public class Model extends BusinessObject {
 		return toStringCollection(tags);
 	}
 	
-	public void addTag(User user, String tag) {
+	public synchronized void addTag(User user, String tag) {
 		// TODO check access right of the user
 		// If the user hasn't already tagged the model with this tag
 		if (!this.getUserTags(user).contains(tag)) {

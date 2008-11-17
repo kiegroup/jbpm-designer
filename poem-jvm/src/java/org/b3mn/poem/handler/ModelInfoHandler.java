@@ -99,7 +99,7 @@ public class ModelInfoHandler extends  HandlerBase {
 		
 		List<String> results = Persistance.getSession()
 			.createSQLQuery("SELECT identity.uri FROM identity, access, representation "
-			+ "WHERE access.subject_id=:subject_id AND access.object_id=identity.id AND representation.ident_id=access.object_id "
+			+ "WHERE (access.subject_name='public' OR access.subject_id=:subject_id) AND access.object_id=identity.id AND representation.ident_id=access.object_id "
 			+ "AND (" + typeQuery + ")")
 			.setInteger("subject_id", subject.getId())
 			.list();
@@ -114,7 +114,7 @@ public class ModelInfoHandler extends  HandlerBase {
 	public static List<String> sortByLastChange(Identity subject) {
 		List<String> results = Persistance.getSession()
 		.createSQLQuery("SELECT identity.uri FROM identity, access, representation "
-		+ "WHERE access.subject_id=:subject_id AND access.object_id=identity.id AND representation.ident_id=access.object_id " 
+		+ "WHERE (access.subject_name='public' OR access.subject_id=:subject_id) AND access.object_id=identity.id AND representation.ident_id=access.object_id " 
 		+ "ORDER BY representation.updated DESC")
 		.setInteger("subject_id", subject.getId())
 		.list();
@@ -128,7 +128,7 @@ public class ModelInfoHandler extends  HandlerBase {
 	public static List<String> sortByTitle(Identity subject) {
 		List<String> results = Persistance.getSession()
 		.createSQLQuery("SELECT identity.uri FROM identity, access, representation "
-		+ "WHERE access.subject_id=:subject_id AND access.object_id=identity.id AND representation.ident_id=access.object_id " 
+		+ "WHERE (access.subject_name='public' OR access.subject_id=:subject_id) AND access.object_id=identity.id AND representation.ident_id=access.object_id " 
 		+ "ORDER BY representation.title")
 		.setInteger("subject_id", subject.getId())
 		.list();

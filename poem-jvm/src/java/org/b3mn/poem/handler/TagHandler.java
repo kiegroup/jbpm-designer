@@ -110,7 +110,7 @@ public class TagHandler extends HandlerBase {
 		List<String> finalUris = Persistance.getSession()
 				.createSQLQuery("SELECT DISTINCT access.object_name "
 						+ "FROM  access "
-						+ "WHERE access.subject_id=:subject_id ")
+						+ "WHERE (access.subject_name='public' OR access.subject_id=:subject_id) ")
 						.setInteger("subject_id", subject.getId())
 						.list();
 		
@@ -122,7 +122,7 @@ public class TagHandler extends HandlerBase {
 			.createSQLQuery("SELECT access.object_name "
 					+ "FROM tag_relation, tag_definition, access "
 					+ "WHERE tag_relation.tag_id=tag_definition.id "
-					+ "AND access.subject_id=:subject_id "
+					+ "AND (access.subject_name='public' OR access.subject_id=:subject_id) "
 					+ "AND tag_relation.object_id=access.object_id " 
 					+ "AND tag_definition.name=:tag_name")
 					.setInteger("subject_id", subject.getId())
