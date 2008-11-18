@@ -35,6 +35,14 @@ Repository.Plugins.TableView = {
 		this.dataUris = ["/meta"];
 		
 		arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
+		
+		if( this.parentPanel.ownerCt ){
+			this.parentPanel.ownerCt.addListener('resize', function(panel, adjWidth, adjHeigth, rawWidth, rawHeight){
+												if (this.facade.getCurrentView() == this) {
+													this.setWidth(adjWidth)
+												}
+											}.bind(this));
+		}
 	},
 	
 	

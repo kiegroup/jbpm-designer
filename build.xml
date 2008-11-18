@@ -58,6 +58,7 @@
 			<filelist id="repsourcefiles" dir="${server-root-dir}/src/javascript/repository2">
                 <file name='ext_templates.js'/>
 				<file name='core/clazz.js'/>
+                <file name='core/helper.js'/>
 				<file name='config.js'/>
 				<file name='core/extExtention.js'/>
 				<file name='core/eventHandler.js'/>

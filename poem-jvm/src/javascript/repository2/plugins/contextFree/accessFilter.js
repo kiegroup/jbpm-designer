@@ -50,16 +50,19 @@ Repository.Plugins.AccessFilter = {
 				
 		this.panel.getEl().setHeight( this.panel.getEl().getHeight() )
 		this.deletePanelItems();
-						
+
+		var curFilter = this.facade.getFilter().get('access')
+				
+		var myFilters = [	
+							[Repository.I18N.AccessFilter.mine, 		'owner'	], 
+							[Repository.I18N.AccessFilter.writer, 		'write'	], 
+							[Repository.I18N.AccessFilter.reader, 		'read'	], 
+							[Repository.I18N.AccessFilter.publicText, 	'public']
+						];		
 		
 		var store 	= new Ext.data.SimpleStore({
 	        fields	: ['title','access'],
-	        data	: [	
-							[Repository.I18N.AccessFilter.mine, 		'owner'], 
-							[Repository.I18N.AccessFilter.writer, 		'write'], 
-							[Repository.I18N.AccessFilter.reader, 		'read'], 
-							[Repository.I18N.AccessFilter.publicText, 	'public']
-						]
+	        data	: myFilters
 	    });
 		
 		
@@ -88,9 +91,18 @@ Repository.Plugins.AccessFilter = {
 		this.panel.getEl().setHeight( )
 		this.panel.doLayout();
 		
-		grid.getSelectionModel().selectFirstRow()
+		// Select the entree, if there are already setted in the initial filter
+		if( curFilter ){
+			for( var i=0; i < myFilters.length; i++){
+				if( curFilter.include( myFilters[i][1] ) ){
+					grid.select(i, true)
+				}
+			}
+		}	
+			
 		this._onSelectionChange( grid )
-		
+			
+	
 	},
 	
 	_onSelectionChange : function( dataView ) {

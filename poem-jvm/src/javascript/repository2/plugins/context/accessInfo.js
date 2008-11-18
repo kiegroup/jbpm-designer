@@ -45,10 +45,31 @@ Repository.Plugins.AccessInfo = {
 		// call Plugin super class
 		arguments.callee.$.construct.apply(this, arguments); 
 		
+		this.currentOpenIDs = {owner:null, reader:[], writer:[]};
+		
 		this._generateData();
 		this._generateGUI();
 		
+		// To cut the open ids, register on resize
+		if( this.panel && this.panel.ownerCt)
+			this.panel.ownerCt.addListener('resize', function(obj, width){ this.cropOpenIDs()}.bind(this))
 
+	},
+	
+	cropOpenIDs: function(){
+		
+		var width 	= this.panel.getInnerWidth()/6.4;
+		width		-= 5;
+		width		= Math.max( width, 6 )
+		var all = this.currentOpenIDs.writer.concat(this.currentOpenIDs.reader)
+		all.push(this.currentOpenIDs.owner)
+		all = all.compact()
+		
+		all.each(function(label){
+			label.getEl().dom.innerHTML = Repository.Helper.CutOpenID( label.originText, width || 50 );
+		})
+		
+		
 	},
 	
 	render: function( modelData ){
@@ -124,6 +145,8 @@ Repository.Plugins.AccessInfo = {
 
 		// Reset Height;
 		this.panel.getEl().setHeight()	
+		
+		this.cropOpenIDs();
 	},
 	
 	_setPublic: function( isPublic, oneIsSelected, writeAccess ){
@@ -167,15 +190,19 @@ Repository.Plugins.AccessInfo = {
 				
 		// Remove children
 		this._deleteItems( this.myOwnerPanel );	
+		this.currentOpenIDs.owner = null;
 		
 		// Set the owner
 		if( owner ){
-			this._addItems( this.myOwnerPanel, [ {text: owner, xtype:'label'}] )	
+			var label = new Ext.form.Label( {text: owner, originText:owner, style:'white-space:nowrap;'});
+			this._addItems( this.myOwnerPanel, [ label ] )	
+			this.currentOpenIDs.owner = label;
 		} else if( moreThanOneIsSelected ) {
 			this._addItems( this.myOwnerPanel, [ {text: Repository.I18N.AccessInfo.several, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		} else {
 			this._addItems( this.myOwnerPanel, [ {text: Repository.I18N.AccessInfo.none, xtype:'label', style:"font-style:italic;color:gray;"}] )	
 		}
+		
 							
 	},
 
@@ -193,7 +220,10 @@ Repository.Plugins.AccessInfo = {
 		this._deleteItems( this.myContrPanel );
 
 		var contributerButtons 	= this._generateButtons( contributers, writeAccess );
-		this._addItems( this.myContrPanel,  contributerButtons )
+		this._addItems( this.myContrPanel,  contributerButtons );
+		
+		// Set labels to eventiually cut those
+		this.currentOpenIDs.writer = contributerButtons.map(function(el){return el instanceof Ext.Panel ? el.items.last() : null }).compact();
 						
 	},
 
@@ -210,8 +240,11 @@ Repository.Plugins.AccessInfo = {
 		// Remove children
 		this._deleteItems( this.myReadrPanel );		
 		
-		var readerButtons 		= this._generateButtons( readers, writeAccess );
-		this._addItems( this.myReadrPanel,  readerButtons )
+		var readerButtons = this._generateButtons( readers, writeAccess );
+		this._addItems( this.myReadrPanel,  readerButtons );
+		
+		// Set labels to eventiually cut those
+		this.currentOpenIDs.reader = readerButtons.map(function(el){return el instanceof Ext.Panel ? el.items.last() : null }).compact();
 	},
 				
 	
@@ -242,7 +275,7 @@ Repository.Plugins.AccessInfo = {
 		// Generate Contributer Buttons			
 		data.each(function(openid){
 			
-			var label = {text: openid, xtype:'label', style:'white-space:nowrap;'};
+			var label = new Ext.form.Label({text: openid, originText: openid, xtype:'label', style:'white-space:nowrap;'});
 			var image = new Ext.LinkButton({image:'../images/silk/cross.png', imageStyle:'width:12px; margin:0px 2px -2px 10px;position:absolute;right:0px;top:1px;', text:Repository.I18N.AccessInfo.deleteText, click:this._deleteOpenID.bind(this, openid)})
 
 			buttons.push( new Ext.Panel({border:false, items: editable ? [image, label] : [label] , style:""}))			
@@ -324,7 +357,7 @@ Repository.Plugins.AccessInfo = {
 
 		var isPublicUser	= this.facade.isPublicUser();
 		
-		this.myPublicPanel 	= new Ext.Panel({border:false, height:20});
+		this.myPublicPanel 	= new Ext.Panel({border:false, height:20, style:'white-space:nowrap;'});
 		this.myContrPanel 	= new Ext.Panel({border:false});
 		this.myOwnerPanel 	= new Ext.Panel({border:false});
 		this.myReadrPanel	= new Ext.Panel({border:false});

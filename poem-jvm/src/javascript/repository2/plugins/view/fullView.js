@@ -38,7 +38,11 @@ Repository.Plugins.FullView = {
 		this.dataUris = ["/meta"];
 		
 		arguments.callee.$.construct.apply(this, arguments); // call superclass constructor
-		
+
+		if( this.parentPanel.ownerCt ){
+			this.parentPanel.ownerCt.addListener('resize', function(){ if(this.facade.getCurrentView() == this){ this.setFrameHeight()} }.bind(this));
+		}
+				
 	},
 	
 	
@@ -60,8 +64,6 @@ Repository.Plugins.FullView = {
 		var ssName			= this.facade.modelCache.getModelTypes().find(function(type){ return rawData.type == type.namespace }.bind(this));
 		data.type 			= ssName ? ssName.title : rawData.type;
 		
-		data.imgHeight		= this.panel.getEl().parent().parent().parent().parent().getComputedHeight() - 100;
-
 		data.title			= unescape(rawData.title)
 		data.summary		= unescape(rawData.summary).gsub('\n', '<br/>');
 		data.creationDate	= rawData.creationDate;
@@ -80,11 +82,11 @@ Repository.Plugins.FullView = {
 	
 		var newHTML = new Ext.Template(
 							    '<div>',
-							   		'<div style="margin-bottom:10px;"><span style="font-weight:bold;font-size:15px;margin-right:5px;">{title}</span> ({type}) <a href="{editUri}" style="text-decoration:none;margin-left:20px;"><img src="/backend/images/silk/application_edit.png" style="margin-right:5px;margin-bottom:-4px;"/>{editLabel}</a></div>',
-									'<div><span style="width:100px;font-weight:bold;display:inline-table;">{createdLabel}: </span>{creationDate} <span style="width:100px;font-weight:bold;margin-left:50px;display:inline-table;">{changeLabel}: </span>{lastUpdate}</div>',
-							   		'<div><span style="width:100px;font-weight:bold;display:inline-table;">{fromLabel}: </span>{author}</div>',
-									'<div><span style="width:100px;font-weight:bold;display:inline-table;">{descriptionLabel}: </span><div style="display:inline-table;">{summary}</div></div>',
-									'<iframe src="{pngUri}" title="{title}" style="width:99%;border:none;margin-top:20px;" height="{imgHeight}"/>',
+							   		'<div style="margin-bottom:10px;"><span style="font-weight:bold;font-size:15px;margin-right:5px;">{title}</span> ({type}) <a href="{editUri}" target="_blank" style="text-decoration:none;margin-left:20px;"><img src="/backend/images/silk/application_edit.png" style="margin-right:5px;margin-bottom:-4px;"/>{editLabel}</a></div>',
+									'<div><span style="width:120px;font-weight:bold;display:inline-table;">{createdLabel}: </span>{creationDate} <span style="width:120px;font-weight:bold;margin-left:50px;display:inline-table;">{changeLabel}: </span>{lastUpdate}</div>',
+							   		'<div><span style="width:120px;font-weight:bold;display:inline-table;">{fromLabel}: </span>{author}</div>',
+									'<div><span style="width:120px;font-weight:bold;display:block;float:left">{descriptionLabel}: </span><div style="margin-left:120px;">{summary}</div></div>',
+									'<iframe id="repository_fullview_pngframe" src="{pngUri}" title="{title}" style="width:99%;border:none;margin-top:20px;"/>',
 							    '</div>'
 							);
 	
@@ -97,9 +99,18 @@ Repository.Plugins.FullView = {
 		this.panel.add( this.myPanel );
 		this.panel.doLayout(); 
 		
+		this.setFrameHeight();
 		
 		this.facade.changeSelection( [modelData.keys()[0]] );
 
+	},
+	
+	setFrameHeight: function(){
+		
+		// Set the height for the canvas
+		var el = $('repository_fullview_pngframe');
+		el.height = this.panel.getEl().parent().parent().parent().parent().getComputedHeight() - el.offsetTop - 20;
+				
 	}	
 };
 
