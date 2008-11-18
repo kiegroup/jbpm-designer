@@ -18,6 +18,7 @@ public abstract class Node extends DiagramObject {
 		return label;
 	}
 
+
 	public void setLabel(String label) {
 		if (label != null)
 			label = label.replace("\n", "_").replace(" ", "_");
@@ -73,6 +74,10 @@ public abstract class Node extends DiagramObject {
 		} catch (IllegalAccessException e) {
 			return null;
 		}
+	}
+	
+	public void setLabelInclWhitespaces(String label) {
+		this.label = label;
 	}
 
 }
