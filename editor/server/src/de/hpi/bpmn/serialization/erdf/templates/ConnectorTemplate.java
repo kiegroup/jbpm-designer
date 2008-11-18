@@ -1,5 +1,6 @@
 package de.hpi.bpmn.serialization.erdf.templates;
 
+import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.serialization.erdf.ERDFSerializationContext;
 
@@ -11,6 +12,21 @@ public abstract class ConnectorTemplate extends BPMN2ERDFTemplateImpl {
 		s.append("<a rel=\"raziel-target\" href=\"#resource" + 
 				context.getResourceIDForDiagramObject(e.getTarget()) + "\"/>");
 		s.append("</div>");
+	}
+	
+	protected void appendDockerInformation(StringBuilder s, Edge e){
+		String dockers = "";
+		if (e.getSource() instanceof Activity){
+			dockers += "50 40 ";
+		} else {
+			dockers += "15 15 ";
+		}
+		if (e.getTarget() instanceof Activity){
+			dockers += "50 40 ";
+		} else {
+			dockers += "15 15 ";
+		}
+		appendOryxField(s,"dockers",dockers+" #");
 	}
 
 }
