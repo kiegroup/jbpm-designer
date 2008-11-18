@@ -75,9 +75,5 @@ public abstract class Node extends DiagramObject {
 			return null;
 		}
 	}
-	
-	public void setLabelInclWhitespaces(String label) {
-		this.label = label;
-	}
 
 }
