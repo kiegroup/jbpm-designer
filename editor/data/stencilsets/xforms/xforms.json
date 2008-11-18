@@ -79,7 +79,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			"layout":function(shape) {
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -91,7 +91,7 @@
 						ul.y = - label.bounds.height() - 1;
 						lr.y = - 1;
 						ul.x = 0;
-						lr.x = label.bounds.width();;
+						lr.x = label.bounds.width();
 						label.bounds.set(ul, lr);
 					});
 				}
@@ -1557,23 +1557,7 @@
 				"item_container"
 			],
 			"layout":function(shape) {	
-				
-				var labels = shape.getChildNodes(false).findAll(function(node) {
-					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
-				});
-				
-				if(labels.length > 0) {
-					labels.each(function(label) {
-						var ul = label.bounds.upperLeft();
-						var lr = label.bounds.lowerRight();
-						ul.y = - label.bounds.height() - 1;
-						lr.y = - 1;
-						ul.x = 0;
-						lr.x = label.bounds.width();
-						label.bounds.set(ul, lr);
-					});
-				}
-				
+		
 				var items = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Item");
 				});
@@ -1599,6 +1583,22 @@
 					
 					var upl = shape.bounds.upperLeft();
 					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight + 5);
+				}
+				
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = - label.bounds.height() - 1;
+						lr.y = - 1;
+						ul.x = 0;
+						lr.x = label.bounds.width();
+						label.bounds.set(ul, lr);
+					});
 				}
 				
  			},
@@ -1801,7 +1801,7 @@
 						ul.y = - label.bounds.height() - 1;
 						lr.y = - 1;
 						ul.x = 0;
-						lr.x = label.bounds.width();;
+						lr.x = label.bounds.width();
 						label.bounds.set(ul, lr);
 					});
 				}
