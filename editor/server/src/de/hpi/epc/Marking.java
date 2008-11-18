@@ -99,7 +99,7 @@ public class Marking implements Cloneable {
 						}
 					}
 					// AND Join
-				} else if (node instanceof Connector && this.isAndConnector(node)) {
+				} else if ( isAndConnector(node) ) {
 					if (filterByContext(diag.getIncomingControlFlow(node), Context.WAIT)
 							.size() == diag.getIncomingControlFlow(node).size()
 							&& context.get(diag.getOutgoingControlFlow(node).iterator().next()) == Context.DEAD
@@ -112,8 +112,7 @@ public class Marking implements Cloneable {
 					if (filterByContext(diag.getIncomingControlFlow(node), Context.WAIT).size() > 0 &&
 							state.get(diag.getOutgoingControlFlow(node).iterator().next()) == State.NO_TOKEN &&
 							context.get(diag.getOutgoingControlFlow(node).iterator().next()) != Context.WAIT) {
-						context.put(diag.getOutgoingControlFlow(node).iterator().next(),
-								Context.WAIT);
+						applyContext(diag.getOutgoingControlFlow(node), Context.WAIT);
 						changed = true;
 					}
 				}
@@ -233,7 +232,7 @@ public class Marking implements Cloneable {
 
 					nodeNewMarking.newMarking
 							.applyContext(filterByState(
-									diag.getIncomingControlFlow(node), State.NEG_TOKEN),
+									diag.getIncomingControlFlow(node), State.POS_TOKEN),
 									Context.DEAD);
 					nodeNewMarking.newMarking.applyState(diag.getIncomingControlFlow(node), State.NO_TOKEN);
 
@@ -298,14 +297,23 @@ public class Marking implements Cloneable {
 	public static Marking getInitialMarking(IEPC diag, List<IFlowObject> startNodes){
 		Marking marking = new Marking();
 		for (IControlFlow edge : diag.getControlFlow()) {
-			marking.applyContext(edge, Marking.Context.WAIT);
-			marking.applyState(edge, Marking.State.NEG_TOKEN);
+			if(Marking.isStartArc(edge, diag)){
+				if(startNodes.contains(edge.getSource())){
+					// If enabled start arc
+					marking.applyContext(edge, Marking.Context.WAIT);
+					marking.applyState(edge, Marking.State.POS_TOKEN);
+				} else {
+					// If not enabled start arc
+					marking.applyContext(edge, Marking.Context.DEAD);
+					marking.applyState(edge, Marking.State.NEG_TOKEN);
+				}
+			} else {
+				// If normal arc
+				marking.applyContext(edge, Marking.Context.WAIT);
+				marking.applyState(edge, Marking.State.NEG_TOKEN);
+			}
 		}
 		
-		for (IFlowObject fo : startNodes){
-			marking.applyState(diag.getOutgoingControlFlow(fo).iterator().next(),
-					Marking.State.POS_TOKEN);
-		}
 		return marking;
 	}
 	
@@ -366,5 +374,8 @@ public class Marking implements Cloneable {
 	}
 	static public boolean isJoin(IGObject flowObject, IEPC diag){
 		return (flowObject instanceof Connector) &&  diag.getIncomingControlFlow((Connector)flowObject).size() > 1;
+	}
+	static public boolean isStartArc(IControlFlow cf, IEPC diag){
+		return diag.getIncomingControlFlow(cf.getSource()).size() == 0;
 	}
 }

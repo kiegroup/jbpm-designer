@@ -9,7 +9,6 @@ import java.util.Map;
 import de.hpi.bpt.hypergraph.abs.IGObject;
 import de.hpi.bpt.process.epc.ControlFlow;
 import de.hpi.bpt.process.epc.Event;
-import de.hpi.bpt.process.epc.FlowObject;
 import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
@@ -37,17 +36,12 @@ public class EPCStepThroughInterpreter implements IStepThroughInterpreter {
 	
 	// Sets initial marking by marking all nodes corresponding to resourceIds as initial
 	public void setInitialMarking(List<String> resourceIds) {
-		Marking marking = new Marking();
-		for (IControlFlow edge : epcDiag.getControlFlow()) {
-			marking.applyContext(edge, Marking.Context.WAIT);
-			marking.applyState(edge, Marking.State.NEG_TOKEN);
+		List<IFlowObject> startNodes = new LinkedList<IFlowObject>();
+		for(String id : resourceIds){
+			startNodes.add((IFlowObject)findNodeById(id));
 		}
 		
-		for (String resourceId : resourceIds){
-			marking.applyState(epcDiag.getOutgoingControlFlow((FlowObject)this.findNodeById(resourceId)).iterator().next(),
-					Marking.State.POS_TOKEN);
-		}
-		nodeNewMarkings = marking.propagate(epcDiag);
+		nodeNewMarkings = Marking.getInitialMarking(epcDiag, startNodes).propagate(epcDiag);
 		
 		changedObjects = new LinkedList<IGObject>();
 		changedObjects.addAll(getFireableNodes());

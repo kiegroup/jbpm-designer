@@ -62,4 +62,37 @@ public class MarkingTest extends AbstractEPCTest {
 			assertEquals(nodeNewMarking.node, orSplit);
 		}
 	}
+	
+	public void testOrJoin(){
+		epc = new EPC();
+		
+		IFlowObject e1 = add(new Event());
+		IFlowObject f1 = add(new Function());
+		connect(e1, f1);
+		IFlowObject e2 = add(new Event());
+		IFlowObject f2 = add(new Function());
+		connect(e2, f2);
+		IFlowObject orJoin = add(new Connector(de.hpi.bpt.process.epc.ConnectorType.OR));
+		connect(f1, orJoin);
+		connect(f2, orJoin);
+		IFlowObject f3 = add(new Function());
+		connect(orJoin, f3);
+
+		// Comb 1: Only e1
+		List<IFlowObject> startNodes = new LinkedList<IFlowObject>();
+		startNodes.add(e1);
+		Marking intialMarking = Marking.getInitialMarking(epc, startNodes);
+		List<NodeNewMarkingPair> newMarkingPairs = intialMarking.propagate(epc);
+		
+		assertTrue(newMarkingPairs.size() == 1);
+		assertEquals(newMarkingPairs.get(0).node, f1);
+		
+		newMarkingPairs = newMarkingPairs.get(0).newMarking.propagate(epc);
+		
+		assertTrue(newMarkingPairs.size() == 1);
+		assertEquals(newMarkingPairs.get(0).node, orJoin);
+		
+		// Comb 2: e1 + e2
+		//TODO
+	}
 }
