@@ -10,11 +10,9 @@
   <defs></defs>
    <g oryx:minimumSize="30 24" oryx:maximumSize="350 24" >
     <rect oryx:anchor="top" oryx:resize="horizontal" x="0" y="0" width="150" height="24" stroke="black" stroke-width="1" fill="white" />
-
 	<g id="b">
 		<text font-size="11" x="3" y="11" oryx:align="middle left" oryx:anchor="top right bottom left" stroke="black">abc</text>
 	</g>
     	
-    
   </g>
 </svg>

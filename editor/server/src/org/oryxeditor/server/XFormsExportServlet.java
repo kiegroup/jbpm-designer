@@ -76,7 +76,7 @@ public class XFormsExportServlet extends HttpServlet {
 			format.setIndenting(true);
 			format.setPreserveSpace(true);
 			format.setLineSeparator(System.getProperty("line.separator"));
-			format.setMethod("text/xhtml");
+			format.setMethod("text/xml");
 			
 			// TODO: newlines in serialize output (weird it doesn't work)
 			
