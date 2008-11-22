@@ -303,7 +303,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 	 *  Handler: placed right.
 	 */
 	handleLayoutEvent: function(event) {
-		alert("handleLayoutEvent");
+		/*alert("handleLayoutEvent");
 		this.dropShapesDown();
 		
      	var shape = event.shape;
@@ -362,12 +362,13 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		}
 		
 		this.autoResizeLayout(event);
-		
+		*/
 		return;
+		
 	},
 	
 	handleLayoutVerticalEvent: function(event) {
-		this.dropShapesDown();
+		/*this.dropShapesDown();
 		
 		var shape= event.shape;
 		var elements = shape.getChildShapes(false);
@@ -390,12 +391,12 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		});
 		
 		this.autoResizeLayout(event);
-		
+		*/
 		return;
 	},
 	
 	handleLayoutHorizontalEvent: function(event) {
-		this.dropShapesDown();
+		/*this.dropShapesDown();
 		
 		var shape= event.shape;
 		var elements = shape.getChildShapes(false);
@@ -420,14 +421,14 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		});
 		
 		this.autoResizeLayout(event);
-		
+		*/
 		return;
 	},
 	
 	
 	
 	handleSingleChildLayoutEvent: function(event) {
-     	//alert("handleSingleChildLayoutEvent");
+     	/*//alert("handleSingleChildLayoutEvent");
      	
      	this.dropShapesDown();
      	
@@ -445,14 +446,14 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		var elementLR = element.bounds.lowerRight();
 		
 		shape.bounds.set(shapeUL.x, shapeUL.y, elementLR.x + 30, elementLR.y + 30);
-        
+        */
 		return;
 	},
 	
 	handleAutoResizeLayoutEvent: function(event) {
-		this.dropShapesDown();
+		/*this.dropShapesDown();
 		
-		this.autoResizeLayout(event);
+		this.autoResizeLayout(event);*/
 	},
 	
 	/**
