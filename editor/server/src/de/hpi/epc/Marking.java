@@ -93,7 +93,7 @@ public class Marking implements Cloneable {
 						for (IControlFlow outEdge : diag.getOutgoingEdges(node)) {
 							// Only put new dead context if there is no token
 							if (state.get(outEdge) == State.NO_TOKEN) {
-								context.put(outEdge, Context.WAIT);
+								applyContext(outEdge, Context.WAIT);
 								changed = true;
 							}
 						}
@@ -198,7 +198,7 @@ public class Marking implements Cloneable {
 						nodeNewMarking.newMarking.applyState(diag.getIncomingControlFlow(node), State.NO_TOKEN);
 
 						nodeNewMarking.newMarking.applyContext(diag.getOutgoingControlFlow(node), Context.DEAD);
-						nodeNewMarking.newMarking.applyState(diag.getOutgoingControlFlow(node), State.NO_TOKEN);
+						nodeNewMarking.newMarking.applyState(diag.getOutgoingControlFlow(node), State.NEG_TOKEN);
 
 						nodeNewMarking.newMarking.applyContext(edges,
 								Context.WAIT);
@@ -256,12 +256,14 @@ public class Marking implements Cloneable {
 							NodeNewMarkingPair nodeNewMarking = new NodeNewMarkingPair(
 									node, this.clone());
 							
-							//TODO negative upper corona, see p. 76
 							nodeNewMarking.newMarking.applyContext(incomingControlFlow, Context.DEAD);
 							nodeNewMarking.newMarking.applyState(incomingControlFlow, State.NO_TOKEN);
 							
 							nodeNewMarking.newMarking.applyState(diag.getOutgoingControlFlow((Connector)node), State.POS_TOKEN);
 							nodeNewMarking.newMarking.applyContext(diag.getOutgoingControlFlow((Connector)node), Context.WAIT);
+							
+							//Remove all negative token from negative upper corona, see p. 76
+							nodeNewMarking.newMarking.cleanUpperNegativeCorona(diag, nodeNewMarking.node);
 							
 							nodeNewMarkings.add(nodeNewMarking);
 						}
@@ -310,7 +312,7 @@ public class Marking implements Cloneable {
 			} else {
 				// If normal arc
 				marking.applyContext(edge, Marking.Context.WAIT);
-				marking.applyState(edge, Marking.State.NEG_TOKEN);
+				marking.applyState(edge, Marking.State.NO_TOKEN);
 			}
 		}
 		
@@ -334,6 +336,24 @@ public class Marking implements Cloneable {
 			}
 		}
 		return tokenForEndArcFound; 
+	}
+	
+	/* Cleans the negative upper corona: "remove all negative tokens on its
+	 * so-called negative upper corona, i.e. the arcs carrying a negative token that have a path to
+	 * the OR-join on which each arc has a dead context and no token on it." (p. 76)
+	 */
+	public void cleanUpperNegativeCorona(IEPC epc, IFlowObject node){
+		for(IControlFlow cf : epc.getIncomingControlFlow(node)){
+			if(context.get(cf).equals(Context.DEAD)){
+				if(state.get(cf).equals(State.NO_TOKEN)){
+					cleanUpperNegativeCorona(epc, cf.getSource());
+				} else if (state.get(cf).equals(State.NEG_TOKEN)){
+					applyState(cf, State.NO_TOKEN);
+				} else {
+					// do nothing
+				}
+			}
+		}
 	}
 
 	public void applyState(Collection<IControlFlow> edges, State type) {
