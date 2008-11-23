@@ -121,10 +121,28 @@ ORYX.I18N.BPELSupport.progressImp = "Importiere...";
 ORYX.I18N.BPELSupport.progressExp = "Exportiere...";
 ORYX.I18N.BPELSupport.impFailed = "Während des Importierens ist ein Fehler aufgetreten. <br/>Fehlermeldung: <br/><br/>";
 
+if(!ORYX.I18N.BPEL4ChorSupport) ORYX.I18N.BPEL4ChorSupport = {};
+
+ORYX.I18N.BPEL4ChorSupport.group = "BPEL4Chor";
+ORYX.I18N.BPEL4ChorSupport.exp = "BPEL4Chor Export";
+ORYX.I18N.BPEL4ChorSupport.expDesc = "Exportieren nach BPEL4Chor";
+ORYX.I18N.BPEL4ChorSupport.imp = "BPEL4Chor Import";
+ORYX.I18N.BPEL4ChorSupport.impDesc = "Importieren einer BPEL4Chor Datei";
+ORYX.I18N.BPEL4ChorSupport.selectFile = "Wählen Sie eine BPEL4Chor Datei aus, die Sie importieren möchten.";
+ORYX.I18N.BPEL4ChorSupport.file = "Datei";
+ORYX.I18N.BPEL4ChorSupport.impPanel = "BPEL4Chor Datei importieren";
+ORYX.I18N.BPEL4ChorSupport.impBtn = "Importieren";
+ORYX.I18N.BPEL4ChorSupport.content = "Inhalt";
+ORYX.I18N.BPEL4ChorSupport.close = "Schließen";
+ORYX.I18N.BPEL4ChorSupport.error = "Fehler";
+ORYX.I18N.BPEL4ChorSupport.progressImp = "Importiere...";
+ORYX.I18N.BPEL4ChorSupport.progressExp = "Exportiere...";
+ORYX.I18N.BPEL4ChorSupport.impFailed = "Während des Importierens ist ein Fehler aufgetreten. <br/>Fehlermeldung: <br/><br/>";
+
 if(!ORYX.I18N.Bpel4ChorTransformation) ORYX.I18N.Bpel4ChorTransformation = {};
 
 ORYX.I18N.Bpel4ChorTransformation.group = "BPEL4Chor";
-ORYX.I18N.Bpel4ChorTransformation.exportBPEL = "BPEL4Chor Eport";
+ORYX.I18N.Bpel4ChorTransformation.exportBPEL = "BPEL4Chor Export";
 ORYX.I18N.Bpel4ChorTransformation.exportBPELDesc = "Exportieren nach BPEL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.exportXPDL = "XPDL4Chor Export";
 ORYX.I18N.Bpel4ChorTransformation.exportXPDLDesc = "Exportieren nach XPDL4Chor";

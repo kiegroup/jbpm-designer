@@ -121,6 +121,24 @@ ORYX.I18N.BPELSupport.progressImp = "Import...";
 ORYX.I18N.BPELSupport.progressExp = "Export...";
 ORYX.I18N.BPELSupport.impFailed = "An error while importing occurs! <br/>Please check error message: <br/><br/>";
 
+if(!ORYX.I18N.BPEL4ChorSupport) ORYX.I18N.BPEL4ChorSupport = {};
+
+ORYX.I18N.BPEL4ChorSupport.group = "BPEL4Chor";
+ORYX.I18N.BPEL4ChorSupport.exp = "Export BPEL4Chor";
+ORYX.I18N.BPEL4ChorSupport.expDesc = "Export diagram to BPEL4Chor";
+ORYX.I18N.BPEL4ChorSupport.imp = "Import BPEL4Chor";
+ORYX.I18N.BPEL4ChorSupport.impDesc = "Import a BPEL4Chor file";
+ORYX.I18N.BPEL4ChorSupport.selectFile = "Select a BPEL4Chor file to import";
+ORYX.I18N.BPEL4ChorSupport.file = "file";
+ORYX.I18N.BPEL4ChorSupport.impPanel = "Import BPEL4Chor file";
+ORYX.I18N.BPEL4ChorSupport.impBtn = "Import";
+ORYX.I18N.BPEL4ChorSupport.content = "content";
+ORYX.I18N.BPEL4ChorSupport.close = "Close";
+ORYX.I18N.BPEL4ChorSupport.error = "Error";
+ORYX.I18N.BPEL4ChorSupport.progressImp = "Import...";
+ORYX.I18N.BPEL4ChorSupport.progressExp = "Export...";
+ORYX.I18N.BPEL4ChorSupport.impFailed = "An error while importing occurs! <br/>Please check error message: <br/><br/>";
+
 if(!ORYX.I18N.Bpel4ChorTransformation) ORYX.I18N.Bpel4ChorTransformation = {};
 
 ORYX.I18N.Bpel4ChorTransformation.group = "BPEL4Chor";
