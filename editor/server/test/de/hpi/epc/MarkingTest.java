@@ -1,6 +1,10 @@
 package de.hpi.epc;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,9 +14,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import de.hpi.bpt.process.epc.Connector;
+import de.hpi.bpt.process.epc.ControlFlow;
 import de.hpi.bpt.process.epc.EPC;
 import de.hpi.bpt.process.epc.Event;
 import de.hpi.bpt.process.epc.Function;
+import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.epc.Marking.NodeNewMarkingPair;
 
@@ -94,5 +100,33 @@ public class MarkingTest extends AbstractEPCTest {
 		
 		// Comb 2: e1 + e2
 		//TODO
+	}
+	
+	public void testEquals(){
+		IControlFlow cf = new ControlFlow(new Event(), new Event());
+		cf.setId("blub");
+		
+		Marking m1 = new Marking();
+		m1.applyContext(cf, Marking.Context.DEAD);
+		m1.applyState(cf, Marking.State.NEG_TOKEN);
+		
+		Marking m2 = new Marking();
+		m2.applyContext(cf, Marking.Context.DEAD);
+		m2.applyState(cf, Marking.State.NEG_TOKEN);
+		
+		Marking m3 = m2.clone();
+		m3.applyContext(cf, Marking.Context.WAIT);
+		
+		assertTrue(m1.equals(m2));
+		assertTrue(m2.equals(m1));
+		assertFalse(m1.equals(m3));
+		assertFalse(m1.equals(new Marking()));
+		
+		List<Marking> list = new LinkedList<Marking>();
+		list.add(m2);
+		assertTrue(list.contains(m2));
+		assertTrue(list.contains(m1));
+		assertFalse(list.contains(new Marking()));
+		assertFalse(list.contains(m3));
 	}
 }

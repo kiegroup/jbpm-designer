@@ -1,13 +1,13 @@
 package de.hpi.epc.validation;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import de.hpi.bpt.graph.abs.AbstractDirectedGraph;
+import de.hpi.bpt.graph.algo.DirectedGraphAlgorithms;
 import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
@@ -18,15 +18,13 @@ import de.hpi.epc.Marking.NodeNewMarkingPair;
  * TODO title thesis?
  * Implementation as proposed by Jan Mendling, p. 90 
  */
-public class ReachabilityGraph {
+public class ReachabilityGraph extends AbstractDirectedGraph<Transition, MarkingNode> {
 	IEPC diag;
-	
-	// Simple map which maps from a fromMarking to several toMarkings (children)
-	public Map<Marking, List<Marking>> tree;
+	DirectedGraphAlgorithms<Transition, MarkingNode> directedGraphAlgorithms;
 	
 	public ReachabilityGraph(IEPC diag){
 		this.diag = diag;
-		tree = new HashMap<Marking, List<Marking>>();
+		directedGraphAlgorithms = new DirectedGraphAlgorithms<Transition, MarkingNode>(); 
 	}
 	
 	// Calculates RG for all possible initial markings
@@ -39,25 +37,28 @@ public class ReachabilityGraph {
 			}
 		}
 		
+		List<Marking> initialMarkings = new LinkedList<Marking>();		
 		for(List<IFlowObject> initialNodes : (List<List<IFlowObject>>)de.hpi.bpmn.analysis.Combination.findCombinations(startNodes) ){
 			if(initialNodes.size() > 0)
-				calculate(Marking.getInitialMarking(diag, initialNodes));
+				initialMarkings.add(Marking.getInitialMarking(diag, initialNodes));
 		}
+		calculate(initialMarkings);
 	}
 	
-	public void calculate(Marking marking){
+	public void calculate(List<Marking> initialMarkings){
 		Stack<Marking> toBePropagated = new Stack<Marking>();
-		toBePropagated.push(marking);
+		System.out.println("InitialMarking: " + initialMarkings.get(0).toString());
+		toBePropagated.addAll(initialMarkings);
 		
 		Set<Marking> propagated = new HashSet<Marking>();
 		
-		while(!toBePropagated.isEmpty()){
+		while(toBePropagated.size() > 0){
 			Marking currentMarking = toBePropagated.pop();
 			Marking oldMarking = currentMarking.clone();
 			List<NodeNewMarkingPair> nodeNewMarkings = currentMarking.propagate(diag);
 			propagated.add(oldMarking);
 			for(NodeNewMarkingPair nodeNewMarking : nodeNewMarkings){
-				add(oldMarking, nodeNewMarking.newMarking);
+				add(oldMarking, nodeNewMarking.newMarking, nodeNewMarking.node);
 				if(!propagated.contains(nodeNewMarking.newMarking)){
 					toBePropagated.push(nodeNewMarking.newMarking);
 				}
@@ -65,64 +66,81 @@ public class ReachabilityGraph {
 		}
 	}
 	
-	public void add(Marking fromMarking, Marking toMarking){
-		if(tree.get(fromMarking) == null){
-			tree.put(fromMarking, new LinkedList<Marking>());
+	public void add(Marking fromMarking, Marking toMarking, IFlowObject node){
+		// Markings with no tokens anymore shouldn't be added
+		if(!toMarking.hasToken(diag))
+			return;
+		
+		MarkingNode fromMarkingNode = findByMarking(fromMarking);
+		if(fromMarkingNode == null){
+			fromMarkingNode = new MarkingNode(fromMarking);
+			addVertex(fromMarkingNode);
 		}
-		tree.get(fromMarking).add(toMarking);
+		MarkingNode toMarkingNode = findByMarking(toMarking);
+		if(toMarkingNode == null){
+			toMarkingNode = new MarkingNode(toMarking);
+			addVertex(toMarkingNode);
+		}
+		
+		Transition transition = new Transition(fromMarkingNode, toMarkingNode, node);
+		addEdge(transition);
+	}
+	
+	public boolean contains(Marking m){
+		return findByMarking(m) != null;
+	}
+	
+	public MarkingNode findByMarking(Marking m){
+		for(MarkingNode fo : this.getVertices()){
+			if(fo.getMarking().equals(m)){
+				return fo;
+			}
+		}
+		return null;
 	}
 	
 	public boolean isRoot(Marking m){
-		return this.getRoots().contains(m);
+		return this.getIncomingEdges(findByMarking(m)).size() == 0;
 	}
 	
 	public boolean isLeaf(Marking m){
-		return this.getLeaves().contains(m);
+		return this.getOutgoingEdges(findByMarking(m)).size() == 0;
 	}
 	
-	//TODO expensive search!!
+	/*TODO should this return all predecessors or only direct ones???*/
+	//TODO expensive search!! Avoid Marking => MarkingNode => Marking
 	public List<Marking> getPredecessors(Marking m){
-		List<Marking> predecessors = new LinkedList<Marking>();
-		
-		for(Marking marking : tree.keySet()){
-			if(tree.get(marking).contains(m)){
-				predecessors.add(marking);
-				predecessors.addAll(getPredecessors(marking));
-			}
+		List<Marking> list = new LinkedList<Marking>();
+		for(MarkingNode markingNode : getPredecessors(findByMarking(m))){
+			list.add(markingNode.getMarking());
 		}
-		return predecessors;
+		return list;
 	}
 	
+	/*TODO should this return all successors or only direct ones???*/
+	//TODO expensive search!! Avoid Marking => MarkingNode => Marking
 	public List<Marking> getSuccessors(Marking m){
-		List<Marking> successors = new LinkedList<Marking>();
-		
-		if(tree.get(m) != null) {
-			successors.addAll(tree.get(m));
-			for(Marking sucMarking : tree.get(m)){
-				successors.addAll(getSuccessors(sucMarking));
-			}
+		List<Marking> list = new LinkedList<Marking>();
+		for(MarkingNode markingNode : getSuccessors(findByMarking(m))){
+			list.add(markingNode.getMarking());
 		}
-		return successors;
+		return list;
 	}
 	
 	public List<Marking> getRoots(){
-		// Calc all keys which don't appears as values
-		Set<Marking> keys = (Set<Marking>) new HashSet<Marking>(tree.keySet()).clone();
-		for(List<Marking> value : tree.values()){
-			keys.removeAll(value);
+		List<Marking> list = new LinkedList<Marking>();
+		for(MarkingNode node : directedGraphAlgorithms.getInputVertices(this)){
+			list.add(node.getMarking());
 		}
-		return new LinkedList<Marking>(keys);
+		return list;
 	}
 	
 	public List<Marking> getLeaves(){
-		// Calc all values which don't appears as keys
-		Set<List<Marking>> valueLists = (Set<List<Marking>>) new HashSet<List<Marking>>(tree.values()).clone();
-		Set<Marking> values = new HashSet<Marking>();
-		for(List<Marking> value : valueLists){
-			values.addAll(value);
+		List<Marking> list = new LinkedList<Marking>();
+		for(MarkingNode node : directedGraphAlgorithms.getOutputVertices(this)){
+			list.add(node.getMarking());
 		}
-		values.removeAll(tree.keySet());
-		return new LinkedList<Marking>(values);
+		return list;
 	}
 	
 	// Returns a list of nodes that do not have a positive

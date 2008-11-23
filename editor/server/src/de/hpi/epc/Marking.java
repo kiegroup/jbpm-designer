@@ -1,6 +1,7 @@
 package de.hpi.epc;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +32,10 @@ public class Marking implements Cloneable {
 			this.node = node;
 			this.newMarking = newMarking;
 		}
+				
+		public String toString(){
+			return node.getId() + newMarking.toString();
+		}
 	}
 
 	public HashMap<IControlFlow, State> state;
@@ -51,7 +56,58 @@ public class Marking implements Cloneable {
 		return new Marking((HashMap<IControlFlow, State>) state.clone(),
 				(HashMap<IControlFlow, Context>) context.clone());
 	}
+	
+	public boolean equals(Object o){
+		//System.err.println("Remark: Marking#equals seems not to work properly!!");
+		Marking m = (Marking)o;
+		if(state.size() != m.state.size() || context.size() != m.context.size()){
+			return false;
+		}
+		return toString().equals(o.toString());
+		/*
+		
+		for(IControlFlow cf : state.keySet()){
+			if(state.get(cf) != m.state.get(cf)){
+				return false;
+			}
+		}
+		
+		for(IControlFlow cf : context.keySet()){
+			if(context.get(cf) != m.context.get(cf)){
+				return false;
+			}
+		}
+		
+		return true;*/
+	}
 
+	public String toString(){
+		String s = "";
+		
+		List<IControlFlow> cfs = new LinkedList<IControlFlow>(state.keySet());
+		Collections.sort(cfs);
+		
+		for(IControlFlow cf : cfs){
+			s+= "|";
+			s+=cf.getId();
+			s+=" ";
+			if(state.get(cf) == State.NEG_TOKEN){
+				s += "-";
+			} else if (state.get(cf) == State.POS_TOKEN){
+				s += "+";
+			} else {
+				s += "0";
+			}
+			if(context.get(cf) == Context.WAIT){
+				s += "W";
+			} else {
+				s += "D";
+			}
+		}
+		
+		return s;
+	}
+	
 	public LinkedList<NodeNewMarkingPair> propagate(IEPC diag) {
 		propagateDeadContext(diag);
 		propagateWaitContext(diag);
@@ -343,10 +399,14 @@ public class Marking implements Cloneable {
 	 * the OR-join on which each arc has a dead context and no token on it." (p. 76)
 	 */
 	public void cleanUpperNegativeCorona(IEPC epc, IFlowObject node){
+		cleanUpperNegativeCorona(epc, node, new LinkedList<IControlFlow>());
+	}
+	public void cleanUpperNegativeCorona(IEPC epc, IFlowObject node, LinkedList<IControlFlow> visited){
 		for(IControlFlow cf : epc.getIncomingControlFlow(node)){
 			if(context.get(cf).equals(Context.DEAD)){
-				if(state.get(cf).equals(State.NO_TOKEN)){
-					cleanUpperNegativeCorona(epc, cf.getSource());
+				if(state.get(cf).equals(State.NO_TOKEN) && !visited.contains(cf)){
+					visited.add(cf);
+					cleanUpperNegativeCorona(epc, cf.getSource(), visited);
 				} else if (state.get(cf).equals(State.NEG_TOKEN)){
 					applyState(cf, State.NO_TOKEN);
 				} else {
@@ -378,6 +438,16 @@ public class Marking implements Cloneable {
 	
 	public boolean hasToken(IControlFlow edge){
 		return state.get(edge).equals(State.POS_TOKEN);
+	}
+	
+	/* Calculates if at least one positive token is in the graph
+	 */
+	public boolean hasToken(IEPC epc){
+		for(IControlFlow cf : epc.getControlFlow()){
+			if(hasToken(cf))
+				return true;
+		}
+		return false;
 	}
 	
 	static public boolean isAndConnector(IGObject flowObject){
