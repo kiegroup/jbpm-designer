@@ -118,6 +118,8 @@ ORYX.CONFIG = {
 	EVENT_PROPWINDOW_PROP_CHANGED:	"propertyWindow.propertyChanged",
 	EVENT_LAYOUT_ROWS:				"layout.rows",
 	EVENT_LAYOUT_BPEL:				"layout.BPEL",
+	EVENT_LAYOUT_BPEL_VERTICAL:     "layout.BPEL.vertical",
+	EVENT_LAYOUT_BPEL_HORIZONTAL:   "layout.BPEL.horizontal",
 	EVENT_LAYOUT_BPEL_SINGLECHILD:  "layout.BPEL.singlechild",
 	EVENT_LAYOUT_BPEL_AUTORESIZE:	"layout.BPEL.autoresize",
 	EVENT_AUTOLAYOUT_LAYOUT:		"autolayout.layout",
