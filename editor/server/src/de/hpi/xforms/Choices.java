@@ -9,9 +9,10 @@ import java.util.List;
  * @author jan-felix.schwarz@student.hpi.uni-potsdam.de
  *
  */
-public class Choices extends ListUICommon implements ListUICommonContainer {
+public class Choices extends ListUICommon implements ListUICommonContainer, LabelContainer {
 	
 	protected List<ListUICommon> listUICommons;
+	protected Label label;
 
 	public Choices() {
 		super();
@@ -22,6 +23,14 @@ public class Choices extends ListUICommon implements ListUICommonContainer {
 			listUICommons = new ArrayList<ListUICommon>();
 		Collections.sort(listUICommons, new ListUICommonComparator());
 		return listUICommons;
+	}
+	
+	public Label getLabel() {
+		return label;
+	}
+
+	public void setLabel(Label label) {
+		this.label = label;
 	}
 	
 	@Override

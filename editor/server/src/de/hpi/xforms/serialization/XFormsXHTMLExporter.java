@@ -214,26 +214,14 @@ public class XFormsXHTMLExporter {
 		if(xfElement==null) return;
 		Element newXmlElement = (Element) xmlElement.appendChild(getElement(xfElement));
 		
-		if(xfElement instanceof UICommonContainer) {
-			addElementsRecursive(newXmlElement, ((UICommonContainer) xfElement).getHelp());
-			addElementsRecursive(newXmlElement, ((UICommonContainer) xfElement).getHint());
-			addElementsRecursive(newXmlElement, ((UICommonContainer) xfElement).getAlert());
-		}
-		
-		if(xfElement instanceof ActionContainer) {
-			for(AbstractAction xfChild : ((ActionContainer) xfElement).getActions()) {
-				addElementsRecursive(newXmlElement, xfChild);
-			}
+		if(xfElement instanceof LabelContainer) {
+			addElementsRecursive(newXmlElement, ((LabelContainer) xfElement).getLabel());
 		}
 		
 		if(xfElement instanceof Switch) {
 			for(Case xfChild : ((Switch) xfElement).getCases()) {
 				addElementsRecursive(newXmlElement, xfChild);
 			}
-		}
-		
-		if(xfElement instanceof LabelContainer) {
-			addElementsRecursive(newXmlElement, ((LabelContainer) xfElement).getLabel());
 		}
 		
 		if(xfElement instanceof ListUICommonContainer) {
@@ -255,6 +243,27 @@ public class XFormsXHTMLExporter {
 					lastYPosition = xfChild.getYPosition();
 				}
 				addElementsRecursive(rowDiv, xfChild);
+			}
+		}
+		
+		if(xfElement instanceof Item) {
+			addElementsRecursive(newXmlElement, ((Item) xfElement).getValue());
+		}
+		
+		if(xfElement instanceof Itemset) {
+			addElementsRecursive(newXmlElement, ((Itemset) xfElement).getValue());
+			addElementsRecursive(newXmlElement, ((Itemset) xfElement).getCopy());
+		}
+		
+		if(xfElement instanceof UICommonContainer) {
+			addElementsRecursive(newXmlElement, ((UICommonContainer) xfElement).getHelp());
+			addElementsRecursive(newXmlElement, ((UICommonContainer) xfElement).getHint());
+			addElementsRecursive(newXmlElement, ((UICommonContainer) xfElement).getAlert());
+		}
+		
+		if(xfElement instanceof ActionContainer) {
+			for(AbstractAction xfChild : ((ActionContainer) xfElement).getActions()) {
+				addElementsRecursive(newXmlElement, xfChild);
 			}
 		}
 		

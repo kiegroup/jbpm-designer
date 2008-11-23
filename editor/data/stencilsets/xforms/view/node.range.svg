@@ -11,7 +11,7 @@
    <g oryx:minimumSize="30 24" oryx:maximumSize="350 24" >
 
 	<g>
-		<rect oryx:anchor="top" oryx:resize="horizontal" x="0" y="0" width="150" height="24" stroke="none" fill="#ffffff"/>
+		<rect oryx:anchors="top" oryx:resize="horizontal" x="0" y="0" width="150" height="24" stroke="none" fill="#ffffff"/>
 		<g>
 			<rect oryx:resize="horizontal" x="0" y="6" width="150" height="1" stroke="none" fill="#000000"/>
 			<rect oryx:resize="horizontal" x="0" y="7" width="150" height="1" stroke="none" fill="#888888"/>

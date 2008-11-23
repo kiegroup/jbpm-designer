@@ -96,6 +96,8 @@ public class XFormsRDFImporter {
 					addSubmit(node, c);
 				} else if (type.equals("Select")) {
 					addSelect(node, c);
+				} else if (type.equals("Select1")) {
+					addSelect1(node, c);
 				} else if (type.equals("Group")) {
 					addGroup(node, c);
 				} else if (type.equals("Repeat")) {
@@ -114,6 +116,10 @@ public class XFormsRDFImporter {
 					addAlert(node, c);
 				} else if (type.equals("Item")) {
 					addItem(node, c);
+				} else if (type.equals("Itemset")) {
+					addItemset(node, c);
+				} else if (type.equals("Choices")) {
+					addChoices(node, c);
 				} else if (type.equals("Action")) {
 					addAction(node, c);
 				} else if (type.equals("SetValue")) {
@@ -158,6 +164,10 @@ public class XFormsRDFImporter {
 	}
 	
 	private void handleAttributes(Node node, XFormsElement element, ImportContext c) {
+		handleAttributes(node, element, null, c);
+	}
+	
+	private void handleAttributes(Node node, XFormsElement element, String prefix, ImportContext c) {
 		if (node.hasChildNodes()) {
 			Node n = node.getFirstChild();
 			while ((n = n.getNextSibling()) != null) {
@@ -171,15 +181,21 @@ public class XFormsRDFImporter {
 					
 					attribute = attribute.substring(3);
 					
+					if((prefix!=null) && (attribute.startsWith(prefix)))
+						attribute = attribute.substring(prefix.length());
+						
 					if(element.getAttributes().containsKey(attribute)) {
 						element.getAttributes().put(attribute, getContent(n));
 					} else {
-						if(element instanceof Submit)
+						if(element instanceof Submit) {
 							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
-						else if((element instanceof XForm) && attribute.equals("head"))
-							addHead(getContent(n), c);
-						else
+						} else if((element instanceof XForm) && attribute.equals("head")) {
+							String head = getContent(n);
+							if(head!=null)
+								addHead(head, c);
+						} else {
 							handleModelItemProperty(attribute, getContent(n), element, c);
+						}
 					}
 				} else if(attribute.startsWith("ev_")) {
 					// handle attributes of xml events namespace
@@ -466,6 +482,13 @@ public class XFormsRDFImporter {
 		handleAttributes(node, select, c);
 	}
 	
+	private void addSelect1(Node node, ImportContext c) {
+		Select1 select1 = factory.createSelect1();
+		select1.setResourceId(getResourceId(node));
+		c.objects.put(select1.getResourceId(), select1);
+		handleAttributes(node, select1, c);
+	}
+	
 	private void addGroup(Node node, ImportContext c) {
 		Group group = factory.createGroup();
 		group.setResourceId(getResourceId(node));
@@ -531,10 +554,38 @@ public class XFormsRDFImporter {
 		item.setResourceId(getResourceId(node));
 		c.objects.put(item.getResourceId(), item);
 		handleAttributes(node, item, c);
+		
 		Value value = factory.createValue();
-		handleAttributes(node, value, c); 		// side effect: assigns Item's id to Value object...
-		value.getAttributes().put("id", null); 	// ...so reset Value's id attribute
-		item.setValue(value);
+		handleAttributes(node, value, "value_", c);
+		if(((value.getAttributes().get("ref")!=null) && !value.getAttributes().get("ref").equals("/"))
+				|| (value.getAttributes().get("value")!=null) || (value.getAttributes().get("bind")!=null))
+			item.setValue(value);
+	}
+	
+	private void addItemset(Node node, ImportContext c) {
+		Itemset itemset = factory.createItemset();
+		itemset.setResourceId(getResourceId(node));
+		c.objects.put(itemset.getResourceId(), itemset);
+		handleAttributes(node, itemset, c);
+		
+		Value value = factory.createValue();
+		handleAttributes(node, value, "value_", c);
+		if(((value.getAttributes().get("ref")!=null) && !value.getAttributes().get("ref").equals("/")) 
+				|| (value.getAttributes().get("value")!=null) || (value.getAttributes().get("bind")!=null))
+			itemset.setValue(value);
+		
+		Copy copy = factory.createCopy();
+		handleAttributes(node, copy, "copy_", c);
+		if(((value.getAttributes().get("ref")!=null) && !value.getAttributes().get("ref").equals("/"))
+				|| (copy.getAttributes().get("bind")!=null))
+			itemset.setCopy(copy);
+	}
+	
+	private void addChoices(Node node, ImportContext c) {
+		Choices choices = factory.createChoices();
+		choices.setResourceId(getResourceId(node));
+		c.objects.put(choices.getResourceId(), choices);
+		handleAttributes(node, choices, c);
 	}
 	
 	private void addAction(Node node, ImportContext c) {

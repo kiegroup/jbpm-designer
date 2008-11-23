@@ -1549,17 +1549,17 @@
 			"id":"Select",
 			"title":"Select",
 			"groups":["Controls"],
-			"description":"Renders a multi select control",
+			"description":"This form control allows the user to make multiple selections from a set of choices.",
 			"view":"node.select.svg",
 			"icon":"new_select.png",
 			"roles": [
 				"core_form_controls",
-				"item_container"
+				"list_ui_common_container"
 			],
 			"layout":function(shape) {	
 		
 				var items = shape.getChildNodes(false).findAll(function(node) {
-					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Item");
+					return ((node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Item")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Itemset"));
 				});
 				
 				if(items.length > 0) {
@@ -1573,9 +1573,250 @@
 					items.each(function(item) {
 						var ul = item.bounds.upperLeft();
 						var lr = item.bounds.lowerRight();
-						ul.y = shapeHeight + 5;
+						if(item.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices") {
+							ul.y = shapeHeight + 25;
+							shapeHeight += 25;
+						} else {
+							ul.y = shapeHeight + 5;
+							shapeHeight += 5;
+						}
 						lr.y = ul.y + item.bounds.height();
-						shapeHeight += item.bounds.height() + 5;
+						shapeHeight += item.bounds.height();
+						ul.x = 30;
+						lr.x = shapeWidth;
+						item.bounds.set(ul, lr);
+					});
+					
+					var upl = shape.bounds.upperLeft();
+					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight + 5);
+				}
+				
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = - label.bounds.height() - 1;
+						lr.y = - 1;
+						ul.x = 0;
+						lr.x = label.bounds.width();
+						label.bounds.set(ul, lr);
+					});
+				}
+				
+ 			},
+			"properties": [
+				{
+					"id":"xf_id",
+					"type":"String",
+					"title":"id",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"xf_ref",
+					"type":"String",
+					"title":"ref",
+					"prefix":"oryx",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"xf_navindex",
+					"type":"Integer",
+					"title":"navindex",
+					"prefix":"oryx",
+					"value":0,
+					"description":"Integer used to define the navigation sequence",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"min":"0"
+				},
+				{
+					"id":"xf_accesskey",
+					"type":"String",
+					"title":"accesskey",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Shortcut for moving the input focus to this control",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"1"
+				},
+				{
+					"id":"xf_selection",
+					"type":"Choice",
+					"title":"selection",
+					"prefix":"oryx",
+					"value":"closed",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"closed",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"open",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"xf_incremental",
+					"type":"Boolean",
+					"title":"incremental",
+					"prefix":"oryx",
+					"value":true,
+					"description":"When true, this form control will generate additional xforms-value-changed events.",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"xf_type",
+					"type":"String",
+					"title":"type",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any xsd:QName representing the expected datatype",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_readonly",
+					"type":"String",
+					"title":"readonly",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_required",
+					"type":"String",
+					"title":"required",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_relevant",
+					"type":"String",
+					"title":"relevant",
+					"prefix":"oryx",
+					"value":"",
+					"description":"Any expression that is convertible to XPath boolean",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_calculate",
+					"type":"String",
+					"title":"calculate",
+					"prefix":"oryx",
+					"value":"",
+					"description":"An expression used to calculate a string value for the associated instance data node",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_constraint",
+					"type":"String",
+					"title":"constraint",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A predicate that needs to be satisfied for the associated instance data node to be considered valid",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_p3ptype",
+					"type":"String",
+					"title":"p3ptype",
+					"prefix":"oryx",
+					"value":"",
+					"description":"A P3P data element indicating the specific kind of data collected here",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Select1",
+			"title":"Select1",
+			"groups":["Controls"],
+			"description":"This form control allows the user to make a single selection from multiple choices.",
+			"view":"node.select1.svg",
+			"icon":"new_select1.png",
+			"roles": [
+				"core_form_controls",
+				"list_ui_common_container"
+			],
+			"layout":function(shape) {	
+		
+				var items = shape.getChildNodes(false).findAll(function(node) {
+					return ((node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Item")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Itemset"));
+				});
+				
+				if(items.length > 0) {
+				
+					items = items.sortBy(function(item) {
+						return item.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = 0;
+					items.each(function(item) {
+						var ul = item.bounds.upperLeft();
+						var lr = item.bounds.lowerRight();
+						if(item.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices") {
+							ul.y = shapeHeight + 25;
+							shapeHeight += 25;
+						} else {
+							ul.y = shapeHeight + 5;
+							shapeHeight += 5;
+						}
+						lr.y = ul.y + item.bounds.height();
+						shapeHeight += item.bounds.height();
 						ul.x = 30;
 						lr.x = shapeWidth;
 						item.bounds.set(ul, lr);
@@ -2212,10 +2453,22 @@
 					"value":"Label",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"labeltext",
 					"length":"100",
 					"wrapLines":true
+				},
+				{
+					"id":"xf_ref",
+					"type":"String",
+					"title":"ref",
+					"prefix":"oryx",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
 				}
 			]
 		},
@@ -2630,7 +2883,7 @@
 			"view":"node.item.svg",
 			"icon":"new_item.png",
 			"roles": [
-				"item",
+				"list_ui_common",
 				"labeled"
 			],
 			"layout":function(shape) {	
@@ -2671,14 +2924,106 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"",
 					"length":"100"
 				},
 				{
-					"id":"xf_ref",
+					"id":"xf_value_ref",
 					"type":"String",
-					"title":"ref",
+					"title":"value/ref",
+					"prefix":"oryx",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Itemset",
+			"title":"Itemset",
+			"groups":["Support Elements"],
+			"description":"This element allows the creation of dynamic selections within controls select and select1.",
+			"view":"node.itemset.svg",
+			"icon":"new_itemset.png",
+			"roles": [
+				"list_ui_common",
+				"labeled"
+			],
+			"layout":function(shape) {	
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = 2;
+						ul.x = 2;
+						lr.y = 2 + label.bounds.height();
+						lr.x = 2 + label.bounds.width();
+						label.bounds.set(ul, lr);
+					});
+				}
+ 			},
+			"properties": [
+				{
+					"id":"xf_id",
+					"type":"String",
+					"title":"id",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"xf_nodeset",
+					"type":"String",
+					"title":"nodeset",
+					"prefix":"oryx",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_copy_ref",
+					"type":"String",
+					"title":"copy/ref",
+					"prefix":"oryx",
+					"value":"/",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_value_value",
+					"type":"String",
+					"title":"value/value",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"100"
+				},
+				{
+					"id":"xf_value_ref",
+					"type":"String",
+					"title":"value/ref",
 					"prefix":"oryx",
 					"value":"/",
 					"description":"",
@@ -2770,6 +3115,86 @@
 					"optional":true,
 					"refToView":"",
 					"length":"100"
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"Choices",
+			"title":"Choices",
+			"groups":["Support Elements"],
+			"description":"This element is used within selection form controls to group available choices.",
+			"view":"node.choices.svg",
+			"icon":"new_choices.png",
+			"roles": [
+				"list_ui_common",
+				"list_ui_common_container",
+				"labeled"
+			],
+			"layout":function(shape) {	
+		
+				var items = shape.getChildNodes(false).findAll(function(node) {
+					return ((node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Item")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Itemset"));
+				});
+				
+				if(items.length > 0) {
+				
+					items = items.sortBy(function(item) {
+						return item.bounds.upperLeft().y;
+					});
+					
+					var shapeWidth = shape.bounds.width();
+					var shapeHeight = 0;
+					items.each(function(item) {
+						var ul = item.bounds.upperLeft();
+						var lr = item.bounds.lowerRight();
+						if(item.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices") {
+							ul.y = shapeHeight + 25;
+							shapeHeight += 25;
+						} else {
+							ul.y = shapeHeight + 5;
+							shapeHeight += 5;
+						}
+						lr.y = ul.y + item.bounds.height();
+						shapeHeight += item.bounds.height();
+						ul.x = 15;
+						lr.x = shapeWidth;
+						item.bounds.set(ul, lr);
+					});
+					
+					var upl = shape.bounds.upperLeft();
+					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight + 5);
+				}
+				
+				var labels = shape.getChildNodes(false).findAll(function(node) {
+					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
+				});
+				
+				if(labels.length > 0) {
+					labels.each(function(label) {
+						var ul = label.bounds.upperLeft();
+						var lr = label.bounds.lowerRight();
+						ul.y = - label.bounds.height() - 1;
+						lr.y = - 1;
+						ul.x = 0;
+						lr.x = label.bounds.width();
+						label.bounds.set(ul, lr);
+					});
+				}
+				
+ 			},
+			"properties": [
+				{
+					"id":"xf_id",
+					"type":"String",
+					"title":"id",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
 				}
 			]
 		},
@@ -4244,9 +4669,9 @@
 				]
 			},
 			{
-				"role":"item_container",
+				"role":"list_ui_common_container",
 				"contains": [
-					"item"
+					"list_ui_common"
 				]
 			},
 			{

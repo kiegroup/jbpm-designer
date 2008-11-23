@@ -11,8 +11,9 @@ public class Value extends XFormsElement implements PCDataContainer {
 
 	public Value() {
 		super();
-		attributes.put("ref", null);
 		attributes.put("value", null);
+		attributes.put("ref", null);
+		attributes.put("bind", null);
 	}
 
 	public String getContent() {

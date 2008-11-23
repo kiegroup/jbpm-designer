@@ -18,8 +18,11 @@ import de.hpi.xforms.ActionContainer;
 import de.hpi.xforms.Alert;
 import de.hpi.xforms.Bind;
 import de.hpi.xforms.Case;
+import de.hpi.xforms.Copy;
 import de.hpi.xforms.Help;
 import de.hpi.xforms.Hint;
+import de.hpi.xforms.Item;
+import de.hpi.xforms.Itemset;
 import de.hpi.xforms.Label;
 import de.hpi.xforms.LabelContainer;
 import de.hpi.xforms.ListUICommon;
@@ -29,6 +32,7 @@ import de.hpi.xforms.Submission;
 import de.hpi.xforms.Switch;
 import de.hpi.xforms.UICommonContainer;
 import de.hpi.xforms.UIElementContainer;
+import de.hpi.xforms.Value;
 import de.hpi.xforms.XForm;
 import de.hpi.xforms.XFormsElement;
 import de.hpi.xforms.XFormsUIElement;
@@ -137,29 +141,24 @@ public class XFormsERDFExporter {
 		}
 		if(element instanceof LabelContainer) {
 			Label label = ((LabelContainer) element).getLabel();
-			if(label!=null) {
+			if(label!=null)
 				registerResourcesRecursive(label, element);
-			}
 		}
 		if(element instanceof UICommonContainer) {
 			
 			Help help = ((UICommonContainer) element).getHelp();
-			if(help!=null) {
+			if(help!=null)
 				registerResourcesRecursive(help, element);
-			}
 			
 			Hint hint = ((UICommonContainer) element).getHint();
-			if(hint!=null) {
+			if(hint!=null)
 				registerResourcesRecursive(hint, element);
-			}
 			
 			Alert alert = ((UICommonContainer) element).getAlert();
-			if(alert!=null) {
+			if(alert!=null)
 				registerResourcesRecursive(alert, element);
-			}
 			
 		}
-		
 	}
 	
 	private void appendFormERDF(PrintWriter writer) {
@@ -239,6 +238,37 @@ public class XFormsERDFExporter {
 						appendXFormsField(writer, field, submission.getAttributes().get(field));
 				}
 			}
+		}
+		
+		// handle item element
+		if(element instanceof Item) {
+			Item item = (Item) element;
+			Value value = item.getValue();
+			if(value!=null) {
+				for(String field : value.getAttributes().keySet()) {
+					if(!field.equals("id"))
+						appendXFormsField(writer, "value_" + field, value.getAttributes().get(field));
+				}
+			}
+			appendOryxField(writer, "bounds", "0," + item.getYPosition() + ",0," + item.getYPosition());
+		}
+		
+		// handle itemset element
+		if(element instanceof Itemset) {
+			Itemset itemset = (Itemset) element;
+			Value value = itemset.getValue();
+			if(value!=null) {
+				for(String field : value.getAttributes().keySet()) {
+					appendXFormsField(writer, "value_" + field, value.getAttributes().get(field));
+				}
+			}
+			Copy copy = ((Itemset) element).getCopy();
+			if(copy!=null) {
+				for(String field : copy.getAttributes().keySet()) {
+					appendXFormsField(writer, "copy_" + field, copy.getAttributes().get(field));
+				}
+			}
+			appendOryxField(writer, "bounds", "0," + itemset.getYPosition() + ",0," + itemset.getYPosition());
 		}
 		
 		if(element instanceof XFormsUIElement) {

@@ -102,6 +102,19 @@ public class XFormsXHTMLImporter {
 				UICommonContainer uiCommonContainer = (UICommonContainer) parent;
 				uiCommonContainer.setAlert((Alert) element);
 			}
+		} else if(element instanceof Value) {
+			if(parent instanceof Item) {
+				Item item = (Item) parent;
+				item.setValue((Value) element);
+			} else if(parent instanceof Itemset) {
+				Itemset itemset = (Itemset) parent;
+				itemset.setValue((Value) element);
+			}
+		} else if(element instanceof Copy) {
+			if(parent instanceof Itemset) {
+				Itemset itemset = (Itemset) parent;
+				itemset.setCopy((Copy) element);
+			}
 		} else if(element instanceof Submission) {
 			if(parent instanceof Model) {
 				Model model = (Model) parent;
