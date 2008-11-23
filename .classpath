@@ -88,7 +88,6 @@
 	<classpathentry kind="lib" path="poem-jvm/lib/jsr107cache-1.0.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/jta-1_0_1B-classes.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/jta-1.0.1B.jar"/>
-	<classpathentry kind="lib" path="poem-jvm/lib/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/log4j-1.2.12.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/logkit-1.0.1.jar"/>
