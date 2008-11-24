@@ -51,7 +51,7 @@ public class ThumbnailRenderer extends PngRenderer {
 		if (pngData != null) {
 			out.write(pngData);
 		} else {    	
-			InputStream in = new ByteArrayInputStream(in_s.getBytes());
+			InputStream in = new ByteArrayInputStream(in_s.getBytes("UTF-8"));
 			PNGTranscoder transcoder = new PNGTranscoder();
 			try {
 				TranscoderInput input = new TranscoderInput(in);

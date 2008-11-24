@@ -280,7 +280,7 @@ ORYX.Core.AbstractShape = {
 			var name = property.id();		// Get name
 			
 			//if(typeof this.properties[prefix+'-'+name] == 'boolean' || this.properties[prefix+'-'+name] != "")
-				serializedObject.push({name: name, prefix: prefix, value: escape(this.properties[prefix+'-'+name]), type: 'literal'});
+				serializedObject.push({name: name, prefix: prefix, value: this.properties[prefix+'-'+name], type: 'literal'});
 
 		}).bind(this));
 		
@@ -312,7 +312,7 @@ ORYX.Core.AbstractShape = {
 				default:
 							// Set property
 							if(this.properties.keys().member(prefix+"-"+name)) {
-								this.setProperty(prefix+"-"+name, unescape(value));
+								this.setProperty(prefix+"-"+name, value);
 							}
 					
 			}

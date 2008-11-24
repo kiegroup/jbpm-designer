@@ -66,7 +66,7 @@ public class ImageRenderer extends HandlerBase {
     }
     
     protected void transcode(String in_s, OutputStream out, Representation representation) throws TranscoderException, IOException {
-    	out.write(in_s.getBytes());
+    	out.write(in_s.getBytes("UTF-8"));
     }
 
 }

@@ -49,7 +49,7 @@ public class PdfRenderer extends ImageRenderer{
 
     @Override
     protected void transcode(String in_s, OutputStream out, Representation representation) throws TranscoderException, IOException {
-    	InputStream in = new ByteArrayInputStream(in_s.getBytes());
+    	InputStream in = new ByteArrayInputStream(in_s.getBytes("UTF-8"));
 	  	PDFTranscoder transcoder = new PDFTranscoder();
 	  	try {
 	    	TranscoderInput input = new TranscoderInput(in);
