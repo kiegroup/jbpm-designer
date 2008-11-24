@@ -33,111 +33,14 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	construct: function(facade) {
 		this.facade = facade;
 		
-		this.toMoveShapes = [];				// Shapes that are moved
-	
-		this.dragBounds = undefined;
-		this.offSetPosition = {x:0, y:0};
-
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL, this.handleLayoutEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL, this.handleLayoutVerticalEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL, this.handleLayoutHorizontalEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD, this.handleSingleChildLayoutEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_AUTORESIZE, this.handleAutoResizeLayoutEvent.bind(this));
-		
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEDOWN, this.handleMouseDown.bind(this));
 	},
-	
-	/************************ Mouse Hanlder *************************/
-	
-	/**
-	 * On the Selection-Changed
-	 */
-	onSelectionChanged: function(event) {
-
-		var elements = event.elements;
-
-		// If there are no elements
-		if(!elements || elements.length == 0) {
-			// reset all variables
-
-			this.toMoveShapes = [];
-			this.dragBounds = undefined;
-		} else {
-
-			// Get all shapes with the highest parent in object hierarchy (canvas is the top most parent)
-			this.toMoveShapes = this.facade.getCanvas().getShapesWithSharedParent(elements);
-			
-			this.toMoveShapes = this.toMoveShapes.findAll( function(shape) { return shape instanceof ORYX.Core.Node && 
-																			(shape.dockers.length === 0 || !elements.member(shape.dockers.first().getDockedShape()))});		
-			elements.each((function(shape){
-				if(!(shape instanceof ORYX.Core.Edge)) {return}
-				
-				var dks = shape.getDockers() 
-								
-				var hasF = elements.member(dks.first().getDockedShape());
-				var hasL = elements.member(dks.last().getDockedShape());	
-						
-				if(!hasL) {
-					this.toMoveShapes.push(dks.last());
-				}
-				if(!hasF){
-					this.toMoveShapes.push(dks.first())
-				} 
-				
-				if( shape.dockers.length > 2){
-					this.toMoveShapes = this.toMoveShapes.concat(dks.findAll(function(el,index){ return index > 0 && index < dks.length-1}))
-				}
-				
-			}).bind(this));	
-																			
-			// Calculate the area-bounds of the selection
-			var newBounds = undefined;
-			elements.each(function(value) {
-				if(!newBounds)
-					newBounds = value.absoluteBounds();
-				else
-					newBounds.include(value.absoluteBounds());
-			});
-
-			// Set the new bounds
-			this.dragBounds = newBounds;
-
-		}
-		
-		return;
-	},
-	
-	handleMouseDown: function(event, uiObj) {
-		if(!this.dragBounds || !this.toMoveShapes.member(uiObj)) {return};
-		
-		var evCoord 	= this.facade.eventCoordinates( event );
-		var ul = this.dragBounds.upperLeft();
-		
-		this.offSetPosition = {
-			x: evCoord.x - ul.x,
-			y: evCoord.y - ul.y
-		}
-		
-		return;
-	},	
 	
 	/**************************** Layout ****************************/
-	
-	
-	dropShapesDown: function(event){
-	
-		var elements = event.shape.getChildShapes(false);
-		
-		var offsetPos = this.offSetPosition;
-		var movedShapes = this.toMoveShapes;
-
-		movedShapes.each(function(shape){
-			if(elements.include(shape)) shape.bounds.moveBy(offsetPos);
-		});
-		
-		return;
-		
-	}, 
 	
 	/**
 	 *  realize special BPEL layouting:
@@ -152,8 +55,6 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		if(!elements || elements.length == 0) {
 			return;
 		};
-		
-		this.dropShapesDown(event);
 		
 		var activity = elements.find(function(node) {
 				return (Array.indexOf(node.getStencil().roles(), node.getStencil().namespace() + "activity")>= 0);
@@ -218,8 +119,6 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			return;
 		};
 		
-		this.dropShapesDown(event);
-		
 		// remove all shapes into a column
 		elements.each(function(element){
 			var ul = element.bounds.upperLeft();
@@ -259,8 +158,6 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		if(!elements || elements.length == 0) {
 			return;
 		};
-
-		this.dropShapesDown(event);
 		
 		// remove all shapes in a row
 		elements.each(function(element){
@@ -304,8 +201,6 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		if(!elements || elements.length == 0) {
 			return;
 		};
-		
-		this.dropShapesDown(event);
 		
 		elements.first().bounds.moveTo(30, 30);
 		
