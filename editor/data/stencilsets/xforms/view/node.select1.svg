@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   width="152"
+   height="52"
+   version="1.0">
+  <defs></defs>
+   <g>
+    <rect oryx:anchors="top left" oryx:resize="vertical horizontal" x="0" y="0" width="150" height="50" style="stroke-dasharray: 2, 3;
+       stroke: black; stroke-width: 1;" fill="white" />
+    <circle oryx:anchors="top left" cx="12" cy="12" r="5" stroke="black" stroke-width="1" fill="white"/>
+	<circle oryx:anchors="top left" cx="12" cy="12" r="3" stroke="black" stroke-width="1" fill="black"/>
+
+  </g>
+</svg>
