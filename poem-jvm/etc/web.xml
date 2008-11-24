@@ -16,21 +16,7 @@
         <display-name>Oryx Dispatcher</display-name>
         <servlet-name>Dispatcher</servlet-name>
         <servlet-class>org.b3mn.poem.Dispatcher</servlet-class>
-    </servlet>
-	
-    <servlet-mapping>
-        <servlet-name>Dispatcher</servlet-name>
-        <url-pattern>/poem/*</url-pattern>
-    </servlet-mapping>
-	
-	<!-- Registering OpenID Consumer Servlet for Authentication -->
-	<!-- 
-	
-	<servlet>
-        <display-name>Oryx OpenID Authentication Servlet</display-name>
-        <servlet-name>AuthServlet</servlet-name>
-        <servlet-class>org.oryxeditor.server.auth.OpenIDAuthenticationServlet</servlet-class>
-        <init-param>
+		<init-param>
             <param-name>proxy-host-name</param-name>
             <param-value></param-value>
         </init-param>
@@ -39,27 +25,12 @@
             <param-value></param-value>
         </init-param>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>AuthServlet</servlet-name>
-        <url-pattern>/consumer</url-pattern>
-    </servlet-mapping>
-	-->
-
-	<!-- Load jstl, needed for OpenID Authentication -->
-    <!--
-	<jsp-config>
-        <taglib>
-            <taglib-uri>
-                http://java.sun.com/jstl/core
-            </taglib-uri>
-            <taglib-location>
-                /WEB-INF/c.tld
-            </taglib-location>
-        </taglib>
-    </jsp-config>
 	
-	-->
-
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/poem/*</url-pattern>
+    </servlet-mapping>
+	
 	<mime-mapping>
 		<extension>svg</extension>
 		<mime-type>image/svg+xml</mime-type>
