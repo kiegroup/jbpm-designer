@@ -312,7 +312,7 @@ ORYX.Core.AbstractShape = {
 				default:
 							// Set property
 							if(this.properties.keys().member(prefix+"-"+name)) {
-								this.setProperty(prefix+"-"+name, value);
+								this.setProperty(prefix+"-"+name, unescape(value));
 							}
 					
 			}
