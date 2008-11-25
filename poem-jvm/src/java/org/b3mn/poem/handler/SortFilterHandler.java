@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +69,9 @@ public class SortFilterHandler extends HandlerBase {
 		}
 
 		Object[] arg = { subject };
-		Set<String> orderedUris = new HashSet<String>( (List<String>) sortMethod.invoke(null, arg));
+		
+		// Use the LinkedHashSet implementation to remain the order of the entries
+		Set<String> orderedUris = new LinkedHashSet<String>( (List<String>) sortMethod.invoke(null, arg));
 		
 		// Iterate over http parameters
 		Enumeration<String> e = request.getParameterNames();
