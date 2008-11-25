@@ -20,7 +20,7 @@ ORYX.CONFIG = {
 	DESYNCHRONIZABILITY_URL:	"/oryx/desynchronizability",
 	IBPMN2BPMN_URL:				"/oryx/ibpmn2bpmn",
 	SYNTAXCHECKER_URL:			"/oryx/syntaxchecker",
-	VALIDATOR_URL:				"/oryx/bpmnvalidator",
+	VALIDATOR_URL:				"/oryx/validator",
 	AUTO_LAYOUTER_URL:			"/oryx/layouter",
 	SS_EXTENSIONS_FOLDER:		"/oryx/stencilsets/extensions/",
 	SS_EXTENSIONS_CONFIG:		"/oryx/stencilsets/extensions/extensions.json",	

@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import de.hpi.bpt.process.epc.Connector;
 import de.hpi.bpt.process.epc.ControlFlow;
@@ -19,8 +20,10 @@ import de.hpi.bpt.process.epc.EPC;
 import de.hpi.bpt.process.epc.Event;
 import de.hpi.bpt.process.epc.Function;
 import de.hpi.bpt.process.epc.IControlFlow;
+import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.epc.Marking.NodeNewMarkingPair;
+import de.hpi.epc.validation.ReachabilityGraph;
 
 public class MarkingTest extends AbstractEPCTest {
 	@BeforeClass
@@ -39,6 +42,7 @@ public class MarkingTest extends AbstractEPCTest {
 	public void tearDown() throws Exception {
 	}
 	
+	@Test
 	public void testOrSplit(){
 		epc = new EPC();
 		
@@ -69,6 +73,7 @@ public class MarkingTest extends AbstractEPCTest {
 		}
 	}
 	
+	@Test
 	public void testOrJoin(){
 		epc = new EPC();
 		
@@ -102,6 +107,7 @@ public class MarkingTest extends AbstractEPCTest {
 		//TODO
 	}
 	
+	@Test
 	public void testEquals(){
 		IControlFlow cf = new ControlFlow(new Event(), new Event());
 		cf.setId("blub");
@@ -128,5 +134,19 @@ public class MarkingTest extends AbstractEPCTest {
 		assertTrue(list.contains(m1));
 		assertFalse(list.contains(new Marking()));
 		assertFalse(list.contains(m3));
+	}
+	
+	@Test
+	public void isFinalMarking(){
+		IEPC epc = openEpcFromFile("simpleEPC.rdf");
+		ReachabilityGraph rg = new ReachabilityGraph(epc);
+		rg.calculate();
+		for(Marking root : rg.getRoots()){
+			assertFalse(root.isFinalMarking(epc));
+		}
+		for(Marking leaf : rg.getLeaves()){
+			assertTrue(leaf.isFinalMarking(epc));
+		}
+		
 	}
 }

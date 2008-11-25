@@ -1,7 +1,6 @@
 package de.hpi.epc.validation;
 
-
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
@@ -28,7 +28,7 @@ public class EPCSoundnessCheckerTest extends AbstractEPCTest {
 
 	@Before
 	public void setUp() throws Exception {
-		epc = openEpcFromFile("soundnessTestEpc.rdf");
+		epc = openEpcFromFile("simpleEPC.rdf");
 		soundnessChecker = new EPCSoundnessChecker(epc);
 		soundnessChecker.calculate();
 	}
@@ -37,11 +37,17 @@ public class EPCSoundnessCheckerTest extends AbstractEPCTest {
 	public void tearDown() throws Exception {
 	}
 	
+	@Test
 	public void testIsSound(){
-		assertFalse(soundnessChecker.isSound());
+		assertTrue(soundnessChecker.isSound());
 	}
 	
+	@Test
 	public void testCheck(){
+		assertTrue(soundnessChecker.badEndArcs.size() == 0);
+		assertTrue(soundnessChecker.badStartArcs.size() == 0);
+		
+		
 		List<IControlFlow> badStartArcs = soundnessChecker.badStartArcs;
 		List<IControlFlow> badEndArcs = soundnessChecker.badEndArcs;
 		

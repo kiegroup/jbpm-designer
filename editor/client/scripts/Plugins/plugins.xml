@@ -87,10 +87,13 @@
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
-		<plugin source="bpmnValidator.js" name="ORYX.Plugins.BPMNValidator">
+		<plugin source="validator.js" name="ORYX.Plugins.BPMNValidator">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 		</plugin>
+        <plugin source="validator.js" name="ORYX.Plugins.EPCValidator">
+            <requires namespace="http://b3mn.org/stencilset/epc#"/>
+        </plugin>
 		
 		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.StepThroughPlugin">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>

@@ -146,16 +146,16 @@
 	
 	<servlet>
 		<display-name>
-			Oryx BPMN Validator
+			Oryx Validator
 		</display-name>
-		<servlet-name>BPMNValidator</servlet-name>
+		<servlet-name>Validator</servlet-name>
 		<servlet-class>
-			org.oryxeditor.server.BPMNValidatorServlet
+			org.oryxeditor.server.ValidatorServlet
 		</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>BPMNValidator</servlet-name>
-		<url-pattern>/bpmnvalidator</url-pattern>
+		<servlet-name>Validator</servlet-name>
+		<url-pattern>/validator</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

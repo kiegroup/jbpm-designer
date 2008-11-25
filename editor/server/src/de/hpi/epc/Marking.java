@@ -382,11 +382,11 @@ public class Marking implements Cloneable {
 		boolean tokenForEndArcFound = false;
 		for(IControlFlow cf : state.keySet()){
 			if(diag.getOutgoingControlFlow(cf.getTarget()).size() == 0){
-				if(state.get(cf.getTarget()) == State.POS_TOKEN){
+				if(state.get(cf) == State.POS_TOKEN){
 					tokenForEndArcFound = true;
 				}
 			} else {
-				if(state.get(cf.getTarget()) == State.POS_TOKEN){
+				if(state.get(cf) == State.POS_TOKEN){
 					return false;
 				}
 			}
