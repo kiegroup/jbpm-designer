@@ -11194,6 +11194,10 @@
 						"from":"DataObject",
 						"to":["to_task_event"]
 					},
+					{
+						"from":"IntermediateCompensationEventCatching",
+						"to":["Task", "CollapsedSubprocess", "Subprocess"]
+					},
 				]
 			},
 			{
