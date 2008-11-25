@@ -62,20 +62,21 @@ Repository.Plugins.TypeFilter = {
 		);
 		
 	    var grid = new Ext.DataView({
-	        store	: store,
-			tpl 	: tpl,
-	       	autoHight: true,
-			listeners: {selectionchange: this._onSelectionChange.bind(this)},
+	        store			: store,
+			tpl 			: tpl,
+	       	autoHight		: true,
 			itemSelector	: 'div.x-grid3-row',
     		overClass		: 'x-grid3-row-over',
 			selectedClass	: 'x-grid3-row x-grid3-row-selected',
-			multiSelect	: true,
-			simpleSelect : true
+			multiSelect		: true,
+			simpleSelect 	: true
 	    });
 
 		
 		this.panel.add( grid )
 		this.panel.doLayout();
+		
+		grid.addListener('selectionchange', this._onSelectionChange.bind(this) );
 	},
 	/**
 	 * apply typ filter, if selection has changed 

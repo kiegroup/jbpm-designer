@@ -87,7 +87,6 @@ Repository.Plugins.TagFilter = {
 	        store	: store,
 			tpl 	: tpl,
 	       	autoHight: true,
-			listeners: {selectionchange: this._onSelectionChange.bind(this)},
 			itemSelector	: 'div.x-grid3-row',
     		overClass		: 'x-grid3-row-over',
 			selectedClass	: 'x-grid3-row x-grid3-row-selected',
@@ -98,6 +97,7 @@ Repository.Plugins.TagFilter = {
 		this.panel.add( grid );
 		this.panel.doLayout();
 				
+		grid.addListener('selectionchange', this._onSelectionChange.bind(this) );
 	},
 	
 	_onSelectionChange : function( dataView, selection ) {

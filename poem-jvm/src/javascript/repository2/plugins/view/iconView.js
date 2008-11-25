@@ -62,7 +62,7 @@ Repository.Plugins.IconView = {
 				}
 			}.bind(this));
 			
-			data.push( [ pair.key, pair.value.thumbnailUri + "?" + Math.random(), unescape(pair.value.title), stencilset, Repository.Helper.CutOpenID(pair.value.author, 50) || 'Unknown' ] )
+			data.push( [ pair.key, pair.value.thumbnailUri + "?" + Math.random(), unescape(pair.value.title), stencilset, Repository.Helper.CutOpenID(pair.value.author, 45) || 'Unknown' ] )
 		}.bind(this));
 		
 		var store = new Ext.data.SimpleStore({

@@ -2,17 +2,20 @@
 <config>
 	
 	<plugins>
+
+		<!-- CONTEXT-FREE PLUGINS, But with the button on the very left -->
+		<plugin source="contextFree/newModelPlugin.js" name="Repository.Plugins.NewModel" />		
 		
 		<!-- VIEW PLUGINS -->
 		<plugin source="view/iconView.js" name="Repository.Plugins.IconView" />
 		<plugin source="view/tableView.js" name="Repository.Plugins.TableView" />
 		<plugin source="view/fullView.js" name="Repository.Plugins.FullView" />
+		
 		<!-- disabled --><!--
 			<plugin source="view/debugView2.js" name="Repository.Plugins.DebugView" />
 		-->
 		
-		<!-- CONTEXT-FREE PLUGINS -->
-		<plugin source="contextFree/newModelPlugin.js" name="Repository.Plugins.NewModel" />
+		<!-- CONTEXT-FREE PLUGINS -->				
 		<plugin source="contextFree/typeFilter.js" name="Repository.Plugins.TypeFilter" />
 		<plugin source="contextFree/accessFilter.js" name="Repository.Plugins.AccessFilter" />
 		<plugin source="contextFree/tagFilter.js" name="Repository.Plugins.TagFilter" />

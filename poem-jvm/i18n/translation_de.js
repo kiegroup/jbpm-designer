@@ -89,8 +89,8 @@ Repository.I18N.TagInfo.newTag = "Neuer Tag"
 Repository.I18N.TagInfo.addTag = "Hinzufügen"
 		
 if(!Repository.I18N.ModelRangeSelection) Repository.I18N.ModelRangeSelection = {};
-Repository.I18N.ModelRangeSelection.previous = "<< Vorherige Seite"
-Repository.I18N.ModelRangeSelection.next = "Nächste Seite >>"
+Repository.I18N.ModelRangeSelection.previous = "« Vorherige Seite"
+Repository.I18N.ModelRangeSelection.next = "Nächste Seite »"
 Repository.I18N.ModelRangeSelection.last = "Letzte"
 Repository.I18N.ModelRangeSelection.first = "Erste"
 Repository.I18N.ModelRangeSelection.modelsOfZero = "(0 Modelle)" 
