@@ -29,8 +29,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,12 +68,13 @@ public class SortFilterHandler extends HandlerBase {
 		}
 
 		Object[] arg = { subject };
-		List<String> orderedUris= (List<String>) sortMethod.invoke(null, arg);
+		Set<String> orderedUris = new HashSet<String>( (List<String>) sortMethod.invoke(null, arg));
 		
 		// Iterate over http parameters
 		Enumeration<String> e = request.getParameterNames();
 		while (e.hasMoreElements()) {
 			String filterName = (String) e.nextElement();
+			
 			String params = request.getParameter(filterName);
 			// Ignore Filters without parameters
 			if (!filterName.equals("sort") && (params != null) && (params.length() > 0)) {
