@@ -63,6 +63,7 @@ public class NewModelHandler extends HandlerBase {
 		}
 		// Check whether the request contains at least the data and svg parameters
 		if ((request.getParameter("data") != null) && (request.getParameter("svg") != null)) {
+			response.setStatus(201);
 			String title = request.getParameter("title");
 			if (title == null) title = "New Process";
 			String type = request.getParameter("type");
@@ -73,7 +74,6 @@ public class NewModelHandler extends HandlerBase {
 			Identity identity = Identity.newModel(subject, title, type, summary, 
 					request.getParameter("svg"), request.getParameter("data"));
 			response.setHeader("location", this.getServerPath(request) + identity.getUri() + "/self");
-			response.setStatus(201);
 		}
 		else {
 			response.setStatus(400);
