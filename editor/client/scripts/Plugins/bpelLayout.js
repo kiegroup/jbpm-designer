@@ -87,17 +87,17 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		// handle EventHanlders
 		if (eventHandlers){
 			eventHandlers.bounds.moveTo(nextLeftBound, nextUpperBound);
-			nextUpperBound = eventHandlers.bounds.lowerRight().y;
+			nextUpperBound = eventHandlers.bounds.lowerRight().y + 10;
 		}
 		// handle FaultHandlers
 		if (faultHandlers){
 			faultHandlers.bounds.moveTo(nextLeftBound, nextUpperBound);
-			nextUpperBound = faultHandlers.bounds.lowerRight().y;
+			nextUpperBound = faultHandlers.bounds.lowerRight().y + 10;
 		}
 		// handle CompensationHandler
 		if (compensationHandler){
 			compensationHandler.bounds.moveTo(nextLeftBound, nextUpperBound);
-			nextUpperBound = compensationHandler.bounds.lowerRight().y;
+			nextUpperBound = compensationHandler.bounds.lowerRight().y + 10;
 		}
 		// handle TerminationHandler
      	if (terminationHandler){
