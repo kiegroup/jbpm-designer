@@ -4692,7 +4692,7 @@
 					"type":"String",
 					"title":"State",
 					"title_de":"Zustand",
-					"value":"[ ]",
+					"value":"",
 					"description":"",
 					"refToView":"text_state",
 					"readonly":false,
