@@ -452,7 +452,7 @@
 
     <target name="deploy-stencilsets">
         <copy todir='${deploymentdir}/oryx/stencilsets'>
-            <fileset dir="${editor-src-root}/stencilsets"/>
+            <fileset dir="${editor-src-root}/data/stencilsets"/>
         </copy>
         <echo>
             Copied stencilsets into deployment destination
