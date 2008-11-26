@@ -939,6 +939,17 @@
 			],
 			"properties": [
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Label",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"refToView":"name"
+				},
+				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
@@ -949,39 +960,6 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"refToView":"name"
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"SourceRef",
-					"title_de":"QuellRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"TargetRef",
-					"title_de":"ZielRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
 				}
 			]
 		},
