@@ -120,6 +120,19 @@
 					"wrapLines":true
 				},
 				{
+					"id":"trackerWorkflowRuleNamespace",
+					"type":"String",
+					"title":"Tracker Workflow Rule Namespace",
+					"value":"TrackerWorkflowRule",
+					"description":"Tracker Workflow Rule namespace of used Collaboration Software",
+					"tooltip":"Enter Tracker Workflow Rule namespace of used Collaboration Software here",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
 					"id":"version",
 					"type":"String",
 					"title":"Version",
