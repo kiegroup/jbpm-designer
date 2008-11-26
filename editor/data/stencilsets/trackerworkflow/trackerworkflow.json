@@ -6,25 +6,15 @@
   		{
 			"type": "node",
 			"id":"Diagram",
-			"title":"Diagram",
+			"title":"Tracker Workflow Diagram",
 			"groups":["Basic Tracker Workflow"],
-			"description":"A Diagram",
+			"description":"A Tracker Workflow Diagram",
 			"view":"node.diagram.svg",
 			"icon":"new_diagram.png",
 			"mayBeRoot": true,
 			"roles": [
 			],
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},
 				{
 					"id":"title",
 					"type":"String",
@@ -196,17 +186,7 @@
 				"trackerrulecondition",
 				"trackerruletransition"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
+			"properties": [			
 				{
 					"id":"title",
 					"type":"String",
@@ -315,17 +295,7 @@
 				"trackerrulecondition",
 				"trackerrulestatus"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
+			"properties": [			
 				{
 					"id":"title",
 					"type":"String",
@@ -434,17 +404,7 @@
 				"trackerruleaction",
 				"trackerrulestatus"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
+			"properties": [			
 				{
 					"id":"title",
 					"type":"String",
@@ -561,16 +521,6 @@
 			],
 			"properties": [
 				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
-				{
 					"id":"title",
 					"type":"String",
 					"title":"Name",
@@ -684,17 +634,7 @@
 				"trackerruleaction",
 				"trackerrulestatus"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
+			"properties": [			
 				{
 					"id":"title",
 					"type":"String",
@@ -809,16 +749,6 @@
 			],
 			"properties": [
 				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
-				{
 					"id":"title",
 					"type":"String",
 					"title":"Title",
@@ -845,17 +775,7 @@
 				"transition",
 				"fromtoall"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
+			"properties": [	
 				{
 					"id":"title",
 					"type":"String",
@@ -884,17 +804,7 @@
 				"place",
 				"fromtoall"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
+			"properties": [			
 				{
 					"id":"title",
 					"type":"String",
@@ -921,17 +831,7 @@
 			"roles": [
 				"mark"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},		
+			"properties": [		
 				{
 					"id":"text",
 					"type":"String",
@@ -958,17 +858,7 @@
 				"text_node",
 				"fromtoall"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},					
+			"properties": [		
 				{
 					"id":"label",
 					"type":"String",
@@ -994,17 +884,7 @@
 			"roles": [
 				"fromtoall"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},					
+			"properties": [					
 				{
 					"id":"label",
 					"type":"String",
@@ -1030,17 +910,7 @@
 			"roles": [
 				"fromtoall"
 			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},					
+			"properties": [					
 				{
 					"id":"label",
 					"type":"String",
@@ -1068,16 +938,6 @@
 				"fromtoall"
 			],
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},
 				{
 					"id":"documentation",
 					"type":"String",
