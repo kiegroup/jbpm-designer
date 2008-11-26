@@ -17,7 +17,6 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
-import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndCancelEvent;
 import de.hpi.bpmn.EndCompensationEvent;
@@ -45,6 +44,7 @@ import de.hpi.bpmn.Lane;
 import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartLinkEvent;
 import de.hpi.bpmn.StartMessageEvent;
@@ -60,7 +60,6 @@ import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
 import de.hpi.bpmn.Activity.LoopType;
 import de.hpi.bpmn.exec.ExecDataObject;
-import de.hpi.bpmn.rdf.BPMNRDFImporter.ImportContext;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -348,7 +347,7 @@ public class BPMN11RDFImporter {
 						n.getNodeName().indexOf(':') + 1);
 
 				// TODO: add further attributes...
-				if (attribute.equals("poolId")) {
+				if (attribute.equals("poolid")) {
 					pool.setId(getContent(n));
 				} else {
 					handleStandardAttributes(attribute, n, pool, c, "Name");
@@ -394,7 +393,7 @@ public class BPMN11RDFImporter {
 						n.getNodeName().indexOf(':') + 1);
 
 				// TODO: add further attributes...
-				// if (attribute.equals("poolId")) {
+				// if (attribute.equals("poolid")) {
 				// pool.setId(getContent(n));
 				// } else {
 				handleStandardAttributes(attribute, n, lane, c, "Name");
@@ -430,8 +429,7 @@ public class BPMN11RDFImporter {
 					} else if (looptypeValue != null && looptypeValue.equals("MultiInstance")) {
 						activity.setLoopType(LoopType.Multiinstance);
 					}
-				}
-				if (attribute.equals("loopcondition")) {
+				} else if (attribute.equals("loopcondition")) {
 					String loopconditionValue = getContent(n);
 					if (loopconditionValue != null) {
 						activity.setLoopCondition(loopconditionValue);
@@ -455,9 +453,6 @@ public class BPMN11RDFImporter {
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 
 				// TODO: add further attributes...
-				// if (attribute.equals("poolId")) {
-				// pool.setId(getContent(n));
-				// } else 
 				if (attribute.equals("bgcolor")){
 					
 					task.setColor(getContent(n));
@@ -833,15 +828,11 @@ public class BPMN11RDFImporter {
 						flow.setConditionType(SequenceFlow.ConditionType.EXPRESSION);
 					else if (ctype.equals("Default"))
 						flow.setConditionType(SequenceFlow.ConditionType.DEFAULT);
-				}
-				
-				if (attribute.equals("conditionexpression")) {
+				} else if (attribute.equals("conditionexpression")) {
 					String expression = getContent(n);
 					if (expression != null)
 						flow.setConditionExpression(expression);
-				}
-				
-				if (attribute.equals("name")) {
+				} else if (attribute.equals("name")) {
 					String name = getContent(n);
 					if (name != null)
 						flow.setName(name);

@@ -87,7 +87,8 @@ public class InteractionNet extends PTNet {
 				ActionTransition i1 = (ActionTransition)t1;
 				ActionTransition i2 = factory.createActionTransition();
 				i2.setLabel(i1.getLabel());
-				i2.setRole((Role)map.get(i1.getRole()));
+				for (Role r: i1.getRoles())
+					i2.getRoles().add((Role)map.get(r));
 				t2 = i2;
 				
 			} else {

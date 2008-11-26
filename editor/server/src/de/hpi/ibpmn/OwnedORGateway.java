@@ -1,21 +1,21 @@
 package de.hpi.ibpmn;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hpi.bpmn.ORGateway;
-import de.hpi.bpmn.Pool;
 
 /**
  * @author Gero.Decker
  */
-public class OwnedORGateway extends ORGateway implements OwnedGateway {
+public class OwnedORGateway extends ORGateway implements OwnedNode {
 
-	protected Pool owner;
+	protected List<Pool> owners;
 
-	public Pool getDecisionOwner() {
-		return owner;
-	}
-
-	public void setDecisionOwner(Pool owner) {
-		this.owner = owner;
+	public List<Pool> getOwners() {
+		if (owners == null)
+			owners = new ArrayList<Pool>();
+		return owners;
 	}
 
 }

@@ -3,12 +3,12 @@ package de.hpi.ibpmn;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hpi.bpmn.ComplexGateway;
+import de.hpi.bpmn.SubProcess;
 
 /**
- * @author Gero.Decker
+ * @author gero.decker
  */
-public class OwnedComplexGateway extends ComplexGateway implements OwnedNode {
+public class ComplexInteraction extends SubProcess implements OwnedNode {
 
 	protected List<Pool> owners;
 

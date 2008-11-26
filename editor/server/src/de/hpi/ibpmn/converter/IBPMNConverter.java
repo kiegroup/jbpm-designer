@@ -4,11 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.DiagramObject;
+import de.hpi.bpmn.Edge;
+import de.hpi.bpmn.EndPlainEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.Pool;
+import de.hpi.bpmn.SequenceFlow;
+import de.hpi.bpmn.StartPlainEvent;
 import de.hpi.bpmn2pn.converter.StandardConverter;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.ibpmn.Interaction;
+import de.hpi.ibpmn.OwnedNode;
+import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionNetFactory;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.interactionnet.Role;
@@ -35,19 +42,53 @@ public class IBPMNConverter extends StandardConverter {
 		// not needed...
 	}
 
-	// assumption: t1 == t2, (t1 instanceof InteractionTransition || t1 instanceof ActionTransition) 
 	@Override
 	protected void handleMessageFlow(PetriNet net, Node node, Transition t1, Transition t2, ConversionContext c) {
-		IBPMNConversionContext ic = (IBPMNConversionContext)c;
-		if (t1 instanceof InteractionTransition && node instanceof Interaction) {
-			InteractionTransition it = (InteractionTransition)t1;
-			Interaction i = (Interaction)node;
-			it.setSender(findOrCreateRole(i.getSenderRole(), ic));
-			it.setReceiver(findOrCreateRole(i.getReceiverRole(), ic));
-			it.setMessageType(node.getLabel());
-		}
+		// not needed...
 	}
 	
+	@Override
+	protected Transition addLabeledTransition(PetriNet net, String id, DiagramObject obj, int autoLevel, String label, ConversionContext c) {
+		if (obj instanceof Interaction) {
+			Interaction i = (Interaction)obj;
+			InteractionTransition t = ((InteractionNetFactory)pnfactory).createInteractionTransition();
+			net.getTransitions().add(t);
+			t.setId(id);
+			t.setLabel(label);
+			t.setSender(findOrCreateRole(i.getSenderRole(), (IBPMNConversionContext)c));
+			t.setReceiver(findOrCreateRole(i.getReceiverRole(), (IBPMNConversionContext)c));
+			t.setMessageType(((Node)obj).getLabel());
+			return t;
+		
+		} else if (obj instanceof OwnedNode) {
+			OwnedNode on = (OwnedNode)obj;
+			ActionTransition t = ((InteractionNetFactory)pnfactory).createActionTransition();
+			net.getTransitions().add(t);
+			t.setId(id);
+			t.setLabel(label);
+			for (Pool p: on.getOwners())
+				t.getRoles().add(findOrCreateRole(p, (IBPMNConversionContext)c));
+			return t;
+
+		} else if (obj instanceof StartPlainEvent || obj instanceof EndPlainEvent) {
+			return addSimpleSilentTransition(net, id);
+		
+		} else {
+			return super.addLabeledTransition(net, id, obj, autoLevel, label, c);
+		}
+	}
+
+	@Override
+	protected Transition addXOROptionTransition(PetriNet net, Edge e, ConversionContext c) {
+		ActionTransition t = ((InteractionNetFactory)pnfactory).createActionTransition();
+		net.getTransitions().add(t);
+		t.setId(e.getId());
+		t.setLabel(((SequenceFlow)e).getConditionExpression());
+		for (Pool p: ((OwnedNode)e.getSource()).getOwners())
+			t.getRoles().add(findOrCreateRole(p, (IBPMNConversionContext)c));
+		return t;
+	}
+
 	protected Role findOrCreateRole(Pool pool, IBPMNConversionContext ic) {
 		Role role = ic.roleMap.get(pool);
 		if (role == null) {
@@ -57,9 +98,5 @@ public class IBPMNConverter extends StandardConverter {
 		}
 		return role;
 	}
-	
-	// TODO: handle ActionTransition
-	
-	// 
 	
 }

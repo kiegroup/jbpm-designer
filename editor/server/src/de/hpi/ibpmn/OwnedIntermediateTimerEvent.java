@@ -3,12 +3,12 @@ package de.hpi.ibpmn;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hpi.bpmn.ComplexGateway;
+import de.hpi.bpmn.IntermediateTimerEvent;
 
 /**
- * @author Gero.Decker
+ * @author gero.decker
  */
-public class OwnedComplexGateway extends ComplexGateway implements OwnedNode {
+public class OwnedIntermediateTimerEvent extends IntermediateTimerEvent implements OwnedNode {
 
 	protected List<Pool> owners;
 

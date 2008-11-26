@@ -35,7 +35,7 @@ public class InteractionNetPNMLImporter extends PTNetPNMLImporter {
 		} else if ((cnode = getChild(tnode, "action")) != null) {
 			ActionTransition ta = InteractionNetFactory.eINSTANCE.createActionTransition();
 
-			ta.setRole(getRole((InteractionNet)net, getContent(getChild(cnode, "role"))));
+			ta.getRoles().add(getRole((InteractionNet)net, getContent(getChild(cnode, "role"))));
 			
 			return ta;
 

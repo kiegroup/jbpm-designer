@@ -26,7 +26,7 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 	
 		Node n1 = addNode(factory.createStartPlainEvent(), "n1", ibpmn);
 		OwnedXORDataBasedGateway n2 = (OwnedXORDataBasedGateway)addNode(factory.createXORDataBasedGateway(), "n2", ibpmn);
-		n2.setDecisionOwner(p1);
+		n2.getOwners().add((de.hpi.ibpmn.Pool)p1);
 		Node i1 = addInteraction(factory.createIntermediateInteraction(), "i1", p1, p2, ibpmn);
 		Node i2 = addInteraction(factory.createIntermediateInteraction(), "i2", p1, p2, ibpmn);
 		Node n3 = addNode(factory.createXORDataBasedGateway(), "n3", ibpmn);
@@ -67,7 +67,7 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 	
 		Node n1 = addNode(factory.createStartPlainEvent(), "n1", ibpmn);
 		OwnedXORDataBasedGateway n2 = (OwnedXORDataBasedGateway)addNode(factory.createXORDataBasedGateway(), "n2", ibpmn);
-		n2.setDecisionOwner(p1);
+		n2.getOwners().add((de.hpi.ibpmn.Pool)p1);
 		Node i1 = addInteraction(factory.createIntermediateInteraction(), "i1", p1, p2, ibpmn);
 		Node i2 = addInteraction(factory.createIntermediateInteraction(), "i2", p2, p1, ibpmn);
 		Node n3 = addNode(factory.createXORDataBasedGateway(), "n3", ibpmn);
@@ -117,7 +117,7 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 	
 		Node m1 = addInteraction(factory.createStartInteraction(), "m1", A, B, ibpmn);
 		OwnedXORDataBasedGateway xor1 = (OwnedXORDataBasedGateway)addNode(factory.createXORDataBasedGateway(), "n1", ibpmn);
-		xor1.setDecisionOwner(B);
+		xor1.getOwners().add((de.hpi.ibpmn.Pool)B);
 		Node m2 = addInteraction(factory.createIntermediateInteraction(), "m2", B, A, ibpmn);
 		Node m3 = addInteraction(factory.createIntermediateInteraction(), "m3", B, C, ibpmn);
 		Node and1 = addNode(factory.createANDGateway(), "n2", ibpmn);
@@ -126,7 +126,8 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 		Node m6 = addInteraction(factory.createIntermediateInteraction(), "m6", B, A, ibpmn);
 		Node and2 = addNode(factory.createANDGateway(), "n3", ibpmn);
 		Node xor2 = addNode(factory.createXORDataBasedGateway(), "n4", ibpmn);
-		Node m7 = addInteraction(factory.createEndInteraction(), "m7", A, B, ibpmn);
+		Node m7 = addInteraction(factory.createIntermediateInteraction(), "m7", A, B, ibpmn);
+		Node n5 = addNode(factory.createEndPlainEvent(), "n5", ibpmn);
 
 		addSequenceFlow(factory.createSequenceFlow(), m1, xor1, ibpmn);
 		addSequenceFlow(factory.createSequenceFlow(), xor1, m2, ibpmn);
@@ -140,6 +141,7 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 		addSequenceFlow(factory.createSequenceFlow(), m6, and2, ibpmn);
 		addSequenceFlow(factory.createSequenceFlow(), and2, xor2, ibpmn);
 		addSequenceFlow(factory.createSequenceFlow(), xor2, m7, ibpmn);
+		addSequenceFlow(factory.createSequenceFlow(), m7, n5, ibpmn);
 		
 		
 		BPMNDiagram bpmn = new IBPMN2BPMNConverter(ibpmn).convert();

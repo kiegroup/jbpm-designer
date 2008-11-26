@@ -285,7 +285,7 @@ public class IBPMN2BPMNConverter {
 	}
 
 	protected boolean isDecisionOwner(OwnedXORDataBasedGateway gateway, Pool role) {
-		if (gateway.getDecisionOwner() == role)
+		if (gateway.getOwners().contains(role))
 			return true;
 		return false;
 	}
@@ -389,51 +389,54 @@ public class IBPMN2BPMNConverter {
 				Node n = (Node)e.getTarget();
 				
 				if (n instanceof IntermediateEvent) {
+					// case (4) from the paper
 					if (n instanceof IntermediateMessageEvent && ((IntermediateMessageEvent)n).isThrowing()) {
 						throw new ConversionException();
 					}
-					// we expect all other possible events to be of catching nature (timer, conditional)
+					// if catching, then we don't need to do anything
+					// (all other possible events are of catching nature (timer, message))
 					
 				} else if (n instanceof EndEvent) {
 					if (n instanceof EndPlainEvent) {
-						// TODO remove node 
+						// remove node (case (5)) 
 						// Nota bene: the partner will not be aware of the conversion end!
-//						changed = true;
+						apply5(e, cont, c);
+						return true;
 					} else {
+						// this cannot happen, as no other end event type is produced during the conversion
 						throw new ConversionException();
 					}
 					
 				} else if (n instanceof XORDataBasedGateway) {
 					if (countSequenceFlows(n.getOutgoingEdges()) == 1) {
 						// event-based gateway followed by XOR merge leads to duplication
-						doDuplication(g, e, cont, c);
-						handleEventBasedGateway(g, cont, c);
+						// case (1a)
+						apply1a2a(g, e, cont, c);
 						return true;
+					} else if (countSequenceFlows(n.getIncomingEdges()) == 1) {
+						// case (1b)
+						apply1b(g, e, cont, c);
 					} else {
-						// event-based gateway followed by a decision is not allowed
-						// TODO fix this! it can indeed be converted
 						throw new ConversionException();
 					}
 					
 				} else if (n instanceof XOREventBasedGateway) {
-					if (countSequenceFlows(n.getIncomingEdges()) > 1) {
-						// duplicate!
-						doDuplication(g, e, cont, c);
+					if (countSequenceFlows(n.getIncomingEdges()) > 1 && countSequenceFlows(n.getOutgoingEdges()) == 1) {
+						apply1a2a(g, e, cont, c);
+					} else if (countSequenceFlows(n.getIncomingEdges()) == 1) {
+						apply2b(g, e, cont, c);
 					} else {
-						// merge event-based gateways
-						mergeGateways(g, e, cont, c);
+						apply2c(g, e, cont, c);
 					}
-					handleEventBasedGateway(g, cont, c);
 					return true;
 					
 				} else if (n instanceof ANDGateway) {
 					if (countSequenceFlows(n.getIncomingEdges()) > 1) {
 						// AND-join: not allowed! (BPMN does not support non-free-choice-ness)
+						// case (3a)
 						throw new ConversionException();
 					} else {
-						// sequentialize!
-						doSequentialization(g, e, cont, c);
-						handleEventBasedGateway(g, cont, c);
+						apply3b(g, e, cont, c);
 						return true;
 					}
 				}
@@ -450,61 +453,79 @@ public class IBPMN2BPMNConverter {
 		return count;
 	}
 
-	protected void doDuplication(XOREventBasedGateway g, Edge g_out, Container parent, ConversionContext c) {
-		Node n = (Node)g_out.getTarget();
-		int countM = 0;
-		for (Edge n_out: n.getOutgoingEdges()) {
-			if (n_out instanceof SequenceFlow) {
-				Node m = (Node)n_out.getTarget();
-				countM++;
-				
-				Node newm = m.getCopy();
-				newm.setParent(parent);
-				Interaction i = c.reverseMap.get(m);
-				if (i != null) {
-					if (m instanceof IntermediateMessageEvent && !((IntermediateMessageEvent)m).isThrowing()) {
-						c.addReceiver(i, newm);
-					} else {
-						c.addSender(i, newm);
-					}
-				}
-				
-				SequenceFlow new_n_out = factory.createSequenceFlow();
-				c.bpmn.getEdges().add(new_n_out);
-				new_n_out.setSource(g);
-				new_n_out.setTarget(m);
-				
-				for (Edge m_out: m.getOutgoingEdges()) {
-					if (m_out instanceof SequenceFlow) {
-						Gateway newg = factory.createXORDataBasedGateway();
-						newg.setParent(parent);
-						
-						SequenceFlow newflow = factory.createSequenceFlow();
-						c.bpmn.getEdges().add(newflow);
-						newflow.setSource(newg);
-						newflow.setTarget(m_out.getTarget());
-						
-						m_out.setTarget(newg);
-						
-						SequenceFlow new_m_out = factory.createSequenceFlow();
-						c.bpmn.getEdges().add(new_m_out);
-						new_m_out.setSource(newm);
-						new_m_out.setTarget(newg);
-					}
-				}
-			}
-		}
-		g_out.setSource(null);
-		g_out.setTarget(null);
-		c.bpmn.getEdges().remove(g_out);
-		
-		if (countSequenceFlows(n.getIncomingEdges()) == 1 && countM == 1) {
-			removeNode(n, null, c);
-			n.setParent(null);
-		}
+	// precondition: count(outgoing sequence flows) = 1
+	protected void apply1a2a(XOREventBasedGateway g, Edge g_out, Container parent, ConversionContext c) {
+//		Node n = (Node)g_out.getTarget();
+//
+//		for (Edge e: n.getOutgoingEdges())
+//			if (e instanceof SequenceFlow) {
+//				Node m = (Node)e.getTarget();
+//				Node newm = getCopy(m, parent, c);
+//				
+//				SequenceFlow new_n_out = factory.createSequenceFlow();
+//				c.bpmn.getEdges().add(new_n_out);
+//				new_n_out.setSource(g);
+//				new_n_out.setTarget(m);
+//				
+//				for (Edge m_out: m.getOutgoingEdges()) {
+//					if (m_out instanceof SequenceFlow) {
+//						Gateway newg = factory.createXORDataBasedGateway();
+//						newg.setParent(parent);
+//						
+//						SequenceFlow newflow = factory.createSequenceFlow();
+//						c.bpmn.getEdges().add(newflow);
+//						newflow.setSource(newg);
+//						newflow.setTarget(m_out.getTarget());
+//						
+//						m_out.setTarget(newg);
+//						
+//						SequenceFlow new_m_out = factory.createSequenceFlow();
+//						c.bpmn.getEdges().add(new_m_out);
+//						new_m_out.setSource(newm);
+//						new_m_out.setTarget(newg);
+//					}
+//				}
+//			}
+//		g_out.setSource(null);
+//		g_out.setTarget(null);
+//		c.bpmn.getEdges().remove(g_out);
+//		
+//		if (countSequenceFlows(n.getIncomingEdges()) == 1 && countM == 1) {
+//			removeNode(n, null, c);
+//			n.setParent(null);
+//		}
 	}
 
-	protected void mergeGateways(Gateway g, Edge g_out, Container cont, ConversionContext c) {
+	private void apply1b(XOREventBasedGateway g, Edge e, Container cont, ConversionContext c) {
+//		// TODO Auto-generated method stub
+//		
+	}
+
+	private void apply2c(XOREventBasedGateway g, Edge e, Container cont, ConversionContext c) {
+//		// TODO Auto-generated method stub
+//		
+	}
+
+	private void apply5(Edge e, Container cont, ConversionContext c) {
+//		// TODO Auto-generated method stub
+//		
+	}
+
+	protected Node getCopy(Node m, Container parent, ConversionContext c) {
+		Node newm = m.getCopy();
+		newm.setParent(parent);
+		Interaction i = c.reverseMap.get(m);
+		if (i != null) {
+			if (m instanceof IntermediateMessageEvent && !((IntermediateMessageEvent)m).isThrowing()) {
+				c.addReceiver(i, newm);
+			} else {
+				c.addSender(i, newm);
+			}
+		}
+		return newm;
+	}
+
+	protected void apply2b(Gateway g, Edge g_out, Container cont, ConversionContext c) {
 		Node n = (Node)g_out.getTarget();
 		// rearrange edges
 		for (Edge e: n.getOutgoingEdges())
@@ -517,7 +538,7 @@ public class IBPMN2BPMNConverter {
 		n.setParent(null);
 	}
 
-	protected void doSequentialization(XOREventBasedGateway g, Edge g_out, Container parent, ConversionContext c) {
+	protected void apply3b(XOREventBasedGateway g, Edge g_out, Container parent, ConversionContext c) {
 		Node n = (Node)g_out.getTarget();
 		int countM = 0;
 		for (Edge n_out: n.getOutgoingEdges())

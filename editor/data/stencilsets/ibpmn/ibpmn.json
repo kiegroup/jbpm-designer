@@ -1543,10 +1543,12 @@
 		{
 			"type": "edge",
 			"id":"SequenceFlow",
-			"title":"Sequence flow",
-			"description":"",
+			"title":"Sequence Flow",
+			"title_de":"Sequenzfluß",
+			"description":"Sequence Flow defines the execution order of activities.",
+			"description_de":"Ein Sequenzfluss definiert die Reihenfolge der Ausführung von Aktivitäten.",
 			"groups":["Control Flow"],
-			"view":"connection/connection.sequenceflow.normal.svg",
+			"view":"connection/connection.sequenceflow.svg",
 			"icon":"new_sequenceflow.png",
 			"roles": [
 			],
@@ -1566,6 +1568,7 @@
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",
+					"title_de":"Dokumentation",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -1585,13 +1588,57 @@
 				},
 				{
 					"id":"ConditionType",
-					"type":"String",
+					"type":"Choice",
 					"title":"ConditionType",
+					"title_de":"Bedingungstyp",
 					"value":"None",
+					"description":"Determine the typ of the flow object.",
+					"description_de":"Legt den Typ des Flußobjectes fest.",
+					"readonly":false,
+					"optional":false,
+					"items": [
+						{
+							"id":"none",
+							"title":"none",
+							"value":"None",
+							"refToView":""
+						},
+						{
+							"id":"expression",
+							"title":"expression",
+							"value":"Expression",
+							"refToView":""
+						},
+						{
+							"id":"default",
+							"title":"default",
+							"value":"Default",
+							"refToView":"default"
+						}
+					]
+				},
+				{
+					"id":"ConditionExpression",
+					"type":"String",
+					"title":"ConditionExpression",
+					"title_de":"Bedingungsausdruck",
+					"value":"",
 					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"",
+					"refToView":"condition"
+				},
+				{
+					"id":"showdiamondmarker",
+					"type":"Boolean",
+					"title":"ShowDiamontMarker",
+					"title_de":"Zeige-Diamanten",
+					"value":"false",
+					"description":"System intern variable to set the Diamond invisible, if sourceShape is a gateway and ConditionType is set to Expression",
 					"readonly":true,
 					"optional":false,
-					"length":""
+					"refToView":"conditional"
 				}
 			]
 		}

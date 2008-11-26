@@ -12,48 +12,29 @@ import org.w3c.dom.Text;
 
 import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.Activity;
-import de.hpi.bpmn.Association;
-import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Edge;
-import de.hpi.bpmn.EndCancelEvent;
-import de.hpi.bpmn.EndCompensationEvent;
-import de.hpi.bpmn.EndErrorEvent;
-import de.hpi.bpmn.EndLinkEvent;
-import de.hpi.bpmn.EndMultipleEvent;
 import de.hpi.bpmn.EndPlainEvent;
-import de.hpi.bpmn.EndTerminateEvent;
 import de.hpi.bpmn.Event;
 import de.hpi.bpmn.Gateway;
-import de.hpi.bpmn.IntermediateCancelEvent;
-import de.hpi.bpmn.IntermediateCompensationEvent;
-import de.hpi.bpmn.IntermediateConditionalEvent;
-import de.hpi.bpmn.IntermediateErrorEvent;
 import de.hpi.bpmn.IntermediateEvent;
-import de.hpi.bpmn.IntermediateLinkEvent;
-import de.hpi.bpmn.IntermediateMultipleEvent;
-import de.hpi.bpmn.IntermediatePlainEvent;
 import de.hpi.bpmn.IntermediateTimerEvent;
-import de.hpi.bpmn.ORGateway;
-import de.hpi.bpmn.Pool;
+import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.SequenceFlow;
-import de.hpi.bpmn.StartConditionalEvent;
-import de.hpi.bpmn.StartLinkEvent;
-import de.hpi.bpmn.StartMultipleEvent;
 import de.hpi.bpmn.StartPlainEvent;
 import de.hpi.bpmn.StartTimerEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.TextAnnotation;
-import de.hpi.bpmn.UndirectedAssociation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
-import de.hpi.ibpmn.EndInteraction;
+import de.hpi.bpmn.Activity.LoopType;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.IBPMNFactory;
 import de.hpi.ibpmn.Interaction;
 import de.hpi.ibpmn.IntermediateInteraction;
-import de.hpi.ibpmn.OwnedGateway;
+import de.hpi.ibpmn.OwnedNode;
+import de.hpi.ibpmn.Pool;
 import de.hpi.ibpmn.StartInteraction;
 
 /**
@@ -73,9 +54,10 @@ public class IBPMNRDFImporter {
 	
 	protected class ImportContext {
 		IBPMNDiagram diagram;
-		Map<String,de.hpi.bpmn.DiagramObject> objects; // key = resource id, value = diagram object
-		Map<String,de.hpi.bpmn.DiagramObject> connections; // key = to resource id, value = from node
-		Map<de.hpi.bpmn.Node,String> parentRelationships; // key = child node, value = parent resource id
+		Map<String,de.hpi.bpmn.DiagramObject> objects = new HashMap<String, de.hpi.bpmn.DiagramObject>(); // key = resource id, value = diagram object
+		Map<String,de.hpi.bpmn.DiagramObject> connections = new HashMap<String, de.hpi.bpmn.DiagramObject>(); // key = to resource id, value = from node
+		Map<de.hpi.bpmn.Node,String> parentRelationships = new HashMap<de.hpi.bpmn.Node, String>(); // key = child node, value = parent resource id
+		Map<de.hpi.bpmn.DiagramObject,String[]> owningRolesMap = new HashMap<de.hpi.bpmn.DiagramObject, String[]>(); // key = node, value = list of roles
 	}
 	
 	public IBPMNRDFImporter(Document doc) {
@@ -90,10 +72,6 @@ public class IBPMNRDFImporter {
 		
 		ImportContext c = new ImportContext();
 		c.diagram = factory.createIBPMNDiagram();
-//		Map map = new HashMap();		
-		c.objects = new HashMap(); // key = resource id, value = node
-		c.connections = new HashMap(); // key = to resource id, value = from node
-		c.parentRelationships = new HashMap();
 		
 		List<Node> edges = new ArrayList();
 		
@@ -107,56 +85,52 @@ public class IBPMNRDFImporter {
 			if (type.equals("IBPMNDiagram")) {
 				handleDiagram(node, c);
 			} else if (type.equals("Pool")) {
-				addPool(node, c);
-//			} else if (type.equals("PoolSet")) { // TODO include
-//				addPoolSet(node, c);
-//			} else if (type.equals("Lane")) {
-//				addLane(node, c);
-//			} else if (type.equals("Task")) {
-//				addTask(node, c);
-			} else if (type.equals("Subprocess")) {
-				addSubProcess(node, c);
+				addPool(node, c, false);
+			} else if (type.equals("PoolSet")) { 
+				addPool(node, c, true);
+			} else if (type.equals("ComplexInteraction")) {
+				addComplexInteraction(node, c);
+			} else if (type.equals("ComplexInteractionCollapsed")) {
+				addComplexInteraction(node, c);
 				
 			} else if (type.equals("StartEvent")) {
 				addStartPlainEvent(node, c);
-			} else if (type.equals("StartMessageEvent")) {
+			} else if (type.equals("StartInteraction")) {
 				addStartInteraction(node, c);
 			} else if (type.equals("StartTimerEvent")) {
 				addStartTimerEvent(node, c);
-			} else if (type.equals("StartRuleEvent")) {
-				addStartRuleEvent(node, c);
-			} else if (type.equals("StartLinkEvent")) {
-				addStartLinkEvent(node, c);
-			} else if (type.equals("StartMultipleEvent")) {
-				addStartMultipleEvent(node, c);
+//			} else if (type.equals("StartRuleEvent")) {
+//				addStartRuleEvent(node, c);
+//			} else if (type.equals("StartLinkEvent")) {
+//				addStartLinkEvent(node, c);
+//			} else if (type.equals("StartMultipleEvent")) {
+//				addStartMultipleEvent(node, c);
 				
-			} else if (type.equals("IntermediateEvent")) {
-				addIntermediatePlainEvent(node, c);
-			} else if (type.equals("IntermediateMessageEvent")) {
+//			} else if (type.equals("IntermediateEvent")) {
+//				addIntermediatePlainEvent(node, c);
+			} else if (type.equals("IntermediateInteraction")) {
 				addIntermediateInteraction(node, c);
-			} else if (type.equals("IntermediateErrorEvent")) {
-				addIntermediateErrorEvent(node, c);
+//			} else if (type.equals("IntermediateErrorEvent")) {
+//				addIntermediateErrorEvent(node, c);
 			} else if (type.equals("IntermediateTimerEvent")) {
 				addIntermediateTimerEvent(node, c);
-			} else if (type.equals("IntermediateCancelEvent")) {
-				addIntermediateCancelEvent(node, c);
+//			} else if (type.equals("IntermediateCancelEvent")) {
+//				addIntermediateCancelEvent(node, c);
 //			} else if (type.equals("IntermediateCompensationEvent")) {
 //				addIntermediateCompensationEvent(node, c);
-			} else if (type.equals("IntermediateRuleEvent")) {
-				addIntermediateRuleEvent(node, c);
-			} else if (type.equals("IntermediateLinkEvent")) {
-				addIntermediateLinkEvent(node, c);
-			} else if (type.equals("IntermediateMultipleEvent")) {
-				addIntermediateMultipleEvent(node, c);
+//			} else if (type.equals("IntermediateRuleEvent")) {
+//				addIntermediateRuleEvent(node, c);
+//			} else if (type.equals("IntermediateLinkEvent")) {
+//				addIntermediateLinkEvent(node, c);
+//			} else if (type.equals("IntermediateMultipleEvent")) {
+//				addIntermediateMultipleEvent(node, c);
 				
 			} else if (type.equals("EndEvent")) {
 				addEndPlainEvent(node, c);
-			} else if (type.equals("EndMessageEvent")) {
-				addEndInteraction(node, c);
-			} else if (type.equals("EndCancelEvent")) {
-				addEndCancelEvent(node, c);
-			} else if (type.equals("EndLinkEvent")) {
-				addEndLinkEvent(node, c);
+//			} else if (type.equals("EndCancelEvent")) {
+//				addEndCancelEvent(node, c);
+//			} else if (type.equals("EndLinkEvent")) {
+//				addEndLinkEvent(node, c);
 				
 			} else if (type.equals("Exclusive_Databased_Gateway")) {
 				addXORDataBasedGateway(node, c);
@@ -164,15 +138,15 @@ public class IBPMNRDFImporter {
 				addXOREventBasedGateway(node, c);
 			} else if (type.equals("AND_Gateway")) {
 				addANDGateway(node, c);
-			} else if (type.equals("Complex_Gateway")) {
-				addComplexGateway(node, c);
-			} else if (type.equals("OR_Gateway")) {
-				addORGateway(node, c);
+//			} else if (type.equals("Complex_Gateway")) {
+//				addComplexGateway(node, c);
+//			} else if (type.equals("OR_Gateway")) {
+//				addORGateway(node, c);
 				
-			} else if (type.equals("DataObject")) {
-				addDataObject(node, c);
-			} else if (type.equals("TextAnnotation")) {
-				addTextAnnotation(node, c);
+//			} else if (type.equals("DataObject")) {
+//				addDataObject(node, c);
+//			} else if (type.equals("TextAnnotation")) {
+//				addTextAnnotation(node, c);
 				
 			} else if (type.equals("SequenceFlow")) {
 				edges.add(node);
@@ -180,20 +154,12 @@ public class IBPMNRDFImporter {
 				edges.add(node);
 			} else if (type.equals("MessageFlowTo")) {
 				edges.add(node);
-			} else if (type.equals("DefaultFlow")) {
-				edges.add(node);
-			} else if (type.equals("ConditionalFlow")) {
-				edges.add(node);
-			} else if (type.equals("Association_Unidirectional")) {
-				edges.add(node);
-			} else if (type.equals("Association_Bidirectional")) {
-				edges.add(node);
-			} else if (type.equals("Association_Undirected")) {
-				edges.add(node);
 //			} else if (type.equals("Association_Unidirectional")) {
-//				addAssociation_Unidirectional(diagram, node, map);
+//				edges.add(node);
+//			} else if (type.equals("Association_Bidirectional")) {
+//				edges.add(node);
 //			} else if (type.equals("Association_Undirected")) {
-//				addAssociation_Undirected(diagram, node, map);
+//				edges.add(node);
 			}
 		}
 		
@@ -206,22 +172,30 @@ public class IBPMNRDFImporter {
 				addMessageFlowFrom(node, c);
 			} else if (type.equals("MessageFlowTo")) {
 				addMessageFlowTo(node, c);
-			} else if (type.equals("DefaultFlow")) {
-				addDefaultFlow(node, c);
-			} else if (type.equals("ConditionalFlow")) {
-				addConditionalFlow(node, c);
-			} else if (type.equals("Association_Unidirectional")) {
-				addAssociation(node, c);
-			} else if (type.equals("Association_Bidirectional")) {
-				addBidirectionalAssociation(node, c);
+//			} else if (type.equals("Association_Unidirectional")) {
+//				addAssociation(node, c);
+//			} else if (type.equals("Association_Bidirectional")) {
+//				addBidirectionalAssociation(node, c);
 			}
 		}
 		
 		// handle undirected associations
-		for (Node node: edges) {
-			String type = getType(node);
-			if (type.equals("Association_Undirected")) {
-				addUndirectedAssociation(node, c);
+//		for (Node node: edges) {
+//			String type = getType(node);
+//			if (type.equals("Association_Undirected")) {
+//				addUndirectedAssociation(node, c);
+//			}
+//		}
+		
+		// handle decision / timer ownership
+		for (Entry<de.hpi.bpmn.DiagramObject,String[]> entry: c.owningRolesMap.entrySet()) {
+			if (entry.getKey() instanceof OwnedNode) {
+				OwnedNode n = (OwnedNode)entry.getKey();
+				for (String roleName: entry.getValue()) {
+					Pool p = findPool(roleName, c);
+					if (p != null)
+						n.getOwners().add(p);
+				}
 			}
 		}
 		
@@ -235,6 +209,14 @@ public class IBPMNRDFImporter {
 		return c.diagram;
 	}
 	
+	protected Pool findPool(String roleName, ImportContext c) {
+		for (de.hpi.bpmn.Node n: c.diagram.getChildNodes()) {
+			if (n instanceof Pool && n.getLabel().equals(roleName))
+				return (Pool)n;
+		}
+		return null;
+	}
+
 	protected void attachIntermediateEvents(ImportContext c) {
 		for (de.hpi.bpmn.Node node: c.diagram.getChildNodes()) {
 			if (node instanceof IntermediateEvent) {
@@ -268,10 +250,11 @@ public class IBPMNRDFImporter {
 		}
 	}
 
-	protected void addPool(Node node, ImportContext c) {
+	protected void addPool(Node node, ImportContext c, boolean isSet) {
 		Pool pool = factory.createPool();
 		pool.setResourceId(getResourceId(node));
 		pool.setParent(c.diagram);
+		pool.setSet(isSet);
 		c.objects.put(pool.getResourceId(), pool);
 		
 		for (Node n=node.getFirstChild(); n != null; n=n.getNextSibling()) {
@@ -279,7 +262,7 @@ public class IBPMNRDFImporter {
 			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
 			
 			// TODO: add further attributes...
-			if (attribute.equals("poolId")) {
+			if (attribute.equals("poolid")) {
 				pool.setId(getContent(n));
 			} else {
 				handleStandardAttributes(attribute, n, pool, c, "name");
@@ -294,6 +277,10 @@ public class IBPMNRDFImporter {
 			node.setId(getContent(n));
 		} else if (attribute.equals("outgoing")) {
 			c.connections.put(getResourceId(getAttributeValue(n, "rdf:resource")), node);
+		} else if (attribute.equals("owningroles") || attribute.equals("controllingroles")) {
+			String roles = getContent(n);
+			if (roles != null)
+				c.owningRolesMap.put(node, roles.split(","));
 		} else if (node instanceof de.hpi.bpmn.Node) {
 			if (attribute.equals("parent")) {
 				c.parentRelationships.put((de.hpi.bpmn.Node)node, getResourceId(getAttributeValue(n, "rdf:resource")));
@@ -306,7 +293,25 @@ public class IBPMNRDFImporter {
 		return true;
 	}
 
-	protected void addSubProcess(Node node, ImportContext c) {
+	protected void handleStandardActivityAttributes(String attribute, Node n, Activity activity, ImportContext c, String label) {
+		if (attribute.equals("looptype")) {
+			String looptypeValue = getContent(n);
+			if (looptypeValue != null && looptypeValue.equals("Standard")) {
+				activity.setLoopType(LoopType.Standard);
+			} else if (looptypeValue != null && looptypeValue.equals("MultiInstance")) {
+				activity.setLoopType(LoopType.Multiinstance);
+			}
+		} else if (attribute.equals("loopcondition")) {
+			String loopconditionValue = getContent(n);
+			if (loopconditionValue != null) {
+				activity.setLoopCondition(loopconditionValue);
+			}
+		} else {
+			handleStandardAttributes(attribute, n, activity, c, label);
+		}
+	}
+
+	protected void addComplexInteraction(Node node, ImportContext c) {
 		SubProcess sp = factory.createSubProcess();
 		sp.setResourceId(getResourceId(node));
 		sp.setParent(c.diagram);
@@ -317,11 +322,11 @@ public class IBPMNRDFImporter {
 			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
 			
 			// TODO: add further attributes...
-			if (attribute.equals("isAdHoc")) {
-				sp.setAdhoc(getContent(n).equals("true"));
-			} else {
-				handleStandardAttributes(attribute, n, sp, c, "name");
-			}
+//			if (attribute.equals("isadhoc")) {
+//				sp.setAdhoc(getContent(n).equals("true"));
+//			} else {
+				handleStandardActivityAttributes(attribute, n, sp, c, "name");
+//			}
 		}
 		if (sp.getId() == null)
 			sp.setId(sp.getResourceId());
@@ -342,105 +347,100 @@ public class IBPMNRDFImporter {
 		handleEvent(node, event, c, "timeDate");
 	}
 
-	protected void addStartRuleEvent(Node node, ImportContext c) {
-		StartConditionalEvent event = factory.createStartConditionalEvent();
-		handleEvent(node, event, c, "ruleName");
-	}
+//	protected void addStartRuleEvent(Node node, ImportContext c) {
+//		StartConditionalEvent event = factory.createStartConditionalEvent();
+//		handleEvent(node, event, c, "ruleName");
+//	}
 
-	protected void addStartLinkEvent(Node node, ImportContext c) {
-		StartLinkEvent event = factory.createStartLinkEvent();
-		handleEvent(node, event, c, "linkId");
-	}
+//	protected void addStartLinkEvent(Node node, ImportContext c) {
+//		StartLinkEvent event = factory.createStartLinkEvent();
+//		handleEvent(node, event, c, "linkId");
+//	}
 
-	protected void addStartMultipleEvent(Node node, ImportContext c) {
-		StartMultipleEvent event = factory.createStartMultipleEvent();
-		handleEvent(node, event, c, "triggers");
-	}
+//	protected void addStartMultipleEvent(Node node, ImportContext c) {
+//		StartMultipleEvent event = factory.createStartMultipleEvent();
+//		handleEvent(node, event, c, "triggers");
+//	}
 
-	protected void addIntermediatePlainEvent(Node node, ImportContext c) {
-		IntermediatePlainEvent event = factory.createIntermediatePlainEvent();
-		handleEvent(node, event, c, "documentation");
-	}
+//	protected void addIntermediatePlainEvent(Node node, ImportContext c) {
+//		IntermediatePlainEvent event = factory.createIntermediatePlainEvent();
+//		handleEvent(node, event, c, "documentation");
+//	}
 
 	protected void addIntermediateTimerEvent(Node node, ImportContext c) {
 		IntermediateTimerEvent event = factory.createIntermediateTimerEvent();
 		handleEvent(node, event, c, "timeCycle");
 	}
 
-	protected void addIntermediateCancelEvent(Node node, ImportContext c) {
-		IntermediateCancelEvent event = factory.createIntermediateCancelEvent();
-		handleEvent(node, event, c, "target");
-	}
+//	protected void addIntermediateCancelEvent(Node node, ImportContext c) {
+//		IntermediateCancelEvent event = factory.createIntermediateCancelEvent();
+//		handleEvent(node, event, c, "target");
+//	}
 
-	protected void addIntermediateCompensationEvent(Node node, ImportContext c) {
-		IntermediateCompensationEvent event = factory.createIntermediateCompensationEvent();
-		handleEvent(node, event, c, "target");
-	}
+//	protected void addIntermediateCompensationEvent(Node node, ImportContext c) {
+//		IntermediateCompensationEvent event = factory.createIntermediateCompensationEvent();
+//		handleEvent(node, event, c, "target");
+//	}
 
-	protected void addIntermediateRuleEvent(Node node, ImportContext c) {
-		IntermediateConditionalEvent event = factory.createIntermediateConditionalEvent();
-		handleEvent(node, event, c, "ruleName");
-	}
+//	protected void addIntermediateRuleEvent(Node node, ImportContext c) {
+//		IntermediateConditionalEvent event = factory.createIntermediateConditionalEvent();
+//		handleEvent(node, event, c, "ruleName");
+//	}
 
-	protected void addIntermediateLinkEvent(Node node, ImportContext c) {
-		IntermediateLinkEvent event = factory.createIntermediateLinkEvent();
-		handleEvent(node, event, c, "linkId");
-	}
+//	protected void addIntermediateLinkEvent(Node node, ImportContext c) {
+//		IntermediateLinkEvent event = factory.createIntermediateLinkEvent();
+//		handleEvent(node, event, c, "linkId");
+//	}
 
-	protected void addIntermediateMultipleEvent(Node node, ImportContext c) {
-		IntermediateMultipleEvent event = factory.createIntermediateMultipleEvent();
-		handleEvent(node, event, c, "triggers");
-	}
+//	protected void addIntermediateMultipleEvent(Node node, ImportContext c) {
+//		IntermediateMultipleEvent event = factory.createIntermediateMultipleEvent();
+//		handleEvent(node, event, c, "triggers");
+//	}
 
 	protected void addIntermediateInteraction(Node node, ImportContext c) {
 		IntermediateInteraction event = factory.createIntermediateInteraction();
 		handleEvent(node, event, c, "message");
 	}
 
-	protected void addIntermediateErrorEvent(Node node, ImportContext c) {
-		IntermediateErrorEvent event = factory.createIntermediateErrorEvent();
-		handleEvent(node, event, c, "errorCode");
-	}
+//	protected void addIntermediateErrorEvent(Node node, ImportContext c) {
+//		IntermediateErrorEvent event = factory.createIntermediateErrorEvent();
+//		handleEvent(node, event, c, "errorCode");
+//	}
 
 	protected void addEndPlainEvent(Node node, ImportContext c) {
 		EndPlainEvent event = factory.createEndPlainEvent();
 		handleEvent(node, event, c, "documentation");
 	}
 	
-	protected void addEndCancelEvent(Node node, ImportContext c) {
-		EndCancelEvent event = factory.createEndCancelEvent();
-		handleEvent(node, event, c, "documentation");
-	}
+//	protected void addEndCancelEvent(Node node, ImportContext c) {
+//		EndCancelEvent event = factory.createEndCancelEvent();
+//		handleEvent(node, event, c, "documentation");
+//	}
 
-	protected void addEndErrorEvent(Node node, ImportContext c) {
-		EndErrorEvent event = factory.createEndErrorEvent();
-		handleEvent(node, event, c, "errorCode");
-	}
+//	protected void addEndErrorEvent(Node node, ImportContext c) {
+//		EndErrorEvent event = factory.createEndErrorEvent();
+//		handleEvent(node, event, c, "errorCode");
+//	}
 
-	protected void addEndCompensationEvent(Node node, ImportContext c) {
-		EndCompensationEvent event = factory.createEndCompensationEvent();
-		handleEvent(node, event, c, "activity");
-	}
+//	protected void addEndCompensationEvent(Node node, ImportContext c) {
+//		EndCompensationEvent event = factory.createEndCompensationEvent();
+//		handleEvent(node, event, c, "activity");
+//	}
 
-	protected void addEndInteraction(Node node, ImportContext c) {
-		EndInteraction event = factory.createEndInteraction();
-		handleEvent(node, event, c, "message");
-	}
+//	protected void addEndTerminateEvent(Node node, ImportContext c) {
+//		EndTerminateEvent event = factory.createEndTerminateEvent();
+//		handleEvent(node, event, c, "documentation");
+//	}
 
-	protected void addEndTerminateEvent(Node node, ImportContext c) {
-		EndTerminateEvent event = factory.createEndTerminateEvent();
-		handleEvent(node, event, c, "documentation");
-	}
+//	protected void addEndLinkEvent(Node node, ImportContext c) {
+//		EndLinkEvent event = factory.createEndLinkEvent();
+//		handleEvent(node, event, c, "linkId");
+//	}
 
-	protected void addEndLinkEvent(Node node, ImportContext c) {
-		EndLinkEvent event = factory.createEndLinkEvent();
-		handleEvent(node, event, c, "linkId");
-	}
-
-	protected void addEndMultipleEvent(Node node, ImportContext c) {
-		EndMultipleEvent event = factory.createEndMultipleEvent();
-		handleEvent(node, event, c, "results");
-	}
+//	protected void addEndMultipleEvent(Node node, ImportContext c) {
+//		EndMultipleEvent event = factory.createEndMultipleEvent();
+//		handleEvent(node, event, c, "results");
+//	}
 
 	protected void handleEvent(Node node, Event event, ImportContext c, String label) {
 		event.setResourceId(getResourceId(node));
@@ -472,23 +472,20 @@ public class IBPMNRDFImporter {
 		handleGateway(node, gateway, c);
 	}
 
-	protected void addComplexGateway(Node node, ImportContext c) {
-		ComplexGateway gateway = factory.createComplexGateway();
-		handleGateway(node, gateway, c);
-	}
+//	protected void addComplexGateway(Node node, ImportContext c) {
+//		ComplexGateway gateway = factory.createComplexGateway();
+//		handleGateway(node, gateway, c);
+//	}
 
-	protected void addORGateway(Node node, ImportContext c) {
-		ORGateway gateway = factory.createORGateway();
-		handleGateway(node, gateway, c);
-	}
+//	protected void addORGateway(Node node, ImportContext c) {
+//		ORGateway gateway = factory.createORGateway();
+//		handleGateway(node, gateway, c);
+//	}
 
 	protected void handleGateway(Node node, Gateway gateway, ImportContext c) {
 		gateway.setResourceId(getResourceId(node));
 		gateway.setParent(c.diagram);
 		c.objects.put(gateway.getResourceId(), gateway);
-		
-		if (gateway instanceof OwnedGateway)
-			determineDecisionOwner(gateway);
 		
 		for (Node n=node.getFirstChild(); n != null; n=n.getNextSibling()) {
 			if (n instanceof Text) continue;
@@ -497,13 +494,6 @@ public class IBPMNRDFImporter {
 		}
 		if (gateway.getId() == null)
 			gateway.setId(gateway.getResourceId());
-	}
-
-	protected void determineDecisionOwner(Gateway gateway) {
-		for (Edge e: gateway.getIncomingEdges())
-			if (e instanceof Association && e.getSource() instanceof Pool) {
-				((OwnedGateway)gateway).setDecisionOwner((Pool)e.getSource());
-			}
 	}
 
 	protected void addDataObject(Node node, ImportContext c) {
@@ -551,68 +541,81 @@ public class IBPMNRDFImporter {
 	protected void addSequenceFlow(Node node, ImportContext c) {
 		SequenceFlow flow = factory.createSequenceFlow();
 		c.diagram.getEdges().add(flow);
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				if (attribute.equals("conditiontype")) {
+					String ctype = getContent(n);
+					if (ctype.equals("Expression"))
+						flow.setConditionType(SequenceFlow.ConditionType.EXPRESSION);
+					else if (ctype.equals("Default"))
+						flow.setConditionType(SequenceFlow.ConditionType.DEFAULT);
+				} else if (attribute.equals("conditionexpression")) {
+					String expression = getContent(n);
+					if (expression != null)
+						flow.setConditionExpression(expression);
+				} else if (attribute.equals("name")) {
+					String name = getContent(n);
+					if (name != null)
+						flow.setName(name);
+				}
+			}
+		}
 		setConnections(flow, node, c);
 	}
 
 	protected void addMessageFlowFrom(Node node, ImportContext c) {
-		Edge temp = factory.createMessageFlow(); // only created temporarily - will not appear in diagram
+		Edge temp = new MessageFlow(); // only created temporarily - will not appear in diagram
 		setConnections(temp, node, c);
 		
 		Interaction i = (Interaction)temp.getTarget();
-		i.setSenderRole((Pool)temp.getSource());
+		if (i != null)
+			i.setSenderRole((Pool)temp.getSource());
 		temp.setSource(null); // clean-up
 		temp.setTarget(null); // clean-up
 	}
 
 	protected void addMessageFlowTo(Node node, ImportContext c) {
-		Edge temp = factory.createMessageFlow(); // only created temporarily - will not appear in diagram
+		Edge temp = new MessageFlow(); // only created temporarily - will not appear in diagram
 		setConnections(temp, node, c);
 		
 		Interaction i = (Interaction)temp.getSource();
-		i.setReceiverRole((Pool)temp.getTarget());
+		if (i != null)
+			i.setReceiverRole((Pool)temp.getTarget());
 		temp.setSource(null); // clean-up
 		temp.setTarget(null); // clean-up
 	}
 
-	protected void addDefaultFlow(Node node, ImportContext c) {
-		SequenceFlow flow = factory.createSequenceFlow();
-		flow.setConditionType(SequenceFlow.ConditionType.DEFAULT);
-		c.diagram.getEdges().add(flow);
-		setConnections(flow, node, c);
-	}
-
-	protected void addConditionalFlow(Node node, ImportContext c) {
-		SequenceFlow flow = factory.createSequenceFlow();
-		flow.setConditionType(SequenceFlow.ConditionType.EXPRESSION);
-		c.diagram.getEdges().add(flow);
-		setConnections(flow, node, c);
-	}
-
-	protected void addAssociation(Node node, ImportContext c) {
-		Association ass = factory.createAssociation();
-		c.diagram.getEdges().add(ass);
-		setConnections(ass, node, c);
-	}
+//	protected void addAssociation(Node node, ImportContext c) {
+//		Association ass = factory.createAssociation();
+//		c.diagram.getEdges().add(ass);
+//		setConnections(ass, node, c);
+//	}
 
 	// introduce 2 associations
-	protected void addBidirectionalAssociation(Node node, ImportContext c) {
-		Association ass = factory.createAssociation();
-		c.diagram.getEdges().add(ass);
-		setConnections(ass, node, c);
-		
-		Association ass2 = factory.createAssociation();
-		c.diagram.getEdges().add(ass);
-		ass2.setId(ass.getId());
-		ass2.setResourceId(ass.getResourceId());
-		ass2.setSource(ass.getTarget());
-		ass2.setTarget(ass.getSource());
-	}
+//	protected void addBidirectionalAssociation(Node node, ImportContext c) {
+//		Association ass = factory.createAssociation();
+//		c.diagram.getEdges().add(ass);
+//		setConnections(ass, node, c);
+//		
+//		Association ass2 = factory.createAssociation();
+//		c.diagram.getEdges().add(ass);
+//		ass2.setId(ass.getId());
+//		ass2.setResourceId(ass.getResourceId());
+//		ass2.setSource(ass.getTarget());
+//		ass2.setTarget(ass.getSource());
+//	}
 
-	protected void addUndirectedAssociation(Node node, ImportContext c) {
-		UndirectedAssociation ass = factory.createUndirectedAssociation();
-		c.diagram.getEdges().add(ass);
-		setConnections(ass, node, c);
-	}
+//	protected void addUndirectedAssociation(Node node, ImportContext c) {
+//		UndirectedAssociation ass = factory.createUndirectedAssociation();
+//		c.diagram.getEdges().add(ass);
+//		setConnections(ass, node, c);
+//	}
 
 	protected void setConnections(Edge edge, Node node, ImportContext c) {
 		edge.setResourceId(getResourceId(node));

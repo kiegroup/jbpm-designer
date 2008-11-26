@@ -329,7 +329,7 @@ public class BPMNRDFImporter {
 						n.getNodeName().indexOf(':') + 1);
 
 				// TODO: add further attributes...
-				if (attribute.equals("poolId")) {
+				if (attribute.equals("poolid")) {
 					pool.setId(getContent(n));
 				} else {
 					handleStandardAttributes(attribute, n, pool, c, "Name");
@@ -375,7 +375,7 @@ public class BPMNRDFImporter {
 						n.getNodeName().indexOf(':') + 1);
 
 				// TODO: add further attributes...
-				// if (attribute.equals("poolId")) {
+				// if (attribute.equals("poolid")) {
 				// pool.setId(getContent(n));
 				// } else {
 				handleStandardAttributes(attribute, n, lane, c, "Name");
@@ -457,7 +457,7 @@ public class BPMNRDFImporter {
 					}
 				}
 				// TODO: add further attributes...
-				// if (attribute.equals("poolId")) {
+				// if (attribute.equals("poolid")) {
 				// pool.setId(getContent(n));
 				// } else {
 				handleStandardAttributes(attribute, n, task, c, "name");

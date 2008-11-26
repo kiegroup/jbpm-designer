@@ -7,9 +7,15 @@ import org.w3c.dom.Node;
 import de.hpi.PTnet.serialization.PTNetPNMLExporter;
 import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionTransition;
+import de.hpi.interactionnet.Role;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Transition;
 
+/**
+ * 
+ * @author gero.decker
+ *
+ */
 public class InteractionNetPNMLExporter extends PTNetPNMLExporter {
 
 	@Override
@@ -25,14 +31,17 @@ public class InteractionNetPNMLExporter extends PTNetPNMLExporter {
 		if (transition instanceof InteractionTransition) {
 			InteractionTransition t = (InteractionTransition)transition;
 			Element inode = (Element)tnode.appendChild(doc.createElement("interaction"));
-			addContentElement(doc, inode, "sender", t.getSender().getName());
-			addContentElement(doc, inode, "receiver", t.getReceiver().getName());
+			if (t.getSender() != null)
+				addContentElement(doc, inode, "sender", t.getSender().getName());
+			if (t.getReceiver() != null)
+				addContentElement(doc, inode, "receiver", t.getReceiver().getName());
 			addContentElement(doc, inode, "messageType", t.getMessageType());
 	
 		} else if (transition instanceof ActionTransition) {
 			ActionTransition t = (ActionTransition)transition;
 			Element inode = (Element)tnode.appendChild(doc.createElement("action"));
-			addContentElement(doc, inode, "role", t.getRole().getName());
+			for (Role r: t.getRoles())
+				addContentElement(doc, inode, "role", r.getName());
 	
 		}
 

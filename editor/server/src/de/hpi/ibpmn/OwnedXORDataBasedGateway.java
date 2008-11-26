@@ -1,21 +1,21 @@
 package de.hpi.ibpmn;
 
-import de.hpi.bpmn.Pool;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hpi.bpmn.XORDataBasedGateway;
 
 /**
  * @author Gero.Decker
  */
-public class OwnedXORDataBasedGateway extends XORDataBasedGateway implements OwnedGateway {
+public class OwnedXORDataBasedGateway extends XORDataBasedGateway implements OwnedNode {
 	
-	protected Pool owner;
+	protected List<Pool> owners;
 
-	public Pool getDecisionOwner() {
-		return owner;
-	}
-
-	public void setDecisionOwner(Pool owner) {
-		this.owner = owner;
+	public List<Pool> getOwners() {
+		if (owners == null)
+			owners = new ArrayList<Pool>();
+		return owners;
 	}
 
 }

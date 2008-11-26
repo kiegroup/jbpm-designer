@@ -20,6 +20,7 @@ import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
+import de.hpi.bpmn.analysis.BPMNNormalizer;
 import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.bpmn2pn.model.HighConversionContext;
 import de.hpi.bpmn2pn.model.SubProcessPlaces;
@@ -60,6 +61,12 @@ public class HighConverter extends StandardConverter {
 		return (HighPetriNet)super.convert();
 	}
 
+	@Override
+	protected void handleDiagram(PetriNet net, ConversionContext c) {
+		(new BPMNNormalizer(diagram)).normalize();
+		super.handleDiagram(net, c);
+	}
+
 	protected HighFlowRelationship addResetFlowRelationship(PetriNet net,
 			de.hpi.petrinet.Place source, de.hpi.petrinet.Transition target) {	
 		HighFlowRelationship rel = (HighFlowRelationship)addFlowRelationship(net, source, target);
@@ -95,7 +102,7 @@ public class HighConverter extends StandardConverter {
 	}
 	
 	@Override
-	protected LabeledTransition addLabeledTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel, String label) {
+	protected LabeledTransition addLabeledTransition(PetriNet net, String id, DiagramObject BPMNObj, int autoLevel, String label, ConversionContext c) {
 		HighLabeledTransition t = (HighLabeledTransition) addSimpleLabeledTransition(net, id, label);
 		t.setBPMNObj(BPMNObj);
 		return t;
@@ -279,7 +286,7 @@ public class HighConverter extends StandardConverter {
 	@Override
 	protected void handleAttachedIntermediateEventForSubProcess(PetriNet net,
 			IntermediateEvent event, ConversionContext c) {
-		Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel());
+		Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel(), c);
 		handleMessageFlow(net, event, t, t, c);
 
 		SubProcessPlaces pl = c.getSubprocessPlaces((SubProcess) event
@@ -325,7 +332,7 @@ public class HighConverter extends StandardConverter {
 			//All Events except of EndTerminateEvent and EndPlainEvent shouldn't be connected to regular end event
 			//TODO trigger somehow (using node id) intermediate events
 			if(!(event instanceof EndPlainEvent)){
-				Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel());
+				Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel(), c);
 				handleMessageFlow(net, event, t, t, c);
 				addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(event)), t);
 				if (c.ancestorHasExcpH)
@@ -370,7 +377,7 @@ public class HighConverter extends StandardConverter {
 	}
 	
 	protected Transition handleEndTerminateEvent(PetriNet net, EndTerminateEvent event, ConversionContext c){
-		Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel());
+		Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel(), c);
 		handleMessageFlow(net, event, t, t, c);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(event)), t);
 		Place p = c.getSubprocessPlaces(event.getProcess()).endP;

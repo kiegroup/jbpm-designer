@@ -9,6 +9,7 @@ import de.hpi.PTnet.PTNet;
 import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.InteractionTransition;
+import de.hpi.interactionnet.Role;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.PetriNet;
@@ -399,7 +400,8 @@ public class LocalModelGenerator {
 			ActionTransition ta = (ActionTransition)t;
 			ActionTransition tnew = ((InteractionNet)net).getFactory().createActionTransition();
 			tnew.setLabel(ta.getLabel());
-			tnew.setRole(ta.getRole());
+			for (Role r: ta.getRoles())
+				tnew.getRoles().add(r);
 			return tnew;
 		} else {
 			SilentTransition tnew = net.getFactory().createSilentTransition();

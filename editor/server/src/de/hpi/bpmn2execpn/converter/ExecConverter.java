@@ -100,12 +100,12 @@ public class ExecConverter extends Converter {
 	}
 	
 	@Override
-	protected Transition addXOROptionTransition(PetriNet net, Edge e) {
+	protected Transition addXOROptionTransition(PetriNet net, Edge e, ConversionContext c) {
 		String name = e.getId();
 		if(e.getName() != null && e.getName().length() > 0)
 			name = e.getName();
 			
-		return addLabeledTransition(net, "option"+e.getId(), e, 0, name);
+		return addLabeledTransition(net, "option"+e.getId(), e, 0, name, c);
 	}
 	
 	@Override
@@ -121,7 +121,7 @@ public class ExecConverter extends Converter {
 			process = event.getParent();
 		}
 
-		Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel());
+		Transition t = addLabeledTransition(net, event.getId(), event, 0, event.getLabel(), c);
 		handleMessageFlow(net, event, t, t, c);
 		addFlowRelationship(net, c.map.get(getIncomingSequenceFlow(event)), t);
 		Place p = c.getSubprocessPlaces(process).endP;

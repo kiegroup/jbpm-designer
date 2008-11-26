@@ -9,15 +9,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.InteractionNetFactory;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.interactionnet.Role;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.SilentTransition;
 
 /**
  * main method: loadIPN()
+ * 
+ * Attention: only the first role of an action transition is loaded 
  * 
  * @author gero.decker
  *
@@ -62,6 +66,10 @@ public class InteractionNetRDFImporter {
 				addPlace(node, c);
 			} else if (type.equals("Interaction")) {
 				addInteraction(node, c);
+			} else if (type.equals("ControlledSilentTransition")) {
+				addControlledSilentTransition(node, c);
+			} else if (type.equals("SilentTransition")) {
+				addSilentTransition(node, c);
 			} else if (type.equals("Arc")) {
 				edges.add(node);
 			}
@@ -115,6 +123,50 @@ public class InteractionNetRDFImporter {
 			} else if (attribute.equals("messagetype")) {
 				t.setMessageType(getContent(n));
 			} else if (attribute.equals("outgoing")) {
+				c.connections.put(getResourceId(getAttributeValue(n, "rdf:resource")), t);
+			}
+		}
+		if (t.getId() == null)
+			t.setId(getResourceId(node));
+	}
+
+	protected void addControlledSilentTransition(Node node, ImportContext c) {
+		ActionTransition t = factory.createActionTransition();
+		c.net.getTransitions().add(t);
+		c.objects.put(getResourceId(node), t);
+		
+		for (Node n=node.getFirstChild(); n != null; n=n.getNextSibling()) {
+			if (n instanceof Text) continue;
+			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
+			
+			if (attribute.equals("roles")) {
+				addRoles(t, getContent(n), c);
+			} else if (attribute.equals("outgoing")) {
+				c.connections.put(getResourceId(getAttributeValue(n, "rdf:resource")), t);
+			}
+		}
+		if (t.getId() == null)
+			t.setId(getResourceId(node));
+	}
+
+	private void addRoles(ActionTransition t, String roleString, ImportContext c) {
+		// extract role names from comma-separated list
+		String[] roles = roleString.split(",");
+		for (String r: roles) {
+			t.getRoles().add(findOrCreateRole(r, c));
+		}
+	}
+
+	protected void addSilentTransition(Node node, ImportContext c) {
+		SilentTransition t = factory.createSilentTransition();
+		c.net.getTransitions().add(t);
+		c.objects.put(getResourceId(node), t);
+		
+		for (Node n=node.getFirstChild(); n != null; n=n.getNextSibling()) {
+			if (n instanceof Text) continue;
+			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
+			
+			if (attribute.equals("outgoing")) {
 				c.connections.put(getResourceId(getAttributeValue(n, "rdf:resource")), t);
 			}
 		}
