@@ -58,6 +58,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		var activity = elements.find(function(node) {
 				return (Array.indexOf(node.getStencil().roles(), node.getStencil().namespace() + "activity")>= 0);
+				        //& !(node.getStencil().id() == node.getStencil().namespace() + "scope"));
 		    });
 		
      	var eventHandlers = elements.find(function(node) {
@@ -78,6 +79,8 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		var nextLeftBound = 30;
 		var nextUpperBound = 30;
+		var width;
+		var maxWidth = 0;
 		
 		// handle Activity
 		if (activity){
@@ -88,20 +91,87 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		if (eventHandlers){
 			eventHandlers.bounds.moveTo(nextLeftBound, nextUpperBound);
 			nextUpperBound = eventHandlers.bounds.lowerRight().y + 10;
+			
+			// record maximal width
+			width = eventHandlers.bounds.width();
+			if (width > maxWidth){
+				maxWidth = width;
+			}
 		}
 		// handle FaultHandlers
 		if (faultHandlers){
 			faultHandlers.bounds.moveTo(nextLeftBound, nextUpperBound);
 			nextUpperBound = faultHandlers.bounds.lowerRight().y + 10;
+			
+			// record maximal width
+			width = faultHandlers.bounds.width();
+			if (width > maxWidth){
+				maxWidth = width;
+			}
 		}
 		// handle CompensationHandler
 		if (compensationHandler){
 			compensationHandler.bounds.moveTo(nextLeftBound, nextUpperBound);
 			nextUpperBound = compensationHandler.bounds.lowerRight().y + 10;
+			
+			// record maximal width
+			width = compensationHandler.bounds.width();
+			if (width > maxWidth){
+				maxWidth = width;
+			}
 		}
+		
 		// handle TerminationHandler
      	if (terminationHandler){
 			terminationHandler.bounds.moveTo(nextLeftBound, nextUpperBound);
+			
+			// record maximal width
+			width = terminationHandler.bounds.width();
+			if (width > maxWidth){
+				maxWidth = width;
+			}
+		}
+		
+		// resize all the handlers with the same width
+		if (width > 0){
+			var ul;
+			var lr;
+			
+			if (eventHandlers){	
+				width = eventHandlers.bounds.width();
+				if (width < maxWidth){
+					ul = eventHandlers.bounds.upperLeft();
+					lr = eventHandlers.bounds.lowerRight();
+					eventHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+				}
+			}
+
+			if (faultHandlers){
+				width = faultHandlers.bounds.width();
+				if (width < maxWidth){
+					ul = faultHandlers.bounds.upperLeft();
+					lr = faultHandlers.bounds.lowerRight();
+					faultHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+				}
+			}
+
+			if (compensationHandler){
+				width = compensationHandler.bounds.width();
+				if (width < maxWidth){
+					ul = compensationHandler.bounds.upperLeft();
+					lr = compensationHandler.bounds.lowerRight();
+					compensationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+				}
+			}
+			
+	     	if (terminationHandler){
+				width = terminationHandler.bounds.width();
+				if (width < maxWidth){
+					ul = terminationHandler.bounds.upperLeft();
+					lr = terminationHandler.bounds.lowerRight();
+					terminationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+				}
+			}
 		}
 		
 		this.autoResizeLayout(event);
@@ -210,6 +280,27 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	},
 	
 	handleAutoResizeLayoutEvent: function(event) {
+		
+		var elements = event.shape.getChildShapes(false);
+		
+		// If there are no elements
+		if(!elements || elements.length == 0) {
+			return;
+		};
+		
+		elements.each(function(element){
+		
+			var ul = element.bounds.upperLeft();
+			
+			if ((ul.x < 30)) {
+				element.bounds.moveTo(30, ul.y);
+				ul = element.bounds.upperLeft();
+			}
+			
+			if ((ul.y < 30)) {
+				element.bounds.moveTo(ul.x, 30);
+			}
+		});
 		
 		this.autoResizeLayout(event);
 	},
