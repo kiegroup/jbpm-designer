@@ -42,6 +42,8 @@
        x="0"
        height="200"
        width="690"
+       rx="10" 
+       ry="10"
        id="mainBody"
 	   oryx:resize="vertical horizontal"
 	   fill="white"
