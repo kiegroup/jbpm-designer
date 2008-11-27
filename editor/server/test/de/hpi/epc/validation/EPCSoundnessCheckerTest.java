@@ -17,6 +17,8 @@ import de.hpi.epc.AbstractEPCTest;
 public class EPCSoundnessCheckerTest extends AbstractEPCTest {
 	IEPC epc;
 	EPCSoundnessChecker soundnessChecker;
+	IEPC epcWithLoop;
+	EPCSoundnessChecker epcWithLoopSC;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -31,6 +33,9 @@ public class EPCSoundnessCheckerTest extends AbstractEPCTest {
 		epc = openEpcFromFile("simpleEPC.rdf");
 		soundnessChecker = new EPCSoundnessChecker(epc);
 		soundnessChecker.calculate();
+		epcWithLoop = openEpcFromFile("epcWithLoop.rdf");
+		epcWithLoopSC = new EPCSoundnessChecker(epcWithLoop);
+		epcWithLoopSC.calculate();
 	}
 
 	@After
@@ -39,7 +44,11 @@ public class EPCSoundnessCheckerTest extends AbstractEPCTest {
 	
 	@Test
 	public void testIsSound(){
+		System.out.println(epcWithLoopSC.badEndArcs.size());
+		System.out.println(epcWithLoopSC.badStartArcs.size());
+		
 		assertTrue(soundnessChecker.isSound());
+		assertTrue(epcWithLoopSC.isSound());
 	}
 	
 	@Test

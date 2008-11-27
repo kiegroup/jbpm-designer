@@ -176,11 +176,35 @@ ORYX.Plugins.BPMNValidator = Ext.extend(ORYX.Plugins.Validator, {
 ORYX.Plugins.EPCValidator = Ext.extend(ORYX.Plugins.Validator, {
     handleValidationResponse: function(result){
         var isSound = result.isSound;
+        var badStartArcs = result.badStartArcs;
+        var badEndArcs = result.badStartArcs;
         
         if (isSound) {
             Ext.Msg.alert("Oryx", "The process is sound, no problems found!");
         } else {
             Ext.Msg.alert("Oryx", "The process is not sound!");
+            
+            if (badStartArcs) {
+              badStartArcs.each(function(node){
+                sh = this.facade.getCanvas().getChildShapeByResourceId(node.id);
+                if (sh) {
+                  this.showOverlay(sh, "Some following pathes will never reach a final state!");
+                }
+              }
+.bind(this));
+            }
+            
+            if (badEndArcs) {
+              badEndArcs.each(function(node){
+                sh = this.facade.getCanvas().getChildShapeByResourceId(node.id);
+                if (sh) {
+                  this.showOverlay(sh, "Some following pathes will never reach a final state!");
+                }
+              }
+.bind(this));
+            }
+            
+            this.active = !this.active; //for indicating that there are overlays
         }
     }
 });

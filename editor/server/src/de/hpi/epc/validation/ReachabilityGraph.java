@@ -8,7 +8,6 @@ import java.util.Stack;
 
 import de.hpi.bpt.graph.abs.AbstractDirectedGraph;
 import de.hpi.bpt.graph.algo.DirectedGraphAlgorithms;
-import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.epc.Marking;
@@ -45,7 +44,13 @@ public class ReachabilityGraph extends AbstractDirectedGraph<Transition, Marking
 		calculate(initialMarkings);
 	}
 	
+	public void clear(){
+		this.getVertices().clear();
+	}
+	
 	public void calculate(List<Marking> initialMarkings){
+		clear();
+				
 		Stack<Marking> toBePropagated = new Stack<Marking>();
 		System.out.println("InitialMarking: " + initialMarkings.get(0).toString());
 		toBePropagated.addAll(initialMarkings);
@@ -55,11 +60,20 @@ public class ReachabilityGraph extends AbstractDirectedGraph<Transition, Marking
 		while(toBePropagated.size() > 0){
 			Marking currentMarking = toBePropagated.pop();
 			Marking oldMarking = currentMarking.clone();
-			List<NodeNewMarkingPair> nodeNewMarkings = currentMarking.propagate(diag);
+			List<NodeNewMarkingPair> nodeNewMarkings = currentMarking.clone().propagate(diag);
 			propagated.add(oldMarking);
 			for(NodeNewMarkingPair nodeNewMarking : nodeNewMarkings){
 				add(oldMarking, nodeNewMarking.newMarking, nodeNewMarking.node);
-				if(!propagated.contains(nodeNewMarking.newMarking)){
+				
+				//TODO why cannot be used propagate.contains? 
+				boolean contains = false;
+				for(Marking m : propagated){
+					if(m.equals(nodeNewMarking.newMarking)){
+						contains = true;
+					}
+				}
+				//if(!propagated.contains(nodeNewMarking.newMarking)){
+				if(!contains){
 					toBePropagated.push(nodeNewMarking.newMarking);
 				}
 			}
@@ -67,7 +81,6 @@ public class ReachabilityGraph extends AbstractDirectedGraph<Transition, Marking
 	}
 	
 	public void add(Marking fromMarking, Marking toMarking, IFlowObject node){
-		// Markings with no tokens anymore shouldn't be added
 		if(!toMarking.hasToken(diag))
 			return;
 		
@@ -82,12 +95,36 @@ public class ReachabilityGraph extends AbstractDirectedGraph<Transition, Marking
 			addVertex(toMarkingNode);
 		}
 		
-		Transition transition = new Transition(fromMarkingNode, toMarkingNode, node);
-		addEdge(transition);
+		// Only add new transition if there isn't already one
+		if(this.getEdgesWithSourceAndTarget(fromMarkingNode, toMarkingNode).size() == 0){
+			Transition transition = new Transition(fromMarkingNode, toMarkingNode, node);
+			addEdge(transition);
+		}
 	}
+	
+	/*public void doubledMarkings(){
+		for( Marking m1 : getMarkings() ){
+			for( Marking m2 : getMarkings() ){
+				if(m1 == m2)
+					break;
+				if(m1.equals(m2)){
+					System.out.print("+"+m2.toString());
+					return;
+				}
+			}
+		}
+	}*/
 	
 	public boolean contains(Marking m){
 		return findByMarking(m) != null;
+	}
+	
+	public List<Marking> getMarkings(){
+		List<Marking> markings = new LinkedList<Marking>();
+		for(MarkingNode mNode : this.getVertices()){
+			markings.add(mNode.getMarking());
+		}
+		return markings;
 	}
 	
 	public MarkingNode findByMarking(Marking m){
@@ -141,32 +178,5 @@ public class ReachabilityGraph extends AbstractDirectedGraph<Transition, Marking
 			list.add(node.getMarking());
 		}
 		return list;
-	}
-	
-	// Returns a list of nodes that do not have a positive
-	// token in any marking of the MarkingList.
-	public List<IControlFlow> missing(List<Marking> markings){
-		LinkedList<IControlFlow> missings = new LinkedList<IControlFlow>();
-		
-		// Initialize list with all start and end arcs
-		for(IControlFlow cf : diag.getControlFlow()){
-			if(diag.getIncomingControlFlow(cf.getSource()).size() == 0){
-				missings.add(cf);
-			} else if (diag.getOutgoingControlFlow(cf.getTarget()).size() == 0){
-				missings.add(cf);
-			}
-		}
-		
-		// For each marking, those arcs with a positive token are deleted
-		for(Marking marking : markings) {
-			List<IControlFlow> missingsClone = (List<IControlFlow>)missings.clone();
-			for(IControlFlow cf : missingsClone){
-				if(marking.state.get(cf) == Marking.State.POS_TOKEN){
-					missings.remove(cf);
-				}
-			}
-		}
-		
-		return missings;
 	}
 }

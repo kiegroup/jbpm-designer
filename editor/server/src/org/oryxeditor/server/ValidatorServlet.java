@@ -25,6 +25,7 @@ import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn.validation.BPMNValidator;
 import de.hpi.bpt.process.epc.EPCFactory;
+import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.util.OryxParser;
 import de.hpi.epc.validation.EPCSoundnessChecker;
@@ -121,6 +122,22 @@ public class ValidatorServlet extends HttpServlet {
 		try{
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("isSound", soundChecker.isSound());
+			
+			JSONArray badStartArcs = new JSONArray();
+			for(IControlFlow node: soundChecker.badStartArcs){
+				JSONObject nodeObject = new JSONObject();
+				nodeObject.put("id", node.getId());
+				badStartArcs.put(nodeObject);
+			}
+			jsonObject.put("badStartArcs", badStartArcs);
+			
+			JSONArray badEndArcs = new JSONArray();
+			for(IControlFlow node: soundChecker.badEndArcs){
+				JSONObject nodeObject = new JSONObject();
+				nodeObject.put("id", node.getId());
+				badEndArcs.put(nodeObject);
+			}
+			jsonObject.put("badEndNodes", badEndArcs);
 			
 			writer.print(jsonObject.toString());
 		} catch (JSONException exception) {

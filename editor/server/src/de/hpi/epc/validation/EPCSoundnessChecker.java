@@ -92,11 +92,53 @@ public class EPCSoundnessChecker {
 		
 		goodInitialMarkings = goodRoots;
 		goodFinalMarkings = goodLeaves;
-		badStartArcs = rg.missing(goodLeaves);
-		badEndArcs = rg.missing(goodRoots);
+		badStartArcs = missingStartArcs(goodLeaves);
+		badEndArcs = missingEndArcs(goodRoots);
 	}
 	
 	public boolean isSound(){
 		return badStartArcs.size() == 0 && badEndArcs.size() == 0;
+	}
+	
+	public List<IControlFlow> missingStartArcs(List<Marking> markings){
+		LinkedList<IControlFlow> missings = new LinkedList<IControlFlow>();
+		
+		// Initialize list with all start and end arcs
+		for(IControlFlow cf : diag.getControlFlow()){
+			if(diag.getIncomingControlFlow(cf.getSource()).size() == 0){
+				missings.add(cf);
+			}
+		}
+		
+		return missings(markings, missings);
+	}
+	
+	public List<IControlFlow> missingEndArcs(List<Marking> markings){
+		LinkedList<IControlFlow> missings = new LinkedList<IControlFlow>();
+		
+		// Initialize list with all start and end arcs
+		for(IControlFlow cf : diag.getControlFlow()){
+			if(diag.getOutgoingControlFlow(cf.getTarget()).size() == 0){
+				missings.add(cf);
+			}
+		}
+		
+		return missings(markings, missings);
+	}
+	
+	// Returns a list of nodes that do not have a positive
+	// token in any marking of the MarkingList.
+	public List<IControlFlow> missings(List<Marking> markings, LinkedList<IControlFlow> missings){
+		// For each marking, those arcs with a positive token are deleted
+		for(Marking marking : markings) {
+			List<IControlFlow> missingsClone = (List<IControlFlow>)missings.clone();
+			for(IControlFlow cf : missingsClone){
+				if(marking.state.get(cf) == Marking.State.POS_TOKEN){
+					missings.remove(cf);
+				}
+			}
+		}
+		
+		return missings;
 	}
 }

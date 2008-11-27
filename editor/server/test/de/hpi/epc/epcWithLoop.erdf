@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div class="processdata">
+    <div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width: 1200px; height: 600px;">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Diagram
+        </span>
+        <span class="oryx-title">
+        </span>
+        <span class="oryx-version">
+        </span>
+        <span class="oryx-author">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-mode">
+            writable
+        </span>
+        <span class="oryx-mode">
+            fullscreen
+        </span>
+        <a rel="oryx-stencilset" href="./stencilsets/epc/epc.json"/><a rel="oryx-render" href="#oryx_080932E9-84A5-4806-8DF0-260DC9C947F5"/><a rel="oryx-render" href="#oryx_B277710E-3B94-4E72-A850-F6ABB8CE7EB4"/><a rel="oryx-render" href="#oryx_3D554242-0888-4C75-91A9-E265053A8108"/><a rel="oryx-render" href="#oryx_7F899535-C248-4FBC-AB29-BFA23CB5D7A6"/><a rel="oryx-render" href="#oryx_AC340264-BF38-44DC-9DD4-297412FAB5BB"/><a rel="oryx-render" href="#oryx_A25D5761-E76F-40EE-967C-F5E32988F209"/><a rel="oryx-render" href="#oryx_83ECF3F8-285A-45A3-9AA3-7E0706B060A7"/><a rel="oryx-render" href="#oryx_90F9938F-A779-434D-A2C6-FBE55EE81BA9"/><a rel="oryx-render" href="#oryx_DA49CA7F-9CD1-4FDB-94DB-E22F9A578832"/><a rel="oryx-render" href="#oryx_D593366C-6EAC-44E6-ADF8-4516D73C5345"/><a rel="oryx-render" href="#oryx_0945973B-511C-44DF-B6FD-DD4F017BE833"/><a rel="oryx-render" href="#oryx_D484B5B3-923C-4182-82AB-FCA9FBD1C449"/><a rel="oryx-render" href="#oryx_9BB86D97-C4FF-4915-BEE0-30D871724CF4"/><a rel="oryx-render" href="#oryx_D2930919-89EB-456B-930F-758EB01CBE67"/><a rel="oryx-render" href="#oryx_EEB8C511-C64F-4921-9608-759981974D1F"/><a rel="oryx-render" href="#oryx_99BD57E4-5C56-448A-A2BB-37CE497B1A14"/><a rel="oryx-render" href="#oryx_1B75FBC9-7BED-4439-9ECF-2C374E367351"/><a rel="oryx-render" href="#oryx_A720C596-DE18-4D75-9F54-E37D5FC94D93"/>
+    </div>
+    <div id="oryx_080932E9-84A5-4806-8DF0-260DC9C947F5">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Event
+        </span>
+        <span class="oryx-title">
+            e4
+        </span>
+        <span class="oryx-commonness">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-bgcolor">
+            #ffafff
+        </span>
+        <span class="oryx-bounds">
+            260.63101125947315,82.30452987141258,360.63101125947315,142.30452987141257
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_3D554242-0888-4C75-91A9-E265053A8108"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_B277710E-3B94-4E72-A850-F6ABB8CE7EB4">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Function
+        </span>
+        <span class="oryx-title">
+            f4
+        </span>
+        <span class="oryx-time">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-refuri">
+        </span>
+        <span class="oryx-bgcolor">
+            #96ff96
+        </span>
+        <span class="oryx-bounds">
+            255,191,355,251
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_AC340264-BF38-44DC-9DD4-297412FAB5BB"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_3D554242-0888-4C75-91A9-E265053A8108">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            313.1308404687195,142.73249822090543,317.05456685320854,190.49216988075608
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_B277710E-3B94-4E72-A850-F6ABB8CE7EB4"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            50 29.999999999999993 63 11  #
+        </span>
+        <a rel="raziel-target" href="#oryx_B277710E-3B94-4E72-A850-F6ABB8CE7EB4"/>
+    </div>
+    <div id="oryx_7F899535-C248-4FBC-AB29-BFA23CB5D7A6">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#XorConnector
+        </span>
+        <span class="oryx-bgcolor">
+            #ffffff
+        </span>
+        <span class="oryx-bounds">
+            290,342,320,372
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_A25D5761-E76F-40EE-967C-F5E32988F209"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_AC340264-BF38-44DC-9DD4-297412FAB5BB">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            305.42013754949073,251.24990356333456,306.67361245050927,341.50009643666544
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_7F899535-C248-4FBC-AB29-BFA23CB5D7A6"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            50 30 17 23  #
+        </span>
+        <a rel="raziel-target" href="#oryx_7F899535-C248-4FBC-AB29-BFA23CB5D7A6"/>
+    </div>
+    <div id="oryx_A25D5761-E76F-40EE-967C-F5E32988F209">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            314.77439359742016,368.92977269838974,474.99123140257984,564.4764773016103
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_83ECF3F8-285A-45A3-9AA3-7E0706B060A7"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            15 15 50 30  #
+        </span>
+        <a rel="raziel-target" href="#oryx_83ECF3F8-285A-45A3-9AA3-7E0706B060A7"/>
+    </div>
+    <div id="oryx_83ECF3F8-285A-45A3-9AA3-7E0706B060A7">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Event
+        </span>
+        <span class="oryx-title">
+            e3b
+        </span>
+        <span class="oryx-commonness">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-bgcolor">
+            #ffafff
+        </span>
+        <span class="oryx-bounds">
+            450,565,550,625
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_DA49CA7F-9CD1-4FDB-94DB-E22F9A578832"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_90F9938F-A779-434D-A2C6-FBE55EE81BA9">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Function
+        </span>
+        <span class="oryx-title">
+            f3b
+        </span>
+        <span class="oryx-time">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-refuri">
+        </span>
+        <span class="oryx-bgcolor">
+            #96ff96
+        </span>
+        <span class="oryx-bounds">
+            441,671,541,731
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_0945973B-511C-44DF-B6FD-DD4F017BE833"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_DA49CA7F-9CD1-4FDB-94DB-E22F9A578832">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            493.6158512639523,625.8089148865496,497.3841487360477,670.1910851134504
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_90F9938F-A779-434D-A2C6-FBE55EE81BA9"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            50 30 50 30  #
+        </span>
+        <a rel="raziel-target" href="#oryx_90F9938F-A779-434D-A2C6-FBE55EE81BA9"/>
+    </div>
+    <div id="oryx_D593366C-6EAC-44E6-ADF8-4516D73C5345">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#XorConnector
+        </span>
+        <span class="oryx-bgcolor">
+            #ffffff
+        </span>
+        <span class="oryx-bounds">
+            230,905,260,935
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_9BB86D97-C4FF-4915-BEE0-30D871724CF4"/><a rel="raziel-outgoing" href="#oryx_A720C596-DE18-4D75-9F54-E37D5FC94D93"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_0945973B-511C-44DF-B6FD-DD4F017BE833">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            256.3172190604916,731.6063352611693,456.6202809395084,909.9249147388307
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_D593366C-6EAC-44E6-ADF8-4516D73C5345"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            50 30 15 15  #
+        </span>
+        <a rel="raziel-target" href="#oryx_D593366C-6EAC-44E6-ADF8-4516D73C5345"/>
+    </div>
+    <div id="oryx_D484B5B3-923C-4182-82AB-FCA9FBD1C449">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Event
+        </span>
+        <span class="oryx-title">
+            e2
+        </span>
+        <span class="oryx-commonness">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-bgcolor">
+            #ffafff
+        </span>
+        <span class="oryx-bounds">
+            40,731,140,791
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_EEB8C511-C64F-4921-9608-759981974D1F"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_9BB86D97-C4FF-4915-BEE0-30D871724CF4">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            119.76054241518837,791.5285564129997,234.00898883481162,908.7253498370003
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_D484B5B3-923C-4182-82AB-FCA9FBD1C449"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            15 15 50 30  #
+        </span>
+        <a rel="raziel-target" href="#oryx_D484B5B3-923C-4182-82AB-FCA9FBD1C449"/>
+    </div>
+    <div id="oryx_D2930919-89EB-456B-930F-758EB01CBE67">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Function
+        </span>
+        <span class="oryx-title">
+            f2
+        </span>
+        <span class="oryx-time">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-refuri">
+        </span>
+        <span class="oryx-bgcolor">
+            #96ff96
+        </span>
+        <span class="oryx-bounds">
+            16,569,116,629
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_99BD57E4-5C56-448A-A2BB-37CE497B1A14"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_EEB8C511-C64F-4921-9608-759981974D1F">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            70.45904866108947,629.0985784623539,85.54095133891053,730.9014215376461
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_D2930919-89EB-456B-930F-758EB01CBE67"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            50 30 50 30  #
+        </span>
+        <a rel="raziel-target" href="#oryx_D2930919-89EB-456B-930F-758EB01CBE67"/>
+    </div>
+    <div id="oryx_99BD57E4-5C56-448A-A2BB-37CE497B1A14">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            95.64408913464615,368.10994067190114,294.02778586535385,568.9838093280989
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_7F899535-C248-4FBC-AB29-BFA23CB5D7A6"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            50 30 15 15  #
+        </span>
+        <a rel="raziel-target" href="#oryx_7F899535-C248-4FBC-AB29-BFA23CB5D7A6"/>
+    </div>
+    <div id="oryx_1B75FBC9-7BED-4439-9ECF-2C374E367351">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#Event
+        </span>
+        <span class="oryx-title">
+            e5
+        </span>
+        <span class="oryx-commonness">
+        </span>
+        <span class="oryx-description">
+        </span>
+        <span class="oryx-bgcolor">
+            #ffafff
+        </span>
+        <span class="oryx-bounds">
+            176,962,276,1022
+        </span>
+        <a rel="raziel-parent" href="#oryx-canvas123"/>
+    </div>
+    <div id="oryx_A720C596-DE18-4D75-9F54-E37D5FC94D93">
+        <span class="oryx-type">
+            http://b3mn.org/stencilset/epc#ControlFlow
+        </span>
+        <span class="oryx-probability">
+        </span>
+        <span class="oryx-bounds">
+            233.973904261231,935.0294003583491,241.033908238769,961.7830996416509
+        </span>
+        <a rel="raziel-outgoing" href="#oryx_1B75FBC9-7BED-4439-9ECF-2C374E367351"/><a rel="raziel-parent" href="#oryx-canvas123"/>
+        <span class="oryx-dockers">
+            15 15 50 30  #
+        </span>
+        <a rel="raziel-target" href="#oryx_1B75FBC9-7BED-4439-9ECF-2C374E367351"/>
+    </div>
+</div>
