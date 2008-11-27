@@ -93,7 +93,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			nextUpperBound = eventHandlers.bounds.lowerRight().y + 10;
 			
 			// record maximal width
-			width = eventHandlers.bounds.width();
+			width = this.getRightestBoundOfAllChildren(eventHandlers)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -104,7 +104,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			nextUpperBound = faultHandlers.bounds.lowerRight().y + 10;
 			
 			// record maximal width
-			width = faultHandlers.bounds.width();
+			width = this.getRightestBoundOfAllChildren(faultHandlers)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -115,7 +115,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			nextUpperBound = compensationHandler.bounds.lowerRight().y + 10;
 			
 			// record maximal width
-			width = compensationHandler.bounds.width();
+			width = this.getRightestBoundOfAllChildren(compensationHandler)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -126,7 +126,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			terminationHandler.bounds.moveTo(nextLeftBound, nextUpperBound);
 			
 			// record maximal width
-			width = terminationHandler.bounds.width();
+			width = this.getRightestBoundOfAllChildren(terminationHandler)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -139,7 +139,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			
 			if (eventHandlers){	
 				width = eventHandlers.bounds.width();
-				if (width < maxWidth){
+				if (width !== maxWidth){
 					ul = eventHandlers.bounds.upperLeft();
 					lr = eventHandlers.bounds.lowerRight();
 					eventHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
@@ -148,7 +148,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 
 			if (faultHandlers){
 				width = faultHandlers.bounds.width();
-				if (width < maxWidth){
+				if (width !== maxWidth){
 					ul = faultHandlers.bounds.upperLeft();
 					lr = faultHandlers.bounds.lowerRight();
 					faultHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
@@ -157,7 +157,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 
 			if (compensationHandler){
 				width = compensationHandler.bounds.width();
-				if (width < maxWidth){
+				if (width !== maxWidth){
 					ul = compensationHandler.bounds.upperLeft();
 					lr = compensationHandler.bounds.lowerRight();
 					compensationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
@@ -166,7 +166,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			
 	     	if (terminationHandler){
 				width = terminationHandler.bounds.width();
-				if (width < maxWidth){
+				if (width !== maxWidth){
 					ul = terminationHandler.bounds.upperLeft();
 					lr = terminationHandler.bounds.lowerRight();
 					terminationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
@@ -178,6 +178,23 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		return;
 		
+	},
+	
+	getRightestBoundOfAllChildren : function(shape){
+		var elements = shape.getChildShapes(false);
+		
+		// If there are no elements
+		if(!elements || elements.length == 0) {
+			// 160 is the default width of hanlders
+			return 130;
+		};
+			
+		// Sort left-right
+		elements = elements.sortBy(function(element){
+			return element.bounds.lowerRight().x;
+		});
+		
+		return elements.last().bounds.lowerRight().x;
 	},
 	
 	handleLayoutVerticalEvent: function(event) {
