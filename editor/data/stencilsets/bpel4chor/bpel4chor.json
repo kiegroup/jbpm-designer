@@ -7044,6 +7044,7 @@
 				"role":"assign",
 				"contains": ["copy"]
 			},
+			/* because they are "SingleActivityContainer" and scope belongs to "activity"
 			{
 				"role":"onEvent",
 				"contains":["scope"]
@@ -7051,7 +7052,7 @@
 			{
 				"role":"onAlarm",
 				"contains":["scope"]
-			},			
+			},*/			
 			{
 				"role":"scope",
 				"contains": ["eventHandlers","faultHandlers","terminationHandler","compensationHandler"]

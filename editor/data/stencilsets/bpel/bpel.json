@@ -5198,8 +5198,7 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"handler.png",
-			"roles": ["handler", "singleActivityContainer", "activity"],
-			//"roles": ["handler", "singleActivityContainer"],
+			"roles": ["handler", "singleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
@@ -6983,6 +6982,7 @@
 				"role":"assign",
 				"contains": ["copy"]
 			},
+			/* because they are "SingleActivityContainer" and scope belongs to "activity"
 			{
 				"role":"onEvent",
 				"contains":["scope"]
@@ -6990,7 +6990,7 @@
 			{
 				"role":"onAlarm",
 				"contains":["scope"]
-			},			
+			},*/			
 			{
 				"role":"scope",
 				"contains": ["eventHandlers","faultHandlers","terminationHandler","compensationHandler"]
