@@ -48,8 +48,9 @@
        stroke="black" 
        stroke-width="1"  />
     <path
-       oryx:anchors="right"
+       oryx:anchors="left"
        d="M 286.31219,53.244217 C 286.37914,51.741592 287.61649,50.568329 289.09839,50.602315 C 290.58029,50.6363 291.76414,51.865091 291.76414,53.369251 L 289.03677,53.369251 L 286.31219,53.244217 z M 281.80815,54.191852 L 284.77965,54.059863 M 283.88597,48.881645 L 286.11559,51.302735 M 289.22312,49.465094 L 289.11586,45.808147 M 292.7165,51.867656 L 294.68381,49.123754 M 293.22033,54.052763 L 296.19185,53.920767"
+       transform="translate(-278,10)"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34357333px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
 	<text 
     	oryx:anchors="top left"

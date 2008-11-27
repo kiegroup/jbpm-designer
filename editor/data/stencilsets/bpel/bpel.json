@@ -5202,7 +5202,7 @@
 			//"roles": ["handler", "singleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
  			},
 			"properties": [
 				{
@@ -5249,7 +5249,7 @@
 			"roles": ["handler", "singleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
  			},
 			"properties": [
 				{

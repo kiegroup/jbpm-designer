@@ -29,6 +29,10 @@
 			"view":"others/node.Bpel.svg",
 			"icon":"task.png",
 			"roles": ["singleActivityContainer"],
+			"layout":function(shape) {
+				var raiseEvent = shape._delegateEvent.bind(shape);
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
+ 			},
 			"properties": [
 				{
 					"id":"name",
@@ -1731,7 +1735,7 @@
 			"roles": ["activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL,shape:shape});	
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});	
  			},
 			"properties": [
 				{
@@ -3180,7 +3184,7 @@
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"start_expLang",
@@ -4276,7 +4280,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"type",
@@ -4284,7 +4288,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"element",
@@ -4292,7 +4296,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspectype",
@@ -4451,7 +4455,7 @@
 							"value":"",
 							"prefix":"oryx",
 							"width":110,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecpart",
@@ -4459,7 +4463,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecpartnerLink",
@@ -4478,7 +4482,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},			
 						{
 							"id":"fromspecquerylanguage",
@@ -4486,7 +4490,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"fromspecquery",
@@ -4494,7 +4498,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecproperty",
@@ -4502,7 +4506,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"fromspecexpressionlanguage",
@@ -4510,7 +4514,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecexpression",
@@ -4518,7 +4522,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecliteral",
@@ -4526,7 +4530,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						}
 				]			
 				},
@@ -4554,7 +4558,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"myRole",
@@ -4562,7 +4566,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"partnerRole",
@@ -4570,7 +4574,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"initializePartnerRole",
@@ -4628,7 +4632,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						}
 					]
 				},
@@ -4681,7 +4685,7 @@
 			"roles": ["handler"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
  			},
 			"properties": [
 				{
@@ -5150,7 +5154,7 @@
 			"roles": ["handler"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
  			},
 			"properties": [
 				{
@@ -5197,7 +5201,7 @@
 			"roles": ["handler", "singleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
  			},
 			"properties": [
 				{
@@ -5244,7 +5248,7 @@
 			"roles": ["handler", "singleActivityContainer"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
  			},
 			"properties": [
 				{

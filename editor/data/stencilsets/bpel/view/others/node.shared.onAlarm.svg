@@ -53,10 +53,10 @@
 	   x="10" 
 	   y="70" 
 	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
+	   style="font-family:Arial; font-size: 8pt; fill:black;"
        xml:space="preserve"></text>
-    <path 
-    	oryx:anchors="right" 
+    <path
+    	oryx:anchors="left" 
     	d="	M 284 40 L 284 43.5
     		M 289 41 L 287.5 44
     		M 293 45 L 290 46.5
@@ -71,6 +71,7 @@
     		M 279 41 L 280.5 44
     		M 286 43 L 284 50 L 288 50" 
     	fill="none" 
+    	transform="translate(-265, 0)"
     	stroke="black" />
     <text 
     	oryx:anchors="top left"

@@ -53,10 +53,10 @@
 	     oryx:resize="vertical horizontal"
 	     style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
     <polygon
-       oryx:anchors="middle right"
+       oryx:anchors="middle left"
        points="294,121 293,130.5 289,127.5 286,135 287,124.5 291,128.5 294,121 "
        stroke-miterlimit="10"
-       transform="translate(0.5514706,-59.558824)"
+       transform="translate(-278,-59.558824)"
        style="fill:#000000;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10" />  
 	  <text 
     	oryx:anchors="top left"

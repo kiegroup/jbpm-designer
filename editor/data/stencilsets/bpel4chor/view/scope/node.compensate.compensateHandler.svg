@@ -49,24 +49,24 @@
        stroke-width="1"
        style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
     <polygon 
-		oryx:anchors="right" 
+		oryx:anchors="left" 
 		stroke="black" 
 		fill="black" 
 		stroke-width="1" 
       	points="285,42 285,58 275,50"
       	stroke-linecap="butt" 
       	stroke-linejoin="miter"
-      	transform="translate(0,10)"
+      	transform="translate(-275,10)"
       	stroke-miterlimit="10" /> 
     <polygon 
-		oryx:anchors="right" 
+		oryx:anchors="left" 
 		stroke="black" 
 		fill="black" 
 		stroke-width="1" 
       	points="295,42 295,58 285,50"
       	stroke-linecap="butt" 
       	stroke-linejoin="miter"
-      	transform="translate(0,10)"
+      	transform="translate(-280,10)"
       	stroke-miterlimit="10" />
      <text 
     	oryx:anchors="top left"

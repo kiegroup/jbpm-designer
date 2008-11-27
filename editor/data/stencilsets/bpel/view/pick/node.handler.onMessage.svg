@@ -48,10 +48,11 @@
        stroke="black" 
        stroke-width="1"  />   
 	<polyline 
-		oryx:anchors="right" 
+		oryx:anchors="left" 
 		stroke="black" 
 		fill="none" 
 		stroke-width="1" 
+		transform="translate(-270, 0)"
 		points="279,45 279,55 295,55 295,45 279,45 287,51 295,45" />
   	<text 
     	oryx:anchors="top left"
