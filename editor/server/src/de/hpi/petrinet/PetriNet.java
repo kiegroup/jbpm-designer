@@ -5,6 +5,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.w3c.dom.Document;
+
+import de.hpi.petrinet.serialization.PetriNetPNMLExporter;
+import de.hpi.petrinet.serialization.XMLFileLoaderSaver;
 import de.hpi.petrinet.verification.PetriNetInterpreter;
 import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
 import de.hpi.petrinet.verification.SyntaxChecker;
@@ -101,6 +105,18 @@ public class PetriNet {
 	
 	public PetriNetInterpreter getInterpreter() {
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		try {
+			XMLFileLoaderSaver ls = new XMLFileLoaderSaver();
+			Document doc = ls.createNewDocument();
+			new PetriNetPNMLExporter().savePetriNet(doc, this);
+			return ls.serializeToString(doc);
+		} catch (Exception e) {
+			return super.toString();
+		}		
 	}
 
 	protected class MyFlowRelationshipList extends ArrayList<FlowRelationship> {

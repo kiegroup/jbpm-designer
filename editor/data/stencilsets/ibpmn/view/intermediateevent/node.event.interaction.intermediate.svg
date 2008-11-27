@@ -17,5 +17,11 @@
     <polyline stroke="black" fill="none" stroke-width="1" points="16,17 24,11" />
     <path stroke="white" fill="black" stroke-width="1" d="M8,11 L8,22 L16,22 L16,17z"/>
     <path stroke="white" fill="black" stroke-width="1" d="M7,10 L16,17 L16,10z"/>
+	<text font-size="11" 
+		id="text_name" 
+		x="16" y="33" 
+		oryx:align="top center" 
+		stroke="black"
+	></text>
   </g>
 </svg>

@@ -1,5 +1,6 @@
 package de.hpi.interactionnet;
 
+import de.hpi.PTnet.PTNet;
 import de.hpi.PTnet.PTNetFactory;
 
 
@@ -29,6 +30,11 @@ public class InteractionNetFactory extends PTNetFactory {
 
 	public InteractionTransition createInteractionTransition() {
 		return new InteractionTransition();
+	}
+
+	@Override
+	public PTNet createPetriNet() {
+		return createInteractionNet();
 	}
 
 }

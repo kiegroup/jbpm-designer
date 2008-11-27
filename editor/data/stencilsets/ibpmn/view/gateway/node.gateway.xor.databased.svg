@@ -18,5 +18,11 @@
       <path d="M 11.5 9.5 L 14.5 9.5 L 20.5 22.5 L 17.5 22.5 L 11.5 9.5" fill="black" stroke="black" stroke-width="1" />
       <path d="M 11.5 22.5 L 17.5 9.5 L 20.5 9.5 L 14.5 22.5 L 11.5 22.5" fill="black" stroke="black" stroke-width="1" />
     </g>
+	<text font-size="11" 
+		id="text_roles" 
+		x="18" y="28" 
+		oryx:align="top left" 
+		stroke="black"
+	></text>
   </g>
 </svg>

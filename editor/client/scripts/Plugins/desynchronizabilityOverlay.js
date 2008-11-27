@@ -95,7 +95,7 @@ ORYX.Plugins.DesynchronizabilityOverlay = Clazz.extend({
 		try {
 			var rdf = xsltProcessor.transformToDocument(parsedDOM);
 			var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
-			serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
+//			serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
 			
 			// Send the request to the server.
 			new Ajax.Request(ORYX.CONFIG.DESYNCHRONIZABILITY_URL, {

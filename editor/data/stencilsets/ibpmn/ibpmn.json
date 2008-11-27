@@ -26,18 +26,6 @@
 					"length":"50"
 				},
 				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"Name is an attribute that is text description of the Diagram.",
-					"readonly":false,
-					"optional":false,
-					"length":"50",
-					"refToView":"diagramtext",
-					"wrapLines":true
-				},
-				{
 					"id":"version",
 					"type":"String",
 					"title":"Version",
@@ -76,47 +64,6 @@
 					"readonly":false,
 					"optional":true,
 					"length":"50"
-				},
-				{
-					"id":"queryLanguage",
-					"type":"String",
-					"title":"QueryLanguage",
-					"value":"",
-					"description":"A Language may be provided so that the syntax of queries used in the Diagram can be understood.",
-					"readonly":false,
-					"optional":true,
-					"length":"50"
-				},
-				{
-					"id":"creationDate",
-					"type":"Date",
-					"title":"CreationDate",
-					"value":"10/07/07",
-					"description":"This defines the date on which the Diagram was created.",
-					"readonly":false,
-					"optional":true,
-					"dateFormat":"j/m/y"
-				},
-				{
-					"id":"modificationDate",
-					"type":"Date",
-					"title":"ModificationDate",
-					"value":"10/07/07",
-					"description":"This defines the date on which the Diagram was last modified.",
-					"readonly":false,
-					"optional":true,
-					"dateFormat":"j/m/y"
-				},
-				{
-					"id":"pools",
-					"type":"String",
-					"title":"Pools",
-					"value":"",
-					"description":"A Business Process Diagramm shall contain one or more Pools.",
-					"readonly":false,
-					"optional":false,
-					"length":"50",
-					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -325,7 +272,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
+					"refToView":"text_name",
 					"length":""
 				},
 				{
@@ -468,7 +415,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
+					"refToView":"text_roles",
 					"length":"30"
 				},
 				{
@@ -757,7 +704,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
+					"refToView":"text_name",
 					"length":""
 				},
 				{

@@ -16,6 +16,7 @@ import de.hpi.bpmn2pn.model.ConversionContext;
 import de.hpi.ibpmn.Interaction;
 import de.hpi.ibpmn.OwnedNode;
 import de.hpi.interactionnet.ActionTransition;
+import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.InteractionNetFactory;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.interactionnet.Role;
@@ -55,8 +56,8 @@ public class IBPMNConverter extends StandardConverter {
 			net.getTransitions().add(t);
 			t.setId(id);
 			t.setLabel(label);
-			t.setSender(findOrCreateRole(i.getSenderRole(), (IBPMNConversionContext)c));
-			t.setReceiver(findOrCreateRole(i.getReceiverRole(), (IBPMNConversionContext)c));
+			t.setSender(findOrCreateRole((InteractionNet)net, i.getSenderRole(), (IBPMNConversionContext)c));
+			t.setReceiver(findOrCreateRole((InteractionNet)net, i.getReceiverRole(), (IBPMNConversionContext)c));
 			t.setMessageType(((Node)obj).getLabel());
 			return t;
 		
@@ -67,7 +68,7 @@ public class IBPMNConverter extends StandardConverter {
 			t.setId(id);
 			t.setLabel(label);
 			for (Pool p: on.getOwners())
-				t.getRoles().add(findOrCreateRole(p, (IBPMNConversionContext)c));
+				t.getRoles().add(findOrCreateRole((InteractionNet)net, p, (IBPMNConversionContext)c));
 			return t;
 
 		} else if (obj instanceof StartPlainEvent || obj instanceof EndPlainEvent) {
@@ -85,14 +86,15 @@ public class IBPMNConverter extends StandardConverter {
 		t.setId(e.getId());
 		t.setLabel(((SequenceFlow)e).getConditionExpression());
 		for (Pool p: ((OwnedNode)e.getSource()).getOwners())
-			t.getRoles().add(findOrCreateRole(p, (IBPMNConversionContext)c));
+			t.getRoles().add(findOrCreateRole((InteractionNet)net, p, (IBPMNConversionContext)c));
 		return t;
 	}
 
-	protected Role findOrCreateRole(Pool pool, IBPMNConversionContext ic) {
+	protected Role findOrCreateRole(InteractionNet net, Pool pool, IBPMNConversionContext ic) {
 		Role role = ic.roleMap.get(pool);
 		if (role == null) {
 			role = ((InteractionNetFactory)pnfactory).createRole();
+			net.getRoles().add(role);
 			role.setName(pool.getLabel());
 			ic.roleMap.put(pool, role);
 		}
