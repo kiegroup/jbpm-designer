@@ -6891,16 +6891,14 @@
 				]
 			}
 		],
-		
 		"cardinalityRules":[
 		   	{	
 				"role":"singleActivityContainer",
-				"maximumChildren":[
-					{
-					   "quantity":1,
-					   "countingRoles":["activity"]
-					}
-				]
+				"maximumChildren":{
+					"quantity":1,
+					"countingRole":"activity"
+				}
+				
 			},
 			/* not necessary, since undefinded is the default quantity
 			{	
