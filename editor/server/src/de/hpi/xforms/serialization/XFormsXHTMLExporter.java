@@ -189,7 +189,7 @@ public class XFormsXHTMLExporter {
 			doc.createElementNS("http://www.w3.org/1999/xhtml", "body"));
 		String formName = form.getAttributes().get("name");
 		if(formName!=null) {
-			Element headline = (Element) html.appendChild(
+			Element headline = (Element) body.appendChild(
 					doc.createElementNS("http://www.w3.org/1999/xhtml", "h1"));
 			headline.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
 		}

@@ -11,6 +11,8 @@ public class Output extends FormControl {
 		super();
 		attributes.put("value", null);
 		attributes.put("mediatype", null);
+		attributes.remove("navindex");
+		attributes.remove("accesskey");
 	}
 	
 	@Override
