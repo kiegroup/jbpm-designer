@@ -223,7 +223,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				this.oldY = this.y;
 				
 				//set rotation
-				if (this._rotate) {
+				if (this._rotate !== undefined) {
 					if (this._rotationPoint) 
 						this.node.setAttributeNS(null, 'transform', 'rotate(' + this._rotate + ' ' + this._rotationPoint.x + ' ' + this._rotationPoint.y + ')');
 					else 
