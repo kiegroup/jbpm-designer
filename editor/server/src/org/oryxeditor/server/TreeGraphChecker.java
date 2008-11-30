@@ -1,7 +1,9 @@
 package org.oryxeditor.server;
 
 import java.net.ResponseCache;
+import java.util.Collection;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,12 +12,23 @@ import de.hpi.treeGraph.Diagram;
 import de.hpi.treeGraph.Shape;
 
 public class TreeGraphChecker extends HttpServlet {
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     	try {
-    	Diagram diagram = new Diagram();
+
     	String eRdf = req.getParameter("data");
     	String valideRdf = eRdf.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?><div>").concat("</div>");
-    	  
+    	Diagram diagram = new Diagram(valideRdf);  
+    	
+    	Collection<String> rootNodeIds = diagram.getRootNodeIds();
+    	
+    	if (rootNodeIds.size() != 1) {
+			if (rootNodeIds.size() > 1) {
+				res.getWriter().println(rootNodeIds.toString());
+			} else {
+
+			}
+		}
+    	/*
     	if (!diagram.deserializeFromeRdf(valideRdf)) {
     		String json = "[";
     		for (Shape shape : diagram.getShapesWithErrors()){
@@ -25,11 +38,9 @@ public class TreeGraphChecker extends HttpServlet {
     		res.getWriter().print(json);
     	} else {
     		// res.getWriter().print("Errors");
-    	} 
+    	} */
     	} catch (Exception e) {
-    		try {
-    			res.getWriter().print("Exception: "+e.getMessage());
-    		} catch (Exception ee) {}
+    		throw new ServletException(e);
     	}
     }
 }
