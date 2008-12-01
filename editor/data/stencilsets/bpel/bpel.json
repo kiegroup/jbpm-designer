@@ -722,6 +722,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -1076,6 +1088,18 @@
 							"prefix":"oryx"
 						}
 					]
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -1871,6 +1895,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2080,6 +2116,18 @@
 					"length":undefined
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2214,6 +2262,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2346,6 +2406,18 @@
 							"refToView":"none"
 						}
 					]
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -2568,6 +2640,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2642,6 +2726,18 @@
 					"optional":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2673,6 +2769,18 @@
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
  			},
 			"properties": [
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
 				{
 					"id":"bgColor",
 					"type":"Color",
@@ -2850,6 +2958,18 @@
 					"optional":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -3020,6 +3140,18 @@
 					"title":"cond_Opaque",
 					"title_de":"opake Bedingung",
 					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -3289,6 +3421,18 @@
 					"wrapLines":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -3451,6 +3595,18 @@
 							"refToView":"none"
 						}
 					]
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -4093,6 +4249,18 @@
 					"wrapLines":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -4657,6 +4825,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -4702,6 +4882,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -4859,6 +5051,18 @@
 					"title":"repeat_opaque",
 					"title_de":"opake Wiederholung",
 					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -5126,6 +5330,18 @@
 					"length":undefined
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -5171,6 +5387,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -5265,6 +5493,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -5370,6 +5610,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":false
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",

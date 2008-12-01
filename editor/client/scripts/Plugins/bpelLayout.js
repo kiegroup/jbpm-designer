@@ -51,14 +51,19 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
      	var elements = event.shape.getChildShapes(false);
      	
+     	// if Autolayout is not required, do nothing.
+		if (!this.requiredAutoLayout (event.shape)){
+     		return;
+     	};
+     	
 		// If there are no elements
 		if(!elements || elements.length == 0) {
+			this.resetBounds(event.shape);
 			return;
 		};
 		
 		var activity = elements.find(function(node) {
 				return (Array.indexOf(node.getStencil().roles(), node.getStencil().namespace() + "activity")>= 0);
-				        //& !(node.getStencil().id() == node.getStencil().namespace() + "scope"));
 		    });
 		
      	var eventHandlers = elements.find(function(node) {
@@ -182,7 +187,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	
 	getRightestBoundOfAllChildren : function(shape){
 		var elements = shape.getChildShapes(false);
-		
+     	
 		// If there are no elements
 		if(!elements || elements.length == 0) {
 			// 160 is the default width of hanlders
@@ -201,8 +206,14 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	
 		var elements = event.shape.getChildShapes(false);
 		
+		// if Autolayout is not required, do nothing.
+		if (!this.requiredAutoLayout (event.shape)){
+     		return;
+     	};
+		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
+			this.resetBounds(event.shape);
 			return;
 		};
 		
@@ -241,8 +252,14 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 
 		var elements = event.shape.getChildShapes(false);
 		
+		// if Autolayout is not required, do nothing.
+		if (!this.requiredAutoLayout (event.shape)){
+     		return;
+     	};
+		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
+			this.resetBounds(event.shape);
 			return;
 		};
 		
@@ -284,8 +301,14 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
      	
 		var elements = event.shape.getChildShapes(false);
 		
+		// if Autolayout is not required, do nothing.
+		if (!this.requiredAutoLayout (event.shape)){
+     		return;
+     	};
+		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
+			this.resetBounds(event.shape);
 			return;
 		};
 		
@@ -300,8 +323,14 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		var elements = event.shape.getChildShapes(false);
 		
+		// if Autolayout is not required, do nothing.
+		if (!this.requiredAutoLayout (event.shape)){
+     		return;
+     	};
+		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
+			this.resetBounds(event.shape);
 			return;
 		};
 		
@@ -349,6 +378,49 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		};
 		
 		return;
-	}
+	},
 	
+	resetBounds: function (shape) {
+		var ul = shape.bounds.upperLeft();
+		if (this.isHandlers(shape)){
+			shape.bounds.set(ul.x, ul.y, ul.x + 160, ul.y + 80);
+		} else {
+			shape.bounds.set(ul.x, ul.y, ul.x + 100, ul.y + 80);	
+		};
+		
+		return;
+	},
+	
+	isHandlers: function (shape) {
+	  	if (shape.getStencil().id() == shape.getStencil().namespace() + "eventHandlers"){
+	  		return true;
+	  	};
+	  	
+	  	if (shape.getStencil().id() == shape.getStencil().namespace() + "faultHandlers"){
+	  		return true;
+	  	};
+	  	
+	  	if (shape.getStencil().id() == shape.getStencil().namespace() + "compensationHandler"){
+	  		return true;
+	  	};
+	  	
+	  	if (shape.getStencil().id() == shape.getStencil().namespace() + "terminationHandler"){
+	  		return true;
+	  	};
+		
+	  	return false;
+	},
+	
+	requiredAutoLayout: function(shape) {
+		/*var autolayout = shape.getStencil().property("oryx-autolayout").value();
+				
+		alert (shape.getStencil().id());
+		alert (autolayout);
+		
+		if (!autolayout || autolayout == "false"){
+			return false;
+		};
+		*/
+		return true;
+	}
 });
