@@ -58,7 +58,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
      	
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event.shape);
+			this.resetBounds(event);
 			return;
 		};
 		
@@ -213,7 +213,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event.shape);
+			this.resetBounds(event);
 			return;
 		};
 		
@@ -259,7 +259,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event.shape);
+			this.resetBounds(event);
 			return;
 		};
 		
@@ -308,7 +308,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event.shape);
+			this.resetBounds(event);
 			return;
 		};
 		
@@ -330,7 +330,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event.shape);
+			this.resetBounds(event);
 			return;
 		};
 		
@@ -380,13 +380,20 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		return;
 	},
 	
-	resetBounds: function (shape) {
+	resetBounds: function (event) {
+		/*var shape = event.shape;
+		
+		if (shape.getStencil().id() == shape.getStencil().namespace() + "process"){
+	  		return;
+	  	};
+	  	
 		var ul = shape.bounds.upperLeft();
+		
 		if (this.isHandlers(shape)){
 			shape.bounds.set(ul.x, ul.y, ul.x + 160, ul.y + 80);
 		} else {
 			shape.bounds.set(ul.x, ul.y, ul.x + 100, ul.y + 80);	
-		};
+		};*/
 		
 		return;
 	},
