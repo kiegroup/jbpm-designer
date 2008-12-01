@@ -272,7 +272,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		var parser = new DOMParser();			
 		var doc    = parser.parseFromString(erdfString ,"text/xml");
 		
-		alert(erdfString);
+		//alert(erdfString);
 		this.facade.importERDF( doc );
 
 	}

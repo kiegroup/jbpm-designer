@@ -153,15 +153,19 @@ ORYX.I18N.Bpel4ChorTransformation.error = "Fehler";
 ORYX.I18N.Bpel4ChorTransformation.noSource = "1 mit der Id 2 hat kein Quellobjekt.";
 ORYX.I18N.Bpel4ChorTransformation.noTarget = "1 mit der Id 2 hat kein Zielobjekt.";
 ORYX.I18N.Bpel4ChorTransformation.transCall = "Während der Transformation ist ein Fehler aufgetreten. 1:2";
-ORYX.I18N.Bpel4ChorTransformation.noResult = "Der Transformations Web Service hat kein Ergebnis zurückgeliefert.";
-ORYX.I18N.Bpel4ChorTransformation.errorParsing = "Während der Analyse des Diagramms ist ein Fehler aufgetreten.";
-ORYX.I18N.Bpel4ChorTransformation.transResult = "Transformationsergebnisse";
-ORYX.I18N.Bpel4ChorTransformation.showFile = "Ergebnisdatei anzeigen";
-ORYX.I18N.Bpel4ChorTransformation.downloadFile = "Ergebnisdatei herunterladen";
-ORYX.I18N.Bpel4ChorTransformation.downloadAll = "Alle Ergebnisdateien herunterladen";
 ORYX.I18N.Bpel4ChorTransformation.loadingXPDL4ChorExport = "Exportiere nach XPDL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.loadingBPEL4ChorExport = "Exportiere nach BPEL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.noGen = "Die Transformationseingabedaten konnten nicht erzeugt werden: 1\n2\n";
+
+if(!ORYX.I18N.TransformationDownloadDialog) ORYX.I18N.TransformationDownloadDialog = {};
+
+ORYX.I18N.TransformationDownloadDialog.error = "Fehler";
+ORYX.I18N.TransformationDownloadDialog.noResult = "Der Transformations Web Service hat kein Ergebnis zurückgeliefert.";
+ORYX.I18N.TransformationDownloadDialog.errorParsing = "Während der Analyse des Diagramms ist ein Fehler aufgetreten.";
+ORYX.I18N.TransformationDownloadDialog.transResult = "Transformationsergebnisse";
+ORYX.I18N.TransformationDownloadDialog.showFile = "Ergebnisdatei anzeigen";
+ORYX.I18N.TransformationDownloadDialog.downloadFile = "Ergebnisdatei herunterladen";
+ORYX.I18N.TransformationDownloadDialog.downloadAll = "Alle Ergebnisdateien herunterladen";
 
 if(!ORYX.I18N.DesynchronizabilityOverlay) ORYX.I18N.DesynchronizabilityOverlay = {};
 //TODO translate
