@@ -62,10 +62,6 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			return;
 		};
 		
-		var activity = elements.find(function(node) {
-				return (Array.indexOf(node.getStencil().roles(), node.getStencil().namespace() + "activity")>= 0);
-		    });
-		
      	var eventHandlers = elements.find(function(node) {
 				return (node.getStencil().id() == node.getStencil().namespace() + "eventHandlers");
 			});
@@ -81,17 +77,47 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		var terminationHandler = elements.find(function(node) {
 				return (node.getStencil().id() == node.getStencil().namespace() + "terminationHandler");
 			});
+			
+		var otherElements = elements.findAll(function(node){
+				return (node !== eventHandlers && node !== faultHandlers 
+				&& node !== compensationHandler && node !== terminationHandler)
+			});
 		
 		var nextLeftBound = 30;
 		var nextUpperBound = 30;
+		
+		// handle Activity
+		if (otherElements){
+			var lastUpperYPosition = 0;
+			var elementWidth;
+			var maxElementWidth = 0;
+			
+			// Arrange shapes like Layout-Vertical
+			otherElements.each (function(element){
+		
+				var ul = element.bounds.upperLeft();
+				var oldUlY = ul.y;
+			
+				ul.y = lastUpperYPosition + 30;
+				lastUpperYPosition = ul.y + element.bounds.height();
+			
+				if (ul.y != oldUlY) {
+					element.bounds.moveTo(30, ul.y);
+				};
+				
+				elementWidth = element.bounds.width();
+				if (elementWidth > maxElementWidth){
+					maxElementWidth = elementWidth;
+				}
+			});
+			
+			nextLeftBound = 30 + maxElementWidth + 30;
+		
+		}
+		
 		var width;
 		var maxWidth = 0;
 		
-		// handle Activity
-		if (activity){
-			activity.bounds.moveTo(nextLeftBound, nextUpperBound);
-			nextLeftBound = activity.bounds.lowerRight().x + 30;
-		}
 		// handle EventHanlders
 		if (eventHandlers){
 			eventHandlers.bounds.moveTo(nextLeftBound, nextUpperBound);
