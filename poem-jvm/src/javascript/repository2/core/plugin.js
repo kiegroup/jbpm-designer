@@ -79,7 +79,7 @@ Repository.Core.Plugin = {
 		if( !panel )
 			panel = this.panel;
 			
-		if( panel ){
+		if( panel && panel.items ){
 			panel.items.each(function(item){ panel.remove( item ) }.bind(this));
 		}
 			
