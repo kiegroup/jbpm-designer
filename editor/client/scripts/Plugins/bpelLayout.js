@@ -380,12 +380,6 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
      		return;
      	};
 		
-		// If there are no elements
-		if(!elements || elements.length == 0) {
-			this.resetBounds(event);
-			return;
-		};
-		
 		elements.each(function(element){
 		
 			var ul = element.bounds.upperLeft();
@@ -426,7 +420,21 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			
 			var ul = event.shape.bounds.upperLeft();
 			
-			event.shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, ul.y + lowerBound + 30);
+			//handle "flow" specially.
+			if (event.shape.getStencil().id() ==event.shape.getStencil().namespace() + "flow"){
+			 	var lr = event.shape.bounds.lowerRight();
+			 	
+			 	if (lr.x < ul.x + rightBound + 30){
+			 		event.shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, lr.y);
+			 		lr.x = ul.x + rightBound + 30;
+			 	};
+			 	
+			 	if (lr.y < ul.y + lowerBound + 30){
+			 		event.shape.bounds.set(ul.x, ul.y, lr.x, ul.y + lowerBound + 30);
+			 	};			 	
+			 } else {
+				event.shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, ul.y + lowerBound + 30);
+			 };
 		};
 		
 		return;
@@ -443,6 +451,8 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		if (this.isHandlers(shape)){
 			shape.bounds.set(ul.x, ul.y, ul.x + 160, ul.y + 80);
+		} else if (flow){
+		
 		} else {
 			shape.bounds.set(ul.x, ul.y, ul.x + 100, ul.y + 80);	
 		};*/
