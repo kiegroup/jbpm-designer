@@ -145,7 +145,7 @@ CREATE OR REPLACE VIEW access AS
   WHERE access.subject = context.hierarchy AND context.ident_id = context_name.id AND (access.subject = subject_axis.hierarchy OR access.subject_descend AND is_parent( access.subject, subject_axis.hierarchy)) AND (NOT access.object_restrict_to_parent AND access.object_self AND access.object = object_axis.hierarchy OR NOT access.object_restrict_to_parent AND access.object_descend AND is_parent(access.object, object_axis.hierarchy) OR access.object_restrict_to_parent AND access.object_self AND object_axis.hierarchy = subject_axis.hierarchy OR access.object_restrict_to_parent AND access.object_descend AND parent(object_axis.hierarchy) = subject_axis.hierarchy) AND subject_axis.ident_id = subject_name.id AND object_axis.ident_id = object_name.id;
 
 
-ALTER TABLE public.access OWNER TO postgres;
+ALTER TABLE public.access OWNER TO poem;
 
 --
 -- Name: comment_id_seq; Type: SEQUENCE; Schema: public; Owner: poem
