@@ -2807,7 +2807,7 @@
 			"groups_de":["Schleifen"],
 			"view":"loop/loop.while.svg",
 			"icon":"while.png",
-			"roles": ["activity","singleActivityContainer"],
+			"roles": ["singleActivityContainer","activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
@@ -2995,7 +2995,7 @@
 			"groups_de":["Schleifen"],
 			"view":"loop/loop.repeatUntil.svg",
 			"icon":"repeatUntil.png",
-			"roles": ["activity","singleActivityContainer"],
+			"roles": ["singleActivityContainer","activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
@@ -4285,7 +4285,7 @@
 			"groups":["Process and Scope"],
 			"view":"scope/node.scope.svg",
 			"icon":"scope.png",
-			"roles": ["activity","singleActivityContainer"],
+			"roles": ["singleActivityContainer","activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
@@ -5426,7 +5426,7 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"handler.png",
-			"roles": ["handler", "singleActivityContainer"],
+			"roles": ["singleActivityContainer", "handler"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
@@ -5473,7 +5473,7 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.terminationHandler.svg",
 			"icon":"handler.png",
-			"roles": ["handler", "singleActivityContainer"],
+			"roles": ["singleActivityContainer","handler"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
@@ -7144,25 +7144,12 @@
 			}
 		],
 		"cardinalityRules":[
-		   	{	
+		   	{
 				"role":"singleActivityContainer",
-				"maximumChildren":{
-					"quantity":1,
-					"countingRole":"activity"
+				"singleChildOnly": {
+					"role":"activity"
 				}
-				
 			},
-			/* not necessary, since undefinded is the default quantity
-			{	
-				"role":"multiActivitiesContainer",
-				"maximumChildren":[
-					{
-					   "quantity":undefined,
-					   "countingRoles":["activity"],
-					}
-				]
-			},
-			*/
 			{	
 				"role":"process",
 				"maximumOccurrence":1
