@@ -1,0 +1,91 @@
+{
+	"title":"BPEL4Chor Extension",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpel4chor#",
+	"description":"BPEL4Chor extension.",
+	"extends":"http://b3mn.org/stencilset/bpel#",
+	"stencils":[
+		{
+			"type": "edge",
+			"id":"messageLink",
+			"title":"Message Link",
+			"title_de":"Message Link",
+			"description":"Defines a Message Link",
+			"description_de":"Definiere eine Message-Kante",
+			"groups":["Message Link"],
+			"groups_de":["Message Link"],
+			"view":"edges/edge.messagelink.svg",
+			"icon":"messagelink.png",
+			"roles": [],
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"Name",
+					"title_de":"Name",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"messageName",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"messageName",
+					"title_de":"messageName",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"participantRefs",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"participantRefs",
+					"title_de":"participantRefs",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				}
+			]
+		}
+	],
+	"rules": {
+		"connectionRules": [
+			{
+				"role":"messageLink",
+				"connects": [
+					{
+						"from":"sendActivity",
+						"to":["receiveActivity"]
+					}
+				]
+			}
+		],
+		
+		"cardinalityRules":[
+			{	
+				"role":"process",
+				"maximumOccurrence":undefined
+			}
+		],
+		"containmentRules": [
+
+		]
+	},
+	"properties": [],
+	"removestencils": [],
+	"removeproperties": []
+}

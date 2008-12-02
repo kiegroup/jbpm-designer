@@ -759,7 +759,7 @@
 			"description_de":"Eine Invoke-Aktivität.",
 			"view":"action(ws)/node.action.invoke.svg",
 			"icon":"invoke.png",
-			"roles": ["activity"],
+			"roles": ["activity","receiveActivity","sendActivity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
@@ -1127,7 +1127,7 @@
 			"description_de":"Eine Receive-Aktivität.",
 			"view":"action(ws)/node.action.receive.svg",
 			"icon":"receive.png",
-			"roles": ["activity"],
+			"roles": ["activity", "receiveActivity"],
 			"properties": [
 				{
 					"id":"name",
@@ -1419,7 +1419,7 @@
 			"description_de":"Eine Reply Aktivität.",
 			"view":"action(ws)/node.action.reply.svg",
 			"icon":"reply.png",
-			"roles": ["activity"],
+			"roles": ["activity", "sendActivity"],
 			"properties": [
 				{
 					"id":"name",
@@ -1932,7 +1932,7 @@
 			"groups_de":["Pick"],
 			"view":"pick/node.handler.onMessage.svg",
 			"icon":"onMessage.png",
-			"roles": ["singleActivityContainer"],
+			"roles": ["singleActivityContainer","receiveActivity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
