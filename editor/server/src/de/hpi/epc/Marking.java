@@ -331,7 +331,7 @@ public class Marking implements Cloneable {
 		return nodeNewMarkings;
 	}
 
-	private Collection<IControlFlow> filterByContext(Collection<IControlFlow> edges,
+	public Collection<IControlFlow> filterByContext(Collection<IControlFlow> edges,
 			Context type) {
 		Collection<IControlFlow> filtered = new LinkedList<IControlFlow>();
 		for (IControlFlow edge : edges) {
@@ -342,7 +342,7 @@ public class Marking implements Cloneable {
 		return filtered;
 	}
 
-	private Collection<IControlFlow> filterByState(Collection<IControlFlow> edges, State type) {
+	public Collection<IControlFlow> filterByState(Collection<IControlFlow> edges, State type) {
 		Collection<IControlFlow> filtered = new LinkedList<IControlFlow>();
 		for (IControlFlow edge : edges) {
 			if (state.get(edge) == type) {
@@ -448,6 +448,28 @@ public class Marking implements Cloneable {
 				return true;
 		}
 		return false;
+	}
+	
+	//TODO Move to another class!
+	static public List<IControlFlow> getStartArcs(IEPC epc){
+		List<IControlFlow> cfs = new LinkedList<IControlFlow>();
+		for(IControlFlow cf : epc.getControlFlow()){
+			if(epc.getIncomingControlFlow(cf.getSource()).size() == 0){
+				cfs.add(cf);
+			}
+		}
+		return cfs;
+	}
+	
+	//TODO Move to another class!
+	static public List<IControlFlow> getEndArcs(IEPC epc){
+		List<IControlFlow> cfs = new LinkedList<IControlFlow>();
+		for(IControlFlow cf : epc.getControlFlow()){
+			if(epc.getOutgoingControlFlow(cf.getTarget()).size() == 0){
+				cfs.add(cf);
+			}
+		}
+		return cfs;
 	}
 	
 	static public boolean isAndConnector(IGObject flowObject){

@@ -28,6 +28,7 @@ import de.hpi.bpt.process.epc.EPCFactory;
 import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.util.OryxParser;
+import de.hpi.epc.Marking;
 import de.hpi.epc.validation.EPCSoundnessChecker;
 
 /**
@@ -116,7 +117,8 @@ public class ValidatorServlet extends HttpServlet {
 	}
 	
 	protected void processEPC(List<IEPC> epcs, PrintWriter writer){
-		EPCSoundnessChecker soundChecker = new EPCSoundnessChecker(epcs.get(0));
+		IEPC epc = epcs.get(0);
+		EPCSoundnessChecker soundChecker = new EPCSoundnessChecker(epc);
 		soundChecker.calculate();
 		
 		try{
@@ -137,7 +139,31 @@ public class ValidatorServlet extends HttpServlet {
 				nodeObject.put("id", node.getId());
 				badEndArcs.put(nodeObject);
 			}
-			jsonObject.put("badEndNodes", badEndArcs);
+			jsonObject.put("badEndArcs", badEndArcs);
+			
+			JSONArray goodInitialMarkings = new JSONArray();
+			for(Marking marking: soundChecker.goodInitialMarkings){
+				JSONArray goodInitialMarking = new JSONArray();
+				for(IControlFlow cf : marking.filterByState(epc.getControlFlow(), Marking.State.POS_TOKEN)){
+					JSONObject nodeObject = new JSONObject();
+					nodeObject.put("id", cf.getId());
+					goodInitialMarking.put(nodeObject);
+				}
+				goodInitialMarkings.put(goodInitialMarking);
+			}
+			jsonObject.put("goodInitialMarkings", goodInitialMarkings);
+			
+			JSONArray goodFinalMarkings = new JSONArray();
+			for(Marking marking: soundChecker.goodFinalMarkings){
+				JSONArray goodFinalMarking = new JSONArray();
+				for(IControlFlow cf : marking.filterByState(epc.getControlFlow(), Marking.State.POS_TOKEN)){
+					JSONObject nodeObject = new JSONObject();
+					nodeObject.put("id", cf.getId());
+					goodFinalMarking.put(nodeObject);
+				}
+				goodFinalMarkings.put(goodFinalMarking);
+			}
+			jsonObject.put("goodFinalMarkings", goodFinalMarkings);
 			
 			writer.print(jsonObject.toString());
 		} catch (JSONException exception) {
