@@ -349,7 +349,7 @@ CREATE SEQUENCE tag_definition_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.tag_definition_id_seq OWNER TO postgres;
+ALTER TABLE public.tag_definition_id_seq OWNER TO poem;
 
 --
 -- Name: tag_definition_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
