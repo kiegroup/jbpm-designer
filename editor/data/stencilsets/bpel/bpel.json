@@ -2763,7 +2763,7 @@
 			"description_de":"Ein Else-Zweig",
 			"view":"if/node.else_branch.svg",
 			"icon":"else_branch.png",
-			"roles": ["singleActivityContainer"],
+			"roles": ["singleActivityContainer", "lastChild"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
@@ -5649,7 +5649,7 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
-			"roles": ["singleActivityContainer"],
+			"roles": ["singleActivityContainer", "lastChild"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});

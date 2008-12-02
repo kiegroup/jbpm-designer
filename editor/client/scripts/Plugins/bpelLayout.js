@@ -88,6 +88,22 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		
 		// handle Activity
 		if (otherElements){
+			
+			// Sort top-down
+			otherElements = otherElements.sortBy(function(element){
+				return element.bounds.upperLeft().y;
+			});
+			
+			// move some certain elements to the last child position
+			// if it "true" returns, that means, the arrangement of elements
+			// is changed, we should sort all elements again
+			if (this.moveSomeElementToLastPosition(otherElements)){
+				// Sort again
+				otherElements = otherElements.sortBy(function(element){
+					return element.bounds.upperLeft().y;
+				});
+			}
+			
 			var lastUpperYPosition = 0;
 			var elementWidth;
 			var maxElementWidth = 0;
@@ -243,16 +259,21 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			return;
 		};
 		
-		// remove all shapes into a column
-		elements.each(function(element){
-			var ul = element.bounds.upperLeft();
-			element.bounds.moveTo(30, ul.y);
-		});
-		
 		// Sort top-down
 		elements = elements.sortBy(function(element){
 			return element.bounds.upperLeft().y;
 		});
+		
+					
+		// move some certain elements to the last child position
+		// if it "true" returns, that means, the arrangement of elements
+		// is changed, we should sort all elements again
+		if (this.moveSomeElementToLastPosition(elements)){
+			// Sort again
+			elements = elements.sortBy(function(element){
+				return element.bounds.upperLeft().y;
+			});
+		}
 		
 		var lastUpperYPosition = 0;
 		// Arrange shapes
@@ -288,17 +309,22 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			this.resetBounds(event);
 			return;
 		};
-		
-		// remove all shapes in a row
-		elements.each(function(element){
-			var ul = element.bounds.upperLeft();
-			element.bounds.moveTo(ul.x, 30);
-		});
+					
 		
 		// Sort left-right
 		elements = elements.sortBy(function(element){
 			return element.bounds.upperLeft().x;
 		});
+		
+		// move some certain elements to the last child position
+		// if it "true" returns, that means, the arrangement of elements
+		// is changed, we should sort all elements again
+		if (this.moveSomeElementToLastPosition(elements)){
+			// Sort again
+			elements = elements.sortBy(function(element){
+				return element.bounds.upperLeft().x;
+			});
+		}
 		
 		var lastLeftXPosition = 0;
 		
@@ -378,7 +404,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	},
 	
 	/**
-	 * Resizes the shape to the bounds of the child shapes
+	 * Resizes the shape to the bounds of the child shapes 
 	 */
 	autoResizeLayout: function(event) {
 		
@@ -454,6 +480,35 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			return false;
 		};
 		*/
+		return true;
+	},
+	
+	/**
+	 * find a element with the role "lastChild", that means, this shape should be
+	 * the last child of their parent, e.g.: "else" in "if-block". then move these elements
+	 * to the last position of the set.
+	 * 
+	 * 
+	 * @param {} elements : the set of all elements
+	 * @pre      all the elements in set are already once arranged, so we just put the 
+	 *           "lastChild" after the current last one. 
+	 * @return   if the arrangement of elements is changed.
+	 */
+	moveSomeElementToLastPosition: function (elements){
+		var lastChild = elements.find(function(node) {
+			 	return (Array.indexOf(node.getStencil().roles(), node.getStencil().namespace() + "lastChild")>= 0);
+			});	
+		
+		// if there are not such element or it's already the last child,
+		// do nothing.	
+		if (!lastChild || lastChild == elements.last()){
+			return false;
+		}
+		
+		// move it after the current last child
+		ulOfCurrentLastChild = elements.last().bounds.upperLeft();
+		lastChild.bounds.moveTo(ulOfCurrentLastChild.x + 1, ulOfCurrentLastChild.y + 1);
+		
 		return true;
 	}
 });
