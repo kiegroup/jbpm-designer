@@ -168,6 +168,10 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 		for (DiagramEdge edge : edges){
 			if ("ControlFlow".equals(edge.getType())){
 				DiagramNode target = edge.getTarget();
+				// In broken diagrams, target can be null. Therefore
+				// the syntax check shouldn't depend on control flow!!
+				if(target == null)
+					break;
 				if ("Function".equals(target.getType()) || "Event".equals(target.getType()) || "ProcessInterface".equals(target.getType())){
 					result.add(target);
 				} else {
