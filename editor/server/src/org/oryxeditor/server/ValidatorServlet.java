@@ -65,7 +65,7 @@ public class ValidatorServlet extends HttpServlet {
 			DocumentBuilder builder;
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
+			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
 			
 			processDocument(document, res.getWriter());
 			
