@@ -311,6 +311,7 @@ ORYX.I18N.StepThroughPlugin.stepThroughDesc = "Step through your BPMN model";
 ORYX.I18N.StepThroughPlugin.undo = "Undo";
 ORYX.I18N.StepThroughPlugin.undoDesc = "Undo one Step";
 ORYX.I18N.StepThroughPlugin.error = "Can't step through this diagram.";
+ORYX.I18N.StepThroughPlugin.executing = "Executing";
 
 if(!ORYX.I18N.SyntaxChecker) ORYX.I18N.SyntaxChecker = {};
 
@@ -327,6 +328,9 @@ ORYX.I18N.Undo.undo = "Undo";
 ORYX.I18N.Undo.undoDesc = "Undo the last action";
 ORYX.I18N.Undo.redo = "Redo";
 ORYX.I18N.Undo.redoDesc = "Redo the last undone action";
+
+if(!ORYX.I18N.Validator) ORYX.I18N.Validator = {};
+ORYX.I18N.Validator.checking = "Checking";
 
 if(!ORYX.I18N.View) ORYX.I18N.View = {};
 

@@ -41,15 +41,16 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
             'icon': ORYX.PATH + "images/checker_syntax.png",
             'description': ORYX.I18N.SyntaxChecker.desc,
             'index': 0,
+            'toggle': true,
             'minShape': 0,
             'maxShape': 0
         });
 		
     },
     
-	showOverlay: function(){
+	showOverlay: function(button, pressed){
 
-		if (this.active) {
+		if (!pressed) {
 			
 			this.raisedEventIds.each(function(id){
 				this.facade.raiseEvent({
@@ -131,11 +132,12 @@ ORYX.Plugins.SyntaxChecker = Clazz.extend({
 								this.active = !this.active;				
 	
 							} else {
-	
+	              button.toggle();
 								Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.noErrors);
 								
 							}
 						} else {
+              button.toggle();
 							Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.invalid);
 						}
 				}.bind(this)

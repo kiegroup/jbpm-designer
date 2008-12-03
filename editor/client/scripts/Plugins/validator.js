@@ -37,13 +37,14 @@ ORYX.Plugins.Validator = Clazz.extend({
             'icon': ORYX.PATH + "images/checker_validation.png",
             'description': "Validate",
             'index': 1,
+            'toggle': true,
             'minShape': 0,
             'maxShape': 0
         });
     },
     
-    load: function(){
-        if (this.active) {
+    load: function(button, pressed){
+        if (!pressed) {
             this.hideOverlays();
             this.active = !this.active;
         }
@@ -105,6 +106,11 @@ ORYX.Plugins.Validator = Clazz.extend({
     },
     
     validate: function(){
+        this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_LOADING_ENABLE,
+            text: ORYX.I18N.Validator.checking
+        });
+      
         // Send the request to the server.
         new Ajax.Request(ORYX.CONFIG.VALIDATOR_URL, {
             method: 'POST',
@@ -118,8 +124,17 @@ ORYX.Plugins.Validator = Clazz.extend({
                 
                 // This should be implemented by child instances of validator 
                 this.handleValidationResponse(result);
+                
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_LOADING_DISABLE
+                });
             }
-.bind(this)
+.bind(this),
+            onFailure: function(){
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_LOADING_DISABLE
+                });
+            }.bind(this)
         });
     },
     

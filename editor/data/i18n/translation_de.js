@@ -311,6 +311,7 @@ ORYX.I18N.StepThroughPlugin.stepThroughDesc = "Schrittweise Ausführung des BPMN
 ORYX.I18N.StepThroughPlugin.undo = "Rückgängig";
 ORYX.I18N.StepThroughPlugin.undoDesc = "Rückgängig";
 ORYX.I18N.StepThroughPlugin.error = "Ausführung des Modells nicht möglich.";
+ORYX.I18N.StepThroughPlugin.executing = "Führe aus";
 
 if(!ORYX.I18N.SyntaxChecker) ORYX.I18N.SyntaxChecker = {};
 
@@ -327,6 +328,9 @@ ORYX.I18N.Undo.undo = "Rückgängig";
 ORYX.I18N.Undo.undoDesc = "Rückgängig";
 ORYX.I18N.Undo.redo = "Wiederherstellen";
 ORYX.I18N.Undo.redoDesc = "Wiederherstellen";
+
+if(!ORYX.I18N.Validator) ORYX.I18N.Validator = {};
+ORYX.I18N.Validator.checking = "Prüfe";
 
 if(!ORYX.I18N.View) ORYX.I18N.View = {};
 
