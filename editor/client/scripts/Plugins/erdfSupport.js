@@ -353,7 +353,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 				
 		// Adds the change event handler to 
 		form.items.items[1].getEl().dom.addEventListener('change',function(evt){
-				var text = evt.target.files[0].getAsBinary();
+				var text = evt.target.files[0].getAsText('UTF-8');
 				form.items.items[2].setValue( text );
 			}, true)
 
