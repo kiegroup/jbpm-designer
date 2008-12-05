@@ -73,6 +73,7 @@ ORYX.CONFIG = {
 	TYPE_CHOICE:				"choice",
 	TYPE_URL:					"url",
 	TYPE_COMPLEX:				"complex",
+	TYPE_TEXT:					"text",
 	
 	/* Vertical line distance of multiline labels */
 	LABEL_LINE_DISTANCE:		2,

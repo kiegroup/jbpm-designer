@@ -84,10 +84,8 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 	 */
 	exportERDF: function(){
 		
-		var s 	= DataManager.serializeDOM( this.facade );
-		s		= s.gsub('><div', ">\n<div");		
-		s		= '<?xml version="1.0" encoding="utf-8"?>\n<div class="processdata">\n' + s + "\n</div>"; 
-
+		var s 	= this.facade.getERDF();
+		
 		//this.openXMLWindow( s );
 		this.openDownloadWindow(window.document.title + ".xml", s);
 	},	
