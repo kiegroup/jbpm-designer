@@ -45,7 +45,7 @@
        ry="10" 
        oryx:resize="vertical horizontal"
 	   fill="white"
-       stroke="#f6f61b" 
+       stroke="#0024fd" 
        stroke-width="1"
        style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
     <polygon 
@@ -72,6 +72,6 @@
     	oryx:anchors="top left"
     	x="23" 
     	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">comp.Handler</text>
+    	style="font-family:Arial; font-size: 10pt; fill:black;">compensationHandler</text>
   </g>
 </svg> 
