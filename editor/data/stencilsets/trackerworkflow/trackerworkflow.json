@@ -154,23 +154,23 @@
 				},
 				{
 					"id":"creationdate",
-					"type":"Date",
-					"title":"CreationDate",
-					"value":"10/07/07",
-					"description":"This defines the date on which the Diagram was created.",
+					"type":"String",
+					"title":"Tracker Creation Date",
+					"value":"",
+					"description":"This holds the date when tracker was created.",
 					"readonly":false,
 					"optional":true,
-					"dateFormat":"j/m/y"
+					"length":""
 				},
 				{
 					"id":"modificationdate",
-					"type":"Date",
-					"title":"ModificationDate",
-					"value":"10/07/07",
-					"description":"This defines the date on which the Diagram was last modified.",
+					"type":"String",
+					"title":"Tracker Extraction Date",
+					"value":"",
+					"description":"This holds the date when tracker was lastly changed before diagram creation.",
 					"readonly":false,
 					"optional":true,
-					"dateFormat":"j/m/y"
+					"length":""
 				},
 				{
 					"id":"documentation",
@@ -182,7 +182,20 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				},				
+				},
+				{
+					"id":"refuri",
+					"type":"String",
+					"title":"URI",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":false
+				}				
 			]
 		},
 		{
@@ -257,6 +270,12 @@
 							"id":"delete",
 							"title":"delete",
 							"value":"delete",
+							"refToView":""
+						},
+						{
+							"id":"move",
+							"title":"move",
+							"value":"move",
 							"refToView":""
 						},
 						{
@@ -366,6 +385,12 @@
 							"id":"delete",
 							"title":"delete",
 							"value":"delete",
+							"refToView":""
+						},
+						{
+							"id":"move",
+							"title":"move",
+							"value":"move",
 							"refToView":""
 						},
 						{
@@ -484,6 +509,12 @@
 							"refToView":""
 						},
 						{
+							"id":"move",
+							"title":"move",
+							"value":"move",
+							"refToView":""
+						},
+						{
 							"id":"all",
 							"title":"*",
 							"value":"*",
@@ -599,6 +630,12 @@
 							"refToView":""
 						},
 						{
+							"id":"move",
+							"title":"move",
+							"value":"move",
+							"refToView":""
+						},
+						{
 							"id":"all",
 							"title":"*",
 							"value":"*",
@@ -711,6 +748,12 @@
 							"id":"delete",
 							"title":"delete",
 							"value":"delete",
+							"refToView":""
+						},
+						{
+							"id":"move",
+							"title":"move",
+							"value":"move",
 							"refToView":""
 						},
 						{
