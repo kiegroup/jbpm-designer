@@ -57,7 +57,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 		}
 		
 		if ((!resultObject.res) || (resultObject.res.length == 0)) {
-			this.openMessageDialog(ORYX.I18N.Bpel4ChorTransformation.error,ORYX.I18N.Bpel4ChorTransformation.noResult);
+			this.openMessageDialog(ORYX.I18N.TransformationDownloadDialog.error,ORYX.I18N.TransformationDownloadDialog.noResult);
 		} else if (resultObject.res[0].content.indexOf("Parser Error")>0) {
 			this.openErrorDialog(resultObject.res[0].content);
 		} else {
@@ -119,7 +119,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 		// Basic Dialog
 		var text = new Ext.form.TextArea({
 			id:'error-field',
-			fieldLabel: ORYX.I18N.Bpel4ChorTransformation.error,
+			fieldLabel: ORYX.I18N.TransformationDownloadDialog.error,
 			name: 'desc',
 			height: 405,
 			width: 633,
@@ -130,7 +130,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 		
 		var dialog = new Ext.Window({ 
 			autoCreate: true, 
-			title: ORYX.I18N.Bpel4ChorTransformation.errorParsing, 
+			title: ORYX.I18N.TransformationDownloadDialog.errorParsing, 
 			modal:true,
 			height: 450,
 			width: 650,
@@ -200,7 +200,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 		
 		var dialog = new Ext.Window({ 
 			autoCreate: true, 
-			title: ORYX.I18N.Bpel4ChorTransformation.transResult, 
+			title: ORYX.I18N.TransformationDownloadDialog.transResult, 
 			autoHeight: true, 
 			width: 297, 
 			modal:true,
@@ -223,7 +223,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 		toolbar.add({
 			icon: 'images/view.png', // icons can also be specified inline
 	        cls: 'x-btn-icon',
-    	    tooltip: ORYX.I18N.Bpel4ChorTransformation.showFile,
+    	    tooltip: ORYX.I18N.TransformationDownloadDialog.showFile,
 			handler: function() {
 				var ds = grid.getStore();
 				var selection = grid.getSelectionModel().getSelected();
@@ -241,7 +241,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 		toolbar.add({
 			icon: 'images/disk.png', // icons can also be specified inline
 	        cls: 'x-btn-icon',
-    	    tooltip: ORYX.I18N.Bpel4ChorTransformation.downloadFile,
+    	    tooltip: ORYX.I18N.TransformationDownloadDialog.downloadFile,
 			handler: function() {
 				var ds = grid.getStore();
 				var selection = grid.getSelectionModel().getSelected();
@@ -254,7 +254,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 		toolbar.add({
 			icon: 'images/disk_multi.png', // icons can also be specified inline
 	        cls: 'x-btn-icon',
-    	    tooltip: ORYX.I18N.Bpel4ChorTransformation.downloadAll,
+    	    tooltip: ORYX.I18N.TransformationDownloadDialog.downloadAll,
 			handler: function() {
 				var ds = grid.getStore();				
 				this.openDownloadWindow(ds.getRange(0, ds.getCount()), true);
