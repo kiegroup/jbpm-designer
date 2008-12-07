@@ -28,6 +28,8 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 
 	facade: undefined,
 
+	dialogSupport: undefined,
+	
 	/**
 	 * Offers the plugin functionality:
 	 * 
@@ -35,6 +37,8 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 	construct: function(facade) {
 		
 		this.facade = facade;
+
+		this.dialogSupport = new ORYX.Plugins.TransformationDownloadDialog();
 
 	    this.facade.offer({
 			'name':ORYX.I18N.BPELSupport.exp,
@@ -44,7 +48,8 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'description': ORYX.I18N.BPELSupport.expDesc,
 			'index': 0,
 			'minShape': 0,
-			'maxShape': 0});
+			'maxShape': 0
+		});
 			
         this.facade.offer({
 			'name':ORYX.I18N.BPELSupport.imp,
@@ -54,8 +59,11 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 			'description': ORYX.I18N.BPELSupport.impDesc,
 			'index': 1,
 			'minShape': 0,
-			'maxShape': 0});
-		},
+			'maxShape': 0
+		});
+	},
+	
+	/***************************** export **********************************/
 	
 	exportProcess: function(){
 	
@@ -130,9 +138,11 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 					resource: resource,
 					data: serialized_rdf
 				},
-                onSuccess: function(request){                
-                	var win = window.open('data:text/xml,' +request.responseText, '_blank', "resizable=yes,width=640,height=480,toolbar=0,scrollbars=yes");
-                } 
+                onSuccess: function(request){
+                	var bpel = request.responseText;      	
+                	var data = this.buildData(bpel);
+					this.dialogSupport.openResultDialog(data);
+                }.bind(this)
 			});
                 	
 			
@@ -142,6 +152,16 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 	 	}
     
 	},
+	
+	buildData: function(bpel){
+
+		var data = [
+		    ["process", bpel, this.dialogSupport.getResultInfo(bpel)]
+		];
+		return data;
+	},
+	
+	/***************************** import **********************************/
 	
 	importProcess: function(){
 		this.openUploadDialog ();
