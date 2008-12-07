@@ -312,7 +312,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
     },
     
     item: function(value){
-        return this._item[value];
+        return this._items[value];
     },
     
     toString: function(){
