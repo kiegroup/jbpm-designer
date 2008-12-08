@@ -481,15 +481,14 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	},
 	
 	requiredAutoLayout: function(shape) {
-		/*var autolayout = shape.getStencil().property("oryx-autolayout").value();
-				
-		alert (shape.getStencil().id());
-		alert (autolayout);
 		
+		var key = "oryx-autolayout";
+		var autolayout = shape.properties[key];
+	
 		if (!autolayout || autolayout == "false"){
 			return false;
 		};
-		*/
+		
 		return true;
 	},
 	
