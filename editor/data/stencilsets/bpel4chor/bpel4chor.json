@@ -722,6 +722,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -747,7 +759,7 @@
 			"description_de":"Eine Invoke-Aktivität.",
 			"view":"action(ws)/node.action.invoke.svg",
 			"icon":"invoke.png",
-			"roles": ["activity", "receiveActivity", "sendActivity"],
+			"roles": ["activity","receiveActivity","sendActivity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
@@ -1076,6 +1088,18 @@
 							"prefix":"oryx"
 						}
 					]
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -1735,7 +1759,7 @@
 			"roles": ["activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
-				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});	
+				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL,shape:shape});	
  			},
 			"properties": [
 				{
@@ -1871,6 +1895,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -1896,7 +1932,7 @@
 			"groups_de":["Pick"],
 			"view":"pick/node.handler.onMessage.svg",
 			"icon":"onMessage.png",
-			"roles": ["singleActivityContainer", "receiveActivity"],
+			"roles": ["singleActivityContainer","receiveActivity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
@@ -2080,6 +2116,18 @@
 					"length":undefined
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2214,6 +2262,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2346,6 +2406,18 @@
 							"refToView":"none"
 						}
 					]
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -2568,6 +2640,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2642,6 +2726,18 @@
 					"optional":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2674,6 +2770,18 @@
  			},
 			"properties": [
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2699,7 +2807,7 @@
 			"groups_de":["Schleifen"],
 			"view":"loop/loop.while.svg",
 			"icon":"while.png",
-			"roles": ["activity","singleActivityContainer"],
+			"roles": ["singleActivityContainer","activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
@@ -2850,6 +2958,18 @@
 					"optional":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -2875,7 +2995,7 @@
 			"groups_de":["Schleifen"],
 			"view":"loop/loop.repeatUntil.svg",
 			"icon":"repeatUntil.png",
-			"roles": ["activity","singleActivityContainer"],
+			"roles": ["singleActivityContainer","activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
@@ -3020,6 +3140,18 @@
 					"title":"cond_Opaque",
 					"title_de":"opake Bedingung",
 					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -3289,6 +3421,18 @@
 					"wrapLines":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -3451,6 +3595,18 @@
 							"refToView":"none"
 						}
 					]
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -4117,7 +4273,7 @@
 			"groups":["Process and Scope"],
 			"view":"scope/node.scope.svg",
 			"icon":"scope.png",
-			"roles": ["activity","singleActivityContainer"],
+			"roles": ["singleActivityContainer","activity"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
@@ -4657,6 +4813,18 @@
 					]
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -4702,6 +4870,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -4859,6 +5039,18 @@
 					"title":"repeat_opaque",
 					"title_de":"opake Wiederholung",
 					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -5126,6 +5318,18 @@
 					"length":undefined
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -5173,6 +5377,18 @@
 					"wrapLines":true
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -5198,7 +5414,7 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"handler.png",
-			"roles": ["handler", "singleActivityContainer"],
+			"roles": ["singleActivityContainer","handler"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
@@ -5218,6 +5434,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -5245,7 +5473,7 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.handler.terminationHandler.svg",
 			"icon":"handler.png",
-			"roles": ["handler", "singleActivityContainer"],
+			"roles": ["singleActivityContainer","handler"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
@@ -5265,6 +5493,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -5372,6 +5612,18 @@
 					"wrapLines":false
 				},
 				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -5417,6 +5669,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -6897,7 +7161,7 @@
 					"type":"String",
 					"title":"Name",
 					"title_de":"Name",
-					"value":"",
+					"value":"NCName",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -6911,11 +7175,81 @@
 					"type":"String",
 					"title":"messageName",
 					"title_de":"messageName",
-					"value":"",
+					"value":"NCName",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"sender",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"sender",
+					"title_de":"Sender",
+					"value":"NCName",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"sendActivity",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"sendActivity",
+					"title_de":"Sendactivität",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"receiver",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"receiver",
+					"title_de":"Empfänger",
+					"value":"NCName",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"receiveActivity",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"receiveActivity",
+					"title_de":"Empfängactivität",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"bindSenderTo",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"bindSenderTo",
+					"title_de":"bindSenderTo",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
 					"refToView":"",
 					"length":""
 				},

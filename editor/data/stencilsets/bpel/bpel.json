@@ -4249,18 +4249,6 @@
 					"wrapLines":false
 				},
 				{
-					"id":"autoLayout",
-					"prefix":"oryx",
-					"type":"boolean",
-					"title":"auto layout?",
-					"title_de":"automatische Anordnung?",
-					"value":true,
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -5426,7 +5414,7 @@
 			"groups":["Exception Handling"],
 			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"handler.png",
-			"roles": ["singleActivityContainer", "handler"],
+			"roles": ["singleActivityContainer","handler"],
 			"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
@@ -5446,6 +5434,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -5669,6 +5669,18 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":true
+				},
+				{
+					"id":"autoLayout",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"auto layout?",
+					"title_de":"automatische Anordnung?",
+					"value":true,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
