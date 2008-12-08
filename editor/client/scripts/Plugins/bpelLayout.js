@@ -485,7 +485,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		var key = "oryx-autolayout";
 		var autolayout = shape.properties[key];
 	
-		if (!autolayout || autolayout == "false"){
+		if (autolayout == "false"){
 			return false;
 		};
 		
