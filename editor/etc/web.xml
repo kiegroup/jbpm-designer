@@ -102,6 +102,39 @@
 		<url-pattern>/bpelexporter</url-pattern>
 	</servlet-mapping>
 	
+	
+	<servlet>
+		<display-name>Oryx BPEL4CHOR IMPORTER</display-name>
+		<servlet-name>BPEL4ChorImporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPEL4ChorImporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPEL4ChorImporter</servlet-name>
+		<url-pattern>/bpel4chorimporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Oryx BPEL4CHOR EXPORTER</display-name>
+		<servlet-name>BPEL4ChorExporter</servlet-name>
+		<servlet-class>org.oryxeditor.server.BPEL4ChorExporter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BPEL4ChorExporter</servlet-name>
+		<url-pattern>/bpel4chorexporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>Oryx XPDL4Chor to BPEL4Chor Servlet</display-name>
+		<servlet-name>XPDL4Chor2BPEL4ChorServlet</servlet-name>
+		<servlet-class>org.oryxeditor.server.XPDL4Chor2BPEL4ChorServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>XPDL4Chor2BPEL4ChorServlet</servlet-name>
+		<url-pattern>/xpdl4chor2bpel4chor</url-pattern>
+	</servlet-mapping>
+	
+	
+	
 	<servlet>
 		<display-name>
 			Oryx Desynchronizability Checker
