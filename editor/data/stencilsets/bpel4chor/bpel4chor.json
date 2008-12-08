@@ -6932,6 +6932,34 @@
 					"optional":true,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"portType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"portType",
+					"title_de":"portType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"operation",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"operation",
+					"title_de":"Operation",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		}

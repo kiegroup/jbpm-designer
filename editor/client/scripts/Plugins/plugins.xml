@@ -130,6 +130,7 @@
 		</plugin>
 		
 		<plugin source="bpel4chorSupport.js" name="ORYX.Plugins.BPEL4ChorSupport">
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>
 		</plugin>
 		

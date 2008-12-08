@@ -30,6 +30,7 @@ ORYX.CONFIG = {
 	XFORMS_EXPORT_URL:			"/oryx/xformsexport",
 	XFORMS_IMPORT_URL:			"/oryx/xformsimport",
 	BPEL_EXPORT_URL:			"/oryx/bpelexporter",
+	BPEL4CHOR_EXPORT_URL:		"/oryx/bpel4chorexporter",
 	TREEGRAPH_SUPPORT:			"/oryx/treegraphsupport",
 	XPDL4CHOR2BPEL4CHOR_TRANSFORMATION_URL: "/oryx/xpdl4chor2bpel4chor",
 	

@@ -43,23 +43,27 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 			'name':ORYX.I18N.BPEL4ChorSupport.exp,
 			'functionality': this.exportProcess.bind(this),
 			'group': ORYX.I18N.BPEL4ChorSupport.group,
-			'icon': ORYX.PATH + "images/bpel4chor_export_icon.png",
+			'icon':  ORYX.PATH + "images/bpel_export_icon.png",
 			'description': ORYX.I18N.BPEL4chorSupport.expDesc,
 			'index': 0,
 			'minShape': 0,
-			'maxShape': 0});
+			'maxShape': 0
+		});
 			
         this.facade.offer({
 			'name':ORYX.I18N.BPEL4ChorSupport.imp,
 			'functionality': this.importProcess.bind(this),
 			'group': ORYX.I18N.BPEL4ChorSupport.group,
-			'icon': ORYX.PATH + "images/bpel4chor_import_icon.png",
+			'icon':  ORYX.PATH + "images/bpel_export_icon.png",
 			'description': ORYX.I18N.BPEL4ChorSupport.impDesc,
 			'index': 1,
 			'minShape': 0,
-			'maxShape': 0});
-		},
+			'maxShape': 0
+		});
+	},
 	
+	/***************************** export **********************************/	
+		
 	exportProcess: function(){
 	
 		// raise loading enable event
@@ -126,7 +130,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 			}
 			  
 			// Send the request to the server.
-			new Ajax.Request(ORYX.CONFIG.BPEL_EXPORT_URL, {
+			new Ajax.Request(ORYX.CONFIG.BPEL4CHOR_EXPORT_URL, {
 				method: 'POST',
 				asynchronous: false,
 				parameters: {
@@ -134,9 +138,8 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 					data: serialized_rdf
 				},
                 onSuccess: function(request){                
-                	var data = this.buildData(request.responseText);
-					this.dialogSupport.displayResult(response.responseText);
-                } 
+                	this.displayResult(response.responseText);
+				}.bind(this)
 			});
                 	
 			
@@ -146,6 +149,76 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 	 	}
     
 	},
+	
+	
+	/**
+	 * Builds up the data that will be shown in the result dialog of
+	 * the BPEL4Chor transformation.
+	 * For this purpose the process names are determined and
+	 * it is checked if the topology and process were generated
+	 * successfully.
+	 * 
+	 * @param {String} topology    The generated topology 
+	 * @param {String[]} processes The generated processes
+	 */
+	buildTransData: function(topology, grounding, processes) {
+		var data = [
+		    ["topology", topology, this.dialogSupport.getResultInfo(topology)],
+		    ["grounding", grounding, this.dialogSupport.getResultInfo(grounding)]
+		];
+		
+		for (var i = 0; i < processes.length; i++) {
+			var name = this.dialogSupport.getProcessName(processes[i]);
+			if (name == undefined) {
+				name = "Process " + (i+1);
+			}
+			data[i+1] = [name, processes[i], this.dialogSupport.getResultInfo(processes[i])];
+		}	
+		
+		return data;
+	},
+	
+	
+	/**
+	 * Analyzes the result of the servlet call.
+	 * 
+	 * If an fault occured or the answer is undefined, the error is shown
+	 * using a message dialog.
+	 * 
+	 * If the first result starts with "ParserError" the error is shown using an 
+	 * error dialog. Otherwise the result is shown using the result dialog.
+	 * 
+	 * @param {Object} result - the result of the transformation servlet (JSON)
+	 */
+	displayResult: function(result) {
+		this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
+
+		var resultString = '(' + result + ')';
+		var resultObject;
+		
+		try {
+			resultObject = eval(resultString);
+		} catch (e1) {
+			alert("Error during evaluation of result: " + e1 + "\r\n" + resultString);
+		}
+		
+		if ((!resultObject.res) || (resultObject.res.length == 0)) {
+			this.dialogSupport.openMessageDialog(ORYX.I18N.TransformationDownloadDialog.error,ORYX.I18N.TransformationDownloadDialog.noResult);
+		} else if (resultObject.res[0].content.indexOf("Parser Error")>0) {
+			this.dialogSupport.openErrorDialog(resultObject.res[0].content);
+		} else {
+			var topology = resultObject.res[0].content;
+			var grounding = resultObject.res[1].content;
+			var processes = new Array();
+			for (var i = 2; i < resultObject.res.length; i++) {
+				processes[i-1] = resultObject.res[i].content;
+			}
+			var data = this.buildTransData(topology,grounding,processes);
+			this.dialogSupport.openResultDialog(data);
+		}
+	},
+	
+	/***************************** import **********************************/
 	
 	importProcess: function(){
 		this.openUploadDialog ();
