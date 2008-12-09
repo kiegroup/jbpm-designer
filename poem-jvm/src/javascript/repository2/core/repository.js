@@ -82,7 +82,7 @@ Repository.Core.Repository = {
 			// are specified in the plugins.xml
 			this._loadPlugins();
 			
-			this.setSort('lastChange', Repository.Config.SORT_DESC);
+			this.setSort( this.isPublicUser() ? "rating" : "lastChange" , Repository.Config.SORT_DESC);
 			
 			
  		},
