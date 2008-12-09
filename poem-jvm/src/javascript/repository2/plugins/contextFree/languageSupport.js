@@ -35,7 +35,9 @@ Repository.Plugins.LanguageSupport = {
 	IMAGE_URLS: {
 		de: '/backend/images/flags/de.png',
 		en_us: '/backend/images/flags/us.png',
-		en: '/backend/images/flags/us.png'
+		en: '/backend/images/flags/us.png',
+		ru: '/backend/images/flags/ru.png',
+		es: '/backend/images/flags/es.png'
 	},
 
 	hidePanel: true,

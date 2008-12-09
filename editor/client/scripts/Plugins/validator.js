@@ -31,11 +31,11 @@ ORYX.Plugins.Validator = Clazz.extend({
         this.raisedEventIds = [];
         
         this.facade.offer({
-            'name': "BPMN Validator",
+            'name': ORYX.I18N.Validator.name,
             'functionality': this.load.bind(this),
             'group': "Verification",
             'icon': ORYX.PATH + "images/checker_validation.png",
-            'description': "Validate",
+            'description': ORYX.I18N.Validator.description,
             'index': 1,
             'toggle': true,
             'minShape': 0,

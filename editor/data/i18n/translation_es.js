@@ -8,7 +8,7 @@ if(!ORYX) var ORYX = {};
 
 if(!ORYX.I18N) ORYX.I18N = {};
 
-ORYX.I18N.Language = "es_ES"; //Pattern <ISO language code>_<ISO country code> in lower case!
+ORYX.I18N.Language = "es"; //Pattern <ISO language code>_<ISO country code> in lower case!
 
 if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 

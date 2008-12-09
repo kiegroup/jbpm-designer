@@ -16,6 +16,9 @@ Repository.I18N.Language = "en_us"; //Pattern <ISO language code>_<ISO country c
 
 Repository.I18N.en_us = "English";
 Repository.I18N.de = "Deutsch";
+Repository.I18N.ru = "Русский";
+Repository.I18N.es = "español";
+
 // Repository strings
 
 if(!Repository.I18N.Repository) Repository.I18N.Repository = {};

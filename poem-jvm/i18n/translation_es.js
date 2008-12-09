@@ -16,7 +16,7 @@ Repository.I18N.Language = "es"; //Pattern <ISO language code>_<ISO country code
 
 if(!Repository.I18N.Repository) Repository.I18N.Repository = {};
 
-Repository.I18N.Repository.openIdSample = "su.openid.de"
+Repository.I18N.Repository.openIdSample = "su.openid.se"
 Repository.I18N.Repository.sayHello = "¡Hola!"
 Repository.I18N.Repository.login = "iniciar sesión"
 Repository.I18N.Repository.logout = "cerrar sesión"
