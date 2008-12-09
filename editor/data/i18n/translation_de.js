@@ -358,3 +358,28 @@ ORYX.I18N.XFormsSerialization.impTitle = "XForms+XHTML Dokument importieren";
 ORYX.I18N.XFormsSerialization.impButton = "Importieren";
 ORYX.I18N.XFormsSerialization.impProgress = "Importiere...";
 ORYX.I18N.XFormsSerialization.close = "Schließen";
+
+
+
+/** New Language Properties: 08.12.2008 **/
+
+ORYX.I18N.PropertyWindow.title = "Eigenschaften";
+
+if(!ORYX.I18N.ShapeRepository) ORYX.I18N.ShapeRepository = {};
+ORYX.I18N.ShapeRepository.title = "Shape Verzeichnis";
+
+ORYX.I18N.Save.dialogDesciption = "Bitte ändern sie den Namen und die Beschreibung.";
+ORYX.I18N.Save.dialogLabelTitle = "Titel";
+ORYX.I18N.Save.dialogLabelDesc = "Beschreibung";
+ORYX.I18N.Save.dialogLabelType = "Typ";
+
+ORYX.I18N.Validator.name = "BPMN Überprüfung";
+ORYX.I18N.Validator.description = "Überprüfung von BPMN Modellen";
+
+ORYX.I18N.SSExtensionLoader.labelImport = "Import";
+ORYX.I18N.SSExtensionLoader.labelCancel = "Abbrechen";
+
+Ext.MessageBox.buttonText.yes = "Ja";
+Ext.MessageBox.buttonText.no = "Nein";
+Ext.MessageBox.buttonText.cancel = "Abbrechen";
+Ext.MessageBox.buttonText.ok = "OK";
