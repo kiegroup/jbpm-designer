@@ -829,15 +829,13 @@
 				"incomingEdges": [
                 	{
                     	"role": "epcEdge",
-                     	"maximum":1,
-                     	"minimum":0
+                     	"maximum":1
                     }
                 ],
                 "outgoingEdges": [
                  	{
                 		"role": "epcEdge",
-                    	"maximum":1,
-                     	"minimum":0
+                    	"maximum":1
               		}
                	]
 			},
@@ -846,15 +844,13 @@
 				"incomingEdges": [
            			{
                     	"role": "epcEdge",
-                        "maximum":1,
-                   		"minimum":1
+                        "maximum":1
                 	}
                 ],
                   	"outgoingEdges": [
                      {
                       	"role": "epcEdge",
-                      	"maximum":1,
-                      	"minimum":0
+                      	"maximum":1
                   	}
            		]
 			},
@@ -863,15 +859,13 @@
 				"incomingEdges": [
            			{
                     	"role": "epcEdge",
-                        "maximum":2,
-                   		"minimum":1
+                        "maximum":2
                 	}
                 ],
                   	"outgoingEdges": [
                      {
                       	"role": "epcEdge",
-                      	"maximum":2,
-                      	"minimum":1
+                      	"maximum":2
                   	}
            		]
 			}
