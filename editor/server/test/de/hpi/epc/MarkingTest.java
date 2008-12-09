@@ -15,7 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.hpi.bpt.process.epc.Connector;
-import de.hpi.bpt.process.epc.ControlFlow;
 import de.hpi.bpt.process.epc.EPC;
 import de.hpi.bpt.process.epc.Event;
 import de.hpi.bpt.process.epc.Function;
@@ -109,7 +108,8 @@ public class MarkingTest extends AbstractEPCTest {
 	
 	@Test
 	public void testEquals(){
-		IControlFlow cf = new ControlFlow(new Event(), new Event());
+		IEPC epc = new EPC();
+		IControlFlow cf = epc.addControlFlow(new Event(), new Event());
 		cf.setId("blub");
 		
 		Marking m1 = new Marking();

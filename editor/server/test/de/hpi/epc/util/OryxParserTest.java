@@ -41,7 +41,7 @@ public class OryxParserTest extends AbstractEPCTest {
 		boolean orConn1Found = false;
 		boolean orConn2Found = false;
 		boolean orConn3Found = false;
-		for(IFlowObject node : epc.getFlowObjects()){
+		for(IFlowObject node : (Collection<IFlowObject>)epc.getFlowObjects()){
 			if(node.getId().equals("oryx_694B77A9-5D1A-44C2-A41F-47884A88C7F2")){
 				orConn1Found = true;
 				testIds(epc.getOutgoingControlFlow(node), "oryx_33F53D90-8292-483A-9F48-9C4327E61F3E", "oryx_7F73B581-9EB7-45CC-A94B-947E04F82AAA");

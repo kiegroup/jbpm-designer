@@ -11,27 +11,17 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import de.hpi.bpt.process.epc.ControlFlow;
 import de.hpi.bpt.process.epc.EPCFactory;
 import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.bpt.process.epc.util.OryxParser;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.Assert.*;
-
 public class AbstractEPCTest {
 	protected IEPC epc;
 
 	protected IControlFlow connect(IFlowObject source, IFlowObject target){
-		IControlFlow cf = new ControlFlow(source, target);
-		epc.addControlFlow(cf);
-		return cf;
+		return epc.addControlFlow(source, target);
 	}
 	
 	protected IFlowObject add(IFlowObject fo){

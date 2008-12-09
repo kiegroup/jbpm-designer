@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import util.PrivateAccessor;
 import de.hpi.bpt.process.epc.Connector;
@@ -39,7 +40,7 @@ public class EPCStepThroughInterpreterTest extends AbstractEPCTest {
 	public void tearDown() throws Exception {
 	}
 	
-	public void testShouldBeAutomaticallyExecuted(){
+	@Test public void testShouldBeAutomaticallyExecuted(){
 		assertTrue(invokeShouldBeAutomaticallyExecuted(new Event()));
 		assertFalse(invokeShouldBeAutomaticallyExecuted(new Function()));
 		
