@@ -828,14 +828,14 @@
 				"role":"event",
 				"incomingEdges": [
                 	{
-                    	"role": "edge",
+                    	"role": "epcEdge",
                      	"maximum":1,
                      	"minimum":0
                     }
                 ],
                 "outgoingEdges": [
                  	{
-                		"role": "edge",
+                		"role": "epcEdge",
                     	"maximum":1,
                      	"minimum":0
               		}
@@ -845,14 +845,14 @@
 				"role":"function",
 				"incomingEdges": [
            			{
-                    	"role": "edge",
+                    	"role": "epcEdge",
                         "maximum":1,
                    		"minimum":1
                 	}
                 ],
                   	"outgoingEdges": [
                      {
-                      	"role": "edge",
+                      	"role": "epcEdge",
                       	"maximum":1,
                       	"minimum":0
                   	}
@@ -862,14 +862,14 @@
 				"role":"connector",
 				"incomingEdges": [
            			{
-                    	"role": "edge",
+                    	"role": "epcEdge",
                         "maximum":2,
                    		"minimum":1
                 	}
                 ],
                   	"outgoingEdges": [
                      {
-                      	"role": "edge",
+                      	"role": "epcEdge",
                       	"maximum":2,
                       	"minimum":1
                   	}
