@@ -2,6 +2,7 @@ package de.hpi.bpmn.serialization.erdf.templates;
 
 import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.Edge;
+import de.hpi.bpmn.Gateway;
 import de.hpi.bpmn.serialization.erdf.ERDFSerializationContext;
 
 public abstract class ConnectorTemplate extends BPMN2ERDFTemplateImpl {
@@ -18,11 +19,15 @@ public abstract class ConnectorTemplate extends BPMN2ERDFTemplateImpl {
 		String dockers = "";
 		if (e.getSource() instanceof Activity){
 			dockers += "50 40 ";
+		} else if  (e.getSource() instanceof Gateway){ 
+			dockers += "20 20 ";
 		} else {
 			dockers += "15 15 ";
 		}
 		if (e.getTarget() instanceof Activity){
 			dockers += "50 40 ";
+		} else if (e.getTarget() instanceof Gateway){
+			dockers += "20 20 ";
 		} else {
 			dockers += "15 15 ";
 		}
