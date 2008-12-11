@@ -174,7 +174,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"value":"",
 					"description":"The modeler may add optional text documentation about the Diagram.",
@@ -300,7 +300,7 @@
 				},
 				{
 					"id":"expression",
-					"type":"String",
+					"type":"Text",
 					"title":"Expression",
 					"value":"true",
 					"description":"Expression that should be evaluated for this tracker rule",
@@ -415,7 +415,7 @@
 				},
 				{
 					"id":"expression",
-					"type":"String",
+					"type":"Text",
 					"title":"Expression",
 					"value":"true",
 					"description":"Expression that should be evaluated for this tracker rule",
@@ -536,7 +536,7 @@
 				},
 				{
 					"id":"expression",
-					"type":"String",
+					"type":"Text",
 					"title":"Expression",
 					"value":"true",
 					"description":"Expression that should be evaluated for this tracker rule",
@@ -657,7 +657,7 @@
 				},
 				{
 					"id":"expression",
-					"type":"String",
+					"type":"Text",
 					"title":"Expression",
 					"value":"true",
 					"description":"Expression that should be evaluated for this tracker rule",
@@ -778,7 +778,7 @@
 				},
 				{
 					"id":"expression",
-					"type":"String",
+					"type":"Text",
 					"title":"Expression",
 					"value":"true",
 					"description":"Expression that should be evaluated for this tracker rule",
@@ -1007,7 +1007,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
