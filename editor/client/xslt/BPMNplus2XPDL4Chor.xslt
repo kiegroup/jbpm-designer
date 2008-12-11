@@ -912,20 +912,34 @@
 		</xsl:for-each>
 	</xsl:template>
 	
+  <!-- ************** Template for extracting relevant Transitions ******************** -->
+  <xsl:template name="relevantTransitions">
+    <xsl:param name="resId" />
+    <xsl:variable name="activitiesOutRefs" select="//div[a[@rel='raziel-parent' and @href=concat('#',$resId)]]/a[@rel='raziel-outgoing']"/>
+    <xsl:for-each select="$activitiesOutRefs">
+      <xsl:variable name="outRef" select="@href"/>
+      <xsl:variable name="relevantTransitions" select="//div[a[@rel='raziel-parent' and @href='#oryx-canvas123'] and @id=substring($outRef,2)]"/>
+      <xsl:call-template name="transitions">
+        <xsl:with-param name="transitions" select="$relevantTransitions" />
+      </xsl:call-template>
+    </xsl:for-each>
+  </xsl:template>
+
 	<!-- ************** Template for generating Transitions content ******************** -->
 	<xsl:template name="transitions">
 		<xsl:param name="transitions" />
 		<xsl:for-each select="$transitions">
 			<xsl:variable name="type" select="span[@class='oryx-type']" />
 			<xsl:variable name="id" select="span[@class='oryx-id']" />
-			<xsl:variable name="name" select="span[@class='oryx-name']" />					
+			<xsl:variable name="name" select="span[@class='oryx-name']" />
+			<xsl:variable name="internalOutRef" select="a[@rel='raziel-outgoing']/@href" />
 			<xsl:if test="$type='http://b3mn.org/stencilset/bpmnplus#SequenceFlow' or 
 						$type='http://b3mn.org/stencilset/bpmnplus#ConditionalFlow' or
 						$type='http://b3mn.org/stencilset/bpmnplus#DefaultFlow'">
 				<xpdl:Transition
 					Id="{$id}"
-					From="{span[@class='oryx-source']}"
-					To="{span[@class='oryx-target']}">
+					From="{//div[a[@rel='raziel-outgoing' and @href=concat('#',$id)]]/@id}"
+					To="{//div[@id=substring($internalOutRef,2)]/@id}">
 					<xsl:if test="string-length(normalize-space($name))>0">
 						<xsl:attribute name="Name">
 							<xsl:value-of select="$name" />
@@ -974,9 +988,9 @@
 						</xsl:call-template>		
 					</xpdl:Activities>
 					<xpdl:Transitions>
-						<xsl:call-template name="transitions">
-							<xsl:with-param name="transitions" select="$innerActivities" />
-						</xsl:call-template>		
+						<xsl:call-template name="relevantTransitions">
+							<xsl:with-param name="laneId" select="$resourceId" />
+						</xsl:call-template>
 					</xpdl:Transitions>
 				</xpdl:ActivitySet>
 			</xsl:if>
@@ -1368,16 +1382,15 @@
 								</xsl:call-template>		
 							</xsl:for-each>
 						</xpdl:Activities>
-			<!-- ************************ Transitions *********************************+ -->				
+			<!-- ************************ Transitions *********************************+ -->
 						<xpdl:Transitions>
 							<xsl:for-each select="$childLanes">
-								<xsl:variable name="laneId" select="@id"/>
-								<xsl:variable name="childTransitions" select="/data/div[a[@rel='raziel-parent' and @href=concat('#',$laneId)]]"/>						
-									<xsl:call-template name="transitions">
-										<xsl:with-param name="transitions" select="$childTransitions" />
-									</xsl:call-template>		
+								<xsl:call-template name="relevantTransitions">
+									<xsl:with-param name="resId" select="@id" />
+								</xsl:call-template>
 							</xsl:for-each>
 						</xpdl:Transitions>
+
 						<xpdl:Extensions/>
 			<!-- ************************ Message Exchanges *********************************+ -->
 						<chor:MessageExchanges>
