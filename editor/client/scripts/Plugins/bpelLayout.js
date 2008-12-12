@@ -26,6 +26,10 @@ if(!ORYX.Plugins)
 
 ORYX.Plugins.BPELLayouting = Clazz.extend({
 
+	facade: undefined,
+	
+	isEnabled : undefined,
+	
 	/**
 	 *	Constructor
 	 *	@param {Object} Facade: The Facade of the Editor
@@ -33,6 +37,30 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	construct: function(facade) {
 		this.facade = facade;
 		
+		this.isEnabled = true;
+		
+		this.facade.offer({
+			'name':ORYX.I18N.BPELSupport.enable,
+			'functionality': this.enableBpelLayout.bind(this),
+			'group': ORYX.I18N.BPELLayout.group,
+			'icon': ORYX.PATH + "images/bpel_layout_enable.png",
+			'description': ORYX.I18N.BPELLayout.enDesc,
+			'index': 0,
+			'minShape': 0,
+			'maxShape': 0
+		});
+		
+		this.facade.offer({
+			'name':ORYX.I18N.BPELSupport.disable,
+			'functionality': this.disableBpelLayout.bind(this),
+			'group': ORYX.I18N.BPELLayout.group,
+			'icon': ORYX.PATH + "images/bpel_layout_disable.png",
+			'description': ORYX.I18N.BPELLayout.disDesc,
+			'index': 1,
+			'minShape': 0,
+			'maxShape': 0
+		});
+	
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL, this.handleLayoutEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL, this.handleLayoutVerticalEvent.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL, this.handleLayoutHorizontalEvent.bind(this));
@@ -40,25 +68,138 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL_AUTORESIZE, this.handleAutoResizeLayoutEvent.bind(this));
 	},
 	
-	/**************************** Layout ****************************/
+	/**************************** plug-in control ****************************/
+	
+	disableBpelLayout : function(){
+		
+		this.isEnabled = false;
+	},
+	
+	enableBpelLayout : function(){
+		
+		this.isEnabled = true;
+		
+		this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_ENABLE,text: 'Auto Layouting...'});
+		
+		//adjust all immediate child nodes(grand-children are adjusted recursively)
+		nodes = this.facade.getCanvas().getChildNodes();
+		for (var i = 0; i < nodes.size(); i++) {
+			node = nodes[i];
+			if (node.getStencil().id() == node.getStencil().namespace() + "process"){
+				this._adjust_node(node);
+			}
+		}
+		
+		this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
+	},
+	
+	_adjust_node : function (node){
+		
+		// handle children first
+		// that means, the innermost children should be at first arranged,
+		var nodes = node.getChildNodes();
+		for (var i = 0; i < nodes.size(); i++) {
+			this._adjust_node(nodes[i]);
+		};
+		
+		// handle the current node
+		this._handleLayoutEventAdapter (node);
+		//alert (node.getStencil().id());
+		
+	},
+	
+	_handleLayoutEventAdapter : function(node){
+		
+		if (node.getStencil().id() == node.getStencil().namespace() + "process"
+	 		|| node.getStencil().id() == node.getStencil().namespace() + "invoke" 
+	    	|| node.getStencil().id() == node.getStencil().namespace() + "scope"){
+	    		
+			this._handleLayoutEvent (node);
+			
+		} else if (node.getStencil().id() == node.getStencil().namespace() + "assign"
+			|| node.getStencil().id() == node.getStencil().namespace() + "eventHandlers"
+			|| node.getStencil().id() == node.getStencil().namespace() + "faultHandlers"
+			|| node.getStencil().id() == node.getStencil().namespace() + "compensationHandler"
+			|| node.getStencil().id() == node.getStencil().namespace() + "terminationHandler"){
+			
+			this._handleLayoutVerticalEvent (node);
+			
+		} else if  (node.getStencil().id() == node.getStencil().namespace() + "if"
+			|| node.getStencil().id() == node.getStencil().namespace() + "sequence"
+			|| node.getStencil().id() == node.getStencil().namespace() + "pick"){
+			
+			this._handleLayoutHorizontalEvent (node);
+			
+		} else if (node.getStencil().id() == node.getStencil().namespace() + "onMessage"
+			|| node.getStencil().id() == node.getStencil().namespace() + "if_branch"
+			|| node.getStencil().id() == node.getStencil().namespace() + "else_branch"
+			|| node.getStencil().id() == node.getStencil().namespace() + "while"
+			|| node.getStencil().id() == node.getStencil().namespace() + "repeatUntil"
+			|| node.getStencil().id() == node.getStencil().namespace() + "forEach"
+			|| node.getStencil().id() == node.getStencil().namespace() + "onAlarm"
+			|| node.getStencil().id() == node.getStencil().namespace() + "onEvent"
+			|| node.getStencil().id() == node.getStencil().namespace() + "catch"
+			|| node.getStencil().id() == node.getStencil().namespace() + "catchAll"){
+			
+			this._handleSingleChildLayoutEvent (node);
+			
+		} else if (node.getStencil().id() == node.getStencil().namespace() + "flow"){
+			
+			this._handleAutoResizeLayoutEvent (node);
+		} else {
+			// other shapes cann't contein any children shapes.
+			return;
+		}
+	
+	},
+	
+	
+	/***************************** Event Handler *****************************/
+	
+	handleLayoutEvent: function(event) {
+		this._handleLayoutEvent (event.shape);
+	},
+	
+	handleLayoutVerticalEvent: function(event) {
+		this._handleLayoutVerticalEvent (event.shape);
+	},
+	
+	handleLayoutHorizontalEvent: function(event) {
+		this._handleLayoutHorizontalEvent (event.shape);
+	},
+	
+	handleSingleChildLayoutEvent: function(event) {
+		this._handleSingleChildLayoutEvent (event.shape);
+	},
+	
+	handleAutoResizeLayoutEvent: function(event) {
+		this._handleAutoResizeLayoutEvent (event.shape);
+	},
+	
+		
+	/************************* Auto Layout Processes ****************************/
 	
 	/**
 	 *  realize special BPEL layouting:
 	 *  main activity: placed left,
 	 *  Handler: placed right.
 	 */
-	handleLayoutEvent: function(event) {
+	_handleLayoutEvent: function(shape) {
 		
-     	var elements = event.shape.getChildShapes(false);
+		if (this.isEnabled == false) {
+			return;
+		}
+		
+     	var elements = shape.getChildShapes(false);
      	
      	// if Autolayout is not required, do nothing.
-		if (!this.requiredAutoLayout (event.shape)){
+		if (!this._requiredAutoLayout (shape)){
      		return;
      	};
      	
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event);
+			this._resetBounds(shape);
 			return;
 		};
 		
@@ -97,7 +238,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			// move some certain elements to the last child position
 			// if it "true" returns, that means, the arrangement of elements
 			// is changed, we should sort all elements again
-			if (this.moveSomeElementToLastPosition(otherElements)){
+			if (this._moveSomeElementToLastPosition(otherElements)){
 				// Sort again
 				otherElements = otherElements.sortBy(function(element){
 					return element.bounds.upperLeft().y;
@@ -140,7 +281,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			nextUpperBound = eventHandlers.bounds.lowerRight().y + 10;
 			
 			// record maximal width
-			width = this.getRightestBoundOfAllChildren(eventHandlers)+ 30;
+			width = this._getRightestBoundOfAllChildren(eventHandlers)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -151,7 +292,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			nextUpperBound = faultHandlers.bounds.lowerRight().y + 10;
 			
 			// record maximal width
-			width = this.getRightestBoundOfAllChildren(faultHandlers)+ 30;
+			width = this._getRightestBoundOfAllChildren(faultHandlers)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -162,7 +303,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			nextUpperBound = compensationHandler.bounds.lowerRight().y + 10;
 			
 			// record maximal width
-			width = this.getRightestBoundOfAllChildren(compensationHandler)+ 30;
+			width = this._getRightestBoundOfAllChildren(compensationHandler)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -173,7 +314,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			terminationHandler.bounds.moveTo(nextLeftBound, nextUpperBound);
 			
 			// record maximal width
-			width = this.getRightestBoundOfAllChildren(terminationHandler)+ 30;
+			width = this._getRightestBoundOfAllChildren(terminationHandler)+ 30;
 			if (width > maxWidth){
 				maxWidth = width;
 			}
@@ -190,6 +331,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = eventHandlers.bounds.upperLeft();
 					lr = eventHandlers.bounds.lowerRight();
 					eventHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+					eventHandlers._changed();
 				}
 			}
 
@@ -199,6 +341,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = faultHandlers.bounds.upperLeft();
 					lr = faultHandlers.bounds.lowerRight();
 					faultHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+					faultHandlers._changed();
 				}
 			}
 
@@ -208,6 +351,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = compensationHandler.bounds.upperLeft();
 					lr = compensationHandler.bounds.lowerRight();
 					compensationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+					compensationHandler._changed();
 				}
 			}
 			
@@ -217,17 +361,18 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = terminationHandler.bounds.upperLeft();
 					lr = terminationHandler.bounds.lowerRight();
 					terminationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
+					terminationHandler._changed();
 				}
 			}
 		}
 		
-		this.autoResizeLayout(event);
+		this._autoResizeLayout(shape);
 		
 		return;
 		
 	},
 	
-	getRightestBoundOfAllChildren : function(shape){
+	_getRightestBoundOfAllChildren : function(shape){
 		var elements = shape.getChildShapes(false);
      	
 		// If there are no elements
@@ -244,18 +389,22 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		return elements.last().bounds.lowerRight().x;
 	},
 	
-	handleLayoutVerticalEvent: function(event) {
-	
-		var elements = event.shape.getChildShapes(false);
+	_handleLayoutVerticalEvent: function(shape) {
+		
+		if (this.isEnabled == false) {
+			return;
+		}
+		
+		var elements = shape.getChildShapes(false);
 		
 		// if Autolayout is not required, do nothing.
-		if (!this.requiredAutoLayout (event.shape)){
+		if (!this._requiredAutoLayout (shape)){
      		return;
      	};
 		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event);
+			this._resetBounds(shape);
 			return;
 		};
 		
@@ -268,7 +417,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		// move some certain elements to the last child position
 		// if it "true" returns, that means, the arrangement of elements
 		// is changed, we should sort all elements again
-		if (this.moveSomeElementToLastPosition(elements)){
+		if (this._moveSomeElementToLastPosition(elements)){
 			// Sort again
 			elements = elements.sortBy(function(element){
 				return element.bounds.upperLeft().y;
@@ -290,23 +439,27 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			}
 		});
 		
-		this.autoResizeLayout(event);
+		this._autoResizeLayout(shape);
 	
 		return;
 	},
 	
-	handleLayoutHorizontalEvent: function(event) {
+	_handleLayoutHorizontalEvent: function(shape) {
 
-		var elements = event.shape.getChildShapes(false);
+		if (this.isEnabled == false) {
+			return;
+		}
+		
+		var elements = shape.getChildShapes(false);
 		
 		// if Autolayout is not required, do nothing.
-		if (!this.requiredAutoLayout (event.shape)){
+		if (!this._requiredAutoLayout (shape)){
      		return;
      	};
 		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event);
+			this._resetBounds(shape);
 			return;
 		};
 					
@@ -319,7 +472,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		// move some certain elements to the last child position
 		// if it "true" returns, that means, the arrangement of elements
 		// is changed, we should sort all elements again
-		if (this.moveSomeElementToLastPosition(elements)){
+		if (this._moveSomeElementToLastPosition(elements)){
 			// Sort again
 			elements = elements.sortBy(function(element){
 				return element.bounds.upperLeft().x;
@@ -342,41 +495,49 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			}
 		});
 		
-		this.autoResizeLayout(event);
+		this._autoResizeLayout(shape);
 			
 		return;
 	},
 	
 	
 	
-	handleSingleChildLayoutEvent: function(event) {
+	_handleSingleChildLayoutEvent: function(shape) {
      	
-		var elements = event.shape.getChildShapes(false);
+		if (this.isEnabled == false) {
+			return;
+		}
+		
+		var elements = shape.getChildShapes(false);
 		
 		// if Autolayout is not required, do nothing.
-		if (!this.requiredAutoLayout (event.shape)){
+		if (!this._requiredAutoLayout (shape)){
      		return;
      	};
 		
 		// If there are no elements
 		if(!elements || elements.length == 0) {
-			this.resetBounds(event);
+			this._resetBounds(shape);
 			return;
 		};
 		
 		elements.first().bounds.moveTo(30, 30);
 		
-		this.autoResizeLayout(event);
+		this._autoResizeLayout(shape);
 		
 		return;
 	},
 	
-	handleAutoResizeLayoutEvent: function(event) {
+	_handleAutoResizeLayoutEvent: function(shape) {
 		
-		var elements = event.shape.getChildShapes(false);
+		if (this.isEnabled == false) {
+			return;
+		};
+		
+		var elements = shape.getChildShapes(false);
 		
 		// if Autolayout is not required, do nothing.
-		if (!this.requiredAutoLayout (event.shape)){
+		if (!this._requiredAutoLayout (shape)){
      		return;
      	};
 		
@@ -394,15 +555,15 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			}
 		});
 		
-		this.autoResizeLayout(event);
+		this._autoResizeLayout(shape);
 	},
 	
 	/**
 	 * Resizes the shape to the bounds of the child shapes 
 	 */
-	autoResizeLayout: function(event) {
+	_autoResizeLayout: function(shape) {
 		
-		var elements = event.shape.getChildShapes(false);
+		var elements = shape.getChildShapes(false);
 		
 		if (elements.length > 0) {
 
@@ -418,49 +579,77 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		    
 			var lowerBound = elements.last().bounds.lowerRight().y;
 			
-			var ul = event.shape.bounds.upperLeft();
+			var ul = shape.bounds.upperLeft();
+			var lr = shape.bounds.lowerRight();
 			
 			//handle "flow" specially.
-			if (event.shape.getStencil().id() ==event.shape.getStencil().namespace() + "flow"){
-			 	var lr = event.shape.bounds.lowerRight();
+			if (shape.getStencil().id() ==shape.getStencil().namespace() + "flow"){
 			 	
 			 	if (lr.x < ul.x + rightBound + 30){
-			 		event.shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, lr.y);
+			 		shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, lr.y);
 			 		lr.x = ul.x + rightBound + 30;
+			 		shape._changed();
 			 	};
 			 	
 			 	if (lr.y < ul.y + lowerBound + 30){
-			 		event.shape.bounds.set(ul.x, ul.y, lr.x, ul.y + lowerBound + 30);
+			 		shape.bounds.set(ul.x, ul.y, lr.x, ul.y + lowerBound + 30);
+			 		shape._changed();
 			 	};			 	
 			 } else {
-				event.shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, ul.y + lowerBound + 30);
+			 	if (lr.x != ul.x + rightBound + 30 || lr.y != ul.y + lowerBound + 30){
+			 		shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, ul.y + lowerBound + 30);
+			 		shape._changed();
+			 	};
 			 };
 		};
 		
+		this._update();
+		
 		return;
 	},
 	
-	resetBounds: function (event) {
-		/*var shape = event.shape;
+	_resetBounds: function (shape) {
+
+		// all the shapes without children will be reseted
+		var ul = shape.bounds.upperLeft();
+		var lr = shape.bounds.lowerRight();
 		
 		if (shape.getStencil().id() == shape.getStencil().namespace() + "process"){
-	  		return;
-	  	};
-	  	
-		var ul = shape.bounds.upperLeft();
-		
-		if (this.isHandlers(shape)){
-			shape.bounds.set(ul.x, ul.y, ul.x + 160, ul.y + 80);
-		} else if (flow){
-		
+			if (shape.getStencil().namespace() == "http://b3mn.org/stencilset/bpel#"){
+				if (lr.x != ul.x + 600 || lr.y != ul.y + 500){
+					shape.bounds.set(ul.x, ul.y, ul.x + 600, ul.y + 500);
+					shape._changed();
+				};
+			} else if (shape.getStencil().namespace() == "http://b3mn.org/stencilset/bpel4chor#"){
+				if (lr.x != ul.x + 690 || lr.y != ul.y + 200){
+					shape.bounds.set(ul.x, ul.y, ul.x + 690, ul.y + 200);
+					shape._changed();
+				};
+			} else {
+				return;
+			}
+		} else if (shape.getStencil().id() == shape.getStencil().namespace() + "flow"){
+			if (lr.x != ul.x + 290 || lr.y != ul.y + 250){
+				shape.bounds.set(ul.x, ul.y, ul.x + 290, ul.y + 250);
+				shape._changed();
+			};
+		} else if (this._isHandlers(shape)){
+			if (lr.x != ul.x + 160 || lr.y != ul.y + 80){
+				shape.bounds.set(ul.x, ul.y, ul.x + 160, ul.y + 80);
+				shape._changed();
+			};
 		} else {
-			shape.bounds.set(ul.x, ul.y, ul.x + 100, ul.y + 80);	
-		};*/
-		
-		return;
+			if (lr.x != ul.x + 100 || lr.y != ul.y + 80){
+				shape.bounds.set(ul.x, ul.y, ul.x + 100, ul.y + 80);
+				shape._changed();
+			};	
+		};
+			
+		this._update();
+
 	},
 	
-	isHandlers: function (shape) {
+	_isHandlers: function (shape) {
 	  	if (shape.getStencil().id() == shape.getStencil().namespace() + "eventHandlers"){
 	  		return true;
 	  	};
@@ -480,7 +669,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	  	return false;
 	},
 	
-	requiredAutoLayout: function(shape) {
+	_requiredAutoLayout: function(shape) {
 		
 		var key = "oryx-autolayout";
 		var autolayout = shape.properties[key];
@@ -507,7 +696,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	 *           "lastChild" after the current last one. 
 	 * @return   if the arrangement of elements is changed.
 	 */
-	moveSomeElementToLastPosition: function (elements){
+	_moveSomeElementToLastPosition: function (elements){
 		var lastChild = elements.find(function(node) {
 			 	return (Array.indexOf(node.getStencil().roles(), node.getStencil().namespace() + "lastChild")>= 0);
 			});	
@@ -523,5 +712,13 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		lastChild.bounds.moveTo(ulOfCurrentLastChild.x + 1, ulOfCurrentLastChild.y + 1);
 		
 		return true;
+	},
+	
+	_update : function(){
+		this.facade.getCanvas().update();
+		/*if (this.shapesChanged == "true"){
+			this.facade.getCanvas().update();
+			this.shapesChanged = false;
+		}*/
 	}
 });

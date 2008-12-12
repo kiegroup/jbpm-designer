@@ -126,11 +126,11 @@
 				
 		<!-- plugin for BPEL and BPEL4Chor editor --> 
 		<plugin source="bpelSupport.js" name="ORYX.Plugins.BPELSupport">
-			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>	
 		</plugin>
 		
 		<plugin source="bpel4chorSupport.js" name="ORYX.Plugins.BPEL4ChorSupport">
-			<requires namespace="http://b3mn.org/stencilset/bpel#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>
 		</plugin>
 		
