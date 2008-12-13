@@ -2,7 +2,9 @@
 <xsl:stylesheet version="1.0" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:chor="http://iaas.uni-stuttgart.de/schemas/XPDL4chor"
-	xmlns:xpdl="http://www.wfmc.org/2004/XPDL2.0alpha">
+	xmlns:xpdl="http://www.wfmc.org/2004/XPDL2.0alpha"
+	xmlns:xh="http://www.w3.org/1999/xhtml" 
+	exclude-result-prefixes="xh">
 	
 	<!-- ********* Template for splitting whitespace separeted String lists for elements without attributes ********** -->
 	<xsl:template name="string-tokens">
@@ -479,9 +481,9 @@
 	<xsl:template name="object">
 		<xsl:param name="objectParent" />
 		<xpdl:Object
-			Id="{$objectParent/span[@class='oryx-id']}">
-			<xsl:variable name="categories" select="$objectParent/span[@class='oryx-categories']" />
-			<xsl:variable name="documentation" select="$objectParent/span[@class='oryx-documentation']" />
+			Id="{$objectParent/xh:span[@class='oryx-id']}">
+			<xsl:variable name="categories" select="$objectParent/xh:span[@class='oryx-categories']" />
+			<xsl:variable name="documentation" select="$objectParent/xh:span[@class='oryx-documentation']" />
 			<!-- Categories -->
 			<xsl:if test="string-length(normalize-space($categories))>0">
 				<xpdl:Categories>
@@ -502,7 +504,7 @@
 	<!--  **************************** Template for NodeGraphicsInfo element ****************** -->
 	<xsl:template name="nodeGraphicsInfos">
 		<xsl:param name="node" />
-		<xsl:variable name="bounds" select="$node/span[@class='oryx-bounds']" />
+		<xsl:variable name="bounds" select="$node/xh:span[@class='oryx-bounds']" />
 		<xsl:variable name="x" select="substring-before($bounds, ',')" />
 		<xsl:variable name="remaining1" select="substring-after($bounds, ',')" />
 		<xsl:variable name="y" select="substring-before($remaining1, ',')" />
@@ -518,11 +520,11 @@
 	
 	<!--  **************************** Template for timer trigger ****************** -->
 	<xsl:template name="triggerTimer">
-		<xsl:variable name="timeType" select="span[@class='oryx-timetype']" />
-		<xsl:variable name="timeExpression" select="span[@class='oryx-timeexpression']" />
-		<xsl:variable name="timeExpressionLanguage" select="span[@class='oryx-timeexpressionlanguage']" />
-		<xsl:variable name="repeatEvery" select="span[@class='oryx-repeatevery']" />
-		<xsl:variable name="repeatEveryLanguage" select="span[@class='oryx-repeateverylanguage']" />
+		<xsl:variable name="timeType" select="xh:span[@class='oryx-timetype']" />
+		<xsl:variable name="timeExpression" select="xh:span[@class='oryx-timeexpression']" />
+		<xsl:variable name="timeExpressionLanguage" select="xh:span[@class='oryx-timeexpressionlanguage']" />
+		<xsl:variable name="repeatEvery" select="xh:span[@class='oryx-repeatevery']" />
+		<xsl:variable name="repeatEveryLanguage" select="xh:span[@class='oryx-repeateverylanguage']" />
 		
 		<xpdl:TriggerTimer>
 			<xsl:if test="$timeType='Cycle'">
@@ -557,8 +559,8 @@
 	<xsl:template name="triggerResultMessage">
 		<xsl:param name="id" />
 		<xpdl:TriggerResultMessage
-			chor:OpaqueOutput="{span[@class='oryx-opaqueoutput']}">
-			<xsl:variable name="messageExchange" select="span[@class='oryx-messageexchange']" />
+			chor:OpaqueOutput="{xh:span[@class='oryx-opaqueoutput']}">
+			<xsl:variable name="messageExchange" select="xh:span[@class='oryx-messageexchange']" />
 			<xsl:if test="string-length(normalize-space($messageExchange))>0">
 				<xsl:attribute name="chor:MessageExchange">
 					<xsl:value-of select="$messageExchange" />
@@ -566,10 +568,10 @@
 			</xsl:if>
 			<xpdl:Message Id="{concat($id,'_message')}"/>
 			<xsl:call-template name="correlations-tokens">
-				<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-correlations']" /></xsl:with-param>
+				<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-correlations']" /></xsl:with-param>
 			</xsl:call-template>
 			<xsl:call-template name="fromParts-tokens">
-				<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-fromparts']" /></xsl:with-param>
+				<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-fromparts']" /></xsl:with-param>
 			</xsl:call-template>
 		</xpdl:TriggerResultMessage>
 	</xsl:template>
@@ -578,13 +580,13 @@
 	<xsl:template name="activities">
 		<xsl:param name="activities" />
 		<xsl:for-each select="$activities">
-			<xsl:variable name="type" select="span[@class='oryx-activitytype']" />
-			<xsl:variable name="gatewayType" select="span[@class='oryx-gatewaytype']" />
-			<xsl:variable name="eventType" select="span[@class='oryx-eventtype']" />
-			<xsl:variable name="loopType" select="span[@class='oryx-looptype']" />
-			<xsl:variable name="id" select="span[@class='oryx-id']" />
-			<xsl:variable name="name" select="span[@class='oryx-name']" />					
-			<xsl:variable name="suppressJoinFailure" select="span[@class='oryx-suppressjoinfailure']" />								
+			<xsl:variable name="type" select="xh:span[@class='oryx-activitytype']" />
+			<xsl:variable name="gatewayType" select="xh:span[@class='oryx-gatewaytype']" />
+			<xsl:variable name="eventType" select="xh:span[@class='oryx-eventtype']" />
+			<xsl:variable name="loopType" select="xh:span[@class='oryx-looptype']" />
+			<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
+			<xsl:variable name="name" select="xh:span[@class='oryx-name']" />					
+			<xsl:variable name="suppressJoinFailure" select="xh:span[@class='oryx-suppressjoinfailure']" />								
 			<xsl:if test="string-length(normalize-space($type))>0 or 
 				string-length(normalize-space($gatewayType))>0 or 
 				string-length(normalize-space($eventType))>0">
@@ -602,7 +604,7 @@
 					</xsl:if>
 			<!-- ******************** Route ********************** -->
 					<xsl:if test="string-length(normalize-space($gatewayType))>0">
-						<xsl:variable name="instantiate" select="span[@class='oryx-instantiate']" />
+						<xsl:variable name="instantiate" select="xh:span[@class='oryx-instantiate']" />
 						<xpdl:Route GatewayType="{$gatewayType}">
 							<xsl:if test="$instantiate">
 								<xsl:attribute name="Instantiate">
@@ -613,10 +615,10 @@
 						<xsl:if test="$gatewayType='XOR'">
 							<xpdl:TransitionRestrictions>
 								<xpdl:TransitionRestriction>
-									<xsl:if test="span[@class='oryx-xortype']='Event'">
+									<xsl:if test="xh:span[@class='oryx-xortype']='Event'">
 										<xpdl:Split Type="XOREVENT" />
 									</xsl:if>
-									<xsl:if test="span[@class='oryx-xortype']='Data'">
+									<xsl:if test="xh:span[@class='oryx-xortype']='Data'">
 										<xpdl:Split Type="XOR" />
 										<!-- TODO: transition Refs depending on defined transition order? -->
 									</xsl:if>
@@ -626,24 +628,24 @@
 					</xsl:if>
 			<!-- ******************** XPDL Tasks ********************** -->
 					<xsl:if test="$type='Task'">
-						<xsl:variable name="taskType" select="span[@class='oryx-tasktype']" />
+						<xsl:variable name="taskType" select="xh:span[@class='oryx-tasktype']" />
 						<xsl:if test="$taskType='Service'">
 							<xpdl:Implementation>
 								<xpdl:Task>
 									<xpdl:TaskService 
-										chor:OpaqueInput="{span[@class='oryx-opaqueinput']}" 
-										chor:OpaqueOutput="{span[@class='oryx-opaqueoutput']}">
+										chor:OpaqueInput="{xh:span[@class='oryx-opaqueinput']}" 
+										chor:OpaqueOutput="{xh:span[@class='oryx-opaqueoutput']}">
 										<xpdl:MessageIn Id="{concat($id,'_messagein')}"/>
 										<xpdl:MessageOut Id="{concat($id,'_messageout')}"/>
 										
 										<xsl:call-template name="correlations-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-correlations']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-correlations']" /></xsl:with-param>
 										</xsl:call-template>
 										<xsl:call-template name="toParts-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-toparts']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-toparts']" /></xsl:with-param>
 										</xsl:call-template>
 										<xsl:call-template name="fromParts-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-fromparts']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-fromparts']" /></xsl:with-param>
 										</xsl:call-template>
 									</xpdl:TaskService>
 								</xpdl:Task>
@@ -652,10 +654,10 @@
 						<xsl:if test="$taskType='Receive'">
 							<xpdl:Implementation>
 								<xpdl:Task>
-									<xsl:variable name="messageExchange" select="span[@class='oryx-messageexchange']" />
+									<xsl:variable name="messageExchange" select="xh:span[@class='oryx-messageexchange']" />
 									<xpdl:TaskReceive
-										Instantiate="{span[@class='oryx-instantiate']}"
-										chor:OpaqueOutput="{span[@class='oryx-opaqueoutput']}">
+										Instantiate="{xh:span[@class='oryx-instantiate']}"
+										chor:OpaqueOutput="{xh:span[@class='oryx-opaqueoutput']}">
 										<xpdl:Message Id="{concat($id,'_message')}"/>
 										<xsl:if test="string-length(normalize-space($messageExchange))>0">
 											<xsl:attribute name="chor:MessageExchange">
@@ -663,10 +665,10 @@
 											</xsl:attribute>
 										</xsl:if>
 										<xsl:call-template name="correlations-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-correlations']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-correlations']" /></xsl:with-param>
 										</xsl:call-template>
 										<xsl:call-template name="fromParts-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-fromparts']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-fromparts']" /></xsl:with-param>
 										</xsl:call-template>
 									</xpdl:TaskReceive>
 								</xpdl:Task>
@@ -675,10 +677,10 @@
 						<xsl:if test="$taskType='Send'">
 							<xpdl:Implementation>
 								<xpdl:Task>
-									<xsl:variable name="messageExchange" select="span[@class='oryx-messageexchange']" />
-									<xsl:variable name="faultName" select="span[@class='oryx-faultname']" />
+									<xsl:variable name="messageExchange" select="xh:span[@class='oryx-messageexchange']" />
+									<xsl:variable name="faultName" select="xh:span[@class='oryx-faultname']" />
 									<xpdl:TaskSend
-										chor:OpaqueInput="{span[@class='oryx-opaqueinput']}">
+										chor:OpaqueInput="{xh:span[@class='oryx-opaqueinput']}">
 										<xsl:if test="string-length(normalize-space($messageExchange))>0">
 											<xsl:attribute name="chor:MessageExchange">
 												<xsl:value-of select="$messageExchange" />
@@ -691,10 +693,10 @@
 										</xsl:if>
 										<xpdl:Message Id="{concat($id,'_message')}"/>
 										<xsl:call-template name="correlations-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-correlations']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-correlations']" /></xsl:with-param>
 										</xsl:call-template>
 										<xsl:call-template name="toParts-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-toparts']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-toparts']" /></xsl:with-param>
 										</xsl:call-template>
 									</xpdl:TaskSend>
 								</xpdl:Task>
@@ -703,8 +705,8 @@
 					</xsl:if>
 			<!-- ************* BlockActivitiy ****************** -->
 					<xsl:if test="$type='SubProcess'">
-						<xsl:variable name="isolated" select="span[@class='oryx-isolated']" />
-						<xsl:variable name="exitOnStandardFault" select="span[@class='oryx-exitonstandardfault']" />
+						<xsl:variable name="isolated" select="xh:span[@class='oryx-isolated']" />
+						<xsl:variable name="exitOnStandardFault" select="xh:span[@class='oryx-exitonstandardfault']" />
 						<xsl:variable name="index" select="generate-id(.)" />
 						<xpdl:BlockActivity 
 							ActivitySetId="{concat(concat($id,'_activitySet_'),$index)}">
@@ -718,9 +720,9 @@
 									<xsl:value-of select="$exitOnStandardFault"/>
 								</xsl:attribute>
 							</xsl:if>
-							<xsl:if test="span[@class='oryx-embeddedsubprocesstype']='Scope'">
+							<xsl:if test="xh:span[@class='oryx-embeddedsubprocesstype']='Scope'">
 								<chor:Scope>
-									<xsl:variable name="messageExchanges" select="span[@class='oryx-messageexchanges']" />
+									<xsl:variable name="messageExchanges" select="xh:span[@class='oryx-messageexchanges']" />
 									<chor:MessageExchanges>
 										<xsl:if test="string-length(normalize-space($messageExchanges))>0" >
 											<xsl:call-template name="string-tokens">
@@ -731,15 +733,15 @@
 									</chor:MessageExchanges>
 								</chor:Scope>
 							</xsl:if>
-							<xsl:if test="span[@class='oryx-embeddedsubprocesstype']='Handler'">
-								<chor:Handler HandlerType="{span[@class='oryx-handlertype']}" />
+							<xsl:if test="xh:span[@class='oryx-embeddedsubprocesstype']='Handler'">
+								<chor:Handler HandlerType="{xh:span[@class='oryx-handlertype']}" />
 							</xsl:if>
 						</xpdl:BlockActivity>
 					</xsl:if>
 				<!-- ******************** Event ********************** -->
 					<xsl:if test="string-length(normalize-space($eventType))>0">
 						<xpdl:Event>
-							<xsl:variable name="trigger" select="span[@class='oryx-trigger']" />
+							<xsl:variable name="trigger" select="xh:span[@class='oryx-trigger']" />
 							<xsl:if test="$eventType='Start'" >
 								<xpdl:StartEvent Trigger="{$trigger}">
 									<xsl:if test="$trigger='Message'">
@@ -753,7 +755,7 @@
 								</xpdl:StartEvent>
 							</xsl:if>
 							<xsl:if test="$eventType='Intermediate'" >
-								<xsl:variable name="target" select="span[@class='oryx-target']" />
+								<xsl:variable name="target" select="xh:span[@class='oryx-target']" />
 								<xpdl:IntermediateEvent>
 									<xsl:if test="$trigger='Termination'">
 										<xsl:attribute name="Trigger">None</xsl:attribute>
@@ -778,10 +780,10 @@
 										<xsl:call-template name="triggerTimer" />
 									</xsl:if>
 									<xsl:if test="$trigger='Error'">
-										<xpdl:ResultError ErrorCode="{span[@class='oryx-errorcode']}" />
+										<xpdl:ResultError ErrorCode="{xh:span[@class='oryx-errorcode']}" />
 									</xsl:if>
 									<xsl:if test="$trigger='Compensation'">
-										<xsl:variable name="activity" select="span[@class='oryx-activity']" />
+										<xsl:variable name="activity" select="xh:span[@class='oryx-activity']" />
 										<xpdl:ResultCompensation>
 											<xsl:if test="string-length(normalize-space($activity))>0" >
 												<xsl:attribute name="ActivityId">
@@ -798,7 +800,7 @@
 						</xpdl:Event>
 					</xsl:if>
 				<!-- correlation sets for scope -->
-					<xsl:variable name="correlationSets" select="span[@class='oryx-correlationsets']"/>
+					<xsl:variable name="correlationSets" select="xh:span[@class='oryx-correlationsets']"/>
 						<xsl:call-template name="correlationSets-tokens">
 						<xsl:with-param name="correlationSets" select="$correlationSets" />
 					</xsl:call-template>
@@ -806,10 +808,10 @@
 					<xsl:if test="$loopType != 'None'">
 						<xpdl:Loop LoopType="{$loopType}">
 							<xsl:if test="$loopType ='Standard'">
-								<xsl:variable name="loopConditionLanguage" select="span[@class='oryx-st_loopconditionlanguage']" />
+								<xsl:variable name="loopConditionLanguage" select="xh:span[@class='oryx-st_loopconditionlanguage']" />
 								<xpdl:LoopStandard
-									LoopCondition="{span[@class='oryx-st_loopcondition']}"
-									TestTime="{span[@class='oryx-st_testtime']}">
+									LoopCondition="{xh:span[@class='oryx-st_loopcondition']}"
+									TestTime="{xh:span[@class='oryx-st_testtime']}">
 									<xsl:if test="string-length(normalize-space($loopConditionLanguage))>0">
 										<xsl:attribute name="chor:LoopConditionLanguage">
 											<xsl:value-of select="$loopConditionLanguage" />
@@ -818,15 +820,15 @@
 								</xpdl:LoopStandard>
 							</xsl:if>
 							<xsl:if test="$loopType='MultiInstance'">
-								<xsl:variable name="mi_StartCounterValueLanguage" select="span[@class='oryx-mi_startcountervaluelanguage']" />
-								<xsl:variable name="mi_FinalCounterValueLanguage" select="span[@class='oryx-mi_finalcountervaluelanguage']" />
-								<xsl:variable name="mi_CompletionCondition" select="span[@class='oryx-mi_completioncondition']" />
-								<xsl:variable name="mi_CompletionConditionLanguage" select="span[@class='oryx-mi_completionconditionlanguage']" />
-								<xsl:variable name="mi_SuccessfulBranchesOnly" select="span[@class='oryx-mi_successfulbranchesonly']" />
+								<xsl:variable name="mi_StartCounterValueLanguage" select="xh:span[@class='oryx-mi_startcountervaluelanguage']" />
+								<xsl:variable name="mi_FinalCounterValueLanguage" select="xh:span[@class='oryx-mi_finalcountervaluelanguage']" />
+								<xsl:variable name="mi_CompletionCondition" select="xh:span[@class='oryx-mi_completioncondition']" />
+								<xsl:variable name="mi_CompletionConditionLanguage" select="xh:span[@class='oryx-mi_completionconditionlanguage']" />
+								<xsl:variable name="mi_SuccessfulBranchesOnly" select="xh:span[@class='oryx-mi_successfulbranchesonly']" />
 								 <xpdl:LoopMultiInstance
 									MI_Condition=""
-									MI_Ordering="{span[@class='oryx-mi_ordering']}"
-									MI_FlowCondition="{span[@class='oryx-mi_flowcondition']}">
+									MI_Ordering="{xh:span[@class='oryx-mi_ordering']}"
+									MI_FlowCondition="{xh:span[@class='oryx-mi_flowcondition']}">
 									<xsl:if test="string-length(normalize-space($mi_SuccessfulBranchesOnly))>0">
 										<xsl:attribute name="chor:SuccessfulBranchesOnly">
 											<xsl:value-of select="$mi_SuccessfulBranchesOnly" />
@@ -838,7 +840,7 @@
 												<xsl:value-of select="$mi_StartCounterValueLanguage" />
 											</xsl:attribute>
 										</xsl:if>
-										<xsl:value-of select="span[@class='oryx-mi_startcountervalue']"/>
+										<xsl:value-of select="xh:span[@class='oryx-mi_startcountervalue']"/>
 									</chor:StartCounterValue>
 									<chor:FinalCounterValue >
 										<xsl:if test="string-length(normalize-space($mi_FinalCounterValueLanguage))>0">
@@ -846,7 +848,7 @@
 												<xsl:value-of select="$mi_FinalCounterValueLanguage" />
 											</xsl:attribute>
 										</xsl:if>
-										<xsl:value-of select="span[@class='oryx-mi_finalcountervalue']"/>
+										<xsl:value-of select="xh:span[@class='oryx-mi_finalcountervalue']"/>
 									</chor:FinalCounterValue>
 									<xsl:if test="string-length(normalize-space($mi_CompletionCondition))>0">
 										<chor:CompletionCondition>
@@ -875,15 +877,15 @@
 					
 			<!-- ************* XPDL4Chor Tasks ******************** -->
 					<xsl:if test="$type='Task'">
-						<xsl:variable name="taskType" select="span[@class='oryx-tasktype']" />
+						<xsl:variable name="taskType" select="xh:span[@class='oryx-tasktype']" />
 						<xsl:if test="$taskType='Assign'">
 							<xpdl:Extensions/>
 							<chor:Task>
 								<TaskAssign
-									Validate="{span[@class='oryx-validate']}">								
+									Validate="{xh:span[@class='oryx-validate']}">								
 									
 									<xsl:call-template name="copies-tokens">
-										<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-copy']" /></xsl:with-param>
+										<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-copy']" /></xsl:with-param>
 									</xsl:call-template>								
 								</TaskAssign>
 							</chor:Task>
@@ -915,10 +917,10 @@
   <!-- ************** Template for extracting relevant Transitions ******************** -->
   <xsl:template name="relevantTransitions">
     <xsl:param name="resId" />
-    <xsl:variable name="activitiesOutRefs" select="//div[a[@rel='raziel-parent' and @href=concat('#',$resId)]]/a[@rel='raziel-outgoing']"/>
+    <xsl:variable name="activitiesOutRefs" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$resId)]]/xh:a[@rel='raziel-outgoing']"/>
     <xsl:for-each select="$activitiesOutRefs">
       <xsl:variable name="outRef" select="@href"/>
-      <xsl:variable name="relevantTransitions" select="//div[a[@rel='raziel-parent' and @href='#oryx-canvas123'] and @id=substring($outRef,2)]"/>
+      <xsl:variable name="relevantTransitions" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href='#oryx-canvas123'] and @id=substring($outRef,2)]"/>
       <xsl:call-template name="transitions">
         <xsl:with-param name="transitions" select="$relevantTransitions" />
       </xsl:call-template>
@@ -929,24 +931,24 @@
 	<xsl:template name="transitions">
 		<xsl:param name="transitions" />
 		<xsl:for-each select="$transitions">
-			<xsl:variable name="type" select="span[@class='oryx-type']" />
-			<xsl:variable name="id" select="span[@class='oryx-id']" />
-			<xsl:variable name="name" select="span[@class='oryx-name']" />
-			<xsl:variable name="internalOutRef" select="a[@rel='raziel-outgoing']/@href" />
+			<xsl:variable name="type" select="xh:span[@class='oryx-type']" />
+			<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
+			<xsl:variable name="name" select="xh:span[@class='oryx-name']" />
+			<xsl:variable name="internalOutRef" select="xh:a[@rel='raziel-outgoing']/@href" />
 			<xsl:if test="$type='http://b3mn.org/stencilset/bpmnplus#SequenceFlow' or 
 						$type='http://b3mn.org/stencilset/bpmnplus#ConditionalFlow' or
 						$type='http://b3mn.org/stencilset/bpmnplus#DefaultFlow'">
 				<xpdl:Transition
 					Id="{$id}"
-					From="{//div[a[@rel='raziel-outgoing' and @href=concat('#',$id)]]/@id}"
-					To="{//div[@id=substring($internalOutRef,2)]/@id}">
+					From="{/xh:html/xh:body/xh:div[xh:a[@rel='raziel-outgoing' and @href=concat('#',$id)]]/@id}"
+					To="{/xh:html/xh:body/xh:div[@id=substring($internalOutRef,2)]/@id}">
 					<xsl:if test="string-length(normalize-space($name))>0">
 						<xsl:attribute name="Name">
 							<xsl:value-of select="$name" />
 						</xsl:attribute>
 					</xsl:if>
 					<xsl:if test="$type='http://b3mn.org/stencilset/bpmnplus#ConditionalFlow'">
-						<xsl:variable name="conditionExpressionLanguage" select="span[@class='oryx-conditionexpressionlanguage']" />
+						<xsl:variable name="conditionExpressionLanguage" select="xh:span[@class='oryx-conditionexpressionlanguage']" />
 						<xpdl:Condition Type="CONDITION">
 							<xpdl:Expression>
 								<xsl:if test="string-length(normalize-space($conditionExpressionLanguage))>0">
@@ -954,7 +956,7 @@
 										<xsl:value-of select="$conditionExpressionLanguage"/>
 									</xsl:attribute>
 								</xsl:if>
-								<xsl:value-of select="span[@class='oryx-conditionexpression']"/>
+								<xsl:value-of select="xh:span[@class='oryx-conditionexpression']"/>
 							</xpdl:Expression>
 						</xpdl:Condition>
 					</xsl:if>
@@ -971,11 +973,11 @@
 	<xsl:template name="activitySets">
 		<xsl:param name="blockActivities" />
 		<xsl:for-each select="$blockActivities">
-			<xsl:variable name="type" select="span[@class='oryx-activitytype']" />
+			<xsl:variable name="type" select="xh:span[@class='oryx-activitytype']" />
 			<xsl:if test="$type='SubProcess'">
 				<xsl:variable name="resourceId" select="@id" />
-				<xsl:variable name="blockActivityId" select="span[@class='oryx-id']" />
-				<xsl:variable name="innerActivities" select="/data/div[a[@rel='raziel-parent' and @href=concat('#',$resourceId)]]"/>
+				<xsl:variable name="blockActivityId" select="xh:span[@class='oryx-id']" />
+				<xsl:variable name="innerActivities" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$resourceId)]]"/>
 				<xsl:variable name="index" select="generate-id(.)" />
 				<xsl:call-template name="activitySets">
 					<xsl:with-param name="blockActivities" select="$innerActivities" />
@@ -1005,9 +1007,9 @@
 		<xsl:if test="count($childLanes)>0">
 			<xpdl:Lanes>
 				<xsl:for-each select="$childLanes">
-					<xsl:variable name="laneName" select="span[@class='oryx-name']" />
+					<xsl:variable name="laneName" select="xh:span[@class='oryx-name']" />
 					<xpdl:Lane 
-						Id="{span[@class='oryx-id']}">
+						Id="{xh:span[@class='oryx-id']}">
 						<xsl:if test="string-length(normalize-space($poolId))>0">
 							<xsl:attribute name="ParentPool">
 								<xsl:value-of select="$poolId"></xsl:value-of>
@@ -1040,7 +1042,7 @@
 	</xsl:template>
 
 	<!-- ************** Template for generating XPDL4Chor package ******************** -->
-	<xsl:template match="/data">
+	<xsl:template match="/xh:html/xh:body">
 		<xpdl:Package
 			xmlns:chor="http://iaas.uni-stuttgart.de/schemas/XPDL4chor"
 			xmlns:xpdl="http://www.wfmc.org/2004/XPDL2.0alpha"
@@ -1051,20 +1053,20 @@
 				<xpdl:Vendor>Oryx</xpdl:Vendor>
 			</xpdl:PackageHeader>
 <!-- *********************** Pools ******************************** -->
-			<xsl:variable name="Pools" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#Pool']"/>
+			<xsl:variable name="Pools" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#Pool']"/>
 			<xsl:if test="count($Pools)>0">
 				<xpdl:Pools>
 					<xsl:for-each select="$Pools">
-						<xsl:variable name="id" select="span[@class='oryx-id']" />
+						<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
 						<xpdl:Pool 
 							Id="{$id}" 
-							Name="{span[@class='oryx-name']}"
-							Process="{span[@class='oryx-processid']}"
-							chor:TargetNamespace="{span[@class='oryx-processtargetnamespace']}"
-							chor:Prefix="{span[@class='oryx-processprefix']}"
-							chor:Containment="{span[@class='oryx-containment']}"
-							BoundaryVisible="{span[@class='oryx-boundaryvisible']}">
-							<xsl:variable name="participantRef" select="span[@class='oryx-participantname']" />
+							Name="{xh:span[@class='oryx-name']}"
+							Process="{xh:span[@class='oryx-processid']}"
+							chor:TargetNamespace="{xh:span[@class='oryx-processtargetnamespace']}"
+							chor:Prefix="{xh:span[@class='oryx-processprefix']}"
+							chor:Containment="{xh:span[@class='oryx-containment']}"
+							BoundaryVisible="{xh:span[@class='oryx-boundaryvisible']}">
+							<xsl:variable name="participantRef" select="xh:span[@class='oryx-participantname']" />
 							<xsl:if test="string-length(normalize-space($participantRef))>0">
 								<xsl:attribute name="Participant">
 									<xsl:value-of select="$participantRef"></xsl:value-of>
@@ -1072,7 +1074,7 @@
 							</xsl:if>
 							
 							<!-- determine Lanes -->
-							<xsl:variable name="childLanes" select="/data/div[a[@rel='raziel-parent' and @href=concat('#',$id)]]" />
+							<xsl:variable name="childLanes" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$id)]]" />
 							<xsl:call-template name="lanes">
 								<xsl:with-param name="childLanes" select="$childLanes" />
 								<xsl:with-param name="poolId" select="$id" />
@@ -1089,27 +1091,27 @@
 							</xsl:call-template>
 							
 							<xsl:call-template name="string-tokens">
-								<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-selects']" /></xsl:with-param>
+								<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-selects']" /></xsl:with-param>
 								<xsl:with-param name="elementName">chor:Selects</xsl:with-param>
 							</xsl:call-template>
 							<xsl:call-template name="imports-tokens">
-								<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-imports']" /></xsl:with-param>
+								<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-imports']" /></xsl:with-param>
 							</xsl:call-template>
 						</xpdl:Pool>
 					</xsl:for-each>				
 				</xpdl:Pools>
 			</xsl:if>
 <!-- ******************* Message Flows ********************** -->
-			<xsl:variable name="MessageFlows" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#MessageFlow']"/>
+			<xsl:variable name="MessageFlows" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#MessageFlow']"/>
 			<xsl:if test="count($MessageFlows)>0">
 				<xpdl:MessageFlows>
 					<xsl:for-each select="$MessageFlows">
-						<xsl:variable name="id" select="span[@class='oryx-id']"/>
-						<xsl:variable name="name" select="span[@class='oryx-name']"/>
+						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>
+						<xsl:variable name="name" select="xh:span[@class='oryx-name']"/>
 						<xpdl:MessageFlow 
 							Id="{$id}"
-							Source="{span[@class='oryx-source']}"
-							Target="{span[@class='oryx-target']}">				
+							Source="{xh:span[@class='oryx-source']}"
+							Target="{xh:span[@class='oryx-target']}">				
 							<xsl:if test="string-length(normalize-space($name))>0">
 								<xsl:attribute name="Name">
 									<xsl:value-of select="$name" />
@@ -1117,24 +1119,24 @@
 							</xsl:if>
 							<xpdl:Message 
 								Id="{concat($id,'_message')}" 
-								Name="{span[@class='oryx-message']}">
+								Name="{xh:span[@class='oryx-message']}">
 							</xpdl:Message>
 						</xpdl:MessageFlow>
 					</xsl:for-each>
 				</xpdl:MessageFlows>
 			</xsl:if>
 <!-- ******************* Associations ********************** -->
-			<xsl:variable name="undirectedAssociations" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#UndirectedAssociation']"/>
-			<xsl:variable name="directedAssociations" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#DirectedAssociation']"/>
+			<xsl:variable name="undirectedAssociations" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#UndirectedAssociation']"/>
+			<xsl:variable name="directedAssociations" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#DirectedAssociation']"/>
 			<xsl:if test="count($undirectedAssociations)>0 or count($directedAssociations)>0">
 				<xpdl:Associations>
 					<xsl:for-each select="$undirectedAssociations">
-						<xsl:variable name="name" select="span[@class='oryx-name']"/>
+						<xsl:variable name="name" select="xh:span[@class='oryx-name']"/>
 						<xpdl:Association 
-							Id="{span[@class='oryx-id']}"
-							Source="{span[@class='oryx-source']}"
-							Target="{span[@class='oryx-target']}"
-							AssociationDirection="{span[@class='oryx-direction']}">
+							Id="{xh:span[@class='oryx-id']}"
+							Source="{xh:span[@class='oryx-source']}"
+							Target="{xh:span[@class='oryx-target']}"
+							AssociationDirection="{xh:span[@class='oryx-direction']}">
 							<xsl:if test="string-length(normalize-space($name))>0">
 								<xsl:attribute name="Name">
 									<xsl:value-of select="$name" />
@@ -1143,12 +1145,12 @@
 						</xpdl:Association>
 					</xsl:for-each>
 					<xsl:for-each select="$directedAssociations">
-						<xsl:variable name="name" select="span[@class='oryx-name']"/>
+						<xsl:variable name="name" select="xh:span[@class='oryx-name']"/>
 						<xpdl:Association 
-							Id="{span[@class='oryx-id']}"
-							Source="{span[@class='oryx-source']}"
-							Target="{span[@class='oryx-target']}"
-							AssociationDirection="{span[@class='oryx-direction']}">
+							Id="{xh:span[@class='oryx-id']}"
+							Source="{xh:span[@class='oryx-source']}"
+							Target="{xh:span[@class='oryx-target']}"
+							AssociationDirection="{xh:span[@class='oryx-direction']}">
 							<xsl:if test="string-length(normalize-space($name))>0">
 								<xsl:attribute name="Name">
 									<xsl:value-of select="$name" />
@@ -1159,27 +1161,27 @@
 				</xpdl:Associations>
 			</xsl:if>
 <!-- ******************* Artifacts *************************** -->
-			<xsl:variable name="VarDataObjects" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#MessageVariableDataObject' or 
-										 			span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject' or
-										  			span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject' or 
-										  			span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#CounterVariableDataObject']"/>
-			<xsl:variable name="RefDataObjects" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#ParticipantReferenceDataObject']"/>							 
-			<xsl:variable name="SetDataObjects" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#ParticipantSetDataObject']"/>
+			<xsl:variable name="VarDataObjects" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#MessageVariableDataObject' or 
+										 			xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject' or
+										  			xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject' or 
+										  			xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#CounterVariableDataObject']"/>
+			<xsl:variable name="RefDataObjects" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#ParticipantReferenceDataObject']"/>							 
+			<xsl:variable name="SetDataObjects" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#ParticipantSetDataObject']"/>
 			<xsl:if test="(count($VarDataObjects) + count($RefDataObjects) + count($SetDataObjects))>0">
 				<xpdl:Artifacts>
 				<!-- ******************** Variable Data Object ******************* -->
 					<xsl:for-each select="$VarDataObjects">
-						<xsl:variable name="id" select="span[@class='oryx-id']"/>
-						<xsl:variable name="subProcess" select="span[@class='oryx-subprocess']"/>
-						<xsl:variable name="process" select="span[@class='oryx-process']"/>
-						<xsl:variable name="pool" select="span[@class='oryx-pool']"/>
-						<xsl:variable name="poolSet" select="span[@class='oryx-poolset']"/>
+						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>
+						<xsl:variable name="subProcess" select="xh:span[@class='oryx-subprocess']"/>
+						<xsl:variable name="process" select="xh:span[@class='oryx-process']"/>
+						<xsl:variable name="pool" select="xh:span[@class='oryx-pool']"/>
+						<xsl:variable name="poolSet" select="xh:span[@class='oryx-poolset']"/>
 						<xpdl:Artifact 
 							Id="{$id}"
-							Name="{span[@class='oryx-name']}"
+							Name="{xh:span[@class='oryx-name']}"
 							ArtifactType="DataObject">
 							<xsl:if test="string-length(normalize-space($subProcess))>0">
-								<xsl:variable name="subProcessNode" select="/data/div[span[@class='oryx-id']=$subProcess]" />
+								<xsl:variable name="subProcessNode" select="/xh:html/xh:body/xh:div[xh:span[@class='oryx-id']=$subProcess]" />
 								<xsl:variable name="index" select="generate-id($subProcessNode)" />
 								<xsl:attribute name="chor:SubProcess">
 									<xsl:value-of select="concat(concat($subProcess,'_activitySet_'),$index)" />
@@ -1204,20 +1206,20 @@
 								Id="{concat($id,'_DataObject')}"
 								RequiredForStart="true" 
 								ProducedAtCompletion="true">
-								<xsl:variable name="type" select="span[@class='oryx-vartype']"/>
-								<xsl:variable name="prefix" select="span[@class='oryx-deftypeprefix']"/>
-								<xsl:variable name="value" select="span[@class='oryx-deftypevalue']"/>
+								<xsl:variable name="type" select="xh:span[@class='oryx-vartype']"/>
+								<xsl:variable name="prefix" select="xh:span[@class='oryx-deftypeprefix']"/>
+								<xsl:variable name="value" select="xh:span[@class='oryx-deftypevalue']"/>
 								<chor:VariableDataObject 
 									Type="{$type}">
-									<xsl:if test="span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#MessageVariableDataObject' or 
-												  span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject' or
-												  span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject'">
-										<xsl:attribute name="VariableType"><xsl:value-of select="span[@class='oryx-deftype']"/></xsl:attribute>
+									<xsl:if test="xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#MessageVariableDataObject' or 
+												  xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject' or
+												  xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject'">
+										<xsl:attribute name="VariableType"><xsl:value-of select="xh:span[@class='oryx-deftype']"/></xsl:attribute>
 										<xsl:attribute name="VariableTypeValue"><xsl:value-of select="concat(concat($prefix,':'),$value)"/></xsl:attribute>
 									</xsl:if>
-									<xsl:if test="span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject'">
+									<xsl:if test="xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject'">
 										<xsl:call-template name="from-specs-tokens">
-											<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-fromspec']" /></xsl:with-param>
+											<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-fromspec']" /></xsl:with-param>
 										</xsl:call-template>
 									</xsl:if>
 								</chor:VariableDataObject>
@@ -1226,12 +1228,12 @@
 					</xsl:for-each>
 				<!-- ******************** Participant Reference Data Object ******************* -->
 					<xsl:for-each select="$RefDataObjects">
-						<xsl:variable name="id" select="span[@class='oryx-id']"/>				
-						<xsl:variable name="pool" select="span[@class='oryx-pool']"/>
-						<xsl:variable name="poolSet" select="span[@class='oryx-poolset']"/>
+						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>				
+						<xsl:variable name="pool" select="xh:span[@class='oryx-pool']"/>
+						<xsl:variable name="poolSet" select="xh:span[@class='oryx-poolset']"/>
 						<xpdl:Artifact
 							Id="{$id}"
-							Name="{span[@class='oryx-name']}"
+							Name="{xh:span[@class='oryx-name']}"
 							ArtifactType="DataObject">
 							<xsl:if test="string-length(normalize-space($pool))>0">
 								<xsl:attribute name="chor:Pool">
@@ -1248,26 +1250,26 @@
 								RequiredForStart="true" 
 								ProducedAtCompletion="true">
 								<chor:ParticipantReferenceDataObject>
-									<xsl:variable name="scope" select="span[@class='oryx-scope']"/>
+									<xsl:variable name="scope" select="xh:span[@class='oryx-scope']"/>
 									<xsl:if test="string-length(normalize-space($scope))>0">
 										<xsl:attribute name="Scope">
 											<xsl:value-of select="$scope" />
 										</xsl:attribute>
 									</xsl:if>	
-									<xsl:variable name="copyTo" select="span[@class='oryx-copyto']"/>
+									<xsl:variable name="copyTo" select="xh:span[@class='oryx-copyto']"/>
 									<xsl:if test="string-length(normalize-space($copyTo))>0">
 										<xsl:attribute name="CopyTo">
 											<xsl:value-of select="$copyTo" />
 										</xsl:attribute>
 									</xsl:if>
-									<xsl:variable name="containment" select="span[@class='oryx-containment']"/>
+									<xsl:variable name="containment" select="xh:span[@class='oryx-containment']"/>
 									<xsl:if test="string-length(normalize-space($containment))>0">
 										<xsl:attribute name="Containment">
 											<xsl:value-of select="$containment" />
 										</xsl:attribute>
 									</xsl:if>
 									<xsl:call-template name="string-tokens">
-										<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-selects']" /></xsl:with-param>
+										<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-selects']" /></xsl:with-param>
 										<xsl:with-param name="elementName">chor:Selects</xsl:with-param>
 									</xsl:call-template>
 								</chor:ParticipantReferenceDataObject>
@@ -1276,12 +1278,12 @@
 					</xsl:for-each>
 				<!-- ******************** Participant Set Data Object ******************* -->
 					<xsl:for-each select="$SetDataObjects">
-						<xsl:variable name="id" select="span[@class='oryx-id']"/>				
-						<xsl:variable name="pool" select="span[@class='oryx-pool']"/>
-						<xsl:variable name="poolSet" select="span[@class='oryx-poolset']"/>
+						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>				
+						<xsl:variable name="pool" select="xh:span[@class='oryx-pool']"/>
+						<xsl:variable name="poolSet" select="xh:span[@class='oryx-poolset']"/>
 						<xpdl:Artifact
 							Id="{$id}"
-							Name="{span[@class='oryx-name']}"
+							Name="{xh:span[@class='oryx-name']}"
 							ArtifactType="DataObject">
 							<xsl:if test="string-length(normalize-space($pool))>0">
 								<xsl:attribute name="chor:Pool">
@@ -1298,13 +1300,13 @@
 								RequiredForStart="true" 
 								ProducedAtCompletion="true">
 								<chor:ParticipantSetDataObject>
-									<xsl:variable name="scope" select="span[@class='oryx-scope']"/>
+									<xsl:variable name="scope" select="xh:span[@class='oryx-scope']"/>
 									<xsl:if test="string-length(normalize-space($scope))>0">
 										<xsl:attribute name="Scope">
 											<xsl:value-of select="$scope" />
 										</xsl:attribute>
 									</xsl:if>	
-									<xsl:variable name="copyTo" select="span[@class='oryx-copyto']"/>
+									<xsl:variable name="copyTo" select="xh:span[@class='oryx-copyto']"/>
 									<xsl:if test="string-length(normalize-space($copyTo))>0">
 										<xsl:attribute name="CopyTo">
 											<xsl:value-of select="$copyTo" />
@@ -1318,17 +1320,17 @@
 			</xsl:if>		
 	<!-- ************************** Processes ******************************* -->
 			<xpdl:WorkflowProcesses>
-				<xsl:for-each select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#Pool' or 
-										span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#PoolSet']">
-					<xsl:variable name="suppressJoinFailure" select="span[@class='oryx-suppressjoinfailure']"/>
-					<xsl:variable name="enableInstanceCompensation" select="span[@class='oryx-enableinstancecompensation']"/>
-					<xsl:variable name="queryLanguage" select="span[@class='oryx-querylanguage']"/>
-					<xsl:variable name="expressionLanguage" select="span[@class='oryx-expressionlanguage']"/>
-					<xsl:variable name="exitOnStandardFault" select="span[@class='oryx-exitonstandardfault']"/>
-					<xsl:variable name="messageExchanges" select="span[@class='oryx-messageexchanges']" />
+				<xsl:for-each select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#Pool' or 
+										xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#PoolSet']">
+					<xsl:variable name="suppressJoinFailure" select="xh:span[@class='oryx-suppressjoinfailure']"/>
+					<xsl:variable name="enableInstanceCompensation" select="xh:span[@class='oryx-enableinstancecompensation']"/>
+					<xsl:variable name="queryLanguage" select="xh:span[@class='oryx-querylanguage']"/>
+					<xsl:variable name="expressionLanguage" select="xh:span[@class='oryx-expressionlanguage']"/>
+					<xsl:variable name="exitOnStandardFault" select="xh:span[@class='oryx-exitonstandardfault']"/>
+					<xsl:variable name="messageExchanges" select="xh:span[@class='oryx-messageexchanges']" />
 					<xpdl:WorkflowProcess 
-						Id="{span[@class='oryx-processid']}"
-						Name="{span[@class='oryx-processname']}">
+						Id="{xh:span[@class='oryx-processid']}"
+						Name="{xh:span[@class='oryx-processname']}">
 						<xsl:if test="string-length(normalize-space($suppressJoinFailure))>0">
 							<xsl:attribute name="SuppressJoinFailure">
 								<xsl:value-of select="$suppressJoinFailure" />
@@ -1355,18 +1357,18 @@
 							</xsl:attribute>
 						</xsl:if>
 						<xpdl:ProcessHeader />
-						<xsl:variable name="correlationSets" select="span[@class='oryx-processcorrelationsets']"/>
+						<xsl:variable name="correlationSets" select="xh:span[@class='oryx-processcorrelationsets']"/>
 						<xsl:call-template name="correlationSets-tokens">
 							<xsl:with-param name="correlationSets" select="$correlationSets" />
 						</xsl:call-template>
 						
 						<xsl:variable name="poolId" select="@id" />
-						<xsl:variable name="childLanes" select="/data/div[a[@rel='raziel-parent' and @href=concat('#',$poolId)]]" />
+						<xsl:variable name="childLanes" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$poolId)]]" />
 						
 						<xpdl:ActivitySets>
 							<xsl:for-each select="$childLanes">
 								<xsl:variable name="laneId" select="@id"/>
-								<xsl:variable name="blockActivities" select="/data/div[a[@rel='raziel-parent' and @href=concat('#',$laneId)]]"/>						
+								<xsl:variable name="blockActivities" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$laneId)]]"/>						
 								<xsl:call-template name="activitySets">
 									<xsl:with-param name="blockActivities" select="$blockActivities" />
 								</xsl:call-template>		
@@ -1376,7 +1378,7 @@
 						<xpdl:Activities>																
 							<xsl:for-each select="$childLanes">
 								<xsl:variable name="laneId" select="@id"/>
-								<xsl:variable name="childActivities" select="/data/div[a[@rel='raziel-parent' and @href=concat('#',$laneId)]]"/>						
+								<xsl:variable name="childActivities" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$laneId)]]"/>						
 								<xsl:call-template name="activities">
 									<xsl:with-param name="activities" select="$childActivities" />
 								</xsl:call-template>		
@@ -1405,21 +1407,21 @@
 				</xsl:for-each>
 			</xpdl:WorkflowProcesses>
 	<!-- *********************** Pool Sets ******************************** -->
-			<xsl:variable name="PoolSets" select="div[span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#PoolSet']"/>
+			<xsl:variable name="PoolSets" select="xh:div[xh:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmnplus#PoolSet']"/>
 			<xsl:if test="count($PoolSets)>0">
 				<chor:PoolSets>
 					<xsl:for-each select="$PoolSets">
-						<xsl:variable name="id" select="span[@class='oryx-id']" />
+						<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
 						<xpdl:PoolSet
 							Id="{$id}" 
-							Name="{span[@class='oryx-name']}"
-							Process="{span[@class='oryx-processid']}"
-							TargetNamespace="{span[@class='oryx-processtargetnamespace']}"
-							Prefix="{span[@class='oryx-processprefix']}"
-							BoundaryVisible="{span[@class='oryx-boundaryvisible']}">
+							Name="{xh:span[@class='oryx-name']}"
+							Process="{xh:span[@class='oryx-processid']}"
+							TargetNamespace="{xh:span[@class='oryx-processtargetnamespace']}"
+							Prefix="{xh:span[@class='oryx-processprefix']}"
+							BoundaryVisible="{xh:span[@class='oryx-boundaryvisible']}">
 							
 							<!-- determine Lanes -->
-							<xsl:variable name="childLanes" select="/data/div[a[@rel='raziel-parent' and @href=concat('#',$id)]]" />
+							<xsl:variable name="childLanes" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$id)]]" />
 							<xsl:call-template name="lanes">
 								<xsl:with-param name="childLanes" select="$childLanes" />
 								<xsl:with-param name="poolSetId" select="$id" />
@@ -1436,7 +1438,7 @@
 							</xsl:call-template>
 							
 							<xsl:call-template name="imports-tokens">
-								<xsl:with-param name="list"><xsl:value-of select="span[@class='oryx-imports']" /></xsl:with-param>
+								<xsl:with-param name="list"><xsl:value-of select="xh:span[@class='oryx-imports']" /></xsl:with-param>
 							</xsl:call-template>
 						</xpdl:PoolSet>
 					</xsl:for-each>	
