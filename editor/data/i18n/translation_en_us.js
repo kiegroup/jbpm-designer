@@ -121,6 +121,14 @@ ORYX.I18N.BPELSupport.progressImp = "Import...";
 ORYX.I18N.BPELSupport.progressExp = "Export...";
 ORYX.I18N.BPELSupport.impFailed = "An error while importing occurs! <br/>Please check error message: <br/><br/>";
 
+if(!ORYX.I18N.BPELLayout) ORYX.I18N.BPELLayout = {};
+
+ORYX.I18N.BPELLayout.group = "BPELLayout";
+ORYX.I18N.BPELLayout.disable = "disable layout";
+ORYX.I18N.BPELLayout.disDesc = "disable auto layout plug-in";
+ORYX.I18N.BPELLayout.enable = "enable layout";
+ORYX.I18N.BPELLayout.enDesc = "enable auto layout plug-in";
+
 if(!ORYX.I18N.BPEL4ChorSupport) ORYX.I18N.BPEL4ChorSupport = {};
 
 ORYX.I18N.BPEL4ChorSupport.group = "BPEL4Chor";

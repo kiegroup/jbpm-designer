@@ -200,6 +200,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		// If there are no elements
 		if(!elements || elements.length == 0) {
 			this._resetBounds(shape);
+			this._update(shape);
 			return;
 		};
 		
@@ -331,7 +332,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = eventHandlers.bounds.upperLeft();
 					lr = eventHandlers.bounds.lowerRight();
 					eventHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
-					eventHandlers._changed();
+					//eventHandlers._changed();
 				}
 			}
 
@@ -341,7 +342,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = faultHandlers.bounds.upperLeft();
 					lr = faultHandlers.bounds.lowerRight();
 					faultHandlers.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
-					faultHandlers._changed();
+					//faultHandlers._changed();
 				}
 			}
 
@@ -351,7 +352,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = compensationHandler.bounds.upperLeft();
 					lr = compensationHandler.bounds.lowerRight();
 					compensationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
-					compensationHandler._changed();
+					//compensationHandler._changed();
 				}
 			}
 			
@@ -361,12 +362,14 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 					ul = terminationHandler.bounds.upperLeft();
 					lr = terminationHandler.bounds.lowerRight();
 					terminationHandler.bounds.set(ul.x, ul.y, ul.x + maxWidth, lr.y);
-					terminationHandler._changed();
+					//terminationHandler._changed();
 				}
 			}
 		}
 		
 		this._autoResizeLayout(shape);
+		
+		this._update(shape);
 		
 		return;
 		
@@ -588,22 +591,20 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			 	if (lr.x < ul.x + rightBound + 30){
 			 		shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, lr.y);
 			 		lr.x = ul.x + rightBound + 30;
-			 		shape._changed();
+			 		//shape._changed();
 			 	};
 			 	
 			 	if (lr.y < ul.y + lowerBound + 30){
 			 		shape.bounds.set(ul.x, ul.y, lr.x, ul.y + lowerBound + 30);
-			 		shape._changed();
+			 		//shape._changed();
 			 	};			 	
 			 } else {
 			 	if (lr.x != ul.x + rightBound + 30 || lr.y != ul.y + lowerBound + 30){
 			 		shape.bounds.set(ul.x, ul.y, ul.x + rightBound + 30, ul.y + lowerBound + 30);
-			 		shape._changed();
+			 		//shape._changed();
 			 	};
 			 };
 		};
-		
-		this._update();
 		
 		return;
 	},
@@ -618,12 +619,12 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			if (shape.getStencil().namespace() == "http://b3mn.org/stencilset/bpel#"){
 				if (lr.x != ul.x + 600 || lr.y != ul.y + 500){
 					shape.bounds.set(ul.x, ul.y, ul.x + 600, ul.y + 500);
-					shape._changed();
+					//shape._changed();
 				};
 			} else if (shape.getStencil().namespace() == "http://b3mn.org/stencilset/bpel4chor#"){
 				if (lr.x != ul.x + 690 || lr.y != ul.y + 200){
 					shape.bounds.set(ul.x, ul.y, ul.x + 690, ul.y + 200);
-					shape._changed();
+					//shape._changed();
 				};
 			} else {
 				return;
@@ -631,21 +632,19 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		} else if (shape.getStencil().id() == shape.getStencil().namespace() + "flow"){
 			if (lr.x != ul.x + 290 || lr.y != ul.y + 250){
 				shape.bounds.set(ul.x, ul.y, ul.x + 290, ul.y + 250);
-				shape._changed();
+				//shape._changed();
 			};
 		} else if (this._isHandlers(shape)){
 			if (lr.x != ul.x + 160 || lr.y != ul.y + 80){
 				shape.bounds.set(ul.x, ul.y, ul.x + 160, ul.y + 80);
-				shape._changed();
+				//shape._changed();
 			};
 		} else {
 			if (lr.x != ul.x + 100 || lr.y != ul.y + 80){
 				shape.bounds.set(ul.x, ul.y, ul.x + 100, ul.y + 80);
-				shape._changed();
+				//shape._changed();
 			};	
 		};
-			
-		this._update();
 
 	},
 	
@@ -714,11 +713,15 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		return true;
 	},
 	
-	_update : function(){
-		this.facade.getCanvas().update();
-		/*if (this.shapesChanged == "true"){
+	_update : function(shape){
+		// update the canvas only wenn the current node "process" is, with this we can
+		// make sure that, each time just once update after all the nodes are arranged
+		// and we must check, whether the node "process" changed is, if not, don't update,
+		// otherwise, an endless loop may occur, wenn there are more than three nesting level 
+		// in a shape.
+		if (shape.getStencil().id() == shape.getStencil().namespace() + "process"
+		&& shape.isChanged){
 			this.facade.getCanvas().update();
-			this.shapesChanged = false;
-		}*/
+		}
 	}
 });
