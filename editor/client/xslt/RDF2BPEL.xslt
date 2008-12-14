@@ -367,23 +367,13 @@
 				
 				<!--if_branch-->
 				<xsl:if test="$type='if_branch'">
-					<xsl:if test="position()=1">
+					<elseif>
 						<xsl:call-template name="add-bounds-attribute"/>
 						<xsl:call-template name="add-condition-element"/>
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
-		            </xsl:if>
-
-					<xsl:if test="not(position()=1)">
-						<elseif>
-							<xsl:call-template name="add-bounds-attribute"/>
-							<xsl:call-template name="add-condition-element"/>
-							<xsl:call-template name="find-children-nodes">
-								<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
-						    </xsl:call-template>
-						</elseif>
-		            </xsl:if>					
+					</elseif>				
 				</xsl:if>
 				
 				<!--else_branch-->

@@ -23,13 +23,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import de.hpi.bpmn.BPMNDiagram;
 
 
 
@@ -183,7 +180,49 @@ public class BPELExporter extends HttpServlet {
 		   if (currentNode.getNodeName().equals("flow")){
 			   // TODO implement
 		   };
-			  
+		   
+		   // remove the head "elseif" of the first child in if-block
+		   if (currentNode.getNodeName().equals("if")){
+			   // get the first child node with neme "elseif"
+			   childNodes = currentNode.getChildNodes();
+			   Node firstElseifChild = null;
+			   boolean found = false;
+			   for (int i=0; i<childNodes.getLength() && !found; i++){
+				   child = childNodes.item(i);
+				   if (child instanceof Element && child.getNodeName().equals("elseif")){
+					   firstElseifChild = child;
+					   found = true;
+				   }
+			   };
+			   
+			   // replace "elseif" with the sole two inner elements "condition" and "activity" 
+			   if (found){
+				   Node condition = null;
+				   Node activity = null;
+				   NodeList childrenOfFirstChild = firstElseifChild.getChildNodes();
+				   for (int i=0; i < childrenOfFirstChild.getLength(); i++){
+					   child = childrenOfFirstChild.item(i);
+					   if (child instanceof Element){
+						   if (child.getNodeName().equals("condition")){
+							   condition = child;
+						   } else {
+							   activity = child;
+						   }
+					   };
+				   };
+				   
+				   Node nextSibling = firstElseifChild.getNextSibling();
+				   currentNode.removeChild(firstElseifChild);
+				   
+				   if (condition != null){
+					   currentNode.insertBefore(condition, nextSibling);
+				   };
+				   
+				   if (activity != null){
+					   currentNode.insertBefore(activity, nextSibling);
+				   }
+			   }
+		   }
 	   }
 	   
 	   // after the arrangement of current node finished, delete the attribute "bounds" of 
