@@ -59,10 +59,10 @@ public class XPDL4Chor2BPEL4ChorServlet extends HttpServlet {
 		// escape (some) JSON special characters
 		// sorry, this is code and fix. 
 		// TODO a JSON-library should be used here...
-		String res = json.replaceAll("\"", "\\\"");
-		res = res.replaceAll("\n","\\\\n");
-		res = res.replaceAll("\r","\\\\r");
-		res = res.replaceAll("\t","\\\\t");
+		String res = json.replace("\"", "\\\"");
+		res = res.replace("\n","\\n");
+		res = res.replace("\r","\\r");
+		res = res.replace("\t","\\t");
 		return res;
 	}
 	
