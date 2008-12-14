@@ -7,21 +7,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import de.hpi.bpmn.BPMNDiagram;
 
 
 
 /**
  * Copyright (c) 2008 
+ * 
+ * Zhen Peng
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -80,16 +95,208 @@ public class BPELExporter extends HttpServlet {
 
     	if (resultString != null){
     		try {
-    		       printResponse (res, resultString);
-    		       return;
+    			resultString = rearrange (res, resultString);
+    			printResponse (res, resultString);
+    		    return;
     		} catch (Exception e){
-    		       handleException(res, e); 
+    		    handleException(res, e); 
     		}
     	}
     }
     
+   private String rearrange (HttpServletResponse res, String oldString){
+	   
+	   StringWriter out = new StringWriter();
+	   try {
+			// transform string to document
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			InputStream oldResultInputStream = new ByteArrayInputStream(oldString.getBytes());
+			Document oldDocument = builder.parse(oldResultInputStream);
+			
+			// rearrange document
+			Document newDocument = rearrangeDocument (oldDocument);
+			
+			// transform document to string
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer();
+			DOMSource source = new DOMSource(newDocument);
+			StreamResult result = new StreamResult(out);
+			transformer.transform(source, result);
+			out.flush();
+	 
+		} catch (Exception e){
+		    handleException(res, e); 
+		}
+		
+		return out.toString();
+
+   }
     
-    
+   private Document rearrangeDocument (Document document){
+	   
+	   rearrangeNode (document);
+	   
+	   return document;
+   }
+   
+   
+   private void rearrangeNode (Node currentNode){
+	      
+	   // handle only the Nodes with type "Element" and "Document" (root element), 
+	   // the other types e.g. "Attr","Comment" will be ignored 
+	   if (!(currentNode instanceof Element || currentNode instanceof Document)) {
+		   return;
+	   };
+	   
+	   // recursive research, work on the child nodes at first.
+	   NodeList childNodes = currentNode.getChildNodes();
+	   Node child;
+	   for (int i=0; i<childNodes.getLength(); i++){
+		   child = childNodes.item(i);
+		   if (child instanceof Element){
+			   rearrangeNode (child);
+		   }
+	   };
+	   
+	   //after all of the child nodes are already handled, handle the current node
+	   if (currentNode instanceof Element){
+		   //the following elements could contain more than one child nodes,
+		   //rearrange their child nodes.
+		   if (currentNode.getNodeName().equals("process")
+			   ||currentNode.getNodeName().equals("invoke")
+			   ||currentNode.getNodeName().equals("scope")
+			   ||currentNode.getNodeName().equals("assign")
+			   ||currentNode.getNodeName().equals("eventHandlers")
+			   ||currentNode.getNodeName().equals("faultHandlers")
+			   ||currentNode.getNodeName().equals("compensationHandler")
+			   ||currentNode.getNodeName().equals("terminationHandler")
+			   ||currentNode.getNodeName().equals("if")
+			   ||currentNode.getNodeName().equals("sequence")
+			   ||currentNode.getNodeName().equals("pick") ){
+			   
+			   rearrangeChildNodesOfCurrentNode((Element)currentNode);
+		   };
+		   
+		   // the order of child Nodes in "flow" is not based on the position of child nodes,
+		   // but the order of the edges "link", so we handle it in a different way.
+		   if (currentNode.getNodeName().equals("flow")){
+			   // TODO implement
+		   };
+			  
+	   }
+	   
+	   // after the arrangement of current node finished, delete the attribute "bounds" of 
+	   // child nodes
+	   childNodes = currentNode.getChildNodes();
+	   Element childElement;
+	   for (int i=0; i<childNodes.getLength(); i++){
+		   child = childNodes.item(i);	   
+		   if (child instanceof Element){
+			   childElement = (Element) child;
+			   childElement.removeAttribute("bounds");
+		   }
+	   };
+   }
+   
+   private void rearrangeChildNodesOfCurrentNode(Element currentNode){
+   
+	   // get all the children with be attribute "bounds"
+	   // record them in a array list "toArrangeChildren"
+	   ArrayList<Element> toArrangeChildren = new ArrayList<Element>();
+	   NodeList allChildren = currentNode.getChildNodes();
+	   Node child;
+	   for (int i=0; i<allChildren.getLength(); i++){
+		   child = allChildren.item(i);
+		   if (child instanceof Element){
+			   Element childElement = (Element) child;
+			   if (!childElement.getAttribute("bounds").isEmpty()){
+				   toArrangeChildren.add((Element) child);
+			   }
+		   }
+	   };
+       
+	   // with a quick-sort method rearrange the children of currentNode;
+	   // copy the list first
+	   ArrayList<Element> arrangedChildren = new ArrayList<Element>();
+	   Iterator<Element> toArrangeChildrenIter = toArrangeChildren.iterator();
+	   Element thisElement;
+	   while (toArrangeChildrenIter.hasNext()){
+		   thisElement = toArrangeChildrenIter.next();
+		   arrangedChildren.add(thisElement);
+	   };
+	   quickSortForArrangingChildren(arrangedChildren, 0, arrangedChildren.size()-1);
+	   
+	   // replace the old Children with the new order
+	   Element oldChild;
+	   Element newChild;
+	   for (int i=0; i < toArrangeChildren.size(); i++){
+		   oldChild = toArrangeChildren.get(i);
+		   newChild = arrangedChildren.get(i);
+		   currentNode.removeChild(oldChild);
+		   currentNode.appendChild(newChild);
+	   }
+ 
+  }
+   
+   private void quickSortForArrangingChildren
+   		(ArrayList<Element> childrenList, int left, int right){
+	   
+	   if (left < right){
+		   int i,j;
+		   Element middle,elementTemp;
+		   
+		   i = left;
+		   j = right; 
+		   middle = childrenList.get((left + right)/2);
+		   
+		   while (i <= j) {
+			   while (isBefore(childrenList.get(i), middle) && (i < right)) i++;
+			   while (isBefore(middle, childrenList.get(j)) && (j > left)) j--;
+			  
+			   if (i<=j){
+				   elementTemp = childrenList.get(i);
+				   childrenList.set(i, childrenList.get(j));
+				   childrenList.set(j, elementTemp); 
+			   
+				   i++;
+				   j--;
+			   };
+		   };
+			   
+		   if (left < j){
+			   quickSortForArrangingChildren(childrenList, left, j);
+		   };
+		   
+		   if (i < right) {
+			   quickSortForArrangingChildren(childrenList, i, right);
+		   }
+	   }
+   }
+   
+   private boolean isBefore(Element e1, Element e2){
+	   int valueOfE1 = getBoundsValueOf (e1);
+	   int valueOfE2 = getBoundsValueOf (e2);
+	   
+	   return valueOfE1 < valueOfE2;
+   }
+   
+   private int getBoundsValueOf (Element e){
+	   String bounds = e.getAttribute("bounds");
+	   
+	   if (bounds.isEmpty()){
+		   return 0;
+	   }
+	   
+	   int indexOfFirstComma = bounds.indexOf(',');
+	   int indexOfSecondComma = bounds.indexOf(',', indexOfFirstComma + 1);	   
+	
+	   int leftUpperX = Integer.parseInt(bounds.substring(0, indexOfFirstComma));
+	   int leftUpperY = Integer.parseInt(bounds.substring(indexOfFirstComma + 1, indexOfSecondComma));
+	  
+	   return leftUpperX + leftUpperY;
+   }
+   
    private void printResponse(HttpServletResponse res, String text){
     	if (res != null){
  
