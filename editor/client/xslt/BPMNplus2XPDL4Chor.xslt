@@ -481,7 +481,7 @@
 	<xsl:template name="object">
 		<xsl:param name="objectParent" />
 		<xpdl:Object
-			Id="{$objectParent/xh:span[@class='oryx-id']}">
+			Id="{$objectParent/@id}">
 			<xsl:variable name="categories" select="$objectParent/xh:span[@class='oryx-categories']" />
 			<xsl:variable name="documentation" select="$objectParent/xh:span[@class='oryx-documentation']" />
 			<!-- Categories -->
@@ -584,7 +584,7 @@
 			<xsl:variable name="gatewayType" select="xh:span[@class='oryx-gatewaytype']" />
 			<xsl:variable name="eventType" select="xh:span[@class='oryx-eventtype']" />
 			<xsl:variable name="loopType" select="xh:span[@class='oryx-looptype']" />
-			<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
+			<xsl:variable name="id" select="@id" />
 			<xsl:variable name="name" select="xh:span[@class='oryx-name']" />					
 			<xsl:variable name="suppressJoinFailure" select="xh:span[@class='oryx-suppressjoinfailure']" />								
 			<xsl:if test="string-length(normalize-space($type))>0 or 
@@ -932,7 +932,7 @@
 		<xsl:param name="transitions" />
 		<xsl:for-each select="$transitions">
 			<xsl:variable name="type" select="xh:span[@class='oryx-type']" />
-			<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
+			<xsl:variable name="id" select="@id" />
 			<xsl:variable name="name" select="xh:span[@class='oryx-name']" />
 			<xsl:variable name="internalOutRef" select="xh:a[@rel='raziel-outgoing']/@href" />
 			<xsl:if test="$type='http://b3mn.org/stencilset/bpmnplus#SequenceFlow' or 
@@ -976,14 +976,13 @@
 			<xsl:variable name="type" select="xh:span[@class='oryx-activitytype']" />
 			<xsl:if test="$type='SubProcess'">
 				<xsl:variable name="resourceId" select="@id" />
-				<xsl:variable name="blockActivityId" select="xh:span[@class='oryx-id']" />
 				<xsl:variable name="innerActivities" select="/xh:html/xh:body/xh:div[xh:a[@rel='raziel-parent' and @href=concat('#',$resourceId)]]"/>
 				<xsl:variable name="index" select="generate-id(.)" />
 				<xsl:call-template name="activitySets">
 					<xsl:with-param name="blockActivities" select="$innerActivities" />
 				</xsl:call-template>
 				<xpdl:ActivitySet
-					Id="{concat(concat($blockActivityId,'_activitySet_'),$index)}">
+					Id="{concat(concat($resourceId,'_activitySet_'),$index)}">
 					<xpdl:Activities>																
 						<xsl:call-template name="activities">
 							<xsl:with-param name="activities" select="$innerActivities" />
@@ -1009,7 +1008,7 @@
 				<xsl:for-each select="$childLanes">
 					<xsl:variable name="laneName" select="xh:span[@class='oryx-name']" />
 					<xpdl:Lane 
-						Id="{xh:span[@class='oryx-id']}">
+						Id="{@id}">
 						<xsl:if test="string-length(normalize-space($poolId))>0">
 							<xsl:attribute name="ParentPool">
 								<xsl:value-of select="$poolId"></xsl:value-of>
@@ -1057,7 +1056,7 @@
 			<xsl:if test="count($Pools)>0">
 				<xpdl:Pools>
 					<xsl:for-each select="$Pools">
-						<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
+						<xsl:variable name="id" select="@id" />
 						<xpdl:Pool 
 							Id="{$id}" 
 							Name="{xh:span[@class='oryx-name']}"
@@ -1106,7 +1105,7 @@
 			<xsl:if test="count($MessageFlows)>0">
 				<xpdl:MessageFlows>
 					<xsl:for-each select="$MessageFlows">
-						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>
+						<xsl:variable name="id" select="@id"/>
 						<xsl:variable name="name" select="xh:span[@class='oryx-name']"/>
 						<xpdl:MessageFlow 
 							Id="{$id}"
@@ -1133,7 +1132,7 @@
 					<xsl:for-each select="$undirectedAssociations">
 						<xsl:variable name="name" select="xh:span[@class='oryx-name']"/>
 						<xpdl:Association 
-							Id="{xh:span[@class='oryx-id']}"
+							Id="{@id}"
 							Source="{xh:span[@class='oryx-source']}"
 							Target="{xh:span[@class='oryx-target']}"
 							AssociationDirection="{xh:span[@class='oryx-direction']}">
@@ -1147,7 +1146,7 @@
 					<xsl:for-each select="$directedAssociations">
 						<xsl:variable name="name" select="xh:span[@class='oryx-name']"/>
 						<xpdl:Association 
-							Id="{xh:span[@class='oryx-id']}"
+							Id="{@id}"
 							Source="{xh:span[@class='oryx-source']}"
 							Target="{xh:span[@class='oryx-target']}"
 							AssociationDirection="{xh:span[@class='oryx-direction']}">
@@ -1171,7 +1170,7 @@
 				<xpdl:Artifacts>
 				<!-- ******************** Variable Data Object ******************* -->
 					<xsl:for-each select="$VarDataObjects">
-						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>
+						<xsl:variable name="id" select="@id"/>
 						<xsl:variable name="subProcess" select="xh:span[@class='oryx-subprocess']"/>
 						<xsl:variable name="process" select="xh:span[@class='oryx-process']"/>
 						<xsl:variable name="pool" select="xh:span[@class='oryx-pool']"/>
@@ -1181,7 +1180,7 @@
 							Name="{xh:span[@class='oryx-name']}"
 							ArtifactType="DataObject">
 							<xsl:if test="string-length(normalize-space($subProcess))>0">
-								<xsl:variable name="subProcessNode" select="/xh:html/xh:body/xh:div[xh:span[@class='oryx-id']=$subProcess]" />
+								<xsl:variable name="subProcessNode" select="/xh:html/xh:body/xh:div[@id=$subProcess]" />
 								<xsl:variable name="index" select="generate-id($subProcessNode)" />
 								<xsl:attribute name="chor:SubProcess">
 									<xsl:value-of select="concat(concat($subProcess,'_activitySet_'),$index)" />
@@ -1228,7 +1227,7 @@
 					</xsl:for-each>
 				<!-- ******************** Participant Reference Data Object ******************* -->
 					<xsl:for-each select="$RefDataObjects">
-						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>				
+						<xsl:variable name="id" select="@id"/>				
 						<xsl:variable name="pool" select="xh:span[@class='oryx-pool']"/>
 						<xsl:variable name="poolSet" select="xh:span[@class='oryx-poolset']"/>
 						<xpdl:Artifact
@@ -1278,7 +1277,7 @@
 					</xsl:for-each>
 				<!-- ******************** Participant Set Data Object ******************* -->
 					<xsl:for-each select="$SetDataObjects">
-						<xsl:variable name="id" select="xh:span[@class='oryx-id']"/>				
+						<xsl:variable name="id" select="@id"/>				
 						<xsl:variable name="pool" select="xh:span[@class='oryx-pool']"/>
 						<xsl:variable name="poolSet" select="xh:span[@class='oryx-poolset']"/>
 						<xpdl:Artifact
@@ -1411,7 +1410,7 @@
 			<xsl:if test="count($PoolSets)>0">
 				<chor:PoolSets>
 					<xsl:for-each select="$PoolSets">
-						<xsl:variable name="id" select="xh:span[@class='oryx-id']" />
+						<xsl:variable name="id" select="@id" />
 						<xpdl:PoolSet
 							Id="{$id}" 
 							Name="{xh:span[@class='oryx-name']}"

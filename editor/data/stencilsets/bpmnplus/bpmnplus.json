@@ -16,16 +16,6 @@
 			],
 			"properties": [
 				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},
-				{
 					"id":"name",
 					"type":"String",
 					"title":"Name",
@@ -186,21 +176,7 @@
 				}
  			},
  			"serialize":function(shape, data) {
- 				var poolId = shape.properties["oryx-id"];
-				if (poolId == "") {
-					poolId = shape.resourceId;
-					if (poolId == undefined) {
-						poolId = "";
-					}
-					var poolRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							poolRec = data[i];
-							break;
-						}
-					}
-					poolRec.value=poolId;
-				}
+ 				var poolId = shape.resourceId;
 				
 				var processId = shape.properties["oryx-processid"];
 				if (processId == "") {
@@ -218,17 +194,7 @@
 				return data;	
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -719,7 +685,7 @@
 					"title":"BackgroundColor",
 					"value":"#ffffff",
 					"description":"",
-					"readonly":false,
+					"readonly":false,
 					"optional":false,
 					"refToView":"c",
 					"fill":true,
@@ -788,21 +754,7 @@
 				}
  			},
  			"serialize":function(shape, data) {
-				var poolId = shape.properties["oryx-id"];
-				if (poolId == "") {
-					poolId = shape.resourceId;
-					if (poolId == undefined) {
-						poolId = "";
-					}
-					var poolRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							poolRec = data[i];
-							break;
-						}
-					}
-					poolRec.value=poolId;
-				}
+				var poolId = shape.resourceId;
 				
 				var processId = shape.properties["oryx-processid"];
 				if (processId == "") {
@@ -819,17 +771,7 @@
 				return data;	
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -1140,7 +1082,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"",
 					"length":"30"
 				},				
 				{
@@ -1293,37 +1235,9 @@
 				"poolChild",
 				"fromtoall"				
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},		
+					
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -1399,37 +1313,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -2051,37 +1937,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -2652,37 +2510,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -3260,37 +3090,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -3886,7 +3688,7 @@
 							"name":"FS_ExpressionLanguage",
 							"type":"String",
 							"value":"",
-							"width":150,
+							"width":150,
 							"optional":true,
 						},
 						{
@@ -4082,37 +3884,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -4546,37 +4320,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -5010,37 +4756,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -5085,7 +4803,7 @@
 					"readonly":false,
 					"optional":true,
 					"complexItems": [
-						{
+						{
 							"id":"to",
 							"name":"To",
 							"type":"String",
@@ -5473,25 +5191,7 @@
 				"assoc_start_from_set",
 				"assoc_start_from_ref",
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
             "properties": [
 				{
 					"id":"id",
@@ -5691,7 +5391,7 @@
 						},
 					]
 				},
-				{
+				{
 					"id":"correlationsets",
 					"type":"Complex",
 					"title":"CorrelationSets",
@@ -5882,7 +5582,7 @@
 					"type":"String",
 					"title":"MI_CompletionConditionLanguage",
 					"value":"",
-					"description":"",
+					"description":"",
 					"readonly":false,
 					"optional":true,
 				},
@@ -5987,7 +5687,7 @@
 		{
 			"type": "node",
 			"id":"FaultHandler",
-			"title":"Fault Handler",
+			"title":"Fault Handler",
 			"groups":["Sub-Processes"],
 			"description":"A fault handler.",
 			"view":"activity/node.handler.fault.svg",
@@ -5998,25 +5698,7 @@
 				"fromtoall",
 				"subProcess"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
             "properties": [
 				{
 					"id":"id",
@@ -6204,7 +5886,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false,
 						},
 						{
 							"id":"correlation",
@@ -6321,25 +6003,7 @@
 				"tc",
 				"fromtoall",
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
             "properties": [
 				{
 					"id":"id",
@@ -6644,25 +6308,7 @@
 				"tc",
 				"fromtoall",				
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
             "properties": [
 				{
 					"id":"id",
@@ -6968,25 +6614,7 @@
 				"fromtoall",
 				"subProcess"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
             "properties": [
 				{
 					"id":"id",
@@ -7274,25 +6902,7 @@
 				"fromtoall",
 				"subProcess"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
             "properties": [
 				{
 					"id":"id",
@@ -7533,7 +7143,7 @@
 					"optional":false,
 				},
 				{
-					"id":"handlertype",
+					"id":"handlertype",
 					"type":"String",
 					"title":"HandlerType",
 					"value":"Compensation",
@@ -7580,37 +7190,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -7732,37 +7314,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -7885,37 +7439,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -8038,37 +7564,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -8193,37 +7691,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -8380,37 +7850,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -8433,7 +7875,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
-				},
+				},
 				{
 					"id":"name",
 					"type":"String",
@@ -8552,37 +7994,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -8726,37 +8140,9 @@
 			"roles": [
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -8815,37 +8201,9 @@
 			"roles": [
 				"tc"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -8893,7 +8251,7 @@
 				}
 			]
 		},
-// ************************** Standard Variable Data Object *******************
+// ************************** Standard Variable Data Object ******************* 
 		{
 			"type": "node",
 			"id":"StandardVariableDataObject",
@@ -8906,21 +8264,7 @@
 				"fromtoall",
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				// serialize pool, poolSet, process and subProcess
 				var parent = shape.getParentShape();
@@ -8933,7 +8277,7 @@
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
 						// determine oryx-subprocess
-						var id = parent.properties["oryx-id"];
+						var id = parent.resourceId;
 						if (id == "") {
 							id = parent.resourceId;
 							if (id == undefined) {
@@ -8960,7 +8304,7 @@
 							name = "poolset";
 						}
 						
-						var poolId = parent.properties["oryx-id"];
+						var poolId = parent.resourceId;
 						if (poolId == "") {
 							poolId = parent.resourceId;
 							if (poolId == undefined) {
@@ -8997,17 +8341,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -9409,21 +8743,7 @@
 				"tc",
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				// serialize pool, poolSet, process and subProcess
 				var parent = shape.getParentShape();
@@ -9436,7 +8756,7 @@
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
 						// determine oryx-subprocess
-						var id = parent.properties["oryx-id"];
+						var id = parent.resourceId;
 						if (id == "") {
 							id = parent.resourceId;
 							if (id == undefined) {
@@ -9463,7 +8783,7 @@
 							name = "poolset";
 						}
 						
-						var poolId = parent.properties["oryx-id"];
+						var poolId = parent.resourceId;
 						if (poolId == "") {
 							poolId = parent.resourceId;
 							if (poolId == undefined) {
@@ -9500,17 +8820,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -9706,21 +9016,7 @@
 				"tc",
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				// serialize pool, poolSet, process and subProcess
 				var parent = shape.getParentShape();
@@ -9733,7 +9029,7 @@
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
 						// determine oryx-subprocess
-						var id = parent.properties["oryx-id"];
+						var id = parent.resourceId;
 						if (id == "") {
 							id = parent.resourceId;
 							if (id == undefined) {
@@ -9760,7 +9056,7 @@
 							name = "poolset";
 						}
 						
-						var poolId = parent.properties["oryx-id"];
+						var poolId = parent.resourceId;
 						if (poolId == "") {
 							poolId = parent.resourceId;
 							if (poolId == undefined) {
@@ -9797,17 +9093,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -10002,21 +9288,7 @@
 				"fromtoall",
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				// serialize pool, poolSet, process and subProcess
 				var parent = shape.getParentShape();
@@ -10029,7 +9301,7 @@
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
 						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
 						// determine oryx-subprocess
-						var id = parent.properties["oryx-id"];
+						var id = parent.resourceId;
 						if (id == "") {
 							id = parent.resourceId;
 							if (id == undefined) {
@@ -10057,7 +9329,7 @@
 							name = "poolset";
 						}
 						
-						var poolId = parent.properties["oryx-id"];
+						var poolId = parent.resourceId;
 						if (poolId == "") {
 							poolId = parent.resourceId;
 							if (poolId == undefined) {
@@ -10094,17 +9366,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -10262,21 +9524,7 @@
 				"tc"
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				// serialize pool or poolSet
 				var parent = shape.getParentShape();		
@@ -10291,7 +9539,7 @@
 							name = "poolset";
 						}
 						
-						var poolId = parent.properties["oryx-id"];
+						var poolId = parent.resourceId;
 						if (poolId == "") {
 							poolId = parent.resourceId;
 							if (poolId == undefined) {
@@ -10315,17 +9563,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -10520,21 +9758,7 @@
 				"tc"
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				// serialize pool or poolSet
 				var parent = shape.getParentShape();				
@@ -10549,7 +9773,7 @@
 							name = "poolset";
 						}
 						
-						var poolId = parent.properties["oryx-id"];
+						var poolId = parent.resourceId;
 						if (poolId == "") {
 							poolId = parent.resourceId;
 							if (poolId == undefined) {
@@ -10573,17 +9797,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -10737,37 +9951,9 @@
 				"sequence_start",				
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -10906,37 +10092,9 @@
 				"noGateway",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -11195,37 +10353,9 @@
 				"from_task_event",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -11424,37 +10554,8 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}				
-				
-				return data;
-			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -11566,7 +10667,7 @@
 					"title":"SuppressJoinFailure",
 					"value":"false",
 					"description":"",
-					"readonly":false,
+					"readonly":false,
 					"optional":true
 				},
 				{
@@ -11723,37 +10824,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -11940,21 +11013,7 @@
 				"fromtoall"
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				var attached;
 				var incomingShapes = shape.getIncomingShapes();
@@ -11969,7 +11028,7 @@
 				});
 
 				if (attached != undefined) {
-					var attachedId = attached.properties["oryx-id"];
+					var attachedId = attached.resourceId;
 					if (attachedId == "") {
 						attachedId = attached.resourceId;
 					}
@@ -11986,17 +11045,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -12149,21 +11198,7 @@
 				"tc"
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				var attached;
 				var incomingShapes = shape.getIncomingShapes();
@@ -12178,7 +11213,7 @@
 				});
 
 				if (attached != undefined) {
-					var attachedId = attached.properties["oryx-id"];
+					var attachedId = attached.resourceId;
 					if (attachedId == "") {
 						attachedId = attached.resourceId;
 					}
@@ -12195,17 +11230,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -12243,7 +11268,7 @@
 				{
 					"id":"assignments",
 					"type":"Complex",
-					"title":"Assignments",
+					"title":"Assignments",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -12360,21 +11385,7 @@
 				"fromtoall"
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				var attached;
 				var incomingShapes = shape.getIncomingShapes();
@@ -12389,7 +11400,7 @@
 				});
 
 				if (attached != undefined) {
-					var attachedId = attached.properties["oryx-id"];
+					var attachedId = attached.resourceId;
 					if (attachedId == "") {
 						attachedId = attached.resourceId;
 					}
@@ -12406,17 +11417,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -12561,37 +11562,9 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				return data;
-			},
+			
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -12722,72 +11695,8 @@
 			"roles": [
 				"flow"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				var sources = shape.getIncomingShapes();
-				if (sources.length > 0) {
-					var source = sources[0];
-					var id = source.properties["oryx-id"];
-					if (id == "") {
-						id = source.resourceId;
-					}
-					if (id != undefined) {
-						data.push({
-								name:"source",
-							 	prefix:"oryx",
-							 	value:id,
-							 	type:"literal",
-						});
-					}
-				}											
-				
-				// determine oryx-target
-				var targets = shape.getOutgoingShapes();
-				if (targets.length > 0) {
-					var target = targets[0];
-					var id = target.properties["oryx-id"];
-					if (id == "") {
-						id = target.resourceId;
-					}
-					if (id != undefined) {
-						data.push({
-							name:"target",
-						 	prefix:"oryx",
-						 	value:id,
-						 	type:"literal",
-						});
-					}
-				}
-				
-				return data;
-			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -12856,72 +11765,8 @@
 			"roles": [
 				"flow"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
-				var sources = shape.getIncomingShapes();
-				if (sources.length > 0) {
-					var source = sources[0];
-					var id = source.properties["oryx-id"];
-					if (id == "") {
-						id = source.resourceId;
-					}
-					if (id != undefined) {
-						data.push({
-								name:"source",
-							 	prefix:"oryx",
-							 	value:id,
-							 	type:"literal",
-						});
-					}
-				}											
-				
-				// determine oryx-target
-				var targets = shape.getOutgoingShapes();
-				if (targets.length > 0) {
-					var target = targets[0];
-					var id = target.properties["oryx-id"];
-					if (id == "") {
-						id = target.resourceId;
-					}
-					if (id != undefined) {
-						data.push({
-							name:"target",
-						 	prefix:"oryx",
-						 	value:id,
-						 	type:"literal",
-						});
-					}
-				}
-				
-				return data;
-			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -13010,72 +11855,7 @@
 			"roles": [
 				"flow"
 			],
-			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}							
-				
-				var sources = shape.getIncomingShapes();
-				if (sources.length > 0) {
-					var source = sources[0];
-					var id = source.properties["oryx-id"];
-					if (id == "") {
-						id = source.resourceId;
-					}
-					if (id != undefined) {
-						data.push({
-								name:"source",
-							 	prefix:"oryx",
-							 	value:id,
-							 	type:"literal",
-						});
-					}
-				}											
-				
-				// determine oryx-target
-				var targets = shape.getOutgoingShapes();
-				if (targets.length > 0) {
-					var target = targets[0];
-					var id = target.properties["oryx-id"];
-					if (id == "") {
-						id = target.resourceId;
-					}
-					if (id != undefined) {
-						data.push({
-							name:"target",
-						 	prefix:"oryx",
-						 	value:id,
-						 	type:"literal",
-						});
-					}
-				}
-				
-				return data;
-			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
 				{
 					"id":"categories",
 					"type":"String",
@@ -13144,50 +11924,31 @@
 			"roles": [
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
 				var sources = shape.getIncomingShapes();
 				var switched = false;
 				if (sources.length > 0) {
 					var source = sources[0];
-					// determine oryx-direction and oryx-source
-					var type= source.getStencil().id();
-					var id = source.properties["oryx-id"];
-					if (id == "") {
-						id = source.resourceId;
-					}
+					// determine oryx-source
+					var type = source.getStencil().id();
+					var id = source.resourceId;
 					var name;
 					if (type == "http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject" ||
 						type == "http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject" ||
 						type == "http://b3mn.org/stencilset/bpmnplus#MessageVariableDataObject" ||
 						type == "http://b3mn.org/stencilset/bpmnplus#CounterVariableDataObject" ||
 						type == "http://b3mn.org/stencilset/bpmnplus#ParticipantReferenceDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#ParticipantSetDataObject") {						
+						type == "http://b3mn.org/stencilset/bpmnplus#ParticipantSetDataObject") {
 						name = "target";
 						switched = true;
 					} else {
-						name="source";
+						name = "source";
 					}
-					data.push({
-							name:"direction",
-						 	prefix:"oryx",
-						 	value:"None",
-						 	type:"literal",
-						});
+//					data.push({
+//							name:"direction",
+//						 	prefix:"oryx",
+//						 	value:"None",
+//						 	type:"literal",
+//						});
 					
 					if (id != undefined) {
 						data.push({
@@ -13197,23 +11958,20 @@
 							 	type:"literal",
 						});
 					}
-				}											
-				
+				}
+
 				// determine oryx-target
 				var targets = shape.getOutgoingShapes();
 				if (targets.length > 0) {
 					var target = targets[0];
-					var id = target.properties["oryx-id"];
-					if (id == "") {
-						id = target.resourceId;
-					}
+					var id = target.resourceId;
 					var name;
 					if (switched) {
 						name = "source";
 					} else {
 						name = "target";
 					}
-					
+
 					if (id != undefined) {
 						data.push({
 							name:name,
@@ -13227,17 +11985,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -13285,21 +12033,7 @@
 			"roles": [
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
+
 				
 				var sources = shape.getIncomingShapes();
 				var switched = false;
@@ -13307,7 +12041,7 @@
 					var source = sources[0];
 					// determine oryx-direction and oryx-source
 					var type= source.getStencil().id();
-					var id = source.properties["oryx-id"];
+					var id = source.resourceId;
 					if (id == "") {
 						id = source.resourceId;
 					}
@@ -13349,7 +12083,7 @@
 				var targets = shape.getOutgoingShapes();
 				if (targets.length > 0) {
 					var target = targets[0];
-					var id = target.properties["oryx-id"];
+					var id = target.resourceId;
 					if (id == "") {
 						id = target.resourceId;
 					}
@@ -13372,17 +12106,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -13430,29 +12154,11 @@
 			"roles": [
 			],
 			"serialize":function(shape, data) {
-				var id = shape.properties["oryx-id"];
-				if (id == "") {
-					id = shape.resourceId;
-					if (id == undefined) {
-						id = "";
-					}
-					var idRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "id") {
-							idRec = data[i];
-							break;
-						}
-					}
-					idRec.value=id;
-				}
-				
+
 				var sources = shape.getIncomingShapes();
 				if (sources.length > 0) {
 					var source = sources[0];
-					var id = source.properties["oryx-id"];
-					if (id == "") {
-						id = source.resourceId;
-					}
+					var id = source.resourceId;
 					if (id != undefined) {
 						data.push({
 							name:"source",
@@ -13466,10 +12172,7 @@
 				var targets = shape.getOutgoingShapes();
 				if (targets.length > 0) {
 					var target = targets[0];
-					var id = target.properties["oryx-id"];
-					if (id == "") {
-						id = target.resourceId;
-					}
+					var id = target.resourceId;
 					if (id != undefined) {
 						data.push({
 							name:"target",
@@ -13483,17 +12186,7 @@
 				return data;
 			},
 			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
+
 				{
 					"id":"categories",
 					"type":"String",
@@ -14068,7 +12761,7 @@
 						// association from compensation event to compensation handler only if compensation event attached
 						// and only if no other compensation handler connected to
 						if (args.targetStencil && args.sourceShape &&
-							(args.targetStencil.id() == args.sourceStencil.namespace() + "CompensationHandler")) {
+							(args.targetStencil.id() == args.sourceStencil.namespace() + "CompensationHandler")) {
 							
 							if (!isAttached(args.sourceShape)) {
 								return false;
