@@ -191,7 +191,7 @@ public class BPELExporter extends HttpServlet {
 	   childNodes = currentNode.getChildNodes();
 	   Element childElement;
 	   for (int i=0; i<childNodes.getLength(); i++){
-		   child = childNodes.item(i);	   
+		   child = childNodes.item(i);
 		   if (child instanceof Element){
 			   childElement = (Element) child;
 			   childElement.removeAttribute("bounds");
@@ -227,16 +227,19 @@ public class BPELExporter extends HttpServlet {
 	   };
 	   quickSortForArrangingChildren(arrangedChildren, 0, arrangedChildren.size()-1);
 	   
-	   // replace the old Children with the new order
+	   // delete old children
 	   Element oldChild;
-	   Element newChild;
 	   for (int i=0; i < toArrangeChildren.size(); i++){
 		   oldChild = toArrangeChildren.get(i);
-		   newChild = arrangedChildren.get(i);
 		   currentNode.removeChild(oldChild);
+	   }
+	   
+	   // add children again with the new order
+	   Element newChild;
+	   for (int i=0; i < arrangedChildren.size(); i++){
+		   newChild = arrangedChildren.get(i);
 		   currentNode.appendChild(newChild);
 	   }
- 
   }
    
    private void quickSortForArrangingChildren
@@ -250,7 +253,7 @@ public class BPELExporter extends HttpServlet {
 		   j = right; 
 		   middle = childrenList.get((left + right)/2);
 		   
-		   while (i <= j) {
+		   while (i<=j) {
 			   while (isBefore(childrenList.get(i), middle) && (i < right)) i++;
 			   while (isBefore(middle, childrenList.get(j)) && (j > left)) j--;
 			  
