@@ -27,11 +27,11 @@
 				<xsl:call-template name="add-otherxmlns-attribute"/>
 
 				<messageLinks>
-					<xsl:call-templa name="find-all-messageLinks"/>
+					<xsl:call-template name="find-all-messageLinks"/>
 				</messageLinks>
 									
 				<participantRefs>
-					<xsl:call-templa name="find-all-participantRefs"/>
+					<xsl:call-template name="find-all-participantRefs"/>
 				</participantRefs>	
 
 			</grounding>	
@@ -143,5 +143,10 @@
 		<xsl:value-of select="substring-after($typeString, '#')" />
 	</xsl:template>
 	
+	
+	<xsl:template name="get-number-of-elements-in-complex-type">
+		<xsl:param name="original_content" />
+		<xsl:value-of select="substring-before(substring-after($original_content, 'totalCount%27%3A'), '%2C%20%27items') " />
+	</xsl:template>	
 	
 </xsl:stylesheet>
