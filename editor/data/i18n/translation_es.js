@@ -339,3 +339,28 @@ if(!ORYX.I18N.TreeGraphSupport) ORYX.I18N.TreeGraphSupport = {};
 ORYX.I18N.TreeGraphSupport.syntaxCheckName = "Syntax Check";
 ORYX.I18N.TreeGraphSupport.group = "Tree Graph Support";
 ORYX.I18N.TreeGraphSupport.syntaxCheckDesc = "Check the syntax of an tree graph structure";
+
+
+/** New Language Properties: 08.12.2008 **/
+
+ORYX.I18N.PropertyWindow.title = "Propriedades";
+
+if(!ORYX.I18N.ShapeRepository) ORYX.I18N.ShapeRepository = {}; 
+
+ORYX.I18N.ShapeRepository.title = "Shape Repository";
+
+ORYX.I18N.Save.dialogDesciption = "Por favor, agrege nombre y descripción";
+ORYX.I18N.Save.dialogLabelTitle = "Título";
+ORYX.I18N.Save.dialogLabelDesc = "Descripción";
+ORYX.I18N.Save.dialogLabelType = "Típo";
+
+ORYX.I18N.Validator.name = "BPMN Validator"; 
+ORYX.I18N.Validator.description = "Validación para BPMN";
+
+ORYX.I18N.SSExtensionLoader.labelImport = "Importación";
+ORYX.I18N.SSExtensionLoader.labelCancel = "Cancelar";
+
+Ext.MessageBox.buttonText.yes = "Sí";
+Ext.MessageBox.buttonText.no = "No";
+Ext.MessageBox.buttonText.cancel = "Cancelar";
+Ext.MessageBox.buttonText.ok = "Ok";
