@@ -130,73 +130,6 @@
 					"optional":false
 				},			
 				{
-					"id":"abstractProcessProfile",
-					"type":"Choice",
-					"title":"abstractProcessProfile",
-					"title_de":"abstraktesProzessprofil",
-					"value":"",
-					"description":"observableBehavior - http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08; templates - http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"observableBehavior",
-							"title_de":"observableBehavior",
-							"value":"http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08",
-							"refToView":"observableBehavior"
-						},
-						{
-							"id":"c2",
-							"title":"templates",
-							"title_de":"templates",
-							"value":"http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08",
-							"refToView":"templates"
-						},
-						{
-							"id":"c3",
-							"title":"your Definition",
-							"title_de":"your Definition",
-							"value":"please type your definition below",
-							"refToView":""
-						},
-						{
-							"id":"c4",
-							"title":"null",
-							"title_de":"leer",
-							"value":"null",
-							"refToView":""
-						}
-					],
-					"disable":[
-						{
-							"value":"http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08",
-							"items": [
-								"appURI"
-							]
-						},
-						{
-							"value":"http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08",
-							"items": [
-								"appURI"
-							]
-						}
-					]
-					
-				},
-				{
-					"id":"appURI",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"user's definition of abstractProcessProfile",
-					"title_de":"von Benutzer eingegebene Definition des abstractProcessProfiles",
-					"value":"",
-					"readonly":false,
-					"optional":true
-				},
-				{
 					"id":"queryLanguage",
 					"prefix":"oryx",
 					"type":"String",
@@ -7197,6 +7130,394 @@
 				}
 			]
 		},
+// ************************** Participant **************************
+		{
+			"type": "node",
+			"id":"participant",
+			"title":"participant",
+			"description":"A participant reference data object.",
+			"groups":["Participant"],
+			"view":"artifact/node.data.participant.ref.svg",
+			"icon":"participant.png",
+			"roles": [],
+			"properties": [
+
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"artifacttype",
+					"type":"String",
+					"title":"ArtifactType",
+					"value":"DataObject",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"participant",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"state",
+					"type":"String",
+					"title":"State",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"properties",
+					"type":"Complex",
+					"title":"Properties",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true,
+						},
+					]
+				},
+				{
+					"id":"requiredforstart",
+					"type":"Boolean",
+					"title":"RequiredForStart",
+					"value":"false",
+					"description":"",
+					"readonly":true,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"producedatcompletion",
+					"type":"Boolean",
+					"title":"ProducedAtCompletion",
+					"value":"false",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"type",
+					"type":"String",
+					"title":"Type",
+					"value":"Reference",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"selects",
+					"type":"String",
+					"title":"Selects",
+					"value":"",
+					"description":"A whitespace separated list of participant names.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"containment",
+					"type":"Choice",
+					"title":"Containment",
+					"value":"AddIfNotExists",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"c1",
+							"value":"Required",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"c2",
+							"value":"MustAdd",
+							"refToView":""
+						},
+						{
+							"id":"c3",
+							"title":"c3",
+							"value":"AddIfNotExists",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"copyto",
+					"type":"String",
+					"title":"CopyTo",
+					"value":"",
+					"description":"The name of another reference to copy this reference to.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"scope",
+					"type":"String",
+					"title":"Scope",
+					"value":"",
+					"description":"The id of the scope that limits the context of the reference.",
+					"readonly":false,
+					"optional":true
+				}
+			]
+		},
+// ************************** Participant Set *****************************
+		{
+			"type": "node",
+			"id":"participantSet",
+			"title":"Participant Set",
+			"description":"A participant set data object.",
+			"groups":["Participant"],
+			"view":"artifact/node.data.participant.set.svg",
+			"icon":"participant_set.png",
+			"roles": [],
+			"properties": [
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"artifacttype",
+					"type":"String",
+					"title":"ArtifactType",
+					"value":"DataObject",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"set",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"state",
+					"type":"String",
+					"title":"State",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"properties",
+					"type":"Complex",
+					"title":"Properties",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false,
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true
+						},
+					]
+				},
+				{
+					"id":"requiredforstart",
+					"type":"Boolean",
+					"title":"RequiredForStart",
+					"value":"false",
+					"description":"",
+					"readonly":true,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"producedatcompletion",
+					"type":"Boolean",
+					"title":"ProducedAtCompletion",
+					"value":"false",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"type",
+					"type":"String",
+					"title":"Type",
+					"value":"Set",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"copyto",
+					"type":"String",
+					"title":"CopyTo",
+					"value":"",
+					"description":"The name of another set to copy this set to.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"scope",
+					"type":"String",
+					"title":"Scope",
+					"value":"",
+					"description":"The id of the scope that limits the context of the set.",
+					"readonly":false,
+					"optional":true
+				}
+			]
+		},						
+// ******************** Directed Association ******************		
+		{
+			"type": "edge",
+			"id":"directedAssociation",
+			"title":"Association Directed",
+			"description":"A directed association.",
+			"groups":["Participant"],
+			"view":"edges/edge.association.directed.svg",
+			"icon":"association.png",
+			"roles": [],
+			"properties": [
+
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}	
+			]
+		},
+// ****************** Message Flow	***************************************	
 		{
 			"type": "edge",
 			"id":"messageLink",
@@ -7386,6 +7707,27 @@
 						"to":["receiveActivity"]
 					}
 				]
+			},
+			{
+				"role":"directedAssociation",
+				"connects": [
+					{
+						"from":"process",
+						"to":"participantSet"
+					},
+					{
+						"from":"participant",
+						"to":"participantSet"
+					},					
+					{
+						"from":"participantSet",
+						"to":"participantSet"
+					},
+					{
+						"from":"process",
+						"to":"participant"
+					}
+				]
 			}
 		],
 		
@@ -7435,7 +7777,7 @@
 			// nodes
 			{
 				"role":"worksheet",
-				"contains": ["process"]
+				"contains": ["process", "participant", "participantSet"]
 			},
 			{
 				"role":"process",
