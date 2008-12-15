@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -58,21 +60,27 @@ public class BPELExporter extends HttpServlet {
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     	
-    	// RDF2BPEL XSLT source
-    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
-    	final File xsltFile = new File(xsltFilename);
-    	final Source xsltSource = new StreamSource(xsltFile);	
-    	
-    	// Transformer Factory
-    	final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-
-    	// Get the rdf source
-    	final Source rdfSource;
     	String rdfString = req.getParameter("data");
-    	InputStream rdf = new ByteArrayInputStream(rdfString.getBytes());
-    	rdfSource = new StreamSource(rdf);
-  
-    	// Get the result string
+
+    	transformProcesses (rdfString, res);
+    }
+   
+   public void transformProcesses (String rdfString, HttpServletResponse res){
+	   
+	   // Get the rdf source
+	   final Source rdfSource;
+	   InputStream rdf = new ByteArrayInputStream(rdfString.getBytes());
+	   rdfSource = new StreamSource(rdf);
+
+	   	// RDF2BPEL XSLT source
+   		final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
+   		final File xsltFile = new File(xsltFilename);
+   		final Source xsltSource = new StreamSource(xsltFile);	
+   	
+   		// Transformer Factory
+   		final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    	
+   		// Get the result string
     	String resultString = null;
     	try {
     		Transformer transformer = transformerFactory.newTransformer(xsltSource);
@@ -83,18 +91,24 @@ public class BPELExporter extends HttpServlet {
     		handleException(res, e); 
     		return;
     	}
-
+    	
     	if (resultString != null){
     		try {
     			resultString = rearrange (res, resultString);
-    			printResponse (res, resultString);
+    			ArrayList<String> processList = separateProcesses(resultString);
+    			Iterator<String> processListIter = processList.iterator();
+    			String process;
+    			while (processListIter.hasNext()){
+				   process = processListIter.next();
+				   printResponse (res, process);
+    			};
     		    return;
     		} catch (Exception e){
     		    handleException(res, e); 
     		}
     	}
-    }
-    
+   }
+   
    private String rearrange (HttpServletResponse res, String oldString){
 	   
 	   StringWriter out = new StringWriter();
@@ -123,8 +137,27 @@ public class BPELExporter extends HttpServlet {
 		return out.toString();
 
    }
-    
+   
+   private ArrayList<String> separateProcesses (String resultString){
+	   ArrayList<String> resultList = new ArrayList<String>();
+	   
+	   int indexOfProcess = resultString.indexOf("<process");
+	   int indexOfEndProcess = 0;
+	   
+	   while (indexOfProcess != -1){
+		   indexOfEndProcess = resultString.indexOf("process>", indexOfProcess + 1);
+  
+		   String process = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" 
+			   + resultString.substring(indexOfProcess, indexOfEndProcess + 8);
 
+		   resultList.add(process);
+		   
+		   indexOfProcess = resultString.indexOf("<process", indexOfEndProcess + 1);
+	   }
+	
+	   return resultList;
+   }
+   
    
    private void printResponse(HttpServletResponse res, String text){
     	if (res != null){
@@ -140,6 +173,7 @@ public class BPELExporter extends HttpServlet {
         	}
         	
     		out.print(text);
+    		out.println();
     	}
     }
     

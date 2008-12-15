@@ -23,6 +23,8 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * Copyright (c) 2008 
  * 
+ * Zhen Peng
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -44,8 +46,10 @@ import javax.xml.transform.stream.StreamSource;
 public class BPEL4ChorExporter extends HttpServlet {
 
 	
-    
 	private static final long serialVersionUID = 3551528829474652693L;
+	
+	private BPELExporter bpelExporter = new BPELExporter();
+	
 
 	/**
      * The POST request.
@@ -54,21 +58,12 @@ public class BPEL4ChorExporter extends HttpServlet {
     	
     	String rdfString = req.getParameter("data");
     	
-    	String resultString = transformTopology (rdfString, res) + transformGrounding (rdfString, res)
-    							+ transformProcesses (rdfString, res);
-
-    	if (resultString != null){
-    		try {
-    		       printResponse (res, resultString);
-    		       return;
-    		} catch (Exception e){
-    		       handleException(res, e); 
-    		}
-    	}
+    	transformProcesses (rdfString, res);
+    	
     }
   
     
-    private String transformTopology (String rdfString, HttpServletResponse res){
+    private void transformTopology (String rdfString, HttpServletResponse res){
   	   /*
 	   	// XSLT source
 	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
@@ -97,11 +92,10 @@ public class BPEL4ChorExporter extends HttpServlet {
 	
 	   	return resultString;
 	   	*/ 
-    	return "TODO : transform topology";
 
    }
     
-    private String transformGrounding (String rdfString, HttpServletResponse res){
+    private void transformGrounding (String rdfString, HttpServletResponse res){
   	   /*
 	   	// XSLT source
 	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
@@ -130,42 +124,13 @@ public class BPEL4ChorExporter extends HttpServlet {
 	
 	   	return resultString;
 	   	*/
-	   	return "TODO : transform topology";
 
    }
     
 
-    private String transformProcesses (String rdfString, HttpServletResponse res){
+    private void transformProcesses (String rdfString, HttpServletResponse res){
 	   
-	   	// RDF2BPEL XSLT source
-	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
-	   	final File xsltFile = new File(xsltFilename);
-	   	final Source xsltSource = new StreamSource(xsltFile);	
-	   	
-	   	// Transformer Factory
-	   	final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-	
-	   	// Get the rdf source
-	   	final Source rdfSource;
-	   	InputStream rdf = new ByteArrayInputStream(rdfString.getBytes());
-	   	rdfSource = new StreamSource(rdf);
-	 
-	   	// Get the result string
-	   	String resultString = null;
-	   	try {
-	   		Transformer transformer = transformerFactory.newTransformer(xsltSource);
-	   		StringWriter writer = new StringWriter();
-	   		transformer.transform(rdfSource, new StreamResult(writer));
-	   		resultString = writer.toString();
-	   	} catch (Exception e){
-	   		handleException(res, e); 
-	   		return null;
-	   	}
-	   	
-	   	//resultString = seperateProcesses (resultString);
-	
-	   	return resultString;
-
+    	bpelExporter.transformProcesses (rdfString, res);
    }
     
    private void printResponse(HttpServletResponse res, String text){

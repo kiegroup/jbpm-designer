@@ -5,7 +5,7 @@
 	xmlns:oryx="http://oryx-editor.org/">
 
 	<xsl:output method="xml" />
-
+	
 	<xsl:template match="rdf:Description">	
 		<xsl:variable name="typeString" select="./oryx:type" />	
 		<xsl:variable name="type">
@@ -14,90 +14,17 @@
 			</xsl:call-template>
 		</xsl:variable>
 
-		<xsl:if test="$type='process'">
-			<!-- process -->
-			<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
-			
-			<xsl:if test="$abstractProcessProfile='' or $abstractProcessProfile='null'">
-				<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
-					<xsl:call-template name="add-children-of-process-element"/>
-				</process>	
-			</xsl:if>
-			
-			<xsl:if test="$abstractProcessProfile!='' and $abstractProcessProfile!='null'">
-				<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/abstract">
-					
-					<xsl:if test="$abstractProcessProfile='observableBehavior'">
-						<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08</xsl:attribute>
-					</xsl:if>	
-					
-					<xsl:if test="$abstractProcessProfile='templates'">
-						<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08</xsl:attribute>
-					</xsl:if>	
-					
-					<xsl:if test="$abstractProcessProfile!='observableBehavior' and $abstractProcessProfile!='templates'">
-						<xsl:attribute name="abstractProcessProfile">
-							<xsl:value-of select="$abstractProcessProfile"/>
-						</xsl:attribute>	
-					</xsl:if>
-					
-					<xsl:call-template name="add-children-of-process-element"/>
-				</process>	
-			</xsl:if>
+		<xsl:if test="$type='worksheet'">
+			<!-- root element -->
+			<worksheet>
+				<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+				<xsl:call-template name="find-children-nodes">
+					<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+			    </xsl:call-template>
+			</worksheet>	
 	 	</xsl:if>
 	</xsl:template>
-	
-	<xsl:template name="add-children-of-process-element">
-		
-		<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
-		
-        <xsl:call-template name="add-standard-attributes"/>
-		
-		<xsl:call-template name="add-documentation-element"/>
-		
-     	<xsl:call-template name="add-bounds-attribute"/>
 
-		<xsl:variable name="targetNamespace" select="./oryx:targetnamespace" />
-		<xsl:if test="$targetNamespace!=''">
-			<xsl:attribute name="targetNamespace">
-				<xsl:value-of select="$targetNamespace" />
-			</xsl:attribute>	
-		</xsl:if>		
-		
-		<xsl:variable name="queryLanguage" select="./oryx:querylanguage" />
-		<xsl:if test="$queryLanguage!=''">
-			<xsl:attribute name="queryLanguage">
-				<xsl:value-of select="$queryLanguage" />
-			</xsl:attribute>
-		</xsl:if>	
-		
-		<xsl:variable name="expressionLanguage" select="./oryx:expressionlanguage" />
-		<xsl:if test="$expressionLanguage!=''">
-			<xsl:attribute name="expressionLanguage">
-				<xsl:value-of select="$expressionLanguage" />
-			</xsl:attribute>
-		</xsl:if>	
-		
-  		<xsl:call-template name="add-exitOnStandardFault-attribute"/>
-
-		<xsl:call-template name="add-otherxmlns-attribute"/>
-		
-		<xsl:call-template name="add-extension-declaration"/>		
-		
-		<xsl:call-template name="add-import-element"/>
-		
-		<xsl:call-template name="add-variables-element"/>	
-		
-		<xsl:call-template name="add-partnerLinks-element"/>	
-		
-		<xsl:call-template name="add-correlationSets-element"/>
-		
-		<xsl:call-template name="add-messageExchanges-element"/>
-		
-		<xsl:call-template name="find-children-nodes">
-			<xsl:with-param name="searchedParentID" select="$realID" />
-	    </xsl:call-template>
-	</xsl:template>
 	
 	<xsl:template name="find-children-nodes">
 		<xsl:param name="searchedParentID" />
@@ -111,6 +38,38 @@
 						<xsl:with-param name="typeString" select="$typeString" />
 					</xsl:call-template>
 				</xsl:variable>
+				
+				<!--process-->
+				<xsl:if test="$type='process'">
+					<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
+					
+					<xsl:if test="$abstractProcessProfile='' or $abstractProcessProfile='null'">
+						<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+							<xsl:call-template name="add-children-of-process-element"/>
+						</process>	
+					</xsl:if>
+					
+					<xsl:if test="$abstractProcessProfile!='' and $abstractProcessProfile!='null'">
+						<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/abstract">
+							
+							<xsl:if test="$abstractProcessProfile='observableBehavior'">
+								<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08</xsl:attribute>
+							</xsl:if>	
+							
+							<xsl:if test="$abstractProcessProfile='templates'">
+								<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08</xsl:attribute>
+							</xsl:if>	
+							
+							<xsl:if test="$abstractProcessProfile!='observableBehavior' and $abstractProcessProfile!='templates'">
+								<xsl:attribute name="abstractProcessProfile">
+									<xsl:value-of select="$abstractProcessProfile"/>
+								</xsl:attribute>	
+							</xsl:if>
+							
+							<xsl:call-template name="add-children-of-process-element"/>
+						</process>	
+					</xsl:if>
+				</xsl:if>	
 					
 				<!--invoke-->
 				<xsl:if test="$type='invoke'">
@@ -669,6 +628,58 @@
 			</xsl:attribute>
 		</xsl:if>
 	</xsl:template>	
+	
+	
+	<xsl:template name="add-children-of-process-element">	
+		<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+		
+        <xsl:call-template name="add-standard-attributes"/>
+		
+		<xsl:call-template name="add-documentation-element"/>
+		
+     	<xsl:call-template name="add-bounds-attribute"/>
+
+		<xsl:variable name="targetNamespace" select="./oryx:targetnamespace" />
+		<xsl:if test="$targetNamespace!=''">
+			<xsl:attribute name="targetNamespace">
+				<xsl:value-of select="$targetNamespace" />
+			</xsl:attribute>	
+		</xsl:if>		
+		
+		<xsl:variable name="queryLanguage" select="./oryx:querylanguage" />
+		<xsl:if test="$queryLanguage!=''">
+			<xsl:attribute name="queryLanguage">
+				<xsl:value-of select="$queryLanguage" />
+			</xsl:attribute>
+		</xsl:if>	
+		
+		<xsl:variable name="expressionLanguage" select="./oryx:expressionlanguage" />
+		<xsl:if test="$expressionLanguage!=''">
+			<xsl:attribute name="expressionLanguage">
+				<xsl:value-of select="$expressionLanguage" />
+			</xsl:attribute>
+		</xsl:if>	
+		
+  		<xsl:call-template name="add-exitOnStandardFault-attribute"/>
+
+		<xsl:call-template name="add-otherxmlns-attribute"/>
+		
+		<xsl:call-template name="add-extension-declaration"/>		
+		
+		<xsl:call-template name="add-import-element"/>
+		
+		<xsl:call-template name="add-variables-element"/>	
+		
+		<xsl:call-template name="add-partnerLinks-element"/>	
+		
+		<xsl:call-template name="add-correlationSets-element"/>
+		
+		<xsl:call-template name="add-messageExchanges-element"/>
+		
+		<xsl:call-template name="find-children-nodes">
+			<xsl:with-param name="searchedParentID" select="$realID" />
+	    </xsl:call-template>
+	</xsl:template>
 	
 	
 	<xsl:template name="add-completionCondition-element">
@@ -1333,7 +1344,7 @@
 	
 	<xsl:template name="get-exact-type">
 		<xsl:param name="typeString" />
-		<xsl:value-of select="substring-after($typeString, 'bpel#')" />
+		<xsl:value-of select="substring-after($typeString, '#')" />
 	</xsl:template>
 
 	
@@ -1721,6 +1732,5 @@
   			</xsl:call-template>
  		</xsl:if>
     </xsl:template>
-
-			
+	
 </xsl:stylesheet>
