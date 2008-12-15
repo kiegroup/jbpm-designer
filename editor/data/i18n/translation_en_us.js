@@ -168,7 +168,7 @@ ORYX.I18N.Bpel4ChorTransformation.noGen = "The transformation input could not be
 if(!ORYX.I18N.TransformationDownloadDialog) ORYX.I18N.TransformationDownloadDialog = {};
 
 ORYX.I18N.TransformationDownloadDialog.error = "Error";
-ORYX.I18N.TransformationDownloadDialog.noResult = "The transformation web service did not return a result.";
+ORYX.I18N.TransformationDownloadDialog.noResult = "The transformation service did not return a result.";
 ORYX.I18N.TransformationDownloadDialog.errorParsing = "Error During the Parsing of the Diagram.";
 ORYX.I18N.TransformationDownloadDialog.transResult = "Transformation Results";
 ORYX.I18N.TransformationDownloadDialog.showFile = "Show the result file";

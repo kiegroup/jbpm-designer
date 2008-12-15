@@ -168,7 +168,7 @@ ORYX.I18N.Bpel4ChorTransformation.noGen = "Die Transformationseingabedaten konnt
 if(!ORYX.I18N.TransformationDownloadDialog) ORYX.I18N.TransformationDownloadDialog = {};
 
 ORYX.I18N.TransformationDownloadDialog.error = "Fehler";
-ORYX.I18N.TransformationDownloadDialog.noResult = "Der Transformations Web Service hat kein Ergebnis zurückgeliefert.";
+ORYX.I18N.TransformationDownloadDialog.noResult = "Der Transformationsservice hat kein Ergebnis zurückgeliefert.";
 ORYX.I18N.TransformationDownloadDialog.errorParsing = "Während der Analyse des Diagramms ist ein Fehler aufgetreten.";
 ORYX.I18N.TransformationDownloadDialog.transResult = "Transformationsergebnisse";
 ORYX.I18N.TransformationDownloadDialog.showFile = "Ergebnisdatei anzeigen";
