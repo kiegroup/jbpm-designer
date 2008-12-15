@@ -40,8 +40,8 @@ public abstract class Task extends Activity {
 	public void addSourceFor(Transition transition, Output output) {
 		if (!this.sourceFor.isEmpty()) {
 			output.addError(
-					"The task " + getId() + 
-					" is not allowed to have multiple outgoing transitions.");
+					"This task " +
+					"is not allowed to have multiple outgoing transitions.", getId());
 		} else {
 			super.addSourceFor(transition, output);
 		}
@@ -55,8 +55,8 @@ public abstract class Task extends Activity {
 	 */
 	public void addTargetFor(Transition transition, Output output) {
 		if (!this.targetFor.isEmpty()) {
-			output.addError("The task " + getId() + 
-					" is not allowed to have multiple incoming transitions.");
+			output.addError("This task " +
+					"is not allowed to have multiple incoming transitions.", getId());
 		} else {
 			super.addTargetFor(transition, output);
 		}

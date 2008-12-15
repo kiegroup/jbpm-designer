@@ -30,8 +30,8 @@ public class GraphicalObjectParser {
 	public static void parse(GraphicalObject object, Node objectNode, Output output) {
 		NamedNodeMap attributes = objectNode.getAttributes();
 		if (attributes.getNamedItem(ID) == null) {
-			output.addError("A graphical object does " +
-					"not have a specified Id.");			
+			output.addParseError("A graphical object does " +
+					"not have a specified Id.", objectNode);			
 		} else {
 			object.setId(attributes.getNamedItem(ID).getNodeValue());
 		}

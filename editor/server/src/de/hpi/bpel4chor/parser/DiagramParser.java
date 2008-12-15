@@ -99,7 +99,7 @@ public class DiagramParser {
 			}
 		}
 		if (this.diagram.getName() == null) {
-			this.output.addError("Package element does not have a specified Name.");
+			this.output.addError("Package element does not have a specified Name.", diagramElement.toString());
 		}
 	}
 	
@@ -301,15 +301,15 @@ public class DiagramParser {
 					try {
 						this.diagram.setQueryLanguage(new URI(value));
 					} catch (URISyntaxException e) {
-						this.output.addError("The query language defined for the "+
-								"diagram is not a valid URI");
+						this.output.addParseError("The query language defined for the "+
+								"diagram is not a valid URI", headerNode);
 					}
 				} else if (attribute.getLocalName().equals(EXPRESSION_LANGUAGE)) {
 					try {
 						this.diagram.setExpressionLanguage(new URI(value));
 					} catch (URISyntaxException e) {
-						this.output.addError("The expression language defined for the "+
-								"diagram is not a valid URI");
+						this.output.addParseError("The expression language defined for the "+
+								"diagram is not a valid URI", headerNode);
 					}
 				}
 			}
@@ -334,8 +334,8 @@ public class DiagramParser {
 		if (node != null) {
 			parseProcesses(node);
 		} else {
-			this.output.addError(
-				"There are no processes defined for the diagram.");
+			this.output.addParseError(
+				"There are no processes defined for the diagram.", diagramElement);
 		}
 		node = XMLUtil.getChildWithName(diagramElement, POOLS);
 		if (node != null) {

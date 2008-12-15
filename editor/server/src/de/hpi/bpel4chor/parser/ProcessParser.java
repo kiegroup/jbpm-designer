@@ -108,7 +108,7 @@ public class ProcessParser {
 					} catch (URISyntaxException e) {
 						this.output.addError(
 								"The query language defined for process "+ 
-								this.process.getId() + " is not a valid URI");
+								"is not a valid URI", this.process.getId() );
 					}
 				}
 			} else if (name.equals(EXPRESSION_LANGUAGE)) {
@@ -118,7 +118,7 @@ public class ProcessParser {
 					} catch (URISyntaxException e) {
 						this.output.addError(
 								"The expression language defined for process "+ 
-								this.process.getId() + " is not a valid URI");
+								" is not a valid URI", this.process.getId());
 					}
 				}
 			} else if (name.equals(EXIT_ON_STANDARD_FAULT)) {
@@ -128,7 +128,7 @@ public class ProcessParser {
 		}
 		
 		if (this.process.getId() == null) {
-			this.output.addError("A process does not have a specified Id.");
+			this.output.addParseError("A process does not have a specified Id.", processNode);
 		}
 	}
 	
@@ -334,14 +334,14 @@ public class ProcessParser {
 						this.output.addError(
 								"An activity with id " + id + 
 								" defined for a compensation " +
-								"intermediate event does not exists in the diagram.");
+								"intermediate event does not exists in the diagram.", event.getId());
 					} else if ((object instanceof BlockActivity) || (object instanceof Task)) {
 						trigger.setActivity((Activity)object);
 					} else {
 						this.output.addError(
 								"A scope or task with id " + id + 
 								" defined for a compensation " +
-								"intermediate event does not exists in the diagram.");
+								"intermediate event does not exists in the diagram.", event.getId());
 					}
 				}
 			}
@@ -366,8 +366,8 @@ public class ProcessParser {
 					((Activity)source).addSourceFor(transition, this.output);
 				} else {
 					this.output.addError(
-							"The source activity of transition" + 
-							transition.getId() + " does not exist in the process.");
+							"The source activity of this transition" + 
+							" does not exist in the process.", transition.getId());
 				}
 			}
 			Activity targetAct = transition.getTarget();
@@ -378,8 +378,8 @@ public class ProcessParser {
 					((Activity)target).addTargetFor(transition, this.output);
 				} else {
 					this.output.addError(
-							"The target activity of transition" + 
-							transition.getId() + " does not exist in the process.");
+							"The target activity of this transition" + 
+							" does not exist in the process.", transition.getId());
 				}
 			}
 		}

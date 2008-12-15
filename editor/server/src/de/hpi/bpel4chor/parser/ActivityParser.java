@@ -195,8 +195,8 @@ public class ActivityParser {
 		if (start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
 			if ((start.getName() == null) || (start.getName().equals(""))) {
 				this.output.addError(
-						"The receiving message event " + start.getId() + 
-						" must define a name.");
+						"The receiving message event " +
+						"must define a name.", start.getId());
 			}
 			triggerNode = 
 				XMLUtil.getChildWithName(eventTypeNode, TRIGGER_RESULT_MESSAGE);
@@ -262,8 +262,8 @@ public class ActivityParser {
 			Object object = this.diagram.getObject(objectId);
 			if ((object == null) || !(object instanceof Activity)) {
 				this.output.addError("The target object with the Id " + 
-						objectId + " defined for the event " + event.getId() + 
-						" does not exists in the diagram.");
+						objectId + " defined for this event " + 
+						" does not exists in the diagram.", event.getId() );
 			} else {
 				String trigger = event.getTriggerType();
 				if (trigger.equals(IntermediateEvent.TRIGGER_COMPENSATION) || 
@@ -292,8 +292,8 @@ public class ActivityParser {
 		if (trigger.equals(IntermediateEvent.TRIGGER_MESSAGE)) {
 			if ((event.getName() == null) || (event.getName().equals(""))) {
 				this.output.addError(
-						"The receiving message event " + event.getId() + 
-						" must define a name.");
+						"This receiving message event " + 
+						" must define a name.", event.getId());
 			}
 			triggerNode = 
 				XMLUtil.getChildWithName(eventTypeNode, TRIGGER_RESULT_MESSAGE);
@@ -376,7 +376,7 @@ public class ActivityParser {
 				result = parseEndEvent(activityNode);
 			}
 		} else {
-			this.output.addError("An event has no event type defined.");
+			this.output.addParseError("An event has no event type defined.", eventNode);
 		}
 		return result;
 	}
@@ -554,8 +554,7 @@ public class ActivityParser {
 				Object object = this.diagram.getObject(subProcessId);
 				if ((object == null) || !(object instanceof SubProcess)) {
 					this.output.addError("The activity set with the id " + 
-							subProcessId + " referenced by the  block activity with id " + 
-							blockAct.getId() + " does not exist.");
+							subProcessId + " referenced by this block activity does not exist.", blockAct.getId());
 				} else {
 					SubProcess subProcess = (SubProcess)object;
 					blockAct.setSubProcess(subProcess);
@@ -566,7 +565,7 @@ public class ActivityParser {
 
 		if (blockAct.getSubProcess() == null) {
 			this.output.addError("There is a block activity without a defined " +
-					"activity set.");
+					"activity set.", blockAct.getId());
 		}
 	}
 	
@@ -618,8 +617,8 @@ public class ActivityParser {
 			}
 		}
 		if (result == null) {
-			this.output.addError("The block activity must either " + 
-					"define a scope or a handler element.");
+			this.output.addParseError("The block activity must either " + 
+					"define a scope or a handler element.", blockActivityNode);
 		}
 		return result;
 	}
@@ -762,8 +761,8 @@ public class ActivityParser {
 	private void parseServiceAttributes(ServiceTask service, Node serviceTaskNode) {
 		if (service.getName() == null) {
 			this.output.addError(
-					"The invoke task " + service.getId() + 
-					" must define a name.");
+					"The invoke task " +
+					"must define a name.", service.getId());
 		}
 		NamedNodeMap attributes = serviceTaskNode.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
@@ -830,8 +829,8 @@ public class ActivityParser {
 	private void parseReceiveAttributes(ReceiveTask receive, Node receiveTaskNode) {
 		if ((receive.getName() == null) || (receive.getName().equals(""))) {
 			this.output.addError(
-					"The receive task " + receive.getId() + 
-					" must define a name.");
+					"The receive task " + 
+					" must define a name.", receive.getId());
 		}
 		
 		NamedNodeMap attributes = receiveTaskNode.getAttributes();
@@ -899,8 +898,8 @@ public class ActivityParser {
 	private void parseSendAttributes(SendTask send, Node sendTaskNode) {
 		if ((send.getName() == null) || (send.getName().equals(""))) {
 			this.output.addError(
-					"The send task " + send.getId() + 
-					" must define a name.");
+					"The send task " +
+					"must define a name.", send.getId());
 		}
 		NamedNodeMap attributes = sendTaskNode.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {

@@ -73,28 +73,28 @@ public class ConnectionsParser {
 		}
 		
 		if (attributes.getNamedItem(SOURCE) == null) {
-			this.output.addError("There is an association without " +
-				"a defined source element.");
+			this.output.addParseError("There is an association without " +
+				"a defined source element.", associationNode);
 		} else {
 			String sourceId = attributes.getNamedItem(SOURCE).getNodeValue();
 			Object object = this.diagram.getObject(sourceId);
 			if ((object == null) || !(object instanceof GraphicalObject)) {
 				this.output.addError("A source object with the Id " + 
-						sourceId + " does not exist for the association " + assoc.getId());
+						sourceId + " does not exist for this association ", assoc.getId());
 			} else {
 				assoc.setSource((GraphicalObject)object);
 			}
 		}
 		
 		if (attributes.getNamedItem(TARGET) == null) {
-			this.output.addError("There is an association without " +
-				"a defined target element.");
+			this.output.addParseError("There is an association without " +
+				"a defined target element.", associationNode);
 		} else {
 			String targetId = attributes.getNamedItem(TARGET).getNodeValue();
 			Object object = this.diagram.getObject(targetId);
 			if ((object == null) || !(object instanceof GraphicalObject)){
 				this.output.addError("A target object with the Id " + 
-						targetId + " does not exist for the association " + assoc.getId());
+						targetId + " does not exist for this association ", assoc.getId());
 			} else {
 				assoc.setTarget((GraphicalObject)object);
 			}
@@ -137,14 +137,14 @@ public class ConnectionsParser {
 		}
 		
 		if (attributes.getNamedItem(SOURCE) == null) {
-			this.output.addError("The message flow with id " + flow.getId() + 
-			" does not have a defined source element.");
+			this.output.addError("This message " + 
+			"does not have a defined source element.", flow.getId());
 		} else {
 			String sourceId = attributes.getNamedItem(SOURCE).getNodeValue();
 			Object object = this.diagram.getObject(sourceId);
 			if ((object == null) || !(object instanceof Activity)) {
 				this.output.addError("A source object with the Id " + 
-						sourceId + " does not exist for the message flow " + flow.getId());
+						sourceId + " does not exist for this message flow", flow.getId());
 			} else {
 				flow.setSource((Activity)object);
 			}
@@ -152,13 +152,13 @@ public class ConnectionsParser {
 		
 		if (attributes.getNamedItem(TARGET) == null) {
 			this.output.addError("There is a message flow without " +
-			"a defined target element.");
+			"a defined target element.", flow.getId());
 		} else {
 			String targetId = attributes.getNamedItem(TARGET).getNodeValue();
 			Object object = this.diagram.getObject(targetId);
 			if ((object == null) || !(object instanceof Activity)) {
 				this.output.addError("A target object with the Id " + 
-						targetId + " does not exist for the association " + flow.getId());
+						targetId + " does not exist for this association", flow.getId());
 			} else {
 				flow.setTarget((Activity)object);
 			}
@@ -185,8 +185,8 @@ public class ConnectionsParser {
 			}
 		}
 		if (flow.getMessageName() == null) {
-			this.output.addError("The message flow " + 
-					flow.getId() + " must define a message name.");
+			this.output.addError("This message flow " + 
+					" must define a message name.", flow.getId());
 		}
 	}
 
@@ -229,13 +229,13 @@ public class ConnectionsParser {
 		attribute = attributes.getNamedItem(TRANSITION_SOURCE);
 		if (attribute == null) {
 			this.output.addError("There is an transition without " +
-				"a defined source element.");
+				"a defined source element.", trans.getId());
 		} else {
 			String sourceId = attribute.getNodeValue();
 			Object object = this.diagram.getObject(sourceId);
 			if ((object == null) || !(object instanceof Activity)) {
 				this.output.addError("A source activity with the Id " + 
-					sourceId + " does not exist for the transition " + trans.getId());
+					sourceId + " does not exist for this transition", trans.getId());
 			} else {
 				trans.setSource((Activity)object, this.output);
 			}
@@ -244,13 +244,13 @@ public class ConnectionsParser {
 		attribute = attributes.getNamedItem(TRANSITION_TARGET);
 		if (attribute == null) {
 			this.output.addError("There is an transition without " +
-				"a defined target element.");
+				"a defined target element.", trans.getId());
 		} else {
 			String targetId = attribute.getNodeValue();
 			Object object = this.diagram.getObject(targetId);
 			if ((object == null) || !(object instanceof Activity)) {
 				this.output.addError("A target activity with the Id " + 
-					targetId + " does not exist for the transition " + trans.getId());
+					targetId + " does not exist for this transition", trans.getId());
 			} else {
 				trans.setTarget((Activity)object, this.output);
 			}

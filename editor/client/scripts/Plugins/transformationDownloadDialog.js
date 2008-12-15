@@ -123,7 +123,11 @@ ORYX.Plugins.TransformationDownloadDialog = {
 	 * The dialog shows a list containing the resulting XML files.
 	 * Each file can be shown in a new window or downloaded.
      *
-	 * @param {Object} data The data to be shown in the dialgo
+	 * @param {Object} data The data to be shown in the dialog
+	 * Format: array with three elements: 
+	 *   * file - the file
+	 *   * result - the content of file, may also be an error message.
+	 *   * info - status of the result: "success" or "error"
 	 */
 	openResultDialog: function(data) {
 

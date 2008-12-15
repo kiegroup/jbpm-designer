@@ -191,24 +191,24 @@ public class SynchronizingProcessMapper {
 			Gateway gateway, Output output) {
 		if (transExpr == null) {
 			output.addError(
-					"The gateway " + gateway.getId() + 
-					" must define conditions for its outgoing transitions.");
+					"The gateway " +
+					"must define conditions for its outgoing transitions.",  gateway.getId());
 			return false;
 		}
 		if (refinedExpression == null) {
 			// error
 			output.addError(
 					"The conditions of the outgoing transitions " +
-					"from gateway " + gateway.getId() + 
-					" must be all opaque or all non-opaque.");
+					"from this gateway "+ 
+					" must be all opaque or all non-opaque.", gateway.getId());
 			return false;
 		} else if (refinedExpression.equals("")) {
 			// opaque expression
 			if (transExpr.getExpression() != null) {
 				output.addError(
 						"The conditions of the outgoing transitions " +
-						"from gateway " + gateway.getId() + 
-						" must be all opaque or all non-opaque.");
+						"from this gateway "+  
+						" must be all opaque or all non-opaque.", gateway.getId());
 				return false;
 			}
 		}
@@ -247,8 +247,9 @@ public class SynchronizingProcessMapper {
 				if (refinedExpression == null) {
 					output.addError(
 							"The conditions of the outgoing transitions " +
-							"from gateway " + gateway.getId() + 
-							" must be all opaque or all non-opaque.");
+							"from this gateway "+ 
+							" must be all opaque or all non-opaque.",
+							gateway.getId());
 					return null;
 				} else if (refinedExpression.equals("")) {
 					// opaque expression can not be negated
@@ -564,7 +565,7 @@ public class SynchronizingProcessMapper {
 							}
 						} else {
 							output.addError("A link could not be generated " +
-									"for a synchronizing process pattern.");
+									"for a synchronizing process pattern.", source.getId());
 						}
 					}
 					if (!joinPart.equals("")) {
@@ -637,14 +638,14 @@ public class SynchronizingProcessMapper {
 		// transition to the source object
 		Transition toAh = this.component.getEntry();
 		if (toAh == null) {
-			output.addError("A component could not be folded.");
+			output.addError("A component could not be folded.", this.component.getId());
 			return null;
 		}
 		
 		// transition to the sink object
 		Transition fromIc = this.component.getExit();
 		if (fromIc == null) {
-			output.addError("A component could not be folded.");
+			output.addError("A component could not be folded.", this.component.getId());
 			return null;
 		}
 		

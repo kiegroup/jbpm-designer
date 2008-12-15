@@ -66,7 +66,7 @@ public abstract class ListUtil {
 	 * Builds a string containing the names of each list element separated
 	 * by comma.
 	 * 
-	 * @param list The list containing the elemnts.
+	 * @param list The list containing the elements.
 	 * 
 	 * @return The string containing the names of each list element separated
 	 * by comma.

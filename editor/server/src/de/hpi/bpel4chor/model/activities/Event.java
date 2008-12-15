@@ -53,8 +53,8 @@ public abstract class Event extends Activity {
 	public void addSourceFor(Transition transition, Output output) {
 		if (!this.sourceFor.isEmpty()) {
 			output.addError(
-					"The event " + getId() + 
-					" is not allowed to have multiple outgoing transitions.");
+					"This event " + 
+					" is not allowed to have multiple outgoing transitions.",  getId());
 		} else {
 			super.addSourceFor(transition, output);
 		}
@@ -64,8 +64,9 @@ public abstract class Event extends Activity {
 	public void addTargetFor(Transition transition, Output output) {
 		if (!this.targetFor.isEmpty()) {
 			output.addError(
-					"The event " + getId() + 
-					" is not allowed to have multiple incoming transitions.");
+					"This event " +  
+					" is not allowed to have multiple incoming transitions.",
+					getId());
 		} else {
 			super.addTargetFor(transition, output);
 		}

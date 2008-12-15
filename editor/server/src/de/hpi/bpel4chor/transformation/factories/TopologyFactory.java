@@ -263,8 +263,8 @@ public class TopologyFactory {
 		if ((source instanceof ServiceTask) || (source instanceof SendTask)) {
 			element.setAttribute("sendActivity", source.getName());
 		} else {
-			this.output.addError("The source object of message flow " + 
-					messageFlow.getId() + " is not a sending activity.");
+			this.output.addError("The source object of message flow " +
+					"is not a sending activity.", messageFlow.getId());
 		}
 	}
 	
@@ -284,8 +284,8 @@ public class TopologyFactory {
 		if (target.isReceiving()) {
 			element.setAttribute("receiveActivity", target.getName());
 		} else {
-			this.output.addError("The target object of message flow " + 
-					messageFlow.getId() + " is not a receiving activity.");
+			this.output.addError("The target object of message flow " +
+					"is not a receiving activity.", messageFlow.getId());
 		}
 	}
 	
@@ -311,8 +311,8 @@ public class TopologyFactory {
 			Activity target = flow.getTarget();
 			// target must be a receiving activity
 			if (!target.isReceiving()) {
-				this.output.addError("The target object of message flow " + 
-						flow.getId() + " is not a receiving activity.");
+				this.output.addError("The target object of message flow " +
+						"is not a receiving activity.", flow.getId());
 				return;
 			}
 			
@@ -321,7 +321,7 @@ public class TopologyFactory {
 				name = target.getName();
 			} else if (!name.equals(target.getName())) {
 				this.output.addError("There are message flows with the same" +
-						" source but different target.");
+						" source but different target.", flow.getId());
 				return;
 			}
 		}
@@ -405,7 +405,7 @@ public class TopologyFactory {
 		String bindSenderTo = getBindSenderTo(flow.getTarget());
 		if (bindSenderTo == null) {
 			this.output.addError("The reference to bind the sender to could "+
-					"not be defined for message flow " + flow.getId());
+					"not be defined for this message flow ", flow.getId());
 		} else {
 			element.setAttribute("bindSenderTo", bindSenderTo);
 		}
@@ -462,8 +462,8 @@ public class TopologyFactory {
 				// actual sender must be bound to participant reference
 				createBindSenderTo(flow, element);
 			} else {
-				this.output.addError("The type of the senders of message " +
-						"flow " + flow.getId() + " is not valid.");
+				this.output.addError("The type of the senders of this message " +
+						"flow is not valid.", flow.getId());
 			}
 		} else {
 			// check participant reference data objects 
@@ -478,8 +478,8 @@ public class TopologyFactory {
 				if (validSenderType(flow, participants.get(0))) {
 					element.setAttribute("sender", participants.get(0).getName());
 				} else {
-					this.output.addError("The type of the sender of message" +
-							" flow " + flow.getId() + " is not valid.");
+					this.output.addError("The type of the sender of this message" +
+							" flow is not valid.", flow.getId());
 				}
 			} else if (participants.size() > 1) {
 				// add name of each associated participant reference to senders 
@@ -488,12 +488,12 @@ public class TopologyFactory {
 							getSendersValue(participants));
 					createBindSenderTo(flow, element);
 				} else {
-					this.output.addError("The type of the senders of message" +
-							" flow " + flow.getId() + " is not valid.");
+					this.output.addError("The type of the senders of this message" +
+							" flow is not valid.", flow.getId());
 				}
 			} else {
-				this.output.addError("The sender of message flow " + 
-						flow.getId() + " could no be determined.");
+				this.output.addError("The sender of this message flow " +
+						"could not be determined.", flow.getId());
 			}
 		}
 	}
@@ -588,7 +588,7 @@ public class TopologyFactory {
 		} else {
 			this.output.addError("The target activities of the message flows " + 
 					ListUtil.toString(flows) + 
-					" are not associated with the same participants.");
+					" are not associated with the same participants.", flows.get(0).getId());
 		}
 	}
 	
@@ -616,7 +616,7 @@ public class TopologyFactory {
 			} else if (!flow.getSource().getParentSwimlane().equals(swimlane)) {
 				this.output.addError("The sources of the message flows " + 
 						ListUtil.toString(flows) + 
-						" must be located in the same swimlane.");
+						" must be located in the same swimlane.", flows.get(0).getId());
 			}
 		}
 		if (!flows.isEmpty()) {
@@ -653,8 +653,8 @@ public class TopologyFactory {
 				getAssociatedParticipantReferences(
 						source, Association.DIRECTION_TO);
 			if (participants.size() == 0) {
-				this.output.addError("Receiver for message flow " + 
-						messageFlow.getId() + " could not be determined");
+				this.output.addError("Receiver for this message flow " +
+						"could not be determined.", messageFlow.getId());
 			} else {
 				ParticipantReferenceDataObject participant = 
 					participants.get(0);
@@ -662,8 +662,8 @@ public class TopologyFactory {
 					element.setAttribute("receiver", participant.getName());
 				} else {
 					this.output.addError(
-							"The type of the receiver of message flow " + 
-							messageFlow.getId() + " is not valid.");
+							"The type of the receiver of message flow " +
+							"is not valid.", messageFlow.getId());
 				}
 			}
 		}
@@ -704,18 +704,17 @@ public class TopologyFactory {
 					getAssociatedParticipantReferences(
 							source, Association.DIRECTION_TO);
 				if (participants.size() == 0) {
-					this.output.addError("Receiver for message flow " + 
-							messageFlow.getId() + " could not be determined");
+					this.output.addError("Receiver for this message flow " + 
+							 "could not be determined", messageFlow.getId());
 				} else if (participants.size() > 1) {
 					this.output.addError("There are multiple " +
-							"receivers defined for " + messageFlow.getId() + 
-							".");
+							"receivers defined", messageFlow.getId()); 
 				} else {
 					if (ref == null) {
 						ref = participants.get(0).getName();
 					} else if (!ref.equals(participants.get(0).getName())) {
-						this.output.addError("The receiver of message flow " +
-								messageFlow.getId() + " must be equal to " + ref);
+						this.output.addError("The receiver of this message flow " +
+								"must be equal to "+ ref, messageFlow.getId());
 					}
 				}
 			}
@@ -724,8 +723,11 @@ public class TopologyFactory {
 		if (ref != null) {
 			element.setAttribute("receiver", ref);
 		} else {
-			this.output.addError(
-					"The Receiver of a message link could not be determined.");
+			if (flows.isEmpty()) {
+				this.output.addGeneralError("The Receiver of a message link could not be determined.");
+			} else {
+				this.output.addError("The Receiver of a message link could not be determined.", flows.get(0).getId());
+			}
 		}
 	}
 	
@@ -770,8 +772,8 @@ public class TopologyFactory {
 			if (copyTo == null) {
 				if (copy) {
 					this.output.addError("Either all or none of the " +
-							"passed participant references and sets for message flow " + 
-							messageFlow.getId() + " must define the CopyTo attribute.");
+							"passed participant references and sets for this message flow "+ 
+							"must define the CopyTo attribute.", messageFlow.getId());
 					return;
 				}
 			} else {
@@ -887,10 +889,10 @@ public class TopologyFactory {
 			if (dataObjects == null) {
 				dataObjects = passed;
 			} else if (!isEqual(dataObjects, passed, true)) {
-				this.output.addError("The message flows " + 
-					ListUtil.toString(flows) + " are not associated with the" +
+				this.output.addError("The message flows " +
+					ListUtil.toString(flows) + " are not associated with the"+
 							" same participants or the participants do not" +
-							" specify the same CopyTo value.");
+							" specify the same CopyTo value.", flows.get(0).getId());
 					return;
 			}
 		}
@@ -927,8 +929,8 @@ public class TopologyFactory {
 					names.add(source.getName());
 				}
 			} else {
-				this.output.addError("The source object of message flow " + 
-						flow.getId() + " is not a sending activity.");
+				this.output.addError("The source object of this message flow " + 
+						"is not a sending activity.", flow.getId());
 			}
 		}
 		element.setAttribute("sendActivity", sendActivities.trim());
@@ -953,8 +955,8 @@ public class TopologyFactory {
 			} else {
 				if ((flow.getName() != null) && 
 						(!flow.getName().equals(name))) {
-					this.output.addError("The message flow " + flow.getId() + 
-							" must define no name or the name " + name);
+					this.output.addError("This message flow " +
+							"must define no name or the name "+ name, flow.getId());
 					return null;
 				}
 			}
@@ -980,8 +982,8 @@ public class TopologyFactory {
 		for (Iterator<MessageFlow> it = flows.iterator(); it.hasNext();) {
 			MessageFlow flow = it.next();
 			if (flow.getMessageName() == null) {
-				this.output.addError("The message flow " + flow.getId() + 
-						" must define a message name");
+				this.output.addError("This message flow " +
+						"must define a message name", flow.getId());
 				return null;
 			} else if (messageName == null) {
 				messageName = flow.getMessageName();
@@ -989,7 +991,7 @@ public class TopologyFactory {
 				if (!flow.getMessageName().equals(messageName)) {
 					this.output.addError("The message flows " + 
 							ListUtil.toString(flows) + 
-							" must define the same message name.");
+							" must define the same message name.", flows.get(0).toString());
 					return null;
 				}
 			}
@@ -1087,8 +1089,8 @@ public class TopologyFactory {
 		}
 		
 		if (flow.getMessageName() == null) {
-			this.output.addError("The message flow " + 
-					flow.getId() + " does not specify a message name.");
+			this.output.addError("This message flow " +
+					"does not specify a message name.", flow.getId());
 		} else {
 			element.setAttribute("messageName", flow.getMessageName());
 		}
@@ -1146,7 +1148,7 @@ public class TopologyFactory {
 	private Element transformMessageLinks(Document document) {
 		if (this.diagram.getMessageFlows().isEmpty()) {
 			this.output.addError(
-					"There are no message flows in the choreography");
+					"There are no message flows in the choreography", this.diagram.getId());
 		}
 		
 		Element messageLinks = document.createElement("messageLinks");

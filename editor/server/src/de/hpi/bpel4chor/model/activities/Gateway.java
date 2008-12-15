@@ -105,9 +105,9 @@ public class Gateway extends Activity {
 	 */
 	public void addSourceFor(Transition transition, Output output) {
 		if ((this.sourceFor.size() > 0) && (this.targetFor.size() > 1)) {
-			output.addError("The gateway " + getId() + 
-					" is a merge gateway and can not have multiple" +
-							" outgoing transitions.");
+			output.addError("This gateway " +
+					" is a merge gateway and can not have multiple"+
+							" outgoing transitions.", getId());
 		} else {
 			super.addSourceFor(transition, output);
 		}
@@ -123,9 +123,9 @@ public class Gateway extends Activity {
 	 */
 	public void addTargetFor(Transition transition, Output output) {
 		if ((this.targetFor.size() > 0) && (this.sourceFor.size() > 1)) {
-			output.addError("The gateway " + 
-					getId() + " is a split gateway and can not have multiple" +
-							" incoming transitions.");
+			output.addError("This gateway " +
+					        " is a split gateway and cannot have multiple"+
+							" incoming transitions.", getId());
 		} else {
 			super.addTargetFor(transition, output);
 		}

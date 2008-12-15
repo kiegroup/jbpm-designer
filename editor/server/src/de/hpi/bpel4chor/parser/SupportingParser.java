@@ -189,8 +189,8 @@ public class SupportingParser {
 		
 		NamedNodeMap attributes = correlationNode.getAttributes();
 		if (attributes.getNamedItem(SET) == null) {
-			output.addError(
-					"An correlation element does not have a set specified.");			
+			output.addParseError(
+					"An correlation element does not have a set specified.", correlationNode);			
 		} else {
 			correlation.setSet(BPELUtil.stringToNCName(
 					attributes.getNamedItem(SET).getNodeValue()));
@@ -247,7 +247,7 @@ public class SupportingParser {
 	private static void parseCorrelationSetAttributes(CorrelationSet set, Node correlationSetNode, Output output) {
 		Node nameNode = correlationSetNode.getAttributes().getNamedItem("Name");
 		if (nameNode == null) {
-			output.addError("A correlation property does not have a name specified.");
+			output.addParseError("A correlation property does not have a name specified.", correlationSetNode);
 		} else {
 			set.setName(BPELUtil.stringToNCName(nameNode.getNodeValue()));
 		}
@@ -591,8 +591,8 @@ public class SupportingParser {
 		
 		NamedNodeMap attributes = importNode.getAttributes();
 		if (attributes.getNamedItem(NAMESPACE) == null) {
-			output.addError("An import element does " +
-					"not have a specified namespace attribute.");			
+			output.addParseError("An import element does " +
+					"not have a specified namespace attribute.", importNode);			
 		} else {
 			imp.setNamespace(attributes.getNamedItem(NAMESPACE).getNodeValue());
 		}
@@ -606,8 +606,8 @@ public class SupportingParser {
 		}
 		
 		if (attributes.getNamedItem(IMPORT_TYPE) == null) {
-			output.addError("An import element does " +
-					"not have a specified import type attribute.");			
+			output.addParseError("An import element does " +
+					"not have a specified import type attribute.", importNode);			
 		} else {
 			try {
 				imp.setImportType(new URI(
@@ -619,7 +619,7 @@ public class SupportingParser {
 		
 		if (attributes.getNamedItem(PREFIX) == null) {
 			output.addError("An import element does " +
-					"not have a specified prefix attribute.");			
+					"not have a specified prefix attribute.", attributes.toString());			
 		} else {
 			imp.setPrefix(attributes.getNamedItem(PREFIX).getNodeValue());
 		}
@@ -643,7 +643,7 @@ public class SupportingParser {
 		if (typeAttr != null) {
 			loop.setLoopType(typeAttr.getNodeValue());
 		} else {
-			output.addError("A loop does not have a loop type defined.");
+			output.addParseError("A loop does not have a loop type defined.", loopNode);
 		}
 	}
 	

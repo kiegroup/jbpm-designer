@@ -69,7 +69,7 @@ public class SupportingFactory {
 			String part, String query, String queryLanguage) {
 		Element result = this.document.createElement(elementName);
 		if (varName == null || varName.equals("")) {
-			this.output.addError("A " + elementName + 
+			this.output.addGeneralError("A " + elementName + 
 				" element of the type Variable must define a variable name.");
 		} else {
 			result.setAttribute("variable", varName);
@@ -108,14 +108,14 @@ public class SupportingFactory {
 			String property) {
 		Element result = this.document.createElement(elementName);
 		if (varName == null || varName.equals("")) {
-			this.output.addError("A " + elementName + 
+			this.output.addGeneralError("A " + elementName + 
 				" element of type VarProperty must define a variable name.");
 		} else {
 			result.setAttribute("variable", varName);
 		}
 		
 		if (property == null || property.equals("")) {
-			this.output.addError("A " + elementName + 
+			this.output.addGeneralError("A " + elementName + 
 				" element of type VarProperty must define a property name.");
 		} else {
 			result.setAttribute("property", property);
@@ -373,16 +373,16 @@ public class SupportingFactory {
 		String prefix = value.substring(0, value.indexOf(':'));
 		if (value.indexOf(':') < 0) {
 			this.output.addError(
-					"There is a prefix missing for the variable type value " + 
-					value + " of the variable " + dataObject.getId());
+					"There is a prefix missing for the variable type value " +
+					value + "of this variable ", dataObject.getId());
 			return result;
 		}
 		// set import
 		Import imp = swimlane.getImportForPrefix(prefix);
 		if (imp == null) {
 			this.output.addError(
-					"There is an import element missing for the prefix " + 
-					prefix + " of the variable " + dataObject.getId());
+					"There is an import element missing for the prefix " +
+					prefix + "of this variable ", dataObject.getId());
 			return result;
 		}
 		
@@ -397,8 +397,8 @@ public class SupportingFactory {
 				VariableDataObject.VARIABLE_TYPE_XML_TYPE))) {
 			result.setAttribute("type", value);
 		} else {
-			this.output.addError("The type of the variable " + 
-					dataObject.getName() + " could not be determined.");
+			this.output.addError("The type of this variable " +
+					"could not be determined.", dataObject.getName());
 		}
 		
 		// set fromSpec

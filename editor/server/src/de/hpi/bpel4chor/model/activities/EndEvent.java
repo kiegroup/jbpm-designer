@@ -34,7 +34,7 @@ public class EndEvent extends Event {
 		} else {
 			output.addError(
 					"The trigger type " + triggerType + 
-					" is not allowed for the end event " + this.getId());
+					" is not allowed for this end event", this.getId());
 		}
 	}
 }

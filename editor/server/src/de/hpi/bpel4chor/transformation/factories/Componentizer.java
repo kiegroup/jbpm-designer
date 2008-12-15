@@ -163,9 +163,7 @@ public class Componentizer {
 					if (gateway == null) {
 						gateway = targetGateway;
 					} else if (!gateway.equals(targetGateway)) {
-						this.output.addError("Each error handler " + 
-								"of activity " + activity.getId() + 
-								" must lead to the same gateway.");
+						this.output.addError("Each error handler must lead to the same gateway.", activity.getId());
 						return null;
 					}
 					predecessors.add(errorHandler);
@@ -181,9 +179,9 @@ public class Componentizer {
 		}
 		
 		if (missing != null) {
-			this.output.addError("The outgoing transition of error handler " + 
-					missing.getId() + " must lead to an inclusive or" +
-					" exclusive merge gateway.");
+			this.output.addError("The outgoing transition of this error handler " +
+					" must lead to an inclusive or"+
+					" exclusive merge gateway.", missing.getId());
 			return null;
 		}
 		
@@ -198,9 +196,10 @@ public class Componentizer {
 		}
 		
 		
-		this.output.addError("The successor of activity " + 
-				activity.getId() + " must be the gateway with id " + 
-				gateway.getId());
+		this.output.addError("The successor of this activity " +
+				" must be the gateway with id "+ 
+				gateway.getId(), activity.getId());
+		this.output.addError("This gateway has to be the successor of the acitivity with id "+activity.getId(), gateway.getId());
 		return null;
 	}
 	
@@ -951,8 +950,7 @@ public class Componentizer {
 					if ((trans == null) ||
 							(trans.getConditionType() == null) || 
 							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
-						this.output.addError("The outgoing transitions of gateway " + 
-								split.getId() + " should define a transition condition.");
+						this.output.addError("The outgoing transitions should define a transition condition.", split.getId());
 						break;
 					}
 					
@@ -1017,8 +1015,7 @@ public class Componentizer {
 					// check if transition from XOR-split to XOR-merge with condition expression
 					if ((trans.getConditionType() == null) || 
 							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
-						this.output.addError("The transition " + trans.getId() + 
-								" should define a transition condition.");
+						this.output.addError("The transition should define a transition condition.", trans.getId());
 						break;
 					}
 					
@@ -1101,8 +1098,7 @@ public class Componentizer {
 					if ((trans == null) ||
 							(trans.getConditionType() == null) || 
 							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
-						this.output.addError("The outgoing transitions of gateway " + 
-								split.getId() + " should define a transition condition.");
+						this.output.addError("The outgoing transitions should define a transition condition.", split.getId());
 						break;
 					}
 					

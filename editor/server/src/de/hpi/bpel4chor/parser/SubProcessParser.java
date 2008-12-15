@@ -54,8 +54,8 @@ public class SubProcessParser {
 	private void parseId(SubProcess subProcess, Node subProcessNode) {
 		NamedNodeMap attributes = subProcessNode.getAttributes();
 		if (attributes.getNamedItem(ID) == null) {
-			this.output.addError("An activity set does " +
-					"not have a specified Id.");			
+			this.output.addParseError("An activity set does " +
+					"not have a specified Id.", subProcessNode);			
 		} else {
 			String id = attributes.getNamedItem(ID).getNodeValue();
 			subProcess.setId(id);
@@ -189,7 +189,7 @@ public class SubProcessParser {
 	public void parseSubProcess(SubProcess subProcess) {
 		Node subProcessNode = nodes.get(subProcess.getId());
 		if (subProcessNode == null) {
-			this.output.addError(
+			this.output.addGeneralError(
 					"Tried to parse a sub process" +
 					" that was not introduced to the parser before.");
 		} else {

@@ -246,8 +246,8 @@ public class SequenceFlowFactory {
 			if (reached) {
 				startGatewayMap.put(start, gateways);
 			} else {
-				this.output.addError("The start event " + 
-						start.getId() + " does not lead to an end event");
+				this.output.addError("The start event " +
+						"does not lead to an end event", start.getId());
 				return null;
 			}
 		}
@@ -277,9 +277,9 @@ public class SequenceFlowFactory {
 		// create gateway
 		Gateway newGateway = null;
 		if (gatewayType.equals(Gateway.TYPE_OR)) {
-			this.output.addError("The start events " + 
-					ListUtil.toString(startEvents) + " could not be combined."+
-					" (No inclusive gateways allowed for combining start events)");
+			this.output.addError("The start events " +
+					ListUtil.toString(startEvents) + "could not be combined."+
+					" (No inclusive gateways allowed for combining start events)", startEvents.get(0).getId());
 			return null;
 		} else if (gatewayType.equals(Gateway.TYPE_AND)) {
 			newGateway = new Gateway(Gateway.TYPE_AND, null, true, this.output);
@@ -287,7 +287,7 @@ public class SequenceFlowFactory {
 			newGateway = new Gateway(Gateway.TYPE_XOR, Gateway.SPLIT_XOREVENT, 
 					createInstance, true, this.output);
 		} else {
-			this.output.addError("The multiple start events can not be combined.");
+			this.output.addError("The multiple start events cannot be combined.", startEvents.get(0).getId());
 			return null;
 		}
 		this.container.addActivity(newGateway);
@@ -356,7 +356,7 @@ public class SequenceFlowFactory {
 				Activity successor = startEvent.getSuccessor();
 				if (gatewayType.equals(Gateway.TYPE_XOR) && (successor instanceof Gateway)) {
 					this.output.addError("The multiple start events could not " +
-							"be combined.");
+							"be combined.", startEvent.getId());
 					return null;
 				}
 				
@@ -561,8 +561,8 @@ public class SequenceFlowFactory {
 				if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE)) {
 					// message triggered start event
 					if (!start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
-						this.output.addError("The message event handler " + handler.getId() +  
-								" must have a message start event.");
+						this.output.addError("The message event handler " +
+								"must have a message start event.", handler.getId());
 						return false;
 					}
 					return true;
@@ -570,8 +570,8 @@ public class SequenceFlowFactory {
 				} else if (handler.getHandlerType().equals(Handler.TYPE_TIMER)) {
 					// timer triggered start event
 					if (!start.getTriggerType().equals(StartEvent.TRIGGER_TIMER)) {
-						this.output.addError("The timer event handler " + handler.getId() +  
-								" must have a timer start event.");
+						this.output.addError("The timer event handler " +
+								"must have a timer start event.", handler.getId());
 						return false;
 					}
 					return true;
@@ -581,8 +581,8 @@ public class SequenceFlowFactory {
 		
 		// timer-triggered start event
 		if (start.getTriggerType().equals(StartEvent.TRIGGER_TIMER)) {
-			this.output.addError("The container " + this.container.getId() +  
-				" is not allowed to contain a timer start event.");
+			this.output.addError("The container " +
+				"is not allowed to contain a timer start event.", this.container.getId());
 			return false;
 		}
 		return true;
@@ -610,8 +610,8 @@ public class SequenceFlowFactory {
 		// check if container contains at least one start event 
 		if (startEvents.size() < 1) {
 			this.output.addError(
-					"The process or sub-process " + this.container.getId() + 
-					" must contain at least one start event.");
+					"The process or sub-process " +
+					"must contain at least one start event.", this.container.getId());
 			return false;
 		} else if (startEvents.size() == 1) {
 			StartEvent start = startEvents.get(0);
@@ -623,8 +623,8 @@ public class SequenceFlowFactory {
 					Handler handler = (Handler)act;
 					if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE) ||
 							handler.getHandlerType().equals(Handler.TYPE_TIMER)) {
-						this.output.addError("The handler " + act.getId() +  
-							"is not allowed to have multiple start events.");
+						this.output.addError("The handler " +
+							"is not allowed to have multiple start events.", act.getId());
 						return false;
 					}
 				}
@@ -634,7 +634,7 @@ public class SequenceFlowFactory {
 				StartEvent start = it.next();
 				if (start.getTriggerType().equals(StartEvent.TRIGGER_NONE)) {
 					this.output.addError("If there are multiple start events " +
-							"defined, the start events are not allowed to be non-triggered.");
+							"defined, the start events are not allowed to be non-triggered.", start.getId());
 					return false;
 				}
 			}
@@ -658,8 +658,8 @@ public class SequenceFlowFactory {
 		List<EndEvent> endEvents = this.container.getEndEvents();
 		if (endEvents.size() < 1) {
 			this.output.addError(
-					"The process or sub-process " + this.container.getId() + 
-					" must contain at least one end event.");
+					"The process or sub-process " +
+					"must contain at least one end event.", this.container.getId());
 			return null;
 		} else if (endEvents.size() == 1) {
 			return endEvents.get(0);
@@ -837,8 +837,8 @@ public class SequenceFlowFactory {
 				return this.basicFactory.createCompensateElement(event);
 			}
 			this.output.addError("The compensation intermediate event " +
-					event.getId() + "must be located in a fault, " +
-					"compensation or termination handler.");
+					"must be located in a fault, "+
+					"compensation or termination handler.",event.getId());
 		} else if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_ERROR)) {
 			return this.basicFactory.createThrowElement(event, this.errorHandler);
 		} else if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_MESSAGE)) {
@@ -879,7 +879,7 @@ public class SequenceFlowFactory {
 				return mapIntermediateEvent((IntermediateEvent)successor);
 			} else {
 				this.output.addError(
-						"A trivial component was not generated correctly");
+						"A trivial component was not generated correctly", successor.getId());
 				return null;
 			}
 			
@@ -1011,8 +1011,8 @@ public class SequenceFlowFactory {
 		} else if (act instanceof IntermediateEvent) {
 			element =  mapIntermediateEvent((IntermediateEvent)act);
 		} else {
-			this.output.addError("Activity " + act.getId() + 
-				" could not be transformed to BPEL4Chor.");
+			this.output.addError("Activity " +
+				"could not be transformed to BPEL4Chor.", act.getId());
 			return null;
 		}
 		if (element != null) {
@@ -1140,8 +1140,8 @@ public class SequenceFlowFactory {
 				element = mapActivity(act, links);
 			}
 			if (trans.getConditionType() == null) {
-				this.output.addError("Transition " + trans.getId() + 
-					" must be conditional or a default flow");
+				this.output.addError("Transition " +
+					"must be conditional or a default flow", trans.getId());
 				return null;
 			}
 			if (trans.getConditionType().equals(Transition.TYPE_OTHERWISE)) {
@@ -1152,13 +1152,12 @@ public class SequenceFlowFactory {
 					}
 				} else {
 					this.output.addError("There is more than one " +
-							"default sequence flow defined for gateway " + 
-							comp.getSourceObject().getId() + ".");
+							"default sequence flow defined for this gateway", comp.getSourceObject().getId());
 					return null;
 				} 
 			} else if (!trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
 				this.output.addError("A transition condition " +
-						"must be defined for transition " + trans.getId());
+						"must be defined for transition ", trans.getId());
 				return null;
 		    } else if (first) {
 				Element condition = 
@@ -1264,7 +1263,7 @@ public class SequenceFlowFactory {
 	 */
 	private void refineQuasi(Component comp) {
 		if (!(comp.getSinkObject() instanceof Gateway)) {
-			this.output.addError("A component was not generated correctly");
+			this.output.addError("A component was not generated correctly", comp.getSinkObject().getId());
 		}
 		Gateway oldGateway = (Gateway)comp.getSinkObject();
 		
@@ -1369,11 +1368,17 @@ public class SequenceFlowFactory {
 	 *                false otherwise.
 	 */
 	private void refineQuasiFlow(Component comp, boolean special) {
-		if (!(comp.getSinkObject() instanceof Gateway) || 
-				!(comp.getSourceObject() instanceof Gateway)) {
+		if (!(comp.getSinkObject() instanceof Gateway)) {
 			this.output.addError("A quasi flow component " +
-					"was not generated correctly.");
+					"was not generated correctly.", comp.getSinkObject().getId());
+			return;
 		}
+		if (!(comp.getSourceObject() instanceof Gateway)) {
+			this.output.addError("A quasi flow component " +
+					"was not generated correctly.", comp.getSourceObject().getId());
+			return;
+		}
+		
 		Gateway sourceGateway = (Gateway)comp.getSourceObject();
 		Gateway sinkGateway = (Gateway)comp.getSinkObject();
 		
@@ -1405,7 +1410,7 @@ public class SequenceFlowFactory {
 		
 		if ((newSourceGateway == null) && (newSinkGateway == null)) {
 			this.output.addError("A quasi flow component " +
-					"was not generated correctly.");
+					"was not generated correctly.", comp.getId());
 		}
 		
 		// change transitions for activities:
@@ -1465,8 +1470,8 @@ public class SequenceFlowFactory {
 			
 			if (trans.getConditionType() == null || 
 					!trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-				this.output.addError("The transition " + trans.getId() + 
-						" must define a transition condition.");
+				this.output.addError("The transition " +
+						"must define a transition condition.", trans.getId());
 			} else {
 				Element condition = this.supportingFactory.createExpressionElement(
 						"condition", trans.getConditionExpression());
@@ -1476,7 +1481,7 @@ public class SequenceFlowFactory {
 			return result;
 		}
 		
-		this.output.addError("A repeat component was not generated correctly");
+		this.output.addError("A repeat component was not generated correctly", comp.getId());
 		return null;
 	}
 	
@@ -1516,7 +1521,7 @@ public class SequenceFlowFactory {
 			}
 			if (t1 == null || t2 == null) {
 				this.output.addError(
-						"A repeat while component was not generated correctly");
+						"A repeat while component was not generated correctly", comp.getId());
 			} else {
 				Element result = this.document.createElement("sequence");
 				Element element = mapActivity(t1, links);
@@ -1526,13 +1531,13 @@ public class SequenceFlowFactory {
 				Element whileElement = this.document.createElement("while");
 				if (condTrans == null) {
 					this.output.addError(
-							"The outgoing transitions of gateway " + 
-							comp.getSinkObject().getId() + 
-							" must define transition conditions.");
+							"The outgoing transitions of this gateway " +
+							"must define transition conditions.", 
+							comp.getSinkObject().getId());
 				} else if ((condTrans.getConditionType() == null) ||
 						!condTrans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-					this.output.addError("The transition " + condTrans.getId() + 
-							" must define a transition condition.");
+					this.output.addError("The transition " +
+							"must define a transition condition.", condTrans.getId());
 				} else {
 					Element condition = this.supportingFactory.createExpressionElement(
 							"condition", condTrans.getConditionExpression());
@@ -1550,7 +1555,7 @@ public class SequenceFlowFactory {
 				return result;
 			}
 		} else {
-			this.output.addError("A repeat-while component was not generated correctly");
+			this.output.addError("A repeat-while component was not generated correctly", comp.getId());
 		}
 		return null;
 	}
@@ -1578,13 +1583,13 @@ public class SequenceFlowFactory {
 				comp.getSinkObject().getTransitionTo(act);
 			if (condTrans == null) {
 				this.output.addError(
-						"A while component was not generated correctly");
+						"A while component was not generated correctly", comp.getId());
 			} else {
 				Element result = this.document.createElement("while");
 				if (condTrans.getConditionType() == null || 
 						!condTrans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-					this.output.addError("The transition " + condTrans.getId() + 
-							" must define a transition condition.");
+					this.output.addError("The transition " +
+							"must define a transition condition.", condTrans.getId());
 				} else {
 					result.appendChild(this.supportingFactory.createExpressionElement(
 							"condition", condTrans.getConditionExpression()));
@@ -1593,7 +1598,7 @@ public class SequenceFlowFactory {
 				}
 			}
 		} else {
-			this.output.addError("A while component was not generated correctly");
+			this.output.addError("A while component was not generated correctly", comp.getId());
 		}
 		return null;
 	}
@@ -1668,8 +1673,8 @@ public class SequenceFlowFactory {
 					} else {
 						this.output.addError(
 							"There are only conditional sequence flows " +
-							"allowed to be connected with the inclusive gateway" + 
-							trans.getSource().getId() + ".");
+							"allowed to be connected with this inclusive gateway", 
+							trans.getSource().getId());
 					}
 			}
 			sources.appendChild(source);
@@ -1713,13 +1718,13 @@ public class SequenceFlowFactory {
 		FoldedTask task = new FoldedTask(element, this.container, this.output);
 		Transition toTask = comp.getEntry();
 		if (toTask == null) {
-			this.output.addError("A component could not be folded.");
+			this.output.addError("A component could not be folded.", comp.getId());
 			return null;
 		}
 		
 		Transition fromTask = comp.getExit();
 		if (fromTask == null) {
-			this.output.addError("A component could not be folded.");
+			this.output.addError("A component could not be folded.", comp.getId());
 			return null;
 		}
 		
@@ -1835,17 +1840,16 @@ public class SequenceFlowFactory {
 				FoldedTask task = foldComponent(component);
 				if ((task == null) && !component.isQuasi() ) {
 					this.output.addError("Diagram can not be transformed to " +
-							"BPEL4Chor. Component was not folded correctly in " + 
-							this.container.getId() + ".");
+							"BPEL4Chor. Component was not folded correctly.", 
+							this.container.getId());
 					return null;
 				}
 			} else {
 				this.output.addError("Diagram can not be transformed to " +
-						"BPEL4Chor. No component found in " + this.container.getId());
-				
-				// print out ids of activities that are left
-				this.output.addError("Activities that could not be transformed: " + 
-						ListUtil.toString(this.container.getActivities()));
+						"BPEL4Chor. No component found", this.container.getId());
+				for (Activity a: this.container.getActivities()) {
+					this.output.addError("Activity could not be transformed", a.getId());
+				}
 				return null;
 			}
 		}

@@ -94,7 +94,7 @@ public class ArtifactParser {
 				Object object = this.diagram.getObject(subprocessId);
 				if (object == null || !(object instanceof SubProcess)) {
 					this.output.addError("A sub process with the Id " + 
-							subprocessId + " does not exist for the artifact " + 
+							subprocessId + " does not exist for this artifact", 
 							artifact.getId());
 				} else {
 					artifact.setContainer((SubProcess)object);
@@ -105,7 +105,7 @@ public class ArtifactParser {
 				Object object = this.diagram.getObject(processId);
 				if ((object == null) || !(object instanceof Process)) {
 					this.output.addError("A process with the Id " + 
-							processId + " does not exist for the artifact " + 
+							processId + " does not exist for this artifact", 
 							artifact.getId());
 				} else {
 					artifact.setContainer((Process)object);
@@ -115,14 +115,14 @@ public class ArtifactParser {
 		
 		if (artifact.getName() == null) {
 			this.output.addError("An artifact element does " +
-					"not have a specified Name.");
+					"not have a specified Name.", artifact.getId());
 		}	
 		
 		if (mustHaveContainer) {
 			if (artifact.getContainer() == null) {
-				this.output.addError("The data object the id " + 
-						artifact.getId() + " does not have a process or" +
-						" subprocess defined.");
+				this.output.addError("The data object " + 
+						" does not have a process or" +
+						" subprocess defined.", artifact.getId());
 			}
 		}
 	}
@@ -174,7 +174,7 @@ public class ArtifactParser {
 				if ((object == null) || !(object instanceof BlockActivity)) {
 					this.output.addError(
 							"The participant reference data object " + 
-							ref.getId() + " defines a scope that does not exist.");
+							" defines a scope that does not exist.", ref.getId());
 				} else {
 					ref.setScope((BlockActivity)object);
 				}
@@ -253,8 +253,8 @@ public class ArtifactParser {
 					this.diagram.getObject(attribute.getNodeValue());
 				if ((object == null) || !(object instanceof BlockActivity)) {
 					this.output.addError(
-							"The participant set data object " + set.getId() +
-							" defines a scope that does not exist.");
+							"The participant set data object " +
+							"defines a scope that does not exist.", set.getId());
 				} else {
 					set.setScope((BlockActivity)object);
 				}
@@ -307,15 +307,15 @@ public class ArtifactParser {
 				type.equals(VariableDataObject.TYPE_FAULT) || 
 				type.equals(VariableDataObject.TYPE_MESSAGE)) {
 			if (attributes.getNamedItem(VARIABLE_TYPE) == null) {
-				this.output.addError("The variable data object with " +
-					"the id " + var.getId() + " does not have a variable type defined");			
+				this.output.addError("The variable data object " +
+					"does not have a variable type defined", var.getId());			
 			} else {
 				var.setVariableType(attributes.getNamedItem(VARIABLE_TYPE).getNodeValue());
 			}
 			
 			if (attributes.getNamedItem(VARIABLE_TYPE_VALUE) == null) {
-				this.output.addError("The variable data object with " +
-						"the id " + var.getId() + " does not have a variable type value defined");
+				this.output.addError("The variable data object " +
+						"does not have a variable type value defined", var.getId());
 			} else {
 				var.setVariableTypeValue(attributes.getNamedItem(VARIABLE_TYPE_VALUE).getNodeValue());
 			}

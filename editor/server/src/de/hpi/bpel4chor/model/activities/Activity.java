@@ -224,7 +224,11 @@ public abstract class Activity extends GraphicalObject{
 				(getPredecessor().equals(transition.getTarget()))) {
 			output.addError(
 					"The target of the transition " + transition.getId() + 
-					" is already connected with activity " + this.getId());
+					" is already connected with this activity ", this.getId());
+			output.addError(
+					"The target of this transition " +
+					" is already connected with activity "+ this.getId(),
+					transition.getId());
 		}
 		this.sourceFor.add(transition);
 	}
@@ -259,7 +263,11 @@ public abstract class Activity extends GraphicalObject{
 				(getSuccessor().equals(transition.getSource()))) {
 			output.addError(
 					"The source of the transition " + transition.getId() + 
-					" is already connected with activity " + this.getId());
+					" is already connected with this activity", this.getId());
+			output.addError(
+					"The source of this transition " +
+					" is already connected with activity "+ this.getId(),
+					transition.getId());
 		}
 		this.targetFor.add(transition);
 	}

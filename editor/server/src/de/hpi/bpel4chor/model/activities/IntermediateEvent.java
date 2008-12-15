@@ -131,7 +131,7 @@ public class IntermediateEvent extends Event {
 		} else {
 			output.addError(
 				"The trigger type " + triggerType + 
-				" is not allowed for the intermediate event " + this.getId());
+				" is not allowed for the intermediate event", this.getId());
 		}
 	}
 }

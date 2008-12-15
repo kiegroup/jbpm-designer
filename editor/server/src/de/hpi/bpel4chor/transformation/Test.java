@@ -34,11 +34,10 @@ public class Test {
 			input.close();
 			
 			//String[] result  = new BPMN2BPELImpl().transform(myString, true);
-			List<TransformationResult> result  = new XPDL4Chor2BPEL4Chor().transform(myString, false);
+			List<TransformationResult> result  = new Transformation().transform(myString, false);
 			
 			for (TransformationResult tr: result) {
-				System.out.println(tr.success);
-				System.out.println(tr.result);
+				System.out.println(tr);
 			}
 
 			System.out.println("Finished Test.");

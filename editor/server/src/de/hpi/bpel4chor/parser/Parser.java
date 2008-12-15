@@ -92,7 +92,7 @@ public class Parser {
 				DiagramParser parser = new DiagramParser(output);
 				diagram = parser.parseDiagram(doc.getDocumentElement());
 			} else {
-				output.addError("The document root is not a package element.");
+				output.addParseError("The document root is not a package element.", doc.getDocumentElement());
 			}
 		} catch (SAXException e) {
 			output.addError(e);
