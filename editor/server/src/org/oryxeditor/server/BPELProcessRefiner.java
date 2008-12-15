@@ -153,7 +153,7 @@ public class BPELProcessRefiner {
 		   child = allChildren.item(i);
 		   if (child instanceof Element){
 			   Element childElement = (Element) child;
-			   if (!childElement.getAttribute("bounds").isEmpty()){
+			   if (childElement.getAttribute("bounds") != ""){
 				   toArrangeChildren.add((Element) child);
 			   }
 		   }
@@ -230,7 +230,7 @@ public class BPELProcessRefiner {
    private int getBoundsValueOf (Element e){
 	   String bounds = e.getAttribute("bounds");
 	   
-	   if (bounds.isEmpty()){
+	   if (bounds == ""){
 		   return 0;
 	   }
 	   
