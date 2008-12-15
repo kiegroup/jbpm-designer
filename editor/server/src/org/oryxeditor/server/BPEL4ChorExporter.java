@@ -60,13 +60,17 @@ public class BPEL4ChorExporter extends HttpServlet {
     	
     	transformProcesses (rdfString, res);
     	
+    	transformTopology (rdfString, res);
+
+    	transformGrounding (rdfString, res);
+
     }
   
     
     private void transformTopology (String rdfString, HttpServletResponse res){
-  	   /*
+  	   
 	   	// XSLT source
-	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
+	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
 	   	final File xsltFile = new File(xsltFilename);
 	   	final Source xsltSource = new StreamSource(xsltFile);	
 	   	
@@ -85,20 +89,17 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
 	   		resultString = writer.toString();
+	   		printResponse (res, resultString);
 	   	} catch (Exception e){
 	   		handleException(res, e); 
-	   		return null;
 	   	}
-	
-	   	return resultString;
-	   	*/ 
 
    }
     
     private void transformGrounding (String rdfString, HttpServletResponse res){
-  	   /*
+  	   
 	   	// XSLT source
-	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
+	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL4Chor_Grounding.xslt";
 	   	final File xsltFile = new File(xsltFilename);
 	   	final Source xsltSource = new StreamSource(xsltFile);	
 	   	
@@ -117,13 +118,10 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
 	   		resultString = writer.toString();
+	   		printResponse (res, resultString);
 	   	} catch (Exception e){
-	   		handleException(res, e); 
-	   		return null;
+	   		handleException(res, e);
 	   	}
-	
-	   	return resultString;
-	   	*/
 
    }
     
@@ -147,6 +145,7 @@ public class BPEL4ChorExporter extends HttpServlet {
         	}
         	
     		out.print(text);
+    		out.println();
     	}
     }
     

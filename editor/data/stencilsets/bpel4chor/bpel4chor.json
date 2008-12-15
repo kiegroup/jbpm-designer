@@ -16,7 +16,62 @@
 			"view":"others/node.Bpel.svg",
 			"icon":"diagram.png",
 			"roles": [],
-			"properties": []
+			"properties": [
+				{
+					"id":"name",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"name",
+					"title_de":"Name",
+					"value":"NCName",
+					"description":"",
+					"description_de":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"label",
+					"length":undefined,
+					"wrapLines":false
+				},
+				{
+					"id":"targetNamespace",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"targetNamespace",
+					"title_de":"Zielnamensraum",
+					"value":"http://bpel.com/process",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"otherxmlns",
+					"prefix":"oryx",
+					"type":"Complex",
+					"title":"other xmlns",
+					"title_de":"andere xml-Namensräume",
+					"value":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"prefix",
+							"name":"prefix",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						},
+						{
+							"id":"namespace",
+							"name":"namespace",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						}
+					]
+				}
+			]
 		},
 		{
 			"type": "node",
@@ -7259,6 +7314,20 @@
 					"type":"String",
 					"title":"participantRefs",
 					"title_de":"participantRefs",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"copyParticipantRefsTo",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"copyParticipantRefsTo",
+					"title_de":"copyParticipantRefsTo",
 					"value":"",
 					"description":"",
 					"tooltip":"",

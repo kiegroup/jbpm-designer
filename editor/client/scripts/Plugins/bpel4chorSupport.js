@@ -137,8 +137,9 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 					resource: resource,
 					data: serialized_rdf
 				},
-                onSuccess: function(request){                
-                	this.displayResult(response.responseText);
+                onSuccess: function(response){
+                	alert (response.responseText);
+                	//this.displayResult(response.responseText);
 				}.bind(this)
 			});
                 	
@@ -194,6 +195,9 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 		this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
 
 		var resultString = '(' + result + ')';
+		
+		alert (resultString);
+		
 		var resultObject;
 		
 		try {
@@ -214,6 +218,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 				processes[i-1] = resultObject.res[i].content;
 			}
 			var data = this.buildTransData(topology,grounding,processes);
+			
 			this.dialogSupport.openResultDialog(data);
 		}
 	},
