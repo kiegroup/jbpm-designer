@@ -80,6 +80,16 @@ Repository.I18N.FullView.editorLabel = "Editor öffnen";
 if(!Repository.I18N.TypeFilter) Repository.I18N.TypeFilter = {};
 Repository.I18N.TypeFilter.name = "Modelltyp-Filter";
 
+// TagFilter Plugin
+
+if(!Repository.I18N.TagFilter) Repository.I18N.TagFilter = {};
+Repository.I18N.TagFilter.name = "Tag-Filter";
+
+// Friend Filter Plugin
+
+if(!Repository.I18N.FriendFilter) Repository.I18N.FriendFilter = {};
+Repository.I18N.FriendFilter.name = "Freunde-Filter";
+
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
 Repository.I18N.TagInfo.name = "Tags"
 Repository.I18N.TagInfo.deleteText = "Löschen"
@@ -115,6 +125,7 @@ Repository.I18N.AccessInfo.addContributer = "Schreibrechte hinzufügen"
 Repository.I18N.AccessInfo.several = "verschiedene"
 Repository.I18N.AccessInfo.noWritePermission = "Keine Schreibrechte"
 
+
 if(!Repository.I18N.SortingSupport) Repository.I18N.SortingSupport = {};
 Repository.I18N.SortingSupport.name = "Sortierung";
 Repository.I18N.SortingSupport.lastchange = "Nach letzter Änderung"
@@ -140,6 +151,7 @@ Repository.I18N.Edit.deleteText = "Löschen"
 Repository.I18N.Edit.noWriteAccess = "Nur der Besitzer des Modells kann diese Löschen"
 Repository.I18N.Edit.deleteOneText = "'#{title}'" 
 Repository.I18N.Edit.deleteMoreText = "Alle #{size} selektierten Modelle" 
+
 
 if(!Repository.I18N.Rating) Repository.I18N.Rating = {};
 Repository.I18N.Rating.name = "Bewertung"
