@@ -79,9 +79,14 @@ public class BPELExporter extends HttpServlet {
     	    e.printStackTrace();
     	}
     	  	
+    	out.print("{\"res\":[");
+    	
     	String rdfString = req.getParameter("data");
     	
+    	
     	transformProcesses (rdfString, out);
+    	
+    	out.print("]}");
     }
    
    public void transformProcesses (String rdfString, PrintWriter out){
@@ -118,7 +123,6 @@ public class BPELExporter extends HttpServlet {
 
     			ArrayList<String> processList = separateProcesses(resultString);
     			
-    			out.print("{\"res\":[");
     			Iterator<String> processListIter = processList.iterator();
     			String process;
     			while (processListIter.hasNext()){
@@ -128,7 +132,6 @@ public class BPELExporter extends HttpServlet {
 					   out.print(',');
 				   }
     			};
-    			out.print("]}");
     		    return;
     		} catch (Exception e){
     		    handleException(out, e); 
@@ -198,11 +201,11 @@ public class BPELExporter extends HttpServlet {
     
     
     private void printError(PrintWriter out, String err){
-		out.print("{\"res\":[{\"type\":\"process\",");
+		out.print("{\"type\":\"process\",");
 		out.print("\"success\":false,");
 		out.print("\"content\":\"");
 		out.print(escapeJSON(err));
-		out.print("\"}]}");
+		out.print("\"}");
     }
     
 	private void handleException(PrintWriter out, Exception e) {

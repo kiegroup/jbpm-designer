@@ -56,18 +56,42 @@ public class BPEL4ChorExporter extends HttpServlet {
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     	
+    	res.setContentType("application/json");
+    	PrintWriter out = null;
+    	try {
+    	    out = res.getWriter();
+    	} catch (IOException e) {
+    	    e.printStackTrace();
+    	}
+    	
+    	out.print("{\"res\":[");
+    	
     	String rdfString = req.getParameter("data");
+    	    	
+    	transformTopology (rdfString, out);
     	
-    	transformProcesses (rdfString, res);
-    	
-    	transformTopology (rdfString, res);
+    	out.print(',');
 
-    	transformGrounding (rdfString, res);
+    	transformGrounding (rdfString, out);
+    	
+    	out.print(',');
+    	
+    	transformProcesses (rdfString, out);
+
+    	out.print("]}");
 
     }
   
-    
-    private void transformTopology (String rdfString, HttpServletResponse res){
+	private static String escapeJSON(String json) {
+		// escape (some) JSON special characters
+		String res = json.replace("\"", "\\\"");
+		res = res.replace("\n","\\n");
+		res = res.replace("\r","\\r");
+		res = res.replace("\t","\\t");
+		return res;
+	}
+	
+    private void transformTopology (String rdfString, PrintWriter out){
   	   
 	   	// XSLT source
 	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
@@ -89,14 +113,14 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
 	   		resultString = writer.toString();
-	   		printResponse (res, resultString);
+	   		printResponse (out, "topology", resultString);
 	   	} catch (Exception e){
-	   		handleException(res, e); 
+	   		handleException(out, "topology", e); 
 	   	}
 
    }
     
-    private void transformGrounding (String rdfString, HttpServletResponse res){
+    private void transformGrounding (String rdfString, PrintWriter out){
   	   
 	   	// XSLT source
 	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL4Chor_Grounding.xslt";
@@ -118,58 +142,39 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
 	   		resultString = writer.toString();
-	   		printResponse (res, resultString);
+	   		printResponse (out, "grounding", resultString);
 	   	} catch (Exception e){
-	   		handleException(res, e);
+	   		handleException(out, "grounding", e);
 	   	}
 
    }
     
 
-    private void transformProcesses (String rdfString, HttpServletResponse res){
+    private void transformProcesses (String rdfString, PrintWriter out){
 	   
-    	bpelExporter.transformProcesses (rdfString, res);
+    	bpelExporter.transformProcesses (rdfString, out);
    }
     
-   private void printResponse(HttpServletResponse res, String text){
-    	if (res != null){
- 
-        	// Get the PrintWriter
-        	res.setContentType("text/plain");
-        	
-        	PrintWriter out = null;
-        	try {
-        	    out = res.getWriter();
-        	} catch (IOException e) {
-        	    e.printStackTrace();
-        	}
-        	
-    		out.print(text);
-    		out.println();
-    	}
+   private void printResponse(PrintWriter out, String type, String text){
+		out.print("{\"type\":\"" + type + "\",");
+		out.print("\"success\":true,");
+		out.print("\"content\":\"");
+		out.print(escapeJSON(text));
+		out.print("\"}");
     }
     
     
-    private void printError(HttpServletResponse res, String err){
-    	if (res != null){
- 
-        	// Get the PrintWriter
-        	res.setContentType("text/html");
-        	
-        	PrintWriter out = null;
-        	try {
-        	    out = res.getWriter();
-        	} catch (IOException e) {
-        	    e.printStackTrace();
-        	}
-        	
-    		out.print("{success:false, content:'"+err+"'}");
-    	}
+    private void printError(PrintWriter out, String type, String err){
+		out.print("{\"type\":\"" + type+ "\",");
+		out.print("\"success\":false,");
+		out.print("\"content\":\"");
+		out.print(escapeJSON(err));
+		out.print("\"}");
     }
     
-	private void handleException(HttpServletResponse res, Exception e) {
+	private void handleException(PrintWriter out, String type, Exception e) {
 		e.printStackTrace();
-		printError(res, e.getLocalizedMessage());
+		printError(out, type, e.getLocalizedMessage());
 	}
     
 }

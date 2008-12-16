@@ -138,8 +138,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 					data: serialized_rdf
 				},
                 onSuccess: function(response){
-                	alert (response.responseText);
-                	//this.displayResult(response.responseText);
+                	this.displayResult(response.responseText);
 				}.bind(this)
 			});
                 	
@@ -173,7 +172,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 			if (name == undefined) {
 				name = "Process " + (i+1);
 			}
-			data[i+1] = [name, processes[i], this.dialogSupport.getResultInfo(processes[i])];
+			data[i+2] = [name, processes[i], this.dialogSupport.getResultInfo(processes[i])];
 		}	
 		
 		return data;
@@ -196,7 +195,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 
 		var resultString = '(' + result + ')';
 		
-		alert (resultString);
+		//alert (resultString);
 		
 		var resultObject;
 		
@@ -215,7 +214,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 			var grounding = resultObject.res[1].content;
 			var processes = new Array();
 			for (var i = 2; i < resultObject.res.length; i++) {
-				processes[i-1] = resultObject.res[i].content;
+				processes[i-2] = resultObject.res[i].content;
 			}
 			var data = this.buildTransData(topology,grounding,processes);
 			
