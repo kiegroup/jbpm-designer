@@ -68,10 +68,12 @@
       	stroke-linejoin="miter"
       	transform="translate(0,-33)"
       	stroke-miterlimit="10" />
-     <text 
-    	oryx:anchors="top left"
-    	x="23" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">compensationHandler</text>
-  </g>
+    <text
+       oryx:rotate="270"
+	   x="16" 
+	   y="40" 
+	   oryx:align="middle center"
+	   oryx:anchors="left"
+	   style="font-family:Arial; font-size: 14pt; fill:black;">compensatationHandler</text>
+	</g>
 </svg> 

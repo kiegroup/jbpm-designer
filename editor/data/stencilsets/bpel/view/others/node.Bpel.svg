@@ -52,15 +52,10 @@
     <text
        oryx:rotate="270"
        id="label"
-	   x="20" 
+	   x="16" 
 	   y="250" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text> 
-    <text 
-    	oryx:anchors="top left"
-    	x="10" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 15pt; fill:black;">Process</text>
+	   oryx:align="middle center"
+	   oryx:anchors="left"
+	   style="font-family:Arial; font-size: 15pt; fill:black;"></text> 
   </g>
 </svg>

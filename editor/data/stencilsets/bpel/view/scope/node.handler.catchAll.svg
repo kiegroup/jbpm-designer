@@ -50,12 +50,11 @@
     	fill="white" />
     <text
        oryx:rotate="270"
-       id="label"
-	   x="10" 
+	   x="16" 
 	   y="40" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>
+	   oryx:align="middle center"
+	   oryx:anchors="left"
+	   style="font-family:Arial; font-size: 14pt; fill:black;">catchAll</text>
 	<path
 	   style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
 	   d="M 20,43 
@@ -102,10 +101,5 @@
 	      L 9.789,38.503953 z "
 	      transform="translate(0,-30)"
 	      oryx:anchors="top left"/>
-    <text 
-    	oryx:anchors="top left"
-    	x="35" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">catchAll</text>
  </g>
 </svg>

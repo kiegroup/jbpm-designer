@@ -120,10 +120,12 @@
 	     style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.90100002;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"
 	     transform="translate(-0,-33)"
 	     oryx:anchors="top left"/>
-	  <text 
-    	oryx:anchors="top left"
-    	x="30" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">terminationHandler</text>
+    <text
+       oryx:rotate="270"
+	   x="16" 
+	   y="40" 
+	   oryx:align="middle center"
+	   oryx:anchors="left"
+	   style="font-family:Arial; font-size: 14pt; fill:black;">terminationHandler</text>
     </g>
 </svg>

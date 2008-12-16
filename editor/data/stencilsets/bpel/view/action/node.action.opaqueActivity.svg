@@ -49,18 +49,11 @@
     	stroke="black" 
     	stroke-width="1" 
     	style="fill:silver;fill-opacity:0.3"/>
-    <text
-       oryx:rotate="270"
-       id="label"
-	   x="10" 
-	   y="40" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>
-    <text 
-    	oryx:anchors="top left"
-    	x="10" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">opaque</text>
+    <text font-size="14" 
+    	  id="label" 
+    	  x="50" 
+    	  y="40" 
+    	  oryx:align="middle center" 
+    	  stroke="black"></text>
   </g>
 </svg>

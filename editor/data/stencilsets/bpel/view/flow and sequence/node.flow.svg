@@ -51,11 +51,11 @@
     <text
        oryx:rotate="270"
        id="label"
-	   x="10" 
-	   y="40" 
-	   oryx:align="middle left"
-	   style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>
+	   x="16" 
+	   y="125" 
+	   oryx:align="middle center"
+	   oryx:anchors="left"
+	   style="font-family:Arial; font-size: 14pt; fill:black;"></text>
     <path  
     	oryx:anchors="top left" 
     	fill="none" 
@@ -65,10 +65,5 @@
 	    M 40.668537,30.668537 L 70.668537,30.668537 L 70.668537,40.668537 L 40.668537,40.668537 L 40.668537,30.668537 z 
 	    M 10.668537,50.668537 L 40.668537,50.668537 L 40.668537,60.668537 L 10.668537,60.668537 L 10.668537,50.668537 z 
 	    M 34.626402,21.085418 L 49.809774,30.63307" />
-	<text 
-    	oryx:anchors="top left"
-    	x="45" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">flow</text>
   </g>
 </svg>
