@@ -1,10 +1,9 @@
 /**
  * @author Sergey Smirnov
  * 
- * contains all strings for default language (en_us)
+ * contains all strings for Russian language (ru)
  * 
  */
-
 
 
 // namespace
