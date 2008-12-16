@@ -1,4 +1,4 @@
-{
+var test = {
 	"title":"BPMN+",
 	"namespace":"http://b3mn.org/stencilset/bpmnplus#",
 	"description":"This is the BPMN+ stencil set specification.",
@@ -370,7 +370,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -419,7 +419,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -427,7 +427,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -454,7 +454,7 @@
 							"type":"String",
 							"value":"",
 							"width":200,
-							"optional":false,
+							"optional":false
 						}
 					]
 				},
@@ -947,7 +947,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -996,7 +996,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -1004,7 +1004,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -1031,7 +1031,7 @@
 							"type":"String",
 							"value":"",
 							"width":200,
-							"optional":false,
+							"optional":false
 						}
 					]
 				},
@@ -1374,7 +1374,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -1493,7 +1493,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -1501,7 +1501,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -1850,7 +1850,7 @@
 							"type":"String",
 							"value":"##opaque",
 							"width":200,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"part",
@@ -1895,7 +1895,7 @@
 							"type":"String",
 							"value":"##opaque",
 							"width":200,
-							"optional":false,
+							"optional":false
 						},
 					]
 				},
@@ -1998,7 +1998,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -2117,7 +2117,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -2125,7 +2125,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -2345,7 +2345,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"implementation",
@@ -2457,7 +2457,7 @@
 							"type":"String",
 							"value":"##opaque",
 							"width":200,
-							"optional":false,
+							"optional":false
 						},
 					]
 				},
@@ -2468,7 +2468,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",
@@ -2571,7 +2571,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -2690,7 +2690,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -2698,7 +2698,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -3011,7 +3011,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"messageexchange",
@@ -3020,7 +3020,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"opaqueinput",
@@ -3047,7 +3047,7 @@
 							"type":"String",
 							"value":"##opaque",
 							"width":200,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"part",
@@ -3151,7 +3151,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -3270,7 +3270,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -3278,7 +3278,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -3516,7 +3516,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":50,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"ignoremissingfromdata",
@@ -3524,7 +3524,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":50,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspectype",
@@ -3649,7 +3649,7 @@
 							"type":"String",
 							"value":"",
 							"width":110,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecpart",
@@ -3657,7 +3657,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecquerylanguage",
@@ -3665,7 +3665,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecquery",
@@ -3673,7 +3673,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecproperty",
@@ -3681,7 +3681,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecexpressionlanguage",
@@ -3689,7 +3689,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecexpression",
@@ -3697,7 +3697,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"fromspecliteral",
@@ -3705,7 +3705,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"tospectype",
@@ -3801,7 +3801,7 @@
 							"type":"String",
 							"value":"",
 							"width":110,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"tospecpart",
@@ -3809,7 +3809,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"tospecquerylanguage",
@@ -3817,7 +3817,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"tospecquery",
@@ -3825,7 +3825,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"tospecproperty",
@@ -3833,7 +3833,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"tospecexpressionlanguage",
@@ -3841,7 +3841,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"tospecexpression",
@@ -3849,7 +3849,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},			
@@ -3945,7 +3945,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -4064,7 +4064,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -4072,7 +4072,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -4381,7 +4381,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -4500,7 +4500,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -4508,7 +4508,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -4817,7 +4817,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -4936,7 +4936,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -4944,7 +4944,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -5202,7 +5202,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"categories",
@@ -5214,7 +5214,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50",
-					"wrapLines":true,
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -5225,7 +5225,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"name",
@@ -5235,7 +5235,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"assignments",
@@ -5260,7 +5260,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -5294,7 +5294,7 @@
 					"description":"The Type of Acitivity.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"status",
@@ -5379,7 +5379,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -5387,7 +5387,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -5414,7 +5414,7 @@
 							"type":"String",
 							"value":"",
 							"width":200,
-							"optional":false,
+							"optional":false
 						}
 					]
 				},
@@ -5427,7 +5427,7 @@
 					"readonly":true,
 					"optional":false,
 					"refToView":"",
-					"min":"1",
+					"min":"1"
 				},
 				{
 					"id":"looptype",
@@ -5468,7 +5468,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"st_loopconditionlanguage",
@@ -5479,7 +5479,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"50",
+					"length":"50"
 				},				
 				{
 					"id":"st_testtime",
@@ -5530,7 +5530,7 @@
 					"value":"All",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"mi_startcountervalue",
@@ -5539,7 +5539,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"mi_startcountervaluelanguage",
@@ -5548,7 +5548,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"mi_finalcountervalue",
@@ -5557,7 +5557,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"mi_finalcountervaluelanguage",
@@ -5566,7 +5566,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"mi_completioncondition",
@@ -5575,7 +5575,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"mi_completionconditionlanguage",
@@ -5584,7 +5584,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"mi_successfulbranchesonly",
@@ -5593,7 +5593,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"suppressjoinfailure",
@@ -5612,7 +5612,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"embeddedsubprocesstype",
@@ -5622,7 +5622,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"isatransaction",
@@ -5631,7 +5631,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"exitonstandardfault",
@@ -5640,7 +5640,7 @@
 					"value":false,
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"messageexchanges",
@@ -5649,7 +5649,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"adhoc",
@@ -5658,7 +5658,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"isolated",
@@ -5667,7 +5667,7 @@
 					"value":false,
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",
@@ -5679,7 +5679,7 @@
 					"optional":false,
 					"refToView":"taskrect",
 					"fill":true,
-					"stroke":false,
+					"stroke":false
 				}
             ]
 		},
@@ -5709,7 +5709,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"categories",
@@ -5721,7 +5721,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50",
-					"wrapLines":true,
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -5732,7 +5732,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"name",
@@ -5742,7 +5742,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"assignments",
@@ -5767,7 +5767,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -5801,7 +5801,7 @@
 					"description":"The Type of Acitivity.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"status",
@@ -5886,7 +5886,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -5894,7 +5894,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -5907,7 +5907,7 @@
 					"readonly":true,
 					"optional":false,
 					"refToView":"",
-					"min":"1",
+					"min":"1"
 				},
 				{
 					"id":"suppressjoinfailure",
@@ -5926,7 +5926,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"embeddedsubprocesstype",
@@ -5936,7 +5936,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"isatransaction",
@@ -5945,7 +5945,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"handlertype",
@@ -5955,7 +5955,7 @@
 					"description":"The type of the handler.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"adhoc",
@@ -5964,7 +5964,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"isolated",
@@ -5973,7 +5973,7 @@
 					"value":false,
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",
@@ -5985,7 +5985,7 @@
 					"optional":false,
 					"refToView":"handlerrect",
 					"fill":true,
-					"stroke":false,
+					"stroke":false
 				}
             ]
 		},
@@ -6014,7 +6014,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"categories",
@@ -6026,7 +6026,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50",
-					"wrapLines":true,
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6037,7 +6037,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"name",
@@ -6047,7 +6047,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"assignments",
@@ -6072,7 +6072,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6106,7 +6106,7 @@
 					"description":"The Type of Acitivity.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"status",
@@ -6191,7 +6191,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -6199,7 +6199,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -6212,7 +6212,7 @@
 					"readonly":true,
 					"optional":false,
 					"refToView":"",
-					"min":"1",
+					"min":"1"
 				},
 				{
 					"id":"subprocesstype",
@@ -6222,7 +6222,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"embeddedsubprocesstype",
@@ -6232,7 +6232,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"isatransaction",
@@ -6241,7 +6241,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"handlertype",
@@ -6251,7 +6251,7 @@
 					"description":"The type of the handler.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"adhoc",
@@ -6260,7 +6260,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"exitonstandardfault",
@@ -6269,7 +6269,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"isolated",
@@ -6278,7 +6278,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",
@@ -6290,7 +6290,7 @@
 					"optional":false,
 					"refToView":"handlerrect",
 					"fill":true,
-					"stroke":false,
+					"stroke":false
 				},
             ]
 		},
@@ -6319,7 +6319,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"categories",
@@ -6331,7 +6331,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50",
-					"wrapLines":true,
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6342,7 +6342,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"name",
@@ -6352,7 +6352,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"assignments",
@@ -6377,7 +6377,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6411,7 +6411,7 @@
 					"description":"The Type of Acitivity.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"status",
@@ -6496,7 +6496,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -6504,7 +6504,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -6517,7 +6517,7 @@
 					"readonly":true,
 					"optional":false,
 					"refToView":"",
-					"min":"1",
+					"min":"1"
 				},
 				{
 					"id":"subprocesstype",
@@ -6527,7 +6527,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"embeddedsubprocesstype",
@@ -6537,7 +6537,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"isatransaction",
@@ -6546,7 +6546,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"handlertype",
@@ -6556,7 +6556,7 @@
 					"description":"The type of the handler.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"adhoc",
@@ -6565,7 +6565,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"exitonstandardfault",
@@ -6574,7 +6574,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"isolated",
@@ -6583,7 +6583,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",
@@ -6595,7 +6595,7 @@
 					"optional":false,
 					"refToView":"handlerrect",
 					"fill":true,
-					"stroke":false,
+					"stroke":false
 				},
             ]
 		},
@@ -6625,7 +6625,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"categories",
@@ -6637,7 +6637,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50",
-					"wrapLines":true,
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6648,7 +6648,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"name",
@@ -6658,7 +6658,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"assignments",
@@ -6683,7 +6683,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6717,7 +6717,7 @@
 					"description":"The Type of Acitivity.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"status",
@@ -6802,7 +6802,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -6810,7 +6810,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -6823,7 +6823,7 @@
 					"readonly":true,
 					"optional":false,
 					"refToView":"",
-					"min":"1",
+					"min":"1"
 				},
 				{
 					"id":"subprocesstype",
@@ -6833,7 +6833,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"embeddedsubprocesstype",
@@ -6843,7 +6843,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"isatransaction",
@@ -6852,7 +6852,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"handlertype",
@@ -6862,7 +6862,7 @@
 					"description":"The type of the handler.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"adhoc",
@@ -6871,7 +6871,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"bgcolor",
@@ -6883,7 +6883,7 @@
 					"optional":false,
 					"refToView":"handlerrect",
 					"fill":true,
-					"stroke":false,
+					"stroke":false
 				}
             ]
 		},
@@ -6913,7 +6913,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"categories",
@@ -6925,7 +6925,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50",
-					"wrapLines":true,
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6936,7 +6936,7 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30",
+					"length":"30"
 				},
 				{
 					"id":"name",
@@ -6946,7 +6946,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"assignments",
@@ -6971,7 +6971,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7005,7 +7005,7 @@
 					"description":"The Type of Acitivity.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"status",
@@ -7090,7 +7090,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -7098,7 +7098,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -7111,7 +7111,7 @@
 					"readonly":true,
 					"optional":false,
 					"refToView":"",
-					"min":"1",
+					"min":"1"
 				},
 				{
 					"id":"subprocesstype",
@@ -7121,7 +7121,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"embeddedsubprocesstype",
@@ -7131,7 +7131,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":"50",
+					"length":"50"
 				},
 				{
 					"id":"isatransaction",
@@ -7140,7 +7140,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"handlertype",
@@ -7150,7 +7150,7 @@
 					"description":"The type of the handler.",
 					"readonly":true,
 					"optional":false,
-					"length":"",
+					"length":""
 				},
 				{
 					"id":"adhoc",
@@ -7159,7 +7159,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"bgcolor",
@@ -7171,7 +7171,7 @@
 					"optional":false,
 					"refToView":"handlerrect",
 					"fill":true,
-					"stroke":false,
+					"stroke":false
 				}
             ]
 		},
@@ -7250,7 +7250,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7374,7 +7374,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7499,7 +7499,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7624,7 +7624,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7751,7 +7751,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7910,7 +7910,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7963,7 +7963,7 @@
 					"value":"false",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",
@@ -8054,7 +8054,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -8289,7 +8289,7 @@
 								name:"subprocess",
 							 	prefix:"oryx",				 
 							 	value:id,
-								type:"literal",
+								type:"literal"
 							});										
 							subProcess = true;
 						}
@@ -8316,7 +8316,7 @@
 							name:name,
 						 	prefix:"oryx",				 
 						 	value:poolId,
-							type:"literal",
+							type:"literal"
 						});
 								
 						if (!subProcess) {
@@ -8328,7 +8328,7 @@
 								name:"process",
 							 	prefix:"oryx",				 
 							 	value:processId,
-								type:"literal",
+								type:"literal"
 							});
 						}
 												
@@ -8419,7 +8419,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -8427,7 +8427,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -8439,7 +8439,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"producedatcompletion",
@@ -8449,7 +8449,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
+					"refToView":""
 				},		
 				{
 					"id":"type",
@@ -8655,7 +8655,7 @@
 							"type":"String",
 							"value":"",
 							"width":110,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"part",
@@ -8663,7 +8663,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"querylanguage",
@@ -8671,7 +8671,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"query",
@@ -8679,7 +8679,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"property",
@@ -8687,7 +8687,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"expressionlanguage",
@@ -8695,7 +8695,7 @@
 							"type":"String",
 							"value":"",
 							"width":150,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"expression",
@@ -8703,7 +8703,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 						{
 							"id":"literal",
@@ -8711,7 +8711,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -8768,7 +8768,7 @@
 								name:"subprocess",
 							 	prefix:"oryx",				 
 							 	value:id,
-								type:"literal",
+								type:"literal"
 							});										
 							subProcess = true;
 						}
@@ -8795,7 +8795,7 @@
 							name:name,
 						 	prefix:"oryx",				 
 						 	value:poolId,
-							type:"literal",
+							type:"literal"
 						});
 								
 						if (!subProcess) {
@@ -8807,7 +8807,7 @@
 								name:"process",
 							 	prefix:"oryx",				 
 							 	value:processId,
-								type:"literal",
+								type:"literal"
 							});
 						}
 												
@@ -8898,7 +8898,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -8906,7 +8906,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},	
@@ -8918,7 +8918,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"producedatcompletion",
@@ -8928,7 +8928,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"refToView":"",
+					"refToView":""
 				},	
 				{
 					"id":"type",
@@ -8947,7 +8947,7 @@
 					"value":"Fault",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},	
 				{
 					"id":"deftype",
@@ -9041,7 +9041,7 @@
 								name:"subprocess",
 							 	prefix:"oryx",				 
 							 	value:id,
-								type:"literal",
+								type:"literal"
 							});										
 							subProcess = true;
 						}
@@ -9068,7 +9068,7 @@
 							name:name,
 						 	prefix:"oryx",				 
 						 	value:poolId,
-							type:"literal",
+							type:"literal"
 						});
 								
 						if (!subProcess) {
@@ -9080,7 +9080,7 @@
 								name:"process",
 							 	prefix:"oryx",				 
 							 	value:processId,
-								type:"literal",
+								type:"literal"
 							});
 						}
 												
@@ -9171,7 +9171,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -9179,7 +9179,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -9191,7 +9191,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"producedatcompletion",
@@ -9201,7 +9201,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"refToView":"",
+					"refToView":""
 				},	
 				{
 					"id":"type",
@@ -9220,7 +9220,7 @@
 					"value":"Message",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},		
 				{
 					"id":"deftype",
@@ -9314,7 +9314,7 @@
 								name:"subprocess",
 							 	prefix:"oryx",				 
 							 	value:id,
-								type:"literal",
+								type:"literal"
 							});										
 							subProcess = true;
 						}
@@ -9341,7 +9341,7 @@
 							name:name,
 						 	prefix:"oryx",				 
 						 	value:poolId,
-							type:"literal",
+							type:"literal"
 						});
 								
 						if (!subProcess) {
@@ -9353,7 +9353,7 @@
 								name:"process",
 							 	prefix:"oryx",				 
 							 	value:processId,
-								type:"literal",
+								type:"literal"
 							});
 						}
 												
@@ -9444,7 +9444,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -9452,7 +9452,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -9464,7 +9464,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"producedatcompletion",
@@ -9474,7 +9474,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"type",
@@ -9493,7 +9493,7 @@
 					"value":"Counter",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},	
 				{
 					"id":"bgcolor",	
@@ -9551,7 +9551,7 @@
 							name:name,
 						 	prefix:"oryx",				 
 						 	value:poolId,
-							type:"literal",
+							type:"literal"
 						});													
 												
 						break;
@@ -9641,7 +9641,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -9649,7 +9649,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -9661,7 +9661,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"producedatcompletion",
@@ -9671,7 +9671,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"type",
@@ -9785,7 +9785,7 @@
 							name:name,
 						 	prefix:"oryx",				 
 						 	value:poolId,
-							type:"literal",
+							type:"literal"
 						});													
 												
 						break;
@@ -9875,7 +9875,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -9883,7 +9883,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -9895,7 +9895,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":true,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"producedatcompletion",
@@ -9905,7 +9905,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"refToView":"",
+					"refToView":""
 				},
 				{
 					"id":"type",
@@ -10012,7 +10012,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10153,7 +10153,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10309,7 +10309,7 @@
 							"type":"String",
 							"value":"##opaque",
 							"width":200,
-							"optional":false,
+							"optional":false
 						},
 					]
 				},				
@@ -10413,7 +10413,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10490,7 +10490,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"timeexpressionlanguage",
@@ -10499,7 +10499,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"repeatevery",
@@ -10508,7 +10508,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"repeateverylanguage",
@@ -10517,7 +10517,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},		
 				{
 					"id":"bgcolor",
@@ -10614,7 +10614,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10707,7 +10707,7 @@
 					"value":"",
 					"description":"The message exchange name to disambiguate the relationship between this event and the following send tasks.",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},				
 				{
 					"id":"fromparts",
@@ -10732,7 +10732,7 @@
 							"type":"String",
 							"value":"##opaque",
 							"width":200,
-							"optional":false,
+							"optional":false
 						},
 					]
 				},
@@ -10743,7 +10743,7 @@
 					"value":"true",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"correlations",
@@ -10884,7 +10884,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10970,7 +10970,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"timeexpressionlanguage",
@@ -10979,7 +10979,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",
@@ -11037,7 +11037,7 @@
 							name:"target",
 						 	prefix:"oryx",				 
 						 	value:attachedId,
-					 		type:"literal",
+					 		type:"literal"
 						});
 					}
 			 	}
@@ -11103,7 +11103,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -11136,7 +11136,7 @@
 					"value":"Intermediate",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"trigger",
@@ -11145,7 +11145,7 @@
 					"value":"Error",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"suppressjoinfailure",
@@ -11163,7 +11163,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},		
 				{
 					"id":"bgcolor",
@@ -11222,7 +11222,7 @@
 							name:"target",
 						 	prefix:"oryx",				 
 						 	value:attachedId,
-					 		type:"literal",
+					 		type:"literal"
 						});
 					}
 			 	}
@@ -11288,7 +11288,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -11351,7 +11351,7 @@
 					"value":"",
 					"description":"The id of the scope or task to compensate.",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				},				
 				{
 					"id":"bgcolor",
@@ -11409,7 +11409,7 @@
 							name:"target",
 						 	prefix:"oryx",				 
 						 	value:attachedId,
-					 		type:"literal",
+					 		type:"literal"
 						});
 					}
 			 	}
@@ -11475,7 +11475,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -11622,7 +11622,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -11955,7 +11955,7 @@
 								name:name,
 							 	prefix:"oryx",
 							 	value:id,
-							 	type:"literal",
+							 	type:"literal"
 						});
 					}
 				}
@@ -11977,7 +11977,7 @@
 							name:name,
 						 	prefix:"oryx",
 						 	value:id,
-						 	type:"literal",
+						 	type:"literal"
 						});
 					}
 				}
@@ -12056,7 +12056,7 @@
 							name:"direction",
 						 	prefix:"oryx",
 						 	value:"To",
-						 	type:"literal",
+						 	type:"literal"
 						});
 						name = "target";
 						switched = true;
@@ -12065,7 +12065,7 @@
 							name:"direction",
 						 	prefix:"oryx",
 						 	value:"From",
-						 	type:"literal",
+						 	type:"literal"
 						});
 						name="source";
 					}
@@ -12074,7 +12074,7 @@
 								name:name,
 							 	prefix:"oryx",
 							 	value:id,
-							 	type:"literal",
+							 	type:"literal"
 						});
 					}
 				}											
@@ -12098,7 +12098,7 @@
 							name:name,
 						 	prefix:"oryx",
 						 	value:id,
-						 	type:"literal",
+						 	type:"literal"
 						});
 					}
 				}
@@ -12164,7 +12164,7 @@
 							name:"source",
 						 	prefix:"oryx",
 						 	value:id,
-						 	type:"literal",
+						 	type:"literal"
 						});
 					}
 				}
@@ -12178,7 +12178,7 @@
 							name:"target",
 						 	prefix:"oryx",
 						 	value:id,
-						 	type:"literal",
+						 	type:"literal"
 						});
 					}
 				}
@@ -12227,7 +12227,7 @@
 					"value":"messageName",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"messageproperties",
@@ -12252,7 +12252,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -12260,7 +12260,7 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
+							"optional":true
 						},
 					]
 				},
@@ -12435,14 +12435,14 @@
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:1,
+						maximum:1
 						
 					}
 				],
 				incomingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:1,						
+						maximum:1						
 					}
 				]
 			},
@@ -12452,14 +12452,14 @@
 				outgoingEdges: [
 					{
 						role:"DefaultFlow",
-						maximum:1,
+						maximum:1
 						
 					},					
 				],
 				incomingEdges: [
 					{
 						role:"flow",
-						maximum:1,
+						maximum:1
 						
 					}
 				]
@@ -12470,7 +12470,7 @@
 				incomingEdges: [
 					{
 						role:"flow",
-						maximum:1,
+						maximum:1
 						
 					}
 				]
@@ -12481,7 +12481,7 @@
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:1,
+						maximum:1
 						
 					}
 				]
@@ -12492,7 +12492,7 @@
 				incomingEdges: [
 					{
 						role:"flow",
-						maximum:1,
+						maximum:1
 						
 					}
 				]
@@ -12503,10 +12503,10 @@
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:1,
+						maximum:1
 						
 					}					
-				],				
+				]				
 			},
 			{
 				"role":"AND_Gateway_Fork",
@@ -12514,10 +12514,10 @@
 				incomingEdges: [
 					{
 						role:"flow",
-						maximum:1,
+						maximum:1
 						
 					}					
-				],				
+				]				
 			},
 			{
 				"role":"AND_Gateway_Join",
@@ -12525,10 +12525,10 @@
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:1,
+						maximum:1
 						
 					}					
-				],				
+				]				
 			},
 			{
 				"role":"attachmentAllowed",
@@ -12536,14 +12536,14 @@
 				outgoingEdges: [
 					{
 						role:"IntermediateTerminationEvent",
-						maximum:1,
+						maximum:1
 						
 					},
 					{
 						role:"IntermediateCompensationEvent",
-						maximum:1,
+						maximum:1
 					}					
-				],				
+				]				
 			}
 			
 		],
