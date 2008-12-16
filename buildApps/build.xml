@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Oryx BuildApps">
+	<!-- Load additional properties -->
+    <property file="build.properties" />
+	
+	<!-- buildApps targets **************************************************** -->
+	<target name="compile-buildApps">
+		<copy todir="build/buildApps/lib">
+			<fileset dir="buildApps/lib"/>
+		</copy>
+		<mkdir dir="build/buildApps/bin"/>
+		<javac srcdir="buildApps/src" destdir="build/buildApps/bin" debug="${java-debug}">
+			<classpath>
+				<fileset dir="build/buildApps/lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+		</javac>
+	</target>
+</project>

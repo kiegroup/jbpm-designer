@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Oryx on a Stick">
+	<target name="oryx-on-a-stick">
+		<copy todir='build/stick'>
+            <fileset dir="stick">
+			</fileset>
+        </copy>
+		<move todir='${editor-src-client}/scripts/Plugins'>
+            <fileset dir="build/stick/src/oryxplugin"/>
+        </move>
+	</target>
+</project>

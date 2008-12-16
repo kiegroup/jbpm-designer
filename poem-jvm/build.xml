@@ -1,67 +1,117 @@
-<project name="Oryx-Server: Pure JAVA">
-	<property name="src-dir" value="backend/src/main/java" />
-	<property name="bin-dir" value="backend/bin" />
-	<property name="lib-dir" value="lib" />
-	<property name="target-dir" value="backend/target" />
-	<property name="hibernate-config-dir" value="backend/src/main/resources" />
-	<property name="repo2-dir" value="backend/src/main/webapp/repository2" />
-	<property name="tomcat-dir" value="/Users/sven.wagner-boysen/dev/apache-tomcat-5.5.26/webapps" />
+<project name="Oryx Repository">
 	
-	<path id="libs"> 
-		<fileset dir="lib">
-			<include name="*.jar" />
-		</fileset>
-		
-		<fileset dir="shared">
-			<include name="*.jar" />
-		</fileset>
-	</path>
+	<!-- Server (poem-jvm) properties *************************************************** -->
+	<property name="server-root-dir" value="poem-jvm" />
+	<property name="java-dir" value="${server-root-dir}/src/java" />
+	<property name="poem-build-dir" value="build/poem-jvm" />
+	<property name="bin-dir" value="${poem-build-dir}/bin" />
+	<property name="lib-dir" value="${server-root-dir}/lib" />
+	<property name="data-dir" value="${server-root-dir}/data" />
+	<property name="target-dir" value="dist" />
+	<property name="repository-dir" value="${server-root-dir}/src/javascript/repository" />
+	<property name="repository2-dir" value="${server-root-dir}/src/javascript/repository2" />
+	<property name="config-dir" value="${server-root-dir}/etc" />
 	
-	<target name="clean">
+	
+	<!-- Server targets (backend.war) ****************************************************** -->
+	<target name="clean-backend">
 		<delete dir="${bin-dir}" />
 		<delete file="${target-dir}/backend.war" />
+		<delete dir="${deploymentdir}/backend" />
 	</target>
 	
-	<target name="compile-server">
+	<target name="compile-backend">
 		<mkdir dir="${bin-dir}"/>
-		<javac srcdir="${src-dir}" destdir="${bin-dir}" classpathref="libs" debug="on" >
+		<javac srcdir="${java-dir}" destdir="${bin-dir}" debug="${java-debug}" >
+			<classpath id="libs"> 
+				<fileset dir="${lib-dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</javac>
 	</target>
 	
-	<target name="build-war-file" depends="compile-server" >
-		<copy todir="${bin-dir}">
-			<fileset dir="${hibernate-config-dir}">
-				<include name="*.xml" />
-				<include name="*.properties" />
-			</fileset>
-		</copy>
+	<target name="compress-repository-javascript">
+		<concat destfile='${poem-build-dir}/repository2/repository2.js'>
+            <fileset file="${server-root-dir}/src/javascript/repository2/prototype.js"/>
+			<fileset file="editor/lib/ext-2.0.2/adapter/ext/ext-base.js"/>
+			<fileset file="editor/lib/ext-2.0.2/ext-all.js"/>
+			<filelist id="repsourcefiles" dir="${server-root-dir}/src/javascript/repository2">
+                <file name='ext_templates.js'/>
+				<file name='core/clazz.js'/>
+                <file name='core/helper.js'/>
+				<file name='config.js'/>
+				<file name='core/extExtention.js'/>
+				<file name='core/eventHandler.js'/>
+                <file name='core/dataCache.js'/>
+                <file name='core/repository.js'/>
+                <file name='core/plugin.js'/>
+                <file name='core/viewPlugin.js'/>
+                <file name='core/contextFreePlugin.js'/>
+                <file name='core/contextPlugin.js'/>
+            </filelist>
+			<fileset dir="${server-root-dir}/src/javascript/repository2/plugins" includes="**/*.js"/>
+        </concat>
+	</target>
+	
+	<target name="build-backend" depends="compile-backend, compress-repository-javascript" >
+		<!-- Add Hibernate xml files to the binary classes dir -->
+		<copy file="${config-dir}/hibernate.cfg.xml" todir="${bin-dir}" />
+		<copy file="${data-dir}/Access.hbm.xml" todir="${bin-dir}" />
 		<war destfile="${target-dir}/backend.war"  
-			webxml="backend/src/main/webapp/WEB-INF/web.xml" 
+			webxml="${config-dir}/web.xml" 
 			update="true">
-			<fileset dir="backend/src/main/webapp" >
-				<exclude name="WEB-INF" />
+			<!-- Ext files-->
+			<!--TODO the backend should not reference anything in folder editor-->
+			<fileset dir="editor/lib" >
+				<include name="ext-2.0.2/" />
+			</fileset>	
+			<!-- Image files-->
+			<fileset dir="${data-dir}" >
+				<include name="images/" />
 			</fileset>
-			<!-- lib refid="libs" / -->
-			<lib dir="lib">
-
-			</lib>
+			<!-- Internationalization files-->
+			<fileset dir="${server-root-dir}" >
+				<include name="i18n/" />
+			</fileset>
+			<!-- Css files-->
+			<fileset dir="${server-root-dir}/src" >
+				<include name="css/" />
+			</fileset>
+			<!-- Javascript files-->
+			<fileset dir="${server-root-dir}/src/javascript" >
+				<include name="repository/" />
+				<include name="repository2/" />
+			</fileset>
+			<fileset dir="${poem-build-dir}" >
+				<include name="repository2/" />
+			</fileset>
+			
+			<lib dir="${lib-dir}" />
 			<classes dir="${bin-dir}" />
+			<metainf file="build/LICENSE"/>
+			
+			<fileset file="favicon.ico"/>
 		</war>
 	</target>
 	
-	<target name="transform">
-		<xslt style="data/create_template_js.xslt" basedir="data" destdir="bin" extension=".js">
-			
-		</xslt>
+	
+	
+	<!-- Database targets ****************************************************** -->
+	<target name="create-db">
+		<exec dir="${postgresql-bin-dir}" executable="createdb"> 
+			<arg value="-h ${postgresql-hostname}" />
+			<arg value="-U ${postgresql-username}" />
+			<arg value="-O poem" />
+			<arg value="poem" />
+		</exec>
 	</target>
 	
-	<target name="deploy-backend">
-		<copy file="${target-dir}/backend.war" todir="${tomcat-dir}" />
+	<target name="drop-db">
+		
 	</target>
 	
-	<target name="deploy-repo-js-only">
-		<copy todir="${tomcat-dir}/backend/repository2" >
-			<fileset dir="${repo2-dir}"/>
-		</copy>
-	</target>	 
+	<target name="clean-db">
+		
+	</target>
 </project>

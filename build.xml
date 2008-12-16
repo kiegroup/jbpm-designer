@@ -1,453 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project>
+<project name="Oryx Main Build Script">
 	<!-- Load additional properties -->
     <property file="build.properties" />
-	
-	<!-- buildApps targets **************************************************** -->
-	<target name="compile-buildApps">
-		<copy todir="build/buildApps/lib">
-			<fileset dir="buildApps/lib"/>
-		</copy>
-		<mkdir dir="build/buildApps/bin"/>
-		<javac srcdir="buildApps/src" destdir="build/buildApps/bin" debug="${java-debug}">
-			<classpath>
-				<fileset dir="build/buildApps/lib">
-                    <include name="*.jar"/>
-                </fileset>
-            </classpath>
-		</javac>
-	</target>
     
-	<!-- Server (poem-jvm) properties *************************************************** -->
-	<property name="server-root-dir" value="poem-jvm" />
-	<property name="java-dir" value="${server-root-dir}/src/java" />
-	<property name="poem-build-dir" value="build/poem-jvm" />
-	<property name="bin-dir" value="${poem-build-dir}/bin" />
-	<property name="lib-dir" value="${server-root-dir}/lib" />
-	<property name="data-dir" value="${server-root-dir}/data" />
-	<property name="target-dir" value="dist" />
-	<property name="repository-dir" value="${server-root-dir}/src/javascript/repository" />
-	<property name="repository2-dir" value="${server-root-dir}/src/javascript/repository2" />
-	<property name="config-dir" value="${server-root-dir}/etc" />
+	<!-- Import ANT build scripts of sub projects -->
+	<import file="editor/build.xml" />
+	<import file="poem-jvm/build.xml" />
+	<import file="stick/build.xml" />
 	
-	
-	<!-- Server targets (backend.war) ****************************************************** -->
-	<target name="clean-backend">
-		<delete dir="${bin-dir}" />
-		<delete file="${target-dir}/backend.war" />
-		<delete file="${deploymentdir}/backend.war" />
-		<delete dir="${deploymentdir}/backend" />
-	</target>
-	
-	<target name="compile-backend">
-		<mkdir dir="${bin-dir}"/>
-		<javac srcdir="${java-dir}" destdir="${bin-dir}" debug="${java-debug}" >
-			<classpath id="libs"> 
-				<fileset dir="${lib-dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</javac>
-	</target>
-	
-	<target name="compress-repository-javascript">
-		<concat destfile='${poem-build-dir}/repository2/repository2.js'>
-            <fileset file="${server-root-dir}/src/javascript/repository2/prototype.js"/>
-			<fileset file="editor/lib/ext-2.0.2/adapter/ext/ext-base.js"/>
-			<fileset file="editor/lib/ext-2.0.2/ext-all.js"/>
-			<filelist id="repsourcefiles" dir="${server-root-dir}/src/javascript/repository2">
-                <file name='ext_templates.js'/>
-				<file name='core/clazz.js'/>
-                <file name='core/helper.js'/>
-				<file name='config.js'/>
-				<file name='core/extExtention.js'/>
-				<file name='core/eventHandler.js'/>
-                <file name='core/dataCache.js'/>
-                <file name='core/repository.js'/>
-                <file name='core/plugin.js'/>
-                <file name='core/viewPlugin.js'/>
-                <file name='core/contextFreePlugin.js'/>
-                <file name='core/contextPlugin.js'/>
-            </filelist>
-			<fileset dir="${server-root-dir}/src/javascript/repository2/plugins" includes="**/*.js"/>
-        </concat>
-	</target>
-	
-	<target name="build-backend" depends="compile-backend, compress-repository-javascript" >
-		<!-- Add Hibernate xml files to the binary classes dir -->
-		<copy file="${config-dir}/hibernate.cfg.xml" todir="${bin-dir}" />
-		<copy file="${data-dir}/Access.hbm.xml" todir="${bin-dir}" />
-		<war destfile="${target-dir}/backend.war"  
-			webxml="${config-dir}/web.xml" 
-			update="true">
-			<!-- Ext files-->
-			<!--TODO the backend should not reference anything in folder editor-->
-			<fileset dir="editor/lib" >
-				<include name="ext-2.0.2/" />
-			</fileset>	
-			<!-- Image files-->
-			<fileset dir="${data-dir}" >
-				<include name="images/" />
-			</fileset>
-			<!-- Internationalization files-->
-			<fileset dir="${server-root-dir}" >
-				<include name="i18n/" />
-			</fileset>
-			<!-- Css files-->
-			<fileset dir="${server-root-dir}/src" >
-				<include name="css/" />
-			</fileset>
-			<!-- Javascript files-->
-			<fileset dir="${server-root-dir}/src/javascript" >
-				<include name="repository/" />
-				<include name="repository2/" />
-			</fileset>
-			<fileset dir="${poem-build-dir}" >
-				<include name="repository2/" />
-			</fileset>
-			
-			<lib dir="${lib-dir}" />
-			<classes dir="${bin-dir}" />
-			<metainf file="build/LICENSE"/>
-			
-			<fileset file="favicon.ico"/>
-		</war>
-	</target>
-	
-	<target name="deploy-backend">
-        <copy file="${target-dir}/backend.war" tofile="${deploymentdir}/backend.war" />
-    </target>
 
-    <target name="undeploy-backend">
-        <delete file="${deploymentdir}/backend.war" />
-    </target>
+    <!-- (RE)BUILD EDITOR AND BACKEND -->
+	<target name="build-all" depends="build-editor, build-backend" />
 	
-	<!-- Database targets ****************************************************** -->
-	<target name="create-db">
-		<exec dir="${postgresql-bin-dir}" executable="createdb"> 
-			<arg value="-h ${postgresql-hostname}" />
-			<arg value="-U ${postgresql-username}" />
-			<arg value="-O poem" />
-			<arg value="poem" />
-		</exec>
-	</target>
+    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" />
 	
-	<target name="drop-db">
-		
-	</target>
 	
-	<target name="clean-db">
-		
-	</target>
+	<!-- CLEAN EDITOR AND BACKEND -->
+	<target name="clean-all" depends="clean-editor, clean-backend" />
 	
-	<!-- Editor properties *************************************************** -->
-	<property name="editor-src-root" value="editor" />
-	<property name="editor-src-client" value="${editor-src-root}/client" />
-	<property name="editor-src-server" value="${editor-src-root}/server" />
-	<property name="editor-build-root" value="build/editor" />
 	
-	<!-- Oryx  targets (oryx.war) ****************************************************** -->
-    <target name="clean-editor">
-        <delete file="${target-dir}/oryx.war" />
-		<delete dir="${editor-build-root}"/>
-    </target>
-    
-    <target name='examples' depends='build'>
-        
-        <copy todir='${editor-build-root}'>
-            <fileset file="${editor-src-root}/test/examples/*.xhtml"/>
-        </copy>
-        <copy todir='${editor-build-root}/css'>
-            <fileset dir='${editor-src-client}/css'/>
-        </copy>
-        <echo>
-            Copied example files into build destination
-        </echo>
-        
-    </target>
+	<!-- DEPLOYMENT TARGETS (NO BUILD OF PROJECTS!) -->
 	
-	 <target name='copy-license'>
-        
-        <copy todir='${editor-build-root}'>
-            <fileset file="LICENSE"/>
-            <fileset file="LIBRARIES"/>
-			<fileset file="VERSION"/>
-        </copy>
-        <echo>
-            Copied license file into build destination
-        </echo>
-        
-    </target>
-    
-    <target name="build-plugins">
-        
-        <copy todir='${editor-build-root}' file="${editor-src-client}/scripts/Plugins/plugins.xml">
-  			
-        </copy>
-        <echo>
-            Copied plugins.xml into build destination
-        </echo>
-        <copy todir='${editor-build-root}/xslt'>
-            <fileset dir="${editor-src-client}/xslt"/>
-        </copy>
-        <echo>
-            Copied XSL stylesheets into build destination
-        </echo>
-        
-    </target>
-    
-    <target name="build-stencilsets" depends='compile-buildApps'>
-        
-		<delete failonerror="false">
-			<fileset dir="${editor-build-root}/stencilsets/" includes="**/*.json"/>
-		</delete>
+	<!-- (UN)DEPLOY EDITOR AND BACKEND -->
+    <target name="deploy-all" depends="deploy-editor, deploy-backend" /> 
 
-        <copy todir='${editor-build-root}/stencilsets'>
-            <fileset dir="${editor-src-root}/data/stencilsets"/>
-        </copy>
-        <echo>
-            Copied stencilsets into build destination
-        </echo>
-		
-		<java dir="${editor-build-root}" classpath="build/buildApps/bin" classname="org.oryxeditor.buildapps.sscompress.SSCompressor" fork="true"
-         failonerror="true">
-         	<classpath>
-				<fileset dir="build/buildApps/lib"/>
-			</classpath>
-            <arg file="${editor-build-root}/stencilsets"/>
-        </java>
-        
-		<!--<delete>
-			<fileset dir="${editor-build-root}/stencilsets/" includes="**/view/**/*.*"/>
-		</delete>-->
-    </target>
-    
-   <target name="build-execution">
-        
-        <copy todir='${editor-build-root}/execution'>
-            <fileset dir="${editor-src-root}/data/execution"/>
-        </copy>
-        <echo>
-            Copied execution data into build destination
-        </echo>
-        
-    </target>
-    
-    <target name="build-server">
-        
-        <mkdir dir="${editor-build-root}/classes"/>
-        
-        <copy todir='${editor-build-root}/classes'>
-            <fileset dir="${editor-src-root}/etc">
-                <include name="*.properties"/>
-            </fileset>
-        </copy>
-        
-		<!--JSP files deprecated, right?-->
-        <!--<copy todir='${editor-build-root}'>
-            <fileset dir="server">
-                <include name="*.jsp"/>
-            </fileset>
-        </copy>-->
-        
-        <javac srcdir="${editor-src-server}/src" destdir="${editor-build-root}/classes" debug="${java-debug}" >
-            <classpath>
-				<fileset dir="${editor-src-root}/lib">
-                    <include name="*.jar"/>
-                    <exclude name="deprecated/**" />
-                </fileset>
-            </classpath>
-        </javac>
-    </target>
-    
-    <target name="build-editor-core">
-        
-        <!--<copy todir='${editor-build-root}' file='${editor-src-client}/scripts/Core/config.js'/>-->
-        <concat destfile='${editor-build-root}/oryx.debug.js'>
-            <filelist id="coresourcefiles" dir="${editor-src-client}">
-                <file name='scripts/kickstart.js'/>
-				<file name='scripts/erdfparser.js'/>
-				<file name='scripts/datamanager.js'/>
-				<file name='scripts/oryx.js'/>
-				<file name='scripts/config.js'/>
-                <file name='scripts/Core/SVG/editpathhandler.js'/>
-                <file name='scripts/Core/SVG/minmaxpathhandler.js'/>
-                <file name='scripts/Core/SVG/pointspathhandler.js'/>
-                <file name='scripts/Core/SVG/svgmarker.js'/>
-                <file name='scripts/Core/SVG/svgshape.js'/>
-                <file name='scripts/Core/SVG/label.js'/>
-                <file name='scripts/Core/Math/math.js'/>
-                <file name='scripts/Core/StencilSet/stencil.js'/>
-                <file name='scripts/Core/StencilSet/property.js'/>
-                <file name='scripts/Core/StencilSet/propertyitem.js'/>
-                <file name='scripts/Core/StencilSet/complexpropertyitem.js'/>
-                <file name='scripts/Core/StencilSet/rules.js'/>
-                <file name='scripts/Core/StencilSet/stencilset.js'/>
-                <file name='scripts/Core/StencilSet/stencilsets.js'/>
-                <file name='scripts/Core/bounds.js'/>
-                <file name='scripts/Core/uiobject.js'/>
-                <file name='scripts/Core/abstractshape.js'/>
-                <file name='scripts/Core/canvas.js'/>
-                <file name='scripts/Core/main.js'/>
-                <file name='scripts/Core/svgDrag.js'/>
-                <file name='scripts/Core/shape.js'/>
-                <file name='scripts/Core/Controls/control.js'/>
-                <file name='scripts/Core/Controls/docker.js'/>
-                <file name='scripts/Core/Controls/magnet.js'/>
-                <file name='scripts/Core/node.js'/>
-                <file name='scripts/Core/edge.js'/>
-				<file name='scripts/Core/command.js'/>
-            </filelist>
-			<fileset dir="${editor-src-client}/scripts/Plugins" includes="**/*.js"/>
-        </concat>
-        <echo>
-            Concatenated source files into oryx.js
-        </echo>
-        
-        <copy todir='${editor-build-root}/lib'>
-            <fileset dir='${editor-src-root}/lib' includes='**/*'>
-				<exclude name="**/*.jar"/>
-				<exclude name="deprecated/**"/>
-				<exclude name="sources/**"/>
-			</fileset>
-        </copy>
-        <echo>
-            Copied dependencies into library destination
-        </echo>
-        <copy todir='${editor-build-root}/images'>
-            <fileset dir='${editor-src-client}/images' includes='**/*.png'/>
-            <fileset dir='${editor-src-client}/images' includes='**/*.gif'/>
-        </copy>
-        <echo>
-            Copied images into oryx build destination
-        </echo>
-        <copy todir="${editor-build-root}/i18n">
-			<fileset dir="${editor-src-root}/data/i18n"/>
-		</copy>
-		<echo>
-            Copied language files into oryx build destination
-        </echo>
-    </target>
-
-    <target name='generate-version-file'>
-        <exec executable="svn" output="${editor-build-root}/version.xml" failifexecutionfails="false">
-            <arg value="info"/>
-            <arg value="--non-interactive"/>
-            <arg value="--xml"/>
-        </exec>
-    </target>
-        
-    <target name="build" depends="copy-license, build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file" />
-    
-    <target name='compress'>
-        
-        <tempfile property="compress.temp" destDir="${editor-build-root}"/>
-        
-        <java dir="${editor-build-root}" jar="${editor-src-root}/lib/custom_rhino.jar" fork="true"
-         failonerror="true" output='${compress.temp}'>
-            <arg value="-c"/>
-            <arg file='${editor-build-root}/oryx.debug.js'/>
-        </java>
-        <echo>
-            Using ${compress.temp} for compression
-        </echo>
-        
-        <echo>
-            Compressing Oryx into build destination
-        </echo>
-        <concat destfile='${editor-build-root}/oryx.js'>
-            <fileset file="license"/>
-            <fileset file="${compress.temp}"/>
-        </concat>
-        
-        <delete file='${compress.temp}'/>
-        
-    </target>
-    
-    <target name="dist">
-        <mkdir dir="${target-dir}"/>
-        
-        <!--
-        <echo>Creating zip for offline or php use, and online war file.</echo>
-        <zip destfile="dist/oryx.zip">
-        <fileset dir="build">
-        <exclude name="*.php"/>
-        <exclude name="classes/"/>
-        </fileset>
-        
-        </zip>
-        -->
-        
-        <echo>
-            Creating web application archive. ${deploy-xhtml}
-        </echo>
-        <war destfile="${target-dir}/oryx.war" webxml="${editor-src-root}/etc/web.xml">
-            
-            <lib dir="${editor-src-root}/lib">
-                <include name="*.jar"/>
-				<exclude name="deprecated/**"/>
-				<exclude name="sources/**"/>
-				<!--<include name="batik-*.jar"/>
-                <include name="js.jar"/>
-                <include name="fop.jar"/>
-                <include name="pdf-transcoder.jar"/>
-                <include name="commons-*.jar"/>
-                <include name="serializer-2.7.0.jar"/>
-                <include name="xalan-2.6.0.jar"/>
-                <include name="xerces-2.5.0.jar"/>
-                <include name="xml-apis.jar"/>
-                <include name="xml-apis-ext.jar"/>
-                <include name="xmlgraphics-commons-1.1.jar"/>-->
-                
-                <!-- jsp and servlet development dependencies -->
-                <!--<include name="jstl.jar"/>
-                <include name="standard.jar"/>-->
-                
-                <!-- needed for openid authentication -->
-                <!--<include name="openid4java.jar"/>
-                <include name="openxri-*.jar"/>
-                <include name="htmlparser.jar"/>
-                <include name="dom3-*.jar"/>
-                <include name="icu4j_3_4_1.jar"/>
-                <include name="jug-1.1.jar"/>
-                <include name="xmlsec-1.1.jar"/>
-                <include name="infocard/*.jar"/>-->
-                
-                <!-- database connectors. consider moving this to users responsibility -->
-                <!--<include name="mysql-connector-java-5.1.5-bin.jar"/>-->
-                <!-- <include name="postgresql-8.3dev-602.jdbc3.jar"/> -->
-				
-				<!--<include name="oryxAtlas.jar"/>-->
-            </lib>
-			
-			
-			
-			<fileset dir="${editor-build-root}">
-				<exclude name="classes/**"/>
-				<exclude name="*.xhtml"/>
-			</fileset>
-			
-			<fileset dir="${editor-build-root}">
-				<include name="${deploy-xhtml}"/>
-			</fileset>
-			
-            <classes dir="${editor-build-root}/classes"/>
-			
-			<metainf file="${editor-build-root}/LICENSE"/>
-            <metainf file="${editor-build-root}/LIBRARIES"/>
-			<metainf file="${editor-build-root}/VERSION"/>
-			
-			<fileset file="favicon.ico"/>
-        </war>
-        
-          
-    </target>
-    
-    <target name="build-editor" depends="build, examples, compress, dist"/>
-
-
-    <target name="deploy-editor">
+    <target name="undeploy-all" depends="undeploy-editor, undeploy-backend" /> 
+	
+	
+	<!-- (UN)DEPLOY EDITOR -->
+	<target name="deploy-editor">
         <copy file="${target-dir}/oryx.war" todir="${deploymentdir}" />
+    </target>
+	
+	<target name="undeploy-editor">
+        <delete file="${deploymentdir}/oryx.war" />
     </target>
 
     <target name="deploy-stencilsets">
@@ -459,42 +45,14 @@
         </echo>
     </target>
 
-    <target name="undeploy-editor">
-        <delete file="${deploymentdir}/oryx.war" />
+    
+	<!-- (UN)DEPLOY REPOSITORY -->
+	<target name="deploy-backend">
+        <copy file="${target-dir}/backend.war" tofile="${deploymentdir}/backend.war" />
     </target>
 
-	<target name="deploy-xhtml">
-		<property name="deploy-xhtml" value="*.xhtml" />
-	</target>
-	
-	
-    <!-- combined tasks for editor and backend -->
-    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" />
-
-    <target name="rebuild-all-parallel">
-        <parallel>
-            <sequential>
-                <antcall target="clean-editor" />
-                <antcall target="build-editor" />
-            </sequential>
-            <sequential>
-                <antcall target="clean-backend" />
-                <antcall target="build-backend" />
-            </sequential>
-        </parallel>
+    <target name="undeploy-backend">
+        <delete file="${deploymentdir}/backend.war" />
     </target>
-
-    <target name="deploy-all" depends="deploy-editor, deploy-backend" /> 
-
-    <target name="undeploy-all" depends="undeploy-editor, undeploy-backend" /> 
 	
-	<target name="oryx-on-a-stick">
-		<copy todir='build/stick'>
-            <fileset dir="stick">
-			</fileset>
-        </copy>
-		<move todir='${editor-src-client}/scripts/Plugins'>
-            <fileset dir="build/stick/src/oryxplugin"/>
-        </move>
-	</target>
 </project>
