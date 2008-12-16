@@ -41,33 +41,46 @@
 				
 				<!--process-->
 				<xsl:if test="$type='process'">
-					<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
 					
-					<xsl:if test="$abstractProcessProfile='' or $abstractProcessProfile='null'">
-						<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+					<xsl:variable name="existsAbstractProcessProfileElement" select="count(./oryx:abstractprocessprofile)" />
+					
+					<!-- bpel4chor editor -->
+					<xsl:if test="$existsAbstractProcessProfileElement=0">
+						<process>
 							<xsl:call-template name="add-children-of-process-element"/>
-						</process>	
+						</process>
 					</xsl:if>
 					
-					<xsl:if test="$abstractProcessProfile!='' and $abstractProcessProfile!='null'">
-						<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/abstract">
-							
-							<xsl:if test="$abstractProcessProfile='observableBehavior'">
-								<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08</xsl:attribute>
-							</xsl:if>	
-							
-							<xsl:if test="$abstractProcessProfile='templates'">
-								<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08</xsl:attribute>
-							</xsl:if>	
-							
-							<xsl:if test="$abstractProcessProfile!='observableBehavior' and $abstractProcessProfile!='templates'">
-								<xsl:attribute name="abstractProcessProfile">
-									<xsl:value-of select="$abstractProcessProfile"/>
-								</xsl:attribute>	
-							</xsl:if>
-							
-							<xsl:call-template name="add-children-of-process-element"/>
-						</process>	
+					<!-- bpel4 editor -->
+					<xsl:if test="$existsAbstractProcessProfileElement!=0">
+						<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
+						
+						<xsl:if test="$abstractProcessProfile='' or $abstractProcessProfile='null'">
+							<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+								<xsl:call-template name="add-children-of-process-element"/>
+							</process>	
+						</xsl:if>
+						
+						<xsl:if test="$abstractProcessProfile!='' and $abstractProcessProfile!='null'">
+							<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/abstract">
+								
+								<xsl:if test="$abstractProcessProfile='observableBehavior'">
+									<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/ap11/2006/08</xsl:attribute>
+								</xsl:if>	
+								
+								<xsl:if test="$abstractProcessProfile='templates'">
+									<xsl:attribute name="abstractProcessProfile">http://docs.oasis-open.org/wsbpel/2.0/process/abstract/simple-template/2006/08</xsl:attribute>
+								</xsl:if>	
+								
+								<xsl:if test="$abstractProcessProfile!='observableBehavior' and $abstractProcessProfile!='templates'">
+									<xsl:attribute name="abstractProcessProfile">
+										<xsl:value-of select="$abstractProcessProfile"/>
+									</xsl:attribute>	
+								</xsl:if>
+								
+								<xsl:call-template name="add-children-of-process-element"/>
+							</process>	
+						</xsl:if>
 					</xsl:if>
 				</xsl:if>	
 					

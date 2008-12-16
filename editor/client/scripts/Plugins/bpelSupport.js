@@ -139,8 +139,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 					data: serialized_rdf
 				},
                 onSuccess: function(response){
-                	alert (response.responseText);
-					//this.displayResult(response.responseText);
+					this.displayResult(response.responseText);
                 }.bind(this)
 			});
                 	
@@ -179,7 +178,7 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 		
 		if ((!resultObject.res) || (resultObject.res.length == 0)) {
 			this.dialogSupport.openMessageDialog(ORYX.I18N.TransformationDownloadDialog.error,ORYX.I18N.TransformationDownloadDialog.noResult);
-		} else if (resultObject.res[0].content.indexOf("Parser Error")>0) {
+		} else if (resultObject.res[0].success == "false") {
 			this.dialogSupport.openErrorDialog(resultObject.res[0].content);
 		} else {
 			var processes = new Array();
@@ -187,7 +186,6 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 				processes[i] = resultObject.res[i].content;
 			}
 			var data = this.buildTransData(processes);
-			
 			this.dialogSupport.openResultDialog(data);
 		}
 	},

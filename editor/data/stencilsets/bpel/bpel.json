@@ -40,7 +40,7 @@
 					"type":"String",
 					"title":"name",
 					"title_de":"Name",
-					"value":"NCName",
+					"value":"process",
 					"description":"",
 					"description_de":"",
 					"tooltip":"",
@@ -771,7 +771,7 @@
 					"type":"String",
 					"title":"name",
 					"title_de":"Name",
-					"value":"",
+					"value":"invoke",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -791,7 +791,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1135,14 +1135,14 @@
 					"type":"String",
 					"title":"name",
 					"title_de":"Name",
-					"value":"",
+					"value":"receive",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -1427,14 +1427,14 @@
 					"type":"String",
 					"title":"name",
 					"title_de":"Name",
-					"value":"",
+					"value":"reply",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
