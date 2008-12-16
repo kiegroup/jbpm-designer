@@ -47,7 +47,7 @@ Repository.I18N.Repository.errorTitle = "Titel:"
 // NewModel Plugin
 if(!Repository.I18N.NewModel) Repository.I18N.NewModel = {};
 Repository.I18N.NewModel.name = "Neues Modell";
-Repository.I18N.NewModel.tooltipText = "Erstellen eines neuen Modells mit dem selektierten StencilSets";
+Repository.I18N.NewModel.tooltipText = "Erstellen eines neuen Modells mit dem selektierten StencilSet";
 
 // VIEW PLUGINS
 
@@ -56,7 +56,7 @@ Repository.I18N.TableView.name = "Tabellenansicht";
 
 if(!Repository.I18N.TableView.columns) Repository.I18N.TableView.columns = {};
 Repository.I18N.TableView.columns.title = "Titel";
-Repository.I18N.TableView.columns.type = "Modell Typ";
+Repository.I18N.TableView.columns.type = "Modelltyp";
 Repository.I18N.TableView.columns.author = "Autor";
 Repository.I18N.TableView.columns.summary = "Beschreibung";
 Repository.I18N.TableView.columns.creationDate = "Erstellt am";
@@ -78,13 +78,13 @@ Repository.I18N.FullView.editorLabel = "Editor öffnen";
 // TypeFilter Plugin
 
 if(!Repository.I18N.TypeFilter) Repository.I18N.TypeFilter = {};
-Repository.I18N.TypeFilter.name = "Typ Filter";
+Repository.I18N.TypeFilter.name = "Modelltyp-Filter";
 
 if(!Repository.I18N.TagInfo) Repository.I18N.TagInfo = {};
 Repository.I18N.TagInfo.name = "Tags"
 Repository.I18N.TagInfo.deleteText = "Löschen"
 Repository.I18N.TagInfo.none = "keine"
-Repository.I18N.TagInfo.shared = "Gemeinsame Tags:"
+Repository.I18N.TagInfo.shared = "Gemeinsamen Tags:"
 Repository.I18N.TagInfo.newTag = "Neuer Tag"
 Repository.I18N.TagInfo.addTag = "Hinzufügen"
 		
@@ -123,7 +123,7 @@ Repository.I18N.SortingSupport.rating = "Nach Bewertung"
 
 if(!Repository.I18N.Export) Repository.I18N.Export = {};
 Repository.I18N.Export.name = "Export";
-Repository.I18N.Export.title = "Verfügbare Export Formate:"
+Repository.I18N.Export.title = "Verfügbare Exportformate:"
 Repository.I18N.Export.onlyOne = "Es darf nur ein Modell selektiert sein"
 
 if(!Repository.I18N.UpdateButton) Repository.I18N.UpdateButton = {};
@@ -150,10 +150,10 @@ Repository.I18N.Rating.totalOneText = "#{totalScore} (#{totalVotes})"
 Repository.I18N.Rating.totalMoreText = "Von #{modelCount} Modellen sind #{voteCount} bewertet mit einem Durchschnitt von #{totalScore} (#{totalVotes})"
 
 if(!Repository.I18N.RatingFilter) Repository.I18N.RatingFilter = {};
-Repository.I18N.RatingFilter.name = "Bewertungs Filter"
+Repository.I18N.RatingFilter.name = "Bewertungsfilter"
 
 if(!Repository.I18N.AccessFilter) Repository.I18N.AccessFilter = {};
-Repository.I18N.AccessFilter.name = "Rechte Filter"
+Repository.I18N.AccessFilter.name = "Rechtefilter"
 Repository.I18N.AccessFilter.mine = "Meine"
 Repository.I18N.AccessFilter.reader = "Alle mit Leserechte"
 Repository.I18N.AccessFilter.writer = "Alle mit Schreibrechte"
