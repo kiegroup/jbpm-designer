@@ -1,4 +1,4 @@
-var test = {
+{
 	"title":"BPMN+",
 	"namespace":"http://b3mn.org/stencilset/bpmnplus#",
 	"description":"This is the BPMN+ stencil set specification.",
