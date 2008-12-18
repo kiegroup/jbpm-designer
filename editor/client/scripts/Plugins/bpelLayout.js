@@ -47,7 +47,8 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			'description': ORYX.I18N.BPELLayout.enDesc,
 			'index': 0,
 			'minShape': 0,
-			'maxShape': 0
+			'maxShape': 0,
+			'isEnabled': function(){ return !(this.isEnabled)}.bind(this)
 		});
 		
 		this.facade.offer({
@@ -58,7 +59,8 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			'description': ORYX.I18N.BPELLayout.disDesc,
 			'index': 1,
 			'minShape': 0,
-			'maxShape': 0
+			'maxShape': 0,
+			'isEnabled': function(){ return this.isEnabled}.bind(this)
 		});
 	
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LAYOUT_BPEL, this.handleLayoutEvent.bind(this));
