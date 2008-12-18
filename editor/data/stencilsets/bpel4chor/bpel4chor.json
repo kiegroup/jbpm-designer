@@ -7158,6 +7158,7 @@
 			"properties": [
 				{
 					"id":"name",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Name",
 					"value":"participant",
@@ -7166,10 +7167,11 @@
 					"optional":false,
 					"refToView":"text",
 					"length":undefined,
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"type",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Type",
 					"value":"Reference",
@@ -7180,6 +7182,7 @@
 				},
 				{
 					"id":"selects",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Selects",
 					"value":"",
@@ -7189,6 +7192,7 @@
 				},
 				{
 					"id":"copyto",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"CopyTo",
 					"value":"",
@@ -7198,6 +7202,7 @@
 				},
 				{
 					"id":"scope",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Scope",
 					"value":"",
@@ -7207,6 +7212,7 @@
 				},
 				{
 					"id":"forEach",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Scope",
 					"value":"",
@@ -7229,6 +7235,7 @@
 			"properties": [
 				{
 					"id":"name",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Name",
 					"value":"set",
@@ -7237,10 +7244,11 @@
 					"optional":false,
 					"refToView":"text",
 					"length":undefined,
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"type",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Type",
 					"value":"Set",
@@ -7251,6 +7259,7 @@
 				},
 				{
 					"id":"copyto",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"CopyTo",
 					"value":"",
@@ -7260,6 +7269,7 @@
 				},
 				{
 					"id":"scope",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Scope",
 					"value":"",
@@ -7269,6 +7279,7 @@
 				},
 				{
 					"id":"forEach",
+					"prefix":"oryx",
 					"type":"String",
 					"title":"Scope",
 					"value":"",
@@ -7288,42 +7299,7 @@
 			"view":"edges/edge.association.directed.svg",
 			"icon":"association.png",
 			"roles": [],
-			"properties": [
-
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				}	
-			]
+			"properties": []
 		},
 // ****************** Message Flow	***************************************	
 		{
@@ -7373,7 +7349,21 @@
 					"type":"String",
 					"title":"sender",
 					"title_de":"Sender",
-					"value":"NCName",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"senders",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"senders",
+					"title_de":"Senders",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -7396,12 +7386,26 @@
 					"length":""
 				},
 				{
+					"id":"sendActivities",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"sendActivities",
+					"title_de":"Sendactivitäten",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
 					"id":"receiver",
 					"prefix":"oryx",
 					"type":"String",
 					"title":"receiver",
 					"title_de":"Empfänger",
-					"value":"NCName",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -7415,6 +7419,20 @@
 					"type":"String",
 					"title":"receiveActivity",
 					"title_de":"Empfängactivität",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"receiveActivities",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"receiveActivities",
+					"title_de":"Empfängactivitäten",
 					"value":"",
 					"description":"",
 					"tooltip":"",

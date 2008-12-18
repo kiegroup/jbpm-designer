@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:oryx="http://oryx-editor.org/">
+	xmlns:oryx="http://oryx-editor.org/"
+	xmlns:raziel="http://raziel.org/">
 
 	<xsl:output method="xml" />
 	
@@ -33,12 +34,13 @@
 				
 				<xsl:call-template name="add-otherxmlns-attribute"/>
 					
-				<participantType>
+				<participantTypes>
 					<xsl:call-template name="find-all-participantTypes"/>
-				</participantType>	
+				</participantTypes>	
 				
 				<participants>
 					<xsl:call-template name="find-all-participants"/>
+					<xsl:call-template name="find-all-participantSets"/>
 				</participants>	
 				
 				<messageLinks>
@@ -47,6 +49,35 @@
 			</topology>	
 	 	</xsl:if>
 	</xsl:template>
+	
+	<xsl:template name="find-all-participantTypes">
+        <xsl:for-each select="//rdf:Description">
+			<xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="type">
+				<xsl:call-template name="get-exact-type">
+					<xsl:with-param name="typeString" select="$typeString" />
+				</xsl:call-template>
+			</xsl:variable>
+			
+			<!--participantTypes saved in processes-->
+			<xsl:if test="$type='process'">
+				<participantType>
+					<xsl:variable name="name" select="./oryx:participantype" />
+					<xsl:if test="$name!=''">
+						<xsl:attribute name="name">
+							<xsl:value-of select="$name" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<!-- TODO implements a method for participantBehaviorDescription-->
+					<!--xsl:variable name="participantBehaviorDescription">
+						<xsl:call-template name="get-Participant-Behavior-Description"/>
+					</xsl:variable-->
+		
+				</participantType>
+			</xsl:if>	
+		</xsl:for-each>
+	</xsl:template>	
 	
 	<xsl:template name="find-all-participants">
         <xsl:for-each select="//rdf:Description">
@@ -57,9 +88,58 @@
 				</xsl:call-template>
 			</xsl:variable>
 			
-			<!--process-->
-			<xsl:if test="$type='process'">
-				<participant>
+			<!--participant without participantSet-->
+			<xsl:if test="$type='participant'">
+				<xsl:variable name="withinParticipantSet" select="count(./raziel:outgoing)" />
+
+				<xsl:if test="$withinParticipantSet='0'">
+					<participant>
+						<xsl:variable name="name" select="./oryx:name" />
+						<xsl:if test="$name!=''">
+							<xsl:attribute name="name">
+								<xsl:value-of select="$name" />
+							</xsl:attribute>
+						</xsl:if>
+						
+						<xsl:variable name="type" select="./oryx:type" />
+						<xsl:if test="$type!=''">
+							<xsl:attribute name="type">
+								<xsl:value-of select="$type" />
+							</xsl:attribute>
+						</xsl:if>
+						
+						<xsl:variable name="selects" select="./oryx:selects" />
+						<xsl:if test="$selects!=''">
+							<xsl:attribute name="selects">
+								<xsl:value-of select="$selects" />
+							</xsl:attribute>
+						</xsl:if>
+						
+						<xsl:variable name="scope" select="./oryx:scope" />
+						<xsl:if test="$scope!=''">
+							<xsl:attribute name="scope">
+								<xsl:value-of select="$scope" />
+							</xsl:attribute>
+						</xsl:if>
+					</participant>
+				</xsl:if>
+			</xsl:if>
+				
+		</xsl:for-each>
+	</xsl:template>	
+	
+	<xsl:template name="find-all-participantSets">
+        <xsl:for-each select="//rdf:Description">
+			<xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="type">
+				<xsl:call-template name="get-exact-type">
+					<xsl:with-param name="typeString" select="$typeString" />
+				</xsl:call-template>
+			</xsl:variable>
+		
+			<!--participantSet-->
+			<xsl:if test="$type='participantSet'">
+				<participantSet>
 					<xsl:variable name="name" select="./oryx:name" />
 					<xsl:if test="$name!=''">
 						<xsl:attribute name="name">
@@ -74,33 +154,65 @@
 						</xsl:attribute>
 					</xsl:if>
 					
-					<xsl:variable name="selects" select="./oryx:selects" />
-					<xsl:if test="$selects!=''">
-						<xsl:attribute name="selects">
-							<xsl:value-of select="$selects" />
+					<xsl:variable name="scope" select="./oryx:scope" />
+					<xsl:if test="$scope!=''">
+						<xsl:attribute name="scope">
+							<xsl:value-of select="$scope" />
 						</xsl:attribute>
 					</xsl:if>
-				</participant>
-			</xsl:if>	
+					
+					<xsl:variable name="forEach" select="./oryx:foreach" />
+					<xsl:if test="$forEach!=''">
+						<xsl:attribute name="forEach">
+							<xsl:value-of select="$forEach" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<!--participant within participantSet-->
+					<xsl:for-each select="//rdf:Description">
+						<xsl:variable name="typeString" select="./oryx:type" />	
+						<xsl:variable name="type">
+							<xsl:call-template name="get-exact-type">
+								<xsl:with-param name="typeString" select="$typeString" />
+							</xsl:call-template>
+						</xsl:variable>
+						
+						<!--participant within participantSet-->
+						<xsl:if test="$type='participant'">
+							<xsl:variable name="withinParticipantSet" select="count(./raziel:outgoing)" />
+
+							<xsl:if test="$withinParticipantSet!='0'">
+								<participant>
+									<xsl:variable name="name" select="./oryx:name" />
+									<xsl:if test="$name!=''">
+										<xsl:attribute name="name">
+											<xsl:value-of select="$name" />
+										</xsl:attribute>
+									</xsl:if>
+									
+									<xsl:variable name="scope" select="./oryx:scope" />
+									<xsl:if test="$scope!=''">
+										<xsl:attribute name="scope">
+											<xsl:value-of select="$scope" />
+										</xsl:attribute>
+									</xsl:if>
+									
+									<xsl:variable name="forEach" select="./oryx:foreach" />
+									<xsl:if test="$forEach!=''">
+										<xsl:attribute name="forEach">
+											<xsl:value-of select="$forEach" />
+										</xsl:attribute>
+									</xsl:if>
+								</participant>
+							</xsl:if>	
+						</xsl:if>
+						
+					</xsl:for-each>	
+				</participantSet>
+			</xsl:if>		
 		</xsl:for-each>
 	</xsl:template>	
 	
-	<xsl:template name="find-all-participantTypes">
-        <xsl:for-each select="//rdf:Description">
-			<xsl:variable name="typeString" select="./oryx:type" />	
-			<xsl:variable name="type">
-				<xsl:call-template name="get-exact-type">
-					<xsl:with-param name="typeString" select="$typeString" />
-				</xsl:call-template>
-			</xsl:variable>
-			
-			<!--process-->
-			<xsl:if test="$type='process'">
-				<participantType>
-				</participantType>
-			</xsl:if>	
-		</xsl:for-each>
-	</xsl:template>	
 	
 	<xsl:template name="find-all-messageLinks">
         <xsl:for-each select="//rdf:Description">
@@ -128,10 +240,24 @@
 						</xsl:attribute>
 					</xsl:if>
 					
+					<xsl:variable name="senders" select="./oryx:senders" />
+					<xsl:if test="$senders!=''">
+						<xsl:attribute name="senders">
+							<xsl:value-of select="$senders" />
+						</xsl:attribute>
+					</xsl:if>
+					
 					<xsl:variable name="sendActivity" select="./oryx:sendactivity" />
 					<xsl:if test="$sendActivity!=''">
 						<xsl:attribute name="sendActivity">
 							<xsl:value-of select="$sendActivity" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:variable name="sendActivities" select="./oryx:sendactivities" />
+					<xsl:if test="$sendActivities!=''">
+						<xsl:attribute name="sendActivities">
+							<xsl:value-of select="$sendActivities" />
 						</xsl:attribute>
 					</xsl:if>
 					
@@ -146,6 +272,13 @@
 					<xsl:if test="$receiveActivity!=''">
 						<xsl:attribute name="receiveActivity">
 							<xsl:value-of select="$receiveActivity" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:variable name="receiveActivities" select="./oryx:receiveactivities" />
+					<xsl:if test="$receiveActivities!=''">
+						<xsl:attribute name="receiveActivities">
+							<xsl:value-of select="$receiveActivities" />
 						</xsl:attribute>
 					</xsl:if>
 					

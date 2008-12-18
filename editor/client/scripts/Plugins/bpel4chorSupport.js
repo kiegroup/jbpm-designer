@@ -58,7 +58,20 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 			'description': ORYX.I18N.BPEL4ChorSupport.impDesc,
 			'index': 1,
 			'minShape': 0,
-			'maxShape': 0
+			'maxShape': 0,
+			'isEnabled': function(){ return false}
+		});
+		
+		this.facade.offer({
+			'name':ORYX.I18N.BPEL4ChorSupport.gen,
+			'functionality': this.generate.bind(this),
+			'group': ORYX.I18N.BPEL4ChorSupport.group,
+			'icon':  ORYX.PATH + "images/bpel4chor_generator.png",
+			'description': ORYX.I18N.BPEL4ChorSupport.genDesc,
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){ return false}
 		});
 	},
 	
@@ -243,7 +256,14 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 		alert(erdfString);
 		this.facade.importERDF( doc );
 
+	},
+	
+	/***************************** generate **********************************/
+	generate : function(){
+		
 	}
+	
+	
 	
 });
 	

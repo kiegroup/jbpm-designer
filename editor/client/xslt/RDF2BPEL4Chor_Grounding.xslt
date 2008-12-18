@@ -34,32 +34,14 @@
 					<xsl:call-template name="find-all-participantRefs"/>
 				</participantRefs>	
 
+				<properties>
+					<xsl:call-template name="find-all-properties"/>
+				</properties>	
+				
 			</grounding>	
 	 	</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="find-all-participantRefs">
-        <xsl:for-each select="//rdf:Description">
-			<xsl:variable name="typeString" select="./oryx:type" />	
-			<xsl:variable name="type">
-				<xsl:call-template name="get-exact-type">
-					<xsl:with-param name="typeString" select="$typeString" />
-				</xsl:call-template>
-			</xsl:variable>
-			
-			<!--process-->
-			<xsl:if test="$type='process'">
-				<participantRef>
-					<xsl:variable name="name" select="./oryx:name" />
-					<xsl:if test="$name!=''">
-						<xsl:attribute name="name">
-							<xsl:value-of select="$name" />
-						</xsl:attribute>
-					</xsl:if>
-				</participantRef>
-			</xsl:if>	
-		</xsl:for-each>
-	</xsl:template>	
 	
 	<xsl:template name="find-all-messageLinks">
         <xsl:for-each select="//rdf:Description">
@@ -98,6 +80,55 @@
 			</xsl:if>	
 		</xsl:for-each>
 	</xsl:template>	
+
+	
+	<xsl:template name="find-all-participantRefs">
+        <xsl:for-each select="//rdf:Description">
+			<xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="type">
+				<xsl:call-template name="get-exact-type">
+					<xsl:with-param name="typeString" select="$typeString" />
+				</xsl:call-template>
+			</xsl:variable>
+			
+			<!--process>
+			<xsl:if test="$type='process'">
+				<participantRef>
+					<xsl:variable name="name" select="./oryx:name" />
+					<xsl:if test="$name!=''">
+						<xsl:attribute name="name">
+							<xsl:value-of select="$name" />
+						</xsl:attribute>
+					</xsl:if>
+				</participantRef>
+			</xsl:if-->	
+		</xsl:for-each>
+	</xsl:template>	
+	
+	
+	<xsl:template name="find-all-properties">
+        <xsl:for-each select="//rdf:Description">
+			<xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="type">
+				<xsl:call-template name="get-exact-type">
+					<xsl:with-param name="typeString" select="$typeString" />
+				</xsl:call-template>
+			</xsl:variable>
+			
+			<!--process>
+			<xsl:if test="$type='process'">
+				<participantRef>
+					<xsl:variable name="name" select="./oryx:name" />
+					<xsl:if test="$name!=''">
+						<xsl:attribute name="name">
+							<xsl:value-of select="$name" />
+						</xsl:attribute>
+					</xsl:if>
+				</participantRef>
+			</xsl:if-->	
+		</xsl:for-each>
+	</xsl:template>
+
 	
 	<xsl:template name="add-otherxmlns-attribute">
 		<xsl:variable name="otherxmlns" select="./oryx:otherxmlns" />
