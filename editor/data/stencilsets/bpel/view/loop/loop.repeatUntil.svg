@@ -49,13 +49,11 @@
     	stroke-width="1" 
     	fill="white" />
     <text
-       oryx:rotate="270"
        id="label"
-	   x="16" 
-	   y="40" 
-	   oryx:align="middle center"
-	   oryx:anchors="left"
-	   style="font-family:Arial; font-size: 14pt; fill:black;"></text>
+	   x="30" 
+	   y="20" 
+	   oryx:anchors="top left"
+	   style="font-family:Arial; font-size: 10pt; fill:black;"></text>
     <path
        d="M 7.8938659,18.643234 C 5.2773374,14.03665 7.2055628,8.1109195 11.75609,5.5699145 C 16.87077,2.7138877 23.419094,4.8627314 26.203355,9.9193152 C 29.299246,15.541862 26.929565,22.713299 21.366778,25.740525 C 20.449292,26.239813 19.467809,26.620284 18.454001,26.871595"
 	   oryx:anchors="top left"

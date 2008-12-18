@@ -48,14 +48,6 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" /> 
-    <text
-       oryx:rotate="270"
-       id="label"
-	   x="10" 
-	   y="40" 
-	   oryx:align="middle left"
-	   style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>
     <rect
        y="10"
 	   x="10"
@@ -76,14 +68,16 @@
 	   fill="white"
        stroke="black" 
        stroke-width="1" />
-    <text
-       oryx:rotate="270"
-       id="label"
-	   x="16" 
-	   y="40" 
-	   oryx:align="middle center"
-	   oryx:anchors="left"
-	   style="font-family:Arial; font-size: 14pt; fill:black;"></text>
+    <rect
+       y="50"
+	   x="10"
+       height="10"
+       width="30"
+       id="rect11265"
+	   oryx:anchors="top left"
+	   fill="white"
+       stroke="black" 
+       stroke-width="1" />
     <path
        id="path11269"
        d="M 25,20 L 25,30"
@@ -94,5 +88,11 @@
        d="M 25,40 L 25,50"
 	   oryx:anchors="top left"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     <text
+       id="label"
+	   x="42" 
+	   y="20" 
+	   oryx:anchors="top left"
+	   style="font-family:Arial; font-size: 10pt; fill:black;"></text>
   </g>
 </svg>

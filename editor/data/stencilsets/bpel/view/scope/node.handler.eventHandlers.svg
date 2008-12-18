@@ -50,13 +50,11 @@
 	     stroke-width="1"
 	     oryx:resize="vertical horizontal"
 	     style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
-    <text
-       oryx:rotate="270"
-	   x="16" 
-	   y="40" 
-	   oryx:align="middle center"
-	   oryx:anchors="left"
-	   style="font-family:Arial; font-size: 14pt; fill:black;">eventHandlers</text>
+	  <text 
+    	oryx:anchors="top left"
+    	x="10" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">eventHandlers</text>
      
   </g>
 </svg>

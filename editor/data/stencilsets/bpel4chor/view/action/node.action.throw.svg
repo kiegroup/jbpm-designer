@@ -48,23 +48,16 @@
     	ry="10" 
     	stroke="black" 
     	stroke-width="1" 
-    	fill="white" />
-    <text
-       oryx:rotate="270"
-       id="label"
-	   x="10" 
-	   y="40" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>   
+    	fill="white" /> 
     <path
          style="fill:black;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10"
          d="M 22.820839,11.171502 L 19.36734,24.58992 L 13.54138,14.281819 L 9.3386512,20.071607 L 13.048949,6.8323057 L 18.996148,16.132659 L 22.820839,11.171502 z"
          id="errorPolygon" />
-    <text 
-    	oryx:anchors="top left"
-    	x="35" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">throw</text> 
+    <text font-size="14" 
+    	  id="label" 
+    	  x="50" 
+    	  y="40" 
+    	  oryx:align="middle center" 
+    	  stroke="black"></text>
   </g>
 </svg>

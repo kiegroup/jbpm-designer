@@ -2543,7 +2543,7 @@
 					"type":"String",
 					"title":"name",
 					"title_de":"Name",
-					"value":"if",
+					"value":"if_block",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,

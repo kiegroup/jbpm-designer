@@ -6,8 +6,8 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="690"
-   height="200"
+   width="600"
+   height="550"
    >
   
   <defs >
@@ -15,23 +15,23 @@
   
   <oryx:magnets>
     <oryx:magnet
-       oryx:cx="345"
-       oryx:cy="100"
+       oryx:cx="300"
+       oryx:cy="250"
        oryx:default="yes" />
     <oryx:magnet
        oryx:cx="0"
-       oryx:cy="100"
+       oryx:cy="250"
        oryx:anchors="left" />
     <oryx:magnet
-       oryx:cx="345"
-       oryx:cy="200"
+       oryx:cx="300"
+       oryx:cy="500"
        oryx:anchors="bottom" />
     <oryx:magnet
-       oryx:cx="690"
-       oryx:cy="100"
+       oryx:cx="600"
+       oryx:cy="250"
        oryx:anchors="right" />
     <oryx:magnet
-       oryx:cx="345"
+       oryx:cx="300"
        oryx:cy="0"
        oryx:anchors="top" />
   </oryx:magnets>
@@ -40,10 +40,10 @@
     <rect
        y="0"
        x="0"
-       height="200"
-       width="690"
        rx="10" 
        ry="10"
+       height="500"
+       width="600"
        id="mainBody"
 	   oryx:resize="vertical horizontal"
 	   fill="white"
@@ -52,15 +52,10 @@
     <text
        oryx:rotate="270"
        id="label"
-	   x="15" 
-	   y="100" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text> 
-    <text 
-    	oryx:anchors="top left"
-    	x="10" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 15pt; fill:black;">Process</text>
+	   x="16" 
+	   y="250" 
+	   oryx:align="middle center"
+	   oryx:anchors="left"
+	   style="font-family:Arial; font-size: 15pt; fill:black;"></text> 
   </g>
 </svg>

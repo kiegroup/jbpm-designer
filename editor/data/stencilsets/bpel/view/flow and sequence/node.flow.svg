@@ -48,14 +48,12 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" /> 
-    <text
-       oryx:rotate="270"
+     <text
        id="label"
-	   x="16" 
-	   y="125" 
-	   oryx:align="middle center"
-	   oryx:anchors="left"
-	   style="font-family:Arial; font-size: 14pt; fill:black;"></text>
+	   x="45" 
+	   y="20" 
+	   oryx:anchors="top left"
+	   style="font-family:Arial; font-size: 12pt; fill:black;"></text>
     <path  
     	oryx:anchors="top left" 
     	fill="none" 

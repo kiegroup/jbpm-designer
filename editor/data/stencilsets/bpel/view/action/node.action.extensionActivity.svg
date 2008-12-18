@@ -49,7 +49,7 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
-    <text font-size="14" 
+    <text font-size="11" 
     	  id="label" 
     	  x="50" 
     	  y="40" 

@@ -49,18 +49,11 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
-    <text
-       oryx:rotate="270"
+     <text
        id="label"
-	   x="10" 
-	   y="100" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>
-    <text 
-    	oryx:anchors="top left"
-    	x="10" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">pick</text>
+	   x="15" 
+	   y="20" 
+	   oryx:anchors="top left"
+	   style="font-family:Arial; font-size: 12pt; fill:black;"></text>
   </g>
 </svg>

@@ -45,7 +45,7 @@
        ry="10" 
        oryx:resize="vertical horizontal"
 	   fill="white"
-       stroke="#f6f61b" 
+       stroke="#0024fd" 
        stroke-width="1"
        style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
     <polygon 
@@ -68,10 +68,10 @@
       	stroke-linejoin="miter"
       	transform="translate(0,-33)"
       	stroke-miterlimit="10" />
-     <text 
+  <text 
     	oryx:anchors="top left"
-    	x="23" 
+    	x="20" 
     	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">comp.Handler</text>
-  </g>
+    	style="font-family:Arial; font-size: 10pt; fill:black;">compensationHandler</text>
+	</g>
 </svg> 

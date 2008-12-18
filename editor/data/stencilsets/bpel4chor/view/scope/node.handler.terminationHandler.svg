@@ -45,7 +45,7 @@
 	     x="0"
 	     y="0"
 	     id="mainBody"
-	     stroke="#4653c7" 
+	     stroke="#f9770d" 
 	     fill="white" 
 	     stroke-width="1"
 	     oryx:resize="vertical horizontal"
@@ -120,10 +120,10 @@
 	     style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.90100002;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"
 	     transform="translate(-0,-33)"
 	     oryx:anchors="top left"/>
-	  <text 
+  <text 
     	oryx:anchors="top left"
     	x="30" 
     	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">term.Handler</text>
+    	style="font-family:Arial; font-size: 10pt; fill:black;">terminationHandler</text>
     </g>
 </svg>

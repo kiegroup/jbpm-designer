@@ -45,7 +45,7 @@
 	     x="0"
 	     y="0"
 	     id="mainBody"
-	     stroke="#d731d3" 
+	     stroke="#fd10d4" 
 	     fill="white" 
 	     stroke-width="1"
 	     oryx:resize="vertical horizontal"
@@ -55,6 +55,6 @@
     	x="10" 
     	y="20" 
     	style="font-family:Arial; font-size: 10pt; fill:black;">eventHandlers</text>
-      
+     
   </g>
 </svg>

@@ -30,13 +30,11 @@
   		stroke="black" 
   		stroke-width="1" 
   		fill="white" />
-    <text
-       oryx:rotate="270"
-	   x="16" 
-	   y="40" 
-	   oryx:align="middle center"
-	   oryx:anchors="left"
-	   style="font-family:Arial; font-size: 14pt; fill:black;">if/else-if</text>
+     <text 
+     	oryx:anchors="top left"
+     	x="35" 
+    	y="20" 
+    	style="font-family:Arial; font-size: 10pt; fill:black;">if-Branch</text>
     <path 
     	oryx:anchors="top left"
     	fill="white" 

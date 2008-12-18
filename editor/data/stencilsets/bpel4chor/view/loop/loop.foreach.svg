@@ -48,14 +48,12 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
-    <text
-       oryx:rotate="270"
+     <text
        id="label"
-	   x="10" 
-	   y="40" 
-	   oryx:align="middle left"
-       style="font-family:Arial; font-size: 8pt; fill:black;"
-       xml:space="preserve"></text>
+	   x="30" 
+	   y="20" 
+	   oryx:anchors="top left"
+	   style="font-family:Arial; font-size: 12pt; fill:black;"></text>
     <path
        d="M 19.273802,10.187935 C 20.557593,13.978344 18.281917,18.098969 14.543865,19.334734 C 10.342387,20.723703 5.7913956,18.195558 4.4473749,14.047413 C 2.9529234,9.4349836 5.7337743,4.4532715 10.292079,3.0012312 C 11.043892,2.7617424 11.826229,2.619522 12.61412,2.5777225"
 	   oryx:anchors="top left"
@@ -72,10 +70,5 @@
        d="M 14.175901,8.4894412 L 15.712625,5.4309725 L 18.238501,8.4920278 L 14.175901,8.4894412 z "
 	   oryx:anchors="top left"
        style="fill:black;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-      <text 
-     	oryx:anchors="top left"
-     	x="30" 
-    	y="20" 
-    	style="font-family:Arial; font-size: 10pt; fill:black;">for each</text>
   </g>
 </svg>

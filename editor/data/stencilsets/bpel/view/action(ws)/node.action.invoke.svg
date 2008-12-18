@@ -49,13 +49,11 @@
     	stroke-width="1" 
     	fill="white" />
     <text
-       oryx:rotate="270"
        id="label"
-	   x="16" 
-	   y="40" 
-	   oryx:align="middle center"
-	   oryx:anchors="left"
-	   style="font-family:Arial; font-size: 14pt; fill:black;"></text>
+	   x="35" 
+	   y="20" 
+	   oryx:anchors="top left"
+	   style="font-family:Arial; font-size: 12pt; fill:black;"></text>
 	<g transform="translate(10,10)">
     	<path oryx:anchors="top left"
        		id="path2408"

@@ -68,10 +68,11 @@
           L 26.19185,53.920767"
        transform="translate(0,-38)"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34357333px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-	<text 
+  	<text 
     	oryx:anchors="top left"
     	x="30" 
     	y="20" 
     	style="font-family:Arial; font-size: 10pt; fill:black;">onEvent</text>
+
   </g>
 </svg> 
