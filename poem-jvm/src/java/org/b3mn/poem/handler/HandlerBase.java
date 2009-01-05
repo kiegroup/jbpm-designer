@@ -247,6 +247,7 @@ public abstract class HandlerBase {
     	}
     	
       	return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+      	    + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
       	  	+ "<html xmlns=\"http://www.w3.org/1999/xhtml\"\n"
       	  	+ "xmlns:b3mn=\"http://b3mn.org/2007/b3mn\"\n"
       	  	+ "xmlns:ext=\"http://b3mn.org/2007/ext\"\n"
