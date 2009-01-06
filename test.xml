@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Oryx Test Script">
+	<!-- Load additional properties -->
+    <property file="test.properties" />
+    
+	<!-- Import ANT test scripts of sub projects -->
+	<import file="editor/test.xml" />
+
+    <!-- RUN TESTS OF EDITOR AND BACKEND -->
+	<target name="test.all" depends="test.editor.client" />
+	
+</project>

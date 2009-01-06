@@ -1,0 +1,8 @@
+<browserResult id="1231248353168" time="0.234"><properties><property name="browserFileName" value="/Applications/Firefox.app/Contents/MacOS/firefox" /><property name="browserId" value="0" /><property name="jsUnitVersion" value="2.2" /><property name="userAgent" value="Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; de; rv:1.9.0.5) Gecko/2008120121 Firefox/3.0.5" /><property name="remoteAddress" value="127.0.0.1" /><property name="url" value="file:///Users/JFS/eclipse_workspace/oryx/editor/test/client/TestSuite.html" /></properties><testCases><testCase name="file:///Users/JFS/eclipse_workspace/oryx/editor/test/client/MathTests.html:testIsPointInPolygone" time="0.0" /><testCase name="file:///Users/JFS/eclipse_workspace/oryx/editor/test/client/MathTests.html:testIsPointInEllipse" time="0.0" /><testCase name="file:///Users/JFS/eclipse_workspace/oryx/editor/test/client/MathTests.html:testIsPointInLine" time="0.0" /><testCase name="file:///Users/JFS/eclipse_workspace/oryx/editor/test/client/MathTests.html:testMidPoint" time="0.0"><failure>Call to assert(boolean) with false&#xD;
+&#xD;
+Stack trace follows:&#xD;
+&gt; JsUnitException&#xD;
+&gt; _assert&#xD;
+&gt; assert&#xD;
+&gt; testMidPoint&#xD;
+</failure></testCase></testCases></browserResult>

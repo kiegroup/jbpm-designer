@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Oryx Editor Test">
+	
+	<property name="url" value="${localWorkingDirectoryUrl}/editor/test/jsunit/testRunner.html?testPage=${localWorkingDirectoryUrl}/editor/test/client/TestSuite.html"/>
+	<property name="resourceBase" value="editor/test/jsunit"/>
+	
+	<!-- Import ANT build script of jsUnit -->
+	<import file="test/jsunit/build.xml" />
+	
+	<target name="test.editor.client" depends="standalone_test" />
+	
+	<!-- <target name="test.editor.client.distributed" depends="distributed_test" /> -->
+	
+</project>

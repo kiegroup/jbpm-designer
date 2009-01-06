@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Math Tests</title>
+<link rel="stylesheet" type="text/css" href="../jsunit/css/jsUnitStyle.css">
+<script language="JavaScript" type="text/javascript" src="../jsunit/app/jsUnitCore.js"></script>
+<script language="JavaScript" type="text/javascript" src="../../client/scripts/Core/Math/math.js"></script>
+<script language="JavaScript" type="text/javascript">
+
+var p1 = {x: 0, y: 0};
+var p2 = {x: 4, y: 3.5};
+var p3 = {x: 2, y: 1.75};
+
+function testMidPoint() {
+    assertEquals(ORYX.Core.Math.midPoint(p1, p2).x, 2);
+    assertEquals(ORYX.Core.Math.midPoint(p1, p2).y, 1.75);
+}
+
+function testIsPointInLine() {
+	assertTrue(ORYX.Core.Math.isPointInLine(p3.x, p3.y, p1.x, p1.y, p2.x, p2.y));
+	assertFalse(ORYX.Core.Math.isPointInLine(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y));
+	//TODO: test offset parameter
+}
+
+function testIsPointInEllipse() {
+	assertTrue(ORYX.Core.Math.isPointInEllipse(p2.x, p2.y, 5, 4, 2, 1));
+	assertFalse(ORYX.Core.Math.isPointInEllipse(p3.x, p3.y, 5, 4, 2, 1));
+}
+
+function testIsPointInPolygone() {
+	var polygone = [ 1,2, 4,2.5, 3,3, 6,9, 1,8 ];
+	assertTrue(ORYX.Core.Math.isPointInPolygone(2, 2.4, polygone));
+	assertTrue(ORYX.Core.Math.isPointInPolygone(5, 8, polygone));
+	assertFalse(ORYX.Core.Math.isPointInPolygone(4, 3, polygone));
+	assertFalse(ORYX.Core.Math.isPointInPolygone(1, 9, polygone));
+}
+
+</script>
+</head>
+
+<body>
+<h1>Math Tests</h1>
+
+<p>This page contains tests for the Math class</p>
+</body>
+</html>
