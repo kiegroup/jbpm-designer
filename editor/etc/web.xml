@@ -6,23 +6,7 @@
 
 	<display-name>Oryx Editor</display-name>
 
-	<!-- the number within the session-timout element must be expressed in
-		minutes. it is now 24 hours. -->
-	<session-config>
-		<session-timeout>1440</session-timeout>
-	</session-config>
-
-	<servlet>
-		<display-name>Oryx OpenID Authentication Servlet</display-name>
-		<servlet-name>AuthServlet</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.auth.OpenIDAuthenticationServlet
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AuthServlet</servlet-name>
-		<url-pattern>/consumer</url-pattern>
-	</servlet-mapping>
+	
 
 	<servlet>
 		<display-name>Oryx Process Repository</display-name>
@@ -31,11 +15,12 @@
 			org.oryxeditor.server.RepositoryProvider
 		</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>Repository</servlet-name>
-		<url-pattern>/repository</url-pattern>
-	</servlet-mapping>
-
+	
+	<!--	<servlet>
+		<servlet-name>EngineProxy</servlet-name>
+		<servlet-class>org.oryxeditor.server.EngineProxy</servlet-class>
+	</servlet> -->
+	
 	<servlet>
 		<display-name>Oryx Legacy File Download Servlet</display-name>
 		<servlet-name>DownloadServlet</servlet-name>
@@ -43,19 +28,7 @@
 			org.oryxeditor.server.MultiDownloader
 		</servlet-class>
 	</servlet>
-
-<!--	<servlet>
-		<servlet-name>EngineProxy</servlet-name>
-		<servlet-class>org.oryxeditor.server.EngineProxy</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>EngineProxy</servlet-name>
-		<url-pattern>/engineproxy</url-pattern>
-	</servlet-mapping>
--->
 	
-
 	<servlet>
 		<display-name>Oryx BPMN to PNML Export</display-name>
 		<servlet-name>ExportServlet</servlet-name>
@@ -63,11 +36,7 @@
 			org.oryxeditor.server.ExportServlet
 		</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>ExportServlet</servlet-name>
-		<url-pattern>/pnml</url-pattern>
-	</servlet-mapping>
-
+	
 	<servlet>
 		<display-name>
 			Oryx BPMN to PNML Export - unexecutable
@@ -77,63 +46,36 @@
 			org.oryxeditor.server.SimplePNMLExporter
 		</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>SimplePNMLExporter</servlet-name>
-		<url-pattern>/simplepnmlexporter</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<display-name>Oryx BPEL IMPORTER</display-name>
 		<servlet-name>BPELImporter</servlet-name>
 		<servlet-class>org.oryxeditor.server.BPELImporter</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>BPELImporter</servlet-name>
-		<url-pattern>/bpelimporter</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<display-name>Oryx BPEL EXPORTER</display-name>
 		<servlet-name>BPELExporter</servlet-name>
 		<servlet-class>org.oryxeditor.server.BPELExporter</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>BPELExporter</servlet-name>
-		<url-pattern>/bpelexporter</url-pattern>
-	</servlet-mapping>
-	
 	
 	<servlet>
 		<display-name>Oryx BPEL4CHOR IMPORTER</display-name>
 		<servlet-name>BPEL4ChorImporter</servlet-name>
 		<servlet-class>org.oryxeditor.server.BPEL4ChorImporter</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>BPEL4ChorImporter</servlet-name>
-		<url-pattern>/bpel4chorimporter</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<display-name>Oryx BPEL4CHOR EXPORTER</display-name>
 		<servlet-name>BPEL4ChorExporter</servlet-name>
 		<servlet-class>org.oryxeditor.server.BPEL4ChorExporter</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>BPEL4ChorExporter</servlet-name>
-		<url-pattern>/bpel4chorexporter</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<display-name>Oryx XPDL4Chor to BPEL4Chor Servlet</display-name>
 		<servlet-name>XPDL4Chor2BPEL4ChorServlet</servlet-name>
 		<servlet-class>org.oryxeditor.server.XPDL4Chor2BPEL4ChorServlet</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>XPDL4Chor2BPEL4ChorServlet</servlet-name>
-		<url-pattern>/xpdl4chor2bpel4chor</url-pattern>
-	</servlet-mapping>
-	
-	
 	
 	<servlet>
 		<display-name>
@@ -144,11 +86,7 @@
 			org.oryxeditor.server.DesynchronizabilityServlet
 		</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>DesynchronizabilityServlet</servlet-name>
-		<url-pattern>/desynchronizability</url-pattern>
-	</servlet-mapping>
-
+	
 	<servlet>
 		<display-name>
 			Oryx IBPMN 2 BPMN Converter
@@ -158,11 +96,7 @@
 			org.oryxeditor.server.IBPMN2BPMNServlet
 		</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>IBPMN2BPMNServlet</servlet-name>
-		<url-pattern>/ibpmn2bpmn</url-pattern>
-	</servlet-mapping>
-
+	
 	<servlet>
 		<display-name>
 			Oryx syntax checker
@@ -172,10 +106,6 @@
 			org.oryxeditor.server.SyntaxCheckerServlet
 		</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>SyntaxChecker</servlet-name>
-		<url-pattern>/syntaxchecker</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<display-name>
@@ -186,6 +116,121 @@
 			org.oryxeditor.server.ValidatorServlet
 		</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<display-name>Oryx Simple Storage Servlet</display-name>
+		<servlet-name>SimpleStorageServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.SimpleStorageServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<display-name>Alternatives Renderer</display-name>
+		<servlet-name>AlternativesRenderer</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.AlternativesRenderer
+		</servlet-class>
+	</servlet>
+	
+<!--<servlet>
+		<display-name>Worklist</display-name>
+		<servlet-name>Worklist</servlet-name>
+		<servlet-class>org.oryxeditor.server.Worklist</servlet-class>
+	</servlet>
+-->
+
+	<servlet>
+		<display-name>Oryx EPC Upload Servlet</display-name>
+		<servlet-name>EPCUpload</servlet-name>
+		<servlet-class>org.oryxeditor.server.EPCUpload</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<display-name>Step Through</display-name>
+		<servlet-name>StepThrough</servlet-name>
+		<servlet-class>
+			de.hpi.diagram.stepthrough.StepThroughServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<display-name>XForms Export</display-name>
+		<servlet-name>XFormsExportServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.XFormsExportServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<display-name>XForms Import</display-name>
+		<servlet-name>XFormsImportServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.XFormsImportServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Repository</servlet-name>
+		<url-pattern>/repository</url-pattern>
+	</servlet-mapping>
+
+<!--<servlet-mapping>
+		<servlet-name>EngineProxy</servlet-name>
+		<url-pattern>/engineproxy</url-pattern>
+	</servlet-mapping>
+-->
+	
+	<servlet-mapping>
+		<servlet-name>ExportServlet</servlet-name>
+		<url-pattern>/pnml</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SimplePNMLExporter</servlet-name>
+		<url-pattern>/simplepnmlexporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>BPELImporter</servlet-name>
+		<url-pattern>/bpelimporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>BPELExporter</servlet-name>
+		<url-pattern>/bpelexporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>BPEL4ChorImporter</servlet-name>
+		<url-pattern>/bpel4chorimporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>BPEL4ChorExporter</servlet-name>
+		<url-pattern>/bpel4chorexporter</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>XPDL4Chor2BPEL4ChorServlet</servlet-name>
+		<url-pattern>/xpdl4chor2bpel4chor</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>DesynchronizabilityServlet</servlet-name>
+		<url-pattern>/desynchronizability</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>IBPMN2BPMNServlet</servlet-name>
+		<url-pattern>/ibpmn2bpmn</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>SyntaxChecker</servlet-name>
+		<url-pattern>/syntaxchecker</url-pattern>
+	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>Validator</servlet-name>
 		<url-pattern>/validator</url-pattern>
@@ -196,89 +241,44 @@
 		<url-pattern>/download</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<display-name>Oryx Simple Storage Servlet</display-name>
-		<servlet-name>SimpleStorageServlet</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.SimpleStorageServlet
-		</servlet-class>
-	</servlet>
 	<servlet-mapping>
 		<servlet-name>SimpleStorageServlet</servlet-name>
 		<url-pattern>/server</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<display-name>Alternatives Renderer</display-name>
-		<servlet-name>AlternativesRenderer</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.AlternativesRenderer
-		</servlet-class>
-	</servlet>
 	<servlet-mapping>
 		<servlet-name>AlternativesRenderer</servlet-name>
 		<url-pattern>/pdf</url-pattern>
 	</servlet-mapping>
 
-<!--	<servlet>
-		<display-name>Worklist</display-name>
-		<servlet-name>Worklist</servlet-name>
-		<servlet-class>org.oryxeditor.server.Worklist</servlet-class>
-	</servlet>
+<!--
 	<servlet-mapping>
 		<servlet-name>Worklist</servlet-name>
 		<url-pattern>/worklist</url-pattern>
 	</servlet-mapping>
 -->
-	<servlet>
-		<display-name>Oryx EPC Upload Servlet</display-name>
-		<servlet-name>EPCUpload</servlet-name>
-		<servlet-class>org.oryxeditor.server.EPCUpload</servlet-class>
-	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>EPCUpload</servlet-name>
 		<url-pattern>/epc-upload</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
-		<display-name>Step Through</display-name>
-		<servlet-name>StepThrough</servlet-name>
-		<servlet-class>
-			de.hpi.diagram.stepthrough.StepThroughServlet
-		</servlet-class>
-	</servlet>
 	<servlet-mapping>
 		<servlet-name>StepThrough</servlet-name>
 		<url-pattern>/stepthrough</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
-		<display-name>XForms Export</display-name>
-		<servlet-name>XFormsExportServlet</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.XFormsExportServlet
-		</servlet-class>
-	</servlet>
 	<servlet-mapping>
 		<servlet-name>XFormsExportServlet</servlet-name>
 		<url-pattern>/xformsexport</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
-		<display-name>XForms Import</display-name>
-		<servlet-name>XFormsImportServlet</servlet-name>
-		<servlet-class>
-			org.oryxeditor.server.XFormsImportServlet
-		</servlet-class>
-	</servlet>
 	<servlet-mapping>
 		<servlet-name>XFormsImportServlet</servlet-name>
 		<url-pattern>/xformsimport</url-pattern>
 	</servlet-mapping>
 	
-	<welcome-file-list>
-		<welcome-file>/server</welcome-file>
-	</welcome-file-list>
+	
 
 	<jsp-config>
 		<taglib>
@@ -287,6 +287,12 @@
 		</taglib>
 	</jsp-config>
 
+	<!-- the number within the session-timout element must be expressed in
+		minutes. it is now 24 hours. -->
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
+	
 	<!--
 		jBoss' default mapping is to "image/svg", which causes the client not to
 		parse the SVG content as XML. However, the Oryx Editor client relies on
@@ -312,4 +318,7 @@
 	    <mime-type>image/x-icon</mime-type>
 	</mime-mapping>
 
+	<welcome-file-list>
+		<welcome-file>/server</welcome-file>
+	</welcome-file-list>
 </web-app>

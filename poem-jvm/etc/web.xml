@@ -5,12 +5,6 @@
  id="oryx" version="2.4">
     
     <display-name>PoEM</display-name>
-    
-	<!-- the number within the session-timout element must be expressed in
-		minutes. it is now 24 hours. -->
-	<session-config>
-		<session-timeout>1440</session-timeout>
-	</session-config>
 	
     <servlet>
         <display-name>Oryx Dispatcher</display-name>
@@ -30,6 +24,12 @@
         <servlet-name>Dispatcher</servlet-name>
         <url-pattern>/poem/*</url-pattern>
     </servlet-mapping>
+	
+	<!-- the number within the session-timout element must be expressed in
+		minutes. it is now 24 hours. -->
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
 	
 	<mime-mapping>
 		<extension>svg</extension>
