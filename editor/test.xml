@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="Oryx Editor Test">
+<project name="Oryx Editor Tests">
+	<!-- Load additional properties -->
+    <property file="../test.properties"/>
 	
 	<property name="url" value="${localWorkingDirectoryUrl}/editor/test/jsunit/testRunner.html?testPage=${localWorkingDirectoryUrl}/editor/test/client/TestSuite.html"/>
 	<property name="resourceBase" value="editor/test/jsunit"/>
+	
+	<import file="build.xml" />
 	
 	<!-- Import ANT build script of jsUnit -->
 	<import file="test/jsunit/build.xml" />
@@ -11,4 +15,103 @@
 	
 	<!-- <target name="test.editor.client.distributed" depends="distributed_test" /> -->
 	
+	
+	<!-- SERVER TESTS -->
+	<path id="test.editor.server.classpath">
+        <fileset dir="${editor-src-root}/lib">
+            <include name="*.jar"/>
+            <exclude name="deprecated/**"/>
+        </fileset>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+	
+	<taskdef resource="cactus.tasks"
+     classpathref="test.editor.server.classpath"/>
+	
+	<!-- Compiles the test sources for the editor-->
+    <target name="test.editor.server.prepare.compile" depends="build-editor">
+        <mkdir dir="build/editor/test/server"/>
+        <javac destdir="build/editor/test/server"
+         debug="on" optimize="off"
+         deprecation="off">
+            <src path="editor/test/server"/>
+            <classpath>
+                <fileset dir="${editor-src-root}/lib">
+                    <include name="*.jar"/>
+                    <exclude name="deprecated/**"/>
+                </fileset>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <pathelement location="build/editor/test/server"/>
+                <pathelement location="build/editor/classes"/>
+            </classpath>
+        </javac>
+    </target>
+	
+	<!-- Copy libraries to ant lib folder -->
+    <target name="test.prepare.cactus.ant">
+        <copy file="lib/xercesImpl-2.8.1.jar" todir="${ant.home}/lib"/>
+    </target>
+    
+    
+    <!-- Prepare editor server test cases -->
+    
+    <!-- Cactify the web-app archive. ATTENTION! oryx.war will be overwritten!-->
+    <target name="test.editor.server.prepare.cactifywar" depends="test.prepare.cactus.ant, test.editor.server.prepare.compile">
+        
+        <cactifywar srcfile="${target-dir}/oryx.war"
+         destfile="${target-dir}/oryxcactified.war">
+            <classes dir="build/editor/test/server"/>
+            <lib file="lib/httpunit-1.6.jar"/>
+        </cactifywar>
+        
+		<delete file="${target-dir}/oryx.war"/>
+		<move file="${target-dir}/oryxcactified.war" tofile="${target-dir}/oryx.war"/>
+    </target>
+    
+    <!-- Run editor server tests -->
+    <target name="test.editor.server.cactus.run" depends="test.editor.server.prepare.cactifywar">
+        <cactus warfile="${target-dir}/oryx.war"
+         printsummary="withOutAndErr">
+            <classpath>
+                <path refid="test.editor.server.classpath"/>
+                <pathelement location="build/editor/test/server"/>
+                <pathelement location="build/editor/classes"/>
+            </classpath>
+            <containerset>
+                <tomcat5x dir="${tomcat.home}" port="8080"/>
+            </containerset>
+            <formatter type="xml"/>
+            <batchtest>
+                <fileset dir="build/editor/test/server">
+                    <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+        </cactus>
+    </target>
+	
+	<target name="test.editor.server.junit.run" depends="test.editor.server.prepare.compile">
+        <junit printsummary="withOutAndErr" haltonfailure="no">
+            <classpath>
+                <path refid="test.editor.server.classpath"/>
+                <pathelement location="build/editor/test/server"/>
+                <pathelement location="build/editor/classes"/>
+            </classpath>
+            
+            <formatter type="xml"/>
+            
+            <batchtest>
+                <fileset dir="build/editor/test/server">
+                    <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        
+    </target>
+	
+	<target name="test.editor.server.run.all" depends="test.editor.server.junit.run"/>
+
 </project>

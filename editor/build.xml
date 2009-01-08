@@ -119,6 +119,9 @@
                     <include name="*.jar"/>
                     <exclude name="deprecated/**" />
                 </fileset>
+				<fileset dir="lib">
+					<include name="*.jar" />
+				</fileset>
             </classpath>
         </javac>
     </target>

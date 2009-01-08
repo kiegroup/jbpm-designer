@@ -15,7 +15,7 @@ import de.hpi.ibpmn2bpmn.IBPMN2BPMNConverter;
 /**
  * @author Gero.Decker
  */
-public class EventBasedGatewayTest extends AbstractIBPMNTest {
+public class TestEventBasedGateway extends AbstractIBPMNTest {
 
 	public void testSimple1() throws Exception {
 		IBPMNFactory factory = new IBPMNFactory();
@@ -59,7 +59,8 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 	}
 
 	public void testDuplication1() throws Exception {
-		IBPMNFactory factory = new IBPMNFactory();
+		fail("DOES NOT WORK");
+		/*IBPMNFactory factory = new IBPMNFactory();
 		IBPMNDiagram ibpmn = factory.createIBPMNDiagram();
 		
 		Pool p1 = (Pool)addNode(factory.createPool(), "p1", ibpmn);
@@ -103,12 +104,13 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 		p = (Pool)bpmn.getChildNodes().get(1);
 		l = (Lane)p.getChildNodes().get(0);
 		assertEquals(8, l.getChildNodes().size());
-		assertTrue(l.getChildNodes().get(1) instanceof XOREventBasedGateway);
+		assertTrue(l.getChildNodes().get(1) instanceof XOREventBasedGateway);*/
 	}
 
 	// Example taken from CBP 2007 paper
 	public void testSequentialization1() throws Exception {
-		IBPMNFactory factory = new IBPMNFactory();
+		fail("DOES NOT WORK");
+		/*IBPMNFactory factory = new IBPMNFactory();
 		IBPMNDiagram ibpmn = factory.createIBPMNDiagram();
 		
 		Pool A = (Pool)addNode(factory.createPool(), "A", ibpmn);
@@ -164,7 +166,7 @@ public class EventBasedGatewayTest extends AbstractIBPMNTest {
 //		p = (Pool)bpmn.getChildNodes().get(1);
 //		l = (Lane)p.getChildNodes().get(0);
 //		assertEquals(8, l.getChildNodes().size());
-//		assertTrue(l.getChildNodes().get(1) instanceof XOREventBasedGateway);
+//		assertTrue(l.getChildNodes().get(1) instanceof XOREventBasedGateway);*/
 	}
 
 }

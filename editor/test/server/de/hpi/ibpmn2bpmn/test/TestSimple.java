@@ -14,7 +14,7 @@ import de.hpi.ibpmn2bpmn.IBPMN2BPMNConverter;
 /**
  * @author Gero.Decker
  */
-public class SimpleTest extends AbstractIBPMNTest {
+public class TestSimple extends AbstractIBPMNTest {
 	
 	public void testSimple1() throws Exception {
 		IBPMNFactory factory = new IBPMNFactory();

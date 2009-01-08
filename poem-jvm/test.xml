@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Oryx Backend Tests">
+	<!-- Load additional properties -->
+    <property file="../test.properties"/>
+	
+	<import file="build.xml" />
+	
+	
+	<!-- SERVER TESTS -->
+	<path id="test.backend.server.classpath">
+        <fileset dir="${server-root-dir}/lib">
+            <include name="*.jar"/>
+            <exclude name="deprecated/**"/>
+        </fileset>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+	
+	<taskdef resource="cactus.tasks"
+     classpathref="test.backend.server.classpath"/>
+
+	<!-- Copy libraries to ant lib folder -->
+    <target name="test.prepare.cactus.ant">
+        <copy file="lib/xercesImpl-2.8.1.jar" todir="${ant.home}/lib"/>
+    </target>
+    
+    
+    <!-- Prepare backend server test cases -->
+    
+    <!-- Compiles the test sources for the backend-->
+    <target name="test.backend.server.prepare.compile" depends="build-backend">
+        <mkdir dir="build/poem-jvm/test/java"/>
+        <javac destdir="build/poem-jvm/test/java"
+         debug="on" optimize="off"
+         deprecation="off">
+            <src path="poem-jvm/test/java"/>
+            <classpath>
+                <fileset dir="${server-root-dir}/lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <pathelement location="build/poem-jvm/test/java"/>
+                <pathelement location="build/poem-jvm/bin"/>
+            </classpath>
+        </javac>
+    </target>
+    
+    <!-- Cactify the web-app archive. ATTENTION! backend.war will be overwritten! -->
+    <target name="test.backend.server.prepare.cactifywar" depends="test.prepare.cactus.ant, test.backend.server.prepare.compile">
+        
+        <cactifywar srcfile="${target-dir}/backend.war"
+         destfile="${target-dir}/backendcactified.war">
+            <classes dir="build/editor/test/server"/>
+            <lib file="lib/httpunit-1.6.jar"/>
+        </cactifywar>
+		
+        <delete file="${target-dir}/backend.war"/>
+		<move file="${target-dir}/backendcactified.war" tofile="${target-dir}/backend.war"/>
+    </target>
+	
+	
+	<!-- Run backend server tests -->
+    <target name="test.backend.server.cactus.run" depends="test.backend.server.prepare.cactifywar">
+        <cactus warfile="${target-dir}/backend.war"
+         printsummary="withOutAndErr">
+            <classpath>
+                <path refid="test.backend.server.classpath"/>
+                <pathelement location="build/poem-jvm/test/java"/>
+                <pathelement location="build/poem-jvm/bin"/>
+            </classpath>
+            <containerset>
+                <tomcat5x dir="${tomcat.home}" port="8080"/>
+            </containerset>
+            <formatter type="xml"/>
+            <batchtest>
+                <fileset dir="build/poem-jvm/test/java">
+                    <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+        </cactus>
+    </target>
+    
+    
+    <target name="test.backend.server.junit.run" depends="test.backend.server.prepare.compile">
+        <junit printsummary="withOutAndErr" haltonfailure="no">
+            <classpath>
+                <path refid="test.backend.server.classpath"/>
+                <pathelement location="build/poem-jvm/test/java"/>
+                <pathelement location="build/poem-jvm/bin"/>
+            </classpath>
+            
+            <formatter type="xml"/>
+            
+            <batchtest>
+                <fileset dir="build/poem-jvm/test/java">
+                    <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        
+    </target>
+	
+	<target name="test.backend.server.run.all" depends="test.backend.server.junit.run"/>
+    
+</project>

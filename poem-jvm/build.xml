@@ -27,6 +27,9 @@
 				<fileset dir="${lib-dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="lib">
+					<include name="*.jar" />
+				</fileset>
 			</classpath>
 		</javac>
 	</target>
@@ -58,6 +61,7 @@
 		<!-- Add Hibernate xml files to the binary classes dir -->
 		<copy file="${config-dir}/hibernate.cfg.xml" todir="${bin-dir}" />
 		<copy file="${data-dir}/Access.hbm.xml" todir="${bin-dir}" />
+		<mkdir dir="${target-dir}" />
 		<war destfile="${target-dir}/backend.war"  
 			webxml="${config-dir}/web.xml" 
 			update="true">

@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Oryx Main Build Script">
-	<!-- Load additional properties -->
-    <property file="build.properties" />
+    <!-- Load additional properties -->
+    <property file="build.properties"/>
     
-	<!-- Import ANT build scripts of sub projects -->
-	<import file="editor/build.xml" />
-	<import file="poem-jvm/build.xml" />
-	<import file="stick/build.xml" />
-	
-
+    <!-- Import ANT build scripts of sub projects -->
+    <import file="editor/build.xml"/>
+    <import file="poem-jvm/build.xml"/>
+    <import file="stick/build.xml"/>
+    
+    
     <!-- (RE)BUILD EDITOR AND BACKEND -->
-	<target name="build-all" depends="build-editor, build-backend" />
-	
-    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" />
-	
-	
-	<!-- CLEAN EDITOR AND BACKEND -->
-	<target name="clean-all" depends="clean-editor, clean-backend" />
-	
-	
-	<!-- DEPLOYMENT TARGETS (NO BUILD OF PROJECTS!) -->
-	
-	<!-- (UN)DEPLOY EDITOR AND BACKEND -->
-    <target name="deploy-all" depends="deploy-editor, deploy-backend" /> 
-
-    <target name="undeploy-all" depends="undeploy-editor, undeploy-backend" /> 
-	
-	
-	<!-- (UN)DEPLOY EDITOR -->
-	<target name="deploy-editor">
-        <copy file="${target-dir}/oryx.war" todir="${deploymentdir}" />
+    <target name="build-all" depends="build-editor, build-backend"/>
+    
+    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend"/>
+    
+    
+    <!-- CLEAN EDITOR AND BACKEND -->
+    <target name="clean-all">
+    	<delete dir="build"/>
+		<delete dir="dist"/>
+	</target>
+    
+    
+    <!-- DEPLOYMENT TARGETS (NO BUILD OF PROJECTS!) -->
+    
+    <!-- (UN)DEPLOY EDITOR AND BACKEND -->
+    <target name="deploy-all" depends="deploy-editor, deploy-backend"/>
+    
+    <target name="undeploy-all" depends="undeploy-editor, undeploy-backend"/>
+    
+    
+    <!-- (UN)DEPLOY EDITOR -->
+    <target name="deploy-editor">
+        <copy file="${target-dir}/oryx.war" todir="${deploymentdir}"/>
     </target>
-	
-	<target name="undeploy-editor">
-        <delete file="${deploymentdir}/oryx.war" />
+    
+    <target name="undeploy-editor">
+        <delete file="${deploymentdir}/oryx.war"/>
     </target>
-
+    
     <target name="deploy-stencilsets">
         <copy todir='${deploymentdir}/oryx/stencilsets'>
             <fileset dir="${editor-src-root}/data/stencilsets"/>
@@ -44,15 +47,15 @@
             Copied stencilsets into deployment destination
         </echo>
     </target>
-
     
-	<!-- (UN)DEPLOY REPOSITORY -->
-	<target name="deploy-backend">
-        <copy file="${target-dir}/backend.war" tofile="${deploymentdir}/backend.war" />
+    
+    <!-- (UN)DEPLOY REPOSITORY -->
+    <target name="deploy-backend">
+        <copy file="${target-dir}/backend.war" tofile="${deploymentdir}/backend.war"/>
     </target>
-
+    
     <target name="undeploy-backend">
-        <delete file="${deploymentdir}/backend.war" />
+        <delete file="${deploymentdir}/backend.war"/>
     </target>
-	
+    
 </project>
