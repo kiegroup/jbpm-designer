@@ -336,7 +336,9 @@ var ERDF = {
 	
 	serialize: function(literal) {
 		
-		if(literal.constructor == String) {
+		if(!literal){
+			return "";
+		}else if(literal.constructor == String) {
 			return literal;
 		} else if(literal.constructor == Boolean) {
 			return literal? 'true':'false';
