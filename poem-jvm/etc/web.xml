@@ -6,6 +6,41 @@
     
     <display-name>PoEM</display-name>
 	
+	<!-- Filter for SAML Single-Sign On Support -->
+	<!--<filter>
+        <filter-name>
+            JICFilter
+        </filter-name>
+        <filter-class>
+            de.fraunhofer.fokus.jic.filter.JICFilter
+        </filter-class>
+        <init-param>
+            <param-name>
+                request_param_name
+            </param-name>
+            <param-value>
+                xmltoken
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>
+                userid_request_attr
+            </param-name>
+            <param-value>
+                userdata
+            </param-value>
+        </init-param>
+    </filter>
+	
+    <filter-mapping>
+        <filter-name>
+            JICFilter
+        </filter-name>
+        <url-pattern>
+            /poem/saml
+        </url-pattern>
+    </filter-mapping>-->
+	
     <servlet>
         <display-name>Oryx Dispatcher</display-name>
         <servlet-name>Dispatcher</servlet-name>
