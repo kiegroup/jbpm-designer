@@ -17,5 +17,13 @@ public abstract class IntermediateEvent extends Event {
 		}
 		this.activity = activity;
 	}
+	
+	/**
+	 * 
+	 * @return true if event is attached to an activity
+	 */
+	public boolean isAttached(){
+		return activity != null;
+	}
 
 }

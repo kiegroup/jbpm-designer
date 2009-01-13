@@ -147,7 +147,7 @@ public class DominatorFinder {
 	protected Node getStartNode(){
 		if(startNode == null){
 			for(Node n : diag.getChildNodes()){
-				if(n.getIncomingEdges().size() == 0){
+				if( n.getIncomingSequenceFlows().size() == 0){
 					startNode = n;
 					return startNode;
 				}
@@ -160,7 +160,7 @@ public class DominatorFinder {
 	protected Node getEndNode(){
 		if(endNode == null){
 			for(Node n : diag.getChildNodes()){
-				if(n.getOutgoingEdges().size() == 0){
+				if(n.getOutgoingSequenceFlows().size() == 0){
 					endNode = n;
 					return endNode;
 				}

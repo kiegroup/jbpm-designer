@@ -11,6 +11,7 @@ import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.Event;
 import de.hpi.bpmn.Gateway;
+import de.hpi.bpmn.IntermediateCompensationEvent;
 import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.Node;
@@ -54,7 +55,7 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 //	protected static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "An intermediate event must have incoming sequence flow.";
 	protected static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "Start events must not have incoming sequence flow.";
 	protected static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "Attached intermediate events must not have incoming sequence flow.";
-	protected static final String ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "Attached intermediate events must have outgoing sequence flow.";
+	protected static final String ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "Attached intermediate events must have exactly one outgoing sequence flow.";
 	protected static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "End events must not have outgoing sequence flow.";
 	protected static final String EVENTBASEDGATEWAY_BADCONTINUATION = "Event-based gateways must not be followed by gateways or subprocesses.";
 
@@ -166,11 +167,8 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 			}
 			
 			//attached intermediate events
-			if (node instanceof IntermediateEvent && ((IntermediateEvent)node).getActivity() != null ) {
-				if(hasIncomingControlFlow(node))
-					addError(node, ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW);
-				if(!hasOutgoingControlFlow(node))
-					addError(node, ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW);
+			if (node instanceof IntermediateEvent) {
+				checkIntermediateEvent((IntermediateEvent)node);
 			}
 			
 			if (node instanceof XOREventBasedGateway) {
@@ -189,19 +187,22 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 		
 		return true;
 	}
+	
+	protected void checkIntermediateEvent(IntermediateEvent event){
+		if(event.isAttached()){
+			if(hasIncomingControlFlow(event))
+				addError(event, ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW);
+			if(event.getOutgoingSequenceFlows().size() != 1 && !(event instanceof IntermediateCompensationEvent))
+				addError(event, ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW);
+		}
+	}
 
 	protected boolean hasIncomingControlFlow(Node node) {
-		for (Edge edge: node.getIncomingEdges())
-			if (edge instanceof SequenceFlow)
-				return true;
-		return false;
+		return node.getIncomingSequenceFlows().size() > 0;
 	}
 
 	protected boolean hasOutgoingControlFlow(Node node) {
-		for (Edge edge: node.getOutgoingEdges())
-			if (edge instanceof SequenceFlow)
-				return true;
-		return false;
+		return node.getOutgoingSequenceFlows().size() > 0;
 	}
 	
 	protected void checkEventBasedGateway(XOREventBasedGateway gateway) {
