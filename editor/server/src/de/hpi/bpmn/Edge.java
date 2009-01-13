@@ -52,5 +52,13 @@ public abstract class Edge extends DiagramObject {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	/**
+	 * Returns true if source and target node are of same pool
+	 */
+	public boolean sourceAndTargetContainedInSamePool(){
+	    return !(this.getSource() instanceof Node && 
+	    		this.getTarget() instanceof Node && 
+	    		((Node)this.getTarget()).getPool() != ((Node)this.getSource()).getPool());
+	}
 }

@@ -59,7 +59,20 @@ public abstract class Node extends DiagramObject {
 		this.bounds = bounds;
 	}
 
-
+	/**
+	 * Searches recursively all ancestors for a pool
+	 * @return pool or null
+	 */
+    public Pool getPool(){
+    	if(this instanceof Pool){
+    		return (Pool)this;
+    	} else if(this.getParent() instanceof Node) {
+    		return ((Node)this.getParent()).getPool();
+    	} else {
+    		return null;
+    	}
+    }
+	
 	public Node getCopy() {
 		try {
 			Node newnode = (Node)this.getClass().newInstance();
