@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>SVGShape Tests</title>
+<link rel="stylesheet" type="text/css" href="../jsunit/css/jsUnitStyle.css">
+<script language="JavaScript" type="text/javascript" src="../jsunit/app/jsUnitCore.js"></script>
+<script language="JavaScript" type="text/javascript" >
+	var Clazz = function() {};
+	Clazz.prototype.construct = function() {};
+	Clazz.extend = function(def) {
+	    var classDef = function() {
+	        if (arguments[0] !== Clazz) { this.construct.apply(this, arguments); }
+	    };
+	    
+	    var proto = new this(Clazz);
+	    var superClass = this.prototype;
+	    
+	    for (var n in def) {
+	        var item = def[n];                        
+	        if (item instanceof Function) item.$ = superClass;
+	        proto[n] = item;
+	    }
+	
+	    classDef.prototype = proto;
+	    
+	    //Give this new class the same static extend method    
+	    classDef.extend = this.extend;        
+	    return classDef;
+	};
+	
+// mocks
+// mocking ORYX.Editor object
+if(!ORYX) {var ORYX = {};}
+if(!ORYX.Editor) {ORYX.Editor = {};}
+
+// stubs
+
+// stubbing ORYX.Editor.checkClassType
+
+ORYX.Editor.checkClassType = function( classInst, classType ) {
+		return classInst instanceof classType
+}
+
+
+
+</script>
+
+<script language="JavaScript" type="text/javascript" src="../../client/scripts/Core/SVG/svgshape.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+
+/**
+ * builds up testSVGElements
+ */
+var testSVGRectElement = null;
+function setUp(){
+	testSVGRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+	testSVGRectElement.setAttributeNS(null, "x", 1);
+	testSVGRectElement.setAttributeNS(null, "y", 2);
+	testSVGRectElement.setAttributeNS(null, "height", 100);
+	testSVGRectElement.setAttributeNS(null, "width", 100);
+}
+
+/**
+ * Resets the testSVGElements
+ */
+function tearDown() {
+	testSVGRectElement = null;
+}
+
+/**
+ * Tests wheater the a full specified SVG can be source of a new SVGShpe object.
+ */
+function testNewSVGRectGood() {
+
+	try {
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement); 
+		fail("Generate a new SVGShape object should fail here.")
+	} catch(e) {
+		if(!(e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+/**
+ * The x-attribute is missing. So init methode sould throw an exception.
+ */
+function testNewSVGRectBadMissingXAttribute() {
+
+	try {
+		testSVGRectElement.removeAttributeNS(null, "x")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement); 
+		fail("Generate a new SVGShape object should fail yet.")
+	} catch(e) {
+		if((e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+/**
+ * The y-attribute is missing. So init methode sould throw an exception.
+ */
+function testNewSVGRectBadMissingYAttribute() {
+
+	try {
+		testSVGRectElement.removeAttributeNS(null, "y")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement); 
+		fail("Generate a new SVGShape object should fail yet.")
+	} catch(e) {
+		if((e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+/**
+ * The height-attribute is missing. So init methode sould throw an exception.
+ */
+function testNewSVGRectBadMissingHeightAttribute() {
+
+	try {
+		testSVGRectElement.removeAttributeNS(null, "height")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement); 
+		fail("Generate a new SVGShape object should fail yet.")
+	} catch(e) {
+		if((e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+/**
+ * The width-attribute is missing. So init methode sould throw an exception.
+ */
+function testNewSVGRectBadMissingWidthAttribute() {
+
+	try {
+		testSVGRectElement.removeAttributeNS(null, "width")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement); 
+		fail("Generate a new SVGShape object should fail yet.")
+	} catch(e) {
+		if((e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+
+</script>
+</head>
+
+<body>
+<h1 onclick="return setUp()">SVGShape Tests</h1>
+
+<p>This page contains tests for the SVGShape class</p>
+</body>
+</html>
