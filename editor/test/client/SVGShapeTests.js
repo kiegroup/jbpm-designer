@@ -11,43 +11,79 @@ ORYX.Editor.checkClassType = function( classInst, classType ) {
 		return classInst instanceof classType
 }
 
-var testSVGRectElement = null;
+//var testSVGRectElement = null;
+//var x = null;
+//var y = null;
+//var cy = null;
+//var cx = null;
+//var r = null;
+//var x1 = null;
+//var y1 = null;
+//var x2 = null;
+//var y2 = null;
+//var height = null;
+//var width = null
+//var ry = null;
+//var rx = null;
+//var points = null;
+//var lessPoints = null;
+
 
 /**
  * builds up testSVGElements
  */
 
 function setUp(){
+	
+	// attribute definitions
+	x = 1
+	y = 2
+	cy = 3
+	cx = 4
+	r = 5
+	rx = 10
+	ry = 11
+	x1 = 6 // lower than x2
+	y1 = 7 // lower than y2
+	x2 = 8
+	y2 = 9
+	height = 100
+	width = 101
+	pointsX = new Array(1,2,3)
+	pointsY = new Array(4,5,6) 
+	points = "" + pointsX[0] +","+pointsY[0]+" "+ pointsX[1] +","+pointsY[1]+" "+ pointsX[2] +","+pointsY[2]
+	lessPoints = "" + pointsX[0] +","+pointsY[0]+" "+ pointsX[1] +","+pointsY[1]
+	
 	// valid SVG-Rect-Element
 	
 	testSVGRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-	testSVGRectElement.setAttributeNS(null, "x", 1);
-	testSVGRectElement.setAttributeNS(null, "y", 2);
-	testSVGRectElement.setAttributeNS(null, "height", 100);
-	testSVGRectElement.setAttributeNS(null, "width", 100);
+	testSVGRectElement.setAttributeNS(null, "x", x);
+	testSVGRectElement.setAttributeNS(null, "y", y);
+	testSVGRectElement.setAttributeNS(null, "height", height);
+	testSVGRectElement.setAttributeNS(null, "width", width);
 	
 	// valid SVG-Circle-Element
 	
 	testSVGCircleElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-	testSVGCircleElement.setAttributeNS(null, "cx", 1);
-	testSVGCircleElement.setAttributeNS(null, "cy", 2);
-	testSVGCircleElement.setAttributeNS(null, "r", 100);
+	testSVGCircleElement.setAttributeNS(null, "cx", cx);
+	testSVGCircleElement.setAttributeNS(null, "cy", cy);
+	testSVGCircleElement.setAttributeNS(null, "r", r);
 	
 	// valid SVG-Ellipse-Element
 	
 	testSVGEllipseElement = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-	testSVGEllipseElement.setAttributeNS(null, "cx", 1);
-	testSVGEllipseElement.setAttributeNS(null, "cy", 2);
-	testSVGEllipseElement.setAttributeNS(null, "ry", 100);
-	testSVGEllipseElement.setAttributeNS(null, "rx", 100);
+	testSVGEllipseElement.setAttributeNS(null, "cx", cx);
+	testSVGEllipseElement.setAttributeNS(null, "cy", cy);
+	testSVGEllipseElement.setAttributeNS(null, "ry", ry);
+	testSVGEllipseElement.setAttributeNS(null, "rx", rx);
 	
 	// valid SVG-Line-Element
 	
 	testSVGLineElement = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-	testSVGLineElement.setAttributeNS(null, "x1", 1);
-	testSVGLineElement.setAttributeNS(null, "y1", 2);
-	testSVGLineElement.setAttributeNS(null, "x2", 100);
-	testSVGLineElement.setAttributeNS(null, "y2", 100);
+	testSVGLineElement.setAttributeNS(null, "x1", x1);
+	testSVGLineElement.setAttributeNS(null, "y1", y1);
+	testSVGLineElement.setAttributeNS(null, "x2", x2);
+	testSVGLineElement.setAttributeNS(null, "y2", y2);
 	
 	// valid SVG-Line-Element (only a point)
 	
@@ -60,20 +96,20 @@ function setUp(){
 	// valid SVG-PolyLine-Element
 	
 	testSVGPolylineElement = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-	testSVGPolylineElement.setAttributeNS(null, "points", "0,0 445,5 4324, 234");
+	testSVGPolylineElement.setAttributeNS(null, "points", points);
 	
 	// valid SVG-Polygon-Element
 	
 	testSVGPolygonElement = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-	testSVGPolygonElement.setAttributeNS(null, "points", "789,45 445,5 4324, 234");
+	testSVGPolygonElement.setAttributeNS(null, "points", points);
 	
 	// valid SVG-Image-Element
 	
 	testSVGImageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-	testSVGImageElement.setAttributeNS(null, "x", 1);
-	testSVGImageElement.setAttributeNS(null, "y", 2);
-	testSVGImageElement.setAttributeNS(null, "height", 100);
-	testSVGImageElement.setAttributeNS(null, "width", 100);
+	testSVGImageElement.setAttributeNS(null, "x", x);
+	testSVGImageElement.setAttributeNS(null, "y", y);
+	testSVGImageElement.setAttributeNS(null, "height", height);
+	testSVGImageElement.setAttributeNS(null, "width", width);
 	
 	// XML-Element, but no SVG
 	
@@ -95,8 +131,11 @@ function tearDown() {
 	testNonsenseElement = null;
 }
 
+
+//  Good tests for rectangle
+
 /**
- * Tests wheater the a full specified SVG can be source of a new SVGShpe object.
+ * Tests whether the a full specified SVG can be source of a new SVGShpe object.
  */
 function testNewSVGRectGood() {
 
@@ -119,6 +158,33 @@ function testNewSVGRectGoodType() {
 	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement); 
 	assertEquals('type check', testSVGShape.type, 'Rect' )
 }
+
+/**
+ * This test checks whether the attribute values of a rectangle are parsed correctly.
+ */
+
+function testNewSVGRectGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, x)
+	assertEquals('yAttr value check', testSVGShape.oldY, y)
+	assertEquals('heightAttr value check', testSVGShape.height, height)
+	assertEquals('widthAttr value check', testSVGShape.width, width)
+}
+
+/**
+ * This test checks whether the oldXXX attribute values of a rectangle are equal.
+ */
+
+function testNewSVGRectGoodOldXXXValuesEqualXXXValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectElement);
+	assertEquals('xAttr value equal check', testSVGShape.oldX, testSVGShape.x)
+	assertEquals('yAttr value equal check', testSVGShape.oldY, testSVGShape.y)
+	assertEquals('heightAttr value equal check', testSVGShape.oldHeight, testSVGShape.height)
+	assertEquals('xAttr value equal check', testSVGShape.oldWidth, testSVGShape.width)
+}
+
+
+//  Good tests for ellipse
 
 /**
  * Tests whether the a full specified SVGEllipse can be source of a new SVGShpe object.
@@ -145,6 +211,33 @@ function testNewSVGEllipseGoodType() {
 	assertEquals('type check', testSVGShape.type, 'Ellipse' )
 }
 
+/**
+ * This test checks whether the attribute values of a ellipse are parsed correctly.
+ */
+
+function testNewSVGEllipseGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGEllipseElement);
+	assertEquals('rAttr value check', testSVGShape.radius, r)
+	assertEquals('xAttr value check', testSVGShape.oldX, cx-rx)
+	assertEquals('yAttr value check', testSVGShape.oldY, cy-ry)
+	assertEquals('heightAttr value check', testSVGShape.oldHeight, 2*ry)
+	assertEquals('widthAttr value check', testSVGShape.oldWidth, 2*rx)
+}
+
+/**
+ * This test checks whether the oldXXX attribute values of a ellipse are equal.
+ */
+
+function testNewSVGEllipseGoodOldXXXValuesEqualXXXValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGEllipseElement);
+	assertEquals('xAttr value equal check', testSVGShape.oldX, testSVGShape.x)
+	assertEquals('yAttr value equal check', testSVGShape.oldY, testSVGShape.y)
+	assertEquals('heightAttr value equal check', testSVGShape.oldHeight, testSVGShape.height)
+	assertEquals('xAttr value equal check', testSVGShape.oldWidth, testSVGShape.width)
+}
+
+
+//  Good tests for image
 
 /**
  * Tests wheater the a full specified SVG-Image-Element can be source of a new SVGShpe object.
@@ -162,6 +255,30 @@ function testNewSVGImageGood() {
 }
 
 /**
+ * This test checks whether the attribute values of a image are parsed correctly.
+ */
+
+function testNewSVGImageGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGImageElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, x)
+	assertEquals('yAttr value check', testSVGShape.oldY, y)
+	assertEquals('heightAttr value check', testSVGShape.oldHeight, height)
+	assertEquals('widthAttr value check', testSVGShape.oldWidth, width)
+}
+
+/**
+ * This test checks whether the oldXXX attribute values of a image are equal.
+ */
+
+function testNewSVGImageGoodOldXXXValuesEqualXXXValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGImageElement);
+	assertEquals('xAttr value equal check', testSVGShape.oldX, testSVGShape.x)
+	assertEquals('yAttr value equal check', testSVGShape.oldY, testSVGShape.y)
+	assertEquals('heightAttr value equal check', testSVGShape.oldHeight, testSVGShape.height)
+	assertEquals('xAttr value equal check', testSVGShape.oldWidth, testSVGShape.width)
+}
+
+/**
  * Checks whether the type of a SVGImageElement is recognized correctly.
  * It is expected, that the type property has the value 'Rect'
  */
@@ -170,6 +287,9 @@ function testNewSVGImageGoodType() {
 	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGImageElement); 
 	assertEquals('type check', testSVGShape.type, 'Rect' )
 }
+
+
+//  Good tests for circle
 
 /**
  * Tests whether the a full specified SVGCircleElement can be source of a new SVGShpe object.
@@ -195,6 +315,35 @@ function testNewSVGCircleGoodType() {
 	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGCircleElement); 
 	assertEquals('type check', testSVGShape.type, 'Circle' )
 }
+
+
+/**
+ * This test checks whether the attribute values of a cricle are parsed correctly.
+ */
+
+function testNewSVGCircleGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGCircleElement);
+	assertEquals('rAttr value check', testSVGShape.radius, r)
+	assertEquals('xAttr value check', testSVGShape.oldX, cx-r)
+	assertEquals('yAttr value check', testSVGShape.oldY, cy-r)
+	assertEquals('heightAttr value check', testSVGShape.height, 2*r)
+	assertEquals('widthAttr value check', testSVGShape.width, 2*r)
+}
+
+/**
+ * This test checks whether the oldXXX attribute values of a circle are equal.
+ */
+
+function testNewSVGCircleGoodOldXXXValuesEqualXXXValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGCircleElement);
+	assertEquals('xAttr value equal check', testSVGShape.oldX, testSVGShape.x)
+	assertEquals('yAttr value equal check', testSVGShape.oldY, testSVGShape.y)
+	assertEquals('heightAttr value equal check', testSVGShape.oldHeight, testSVGShape.height)
+	assertEquals('xAttr value equal check', testSVGShape.oldWidth, testSVGShape.width)
+}
+
+
+//  Good tests for line
 
 /**
  * Tests whether the a full specified SVGLineElement can be source of a new SVGShpe object.
@@ -222,6 +371,30 @@ function testNewSVGLineGoodType() {
 }
 
 /**
+ * This test checks whether the attribute values of a line are parsed correctly.
+ */
+
+function testNewSVGLineGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, x1)
+	assertEquals('yAttr value check', testSVGShape.oldY, y1)
+	assertEquals('heightAttr value check', testSVGShape.height, x2-x1 )
+	assertEquals('widthAttr value check', testSVGShape.width, y2-y1)
+}
+
+/**
+ * This test checks whether the oldXXX attribute values of a line are equal.
+ */
+
+function testNewSVGLineGoodOldXXXValuesEqualXXXValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement);
+	assertEquals('xAttr value equal check', testSVGShape.oldX, testSVGShape.x)
+	assertEquals('yAttr value equal check', testSVGShape.oldY, testSVGShape.y)
+	assertEquals('heightAttr value equal check', testSVGShape.oldHeight, testSVGShape.height)
+	assertEquals('xAttr value equal check', testSVGShape.oldWidth, testSVGShape.width)
+}
+
+/**
  * Tests whether the a full specified SVGLineElement can be source of a new SVGShpe object. But the line is actually only a point.
  */
 function testNewNullSVGLineGood() {
@@ -245,6 +418,9 @@ function testNewNullSVGLineGoodType() {
 	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
 	assertEquals('type check', testSVGShape.type, 'Line' )
 }
+
+
+// Good tests for polyline/polygon
 
 /**
  * Tests whether the a full specified SVGPolylineElement can be source of a new SVGShpe object.
@@ -745,7 +921,7 @@ function testNewSVGLineBadMissingY1Attribute() {
 }
 
 /**
- * The x2-attribute is missing. So init methode sould throw an exception.
+ * The x2-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGLineBadMissingX2Attribute() {
 
@@ -845,13 +1021,13 @@ function testNewSVGLineBadY2AttributeValueType() {
 // bad tests for Polyline/Polygon
 
 /**
- * The x1-attribute is missing. So init method should throw an exception.
+ * The points-attribute is missing. So init method should throw an exception.
  */
-function testNewSVGLineBadMissingX1Attribute() {
+function testNewSVGPolylineBadMissingPointsAttribute() {
 
 	try {
-		testSVGLineElement.removeAttributeNS(null, "x1")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
+		testSVGPolyline.removeAttributeNS(null, "points")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolylineElement); 
 		fail("Generate a new SVGShape object should fail yet.")
 	} catch(e) {
 		if((e instanceof JsUnitException)){
@@ -861,13 +1037,13 @@ function testNewSVGLineBadMissingX1Attribute() {
 }
 
 /**
- * The y1-attribute is missing. So init method should throw an exception.
+ * The points-attribute is missing. So init method should throw an exception.
  */
-function testNewSVGLineBadMissingY1Attribute() {
+function testNewSVGPolygonBadMissingPointsAttribute() {
 
 	try {
-		testSVGLineElement.removeAttributeNS(null, "y1")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
+		testSVGPolylgon.removeAttributeNS(null, "points")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolygonElement); 
 		fail("Generate a new SVGShape object should fail yet.")
 	} catch(e) {
 		if((e instanceof JsUnitException)){
@@ -877,13 +1053,13 @@ function testNewSVGLineBadMissingY1Attribute() {
 }
 
 /**
- * The x2-attribute is missing. So init method should throw an exception.
+ * The points-attribute value has a wrong type. So init method should throw an exception.
  */
-function testNewSVGPolylineBadMissingAttribute() {
+function testNewSVGPolylineBadPointsAttributeValueType() {
 
 	try {
-		testSVGLineElement.removeAttributeNS(null, "x2")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
+		testSVGPolylineElement.setAttributeNS(null, "points", "a?,4 uz,?= 78,9r")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolylineElement); 
 		fail("Generate a new SVGShape object should fail yet.")
 	} catch(e) {
 		if((e instanceof JsUnitException)){
@@ -893,78 +1069,13 @@ function testNewSVGPolylineBadMissingAttribute() {
 }
 
 /**
- * The y2-attribute is missing. So init method should throw an exception.
+ * The delivered Polygon only consists of tow points. So init method should throw an exception.
  */
-function testNewSVGLineBadMissingY2Attribute() {
+function testNewSVGPolygonBadTooLessPoints() {
 
 	try {
-		testSVGLineElement.removeAttributeNS(null, "y2")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
-		fail("Generate a new SVGShape object should fail yet.")
-	} catch(e) {
-		if((e instanceof JsUnitException)){
-			throw e;
-		}
-	}	
-}
-
-
-/**
- * The x1-attribute value has a wrong type. So init methode should throw an exception.
- */
-function testNewSVGLineBadX1AttributeValueType() {
-
-	try {
-		testSVGLineElement.setAttributeNS(null, "x1", "a?")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
-		fail("Generate a new SVGShape object should fail yet.")
-	} catch(e) {
-		if((e instanceof JsUnitException)){
-			throw e;
-		}
-	}	
-}
-
-/**
- * The y1-attribute value has a wrong type. So init methode should throw an exception.
- */
-function testNewSVGLineBadY1AttributeValueType() {
-
-	try {
-		testSVGLineElement.setAttributeNS(null, "y1", "a?")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
-		fail("Generate a new SVGShape object should fail yet.")
-	} catch(e) {
-		if((e instanceof JsUnitException)){
-			throw e;
-		}
-	}	
-}
-
-/**
- * The x2-attribute value has a wrong type. So init methode should throw an exception.
- */
-function testNewSVGLineBadX1AttributeValueType() {
-
-	try {
-		testSVGLineElement.setAttributeNS(null, "x2", "a?")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
-		fail("Generate a new SVGShape object should fail yet.")
-	} catch(e) {
-		if((e instanceof JsUnitException)){
-			throw e;
-		}
-	}	
-}
-
-/**
- * The y2-attribute value has a wrong type. So init methode should throw an exception.
- */
-function testNewSVGLineBadY2AttributeValueType() {
-
-	try {
-		testSVGLineElement.setAttributeNS(null, "y2", "a?")
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
+		testSVGPolygonElement.setAttributeNS(null, "points", "1,1 45,56")
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolylineElement); 
 		fail("Generate a new SVGShape object should fail yet.")
 	} catch(e) {
 		if((e instanceof JsUnitException)){
