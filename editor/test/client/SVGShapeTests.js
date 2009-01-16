@@ -217,7 +217,8 @@ function testNewSVGEllipseGoodType() {
 
 function testNewSVGEllipseGoodParsedValues() {
 	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGEllipseElement);
-	assertEquals('rAttr value check', testSVGShape.radius, r)
+	assertEquals('rxAttr value check', testSVGShape.radiusX, rx)
+	assertEquals('rxAttr value check', testSVGShape.radiusY, ry)
 	assertEquals('xAttr value check', testSVGShape.oldX, cx-rx)
 	assertEquals('yAttr value check', testSVGShape.oldY, cy-ry)
 	assertEquals('heightAttr value check', testSVGShape.oldHeight, 2*ry)
@@ -323,7 +324,7 @@ function testNewSVGCircleGoodType() {
 
 function testNewSVGCircleGoodParsedValues() {
 	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGCircleElement);
-	assertEquals('rAttr value check', testSVGShape.radius, r)
+	assertEquals('rAttr value check', testSVGShape.radiusX, r)
 	assertEquals('xAttr value check', testSVGShape.oldX, cx-r)
 	assertEquals('yAttr value check', testSVGShape.oldY, cy-r)
 	assertEquals('heightAttr value check', testSVGShape.height, 2*r)
