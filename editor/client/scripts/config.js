@@ -128,6 +128,8 @@ ORYX.CONFIG = {
 	EVENT_UNDO_EXECUTE:				"undo.execute",
 	EVENT_UNDO_ROLLBACK:			"undo.rollback",
 	
+	EVENT_SHOW_PROPERTYWINDOW:		"propertywindow.show",
+	
 	/* Selection Shapes Highlights */
 	SELECTION_HIGHLIGHT_SIZE:				5,
 	SELECTION_HIGHLIGHT_COLOR:				"#4444FF",
