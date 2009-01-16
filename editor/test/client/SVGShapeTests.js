@@ -121,7 +121,7 @@ function testNewSVGRectGoodType() {
 }
 
 /**
- * Tests wheater the a full specified SVGEllipse can be source of a new SVGShpe object.
+ * Tests whether the a full specified SVGEllipse can be source of a new SVGShpe object.
  */
 function testNewSVGEllipseGood() {
 
@@ -163,7 +163,7 @@ function testNewSVGImageGood() {
 
 /**
  * Checks whether the type of a SVGImageElement is recognized correctly.
- * It is expacted, that the type property has the value 'Rect'
+ * It is expected, that the type property has the value 'Rect'
  */
 function testNewSVGImageGoodType() {
 	
@@ -172,7 +172,7 @@ function testNewSVGImageGoodType() {
 }
 
 /**
- * Tests wheater the a full specified SVGCircleElement can be source of a new SVGShpe object.
+ * Tests whether the a full specified SVGCircleElement can be source of a new SVGShpe object.
  */
 function testNewSVGCircleGood() {
 
@@ -197,7 +197,7 @@ function testNewSVGCircleGoodType() {
 }
 
 /**
- * Tests wheater the a full specified SVGLineElement can be source of a new SVGShpe object.
+ * Tests whether the a full specified SVGLineElement can be source of a new SVGShpe object.
  */
 function testNewSVGLineGood() {
 
@@ -222,7 +222,7 @@ function testNewSVGLineGoodType() {
 }
 
 /**
- * Tests wheater the a full specified SVGLineElement can be source of a new SVGShpe object. But the line is actually only a point.
+ * Tests whether the a full specified SVGLineElement can be source of a new SVGShpe object. But the line is actually only a point.
  */
 function testNewNullSVGLineGood() {
 
@@ -247,7 +247,7 @@ function testNewNullSVGLineGoodType() {
 }
 
 /**
- * Tests wheater the a full specified SVGPolylineElement can be source of a new SVGShpe object.
+ * Tests whether the a full specified SVGPolylineElement can be source of a new SVGShpe object.
  */
 function testNewSVGPolylineGood() {
 
@@ -272,7 +272,7 @@ function testNewSVGPolylineGoodType() {
 }
 
 /**
- * Tests wheater the a full specified SVGPolygonElement can be source of a new SVGShpe object.
+ * Tests whether the a full specified SVGPolygonElement can be source of a new SVGShpe object.
  */
 function testNewSVGPolygonGood() {
 
@@ -298,10 +298,10 @@ function testNewSVGPolygonGoodType() {
 
 
 
-// bad tests for rectagle 
+// bad tests for rectangle 
 
 /**
- * The x-attribute is missing. So init methode sould throw an exception.
+ * The x-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGRectBadMissingXAttribute() {
 
@@ -317,7 +317,7 @@ function testNewSVGRectBadMissingXAttribute() {
 }
 
 /**
- * The y-attribute is missing. So init methode sould throw an exception.
+ * The y-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGRectBadMissingYAttribute() {
 
@@ -333,7 +333,7 @@ function testNewSVGRectBadMissingYAttribute() {
 }
 
 /**
- * The height-attribute is missing. So init methode sould throw an exception.
+ * The height-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGRectBadMissingHeightAttribute() {
 
@@ -349,7 +349,7 @@ function testNewSVGRectBadMissingHeightAttribute() {
 }
 
 /**
- * The width-attribute is missing. So init methode sould throw an exception.
+ * The width-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGRectBadMissingWidthAttribute() {
 
@@ -366,7 +366,7 @@ function testNewSVGRectBadMissingWidthAttribute() {
 
 /**
  * Tests what happens, if the delivered parameter to the constructor is no SVG-Element. 
- * It is expacted, that an error occurs.
+ * It is expected, that an error occurs.
  */
 function testNewSVGRectBadNoSVGElement() {
 
@@ -382,7 +382,7 @@ function testNewSVGRectBadNoSVGElement() {
 
 /**
  * Tests what happens, if the delivered parameter to the constructor is a nonsense object. 
- * It is expacted, that an error occurs.
+ * It is expected, that an error occurs.
  */
 function testNewSVGRectBadNonsenseElement() {
 
@@ -398,7 +398,7 @@ function testNewSVGRectBadNonsenseElement() {
 
 /**
  * Tests what happens, if the delivered parameter to the constructor is a nonsense object. 
- * It is expacted, that an error occurs.
+ * It is expected, that an error occurs.
  */
 function testNewSVGRectBadNonsenseElement() {
 
@@ -414,7 +414,7 @@ function testNewSVGRectBadNonsenseElement() {
 
 /**
  * Tests what happens, if no parameter is delivered to the constructor. 
- * It is expacted, that an error occurs.
+ * It is expected, that an error occurs.
  */
 function testNewSVGRectBadNoConstructorParameter() {
 
@@ -430,7 +430,7 @@ function testNewSVGRectBadNoConstructorParameter() {
 
 /**
  * Tests what happens, if to many parameter are delivered to the constructor. 
- * It is expacted, that an error occurs.
+ * It is expected, that an error occurs.
  */
 function testNewSVGRectBadToManyConstructorParameters() {
 
@@ -446,7 +446,7 @@ function testNewSVGRectBadToManyConstructorParameters() {
 
 /**
  * Tests what happens, if to many and bad parameter are delivered to the constructor. 
- * It is expacted, that an error occurs.
+ * It is expected, that an error occurs.
  */
 function testNewSVGRectBadToManyAndBadConstructorParameters() {
 
@@ -462,7 +462,7 @@ function testNewSVGRectBadToManyAndBadConstructorParameters() {
 
 /**
  * Tests what happens, if attributes of SVG-Elements have a wrong type. 
- * It is expacted, that an error occurs.
+ * It is expected, that an error occurs.
  */
 function testNewSVGRectBadWrongSVGElementAttributeTypes() {
 
@@ -481,7 +481,7 @@ function testNewSVGRectBadWrongSVGElementAttributeTypes() {
 // bad tests for circle
 
 /**
- * The cx-attribute is missing. So init methode sould throw an exception.
+ * The cx-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGCircleBadMissingCXAttribute() {
 
@@ -497,7 +497,7 @@ function testNewSVGCircleBadMissingCXAttribute() {
 }
 
 /**
- * The cy-attribute is missing. So init methode sould throw an exception.
+ * The cy-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGCircleBadMissingCYAttribute() {
 
@@ -513,7 +513,7 @@ function testNewSVGCircleBadMissingCYAttribute() {
 }
 
 /**
- * The r-attribute is missing. So init methode sould throw an exception.
+ * The r-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGCircleBadMissingRAttribute() {
 
@@ -529,7 +529,7 @@ function testNewSVGCircleBadMissingRAttribute() {
 }
 
 /**
- * The cx-attribute value has a wrong type. So init methode sould throw an exception.
+ * The cx-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGCircleBadCXAttributeValueType() {
 
@@ -545,7 +545,7 @@ function testNewSVGCircleBadCXAttributeValueType() {
 }
 
 /**
- * The cy-attribute value has a wrong type. So init methode sould throw an exception.
+ * The cy-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGCircleBadCYAttributeValueType() {
 
@@ -561,7 +561,7 @@ function testNewSVGCircleBadCYAttributeValueType() {
 }
 
 /**
- * The r-attribute value has a wrong type. So init methode sould throw an exception.
+ * The r-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGCircleBadRAttributeValueType() {
 
@@ -580,7 +580,7 @@ function testNewSVGCircleBadRAttributeValueType() {
 // bad tests for ellipse
 
 /**
- * The cx-attribute is missing. So init methode sould throw an exception.
+ * The cx-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGEllipseBadMissingCXAttribute() {
 
@@ -596,7 +596,7 @@ function testNewSVGEllipseBadMissingCXAttribute() {
 }
 
 /**
- * The cy-attribute is missing. So init methode sould throw an exception.
+ * The cy-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGEllipseBadMissingCYAttribute() {
 
@@ -612,7 +612,7 @@ function testNewSVGEllipseBadMissingCYAttribute() {
 }
 
 /**
- * The ry-attribute is missing. So init methode sould throw an exception.
+ * The ry-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGEllipseBadMissingRYAttribute() {
 
@@ -628,7 +628,7 @@ function testNewSVGEllipseBadMissingRYAttribute() {
 }
 
 /**
- * The rx-attribute is missing. So init methode sould throw an exception.
+ * The rx-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGEllipseBadMissingRXAttribute() {
 
@@ -646,7 +646,7 @@ function testNewSVGEllipseBadMissingRXAttribute() {
 
 
 /**
- * The cx-attribute value has a wrong type. So init methode sould throw an exception.
+ * The cx-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGEllipseBadCXAttributeValueType() {
 
@@ -662,7 +662,7 @@ function testNewSVGEllipseBadCXAttributeValueType() {
 }
 
 /**
- * The cy-attribute value has a wrong type. So init methode sould throw an exception.
+ * The cy-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGEllipseBadCYAttributeValueType() {
 
@@ -678,7 +678,7 @@ function testNewSVGEllipseBadCYAttributeValueType() {
 }
 
 /**
- * The ry-attribute value has a wrong type. So init methode sould throw an exception.
+ * The ry-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGEllipseBadRYAttributeValueType() {
 
@@ -694,7 +694,7 @@ function testNewSVGEllipseBadRYAttributeValueType() {
 }
 
 /**
- * The rx-attribute value has a wrong type. So init methode sould throw an exception.
+ * The rx-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGEllipseBadRYAttributeValueType() {
 
@@ -713,7 +713,7 @@ function testNewSVGEllipseBadRYAttributeValueType() {
 // bad tests for line
 
 /**
- * The x1-attribute is missing. So init methode sould throw an exception.
+ * The x1-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGLineBadMissingX1Attribute() {
 
@@ -729,7 +729,7 @@ function testNewSVGLineBadMissingX1Attribute() {
 }
 
 /**
- * The y1-attribute is missing. So init methode sould throw an exception.
+ * The y1-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGLineBadMissingY1Attribute() {
 
@@ -761,7 +761,7 @@ function testNewSVGLineBadMissingX2Attribute() {
 }
 
 /**
- * The y2-attribute is missing. So init methode sould throw an exception.
+ * The y2-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGLineBadMissingY2Attribute() {
 
@@ -778,7 +778,7 @@ function testNewSVGLineBadMissingY2Attribute() {
 
 
 /**
- * The x1-attribute value has a wrong type. So init methode should throw an exception.
+ * The x1-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGLineBadX1AttributeValueType() {
 
@@ -794,7 +794,7 @@ function testNewSVGLineBadX1AttributeValueType() {
 }
 
 /**
- * The y1-attribute value has a wrong type. So init methode should throw an exception.
+ * The y1-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGLineBadY1AttributeValueType() {
 
@@ -810,7 +810,7 @@ function testNewSVGLineBadY1AttributeValueType() {
 }
 
 /**
- * The x2-attribute value has a wrong type. So init methode should throw an exception.
+ * The x2-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGLineBadX1AttributeValueType() {
 
@@ -826,7 +826,7 @@ function testNewSVGLineBadX1AttributeValueType() {
 }
 
 /**
- * The y2-attribute value has a wrong type. So init methode should throw an exception.
+ * The y2-attribute value has a wrong type. So init method should throw an exception.
  */
 function testNewSVGLineBadY2AttributeValueType() {
 
@@ -845,7 +845,7 @@ function testNewSVGLineBadY2AttributeValueType() {
 // bad tests for Polyline/Polygon
 
 /**
- * The x1-attribute is missing. So init methode sould throw an exception.
+ * The x1-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGLineBadMissingX1Attribute() {
 
@@ -861,7 +861,7 @@ function testNewSVGLineBadMissingX1Attribute() {
 }
 
 /**
- * The y1-attribute is missing. So init methode sould throw an exception.
+ * The y1-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGLineBadMissingY1Attribute() {
 
@@ -877,7 +877,7 @@ function testNewSVGLineBadMissingY1Attribute() {
 }
 
 /**
- * The x2-attribute is missing. So init methode sould throw an exception.
+ * The x2-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGPolylineBadMissingAttribute() {
 
@@ -893,7 +893,7 @@ function testNewSVGPolylineBadMissingAttribute() {
 }
 
 /**
- * The y2-attribute is missing. So init methode sould throw an exception.
+ * The y2-attribute is missing. So init method should throw an exception.
  */
 function testNewSVGLineBadMissingY2Attribute() {
 
