@@ -23,7 +23,8 @@
 
 package org.b3mn.poem.handler;
 
-import java.util.Iterator;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,10 +47,23 @@ public class SAMLHandler extends HandlerBase {
 	 */
 
 	private static final String USER_SESSION_IDENTIFIER = "openid";
+	
+	private String uniqueIdentifierClaimUri;
 
 	@Override
 	public void init() {
-
+		//Load properties
+		FileInputStream in;
+		
+		try {
+			in = new FileInputStream(this.getBackendRootDirectory() + "/WEB-INF/backend.properties");
+			Properties props = new Properties();
+			props.load(in);
+			in.close();
+			uniqueIdentifierClaimUri = props.getProperty("org.b3mn.poem.handler.SAMLHandler.UniqueIdentifier");
+		} catch (Exception e) {
+			
+		}
 	}
 
 	/**
@@ -94,6 +108,10 @@ public class SAMLHandler extends HandlerBase {
 			throw new Exception("SAMLHandler: No 'returnto' parameter passed!");
 		}
 		
+		if(this.uniqueIdentifierClaimUri == null) {
+			throw new Exception("SAMLHandler: No unique identifier claim URI in configuration defined!");
+		}
+		
 		try {
 			// If logout is true remove session attribute
 			if ("true".equals(req.getParameter("logout"))) {
@@ -105,15 +123,6 @@ public class SAMLHandler extends HandlerBase {
 			} else {
 				ClaimIdentity _id = (ClaimIdentity) req
 						.getAttribute("userdata");
-
-				// DEBUG: print all available claims
-				Iterator<String> keys = _id.keySet().iterator();
-				while (keys.hasNext()) {
-					String key = keys.next();
-					System.out.println("Key: " + key);
-					String value = _id.get(key).get(0).toString();
-					System.out.println("Value: " + value);
-				}
 
 				// get email address
 				String emailAddress = _id.get(ClaimUris.EMAIL_ADDRESS).get(0)
@@ -155,6 +164,7 @@ public class SAMLHandler extends HandlerBase {
 		}
 
 	}
+	
 	
 	/**
 	 * Creates an HTML with a form that automatically redirects to 

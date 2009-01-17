@@ -95,6 +95,10 @@
 			<classes dir="${bin-dir}" />
 			<metainf file="build/LICENSE"/>
 			
+			<webinf dir="${server-root-dir}/etc">
+				<include name="backend.properties" />
+			</webinf>
+			
 			<fileset file="favicon.ico"/>
 		</war>
 	</target>
