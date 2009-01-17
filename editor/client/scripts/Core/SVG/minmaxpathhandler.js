@@ -30,7 +30,10 @@ if(!ORYX.Core.SVG) {ORYX.Core.SVG = {};}
 
 
 /**
- * PathHandler
+ * MinMaxPathHandler
+ * 
+ * Determine the minimum and maximum of a path's absolute coordinates.
+ * The values are stored in attributes minX, minY, maxX, and maxY.
  * 
  * @constructor
  */
