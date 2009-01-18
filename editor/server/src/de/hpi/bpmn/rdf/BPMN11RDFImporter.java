@@ -59,6 +59,9 @@ import de.hpi.bpmn.UndirectedAssociation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
 import de.hpi.bpmn.Activity.LoopType;
+import de.hpi.bpmn.Activity.MIFlowCondition;
+import de.hpi.bpmn.Activity.MIOrdering;
+import de.hpi.bpmn.Activity.TestTime;
 import de.hpi.bpmn.exec.ExecDataObject;
 
 /**
@@ -424,15 +427,45 @@ public class BPMN11RDFImporter {
 
 				if (attribute.equals("looptype")) {
 					String looptypeValue = getContent(n);
-					if (looptypeValue != null && looptypeValue.equals("Standard")) {
+					if (looptypeValue != null && looptypeValue.equalsIgnoreCase("Standard")) {
 						activity.setLoopType(LoopType.Standard);
-					} else if (looptypeValue != null && looptypeValue.equals("MultiInstance")) {
+					} else if (looptypeValue != null && looptypeValue.equalsIgnoreCase("MultiInstance")) {
 						activity.setLoopType(LoopType.Multiinstance);
 					}
 				} else if (attribute.equals("loopcondition")) {
 					String loopconditionValue = getContent(n);
 					if (loopconditionValue != null) {
 						activity.setLoopCondition(loopconditionValue);
+					}
+				} else if (attribute.equals("mitcondition")) {
+					String miconditionValue = getContent(n);
+					if (miconditionValue != null) {
+						activity.setMiCondition(miconditionValue);
+					}
+				} else if (attribute.equals("testtime")) {
+					String testtimeValue = getContent(n);
+					if (testtimeValue != null && testtimeValue.equalsIgnoreCase("before")) {
+						activity.setTestTime(TestTime.Before);
+					} else if (testtimeValue != null && testtimeValue.equalsIgnoreCase("after")) {
+						activity.setTestTime(TestTime.After);
+					}
+				} else if (attribute.equals("miordering")) {
+					String miorderingValue = getContent(n);
+					if (miorderingValue != null && miorderingValue.equalsIgnoreCase("sequential")) {
+						activity.setMiOrdering(MIOrdering.Sequential);
+					} else if (miorderingValue != null && miorderingValue.equalsIgnoreCase("parallel")) {
+						activity.setMiOrdering(MIOrdering.Parallel);
+					}
+				} else if (attribute.equals("miflowcondition")) {
+					String miflowconditionValue = getContent(n);
+					if (miflowconditionValue != null && miflowconditionValue.equalsIgnoreCase("one")) {
+						activity.setMiFlowCondition(MIFlowCondition.One);
+					} else if (miflowconditionValue != null && miflowconditionValue.equalsIgnoreCase("all")) {
+						activity.setMiFlowCondition(MIFlowCondition.All);
+					} else if (miflowconditionValue != null && miflowconditionValue.equalsIgnoreCase("complex")) {
+						activity.setMiFlowCondition(MIFlowCondition.Complex);
+					} else if (miflowconditionValue != null && miflowconditionValue.equalsIgnoreCase("none")) {
+						activity.setMiFlowCondition(MIFlowCondition.None);
 					}
 				}
 			}
@@ -722,6 +755,22 @@ public class BPMN11RDFImporter {
 	protected void addXOREventBasedGateway(Node node, ImportContext c) {
 		XOREventBasedGateway gateway = factory.createXOREventBasedGateway();
 		handleGateway(node, gateway, c);
+		
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
+
+				if (attribute.equals("instantiate")) {
+					String instantiateValue = getContent(n);
+					if (instantiateValue != null && instantiateValue.equalsIgnoreCase("true")) {
+						gateway.setInstantiate(true);
+					}
+				}
+			}
+		}
 	}
 
 	protected void addANDGateway(Node node, ImportContext c) {
