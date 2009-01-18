@@ -4,7 +4,7 @@ import de.hpi.bpmn.serialization.BPMNSerialization;
 
 public class IntermediateSignalEvent extends IntermediateEvent {
 
-	protected boolean isThrowing;
+	protected boolean isThrowing = false;
 
 	public boolean isThrowing() {
 		return isThrowing;
