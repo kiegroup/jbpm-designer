@@ -52,7 +52,7 @@ ORYX.Core.SVG.MinMaxPathHandler = Clazz.extend({
 	},
 
 	/**
-	 * calculateMinMax
+	 * Store minimal and maximal coordinates of passed points to attributes minX, maxX, minY, maxY
 	 * 
 	 * @param {Array} points Array of absolutePoints
 	 */
