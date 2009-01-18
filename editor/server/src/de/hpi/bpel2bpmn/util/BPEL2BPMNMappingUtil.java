@@ -2,8 +2,10 @@ package de.hpi.bpel2bpmn.util;
 
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -17,7 +19,9 @@ import org.w3c.dom.Text;
  */
 public final class BPEL2BPMNMappingUtil {
 	
-	public static final Collection<String> BPEL_ACTIVITIES = new HashSet<String>() {{ 
+	public static final Collection<String> BPEL_ACTIVITIES = new HashSet<String>() {
+		private static final long serialVersionUID = -1626491688586809929L;
+	{ 
 		add("invoke"); 
 		add("receive"); 
 		add("reply"); 
@@ -228,12 +232,7 @@ public final class BPEL2BPMNMappingUtil {
 		
 		Collection<Node> targetNodes = getAllSpecificChildNodes(targetsNode, "target");
 		
-		if (targetNodes.size() == 0) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		return (targetNodes.size() != 0);
 	}
 
 	/**
@@ -251,12 +250,7 @@ public final class BPEL2BPMNMappingUtil {
 		
 		Collection<Node> sourceNodes = getAllSpecificChildNodes(sourcesNode, "source");
 		
-		if (sourceNodes.size() == 0) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		return (sourceNodes.size() != 0);
 	}
 	
 	/**
@@ -289,6 +283,32 @@ public final class BPEL2BPMNMappingUtil {
 			return buffer.toString();
 		}
 	}
+	
+	/**
+	 * For a given node, the transition conditions for all outgoing links are 
+	 * determined. In case there is no explicit transition condition, the 
+	 * condition is set to 'true'.
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public static Map<String,String> getTransitionConditionsOfNode(Node node) {
+		Map<String,String> transitionConditions = new HashMap<String,String>();
+		Node sourcesNode = getSpecificChildNode(node, "sources");
+		for (Node sourceNode : getAllSpecificChildNodes(sourcesNode, "source")) {
+			String linkName = sourceNode.getAttributes().getNamedItem("name").getNodeValue();
+			Node transitionNode = getSpecificChildNode(sourceNode, "transitionCondition");
+			// has the transition condition been set?
+			if (transitionNode != null) {
+				transitionConditions.put(linkName,transitionNode.getTextContent());
+			}
+			else {
+				transitionConditions.put(linkName,"true");
+			}
+		}
+		return transitionConditions;
+	}
+
 	
 	/**
 	 * Checks whether the Boolean attribute suppressJoinFailure is set 
@@ -344,4 +364,5 @@ public final class BPEL2BPMNMappingUtil {
 		}
 		return names;
 	}
+		
 }

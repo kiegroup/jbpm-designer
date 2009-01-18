@@ -6,6 +6,14 @@ import de.hpi.bpel2bpmn.mapping.MappingContext;
 import de.hpi.bpel2bpmn.util.BPEL2BPMNMappingUtil;
 import de.hpi.bpmn.IntermediateErrorEvent;
 
+/**
+ * Please note that the throw activity always maps to an intermediate
+ * event first. However, it might this event might later be replaced
+ * by an end event in the course of a post processing of the model.
+ * 
+ * @author matthias.weidlich
+ *
+ */
 public class ThrowMapping extends BasicActivityMapping {
 	
 	static private ThrowMapping instance = null;

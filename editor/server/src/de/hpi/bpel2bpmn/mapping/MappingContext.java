@@ -11,22 +11,62 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.DiagramObject;
 
+/**
+ * This class captures all context information in order to
+ * apply one of the specific mapping classes. In particular,
+ * for every BPEL node, we have to track the BPMN
+ * elements indicating the beginning and the end of the 
+ * corresponding process part.
+ * 
+ * In addition, sources and targets for control links are 
+ * stored in this class.
+ * 
+ * @author matthias.weidlich
+ *
+ */
 public class MappingContext { 
 	
 	private BPMNDiagram diagram;
 	
 	private BPMNFactory factory;
 
+	/*
+	 * All BPMN elements that correspond to a certain BPEL node.
+	 */
 	private Map<Node, Set<de.hpi.bpmn.Node>> mappingElements;
 
+	/*
+	 * The BPMN element that indicates the beginning of the process part
+	 * that corresponds to a certain BPEL node.
+	 */
 	private Map<Node, DiagramObject> mappingConnectionIn;
 	
+	/*
+	 * The BPMN element that indicates the end of the process part
+	 * that corresponds to a certain BPEL node.
+	 */
 	private Map<Node, DiagramObject> mappingConnectionOut;
 
+	/*
+	 * We might need to consider an expression, when connecting the
+	 * end of the mapped process part. If so, the expression is stored
+	 * in the following map.
+	 */
 	private Map<Node, String> mappingConnectionOutExpression;
 
+	/*
+	 * Store the BPMN element that represents the source of a certain link.
+	 */
 	private Map<String, DiagramObject> controlLinkSource;
 	
+	/*
+	 * Store the transition condition for an outgoing link.
+	 */
+	private Map<String, String> controlLinkSourceTransitionConditions;
+	
+	/*
+	 * Store the BPMN element that represents the target of a certain link.
+	 */
 	private Map<String, DiagramObject> controlLinkTarget;
 	
 	public MappingContext(BPMNFactory factory) {
@@ -88,5 +128,9 @@ public class MappingContext {
 			objects.add(node);
 			this.mappingElements.put(domNode,objects);
 		}
+	}
+
+	public Map<String, String> getControlLinkSourceTransitionConditions() {
+		return controlLinkSourceTransitionConditions;
 	}
 }

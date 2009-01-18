@@ -6,6 +6,7 @@ import de.hpi.bpel2bpmn.mapping.ElementMapping;
 import de.hpi.bpel2bpmn.mapping.MappingContext;
 import de.hpi.bpel2bpmn.util.BPEL2BPMNMappingUtil;
 import de.hpi.bpmn.ANDGateway;
+import de.hpi.bpmn.DiagramObject;
 
 public class FlowMapping extends StructuredActivityMapping {
 	
@@ -52,9 +53,15 @@ public class FlowMapping extends StructuredActivityMapping {
 		}
 		
 		/*
-		 * Still to do: mapping of the actual control links
+		 * Mapping of the actual control links
 		 */
-		
+		Node linksChild = BPEL2BPMNMappingUtil.getSpecificChildNode(node, "links");
+		for (Node linkChild : BPEL2BPMNMappingUtil.getAllSpecificChildNodes(linksChild, "link")) {
+			String linkName = linkChild.getAttributes().getNamedItem("name").getNodeValue();
+			DiagramObject source = mappingContext.getControlLinkSource().get(linkName);
+			DiagramObject target = mappingContext.getControlLinkTarget().get(linkName);
+			String transitionCondition = mappingContext.getControlLinkSourceTransitionConditions().get(linkName);
+			createSequenceFlowBetweenDiagramObjects(source, target,transitionCondition,mappingContext);
+		}
 	}
-
 }

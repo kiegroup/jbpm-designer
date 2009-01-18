@@ -3,8 +3,6 @@ package de.hpi.bpel2bpmn.mapping;
 import org.w3c.dom.Node;
 
 import de.hpi.bpel2bpmn.util.BPEL2BPMNMappingUtil;
-import de.hpi.bpmn.Lane;
-import de.hpi.bpmn.Pool;
 
 public class ProcessMapping extends ElementMappingImpl {
 
@@ -25,17 +23,6 @@ public class ProcessMapping extends ElementMappingImpl {
 			name = "Imported BPEL Proces";
 		
 		mappingContext.getDiagram().setTitle(name);
-		
-//		Pool pool = mappingContext.getFactory().createPool();
-//		pool.setParent(mappingContext.getDiagram());
-		// TODO: do we need to set the resource id?
-		//pool.setResourceId();
-		
-//		Lane lane = mappingContext.getFactory().createLane();
-//		lane.setParent(mappingContext.getDiagram());
-		// TODO: do we need to set the resource id?
-		//lane.setResourceId();
-
 		
 	}
 }

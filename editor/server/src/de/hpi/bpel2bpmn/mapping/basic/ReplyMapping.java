@@ -6,6 +6,14 @@ import de.hpi.bpel2bpmn.mapping.MappingContext;
 import de.hpi.bpel2bpmn.util.BPEL2BPMNMappingUtil;
 import de.hpi.bpmn.IntermediateMessageEvent;
 
+/**
+ * Please note that the reply activity always maps to an intermediate
+ * event first. However, it might this event might later be replaced
+ * by an end event in the course of a post processing of the model.
+ * 
+ * @author matthias.weidlich
+ *
+ */
 public class ReplyMapping extends BasicActivityMapping {
 	
 	static private ReplyMapping instance = null;

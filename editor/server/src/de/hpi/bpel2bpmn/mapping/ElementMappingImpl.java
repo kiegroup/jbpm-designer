@@ -8,6 +8,8 @@ import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.EndErrorEvent;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.SequenceFlow;
+import de.hpi.bpmn.TextAnnotation;
+import de.hpi.bpmn.UndirectedAssociation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.SequenceFlow.ConditionType;
 
@@ -42,6 +44,10 @@ public abstract class ElementMappingImpl implements ElementMapping {
 			for (String link : BPEL2BPMNMappingUtil.getAllOutgoingControlLinkNames(node)) {
 				mappingContext.getControlLinkSource().put(link, orGateway);
 			}
+			
+			// extract transition conditions for the outgoing links
+			mappingContext.getControlLinkSourceTransitionConditions().putAll(
+					BPEL2BPMNMappingUtil.getTransitionConditionsOfNode(node));
 		}
 
 		// incoming links lead to the creation of a complex gateway
@@ -145,11 +151,30 @@ public abstract class ElementMappingImpl implements ElementMapping {
 		}
 
 		sequenceFlow.setSource(startObject);
-		startObject.getOutgoingEdges().add(sequenceFlow);
 		sequenceFlow.setTarget(endObject);
-		endObject.getIncomingEdges().add(sequenceFlow);
 		mappingContext.getDiagram().getEdges().add(sequenceFlow);
 		
+	}
+	
+	/**
+	 * Creates a text annotation and connects it with a certain diagram object.
+	 * 
+	 * @param text
+	 * @param annotatedObject
+	 * @param mappingContext
+	 */
+	protected void createAnnotationAndAssociation(String text, DiagramObject annotatedObject,
+			MappingContext mappingContext) {
+		
+		TextAnnotation annotation = mappingContext.getFactory().createTextAnnotation();
+		annotation.setParent(mappingContext.getDiagram());
+		annotation.setLabel(text);
+		
+		UndirectedAssociation association = mappingContext.getFactory().createUndirectedAssociation();
+		association.setSource(annotatedObject);
+		association.setTarget(annotatedObject);
+		
+		mappingContext.getDiagram().getEdges().add(association);
 	}
 	
 }

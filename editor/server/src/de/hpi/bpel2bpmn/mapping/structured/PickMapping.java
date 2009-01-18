@@ -21,15 +21,14 @@ public class PickMapping extends StructuredActivityMapping {
 	}
 	
 	public void mapElement(Node node, MappingContext mappingContext) {
-				
+		
 		XOREventBasedGateway eventGateway = mappingContext.getFactory().createXOREventBasedGateway();
 		XORDataBasedGateway dataGateway = mappingContext.getFactory().createXORDataBasedGateway();
 		
 		setConnectionPointsWithControlLinks(node, eventGateway, dataGateway, null, mappingContext);
 
-		// TODO: support create instance for pick
 		if (BPEL2BPMNMappingUtil.isCreateInstanceSet(node)) {
-			//
+			eventGateway.setInstantiate(true);
 		}
 		
 		for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
