@@ -24,6 +24,11 @@
 package org.b3mn.poem.handler;
 
 import java.io.FileInputStream;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +37,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
+import org.opensaml.Configuration;
+import org.opensaml.saml2.encryption.Decrypter;
+import org.opensaml.xml.XMLObject;
+import org.opensaml.xml.encryption.InlineEncryptedKeyResolver;
+import org.opensaml.xml.io.Unmarshaller;
+import org.opensaml.xml.io.UnmarshallerFactory;
+import org.opensaml.xml.io.UnmarshallingException;
+import org.opensaml.xml.parse.BasicParserPool;
+import org.opensaml.xml.parse.XMLParserException;
+import org.opensaml.xml.security.credential.BasicCredential;
+import org.opensaml.xml.security.keyinfo.StaticKeyInfoCredentialResolver;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import de.fraunhofer.fokus.jic.identity.Claim;
 import de.fraunhofer.fokus.jic.identity.ClaimIdentity;
-import de.fraunhofer.fokus.jic.identity.ClaimUris;
 
 @HandlerWithoutModelContext(uri = "/saml")
 public class SAMLHandler extends HandlerBase {
@@ -49,18 +67,57 @@ public class SAMLHandler extends HandlerBase {
 	private static final String USER_SESSION_IDENTIFIER = "openid";
 	
 	private String uniqueIdentifierClaimUri;
+	
+	private boolean onlyUseTrustedIssuers;
+	
+	private ArrayList<String> trustedIssuers;
 
 	@Override
 	public void init() {
 		//Load properties
 		FileInputStream in;
 		
+		//initialize properties from backend.properties
 		try {
+			trustedIssuers = new ArrayList<String>();
+			
 			in = new FileInputStream(this.getBackendRootDirectory() + "/WEB-INF/backend.properties");
 			Properties props = new Properties();
 			props.load(in);
 			in.close();
-			uniqueIdentifierClaimUri = props.getProperty("org.b3mn.poem.handler.SAMLHandler.UniqueIdentifier");
+			
+			//get unique identifier claim uri
+			uniqueIdentifierClaimUri = props.getProperty("org.b3mn.poem.handler.SAMLHandler.uniqueIdentifier");
+			System.out.println("ID: " + uniqueIdentifierClaimUri);
+			try {
+				URL uIdUrl = new URL(uniqueIdentifierClaimUri);
+			} catch (MalformedURLException mue) {
+				uniqueIdentifierClaimUri = null;
+				System.out.println("ID malformed");
+			}
+			
+			//get flag, if only trusted issuers should be used
+			String onlyUseTrusted = props.getProperty("org.b3mn.poem.handler.SAMLHandler.onlyUseTrustedIssuers");
+			if("false".equals(onlyUseTrusted)) {
+				onlyUseTrustedIssuers = false;
+			} else {
+				onlyUseTrustedIssuers = true;
+				
+				//get list of trusted issuers
+				String trustedIssuersString = props.getProperty("org.b3mn.poem.handler.SAMLHandler.trustedIssuers");
+				String[] trustedIssuersArray = trustedIssuersString.split(";");
+				for(int i = 0; i < trustedIssuersArray.length; i++) {
+					String issuer = trustedIssuersArray[i];
+					try {
+						System.out.println(issuer);
+						URL issuerUrl = new URL(issuer);
+						trustedIssuers.add(issuer);
+					} catch (MalformedURLException mue) {
+						System.out.println("issuer malformed");
+					}
+				}
+			}
+			
 		} catch (Exception e) {
 			
 		}
@@ -100,6 +157,10 @@ public class SAMLHandler extends HandlerBase {
 	public void doPost(HttpServletRequest req, HttpServletResponse res,
 			Identity subject, Identity object) throws Exception {
 		
+		//logout current user so that future requests to Oryx
+		//will fail, in case the SAML authentication fails
+		req.getSession().removeAttribute(USER_SESSION_IDENTIFIER);
+		
 		//get returnto url
 		String retUrl = req.getParameter("returnto");
 		
@@ -108,37 +169,50 @@ public class SAMLHandler extends HandlerBase {
 			throw new Exception("SAMLHandler: No 'returnto' parameter passed!");
 		}
 		
+		//get the claim uri that has to be used as the user's unique identifier
 		if(this.uniqueIdentifierClaimUri == null) {
 			throw new Exception("SAMLHandler: No unique identifier claim URI in configuration defined!");
 		}
 		
 		try {
-			// If logout is true remove session attribute
+			// If logout is true, just return
 			if ("true".equals(req.getParameter("logout"))) {
-				req.getSession().removeAttribute(USER_SESSION_IDENTIFIER);
-
-				res.setStatus(200); // redirect status???
-				res.getWriter().write(this.getReturnToPage(retUrl, false, true));
-				return;
-			} else {
+				
+				res.setStatus(200);
+				retUrl = this.getReturnToUrl(retUrl, false, true);
+			} else { //login
+				//Get ClaimIdentity that contains all claims
 				ClaimIdentity _id = (ClaimIdentity) req
 						.getAttribute("userdata");
 
-				// get email address
-				String emailAddress = _id.get(ClaimUris.EMAIL_ADDRESS).get(0)
-						.toString();
+				// get unique user id
+				Claim userUniqueIdClaim = _id.get(uniqueIdentifierClaimUri).get(0);
+				
+				if(onlyUseTrustedIssuers) {
+					//get issuer
+					String _issuerType = "urn:oasis:names:tc:SAML:2.0:assertion:NameIDType";
+					String issuer = userUniqueIdClaim.getIsuuer().get(_issuerType).get(0).getValue();
+					
+					//check, if issuer is trusted
+					if(!trustedIssuers.contains(issuer)) {
+						throw new Exception("SAMLHandler: Issuer of SAML token is not a trusted issuer!");
+					}
+				}
+				
+				//get user's unique id
+				String userUniqueId = userUniqueIdClaim.getValue();
 
 				// identify user
-				Identity subj = Identity.instance(emailAddress);
+				Identity subj = Identity.instance(userUniqueId);
 
-				// create new user if the user does not exist
+				// create new user, if the user does not exist
 				if (subj == null) {
 					// Create new user with open id attributes
-					User.CreateNewUser(emailAddress);
+					User.CreateNewUser(userUniqueId);
 				}
 				
 				//get user
-				User user = new User(emailAddress);
+				User user = new User(userUniqueId);
 
 				// login
 				user.login(req, res);
@@ -152,32 +226,31 @@ public class SAMLHandler extends HandlerBase {
 
 				// redirect to return to page
 				res.setStatus(200);
-				res.getWriter().write(this.getReturnToPage(retUrl, true, false));
-				return;
+				retUrl = this.getReturnToUrl(retUrl, true, false);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 			res.setStatus(200);
-			res.getWriter().write(this.getReturnToPage(retUrl, false, false));
-			return;
+			retUrl = this.getReturnToUrl(retUrl, false, false);
 		}
 
+		//Redirect the request
+		res.sendRedirect(retUrl);
 	}
 	
 	
 	/**
-	 * Creates an HTML with a form that automatically redirects to 
-	 * the resource via GET specified by url.
-	 * Parameters login and logout are passed.
+	 * Creates the URL the request will be redirected.
+	 * Adds two query parameters login and logout.
 	 * 
 	 * @param url
 	 * @param login
 	 * @param logout
-	 * @return a string that represents a html document
+	 * @return a string that represents the redirect URL
 	 */
-	private String getReturnToPage(String url, boolean login, boolean logout) {
-		
+	private String getReturnToUrl(String url, boolean login, boolean logout) {
+		String res = url;
 		String lin = null, lout = null;
 		if(login) {
 			lin = "true";
@@ -190,18 +263,14 @@ public class SAMLHandler extends HandlerBase {
 			lout = "false";
 		}
 		
-		String page = "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
-				+ "<head>"
-				+ "<title>SAML Redirection</title>"
-				+ "</head>"
-				+ "<body onload=\"document.forms['saml-form-redirection'].submit();\">"
-				+ "<form name=\"saml-form-redirection\" action=\"" + url
-				+ "\" method=\"get\" accept-charset=\"utf-8\" >"
-				+ "<input type=\"hidden\" name=\"login\" value=\"" + lin + "\"/>"
-				+ "<input type=\"hidden\" name=\"logout\" value=\"" + lout + "\"/>"
-				+ "<button type=\"submit\">Continue...</button>" + "</form>"
-				+ "</body>" + "</html>";
+		if(res.contains("?")) {
+			res += "&";
+		} else {
+			res += "?";
+		}
+		
+		res += "login=" + lin + "&logout=" + lout;
 
-		return page;
+		return res;
 	}
 }
