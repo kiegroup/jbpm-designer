@@ -132,6 +132,14 @@
 			org.oryxeditor.server.AlternativesRenderer
 		</servlet-class>
 	</servlet>
+    
+    <servlet>
+        <display-name>BPMN to Petri Net Converter</display-name>
+        <servlet-name>BPMN2PNServlet</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.BPMN2PNServlet
+        </servlet-class>
+    </servlet>
 	
 <!--<servlet>
 		<display-name>Worklist</display-name>
@@ -250,6 +258,11 @@
 		<servlet-name>AlternativesRenderer</servlet-name>
 		<url-pattern>/pdf</url-pattern>
 	</servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>BPMN2PNServlet</servlet-name>
+        <url-pattern>/bpmn2pn</url-pattern>
+    </servlet-mapping>
 
 <!--
 	<servlet-mapping>

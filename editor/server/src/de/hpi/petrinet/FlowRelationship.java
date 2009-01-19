@@ -27,6 +27,7 @@ public class FlowRelationship {
 	
 	protected Node source;
 	protected Node target;
+	protected String id;
 
 	public Node getSource() {
 		return source;
@@ -55,6 +56,22 @@ public class FlowRelationship {
 	
 	public String toString() {
 		return "("+source+","+target+")";
+	}
+
+	public String getId() {
+		if(id != null){
+			return id;
+		} else if(id == null && 
+				this.getSource().getId() != null && 
+				this.getTarget().getId() != null){
+			return this.getSource().getId() + this.getTarget().getId();
+		} else {
+			return null;
+		}
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

@@ -111,6 +111,10 @@
             <fileset dir="${editor-src-root}/etc">
                 <include name="*.properties"/>
             </fileset>
+            <!-- velocity templates -->
+            <fileset dir="${editor-src-server}/src">
+                <include name="**/*.*.vm"/>
+            </fileset>
         </copy>
         
         <javac srcdir="${editor-src-server}/src" destdir="${editor-build-root}/classes" debug="${java-debug}" >
