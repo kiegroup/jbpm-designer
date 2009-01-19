@@ -33,11 +33,13 @@ public class StencilSetUtil {
 //	}
 	
 	private String getAttributeValue(Node node, String attribute) {
-		Node item = node.getAttributes().getNamedItem(attribute);
-		if (item != null)
-			return item.getNodeValue();
-		else
-			return null;
+		if (node.getAttributes() != null){ // text nodes have no attributes
+			Node item = node.getAttributes().getNamedItem(attribute);
+			if (item != null)
+				return item.getNodeValue();
+		}
+		
+		return null;
 	}
 
 	private Node getChild(Node n, String name) {
