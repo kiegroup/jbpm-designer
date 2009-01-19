@@ -161,9 +161,4 @@ public class PetriNetPNMLExporter {
 	public void setTargetTool(Tool targetTool) {
 		this.targetTool = targetTool;
 	}
-
-	public Marking getMarking() {
-		return marking;
-	}
-
 }
