@@ -26,6 +26,7 @@ package org.b3mn.poem.handler;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,6 +49,8 @@ import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
 import org.openid4java.message.sreg.SRegRequest;
+import org.openid4java.util.HttpClientFactory;
+import org.openid4java.util.ProxyProperties;
 
 @HandlerWithoutModelContext(uri="/login")
 public class LoginHandler extends HandlerBase {
@@ -68,6 +71,21 @@ public class LoginHandler extends HandlerBase {
 	
 	@Override
 	public void init() {
+		
+		ServletContext context = getServletContext();
+		
+		// --- Forward proxy setup (only if needed) --- 
+		if (context != null) {
+			String proxyHostName = context.getInitParameter("proxy-host-name");
+			String proxyPort = getServletContext().getInitParameter("proxy-port");
+			if (proxyHostName != null && proxyPort != null && proxyHostName.length() > 0 && proxyPort.length() > 0) {
+				ProxyProperties proxyProps = new ProxyProperties(); 
+				proxyProps.setProxyHostName(proxyHostName.trim()); 
+				proxyProps.setProxyPort(Integer.valueOf(proxyPort.trim())); 
+				HttpClientFactory.setProxyProperties(proxyProps);
+			}
+		}
+		
         try {
 			this.manager = new ConsumerManager();
 	        manager.setAssociations(new InMemoryConsumerAssociationStore());

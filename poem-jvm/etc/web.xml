@@ -3,6 +3,15 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
  id="oryx" version="2.4">
+ 
+    <context-param>
+        <param-name>proxy-host-name</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>proxy-port</param-name>
+        <param-value></param-value>
+    </context-param>
     
     <display-name>PoEM</display-name>
 	
@@ -45,14 +54,6 @@
         <display-name>Oryx Dispatcher</display-name>
         <servlet-name>Dispatcher</servlet-name>
         <servlet-class>org.b3mn.poem.Dispatcher</servlet-class>
-		<init-param>
-            <param-name>proxy-host-name</param-name>
-            <param-value></param-value>
-        </init-param>
-        <init-param>
-            <param-name>proxy-port</param-name>
-            <param-value></param-value>
-        </init-param>
     </servlet>
 	
     <servlet-mapping>
