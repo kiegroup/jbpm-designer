@@ -3,6 +3,61 @@
 if(!ORYX) {var ORYX = {};}
 if(!ORYX.Editor) {ORYX.Editor = {};}
 
+// mocking MinMaxPathHandler
+if(!ORYX.Core) {ORYX.Core = {};}
+if(!ORYX.Core.SVG) {ORYX.Core.SVG = {};}
+
+/**
+ * MinMaxPathHandler for SVGPath with the d-Attribute: d="M1 1 L 2 2 L 5 6 Z"
+ */
+ORYX.Core.SVG.MinMaxPathHandler = {
+	
+	construct: function() {
+		arguments.callee.$.construct.apply(this, arguments);
+		
+		this.minX = undefined;
+		this.minY = undefined;
+		this.maxX = undefined;
+		this.maxY = undefined;
+	},
+	
+	calculateMinMax: function(points) {
+		this.minX = 1
+		this.maxX = 5
+		this.minY = 1
+		this.maxY = 6
+	},
+}
+
+ORYX.Core.SVG.MinMaxPathHandler = Clazz.extend(ORYX.Core.SVG.MinMaxPathHandler)
+
+// mocking PathParser
+
+PathParser = {
+	construct: function() {
+		arguments.callee.$.construct.apply(this, arguments);
+		this.handler;
+	},
+	setHandler: function(handler) {
+		this.handler = handler
+	},
+	parsePath: function(element) {
+		this.handler.calculateMinMax();
+	}
+}
+
+PathParser = Clazz.extend(PathParser)
+
+// mocking ORYX.Core.SVG.EditPathHandler
+
+ORYX.Core.SVG.EditPathHandler = {
+	construct: function() {
+		arguments.callee.$.construct.apply(this, arguments);
+	},
+}
+
+ORYX.Core.SVG.EditPathHandler = Clazz.extend(ORYX.Core.SVG.EditPathHandler);
+
 // stubs
 
 // stubbing ORYX.Editor.checkClassType
@@ -43,16 +98,17 @@ function setUp(){
 	r = 5
 	rx = 10
 	ry = 11
-	x1 = 6 // lower than x2
-	y1 = 7 // lower than y2
+	x1 = 3 // lower than x2
+	y1 = 8 // lower than y2
 	x2 = 8
 	y2 = 9
 	height = 100
 	width = 101
 	pointsX = new Array(1,2,3)
-	pointsY = new Array(4,5,6) 
+	pointsY = new Array(4,5,7) 
 	points = "" + pointsX[0] +","+pointsY[0]+" "+ pointsX[1] +","+pointsY[1]+" "+ pointsX[2] +","+pointsY[2]
 	lessPoints = "" + pointsX[0] +","+pointsY[0]+" "+ pointsX[1] +","+pointsY[1]
+	nullValuesPoints = "" + 0 + "," + 0 + " " + 0 + "," + 0 + " " + 0 + "," + 0
 	
 	// valid SVG-Rect-Element
 	
@@ -98,10 +154,25 @@ function setUp(){
 	testSVGPolylineElement = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
 	testSVGPolylineElement.setAttributeNS(null, "points", points);
 	
+	// valid SVG-PolyLine-Element (but is actually only a point)
+	
+	testSVGNullPolylineElement = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+	testSVGNullPolylineElement.setAttributeNS(null, "points", nullValuesPoints);
+	
 	// valid SVG-Polygon-Element
 	
 	testSVGPolygonElement = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
 	testSVGPolygonElement.setAttributeNS(null, "points", points);
+	
+	// valid SVG-Polygon-Element (but is actually only a point)
+	
+	testSVGNullPolygonElement = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+	testSVGNullPolygonElement.setAttributeNS(null, "points", nullValuesPoints);
+	
+	// valid SVG-Path-Element (but is actually only a point)
+	
+	testSVGPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+	testSVGPathElement.setAttributeNS(null, "d", "M 1 1 L2 2 L 5 6 Z");
 	
 	// valid SVG-Image-Element
 	
@@ -131,6 +202,44 @@ function tearDown() {
 	testNonsenseElement = null;
 }
 
+// Good tests for path
+
+ /**
+ * Tests whether the a full specified SVG can be source of a new SVGShpe object.
+ */
+function testNewSVGPathGood() {
+
+	try {
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement); 
+		fail("Generate a new SVGShape object should fail here.")
+	} catch(e) {
+		if(!(e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+/**
+ * Checks whether the type of a SVGPathElement is recognized correctly.
+ * It expects, that the type property has the value 'Path'
+ */
+function testNewSVGPathGoodType() {
+	
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement); 
+	assertEquals('type check', testSVGShape.type, 'Path' )
+}
+
+/**
+ * This test checks whether the attribute values of a path are parsed correctly.
+ */
+
+function testNewSVGPathGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, 1)
+	assertEquals('yAttr value check', testSVGShape.oldY, 1)
+	assertEquals('heightAttr value check', testSVGShape.height, 5)
+	assertEquals('widthAttr value check', testSVGShape.width, 4)
+}
 
 //  Good tests for rectangle
 
@@ -379,8 +488,20 @@ function testNewSVGLineGoodParsedValues() {
 	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement);
 	assertEquals('xAttr value check', testSVGShape.oldX, x1)
 	assertEquals('yAttr value check', testSVGShape.oldY, y1)
-	assertEquals('heightAttr value check', testSVGShape.height, x2-x1 )
-	assertEquals('widthAttr value check', testSVGShape.width, y2-y1)
+	assertEquals('heightAttr value check', testSVGShape.height, y2-y1 )
+	assertEquals('widthAttr value check', testSVGShape.width, x2-x1)
+}
+
+/**
+ * This test checks whether the attribute values of a null-line are parsed correctly.
+ */
+
+function testNewSVGNullLineGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGNullLineElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, 0)
+	assertEquals('yAttr value check', testSVGShape.oldY, 0)
+	assertEquals('heightAttr value check', testSVGShape.height, 0 )
+	assertEquals('widthAttr value check', testSVGShape.width, 0)
 }
 
 /**
@@ -401,7 +522,7 @@ function testNewSVGLineGoodOldXXXValuesEqualXXXValues() {
 function testNewNullSVGLineGood() {
 
 	try {
-		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGNullLineElement); 
 		fail("Generate a new SVGShape object should fail here.")
 	} catch(e) {
 		if(!(e instanceof JsUnitException)){
@@ -416,7 +537,7 @@ function testNewNullSVGLineGood() {
  */
 function testNewNullSVGLineGoodType() {
 	
-	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGLineElement); 
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGNullLineElement); 
 	assertEquals('type check', testSVGShape.type, 'Line' )
 }
 
@@ -449,6 +570,57 @@ function testNewSVGPolylineGoodType() {
 }
 
 /**
+ * This test checks whether the attribute values of a Polyline are parsed correctly.
+ */
+
+function testNewSVGPolylineGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolylineElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, pointsX[0])
+	assertEquals('yAttr value check', testSVGShape.oldY, pointsY[0])
+	assertEquals('heightAttr value check', testSVGShape.height, pointsY[2]-pointsY[0] )
+	assertEquals('widthAttr value check', testSVGShape.width, pointsX[2]-pointsX[0])
+}
+
+/**
+ * This test checks whether the oldXXX attribute values of a polyline are equal.
+ */
+
+function testNewSVGPolylineGoodOldXXXValuesEqualXXXValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolylineElement);
+	assertEquals('xAttr value equal check', testSVGShape.oldX, testSVGShape.x)
+	assertEquals('yAttr value equal check', testSVGShape.oldY, testSVGShape.y)
+	assertEquals('heightAttr value equal check', testSVGShape.oldHeight, testSVGShape.height)
+	assertEquals('xAttr value equal check', testSVGShape.oldWidth, testSVGShape.width)
+}
+
+/**
+ * Tests whether the a full specified SVGNullPolylineElement can be source of a new SVGShpe object. But the polyline is actually only a point.
+ */
+function testNewNullSVGPolylineGood() {
+
+	try {
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGNullPolylineElement); 
+		fail("Generate a new SVGShape object should fail here.")
+	} catch(e) {
+		if(!(e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+/**
+ * This test checks whether the attribute values of a null-Polyline are parsed correctly.
+ */
+
+function testNewSVGNullPolylineGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGNullPolylineElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, 0)
+	assertEquals('yAttr value check', testSVGShape.oldY, 0)
+	assertEquals('heightAttr value check', testSVGShape.height, 0 )
+	assertEquals('widthAttr value check', testSVGShape.width, 0)
+}
+
+/**
  * Tests whether the a full specified SVGPolygonElement can be source of a new SVGShpe object.
  */
 function testNewSVGPolygonGood() {
@@ -462,6 +634,58 @@ function testNewSVGPolygonGood() {
 		}
 	}	
 }
+
+/**
+ * Tests whether the a full specified SVGNullPolygonElement can be source of a new SVGShpe object. But the polygon is actually only a point.
+ */
+function testNewNullSVGPolygonGood() {
+
+	try {
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGNullPolygonElement); 
+		fail("Generate a new SVGShape object should fail here.")
+	} catch(e) {
+		if(!(e instanceof JsUnitException)){
+			throw e;
+		}
+	}	
+}
+
+/**
+ * This test checks whether the attribute values of a Polygon are parsed correctly.
+ */
+
+function testNewSVGPolygonGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolygonElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, pointsX[0])
+	assertEquals('yAttr value check', testSVGShape.oldY, pointsY[0])
+	assertEquals('heightAttr value check', testSVGShape.height, pointsY[2]-pointsY[0] )
+	assertEquals('widthAttr value check', testSVGShape.width, pointsX[2]-pointsX[0])
+}
+
+/**
+ * This test checks whether the attribute values of a null-Polygon are parsed correctly.
+ */
+
+function testNewSVGNullPolygonGoodParsedValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGNullPolygonElement);
+	assertEquals('xAttr value check', testSVGShape.oldX, 0)
+	assertEquals('yAttr value check', testSVGShape.oldY, 0)
+	assertEquals('heightAttr value check', testSVGShape.height, 0 )
+	assertEquals('widthAttr value check', testSVGShape.width, 0)
+}
+
+/**
+ * This test checks whether the oldXXX attribute values of a polygon are equal.
+ */
+
+function testNewSVGPolygonGoodOldXXXValuesEqualXXXValues() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPolygonElement);
+	assertEquals('xAttr value equal check', testSVGShape.oldX, testSVGShape.x)
+	assertEquals('yAttr value equal check', testSVGShape.oldY, testSVGShape.y)
+	assertEquals('heightAttr value equal check', testSVGShape.oldHeight, testSVGShape.height)
+	assertEquals('xAttr value equal check', testSVGShape.oldWidth, testSVGShape.width)
+}
+
 
 /**
  * Checks whether the type of a SVGPolygonElement is recognized correctly.
@@ -1084,3 +1308,5 @@ function testNewSVGPolygonBadTooLessPoints() {
 		}
 	}	
 }
+
+
