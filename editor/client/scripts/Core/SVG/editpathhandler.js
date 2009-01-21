@@ -32,6 +32,10 @@ if(!ORYX.Core.SVG) {ORYX.Core.SVG = {};}
 /**
  * EditPathHandler
  * 
+ * Edit SVG paths' coordinates according to specified from-to movement and
+ * horizontal and vertical scaling factors. 
+ * The resulting path's d attribute is stored in instance variable d.
+ * 
  * @constructor
  */
 ORYX.Core.SVG.EditPathHandler = Clazz.extend({
@@ -49,6 +53,16 @@ ORYX.Core.SVG.EditPathHandler = Clazz.extend({
 		this.d = "";
 	},
 	
+	/**
+	 * init
+	 * 
+	 * @param {float} x Target point's x-coordinate
+	 * @param {float} y Target point's y-coordinate
+	 * @param {float} oldX Reference point's x-coordinate
+	 * @param {float} oldY Reference point's y-coordinate
+	 * @param {float} deltaWidth Horizontal scaling factor
+	 * @param {float} deltaHeight Vertical scaling factor
+	 */
 	init: function(x, y, oldX, oldY, deltaWidth, deltaHeight) {
 		this.x = x;
 		this.y = y;
@@ -143,8 +157,8 @@ ORYX.Core.SVG.EditPathHandler = Clazz.extend({
 		
 		this.d = this.d.concat(" a" + pointsRel[0] + " " + pointsRel[1] + 
 								" " + xAxisRotation + " " + largeArcFlag + 
-								" " + sweepFlag + " " + pointsAbs[2] + " " +
-								pointsAbs[3] + " ");	
+								" " + sweepFlag + " " + pointsRel[2] + " " +
+								pointsRel[3] + " ");	
 	},
 
 	/**

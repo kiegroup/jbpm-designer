@@ -8,10 +8,19 @@
 
     function suite() {
         var result = new top.jsUnitTestSuite();
+
+        // Math package
         result.addTestPage("../client/Core/Math/MathTests.xhtml");
+
+        // StencilSet package
+
+        // SVG package
+        result.addTestPage("../client/Core/SVG/EditPathHandlerTests.xhtml");
         result.addTestPage("../client/Core/SVG/MinMaxPathHandlerTests.xhtml");
         result.addTestPage("../client/Core/SVG/PointsPathHandlerTests.xhtml");
 		result.addTestPage("../client/Core/SVG/SVGShapeTests.xhtml");
+
+		
         return result;
     }
 

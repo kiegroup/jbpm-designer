@@ -32,6 +32,10 @@ if(!ORYX.Core.SVG) {ORYX.Core.SVG = {};}
 /**
  * PathHandler
  * 
+ * Determine absolute points of a SVG path. The coordinates are stored 
+ * sequentially in the attribute points (x-coordinates at even indices,
+ * y-coordinates at odd indices).
+ * 
  * @constructor
  */
 ORYX.Core.SVG.PointsPathHandler = Clazz.extend({
