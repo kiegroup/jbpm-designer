@@ -62,7 +62,6 @@
 		<plugin source="shapeHighlighting.js" name="ORYX.Plugins.ShapeHighlighting" />
 		<plugin source="overlay.js" name="ORYX.Plugins.Overlay" />		
 		<plugin source="edit.js" name="ORYX.Plugins.Edit" />
-		<plugin source="collapsePool.js" name="ORYX.Plugins.CollapsePool" />
 
 		<!-- plugin for PNML export and deployment -->
 		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport">
@@ -156,7 +155,6 @@
 		<plugin source="autoLayout.js" name="ORYX.Plugins.AutoLayout" />
 		<plugin source="overlayexample.js" name="ORYX.Plugins.OverlayExample" />
 		-->
-		
 
 	</plugins>
 	
