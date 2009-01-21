@@ -29,6 +29,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3mn.poem.business.Model;
 import org.b3mn.poem.business.User;
 import org.b3mn.poem.handler.HandlerBase;
+import org.b3mn.poem.security.AuthentificationToken;
 import org.b3mn.poem.util.AccessRight;
 import org.b3mn.poem.util.ExportInfo;
 import org.b3mn.poem.util.HandlerInfo;
@@ -59,6 +62,8 @@ public class Dispatcher extends HttpServlet {
 	protected Map<String, HandlerInfo> knownHandlers = new Hashtable<String, HandlerInfo>();
 	
 	protected Collection<ExportInfo> exportInfos = new ArrayList<ExportInfo>();
+	
+	private static final String USER_AUTHENTIFICATION_TOKENS = "user_auth_tokens";
 	
 	public static String getPublicUser() {
 		return publicUser;
@@ -214,6 +219,7 @@ public class Dispatcher extends HttpServlet {
 
 	// The dispatching magic goes here. Each exception is caught and the tomcat stackstrace page 
 	// is replaced by a custom oryx error page.
+	@SuppressWarnings("unchecked")
 	protected void dispatch(HttpServletRequest request, HttpServletResponse response) 
 		throws ServletException {
 		try { 
@@ -244,6 +250,24 @@ public class Dispatcher extends HttpServlet {
 			String openId =  (String) request.getSession().getAttribute("openid"); // Retrieve open id from session
 			
 			User user = null;
+			
+			// if the user isn't logged in, check if an authentication token is provided
+			// in the servlet context and try to authenticate the user with that token
+			String authTokenParam = request.getParameter("authToken");
+			
+			if(authTokenParam != null && !authTokenParam.equals("")) {
+				List<AuthentificationToken> authList = (List<AuthentificationToken>) this.getServletContext().getAttribute(USER_AUTHENTIFICATION_TOKENS);
+				Iterator<AuthentificationToken> iter = authList.iterator();
+				
+				while(iter.hasNext()) {
+					AuthentificationToken token = iter.next();
+					
+					if(token.getAuthToken() == authTokenParam) {
+						openId = token.getUserUniqueId();
+						break;
+					}
+				}
+			}
 			
 			// If the user isn't logged in, set the OpenID to public
 			if (openId == null) {

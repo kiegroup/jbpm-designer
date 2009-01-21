@@ -30,6 +30,7 @@ import java.net.URL;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -157,9 +158,20 @@ public class SAMLHandler extends HandlerBase {
 	public void doPost(HttpServletRequest req, HttpServletResponse res,
 			Identity subject, Identity object) throws Exception {
 		
+		//get current user
+		String userId = (String) req.getSession().getAttribute(USER_SESSION_IDENTIFIER);
+		
+		User curUser = null;
+		if(userId != null && !userId.equals("") && !userId.equals(getPublicUser())) {
+			curUser = new User(userId);
+		}
+		
 		//logout current user so that future requests to Oryx
 		//will fail, in case the SAML authentication fails
-		req.getSession().removeAttribute(USER_SESSION_IDENTIFIER);
+		//req.getSession().removeAttribute(USER_SESSION_IDENTIFIER);
+		if(curUser != null) {
+			curUser.removeAuthentificationAttributes(this.getServletContext(), req, res);
+		}
 		
 		//get returnto url
 		String retUrl = req.getParameter("returnto");
@@ -179,7 +191,7 @@ public class SAMLHandler extends HandlerBase {
 			if ("true".equals(req.getParameter("logout"))) {
 				
 				res.setStatus(200);
-				retUrl = this.getReturnToUrl(retUrl, false, true);
+				retUrl = this.getReturnToUrl(retUrl, false, true, null);
 			} else { //login
 				//Get ClaimIdentity that contains all claims
 				ClaimIdentity _id = (ClaimIdentity) req
@@ -215,24 +227,32 @@ public class SAMLHandler extends HandlerBase {
 				User user = new User(userUniqueId);
 
 				// login
-				user.login(req, res);
+				//user.login(req, res);
 
 				// bind session to authenticated user
-				req.getSession().setAttribute(USER_SESSION_IDENTIFIER,
-						user.getOpenId());
+				//req.getSession().setAttribute(USER_SESSION_IDENTIFIER,
+				//		user.getOpenId());
+				
+				// create authentification token
+				UUID authToken = UUID.randomUUID();
 
+				user.addAuthentificationAttributes(this.getServletContext(), req, res, authToken);
+				
+				// store authToken in session
+				//req.getSession().setAttribute("SAMLAuthentificationToken", authToken);
+				
 				// set identifier
-				req.setAttribute("identifier", user.getOpenId());
+				//req.setAttribute("identifier", user.getOpenId());
 
 				// redirect to return to page
 				res.setStatus(200);
-				retUrl = this.getReturnToUrl(retUrl, true, false);
+				retUrl = this.getReturnToUrl(retUrl, true, false, authToken.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 			res.setStatus(200);
-			retUrl = this.getReturnToUrl(retUrl, false, false);
+			retUrl = this.getReturnToUrl(retUrl, false, false, null);
 		}
 
 		//Redirect the request
@@ -249,7 +269,7 @@ public class SAMLHandler extends HandlerBase {
 	 * @param logout
 	 * @return a string that represents the redirect URL
 	 */
-	private String getReturnToUrl(String url, boolean login, boolean logout) {
+	private String getReturnToUrl(String url, boolean login, boolean logout, String authToken) {
 		String res = url;
 		String lin = null, lout = null;
 		if(login) {
@@ -271,6 +291,10 @@ public class SAMLHandler extends HandlerBase {
 		
 		res += "login=" + lin + "&logout=" + lout;
 
+		if(authToken != null) {
+			res += "&authtoken=" + authToken;
+		}
+		
 		return res;
 	}
 }

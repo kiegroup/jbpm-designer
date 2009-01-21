@@ -30,9 +30,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,9 +47,15 @@ import org.b3mn.poem.Subject;
 import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.manager.ConfigurationManager;
 
+import org.b3mn.poem.security.AuthenticationTokenException;
+import org.b3mn.poem.security.AuthentificationToken;
+
 
 
 public class User extends BusinessObject {
+	
+	private static final String USER_SESSION_IDENTIFIER = "openid";
+	private static final String USER_AUTHENTIFICATION_TOKENS = "user_auth_tokens";
 	
 	protected Subject subject;
 	
@@ -283,4 +292,72 @@ public class User extends BusinessObject {
 		}
 		return result;
 	}	
+	
+	@SuppressWarnings("unchecked")
+	public void addAuthentificationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res) {
+		addAuthentificationAttributes(con, req, res, null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addAuthentificationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res, UUID uuid) {
+		
+		String openId = getOpenId();
+		
+		// bind session to authenticated user
+		req.getSession().setAttribute(USER_SESSION_IDENTIFIER, openId);
+		
+		//TODO is it necessary???
+		req.setAttribute("identifier", openId);
+		
+		if(uuid != null) {
+			
+			List<AuthentificationToken> authList = (List<AuthentificationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
+			
+			if(authList == null) {
+				authList = new ArrayList<AuthentificationToken>();
+			}
+
+			Iterator<AuthentificationToken> iter = authList.iterator();
+			while(iter.hasNext()) {
+				AuthentificationToken token = iter.next();
+				//TODO check if there is already an entry for that user
+				System.out.println(token.toString());
+			}
+			
+			System.out.println("adding token " + uuid.toString() + " " + openId);
+			try {
+				authList.add(new AuthentificationToken(uuid.toString(), openId));
+			} catch (AuthenticationTokenException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			con.setAttribute(USER_AUTHENTIFICATION_TOKENS, authList);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void removeAuthentificationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res) {
+		req.getSession().removeAttribute(USER_SESSION_IDENTIFIER);
+		
+		String openId = this.getOpenId();
+		
+		List<AuthentificationToken> authList = (List<AuthentificationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
+		
+		List<AuthentificationToken> newAuthList = new ArrayList<AuthentificationToken>();
+		
+		if(authList != null) {
+				
+			Iterator<AuthentificationToken> iter = authList.iterator();
+			while(iter.hasNext()) {
+				AuthentificationToken token = iter.next();
+				
+				if(!token.getUserUniqueId().equals(openId)) {
+					newAuthList.add(token);
+				}
+			}
+		}
+		
+		con.setAttribute(USER_AUTHENTIFICATION_TOKENS, newAuthList);
+	}
 }

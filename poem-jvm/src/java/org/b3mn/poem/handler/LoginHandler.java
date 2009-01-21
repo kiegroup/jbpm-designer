@@ -106,7 +106,13 @@ public class LoginHandler extends HandlerBase {
         // If logout is true remove session attribute and redirect to the repository
     	// which will force a new login as public user
     	if ("true".equals(req.getParameter("logout"))) {
-    		req.getSession().removeAttribute("openid");
+    		//req.getSession().removeAttribute("openid");
+    		String openid = (String)req.getSession().getAttribute("openid");
+    		
+    		if(openid != null && openid != "" && openid != getPublicUser()) {
+    			User user = new User(openid);
+    			user.removeAuthentificationAttributes(this.getServletContext(), req, res);
+    		}
     		res.sendRedirect(REPOSITORY_REDIRECT);
     		return;
     	}
@@ -131,10 +137,12 @@ public class LoginHandler extends HandlerBase {
     		// authentication successful.
 
     		// store openid in session for future use by java dispatcher.
-    		req.getSession().setAttribute(OPENID_SESSION_IDENTIFIER,
-    				user.getOpenId());
+    		//req.getSession().setAttribute(OPENID_SESSION_IDENTIFIER,
+    		//		user.getOpenId());
 
-    		req.setAttribute("identifier", user.getOpenId());
+    		//req.setAttribute("identifier", user.getOpenId());
+    		user.addAuthentificationAttributes(this.getServletContext(), req, resp);
+    		
     		resp.sendRedirect(REPOSITORY_REDIRECT);
     	}
     }
