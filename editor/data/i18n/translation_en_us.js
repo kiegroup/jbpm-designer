@@ -298,6 +298,7 @@ ORYX.I18N.PropertyWindow.clickIcon = "Click Icon";
 ORYX.I18N.PropertyWindow.add = "Add";
 ORYX.I18N.PropertyWindow.rem = "Remove";
 ORYX.I18N.PropertyWindow.complex = "Editor for a Complex Type";
+ORYX.I18N.PropertyWindow.text = "Editor for a Text Type";
 ORYX.I18N.PropertyWindow.ok = "Ok";
 ORYX.I18N.PropertyWindow.cancel = "Cancel";
 ORYX.I18N.PropertyWindow.dateFormat = "m/d/y";

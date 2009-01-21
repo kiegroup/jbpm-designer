@@ -178,7 +178,8 @@ ORYX.Plugins.PropertyWindow = {
 		var oldValue	= currentEl.properties[name]; 
 		var newValue	= option.value;
 		var facade		= this.facade;
-		
+
+		console.log(newValue)
 		// Implement the specific command for property change
 		var commandClass = ORYX.Core.Command.extend({
 			construct: function(){
@@ -324,6 +325,7 @@ ORYX.Plugins.PropertyWindow = {
 							var cf = new Ext.form.ComplexTextField({
 								allowBlank: pair.optional(),
 								dataSource:this.dataSource,
+								grid:this.grid,
 								row:index,								facade:this.facade							});
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1});							
 							editorGrid = new Ext.Editor(cf);
@@ -812,18 +814,17 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
         if(this.disabled){
             return;
         }	
-	
-		
+		        
 		var grid = new Ext.form.TextArea({
 	        anchor		: '100% 100%',
-			value		: this.value,			listeners	: {				focus: function(){					this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);				}.bind(this)			}		})
+			value		: unescape(this.value),			listeners	: {				focus: function(){					this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);				}.bind(this)			}		})
 		
 		
 		// Basic Dialog
 		var dialog = new Ext.Window({ 
 			layout		: 'anchor',
 			autoCreate	: true, 
-			title		: ORYX.I18N.PropertyWindow.complex, 
+			title		: ORYX.I18N.PropertyWindow.text, 
 			height		: 350, 
 			width		: 300, 
 			modal		: true,
@@ -849,10 +850,10 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
 					// store dialog input
-					this.setValue(grid.getValue());
-        			this.value = grid.getValue();
+					var value = escape(grid.getValue());
+					this.setValue(value);
 					
-					this.dataSource.getAt(this.row).set('value', grid.getValue())
+					this.dataSource.getAt(this.row).set('value', value)
 					this.dataSource.commitChanges()
 
 					dialog.hide()
@@ -864,10 +865,12 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
                 }.bind(this)
             }]
 		});		
-			
-		
+				
 		dialog.show();		
-		grid.render();	
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
 		
 	}
 });

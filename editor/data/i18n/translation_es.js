@@ -266,6 +266,7 @@ ORYX.I18N.PropertyWindow.clickIcon = "Hacer cliq en el símbolo";
 ORYX.I18N.PropertyWindow.add = "Añadir";
 ORYX.I18N.PropertyWindow.rem = "Borrar";
 ORYX.I18N.PropertyWindow.complex = "Editor para propriedad compleja";
+ORYX.I18N.PropertyWindow.text = "Editor para propriedad texto";
 ORYX.I18N.PropertyWindow.ok = "Ok";
 ORYX.I18N.PropertyWindow.cancel = "Cancelar";
 ORYX.I18N.PropertyWindow.dateFormat = "dia/mes/año";

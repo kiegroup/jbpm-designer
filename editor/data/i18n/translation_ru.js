@@ -287,6 +287,7 @@ ORYX.I18N.PropertyWindow.clickIcon = "Нажмите на значок";
 ORYX.I18N.PropertyWindow.add = "Добавить";
 ORYX.I18N.PropertyWindow.rem = "Удалить";
 ORYX.I18N.PropertyWindow.complex = "Редактор сложных типов";
+ORYX.I18N.PropertyWindow.text = "Редактор текста типа";
 ORYX.I18N.PropertyWindow.ok = "Ок";
 ORYX.I18N.PropertyWindow.cancel = "Отменить";
 ORYX.I18N.PropertyWindow.dateFormat = "m/d/y";
