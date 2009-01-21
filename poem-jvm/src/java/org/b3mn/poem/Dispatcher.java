@@ -23,15 +23,19 @@
 
 package org.b3mn.poem;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,6 +69,10 @@ public class Dispatcher extends HttpServlet {
 	
 	private static final String USER_AUTHENTIFICATION_TOKENS = "user_auth_tokens";
 	
+	private Properties props;
+	
+	private long authenticationTokenExpirationTime = 30;
+	
 	public static String getPublicUser() {
 		return publicUser;
 	}
@@ -91,6 +99,20 @@ public class Dispatcher extends HttpServlet {
 		super.init();
 		loadHandlerInfo();
 		//reloadFriendTable(); // ToDo: implement a bootloader. this operation isn't necessary at each start
+		
+		// load backend.properties
+		try {
+			FileInputStream in;
+			in = new FileInputStream(this.getServletContext().getRealPath("/WEB-INF/backend.properties"));
+			props = new Properties();
+			props.load(in);
+			in.close();
+			
+			String expirationTime = props.getProperty("org.b3mn.poem.authenticationTokenExpirationTime");
+			authenticationTokenExpirationTime = new Long(expirationTime);
+		} catch (Exception e) {
+			
+		}
 	}
 	
 	protected void reloadFriendTable()  {
@@ -253,17 +275,50 @@ public class Dispatcher extends HttpServlet {
 			
 			// if the user isn't logged in, check if an authentication token is provided
 			// in the servlet context and try to authenticate the user with that token
-			String authTokenParam = request.getParameter("authToken");
+			String authTokenParam = request.getParameter("authtoken");
+			
+			List<AuthenticationToken> authList = (List<AuthenticationToken>) this.getServletContext().getAttribute(USER_AUTHENTIFICATION_TOKENS);
+			
+			if(authList == null) {
+				authList = Collections.synchronizedList(new ArrayList<AuthenticationToken>());
+				this.getServletContext().setAttribute(USER_AUTHENTIFICATION_TOKENS, authList);
+			}
 			
 			if(authTokenParam != null && !authTokenParam.equals("")) {
-				List<AuthenticationToken> authList = (List<AuthenticationToken>) this.getServletContext().getAttribute(USER_AUTHENTIFICATION_TOKENS);
+				
+				//remove all expired tokens
+				//GARBAGE COLLECTOR
+				Date curDate = new Date();
+				Long thirtyMinutes = new Date(1000*60*authenticationTokenExpirationTime).getTime();
+				
+				int index = 0;
+				while(true) {
+					if(index < authList.size()) {
+						AuthenticationToken token = authList.get(index);
+						System.out.println("expires: " + (curDate.getTime() - token.getLastRequestDate().getTime()));
+						if((curDate.getTime() - token.getLastRequestDate().getTime()) > thirtyMinutes ) {
+							authList.remove(index);
+						} else {
+							index++;
+						}
+					} else {
+						break;
+					}
+				}
+				
+				this.getServletContext().setAttribute(USER_AUTHENTIFICATION_TOKENS, authList);
+				// END GARBAGE COLLECTOR
+				
+				//find authentication token
 				Iterator<AuthenticationToken> iter = authList.iterator();
 				
 				while(iter.hasNext()) {
 					AuthenticationToken token = iter.next();
 					
-					if(token.getAuthToken() == authTokenParam) {
+					if(token.getAuthToken().equals(authTokenParam)) {
+						//authentication token found. set openid
 						openId = token.getUserUniqueId();
+						token.setLastRequestDate(new Date());
 						break;
 					}
 				}

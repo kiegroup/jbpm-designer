@@ -28,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -313,26 +314,18 @@ public class User extends BusinessObject {
 			
 			List<AuthenticationToken> authList = (List<AuthenticationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
 			
-			if(authList == null) {
-				authList = new ArrayList<AuthenticationToken>();
-			}
-
-			Iterator<AuthenticationToken> iter = authList.iterator();
-			while(iter.hasNext()) {
-				AuthenticationToken token = iter.next();
-				//TODO check if there is already an entry for that user
-				System.out.println(token.toString());
-			}
+			if(authList != null) {
 			
-			System.out.println("adding token " + uuid.toString() + " " + openId);
-			try {
-				authList.add(new AuthenticationToken(uuid.toString(), openId));
-			} catch (AuthenticationTokenException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("adding token " + uuid.toString() + " " + openId);
+				try {
+					authList.add(new AuthenticationToken(uuid.toString(), openId));
+				} catch (AuthenticationTokenException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				con.setAttribute(USER_AUTHENTIFICATION_TOKENS, authList);
 			}
-			
-			con.setAttribute(USER_AUTHENTIFICATION_TOKENS, authList);
 		}
 	}
 	
@@ -343,21 +336,24 @@ public class User extends BusinessObject {
 		String openId = this.getOpenId();
 		
 		List<AuthenticationToken> authList = (List<AuthenticationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
-		
-		List<AuthenticationToken> newAuthList = new ArrayList<AuthenticationToken>();
-		
+
 		if(authList != null) {
 				
-			Iterator<AuthenticationToken> iter = authList.iterator();
-			while(iter.hasNext()) {
-				AuthenticationToken token = iter.next();
-				
-				if(!token.getUserUniqueId().equals(openId)) {
-					newAuthList.add(token);
+			int index = 0;
+			while(true) {
+				if(index < authList.size()) {
+					AuthenticationToken token = authList.get(index);
+					if(token.getUserUniqueId().equals(openId)) {
+						authList.remove(index);
+					} else {
+						index++;
+					}
+				} else {
+					break;
 				}
 			}
 		}
 		
-		con.setAttribute(USER_AUTHENTIFICATION_TOKENS, newAuthList);
+		con.setAttribute(USER_AUTHENTIFICATION_TOKENS, authList);
 	}
 }

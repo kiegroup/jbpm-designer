@@ -10,6 +10,8 @@ public class AuthenticationToken {
 	
 	private Date creationDate;
 	
+	private Date lastRequest;
+	
 	public AuthenticationToken(String authToken, String userUniqueId) throws AuthenticationTokenException {
 		if(authToken == null || authToken == "") {
 			throw new AuthenticationTokenException("AuthToken is null or empty.");
@@ -21,7 +23,7 @@ public class AuthenticationToken {
 		this.userUniqueIdentifier = userUniqueId;
 		
 		this.creationDate = new Date();
-		
+		this.lastRequest = new Date();
 	}
 	
 	public String getAuthToken() {
@@ -38,5 +40,13 @@ public class AuthenticationToken {
 	
 	public Date getCreationDate() {
 		return (Date) this.creationDate.clone();
+	}
+	
+	public Date getLastRequestDate() {
+		return (Date) this.lastRequest.clone();
+	}
+	
+	public void setLastRequestDate(Date lastRequest) {
+		this.lastRequest = (Date) lastRequest.clone();
 	}
 }
