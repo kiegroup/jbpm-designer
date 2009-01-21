@@ -54,5 +54,13 @@
             "uri":"/xforms/xforms.json",
             "icon_url":"/xforms/xforms.png",
             "visible":true
+        },
+        {
+            "title":"BPMN-Q",
+            "namespace":"http://b3mn.org/stencilset/bpmnq#",
+            "description":"BPMN-Q querying shapes.",
+            "uri":"/bpmn1.1/bpmn1.1.json",
+            "icon_url":"/bpmn1.1/bpmn1.1.png",
+            "visible":false
         }
 ]
