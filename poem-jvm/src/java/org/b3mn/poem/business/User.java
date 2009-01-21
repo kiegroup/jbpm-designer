@@ -48,7 +48,7 @@ import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.manager.ConfigurationManager;
 
 import org.b3mn.poem.security.AuthenticationTokenException;
-import org.b3mn.poem.security.AuthentificationToken;
+import org.b3mn.poem.security.AuthenticationToken;
 
 
 
@@ -311,22 +311,22 @@ public class User extends BusinessObject {
 		
 		if(uuid != null) {
 			
-			List<AuthentificationToken> authList = (List<AuthentificationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
+			List<AuthenticationToken> authList = (List<AuthenticationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
 			
 			if(authList == null) {
-				authList = new ArrayList<AuthentificationToken>();
+				authList = new ArrayList<AuthenticationToken>();
 			}
 
-			Iterator<AuthentificationToken> iter = authList.iterator();
+			Iterator<AuthenticationToken> iter = authList.iterator();
 			while(iter.hasNext()) {
-				AuthentificationToken token = iter.next();
+				AuthenticationToken token = iter.next();
 				//TODO check if there is already an entry for that user
 				System.out.println(token.toString());
 			}
 			
 			System.out.println("adding token " + uuid.toString() + " " + openId);
 			try {
-				authList.add(new AuthentificationToken(uuid.toString(), openId));
+				authList.add(new AuthenticationToken(uuid.toString(), openId));
 			} catch (AuthenticationTokenException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -342,15 +342,15 @@ public class User extends BusinessObject {
 		
 		String openId = this.getOpenId();
 		
-		List<AuthentificationToken> authList = (List<AuthentificationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
+		List<AuthenticationToken> authList = (List<AuthenticationToken>) con.getAttribute(USER_AUTHENTIFICATION_TOKENS);
 		
-		List<AuthentificationToken> newAuthList = new ArrayList<AuthentificationToken>();
+		List<AuthenticationToken> newAuthList = new ArrayList<AuthenticationToken>();
 		
 		if(authList != null) {
 				
-			Iterator<AuthentificationToken> iter = authList.iterator();
+			Iterator<AuthenticationToken> iter = authList.iterator();
 			while(iter.hasNext()) {
-				AuthentificationToken token = iter.next();
+				AuthenticationToken token = iter.next();
 				
 				if(!token.getUserUniqueId().equals(openId)) {
 					newAuthList.add(token);

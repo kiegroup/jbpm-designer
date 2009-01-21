@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3mn.poem.business.Model;
 import org.b3mn.poem.business.User;
 import org.b3mn.poem.handler.HandlerBase;
-import org.b3mn.poem.security.AuthentificationToken;
+import org.b3mn.poem.security.AuthenticationToken;
 import org.b3mn.poem.util.AccessRight;
 import org.b3mn.poem.util.ExportInfo;
 import org.b3mn.poem.util.HandlerInfo;
@@ -256,11 +256,11 @@ public class Dispatcher extends HttpServlet {
 			String authTokenParam = request.getParameter("authToken");
 			
 			if(authTokenParam != null && !authTokenParam.equals("")) {
-				List<AuthentificationToken> authList = (List<AuthentificationToken>) this.getServletContext().getAttribute(USER_AUTHENTIFICATION_TOKENS);
-				Iterator<AuthentificationToken> iter = authList.iterator();
+				List<AuthenticationToken> authList = (List<AuthenticationToken>) this.getServletContext().getAttribute(USER_AUTHENTIFICATION_TOKENS);
+				Iterator<AuthenticationToken> iter = authList.iterator();
 				
 				while(iter.hasNext()) {
-					AuthentificationToken token = iter.next();
+					AuthenticationToken token = iter.next();
 					
 					if(token.getAuthToken() == authTokenParam) {
 						openId = token.getUserUniqueId();

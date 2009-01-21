@@ -2,7 +2,7 @@ package org.b3mn.poem.security;
 
 import java.util.Date;
 
-public class AuthentificationToken {
+public class AuthenticationToken {
 
 	private String authToken;
 	
@@ -10,7 +10,7 @@ public class AuthentificationToken {
 	
 	private Date creationDate;
 	
-	public AuthentificationToken(String authToken, String userUniqueId) throws AuthenticationTokenException {
+	public AuthenticationToken(String authToken, String userUniqueId) throws AuthenticationTokenException {
 		if(authToken == null || authToken == "") {
 			throw new AuthenticationTokenException("AuthToken is null or empty.");
 		}
