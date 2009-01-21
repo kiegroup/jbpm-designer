@@ -3,7 +3,7 @@
 	<!-- Load additional properties -->
     <property file="../test.properties"/>
 	
-	<property name="url" value="${localWorkingDirectoryUrl}/editor/test/jsunit/testRunner.html?testPage=${localWorkingDirectoryUrl}/editor/test/client/TestSuite.html"/>
+	<property name="url" value="${localWorkingDirectoryUrl}/editor/test/jsunit/testRunner.html?testPage=${localWorkingDirectoryUrl}/editor/test/client/TestSuite.xhtml"/>
 	<property name="resourceBase" value="editor/test/jsunit"/>
 	
 	<import file="build.xml" />
