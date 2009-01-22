@@ -98,7 +98,7 @@ public class Interaction {
 		Persistance.commit();
 	}
 	public long save() {
-		Persistance.getSession().save(this);
+		Persistance.getSession().saveOrUpdate(this);
 		Persistance.commit();
 		return this.getId();
 	}

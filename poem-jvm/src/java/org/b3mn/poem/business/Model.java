@@ -45,6 +45,9 @@ import org.hibernate.classic.Session;
 
 public class Model extends BusinessObject {
 	
+	
+	private static final Object lock = new Object();
+	
 	// Cache data
 	protected String author = null;
 	
@@ -208,26 +211,28 @@ public class Model extends BusinessObject {
 	}
 	
 	public synchronized void addTag(User user, String tag) {
-		// TODO check access right of the user
-		// If the user hasn't already tagged the model with this tag
-		if (!this.getUserTags(user).contains(tag)) {
-			
-			TagDefinition tagDefinition = this.getTagDefintion(user, tag);
-			Session session = Persistance.getSession();
-			// User uses this tag for the first time
-			if (tagDefinition == null) {
-				// Create definition
-				tagDefinition = new TagDefinition();
-				tagDefinition.setName(tag);
-				tagDefinition.setSubject_id(user.getId());
-				session.save(tagDefinition);
+		synchronized(lock) {
+			// TODO check access right of the user
+			// If the user hasn't already tagged the model with this tag
+			if (!this.getUserTags(user).contains(tag)) {
+				
+				TagDefinition tagDefinition = this.getTagDefintion(user, tag);
+				Session session = Persistance.getSession();
+				// User uses this tag for the first time
+				if (tagDefinition == null) {
+					// Create definition
+					tagDefinition = new TagDefinition();
+					tagDefinition.setName(tag);
+					tagDefinition.setSubject_id(user.getId());
+					session.save(tagDefinition);
+				}
+				// Create tag relation
+				TagRelation tagRelation = new TagRelation();
+				tagRelation.setObject_id(this.getId());
+				tagRelation.setTag_id(tagDefinition.getId());
+				session.save(tagRelation);
+				Persistance.commit();
 			}
-			// Create tag relation
-			TagRelation tagRelation = new TagRelation();
-			tagRelation.setObject_id(this.getId());
-			tagRelation.setTag_id(tagDefinition.getId());
-			session.save(tagRelation);
-			Persistance.commit();
 		}
 	}
 	
@@ -275,24 +280,29 @@ public class Model extends BusinessObject {
 	}
 	
 	public boolean addAccessRight(String openId, String term) {
-		if (!User.openIdExists(openId)) return false;
-		Identity sub = Identity.ensureSubject(openId);
-		String subject_hierarchy = sub.getUserHierarchy();
-		String object_hierarchy = this.identity.getModelHierarchy();
-		Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term);
-		if (right == null) {
-			right = new Interaction();
-			right.setSubject(subject_hierarchy);
-			right.setObject(object_hierarchy);
-			right.setScheme("http://b3mn.org/http");
-			right.setTerm(term);
-			right.setObject_self(true);
-			right.save();
-		} else {
-			right.setTerm(term); // Overwrite old term
-			right.save();
+		
+		synchronized(lock) {
+			
+			if (!User.openIdExists(openId)) return false;
+			Identity sub = Identity.ensureSubject(openId);
+			String subject_hierarchy = sub.getUserHierarchy();
+			String object_hierarchy = this.identity.getModelHierarchy();
+			Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term);
+			
+			if (right == null) {
+				right = new Interaction();
+				right.setSubject(subject_hierarchy);
+				right.setObject(object_hierarchy);
+				right.setScheme("http://b3mn.org/http");
+				right.setTerm(term);
+				right.setObject_self(true);
+				right.save();
+			} else {
+				right.setTerm(term); // Overwrite old term
+				right.save();
+			}
+			return true;
 		}
-		return true;
 		
 	}
 	
@@ -300,12 +310,22 @@ public class Model extends BusinessObject {
 		AccessRight term = this.getAccessRight(openId);
 		// None and owner rights cannot be removed
 		if ((term != AccessRight.NONE) && (term != AccessRight.OWNER)){
-			Identity sub = Identity.ensureSubject(openId);
-			String subject_hierarchy = sub.getUserHierarchy();
-			String object_hierarchy = this.identity.getModelHierarchy();
-			Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term.toString().toLowerCase());
-			right.delete();
-			return true; // Deleted
+			try {
+				Identity sub = Identity.ensureSubject(openId);
+				String subject_hierarchy = sub.getUserHierarchy();
+				String object_hierarchy = this.identity.getModelHierarchy();
+				Interaction right = Interaction.exist(subject_hierarchy, object_hierarchy, term.toString().toLowerCase());
+				List<User> users = new ArrayList<User>();
+				
+				for (String userOpenId : getAccessRights().keySet()) {
+					User user = new User(userOpenId);
+					users.add(user);
+				}
+
+						
+				right.delete();
+				return true; // Deleted
+			} catch (Exception e) { return false; }
 		} else {
 			return false; // Doesn't exist
 		}
