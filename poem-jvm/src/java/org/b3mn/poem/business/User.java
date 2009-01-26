@@ -296,11 +296,11 @@ public class User extends BusinessObject {
 	
 	@SuppressWarnings("unchecked")
 	public void addAuthentificationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res) {
-		addAuthentificationAttributes(con, req, res, null);
+		addAuthenticationAttributes(con, req, res, null);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void addAuthentificationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res, UUID uuid) {
+	public void addAuthenticationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res, UUID uuid) {
 		
 		String openId = getOpenId();
 		
@@ -330,7 +330,7 @@ public class User extends BusinessObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void removeAuthentificationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res) {
+	public void removeAuthenticationAttributes(ServletContext con, HttpServletRequest req, HttpServletResponse res) {
 		req.getSession().removeAttribute(USER_SESSION_IDENTIFIER);
 		
 		String openId = this.getOpenId();

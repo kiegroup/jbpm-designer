@@ -111,7 +111,7 @@ public class LoginHandler extends HandlerBase {
     		
     		if(openid != null && openid != "" && openid != getPublicUser()) {
     			User user = new User(openid);
-    			user.removeAuthentificationAttributes(this.getServletContext(), req, res);
+    			user.removeAuthenticationAttributes(this.getServletContext(), req, res);
     		}
     		res.sendRedirect(REPOSITORY_REDIRECT);
     		return;

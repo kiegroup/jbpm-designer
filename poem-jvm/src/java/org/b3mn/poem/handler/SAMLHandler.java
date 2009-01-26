@@ -170,7 +170,7 @@ public class SAMLHandler extends HandlerBase {
 		//will fail, in case the SAML authentication fails
 		//req.getSession().removeAttribute(USER_SESSION_IDENTIFIER);
 		if(curUser != null) {
-			curUser.removeAuthentificationAttributes(this.getServletContext(), req, res);
+			curUser.removeAuthenticationAttributes(this.getServletContext(), req, res);
 		}
 		
 		//get returnto url
@@ -236,7 +236,7 @@ public class SAMLHandler extends HandlerBase {
 				// create authentification token
 				UUID authToken = UUID.randomUUID();
 
-				user.addAuthentificationAttributes(this.getServletContext(), req, res, authToken);
+				user.addAuthenticationAttributes(this.getServletContext(), req, res, authToken);
 				
 				// store authToken in session
 				//req.getSession().setAttribute("SAMLAuthentificationToken", authToken);

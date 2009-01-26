@@ -15,6 +15,25 @@
     
     <display-name>PoEM</display-name>
 	
+	<!-- Authentication Filter -->
+	<filter>
+        <filter-name>
+            AuthenticationFilter
+        </filter-name>
+        <filter-class>
+            org.b3mn.poem.security.filter.AuthenticationFilter
+        </filter-class>
+    </filter>
+	
+    <filter-mapping>
+        <filter-name>
+            AuthenticationFilter
+        </filter-name>
+        <url-pattern>
+            /poem/*
+        </url-pattern>
+    </filter-mapping>
+	
 	<!-- Filter for SAML Single-Sign On Support -->
 	<!--<filter>
         <filter-name>
