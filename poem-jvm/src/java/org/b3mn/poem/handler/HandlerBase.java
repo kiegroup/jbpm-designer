@@ -228,9 +228,15 @@ public abstract class HandlerBase {
     	return files;
     }
     
-    
+
     protected String getOryxModel(String title, String content, 
     		String languageCode, String countryCode) {
+    	
+    	return getOryxModel(title, content, languageCode, countryCode, "");
+    }
+    
+    protected String getOryxModel(String title, String content, 
+    		String languageCode, String countryCode, String headExtentions) {
     	
     	String oryx_path = "/oryx/";
     	String languageFiles = "";
@@ -272,6 +278,8 @@ public abstract class HandlerBase {
       	  	+ "<script src=\"" + oryx_path + "i18n/translation_en_us.js\" type=\"text/javascript\" />\n"      	  	
       	  	+ languageFiles
       	  	+ "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
+      	 
+      	  	+ headExtentions
       	  	
       	  	+ "<link rel=\"Stylesheet\" media=\"screen\" href=\"" + oryx_path + "css/theme_norm.css\" type=\"text/css\" />\n"
 

@@ -38,7 +38,34 @@ table-layout:fixed;
 }
 
 
-#oryx_editor_header {       background-image: url('../images/header_bg.small.gif');       background-position: top center;       background-repeat: repeat-x;       position: absolute;       width: 100%;	   height: 30px;}.LoadingIndicator, .StatusIndicator {	font-family:Verdana;	font-size:11px; 	display:block; 	background: white no-repeat 8px; 	padding:5px; 	padding-left:30px; 	position:fixed; 	top:0px; 	left:0px;	border:1px solid silver;
+#oryx_editor_header {       background-image: url('../images/header_bg.small.gif');       background-position: top center;       background-repeat: repeat-x;       position: absolute;       width: 100%;	   height: 30px;}
+
+#oryx_editor_header .openid{
+	font-family:tahoma;
+	font-size:11px;
+	position:absolute;
+	right:15px;
+	top:8px;
+}
+#oryx_editor_header .openid.not{
+	color:#666666;
+	font-style:italic;
+}
+
+#oryx_editor_header .mashupinfo{
+	margin-left:8px;
+	position:relative;
+	top:3px;
+	vertical-align:top;
+}
+
+#oryx_editor_header .mashupinfo img{
+	margin-left:5px;
+	width:14px;
+}
+
+
+.LoadingIndicator, .StatusIndicator {	font-family:Verdana;	font-size:11px; 	display:block; 	background: white no-repeat 8px; 	padding:5px; 	padding-left:30px; 	position:fixed; 	top:0px; 	left:0px;	border:1px solid silver;
 	white-space:nowrap;
 	opacity:0.6;}
 

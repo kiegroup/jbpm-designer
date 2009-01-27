@@ -105,7 +105,7 @@ ORYX.Core.AbstractShape = {
 		var result = [];
 
 		this.children.each(function(uiObject) {
-			if(uiObject instanceof ORYX.Core.Shape) {
+			if(uiObject instanceof ORYX.Core.Shape && uiObject.isVisible ) {
 				if(iterator) {
 					iterator(uiObject);
 				}
@@ -128,7 +128,7 @@ ORYX.Core.AbstractShape = {
 		var result = [];
 
 		this.children.each(function(uiObject) {
-			if(uiObject instanceof ORYX.Core.Node) {
+			if(uiObject instanceof ORYX.Core.Node && uiObject.isVisible) {
 				if(iterator) {
 					iterator(uiObject);
 				}
@@ -153,7 +153,7 @@ ORYX.Core.AbstractShape = {
 		var result = [];
 
 		this.children.each(function(uiObject) {
-			if(uiObject instanceof ORYX.Core.Edge) {
+			if(uiObject instanceof ORYX.Core.Edge && uiObject.isVisible) {
 				if(iterator) {
 					iterator(uiObject);
 				}
@@ -204,6 +204,7 @@ ORYX.Core.AbstractShape = {
 				var nodesAtPosition = new Hash();
 				
 				ne.each(function(node) {
+					if(!node.isVisible){ return }
 					var candidates = node.getAbstractShapesAtPosition( x , y );
 					if(candidates.length > 0) {
 						var nodesInZOrder = $A(node.node.parentNode.childNodes);

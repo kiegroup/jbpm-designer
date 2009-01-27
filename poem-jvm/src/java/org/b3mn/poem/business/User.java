@@ -139,6 +139,7 @@ public class User extends BusinessObject {
 		request.getSession().setAttribute("countrycode", countrycode);
 		response.addCookie(new Cookie("languagecode", languagecode));
 		response.addCookie(new Cookie("countrycode", countrycode));
+		response.addCookie(new Cookie("identifier", this.getOpenId()));
 	}
 	
 	public String getLanguageCode(HttpServletRequest request) {

@@ -97,11 +97,13 @@ ORYX.CONFIG = {
 	EVENT_DBLCLICK:				"dblclick",
 	EVENT_KEYDOWN:				"keydown",
 	EVENT_KEYUP:				"keyup",
+
+	EVENT_LOADED:				"editorloaded",
 	
 	EVENT_EXECUTE_COMMANDS:			"executeCommands",
 	EVENT_STENCIL_SET_LOADED:		"stencilSetLoaded",
 	EVENT_SELECTION_CHANGED:		"selectionchanged",
-	
+	EVENT_CANVAS_SHAPEADDED:		"shapeadded",
 	EVENT_PROPERTY_CHANGED:			"propertyChanged",
 	EVENT_DRAGDROP_START:			"dragdrop.start",
 	EVENT_DRAGDROP_END:				"dragdrop.end",

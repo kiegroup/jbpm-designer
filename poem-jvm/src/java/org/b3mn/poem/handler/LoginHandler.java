@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -129,13 +130,13 @@ public class LoginHandler extends HandlerBase {
 
     private void processReturn(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	User user = this.verifyResponse(req, resp);
+
     	if (user == null) {
     		this.getServletContext().getRequestDispatcher("/index.jsp")
     		.forward(req, resp);
     	} else {
 
     		// authentication successful.
-
     		// store openid in session for future use by java dispatcher.
     		//req.getSession().setAttribute(OPENID_SESSION_IDENTIFIER,
     		//		user.getOpenId());
@@ -143,7 +144,9 @@ public class LoginHandler extends HandlerBase {
     		//req.setAttribute("identifier", user.getOpenId());
     		user.addAuthentificationAttributes(this.getServletContext(), req, resp);
     		
-    		resp.sendRedirect(REPOSITORY_REDIRECT);
+    		
+    		String rPage = req.getParameter("redirect");
+    		resp.sendRedirect( rPage != null ? rPage : REPOSITORY_REDIRECT);
     	}
     }
 
@@ -157,7 +160,7 @@ public class LoginHandler extends HandlerBase {
             // the authentication responses from the OpenID provider
             // String returnToUrl = "http://example.com/openid";
             String returnToUrl = httpReq.getRequestURL().toString()
-                    + "?is_return=true";
+                    + "?is_return=true" + (httpReq.getParameter("redirect") != null ? "&redirect=" + httpReq.getParameter("redirect") : "");
 
             // perform discovery on the user-supplied identifier
             List discoveries = manager.discover(userSuppliedString);

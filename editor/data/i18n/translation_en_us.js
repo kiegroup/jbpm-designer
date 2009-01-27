@@ -13,6 +13,7 @@ ORYX.I18N.Language = "en_us"; //Pattern <ISO language code>_<ISO country code> i
 if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 
 ORYX.I18N.Oryx.pleaseWait = "Please wait while Oryx is loading...";
+ORYX.I18N.Oryx.notLoggedOn = "Not logged on";
 
 if(!ORYX.I18N.AddDocker) ORYX.I18N.AddDocker = {};
 

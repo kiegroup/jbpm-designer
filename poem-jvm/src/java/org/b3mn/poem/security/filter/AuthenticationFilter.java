@@ -153,7 +153,7 @@ public class AuthenticationFilter implements Filter {
 			} else {
 				Identity subject = Identity.ensureSubject(openId);
 				user = new User(subject);
-				//TODO login?
+				user.login(request, response);
 			}
 			request.setAttribute("user", user);
 
