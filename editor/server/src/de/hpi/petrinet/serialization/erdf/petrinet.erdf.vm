@@ -44,7 +44,7 @@
                 <span class="oryx-id"></span>
                 <span class="oryx-title"></span>
                 <span class="oryx-href"></span>
-                <span class="oryx-bounds">282,185,362,225</span>
+                <span class="oryx-bounds">$transition.getBounds().toString()</span>
                 #foreach( $arc in $transition.getOutgoingFlowRelationships() )
                     <a rel="raziel-outgoing" href="#$arc.getId()"/>
                 #end
@@ -58,7 +58,7 @@
                 <span class="oryx-id"></span>
                 <span class="oryx-title"></span>
                 <span class="oryx-href"></span>
-                <span class="oryx-bounds">282,185,362,225</span>
+                <span class="oryx-bounds">$place.getBounds().toString()</span>
                 #foreach( $arc in $place.getOutgoingFlowRelationships() )
                     <a rel="raziel-outgoing" href="#$arc.getId()"/>
                 #end
@@ -71,10 +71,9 @@
                 <span class="oryx-type">http://b3mn.org/stencilset/petrinet#Arc</span>
                 <span class="oryx-id"></span>
                 <span class="oryx-label"></span>
-                <span class="oryx-bounds">282,185,362,225</span>
                 <a rel="raziel-outgoing" href="#$arc.getTarget().getId()"/>
 				<a rel="raziel-parent" href="#oryx-canvas123"/>
-                <span class="oryx-dockers"></span>
+                <span class="oryx-dockers">40 20 15 15  # </span>
                 <a rel="raziel-target" href="#$arc.getTarget().getId()"/>
             </div>
         #end

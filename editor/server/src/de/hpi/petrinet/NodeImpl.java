@@ -3,6 +3,8 @@ package de.hpi.petrinet;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hpi.util.Bounds;
+
 /**
  * Copyright (c) 2008 Gero Decker
  * 
@@ -29,6 +31,7 @@ public class NodeImpl implements Node {
 	protected String id;
 	private List<FlowRelationship> incomingFlowRelationships;
 	private List<FlowRelationship> outgoingFlowRelationships;
+	private Bounds bounds;
 
 	public String getId() {
 		return id;
@@ -61,6 +64,14 @@ public class NodeImpl implements Node {
 
 	public String toString() {
 		return getId();
+	}
+
+	public Bounds getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(Bounds bounds) {
+		this.bounds = bounds;
 	}
 
 }

@@ -21,6 +21,7 @@ import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Converter;
 import de.hpi.bpmn2pn.converter.StandardConverter;
 import de.hpi.petrinet.PetriNet;
+import de.hpi.petrinet.layouting.PetriNetLayouter;
 import de.hpi.petrinet.serialization.erdf.PetriNeteRDFSerializer;
 
 /**
@@ -79,6 +80,10 @@ public class BPMN2PNServlet extends HttpServlet {
 
 		Converter conv = new StandardConverter(diagram);
 		PetriNet pn = conv.convert();
+		
+		PetriNetLayouter layouter = new PetriNetLayouter(pn);
+		layouter.layout();
+		
 		String erdf = new PetriNeteRDFSerializer(this.getServletContext()).serializeDiagram(pn);
 		
 		writer.write(erdf);
