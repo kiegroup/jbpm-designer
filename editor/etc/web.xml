@@ -8,13 +8,13 @@
 
 	
 
-	<servlet>
+	<!--<servlet>
 		<display-name>Oryx Process Repository</display-name>
 		<servlet-name>Repository</servlet-name>
 		<servlet-class>
 			org.oryxeditor.server.RepositoryProvider
 		</servlet-class>
-	</servlet>
+	</servlet>-->
 	
 	<!--	<servlet>
 		<servlet-name>EngineProxy</servlet-name>
@@ -117,13 +117,13 @@
 		</servlet-class>
 	</servlet>
 	
-	<servlet>
+	<!--<servlet>
 		<display-name>Oryx Simple Storage Servlet</display-name>
 		<servlet-name>SimpleStorageServlet</servlet-name>
 		<servlet-class>
 			org.oryxeditor.server.SimpleStorageServlet
 		</servlet-class>
-	</servlet>
+	</servlet>-->
 	
 	<servlet>
 		<display-name>Alternatives Renderer</display-name>
@@ -178,10 +178,10 @@
 		</servlet-class>
 	</servlet>
 	
-	<servlet-mapping>
+	<!--<servlet-mapping>
 		<servlet-name>Repository</servlet-name>
 		<url-pattern>/repository</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 <!--<servlet-mapping>
 		<servlet-name>EngineProxy</servlet-name>
@@ -249,10 +249,10 @@
 		<url-pattern>/download</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping>
+	<!--<servlet-mapping>
 		<servlet-name>SimpleStorageServlet</servlet-name>
 		<url-pattern>/server</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 	<servlet-mapping>
 		<servlet-name>AlternativesRenderer</servlet-name>
@@ -331,7 +331,7 @@
 	    <mime-type>image/x-icon</mime-type>
 	</mime-mapping>
 
-	<welcome-file-list>
+	<!--<welcome-file-list>
 		<welcome-file>/server</welcome-file>
-	</welcome-file-list>
+	</welcome-file-list>-->
 </web-app>

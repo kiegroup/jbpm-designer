@@ -8,7 +8,7 @@
 	<property name="lib-dir" value="${server-root-dir}/lib" />
 	<property name="data-dir" value="${server-root-dir}/data" />
 	<property name="target-dir" value="dist" />
-	<property name="repository-dir" value="${server-root-dir}/src/javascript/repository" />
+	<!--<property name="repository-dir" value="${server-root-dir}/src/javascript/repository" />-->
 	<property name="repository2-dir" value="${server-root-dir}/src/javascript/repository2" />
 	<property name="config-dir" value="${server-root-dir}/etc" />
 	
@@ -84,7 +84,7 @@
 			</fileset>
 			<!-- Javascript files-->
 			<fileset dir="${server-root-dir}/src/javascript" >
-				<include name="repository/" />
+				<!--<include name="repository/" />-->
 				<include name="repository2/" />
 			</fileset>
 			<fileset dir="${poem-build-dir}" >
