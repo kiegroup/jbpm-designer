@@ -46,12 +46,12 @@ ORYX.I18N.AdHocCC.selectTask = "seleccionar actividad";
 ORYX.I18N.AdHocCC.selectState = "seleccionar estado";
 ORYX.I18N.AdHocCC.addExp = "Añadir expresión";
 ORYX.I18N.AdHocCC.selectDataField = "Seleccionar campo de datos"; 
-( ORYX.I18N.AdHocCC.enterEqual = "Agregar valor de comparación";
+ORYX.I18N.AdHocCC.enterEqual = "Agregar valor de comparación";
 ORYX.I18N.AdHocCC.and = "y";
 ORYX.I18N.AdHocCC.or = "o"; 
 ORYX.I18N.AdHocCC.not = "no";
-( ORYX.I18N.AdHocCC.clearCC = "Borrar condición final";
-( ORYX.I18N.AdHocCC.editCC = "Editar condición final ad hoc";
+ORYX.I18N.AdHocCC.clearCC = "Borrar condición final";
+ORYX.I18N.AdHocCC.editCC = "Editar condición final ad hoc";
 ORYX.I18N.AdHocCC.addExecState = "Añadir expresión de estado de ejecución"; 
 ORYX.I18N.AdHocCC.addDataExp = "Añadir expresión de datos";
 ORYX.I18N.AdHocCC.addLogOp = "Añadir operadores logicos";
@@ -233,7 +233,7 @@ ORYX.I18N.File.infoDesc = "sobre";
 ORYX.I18N.File.genPDF = "Está creando PDF...";
 ORYX.I18N.File.genPDFFailed = "Falló la creación del archivo PDF.";
 ORYX.I18N.File.printTitle = "Imprimir";
-ORYX.I18N.File.printMsg = "Sentimos que por el momento la función "imprimir" no trabaja siempre correcto. Por favor, utilice la exportación al PDF y imprime el documento PDF. ¿Quiere seguir imprimiendo?";
+ORYX.I18N.File.printMsg = 'Sentimos que por el momento la función "imprimir" no trabaja siempre correcto. Por favor, utilice la exportación al PDF y imprime el documento PDF. ¿Quiere seguir imprimiendo?';
 
 if(!ORYX.I18N.Grouping) ORYX.I18N.Grouping = {};
 
@@ -366,3 +366,8 @@ Ext.MessageBox.buttonText.yes = "Sí";
 Ext.MessageBox.buttonText.no = "No";
 Ext.MessageBox.buttonText.cancel = "Cancelar";
 Ext.MessageBox.buttonText.ok = "Ok";
+
+
+/** New Language Properties: 28.01.2009 */
+//ORYX.I18N.BPMN2XPDL.group = "Export";
+//ORYX.I18N.BPMN2XPDL.xpdlExport = "Export to XPDL";

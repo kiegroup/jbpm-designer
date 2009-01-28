@@ -380,7 +380,7 @@ ORYX.I18N.TreeGraphSupport.syntaxCheckDesc = "Check the syntax of an tree graph 
 
 
 
-/** New Language Properties: 08.12.2008 **/
+/** New Language Properties: 08.12.2008 */
 
 ORYX.I18N.PropertyWindow.title = "Properties";
 
@@ -402,3 +402,9 @@ Ext.MessageBox.buttonText.yes = "Yes";
 Ext.MessageBox.buttonText.no = "No";
 Ext.MessageBox.buttonText.cancel = "Cancel";
 Ext.MessageBox.buttonText.ok = "OK";
+
+
+/** New Language Properties: 28.01.2009 */
+if(!ORYX.I18N.BPMN2XPDL) ORYX.I18N.BPMN2XPDL = {};
+ORYX.I18N.BPMN2XPDL.group = "Export";
+ORYX.I18N.BPMN2XPDL.xpdlExport = "Export to XPDL";

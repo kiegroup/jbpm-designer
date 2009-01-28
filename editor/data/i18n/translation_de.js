@@ -395,3 +395,9 @@ Ext.MessageBox.buttonText.yes = "Ja";
 Ext.MessageBox.buttonText.no = "Nein";
 Ext.MessageBox.buttonText.cancel = "Abbrechen";
 Ext.MessageBox.buttonText.ok = "OK";
+
+
+
+/** New Language Properties: 28.01.2009 */
+ORYX.I18N.BPMN2XPDL.group = "Export";
+ORYX.I18N.BPMN2XPDL.xpdlExport = "Nach XPDL exportieren";
