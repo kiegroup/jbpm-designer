@@ -90,6 +90,10 @@ ORYX.Editor.checkClassType = function( classInst, classType ) {
 
 function setUp(){
 	
+	// set Oryx-Namespace
+	
+	NAMESPACE_ORYX_TEST = "http://www.b3mn.org/oryx";
+	
 	// attribute definitions
 	x = 1
 	y = 2
@@ -109,6 +113,24 @@ function setUp(){
 	points = "" + pointsX[0] +","+pointsY[0]+" "+ pointsX[1] +","+pointsY[1]+" "+ pointsX[2] +","+pointsY[2]
 	lessPoints = "" + pointsX[0] +","+pointsY[0]+" "+ pointsX[1] +","+pointsY[1]
 	nullValuesPoints = "" + 0 + "," + 0 + " " + 0 + "," + 0 + " " + 0 + "," + 0
+	
+	// valid SVG-Rect with anchors
+	
+	testSVGRectWithAnchors = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+	testSVGRectWithAnchors.setAttributeNS(null, "x", x);
+	testSVGRectWithAnchors.setAttributeNS(null, "y", y);
+	testSVGRectWithAnchors.setAttributeNS(null, "height", height);
+	testSVGRectWithAnchors.setAttributeNS(null, "width", width);
+	testSVGRectWithAnchors.setAttributeNS(NAMESPACE_ORYX_TEST, "anchors", "left right bottom top");
+	
+	// valid resizable SVG-Rect
+	
+	testSVGRectResizable = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+	testSVGRectResizable.setAttributeNS(null, "x", x);
+	testSVGRectResizable.setAttributeNS(null, "y", y);
+	testSVGRectResizable.setAttributeNS(null, "height", height);
+	testSVGRectResizable.setAttributeNS(null, "width", width);
+	testSVGRectResizable.setAttributeNS(NAMESPACE_ORYX_TEST, "resize", "horizontal");
 	
 	// valid SVG-Rect-Element
 	
@@ -1307,6 +1329,191 @@ function testNewSVGPolygonBadTooLessPoints() {
 			throw e;
 		}
 	}	
+}
+
+// Test for resize attribute
+
+/**
+ * Tests, if the resize attribute is parsed correctly, if value equals "horizontal"
+ */
+function testGoodParseResizableHorizontal() {
+	testSVGRectResizable.setAttributeNS(NAMESPACE_ORYX_TEST, "resize", "horizontal");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectResizable);
+	assertTrue('resize value check horizontal', testSVGShape.isHorizontallyResizable)
+	assertFalse('resize value check vertical', testSVGShape.isVerticallyResizable) 
+}
+
+
+/**
+ * Tests, if the resize attribute is parsed correctly, if value equals "vertical"
+ */
+function testGoodParseResizableVertical() {
+	testSVGRectResizable.setAttributeNS(NAMESPACE_ORYX_TEST, "resize", "vertical");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectResizable);
+	assertFalse('resize value check horizontal', testSVGShape.isHorizontallyResizable)
+	assertTrue('resize value check vertical', testSVGShape.isVerticallyResizable)
+}
+
+/**
+ * Tests, if the resize attribute is parsed correctly, if value equals "vertical horizontal"
+ */
+function testGoodParseResizableVerticalAndHorizontal() {
+	testSVGRectResizable.setAttributeNS(NAMESPACE_ORYX_TEST, "resize", "vertical horizontal");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectResizable);
+	assertTrue('resize value check horizontal', testSVGShape.isHorizontallyResizable)
+	assertTrue('resize value check vertical', testSVGShape.isVerticallyResizable)
+}
+
+/**
+ * Tests, if the resize attribute is parsed correctly, if value equals "horizontal vertical"
+ */
+function testGoodParseResizableVerticalAndHorizontalChangedOrder() {
+	testSVGRectResizable.setAttributeNS(NAMESPACE_ORYX_TEST, "resize", "horizontal vertical");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectResizable);
+	assertTrue('resize value check horizontal', testSVGShape.isHorizontallyResizable)
+	assertTrue('resize value check vertical', testSVGShape.isVerticallyResizable)
+}
+
+
+/**
+ * If no resize attribute is set, both isHorizontallyRezisable and isVerticallyresizable should be false.
+ */
+function testGoodParseResizableNoResizeAttribute() {
+	testSVGRectResizable.removeAttributeNS(NAMESPACE_ORYX_TEST, "resize");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectResizable);
+	assertFalse('resize value check horizontal', testSVGShape.isHorizontallyResizable)
+	assertFalse('resize value check vertical', testSVGShape.isVerticallyResizable)
+}
+
+/**
+ * If the resize attribute contains of nonsense values, both isHorizontallyRezisable and isVerticallyresizable should be false.
+ */
+function testBadParseResizableNoResizeAttribute() {
+	testSVGRectResizable.setAttributeNS(NAMESPACE_ORYX_TEST, "resize", "horizontalxx verticalzz");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectResizable);
+	assertFalse('resize value check horizontal', testSVGShape.isHorizontallyResizable)
+	assertFalse('resize value check vertical', testSVGShape.isVerticallyResizable)
+}
+
+// Test for anchor parsing
+
+/**
+ * In testSVGRectWithAnchors all anchors are set. So all possible four anchors should signal a true value.
+ */
+function testParseAnchorsFromAnchorAttribute() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectWithAnchors);
+	assertTrue('value check for left anchor', testSVGShape.anchorLeft)
+	assertTrue('value check for right anchor', testSVGShape.anchorRight)
+	assertTrue('value check for top anchor', testSVGShape.anchorTop)
+	assertTrue('value check for bottom anchor', testSVGShape.anchorBottom)
+}
+
+/**
+ * Tests if also comma-seperation is parsed correctly. (no spaces)
+ */
+function testAnchorCommaSeparationWithoutSpaces() {
+	testSVGRectWithAnchors.setAttributeNS(NAMESPACE_ORYX_TEST, "anchors", "left,right,top,bottom,,,");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectWithAnchors);
+	assertTrue('value check for left anchor', testSVGShape.anchorLeft)
+	assertTrue('value check for right anchor', testSVGShape.anchorRight)
+	assertTrue('value check for top anchor', testSVGShape.anchorTop)
+	assertTrue('value check for bottom anchor', testSVGShape.anchorBottom)
+}
+
+/**
+ * Tests if also comma-seperation is parsed correctly. (with spaces)
+ */
+function testAnchorCommaSeparationWithSpaces() {
+	testSVGRectWithAnchors.setAttributeNS(NAMESPACE_ORYX_TEST, "anchors", "left, right ,top   ,   bottom  ,,,");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectWithAnchors);
+	assertTrue('value check for left anchor', testSVGShape.anchorLeft)
+	assertTrue('value check for right anchor', testSVGShape.anchorRight)
+	assertTrue('value check for top anchor', testSVGShape.anchorTop)
+	assertTrue('value check for bottom anchor', testSVGShape.anchorBottom)
+}
+
+/**
+ * Only left and top are set.
+ */
+function testAnchorCommaSeparationWithSpaces() {
+	testSVGRectWithAnchors.setAttributeNS(NAMESPACE_ORYX_TEST, "anchors", "top LeFt");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectWithAnchors);
+	assertTrue('value check for left anchor', testSVGShape.anchorLeft)
+	assertFalse('value check for right anchor', testSVGShape.anchorRight)
+	assertTrue('value check for top anchor', testSVGShape.anchorTop)
+	assertFalse('value check for bottom anchor', testSVGShape.anchorBottom)
+}
+
+/**
+ * The anchors attribute is not available. So all anchors should be false.
+ */
+function testAnchorCommaSeparationWithSpaces() {
+	testSVGRectWithAnchors.removeAttributeNS(NAMESPACE_ORYX_TEST, "anchors");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectWithAnchors);
+	assertFalse('value check for left anchor', testSVGShape.anchorLeft)
+	assertFalse('value check for right anchor', testSVGShape.anchorRight)
+	assertFalse('value check for top anchor', testSVGShape.anchorTop)
+	assertFalse('value check for bottom anchor', testSVGShape.anchorBottom)
+}
+
+/**
+ * The anchor attribute has a wrong syntax and nonsense elements. An InvalidParameterException should be thrown.
+ * An anchor attribute only should consists of values left, right, top, bottom comma oder space separated.
+ */
+function testAnchorCommaSeparationWithSpaces() {
+	testSVGRectWithAnchors.setAttributeNS(NAMESPACE_ORYX_TEST, "anchors", "left,..,top,,fail");
+	try {
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGRectWithAnchors);
+	} 
+	catch (e) {
+		if (!(e instanceof JsUnitException)) {
+			throw e;
+		}
+	}
+}
+
+//testSVGPathElement
+// Tests for allowDockers and resizeMarkerMid attributes of SVGPathElement
+
+/**
+ * If no allowDockers is set, it should be disabled
+ */
+function testNoAllowDockersSet() {
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	assertTrue('value check of allowDockers', testSVGShape.allowDockers)
+}
+
+/**
+ * If allowDockers equals "yes", it should be true
+ */
+function testAllowDockersWithValueYes() {
+	testSVGPathElement.setAttributeNS(NAMESPACE_ORYX_TEST, "allowDockers", "yes");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	assertTrue('value check of allowDockers', testSVGShape.allowDockers)
+}
+
+/**
+ * If allowDockers equals "no", it should be false
+ */
+function testAllowDockersWithValueNo() {
+	testSVGPathElement.setAttributeNS(NAMESPACE_ORYX_TEST, "allowDockers", "no");
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	assertFalse('value check of allowDockers', testSVGShape.allowDockers)
+}
+
+/**
+ * If allowDockers contains a wrong value, a InvalidParameterException should be thrown.
+ */
+function testFailsForInvalidAllowDockersValue() {
+	testSVGPathElement.setAttributeNS(NAMESPACE_ORYX_TEST, "allowDockers", "yesno");
+	try {
+		var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	} 
+	catch (e) {
+		if (!(e instanceof JsUnitException)) {
+			throw e;
+		}
+	}
 }
 
 
