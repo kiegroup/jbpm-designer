@@ -1,7 +1,7 @@
 {
-	"title":"BPMN 1.1",
+	"title":"BPMN 1.2",
 	"namespace":"http://b3mn.org/stencilset/bpmn1.1#",
-	"description":"This is the BPMN1.1 stencil set specification.",
+	"description":"This is the BPMN1.2 stencil set specification.",
  	"stencils" : [
  		{
 			"type":				"node",
