@@ -482,7 +482,7 @@
   </xsl:template>
 
   <!-- ************** Template for generating XPDL package ******************** -->
-  <xsl:template match="x:body">
+  <xsl:template match="/">
     <xpdl:Package
 			xmlns:xpdl="http://www.wfmc.org/2004/XPDL2.0alpha"
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -494,52 +494,98 @@
         <xpdl:Created />
       </xpdl:PackageHeader>
       <!-- *********************** Pools ******************************** -->
-      <xsl:variable name="Pools" select="x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#Pool']"/>
-      <xsl:if test="count($Pools)>0">
-        <xpdl:Pools>
-          <xsl:for-each select="$Pools">
-            <!-- <xsl:variable name="id" select="x:span[@class='oryx-id']" /> -->
-            <xsl:variable name="id" select="@id" />
-            <!-- <xpdl:Pool 
+      <xsl:variable name="Pools" select="//x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#Pool']"/>
+	  <!-- Get Id of canvas-->
+	  <xsl:variable name="canvasId" select="//x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#BPMNDiagram']/@id" />
+	  <!-- Get elements that are direct children of the canvas (no flows, no other pools) -->
+	  <xsl:variable name="canvasChildren" select="//x:div[x:a[@rel='raziel-parent' and @href=concat('#',$canvasId)] 
+	  and x:span[@class='oryx-type']!='http://b3mn.org/stencilset/bpmn1.1#MessageFlow'
+	  and x:span[@class='oryx-type']!='http://b3mn.org/stencilset/bpmn1.1#UndirectedAssociation'
+	  and x:span[@class='oryx-type']!='http://b3mn.org/stencilset/bpmn1.1#DirectedAssociation'
+	  and x:span[@class='oryx-type']!='http://b3mn.org/stencilset/bpmn1.1#DataObject'
+	  and x:span[@class='oryx-type']!='http://b3mn.org/stencilset/bpmn1.1#Pool']" />
+      <xpdl:Pools>
+	  <xsl:if test="count($Pools)>0">
+		  <xsl:for-each select="$Pools">
+			<!-- <xsl:variable name="id" select="x:span[@class='oryx-id']" /> -->
+			<xsl:variable name="id" select="@id" />
+			<!-- <xpdl:Pool 
 							Id="{$id}" 
 							Name="{x:span[@class='oryx-name']}"
 							Process="{x:span[@class='oryx-processRef']}"
 							BoundaryVisible="{x:span[@class='oryx-boundaryvisible']}"> -->
-            <xpdl:Pool 
+			<xpdl:Pool 
 							Id="{$id}" 
 							Name="{x:span[@class='oryx-name']}"
 							Process="{concat($id,'_process')}"
 							BoundaryVisible="{x:span[@class='oryx-boundaryvisible']}">
-              <xsl:variable name="participantRef" select="x:span[@class='oryx-participantRef']" />
-              <xsl:if test="string-length(normalize-space($participantRef))>0">
-                <xsl:attribute name="Participant">
-                  <xsl:value-of select="$participantRef"></xsl:value-of>
-                </xsl:attribute>
-              </xsl:if>
+			  <xsl:variable name="participantRef" select="x:span[@class='oryx-participantRef']" />
+			  <xsl:if test="string-length(normalize-space($participantRef))>0">
+				<xsl:attribute name="Participant">
+				  <xsl:value-of select="$participantRef"></xsl:value-of>
+				</xsl:attribute>
+			  </xsl:if>
 
-              <!-- determine Lanes -->
-              <xsl:variable name="childLanes" select="//x:div[x:a[@rel='raziel-parent' and @href=concat('#',$id)]]" />
-              <xsl:call-template name="lanes">
-                <xsl:with-param name="childLanes" select="$childLanes" />
-                <xsl:with-param name="poolId" select="$id" />
-              </xsl:call-template>
+			  <!-- determine Lanes -->
+			  <xsl:variable name="childLanes" select="//x:div[x:a[@rel='raziel-parent' and @href=concat('#',$id)]]" />
+			  <xsl:call-template name="lanes">
+				<xsl:with-param name="childLanes" select="$childLanes" />
+				<xsl:with-param name="poolId" select="$id" />
+			  </xsl:call-template>
 
-              <!-- add Object element (Categories and Documentation) -->
-              <xsl:call-template name="object">
-                <xsl:with-param name="objectParent" select="." />
-              </xsl:call-template>
+			  <!-- add Object element (Categories and Documentation) -->
+			  <xsl:call-template name="object">
+				<xsl:with-param name="objectParent" select="." />
+			  </xsl:call-template>
 
-              <!-- add NodeGraphicsInfos -->
-              <xsl:call-template name="nodeGraphicsInfos">
-                <xsl:with-param name="node" select="." />
-              </xsl:call-template>
+			  <!-- add NodeGraphicsInfos -->
+			  <xsl:call-template name="nodeGraphicsInfos">
+				<xsl:with-param name="node" select="." />
+			  </xsl:call-template>
+			</xpdl:Pool>
+		  </xsl:for-each>
+	  </xsl:if>
+	  <!-- Check for elements that are not contained in a pool -->
+	  <!-- The following variable is only used if there is a background pool -->
+	  <!-- It must also be considered in the part creating the actual workflow processes -->
+	  <xsl:variable name="backgroundLaneId" select="generate-id(.)" />
+  	  <xsl:if test="count($canvasChildren)>0">
+		<xpdl:Pool 
+						Id="{$canvasId}" 
+						Name="Background Pool"
+						Process="{concat($canvasId,'_process')}"
+						BoundaryVisible="false">
+			<xpdl:Lanes>
+			  <xpdl:Lane 
+				Id="{generate-id(.)}" 
+				ParentPool="{$canvasId}"
+				Name="Background Lane">
+				
+				<xpdl:Object Id="{$backgroundLaneId}">
+				<xpdl:Documentation><xsl:text>This Lane belongs to the background Pool and has been created automatically.</xsl:text></xpdl:Documentation>
+				</xpdl:Object>
+				<xpdl:NodeGraphicsInfos>
+				  <xpdl:NodeGraphicsInfo Width="1000" Height="1000">
+					<xpdl:Coordinates XCoordinate="0" YCoordinate="0" />
+				  </xpdl:NodeGraphicsInfo>
+				</xpdl:NodeGraphicsInfos>
+				
+			  </xpdl:Lane>
+			</xpdl:Lanes>
+			<xpdl:Object Id="{$backgroundLaneId}">
+			<xpdl:Documentation><xsl:text>This is the background Pool, which has been created automatically.</xsl:text></xpdl:Documentation>
+			</xpdl:Object>
+			<xpdl:NodeGraphicsInfos>
+			  <xpdl:NodeGraphicsInfo Width="1000" Height="1000">
+				<xpdl:Coordinates XCoordinate="0" YCoordinate="0" />
+			  </xpdl:NodeGraphicsInfo>
+			</xpdl:NodeGraphicsInfos>
+		</xpdl:Pool>
+	  </xsl:if>
+      </xpdl:Pools>
 
-            </xpdl:Pool>
-          </xsl:for-each>
-        </xpdl:Pools>
-      </xsl:if>
       <!-- ******************* Message Flows ********************** -->
-      <xsl:variable name="MessageFlows" select="x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#MessageFlow']"/>
+      <xsl:variable name="MessageFlows" select="//x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#MessageFlow']"/>
       <xsl:if test="count($MessageFlows)>0">
         <xpdl:MessageFlows>
           <xsl:for-each select="$MessageFlows">
@@ -570,8 +616,8 @@
         </xpdl:MessageFlows>
       </xsl:if>
       <!-- ******************* Associations ********************** -->
-      <xsl:variable name="undirectedAssociations" select="x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#UndirectedAssociation']"/>
-      <xsl:variable name="directedAssociations" select="x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#DirectedAssociation']"/>
+      <xsl:variable name="undirectedAssociations" select="//x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#UndirectedAssociation']"/>
+      <xsl:variable name="directedAssociations" select="//x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#DirectedAssociation']"/>
       <xsl:if test="count($undirectedAssociations)>0 or count($directedAssociations)>0">
         <xpdl:Associations>
           <xsl:for-each select="$undirectedAssociations">
@@ -607,7 +653,7 @@
             <xpdl:Association 
 							Id="{$id}"
               Source="{//x:div[x:a[@rel='raziel-outgoing' and @href=concat('#',$id)]]/@id}"
-              Target="{//x:div[@id=substring($internalOutRef,2)]/@id}">
+              Target="{//x:div[@id=substring($internalOutRef,2)]/@id}"
               AssociationDirection="{x:span[@class='oryx-direction']}">
               <xsl:if test="string-length(normalize-space($name))>0">
                 <xsl:attribute name="Name">
@@ -619,7 +665,7 @@
         </xpdl:Associations>
       </xsl:if>
       <!-- ******************* Artifacts *************************** -->
-      <xsl:variable name="VarDataObjects" select="x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#DataObject']"/>
+      <xsl:variable name="VarDataObjects" select="//x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#DataObject']"/>
       <xsl:if test="(count($VarDataObjects))>0">
         <xpdl:Artifacts>
           <!-- ******************** Variable Data Object ******************* -->
@@ -647,7 +693,7 @@
       </xsl:if>
       <!-- ************************** Processes ******************************* -->
       <xpdl:WorkflowProcesses>
-        <xsl:for-each select="x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#Pool']">
+        <xsl:for-each select="//x:div[x:span[@class='oryx-type']='http://b3mn.org/stencilset/bpmn1.1#Pool']">
           <xsl:variable name="suppressJoinFailure" select="x:span[@class='oryx-suppressjoinfailure']"/>
           <xsl:variable name="enableInstanceCompensation" select="x:span[@class='oryx-enableinstancecompensation']"/>
           <xsl:variable name="queryLanguage" select="x:span[@class='oryx-querylanguage']"/>
@@ -713,6 +759,40 @@
             <xpdl:Extensions/>
           </xpdl:WorkflowProcess>
         </xsl:for-each>
+		<!-- Treat the elements potentially contained in the background pool -->
+		<xsl:if test="count($canvasChildren)>0">
+			<xpdl:WorkflowProcess 
+				Id="{concat(@canvasId,'_process')}"
+				Name="Background Pool Process">
+				<xpdl:ProcessHeader />
+
+				<!-- ************************ Activity Sets ********************************* -->
+				<xpdl:ActivitySets>
+					<xsl:for-each select="$canvasChildren">
+						<xsl:call-template name="activitySets">
+						  <xsl:with-param name="blockActivities" select="$canvasChildren" />
+						</xsl:call-template>
+					</xsl:for-each>
+				</xpdl:ActivitySets>
+				<!-- ************************ Activities ********************************* -->
+				<xpdl:Activities>
+					<xsl:for-each select="$canvasChildren">
+						<xsl:call-template name="activities">
+						  <xsl:with-param name="activities" select="$canvasChildren" />
+						</xsl:call-template>
+				  </xsl:for-each>
+				</xpdl:Activities>
+				<!-- ************************ Transitions ********************************* -->
+				<xpdl:Transitions>
+					<xsl:for-each select="$canvasChildren">
+						<xsl:call-template name="relevantTransitions">
+						  <xsl:with-param name="resId" select="$canvasId" />
+						</xsl:call-template>
+				  </xsl:for-each>
+				</xpdl:Transitions>
+				<xpdl:Extensions/>
+			</xpdl:WorkflowProcess>
+		</xsl:if>
       </xpdl:WorkflowProcesses>
     </xpdl:Package>
   </xsl:template>
