@@ -2,6 +2,8 @@
 <project name="Oryx Main Build Script">
     <!-- Load additional properties -->
     <property file="build.properties"/>
+	<property name="build-dir" value="build" />
+	<property name="target-dir" value="dist" />
     
     <!-- Import ANT build scripts of sub projects -->
     <import file="editor/build.xml"/>
@@ -16,9 +18,10 @@
     
     
     <!-- CLEAN EDITOR AND BACKEND -->
-    <target name="clean-all">
-    	<delete dir="build"/>
-		<delete dir="dist"/>
+    <target name="clean-all" depends="clean-editor, clean-backend">
+        <!-- the depencies are somewhat redundant at the moment, but also future-proof -->
+    	<delete dir="${build-dir}"/>
+		<delete dir="${target-dir}"/>
 	</target>
     
     

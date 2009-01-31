@@ -9,8 +9,7 @@
 	<property name="editor-src-root" value="editor" />
 	<property name="editor-src-client" value="${editor-src-root}/client" />
 	<property name="editor-src-server" value="${editor-src-root}/server" />
-	<property name="editor-build-root" value="build/editor" />
-	<property name="target-dir" value="dist" />
+	<property name="editor-build-root" value="${build-dir}/editor" />
 	
 	<!-- Oryx  targets (oryx.war) ****************************************************** -->
 	<target name="build-with-xhtml-test-files-flag">

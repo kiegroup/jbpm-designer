@@ -3,11 +3,10 @@
 	<!-- Server (poem-jvm) properties *************************************************** -->
 	<property name="server-root-dir" value="poem-jvm" />
 	<property name="java-dir" value="${server-root-dir}/src/java" />
-	<property name="poem-build-dir" value="build/poem-jvm" />
+	<property name="poem-build-dir" value="${build-dir}/poem-jvm" />
 	<property name="bin-dir" value="${poem-build-dir}/bin" />
 	<property name="lib-dir" value="${server-root-dir}/lib" />
 	<property name="data-dir" value="${server-root-dir}/data" />
-	<property name="target-dir" value="dist" />
 	<!--<property name="repository-dir" value="${server-root-dir}/src/javascript/repository" />-->
 	<property name="repository2-dir" value="${server-root-dir}/src/javascript/repository2" />
 	<property name="config-dir" value="${server-root-dir}/etc" />
@@ -15,9 +14,8 @@
 	
 	<!-- Server targets (backend.war) ****************************************************** -->
 	<target name="clean-backend">
-		<delete dir="${bin-dir}" />
+		<delete dir="${poem-build-dir}" />
 		<delete file="${target-dir}/backend.war" />
-		<delete dir="${deploymentdir}/backend" />
 	</target>
 	
 	<target name="compile-backend">
