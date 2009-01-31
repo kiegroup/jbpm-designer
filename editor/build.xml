@@ -198,15 +198,17 @@
         </echo>
     </target>
 
-    <target name='generate-version-file'>
-        <exec executable="svn" output="${editor-build-root}/version.xml" failifexecutionfails="false">
+    <!-- generates a file containing the Subversion branch and revision number
+         a build was made from, which may come handy for tracking issues -->
+    <target name='generate-version-file-editor'>
+        <exec executable="svn" dir="${editor-src-root}" output="${editor-build-root}/version.xml" failifexecutionfails="false">
             <arg value="info"/>
             <arg value="--non-interactive"/>
             <arg value="--xml"/>
         </exec>
     </target>
         
-    <target name="build" depends="copy-license, build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file" />
+    <target name="build" depends="copy-license, build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file-editor" />
     
     <target name='compress'>
         
