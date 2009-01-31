@@ -60,5 +60,22 @@
     <target name="undeploy-backend">
         <delete file="${deploymentdir}/backend.war"/>
     </target>
+
+    <!-- Generate dependency graph of Ant tasks using Grand
+         http://www.ggtools.net/grand/
+         Grand is distributed under the terms of the BSD License. -->
+    <target name="generate-build-dependcy-graph">
+        <typedef resource="net/ggtools/grand/antlib.xml" classpath="buildApps/lib/grand-1.8.jar"/>
+        <grand output="build.dot">
+            <filter name="removenode" node="Oryx Editor" />
+        </grand>
+        <exec executable="sed" >
+            <arg line="-i -e 's/Oryx \(Repository\|Editor\|BuildApps\|on a Stick\).//' -e 's/^digraph/strict digraph/' build.dot"/>
+        </exec>
+        <exec executable="dot" >
+            <arg line="-Tpng -o build-dependencies.png build.dot"/>
+        </exec>
+        <delete file="build.dot"/>
+    </target>
     
 </project>
