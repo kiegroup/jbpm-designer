@@ -70,7 +70,8 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         jsonProp.value = jsonProp.value || "";
         jsonProp.description = jsonProp.description || "";
         jsonProp.readonly = jsonProp.readonly || false;
-        jsonProp.optional = jsonProp.optional || true;
+        if(jsonProp.optional != false)
+        	jsonProp.optional = true;
         
         //init refToView
         if (this._jsonProp.refToView) {
@@ -121,6 +122,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         if (jsonProp.type === ORYX.CONFIG.TYPE_CHOICE) {
             if (jsonProp.items && jsonProp.items instanceof Array) {
                 jsonProp.items.each((function(jsonItem){
+                	// why is the item's value used as the key???
                     this._items[jsonItem.value] = new ORYX.Core.StencilSet.PropertyItem(jsonItem, namespace, this);
                 }).bind(this));
             }
@@ -324,8 +326,8 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         return this._complexItems.values();
     },
     
-    complexItem: function(value){
-        return this._complexItems[value];
+    complexItem: function(id){
+        return this._complexItems[id];
     }
     // extended by Kerstin (end)
 });
