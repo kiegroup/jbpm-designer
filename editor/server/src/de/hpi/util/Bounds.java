@@ -12,8 +12,16 @@ public class Bounds {
 		this.y2 = y2;
 	}
 	
+	public Bounds(Point point1, Point point2) {
+		this(point1.x, point1.y, point2.x, point2.y);
+	}
+	
 	public String toString(){
-		return String.valueOf(x1)+","+String.valueOf(y1)+","+String.valueOf(x2)+","+String.valueOf(y2);
+		return toString(",");
+	}
+	
+	public String toString(String delimiter){
+		return String.valueOf(x1)+delimiter+String.valueOf(y1)+delimiter+String.valueOf(x2)+delimiter+String.valueOf(y2);
 	}
 	
 	public int getX1() {
@@ -32,5 +40,12 @@ public class Bounds {
 		return y2;
 	}
 
-
+	/**
+	 * Calculates center point relatively to bounds.
+	 * E.g. new Bounds(1, 5, 3, 9).getCenterRelative() => new Point(2, 3)
+	 * @return center point relatively to bounds
+	 */
+	public Point getCenterRelative(){
+		return new Point((x2 - x1)/2, (y2 - y1)/2);
+	}
 }

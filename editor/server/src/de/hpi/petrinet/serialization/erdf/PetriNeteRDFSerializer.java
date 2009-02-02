@@ -2,6 +2,8 @@ package de.hpi.petrinet.serialization.erdf;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -12,7 +14,9 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
+import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.PetriNet;
+import de.hpi.petrinet.Transition;
 
 
 public class PetriNeteRDFSerializer {
@@ -33,7 +37,14 @@ public class PetriNeteRDFSerializer {
 	        
 	        /* create a context and add data */
 	        VelocityContext context = new VelocityContext();
-	        context.put("transitions", petrinet.getTransitions());
+	        
+	        List<LabeledTransition> labeledTransitions = new LinkedList<LabeledTransition>();
+	        List<Transition> nopTransitions = new LinkedList<Transition>();
+	        
+	        prepareTransitions(petrinet.getTransitions(), labeledTransitions, nopTransitions);
+
+	        context.put("labeledTransitions", labeledTransitions);
+	        context.put("nopTransitions", nopTransitions);
 	        context.put("places", petrinet.getPlaces());
 	        context.put("arcs", petrinet.getFlowRelationships());
 	        
@@ -55,26 +66,24 @@ public class PetriNeteRDFSerializer {
 		}
 		
 		return null;
-        
-		/*
-		StringBuilder eRDF = new StringBuilder();
-		
-		PetriNeteRDFSerialization serialization = new PetriNeteRDFSerialization(bpmnDiagram);
-		
-		eRDF.append(serialization.getSerializationHeader());
-
-		for(Edge edge : bpmnDiagram.getEdges()) {
-			eRDF.append(edge.getSerialization(serialization));
-		}
-		
-		for(Node node : bpmnDiagram.getChildNodes()) {
-			eRDF.append(node.getSerialization(serialization));
-		}
-
-		eRDF.append(serialization.getSerializationFooter());
-
-		return eRDF.toString();*/
-		
+	}
+	
+	/**
+	 * Sorts given transition list and set null labels to empty strings
+	 * @param transitions List of transitions which should be prepared
+	 * @param labeledTransitions Target list which will be filled with labeled transitions
+	 * @param nopTransitions Target list which will be filled with nop transitions
+	 */
+	protected void prepareTransitions(List<Transition> transitions, List<LabeledTransition> labeledTransitions, List<Transition> nopTransitions){
+        for(Transition trans : transitions){
+        	if(trans instanceof LabeledTransition){
+        		LabeledTransition lTrans = (LabeledTransition) trans;
+        		if(lTrans.getLabel() == null ) lTrans.setLabel(""); //needed for template
+        		labeledTransitions.add(lTrans);
+        	} else {
+        		nopTransitions.add(trans);
+        	}
+        }
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.hpi.petrinet.FlowRelationship;
+import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
@@ -29,21 +30,24 @@ public class PetriNetLayouter {
 	}
 	
 	private void setBounds() {
-		for(int row = 0; row < 100; row ++){
-			for(int col = 0; col < 100; col ++){
+		for(int row = 0; row < matrix.sizeRows; row ++){
+			for(int col = 0; col < matrix.sizeCols; col ++){
 				Node node = matrix.get(row, col);
 				if(node != null){
 					int height = 0;
 					int width = 0;
-					int margin = 100; //distance from left and upper corner of oryx canvas
+					int margin = 80; //distance from left and upper corner of oryx canvas
 					int x = margin + 100*col; //center x
 					int y = margin + 100*row; // center y
 					if(node instanceof Place){
 						height = 30;
 						width = 30;
-					} else {
+					} else if (node instanceof LabeledTransition) {
 						height = 40;
 						width = 80;
+					} else { //nop transition
+						height = 50;
+						width = 10;
 					}
 					Bounds bounds = new Bounds(x-width/2, y-height/2, x+width/2, y+height/2);
 					node.setBounds(bounds);
