@@ -168,6 +168,18 @@ ORYX.I18N.Bpel4ChorTransformation.loadingXPDL4ChorExport = "Exportiere nach XPDL
 ORYX.I18N.Bpel4ChorTransformation.loadingBPEL4ChorExport = "Exportiere nach BPEL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.noGen = "Die Transformationseingabedaten konnten nicht erzeugt werden: 1\n2\n";
 
+ORYX.I18N.BPMN2PNConverter = {
+  name: "BPMN nach Petrinetz Konverter",
+  desc: "Konvertiert BPMN-Diagramme in Petrinetze",
+  group: "Export",
+  error: "Fehler",
+  errors: {
+    server: "BPMN Diagramm konnte nicht importiert werden!",
+    noRights: "Es sind keine Leserechte für das importierte Diagramm vorhanden!",
+    notSaved: "Das Diagramm wurde noch nicht gespeichert und/ oder muss neu geöffnet werden!"
+  }
+}
+
 if(!ORYX.I18N.TransformationDownloadDialog) ORYX.I18N.TransformationDownloadDialog = {};
 
 ORYX.I18N.TransformationDownloadDialog.error = "Fehler";
@@ -370,8 +382,6 @@ ORYX.I18N.XFormsSerialization.impTitle = "XForms+XHTML Dokument importieren";
 ORYX.I18N.XFormsSerialization.impButton = "Importieren";
 ORYX.I18N.XFormsSerialization.impProgress = "Importiere...";
 ORYX.I18N.XFormsSerialization.close = "Schließen";
-
-
 
 /** New Language Properties: 08.12.2008 **/
 

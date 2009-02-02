@@ -168,6 +168,18 @@ ORYX.I18N.Bpel4ChorTransformation.loadingXPDL4ChorExport = "Export to XPDL4Chor"
 ORYX.I18N.Bpel4ChorTransformation.loadingBPEL4ChorExport = "Export to BPEL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.noGen = "The transformation input could not be generated: 1\n2\n";
 
+ORYX.I18N.BPMN2PNConverter = {
+  name: "BPMN to Petri net converter",
+  desc: "Converts BPMN diagrams to Petri nets",
+  group: "Export",
+  error: "Error",
+  errors: {
+    server: "Couldn't import BPNM diagram.",
+    noRights: "Don't you have read permissions on given model?",
+    notSaved: "Model must be saved and reopened for using Petri net exporter!"
+  }
+}
+
 if(!ORYX.I18N.TransformationDownloadDialog) ORYX.I18N.TransformationDownloadDialog = {};
 
 ORYX.I18N.TransformationDownloadDialog.error = "Error";

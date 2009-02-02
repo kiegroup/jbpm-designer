@@ -23,7 +23,7 @@
  **/
 Ext.ns("Oryx.Plugins");
 
-ORYX.Plugins.BPMN2PN = Clazz.extend({
+ORYX.Plugins.BPMNImport = Clazz.extend({
     converterUrl: "/oryx/bpmn2pn",
     
     // Offers the plugin functionality
@@ -66,7 +66,7 @@ ORYX.Plugins.BPMN2PN = Clazz.extend({
                 this.facade.importERDF(doc);
             }.createDelegate(this),
             failure: function(){
-                Ext.Msg.alert('Error', "Couldn't import BPNM diagram.");
+                Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.server);
             },
             params: {
                 rdf: bpmnRdf
@@ -87,7 +87,7 @@ ORYX.Plugins.BPMN2PN = Clazz.extend({
                     this.bpmnToPn(bpmnRdf);
                 }.createDelegate(this),
                 failure: function(request){
-                    Ext.Msg.alert('Error', "Don't you have read permissions on given model?")
+                    Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.noRights)
                 },
                 method: "GET"
             })
@@ -102,5 +102,32 @@ ORYX.Plugins.BPMN2PN = Clazz.extend({
      */
     getRdfUrl: function(url){
         return url.replace(/\/self(\/)?$/, "/rdf")
+    }
+});
+
+ORYX.Plugins.PNExport = Clazz.extend({
+    // Offers the plugin functionality
+    construct: function(facade){
+    
+        this.facade = facade;
+       
+        this.facade.offer({
+            'name': ORYX.I18N.BPMN2PNConverter.name,
+            'functionality': this.exportIt.bind(this),
+            'group': ORYX.I18N.BPMN2PNConverter.group,
+            'icon': ORYX.PATH + "images/bpmn2pn_conversion.png",
+            'description': ORYX.I18N.BPMN2PNConverter.desc,
+            'index': 3,
+            'minShape': 0,
+            'maxShape': 0
+        });
+    },
+    
+    exportIt: function(){
+        if(location.href.include( ORYX.CONFIG.ORYX_NEW_URL )){
+            Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.notSaved)
+        } else {
+            window.open("/backend/poem/new?stencilset=/stencilsets/petrinets/petrinet.json&importBPMN=" + location.href);
+        }
     }
 });
