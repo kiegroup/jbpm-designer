@@ -25,11 +25,8 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Document;
 
-import de.hpi.bpel4chor.transformation.TransformationResult.Type;
-
-
 /**
- * Copyright (c) 2008 
+ * Copyright (c) 2008-2009 
  * 
  * Zhen Peng
  * 

@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:oryx="http://oryx-editor.org/">
+	xmlns:oryx="http://oryx-editor.org/"
+	xmlns:raziel="http://raziel.org/">
 
 	<xsl:output method="xml" />
 	
@@ -29,7 +30,7 @@
 	<xsl:template name="find-children-nodes">
 		<xsl:param name="searchedParentID" />
         <xsl:for-each select="//rdf:Description">
-			<xsl:variable name="currentParentID"><xsl:value-of select="(*/@rdf:resource)[last()]" /></xsl:variable>         
+			<xsl:variable name="currentParentID"><xsl:value-of select="(./raziel:parent/@rdf:resource)" /></xsl:variable>         
 			<xsl:if test="$currentParentID = $searchedParentID">
       		  	<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
 				<xsl:variable name="typeString" select="./oryx:type" />	
@@ -95,6 +96,8 @@
 						
 						<xsl:call-template name="add-bounds-attribute"/>
 
+						<xsl:call-template name="add-outgoing-attribute"/>
+						
 						<xsl:call-template name="add-partnerLink-portType-operation-attributes"/>
 						
 						<xsl:variable name="inputVariable" select="./oryx:inputvariable" />
@@ -130,6 +133,8 @@
 		
 						<xsl:call-template name="add-bounds-attribute"/>
 
+						<xsl:call-template name="add-outgoing-attribute"/>
+						
 						<xsl:call-template name="add-partnerLink-portType-operation-attributes"/>
 		                
 						<xsl:call-template name="add-correlations-element"/>
@@ -152,6 +157,8 @@
 						<xsl:call-template name="add-standard-elements"/>
 						
 						<xsl:call-template name="add-bounds-attribute"/>
+						
+						<xsl:call-template name="add-outgoing-attribute"/>
 
 						<xsl:call-template name="add-partnerLink-portType-operation-attributes"/>
 						
@@ -177,7 +184,9 @@
 						<xsl:call-template name="add-standard-elements"/>
 						
 						<xsl:call-template name="add-bounds-attribute"/>
-
+						
+						<xsl:call-template name="add-outgoing-attribute"/>
+						
 						<xsl:variable name="validate" select="./oryx:validate" />
 						<xsl:if test="$validate!=''">
 							<xsl:attribute name="validate">
@@ -227,6 +236,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 		            	<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 					</empty>
 				</xsl:if>
 				
@@ -237,6 +247,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 		            	<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 					</opaqueActivity>
 				</xsl:if>
 				
@@ -246,6 +257,7 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						
 						<xsl:variable name="variables" select="./oryx:variables" />
 						<xsl:if test="$variables!=''">
@@ -262,6 +274,8 @@
 				<xsl:if test="$type='extensionActivity'">
 					<extensionActivity>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
+						
 						<xsl:variable name="elementName" select="./oryx:elementname" />
 						<xsl:if test="$elementName!=''">
 							<xsl:element name="{$elementName}">
@@ -288,6 +302,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="add-ForOrUntil-element"/>
 		            </wait>
 				</xsl:if>
@@ -299,6 +314,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="add-faultName-attribute"/>
 						<xsl:call-template name="add-faultVariable-attribute"/>
 		            </throw>
@@ -311,6 +327,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 		            	<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 					</exit>
 				</xsl:if>
 				
@@ -321,6 +338,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 		            </rethrow>
 				</xsl:if>
 				
@@ -331,6 +349,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
@@ -365,9 +384,12 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
+						
 						<xsl:call-template name="add-link-elements">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
+						
 					 	<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
@@ -381,6 +403,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="add-createInstance-attribute"/>
 				        <xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
@@ -411,6 +434,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
 					    </xsl:call-template>
@@ -424,6 +448,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="add-condition-element"/>
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
@@ -438,6 +463,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="add-condition-element"/>
 						<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
@@ -452,6 +478,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						
 						<xsl:variable name="counterName" select="./oryx:countername" />
 						<xsl:if test="$counterName!=''">
@@ -485,6 +512,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 		            </compensate>
 				</xsl:if>
 				
@@ -495,6 +523,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						
 						<xsl:variable name="target" select="./oryx:target" />
 						<xsl:if test="$target!=''">
@@ -511,6 +540,7 @@
 						<xsl:call-template name="add-standard-attributes"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-bounds-attribute"/>
+						<xsl:call-template name="add-outgoing-attribute"/>
 						<xsl:call-template name="add-exitOnStandardFault-attribute"/>
 						<xsl:call-template name="add-variables-element"/>	
 						<xsl:call-template name="add-partnerLinks-element"/>				
@@ -1077,16 +1107,23 @@
 					</xsl:call-template>
 				</xsl:variable>
 				<xsl:if test="$type='link'">
-					<xsl:variable name="targetID" select="(*/@rdf:resource)[last()]"/>
+					<xsl:variable name="targetID" select="(./raziel:target/@rdf:resource)"/>
 					<xsl:variable name="linkName" select="./oryx:linkname"/>
+					<xsl:variable name="id" select="@rdf:about"/>
 					<xsl:for-each select="//rdf:Description">
-						<xsl:variable name="currentID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+						<xsl:variable name="currentID" select="@rdf:about" />
 						<xsl:if test="$currentID=$targetID">
-							<xsl:variable name="currentParentID" select="(*/@rdf:resource)[last()]" />         
+							<xsl:variable name="currentParentID" select="(./raziel:parent/@rdf:resource)" />         
 				            <xsl:if test="$currentParentID=$searchedParentID">
 				            	<link>
 				            		<xsl:attribute name="name">
 				            			<xsl:value-of select="$linkName"/>
+									</xsl:attribute>
+									<xsl:attribute name="id">
+				            			<xsl:value-of select="$id"/>
+									</xsl:attribute>
+									<xsl:attribute name="targetID">
+				            			<xsl:value-of select="$targetID"/>
 									</xsl:attribute>
 								</link>
 							</xsl:if>
@@ -1128,7 +1165,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-						
+	
 	<xsl:template name="add-otherxmlns-attribute">
 		<xsl:variable name="otherxmlns" select="./oryx:otherxmlns" />
 		<xsl:if test="$otherxmlns!=''">
@@ -1144,6 +1181,17 @@
 				<xsl:with-param name="data-set" select="$otherxmlns" />
 			</xsl:call-template>
 		</xsl:if>
+	</xsl:template>
+		
+						
+	<xsl:template name="add-outgoing-attribute">
+		<xsl:variable name="numberOfOutgoingLinks" select="count(./raziel:outgoing)" />
+		<xsl:if test="$numberOfOutgoingLinks!=0">
+			<xsl:call-template name="loop-for-adding-outgoing-attribute">
+				<xsl:with-param name="i">1</xsl:with-param>
+				<xsl:with-param name="count" select="$numberOfOutgoingLinks" />
+			</xsl:call-template>
+		</xsl:if>	
 	</xsl:template>
 	
 
@@ -1225,6 +1273,14 @@
 				<xsl:value-of select="$suppressJoinFailure" />
 			</xsl:attribute>
 		</xsl:if>		
+		
+		<xsl:variable name="id" select="@rdf:about"/>
+		<xsl:if test="$id!=''">
+			<xsl:attribute name="id">
+				<xsl:value-of select="$id" />
+			</xsl:attribute>
+		</xsl:if>
+					
 	</xsl:template>
 	
 	
@@ -1561,6 +1617,25 @@
  		</xsl:if>
     </xsl:template>
 
+
+	<xsl:template name="loop-for-adding-outgoing-attribute">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+ 			<xsl:variable name="linkID" select="(./raziel:outgoing/@rdf:resource)[$i]" />
+			
+			<outgoing>
+				<xsl:value-of select="$linkID"/>
+			</outgoing>		
+			
+  			<xsl:call-template name="loop-for-adding-outgoing-attribute">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
+	
 
 	<xsl:template name="loop-for-adding-partnerLinks-element">
 		<xsl:param name="i"/>
