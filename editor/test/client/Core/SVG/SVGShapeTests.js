@@ -1517,3 +1517,34 @@ function testFailsForInvalidAllowDockersValue() {
 }
 
 
+// test parsing of oryx:ResizeMarkerMid attribute
+
+/**
+ * If no oryx:ResizeMarker-mid is specified, it should be disabled by default.
+ */
+function testResizeMarkerMidIsDisabledByDefault() {
+	
+	testSVGPathElement.removeAttributeNS(NAMESPACE_ORYX_TEST, "resizeMarker-mid")
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	assertFalse('value check of resizeMarker-mid', testSVGShape.resizeMarkerMid)
+}
+
+/**
+ * Tests if oryx:ResizeMarker-mid is parsed correctly.
+ */
+function testParseResizeMarkerMid() {
+	
+	testSVGPathElement.setAttributeNS(NAMESPACE_ORYX_TEST, "resizeMarker-mid", "yes")
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	assertTrue('value check of resizeMarker-mid', testSVGShape.resizeMarkerMid)
+}
+
+/**
+ * Tests if oryx:ResizeMarker-mid is parsed correctly.
+ */
+function testParseResizeMarkerMid2() {
+	
+	testSVGPathElement.setAttributeNS(NAMESPACE_ORYX_TEST, "resizeMarker-mid", "no")
+	var testSVGShape = new ORYX.Core.SVG.SVGShape(testSVGPathElement);
+	assertFalse('value check of resizeMarker-mid', testSVGShape.resizeMarkerMid)
+}
