@@ -12,9 +12,9 @@
     
     
     <!-- (RE)BUILD EDITOR AND BACKEND -->
-    <target name="build-all" depends="build-editor, build-backend"/>
+    <target name="build-all" depends="build-editor, build-backend, generate-build-dependcy-graph" />
     
-    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend"/>
+    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" />
     
     
     <!-- CLEAN EDITOR AND BACKEND -->
@@ -64,18 +64,49 @@
     <!-- Generate dependency graph of Ant tasks using Grand
          http://www.ggtools.net/grand/
          Grand is distributed under the terms of the BSD License. -->
-    <target name="generate-build-dependcy-graph">
+    <target name="generate-build-dependcy-graph" depends="check-build-dependcy-graph" unless="buildDependencyGraph.isUpToDate">
         <typedef resource="net/ggtools/grand/antlib.xml" classpath="buildApps/lib/grand-1.8.jar"/>
         <grand output="build.dot">
             <filter name="removenode" node="Oryx Editor" />
         </grand>
-        <exec executable="sed" >
+        <!-- the replaceregexp task requires ant-nodeps.jar and fails the build
+             if the library is not found
+        <typedef
+            name="replaceregexp"
+            classname="org.apache.tools.ant.taskdefs.optional.ReplaceRegExp"
+            classpath="buildApps/lib/ant-nodeps.jar" />
+        <replaceregexp file="build.dot"
+            match="Oryx (Repository|Editor|BuildApps|on a Stick)\."
+            replace="" flags="g" />
+        <replaceregexp file="build.dot"
+            match="^digraph"
+            replace="strict digraph" flags="s" byline="true" />
+        -->
+        <!-- sed is only available on unix systems
+        <exec executable="sed" failonerror="false" failifexecutionfails="false">
             <arg line="-i -e 's/Oryx \(Repository\|Editor\|BuildApps\|on a Stick\).//' -e 's/^digraph/strict digraph/' build.dot"/>
         </exec>
-        <exec executable="dot" >
+        -->
+        <replace file="build.dot" token="Oryx Repository." />
+        <replace file="build.dot" token="Oryx Editor." />
+        <replace file="build.dot" token="Oryx BuildApps." />
+        <replace file="build.dot" token="Oryx on a Stick." />
+        <replace file="build.dot" token="digraph &quot;" value="strict digraph &quot;" />
+        <!-- the dot tool from http://graphviz.org/ is required
+             but it won't fail the build if not available -->
+        <exec executable="dot" failonerror="false" failifexecutionfails="false">
             <arg line="-Tpng -o build-dependencies.png build.dot"/>
         </exec>
         <delete file="build.dot"/>
     </target>
-    
+
+    <!-- check if regeneration of build dependency graph is required -->
+    <target name="check-build-dependcy-graph">
+        <uptodate property="buildDependencyGraph.isUpToDate" targetfile="build-dependencies.png">
+            <srcfiles file="build.xml" />
+            <srcfiles file="editor/build.xml" />
+            <srcfiles file="poem-jvm/build.xml" />
+            <srcfiles file="stick/build.xml" />
+        </uptodate>
+    </target>
 </project>
