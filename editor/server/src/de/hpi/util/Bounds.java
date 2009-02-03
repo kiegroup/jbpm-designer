@@ -1,5 +1,7 @@
 package de.hpi.util;
 
+import java.awt.Point;
+
 public class Bounds {
 	
 	private int x1, x2, y1, y2;
