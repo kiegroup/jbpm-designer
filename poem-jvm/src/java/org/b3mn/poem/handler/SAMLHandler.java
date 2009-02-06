@@ -23,34 +23,36 @@
 
 package org.b3mn.poem.handler;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.PrivateKey;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.dsig.XMLSignature;
+import javax.xml.crypto.dsig.XMLSignatureFactory;
+import javax.xml.crypto.dsig.dom.DOMValidateContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
-import org.opensaml.Configuration;
-import org.opensaml.saml2.encryption.Decrypter;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.encryption.InlineEncryptedKeyResolver;
-import org.opensaml.xml.io.Unmarshaller;
-import org.opensaml.xml.io.UnmarshallerFactory;
-import org.opensaml.xml.io.UnmarshallingException;
-import org.opensaml.xml.parse.BasicParserPool;
-import org.opensaml.xml.parse.XMLParserException;
-import org.opensaml.xml.security.credential.BasicCredential;
-import org.opensaml.xml.security.keyinfo.StaticKeyInfoCredentialResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import de.fraunhofer.fokus.jic.identity.Claim;
 import de.fraunhofer.fokus.jic.identity.ClaimIdentity;
@@ -72,6 +74,8 @@ public class SAMLHandler extends HandlerBase {
 	private boolean onlyUseTrustedIssuers;
 	
 	private ArrayList<String> trustedIssuers;
+	
+	private ArrayList<String> certificates;
 
 	@Override
 	public void init() {
@@ -81,6 +85,7 @@ public class SAMLHandler extends HandlerBase {
 		//initialize properties from backend.properties
 		try {
 			trustedIssuers = new ArrayList<String>();
+			certificates = new ArrayList<String>();
 			
 			in = new FileInputStream(this.getBackendRootDirectory() + "/WEB-INF/backend.properties");
 			Properties props = new Properties();
@@ -114,13 +119,26 @@ public class SAMLHandler extends HandlerBase {
 						URL issuerUrl = new URL(issuer);
 						trustedIssuers.add(issuer);
 					} catch (MalformedURLException mue) {
-						System.out.println("issuer malformed");
+						throw new Exception("Issuer " + issuer + " is not a valid URL.");
+					}
+				}
+				
+				//get list of certificates
+				String certificatesString = props.getProperty("org.b3mn.poem.handler.SAMLHandler.trustedIssuerCertificates");
+				String[] certificatesArray = certificatesString.split(";");
+				for(int i = 0; i < certificatesArray.length; i++) {
+					String cert = certificatesArray[i];
+					File certFile = new File(this.getBackendRootDirectory() + "/WEB-INF/" + cert);
+					if(certFile.exists() && certFile.isFile()) {
+						certificates.add(certFile.getCanonicalPath());
+					} else {
+						throw new Exception("Certicate " + cert + " does not exist!");
 					}
 				}
 			}
-			
 		} catch (Exception e) {
-			
+			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -212,6 +230,21 @@ public class SAMLHandler extends HandlerBase {
 					if(!trustedIssuers.contains(issuer)) {
 						throw new Exception("SAMLHandler: Issuer of SAML token is not a trusted issuer!");
 					}
+					
+					//validate signature (if it is not a self-issued token)
+					if(!issuer.equals("http://schemas.xmlsoap.org/ws/2005/05/identity/issuer/self")) {
+						int issuerIndex = trustedIssuers.indexOf(issuer);
+						try {
+							String certFileName = certificates.get(issuerIndex);
+							RSAPublicKey pubKey = getPubKeyFromFile(certFileName);
+							String token = req.getParameter("xmltoken");
+							if(!validateSignature(token, pubKey)) {
+								throw new Exception("SAMLHandler: Validating signature of issuer " + issuer + " failed.");
+							}
+						} catch (IndexOutOfBoundsException e){
+							
+						}
+					}
 				}
 				
 				//get user's unique id
@@ -229,24 +262,12 @@ public class SAMLHandler extends HandlerBase {
 				//get user
 				User user = new User(userUniqueId);
 				user.login(req, res);
-
-				// login
-				//
-				// bind session to authenticated user
-				//req.getSession().setAttribute(USER_SESSION_IDENTIFIER,
-				//		user.getOpenId());
 				
 				// create authentification token
 				UUID authToken = UUID.randomUUID();
 
 				user.addAuthenticationAttributes(this.getServletContext(), req, res, authToken);
 				
-				// store authToken in session
-				//req.getSession().setAttribute("SAMLAuthentificationToken", authToken);
-				
-				// set identifier
-				//req.setAttribute("identifier", user.getOpenId());
-
 				// redirect to return to page
 				res.setStatus(200);
 				retUrl = this.getReturnToUrl(retUrl, true, false, authToken.toString());
@@ -299,5 +320,81 @@ public class SAMLHandler extends HandlerBase {
 		}
 		
 		return res;
+	}
+	
+	/**
+	 * Checks the signature against the issuer's public key.
+	 * The JInfoCard Framework only validates the signature with the
+	 * key specified in the token. To be more secure, we check it again
+	 * with a public key that is stored on our server for that issuer.
+	 * 
+	 * @param token The SAML token
+	 * @param pubKey The issuer's public key
+	 * @return validation result
+	 */
+	protected Boolean validateSignature( String token, RSAPublicKey pubKey ){
+
+		try {
+			if(pubKey == null){
+				return false;
+			}
+			
+			// Get the DOM-Structure from token
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
+			// be namespace aware
+			dbf.setNamespaceAware(true); 
+			DocumentBuilder builder = dbf.newDocumentBuilder();  
+			Document doc = builder.parse(new ByteArrayInputStream(token.getBytes())); 
+	 
+			// Get the signature node
+			NodeList nl = doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
+			if (nl.getLength() == 0) {
+				throw new Exception("Cannot find Signature element");
+			} 
+	
+			// Creating a validation context
+			DOMValidateContext valContext = new DOMValidateContext(pubKey, nl.item(0)); 
+	
+			// Unmarshal the xml signature
+			XMLSignatureFactory factory = 
+				  XMLSignatureFactory.getInstance("DOM"); 
+			 
+			XMLSignature signature = 
+				  factory.unmarshalXMLSignature(valContext); 
+	
+			// Validate
+			return signature.validate(valContext); 
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param filename of certificate
+	 * @return The certificate's public key
+	 */
+	protected RSAPublicKey getPubKeyFromFile( String filename ) {
+
+
+		try {
+			
+			InputStream inStream = new FileInputStream(filename);
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+			X509Certificate cert =(X509Certificate)cf.generateCertificate(inStream);
+			inStream.close();
+
+			RSAPublicKey pubKey = (RSAPublicKey) cert.getPublicKey(); 
+			
+			return pubKey;
+
+		} catch (Exception e) {
+			
+		}
+
+		return null;
+
 	}
 }

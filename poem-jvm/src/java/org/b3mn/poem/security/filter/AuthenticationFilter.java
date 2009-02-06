@@ -38,8 +38,8 @@ public class AuthenticationFilter implements Filter {
 		servletContext = config.getServletContext();
 
 		// load backend.properties
+		FileInputStream in;
 		try {
-			FileInputStream in;
 			in = new FileInputStream(servletContext
 					.getRealPath("/WEB-INF/backend.properties"));
 			props = new Properties();
@@ -49,7 +49,8 @@ public class AuthenticationFilter implements Filter {
 			String expirationTime = props
 					.getProperty("org.b3mn.poem.authenticationTokenExpirationTime");
 			authenticationTokenExpirationTime = new Long(expirationTime);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 
 		}
 	}
