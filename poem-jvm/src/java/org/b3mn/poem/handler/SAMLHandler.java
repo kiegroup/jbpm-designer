@@ -190,6 +190,9 @@ public class SAMLHandler extends HandlerBase {
 			// If logout is true, just return
 			if ("true".equals(req.getParameter("logout"))) {
 				
+				User u = new User(getPublicUser());
+				u.login(req, res);
+				
 				res.setStatus(200);
 				retUrl = this.getReturnToUrl(retUrl, false, true, null);
 			} else { //login
@@ -225,10 +228,10 @@ public class SAMLHandler extends HandlerBase {
 				
 				//get user
 				User user = new User(userUniqueId);
+				user.login(req, res);
 
 				// login
-				//user.login(req, res);
-
+				//
 				// bind session to authenticated user
 				//req.getSession().setAttribute(USER_SESSION_IDENTIFIER,
 				//		user.getOpenId());
