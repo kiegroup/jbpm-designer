@@ -58,6 +58,7 @@
 					"title_de":"Dokumentation",
 					"value":"",
 					"description":"",
+					"refToView":"documentation",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
@@ -1155,7 +1156,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1447,7 +1448,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1788,7 +1789,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1949,7 +1950,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2185,7 +2186,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2331,7 +2332,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2453,49 +2454,19 @@
 					"type":"String",
 					"title":"Name",
 					"title_de":"Name",
-					"value":"NCName",
+					"value":"link",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"title_de":"Dokumentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"transition_expression",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"expression",
-					"title_de":"Ausdruck",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
 					"refToView":"label",
-					"length":undefined,
-					"wrapLines":false
+					"length":""
 				},
 				{
 					"id":"TC_expressionLanguage",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"expressionLanguage",
+					"title":"transCond_expLang",
 					"title_de":"Ausdruckssprache",
 					"value":"",
 					"description":"",
@@ -2505,12 +2476,27 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":false
+				},				
+				{
+					"id":"transition_expression",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"transCond_boolExp",
+					"title_de":"Ausdruck",
+					"value":"transionCondition",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"expression",
+					"length":undefined,
+					"wrapLines":false
 				},
 				{
 					"id":"TC_opaque",
 					"prefix":"oryx",
 					"type":"boolean",
-					"title":"opaque",
+					"title":"transCond_opaque",
 					"title_de":"opak",
 					"value":false,
 					"description":"",
@@ -2563,7 +2549,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2839,7 +2825,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -3027,7 +3013,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -3215,7 +3201,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -3490,7 +3476,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -4305,7 +4291,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -4867,7 +4853,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -4926,7 +4912,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5099,7 +5085,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5372,7 +5358,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5431,7 +5417,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5490,7 +5476,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5577,7 +5563,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5666,7 +5652,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5735,7 +5721,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},{
@@ -5893,7 +5879,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6023,7 +6009,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6153,7 +6139,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6298,7 +6284,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6428,7 +6414,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6632,7 +6618,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6777,7 +6763,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},{
@@ -6906,7 +6892,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -7051,7 +7037,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},

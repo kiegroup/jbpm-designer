@@ -10,5 +10,7 @@
 	</defs>
 	<g id="edge">
 	    <path d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#end)" />
+		<text font-size="14" id="label" x="47" y="7" oryx:edgePosition="midtop"></text>	
+		<text font-size="14" id="expression" x="47" y="7" oryx:edgePosition="midbottom"></text>
 	</g>
 </svg>

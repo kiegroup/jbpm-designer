@@ -49,6 +49,37 @@
 	   fill="white"
        stroke="black" 
        stroke-width="1"/>
+       
+	<g id="documentation"
+	   pointer-events="fill">
+    	
+    	<circle 
+    		cx="584" 
+    		cy="484" 
+    		r="15" 
+    		stroke="black" 
+    		fill="white" 
+    		stroke-width="1"
+    		oryx:anchors="bottom right"/>
+    	<rect 
+    		x="576" 
+    		y="476" 
+    		width="16" 
+    		height="16" 
+    		stroke="black" 
+    		stroke-width="1" 
+    		fill="none" 
+    		oryx:anchors="bottom right"/>
+    	<path 
+    		d="	M 578 478 L 590 478
+    			M 578 482 L 590 482
+    			M 578 486 L 590 486
+    			M 578 490 L 590 490" 
+    		fill="none" 
+    		stroke="black"
+    		oryx:anchors="bottom right"/>
+  	</g>
+  	
     <text
        oryx:rotate="270"
        id="label"
@@ -59,3 +90,6 @@
 	   style="font-family:Arial; font-size: 15pt; fill:black;"></text> 
   </g>
 </svg>
+
+
+		
