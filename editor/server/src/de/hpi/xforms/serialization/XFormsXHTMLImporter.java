@@ -31,7 +31,24 @@ public class XFormsXHTMLImporter {
 		addElementsRecursive(form, root, 0);
 		
 		if(doc.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "head").getLength()>0) {
-			form.setHead((Element) doc.getElementsByTagName("head").item(0));
+			form.setHead((Element) doc.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "head").item(0));
+			
+			// Find model node in head
+			Node modelNode = null;
+			for(Node child = form.getHead().getFirstChild(); 
+					child != null; 
+					child = child.getNextSibling()) {
+				if("model".equals(child.getLocalName()!=null ? child.getLocalName() : child.getNodeName()))
+					modelNode = child;
+			}
+			
+			// Delete old binds from model
+			for(Node child = modelNode.getFirstChild(); child != null; child = child.getNextSibling()) {
+				if("bind".equals(child.getLocalName()!=null ? child.getLocalName() : child.getNodeName())) {
+					modelNode.removeChild(child);
+				}
+			}
+			
 		}
 		
 		return form;
@@ -79,8 +96,7 @@ public class XFormsXHTMLImporter {
 			}
 		} else if(element instanceof Case) {
 			if(parent instanceof Switch) {
-				Switch switchObj = (Switch) parent;
-				switchObj.getCases().add((Case) element);
+				((Case) element).setSwitch((Switch) parent);
 			}
 		} else if(element instanceof Label) {
 			if(parent instanceof LabelContainer) {
@@ -129,6 +145,10 @@ public class XFormsXHTMLImporter {
 			if(parent instanceof Model) {
 				Model model = (Model) parent;
 				model.getBinds().add((Bind) element);
+			} else if(parent instanceof Bind) {
+				// handle nested binds
+				Bind bind = (Bind) parent;
+				((Bind) element).setParentBind(bind);
 			}
 		} else if(element instanceof Model) {
 			if(parent instanceof XForm) {
@@ -142,7 +162,16 @@ public class XFormsXHTMLImporter {
 	
 	private void addAttributes(XFormsElement xfElement, Node node) {
 		for(String key : xfElement.getAttributes().keySet()) {
-			Attr attr = ((Attr) node.getAttributes().getNamedItem(key));
+			Attr attr;
+			if(key.startsWith("ev:")) {
+				// attribute of Events namespace
+				attr = ((Attr) node.getAttributes().getNamedItem(
+						node.lookupPrefix("http://www.w3.org/2001/xml-events") + key.substring(2))); // replace ev: with correct prefix
+			} else {
+				// attribute of XForms namespace
+				attr = ((Attr) node.getAttributes().getNamedItem(key));
+			}
+
 			if(attr!=null)
 				xfElement.getAttributes().put(key, attr.getValue());
 		}

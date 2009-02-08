@@ -1,5 +1,7 @@
 package de.hpi.xforms.serialization;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,6 +24,8 @@ public class XFormsXHTMLExporter {
 	
 	private XForm form;
 	private Document doc;
+	
+	private Map<String,String> nsPrefixes;
 
 	public XFormsXHTMLExporter(XForm form) {
 		super();
@@ -29,11 +33,27 @@ public class XFormsXHTMLExporter {
 	}
 	
 	/**
-	 * Generate XForms+XHTML document
+	 * Generate XForms+XHTML document with default namespace prefixes
 	 * @return XForms+XHTML document
 	 */
 	public Document getXHTMLDocument(String cssUrl) {
 
+		nsPrefixes = new HashMap<String,String>();
+		nsPrefixes.put("http://www.w3.org/2002/xforms", "xf");
+		nsPrefixes.put("http://www.w3.org/2001/xml-events", "ev");
+		nsPrefixes.put("http://www.w3.org/2001/XMLSchema-instance", "xsi");
+		nsPrefixes.put("http://www.w3.org/2001/XMLSchema", "xsd");
+
+		return getXHTMLDocument(cssUrl, nsPrefixes);
+	}
+	
+	/**
+	 * Generate XForms+XHTML document with specified namespace prefixes
+	 * @return XForms+XHTML document
+	 */
+	public Document getXHTMLDocument(String cssUrl, Map<String,String> nsPrefixes) {
+		this.nsPrefixes = nsPrefixes;
+		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -41,18 +61,14 @@ public class XFormsXHTMLExporter {
 			
 			Element html = doc.createElementNS("http://www.w3.org/1999/xhtml", "html");
 			html.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-			html.setAttribute("xmlns:xf", "http://www.w3.org/2002/xforms");
-			html.setAttribute("xmlns:ev", "http://www.w3.org/2001/xml-events"  );
-			html.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			html.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+			
+			for(String ns : nsPrefixes.keySet()) {
+				html.setAttribute("xmlns:" + nsPrefixes.get(ns), ns);
+			}
+			
 			doc.appendChild(html);
 			addHead(html, cssUrl);
 			addBody(html);
-			
-			/* 
-			 * TODO: (for integration in process execution environment) adjust submissions to submit 
-			 * instance data to following task fitting execution engine's requirements
-			 */
 			
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -70,9 +86,10 @@ public class XFormsXHTMLExporter {
 	public Document getXHTMLDocumentForInspection(String instanceInspectorUrl, String cssUrl) {
 		if(doc==null) getXHTMLDocument(cssUrl);
 		
-		Element model = (Element) doc.getElementsByTagName("xf:model").item(0);
+		Element model = (Element) doc.getElementsByTagName(nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model").item(0);
 		Element instance = (Element) model.appendChild(
-				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:submission"));
+				doc.createElementNS("http://www.w3.org/2002/xforms", 
+						nsPrefixes.get("http://www.w3.org/2002/xforms") + ":submission"));
 		instance.setAttribute("id", "oryx_xforms_instance_inspection_submission");
 		instance.setAttribute("resource", instanceInspectorUrl);
 		instance.setAttribute("method", "post");
@@ -84,11 +101,13 @@ public class XFormsXHTMLExporter {
 				doc.createElementNS("http://www.w3.org/1999/xhtml", "div"));
 		rowDiv.setAttribute("class", "form_row");
 		Element submit = (Element) rowDiv.appendChild(
-				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:submit"));
+				doc.createElementNS("http://www.w3.org/2002/xforms", 
+						nsPrefixes.get("http://www.w3.org/2002/xforms") + ":submit"));
 		submit.setAttribute("id", "oryx_xforms_instance_inspection_submit");
 		submit.setAttribute("submission", "oryx_xforms_instance_inspection_submission");
 		Element label = (Element) submit.appendChild(
-				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:label"));
+				doc.createElementNS("http://www.w3.org/2002/xforms", 
+						nsPrefixes.get("http://www.w3.org/2002/xforms") + ":label"));
 		label.appendChild(doc.createCDATASection("SHOW INSTANCE DATA"));
 		
 		return doc;
@@ -116,16 +135,20 @@ public class XFormsXHTMLExporter {
 		}
 		
 		Element model;
-		if(head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:model").getLength()>0) {
-			model = (Element) head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:model").item(0);
+		if(head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
+				nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model").getLength()>0) {
+			model = (Element) head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
+					nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model").item(0);
 		} else {
 			model = (Element) head.appendChild(
-					doc.createElementNS("http://www.w3.org/2002/xforms", "xf:model"));
+					doc.createElementNS("http://www.w3.org/2002/xforms", 
+							nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model"));
 			addAttributes(model, form.getModel());
 		}
 		
 		for(Bind bind : form.getModel().getBinds()) {
-			NodeList bindNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:bind");
+			NodeList bindNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
+					nsPrefixes.get("http://www.w3.org/2002/xforms") + ":bind");
 			for(int i=0; i<bindNodes.getLength(); i++) {
 				boolean replaced = false;
 				String nodeset = ((Element) bindNodes.item(i)).getAttribute("nodeset");
@@ -140,7 +163,8 @@ public class XFormsXHTMLExporter {
 		
 		for(Submission submission : form.getModel().getSubmissions()) {
 			boolean replaced = false;
-			NodeList submissionNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "xf:submission");
+			NodeList submissionNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
+					nsPrefixes.get("http://www.w3.org/2002/xforms") + ":submission");
 			for(int i=0; i<submissionNodes.getLength(); i++) {
 				String id = ((Element) submissionNodes.item(i)).getAttribute("id");
 				if((id!=null) && id.equals(submission.getAttributes().get("id"))) {
@@ -165,11 +189,13 @@ public class XFormsXHTMLExporter {
 		link.setAttribute("href", cssUrl);
 		
 		Element model = (Element) head.appendChild(
-				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:model"));
+				doc.createElementNS("http://www.w3.org/2002/xforms", 
+						nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model"));
 		addAttributes(model, form.getModel());
 		
 		Element instance = (Element) model.appendChild(
-				doc.createElementNS("http://www.w3.org/2002/xforms", "xf:instance"));
+				doc.createElementNS("http://www.w3.org/2002/xforms", 
+						nsPrefixes.get("http://www.w3.org/2002/xforms") + ":instance"));
 		Node instanceChild = form.getModel().getInstance().getContent().getFirstChild();
 		while(instanceChild!=null) {
 			instance.appendChild(doc.importNode(instanceChild, true));
@@ -271,7 +297,8 @@ public class XFormsXHTMLExporter {
 	
 	private Element getElement(XFormsElement xfElement) {
 		Element element = doc.createElementNS(
-				"http://www.w3.org/2002/xforms", "xf:" + xfElement.getTagName());
+				"http://www.w3.org/2002/xforms", 
+				nsPrefixes.get("http://www.w3.org/2002/xforms") + ":" + xfElement.getTagName());
 		addAttributes(element, xfElement);
 		return element;
 	}
@@ -279,10 +306,15 @@ public class XFormsXHTMLExporter {
 	private void addAttributes(Element xmlElement, XFormsElement xfElement) {
 		for(Entry<String, String> attribute : xfElement.getAttributes().entrySet()) {
 			if((attribute.getValue()!=null) && !attribute.getValue().equals("/") && !attribute.getValue().equals("")) {
-				String namespace = "http://www.w3.org/2002/xforms";
-				if(attribute.getKey().startsWith("ev:"))
+				String namespace, key; 
+				if(attribute.getKey().startsWith("ev:")) {
 					namespace = "http://www.w3.org/2001/xml-events";
-				xmlElement.setAttributeNS(namespace, attribute.getKey(), attribute.getValue());
+					key = nsPrefixes.get(namespace) + ":" + attribute.getKey().substring(3);
+				} else {
+					namespace = "http://www.w3.org/2002/xforms";
+					key = attribute.getKey();
+				}
+				xmlElement.setAttributeNS(namespace, key, attribute.getValue());
 			}
 				
 		}

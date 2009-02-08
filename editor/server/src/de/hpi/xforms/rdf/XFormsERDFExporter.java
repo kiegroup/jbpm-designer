@@ -109,6 +109,7 @@ public class XFormsERDFExporter {
 		}
 		
 		writer.append("</div>");
+		
 	}
 	
 	/**
@@ -219,7 +220,13 @@ public class XFormsERDFExporter {
 		// handle model item properties
 		String ref = element.getAttributes().get("ref");
 		if(ref!=null) {
+			
+			if(!ref.startsWith("/") && (element instanceof XFormsUIElement)) {
+				ref = getNodesetContext((XFormsUIElement) element) + ref;
+			}
+			
 			Bind bind = getBindByNodeset(ref);
+			
 			if(bind!=null) {
 				for(String field : bind.getAttributes().keySet()) {
 					if(!field.equals("id") && !field.equals("nodeset"))
@@ -304,7 +311,7 @@ public class XFormsERDFExporter {
 		}
 		if (entry != null) {
 			writer.append("\">");
-			writer.append(entry);
+			writer.append(StringEscapeUtils.escapeXml(entry));
 			writer.append("</span>");
 		}
 		else {
@@ -315,10 +322,47 @@ public class XFormsERDFExporter {
 	private Bind getBindByNodeset(String nodeset) {
 		if(context.getForm().getModel()==null) return null;
 		for(Bind bind : context.getForm().getModel().getBinds()) {
-			if(bind.getAttributes().get("nodeset")!=null && bind.getAttributes().get("nodeset").equals(nodeset))
-				return bind;
+			Bind result = getBindByNodesetRecursive(bind, nodeset, "");
+			if(result!=null) return result;
 		}
 		return null;
+	}
+	
+	private Bind getBindByNodesetRecursive(Bind bind, String searchedNodeset, String accNodeset) {
+		String ns = bind.getAttributes().get("nodeset");
+		if(ns!=null)
+			accNodeset += "/" + ns;
+		
+		if(accNodeset.equals(searchedNodeset) || accNodeset.substring(1).equals(searchedNodeset)) {
+			// found matching bind (first / is optional)
+			return bind;
+		} else if(bind.getBinds().size()>0) {
+			// not found, continue search in child binds
+			for(Bind nestedBind : bind.getBinds()) {
+				 Bind result = getBindByNodesetRecursive(nestedBind, searchedNodeset, accNodeset);
+				 if(result!=null) return result;
+			}
+			return null;
+		} else {
+			// not found, no children
+			return null;
+		}
+	}
+
+	private String getNodesetContext(XFormsUIElement element) {
+		String nodesetContext = "";
+		while(element.getParent()!=null && !(element.getParent() instanceof XForm)) {
+			if(element.getParent() instanceof XFormsUIElement)
+				element = (XFormsUIElement) element.getParent();
+			else if(element.getParent() instanceof Case)
+				element = ((Case) element.getParent()).getSwitch();
+			String nodeset = element.getAttributes().get("nodeset");
+			if((nodeset==null) || nodeset.equals("") || nodeset.equals("/"))
+				nodeset = element.getAttributes().get("ref");
+			if((nodeset!=null) && !nodeset.equals("") && !nodeset.equals("/"))
+				nodesetContext = nodeset + "/" + nodesetContext;
+		}
+		return nodesetContext;
 	}
 	
 	private Submission getSubmissionById(String id) {

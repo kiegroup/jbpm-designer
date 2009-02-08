@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.net.URLCodec;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -396,9 +397,9 @@ public class XFormsRDFImporter {
 				element = (XFormsUIElement) element.getParent();
 			else if(element.getParent() instanceof Case)
 				element = ((Case) element.getParent()).getSwitch();
-			String nodeset = element.getAttributes().get("nodeset");
+			String nodeset = element.getAttributes().get("nodeset"); // look for nodeset attr first...
 			if((nodeset==null) || nodeset.equals("") || nodeset.equals("/"))
-				nodeset = element.getAttributes().get("ref");
+				nodeset = element.getAttributes().get("ref");		 // ... then for ref attr
 			if((nodeset!=null) && !nodeset.equals("") && !nodeset.equals("/"))
 				nodesetContext = nodeset + "/" + nodesetContext;
 		}
@@ -702,12 +703,7 @@ public class XFormsRDFImporter {
 	}
 	
 	private void addHead(String head, ImportContext c) {
-		URLCodec codec = new URLCodec();
-		try {
-			head = codec.decode(head);
-		} catch (DecoderException e) {	
-			e.printStackTrace();
-		}
+		head = StringEscapeUtils.unescapeXml(head);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		try {

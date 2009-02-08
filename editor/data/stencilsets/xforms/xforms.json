@@ -63,7 +63,7 @@
 					"description":"The form page's head markup.",
 					"readonly":true,
 					"optional":true,
-					"length":"10000",
+					"length":"1000000",
 					"wrapLines":true
 				},
 			]
