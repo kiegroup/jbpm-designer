@@ -63,6 +63,11 @@ public class SSCompressor {
 			//read stencil set file
 			StringBuffer ssString = readFile(ssFile);
 			
+			// store copy of original stencilset file (w/o SVG includes) with postfix '-nosvg'
+			int pIdx = ssUri.lastIndexOf('.');
+			File ssNoSvgFile = new File(ssDirString + ssUri.substring(0, pIdx) + "-nosvg" + ssUri.substring(pIdx));
+			writeFile(ssNoSvgFile, ssString.toString());
+			
 			//***include svg files***
 			
 			//get view property
