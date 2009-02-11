@@ -352,6 +352,22 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 		// load process model meta data
 		processList.each(this.getModelMetaData.bind(this));
 		
+		// transform array of objects into array of arrays
+		var data = [];
+		processList.each(function( pair ){
+/*			var stencilset = pair.value.type;
+			// Try to display stencilset title instead of uri
+			this.facade.modelCache.getModelTypes().each(function(type){
+				if (stencilset == type.namespace) {
+					stencilset = type.title;
+					return;
+				}
+			}.bind(this));
+*/			
+			data.push( [ pair.id, pair.metadata.thumbnailUri + "?" + Math.random(), unescape(pair.metadata.title), '' /*stencilset*/, 'Unknown' ] )
+		}.bind(this));
+
+		
 		// following is mostly UI logic
 		var myProcsPopup = new Ext.Window({
 			layout      : 'fit',
@@ -373,15 +389,16 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 		
 		var tableModel = new Ext.data.SimpleStore({
 			fields: [
-				{name: 'id', type: 'string', mapping: 'id'},
-				{name: 'icon'},
-				{name: 'title'},
-				{name: 'type'},
-				{name: 'author'},
-				{name: 'elements', type: 'auto', mapping: 'elements'}
-			]
+				{name: 'id'}, //, type: 'string', mapping: 'metadata.id'},
+				{name: 'icon'}, //, mapping: 'metadata.icon'},
+				{name: 'title'}, //, mapping: 'metadata.title'},
+				{name: 'type'}, //, mapping: 'metadata.type'},
+				{name: 'author'}, //, mapping: 'metadata.author'},
+//				{name: 'elements', type: 'auto', mapping: 'elements'}
+			],
+			data : data
 		});
-		tableModel.loadData(processList);
+//		tableModel.loadData(processList);
 		
 /*		var iconPanel = new Ext.grid.GridPanel({
 			store:	tableModel,
@@ -411,7 +428,7 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 	},
 	
 	getModelMetaData : function(processEntry) {
-		var metaUri = processEntry.id.replace(/\/rdf$/, /\/meta/);
+		var metaUri = processEntry.id.replace(/\/rdf$/, '/meta');
 		new Ajax.Request(metaUri, 
 			 {
 				method			: "get",
