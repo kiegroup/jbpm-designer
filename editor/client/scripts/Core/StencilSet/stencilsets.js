@@ -79,7 +79,7 @@ ORYX.Core.StencilSet.stencilSets = function(editorId) {
  *  http://www.example.org/stencilset#ANode
  */
 ORYX.Core.StencilSet.stencilSet = function(namespace) {
-	ORYX.Log.trace("Getting stencil set for %0", id);
+	ORYX.Log.trace("Getting stencil set %0", namespace);
 	var splitted = namespace.split("#", 1);
 	if(splitted.length === 1) {
 		ORYX.Log.trace("Getting stencil set %0", splitted[0]);
