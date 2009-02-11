@@ -44,7 +44,7 @@
         #foreach( $transition in $labeledTransitions )
             <div id="$transition.getId()">
                 <span class="oryx-type">http://b3mn.org/stencilset/petrinet#Transition</span>
-                <span class="oryx-id"></span>
+                <span class="oryx-id">$transition.getId()</span>
                 <span class="oryx-title">$transition.getLabel()</span>
                 <span class="oryx-href"></span>
                 <span class="oryx-bounds">$transition.getBounds().toString()</span>
@@ -58,7 +58,7 @@
         #foreach( $transition in $nopTransitions )
             <div id="$transition.getId()">
                 <span class="oryx-type">http://b3mn.org/stencilset/petrinet#VerticalEmptyTransition</span>
-                <span class="oryx-id"></span>
+                <span class="oryx-id">$transition.getId()</span>
                 <span class="oryx-title"></span>
                 <span class="oryx-href"></span>
                 <span class="oryx-bounds">$transition.getBounds().toString()</span>
@@ -72,7 +72,7 @@
         #foreach( $place in $places )
             <div id="$place.getId()">
                 <span class="oryx-type">http://b3mn.org/stencilset/petrinet#Place</span>
-                <span class="oryx-id"></span>
+                <span class="oryx-id">$place.getId()</span>
                 <span class="oryx-title"></span>
                 <span class="oryx-href"></span>
                 <span class="oryx-bounds">$place.getBounds().toString()</span>
@@ -86,7 +86,7 @@
         #foreach( $arc in $arcs )
             <div id="$arc.getId()">
                 <span class="oryx-type">http://b3mn.org/stencilset/petrinet#Arc</span>
-                <span class="oryx-id"></span>
+                <span class="oryx-id">$arc.getId()</span>
                 <span class="oryx-label"></span>
                 <a rel="raziel-outgoing" href="#$arc.getTarget().getId()"/>
 				<a rel="raziel-parent" href="#oryx-canvas123"/>

@@ -505,12 +505,12 @@ public abstract class Converter {
 		SubProcessPlaces pl = c.getSubprocessPlaces((SubProcess) event
 				.getActivity());
 
-		Place excp = addPlace(net, "excp" + event.getId());
+		Place excp = addPlace(net, "pExcp" + event.getId());
 		addFlowRelationship(net, pl.ok, t);
 		addFlowRelationship(net, t, pl.nok);
 		addFlowRelationship(net, t, excp);
 
-		Transition texcp = addSilentTransition(net, "excp"+event.getId(), event, 0);
+		Transition texcp = addSilentTransition(net, "tExcp"+event.getId(), event, 0);
 		addFlowRelationship(net, excp, texcp);
 		addFlowRelationship(net, pl.nok, texcp);
 		addFlowRelationship(net, pl.endP, texcp);
