@@ -105,4 +105,65 @@
 	
 	<target name="test.backend.server.run.all" depends="test.backend.server.junit.run"/>
     
+    <!-- Tasks for selenium test -->
+    <target name="test.backend.selenium.prepare" depends="build-backend">
+        <mkdir dir="build/poem-jvm/test/selenium"/>
+        <javac destdir="build/poem-jvm/test/selenium"
+         debug="on" optimize="off"
+         deprecation="off">
+            <src path="poem-jvm/test/selenium"/>
+            <classpath>
+                <fileset dir="${server-root-dir}/lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <pathelement location="build/poem-jvm/test/selenium"/>
+                <pathelement location="build/poem-jvm/bin"/>
+            </classpath>
+        </javac>
+    </target>
+    
+    <target name="test.backend.selenium.run" depends="test.backend.selenium.prepare">
+        <junit printsummary="withOutAndErr" haltonfailure="no">
+            <classpath>
+                <path refid="test.backend.server.classpath"/>
+                <pathelement location="build/poem-jvm/test/selenium"/>
+                <pathelement location="build/poem-jvm/bin"/>
+            </classpath>
+            
+            <formatter type="xml"/>
+            
+            <batchtest>
+                <fileset dir="build/poem-jvm/test/selenium">
+                    <include name="**/*Test.class"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        
+    </target>
+    
+    <target name="test.backend.selenium.start_server" >
+        <java jar="selenium-server.jar" fork="true" spawn="true" >
+            <classpath>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+            <arg line="-timeout 30" />
+            <jvmarg value="-Dhttp.proxyHost=proxy.proxyhost.com" />
+            <jvmarg value="-Dhttp.proxyPort=44444" />
+        </java >
+    </target>
+    
+    <target name="test.backend.selenium.stop_server" >
+        <get taskname="selenium-shutdown"
+            src="http://localhost:4444/selenium-server/driver/?cmd=shutDown"
+            dest="result.txt" ignoreerrors="true" />
+        <echo taskname="selenium-shutdown" message="DGF Errors during shutdown are expected" />
+    </target>
+    
+    <target name="test.backend.selenium.start_and_run" depends="test.backend.selenium.start_server, test.backend.selenium.run, test.backend.selenium.stop_server" />
+
 </project>

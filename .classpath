@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="editor/server/src"/>
-	<classpathentry kind="src" path="editor/test/selenium"/>
+	<classpathentry kind="src" path="poem-jvm/test/selenium"/>
 	<classpathentry kind="src" path="editor/test/server"/>
 	<classpathentry kind="src" path="poem-jvm/test/java"/>
 	<classpathentry kind="src" path="poem-jvm/src/java"/>
@@ -133,7 +133,6 @@
 	<classpathentry kind="lib" path="lib/org.mortbay.jetty-5.1.9.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.8.1.jar"/>
-	<classpathentry kind="lib" path="editor/lib/selenium-java-client-driver.jar"/>
 	<classpathentry kind="lib" path="editor/lib/velocity-1.6.1.jar"/>
 	<classpathentry kind="lib" path="editor/lib/velocity-tools-view-1.4.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/bcprov-ext-jdk15-1.40.jar"/>
@@ -159,5 +158,6 @@
 	<classpathentry kind="lib" path="poem-jvm/lib/xml-apis-2.9.1.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xmlsec-1.4.2.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xmltooling-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-client-driver.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
