@@ -271,7 +271,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -3513,7 +3513,11 @@
 						if(childLanes.length > 0) {
 							lanes.first().setProperty("oryx-showcaption", true);
 						} else {
-							lanes.first().setProperty("oryx-showcaption", false);
+							if(lanes.first().properties["oryx-name"].trim().length > 0) {
+								lanes.first().setProperty("oryx-showcaption", true);
+							} else {
+								lanes.first().setProperty("oryx-showcaption", false);
+							}
 						}
 						
 					} else {
@@ -3887,19 +3891,6 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"title_de":"Hintergrundfarbe",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"c",
-					"fill":true,
-					"stroke":false
 				}
 			]
 		},
@@ -4367,19 +4358,6 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
-				},				
-				{
-					"id":"bgColor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"title_de":"Hintergrundfarbe",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"frame",
-					"fill":true,
-					"stroke":false
 				},
 				{
 					"id":"showCaption",

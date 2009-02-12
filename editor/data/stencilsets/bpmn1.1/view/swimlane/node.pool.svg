@@ -15,10 +15,9 @@
   	<oryx:magnet oryx:cx="299" oryx:cy="0" oryx:anchors="top" />
   	<oryx:magnet oryx:cx="299" oryx:cy="124" oryx:default="yes" />
   </oryx:magnets>
-  <g pointer-events="fill" >
-    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" fill="white" fill-opacity=".3" />
-    <rect id="border" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" stroke-width="1" fill="none" />
-
+  <g pointer-events="painted" >
+    <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" fill="none" />
+    
 	<rect 
 		id="caption"
 		oryx:anchors="left top bottom"
