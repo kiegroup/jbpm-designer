@@ -169,7 +169,7 @@ ORYX.I18N.Bpel4ChorTransformation.loadingBPEL4ChorExport = "Export to BPEL4Chor"
 ORYX.I18N.Bpel4ChorTransformation.noGen = "The transformation input could not be generated: 1\n2\n";
 
 ORYX.I18N.BPMN2PNConverter = {
-  name: "BPMN to Petri net converter",
+  name: "Convert to Petri net",
   desc: "Converts BPMN diagrams to Petri nets",
   group: "Export",
   error: "Error",
@@ -324,8 +324,8 @@ ORYX.I18N.ShapeMenuPlugin.clickDrag = "Click or drag";
 if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
 
 ORYX.I18N.SimplePnmlexport.group = "Export";
-ORYX.I18N.SimplePnmlexport.name = "Simple BPMN to PNML Export";
-ORYX.I18N.SimplePnmlexport.desc = "Export as PNML";
+ORYX.I18N.SimplePnmlexport.name = "Export to PNML";
+ORYX.I18N.SimplePnmlexport.desc = "Export to PNML";
 
 if(!ORYX.I18N.StepThroughPlugin) ORYX.I18N.StepThroughPlugin = {};
 

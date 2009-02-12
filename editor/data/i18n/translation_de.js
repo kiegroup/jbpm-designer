@@ -169,7 +169,7 @@ ORYX.I18N.Bpel4ChorTransformation.loadingBPEL4ChorExport = "Exportiere nach BPEL
 ORYX.I18N.Bpel4ChorTransformation.noGen = "Die Transformationseingabedaten konnten nicht erzeugt werden: 1\n2\n";
 
 ORYX.I18N.BPMN2PNConverter = {
-  name: "BPMN nach Petrinetz Konverter",
+  name: "Konvertiere zu Petrinetz",
   desc: "Konvertiert BPMN-Diagramme in Petrinetze",
   group: "Export",
   error: "Fehler",
@@ -300,7 +300,7 @@ ORYX.I18N.Loading.waiting ="Bitte warten...";
 if(!ORYX.I18N.Pnmlexport) ORYX.I18N.Pnmlexport = {};
 
 ORYX.I18N.Pnmlexport.group ="Export";
-ORYX.I18N.Pnmlexport.name ="PNML Export";
+ORYX.I18N.Pnmlexport.name ="Nach PNML exportieren";
 ORYX.I18N.Pnmlexport.desc ="Exportieren nach ausführbarem PNML und Deployen";
 
 if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
@@ -324,7 +324,7 @@ ORYX.I18N.ShapeMenuPlugin.clickDrag = "Klicken oder ziehen";
 if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
 
 ORYX.I18N.SimplePnmlexport.group = "Export";
-ORYX.I18N.SimplePnmlexport.name = "Einfacher PNML Export";
+ORYX.I18N.SimplePnmlexport.name = "Nach PNML exportieren";
 ORYX.I18N.SimplePnmlexport.desc = "Exportieren nach PNML";
 
 if(!ORYX.I18N.StepThroughPlugin) ORYX.I18N.StepThroughPlugin = {};

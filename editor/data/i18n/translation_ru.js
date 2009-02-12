@@ -413,3 +413,15 @@ Ext.MessageBox.buttonText.ok = "Ок";
 ///** New Language Properties: 28.01.2009 */
 //ORYX.I18N.BPMN2XPDL.group = "Export";
 //ORYX.I18N.BPMN2XPDL.xpdlExport = "Export to XPDL";
+
+/*ORYX.I18N.BPMN2PNConverter = {
+  name: "Convert to Petri net",
+  desc: "Converts BPMN diagrams to Petri nets",
+  group: "Export",
+  error: "Error",
+  errors: {
+    server: "Couldn't import BPNM diagram.",
+    noRights: "Don't you have read permissions on given model?",
+    notSaved: "Model must be saved and reopened for using Petri net exporter!"
+  }
+}*/

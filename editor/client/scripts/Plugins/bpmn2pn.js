@@ -115,7 +115,7 @@ ORYX.Plugins.PNExport = Clazz.extend({
             'name': ORYX.I18N.BPMN2PNConverter.name,
             'functionality': this.exportIt.bind(this),
             'group': ORYX.I18N.BPMN2PNConverter.group,
-            'icon': ORYX.PATH + "images/bpmn2pn_conversion.png",
+            dropDownGroupIcon: ORYX.PATH + "images/export2.png",
             'description': ORYX.I18N.BPMN2PNConverter.desc,
             'index': 3,
             'minShape': 0,
