@@ -49,16 +49,18 @@
 					<xsl:if test="$existsAbstractProcessProfileElement=0">
 						<process>
 							<xsl:call-template name="add-children-of-process-element"/>
+							<xsl:call-template name="record-link-nodes"/>
 						</process>
 					</xsl:if>
 					
-					<!-- bpel4 editor -->
+					<!-- bpel editor -->
 					<xsl:if test="$existsAbstractProcessProfileElement!=0">
 						<xsl:variable name="abstractProcessProfile" select="./oryx:abstractprocessprofile" />
 						
 						<xsl:if test="$abstractProcessProfile='' or $abstractProcessProfile='null'">
 							<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
 								<xsl:call-template name="add-children-of-process-element"/>
+								<xsl:call-template name="record-link-nodes"/>
 							</process>	
 						</xsl:if>
 						
@@ -80,6 +82,8 @@
 								</xsl:if>
 								
 								<xsl:call-template name="add-children-of-process-element"/>
+								
+								<xsl:call-template name="record-link-nodes"/>
 							</process>	
 						</xsl:if>
 					</xsl:if>
@@ -385,10 +389,6 @@
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-bounds-attribute"/>
 						<xsl:call-template name="add-outgoing-attribute"/>
-						
-						<xsl:call-template name="add-link-elements">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
-					    </xsl:call-template>
 						
 					 	<xsl:call-template name="find-children-nodes">
 							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
@@ -726,9 +726,10 @@
 	
 	
 	<xsl:template name="add-completionCondition-element">
-		<xsl:variable name="expressionLanguage" select="./oryx:compcond_explang" />
+		<xsl:variable name="expressionLanguage" select="./oryx:branches_explang" />
 		<xsl:variable name="successfulBranchesOnly" select="./oryx:successfulbranchesonly" />
 		<xsl:variable name="branches_counter" select="./oryx:branches_intexp" />
+		<xsl:variable name="opaque" select="./oryx:branches_opaque" />
 		
 		<xsl:if test="$expressionLanguage!='' or $successfulBranchesOnly!='' or $branches_counter!=''">
 			<completionCondition>
@@ -742,6 +743,9 @@
 						<xsl:attribute name="successfulBranchesOnly">
 							<xsl:value-of select="$successfulBranchesOnly" />
 						</xsl:attribute>
+					</xsl:if>
+					<xsl:if test="$opaque='true'">
+						<xsl:attribute name="opaque">yes</xsl:attribute>
 					</xsl:if>
 					<xsl:value-of select="$branches_counter" />
 				</branches>
@@ -762,9 +766,7 @@
 				</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="$opaque='true'">
-				<xsl:attribute name="opaque">
-					<xsl:value-of select="$opaque" />
-				</xsl:attribute>
+				<xsl:attribute name="opaque">yes</xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select="$expression" />
 		</condition>
@@ -813,7 +815,8 @@
 
 	<xsl:template name="add-counterValue-elements">
 		<xsl:variable name="s_expressionLanguage" select="./oryx:start_explang" />
-		<xsl:variable name="s_expression" select="./oryx:start_intexp" />		
+		<xsl:variable name="s_expression" select="./oryx:start_intexp" />
+		<xsl:variable name="s_opaque" select="./oryx:start_opaque" />		
 		
 		<startCounterValue>
 			<xsl:if test="$s_expressionLanguage!=''">
@@ -821,17 +824,24 @@
 					<xsl:value-of select="$s_expressionLanguage" />
 				</xsl:attribute>
 			</xsl:if>
+			<xsl:if test="$s_opaque='true'">
+				<xsl:attribute name="opaque">yes</xsl:attribute>
+			</xsl:if>
 			<xsl:value-of select="$s_expression" />
 		</startCounterValue>
 		
 		<xsl:variable name="f_expressionLanguage" select="./oryx:final_explang" />
-		<xsl:variable name="f_expression" select="./oryx:final_intexp" />		
+		<xsl:variable name="f_expression" select="./oryx:final_intexp" />
+		<xsl:variable name="f_opaque" select="./oryx:final_opaque" />		
 		
 		<finalCounterValue>
 			<xsl:if test="$f_expressionLanguage!=''">
 				<xsl:attribute name="expressionLanguage">
 					<xsl:value-of select="$f_expressionLanguage" />
 				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="$f_opaque='true'">
+				<xsl:attribute name="opaque">yes</xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select="$f_expression" />
 		</finalCounterValue>	
@@ -965,9 +975,7 @@
 					</xsl:attribute>
 				</xsl:if>
 				<xsl:if test="$opaque='true'">
-					<xsl:attribute name="opaque">
-						<xsl:value-of select="$opaque" />
-					</xsl:attribute>
+					<xsl:attribute name="opaque">yes</xsl:attribute>
 				</xsl:if>
 				<xsl:value-of select="$expression" />	
 			</for>
@@ -981,9 +989,7 @@
 					</xsl:attribute>
 				</xsl:if>
 				<xsl:if test="$opaque='true'">
-					<xsl:attribute name="opaque">
-						<xsl:value-of select="$opaque" />
-					</xsl:attribute>
+					<xsl:attribute name="opaque">yes</xsl:attribute>
 				</xsl:if>
 				<xsl:value-of select="$expression" />	
 			</until>
@@ -1093,47 +1099,6 @@
 			</xsl:call-template>		
 		</xsl:if>
 	</xsl:template>
-	
-
-  	<xsl:template name="add-link-elements">
-    	<xsl:param name="searchedParentID" />
-		
-		<links>
-	        <xsl:for-each select="//rdf:Description">
-	    		<xsl:variable name="typeString" select="./oryx:type" />	
-				<xsl:variable name="type">
-					<xsl:call-template name="get-exact-type">
-						<xsl:with-param name="typeString" select="$typeString" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:if test="$type='link'">
-					<xsl:variable name="targetID" select="(./raziel:target/@rdf:resource)"/>
-					<xsl:variable name="linkName" select="./oryx:linkname"/>
-					<xsl:variable name="id" select="@rdf:about"/>
-					<xsl:for-each select="//rdf:Description">
-						<xsl:variable name="currentID" select="@rdf:about" />
-						<xsl:if test="$currentID=$targetID">
-							<xsl:variable name="currentParentID" select="(./raziel:parent/@rdf:resource)" />         
-				            <xsl:if test="$currentParentID=$searchedParentID">
-				            	<link>
-				            		<xsl:attribute name="name">
-				            			<xsl:value-of select="$linkName"/>
-									</xsl:attribute>
-									<xsl:attribute name="id">
-				            			<xsl:value-of select="$id"/>
-									</xsl:attribute>
-									<xsl:attribute name="targetID">
-				            			<xsl:value-of select="$targetID"/>
-									</xsl:attribute>
-								</link>
-							</xsl:if>
-						</xsl:if>
-					</xsl:for-each>				
-				</xsl:if>	
-       		 </xsl:for-each>	
-		</links>	 
-	</xsl:template>
-
 				
 	<xsl:template name="add-messageExchange-attribute">
 		<xsl:variable name="messageExchange" select="./oryx:messageexchange" />
@@ -1248,10 +1213,8 @@
 						<xsl:value-of select="$expressionLanguage" />
 					</xsl:attribute>
 				</xsl:if>
-				<xsl:if test="$opaque!='true'">
-					<xsl:attribute name="opaque">
-						<xsl:value-of select="$opaque" />
-					</xsl:attribute>
+				<xsl:if test="$opaque='true'">
+					<xsl:attribute name="opaque">yes</xsl:attribute>
 				</xsl:if>
 				<xsl:value-of select="$expression" />
 			</repeatEvery>
@@ -1295,8 +1258,8 @@
 	    			<xsl:attribute name="expressionLanguage">
 	    				<xsl:value-of select="$JC_expLang" />
 					</xsl:attribute>
-					<xsl:if test="$JC_opaque = 'true'">
-						<xsl:attribute name="opaque">true</xsl:attribute>
+					<xsl:if test="$JC_opaque='true'">
+						<xsl:attribute name="opaque">yes</xsl:attribute>
 					</xsl:if>
 	    			<xsl:value-of select="$JC_boolExp"/>
 				</joinCondition>
@@ -1409,7 +1372,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	
+
 	
 	<xsl:template name="get-exact-type">
 		<xsl:param name="typeString" />
@@ -1625,9 +1588,11 @@
  		<xsl:if test="$i &lt;= $count">
  			<xsl:variable name="linkID" select="(./raziel:outgoing/@rdf:resource)[$i]" />
 			
-			<outgoing>
-				<xsl:value-of select="$linkID"/>
-			</outgoing>		
+			<outgoingLink>
+				<xsl:attribute name="linkID">
+					<xsl:value-of select="$linkID" />
+				</xsl:attribute>
+			</outgoingLink>		
 			
   			<xsl:call-template name="loop-for-adding-outgoing-attribute">
    				<xsl:with-param name="i" select="$i + 1"/>
@@ -1820,5 +1785,62 @@
   			</xsl:call-template>
  		</xsl:if>
     </xsl:template>
+	
+	<xsl:template name="record-link-nodes">
+        <xsl:for-each select="//rdf:Description">
+			<xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="type">
+				<xsl:call-template name="get-exact-type">
+					<xsl:with-param name="typeString" select="$typeString" />
+				</xsl:call-template>
+			</xsl:variable>
+
+			<xsl:if test="$type='link'">
+				<linkInfoSet>
+					<xsl:variable name="id" select="@rdf:about " />
+ 					<xsl:variable name="linkName" select="./oryx:linkname" />
+					<xsl:variable name="targetID" select="./raziel:outgoing/@rdf:resource" />
+ 					<xsl:variable name="transCond_expLang" select="./oryx:tc_expressionlanguage" />
+		 			<xsl:variable name="transCond_boolExp" select="./oryx:transition_expression " />
+		 			<xsl:variable name="transCond_opaque" select="./oryx:tc_opaque" />
+					
+					<xsl:if test="$id!=''">
+						<xsl:attribute name="id">
+							<xsl:value-of select="$id" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:if test="$linkName!=''">
+						<xsl:attribute name="linkName">
+							<xsl:value-of select="$linkName" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:if test="$targetID!=''">
+						<xsl:attribute name="targetID">
+							<xsl:value-of select="$targetID" />
+						</xsl:attribute>
+					</xsl:if>					
+					
+					<xsl:if test="$transCond_expLang!=''">
+						<xsl:attribute name="transCond_expLang">
+							<xsl:value-of select="$transCond_expLang" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:if test="$transCond_boolExp!=''">
+						<xsl:attribute name="transCond_boolExp">
+							<xsl:value-of select="$transCond_boolExp" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:if test="$transCond_opaque='true'">
+						<xsl:attribute name="transCond_opaque">yes</xsl:attribute>
+					</xsl:if>
+				</linkInfoSet>	
+			</xsl:if>
+		</xsl:for-each>	
+	</xsl:template>			
+	
 	
 </xsl:stylesheet>

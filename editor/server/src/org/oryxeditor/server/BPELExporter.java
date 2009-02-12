@@ -80,7 +80,6 @@ public class BPELExporter extends HttpServlet {
     	
     	String rdfString = req.getParameter("data");
     	
-    	
     	transformProcesses (rdfString, out);
     	
     	out.print("]}");
