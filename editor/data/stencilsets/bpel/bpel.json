@@ -2459,7 +2459,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"label",
+					"refToView":"",
 					"length":""
 				},
 				{
@@ -2488,7 +2488,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"expression",
+					"refToView":"",
 					"length":undefined,
 					"wrapLines":false
 				},
@@ -3335,6 +3335,18 @@
 					"wrapLines":false
 				},
 				{
+					"id":"start_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"start_Opaque",
+					"title_de":"start_opake",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"final_expLang",
 					"prefix":"oryx",
 					"type":"String",
@@ -3365,11 +3377,23 @@
 					"wrapLines":false
 				},
 				{
-					"id":"compCond_expLang",
+					"id":"final_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"final_Opaque",
+					"title_de":"final_opake",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"branches_expLang",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"compCond_expLang",
-					"title_de":"compCond_expLang",
+					"title":"branches_expLang",
+					"title_de":"branches_expLang",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -3390,6 +3414,18 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true
+				},
+				{
+					"id":"branches_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"branches_Opaque",
+					"title_de":"branches_opake",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"branches_intExp",
