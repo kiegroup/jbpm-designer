@@ -178,6 +178,14 @@
 		</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<display-name>StencilSet JSONP</display-name>
+		<servlet-name>StencilSetJSONPServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.StencilSetJSONPServlet
+		</servlet-class>
+	</servlet>
+	
 	<!--<servlet-mapping>
 		<servlet-name>Repository</servlet-name>
 		<url-pattern>/repository</url-pattern>
@@ -291,6 +299,10 @@
 		<url-pattern>/xformsimport</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+		<servlet-name>StencilSetJSONPServlet</servlet-name>
+		<url-pattern>/jsonp</url-pattern>
+	</servlet-mapping>
 	
 
 	<jsp-config>
