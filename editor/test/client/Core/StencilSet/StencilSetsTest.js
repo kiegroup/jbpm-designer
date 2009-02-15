@@ -35,8 +35,17 @@ ORYX.Core.StencilSet.Rules = Clazz.extend({
 	
 	rulesName : function() {
 		return this._name
+	},
+	
+	initializeRules: function(stencilSet) {
+		return
 	}
 })
+
+// mocking ORYX.I18N.Language
+if(!ORYX) {var ORYX = {};}
+if(!ORYX.I18N) {ORYX.I18N = {};}
+ORYX.I18N.Language = "de_at"
 
 // stubs
 
@@ -157,7 +166,6 @@ function testNotExistingEditorInstances() {
 	assertEquals("A not existing editor instance should not have any reference to a stencil set", 0, $A(ORYX.Core.StencilSet.stencilSets("editorXX")).length)
 }
 
-
 /**
  * Tests if undefined is returned if the stencilset or stencil does not exists.
  */
@@ -184,3 +192,111 @@ function testRulesForEditorInstance() {
 	assertEquals("Rules of first editor should be rules1", rules1, ORYX.Core.StencilSet.rules("first"))
 	assertTrue("Rules should be created for a new editor instance", ORYX.Core.StencilSet.rules("second") instanceof ORYX.Core.StencilSet.Rules)
 }
+
+/**
+ * Test tries to load a stencil form a given stencilset.
+ */
+function testGetStencilFromStencilSet() {
+	// prepare stencil set
+	
+	var stencilset = new ORYX.Core.StencilSet.StencilSet("http://example.com#")
+	
+	// prepare Hash
+	ORYX.Core.StencilSet._stencilSetsByNamespace[stencilset.namespace()] =  stencilset
+	
+	// node
+	var stencil = ORYX.Core.StencilSet.stencil("http://example.com#ANode")
+	assertTrue("Verify return value from stubed stencil method.", stencil["stencil"])
+	
+	// edge
+	var stencil = ORYX.Core.StencilSet.stencil("http://example.com#AnEdge")
+	assertTrue("Verify return value from stubed stencil method.", stencil["stencil"])
+}
+
+/**
+ * The test loads a new stencilset.
+ */
+function testLoadNewStencilSet() {
+	ORYX.Core.StencilSet.loadStencilSet("http://example.com#", "myId")
+	
+	//test if the new stencil set exists
+	assertTrue("Test existence of stencil set.",ORYX.Core.StencilSet._stencilSetsByNamespace["http://example.com#"] instanceof ORYX.Core.StencilSet.StencilSet)
+	
+	assertTrue("Test existence of stencil set in stencil set by url hash.",ORYX.Core.StencilSet._stencilSetsByUrl["http://example.com#"] instanceof ORYX.Core.StencilSet.StencilSet)
+	
+	assertTrue("Test if rules are set correctly.", ORYX.Core.StencilSet._rulesByEditorInstance["myId"] instanceof ORYX.Core.StencilSet.Rules)
+}
+
+/**
+ *  Test getTranslation with an invalid JSON-object.
+ */
+function testFailForInvalidJSONInTranslation() {
+	
+	try {
+		ORYX.Core.StencilSet.getTranslation("invalidjsonObject", "title")
+		fail("Test should fail yet for invalid JSON.")
+	} catch (e) {
+		if((e instanceof JsUnitException)) {
+			throw e
+		}
+	}
+}
+
+/**
+ * If a Attributes does not exists, it should return undefined.
+ */
+function testNotExistingAttributeTranslationInJSON() {
+	var json = {
+			"type":			"node",
+			"id":			"Diagram",
+			"title":		"Diagram",	
+			"title_de": 	"Diagram_de",
+			"title_de_at": "Diagram_de_at"
+			}
+			
+	assertUndefined("Test not existing Attribute.",ORYX.Core.StencilSet.getTranslation(json, "name"))
+}
+
+/**
+ * Tries to get an attribute for different languages.
+ */
+function testgetTranslationOfJSONAttr() {
+	var json = {
+			"type":			"node",
+			"id":			"Diagram",
+			"title":		"Diagram",	
+			"title_de": 	"Diagram_de",
+			"title_de_at": "Diagram_de_at",
+			"title_ch": "Diagram_ch"
+			}
+	
+	// get title with lang de
+	ORYX.I18N.Language = "de"		
+	assertEquals("Get title_de",ORYX.Core.StencilSet.getTranslation(json, "title"), "Diagram_de")
+	
+	// get title with lang de_at
+	ORYX.I18N.Language = "de_at"		
+	assertEquals("Get title_de_at",ORYX.Core.StencilSet.getTranslation(json, "title"), "Diagram_de_at")
+	
+	// get title default
+	ORYX.I18N.Language = "ar"		
+	assertEquals("Get title default",ORYX.Core.StencilSet.getTranslation(json, "title"), "Diagram")
+	
+	// get title_ch with lang ch_zz
+	ORYX.I18N.Language = "ch_zz"		
+	assertEquals("Get title_de",ORYX.Core.StencilSet.getTranslation(json, "title"), "Diagram_ch")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
