@@ -99,6 +99,13 @@ public abstract class Activity extends Node {
 		this.miOrdering = miOrdering;
 	}
 	
+	public boolean isMultipleInstance(){
+		return loopType == LoopType.Multiinstance;
+	}
+	public void setMultipleInstance(){
+		loopType = LoopType.Multiinstance;
+	}
+	
 	@Override
 	public Node getCopy() {
 		Activity newnode = (Activity)super.getCopy();
