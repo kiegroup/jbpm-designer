@@ -246,7 +246,7 @@ public class Dispatcher extends HttpServlet {
 		throws ServletException {
 		try { 
 			response.setCharacterEncoding("UTF-8");
-			
+			response.setHeader("Cache-Control", "no-cache");
 			// Parse request uri to extract handler uri and model uri
 			String modelUri = this.getModelUri(request.getPathInfo());
 			String handlerUri  = this.getHandlerUri(request.getPathInfo());
