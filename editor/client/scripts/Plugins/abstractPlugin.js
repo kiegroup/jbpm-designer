@@ -21,7 +21,7 @@ if(!ORYX.Plugins){ ORYX.Plugins = {} }
         [...]
     });
    
-   @class ORYX.Plugins.SyntaxChecker
+   @class ORYX.Plugins.AbstractPlugin
    @constructor Creates a new instance
    @author Willi Tscheschner
 */
@@ -36,24 +36,20 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 	construct: function( facade ){
 		this.facade = facade;
 		
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.onLoaded.bind(this))		
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.onLoaded.bind(this));
 	},
-	
+        
     /**
        Overwrite to handle load event. TODO: Document params!!!
        @methodOf ORYX.Plugins.AbstractPlugin.prototype
     */
-	onLoaded: function(){
-		// Your Code Here
-	},
+	onLoaded: function(){},
 	
     /**
        Overwrite to handle selection changed event. TODO: Document params!!!
        @methodOf ORYX.Plugins.AbstractPlugin.prototype
     */
-	onSelectionChanged: function(){
-		// Your Code Here
-	},
+	onSelectionChanged: function(){},
 	
     /**
        Show overlay on given shape.
@@ -203,5 +199,61 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 			submitForm.action= ORYX.PATH + "/download";
 			submitForm.submit();
 		}		
-	}
+	},
+    
+    /**
+     * Serializes DOM.
+     * @methodOf ORYX.Plugins.AbstractPlugin.prototype
+     * @type {String} Serialized DOM
+     */
+    getSerializedDOM: function(){
+        // Force to set all resource IDs
+        var serializedDOM = DataManager.serializeDOM( this.facade );
+
+        //add namespaces
+        serializedDOM = '<?xml version="1.0" encoding="utf-8"?>' +
+        '<html xmlns="http://www.w3.org/1999/xhtml" ' +
+        'xmlns:b3mn="http://b3mn.org/2007/b3mn" ' +
+        'xmlns:ext="http://b3mn.org/2007/ext" ' +
+        'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ' +
+        'xmlns:atom="http://b3mn.org/2007/atom+xhtml">' +
+        '<head profile="http://purl.org/NET/erdf/profile">' +
+        '<link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />' +
+        '<link rel="schema.dcTerms" href="http://purl.org/dc/terms/ " />' +
+        '<link rel="schema.b3mn" href="http://b3mn.org" />' +
+        '<link rel="schema.oryx" href="http://oryx-editor.org/" />' +
+        '<link rel="schema.raziel" href="http://raziel.org/" />' +
+        '<base href="' +
+        location.href.split("?")[0] +
+        '" />' +
+        '</head><body>' +
+        serializedDOM +
+        '</body></html>';
+        
+        return serializedDOM;
+    },
+    
+    /**
+     * Extracts RDF from DOM.
+     * @methodOf ORYX.Plugins.AbstractPlugin.prototype
+     * @type {String} Extracted RFD. Null if there are transformation errors.
+     */
+    getRDFFromDOM: function(){
+        //convert to RDF
+        var parser = new DOMParser();
+        var parsedDOM = parser.parseFromString(this.getSerializedDOM(), "text/xml");
+        var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
+        var xsltProcessor = new XSLTProcessor();
+        var xslRef = document.implementation.createDocument("", "", null);
+        xslRef.async = false;
+        xslRef.load(xsltPath);
+        xsltProcessor.importStylesheet(xslRef);
+        try {
+            var rdf = xsltProcessor.transformToDocument(parsedDOM);
+            return (new XMLSerializer()).serializeToString(rdf);
+        } catch (error) {
+            Ext.Msg.alert("Oryx", error);
+            return null;
+        }
+    }
 });
