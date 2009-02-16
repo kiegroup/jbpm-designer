@@ -7,30 +7,75 @@
 if(!ORYX){ var ORYX = {} }
 if(!ORYX.Plugins){ ORYX.Plugins = {} }
 
+/**
+   This abstract plugin class can be used to build plugins on.
+   It provides some more basic functionality like registering events (on*-handlers)...
+   @example
+    ORYX.Plugins.MyPlugin = ORYX.Plugins.AbstractPlugin.extend({
+        construct: function() {
+            // Call super class constructor
+            arguments.callee.$.construct.apply(this, arguments);
+            
+            [...]
+        },
+        [...]
+    });
+   
+   @class ORYX.Plugins.SyntaxChecker
+   @constructor Creates a new instance
+   @author Willi Tscheschner
+*/
 ORYX.Plugins.AbstractPlugin = Clazz.extend({
-	
+    /** 
+     * The facade which offer editor-specific functionality
+     * @type Facade
+     * @memberOf ORYX.Plugins.AbstractPlugin.prototype
+     */
 	facade: null,
 	
 	construct: function( facade ){
 		this.facade = facade;
 		
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.onLoaded.bind(this))
-				
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.onLoaded.bind(this))		
 	},
 	
+    /**
+       Overwrite to handle load event. TODO: Document params!!!
+       @methodOf ORYX.Plugins.AbstractPlugin.prototype
+    */
 	onLoaded: function(){
 		// Your Code Here
 	},
 	
+    /**
+       Overwrite to handle selection changed event. TODO: Document params!!!
+       @methodOf ORYX.Plugins.AbstractPlugin.prototype
+    */
 	onSelectionChanged: function(){
 		// Your Code Here
 	},
 	
-	/**
-	 * 
-	 * 
-	 */
-	showOverlay: function( shapes, attributes, svgNode, svgNodePosition ){
+    /**
+       Show overlay on given shape.
+       @methodOf ORYX.Plugins.AbstractPlugin.prototype
+       @example
+       showOverlay(
+           myShape,
+           { stroke: "green" },
+           ORYX.Editor.graft("http://www.w3.org/2000/svg", null, ['path', {
+               "title": "Click the element to execute it!",
+               "stroke-width": 2.0,
+               "stroke": "black",
+               "d": "M0,-5 L5,0 L0,5 Z",
+               "line-captions": "round"
+           }])
+       )
+       @param {Oryx.XXX.Shape[]} shapes One shape or array of shapes the overlay should be put on
+       @param {Oryx.XXX.Attributes} attributes some attributes...
+       @param {Oryx.svg.node} svgNode The svg node which should be used as overlay
+       @param {String} [svgNode="NW"] The svg node position where the overlay should be placed
+    */
+	showOverlay: function(shapes, attributes, svgNode, svgNodePosition ){
 		
 		if( !(shapes instanceof Array) ){
 			shapes = [shapes]
@@ -62,6 +107,10 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 		
 	},
 	
+    /**
+       Hide current overlay.
+       @methodOf ORYX.Plugins.AbstractPlugin.prototype
+    */
 	hideOverlay: function(){
 		this.facade.raiseEvent({
 			type	: ORYX.CONFIG.EVENT_OVERLAY_HIDE,
@@ -69,10 +118,12 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 		});		
 	},
 	
-	/**
-	 * Does a transformation with the given xslt stylesheet 
-	 * 
-	 * */
+    /**
+       Does a transformation with the given xslt stylesheet.
+       @methodOf ORYX.Plugins.AbstractPlugin.prototype
+       @param {String} data The data (e.g. eRDF) which should be transformed
+       @param {String} stylesheet URL of a stylesheet which should be used for transforming data.
+    */
 	doTransform: function( data, stylesheet ) {		
 		
 		if( !stylesheet || !data ){
@@ -106,8 +157,10 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 	
 	/**
 	 * Opens a new window that shows the given XML content.
-	 * 
+	 * @methodOf ORYX.Plugins.AbstractPlugin.prototype
 	 * @param {Object} content The XML content to be shown.
+	 * @example
+	 * openDownloadWindow( "my.xml", "<exampleXML />" );
 	 */
 	openXMLWindow: function(content) {
 		var win = window.open(
@@ -118,10 +171,12 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 		);
 	},
 	
-	/**
-	 * Opens a download window for downloading the given content.
-	 * 
-	 */
+    /**
+     * Opens a download window for downloading the given content.
+     * @methodOf ORYX.Plugins.AbstractPlugin.prototype
+     * @param {String} filename The content's file name
+     * @param {String} content The content to download
+     */
 	openDownloadWindow: function(filename, content) {
 		var win = window.open("");
 		if (win != null) {
@@ -148,6 +203,5 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 			submitForm.action= ORYX.PATH + "/download";
 			submitForm.submit();
 		}		
-	},	
-	
+	}
 });
