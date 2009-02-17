@@ -108,10 +108,10 @@
 	<target name="create-db">
 		<exec dir="${postgresql-bin-dir}" executable="createdb"> 
 			<arg value="--echo" />
-			<arg value="--host ${postgresql-hostname}" />
-			<arg value="--username ${postgresql-username}" />
-			<arg value="--port ${postgresql-port}" />
-			<arg value="--owner poem" />
+			<arg value="--host=${postgresql-hostname}" />
+			<arg value="--username=${postgresql-username}" />
+			<arg value="--port=${postgresql-port}" />
+			<arg value="--owner=poem" />
 			<arg value="poem" />
 		</exec>
 	</target>
@@ -119,9 +119,9 @@
 	<target name="drop-db">
 		<exec dir="${postgresql-bin-dir}" executable="dropdb"> 
 			<arg value="--echo" />
-			<arg value="--host ${postgresql-hostname}" />
-			<arg value="--username ${postgresql-username}" />
-			<arg value="--port ${postgresql-port}" />
+			<arg value="--host=${postgresql-hostname}" />
+			<arg value="--username=${postgresql-username}" />
+			<arg value="--port=${postgresql-port}" />
 			<arg value="poem" />
 		</exec>
 	</target>
