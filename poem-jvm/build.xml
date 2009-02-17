@@ -114,6 +114,14 @@
 			<arg value="--owner=poem" />
 			<arg value="poem" />
 		</exec>
+		<exec dir="${postgresql-bin-dir}" executable="psql"> 
+			<arg value="--echo" />
+			<arg value="--host ${postgresql-hostname}" />
+			<arg value="--username ${postgresql-username}" />
+			<arg value="--port ${postgresql-port}" />
+			<arg value="--dbname poem" />
+			<arg value="--file ${data-dir}/database/db_schema.sql" />
+		</exec>
 	</target>
 	
 	<target name="drop-db">
