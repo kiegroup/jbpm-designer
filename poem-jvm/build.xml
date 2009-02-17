@@ -103,40 +103,37 @@
 	</target>
 	
 	
-	
-	<!-- Database targets ****************************************************** -->
-	<target name="create-db">
-		<exec dir="${postgresql-bin-dir}" executable="createdb"> 
-			<arg value="--echo" />
-			<arg value="--host=${postgresql-hostname}" />
-			<arg value="--username=${postgresql-username}" />
-			<arg value="--port=${postgresql-port}" />
-			<arg value="--owner=poem" />
-			<arg value="poem" />
-		</exec>
-		<exec dir="${postgresql-bin-dir}" executable="psql"> 
-			<arg value="--echo" />
-			<arg value="--host ${postgresql-hostname}" />
-			<arg value="--username ${postgresql-username}" />
-			<arg value="--port ${postgresql-port}" />
-			<arg value="--dbname poem" />
-			<arg value="--file ${data-dir}/database/db_schema.sql" />
-		</exec>
-	</target>
-	
-	<target name="drop-db">
-		<exec dir="${postgresql-bin-dir}" executable="dropdb"> 
-			<arg value="--echo" />
-			<arg value="--host=${postgresql-hostname}" />
-			<arg value="--username=${postgresql-username}" />
-			<arg value="--port=${postgresql-port}" />
-			<arg value="poem" />
-		</exec>
-	</target>
-	
-	<target name="clean-db">
-		
-	</target>
+    <!-- Database targets ****************************************************** -->
+    <target name="create-db">
+        <exec executable="${postgresql-bin-dir}/createdb">
+            <arg value="--echo" />
+            <arg value="--host=${postgresql-hostname}" />
+            <arg value="--username=${postgresql-username}" />
+            <arg value="--port=${postgresql-port}" />
+            <arg value="--owner=poem" />
+            <arg value="poem" />
+        </exec>
+        <exec executable="${postgresql-bin-dir}/psql">
+            <arg value="--host=${postgresql-hostname}" />
+            <arg value="--username=${postgresql-username}" />
+            <arg value="--port=${postgresql-port}" />
+            <arg value="--dbname=poem" />
+            <arg value="--file=${data-dir}/database/db_schema.sql" />
+        </exec>
+    </target>
+
+    <target name="drop-db">
+        <exec executable="${postgresql-bin-dir}/dropdb">
+            <arg value="--echo" />
+            <arg value="--host=${postgresql-hostname}" />
+            <arg value="--username=${postgresql-username}" />
+            <arg value="--port=${postgresql-port}" />
+            <arg value="poem" />
+        </exec>
+    </target>
+
+    <target name="recreate-db" depends="drop-db, create-db" />
+
 
     <!-- generates a file containing the Subversion branch and revision number
          a build was made from, which may come handy for tracking issues -->
