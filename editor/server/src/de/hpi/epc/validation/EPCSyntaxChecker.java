@@ -3,15 +3,14 @@ package de.hpi.epc.validation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hpi.diagram.Diagram;
 import de.hpi.diagram.DiagramEdge;
 import de.hpi.diagram.DiagramNode;
 import de.hpi.diagram.DiagramObject;
-import de.hpi.petrinet.verification.SyntaxChecker;
+import de.hpi.diagram.verification.AbstractSyntaxChecker;
 
-public class EPCSyntaxChecker implements SyntaxChecker {
+public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	
 	private static final String NO_SOURCE = "Each edge must have a source";
 	private static final String NO_TARGET = "Each edge must have a target";
@@ -30,9 +29,7 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 	private static final String PI_AFTER_FUNCTION =  "There must be no process interface after a function";
 	private static final String FUNCTION_AFTER_PI =  "There must be no function after a process interface";
 
-	
 	protected Diagram diagram;
-	protected Map<String,String> errors;
 	
 	public EPCSyntaxChecker(Diagram diagram) {
 		this.diagram = diagram;
@@ -47,10 +44,6 @@ public class EPCSyntaxChecker implements SyntaxChecker {
 		checkNodes();
 		
 		return errors.size() == 0;
-	}
-
-	public Map<String, String> getErrors() {
-		return errors;
 	}
 	
 	protected void checkEdges() {

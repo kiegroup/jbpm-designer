@@ -57,13 +57,16 @@ ORYX.Plugins.BPMNImport = Clazz.extend({
      * @param {Object} bpmnRdf
      */
     bpmnToPn: function(bpmnRdf){
+        Ext.Msg.updateProgress(0.66, ORYX.I18N.BPMN2PNConverter.progress.convertingModel);
         Ext.Ajax.request({
             url: this.converterUrl,
             method: 'POST',
             success: function(request){
                 var parser = new DOMParser();
+                Ext.Msg.updateProgress(1.0, ORYX.I18N.BPMN2PNConverter.progress.renderingModel);
                 var doc = parser.parseFromString(request.responseText, "text/xml");
                 this.facade.importERDF(doc);
+                Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
                 Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.server);
@@ -78,6 +81,11 @@ ORYX.Plugins.BPMNImport = Clazz.extend({
      * Loads rdf of given bpmn url
      */
     importBpmn: function(){
+        Ext.Msg.progress(ORYX.I18N.BPMN2PNConverter.progress.status, 
+                         ORYX.I18N.BPMN2PNConverter.progress.importingModel
+        );
+        Ext.Msg.updateProgress(0.33, ORYX.I18N.BPMN2PNConverter.progress.fetchingModel);
+        
         var importBPMNUrl = this.getParamFromUrl("importBPMN");
         if (importBPMNUrl) {
             Ext.Ajax.request({
@@ -124,10 +132,25 @@ ORYX.Plugins.PNExport = Clazz.extend({
     },
     
     exportIt: function(){
+        //Throw error if model hasn't been saved before
         if(location.href.include( ORYX.CONFIG.ORYX_NEW_URL )){
-            Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.notSaved)
-        } else {
-            window.open("/backend/poem/new?stencilset=/stencilsets/petrinets/petrinet.json&importBPMN=" + location.href);
+            Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.notSaved);
+            return;
         }
+        ORYX.Plugins.SyntaxChecker.instance.resetErrors();
+        ORYX.Plugins.SyntaxChecker.instance.checkForErrors({
+            context: "bpmn2pn",
+            onNoErrors: function(){
+                this.openPetriNetEditor();
+            }.bind(this)
+        })
+    },
+    
+    /**
+     * Opens petri net editor with bpmn model import
+     * @methodOf: ORYX.Plugins.BPMNImport.prototype
+     */
+    openPetriNetEditor: function(){
+        window.open("/backend/poem/new?stencilset=/stencilsets/petrinets/petrinet.json&importBPMN=" + location.href);
     }
 });

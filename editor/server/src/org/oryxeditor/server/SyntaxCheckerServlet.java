@@ -3,7 +3,6 @@ package org.oryxeditor.server;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,14 +18,15 @@ import org.xml.sax.SAXException;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
+import de.hpi.bpmn2pn.BPMN2PNSyntaxChecker;
 import de.hpi.diagram.Diagram;
+import de.hpi.diagram.verification.SyntaxChecker;
 import de.hpi.epc.rdf.EPCDiagramRDFImporter;
 import de.hpi.epc.validation.EPCSyntaxChecker;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
-import de.hpi.petrinet.verification.SyntaxChecker;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -52,12 +52,19 @@ import de.hpi.petrinet.verification.SyntaxChecker;
 public class SyntaxCheckerServlet extends HttpServlet {
 	private static final long serialVersionUID = 929153463101368351L;
 	
+	/** This can be used to set which syntax for a given stencil set should be used
+	 * E.g., BPMN diagrams could have a special syntax checker for step through and
+	 * bpmn2pn conversion
+	*/ 
+	private String context;
+	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
 		try {
 			res.setContentType("text/json");
 
 			String rdf = req.getParameter("data");
+			context = req.getParameter("context");
 
 			DocumentBuilder builder;
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -87,19 +94,11 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		else if (type.equals("epc.json"))
 			checker = getCheckerEPC(document);
 
-		if (checker == null || checker.checkSyntax()) {
+		if (checker == null) {
 			writer.print("{}");
 		} else {
-			writer.print("{");
-			boolean isFirst = true;
-			for (Entry<String,String> error: checker.getErrors().entrySet()) {
-				if (isFirst)
-					isFirst = false;
-				else
-					writer.print(",");
-				writer.print("\""+error.getKey()+"\": \""+error.getValue()+"\"");
-			}
-			writer.print("}");
+			checker.checkSyntax();
+			writer.print(checker.getErrorsAsJson().toString());
 		}
 	}
 	
@@ -112,7 +111,11 @@ public class SyntaxCheckerServlet extends HttpServlet {
 	protected SyntaxChecker getCheckerBPMN11(Document document) {
 		BPMN11RDFImporter importer = new BPMN11RDFImporter(document);
 		BPMNDiagram diagram = importer.loadBPMN();
-		return diagram.getSyntaxChecker();
+		if(context != null && context.equals("bpmn2pn")){
+			return new BPMN2PNSyntaxChecker(diagram);
+		} else {
+			return diagram.getSyntaxChecker();
+		}
 	}
 
 	protected SyntaxChecker getCheckerIBPMN(Document document) {
@@ -132,5 +135,4 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		Diagram diagram = importer.loadEPCDiagram();
 		return new EPCSyntaxChecker(diagram);
 	}
-
 }

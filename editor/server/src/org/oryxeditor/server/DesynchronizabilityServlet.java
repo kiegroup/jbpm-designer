@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.validation.BPMNSyntaxChecker;
+import de.hpi.diagram.verification.SyntaxChecker;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.converter.IBPMNConverter;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
@@ -27,7 +28,6 @@ import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.localmodelgeneration.DesynchronizabilityChecker;
 import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
 import de.hpi.petrinet.Transition;
-import de.hpi.petrinet.verification.SyntaxChecker;
 
 /**
  * Copyright (c) 2008 Gero Decker

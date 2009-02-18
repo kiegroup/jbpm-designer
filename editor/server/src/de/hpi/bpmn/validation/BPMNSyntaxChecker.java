@@ -2,7 +2,6 @@ package de.hpi.bpmn.validation;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
@@ -21,7 +20,7 @@ import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XOREventBasedGateway;
-import de.hpi.petrinet.verification.SyntaxChecker;
+import de.hpi.diagram.verification.AbstractSyntaxChecker;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -44,7 +43,7 @@ import de.hpi.petrinet.verification.SyntaxChecker;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class BPMNSyntaxChecker implements SyntaxChecker {
+public class BPMNSyntaxChecker extends AbstractSyntaxChecker {
 	
 	protected static final String NO_SOURCE = "An edge must have a source.";
 	protected static final String NO_TARGET = "An edge must have a target.";
@@ -62,7 +61,6 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 	protected static final String NODE_NOT_ALLOWED = "Node type is not allowed.";
 
 	protected BPMNDiagram diagram;
-	protected Map<String,String> errors;
 	
 	/**
 	 * Use these as configuration options
@@ -95,14 +93,6 @@ public class BPMNSyntaxChecker implements SyntaxChecker {
 		checkNodesRecursively(diagram);
 		
 		return errors.size() == 0;
-	}
-
-	public Map<String,String> getErrors() {
-		return errors;
-	}
-	
-	public void clearErrors(){
-		errors.clear();
 	}
 
 	protected boolean checkEdges(boolean checkControlFlowOnly) {

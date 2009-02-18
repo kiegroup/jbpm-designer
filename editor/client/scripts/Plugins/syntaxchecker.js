@@ -84,18 +84,25 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
      * Performs request to server to check for errors on current model.
      * @methodOf ORYX.Plugins.SyntaxChecker.prototype
      * @param {Object} options Configuration hash
-     * @param {Function} options.onNoErrors Raised when model has no errors.
-     * @param {Function} options.onErrors Raised when model has errors.
-     * @param {Function} options.onFailure Raised when server communcation failed.
+     * @param {String} context A context send to the syntax checker servlet
+     * @param {Function} [options.onNoErrors] Raised when model has no errors.
+     * @param {Function} [options.onErrors] Raised when model has errors.
+     * @param {Function} [options.onFailure] Raised when server communcation failed.
      */
     checkForErrors: function(options){
+        if(!options)
+            options = {};
+            
+        Ext.Msg.wait(ORYX.I18N.SyntaxChecker.checkingMessage);
+        
         // Send the request to the server.
         new Ajax.Request(ORYX.CONFIG.SYNTAXCHECKER_URL, {
             method: 'POST',
             asynchronous: false,
             parameters: {
                 resource: location.href,
-                data: this.getRDFFromDOM()
+                data: this.getRDFFromDOM(),
+                context: options.context
             },
             onSuccess: function(request){
                 var resp = request.responseText.evalJSON();
@@ -105,17 +112,21 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
                     if (resp.size() > 0) {
                         this.showErrors(resp);
                  
-                        options.onErrors();
+                        if(options.onErrors) options.onErrors();
                     }
                     else {
-                        options.onNoErrors();
+                        if(options.onNoErrors) options.onNoErrors();
                     }
                 }
                 else {
-                    options.onFailure();
+                    if(options.onFailure) options.onFailure();
                 }
+                Ext.Msg.hide();
             }.bind(this),
-            onFailure: options.onFailure
+            onFailure: function(){
+                Ext.Msg.hide();
+                if(options.onFailure) options.onFailure();
+            }
         });
     },
     

@@ -2,13 +2,13 @@ package de.hpi.interactionnet.verification;
 
 import java.util.Iterator;
 
+import de.hpi.diagram.verification.SyntaxChecker;
 import de.hpi.interactionnet.ActionTransition;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.InteractionTransition;
 import de.hpi.petrinet.SilentTransition;
 import de.hpi.petrinet.Transition;
 import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
-import de.hpi.petrinet.verification.SyntaxChecker;
 
 public class InteractionNetSyntaxCheckerImpl extends PetriNetSyntaxChecker
 		implements SyntaxChecker {

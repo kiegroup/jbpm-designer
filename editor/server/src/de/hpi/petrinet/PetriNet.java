@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
+import de.hpi.diagram.verification.SyntaxChecker;
 import de.hpi.petrinet.serialization.PetriNetPNMLExporter;
 import de.hpi.petrinet.serialization.XMLFileLoaderSaver;
 import de.hpi.petrinet.verification.PetriNetInterpreter;
 import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
-import de.hpi.petrinet.verification.SyntaxChecker;
 
 /**
  * Copyright (c) 2008 Gero Decker

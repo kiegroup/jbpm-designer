@@ -1,6 +1,8 @@
-package de.hpi.petrinet.verification;
+package de.hpi.diagram.verification;
 
 import java.util.Map;
+
+import org.json.JSONObject;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -36,5 +38,16 @@ public interface SyntaxChecker {
 	 * @return key = resource ID, value = error text
 	 */
 	Map<String,String> getErrors();
-
+	
+	/**
+	 * 
+	 * @return json representation of errors
+	 */
+	JSONObject getErrorsAsJson();
+	
+	/**
+	 * 
+	 * @return true if any errors have been found
+	 */
+	boolean errorsFound();
 }

@@ -7,12 +7,12 @@ import java.util.Map;
 
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.PTNet;
+import de.hpi.diagram.verification.SyntaxChecker;
 import de.hpi.interactionnet.verification.InteractionNetSyntaxCheckerImpl;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
-import de.hpi.petrinet.verification.SyntaxChecker;
 
 public class InteractionNet extends PTNet {
 	

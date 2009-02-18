@@ -381,5 +381,12 @@ Ext.MessageBox.buttonText.ok = "Ok";
     server: "Couldn't import BPNM diagram.",
     noRights: "Don't you have read permissions on given model?",
     notSaved: "Model must be saved and reopened for using Petri net exporter!"
+  },
+  progress: {
+      status: "Status",
+      importingModel: "Importing BPMN Model",
+      fetchingModel: "Fetching",
+      convertingModel: "Converting",
+      renderingModel: "Rendering"
   }
 }*/

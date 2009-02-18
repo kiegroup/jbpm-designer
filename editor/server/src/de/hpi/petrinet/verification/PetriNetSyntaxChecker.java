@@ -2,8 +2,8 @@ package de.hpi.petrinet.verification;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
+import de.hpi.diagram.verification.AbstractSyntaxChecker;
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.Node;
@@ -32,7 +32,7 @@ import de.hpi.petrinet.Transition;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PetriNetSyntaxChecker implements SyntaxChecker {
+public class PetriNetSyntaxChecker extends AbstractSyntaxChecker {
 
 	private static final String NOT_BIPARTITE = "The graph is not bipartite";
 	private static final String NO_LABEL = "Label not set for a labeled transition";
@@ -41,7 +41,6 @@ public class PetriNetSyntaxChecker implements SyntaxChecker {
 	private static final String NODE_NOT_SET = "A node is not set for a flowrelationship";
 	
 	protected PetriNet net;
-	protected Map<String,String> errors;
 	
 	public PetriNetSyntaxChecker(PetriNet net) {
 		this.net = net;
@@ -57,10 +56,6 @@ public class PetriNetSyntaxChecker implements SyntaxChecker {
 			return false;
 		errors.clear();
 		return true;
-	}
-
-	public Map<String,String> getErrors() {
-		return errors;
 	}
 
 	protected boolean isBipartite() {

@@ -177,6 +177,13 @@ ORYX.I18N.BPMN2PNConverter = {
     server: "Couldn't import BPNM diagram.",
     noRights: "Don't you have read permissions on given model?",
     notSaved: "Model must be saved and reopened for using Petri net exporter!"
+  },
+  progress: {
+      status: "Status",
+      importingModel: "Importing BPMN Model",
+      fetchingModel: "Fetching",
+      convertingModel: "Converting",
+      renderingModel: "Rendering"
   }
 }
 
@@ -344,6 +351,7 @@ ORYX.I18N.SyntaxChecker.name = "Syntax Checker";
 ORYX.I18N.SyntaxChecker.desc = "Check Syntax";
 ORYX.I18N.SyntaxChecker.noErrors = "There are no syntax errors.";
 ORYX.I18N.SyntaxChecker.invalid = "Invalid answer from server.";
+ORYX.I18N.SyntaxChecker.checkingMessage = "Checking ...";
 
 if(!ORYX.I18N.Undo) ORYX.I18N.Undo = {};
 

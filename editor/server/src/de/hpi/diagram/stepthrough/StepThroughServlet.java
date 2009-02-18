@@ -2,9 +2,7 @@ package de.hpi.diagram.stepthrough;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.oryxeditor.server.StencilSetUtil;
 import org.w3c.dom.Document;
 
@@ -25,7 +25,10 @@ import de.hpi.bpmn2pn.converter.STConverter;
 import de.hpi.bpt.process.epc.EPCFactory;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.util.OryxParser;
+import de.hpi.diagram.verification.SyntaxChecker;
+import de.hpi.epc.rdf.EPCDiagramRDFImporter;
 import de.hpi.epc.stepthrough.EPCStepThroughInterpreter;
+import de.hpi.epc.validation.EPCSyntaxChecker;
 import de.hpi.petrinet.stepthrough.AutoSwitchLevel;
 import de.hpi.petrinet.stepthrough.STMapper;
 import de.hpi.petrinet.stepthrough.STSyntaxChecker;
@@ -64,37 +67,34 @@ public class StepThroughServlet extends HttpServlet {
 		IStepThroughInterpreter stm = null;
 		
 		if (type.equals("bpmn.json") || type.equals("bpmn1.1.json")){
+			if (req.getParameter("checkSyntax").equals("true")) {
+				BPMNDiagram diagram = loadBPMN(document);
+				// Check Diagram in Syntax and Compatibility
+				STSyntaxChecker checker = new STSyntaxChecker(diagram);
+				checker.checkSyntax(true);
+				if(checker.errorsFound()){
+					writeSyntaxCheckResults(checker, res);
+					return; // Stop further execution
+				}
+			}
+			
+			// Produce a BPMN2PN converter and create a StepThroughMapper with it
+			stm = new STMapper(loadConverter(document));
+		} else if (type.equals("epc.json")){
 			try{
-				// Check the syntax?
+				//TODO Step through and syntax checker expects two different epc class models!!!
+				// Check for syntax errors
 				if (req.getParameter("checkSyntax").equals("true")) {
-					BPMNDiagram diagram = loadBPMN(document);
-					// Check Diagram in Syntax and Compatibility
-					STSyntaxChecker checker = new STSyntaxChecker(diagram);
-					checker.checkSyntax(true);
-					if (checker.getErrors().size() > 0) {
-						PrintWriter writer = res.getWriter();
-						// Announce errors
-						writer.print("!errors!");
-						// Write errors into the output, if any exist
-						for (Entry<String, String> error : checker.getErrors()
-								.entrySet()) {
-							res.getWriter().print(
-									error.getKey() + ":" + error.getValue() + ";");
-						}
-						
-						// Stop further execution
-						return;
+					EPCSyntaxChecker checker = new EPCSyntaxChecker(new EPCDiagramRDFImporter(document).loadEPCDiagram());
+					checker.checkSyntax();
+					if(checker.errorsFound()) {
+						writeSyntaxCheckResults(checker, res);
+						return; // stop futher execution
 					}
 				}
 				
-				// Produce a BPMN2PN converter and create a StepThroughMapper with it
-				stm = new STMapper(loadConverter(document));
-			} catch (IOException e){
-				e.printStackTrace();
-			}
-		} else if (type.equals("epc.json")){
-			try{
-				IEPC epcDiagram = new OryxParser(new EPCFactory()).parse(document).get(0); 
+				// Initialize step through
+				IEPC epcDiagram = new OryxParser(new EPCFactory()).parse(document).get(0);
 				EPCStepThroughInterpreter epcStm = new EPCStepThroughInterpreter(epcDiagram);
 				epcStm.setInitialMarking(Arrays.asList(initialMarking.split(";")));
 				stm = epcStm;
@@ -131,6 +131,20 @@ public class StepThroughServlet extends HttpServlet {
 			res.getWriter().print(stm.getChangedObjsAsString());
 		} catch (IOException e){
 			e.printStackTrace();
+		}
+	}
+	
+	private void writeSyntaxCheckResults(SyntaxChecker checker, HttpServletResponse res){
+		if(checker.errorsFound()){
+			JSONObject response = new JSONObject();
+			try {
+				response.put("syntaxErrors", checker.getErrorsAsJson());
+				res.getWriter().write(response.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

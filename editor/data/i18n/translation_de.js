@@ -177,6 +177,13 @@ ORYX.I18N.BPMN2PNConverter = {
     server: "BPMN Diagramm konnte nicht importiert werden!",
     noRights: "Es sind keine Leserechte für das importierte Diagramm vorhanden!",
     notSaved: "Das Diagramm wurde noch nicht gespeichert und/ oder muss neu geöffnet werden!"
+  },
+  progress: {
+      status: "Status",
+      importingModel: "Importiere BPMN Model",
+      fetchingModel: "Lade",
+      convertingModel: "Konvertiere",
+      renderingModel: "Zeige an"
   }
 }
 
