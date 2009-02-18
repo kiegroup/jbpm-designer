@@ -10,6 +10,7 @@ import java.util.Map;
 import de.hpi.bpt.hypergraph.abs.IGObject;
 import de.hpi.bpt.process.epc.ControlFlow;
 import de.hpi.bpt.process.epc.Event;
+import de.hpi.bpt.process.epc.FlowObject;
 import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
@@ -45,9 +46,17 @@ public class EPCStepThroughInterpreter implements IStepThroughInterpreter {
 		nodeNewMarkings = Marking.getInitialMarking(epcDiag, startNodes).propagate(epcDiag);
 		
 		changedObjects = new LinkedList<IGObject>();
+		
+		//Fire automatically nodes like and-splits for initial marking
+		for(INode node : this.getFireableNodes()){
+			if(node instanceof FlowObject && this.shouldBeAutomaticallyExecuted((FlowObject)node)){
+				fireObject(node.getId());
+			}
+		}
+		
 		changedObjects.addAll(getFireableNodes());
 	}
-
+	
 	// TODO this method should be refactored and should call a method fireObject(node)
 	public boolean fireObject(String resourceId) {
 		// For firing or-splits, resourceId looks like as follows:

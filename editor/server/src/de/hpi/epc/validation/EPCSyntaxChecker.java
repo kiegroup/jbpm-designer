@@ -35,11 +35,13 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	 * Here are some configuration options
 	 */
 	public boolean checkFunctionFollowsFunction;
+	public boolean checkExactlyOneStartEvent;
 	
 	public EPCSyntaxChecker(Diagram diagram) {
-		this.diagram = diagram;
-		this.errors = new HashMap<String,String>();
-		this.checkFunctionFollowsFunction = true;
+		diagram = diagram;
+		errors = new HashMap<String,String>();
+		checkFunctionFollowsFunction = true;
+		checkExactlyOneStartEvent = true;
 	}
 
 	public boolean checkSyntax() {
@@ -121,7 +123,7 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 				}
 			}
 		}
-		if (startEvents.size() > 1){
+		if (checkExactlyOneStartEvent && startEvents.size() > 1){
 			for (DiagramNode n : startEvents){
 				addError(n, MANY_STARTS);
 			}

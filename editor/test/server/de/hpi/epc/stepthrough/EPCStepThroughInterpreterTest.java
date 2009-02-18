@@ -1,6 +1,7 @@
 package de.hpi.epc.stepthrough;
 
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -18,6 +19,7 @@ import de.hpi.bpt.process.epc.Event;
 import de.hpi.bpt.process.epc.Function;
 import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.epc.AbstractEPCTest;
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class EPCStepThroughInterpreterTest extends AbstractEPCTest {
 	EPCStepThroughInterpreter epcST;
@@ -38,6 +40,41 @@ public class EPCStepThroughInterpreterTest extends AbstractEPCTest {
 
 	@After
 	public void tearDown() throws Exception {
+	}
+	
+	@Test public void testSetInitialMarking(){
+		EPC epc = new EPC();
+		
+		Event e1 = new Event();
+		epc.addFlowObject(e1);
+		
+		Event e2 = new Event();
+		epc.addFlowObject(e2);
+		
+		Event e3 = new Event();
+		epc.addFlowObject(e3);
+		
+		Connector xor = new Connector(ConnectorType.AND);
+		epc.addFlowObject(xor);
+		
+		Function f1 = new Function();
+		epc.addFlowObject(f1);
+		
+		Function f2 = new Function();
+		epc.addFlowObject(f2);
+		
+		epc.addControlFlow(e1, xor);
+		epc.addControlFlow(xor, e2);
+		epc.addControlFlow(xor, e3);
+		epc.addControlFlow(e2, f1);
+		epc.addControlFlow(e3, f2);
+		
+		EPCStepThroughInterpreter interpreter = new EPCStepThroughInterpreter(epc);
+		String[] resources = {e1.getId()};
+		interpreter.setInitialMarking(Arrays.asList(resources));
+		assertEquals(2, interpreter.getFireableNodes().size());
+		assertTrue(interpreter.getFireableNodes().contains(f1));
+		assertTrue(interpreter.getFireableNodes().contains(f2));
 	}
 	
 	@Test public void testShouldBeAutomaticallyExecuted(){

@@ -8,6 +8,7 @@ public class StepThroughEPCSyntaxChecker extends EPCSyntaxChecker {
 	public StepThroughEPCSyntaxChecker(Diagram diagram) {
 		super(diagram);
 		checkFunctionFollowsFunction = false;
+		checkExactlyOneStartEvent = false;
 	}
 
 }
