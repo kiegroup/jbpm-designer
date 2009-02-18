@@ -51,15 +51,7 @@
     	
 	<g id="documentation"
 	   pointer-events="fill">
-    	
-    	<circle 
-    		cx="274" 
-    		cy="234" 
-    		r="15" 
-    		stroke="black" 
-    		fill="white"
-    		oryx:anchors="bottom right"
-	  	 	stroke-width="1"/>
+
     	<rect 
     		x="266" 
     		y="226" 

@@ -53,14 +53,6 @@
 	<g id="documentation"
 	   pointer-events="fill">
     	
-    	<circle 
-    		cx="584" 
-    		cy="484" 
-    		r="15" 
-    		stroke="black" 
-    		fill="white" 
-    		stroke-width="1"
-    		oryx:anchors="bottom right"/>
     	<rect 
     		x="576" 
     		y="476" 

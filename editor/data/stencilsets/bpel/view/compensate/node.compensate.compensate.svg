@@ -52,13 +52,7 @@
     	
 	<g id="documentation"
 	   pointer-events="fill">	
-    	<circle 
-    		cx="84" 
-    		cy="64" 
-    		r="15" 
-    		stroke="black" 
-    		fill="white" 
-    		stroke-width="1"/>
+
     	<rect 
     		x="76" 
     		y="56" 
