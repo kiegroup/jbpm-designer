@@ -31,9 +31,15 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 
 	protected Diagram diagram;
 	
+	/**
+	 * Here are some configuration options
+	 */
+	public boolean checkFunctionFollowsFunction;
+	
 	public EPCSyntaxChecker(Diagram diagram) {
 		this.diagram = diagram;
 		this.errors = new HashMap<String,String>();
+		this.checkFunctionFollowsFunction = true;
 	}
 
 	public boolean checkSyntax() {
@@ -79,7 +85,7 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 				if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
 				else if (in == 0 || out == 0) addError(node, NOT_CONNECTED_2);
 				for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
-					if ("Function".equals(next.getType())) addError(next, FUNCTION_AFTER_FUNCTION);
+					if (checkFunctionFollowsFunction && "Function".equals(next.getType())) addError(next, FUNCTION_AFTER_FUNCTION);
 					if ("ProcessInterface".equals(next.getType())) addError(next, PI_AFTER_FUNCTION);
 				}
 			}

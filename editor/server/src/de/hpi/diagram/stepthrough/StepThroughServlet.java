@@ -28,7 +28,7 @@ import de.hpi.bpt.process.epc.util.OryxParser;
 import de.hpi.diagram.verification.SyntaxChecker;
 import de.hpi.epc.rdf.EPCDiagramRDFImporter;
 import de.hpi.epc.stepthrough.EPCStepThroughInterpreter;
-import de.hpi.epc.validation.EPCSyntaxChecker;
+import de.hpi.epc.stepthrough.StepThroughEPCSyntaxChecker;
 import de.hpi.petrinet.stepthrough.AutoSwitchLevel;
 import de.hpi.petrinet.stepthrough.STMapper;
 import de.hpi.petrinet.stepthrough.STSyntaxChecker;
@@ -85,7 +85,7 @@ public class StepThroughServlet extends HttpServlet {
 				//TODO Step through and syntax checker expects two different epc class models!!!
 				// Check for syntax errors
 				if (req.getParameter("checkSyntax").equals("true")) {
-					EPCSyntaxChecker checker = new EPCSyntaxChecker(new EPCDiagramRDFImporter(document).loadEPCDiagram());
+					StepThroughEPCSyntaxChecker checker = new StepThroughEPCSyntaxChecker(new EPCDiagramRDFImporter(document).loadEPCDiagram());
 					checker.checkSyntax();
 					if(checker.errorsFound()) {
 						writeSyntaxCheckResults(checker, res);
