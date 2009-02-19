@@ -51,7 +51,30 @@ public class XFormsXHTMLImporter {
 			
 		}
 		
+		getNSDeclarationsRecursive(root);
+		
 		return form;
+	}
+	
+	private void getNSDeclarationsRecursive(Node node) {
+		
+		if(node.getAttributes()!=null) {
+			for(int i=0; i<node.getAttributes().getLength(); i++) {
+				if(node.getAttributes().item(i).getNodeName().startsWith("xmlns:")) {
+					String prefix = "";
+					if(node.getAttributes().item(i).getNodeName().length()>6)
+						prefix = node.getAttributes().item(i).getNodeName().substring(6);
+					String namespace = node.getAttributes().item(i).getTextContent();
+					form.getNSDeclarations().put(prefix, namespace);
+				}
+			}
+		}
+	
+		for(Node child = node.getFirstChild(); 
+				child != null; 
+				child = child.getNextSibling()) {
+			getNSDeclarationsRecursive(child);
+		}
 	}
 	
 	private void addElementsRecursive(XFormsElement xfElement, Node node, int row) {

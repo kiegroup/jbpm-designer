@@ -105,6 +105,11 @@
 		<plugin source="xformsexport.js" name="ORYX.Plugins.XFormsExport">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
 		</plugin>	
+<!--		
+		<plugin source="xformsexportorbeon.js" name="ORYX.Plugins.XFormsExportOrbeon">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	
+		</plugin>	
+-->
 		
 		<plugin source="xformsimport.js" name="ORYX.Plugins.XFormsImport">
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>	

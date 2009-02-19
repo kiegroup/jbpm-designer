@@ -159,5 +159,8 @@
 	<classpathentry kind="lib" path="poem-jvm/lib/xmlsec-1.4.2.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xmltooling-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-java-client-driver.jar"/>
+	<classpathentry kind="lib" path="editor/lib/orbeon-xforms-filter.jar"/>
+	<classpathentry kind="lib" path="editor/lib/saxon9-dom.jar"/>
+	<classpathentry kind="lib" path="editor/lib/saxon9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -66,6 +66,18 @@
 					"length":"1000000",
 					"wrapLines":true
 				},
+				{
+					"id":"xf_nsdeclarations",
+					"type":"String",
+					"title":"head",
+					"prefix":"oryx",
+					"value":"",
+					"description":"The original namespace declarations (serialized).",
+					"readonly":true,
+					"optional":true,
+					"length":"1000000",
+					"wrapLines":true
+				},
 			]
 		},	
  		{

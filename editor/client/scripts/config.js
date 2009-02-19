@@ -28,6 +28,7 @@ ORYX.CONFIG = {
 	STEP_THROUGH:				"/oryx/stepthrough",
 	STEP_THROUGH_CHECKER:		"/oryx/stepthroughchecker",
 	XFORMS_EXPORT_URL:			"/oryx/xformsexport",
+	XFORMS_EXPORT_ORBEON_URL:	"/oryx/xformsexport-orbeon",
 	XFORMS_IMPORT_URL:			"/oryx/xformsimport",
 	BPEL_EXPORT_URL:			"/oryx/bpelexporter",
 	BPEL4CHOR_EXPORT_URL:		"/oryx/bpel4chorexporter",

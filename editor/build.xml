@@ -256,6 +256,7 @@
             
             <lib dir="${editor-src-root}/lib">
                 <include name="*.jar"/>
+            	<include name="*.xsl"/>
 				<exclude name="deprecated/**"/>
 				<exclude name="sources/**"/>
 				<exclude name="servlet-api.jar" />

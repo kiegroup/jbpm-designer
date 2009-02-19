@@ -175,6 +175,10 @@ public class XFormsRDFImporter {
 				if (n instanceof Text)
 					continue;
 				
+				String content = null;
+				if(getContent(n)!=null)
+					content = StringEscapeUtils.unescapeXml(getContent(n));
+				
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 				
 				if(attribute.startsWith("xf_")) {
@@ -186,28 +190,30 @@ public class XFormsRDFImporter {
 						attribute = attribute.substring(prefix.length());
 						
 					if(element.getAttributes().containsKey(attribute)) {
-						element.getAttributes().put(attribute, getContent(n));
+						element.getAttributes().put(attribute, content);
 					} else {
 						if(element instanceof Submit) {
-							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
+							handleSubmissionProperty(attribute, content, (Submit) element, c);
 						} else if((element instanceof XForm) && attribute.equals("head")) {
-							String head = getContent(n);
-							if(head!=null)
-								addHead(head, c);
+							if(content!=null)
+								addHead(content, c);
+						} else if((element instanceof XForm) && attribute.equals("nsdeclarations")) {
+							if(content!=null)
+								addNSDeclarations(content, c);
 						} else {
-							handleModelItemProperty(attribute, getContent(n), element, c);
+							handleModelItemProperty(attribute, content, element, c);
 						}
 					}
 				} else if(attribute.startsWith("ev_")) {
 					// handle attributes of xml events namespace
 					attribute = "ev:" + attribute.substring(3);
 					if(element.getAttributes().containsKey(attribute)) {
-						element.getAttributes().put(attribute, getContent(n));
+						element.getAttributes().put(attribute, content);
 					} else {
 						if(element instanceof Submit)
-							handleSubmissionProperty(attribute, getContent(n), (Submit) element, c);
+							handleSubmissionProperty(attribute, content, (Submit) element, c);
 						else
-							handleModelItemProperty(attribute, getContent(n), element, c);
+							handleModelItemProperty(attribute, content, element, c);
 					}
 				} else {
 					// handle oryx attributes
@@ -703,7 +709,6 @@ public class XFormsRDFImporter {
 	}
 	
 	private void addHead(String head, ImportContext c) {
-		head = StringEscapeUtils.unescapeXml(head);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		try {
@@ -712,6 +717,21 @@ public class XFormsRDFImporter {
 			c.form.setHead(headDoc.getDocumentElement());
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void addNSDeclarations(String nsDeclarations, ImportContext c) {
+		// deserialize namespace declaraions
+		// format: [prefix1,namespace1][prefix2,namespace2] ...
+		
+		int b = nsDeclarations.indexOf("[");
+		while(b>=0) {
+			int t = nsDeclarations.indexOf(",");
+			int e = nsDeclarations.indexOf("]");
+			c.form.getNSDeclarations().put(
+					nsDeclarations.substring(b+1, t), nsDeclarations.substring(t+1, e));
+			nsDeclarations = nsDeclarations.substring(e+1);
+			b = nsDeclarations.indexOf("[");
 		}
 	}
 	

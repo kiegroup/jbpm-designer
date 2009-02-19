@@ -30,29 +30,28 @@ public class XFormsXHTMLExporter {
 	public XFormsXHTMLExporter(XForm form) {
 		super();
 		this.form = form;
+		
+		if(!this.form.getNSDeclarations().containsValue("http://www.w3.org/2002/xforms"))
+			this.form.getNSDeclarations().put("xf", "http://www.w3.org/2002/xforms");
+		if(!this.form.getNSDeclarations().containsValue("http://www.w3.org/2001/xml-events"))
+			this.form.getNSDeclarations().put("ev", "http://www.w3.org/2001/xml-events");
+		if(!this.form.getNSDeclarations().containsValue("http://www.w3.org/2001/XMLSchema-instance"))
+			this.form.getNSDeclarations().put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		if(!this.form.getNSDeclarations().containsValue("http://www.w3.org/2001/XMLSchema"))
+			this.form.getNSDeclarations().put("xsd", "http://www.w3.org/2001/XMLSchema");
+		
+		nsPrefixes = new HashMap<String,String>();
+		for(String key : this.form.getNSDeclarations().keySet()) {
+			nsPrefixes.put(this.form.getNSDeclarations().get(key), key); 
+		}
+		
 	}
 	
 	/**
-	 * Generate XForms+XHTML document with default namespace prefixes
+	 * Generate XForms+XHTML document
 	 * @return XForms+XHTML document
 	 */
 	public Document getXHTMLDocument(String cssUrl) {
-
-		nsPrefixes = new HashMap<String,String>();
-		nsPrefixes.put("http://www.w3.org/2002/xforms", "xf");
-		nsPrefixes.put("http://www.w3.org/2001/xml-events", "ev");
-		nsPrefixes.put("http://www.w3.org/2001/XMLSchema-instance", "xsi");
-		nsPrefixes.put("http://www.w3.org/2001/XMLSchema", "xsd");
-
-		return getXHTMLDocument(cssUrl, nsPrefixes);
-	}
-	
-	/**
-	 * Generate XForms+XHTML document with specified namespace prefixes
-	 * @return XForms+XHTML document
-	 */
-	public Document getXHTMLDocument(String cssUrl, Map<String,String> nsPrefixes) {
-		this.nsPrefixes = nsPrefixes;
 		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -62,8 +61,8 @@ public class XFormsXHTMLExporter {
 			Element html = doc.createElementNS("http://www.w3.org/1999/xhtml", "html");
 			html.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
 			
-			for(String ns : nsPrefixes.keySet()) {
-				html.setAttribute("xmlns:" + nsPrefixes.get(ns), ns);
+			for(String prefix : this.form.getNSDeclarations().keySet()) {
+				html.setAttribute("xmlns:" + prefix, this.form.getNSDeclarations().get(prefix));
 			}
 			
 			doc.appendChild(html);
@@ -83,7 +82,7 @@ public class XFormsXHTMLExporter {
 	 * @param instanceInspectorUrl destination URI for submitting instance data for inspection
 	 * @return XForms+XHTML document with markup for an instance inspector button
 	 */
-	public Document getXHTMLDocumentForInspection(String instanceInspectorUrl, String cssUrl) {
+	/*public Document getXHTMLDocumentForInspection(String instanceInspectorUrl, String cssUrl) {
 		if(doc==null) getXHTMLDocument(cssUrl);
 		
 		Element model = (Element) doc.getElementsByTagName(nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model").item(0);
@@ -111,7 +110,7 @@ public class XFormsXHTMLExporter {
 		label.appendChild(doc.createCDATASection("SHOW INSTANCE DATA"));
 		
 		return doc;
-	}
+	}*/
 	
 	private void addHead(Element html, String cssUrl) {
 		if(form.getHead()!=null) {
@@ -135,36 +134,32 @@ public class XFormsXHTMLExporter {
 		}
 		
 		Element model;
-		if(head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
-				nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model").getLength()>0) {
-			model = (Element) head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
-					nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model").item(0);
+		if(head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "model").getLength()>0) {
+			model = (Element) head.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "model").item(0);
 		} else {
 			model = (Element) head.appendChild(
 					doc.createElementNS("http://www.w3.org/2002/xforms", 
-							nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model"));
+							nsPrefixes.get("http://www.w3.org/2002/xforms") + "model"));
 			addAttributes(model, form.getModel());
 		}
 		
+		NodeList bindNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "bind");
 		for(Bind bind : form.getModel().getBinds()) {
-			NodeList bindNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
-					nsPrefixes.get("http://www.w3.org/2002/xforms") + ":bind");
+			boolean replaced = false;
 			for(int i=0; i<bindNodes.getLength(); i++) {
-				boolean replaced = false;
 				String nodeset = ((Element) bindNodes.item(i)).getAttribute("nodeset");
 				if((nodeset!=null) && nodeset.equals(bind.getAttributes().get("nodeset"))) {
 					model.replaceChild(getElement(bind), bindNodes.item(i));
 					replaced = true;
 				}
-				if(!replaced) 
-					addElementsRecursive(model, bind);
 			}
+			if(!replaced) 
+				addElementsRecursive(model, bind);
 		}
 		
+		NodeList submissionNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", "submission");
 		for(Submission submission : form.getModel().getSubmissions()) {
 			boolean replaced = false;
-			NodeList submissionNodes = model.getElementsByTagNameNS("http://www.w3.org/2002/xforms", 
-					nsPrefixes.get("http://www.w3.org/2002/xforms") + ":submission");
 			for(int i=0; i<submissionNodes.getLength(); i++) {
 				String id = ((Element) submissionNodes.item(i)).getAttribute("id");
 				if((id!=null) && id.equals(submission.getAttributes().get("id"))) {

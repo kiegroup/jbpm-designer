@@ -39,6 +39,10 @@ public class Repository {
 		return baseUrl.substring(0, baseUrl.length()-req.getRequestURI().length() +1);
 	}
 	
+	public static String getOryxUrl(HttpServletRequest req) {
+		return getBaseUrl(req) + "oryx/";
+	}
+	
 	public String getModel(String path) {
 		String result = "";
 		try {

@@ -2,7 +2,7 @@ package de.hpi.xforms.rdf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,21 +94,26 @@ public class XFormsERDFExporter {
 		context = new ExportContext(form);
 	}
 	
-	public void exportERDF(PrintWriter writer) {
+	public void exportERDF(Writer writer) {
 		
 		for(XFormsUIElement element : context.getForm().getChildElements()) {
 			registerResourcesRecursive(element, context.getForm());
 		}
 		
-		writer.append("<div class=\"processdata\">");
-		
-		appendFormERDF(writer);
-		
-		for(XFormsElement element : context.getRegisteredElements()) {
-			appendElementERDF(writer, element);
+		try {
+			writer.append("<div class=\"processdata\">");
+			appendFormERDF(writer);
+			
+			for(XFormsElement element : context.getRegisteredElements()) {
+				appendElementERDF(writer, element);
+			}
+			
+			writer.append("</div>");
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
-		writer.append("</div>");
 		
 	}
 	
@@ -162,7 +167,7 @@ public class XFormsERDFExporter {
 		}
 	}
 	
-	private void appendFormERDF(PrintWriter writer) {
+	private void appendFormERDF(Writer writer) throws IOException {
 		String name = context.getForm().getAttributes().get("name");
 		if(name==null) name = "";
 		
@@ -181,15 +186,21 @@ public class XFormsERDFExporter {
 			}
 		}
 		
+		String nsDeclarations = "";
+		for(String key : context.getForm().getNSDeclarations().keySet()) {
+			nsDeclarations += "["  + key + "," + context.getForm().getNSDeclarations().get(key) + "]";
+		}
+		
 		writer.append("<div id=\""+ context.getForm().getResourceId() +"\" class=\"-oryx-canvas\">");
 		appendOryxField(writer, "type", STENCILSET_URI + "#" + context.getForm().getStencilId());
 		appendXFormsField(writer, "id", "");
 		appendXFormsField(writer, "name", name);
 		appendXFormsField(writer, "version", "");
 		appendXFormsField(writer, "head", head);
+		appendXFormsField(writer, "nsdeclarations", nsDeclarations);
 		appendOryxField(writer, "mode", "writable");
 		appendOryxField(writer, "mode", "fullscreen");
-		writer.append("<a rel=\"oryx-stencilset\" href=\"./stencilsets/xforms/xforms.json\"/>");
+		writer.append("<a rel=\"oryx-stencilset\" href=\"/oryx/stencilsets/xforms/xforms.json\"/>"); // TODO: HACK TO MAKE IT WORK FOR NOW
 
 		for(String id : context.getResourceIds()){
 			writer.append("<a rel=\"oryx-render\" href=\"#" + id + "\"/>");
@@ -198,7 +209,7 @@ public class XFormsERDFExporter {
 		writer.append("</div>");
 	}
 	
-	private void appendElementERDF(PrintWriter writer, XFormsElement element) {
+	private void appendElementERDF(Writer writer, XFormsElement element) throws IOException {
 		writer.append("<div id=\""+ element.getResourceId() +"\">");
 		appendOryxField(writer,"type",STENCILSET_URI + "#" + element.getStencilId());
 		
@@ -288,12 +299,12 @@ public class XFormsERDFExporter {
 		writer.append("</div>");
 	}
 	
-	private void appendOryxField(PrintWriter writer, String field, String entry) {
+	private void appendOryxField(Writer writer, String field, String entry) throws IOException {
 		writer.append("<span class=\"oryx-");
 		writer.append(field);
 		if (entry != null) {
 			writer.append("\">");
-			writer.append(entry);
+			writer.append(StringEscapeUtils.escapeXml(entry));
 			writer.append("</span>");
 		}
 		else {
@@ -301,7 +312,7 @@ public class XFormsERDFExporter {
 		}
 	}
 	
-	private void appendXFormsField(PrintWriter writer, String field, String entry) {
+	private void appendXFormsField(Writer writer, String field, String entry) throws IOException {
 		if(field.startsWith("ev:")) {
 			writer.append("<span class=\"oryx-ev_");
 			writer.append(field.substring(3));
