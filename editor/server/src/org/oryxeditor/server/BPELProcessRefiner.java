@@ -122,18 +122,26 @@ public class BPELProcessRefiner {
 		}
 		
 		NodeList childNodes = currentNode.getChildNodes();
+		ArrayList<Node> uselessChildren = new ArrayList<Node>();
 		Node child;
 		for (int i=0; i<childNodes.getLength(); i++){
 			child = childNodes.item(i);
 			if (child instanceof Element){
 				if (child.getNodeName().equals("outgoingLink")
 						|| child.getNodeName().equals("linkInfoSet")){
-					currentNode.removeChild(child);
+					uselessChildren.add(child);
 				} else {
 					cleanUp(child);
 				}
 			}
 		}	
+		
+		Iterator<Node> iter = uselessChildren.iterator();
+		Node uselessChild;
+		while (iter.hasNext()){
+			uselessChild = iter.next();
+			currentNode.removeChild(uselessChild);
+		}
 	}
 
 	/*********************** record node informations *****************/
@@ -748,7 +756,8 @@ public class BPELProcessRefiner {
 		if (ifNullBuildNewElement){
 			Element newNode = currentNode.getOwnerDocument()
 								.createElement(childName);
-			currentNode.appendChild(newNode);
+			Node firstChild = currentNode.getFirstChild();
+			currentNode.insertBefore(newNode, firstChild);
 			return newNode;
 		} else {
 			return null;
