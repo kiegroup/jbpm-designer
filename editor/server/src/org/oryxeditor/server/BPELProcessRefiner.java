@@ -97,8 +97,7 @@ public class BPELProcessRefiner {
 		
 		// now the <link> elements are already in correct flow parent, so we
 		// can rearrange the child nodes of flow right now
-		// TODO : check this method
-		// rearrangeFlow(document);
+		rearrangeFlow(document);
 		
 		// visit all nodes for the last time, delete all useless attributes - 
 		// "bounds" "id" and "visited", and useless elements - "outgoingLink" 
@@ -271,13 +270,6 @@ public class BPELProcessRefiner {
 				  
 				rearrangeChildNodesOfCurrentNode((Element)currentNode);
 			};
-			   
-			// the order of child nodes in "flow" is not based on the position
-			// of child nodes, but the order of the edges "link", so we handle
-			// it in a different way.
-			if (currentNode.getNodeName().equals("flow")){
-				handleFlowElement((Element)currentNode);
-			}
 		   
 			// remove the head "elseIf" of the first child in if-block
 			if (currentNode.getNodeName().equals("if")){
@@ -293,7 +285,7 @@ public class BPELProcessRefiner {
 		for (int i=0; i<childNodes.getLength(); i++){
 			child = childNodes.item(i);
 			if (child.getNodeName().equals("outgoingLink")){
-				String linkID = ((Element) child).getAttribute("linkID");
+				String linkID = ((Element)child).getAttribute("linkID");
 				String sourceID = ((Element)currentNode).getAttribute("id");
 				recordSourceNodeInlinksMap (linkID, sourceID);
 			}
@@ -545,8 +537,9 @@ public class BPELProcessRefiner {
 		};
 	   
 		// recursive research, work on the child nodes at first.
-		NodeList childNodes = currentNode.getChildNodes();
 		Node child;
+		
+		NodeList childNodes = currentNode.getChildNodes();
 		for (int i=0; i<childNodes.getLength(); i++){
 			child = childNodes.item(i);
 			if (child instanceof Element){
@@ -563,184 +556,177 @@ public class BPELProcessRefiner {
 		   
 	}
 	
-	private void handleFlowElement(Element currentNode) {
+	private void handleFlowElement(Element flow) {
 		   
-		// find all child nodes which are the source nodes of a link but 
-		// not the target nodes of any other links, put them into a record
-		// list "childrenList", Then use a Breadth-First Search to find all
-		// other child nodes and arrange them with a correct order, in the
-		// end the result will be also in "childrenList" 
-		ArrayList<Element> childrenList = new ArrayList<Element>();
+		// rearrange the child nodes with a Depth-First Search
+		// attention: if a activity has several in-coming-links, this activity
+		//            must stay behind all its source activities. 
+		ArrayList<Element> resultList = new ArrayList<Element>();
 
-		// record all targetNode IDs
-		ArrayList<String> targetIDList = new ArrayList<String>();
-		NodeList childNodesOfFlow = currentNode.getChildNodes();
+		NodeList childNodesOfFlow = flow.getChildNodes();
 		Node childOfFlow;
 		for (int i=0; i<childNodesOfFlow.getLength(); i++){
 			childOfFlow = childNodesOfFlow.item(i);
-			if (childOfFlow instanceof Element && childOfFlow.getNodeName().equals("links")){
-				Element links = (Element) childOfFlow;
-				NodeList childNodesOfLinks = links.getChildNodes();
-				Node link;
-				for (int k=0; k<childNodesOfLinks.getLength(); k++){
-					link = childNodesOfLinks.item(k);
-					if (link instanceof Element && link.getNodeName().equals("link")){
-						String targetID = ((Element)link).getAttribute("targetID");
-						targetIDList.add(targetID); 
-					};
+			// element <links> will not be rearranged
+			if (childOfFlow instanceof Element 
+					&& !childOfFlow.getNodeName().equals("links")){
+				Element currentElement = (Element)childOfFlow;
+				if (!isVisited(currentElement) && 
+						couldBeVisitedNow(currentElement)){
+					DFSForArrangingChildrenOfFlow(currentElement, resultList);
 				}
-				break;
 			}
 		};
 		   
-		// filter child nodes of flow with targetIDList in order get all
-		// nodes which are just the source nodes of a link but not the 
-		// target nodes of any other links, also are the start nodes of 
-		// BFS
-		for (int i=0; i<childNodesOfFlow.getLength(); i++){
-			childOfFlow = childNodesOfFlow.item(i);
-			if (childOfFlow instanceof Element  
-					&& !childOfFlow.getNodeName().equals("links")
-					&& !isTargetOfOtherNode((Element)childOfFlow, targetIDList)){
-		   
-				childrenList.add((Element)childOfFlow);
-				logger.finer("add Node : " +  childOfFlow.getNodeName() +
-					" in list...");
-			}
-		};
-	   
-		// if no such node can be found, there are 2 possibilities
-		// 1: flow doesn't contain any child at all.
-		// 2: there is a node circle.
-		// for the second situation, we put the first element node of flow in the list
-		if (childrenList.size()==0){
-			for (int i=0; i<childNodesOfFlow.getLength(); i++){
-				childOfFlow = childNodesOfFlow.item(i);
-				if (childOfFlow instanceof Element
-						&& !childOfFlow.getNodeName().equals("links")){
-					childrenList.add((Element)childOfFlow);
-					break;
-				}
-			};
-		}
-	   
-		logger.finest("BFS starts...");
-		BFSForArrangingChildrenOfFlow (0, childrenList);
-	   
-		// delete old children
-		childNodesOfFlow = currentNode.getChildNodes();
-		Node oldChild;
-		for (int i=0; i < childNodesOfFlow.getLength(); i++){
-			oldChild = childNodesOfFlow.item(i);
-			if (oldChild instanceof Element
-					&& !oldChild.getNodeName().equals("links")){
-				currentNode.removeChild(oldChild);
-			}
-		}
-	   
-		// add children again with the new order
-		Element newChild;
-		for (int i=0; i < childrenList.size(); i++){
-			newChild = childrenList.get(i);
-			currentNode.appendChild(newChild);
+		// delete old child and append it in the end position
+		Element child;
+		
+		Iterator<Element> iterRes = resultList.iterator();
+		while (iterRes.hasNext()){
+			child = iterRes.next();
+			flow.removeChild(child);
+			flow.appendChild(child);
 		}
 		
 	}
 	
-	private boolean isTargetOfOtherNode(Element e,
-			   ArrayList<String> targetIDList) {
-		   
-		   String currentId = e.getAttribute("id");
+	private void DFSForArrangingChildrenOfFlow(Element currentElement,
+			ArrayList<Element> resultList) {
 		
-		   if (currentId == null){
-			   return false;
-		   }
+		// record current element
+		resultList.add(currentElement);
+		markNodeAsVisited(currentElement);
 		
-		   Iterator<String> listIter = targetIDList.iterator();
-		   String targetId;
-		   while (listIter.hasNext()){
-			   targetId = listIter.next();
-			   if (targetId.equals(currentId)){
-				   return true;
-			   }
-		   }
-		   
-		   return false;
+		// find all target nodes of the current element, which inside the same
+		// flow element are.
+		ArrayList<Element> targetNodesList = 
+			findAllTargetNodesInsideFlow(currentElement);
+		
+		Element targetNode;
+		
+		Iterator<Element> iter = targetNodesList.iterator();
+		while (iter.hasNext()){
+			targetNode = iter.next();
+			if (!isVisited(targetNode) && 
+					couldBeVisitedNow(targetNode)){
+				DFSForArrangingChildrenOfFlow(targetNode, resultList);
+			}
 		}
-	   
-	   private void BFSForArrangingChildrenOfFlow (int index, 
-			   ArrayList<Element> childrenList){
-		   
-		   if (index >= childrenList.size()){
-			   return;
-		   }
-		   
-		   Element sourceNode = childrenList.get(index);
-		   
-		   logger.finer("index :" + index);
-		   logger.finer("node : " + sourceNode.getNodeName());
-		   
-		   markNodeAsVisited (sourceNode);
-		   
-		   ArrayList<String> outgoingLinkIDs = findAllOutgoingLinksOf(sourceNode);
-
-		   Element targetNode;
-		   Iterator<String> outgoingLinksIter = outgoingLinkIDs.iterator();
-		   String linkID;
-		   while (outgoingLinksIter.hasNext()){
-			   linkID = outgoingLinksIter.next();
-			   targetNode = getTargetNode(linkID);
-			   logger.finer("targetNode :" + targetNode);
-			   if (targetNode != null){
-				   if (!isVisited(targetNode)) {
-					   childrenList.add(targetNode);
-				   }
-			   }
-		   };
-		   
-		   BFSForArrangingChildrenOfFlow (index + 1, childrenList);
-	   }
+		
+	}
 
 
+	private ArrayList<Element> findAllSourceNodesInsideFlow(
+			Element currentElement) {
+		
+		ArrayList<Element> sourceNodeList = new ArrayList<Element>();
+		String searchedTargetID = currentElement.getAttribute("id");
+		
+		// visit all links once to find the source nodes with the searched
+		// target id.
+		String linkID;
+		String targetNodeID;
+		String sourceNodeID;
+		
+		Iterator<String> iterLinkList = linkList.iterator();
+		while (iterLinkList.hasNext()){
+			linkID = iterLinkList.next();
+			targetNodeID = getTargetID(linkID);
+			// check if the current target id is the searched target id
+			if (searchedTargetID.equals(targetNodeID)){
+				sourceNodeID = getSourceID(linkID);
+				// check if the both nodes stay under the same flow parent
+				// if true, it means this link is NOT a cross-bounding-link,
+				// so we find one wanted source node, record it.
+				if (haveTheSameFlowParent(sourceNodeID, targetNodeID)){
+					Element sourceNode = this.getNodeWithID(sourceNodeID);
+					sourceNodeList.add(sourceNode);
+				}
+			}
+		}
+		
+		return sourceNodeList;
+	}
+	
+	private ArrayList<Element> findAllTargetNodesInsideFlow(
+			Element currentElement) {
+		
+		ArrayList<Element> targetNodeList = new ArrayList<Element>();
+		String searchedSourceID = currentElement.getAttribute("id");
+		
+		// visit all links once to find the target nodes with the searched
+		// source id.
+		String linkID;
+		String targetNodeID;
+		String sourceNodeID;
+		
+		Iterator<String> iterLinkList = linkList.iterator();
+		while (iterLinkList.hasNext()){
+			linkID = iterLinkList.next();
+			sourceNodeID = getSourceID(linkID);
+			// check if the current source id is the searched source id
+			if (searchedSourceID.equals(sourceNodeID)){
+				targetNodeID = getTargetID(linkID);
+				// check if the both nodes stay under the same flow parent
+				// if true, it means this link is NOT a cross-bounding-link,
+				// so we find one wanted target node, record it.
+				if (haveTheSameFlowParent(targetNodeID, sourceNodeID)){
+					Element targetNode = this.getNodeWithID(targetNodeID);
+					targetNodeList.add(targetNode);
+				}
+			}
+		}
+		
+		return targetNodeList;
+	}
+
+	private boolean haveTheSameFlowParent(String ID_A, String ID_B) {
+		
+		Element flowParent_A = this.getClosestFlowParentOfNode(ID_A);
+		Element flowParent_B = this.getClosestFlowParentOfNode(ID_B);
+		
+		if (flowParent_A.equals(flowParent_B)){
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 
-	  private void markNodeAsVisited (Element e){
-		  e.setAttribute("visited", "true");
-	  }
-	  
-	  
-	  private boolean isVisited(Element e) {
-		  String result = e.getAttribute("visited");
-		  if (result.equals("true")){
-			  return true;
-		  } else {
-			  return false;
-		  }
-	  }
+	private boolean couldBeVisitedNow(Element currentElement) {
+		// a element could be visited only when all its source nodes already
+		// visited are.
+		ArrayList<Element> sourceNodesList = 
+			findAllSourceNodesInsideFlow (currentElement);
+		
+		Element sourceNode;
+		
+		Iterator<Element> iter = sourceNodesList.iterator();
+		while (iter.hasNext()){
+			sourceNode = iter.next();
+			if (!isVisited(sourceNode)){
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
-	  
-	  private ArrayList<String> findAllOutgoingLinksOf (Element e){
-		  ArrayList<String> linksList = new ArrayList<String>() ;
-		  
-		  NodeList childNodesOfE = e.getChildNodes();
-		  Node childOfE;
-		  String id;
-		  
-		  for (int i=0; i<childNodesOfE.getLength(); i++){
-			  childOfE = childNodesOfE.item(i);
-			  if (childOfE instanceof Element && childOfE.getNodeName().equals("outgoing")){
-				  id = ((Element) childOfE).getNodeValue();
-				  linksList.add(id);
-			  }
-		  }; 
-		   
-		  return linksList;
-	  }
-
+	private void markNodeAsVisited (Element e){
+		e.setAttribute("visited", "true");
+	}
+	    
+	private boolean isVisited(Element e) {
+		String result = e.getAttribute("visited");
+		if (result.equals("true")){
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/****************************** other GET-methods **************************/
   
-
 	private Element getChildElementWithNodeName(Element currentNode, 
 			String childName, boolean ifNullBuildNewElement) {
 		
