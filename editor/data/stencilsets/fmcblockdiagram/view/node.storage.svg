@@ -23,8 +23,6 @@
        style="stroke:#000000;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round"
        id="storage"
        oryx:resize="vertical horizontal" />
-    <a id="theanchor">
       <text font-size="12" id="text" x="40" y="22" oryx:align="middle center" stroke="black"></text>
-    </a>
   </g>
 </svg>

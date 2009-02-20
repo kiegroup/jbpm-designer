@@ -99,8 +99,7 @@
                     "value":"",
                     "description":"",
                     "readonly":false,
-                    "optional":true,
-                    "refToView":"theanchor"
+                    "optional":true
 				},
                 {
                     "id":"color",
@@ -151,8 +150,7 @@
                     "value":"",
                     "description":"",
                     "readonly":false,
-                    "optional":true,
-                    "refToView":"theanchor"
+                    "optional":true
 				},
                 {
                     "id":"color",
@@ -206,8 +204,7 @@
                     "value":"",
                     "description":"",
                     "readonly":false,
-                    "optional":true,
-                    "refToView":"theanchor"
+                    "optional":true
 				},
                 {
                     "id":"color",
