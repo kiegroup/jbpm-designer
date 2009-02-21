@@ -6,9 +6,9 @@
 	
 	<!-- Root element -->
 	<xsl:template match="process">
-		<div class="processdata">
-			<div id="oryxcanvas" class="-oryx-canvas">
-				<span class="oryx-type">http://b3mn.org/stencilset/bpel#Process</span>
+		<root>
+			<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width: 1200px; height: 600px;">
+				<span class="oryx-type">http://b3mn.org/stencilset/bpel#worksheet</span>
 				<span class="oryx-mode">writeable</span>
 				<span class="oryx-mode">fullscreen</span>
 				<a rel="oryx-stencilset" href="./stencilsets/bpel/bpel.json"/>
@@ -26,7 +26,7 @@
 					<xsl:with-param name="parentBoundLeftUpperY">18</xsl:with-param>
 				</xsl:call-template>		
 			</div>
-		</div>	 
+		</root>	 
 	</xsl:template>
 	
 	
@@ -51,10 +51,21 @@
 	
 		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandlers|faultHandlers|compensationHandler|terminationHandler|catch|catchAll">
 			<xsl:variable name="id" select="concat($parentID,'_',position())" />
-			<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()*3+ 10" />
-			<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()*3+ 10" />
-			<xsl:variable name="BoundRLX" select="$BoundLUX + 100" />
-			<xsl:variable name="BoundRLY" select="$BoundLUY + 80" />
+			
+			<!--xsl:variable name="boundChecker" select="@boundLUX"/>
+			<xsl:if test="($boundChecker = '')"-->			
+				<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()*3+ 10" />
+				<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()*3+ 10" />
+				<xsl:variable name="BoundRLX" select="$BoundLUX + 100" />
+				<xsl:variable name="BoundRLY" select="$BoundLUY + 80" />
+			<!--/xsl:if>	
+			
+			<xsl:if test="($boundChecker != '')">			
+				<xsl:variable name="BoundLUX" select="@boundLUX" />
+				<xsl:variable name="BoundLUY" select="@boundLUY" />
+				<xsl:variable name="BoundRLX" select="@boundRLX" />
+				<xsl:variable name="BoundRLY" select="@boundRLY" />
+			</xsl:if-->	
 			
 			<div>		
 		 		<xsl:attribute name="id">
