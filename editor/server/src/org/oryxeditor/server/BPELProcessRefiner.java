@@ -42,7 +42,9 @@ public class BPELProcessRefiner {
 	
 	private HashMap<String, Object[]> linksMap = new HashMap<String, Object[]>();
 	
-	private ArrayList<String> linkList = new ArrayList<String>();
+	private ArrayList<String> linksList = new ArrayList<String>();
+	
+	private ArrayList<String> inBoundingLinksList = new ArrayList<String>();
 	
 	public Document rearrangeDocument (Document document){
 	   
@@ -73,9 +75,13 @@ public class BPELProcessRefiner {
 		// 			transitionCondition element}  - type Object
 		linksMap = new HashMap<String, Object[]>();
 		
-		// record all link IDs in a list, in the end we can immediately find out
+		// record all link IDs in this list, in the end we can immediately find out
 		// how many links do we have and what their IDs are
-		linkList = new ArrayList<String>();
+		linksList = new ArrayList<String>();
+		
+		// record all IDs of the in-bounding-links (source node and target node have
+		// the same flow parent) in this list. 
+		inBoundingLinksList = new ArrayList<String>();
 		
 		// visit this document from top to bottom, record activity nodes and link
 		// element informations
@@ -89,10 +95,14 @@ public class BPELProcessRefiner {
 		// source nodes of link, then add them as source nodes into the linksMap. 
 		handleNode (document);
 	   
-		// visit all links in linkList, with help of linksMap append standardElement
+		// visit all links in linksList, with help of linksMap append standardElement
 		// <sources> & <targets> under corresponding source node and target node,
 		// then build for each item a new <link> element and append it to the 
 		// correct flow parent.
+		// at the same time, check whether the link is a cross-bounding-link (source
+		// node and target node don't have the same flow parent) or a in-bounding-link
+		// (source node and target node do have the same flow parent). record all the
+		// in-bounding-links in the inBoundingLinksList
 		buildLinkElements();
 		
 		// now the <link> elements are already in correct flow parent, so we
@@ -181,8 +191,8 @@ public class BPELProcessRefiner {
 			// right now we don't know the source node id yet, so we set the first item "null"
 			linksMap.put(id, new Object[]{null, targetID, linkName, transitionCondition});
 			
-			// record this link in linkList
-			linkList.add(id);
+			// record this link in linksList
+			linksList.add(id);
 		}
 		
 		Element newClosestFlow;
@@ -445,13 +455,24 @@ public class BPELProcessRefiner {
 
 	private void buildLinkElements() {
 		
-		Iterator<String> linkIter = linkList.iterator();
+		Iterator<String> linkIter = linksList.iterator();
 		while (linkIter.hasNext()){
 			
 			String linkID = (String) linkIter.next();
 			
 			Element sourceNode = getSourceNode (linkID);
 			Element targetNode = getTargetNode (linkID);
+			
+			String sourceNodeID = getSourceID(linkID);
+			String targetNodeID = getTargetID(linkID);
+			
+			// record the in-bounding-links
+			// check if the both nodes stay under the same flow parent
+			// if true, it means this link is NOT a cross-bounding-link,
+			// so we find one wanted link, record it.
+			if (haveTheSameFlowParent(sourceNodeID, targetNodeID)){
+				inBoundingLinksList.add(linkID);
+			}
 			
 			addStandardElement (linkID, sourceNode, targetNode);
 			
@@ -471,6 +492,18 @@ public class BPELProcessRefiner {
 				logger.warning("BUG : cann't get the correct shared flow parent..."
 						+ " null is returned... ");
 			}
+		}
+	}
+	
+	private boolean haveTheSameFlowParent(String ID_A, String ID_B) {
+		
+		Element flowParent_A = this.getClosestFlowParentOfNode(ID_A);
+		Element flowParent_B = this.getClosestFlowParentOfNode(ID_B);
+		
+		if (flowParent_A.equals(flowParent_B)){
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -626,22 +659,17 @@ public class BPELProcessRefiner {
 		// target id.
 		String linkID;
 		String targetNodeID;
-		String sourceNodeID;
 		
-		Iterator<String> iterLinkList = linkList.iterator();
-		while (iterLinkList.hasNext()){
-			linkID = iterLinkList.next();
+		// just check all in-bounding-links, the cross-bounding-links are
+		// ignored
+		Iterator<String> iterInBoundinglinksList = inBoundingLinksList.iterator();
+		while (iterInBoundinglinksList.hasNext()){
+			linkID = iterInBoundinglinksList.next();
 			targetNodeID = getTargetID(linkID);
 			// check if the current target id is the searched target id
 			if (searchedTargetID.equals(targetNodeID)){
-				sourceNodeID = getSourceID(linkID);
-				// check if the both nodes stay under the same flow parent
-				// if true, it means this link is NOT a cross-bounding-link,
-				// so we find one wanted source node, record it.
-				if (haveTheSameFlowParent(sourceNodeID, targetNodeID)){
-					Element sourceNode = this.getNodeWithID(sourceNodeID);
-					sourceNodeList.add(sourceNode);
-				}
+				Element sourceNode = getSourceNode(linkID);
+				sourceNodeList.add(sourceNode);
 			}
 		}
 		
@@ -657,39 +685,22 @@ public class BPELProcessRefiner {
 		// visit all links once to find the target nodes with the searched
 		// source id.
 		String linkID;
-		String targetNodeID;
 		String sourceNodeID;
 		
-		Iterator<String> iterLinkList = linkList.iterator();
-		while (iterLinkList.hasNext()){
-			linkID = iterLinkList.next();
+		// just check all in-bounding-links, the cross-bounding-links are
+		// ignored
+		Iterator<String> iterInBoundinglinksList = inBoundingLinksList.iterator();
+		while (iterInBoundinglinksList.hasNext()){
+			linkID = iterInBoundinglinksList.next();
 			sourceNodeID = getSourceID(linkID);
 			// check if the current source id is the searched source id
 			if (searchedSourceID.equals(sourceNodeID)){
-				targetNodeID = getTargetID(linkID);
-				// check if the both nodes stay under the same flow parent
-				// if true, it means this link is NOT a cross-bounding-link,
-				// so we find one wanted target node, record it.
-				if (haveTheSameFlowParent(targetNodeID, sourceNodeID)){
-					Element targetNode = this.getNodeWithID(targetNodeID);
-					targetNodeList.add(targetNode);
-				}
+				Element targetNode = getTargetNode(linkID);
+				targetNodeList.add(targetNode);
 			}
 		}
 		
 		return targetNodeList;
-	}
-
-	private boolean haveTheSameFlowParent(String ID_A, String ID_B) {
-		
-		Element flowParent_A = this.getClosestFlowParentOfNode(ID_A);
-		Element flowParent_B = this.getClosestFlowParentOfNode(ID_B);
-		
-		if (flowParent_A.equals(flowParent_B)){
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 
