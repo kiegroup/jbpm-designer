@@ -103,7 +103,7 @@ public class BPELImporter extends HttpServlet {
     	//  	1. handle different namespaces of bpel process
     	//  	2. calculate the bounding of each shape
     	//  	3. move the <link> elements from <links> element to
-    	//         to top of the root <process> element, so they could
+    	//         top of the root <process> element, so they could
     	//         be easier to handle in BPEL2eRDF.xslt
     	//      4. integrate the first <condition> and <activity> element
     	//         under a If-block into a <elseIF> element, so they

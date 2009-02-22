@@ -2488,7 +2488,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"expression",
 					"length":undefined,
 					"wrapLines":false
 				},

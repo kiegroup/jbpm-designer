@@ -226,6 +226,10 @@ public class BPELExportPostprocessor {
 	
 	
 	private boolean isActivity(Node currentNode) {
+		if (!(currentNode instanceof Element)){
+			return false;
+		}
+		
 		if (currentNode.getNodeName().equals("receive")
 				|| currentNode.getNodeName().equals("reply")
 				|| currentNode.getNodeName().equals("invoke")
