@@ -33,7 +33,7 @@ import org.w3c.dom.NodeList;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class BPELProcessRefiner {
+public class BPELExportPostprocessor {
 	
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -46,7 +46,18 @@ public class BPELProcessRefiner {
 	
 	private ArrayList<String> inBoundingLinksList = new ArrayList<String>();
 	
-	public Document rearrangeDocument (Document document){
+	// do a post-processing on this result bpel document
+	// in this postprocessor the following works will be done:
+	//  	1. rearrange the position of nodes on the basis of their
+	//         bounding. (except child nodes under <flow>)
+	//  	2. rearrange the position of child nodes of <flow> on the
+	//         basis of the order of <link>
+	//      3. separate the first <elseIF> element under <if>-block
+	//         to <condition> and <activity> element
+	//      4. remove all useless attributes and elements, which contain
+	//         the necessary informations for the above works but useless
+	//         right now
+	public Document postProcessDocument (Document document){
 	   
 		// use a hash map to record all activity node informations in this 
 		// document, these informations can simplify the rearrange process 

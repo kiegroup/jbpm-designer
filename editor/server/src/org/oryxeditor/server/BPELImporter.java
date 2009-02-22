@@ -13,9 +13,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -25,6 +28,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.w3c.dom.Document;
 
 
 /**
@@ -52,7 +56,7 @@ public class BPELImporter extends HttpServlet {
 
 	private static final long serialVersionUID = 316274845723034029L;
 	
-//	private static Configuration config = null;
+	private BPELImportPreprocessor preprocessor = new BPELImportPreprocessor();
 	
     /**
      * The POST request.
@@ -86,26 +90,32 @@ public class BPELImporter extends HttpServlet {
 		// Get filename and content
     	final FileItem fileItem = (FileItem)items.get(0);
     	final String fileName = fileItem.getName();
-    	final String fileContent = fileItem.getString();
 
-    	// because the namespace of bpel process is't unique, and it's difficult 
-    	// to handle a unknown namespace in XSLT 1.0 (it doesn't support the xPath 
-    	// e.g."*:process"), we remove the attribute "xmlns" before we transform
-    	// this file. 
-    	final String contentWithoutNamespace = removeAttributeXMLNS(fileContent);
-    	
-    	// Get the input stream	
-    	final InputStream inputStream = new ByteArrayInputStream(contentWithoutNamespace.getBytes());
-	   	
-    	// Get the bpel source
-    	final Source bpelSource;
-
-    	if (fileName.endsWith(".bpel")){
-    		bpelSource = new StreamSource(inputStream);
-    	} else {
+    	if (!fileName.endsWith(".bpel")){
     		printError(res, "No file with .bepl extension uploaded.");
     		return ;
     	}
+  	
+    	final String fileContent = fileItem.getString();
+
+    	// do a pre-processing on this bpel source
+    	// in this preprocessor the following works will be done:
+    	//  	1. handle different namespaces of bpel process
+    	//  	2. calculate the bounding of each shape
+    	//  	3. move the <link> elements from <links> element to
+    	//         to top of the root <process> element, so they could
+    	//         be easier to handle in BPEL2eRDF.xslt
+    	//      4. integrate the first <condition> and <activity> element
+    	//         under a If-block into a <elseIF> element, so they
+    	//         they could be easier to transform in BPEL2eRDF.xslt
+    	final String newContent = preprocessSource (res, fileContent);
+    	
+    	// Get the input stream	
+    	final InputStream inputStream = new ByteArrayInputStream(newContent.getBytes());
+	 
+    	// Get the bpel source
+    	final Source bpelSource = new StreamSource(inputStream);
+
     	
     	// === prepare the xslt source ===
     	// BPEL2eRDF XSLT source
@@ -138,22 +148,34 @@ public class BPELImporter extends HttpServlet {
     	}
     }
     
-    
-    
-   private String removeAttributeXMLNS(String fileContent) {
-	int beginIndex = fileContent.indexOf("xmlns=");
-	
-	if (beginIndex == -1) return fileContent;
-	
-	int endIndex = fileContent.indexOf(" ", beginIndex);
-	
-	// locate the attribute "xmlns"
-	String attributeXMLNS = fileContent.substring(beginIndex, endIndex + 1); 
-	
-	return fileContent.replace(attributeXMLNS, "");
-}
+   private String preprocessSource (HttpServletResponse res, String oldString){
+	   
+	   StringWriter stringOut = new StringWriter();
+	   try {
+			// transform string to document
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			InputStream oldResultInputStream = new ByteArrayInputStream(oldString.getBytes());
+			Document oldDocument = builder.parse(oldResultInputStream);
+			
+			// rearrange document
+			Document newDocument = preprocessor.preprocessDocument (oldDocument);
+			
+			// transform document to string
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer();
+			DOMSource source = new DOMSource(newDocument);
+			StreamResult result = new StreamResult(stringOut);
+			transformer.transform(source, result);
+			stringOut.flush();
+	 
+		} catch (Exception e){
+		    handleException(res, e); 
+		}
+		
+		return stringOut.toString();
 
-
+   }
 
 private void printResponse(HttpServletResponse res, String text){
     	if (res != null){

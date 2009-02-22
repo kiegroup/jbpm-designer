@@ -52,7 +52,7 @@ public class BPELExporter extends HttpServlet {
 
 	private static final long serialVersionUID = 316274845723034029L;
 	
-	private BPELProcessRefiner refiner = new BPELProcessRefiner();
+	private BPELExportPostprocessor postprocessor = new BPELExportPostprocessor();
 
 	private static String escapeJSON(String json) {
 		// escape (some) JSON special characters
@@ -115,8 +115,20 @@ public class BPELExporter extends HttpServlet {
     	//System.out.println(resultString);
     	if (resultString != null){
     		try {
-    			resultString = rearrange (out, resultString);
+    	    	// do a post-processing on this result bpel document
+    	    	// in this postprocessor the following works will be done:
+    	    	//  	1. rearrange the position of nodes on the basis of their
+    			//         bounding. (except child nodes under <flow>)
+    	    	//  	2. rearrange the position of child nodes of <flow> on the
+    			//         basis of the order of <link>
+    	    	//      3. separate the first <elseIF> element under <if>-block
+    			//         to <condition> and <activity> element
+    			//      4. remove all useless attributes and elements, which contain
+    			//         the necessary informations for the above works but useless
+    			//         right now
+    			resultString = postprocessResult (out, resultString);
 
+    			
     			ArrayList<String> processList = separateProcesses(resultString);
     			
     			Iterator<String> processListIter = processList.iterator();
@@ -135,7 +147,7 @@ public class BPELExporter extends HttpServlet {
     	}
    }
    
-   private String rearrange (PrintWriter out, String oldString){
+   private String postprocessResult (PrintWriter out, String oldString){
 	   
 	   StringWriter stringOut = new StringWriter();
 	   try {
@@ -146,7 +158,7 @@ public class BPELExporter extends HttpServlet {
 			Document oldDocument = builder.parse(oldResultInputStream);
 			
 			// rearrange document
-			Document newDocument = refiner.rearrangeDocument (oldDocument);
+			Document newDocument = postprocessor.postProcessDocument(oldDocument);
 			
 			// transform document to string
 			TransformerFactory tFactory = TransformerFactory.newInstance();
