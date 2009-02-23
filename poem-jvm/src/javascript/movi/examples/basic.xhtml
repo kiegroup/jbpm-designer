@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>MOVI Example</title>
+		<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader.js" />
+		<script type="text/javascript" src="../api/movi.js" />
+		
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" />
+		
+		<style type="text/css">
+			#modelviewer {
+				height: 300px;
+			}
+			
+			#modelnavigator {
+				position: relative;
+				width: 240px;
+			}
+			
+			.yui-resize-handle {
+				top: 100%;
+			}
+			
+			#content {
+				margin-top: 15px;
+			}
+
+		</style>
+    </head>
+    <body class="yui-skin-sam">
+		<div id="doc3" class="yui-t5">
+			<div id="bd">
+
+				<div class="yui-ge">
+
+		    		<div class="yui-u first">
+		    			<div id="modelviewer" />
+						<div id="content">
+
+						</div>
+		    		</div>
+
+		    		<div class="yui-u">
+						<div id="modelnavigator" />
+			    	</div>
+
+				</div>
+
+			</div>
+		</div>
+
+
+		<script type="text/javascript">
+
+			var modelviewer;
+		
+			MOVI.init(
+				function() {
+				
+					modelviewer = new MOVI.widget.ModelViewer("modelviewer");
+					modelviewer.loadModel("http://b3mn-mirror/backend/poem/model/1219"	, 
+						{ onSuccess: init }
+					);
+					
+				},
+				"../api",
+				undefined,
+				["resize"]
+			);
+			
+			function init() {
+				setUpUI();
+				doStuffWithModel();
+			}
+			
+			function setUpUI() {
+				
+				var	modelnavigator = new MOVI.widget.ModelNavigator("modelnavigator", modelviewer);
+				
+				var resize = new YAHOO.util.Resize("modelviewer", {
+		            handles: ['b'],
+		            minHeight: 150
+		        });
+		
+				resize.on("resize", modelnavigator.update, modelnavigator, true);
+
+				resize.reset();
+			}
+			
+			function doStuffWithModel() {
+				
+				var marker = new MOVI.util.Marker(
+					modelviewer.canvas.getShape("oryx_00427B8F-2858-4B26-B5C9-8F0D9877D4E5"),
+					{"border": "2px solid blue"}
+				);
+				
+				var annotation = new MOVI.util.Annotation(
+					marker, 
+					"&lt;p&gt;This is an annotation.&lt;/p&gt;"
+				);
+				
+				annotation.show();
+				
+				// enable selection
+				var multiselect = true;
+				var selection = new MOVI.util.ShapeSelect(modelviewer, multiselect);
+				selection.onSelectionChanged(function(shapes, marker) {
+					var resourceIds = "";
+					for(i in shapes) {
+						resourceIds += shapes[i].resourceId + ", "
+					}
+					console.log("Selected shapes: " + resourceIds);
+				})
+				
+			}
+			
+			
+			
+		</script>
+		
+    </body>
+</html>
