@@ -41,7 +41,9 @@ public class BPELImportPreprocessor {
 
 	// do a pre-processing on this bpel source
 	// in this preprocessor the following works will be done:
-	//  	1. handle different namespaces of bpel process
+	//  	1. mark all node stencil sets with the attribute "isNodeStencilSet"
+	//         mark all edge stencil sets with the attribute "isEdgeStencilSet"
+	//         in order to avoid the prefix problem
 	//  	2. calculate the bounding of each shape
 	//      3. generate for each shape a ID
 	//  	4. move the <link> elements from <links> element to
@@ -73,12 +75,10 @@ public class BPELImportPreprocessor {
 		
 		buildLinkElements(document);
 		
-		System.out.println ("erfolgreich");
 		return document;
 	}
 
 	private void handleNode(Node currentNode, int position) {
-		System.out.println ("handleNode");
 		
 		// handle only the Nodes with type "Element" and "Document" (root element), 
 		// the other types e.g. "Attr","Comment" will be ignored 
@@ -91,39 +91,30 @@ public class BPELImportPreprocessor {
 		if (currentNode instanceof Element){
 			
 			Element currentElement = (Element) currentNode;
-			
-			if (currentNode.getNodeName().equals("process")){
-				// handle different namespaces of bpel process
-				handleNamespaceOfProcess(currentElement);
-			}
-			
-			System.out.println ("generateBounding");
+
 			// calculate the bounding and ID of each shapes
+			// mark the node stencil set
 			if (isStencilSet(currentElement)){
+				currentElement.setAttribute("isNodeStencilSet", "true");
 				generateBounding(currentElement, position);
-				System.out.println ("generateID");
 				generateID(currentElement, position);
 			}
 			
-			System.out.println ("recordSourceNodeOfLink");
 			// record the necessary information of links
 			if (currentNode.getNodeName().equals("source")){
 				recordSourceNodeOfLink(currentElement);
 			}
 			
-			System.out.println ("recordTargetNodeOfLink");
 			if (currentNode.getNodeName().equals("target")){
 				recordTargetNodeOfLink(currentElement);
 			}
 				
-			System.out.println ("handleIfElement");
 			// integrate the first <condition> and <activity> element
 			// under a If-block into a <elseIF> element
 			if (currentNode.getNodeName().equals("if")){
 				handleIfElement(currentElement);
 			}
 			
-			System.out.println ("opaque");
 			// transform the value of attribute "opaque" from "yes" 
 			// to "true"
 			String opaque = currentElement.getAttribute("opaque");
@@ -145,13 +136,6 @@ public class BPELImportPreprocessor {
 		};
 		
 
-	}
-	
-
-
-	private void handleNamespaceOfProcess(Element currentElement) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 
@@ -451,7 +435,7 @@ public class BPELImportPreprocessor {
 		
 		// record linkID as element <outGoing> under currentElement
 		Element outgoing = source.getOwnerDocument().createElement("outgoing");
-		outgoing.setNodeValue("#" + linkID);
+		outgoing.setAttribute("linkID", linkID);
 		currentElement.appendChild(outgoing);
 	}
 
@@ -553,8 +537,9 @@ public class BPELImportPreprocessor {
 			
 			Element linkInfoSet = document.createElement("linkInfoSet");
 			linkInfoSet.setAttribute("id", linkID);
+			linkInfoSet.setAttribute("isEdgeStencilSet", "true");
 			linkInfoSet.setAttribute("linkName", linkName);
-			linkInfoSet.setAttribute("targetID", "#"+targetID);
+			linkInfoSet.setAttribute("targetID", targetID);
 			linkInfoSet.appendChild(transitionCondition);
 			
 			process.appendChild(linkInfoSet);

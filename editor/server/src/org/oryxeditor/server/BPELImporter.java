@@ -100,7 +100,9 @@ public class BPELImporter extends HttpServlet {
 
     	// do a pre-processing on this bpel source
     	// in this preprocessor the following works will be done:
-    	//  	1. handle different namespaces of bpel process
+    	//  	1. mark all node stencil sets with the attribute "isNodeStencilSet"
+    	//         mark all edge stencil sets with the attribute "isEdgeStencilSet"
+    	//         in order to avoid the prefix problem
     	//  	2. calculate the bounding of each shape
     	//      3. generate for each shape a ID
     	//  	4. move the <link> elements from <links> element to
@@ -112,6 +114,9 @@ public class BPELImporter extends HttpServlet {
     	//         they could be easier to transform in BPEL2eRDF.xslt
     	//      6. transform the value of attribute "opaque" from "yes" to "true"
     	final String newContent = preprocessSource (res, fileContent);
+    	
+    	System.out.println("***********************");
+    	System.out.println(newContent);
     	
     	// Get the input stream	
     	final InputStream inputStream = new ByteArrayInputStream(newContent.getBytes());
