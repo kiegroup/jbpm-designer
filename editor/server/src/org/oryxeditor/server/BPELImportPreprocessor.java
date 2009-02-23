@@ -1,5 +1,9 @@
 package org.oryxeditor.server;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,26 +35,50 @@ import org.w3c.dom.NodeList;
 public class BPELImportPreprocessor {
 	
 	
+	private HashMap<String, Object[]> linksMap = new HashMap<String, Object[]>();
+	
+	private ArrayList<String> linksList = new ArrayList<String>();
+
 	// do a pre-processing on this bpel source
 	// in this preprocessor the following works will be done:
 	//  	1. handle different namespaces of bpel process
 	//  	2. calculate the bounding of each shape
-	//  	3. move the <link> elements from <links> element to
-	//         top of the root <process> element, so they could
-	//         be easier to handle in BPEL2eRDF.xslt
-	//      4. integrate the first <condition> and <activity> element
+	//      3. generate for each shape a ID
+	//  	4. move the <link> elements from <links> element to
+	//         top of the root <process> element, and record linkID
+	//         as the value of element <outgoing> under the corresponding
+	//         activity, so they could be easier to handle in BPEL2eRDF.xslt
+	//      5. integrate the first <condition> and <activity> element
 	//         under a If-block into a <elseIF> element, so they
 	//         they could be easier to transform in BPEL2eRDF.xslt
+	//      6. transform the value of attribute "opaque" from "yes" to "true"
 	public Document preprocessDocument(Document document) {
+		
+		// use a hash map to record all link node informations, so that we can
+		// easily get all necessary informations about a link
+		//
+		// in this hash map:
+		// key :link name - type String
+		// value : {sourceNode ID,targetNode ID, linkID
+		// 				transitionCondition element}  - type Object
+		linksMap = new HashMap<String, Object[]>();
+		
+		// record all link names in this list, in the end we can immediately
+		// find out how many links do we have and what their names are.
+		// the linkID is also based on the index of the linkName in linksList
+		// each linkID is in form "link_index"
+		linksList = new ArrayList<String>();
 		
 		handleNode (document, 0);
 		
-		buildLinkElements();
+		buildLinkElements(document);
 		
+		System.out.println ("erfolgreich");
 		return document;
 	}
 
 	private void handleNode(Node currentNode, int position) {
+		System.out.println ("handleNode");
 		
 		// handle only the Nodes with type "Element" and "Document" (root element), 
 		// the other types e.g. "Attr","Comment" will be ignored 
@@ -58,7 +86,6 @@ public class BPELImportPreprocessor {
 				|| currentNode instanceof Document)) {
 			return;
 		};
-		
 		
 		// handle the current node first
 		if (currentNode instanceof Element){
@@ -69,33 +96,47 @@ public class BPELImportPreprocessor {
 				// handle different namespaces of bpel process
 				handleNamespaceOfProcess(currentElement);
 			}
-		
-			// calculate the bounding of each shape 
+			
+			System.out.println ("generateBounding");
+			// calculate the bounding and ID of each shapes
 			if (isStencilSet(currentElement)){
 				generateBounding(currentElement, position);
+				System.out.println ("generateID");
+				generateID(currentElement, position);
 			}
 			
+			System.out.println ("recordSourceNodeOfLink");
 			// record the necessary information of links
 			if (currentNode.getNodeName().equals("source")){
 				recordSourceNodeOfLink(currentElement);
 			}
 			
+			System.out.println ("recordTargetNodeOfLink");
 			if (currentNode.getNodeName().equals("target")){
 				recordTargetNodeOfLink(currentElement);
 			}
 				
+			System.out.println ("handleIfElement");
 			// integrate the first <condition> and <activity> element
 			// under a If-block into a <elseIF> element
 			if (currentNode.getNodeName().equals("if")){
 				handleIfElement(currentElement);
 			}
 			
+			System.out.println ("opaque");
+			// transform the value of attribute "opaque" from "yes" 
+			// to "true"
+			String opaque = currentElement.getAttribute("opaque");
+			if (opaque.equals("yes")){
+				currentElement.setAttribute("opaque", "true");
+			}
 		}
 		
 		// after the current node is already handled, research recursive,
 		// work on the child nodes.
-		NodeList childNodes = currentNode.getChildNodes();
 		Node child;
+		
+		NodeList childNodes = currentNode.getChildNodes();
 		for (int i=0; i<childNodes.getLength(); i++){
 			child = childNodes.item(i);
 			if (child instanceof Element){
@@ -106,6 +147,8 @@ public class BPELImportPreprocessor {
 
 	}
 	
+
+
 	private void handleNamespaceOfProcess(Element currentElement) {
 		// TODO Auto-generated method stub
 		
@@ -155,9 +198,26 @@ public class BPELImportPreprocessor {
 		return false;
 	}
 
-	/*********************** generate Bounding *****************/
+	/******************* generate Bounding and ID *****************/
+	private void generateID(Element currentElement, int position) {
+		if (currentElement.getNodeName().equals("process")){
+			setID (currentElement, "oryx_0"); 
+		} else {
+			Element parent = (Element)currentElement.getParentNode();
+			String parentID = getIDOfElement (parent);
+			setID (currentElement, parentID + "_" + position);
+		}
+	}
+	
+	private void setID(Element currentElement, String id) {
+		currentElement.setAttribute("id", id);
+	}
+
+	private String getIDOfElement(Element currentElement) {
+		return currentElement.getAttribute("id");
+	}
+
 	private void generateBounding(Element currentElement, int position) {
-		
 		if (currentElement.getNodeName().equals("process")){
 			setBound(currentElement, 114, 18, 714, 518);
 			return;
@@ -172,11 +232,12 @@ public class BPELImportPreprocessor {
 		// calculate the left upper point of the current shape
 		int LUX;
 		int LUY;
+		
 		// handle the child nodes of flow in a different way
 		// each row shows 3 shapes.
 		if (currentElement.getParentNode().getNodeName().equals("flow")){
 			
-			int index = getIndexOfElement(currentElement);
+			int index = getIndexOfShape(currentElement);
 			
 			// the first shape of the first row
 			if (index == 1){
@@ -218,12 +279,13 @@ public class BPELImportPreprocessor {
 	}
 
 
-	private int getIndexOfElement(Element currentElement) {
+	private int getIndexOfShape(Element currentElement) {
+		
 		int index = 0;
+		Node child;
 		
 		Node flow = currentElement.getParentNode();
 		NodeList childList = flow.getChildNodes();
-		Node child;
 		for (int i = 0; i < childList.getLength(); i++){
 			child = childList.item(i);
 			if (isActivity(child)){
@@ -238,6 +300,7 @@ public class BPELImportPreprocessor {
 	}
 
 	private boolean isActivity(Node currentNode) {
+		
 		if (!(currentNode instanceof Element)){
 			return false;
 		}
@@ -302,10 +365,10 @@ public class BPELImportPreprocessor {
 		if (currentElement.getNodeName().equals("flow")){
 			return 290;
 		} else if (currentElement.getNodeName().equals("eventHandlers")
-				|| currentElement.getNodeName().equals("eventHandlers")
-				|| currentElement.getNodeName().equals("eventHandlers")
-				|| currentElement.getNodeName().equals("eventHandlers")){		
-			return  160;
+				|| currentElement.getNodeName().equals("faultHandlers")
+				|| currentElement.getNodeName().equals("compensationHandler")
+				|| currentElement.getNodeName().equals("terminationHandler")){		
+			return 160;
 		} else {		
 			return 100;
 		}
@@ -318,15 +381,16 @@ public class BPELImportPreprocessor {
 			return 80;
 		}
 	}
-
 	
 	/*********************** handle If elements *****************/
 	private void handleIfElement(Element ifElement) {
+		// find element <condition> and the single activity
 		Node condition = null;
 		Node activity = null;
 		
-		NodeList childList = ifElement.getChildNodes();
 		Node child;
+		
+		NodeList childList = ifElement.getChildNodes();
 		for (int i = 0; i < childList.getLength(); i++){
 			child = childList.item(i);
 			
@@ -355,23 +419,146 @@ public class BPELImportPreprocessor {
 		
 		// append <elseif> to <if>
 		ifElement.appendChild(elseif);
-		
 	}
-
 	
 	/*********************** handle link elements *****************/
-	private void recordSourceNodeOfLink(Element currentElement) {
-		// TODO Auto-generated method stub
+	private void recordSourceNodeOfLink(Element source) {
+		// get linkName
+		String linkName = source.getAttribute("linkName");
 		
+		int index = getIndexInLinksList(linkName);
+		
+		if (index == -1){
+			linksList.add(linkName);
+			linksMap.put(linkName, 
+					new Object[]{null, null, null, null});
+			index = linksList.size()-1;
+		}
+		
+		// get transitionCondition
+		Element transitionCondition = getChildElementWithNodeName(source,
+				"transitionCondition");
+		
+		Element sources = (Element)source.getParentNode();
+		Element currentElement = (Element)sources.getParentNode();
+		
+		String sourceID = getIDOfElement(currentElement);
+		String targetID = getTargetID(linkName);
+		String linkID = "link_" + Integer.toString(index);
+		
+		linksMap.put(linkName, 
+				new Object[]{sourceID, targetID, linkID, transitionCondition});
+		
+		// record linkID as element <outGoing> under currentElement
+		Element outgoing = source.getOwnerDocument().createElement("outgoing");
+		outgoing.setNodeValue("#" + linkID);
+		currentElement.appendChild(outgoing);
 	}
 
-	private void recordTargetNodeOfLink(Element currentElement) {
-		// TODO Auto-generated method stub
+	private void recordTargetNodeOfLink(Element target) {
+		String linkName = target.getAttribute("linkName");
+		
+		int index = getIndexInLinksList(linkName);
+		
+		if (index == -1){
+			linksList.add(linkName);
+			linksMap.put(linkName, 
+					new Object[]{null, null, null, null});
+			index = linksList.size() - 1;
+		}
+		
+		Element targets = (Element)target.getParentNode();
+		Element currentElement = (Element)targets.getParentNode();
+		
+		String sourceID = getSourceID(linkName);
+		String targetID = getIDOfElement(currentElement);
+		String linkID = "link_" + Integer.toString(index);
+		Element transitionCondition = getTransitionCondition(linkName);
+		
+		linksMap.put(linkName, 
+				new Object[]{sourceID, targetID, linkID, transitionCondition});
 		
 	}
-	private void buildLinkElements() {
-		// TODO Auto-generated method stub
+	
+	private int getIndexInLinksList(String linkName) {
+		int index = 0;
+		String nameItem;
 		
+		Iterator<String> iterLinksList = linksList.iterator();
+		while (iterLinksList.hasNext()){
+			index ++;
+			nameItem = iterLinksList.next();
+			if (nameItem.equals(linkName)){
+				return index;
+			}
+		}
+		return -1;
+	}
+	
+	private String getSourceID(String linkName) {
+		Object[] infoSet = linksMap.get(linkName);
+		return (String)infoSet[0];
+	}
+	
+	private String getTargetID(String linkName) {
+		Object[] infoSet = linksMap.get(linkName);
+		return (String)infoSet[1];
+	}
+
+	private String getLinkID(String linkName) {
+		Object[] infoSet = linksMap.get(linkName);
+		return (String)infoSet[2];
+	}
+	
+	private Element getTransitionCondition(String linkName) {
+		Object[] infoSet = linksMap.get(linkName);
+		return (Element)infoSet[3];
+	}
+	
+	private Element getChildElementWithNodeName(Node currentNode, 
+			String childName) {
+		
+		NodeList childrenList = currentNode.getChildNodes();
+		for (int i = 0; i < childrenList.getLength(); i++){
+			Node child = childrenList.item(i);
+			if (child instanceof Element 
+					&& child.getNodeName().equals(childName)){
+				return (Element)child;
+			}
+		}
+		return null;
+	}
+	
+	/*********************** build link element ***********************/
+	private void buildLinkElements(Document document) {
+		
+		Element process = getChildElementWithNodeName(document, "process");
+		
+		if (process == null) {
+			return;
+		}
+		
+		String linkName;
+		String linkID;
+		String targetID;
+		Element transitionCondition;
+		
+		Iterator<String> iterLinksList = linksList.iterator();
+		while (iterLinksList.hasNext()){
+			linkName = iterLinksList.next();
+			
+			linkID = getLinkID(linkName);
+			targetID = getTargetID(linkName);
+			transitionCondition = getTransitionCondition(linkName);
+			
+			Element linkInfoSet = document.createElement("linkInfoSet");
+			linkInfoSet.setAttribute("id", linkID);
+			linkInfoSet.setAttribute("linkName", linkName);
+			linkInfoSet.setAttribute("targetID", "#"+targetID);
+			linkInfoSet.appendChild(transitionCondition);
+			
+			process.appendChild(linkInfoSet);
+		}
 	}
 
 }

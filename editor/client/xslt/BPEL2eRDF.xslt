@@ -7,65 +7,57 @@
 	<!-- Root element -->
 	<xsl:template match="process">
 		<root>
+			
 			<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width: 1200px; height: 600px;">
 				<span class="oryx-type">http://b3mn.org/stencilset/bpel#worksheet</span>
 				<span class="oryx-mode">writeable</span>
 				<span class="oryx-mode">fullscreen</span>
 				<a rel="oryx-stencilset" href="./stencilsets/bpel/bpel.json"/>
-				<xsl:call-template name="add-render"/>
+				<a rel="oryx-render" href="#oryx_0" />
+				<xsl:call-template name="DFS-for-adding-render"/>
 			</div>	
-	         <div id="oryx_1">
+			
+	         <div id="oryx_0">
 				<span class="oryx-type">http://b3mn.org/stencilset/bpel#process</span>
 				<span class="oryx-bounds">114,18,714,518</span>
-				<a rel="raziel-parent" href="#oryx-canvas123"/>
 				<xsl:call-template name="add-attributes"/>
 				<xsl:call-template name="add-elements"/>
-				<xsl:call-template name="add-children-nodes">
-					<xsl:with-param name="parentID">oryx_1</xsl:with-param>
-					<xsl:with-param name="parentBoundLeftUpperX">114</xsl:with-param>
-					<xsl:with-param name="parentBoundLeftUpperY">18</xsl:with-param>
-				</xsl:call-template>		
+				<a rel="raziel-parent" href="#oryx-canvas123"/>
 			</div>
+			
+			<xsl:call-template name="add-children-nodes">
+				<xsl:with-param name="parentID">oryx_0</xsl:with-param>
+			</xsl:call-template>	
+			
+			<xsl:call-template name="add-link-edges"/>
 		</root>	 
 	</xsl:template>
 	
 	
 	<xsl:template name="add-attributes">		
 		<xsl:for-each select="@*">
-			<xsl:variable name="attributeName" select="translate(concat('oryx-',name()),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
-				
-			<span>
-				<xsl:attribute name="class">
-					<xsl:value-of select="$attributeName"/>
-				</xsl:attribute>	
-				<xsl:value-of select="."/>
-			</span>	
+			<xsl:if test="name()!='id' and name()!='boundLUX' and name()!='boundLUY' and name()!='boundRLX' and name()!='boundRLY' and name()!='messageType' and name()!='element'">
+				<xsl:variable name="attributeName" select="translate(concat('oryx-',name()),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>		
+				<span>
+					<xsl:attribute name="class">
+						<xsl:value-of select="$attributeName"/>
+					</xsl:attribute>	
+					<xsl:value-of select="."/>
+				</span>	
+			</xsl:if>	
 		</xsl:for-each>			
 	</xsl:template>
-	
-	
+			
 	<xsl:template name="add-children-nodes">
 		<xsl:param name="parentID"/>
-		<xsl:param name="parentBoundLeftUpperX"/>
-		<xsl:param name="parentBoundLeftUpperY"/>
-	
-		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandlers|faultHandlers|compensationHandler|terminationHandler|catch|catchAll">
-			<xsl:variable name="id" select="concat($parentID,'_',position())" />
+		
+		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandlers|faultHandlers|compensationHandler|terminationHandler|catch|catchAll">	
 			
-			<!--xsl:variable name="boundChecker" select="@boundLUX"/>
-			<xsl:if test="($boundChecker = '')"-->			
-				<xsl:variable name="BoundLUX" select="$parentBoundLeftUpperX + position()*3+ 10" />
-				<xsl:variable name="BoundLUY" select="$parentBoundLeftUpperY + position()*3+ 10" />
-				<xsl:variable name="BoundRLX" select="$BoundLUX + 100" />
-				<xsl:variable name="BoundRLY" select="$BoundLUY + 80" />
-			<!--/xsl:if>	
-			
-			<xsl:if test="($boundChecker != '')">			
-				<xsl:variable name="BoundLUX" select="@boundLUX" />
-				<xsl:variable name="BoundLUY" select="@boundLUY" />
-				<xsl:variable name="BoundRLX" select="@boundRLX" />
-				<xsl:variable name="BoundRLY" select="@boundRLY" />
-			</xsl:if-->	
+			<xsl:variable name="id" select="@id"/>	
+			<xsl:variable name="BoundLUX" select="@boundLUX" />
+			<xsl:variable name="BoundLUY" select="@boundLUY" />
+			<xsl:variable name="BoundRLX" select="@boundRLX" />
+			<xsl:variable name="BoundRLY" select="@boundRLY" />
 			
 			<div>		
 		 		<xsl:attribute name="id">
@@ -94,8 +86,6 @@
 			<xsl:if test="name()='assign' or name()='if' or name()='elseif' or name()='else' or name()='flow' or name()='pick' or name()='onMessage' or name()='sequence' or name()='while' or name()='repeatUntil' or name()='forEach' or name()='scope' or name()='onAlarm' or name()='onEvent' or name()='eventHandlers'or name()='faultHandlers'or name()='compensationHandler' or name()='terminationHandler' or name()='catch' or name()='catchAll'">
 			    <xsl:call-template name="add-children-nodes">
 					<xsl:with-param name="parentID" select="$id"/>	
-					<xsl:with-param name="parentBoundLeftUpperX" select="$BoundLUX"/>
-					<xsl:with-param name="parentBoundLeftUpperY" select="$BoundLUY"/>
 				</xsl:call-template>	
 			</xsl:if>				
 		</xsl:for-each>	
@@ -521,6 +511,10 @@
         		<xsl:call-template name="add-standard-element">
 					<xsl:with-param name="elementName">start_intExp</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="."/>
+				</xsl:call-template>
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">start_opaque</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="@opaque"/>
 				</xsl:call-template>				
 			</xsl:for-each>
 			<xsl:for-each select="finalCounterValue">
@@ -532,6 +526,10 @@
 					<xsl:with-param name="elementName">final_intExp</xsl:with-param>
 					<xsl:with-param name="valueOfElement" select="."/>
 				</xsl:call-template>				
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">final_opaque</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="@opaque"/>
+				</xsl:call-template>
 			</xsl:for-each>
 			<xsl:for-each select="completionCondition">
 				<xsl:for-each select="branches">
@@ -546,8 +544,12 @@
 	        		<xsl:call-template name="add-standard-element">
 						<xsl:with-param name="elementName">branches_intExp</xsl:with-param>
 						<xsl:with-param name="valueOfElement" select="."/>
-					</xsl:call-template>	
-				</xsl:for-each>								
+					</xsl:call-template>
+					<xsl:call-template name="add-standard-element">
+						<xsl:with-param name="elementName">branches_opaque</xsl:with-param>
+						<xsl:with-param name="valueOfElement" select="@opaque"/>
+					</xsl:call-template>				
+					</xsl:for-each>								
 			</xsl:for-each>
 		</xsl:if>		
 		
@@ -569,7 +571,7 @@
 			</xsl:for-each>	
 		</xsl:if>
 		
-		<!--messageType or element attributes in <onEvent>-->
+		<!-- <messageType> or <element> attributes in <onEvent>-->
 		<xsl:if test="name()='onEvent'">
 			<xsl:variable name="messageType" select="@messageType"/>
 			<xsl:variable name="element" select="@element"/>
@@ -595,6 +597,15 @@
 				</xsl:call-template>
 			</xsl:if>						
 		</xsl:if>	
+		
+		<!-- <outgoing> in activity -->
+		<xsl:for-each select="outgoing">			
+    		<a rel="raziel-outgoing">
+    			<xsl:attribute name="href">
+					<xsl:value-of select="."/>
+				</xsl:attribute>	
+    		</a>					
+		</xsl:for-each>	
 		
     	<xsl:call-template name="add-complex-type-elements"/>
 	</xsl:template>
@@ -643,15 +654,55 @@
 			</xsl:call-template>
 		</xsl:for-each>
 	</xsl:template>	
-	
-	<xsl:template name="add-render">
-		 <a rel="oryx-render" href="#oryx_1" />
-		<xsl:call-template name="DFS-for-adding-render">
-			<xsl:with-param name="parentID">#oryx_1</xsl:with-param>
-	    </xsl:call-template>
-	</xsl:template>
-	
-	
+		
+		
+	<xsl:template name="add-link-edges">
+		<xsl:for-each select="linkInfoSet">
+			<div> 
+				<xsl:variable name="id" select="@id"/>
+				
+				<span class="oryx-type">http://b3mn.org/stencilset/bpel#link</span>
+				
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">linkname</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="@linkname"/>
+				</xsl:call-template>
+				
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">tc_expressionlanguage</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="transitionCondition/@expressionLanguage"/>
+				</xsl:call-template>
+				
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">transition_expression</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="transitionCondition"/>
+				</xsl:call-template>
+				
+				<xsl:call-template name="add-standard-element">
+					<xsl:with-param name="elementName">tc_opaque</xsl:with-param>
+					<xsl:with-param name="valueOfElement" select="transitionCondition/@opaque"/>
+				</xsl:call-template>
+				
+				<a rel="raziel-outgoing">
+	    			<xsl:attribute name="href">
+						<xsl:value-of select="@targetID"/>
+					</xsl:attribute>	
+	    		</a>	
+				
+				<a rel="raziel-parent" href="#oryx-canvas123"/>
+				
+    			<!--span class="oryx-dockers">50 40 50 40  # </span-->
+				
+				<a rel="raziel-target">
+	    			<xsl:attribute name="href">
+						<xsl:value-of select="@targetID"/>
+					</xsl:attribute>	
+	    		</a>
+			</div>	
+		</xsl:for-each>
+	</xsl:template>			
+
+
 	<xsl:template name="add-standard-element">
 		<xsl:param name="elementName"/>			
 		<xsl:param name="valueOfElement"/>
@@ -700,26 +751,20 @@
 			</xsl:call-template>
 		</xsl:for-each>
 	</xsl:template>	
-	
+
 	<xsl:template name="DFS-for-adding-render">
-		<xsl:param name="parentID"/>
-		
-		<xsl:for-each select="invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandlers|faultHandlers|compensationHandler|terminationHandler|catch|catchAll"> 
-		    <xsl:variable name="id">
- 		    	<xsl:value-of select="concat($parentID,'_',position())"/>
-			</xsl:variable>	
+		<xsl:for-each select="linkInfoSet|invoke|receive|reply|assign|copy|empty|opaqueActivity|validate|extensionActivity|wait|throw|exit|rethrow|if|elseif|else|flow|sequence|link|pick|onMessage|onAlarm|while|repeatUntil|forEach|compensate|compensateScope|scope|onEvent|eventHandlers|faultHandlers|compensationHandler|terminationHandler|catch|catchAll"> 
+		    <xsl:variable name="id" select="@id"/>
  		    		
  			<a rel="oryx-render">
  				<xsl:attribute name="href">
- 					<xsl:value-of select="$id" />
+ 					<xsl:value-of select="concat('#',$id)" />
 				</xsl:attribute>
 			</a>
 			
-  			<xsl:call-template name="DFS-for-adding-render">
-   				<xsl:with-param name="parentID" select="$id"/>
-  			</xsl:call-template>
+  			<xsl:call-template name="DFS-for-adding-render"/>
 		</xsl:for-each>
-    </xsl:template>		
-
+	</xsl:template>
+	
 </xsl:stylesheet>
 		

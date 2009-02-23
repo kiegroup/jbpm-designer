@@ -102,12 +102,15 @@ public class BPELImporter extends HttpServlet {
     	// in this preprocessor the following works will be done:
     	//  	1. handle different namespaces of bpel process
     	//  	2. calculate the bounding of each shape
-    	//  	3. move the <link> elements from <links> element to
-    	//         top of the root <process> element, so they could
-    	//         be easier to handle in BPEL2eRDF.xslt
-    	//      4. integrate the first <condition> and <activity> element
+    	//      3. generate for each shape a ID
+    	//  	4. move the <link> elements from <links> element to
+    	//         top of the root <process> element, and record linkID
+    	//         as the value of element <outgoing> under the corresponding
+    	//         activity, so they could be easier to handle in BPEL2eRDF.xslt
+    	//      5. integrate the first <condition> and <activity> element
     	//         under a If-block into a <elseIF> element, so they
     	//         they could be easier to transform in BPEL2eRDF.xslt
+    	//      6. transform the value of attribute "opaque" from "yes" to "true"
     	final String newContent = preprocessSource (res, fileContent);
     	
     	// Get the input stream	

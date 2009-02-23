@@ -81,7 +81,7 @@ public class BPELExportPostprocessor {
 		// easily get all necessary informations about a link
 		//
 		// in this hash map:
-		// key : node ID - type String
+		// key : link ID - type String
 		// value : {sourceNode ID,targetNode ID, linkName, 
 		// 			transitionCondition element}  - type Object
 		linksMap = new HashMap<String, Object[]>();
