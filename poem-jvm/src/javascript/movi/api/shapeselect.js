@@ -50,8 +50,8 @@ MOVI.namespace("util");
 		}
 		
 		if(!YAHOO.lang.isArray(shapes)) {
-			shapes = modelviewer.canvas.getNodes(); // only nodes supported atm
 			if(shapes==true) multiselect = true;
+			shapes = modelviewer.canvas.getNodes(); // only nodes supported atm
 		}
 		
 		this._allowMultiselect = multiselect;
@@ -127,7 +127,11 @@ MOVI.namespace("util");
 		},
 		
 		_reset: function() {
-			this._selectedShapes = {};
+			for(key in this._selectedShapes) {
+				var s = this._selectedShapes[key];
+				this._selectionMarker.removeShape(s);
+				delete this._selectedShapes[key];
+			}
 		},
 		
 		/**

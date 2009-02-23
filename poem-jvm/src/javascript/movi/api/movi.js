@@ -118,6 +118,8 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 				return false;
 			}
 			
+			YAHOO.util.Get.css(moviBase + "/style/movi.css", {});
+			
 			// load MOVI modules in correct order to satisfy dependencies
 			// path references are relative to YUI root directory
 			YAHOO.util.Get.script([ moviBase + "/config.js", 
