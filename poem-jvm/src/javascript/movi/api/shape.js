@@ -120,8 +120,8 @@ MOVI.namespace("model");
 		this.childShapes = {};			// reset childShapes map
 	
 		// create shape object for each child and append to childShapes map
-		for(key in childSh) { 
-			var child = childSh[key];
+		for(var i = 0; i<childSh.length; i++) { 
+			var child = childSh[i];
 			var subclass = _getSubclassForJSONObj(child, stencilset);
 			child = new subclass(child, stencilset, this);
 			this.childShapes[child.resourceId] = child;
