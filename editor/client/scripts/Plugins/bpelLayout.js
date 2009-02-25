@@ -149,7 +149,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 			
 			this._handleAutoResizeLayoutEvent (node);
 		} else {
-			// other shapes cann't contein any children shapes.
+			// other shapes cannot contain any children shapes.
 			return;
 		}
 	
@@ -716,10 +716,10 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 	},
 	
 	_update : function(shape){
-		// update the canvas only wenn the current node "process" is, with this we can
+		// update the canvas only if the current node is "process", with this we can
 		// make sure that, each time just once update after all the nodes are arranged
 		// and we must check, whether the node "process" changed is, if not, don't update,
-		// otherwise, an endless loop may occur, wenn there are more than three nesting level 
+		// otherwise, an endless loop may occur, if there are more than three nesting level 
 		// in a shape.
 		if (shape.getStencil().id() == shape.getStencil().namespace() + "process"
 		&& shape.isChanged){
