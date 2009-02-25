@@ -204,12 +204,26 @@
 		</servlet-class>
 	</servlet>
 	
-	<!--<servlet-mapping>
+<!--	
+    <servlet>
+        <display-name>Service Composer Servlet</display-name>
+        <servlet-name>ServiceComposerServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.ServiceComposerServlet
+        </servlet-class>
+    </servlet>
+-->
+
+
+<!--	
+	<servlet-mapping>
 		<servlet-name>Repository</servlet-name>
 		<url-pattern>/repository</url-pattern>
-	</servlet-mapping>-->
+	</servlet-mapping>
+-->
 
-<!--<servlet-mapping>
+<!--
+    <servlet-mapping>
 		<servlet-name>EngineProxy</servlet-name>
 		<url-pattern>/engineproxy</url-pattern>
 	</servlet-mapping>
@@ -335,6 +349,12 @@
 		<url-pattern>/jsonp</url-pattern>
 	</servlet-mapping>
 	
+<!--	
+    <servlet-mapping>
+            <servlet-name>ServiceComposerServlet</servlet-name>
+            <url-pattern>/servicecomposer</url-pattern>
+    </servlet-mapping>
+-->
 
 	<jsp-config>
 		<taglib>
