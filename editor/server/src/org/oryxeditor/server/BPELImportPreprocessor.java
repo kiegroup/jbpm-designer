@@ -98,22 +98,31 @@ public class BPELImportPreprocessor {
 				currentElement.setAttribute("isNodeStencilSet", "true");
 				generateBounding(currentElement, position);
 				generateID(currentElement, position);
-			}
-			
-			// record the necessary information of links
-			if (currentNode.getNodeName().equals("source")){
+
+				// integrate the first <condition> and <activity> element
+				// under a If-block into a <elseIF> element
+				if (currentNode.getNodeName().equals("if")){
+					handleIfElement(currentElement);
+				}
+
+				// after the current node is already handled, research recursive,
+				// work on the child nodes.
+				Node child;
+				
+				NodeList childNodes = currentNode.getChildNodes();
+				for (int i=0; i<childNodes.getLength(); i++){
+					child = childNodes.item(i);
+					if (child instanceof Element){
+						handleNode (child, i);
+					}
+				};
+			} else if (currentNode.getNodeName().equals("source")){
+				// record the necessary information of links
 				recordSourceNodeOfLink(currentElement);
-			}
-			
-			if (currentNode.getNodeName().equals("target")){
+			} else if (currentNode.getNodeName().equals("target")){
 				recordTargetNodeOfLink(currentElement);
 			}
 				
-			// integrate the first <condition> and <activity> element
-			// under a If-block into a <elseIF> element
-			if (currentNode.getNodeName().equals("if")){
-				handleIfElement(currentElement);
-			}
 			
 			// transform the value of attribute "opaque" from "yes" 
 			// to "true"
@@ -122,69 +131,56 @@ public class BPELImportPreprocessor {
 				currentElement.setAttribute("opaque", "true");
 			}
 		}
-		
-		// after the current node is already handled, research recursive,
-		// work on the child nodes.
-		Node child;
-		
-		NodeList childNodes = currentNode.getChildNodes();
-		for (int i=0; i<childNodes.getLength(); i++){
-			child = childNodes.item(i);
-			if (child instanceof Element){
-				handleNode (child, i);
-			}
-		};
-		
-
+	}
+	
+	private static boolean isFromBPELNamespace(Node node) {
+		return (node.getNamespaceURI().equals("http://docs.oasis-open.org/wsbpel/2.0/process/abstract") ||
+				node.getNamespaceURI().equals("http://docs.oasis-open.org/wsbpel/2.0/process/executable"));
 	}
 	
 
-	private boolean isStencilSet(Element currentElement) {
-		if (currentElement.getNodeName().equals("process")
-				|| currentElement.getNodeName().equals("invoke")
-				|| currentElement.getNodeName().equals("receive")
-				|| currentElement.getNodeName().equals("reply")
-				|| currentElement.getNodeName().equals("assign")
-				|| currentElement.getNodeName().equals("copy")
-				|| currentElement.getNodeName().equals("empty")
-				|| currentElement.getNodeName().equals("opaqueActivity")
-				|| currentElement.getNodeName().equals("validate")
-				|| currentElement.getNodeName().equals("extensionActivity")
-				|| currentElement.getNodeName().equals("wait")
-				|| currentElement.getNodeName().equals("throw")
-				|| currentElement.getNodeName().equals("exit")
-				|| currentElement.getNodeName().equals("rethrow")
-				|| currentElement.getNodeName().equals("if")
-				|| currentElement.getNodeName().equals("elseif")
-				|| currentElement.getNodeName().equals("else")
-				|| currentElement.getNodeName().equals("flow")
-				|| currentElement.getNodeName().equals("sequence")
-				|| currentElement.getNodeName().equals("link")
-				|| currentElement.getNodeName().equals("pick")
-				|| currentElement.getNodeName().equals("onMessage")
-				|| currentElement.getNodeName().equals("while")
-				|| currentElement.getNodeName().equals("repeatUntil")
-				|| currentElement.getNodeName().equals("forEach")
-				|| currentElement.getNodeName().equals("compensate")
-				|| currentElement.getNodeName().equals("compensateScope")
-				|| currentElement.getNodeName().equals("scope")
-				|| currentElement.getNodeName().equals("onEvent")
-				|| currentElement.getNodeName().equals("eventHandlers")
-				|| currentElement.getNodeName().equals("faultHandlers")
-				|| currentElement.getNodeName().equals("compensationHandler")
-				|| currentElement.getNodeName().equals("terminationHandler")
-				|| currentElement.getNodeName().equals("catch")
-				|| currentElement.getNodeName().equals("catchAll")){
-        
-			return true;
-		}
-			    
-		return false;
+	private static boolean isStencilSet(Element currentElement) {
+		return ( isFromBPELNamespace(currentElement) &&
+				( currentElement.getLocalName().equals("process")
+				|| currentElement.getLocalName().equals("invoke")
+				|| currentElement.getLocalName().equals("receive")
+				|| currentElement.getLocalName().equals("reply")
+				|| currentElement.getLocalName().equals("assign")
+				|| currentElement.getLocalName().equals("copy")
+				|| currentElement.getLocalName().equals("empty")
+				|| currentElement.getLocalName().equals("opaqueActivity")
+				|| currentElement.getLocalName().equals("validate")
+				|| currentElement.getLocalName().equals("extensionActivity")
+				|| currentElement.getLocalName().equals("wait")
+				|| currentElement.getLocalName().equals("throw")
+				|| currentElement.getLocalName().equals("exit")
+				|| currentElement.getLocalName().equals("rethrow")
+				|| currentElement.getLocalName().equals("if")
+				|| currentElement.getLocalName().equals("elseif")
+				|| currentElement.getLocalName().equals("else")
+				|| currentElement.getLocalName().equals("flow")
+				|| currentElement.getLocalName().equals("sequence")
+				|| currentElement.getLocalName().equals("link")
+				|| currentElement.getLocalName().equals("pick")
+				|| currentElement.getLocalName().equals("onMessage")
+				|| currentElement.getLocalName().equals("while")
+				|| currentElement.getLocalName().equals("repeatUntil")
+				|| currentElement.getLocalName().equals("forEach")
+				|| currentElement.getLocalName().equals("compensate")
+				|| currentElement.getLocalName().equals("compensateScope")
+				|| currentElement.getLocalName().equals("scope")
+				|| currentElement.getLocalName().equals("onEvent")
+				|| currentElement.getLocalName().equals("eventHandlers")
+				|| currentElement.getLocalName().equals("faultHandlers")
+				|| currentElement.getLocalName().equals("compensationHandler")
+				|| currentElement.getLocalName().equals("terminationHandler")
+				|| currentElement.getLocalName().equals("catch")
+				|| currentElement.getLocalName().equals("catchAll")));
 	}
 
 	/******************* generate Bounding and ID *****************/
 	private void generateID(Element currentElement, int position) {
-		if (currentElement.getNodeName().equals("process")){
+		if (isFromBPELNamespace(currentElement) && currentElement.getLocalName().equals("process")){
 			setID (currentElement, "oryx_0"); 
 		} else {
 			Element parent = (Element)currentElement.getParentNode();
@@ -202,7 +198,7 @@ public class BPELImportPreprocessor {
 	}
 
 	private void generateBounding(Element currentElement, int position) {
-		if (currentElement.getNodeName().equals("process")){
+		if (currentElement.getLocalName().equals("process")) {
 			setBound(currentElement, 114, 18, 714, 518);
 			return;
 		}
@@ -219,7 +215,7 @@ public class BPELImportPreprocessor {
 		
 		// handle the child nodes of flow in a different way
 		// each row shows 3 shapes.
-		if (currentElement.getParentNode().getNodeName().equals("flow")){
+		if (currentElement.getParentNode().getLocalName().equals("flow")){
 			
 			int index = getIndexOfShape(currentElement);
 			
@@ -289,7 +285,7 @@ public class BPELImportPreprocessor {
 			return false;
 		}
 		
-		if (currentNode.getNodeName().equals("receive")
+		if (isFromBPELNamespace((currentNode) && currentNode.getNodeName().equals("receive")
 				|| currentNode.getNodeName().equals("reply")
 				|| currentNode.getNodeName().equals("invoke")
 				|| currentNode.getNodeName().equals("assign")
