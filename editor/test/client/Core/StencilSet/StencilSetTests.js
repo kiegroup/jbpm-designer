@@ -56,6 +56,9 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 			},
 			roles : function() {
 				return this._jsonStencil.roles
+			},
+			removeProperty: function(id) {
+				this._properties.remove(id)
 			}
 			,
 
@@ -68,6 +71,8 @@ Ajax = {}
 
 // stubing Ajax.request method
 Ajax.Request = function(source, options) {
+	//TODO: use Hash instead of if conditions
+	
 	var response = {}
 	// valid stencil set
 	if (source == "TestStencilSet") {
@@ -147,7 +152,20 @@ Ajax.Request = function(source, options) {
 	// loads a stencil set extension, which adds a property package to the
 	// current set
 	if (source == "StencilSetExtensionNewProperties") {
-		var extension = testStencilSetExtensionPropJSON
+		var extension = testStencilSetExtensionAddPropJSON
+		response.responseText = Object.toJSON(extension)
+	}
+	
+	// loads a stencil set extension, which removes a properties from a stencil of the current set
+	if (source == "StencilSetExtensionRemoveProperties") {
+		var extension = testStencilSetExtensionRemovePropJSON
+		response.responseText = Object.toJSON(extension)
+	}
+	
+	
+	// loads a stencil set extension, which removes stencils from the current set
+	if (source == "StencilSetExtensionRemoveStencils") {
+		var extension = testStencilSetExtensionRemoveStencilsJSON
 		response.responseText = Object.toJSON(extension)
 	}
 
@@ -536,7 +554,7 @@ function testAddNewStencil() {
 }
 
 /**
- * This test uses the possibility to add properties packages to some stencils
+ * This test uses the possibility of a stencil set extension to add property packages to some stencils
  * and verify if they were only added to the stencils "Service1" and "Service2"
  */
 function testAddPropertyPackageOverExtension() {
@@ -545,5 +563,40 @@ function testAddPropertyPackageOverExtension() {
 
 	assertNotUndefined("Now the new property should exist for Service1",
 			testStencilSet.stencil("http://b3mn.org/stencilset/testB#Service1").property("testExtensionProp"))
+	
+	assertNotUndefined("Now the new property should exist for Service2",
+			testStencilSet.stencil("http://b3mn.org/stencilset/testB#Service2").property("testExtensionProp"))	
+			
+	assertUndefined("But 'Diagram' should not have the property 'testExtensionProp'",
+			testStencilSet.stencil("http://b3mn.org/stencilset/testB#Diagram").property("testExtensionProp"))
+}
 
+/**
+ * This test uses the functionality of a stencil set extension to remove properties from a stencil
+ * and verifies the result.
+ */
+function testRemovePropertiesOverExtension() {
+	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
+	
+	// removes the properties value and description from stencil "Service1"
+	
+	testStencilSet.addExtension("StencilSetExtensionRemoveProperties")
+	
+	assertUndefined("Service1 should not have the property value",testStencilSet.stencil("http://b3mn.org/stencilset/testB#Service1").property("value"))
+	assertUndefined("Service1 should not have the property description",testStencilSet.stencil("http://b3mn.org/stencilset/testB#Service1").property("description"))
+}
+
+/**
+ * This test uses the functionality of a stencil set extension to remove stencils from a stencil set
+ * and verifies the result.
+ */
+function testRemoveStencilsOverExtension() {
+	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
+	
+	// removes the stencils "Service1" and "Service2"
+	
+	testStencilSet.addExtension("StencilSetExtensionRemoveStencils")
+	
+	assertUndefined("Stencil 'Service1' should not exist.",testStencilSet._availableStencils["http://b3mn.org/stencilset/testB#Service1"])
+	assertUndefined("Stencil 'Service2' should not exist.",testStencilSet._availableStencils["http://b3mn.org/stencilset/testB#Service2"])
 }

@@ -1,4 +1,4 @@
-var testStencilSetExtensionPropJSON = {
+var testStencilSetExtensionAddPropJSON = {
 	"title":"TestStencilSetExtention",
 	"namespace":"http://testStencilSetExtension#",
 	"description":"Test extension",
@@ -28,5 +28,6 @@ var testStencilSetExtensionPropJSON = {
 	"removestencils": [
 		
 	],
-	"removeproperties": []
+	"removeproperties": [
+	]
 }
