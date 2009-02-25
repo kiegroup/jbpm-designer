@@ -285,7 +285,7 @@ public class BPELImportPreprocessor {
 			return false;
 		}
 		
-		if (isFromBPELNamespace((currentNode) && currentNode.getNodeName().equals("receive")
+		if (isFromBPELNamespace(currentNode) && currentNode.getNodeName().equals("receive")
 				|| currentNode.getNodeName().equals("reply")
 				|| currentNode.getNodeName().equals("invoke")
 				|| currentNode.getNodeName().equals("assign")
