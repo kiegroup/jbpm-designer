@@ -234,7 +234,7 @@ this._shapes = {};
 		getShapes: function() {
 			var marked = new Array();
 			for(key in this._shapes)
-				marked.push(this.shapes[key]);
+				marked.push(this._shapes[key]);
 			return marked;
 		},
 		
