@@ -51,7 +51,7 @@ public class ImageRenderer extends HandlerBase {
     					"height=\"400\" xlink=\"http://www.w3.org/1999/xlink\" " +
     					"svg=\"http://www.w3.org/2000/svg\"><text x=\"30\" y=\"30\" font-size=\"12px\">" +
     					"Sorry, there is no graphical representation available on the server.<tspan x=\"30\" y=\"50\">" +
-    					"Please load the process with the Oryx Editor and push the Save button.</tspan></text></svg>";
+    					"Please load the process in Oryx Editor and press the Save button.</tspan></text></svg>";
     		}
     		transcode(SvgRepresentation, res.getOutputStream(), representation);
 		} catch (TranscoderException e) {
