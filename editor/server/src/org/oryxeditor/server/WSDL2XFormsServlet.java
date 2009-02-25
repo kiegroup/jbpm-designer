@@ -2,9 +2,11 @@ package org.oryxeditor.server;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -15,6 +17,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import de.hpi.xforms.XForm;
 import de.hpi.xforms.generation.WSDL2XFormsTransformation;
@@ -29,13 +32,22 @@ import de.hpi.xforms.serialization.XFormsXHTMLImporter;
 public class WSDL2XFormsServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 6084194342174761234L;
+	
+	/*private static List<String> portTypes;
+	private static Map<String, String> operations; // operation name -> port type
+	private static Map<String, String> forms; // form url -> operation*/
+	
+	private static Map<String, Map<String, String>> forms; // port type -> ( operation name -> form url )
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-		res.setContentType("text/html");
+		res.setContentType("text/plain");
+		
+		Writer resWriter = res.getWriter();
 		
 		String wsdlUrl = req.getParameter("wsdlUrl");
-		String redirectUrl = req.getParameter("redirectUrl");
+		
+		forms = new HashMap<String, Map<String, String>>();
 
 		try {
 			
@@ -47,10 +59,9 @@ public class WSDL2XFormsServlet extends HttpServlet {
 			Document wsdlDoc = builder.parse(url.openStream());
 			
 			// transform to XForms documents
+			String wsdlId = generateWsdlId(wsdlUrl);
 			List<Document> xformsDocs = WSDL2XFormsTransformation.transform(
-						getServletContext(), wsdlDoc.getDocumentElement(), generateWsdlId(wsdlUrl));
-			
-			String modelUrls = "";
+						getServletContext(), wsdlDoc.getDocumentElement(), wsdlId);
 			
 			int i=0;
 			for(Document xformsDoc : xformsDocs) {
@@ -65,7 +76,7 @@ public class WSDL2XFormsServlet extends HttpServlet {
 				
 				// save to backend
 				Repository repo = new Repository(Repository.getBaseUrl(req));
-				String modelName = generateWsdlId(wsdlUrl) + " " + i;
+				String modelName = wsdlId + " " + i;
 				
 				String modelUrl = repo.saveNewModel(
 						erdfWriter.toString(), 
@@ -74,19 +85,24 @@ public class WSDL2XFormsServlet extends HttpServlet {
 						"http://b3mn.org/stencilset/xforms#", 
 						"/stencilsets/xforms/xforms.json");
 				
-				modelUrls += "," + Repository.getOryxUrl(req) + modelUrl;
+				addResponseParams(xformsDoc.getDocumentElement(), Repository.getOryxUrl(req) + modelUrl);
 				
 				i++;
 				
 			}
 			
-			System.out.println(redirectUrl);
-			
-			// redirect to specified URL
-			if(redirectUrl!=null && redirectUrl.length()>0) {
-				res.sendRedirect(redirectUrl + URLEncoder.encode(modelUrls, "UTF-8"));
+			resWriter.write("svc_0=" + wsdlUrl);
+			int ptId=0;
+			for(String portType : forms.keySet()) {
+				resWriter.write("&svc0_pt" + ptId + "=" + portType);
+				int opId=0;
+				for(String operationName : forms.get(portType).keySet()) {
+					resWriter.write("&svc0_pt" + ptId + "_op" + opId + "=" + operationName);
+					resWriter.write("&svc0_pt" + ptId + "_op" + opId + "_ui0=" + forms.get(portType).get(operationName));
+					opId++;
+				}
+				ptId++;
 			}
-			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,4 +114,35 @@ public class WSDL2XFormsServlet extends HttpServlet {
 		UUID uuid = UUID.nameUUIDFromBytes(url.getBytes());
 		return uuid.toString();
 	}
+	
+	private static void addResponseParams(Node formNode, String formUrl) {
+		Node instanceNode = getChild(getChild(getChild(formNode, "xhtml:head"), "xforms:model"), "xforms:instance");
+		if(instanceNode!=null) {
+			String[] splitted = getAttributeValue(instanceNode, "id").split("\\.");
+			Map<String, String> operations = new HashMap<String, String>();
+			if(!forms.containsKey(splitted[1]))
+				forms.put(splitted[1], operations);
+			else 
+				operations = forms.get(splitted[1]);
+			operations.put(splitted[2], formUrl);
+		}
+	}
+	
+	private static Node getChild(Node n, String name) {
+		if (n == null)
+			return null;
+		for (Node node=n.getFirstChild(); node != null; node=node.getNextSibling())
+			if (node.getNodeName().equals(name)) 
+				return node;
+		return null;
+	}
+	
+	private static String getAttributeValue(Node node, String attribute) {
+		Node item = node.getAttributes().getNamedItem(attribute);
+		if (item != null)
+			return item.getNodeValue();
+		else
+			return null;
+	}
+	
 }

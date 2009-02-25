@@ -17,7 +17,6 @@ public class XsltUriResolver implements URIResolver {
 	public Source resolve(String href,String base) {
 		StringBuffer path = new StringBuffer(this.base_path);
 		path.append("/" + href);
-		System.out.println(path.toString());
 		File file = new File(path.toString());
 		if(file.exists()) return new StreamSource(file);
 		return null;

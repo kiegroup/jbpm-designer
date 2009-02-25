@@ -83,7 +83,7 @@ public class WSDL2XFormsTransformation {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        System.out.println("RESULTSIZE: " +result.size());
+        //System.out.println("RESULTSIZE: " +result.size());
 		return result;
 	}
 	

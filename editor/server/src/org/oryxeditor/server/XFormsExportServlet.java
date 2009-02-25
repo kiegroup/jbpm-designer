@@ -3,6 +3,7 @@ package org.oryxeditor.server;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,13 +42,50 @@ public class XFormsExportServlet extends HttpServlet {
 		
 		String rdf = req.getParameter("data");
 		String cssUrl = req.getParameter("css");
-
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
 		try {
-			
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
+			exportForm(new BufferedWriter(res.getWriter()), document, cssUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		
+		res.setContentType("text/xhtml");
+		
+		String path = req.getParameter("path");
+		String cssUrl = req.getParameter("css");
+		
+		if(path==null)
+			return;
+		if(cssUrl==null)
+			cssUrl = "";
+		
+		if(path.endsWith("/self")) path = path.substring(0, path.indexOf("/self"));
+		
+		Repository repo = new Repository(Repository.getBaseUrl(req));
+		String rdf = repo.getModel(path, "rdf");
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
+			exportForm(new BufferedWriter(res.getWriter()), document, cssUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void exportForm(Writer writer, Document document, String cssUrl) {
+		
+		try {
 			
 			XFormsRDFImporter importer = new XFormsRDFImporter(document);
 			XForm form = importer.loadXForm();
@@ -70,7 +108,6 @@ public class XFormsExportServlet extends HttpServlet {
 			LSOutput output = feature.createLSOutput();
 			output.setByteStream(res.getOutputStream());
 			serializer.write(xhtmlDoc, output);*/
-
 			
 			OutputFormat format = new OutputFormat(xhtmlDoc);
 			format.setIndenting(true);
@@ -80,7 +117,7 @@ public class XFormsExportServlet extends HttpServlet {
 			
 			// TODO: newlines in serialize output (weird it doesn't work)
 			
-			XMLSerializer serial = new XMLSerializer(new BufferedWriter(res.getWriter()), format);
+			XMLSerializer serial = new XMLSerializer(writer, format);
 			DOMSerializer domserial = serial.asDOMSerializer();
 			domserial.serialize(xhtmlDoc); 
 			
@@ -89,4 +126,5 @@ public class XFormsExportServlet extends HttpServlet {
 		}
 		
 	}
+
 }

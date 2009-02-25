@@ -44,10 +44,14 @@ public class Repository {
 	}
 	
 	public String getModel(String path) {
+		return getModel(path, "self");
+	}
+
+	public String getModel(String path, String representationType) {
 		String result = "";
 		try {
 		    HttpClient client = new HttpClient();
-		    GetMethod method = new GetMethod( baseUrl + path );
+		    GetMethod method = new GetMethod( baseUrl + path + "/" + representationType);
 		    int statusCode = client.executeMethod( method );
 			if( statusCode != -1 ) {
 				result = method.getResponseBodyAsString();
