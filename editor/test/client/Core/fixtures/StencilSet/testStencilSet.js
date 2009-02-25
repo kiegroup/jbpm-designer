@@ -35,7 +35,7 @@ testStencilSetJSON = {
 			"description":	"... Service",
 			"view":			"node.task.svg",
 			"icon":			"node.task.png",
-			"roles":		["all", "Service"],
+			"roles":		["all", "Service", "Service1"],
 			"properties": [
 				{
 					"id":"id",
@@ -58,7 +58,7 @@ testStencilSetJSON = {
 			"description":	"... Service",
 			"view":			"node.task.svg",
 			"icon":			"node.task.png",
-			"roles":		["all", "Service"],
+			"roles":		["all", "Service", "Service2"],
 			"properties": [
 				{
 					"id":"id",

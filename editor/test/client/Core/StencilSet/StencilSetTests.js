@@ -27,13 +27,38 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 				this.namespace = namespace
 				this.baseUrl = baseUrl
 				this.stencilSet = stencilSet
+				this._properties = new Hash()
+				// add id of stencil to its roles
+				this._jsonStencil.roles.push(this._jsonStencil.id);
+
+				// prepend namespace to each role
+				this._jsonStencil.roles.each((function(role, index) {
+							this._jsonStencil.roles[index] = namespace + role;
+						}).bind(this));
+
+				// delete duplicate roles
+				this._jsonStencil.roles = this._jsonStencil.roles.uniq();
+
+				// make id unique by prepending namespace of stencil set
+				this._jsonStencil.id = namespace + this._jsonStencil.id;
 			},
 			id : function() {
 				return this._jsonStencil.id;
 			},
-			type: function() {
+			type : function() {
 				return this._jsonStencil.type;
+			},
+			addProperty : function(property, namespace) {
+				this._properties[property.id] = property
+			},
+			property : function(id) {
+				return this._properties[id]
+			},
+			roles : function() {
+				return this._jsonStencil.roles
 			}
+			,
+
 		})
 
 // mocking Ajax Object
@@ -45,50 +70,101 @@ Ajax = {}
 Ajax.Request = function(source, options) {
 	var response = {}
 	// valid stencil set
-	if(source == "TestStencilSet") {
+	if (source == "TestStencilSet") {
 		response.responseText = Object.toJSON(testStencilSetJSON)
 	}
-	
+
 	// valid stencil set, but without explicitly marked root element
-	if(source == "StencilSetWithoutRoot") {
+	if (source == "StencilSetWithoutRoot") {
 		response.responseText = Object.toJSON(testStencilSetWithoutRootJSON)
 	}
-	
+
 	// invalid stencil set
-	if(source == "TestCorruptedStencilSet") {
+	if (source == "TestCorruptedStencilSet") {
 		response.responseText = Object.toJSON(testCorruptedStencilSetJSON)
 	}
-	
+
 	// simulate failure while processing AJAX request
-	if(source == "request fail") {
+	if (source == "request fail") {
 		options.onFailure(response)
 		return
 	}
-	
-	// load stencil set extention
-	if(source == "StencilSetExtention") {
+
+	// load stencil set extension
+	if (source == "StencilSetExtension") {
 		response.responseText = Object.toJSON(testStencilSetExtensionJSON)
 	}
-	
-	// load stencil set extention (namespace does not ends with a pound sign)
-	if(source == "StencilSetExtentionWithoutNamespace#") {
+
+	// load stencil set Extension (namespace does not ends with a pound sign)
+	if (source == "StencilSetExtensionWithoutNamespace#") {
 		var extension = testStencilSetExtensionJSON
 		extension["extends"] = "http://b3mn.org/stencilset/testB"
-		
+
 		response.responseText = Object.toJSON(extension)
 	}
-	
+
+	// load stencil set Extension (namespace does not match the current stencil
+	// set namespace)
+	if (source == "StencilSetExtensionNotMatchingNamespace") {
+		var extension = testStencilSetExtensionJSON
+		extension["extends"] = "http://b3mn.org/stencilset/testBBB#"
+
+		response.responseText = Object.toJSON(extension)
+	}
+
+	// loads an invalid stencil set Extension
+	if (source == "StencilSetExtensionInvalid") {
+		var extension = "Invalid"
+
+		response.responseText = Object.toJSON(extension)
+	}
+
+	// {
+	// "StencilSetExtensionNewStencil": function(){
+	// var extension = testStencilSetExtensionJSON
+	// extension.stencils.push({
+	// "type":"node",
+	// "id":"newStencil"
+	// })
+	// return extension;
+	// }
+	// }
+
+	// response.responseText = Object.toJSON(map[source]());
+
+	// loads a stencil set extension, which adds a stencil to the curret set
+	if (source == "StencilSetExtensionNewStencil") {
+		var extension = testStencilSetExtensionJSON
+		extension.stencils.push({
+					"type" : "node",
+					"id" : "newStencil",
+					"roles": []
+					
+				})
+		response.responseText = Object.toJSON(extension)
+	}
+
+	// loads a stencil set extension, which adds a property package to the
+	// current set
+	if (source == "StencilSetExtensionNewProperties") {
+		var extension = testStencilSetExtensionPropJSON
+		response.responseText = Object.toJSON(extension)
+	}
+
 	options.onSuccess(response)
 }
 
 // stubing ORYX.Log.warn method
 
-ORYX.Log.warn = function(string) {var warning = string}
+ORYX.Log.warn = function(string) {
+	var warning = string
+}
 
 // stubing ORYX.Log.debug method
 
-ORYX.Log.debug = function(string) {var debugInfo = string}
-
+ORYX.Log.debug = function(string) {
+	ORYX.Log.debugInfo = string
+}
 
 /**
  * Tests, if missing parameters are handled.
@@ -135,12 +211,13 @@ function testFailForCorruptedJSON() {
 }
 
 /**
- * A valid stencil set is passed to the constructor. So afterwards a new instance
- * of ORYX.Core.StencilSet.StencilSet should exist.
+ * A valid stencil set is passed to the constructor. So afterwards a new
+ * instance of ORYX.Core.StencilSet.StencilSet should exist.
  */
 function testConstructor() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	assertTrue("A new StencilSet should be created.", testStencilSet instanceof ORYX.Core.StencilSet.StencilSet)
+	assertTrue("A new StencilSet should be created.",
+			testStencilSet instanceof ORYX.Core.StencilSet.StencilSet)
 	assertUndefined(testStencilSet.errornous)
 }
 
@@ -148,50 +225,51 @@ function testConstructor() {
  * Simulate a failure on Ajax request and test if it is handled.
  */
 function testFailureOnAjaxRequest() {
-	try{
+	try {
 		var testStencilSet = new ORYX.Core.StencilSet.StencilSet("request fail")
 		fail("Test should fail yet, because of failed ajax request.")
-	}catch(e) {
-		if(!(e == "Loading stencil set request fail failed.")) {
+	} catch (e) {
+		if (!(e == "Loading stencil set request fail failed.")) {
 			throw e
 		}
 	}
 }
 
 /**
- * In a stencil set without explicitly marked root element, the findRootStencilName method
- * should return the first one.
+ * In a stencil set without explicitly marked root element, the
+ * findRootStencilName method should return the first one.
  */
-function testFindRootStencilNameWithoutMarkedRoot(){
+function testFindRootStencilNameWithoutMarkedRoot() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("StencilSetWithoutRoot")
 	var root = testStencilSet.findRootStencilName()
-	assertEquals("Diagram should be the root Stencil", "Diagram", root)
+	assertEquals("Diagram should be the root Stencil", "http://b3mn.org/stencilset/test#Diagram", root)
 }
 
 /**
- * FindRootStencilName should return the stencil marked as root element 
+ * FindRootStencilName should return the stencil marked as root element
  */
-function testFindRootStencilNameWithMarkedRoot(){
+function testFindRootStencilNameWithMarkedRoot() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
 	var root = testStencilSet.findRootStencilName()
-	assertEquals("Diagram should be the root Stencil", "Diagram", root)
+	assertEquals("Diagram should be the root Stencil", "http://b3mn.org/stencilset/testB#Diagram", root)
 }
 
 /**
- * Two stencil sets are equal if both have the same namespace. It should be checked if the passed
- * stencilset is an instance of ORYX.Core.StencilSet.StencilSet
+ * Two stencil sets are equal if both have the same namespace. It should be
+ * checked if the passed stencilset is an instance of
+ * ORYX.Core.StencilSet.StencilSet
  */
 function testFailForInvalidParameterStencilSetEqual() {
 	try {
 		var testStencilSet = new ORYX.Core.StencilSet.StencilSet("StencilSetWithoutRoot")
 		testStencilSet.equals("invaildStencilSet")
 		fail("Test should fail yet for passing invalid stencil set")
-	}catch(e) {
-		if(e != "Invaild Stencilset") {
+	} catch (e) {
+		if (e != "Invaild Stencilset") {
 			throw e
 		}
 	}
-	
+
 }
 
 /**
@@ -200,7 +278,8 @@ function testFailForInvalidParameterStencilSetEqual() {
 function testEqualStencilSets() {
 	var testStencilSet1 = new ORYX.Core.StencilSet.StencilSet("StencilSetWithoutRoot")
 	var testStencilSet2 = new ORYX.Core.StencilSet.StencilSet("StencilSetWithoutRoot")
-	assertTrue("The two stencil sets should be equal.",testStencilSet1.equals(testStencilSet2))
+	assertTrue("The two stencil sets should be equal.", testStencilSet1
+					.equals(testStencilSet2))
 }
 
 /**
@@ -209,7 +288,8 @@ function testEqualStencilSets() {
 function testEqualStencilSets() {
 	var testStencilSet1 = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
 	var testStencilSet2 = new ORYX.Core.StencilSet.StencilSet("StencilSetWithoutRoot")
-	assertFalse("The two stencil sets should not be equal.",testStencilSet1.equals(testStencilSet2))
+	assertFalse("The two stencil sets should not be equal.", testStencilSet1
+					.equals(testStencilSet2))
 }
 
 /**
@@ -219,27 +299,30 @@ function testInvalidParametersForStencilsMethod() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
 	try {
 		testStencilSet.stencils("invalidstencil", "invalidrules")
-	} catch(e) {
-		if(e != "invalid parameters") {
+	} catch (e) {
+		if (e != "invalid parameters") {
 			throw e
 		}
 	}
 }
 
 /**
- * If no parameters are passed, the stencils method should return all available stencils.
+ * If no parameters are passed, the stencils method should return all available
+ * stencils.
  */
 function testStencilsAll() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
 	var stencils = testStencilSet.stencils()
-	
-	assertEquals("Number elements should be equal", testStencilSet._availableStencils.size(), stencils.size())
-	stencils.each(function(stencil){
-		var equalStencil = testStencilSet._availableStencils.find(function(aStencil) {
-			return aStencil.value._jsonStencil == stencil._jsonStencil
-		} )
-		assertNotUndefined("Stencil should be there.", equalStencil)
-	})
+
+	assertEquals("Number elements should be equal",
+			testStencilSet._availableStencils.size(), stencils.size())
+	stencils.each(function(stencil) {
+				var equalStencil = testStencilSet._availableStencils.find(
+						function(aStencil) {
+							return aStencil.value._jsonStencil == stencil._jsonStencil
+						})
+				assertNotUndefined("Stencil should be there.", equalStencil)
+			})
 }
 
 /**
@@ -251,8 +334,10 @@ function testStencilsRejectAll() {
 		return false
 	}
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	var stencils = testStencilSet.stencils(testStencilSet._stencils.values()[0], rules)
-	assertTrue("No returned stencil are expected", stencils.length == 1) // there is one edge inside the test stencil set
+	var stencils = testStencilSet.stencils(
+			testStencilSet._stencils.values()[0], rules)
+	// there is one edge inside the test stencil set
+	assertTrue("No returned stencil are expected", stencils.length == 1) 
 }
 
 /**
@@ -264,14 +349,17 @@ function testStencilsAcceptAll() {
 	rules.canContain = function(arg) {
 		return true
 	}
-	
+
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	var stencils = testStencilSet.stencils(testStencilSet._stencils.values()[0], rules)
-	assertEquals("Number elements should be equal", testStencilSet._availableStencils.size()+1, stencils.size())
-	stencils.each(function(stencil){
-		var equalStencil = testStencilSet._availableStencils.find(function(aStencil) {
-			return aStencil.value._jsonStencil.id == stencil._jsonStencil.id
-		} )
+	var stencils = testStencilSet.stencils(
+			testStencilSet._stencils.values()[0], rules)
+	assertEquals("Number elements should be equal",
+			testStencilSet._availableStencils.size() + 1, stencils.size())
+	stencils.each(function(stencil) {
+		var equalStencil = testStencilSet._availableStencils.find(function(
+						aStencil) {
+					return aStencil.value._jsonStencil.id == stencil._jsonStencil.id
+				})
 		assertNotUndefined("Stencil should be there.", equalStencil)
 	})
 }
@@ -281,22 +369,22 @@ function testStencilsAcceptAll() {
  */
 function testGetNodes() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	
+
 	var nodes = testStencilSet.nodes()
-	
+
 	// SequenceFlow is the only edge in this stencil set
 	var nodeStencils = testStencilSet._availableStencils
-	nodeStencils.remove('SequenceFlow')
-	
+	nodeStencils.remove('http://b3mn.org/stencilset/testB#SequenceFlow')
+
 	assertEquals("Both sets should have the same quantity.", nodes.size(), nodeStencils.size())
-	
+
 	nodes.each(function(nodeA) {
-		var node = nodeStencils.find(function(nodeB) {
-			return nodeA == nodeB.value
-		})
-		assertNotUndefined("The node should exist.", node)
-		delete node
-	})
+				var node = nodeStencils.find(function(nodeB) {
+							return nodeA == nodeB.value
+						})
+				assertNotUndefined("The node should exist.", node)
+				delete node
+			})
 }
 
 /**
@@ -305,23 +393,24 @@ function testGetNodes() {
  */
 function testGetEdges() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	
+
 	// use #edges method to retrieve edge stencils
 	var edges = testStencilSet.edges()
-	
-	assertEquals("The SequencFlow stencil should be contained in edges.", edges[0]._jsonStencil.id, "SequenceFlow")
+
+	assertEquals("The SequencFlow stencil should be contained in edges.", edges[0]._jsonStencil.id, "http://b3mn.org/stencilset/testB#SequenceFlow")
 }
 
 /**
- * The edges method should also works well, if there are no edge available in the stencil set.
+ * The edges method should also works well, if there are no edge available in
+ * the stencil set.
  */
 function testGetEdgesNoEdges() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	testStencilSet._availableStencils.remove('SequenceFlow')
+	testStencilSet._availableStencils.remove('http://b3mn.org/stencilset/testB#SequenceFlow')
 	// Now the stencil set has no edges
-	
+
 	var edges = testStencilSet.edges()
-	
+
 	assertEquals("Edges should be empty.", edges.size(), 0)
 }
 
@@ -331,8 +420,9 @@ function testGetEdgesNoEdges() {
 function testGetStencilById() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
 	// get Diagram node
-	var stencil = testStencilSet.stencil('Diagram')
-	assertEquals("The ID of the stencil should be 'Diagram'", stencil._jsonStencil.id, 'Diagram')
+	var stencil = testStencilSet.stencil('http://b3mn.org/stencilset/testB#Diagram')
+	assertEquals("The ID of the stencil should be 'Diagram'",
+			stencil._jsonStencil.id, 'http://b3mn.org/stencilset/testB#Diagram')
 }
 
 /**
@@ -340,9 +430,9 @@ function testGetStencilById() {
  */
 function testGetStencilByIdNotExists() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	
+
 	var stencil = testStencilSet.stencil('notexists')
-	assertUndefined('No stencil should be returned.',stencil)
+	assertUndefined('No stencil should be returned.', stencil)
 }
 
 /**
@@ -351,7 +441,7 @@ function testGetStencilByIdNotExists() {
 function testGetNamespace() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
 	var namespace = testStencilSet.namespace()
-	
+
 	assertEquals("Check namespace of testStencilSet", namespace, "http://b3mn.org/stencilset/testB#")
 }
 
@@ -361,7 +451,7 @@ function testGetNamespace() {
 function testGetJSONRules() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
 	var rules = testStencilSet.jsonRules()
-	
+
 	assertNotUndefined('ContainmentRules should exist.', rules.containmentRules)
 	assertNotUndefined('ConnectionRules should exist.', rules.connectionRules)
 }
@@ -379,10 +469,11 @@ function testGetSource() {
  */
 function testGetExtensions() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	
+
 	// Should return an empty hash.
-	assertTrue("Should be an instance of hash", testStencilSet.extensions() instanceof Hash )
-	assertEquals("At the moment there should not be any extensions",testStencilSet.extensions().size(), 0)
+	assertTrue("Should be an instance of hash",
+			testStencilSet.extensions() instanceof Hash)
+	assertEquals("At the moment there should not be any extensions", testStencilSet.extensions().size(), 0)
 }
 
 /**
@@ -390,26 +481,69 @@ function testGetExtensions() {
  */
 function testLoadStencilSetExtension() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	testStencilSet.addExtension("StencilSetExtention")
-	
+	testStencilSet.addExtension("StencilSetExtension")
+
 	assertNotUndefined("The 'TestStencilSetExtension' should exist.", testStencilSet.extensions()["http://testStencilSetExtension#"])
 }
 
 /**
- * Test, that the namespace of the extended stencil set ends with a '#' is assured.
+ * Test, that the namespace of the extended stencil set ends with a '#' is
+ * assured.
  */
 function testExtensionExtendNamespaceEndWithPoundSign() {
 	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
-	testStencilSet.addExtension("StencilSetExtentionWithoutNamespace#")
-	
+	testStencilSet.addExtension("StencilSetExtensionWithoutNamespace#")
+
 	// pound sign at the end should be assured
 	var extends = testStencilSet.extensions()["http://testStencilSetExtension#"].extends
 	assertEquals("Pound sign should be added at the end.", extends, "http://b3mn.org/stencilset/testB#")
-	
 }
 
 /**
- * 
+ * If namespace defined under extends inside the extension does not match the
+ * stencil set's namespace, the stencil set extension should be ignored.
  */
+function testNotMatchingNamespace() {
+	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
+	testStencilSet.addExtension("StencilSetExtensionNotMatchingNamespace")
 
+	var extension = testStencilSet.extensions()["http://testStencilSetExtension#"]
+	assertUndefined("The stencil set extension must not been added to the extension Hash-Map",extension)
+}
 
+/**
+ * Test it with an invalid extension. An error should be thrown.
+ */
+function testFailForInvalidExtension() {
+	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
+	testStencilSet.addExtension("StencilSetExtensionInvalid")
+
+	var message = "StencilSet.addExtension: Something went wrong when initialising the stencil set extension. TypeError: jsonExtension.extends is undefined"
+	assertEquals("Validate error message", message, ORYX.Log.debugInfo)
+}
+
+/**
+ * This test tries to a new stencil to the stencil set over a stencil set
+ * extension.
+ */
+function testAddNewStencil() {
+	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
+	testStencilSet.addExtension("StencilSetExtensionNewStencil")
+
+	// check if the new stencil was added
+
+	assertNotUndefined("The new stencil should been added.", testStencilSet.stencil("http://b3mn.org/stencilset/testB#newStencil"))
+}
+
+/**
+ * This test uses the possibility to add properties packages to some stencils
+ * and verify if they were only added to the stencils "Service1" and "Service2"
+ */
+function testAddPropertyPackageOverExtension() {
+	var testStencilSet = new ORYX.Core.StencilSet.StencilSet("TestStencilSet")
+	testStencilSet.addExtension("StencilSetExtensionNewProperties")
+
+	assertNotUndefined("Now the new property should exist for Service1",
+			testStencilSet.stencil("http://b3mn.org/stencilset/testB#Service1").property("testExtensionProp"))
+
+}
