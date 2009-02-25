@@ -214,103 +214,6 @@
 		},
  		{
 			"type": "node",
-			"id":"EmptyTransition",
-			"title":"Empty Transition",
-			"groups":[],
-			"description":"An empty transition",
-			"view":"node.transition.empty.svg",
-			"icon":"new_transition_empty.png",
-			"roles": [
-				"transition",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},			
-				{
-					"id":"title",
-					"type":"String",
-					"title":"Title",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":"",
-					"wrapLines":true
-				},
-				{
-					"id":"firetype",
-					"type":"String",
-					"title":"Fire type",
-					"value":"Automatic",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-				},			
-				{
-					"id":"href",
-					"type":"String",
-					"title":"Href",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"",
-					"wrapLines":true
-				},
-				{
-					"id":"omodel",
-					"type":"String",
-					"title":"Output model",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"",
-					"wrapLines":true
-				},
-				{
-					"id":"oform",
-					"type":"String",
-					"title":"Output form",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"",
-					"wrapLines":true
-				},
-				{
-					"id":"guard",
-					"type":"String",
-					"title":"Guard",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				}					
-			]
-		},
- 		{
-			"type": "node",
 			"id":"VerticalEmptyTransition",
 			"title":"Empty Transition",
 			"groups":[],
@@ -442,6 +345,43 @@
 					"refToView":"text",
 					"length":""
 				},
+                {
+                    "id":"numberOfTokens",
+                    "type":"Choice",
+                    "title":"# Tokens",
+                    "title_de":"# Tokens",
+                    "value":"0",
+                    "description":"",
+                    "readonly":false,
+                    "optional":false,
+                    "refToView":"",
+                    "items": [
+                        {
+                            "id":"0",
+                            "title":"0",
+                            "value":"0",
+                            "refToView":"numTokens0"
+                        },
+                        {
+                            "id":"1",
+                            "title":"1",
+                            "value":"1",
+                            "refToView":"numTokens1"
+                        },
+                        {
+                            "id":"2",
+                            "title":"2",
+                            "value":"2",
+                            "refToView":"numTokens2"
+                        },
+                        {
+                            "id":"3",
+                            "title":"3",
+                            "value":"3",
+                            "refToView":"numTokens3"
+                        }
+                    ]
+                },
 				{
 					"id":"external",
 					"type":"Boolean",
@@ -521,80 +461,6 @@
 			]
 		},
 		{
-			"type": "node",
-			"id":"Mark",
-			"title":"Mark",
-			"groups":[],
-			"description":"A mark.",
-			"view":"node.mark.svg",
-			"icon":"new_mark.png",
-			"intersectionType":"ellipse",			
-			"roles": [
-				"mark"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},		
-				{
-					"id":"text",
-					"type":"String",
-					"title":"Text",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":""
-				}
-			]
-		},
-		{
-			"type": "node",
-			"id":"Label",
-			"title":"Label",
-			"groups":[],
-			"description":"A text node. Can be attached to marks.",
-			"view":"node.text.svg",
-			"icon":"new_annotation.png",
-			"roles": [
-				"text_node",
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},					
-				{
-					"id":"label",
-					"type":"String",
-					"title":"Label",
-					"value":"[]",
-					"description":"allowed: (a,new)/[new,a]/a",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":"40",
-					"wrapLines":true
-				}
-			]
-		},
-		{
 			"type": "edge",
 			"id":"Arc",
 			"title":"Arc",
@@ -640,43 +506,7 @@
 					"length":""
 				}								
 			]
-		},
-		{
-			"type": "edge",
-			"id":"Description",
-			"title":"Description",
-			"description":"line for a description",
-			"groups":[],
-			"view":"connection.annotation.svg",
-			"icon":"new_flow_annotation.png",
-			"roles": [
-				"fromtoall"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},					
-				{
-					"id":"label",
-					"type":"String",
-					"title":"value",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":""
-				}
-			]
-		},
+		}
 	],	
 	"rules": {
 		"connectionRules": [
@@ -692,19 +522,6 @@
 						"to":["transition"]
 					},
 				]
-			},
-			{
-				"role":"Description",
-				"connects": [
-					{
-						"from":"mark",
-						"to":["text_node"]
-					},
-					{
-						"from":"text_node",
-						"to":["mark"]
-					},	
-				]				
 			}	
 		],
 		"containmentRules": [
@@ -713,12 +530,6 @@
 				"contains": [
 					"fromtoall"
 				]
-			},
-			{
-				"role":"place",
-				"contains": [
-					"mark"
-				]	
 			},
 		]
 	}

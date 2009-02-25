@@ -76,6 +76,7 @@
                 <span class="oryx-title"></span>
                 <span class="oryx-href"></span>
                 <span class="oryx-bounds">$place.getBounds().toString()</span>
+                <span class="oryx-numberoftokens">$marking.getNumTokens($place)</span>
                 #foreach( $arc in $place.getOutgoingFlowRelationships() )
                     <a rel="raziel-outgoing" href="#$arc.getId()"/>
                 #end

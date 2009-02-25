@@ -47,6 +47,7 @@ public class PetriNeteRDFSerializer {
 	        context.put("nopTransitions", nopTransitions);
 	        context.put("places", petrinet.getPlaces());
 	        context.put("arcs", petrinet.getFlowRelationships());
+	        context.put("marking", petrinet.getInitialMarking());
 	        
 	        /* now render the template into a StringWriter */
 	        StringWriter writer = new StringWriter();
