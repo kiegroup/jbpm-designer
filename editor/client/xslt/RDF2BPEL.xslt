@@ -1822,21 +1822,22 @@
 						</xsl:attribute>
 					</xsl:if>					
 					
-					<xsl:if test="$transCond_expLang!=''">
-						<xsl:attribute name="transCond_expLang">
-							<xsl:value-of select="$transCond_expLang" />
-						</xsl:attribute>
-					</xsl:if>
+					<transitionCondition>
+						<xsl:if test="$transCond_expLang!=''">
+							<xsl:attribute name="transCond_expLang">
+								<xsl:value-of select="$transCond_expLang" />
+							</xsl:attribute>
+						</xsl:if>
 					
-					<xsl:if test="$transCond_boolExp!=''">
-						<xsl:attribute name="transCond_boolExp">
-							<xsl:value-of select="$transCond_boolExp" />
-						</xsl:attribute>
-					</xsl:if>
-					
-					<xsl:if test="$transCond_opaque='true'">
-						<xsl:attribute name="transCond_opaque">yes</xsl:attribute>
-					</xsl:if>
+						<xsl:if test="$transCond_boolExp!=''">
+								<xsl:value-of select="$transCond_boolExp" />
+						</xsl:if>
+						
+						<xsl:if test="$transCond_opaque='true'">
+							<xsl:attribute name="transCond_opaque">yes</xsl:attribute>
+						</xsl:if>
+					</transitionCondition>
+	
 				</linkInfoSet>	
 			</xsl:if>
 		</xsl:for-each>	

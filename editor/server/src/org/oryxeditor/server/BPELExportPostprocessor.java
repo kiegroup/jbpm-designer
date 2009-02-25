@@ -187,18 +187,9 @@ public class BPELExportPostprocessor {
 			String id = link.getAttribute("id");
 			String linkName = link.getAttribute("linkName");
 			String targetID = link.getAttribute("targetID");
-			String transCond_expLang = link.getAttribute("transCond_expLang");
-			String transCond_boolExp = link.getAttribute("transCond_boolExp");
-			String transCond_opaque = link.getAttribute("transCond_opaque");
 			
-			Element transitionCondition = currentNode.getOwnerDocument()
-							.createElement("transitionCondition");
-			transitionCondition.setAttribute("expressionLanguage", transCond_expLang);
-			transitionCondition.setNodeValue(transCond_boolExp);
-			if (transCond_opaque.equals("yes")){
-				transitionCondition.setAttribute("opaque", "yes");
-			}
-			
+			Element transitionCondition = getChildElementWithNodeName(link, 
+					"transitionCondition", false);
 			// right now we don't know the source node id yet, so we set the first item "null"
 			linksMap.put(id, new Object[]{null, targetID, linkName, transitionCondition});
 			
