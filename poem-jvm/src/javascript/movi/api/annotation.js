@@ -63,7 +63,7 @@ MOVI.namespace("util");
 					   	"<div class=\"" + _BUBBLE_LL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_LR_CLASS_NAME + "\">" + 
 					    	"<div class=\"" + _BUBBLE_BORDERTOP_CLASS_NAME + "\"></div>" +
 					   		"<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
-								"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\" />" +
+								"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\"></div>" +
 					        	content +
 					        "</div>" +
 					        "<div class=\"" + _BUBBLE_BORDERBOTTOM_CLASS_NAME + "\"></div>" +
