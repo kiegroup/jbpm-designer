@@ -81,25 +81,26 @@ ORYX.Plugins.BPMNImport = Clazz.extend({
      * Loads rdf of given bpmn url
      */
     importBpmn: function(){
+        var importBPMNUrl = this.getParamFromUrl("importBPMN");
+        
+        if(!importBPMNUrl) return; //return if no model to import is given
+        
         Ext.Msg.progress(ORYX.I18N.BPMN2PNConverter.progress.status, 
                          ORYX.I18N.BPMN2PNConverter.progress.importingModel
         );
         Ext.Msg.updateProgress(0.33, ORYX.I18N.BPMN2PNConverter.progress.fetchingModel);
         
-        var importBPMNUrl = this.getParamFromUrl("importBPMN");
-        if (importBPMNUrl) {
-            Ext.Ajax.request({
-                url: this.getRdfUrl(importBPMNUrl),
-                success: function(request){
-                    var bpmnRdf = request.responseText;
-                    this.bpmnToPn(bpmnRdf);
-                }.createDelegate(this),
-                failure: function(request){
-                    Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.noRights)
-                },
-                method: "GET"
-            })
-        }
+        Ext.Ajax.request({
+            url: this.getRdfUrl(importBPMNUrl),
+            success: function(request){
+                var bpmnRdf = request.responseText;
+                this.bpmnToPn(bpmnRdf);
+            }.createDelegate(this),
+            failure: function(request){
+                Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.noRights)
+            },
+            method: "GET"
+        })
     },
     
     /**
