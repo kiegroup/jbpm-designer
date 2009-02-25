@@ -75,6 +75,7 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 		
 		//get current DOM content
 		var serializedDOM = DataManager.__persistDOM(this.facade);
+
 		//add namespaces
 		serializedDOM = '<?xml version="1.0" encoding="utf-8"?>' +
 		'<html xmlns="http://www.w3.org/1999/xhtml" ' +
@@ -97,6 +98,8 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 		//convert to RDF
 		var parser = new DOMParser();
 		var parsedDOM = parser.parseFromString(serializedDOM, "text/xml");
+		parsedDOM.normalize();
+		
 		var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
 		var xsltProcessor = new XSLTProcessor();
 		var xslRef = document.implementation.createDocument("", "", null);
