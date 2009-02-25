@@ -31,18 +31,10 @@ if (!ORYX.Plugins)
    @extends ORYX.Plugins.AbstractPlugin
 */
 ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
-    
     /**@private*/
     construct: function(){
         arguments.callee.$.construct.apply(this, arguments);
-        
-        /** 
-         * Returns the syntax checker instatiated by Oryx. This can be used to interact
-         * with syntax checker from other plugins.
-         * @memberOf ORYX.Plugins.SyntaxChecker
-         */
-        ORYX.Plugins.SyntaxChecker.instance = this;
-        
+                
         this.active = false;
         this.raisedEventIds = [];
         
@@ -57,6 +49,10 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             'minShape': 0,
             'maxShape': 0
         });
+        
+        this.facade.registerOnEvent(ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT, this.checkForErrors.bind(this));
+        this.facade.registerOnEvent(ORYX.Plugins.SyntaxChecker.RESET_ERRORS_EVENT, this.resetErrors.bind(this));
+        this.facade.registerOnEvent(ORYX.Plugins.SyntaxChecker.SHOW_ERRORS_EVENT, this.doShowErrors.bind(this));
     },
     
     perform: function(button, pressed){
@@ -130,6 +126,15 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         });
     },
     
+    /** Called on SHOW_ERRORS_EVENT.
+     * 
+     * @param {Object} event
+     * @param {Object} args
+     */
+    doShowErrors: function(event, args){
+        this.showErrors(event.errors);
+    },
+    
     /**
      * Shows overlays for each given error
      * @methodOf ORYX.Plugins.SyntaxChecker.prototype
@@ -196,3 +201,8 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         return cross;
     }
 });
+
+// Define the events
+ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT = "checkForErrors";
+ORYX.Plugins.SyntaxChecker.RESET_ERRORS_EVENT = "resetErrors";
+ORYX.Plugins.SyntaxChecker.SHOW_ERRORS_EVENT = "showErrors";

@@ -138,13 +138,15 @@ ORYX.Plugins.PNExport = Clazz.extend({
             Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.notSaved);
             return;
         }
-        ORYX.Plugins.SyntaxChecker.instance.resetErrors();
-        ORYX.Plugins.SyntaxChecker.instance.checkForErrors({
+        
+        this.facade.raiseEvent({type: ORYX.Plugins.SyntaxChecker.RESET_ERRORS_EVENT});
+        this.facade.raiseEvent({
+            type: ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT,
             context: "bpmn2pn",
             onNoErrors: function(){
                 this.openPetriNetEditor();
             }.bind(this)
-        })
+        });
     },
     
     /**
