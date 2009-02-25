@@ -130,65 +130,65 @@ MOVI.namespace("widget");
 	     * Callback that is executed when the model is finished
 		 * loading.
 	     * @method _onSuccess
-	 	 * @param {Object} obj The transaction object
 		 * @private
 	     */
 		_onSuccess: function() {
 			MOVI.log("Model loaded successfully.", "info");
+			var scope = this._loadOptions.scope || window;
 			if(this._loadOptions.onSuccess)
-				this._loadOptions.onSuccess(this);
+				this._loadOptions.onSuccess.call(scope, this);
 		},
 		
 		/**
 	     * Callback for handling model load failures.
 	     * @method _onLoadFailure
-		 * @param {Object} obj The transaction object
 		 * @private
 	     */
-		_onLoadFailure: function(obj) {
+		_onLoadFailure: function() {
 			MOVI.log("Could not load model.", "error", "modelviewer.js");
-			if(obj.data.onFailure)
-				obj.data.onFailure(this);
+			var scope = this._loadOptions.scope || window;
+			if(this._loadOptions.onFailure)
+				this._loadOptions.onFailure.call(scope, this);
 		},
 		
 		/**
 	     * Callback for handling model load timeouts.
 	     * @method _onLoadTimeout
-		 * @param {Object} obj The transaction object
 		 * @private
 	     */
-		_onLoadTimeout: function(obj) {
+		_onLoadTimeout: function() {
 			MOVI.log("A timeout occured while trying to load model.", "error", "modelviewer.js");
-			if(obj.data.onTimeout)
-				obj.data.onTimeout(this);
-			else if(obj.data.onFailure)
-				obj.data.onFailure(this);
+			var scope = this._loadOptions.scope || window;
+			if(this._loadOptions.onTimeout)
+				this._loadOptions.onTimeout.call(scope, this);
+			else if(this._loadOptions.onFailure)
+				this._loadOptions.onFailure.call(scope, this);
 		},
 		
 		/**
 	     * Callback for handling stencil set load failures.
 	     * @method _onStencilSetLoadFailure
-		 * @param {Object} obj The transaction object
 		 * @private
 	     */
-		_onStencilSetLoadFailure: function(obj) {
+		_onStencilSetLoadFailure: function() {
 			MOVI.log("Could not load stencil set for model.", "error", "modelviewer.js");
-			if(obj.data.onFailure)
-				obj.data.onFailure(this);
+			var scope = this._loadOptions.scope || window;
+			if(this._loadOptions.onFailure)
+				this._loadOptions.onFailure.call(scope, this);
 		},
 		
 		/**
 	     * Callback for handling stencil set load timeouts.
 	     * @method _onStencilSetLoadTimeout
-		 * @param {Object} obj The transaction object
 		 * @private
 	     */
-		_onStencilSetLoadTimeout: function(obj) {
+		_onStencilSetLoadTimeout: function() {
 			MOVI.log("A timeout occured while trying to load stencil set for model.", "error", "modelviewer.js");
-			if(obj.data.onTimeout)
-				obj.data.onTimeout(this);
-			else if(obj.data.onFailure)
-				obj.data.onFailure(this);
+			var scope = this._loadOptions.scope || window;
+			if(this._loadOptions.onTimeout)
+				this._loadOptions.onTimeout.call(scope, this);
+			else if(this._loadOptions.onFailure)
+				this._loadOptions.onFailure.call(scope, this);
 		},
 
 		/**
@@ -214,6 +214,8 @@ MOVI.namespace("widget");
 		 * the onFailure callback will be executed on timeout.
          * The callback receives the ModelViewer instance back.
          * </dd>
+ 		 * <dt>scope</dt>
+		 * <dd>The execution scope for the callbacks.</dd>
  	 	 * <dt>timeout</dt>
          * <dd>
          * Number of milliseconds to wait before aborting the loading
@@ -243,7 +245,6 @@ MOVI.namespace("widget");
 			var transactionObj = YAHOO.util.Get.script(url, {
 				onFailure: this._onLoadFailure, 
 				onTimeout: this._onLoadTimeout,
-				data	 : this._loadOptions, 
 				timeout  : this._loadOptions.timeout,
 				scope    : this
 			});
@@ -302,7 +303,6 @@ MOVI.namespace("widget");
 			this.canvas.stencilset = new MOVI.stencilset.Stencilset(jsonObj);
 			this.canvas = new MOVI.model.Canvas(this, this.canvas);
 			this._scrollbox.appendChild(this.canvas);
-
 			this._onSuccess();
 		},
 		

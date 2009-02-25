@@ -68,6 +68,8 @@ MOVI.namespace("util");
 			
 		}
 		
+		modelviewer.canvas.addListener("click", this.reset, null, this, true)
+		
 		this._selectionMarker = new Marker();
 		this._selectionMarker.setRectClassName(_SELECT_RECT_CLASS_NAME);
 		this._selectionMarker.show();
@@ -201,6 +203,8 @@ MOVI.namespace("util");
 		 * @method reset
 		 */
 		reset: function() {
+			if(this.getSelectedShapes().length==0)
+				return;
 			this._reset();
 			this._selectionChangedCallback(this.getSelectedShapes(), this._selectionMarkers);
 		},

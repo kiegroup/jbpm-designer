@@ -25,16 +25,20 @@ MOVI.namespace("util");
 
 (function() {
 	
-	var _BUBBLE_VISIBLE_CLASS_NAME = "movi-bubble-visible",
-		_BUBBLE_HIDDEN_CLASS_NAME = "movi-bubble-hidden",
-		_BUBBLE_UL_CLASS_NAME = "movi-bubble-ul",
-		_BUBBLE_UR_CLASS_NAME = "movi-bubble-ur",
-		_BUBBLE_LL_CLASS_NAME = "movi-bubble-ll",
-		_BUBBLE_LR_CLASS_NAME = "movi-bubble-lr",
-		_BUBBLE_BORDERTOP_CLASS_NAME = "movi-bubble-bt",
-		_BUBBLE_BORDERBOTTOM_CLASS_NAME = "movi-bubble-bb",
-		_BUBBLE_ARROW_CLASS_NAME = "movi-bubble-ar",
-		_BUBBLE_CONTENT_CLASS_NAME = "movi-bubble-bc";
+	var _BUBBLE_VISIBLE_CLASS_NAME 		= "movi-bubble-visible",
+		_BUBBLE_HIDDEN_CLASS_NAME 		= "movi-bubble-hidden",
+		_BUBBLE_UL_CLASS_NAME 			= "movi-bubble-ul",
+		_BUBBLE_UR_CLASS_NAME 			= "movi-bubble-ur",
+		_BUBBLE_LL_CLASS_NAME 			= "movi-bubble-ll",
+		_BUBBLE_LR_CLASS_NAME 			= "movi-bubble-lr",
+		_BUBBLE_BORDERTOP_CLASS_NAME 	= "movi-bubble-bt",
+		_BUBBLE_BORDERBOTTOM_CLASS_NAME	= "movi-bubble-bb",
+		_BUBBLE_ARROW_CLASS_NAME 		= "movi-bubble-ar",
+		_BUBBLE_CONTENT_CLASS_NAME	 	= "movi-bubble-bc",
+		_BUBBLE_CLOSEBUTTON_CLASS_NAME 	= "movi-bubble-closebutton"
+		
+	var Event	= YAHOO.util.Event,
+		Element	= YAHOO.util.Element;
 	
 	/**
      * Create the host element.
@@ -59,6 +63,7 @@ MOVI.namespace("util");
 					   	"<div class=\"" + _BUBBLE_LL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_LR_CLASS_NAME + "\">" + 
 					    	"<div class=\"" + _BUBBLE_BORDERTOP_CLASS_NAME + "\"></div>" +
 					   		"<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
+								"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\" />" +
 					        	content +
 					        "</div>" +
 					        "<div class=\"" + _BUBBLE_BORDERBOTTOM_CLASS_NAME + "\"></div>" +
@@ -76,7 +81,7 @@ MOVI.namespace("util");
      * @extends YAHOO.util.Element
      * @constructor
 	 * @param {Marker} marker The Marker to attach the Annotation to
-	 * @param {String} content The Annotation's inner XHTML content 
+	 * @param {String} content The Annotation's inner HTML content 
      */
     MOVI.util.Annotation = function(marker, content) {
 	
@@ -96,22 +101,28 @@ MOVI.namespace("util");
 		
 		_createBubble.call(this, content);
 		
-		this._content = new YAHOO.util.Element(
+		this._content = new Element(
 			this.getElementsByClassName(_BUBBLE_CONTENT_CLASS_NAME)[0]);
 		
 		// attach to marker
-		var appended = false;
 		for(key in marker.shapeRects) {
 			var rect = marker.shapeRects[key];
-			
-			if(!appended) { // only append to first shape rect of the marker
-				rect.appendChild(this);
-				appended = true;
-			}
+			rect.appendChild(this);
+			break;
 		}
+		
+		this._marker = marker;
+		
+		(new Element(this.getElementsByClassName(_BUBBLE_CLOSEBUTTON_CLASS_NAME)[0]))
+			.addListener("click", this._close, this, this);
+		
+		// don't bubble mouse events on annotations
+		this.addListener("mouseover", function(ev) { Event.stopPropagation(ev) });
+		this.addListener("mouseout", function(ev) { Event.stopPropagation(ev) });
+		this.addListener("click", function(ev) { Event.stopPropagation(ev) });
 	}
 
-	MOVI.extend(MOVI.util.Annotation, YAHOO.util.Element, {
+	MOVI.extend(MOVI.util.Annotation, Element, {
 		
 		/**
 		 * The Element containing the specified content as inner HTML.
@@ -120,6 +131,37 @@ MOVI.namespace("util");
 		 * @private
 		 */
 		_contentElement: null,
+		
+		/**
+		 * The marker that the annotation is attached to
+		 * @property _marker
+		 * @type Marker
+		 * @private
+		 */
+		_marker: null,
+		
+		/**
+		 * The callback that is executed when the annotation bubble is closed
+		 * @property _closeCallback
+		 * @type Object
+		 * @private
+		 */
+		_closeCallback: null,
+		
+		/**
+	     * Callback that is executed when the close button is clicked
+	     * @method _onClose
+		 * @private
+	     */
+		_close: function() {
+			this.hide();
+			if(this._closeCallback) {
+				this._closeCallback.callback.call(
+					this._closeCallback.callback.scope,
+					this._closeCallback.callback.data
+				);
+			}
+		},
 		
 		/**
 	     * Show the annotation bubble
@@ -135,6 +177,22 @@ MOVI.namespace("util");
 	     */
 		hide: function() {
 			this.set("className", _BUBBLE_HIDDEN_CLASS_NAME);
+		},
+		
+		/**
+	     * Specfiy a callback that is executed when the annotation bubble is
+		 * closed using the close button
+	     * @method onClose
+		 * @param {Function} callback The callback function
+		 * @param {Any} data The variable to pass to the callback function
+		 * @param {Object} scope The object to use as the scope for the callback
+	     */
+		onClose: function(callback, data, scope) {
+			this._closeCallback = {
+				callback: callback,
+				data: data,
+				scope: scope
+			};
 		}
 		
 	});

@@ -92,6 +92,14 @@
 	border-right: 2px solid #777777;	
 }
 
+.movi-bubble-closebutton {
+	position: absolute;
+	right: 4px; top: 5px;
+	width: 10px; height: 10px;
+	background: url('../img/bubble-closebutton.gif') no-repeat 0 0;
+	cursor: pointer;
+}
+
 
 /* MOVI ModelNavigator styles */
 
