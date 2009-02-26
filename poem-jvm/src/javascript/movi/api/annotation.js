@@ -180,6 +180,14 @@ MOVI.namespace("util");
 		},
 		
 		/**
+	     * Remove the element from the DOM
+	     * @method remove
+	     */
+		remove: function() {
+			this.get("element").parentNode.removeChild(this.get("element"));
+		},
+		
+		/**
 	     * Specfiy a callback that is executed when the annotation bubble is
 		 * closed using the close button
 	     * @method onClose

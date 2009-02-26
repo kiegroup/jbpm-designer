@@ -252,7 +252,21 @@ this._shapes = {};
 	     */
 		hide: function() {
 			this.setRectStyle("display", "none");
-		}
+		},
+		
+		/**
+	     * Remove the marker elements from the DOM
+	     * @method remove
+	     */
+		remove: function() {
+			for(i in this._shapes) {
+				var rect = this.shapeRects[i];
+				rect.get("element").parentNode.removeChild(rect.get("element"));
+				delete this._shapes[i];
+				delete this.shapeRects[i];
+			}
+			
+		},
 		
 	}
 	
