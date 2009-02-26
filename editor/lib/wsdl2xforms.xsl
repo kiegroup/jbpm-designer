@@ -106,9 +106,11 @@
 <xsl:template match="wsdl:portType/wsdl:operation" mode="activate">
   <xsl:param name="formname" tunnel="yes"/>
   <!-- When output instance has been populated from request body, then activate response form, instead of request form. -->
+ <xhtml:div class="form_row"> 
   <xforms:toggle case="{$formname}.request" events:event="xforms-ready" if="not(boolean(instance('{$formname}.output')/SOAP-ENV:Body))"/>
   <xforms:toggle case="{$formname}.response" events:event="xforms-ready" if="boolean(instance('{$formname}.output')/SOAP-ENV:Body)"/>
-</xsl:template>
+ </xhtml:div>
+/xsl:template>
 
 <!-- Instance generation. -->
 
@@ -426,9 +428,11 @@
 
 <xsl:template match="wsdl:portType/wsdl:operation" mode="form">
   <xsl:if test="$debug"><xsl:message select="concat('form: ', name(), ', ', @name)"/></xsl:if>
+ <xhtml:div class="form_row"> 
   <xforms:switch>
     <xsl:apply-imports/>
   </xforms:switch>
+ </xhtml:div>
 </xsl:template>
 
 <xsl:template match="wsdl:input" mode="form">
@@ -445,6 +449,7 @@
 <xsl:template match="wsdl:input" mode="form-actions">
   <xsl:param name="formname" tunnel="yes"/>
   <xsl:if test="$debug"><xsl:message select="concat('form-actions: ', name(), ', ', @message)"/></xsl:if>
+ <xhtml:div class="form_row"> 
   <xforms:submit submission="{$formname}.submission">
     <xsl:apply-templates select="." mode="form-submit"/>
   </xforms:submit>
@@ -453,6 +458,7 @@
       <xforms:label>Debug</xforms:label>
     </xforms:submit>
   </xsl:if>
+ </xhtml:div>
 </xsl:template>
 
 <xsl:template match="wsdl:input" mode="form-submit">
@@ -467,22 +473,27 @@
   <xforms:case id="{$formname}.response">
     <xsl:apply-imports/>
     <xsl:apply-templates select="." mode="form-fault"/>
+   <xhtml:div class="form_row">
     <xforms:group class="actions">
       <xsl:apply-templates select="." mode="form-actions"/>
     </xforms:group>
+   </xhtml:div>
   </xforms:case>
 </xsl:template>
 
 <xsl:template match="wsdl:output" mode="form-fault">
   <xsl:param name="formname" tunnel="yes" />
+ <xhtml:div class="form_row"> 
   <xforms:group ref="{concat('instance(''', $formname, '.output'')')}/SOAP-ENV:Body/SOAP-ENV:Fault" class="fault">
     <xforms:output ref="faultstring"/>
   </xforms:group>
+ </xhtml:div>
 </xsl:template>
 
 <xsl:template match="wsdl:output" mode="form-actions">
   <xsl:param name="formname" tunnel="yes"/>
   <xsl:if test="$debug"><xsl:message select="concat('form-actions: ', name(), ', ', @message)"/></xsl:if>
+ <xhtml:div class="form_row"> 
   <xforms:trigger>
     <xsl:apply-templates select="." mode="form-again"/>
     <xforms:toggle events:event="DOMActivate" case="{$formname}.request"/>
@@ -492,6 +503,7 @@
       <xforms:label>Show XML</xforms:label>
     </xforms:submit>
   </xsl:if>
+ </xhtml:div>
 </xsl:template>
 
 <xsl:template match="wsdl:output" mode="form-again">
@@ -510,6 +522,7 @@
   <xsl:variable name="namespace" select="namespace-uri-from-QName($qname)"/-->
   <xsl:variable name="ref" select="concat('instance(''', $formname, '.', $formtype, ''')/SOAP-ENV:Body/', $tnsprefix, ':', if ($message) then $message else @name)"/>
   <!-- Assume message is in target namespace. -->
+ <xhtml:div class="form_row">
   <xforms:group ref="{$ref}">
     <xsl:apply-imports>
       <xsl:with-param name="parentref" select="$ref" tunnel="yes"/>
@@ -517,6 +530,7 @@
       <xsl:with-param name="root" tunnel="yes"/>
     </xsl:apply-imports>
   </xforms:group>
+ </xhtml:div>
 </xsl:template>
 
 <xsl:template match="wsdl:part" mode="form">

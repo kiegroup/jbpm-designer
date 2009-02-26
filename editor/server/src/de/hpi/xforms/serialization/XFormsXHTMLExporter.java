@@ -31,6 +31,10 @@ public class XFormsXHTMLExporter {
 		super();
 		this.form = form;
 		
+		this.form.getNSDeclarations().remove(""); // using empty prefix can sometimes cause problems
+		
+		if(!this.form.getNSDeclarations().containsValue("http://www.w3.org/1999/xhtml"))
+			this.form.getNSDeclarations().put("xhtml", "http://www.w3.org/1999/xhtml");
 		if(!this.form.getNSDeclarations().containsValue("http://www.w3.org/2002/xforms"))
 			this.form.getNSDeclarations().put("xf", "http://www.w3.org/2002/xforms");
 		if(!this.form.getNSDeclarations().containsValue("http://www.w3.org/2001/xml-events"))
@@ -58,8 +62,8 @@ public class XFormsXHTMLExporter {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			doc = builder.newDocument();
 			
-			Element html = doc.createElementNS("http://www.w3.org/1999/xhtml", "html");
-			html.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+			Element html = doc.createElementNS("http://www.w3.org/1999/xhtml", 
+					nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":html");
 			
 			for(String prefix : this.form.getNSDeclarations().keySet()) {
 				html.setAttribute("xmlns:" + prefix, this.form.getNSDeclarations().get(prefix));
@@ -119,16 +123,19 @@ public class XFormsXHTMLExporter {
 			modifyHead(form.getHead());
 		} else {
 			Element head = (Element) html.appendChild(
-					doc.createElementNS("http://www.w3.org/1999/xhtml", "head"));
+					doc.createElementNS("http://www.w3.org/1999/xhtml", 
+							nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":head"));
 			generateHead(cssUrl, head);
 		}
 	}
 	
 	private void modifyHead(Element head) {
-		if(head.getElementsByTagName("title").getLength()>0) {
-			head.getElementsByTagName("title").item(0).setTextContent(form.getAttributes().get("name"));
+		if(head.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "title").getLength()>0) {
+			head.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "title").item(0).setTextContent(form.getAttributes().get("name"));
 		} else {
-			Element title = (Element) head.appendChild(doc.createElement("title"));
+			Element title = (Element) head.appendChild(
+					doc.createElementNS("http://www.w3.org/1999/xhtml", 
+							nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":title"));
 			title.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
 			head.appendChild(title);
 		}
@@ -174,11 +181,13 @@ public class XFormsXHTMLExporter {
 	}
 
 	private void generateHead(String cssUrl, Element head) {
-		Element title = (Element) head.appendChild(doc.createElement("title"));
+		Element title = (Element) head.appendChild(
+				doc.createElementNS("http://www.w3.org/1999/xhtml", 
+						nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":title"));
 		title.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
 		
 		Element link = (Element) head.appendChild(
-				doc.createElementNS("http://www.w3.org/1999/xhtml", "link"));
+				doc.createElementNS("http://www.w3.org/1999/xhtml", nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":link"));
 		link.setAttribute("rel", "stylesheet");
 		link.setAttribute("media", "screen");
 		link.setAttribute("href", cssUrl);
@@ -207,11 +216,11 @@ public class XFormsXHTMLExporter {
 	
 	private void addBody(Element html) {
 		Element body = (Element) html.appendChild(
-			doc.createElementNS("http://www.w3.org/1999/xhtml", "body"));
+			doc.createElementNS("http://www.w3.org/1999/xhtml", nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":body"));
 		String formName = form.getAttributes().get("name");
 		if(formName!=null) {
 			Element headline = (Element) body.appendChild(
-					doc.createElementNS("http://www.w3.org/1999/xhtml", "h1"));
+					doc.createElementNS("http://www.w3.org/1999/xhtml", nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":h1"));
 			headline.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
 		}
 		
@@ -221,7 +230,7 @@ public class XFormsXHTMLExporter {
 		for(XFormsUIElement element : form.getChildElements()) {
 			if(element.getYPosition() > lastYPosition) {
 				// next row
-				rowDiv = (Element) doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
+				rowDiv = (Element) doc.createElementNS("http://www.w3.org/1999/xhtml", nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":div");
 				rowDiv.setAttribute("class", "form_row");
 				body.appendChild(rowDiv);
 				lastYPosition = element.getYPosition();
@@ -258,7 +267,7 @@ public class XFormsXHTMLExporter {
 			for(XFormsUIElement xfChild : ((UIElementContainer) xfElement).getChildElements()) {
 				if(xfChild.getYPosition() > lastYPosition) {
 					// next row
-					rowDiv = (Element) doc.createElementNS("http://www.w3.org/1999/xhtml", "div");
+					rowDiv = (Element) doc.createElementNS("http://www.w3.org/1999/xhtml", nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":div");
 					rowDiv.setAttribute("class", "form_row");
 					newXmlElement.appendChild(rowDiv);
 					lastYPosition = xfChild.getYPosition();

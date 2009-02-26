@@ -600,6 +600,7 @@
       <xsl:apply-imports/>
     </xsl:when>
     <xsl:otherwise>
+     <xhtml:div class="form_row">
       <xforms:group ref="{$ref}">
         <!-- Generate labels and hints. -->
         <xsl:if test="$node">
@@ -613,6 +614,7 @@
           <xsl:with-param name="parentref" select="if ($ref = '.') then $parentref else if ($parentref = '') then $ref else concat($parentref, '/', $ref)" tunnel="yes"/>
         </xsl:apply-imports>
       </xforms:group>
+     </xhtml:div>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -638,6 +640,7 @@
   <xsl:choose>
     <!-- If maxOccurs > 1, then create repeat block. -->
     <xsl:when test="$maxOccurs = 'unbounded' or number($maxOccurs) &gt; 1">
+     <xhtml:div class="form_row">
       <xforms:repeat nodeset="{$newref}" id="repeat-{generate-id()}">
         <!-- Generate labels and hints. -->
         <!-- Repeat can't have a label, although Chiba renders it correctly. -->
@@ -653,7 +656,9 @@
           <xsl:with-param name="maxOccurs" tunnel="yes"/>
         </xsl:apply-imports>
       </xforms:repeat>
+     </xhtml:div>
       <xsl:if test="$formtype = 'input'">
+       <xhtml:div class="form_row">
         <xforms:trigger ref="insert-trigger-{generate-id()}">
           <xforms:label>Insert</xforms:label>
           <xforms:insert events:event="DOMActivate" nodeset="../{$newref}" at="last()" position="before"/>
@@ -664,6 +669,7 @@
           <!-- Set position to next item, but not on prototype item. You wouldn't want to delete that. -->
           <xforms:setindex events:event="DOMActivate" repeat="repeat-{generate-id()}" index="if(index('repeat-{generate-id()}') = count(../{$newref}), index('repeat-{generate-id()}') - 1, index('repeat-{generate-id()}'))"/>
         </xforms:trigger>
+       </xhtml:div>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>
@@ -697,12 +703,14 @@
   <xsl:param name="formtype" tunnel="yes"/>
   <xsl:choose>
     <xsl:when test="$formtype = 'input'">
+     <xhtml:div class="form_row">
       <xforms:select ref="{$ref}">
         <!-- Generate labels and hints. -->
         <xsl:apply-templates select="$node" mode="label"/>
         <!-- Generate enumeration list. -->
         <xsl:apply-templates select="." mode="items"/>
       </xforms:select>
+     </xhtml:div>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-imports/>
@@ -720,6 +728,7 @@
       <xsl:choose>
         <!-- If there is a enumeration then generate select1 control. -->
         <xsl:when test="xsd:enumeration">
+         <xhtml:div class="form_row">
           <xforms:select1 ref="{$ref}">
             <!-- Generate labels and hints. -->
             <xsl:apply-templates select="$node" mode="label"/>
@@ -730,13 +739,16 @@
             <!--xsl:apply-templates select="." mode="itemset"/-->
             <xsl:apply-templates mode="items"/>
           </xforms:select1>
+         </xhtml:div>
         </xsl:when>
         <!-- If there is minInclusive and maxExclusive restriction then generate range control. -->
         <xsl:when test="xsd:minInclusive and xsd:maxInclusive and false()">
+         <xhtml:div class="form_row">
           <xforms:range ref="{$ref}" start="{xsd:minInclusive/@value}" end="{xsd:maxInclusive/@value}">
             <!-- Generate labels and hints. -->
             <xsl:apply-templates select="$node" mode="label"/>
           </xforms:range>
+         </xhtml:div>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-imports/>
@@ -747,10 +759,12 @@
       <xsl:choose>
         <!-- If there is enumeration inside then use label instead of value. -->
         <xsl:when test="xsd:enumeration">
+         <xhtml:div class="form_row">
           <xforms:output value="instance('lookup-{generate-id()}')/item[@value = current()/{$ref}]">
             <!-- Generate labels and hints. -->
             <xsl:apply-templates select="$node" mode="label"/>
           </xforms:output>
+         </xhtml:div>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-imports/>
@@ -796,25 +810,31 @@
         <xsl:when test="$formtype = 'input'">
           <xsl:choose>
             <xsl:when test="$localname = 'base64Binary' or $localname = 'hexBinary'">
+             <xhtml:div class="form_row">
               <xforms:upload ref="{$ref}">
                 <!-- Generate labels and hints. -->
                 <xsl:apply-templates select="$node" mode="label"/>
               </xforms:upload>
+             </xhtml:div>
             </xsl:when>
             <xsl:otherwise>
+             <xhtml:div class="form_row">
               <xforms:input ref="{$ref}">
                 <!-- Generate labels and hints. -->
                 <xsl:apply-templates select="$node" mode="label"/>
               </xforms:input>
+             </xhtml:div>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <!-- Output form controls. -->
         <xsl:when test="$formtype = 'output'">
+         <xhtml:div class="form_row">
           <xforms:output ref="{$ref}">
             <!-- Generate labels and hints. -->
             <xsl:apply-templates select="$node" mode="label"/>
           </xforms:output>
+         </xhtml:div>
         </xsl:when>
       </xsl:choose>
     </xsl:when>
@@ -834,12 +854,14 @@
   <xsl:if test="$debug"><xsl:message select="concat('form: ', name())"/></xsl:if>
   <xsl:choose>
     <xsl:when test="$formtype = 'input'">
+     <xhtml:div class="form_row">
       <xforms:group>
         <xforms:select1 ref="choice-{generate-id()}" appearance="full">
           <xsl:apply-templates mode="choice"/>
         </xforms:select1>
         <xsl:apply-imports />
       </xforms:group>
+     </xhtml:div>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-imports />
