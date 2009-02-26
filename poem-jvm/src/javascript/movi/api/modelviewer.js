@@ -340,6 +340,47 @@ MOVI.namespace("widget");
 		 */
 		getScrollboxEl: function() {
 			return this._scrollbox;
+		},
+		
+		/**
+		 * Scrolls to the shape, i.e. centers the (canvas around the) shape 
+		 * within the scrollbox.
+		 * @method scrollToShape()
+		 * @param shape the shape or its resource id
+		 * @return {Element} The shape element / null if it does not exist
+		 * @throws Exception if scrollbox dimensions cannot be calculated
+		 */
+		scrollToShape: function(shape) {
+			if ("string" == typeof(shape)) {
+				shape = this.canvas.getShape(shape);
+				if (null == shape) {
+					return null;
+				}
+			}
+			
+			if (null != (h = this.getScrollboxEl().getStyle("height").match(/(\d+)px/)) &&
+			    null != (w = this.getScrollboxEl().getStyle("width").match(/(\d+)px/)))
+			{
+				var bounds = shape.getAbsBounds();			
+
+				var origin = {
+					x: bounds.upperLeft.x + (bounds.lowerRight.x - bounds.upperLeft.x)/2,
+					y: bounds.upperLeft.y + (bounds.lowerRight.y - bounds.upperLeft.y)/2
+				}
+
+				var target = {
+					x: parseInt(origin.x - parseInt(w[1])/2 ),
+					y: parseInt(origin.y - parseInt(h[1])/2 )
+				}
+
+				this.getScrollboxEl().set("scrollTop", target.y);
+				this.getScrollboxEl().set("scrollLeft", target.x);
+			}
+			else {
+				throw "Unable to calculate scrollbox dimensions";
+			}
+			
+			return shape;
 		}
 		
 	});
