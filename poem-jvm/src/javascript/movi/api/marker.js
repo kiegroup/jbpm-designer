@@ -45,7 +45,7 @@ MOVI.namespace("util");
 		this._style = style || {};
 		this.shapeRects = {};
 
-this._shapes = {};
+		this._shapes = {};
 		// create shape rect elements
 		for(i in shapes) {
 			var s = shapes[i];
@@ -266,7 +266,7 @@ this._shapes = {};
 				delete this.shapeRects[i];
 			}
 			
-		},
+		}
 		
 	}
 	
