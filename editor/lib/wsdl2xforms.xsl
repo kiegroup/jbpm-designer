@@ -110,7 +110,7 @@
   <xforms:toggle case="{$formname}.request" events:event="xforms-ready" if="not(boolean(instance('{$formname}.output')/SOAP-ENV:Body))"/>
   <xforms:toggle case="{$formname}.response" events:event="xforms-ready" if="boolean(instance('{$formname}.output')/SOAP-ENV:Body)"/>
  </xhtml:div>
-/xsl:template>
+</xsl:template>
 
 <!-- Instance generation. -->
 
