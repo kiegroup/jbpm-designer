@@ -414,7 +414,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"fromspectype",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -638,7 +638,7 @@
 							"optional":true
 						},
 						{							
-							"id":"type",
+							"id":"importType",
 							"name":"ImportType",
 							"type":"Choice",
 							"value":"http://www.w3.org/2001/XMLSchema",
@@ -991,7 +991,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertytype",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -1167,7 +1167,7 @@
 							"optional":true
 						},
 						{							
-							"id":"type",
+							"id":"importtype",
 							"name":"ImportType",
 							"type":"Choice",
 							"value":"http://www.w3.org/2001/XMLSchema",
@@ -1488,7 +1488,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -2112,7 +2112,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -2685,7 +2685,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -3265,7 +3265,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -4059,7 +4059,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -4495,7 +4495,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -4931,7 +4931,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -5374,7 +5374,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -5881,7 +5881,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -6186,7 +6186,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -6491,7 +6491,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -6797,7 +6797,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -7085,7 +7085,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -8414,7 +8414,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertyType",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -8452,7 +8452,7 @@
 					"refToView":""
 				},		
 				{
-					"id":"type",
+					"id":"artifactsubtype",
 					"type":"String",
 					"title":"Type",
 					"value":"Variable",
@@ -8533,7 +8533,7 @@
 					"optional":true,
 					"complexItems": [
 						{
-							"id":"type",
+							"id":"fromspectype",
 							"name":"FromSpecType",
 							"type":"Choice",
 							"value":"Empty",
@@ -8893,7 +8893,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertytype",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -8931,7 +8931,7 @@
 					"refToView":""
 				},	
 				{
-					"id":"type",
+					"id":"artifactsubtype",
 					"type":"String",
 					"title":"Type",
 					"value":"Variable",
@@ -9166,7 +9166,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertytype",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -9204,7 +9204,7 @@
 					"refToView":""
 				},	
 				{
-					"id":"type",
+					"id":"artifactsubtype",
 					"type":"String",
 					"title":"Type",
 					"value":"Variable",
@@ -9439,7 +9439,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertytype",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -9477,7 +9477,7 @@
 					"refToView":""
 				},
 				{
-					"id":"type",
+					"id":"artifactsubtype",
 					"type":"String",
 					"title":"Type",
 					"value":"Variable",
@@ -9636,7 +9636,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertytype",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -9674,7 +9674,7 @@
 					"refToView":""
 				},
 				{
-					"id":"type",
+					"id":"artifactsubtype",
 					"type":"String",
 					"title":"Type",
 					"value":"Reference",
@@ -9870,7 +9870,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertytype",
 							"name":"Type",
 							"type":"String",
 							"value":"",
@@ -9908,7 +9908,7 @@
 					"refToView":""
 				},
 				{
-					"id":"type",
+					"id":"artifactsubtype",
 					"type":"String",
 					"title":"Type",
 					"value":"Set",
@@ -12247,7 +12247,7 @@
 							"optional":false 
 						},
 						{
-							"id":"type",
+							"id":"propertytype",
 							"name":"Type",
 							"type":"String",
 							"value":"",

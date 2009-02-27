@@ -64,7 +64,7 @@
 		
 		<xsl:variable name="namespace" select="substring-before(substring-after($first, 'namespace:&quot;'),'&quot;')" />
 		<xsl:variable name="location" select="substring-before(substring-after($first, 'location:&quot;'),'&quot;')" />
-		<xsl:variable name="type" select="substring-before(substring-after($first, 'type:&quot;'),'&quot;')" />
+		<xsl:variable name="type" select="substring-before(substring-after($first, 'importType:&quot;'),'&quot;')" />
 		<xsl:variable name="prefix" select="substring-before(substring-after($first, 'prefix:&quot;'),'&quot;')" />
 		<chor:Import>
 			<xsl:if test="$namespace">
@@ -151,7 +151,7 @@
 		<xsl:variable name="first" select="substring-after(substring-before($list, '}'),'{')" />		
 		<xsl:variable name="remaining" select="substring-after($list, '}')" />
 
-		<xsl:variable name="type" select="substring-before(substring-after($first, 'type:&quot;'),'&quot;')" />
+		<xsl:variable name="type" select="substring-before(substring-after($first, 'fromspectype:&quot;'),'&quot;')" />
 		<xsl:variable name="variableName" select="substring-before(substring-after($first, 'variablename:&quot;'),'&quot;')" />
 		<xsl:variable name="part" select="substring-before(substring-after($first, 'part:&quot;'),'&quot;')" />
 		<xsl:variable name="queryLanguage" select="substring-before(substring-after($first, 'querylanguage:&quot;'),'&quot;')" />
@@ -1134,8 +1134,7 @@
 						<xpdl:Association 
 							Id="{@id}"
 							Source="{xh:span[@class='oryx-source']}"
-							Target="{xh:span[@class='oryx-target']}"
-							AssociationDirection="{xh:span[@class='oryx-direction']}">
+							Target="{xh:span[@class='oryx-target']}">
 							<xsl:if test="string-length(normalize-space($name))>0">
 								<xsl:attribute name="Name">
 									<xsl:value-of select="$name" />
@@ -1148,8 +1147,7 @@
 						<xpdl:Association 
 							Id="{@id}"
 							Source="{xh:span[@class='oryx-source']}"
-							Target="{xh:span[@class='oryx-target']}"
-							AssociationDirection="{xh:span[@class='oryx-direction']}">
+							Target="{xh:span[@class='oryx-target']}">
 							<xsl:if test="string-length(normalize-space($name))>0">
 								<xsl:attribute name="Name">
 									<xsl:value-of select="$name" />
