@@ -114,7 +114,7 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 			YAHOO.widget.Logger.enableBrowserConsole();  // remove this line for production use 
 			
 			if(!YAHOO.lang.isString(moviBase)) {
-				MOVI.log("MOVI base directory not specified.", "error", "movi.js");
+				throw new Error("MOVI base directory is not specified.", "movi.js");
 				return false;
 			}
 			
@@ -136,8 +136,7 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 									moviBase + "/shapeselect.js" ], {
 				onSuccess: callback,  // execute user specified callback
 				onFailure: function() {
-					MOVI.log(	"Unable to load MOVI modules from base dir '" + moviBase + "'", 
-								"error", "movi.js");
+					throw new Error("Unable to load MOVI modules from base dir '" + moviBase + "'", "movi.js");
 				}
 			});
 		},
@@ -146,7 +145,7 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 			if (xhrobj) { 
 				m += ", " + YAHOO.lang.dump(xhrobj); 
 			} 
-			MOVI.log(m, "error", "movi.js"); 
+			throw new Error(m, "movi.js"); 
 		}
 	});
 	

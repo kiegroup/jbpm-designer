@@ -133,7 +133,7 @@ MOVI.namespace("widget");
 		 * @private
 	     */
 		_onSuccess: function() {
-			MOVI.log("Model loaded successfully.", "info");
+			MOVI.log("Model loaded successfully.", "info", "modelviewer.js");
 			var scope = this._loadOptions.scope || window;
 			if(this._loadOptions.onSuccess)
 				this._loadOptions.onSuccess.call(scope, this);
@@ -223,11 +223,12 @@ MOVI.namespace("widget");
 		 * The default value is 15000 (15 seconds).
          * </dd>
 		 * </dl>
+		 * @throws Exception, if passed URI is not valid
 	     */
 		loadModel: function(uri, opt) {
 			
 			if(!YAHOO.lang.isString(uri)) {
-				MOVI.log("No valid URI passed to loadModel.", "error", "modelviewer.js");
+				throw new URIError("No valid URI passed to loadModel." , "modelviewer.js");
 				this._onLoadFailure();
 			}
 			
@@ -348,7 +349,7 @@ MOVI.namespace("widget");
 		 * @method scrollToShape()
 		 * @param shape the shape or its resource id
 		 * @return {Element} The shape element / null if it does not exist
-		 * @throws Exception if scrollbox dimensions cannot be calculated
+		 * @throws Error if scrollbox dimensions cannot be calculated
 		 */
 		scrollToShape: function(shape) {
 			if ("string" == typeof(shape)) {
@@ -377,7 +378,7 @@ MOVI.namespace("widget");
 				this.getScrollboxEl().set("scrollLeft", target.x);
 			}
 			else {
-				throw "Unable to calculate scrollbox dimensions";
+				throw new Error("Unable to calculate scrollbox dimensions", "modelviewer.js");
 			}
 			
 			return shape;

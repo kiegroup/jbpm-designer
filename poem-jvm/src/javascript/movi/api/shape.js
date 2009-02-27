@@ -76,19 +76,19 @@ MOVI.namespace("model");
 		YAHOO.lang.augmentObject(this, jsonObj, true);
 		
 		if(!stencilset) {
-			MOVI.log("No stencilset associated for shape with resource id" + 
-					 this.resourceId + ".", "error", "shape.js");
+			throw new Error("No stencilset associated for shape with resource id" + 
+					 this.resourceId + ".", "shape.js");
 			return false;
 		}
 		
 		if(!this.resourceId) {
-			MOVI.log("The shape has no resource id.", "error", "shape.js");
+			throw new Error("The shape has no resource id.", "shape.js");
 			return false;
 		}
 	
 		if(!this.stencil || !this.stencil.id) {
-			MOVI.log("No stencil definition found for shape with resource id " + 
-				this.resourceId, "error", "shape.js");
+			throw new Error("No stencil definition found for shape with resource id " + 
+				this.resourceId, "shape.js");
 			return false;
 		}
 	
@@ -97,9 +97,8 @@ MOVI.namespace("model");
 		this.stencil = stencilset.getStencil(sId);
 		
 		if(!this.stencil) {
-			MOVI.log("Could not find definition for stencil " + sId + 
-					 " in stencilset " + stencilset.namespace + ".", 
-					 "error", "shape.js" );
+			throw new Error("Could not find definition for stencil " + sId + 
+					 " in stencilset " + stencilset.namespace + ".", "shape.js" );
 			return false;
 		}
 		

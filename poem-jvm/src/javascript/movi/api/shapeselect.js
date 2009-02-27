@@ -45,7 +45,7 @@ MOVI.namespace("util");
     MOVI.util.ShapeSelect = function(modelviewer, shapes, multiselect) {
 	
 		if(!modelviewer) {
-			MOVI.log("No model viewer specified for shape select.", "error", "shapeselect.js");
+			throw new Error("No model viewer specified for shape select.", "error", "shapeselect.js");
 			return false;
 		}
 		

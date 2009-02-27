@@ -86,12 +86,12 @@ MOVI.namespace("util");
     MOVI.util.Annotation = function(marker, content) {
 	
 		if(!marker) {
-			MOVI.log("No marker specified for annotation.", "error", "annotation.js");
+			throw new Error("No marker specified for annotation.", "annotation.js");
 			return false;
 		}
 		
 		if(!YAHOO.lang.isString(content)) {
-			MOVI.log("A String is expected for the annotation's content.", "error", "annotation.js");
+			throw new TypeError("A String is expected for the annotation's content.", "annotation.js");
 		}
 		
 		// create host element

@@ -61,7 +61,7 @@ MOVI.namespace("widget");
     MOVI.widget.ModelNavigator = function(el, modelviewer) {
 	
 		if(!modelviewer) {
-			MOVI.log("No model viewer specified for model navigator", "error", "modelnavigator.js");
+			throw new Error("No model viewer specified for model navigator", "modelnavigator.js");
 			return false;
 		}
 	
