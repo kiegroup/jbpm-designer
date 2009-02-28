@@ -179,7 +179,7 @@ ORYX.Plugins.PropertyWindow = {
 		var newValue	= option.value;
 		var facade		= this.facade;
 
-		console.log(newValue)
+		//console.log(newValue)
 		// Implement the specific command for property change
 		var commandClass = ORYX.Core.Command.extend({
 			construct: function(){
