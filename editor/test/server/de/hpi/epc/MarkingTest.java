@@ -22,7 +22,7 @@ import de.hpi.bpt.process.epc.IControlFlow;
 import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.epc.Marking.NodeNewMarkingPair;
-import de.hpi.epc.validation.ReachabilityGraph;
+import de.hpi.epc.validation.EPCReachabilityGraph;
 
 public class MarkingTest extends AbstractEPCTest {
 	@BeforeClass
@@ -139,7 +139,7 @@ public class MarkingTest extends AbstractEPCTest {
 	@Test
 	public void isFinalMarking(){
 		IEPC epc = openEpcFromFile("simpleEPC.rdf");
-		ReachabilityGraph rg = new ReachabilityGraph(epc);
+		EPCReachabilityGraph rg = new EPCReachabilityGraph(epc);
 		rg.calculate();
 		for(Marking root : rg.getRoots()){
 			assertFalse(root.isFinalMarking(epc));

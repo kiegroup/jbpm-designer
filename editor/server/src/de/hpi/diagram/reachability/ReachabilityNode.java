@@ -1,18 +1,17 @@
-package de.hpi.epc.validation;
+package de.hpi.diagram.reachability;
 
 import de.hpi.bpt.hypergraph.abs.Vertex;
-import de.hpi.epc.Marking;
 
-public class MarkingNode extends Vertex {
+public class ReachabilityNode<Marking> extends Vertex {
 	protected Marking marking;
 	
-	public MarkingNode(Marking m){
+	public ReachabilityNode(Marking m){
 		marking = m;
 	}
 	
 	public boolean equals(Object o){
 		//System.out.println("Calling MarkingNode#equals");
-		return marking.equals(((MarkingNode)o).getMarking());
+		return marking.equals(((ReachabilityNode<Marking>)o).getMarking());
 	}
 
 	public Marking getMarking() {

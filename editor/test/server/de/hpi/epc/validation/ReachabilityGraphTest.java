@@ -17,18 +17,18 @@ import de.hpi.epc.AbstractEPCTest;
 import de.hpi.epc.Marking;
 
 public class ReachabilityGraphTest extends AbstractEPCTest {
-	static public ReachabilityGraph rg;
+	static public EPCReachabilityGraph rg;
 	static public IEPC epc;
 	static public IEPC epcWithLoop;
-	static public ReachabilityGraph epcWithLoopRg;
+	static public EPCReachabilityGraph epcWithLoopRg;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		epc = openEpcFromFile("simpleEPC.rdf");
-		rg = new ReachabilityGraph(epc);
+		rg = new EPCReachabilityGraph(epc);
 		rg.calculate();
 		epcWithLoop = openEpcFromFile("epcWithLoop.rdf");
-		epcWithLoopRg = new ReachabilityGraph(epcWithLoop);
+		epcWithLoopRg = new EPCReachabilityGraph(epcWithLoop);
 		epcWithLoopRg.calculate();
 	}
 
@@ -47,7 +47,7 @@ public class ReachabilityGraphTest extends AbstractEPCTest {
 
 	@Test
 	public void calculate() {
-		ReachabilityGraph epcWithLoopRg2 = new ReachabilityGraph(epcWithLoop);
+		EPCReachabilityGraph epcWithLoopRg2 = new EPCReachabilityGraph(epcWithLoop);
 		epcWithLoopRg2.calculate();
 		
 		for(Marking m : rg.getLeaves()){

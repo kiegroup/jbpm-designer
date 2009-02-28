@@ -33,7 +33,7 @@ public class AbstractEPCTest {
 		try{
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new File("editor/server/test/de/hpi/epc/"+fileName));
+			Document document = builder.parse(new File("editor/test/server/de/hpi/epc/"+fileName));
 
 			return (new OryxParser(new EPCFactory())).parse(document).get(0);
 		} catch (ParserConfigurationException e) {

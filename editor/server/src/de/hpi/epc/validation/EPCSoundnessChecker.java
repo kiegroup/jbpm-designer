@@ -11,12 +11,12 @@ import de.hpi.bpt.process.epc.IEPC;
 import de.hpi.epc.Marking;
 
 public class EPCSoundnessChecker {
-	ReachabilityGraph rg;
+	EPCReachabilityGraph rg;
 	IEPC diag;
 	
 	public EPCSoundnessChecker(IEPC diag){
 		this.diag = diag;
-		rg = new ReachabilityGraph(diag);
+		rg = new EPCReachabilityGraph(diag);
 	}
 	
 	public List<IControlFlow> badStartArcs;
