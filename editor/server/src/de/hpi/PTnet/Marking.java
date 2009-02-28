@@ -122,5 +122,4 @@ public class Marking implements de.hpi.petrinet.Marking {
 		}
 		return places;
 	}
-
 }

@@ -1,6 +1,5 @@
 package de.hpi.petrinet;
 
-
 /**
  * Copyright (c) 2008 Gero Decker
  * 
@@ -28,6 +27,12 @@ public interface Marking {
 	
 	int getNumTokens(Place p);
 	
+	/**
+	 * 
+	 * @return the total number of tokens in the net
+	 */
 	int getNumTokens();
+	
+	void setNumTokens(Place place, int numTokens);
 
 }

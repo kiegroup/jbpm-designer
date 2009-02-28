@@ -42,6 +42,17 @@ public class ReachabilityGraph<Diagram, FlowObject, Marking>
 				this, s, t);
 		return e;
 	}
+	
+	public void addMarking(Marking m){
+		if(this.contains(m))
+			return;
+		
+		this.addVertex(new ReachabilityNode<Marking>(m));
+	}
+	
+	public void addTransition(Marking mSource, Marking mTarget){
+		this.addEdge(this.findByMarking(mSource), this.findByMarking(mTarget));
+	}
 
 	public void clear() {
 		this.getVertices().clear();

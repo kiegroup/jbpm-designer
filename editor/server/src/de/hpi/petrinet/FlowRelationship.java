@@ -30,7 +30,7 @@ public class FlowRelationship {
 	protected Node source;
 	protected Node target;
 	protected String id;
-
+	
 	public Node getSource() {
 		return source;
 	}
