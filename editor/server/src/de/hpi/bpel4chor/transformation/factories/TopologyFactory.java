@@ -462,8 +462,8 @@ public class TopologyFactory {
 				// actual sender must be bound to participant reference
 				createBindSenderTo(flow, element);
 			} else {
-				this.output.addError("The type of the senders of this message " +
-						"flow is not valid.", flow.getId());
+				this.output.addError("The type of the senders of this message flow " +
+						"is not valid.", flow.getId());
 			}
 		} else {
 			// check participant reference data objects 
@@ -478,8 +478,8 @@ public class TopologyFactory {
 				if (validSenderType(flow, participants.get(0))) {
 					element.setAttribute("sender", participants.get(0).getName());
 				} else {
-					this.output.addError("The type of the sender of this message" +
-							" flow is not valid.", flow.getId());
+					this.output.addError("The type of the sender of this message flow " +
+							"is not valid.", flow.getId());
 				}
 			} else if (participants.size() > 1) {
 				// add name of each associated participant reference to senders 
@@ -492,7 +492,7 @@ public class TopologyFactory {
 							" flow is not valid.", flow.getId());
 				}
 			} else {
-				this.output.addError("The sender of this message flow " +
+				this.output.addError("Sender of this message flow " +
 						"could not be determined.", flow.getId());
 			}
 		}

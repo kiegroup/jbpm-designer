@@ -1,17 +1,10 @@
 package de.hpi.bpel4chor.transformation;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.w3c.dom.Document;
 
@@ -29,6 +22,8 @@ import de.hpi.bpel4chor.parser.Parser;
  * This class transforms the parsed diagram to BPEL4Chor.
  */
 public class Transformation {
+	
+	private static Logger logger = Logger.getLogger(Transformation.class.toString());
 	
 	/**
 	 * Transforms the diagram to BPEL4Chor.
@@ -100,16 +95,16 @@ public class Transformation {
 	 * error messages (first element)
 	 */
 	public List<TransformationResult> transform(String diagramStr, boolean validate) {
-		System.out.println("Start parsing");
+		logger.log(Level.FINE, "Start parsing");
 		Output parserOutput = new Output();
 		Diagram diagram = Parser.parse(diagramStr, validate, parserOutput);
-		System.out.println("Finished parsing");
+		logger.log(Level.FINE, "Finished parsing");
 		
 		List<TransformationResult> result;
 		if (parserOutput.isEmpty()) {
-			System.out.println("Start Transformation");
+			logger.log(Level.FINE, "Start Transformation");
 			result = transform(diagram);
-			System.out.println("Finished Transformation");
+			logger.log(Level.FINE, "Finished Transformation");
 			return result;
 		} else {
 			result = new ArrayList<TransformationResult>();

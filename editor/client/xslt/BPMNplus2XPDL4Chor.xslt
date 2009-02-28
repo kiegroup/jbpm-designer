@@ -6,7 +6,7 @@
 	xmlns:xh="http://www.w3.org/1999/xhtml" 
 	exclude-result-prefixes="xh">
 	
-	<!-- ********* Template for splitting whitespace separeted String lists for elements without attributes ********** -->
+	<!-- ********* Template for splitting whitespace separated String lists for elements without attributes ********** -->
 	<xsl:template name="string-tokens">
 		<xsl:param name="list" />
 		<xsl:param name="elementName" />
@@ -990,7 +990,7 @@
 					</xpdl:Activities>
 					<xpdl:Transitions>
 						<xsl:call-template name="relevantTransitions">
-							<xsl:with-param name="laneId" select="$resourceId" />
+							<xsl:with-param name="resId" select="@id" />
 						</xsl:call-template>
 					</xpdl:Transitions>
 				</xpdl:ActivitySet>
@@ -1134,7 +1134,8 @@
 						<xpdl:Association 
 							Id="{@id}"
 							Source="{xh:span[@class='oryx-source']}"
-							Target="{xh:span[@class='oryx-target']}">
+							Target="{xh:span[@class='oryx-target']}"
+							AssociationDirection="{xh:span[@class='oryx-direction']}">
 							<xsl:if test="string-length(normalize-space($name))>0">
 								<xsl:attribute name="Name">
 									<xsl:value-of select="$name" />
@@ -1147,7 +1148,8 @@
 						<xpdl:Association 
 							Id="{@id}"
 							Source="{xh:span[@class='oryx-source']}"
-							Target="{xh:span[@class='oryx-target']}">
+							Target="{xh:span[@class='oryx-target']}"
+							AssociationDirection="{xh:span[@class='oryx-direction']}">
 							<xsl:if test="string-length(normalize-space($name))>0">
 								<xsl:attribute name="Name">
 									<xsl:value-of select="$name" />

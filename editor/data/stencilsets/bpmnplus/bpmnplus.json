@@ -11943,12 +11943,12 @@
 					} else {
 						name = "source";
 					}
-//					data.push({
-//							name:"direction",
-//						 	prefix:"oryx",
-//						 	value:"None",
-//						 	type:"literal",
-//						});
+					data.push({
+							name:"direction",
+						 	prefix:"oryx",
+						 	value:"None",
+						 	type:"literal",
+						});
 					
 					if (id != undefined) {
 						data.push({
@@ -12042,9 +12042,6 @@
 					// determine oryx-direction and oryx-source
 					var type= source.getStencil().id();
 					var id = source.resourceId;
-					if (id == "") {
-						id = source.resourceId;
-					}
 					var name;
 					if (type == "http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject" ||
 						type == "http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject" ||

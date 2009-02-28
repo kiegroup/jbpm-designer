@@ -1295,7 +1295,7 @@ public class ParticipantsFactory {
 			String type = getType(setDataObject);			
 			if (type == null) {
 				this.output.addError("Type for this participant set " + 
-						 " could not be determined.", setDataObject.getName() );
+						 "could not be determined.", setDataObject.getId());
 			} else {
 				result.setAttribute("type", type);
 			}

@@ -26,9 +26,11 @@ public class StartEvent extends Event {
 	public StartEvent(String triggerType, Trigger trigger, boolean generated, Output output) {
 		super(generated, trigger, output);
 		if (triggerType == null) {
-			this.setTriggerType(triggerType, output);
-		} else {
 			this.setTriggerType(TRIGGER_NONE, output);
+		}		
+		else {
+			// not needed, since triggerType has already been set at super(generated, trigger, output)
+			//this.setTriggerType(trigger, output);
 		}
 	}
 	
