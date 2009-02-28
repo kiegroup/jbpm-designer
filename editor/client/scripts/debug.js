@@ -29,4 +29,12 @@
  * build-with-xhtml-test-files-flag target
  */
 
-ORYX_LOGLEVEL = ORYX_LOGLEVEL_DEBUG
+// only enable debugging, if firebug is really there
+if(typeof loadFirebugConsole == 'function') {
+	// hack for Firebug 1.4.0a12, since console does not seem to be loaded automatically 
+	// this is causes no harm for Firebug 1.3.3
+	loadFirebugConsole();
+	
+	ORYX_LOGLEVEL = ORYX_LOGLEVEL_DEBUG
+} 
+
