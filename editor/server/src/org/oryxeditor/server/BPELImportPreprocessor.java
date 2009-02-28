@@ -87,6 +87,19 @@ public class BPELImportPreprocessor {
 			return;
 		};
 		
+		if (currentNode instanceof Document){
+			Node child;
+			
+			NodeList childNodes = currentNode.getChildNodes();
+			for (int i=0; i<childNodes.getLength(); i++){
+				child = childNodes.item(i);
+				if (child instanceof Element){
+					handleNode (child, i);
+				}
+			};
+			return;
+		}	
+		
 		// handle the current node first
 		if (currentNode instanceof Element){
 			
