@@ -16,6 +16,10 @@
 		<property name="build-with-xhtml-test-files-flag" value="*.xhtml" />
 	</target>
 	
+	<target name="build-with-script-files-flag">
+		<property name="build-with-script-files-flag" value="scripts/**" />
+	</target>
+	
     <target name="clean-editor">
         <delete file="${target-dir}/oryx.war" />
 		<delete dir="${editor-build-root}"/>
@@ -261,6 +265,10 @@
 				<exclude name="sources/**"/>
 				<exclude name="servlet-api.jar" />
             </lib>
+			
+            <fileset dir="${editor-src-root}/client">        	
+                <include name="${build-with-script-files-flag}"/>
+            </fileset>
 			
 			<fileset dir="${editor-build-root}">
 				<exclude name="classes/**"/>
