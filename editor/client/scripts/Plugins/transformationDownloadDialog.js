@@ -288,7 +288,7 @@ ORYX.Plugins.TransformationDownloadDialog = {
 	 * @param {Object} file The file name to add the extension to.
 	 */
 	addFileExtension: function(file) {
-		if ((file == "topology") || (file == "XPDL4Chor")) {
+		if ((file.toLowerCase() == "topology") || (file == "XPDL4Chor")) {
 			return file + ".xml";
 		} else {
 			return file + ".bpel";

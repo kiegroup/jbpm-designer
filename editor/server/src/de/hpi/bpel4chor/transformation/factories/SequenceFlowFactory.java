@@ -349,7 +349,7 @@ public class SequenceFlowFactory {
 		}
 		
 		// remove non-triggered start events and add transition from gateway to successor
-		// this is not allowed if the gatway is an event-based decision gateway and 
+		// this is not allowed if the gateway is an event-based decision gateway and 
 		// the successor is a gateway, too
 		for (Iterator<StartEvent> it = startEvents.iterator(); it.hasNext();) {
 			StartEvent startEvent = it.next();
