@@ -25,7 +25,7 @@ import de.hpi.bpel4chor.util.Output;
 
 /**
  * This factory is used for generating certain child elements of BPEL4Chor 
- * activities like "from", "to" or "correlations". 
+ * activities such as "from", "to" or "correlations". 
  * 
  * <p>An instance of this class can only be used for one diagram.</p>
  */

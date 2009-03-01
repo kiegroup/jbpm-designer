@@ -34,8 +34,8 @@ import de.hpi.bpel4chor.util.ListUtil;
 import de.hpi.bpel4chor.util.Output;
 
 /**
- * <p>This factory transforms the sequence flwo contained in processes or 
- * sub-processes. This transformation is based on the Ouyang et. al transformation.
+ * <p>This factory transforms the sequence flow contained in processes or 
+ * sub-processes. This transformation is based on the Ouyang et al. transformation.
  * This transformation was extended with a support for multiple start and end
  * events and with a support of inclusive gateways.</p> 
  * 
@@ -162,9 +162,9 @@ public class SequenceFlowFactory {
 	 * <p>Determines the gateways on the paths from the start activity to an 
 	 * end event in the sequence flow using depth-first search. 
 	 * If there is a path that does not reach an end event or an already visited
-	 * activiy false will be returned. If an end event is reached or a cycle was
+	 * activity false will be returned. If an end event is reached or a cycle was
 	 * detected, the result will contain all gateways found except the end activity.
-	 * If a cylce was detected, then the result contains the current list of
+	 * If a cycle was detected, then the result contains the current list of
 	 * gateways and true is returned.</p>
 	 * 
 	 * <p>The order of the returned gateways is determined by the depth of the 
@@ -266,20 +266,20 @@ public class SequenceFlowFactory {
 	 * @param startEvents Start events to be combined.
 	 * @param gatewayType The gateway type of the gateway to create.
 	 * 
-	 * @return The created gateway of null if an error occured. 
+	 * @return The created gateway of null if an error occurred. 
 	 */
 	private Gateway createCombinatingGateway(List<StartEvent> startEvents, 
 			String gatewayType) {
 		
-		// createInstance for exclusive gateway allowed if process
+		// createInstance for exclusive gateway allowed if it is at the start of the process
 		boolean createInstance = this.container instanceof Process;
 		
 		// create gateway
 		Gateway newGateway = null;
 		if (gatewayType.equals(Gateway.TYPE_OR)) {
 			this.output.addError("The start events " +
-					ListUtil.toString(startEvents) + "could not be combined."+
-					" (No inclusive gateways allowed for combining start events)", startEvents.get(0).getId());
+					ListUtil.toString(startEvents) + "could not be combined: "+
+					"no inclusive gateways allowed for combining start events", startEvents.get(0).getId());
 			return null;
 		} else if (gatewayType.equals(Gateway.TYPE_AND)) {
 			newGateway = new Gateway(Gateway.TYPE_AND, null, true, this.output);
@@ -287,7 +287,8 @@ public class SequenceFlowFactory {
 			newGateway = new Gateway(Gateway.TYPE_XOR, Gateway.SPLIT_XOREVENT, 
 					createInstance, true, this.output);
 		} else {
-			this.output.addError("The multiple start events cannot be combined.", startEvents.get(0).getId());
+			this.output.addError("The start events " +
+					ListUtil.toString(startEvents) + "could not be combined: unknown gateway type.", startEvents.get(0).getId());
 			return null;
 		}
 		this.container.addActivity(newGateway);
@@ -533,7 +534,7 @@ public class SequenceFlowFactory {
 		while (next != null) {			
 			start = combineStartEventsForGateway(map, next);
 			if (start == null) {
-				// error occured during generation
+				// error occurred during generation
 				break;
 			}
 			next = determineGateway(map);
