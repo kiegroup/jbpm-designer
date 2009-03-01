@@ -831,22 +831,32 @@ public class TopologyFactory {
 					
 					found = true;
 					if (copyTo) {
+						String copyTo1 = null;
+						String copyTo2 = null;
 						if (obj1 instanceof ParticipantReferenceDataObject) {
 							ParticipantReferenceDataObject ref1 = 
 								(ParticipantReferenceDataObject)obj1;
 							ParticipantReferenceDataObject ref2 = 
 								(ParticipantReferenceDataObject)obj2;
-							if (!ref1.getCopyTo().equals(ref2)) {
-								return false;
-							}
-						} else if (obj1 instanceof ParticipantSetDataObject) {
+							copyTo1 = ref1.getCopyTo();
+							copyTo2 = ref2.getCopyTo();
+						} else  if (obj1 instanceof ParticipantSetDataObject) {
 							ParticipantSetDataObject ref1 = 
 								(ParticipantSetDataObject)obj1;
 							ParticipantSetDataObject ref2 = 
 								(ParticipantSetDataObject)obj2;
-							if (!ref1.getCopyTo().equals(ref2)) {
+						}
+						if ((copyTo1 != null) && (copyTo2 != null)) {
+							if (!copyTo1.equals(copyTo2)) {
 								return false;
 							}
+						} else {
+							if ((copyTo1 != null) && (!copyTo1.equals(obj2))) {
+								return false;
+							};
+							if ((copyTo2 != null) && (!copyTo1.equals(obj1))) {
+								return false;
+							};
 						}
 					}
 					break;
