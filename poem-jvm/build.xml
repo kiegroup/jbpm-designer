@@ -95,6 +95,7 @@
 			
 			<webinf dir="${server-root-dir}/etc">
 				<include name="backend.properties" />
+				<include name="*.crt" />
 			</webinf>
 			
 			<fileset file="favicon.ico"/>
