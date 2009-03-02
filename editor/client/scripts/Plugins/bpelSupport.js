@@ -298,8 +298,15 @@ ORYX.Plugins.BPELSupport = Clazz.extend({
 								// Get the erdf string					
 								var erdf = a.result;
 								erdf = erdf.startsWith('<?xml') ? erdf : '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
+								
+								//alert(erdf);
+								
 								// Load the eRDF to the editor
 								this.loadERDF(erdf);
+								
+								// update the canvas
+								this.facade.getCanvas().update();
+								
 								// Hide the waiting panel
 								loadMask.hide();
 								

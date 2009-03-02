@@ -103,7 +103,7 @@ public class BPELImporter extends HttpServlet {
     	//  	1. mark all node stencil sets with the attribute "isNodeStencilSet"
     	//         mark all edge stencil sets with the attribute "isEdgeStencilSet"
     	//         in order to avoid the prefix problem
-    	//  	2. calculate the bounding of each shape
+    	//  	2. calculate the bounds of each shape
     	//      3. generate for each shape a ID
     	//  	4. move the <link> elements from <links> element to
     	//         top of the root <process> element, and record linkID
