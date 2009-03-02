@@ -6,12 +6,6 @@
 	position: relative;
 }
 
-<!--[if IE]>
-.movi-scollbox {
-	overflow: scroll;
-}
-<![endif]-->
-
 .movi-modelimg {
 	top: 0px;
 	left: 0px;

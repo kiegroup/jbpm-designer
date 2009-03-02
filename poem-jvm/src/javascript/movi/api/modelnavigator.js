@@ -127,17 +127,24 @@ MOVI.namespace("widget");
 			if(this._image.get("src")!=pngUrl)
 				this._image.set("src", pngUrl);
 				
-			var width = parseInt(this.getStyle("width"), 10);
-			var scale = width / this.modelviewer.getImgWidth();
+			var navigatorWidth = parseInt(this.getStyle("width"), 10);
+			var scale = navigatorWidth / this.modelviewer.getImgWidth();
+			var navigatorHeight = Math.round(scale * this.modelviewer.getImgHeight());
 			
 			// adjust navigator's height
-			this.setStyle("height", Math.round(scale * this.modelviewer.getImgHeight()) + "px");
+			this.setStyle("height", navigatorHeight + "px");
 			
-			// update clipping rect
+			// calculate dimensions of clipping rect
 			var scrollboxWidth = parseInt(scrollboxEl.getStyle("width"), 10);
 			var scrollboxHeight = parseInt(scrollboxEl.getStyle("height"), 10);
-			this._clippingRect.setStyle("width", Math.round(scale * scrollboxWidth) + "px");
-			this._clippingRect.setStyle("height", Math.round(scale * scrollboxHeight) + "px");
+			var clippingRectWidth = Math.round(scale * scrollboxWidth);
+			var clippingRectHeight = Math.round(scale * scrollboxHeight);
+			if(clippingRectWidth>navigatorWidth) clippingRectWidth = navigatorWidth;
+			if(clippingRectHeight>navigatorHeight) clippingRectHeight = navigatorHeight;
+			
+			// update clipping rect
+			this._clippingRect.setStyle("width", clippingRectWidth + "px");
+			this._clippingRect.setStyle("height", clippingRectHeight + "px");
 			this._clippingRect.setStyle("left", Math.round(scale * scrollboxEl.get("scrollLeft")) + "px");
 			this._clippingRect.setStyle("top", Math.round(scale * scrollboxEl.get("scrollTop")) + "px");
 			

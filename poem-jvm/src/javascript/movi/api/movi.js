@@ -119,6 +119,10 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 			}
 			
 			YAHOO.util.Get.css(moviBase + "/style/movi.css", {});
+			if (YAHOO.env.ua.ie > 0) { 
+				// load custom stylesheets for IE
+				YAHOO.util.Get.css(moviBase + "/style/movi_ie.css", {});
+			}
 			
 			// load MOVI modules in correct order to satisfy dependencies
 			// path references are relative to YUI root directory
