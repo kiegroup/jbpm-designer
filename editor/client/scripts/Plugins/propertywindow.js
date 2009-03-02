@@ -432,7 +432,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 			jsonString += "{";	
 			for (var j = 0; j < this.items.length; j++) {
 				var key = this.items[j].id();
-				jsonString += key + ':' + data.get(key).toJSON();
+				jsonString += key + ':' + ("" + data.get(key)).toJSON();
 				if (j < (this.items.length - 1)) {
 					jsonString += ", ";
 				}
