@@ -62,6 +62,7 @@
 		<plugin source="shapeHighlighting.js" name="ORYX.Plugins.ShapeHighlighting" />
 		<plugin source="overlay.js" name="ORYX.Plugins.Overlay" />		
 		<plugin source="edit.js" name="ORYX.Plugins.Edit" />
+		<plugin source="keysMove.js" name="ORYX.Plugins.KeysMove" />
 
 		<!-- plugin for PNML export and deployment -->
 		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport">
