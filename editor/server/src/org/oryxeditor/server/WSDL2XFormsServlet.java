@@ -70,28 +70,28 @@ public class WSDL2XFormsServlet extends HttpServlet {
 				XForm form = importer.getXForm();
 				
 				// import XForms document for Oryx
-				XFormsERDFExporter exporter = new XFormsERDFExporter(form);
+				XFormsERDFExporter exporter = new XFormsERDFExporter(form, getServletContext().getRealPath("/stencilsets/xforms/xforms.json"));
 				StringWriter erdfWriter = new StringWriter();
 				exporter.exportERDF(erdfWriter);
-				
+			
 				// save to backend
 				Repository repo = new Repository(Repository.getBaseUrl(req));
 				String modelName = wsdlId + " " + i;
 				
-				String modelUrl = repo.saveNewModel(
+				String modelUrl = Repository.getBaseUrl(req) + repo.saveNewModel(
 						erdfWriter.toString(), 
 						modelName, 
 						modelName, 
 						"http://b3mn.org/stencilset/xforms#", 
 						"/stencilsets/xforms/xforms.json");
-				
-				addResponseParams(xformsDoc.getDocumentElement(), Repository.getOryxUrl(req) + modelUrl);
+			
+				addResponseParams(xformsDoc.getDocumentElement(), modelUrl);
 				
 				i++;
 				
 			}
 			
-			resWriter.write("svc_0=" + wsdlUrl);
+			resWriter.write("svc0=" + wsdlUrl);
 			int ptId=0;
 			for(String portType : forms.keySet()) {
 				resWriter.write("&svc0_pt" + ptId + "=" + portType);

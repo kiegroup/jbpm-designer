@@ -1,6 +1,9 @@
 package de.hpi.xforms.rdf;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -8,10 +11,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 import de.hpi.xforms.AbstractAction;
 import de.hpi.xforms.ActionContainer;
@@ -89,9 +102,39 @@ public class XFormsERDFExporter {
 	
 	private ExportContext context;
 	
-	public XFormsERDFExporter(XForm form) {
+	private JSONObject stencilSetJsonObj;
+	
+	public XFormsERDFExporter(XForm form, String stencilsetPath) {
 		super();
 		context = new ExportContext(form);
+		this.getStencilSetJson(stencilsetPath);
+	}
+	
+	private void getStencilSetJson(String stencilsetPath) {
+		try {
+			String jsonString = readFileAsString(stencilsetPath);
+			
+			// HACK: remove all layout functions to get valid JSON
+			String validJsonString = removeLayoutFunctions(jsonString);
+			
+			stencilSetJsonObj = new JSONObject(validJsonString);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private String removeLayoutFunctions(String jsonString) {
+		// REGEX dont work well with grammars... lets do it by hand
+		String result = "";
+		int i = 0;
+		int j = jsonString.indexOf("\"layout\"");
+		while(j>0) {
+			result += jsonString.substring(i, j);
+			i = jsonString.indexOf("\"properties\"", j+1);
+			j = jsonString.indexOf("\"layout\"", i+1);
+		}
+		if(i>0) result += jsonString.substring(i);
+		return result;
 	}
 	
 	public void exportERDF(Writer writer) {
@@ -268,8 +311,9 @@ public class XFormsERDFExporter {
 						appendXFormsField(writer, "value_" + field, value.getAttributes().get(field));
 				}
 			}
-			appendOryxField(writer, "bounds", "0," + item.getYPosition() + ",0," + item.getYPosition());
-		}
+			
+			appendOryxField(writer, "bounds", "0," + item.getYPosition() + "," +getDefaultStencilWidth(element) +"," + (item.getYPosition() + getDefaultStencilHeight(element)));
+			}
 		
 		// handle itemset element
 		if(element instanceof Itemset) {
@@ -286,13 +330,15 @@ public class XFormsERDFExporter {
 					appendXFormsField(writer, "copy_" + field, copy.getAttributes().get(field));
 				}
 			}
-			appendOryxField(writer, "bounds", "0," + itemset.getYPosition() + ",0," + itemset.getYPosition());
+			appendOryxField(writer, "bounds", "0," + itemset.getYPosition() + "," +getDefaultStencilWidth(element) +"," + (itemset.getYPosition() + getDefaultStencilHeight(element)));
 		}
 		
 		if(element instanceof XFormsUIElement) {
-			int x = ((XFormsUIElement) element).getXPosition();
-			int y = (((XFormsUIElement) element).getYPosition() + 10) * DISTANCE_FACTOR;
-			appendOryxField(writer, "bounds", x + "," + y + "," + x + "," + y );
+			int x1 = ((XFormsUIElement) element).getXPosition();
+			int y1 = (((XFormsUIElement) element).getYPosition() + 10) * DISTANCE_FACTOR;
+			int x2 = x1 + getDefaultStencilWidth(element);
+			int y2 = y1 + getDefaultStencilHeight(element);
+			appendOryxField(writer, "bounds", x1 + "," + y1 + "," + x2 + "," + y2 );
 		}
 		
 		writer.append("<a rel=\"raziel-parent\" href=\"#" + context.getParent(element).getResourceId() + "\"/>");
@@ -384,5 +430,59 @@ public class XFormsERDFExporter {
 		}
 		return null;
 	}
+	
+	
+	private int getDefaultStencilWidth(XFormsElement element) {
+		Document svg = getSvgForElement(element);
+		return Integer.parseInt(svg.getDocumentElement().getAttribute("width"));
+	}
+	
+	private int getDefaultStencilHeight(XFormsElement element) {
+		Document svg = getSvgForElement(element);
+		return Integer.parseInt(svg.getDocumentElement().getAttribute("height"));
+	}
+	
+	private Document getSvgForElement(XFormsElement element) {
+		JSONArray stencils;
+		String svg = "";
+		try {
+			stencils = stencilSetJsonObj.getJSONArray("stencils");
+			for(int i=0; i<stencils.length(); i++) {
+				JSONObject stencil = stencils.getJSONObject(i);
+				if(stencil.getString("id").equals(element.getStencilId()))
+					svg = stencil.getString("view");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			return builder.parse(new ByteArrayInputStream(svg.getBytes()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
+	private String readFileAsString(String filePath) {
+        StringBuffer fileData = new StringBuffer(1000);
+        try {
+	        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+	        char[] buf = new char[1024];
+	        int numRead=0;
+			while((numRead=reader.read(buf)) != -1){
+			    String readData = String.valueOf(buf, 0, numRead);
+			    fileData.append(readData);
+			    buf = new char[1024];
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return fileData.toString();
+    }
 }

@@ -43,7 +43,7 @@ public class XFormsImportServlet extends HttpServlet {
 			XFormsXHTMLImporter importer = new XFormsXHTMLImporter(document);
 			XForm form = importer.getXForm();
 			
-			XFormsERDFExporter exporter = new XFormsERDFExporter(form);
+			XFormsERDFExporter exporter = new XFormsERDFExporter(form, getServletContext().getRealPath("/stencilsets/xforms/xforms.json"));
 			exporter.exportERDF(res.getWriter());
 			
 		} catch (ParserConfigurationException e) {
