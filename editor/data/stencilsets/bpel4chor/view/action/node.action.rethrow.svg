@@ -49,6 +49,27 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
+    	
+    <g id="documentation"
+	   pointer-events="fill">
+    	
+    	<rect 
+    		x="76" 
+    		y="56" 
+    		width="16" 
+    		height="16" 
+    		stroke="black" 
+    		stroke-width="1" 
+    		fill="none" />
+    	<path 
+    		d="	M 78 58 L 90 58
+    			M 78 62 L 90 62
+    			M 78 66 L 90 66
+    			M 78 70 L 90 70" 
+    		fill="none" 
+    		stroke="black" />
+  	</g>
+  	
     <path
          style="fill:black;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10"
          d="M 22.820839,11.171502 L 19.36734,24.58992 L 13.54138,14.281819 L 9.3386512,20.071607 L 13.048949,6.8323057 L 18.996148,16.132659 L 22.820839,11.171502 z"

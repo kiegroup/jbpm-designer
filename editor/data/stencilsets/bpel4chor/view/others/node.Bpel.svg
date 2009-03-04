@@ -6,8 +6,8 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="600"
-   height="550"
+   width="690"
+   height="200"
    >
   
   <defs >
@@ -15,23 +15,23 @@
   
   <oryx:magnets>
     <oryx:magnet
-       oryx:cx="300"
-       oryx:cy="250"
+       oryx:cx="345"
+       oryx:cy="100"
        oryx:default="yes" />
     <oryx:magnet
        oryx:cx="0"
-       oryx:cy="250"
+       oryx:cy="100"
        oryx:anchors="left" />
     <oryx:magnet
-       oryx:cx="300"
-       oryx:cy="500"
+       oryx:cx="345"
+       oryx:cy="200"
        oryx:anchors="bottom" />
     <oryx:magnet
-       oryx:cx="600"
-       oryx:cy="250"
+       oryx:cx="690"
+       oryx:cy="100"
        oryx:anchors="right" />
     <oryx:magnet
-       oryx:cx="300"
+       oryx:cx="345"
        oryx:cy="0"
        oryx:anchors="top" />
   </oryx:magnets>
@@ -42,18 +42,41 @@
        x="0"
        rx="10" 
        ry="10"
-       height="500"
-       width="600"
+       height="200"
+       width="690"
        id="mainBody"
 	   oryx:resize="vertical horizontal"
 	   fill="white"
        stroke="black" 
        stroke-width="1"/>
+       
+	<g id="documentation"
+	   pointer-events="fill">
+    	
+    	<rect 
+    		x="666" 
+    		y="176" 
+    		width="16" 
+    		height="16" 
+    		stroke="black" 
+    		stroke-width="1" 
+    		fill="none" 
+    		oryx:anchors="bottom right"/>
+    	<path 
+    		d="	M 668 178 L 680 178
+    			M 668 182 L 680 182
+    			M 668 186 L 680 186
+    			M 668 190 L 680 190" 
+    		fill="none" 
+    		stroke="black"
+    		oryx:anchors="bottom right"/>
+  	</g>
+  	
     <text
        oryx:rotate="270"
        id="label"
 	   x="16" 
-	   y="250" 
+	   y="100" 
 	   oryx:align="middle center"
 	   oryx:anchors="left"
 	   style="font-family:Arial; font-size: 15pt; fill:black;"></text> 

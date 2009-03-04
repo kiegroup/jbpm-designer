@@ -50,6 +50,29 @@
 	     stroke-width="1"
 	     oryx:resize="vertical horizontal"
 	     style="fill-opacity:1;stroke-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0"/>
+    
+    <g id="documentation"
+	   pointer-events="fill">
+
+    	<rect 
+    		x="136" 
+    		y="56" 
+    		width="16" 
+    		height="16" 
+    		stroke="black" 
+    		stroke-width="1"
+    		oryx:anchors="bottom right"
+    		fill="none" />
+    	<path 
+    		d="	M 138 58 L 150 58
+    			M 138 62 L 150 62
+    			M 138 66 L 150 66
+    			M 138 70 L 150 70" 
+    		fill="none"
+    		oryx:anchors="bottom right"
+    		stroke="black" />
+  	</g>
+    
     <polygon
        oryx:anchors="top left"
        points="14,1 13,10.5 9,7.5 6,15 7,4.5 11,8.5 14,1 "

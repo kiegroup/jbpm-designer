@@ -9,6 +9,19 @@
 	  	</marker>
 	</defs>
 	<g id="edge">
-	    <path d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#end)" />
+	    <path d="M10 50 L210 50" 
+	    	  stroke="black" 
+	    	  fill="none" 
+	    	  stroke-width="2" 
+	    	  stroke-linecap="round" 
+	    	  stroke-linejoin="round" 
+	    	  marker-end="url(#end)" />
+		<text id="expression" 
+			  x="47" 
+			  y="7" 
+			  font-size="10" 
+			  font-family="Arial" 
+			  fill="black" 
+			  oryx:edgePosition="midtop"/>
 	</g>
 </svg>

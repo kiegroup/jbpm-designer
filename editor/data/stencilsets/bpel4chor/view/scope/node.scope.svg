@@ -48,6 +48,29 @@
     	stroke="black" 
     	stroke-width="1" 
     	fill="white" />
+    
+    <g id="documentation"
+	   pointer-events="fill">
+
+    	<rect 
+    		x="76" 
+    		y="56" 
+    		width="16" 
+    		height="16" 
+    		stroke="black" 
+    		stroke-width="1"
+    		oryx:anchors="bottom right"
+    		fill="none" />
+    	<path 
+    		d="	M 78 58 L 90 58
+    			M 78 62 L 90 62
+    			M 78 66 L 90 66
+    			M 78 70 L 90 70" 
+    		fill="none"
+    		oryx:anchors="bottom right"
+    		stroke="black" />
+  	</g>
+  		
     <text
        oryx:rotate="270"
        id="label"

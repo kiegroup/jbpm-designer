@@ -128,6 +128,7 @@
 					"title_de":"Dokumentation",
 					"value":"",
 					"description":"",
+					"refToView":"documentation",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
@@ -794,7 +795,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1145,7 +1146,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -1158,7 +1159,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1437,7 +1438,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -1450,7 +1451,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1791,7 +1792,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -1947,12 +1948,12 @@
 					"type":"String",
 					"title":"documentation",
 					"title_de":"Dokumentation",
-					"value":"onMessage",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2188,7 +2189,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2334,7 +2335,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2465,40 +2466,10 @@
 					"length":""
 				},
 				{
-					"id":"documentation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"documentation",
-					"title_de":"Dokumentation",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":true
-				},
-				{
-					"id":"transition_expression",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"expression",
-					"title_de":"Ausdruck",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"label",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
 					"id":"TC_expressionLanguage",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"expressionLanguage",
+					"title":"transCond_expLang",
 					"title_de":"Ausdruckssprache",
 					"value":"",
 					"description":"",
@@ -2508,12 +2479,27 @@
 					"refToView":"",
 					"length":undefined,
 					"wrapLines":false
+				},				
+				{
+					"id":"transition_expression",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"transCond_boolExp",
+					"title_de":"Ausdruck",
+					"value":"transionCondition",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"expression",
+					"length":undefined,
+					"wrapLines":false
 				},
 				{
 					"id":"TC_opaque",
 					"prefix":"oryx",
 					"type":"boolean",
-					"title":"opaque",
+					"title":"transCond_opaque",
 					"title_de":"opak",
 					"value":false,
 					"description":"",
@@ -2546,7 +2532,7 @@
 					"type":"String",
 					"title":"name",
 					"title_de":"Name",
-					"value":"if",
+					"value":"if_block",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
@@ -2566,7 +2552,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -2842,7 +2828,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -3030,7 +3016,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -3218,7 +3204,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -3352,6 +3338,18 @@
 					"wrapLines":false
 				},
 				{
+					"id":"start_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"start_Opaque",
+					"title_de":"start_opake",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
 					"id":"final_expLang",
 					"prefix":"oryx",
 					"type":"String",
@@ -3382,11 +3380,23 @@
 					"wrapLines":false
 				},
 				{
-					"id":"compCond_expLang",
+					"id":"final_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"final_Opaque",
+					"title_de":"final_opake",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"branches_expLang",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"compCond_expLang",
-					"title_de":"compCond_expLang",
+					"title":"branches_expLang",
+					"title_de":"branches_expLang",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -3407,6 +3417,18 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true
+				},
+				{
+					"id":"branches_opaque",
+					"prefix":"oryx",
+					"type":"boolean",
+					"title":"branches_Opaque",
+					"title_de":"branches_opake",
+					"value":false,
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"branches_intExp",
@@ -3493,7 +3515,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -4308,7 +4330,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -4870,7 +4892,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -4929,7 +4951,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5102,7 +5124,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5375,7 +5397,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5434,7 +5456,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5493,7 +5515,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5547,12 +5569,12 @@
 					"type":"String",
 					"title":"name",
 					"title_de":"Name",
-					"value":"catch",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"top",
+					"refToView":"",
 					"length":undefined,
 					"wrapLines":false
 				},
@@ -5580,7 +5602,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5664,12 +5686,12 @@
 					"type":"String",
 					"title":"documentation",
 					"title_de":"Dokumentation",
-					"value":"catchAll",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -5725,7 +5747,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -5738,7 +5760,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},{
@@ -5883,7 +5905,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -5896,7 +5918,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6013,7 +6035,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6026,7 +6048,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6143,7 +6165,7 @@
 					"optional":false,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6156,7 +6178,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6288,7 +6310,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6301,7 +6323,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6418,7 +6440,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6431,7 +6453,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6622,7 +6644,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6635,7 +6657,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -6767,7 +6789,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6780,7 +6802,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},{
@@ -6896,7 +6918,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"documentation",
@@ -6909,7 +6931,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
@@ -7026,7 +7048,7 @@
 					"optional":true,
 					"refToView":"label",
 					"length":undefined,
-					"wrapLines":false
+					"wrapLines":true
 				},
 				{
 					"id":"elementName",
@@ -7054,7 +7076,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
 				},
