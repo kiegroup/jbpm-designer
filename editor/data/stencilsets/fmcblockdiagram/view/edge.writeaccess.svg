@@ -16,7 +16,7 @@
         <path
           style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round"
           d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-          transform="scale(0.6) translate(0,0) rotate(180)" />
+          transform="scale(0.5,0.6) translate(0,0) rotate(180)" />
       </marker>
 	</defs>
 	<g>
