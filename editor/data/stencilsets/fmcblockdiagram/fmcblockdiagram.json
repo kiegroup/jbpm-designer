@@ -436,6 +436,20 @@
 				}
 			]
 		},
+        {
+            "type": "node",
+            "id":"RequestSymbolL2R",
+            "title":"Request Symbol (l2r)",
+            "description":"The agent on the left can request information from agent on the right which in turn responds (e.g. function calls or http request/responses). Because it is very common, this symbol is an abbreviation of the request/response channel.",
+            "groups":[],
+            "view":"node.requestsymbol-l2r.svg",
+            "icon":"node.requestsymbol-l2r.png",
+            "roles": [
+                "fromtoall",
+                "agentcontent"
+            ],
+            "properties": []
+        },
 	],	
 	"rules": {
 		"connectionRules": [
