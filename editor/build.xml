@@ -266,6 +266,10 @@
 				<exclude name="servlet-api.jar" />
             </lib>
 			
+            <lib dir="${editor-src-root}/lib/wsdl2xforms">
+            	<include name="*.xsl"/>
+            </lib>
+			
             <fileset dir="${editor-src-root}/client">        	
                 <include name="${build-with-script-files-flag}"/>
             </fileset>
