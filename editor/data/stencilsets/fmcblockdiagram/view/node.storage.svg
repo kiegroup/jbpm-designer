@@ -20,9 +20,10 @@
        height="45"
        rx="22.5"
        ry="22.5"
-       style="stroke:#000000;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round"
+       style="stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       fill="white"
        id="storage"
        oryx:resize="vertical horizontal" />
-      <text font-size="12" id="text" x="40" y="22" oryx:align="middle center" stroke="black"></text>
+      <text font-size="12" id="text" x="40" y="22" oryx:align="middle center" stroke="black">Storage</text>
   </g>
 </svg>

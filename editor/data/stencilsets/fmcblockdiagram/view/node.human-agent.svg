@@ -13,6 +13,7 @@
        height="34.015701"
        id="humanagent"
        style="stroke:#000000"
+       stroke-width="1.9"
        oryx:resize="horizontal vertical"
        oryx:anchor="top bottom left right" />
       <path
