@@ -84,8 +84,8 @@ public class WSDL2XFormsServlet extends HttpServlet {
 						modelName, 
 						"http://b3mn.org/stencilset/xforms#", 
 						"/stencilsets/xforms/xforms.json");
-			
-				addResponseParams(xformsDoc.getDocumentElement(), modelUrl);
+				
+				addResponseParams(xformsDoc.getDocumentElement(), modelUrl.substring(modelUrl.lastIndexOf("http://")));
 				
 				i++;
 				
