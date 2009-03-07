@@ -503,8 +503,8 @@
             "description":"A label that can be freely positioned whithin a storage or agent.",
             "groups":[],
             "groups_de":[],
-            "view":"node.text.svg",
-            "icon":"node.text.png",
+            "view":"node.textlabel.svg",
+            "icon":"node.textlabel.png",
             "roles": [
                 "diagramcontent",
                 "agentcontent",
