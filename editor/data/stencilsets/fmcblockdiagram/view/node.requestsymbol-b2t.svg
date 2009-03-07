@@ -2,13 +2,14 @@
 <svg
    xmlns="http://www.w3.org/2000/svg"
    xmlns:oryx="http://www.b3mn.org/oryx"
-   width="23"
-   height="12"
+   width="11"
+   height="21"
    version="1.0">
   <g pointer-events="fill" >
-    <rect x="0" y="0" width="23" height="12" stroke="none" fill="none" />
-    <text font-size="10" id="text" x="2" y="10" stroke="black">R</text>
-    <path d="M 12.5 1 L 18.75 6 L 12.5 11 L 12.5 1" fill="black" stroke="none" />
+    <rect x="0" y="0" width="11" height="21" stroke="none" fill="none" />
+    <text font-size="10" id="text" x="1" y="18" stroke="black">R</text>
+    <path d="M 12.5 1 L 18.75 6 L 12.5 11 L 12.5 1" fill="black" stroke="none"
+      transform="translate(-0.5,21) rotate(270)"/>
 <!--
     <path
       style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round"

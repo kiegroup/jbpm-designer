@@ -7,8 +7,9 @@
    version="1.0">
   <g pointer-events="fill" >
     <rect x="0" y="0" width="23" height="12" stroke="none" fill="none" />
-    <text font-size="10" id="text" x="2" y="10" stroke="black">R</text>
-    <path d="M 12.5 1 L 18.75 6 L 12.5 11 L 12.5 1" fill="black" stroke="none" />
+    <text font-size="10" id="text" x="11" y="10" stroke="black">R</text>
+    <path d="M 12.5 1 L 18.75 6 L 12.5 11 L 12.5 1" fill="black" stroke="none"
+      transform="translate(21.5,12.5) rotate(180)" />
 <!--
     <path
       style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round"

@@ -415,7 +415,8 @@
 			"id":"ProtocolBoundary",
 			"title":"Protocol Boundary",
 			"description":"A protocol boundary is used to indicate that a certain protocol is used for communication between agents.",
-			"groups":[],
+            "groups":[],
+            "groups_de":[],
 			"view":"edge.protocolboundary.svg",
 			"icon":"edge.protocolboundary.png",
 			"roles": [
@@ -442,6 +443,7 @@
             "title":"Request Symbol (l2r)",
             "description":"The agent on the left can request information from agent on the right which in turn responds (e.g. function calls or http request/responses). Because it is very common, this symbol is an abbreviation of the request/response channel.",
             "groups":[],
+            "groups_de":[],
             "view":"node.requestsymbol-l2r.svg",
             "icon":"node.requestsymbol-l2r.png",
             "roles": [
@@ -449,6 +451,128 @@
                 "agentcontent"
             ],
             "properties": []
+        },
+        {
+            "type": "node",
+            "id":"RequestSymbolT2B",
+            "title":"Request Symbol (t2b)",
+            "description":"The agent above can request information from agent below which in turn responds (e.g. function calls or http request/responses). Because it is very common, this symbol is an abbreviation of the request/response channel.",
+            "groups":[],
+            "groups_de":[],
+            "view":"node.requestsymbol-t2b.svg",
+            "icon":"node.requestsymbol-t2b.png",
+            "roles": [
+                "diagramcontent",
+                "agentcontent"
+            ],
+            "properties": []
+        },
+        {
+            "type": "node",
+            "id":"RequestSymbolR2L",
+            "title":"Request Symbol (r2l)",
+            "description":"The agent on the right can request information from agent on the left which in turn responds (e.g. function calls or http request/responses). Because it is very common, this symbol is an abbreviation of the request/response channel.",
+            "groups":[],
+            "groups_de":[],
+            "view":"node.requestsymbol-r2l.svg",
+            "icon":"node.requestsymbol-r2l.png",
+            "roles": [
+                "diagramcontent",
+                "agentcontent"
+            ],
+            "properties": []
+        },
+        {
+            "type": "node",
+            "id":"RequestSymbolB2T",
+            "title":"Request Symbol (b2t)",
+            "description":"The agent below can request information from agent above which in turn responds (e.g. function calls or http request/responses). Because it is very common, this symbol is an abbreviation of the request/response channel.",
+            "groups":[],
+            "groups_de":[],
+            "view":"node.requestsymbol-b2t.svg",
+            "icon":"node.requestsymbol-b2t.png",
+            "roles": [
+                "diagramcontent",
+                "agentcontent"
+            ],
+            "properties": []
+        },
+        {
+            "type": "node",
+            "id":"TextLabel",
+            "title":"Text Label",
+            "description":"A label that can be freely positioned whithin a storage or agent.",
+            "groups":[],
+            "groups_de":[],
+            "view":"node.text.svg",
+            "icon":"node.text.png",
+            "roles": [
+                "diagramcontent",
+                "agentcontent",
+                "storagecontent"
+            ],
+            "properties": [
+                {
+                    "id":"Label",
+                    "type":"String",
+                    "title":"Text",
+                    "value":"Text",
+                    "description":"",
+                    "tooltip":"",
+                    "readonly":false,
+                    "optional":false,
+                    "refToView":"text",
+                    "length":""
+                }
+            ]
+        },
+        {
+            "type": "node",
+            "id":"TextAnnotation",
+            "title":"Text Annotation",
+            "title_de":"Text-Anmerkung",
+            "description":"Any object can be associated with a Text Annotation to provide additional documentation.",
+            "description_de":"Jedes Objekt kann durch eine Text-Anmerkung kommentiert werden.",
+            "groups":[],
+            "groups_de":[],
+            "view":"node.textannotation.svg",
+            "icon":"node.textannotation.png",
+            "roles": [
+                "diagramcontent",
+                "from_artifact",
+                "to_artifact"
+            ],
+            "properties": [
+                {
+                    "id":"text",
+                    "type":"String",
+                    "title":"Text",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "refToView":"text",
+                    "length":"",
+                    "wrapLines":true
+                }
+            ]
+        },
+        {
+            "type": "edge",
+            "id":"UndirectedAssociation",
+            "title":"Undirected Association",
+            "title_de":"Ungerichtete Assoziation",
+            "description":"Attaches a text annotation with a model element.",
+            "description_de":"Verbindet eine Text-Annotation mit einem Model Element.",
+            "groups":[],
+            "groups_de":[],
+            "view":"edge.undirectedassociation.svg",
+            "icon":"edge.undirectedassociation.png",
+            "roles": [
+                "diagramcontent"
+            ],
+            "properties": [
+            ]
         },
 	],	
 	"rules": {
@@ -504,7 +628,20 @@
 						"to":["to_active"]
 					}
 				]
-			}	
+			},
+            {
+                "role":"UndirectedAssociation",
+                "connects": [
+                    {
+                        "from":"diagramcontent",
+                        "to":["TextAnnotation"]
+                    },
+                    {
+                        "from":"TextAnnotation",
+                        "to":["diagramcontent"]
+                    }
+                ]
+            },
 		],
 		"containmentRules": [
 			{
