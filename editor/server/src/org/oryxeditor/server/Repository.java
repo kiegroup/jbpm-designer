@@ -36,6 +36,10 @@ public class Repository {
 	 */
 	public static String getBaseUrl(HttpServletRequest req) {
 		String baseUrl = req.getRequestURL().toString();
+		
+		//hack for reverse proxies:
+		baseUrl = baseUrl.substring(baseUrl.lastIndexOf("http://"));
+		
 		return baseUrl.substring(0, baseUrl.length()-req.getRequestURI().length() +1);
 	}
 	
