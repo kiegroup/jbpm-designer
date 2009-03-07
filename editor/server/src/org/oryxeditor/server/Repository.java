@@ -135,6 +135,10 @@ public class Repository {
 			 if( statusCode != -1 ) {
 		    	Header header = method.getResponseHeader("location");
 		    	result = header.getValue();
+		    	
+		    	//hack for reverse proxies:
+				result = result.substring(result.lastIndexOf("http://"));
+		    	
 		    	if (result.startsWith(baseUrl)){
 		    		result = result.substring(baseUrl.length());
 		    	}
