@@ -21,16 +21,15 @@
  * DEALINGS IN THE SOFTWARE.
  **/
 
-//TODO: request symbols
 //TODO: better svg for modifying access (I tried with 'view/edge.modifyingaccess.2.svg' and 'view/edge.modifyingaccess.3.edit.svg' but they don't work in Oryx)
 //TODO: L and U agents and storages
 //TODO: bing protocol boundary to background
 //TODO: two and three dot shapes
 //TODO: enumeration of nodes (see Figure 27 of the FMC Visualization Guidelines at http://www.fmc-modeling.org/visualization_guidelines)
-//TODO: text annotation
 //TODO: brace
+//TODO: attach request symbols to channels
 //TODO: rounded edges (like in the universal communication channel in Viso stencils)
-//TODO: nicer arrows
+//TODO: nicer arrows for request symbols
 //TODO: prefix for properties (raziel, oryx or fmc)?
 
 {
