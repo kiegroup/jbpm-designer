@@ -142,6 +142,15 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                     var placeShape = plugin.facade.getCanvas().getChildShapeByResourceId(place);
                     placeShape.setProperty("oryx-numberoftokens", marking[place]);
                 }
+            },
+            showErrors: function(errors){
+                this.setIcon(CheckNode.ERROR_STATUS);
+                Ext.each(errors, function(error){
+                    this.appendChild(new CheckNode({
+                        icon: CheckNode.ERROR_STATUS,
+                        text: error
+                    }));
+                }.bind(this))
             }
         });
         CheckNode.UNKNOWN_STATUS = ORYX.PATH + 'images/soundness_checker/' + 'asterisk_yellow.png';
@@ -274,6 +283,12 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                         method: 'POST',
                                         success: function(request){
                                             var res = Ext.decode(request.responseText);
+                                            
+                                            if(res.errors.length !== 0){
+                                                node.showErrors(res.errors);
+                                                return;
+                                            }
+                                            
                                             if (res.isSound) {
                                                 node.setIcon(CheckNode.OK_STATUS);
                                             }
@@ -320,7 +335,13 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                         method: 'POST',
                                         success: function(request){
                                             var res = Ext.decode(request.responseText);
-                                            if (res.isSound) {
+                                            
+                                            if(res.errors.length !== 0){
+                                                node.showErrors(res.errors);
+                                                return;
+                                            }
+                                            
+                                            if (res.isWeakSound) {
                                                 node.setIcon(CheckNode.OK_STATUS);
                                             }
                                             else {
@@ -362,6 +383,12 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                         method: 'POST',
                                         success: function(request){
                                             var res = Ext.decode(request.responseText);
+                                            
+                                            if(res.errors.length !== 0){
+                                                node.showErrors(res.errors);
+                                                return;
+                                            }
+                                            
                                             if (res.isRelaxedSound) {
                                                 node.setIcon(CheckNode.OK_STATUS);
                                             }

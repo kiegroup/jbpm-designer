@@ -12,13 +12,14 @@ public class PetriNetRGCalculator {
 	PetriNet net;
 	PetriNetInterpreter interpreter;
 	PetriNetReachabilityGraph rg;
+	public static final int MAX_NUM_STATES = 1000;
 	
 	public PetriNetRGCalculator(PetriNet net, PetriNetInterpreter interpreter){
 		this.net = net;
 		this.interpreter = interpreter;
 	}
 	
-	public PetriNetReachabilityGraph calculate(){
+	public PetriNetReachabilityGraph calculate() throws MaxNumOfStatesReachedException{
 		rg = new PetriNetReachabilityGraph(net);
 		
 		Marking initialMarking = calcInitialMarking();
@@ -39,7 +40,10 @@ public class PetriNetRGCalculator {
 	}
 
 	//TODO prevent livelocks!!!!
-	protected void doCalculation(Marking marking) {
+	protected void doCalculation(Marking marking) throws MaxNumOfStatesReachedException {
+		if(rg.getMarkingsCount() > MAX_NUM_STATES)
+			throw new MaxNumOfStatesReachedException();
+		
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
 		for (Iterator<Transition> it=transitions.iterator(); it.hasNext(); ) {
 			Transition t = it.next();

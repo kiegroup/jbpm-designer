@@ -112,6 +112,13 @@ public class ReachabilityGraph<Diagram, FlowObject, Marking>
 		return markings;
 	}
 	
+	/**
+	 * @return The total number of marking/ state nodes in the reachability graph
+	 */
+	public int getMarkingsCount(){
+		return this.getVertices().size();
+	}
+	
 	public List<FlowObject> getFlowObjects(){
 		List<FlowObject> flowObjects = new LinkedList<FlowObject>();
 		for (ReachabilityTransition<FlowObject, Marking> trans : this.getEdges()) {

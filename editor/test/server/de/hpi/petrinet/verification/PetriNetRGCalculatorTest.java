@@ -96,4 +96,29 @@ public class PetriNetRGCalculatorTest extends AbstractPetriNetTest {
 		Marking mAfterTC = rg.getSuccessor(mAfterTB2, tC);
 		assertTrue(mAfterTA == mAfterTC);
 	}
+	
+	@Test(expected=MaxNumOfStatesReachedException.class) public void testCalculateWithLiveLock(){
+		// Petri net taken from BPM Weske book
+		PetriNet net = new PTNet();
+		Place pI = createPlace(net, "i");
+		Place p1 = createPlace(net, "p1");
+		Place p2 = createPlace(net, "p2");
+		Place pO = createPlace(net, "o");
+		Transition tA = createTransition(net, "tA");
+		Transition tB= createTransition(net, "tB");
+		Transition tC = createTransition(net, "tC");
+		
+		// Simple sequence
+		createFlowRelationship(net, pI, tA);
+		createFlowRelationship(net, tA, p1);
+		createFlowRelationship(net, p1, tB);
+		createFlowRelationship(net, tB, pO);
+		// ... and the live lock
+		createFlowRelationship(net, tB, p2);
+		createFlowRelationship(net, p2, tC);
+		createFlowRelationship(net, tC, p1);
+		
+		PetriNetRGCalculator rgCalc = new PetriNetRGCalculator(net, new PTNetInterpreter());
+		ReachabilityGraph<PetriNet, Transition, Marking> rg = rgCalc.calculate();
+	}
 }
