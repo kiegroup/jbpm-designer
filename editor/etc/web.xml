@@ -116,6 +116,16 @@
 			org.oryxeditor.server.ValidatorServlet
 		</servlet-class>
 	</servlet>
+    
+    <servlet>
+        <display-name>
+            Oryx Petri Net Soundness Checker
+        </display-name>
+        <servlet-name>PetriNetSoundnessChecker</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.PetriNetSoundnessCheckerServlet
+        </servlet-class>
+    </servlet>
 	
 	<!--<servlet>
 		<display-name>Oryx Simple Storage Servlet</display-name>
@@ -253,6 +263,11 @@
 		<servlet-name>BPEL4ChorImporter</servlet-name>
 		<url-pattern>/bpel4chorimporter</url-pattern>
 	</servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PetriNetSoundnessChecker</servlet-name>
+        <url-pattern>/checksoundness</url-pattern>
+    </servlet-mapping>
 	
 	<servlet-mapping>
 		<servlet-name>BPEL4ChorExporter</servlet-name>

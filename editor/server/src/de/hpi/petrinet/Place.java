@@ -23,5 +23,8 @@ package de.hpi.petrinet;
  * SOFTWARE.
  */
 public interface Place extends Node {
-	
+	/**
+	 * Returns true if place is a final place.
+	 */
+	boolean isFinalPlace();
 }

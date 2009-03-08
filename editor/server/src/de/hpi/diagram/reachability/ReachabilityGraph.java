@@ -1,16 +1,14 @@
 package de.hpi.diagram.reachability;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.hpi.bpt.graph.abs.AbstractDirectedGraph;
+import de.hpi.bpt.graph.abs.AbstractMultiDirectedGraph;
 import de.hpi.bpt.graph.algo.DirectedGraphAlgorithms;
 
 public class ReachabilityGraph<Diagram, FlowObject, Marking>
 		extends
-		AbstractDirectedGraph<ReachabilityTransition<FlowObject, Marking>, ReachabilityNode<Marking>> {
+		AbstractMultiDirectedGraph<ReachabilityTransition<FlowObject, Marking>, ReachabilityNode<Marking>> {
 	protected Diagram diag;
 	protected DirectedGraphAlgorithms<ReachabilityTransition<FlowObject, Marking>, ReachabilityNode<Marking>> directedGraphAlgorithms;
 
@@ -19,24 +17,30 @@ public class ReachabilityGraph<Diagram, FlowObject, Marking>
 		directedGraphAlgorithms = new DirectedGraphAlgorithms<ReachabilityTransition<FlowObject, Marking>, ReachabilityNode<Marking>>();
 	}
 
-	// FIXME Very dirty!
-	// Code just copied because of cast exception
+	// FIXME Very dirty! Code just copied because of cast exception
+	// Between two nodes, several edges are possible as long as another flow object!!!
 	@Override
 	public ReachabilityTransition<FlowObject, Marking> addEdge(
 			ReachabilityNode<Marking> s, ReachabilityNode<Marking> t) {
-		if (s == null || t == null)
+		if (s == null || t == null) // return null if one node is null
 			return null;
-		Collection<ReachabilityTransition<FlowObject, Marking>> es = this
-				.getEdgesWithSourceAndTarget(s, t);
-		if (es.size() > 0) {
-			Iterator<ReachabilityTransition<FlowObject, Marking>> i = es
-					.iterator();
-			while (i.hasNext()) {
-				ReachabilityTransition<FlowObject, Marking> e = i.next();
-				if (e.getVertices().size() == 2)
-					return null;
-			}
-		}
+		
+		//TODO Check is commented out, because several edges between nodes are possible
+		//Instead, a ReachabilityTransition should have a list of flow objects, so exactly
+		//TODO RG is a multi directed graph now!!!
+		//one edge is necessary to represent several transitions
+		// Check, whether they are already connected
+		//Collection<ReachabilityTransition<FlowObject, Marking>> es = this
+		//		.getEdgesWithSourceAndTarget(s, t);
+		//if (es.size() > 0) {
+		//	Iterator<ReachabilityTransition<FlowObject, Marking>> i = es
+		//			.iterator();
+		//	while (i.hasNext()) {
+		//		ReachabilityTransition<FlowObject, Marking> e = i.next();
+		//		if (e.getVertices().size() == 2)
+		//			return null;
+		//	}
+		//}
 
 		ReachabilityTransition<FlowObject, Marking> e = new ReachabilityTransition<FlowObject, Marking>(
 				this, s, t);
@@ -50,8 +54,10 @@ public class ReachabilityGraph<Diagram, FlowObject, Marking>
 		this.addVertex(new ReachabilityNode<Marking>(m));
 	}
 	
-	public void addTransition(Marking mSource, Marking mTarget){
-		this.addEdge(this.findByMarking(mSource), this.findByMarking(mTarget));
+	public ReachabilityTransition<FlowObject, Marking> addTransition(Marking mSource, Marking mTarget, FlowObject fo){
+		ReachabilityTransition<FlowObject, Marking> trans = this.addEdge(this.findByMarking(mSource), this.findByMarking(mTarget));
+		trans.setFlowObject(fo);
+		return trans;
 	}
 
 	public void clear() {
@@ -94,12 +100,6 @@ public class ReachabilityGraph<Diagram, FlowObject, Marking>
 		}
 	}
 
-	/*
-	 * public void doubledMarkings(){ for( Marking m1 : getMarkings() ){ for(
-	 * Marking m2 : getMarkings() ){ if(m1 == m2) break; if(m1.equals(m2)){
-	 * System.out.print("+"+m2.toString()); return; } } } }
-	 */
-
 	public boolean contains(Marking m) {
 		return findByMarking(m) != null;
 	}
@@ -110,6 +110,14 @@ public class ReachabilityGraph<Diagram, FlowObject, Marking>
 			markings.add(mNode.getMarking());
 		}
 		return markings;
+	}
+	
+	public List<FlowObject> getFlowObjects(){
+		List<FlowObject> flowObjects = new LinkedList<FlowObject>();
+		for (ReachabilityTransition<FlowObject, Marking> trans : this.getEdges()) {
+			flowObjects.add(trans.getFlowObject());
+		}
+		return flowObjects;
 	}
 
 	public ReachabilityNode<Marking> findByMarking(Marking m) {
@@ -147,6 +155,45 @@ public class ReachabilityGraph<Diagram, FlowObject, Marking>
 			list.add(markingNode.getMarking());
 		}
 		return list;
+	}
+	
+	public ReachabilityPath<FlowObject, Marking> getPath(Marking fromMarking, Marking toMarking){
+		return ReachabilityPath.calculate(this, fromMarking, toMarking);
+	}
+	
+	public ReachabilityPath<FlowObject, Marking> getPathFromRoot(Marking toMarking){
+		for(Marking marking : this.getRoots()){
+			ReachabilityPath<FlowObject, Marking> path = getPath(marking, toMarking);
+			if(path != null) return path;
+		}
+		return null;
+	}
+	
+	public List<ReachabilityPath<FlowObject, Marking>> getPaths(Marking fromMarking, Marking toMarking){
+		return ReachabilityPath.calculateAll(this, fromMarking, toMarking);
+	}
+	
+	public List<ReachabilityPath<FlowObject, Marking>> getPathsFromRoot(Marking toMarking){
+		List<ReachabilityPath<FlowObject, Marking>> paths = new LinkedList<ReachabilityPath<FlowObject, Marking>>();
+		for(Marking marking : this.getRoots()){
+			paths.addAll(getPaths(marking, toMarking));
+		}
+		return paths;
+	}
+	
+	/**
+	 * 
+	 * @param m 
+	 * @param fo
+	 * @return Next marking which is a result of a transition with given flow object
+	 */
+	public Marking getSuccessor(Marking m, FlowObject fo){
+		for(ReachabilityTransition trans : this.getOutgoingEdges(this.findByMarking(m))){
+			if(trans.getFlowObject() == fo){
+				return ((ReachabilityNode<Marking>)trans.getTarget()).getMarking();
+			}
+		}
+		return null;
 	}
 
 	public List<Marking> getRoots() {

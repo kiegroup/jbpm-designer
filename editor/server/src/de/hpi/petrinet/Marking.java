@@ -1,5 +1,8 @@
 package de.hpi.petrinet;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Copyright (c) 2008 Gero Decker
  * 
@@ -34,5 +37,17 @@ public interface Marking {
 	int getNumTokens();
 	
 	void setNumTokens(Place place, int numTokens);
-
+	
+	/**
+	 * Returns json representation of marking
+	 * {@code {'place1' => 1, 'place2' => 3}}
+	 * @throws JSONException 
+	 */
+	JSONObject toJson() throws JSONException;
+	
+	/**
+	 * Calculates if given marking is a final marking. 
+	 * @return true
+	 */
+	boolean isFinalMarking();
 }

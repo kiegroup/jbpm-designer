@@ -32,6 +32,7 @@ public class NodeImpl implements Node {
 	private List<FlowRelationship> incomingFlowRelationships;
 	private List<FlowRelationship> outgoingFlowRelationships;
 	private Bounds bounds;
+	protected String resourceId;
 
 	public String getId() {
 		return id;
@@ -72,6 +73,14 @@ public class NodeImpl implements Node {
 
 	public void setBounds(Bounds bounds) {
 		this.bounds = bounds;
+	}
+
+	public String getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(String resourceId) {
+		this.resourceId = resourceId;
 	}
 
 }

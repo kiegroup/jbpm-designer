@@ -58,5 +58,10 @@ public class ExecPlace extends ExecNode implements Place {
 		if (type == Type.data)
 			this.name = name;
 	}
+
+	public boolean isFinalPlace() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

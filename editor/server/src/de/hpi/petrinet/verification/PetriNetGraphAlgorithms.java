@@ -1,6 +1,8 @@
 package de.hpi.petrinet.verification;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import de.hpi.petrinet.FlowRelationship;
 import de.hpi.petrinet.PetriNet;
@@ -54,5 +56,31 @@ public class PetriNetGraphAlgorithms {
 		}
 		
 		return true;
+	}
+	
+	public static List<Place> getInputPlaces(PetriNet net){
+		List<Place> inputPlaces = new LinkedList<Place>();
+		
+		for(Place place : net.getPlaces()){
+			if(place.getIncomingFlowRelationships().size() == 0){
+				inputPlaces.add(place);
+			}
+		}
+		
+		return inputPlaces;
+	}
+	
+	public static Place getPlaceById(PetriNet net, String id){
+		for(Place place : net.getPlaces()){
+			if(place.getId().equals(id)) return place;
+		}
+		return null;
+	}
+	
+	public static Transition getTransitionById(PetriNet net, String id){
+		for(Transition trans : net.getTransitions()){
+			if(trans.getId().equals(id)) return trans;
+		}
+		return null;
 	}
 }

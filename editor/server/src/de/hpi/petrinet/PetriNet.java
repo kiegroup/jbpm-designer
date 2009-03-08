@@ -3,6 +3,7 @@ package de.hpi.petrinet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -39,6 +40,7 @@ public class PetriNet {
 	protected List<Place> places;
 	protected List<Transition> transitions;
 	protected List<FlowRelationship> flowRelationships;
+	protected List<Place> finalPlaces;
 
 	public List<FlowRelationship> getFlowRelationships() {
 		if (flowRelationships == null)
@@ -118,7 +120,30 @@ public class PetriNet {
 			return super.toString();
 		}		
 	}
+	
+	/**
+	 * Returns all final places of this petri net (cached).
+	 */
+	public List<Place> getFinalPlaces(){
+		if (finalPlaces == null) {
+			finalPlaces = new LinkedList<Place>();
+			for (Place place : this.getPlaces()) {
+				if (place.isFinalPlace()) {
+					finalPlaces.add(place);
+				}
+			}
+		}
 
+		return finalPlaces;
+	}
+
+	/**
+	 * Returns the first final place, intended for use in workflow nets.
+	 */
+	public Place getFinalPlace(){
+		return this.getFinalPlaces().get(0);
+	}
+	
 	protected class MyFlowRelationshipList extends ArrayList<FlowRelationship> {
 		
 		private static final long serialVersionUID = 7350067193890668068L;

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
 
@@ -101,7 +104,7 @@ public class Marking implements de.hpi.petrinet.Marking {
 						str.append(",");
 					str.append(p.getId());
 					if (numt > 1)
-						str.append(p.getId()).append(":").append(numt);
+						str.append(":").append(numt);
 				}
 			}
 			str.append("}");
@@ -121,5 +124,43 @@ public class Marking implements de.hpi.petrinet.Marking {
 				places.add(p);
 		}
 		return places;
+	}
+	
+	public boolean equals(Object o){
+		if(o instanceof Marking){
+			return toString().equals(((Marking)o).toString());
+		} else {
+			return false;
+		}
+	}
+
+	public JSONObject toJson() throws JSONException {
+		JSONObject marking = new JSONObject();
+		
+		for(Place place : net.getPlaces()){
+			marking.put(place.getResourceId(), this.getNumTokens(place));
+		}
+		
+		return marking;
+	}
+
+	/**
+	 * Returns true if all intermediate places have no token and at least one 
+	 * end place have a token. This implementation refers to the definition of 
+	 * the end state of a workflow net (a Petri net with 1 end place) 
+	 */
+	public boolean isFinalMarking() {
+		boolean oneTokenOnFinalPlace = false;
+		for(Place place : net.getPlaces()){
+			if(place.isFinalPlace()){
+				if(this.getNumTokens(place) > 0) // if token on end place, all is okay 
+					oneTokenOnFinalPlace = true;
+			} else {
+				if(this.getNumTokens(place) > 0) // if token on intermediate place
+					return false;
+			}
+		}
+		
+		return oneTokenOnFinalPlace;
 	}
 }

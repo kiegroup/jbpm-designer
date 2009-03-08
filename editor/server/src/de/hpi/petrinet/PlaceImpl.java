@@ -23,6 +23,20 @@ package de.hpi.petrinet;
  */
 public class PlaceImpl extends NodeImpl implements Place {
 
+	/**
+	 * Returns true if place has no outgoing arcs.
+	 */
+	public boolean isFinalPlace() {
+		return this.getOutgoingFlowRelationships().size() == 0;
+	}
+	
+	/**
+	 * Returns true if place has no incoming arcs.
+	 */
+	public boolean isInitialPlace(){
+		return this.getIncomingFlowRelationships().size() == 0;
+	}
+
 }
 
 

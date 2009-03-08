@@ -30,6 +30,7 @@ public class FlowRelationship {
 	protected Node source;
 	protected Node target;
 	protected String id;
+	protected String resourceId;
 	
 	public Node getSource() {
 		return source;
@@ -78,6 +79,14 @@ public class FlowRelationship {
 	
 	public Bounds getCalculatedBounds(){
 		return new Bounds(this.getSource().getBounds().getCenterRelative(), this.getTarget().getBounds().getCenterRelative());
+	}
+
+	public String getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(String resourceId) {
+		this.resourceId = resourceId;
 	}
 
 }

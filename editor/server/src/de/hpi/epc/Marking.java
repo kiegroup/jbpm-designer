@@ -64,22 +64,7 @@ public class Marking implements Cloneable {
 		if(state.size() != m.state.size() || context.size() != m.context.size()){
 			return false;
 		}
-		return toString().equals(o.toString());
-		/*
-		
-		for(IControlFlow cf : state.keySet()){
-			if(state.get(cf) != m.state.get(cf)){
-				return false;
-			}
-		}
-		
-		for(IControlFlow cf : context.keySet()){
-			if(context.get(cf) != m.context.get(cf)){
-				return false;
-			}
-		}
-		
-		return true;*/
+		return toString().equals(m.toString());
 	}
 
 	public String toString(){

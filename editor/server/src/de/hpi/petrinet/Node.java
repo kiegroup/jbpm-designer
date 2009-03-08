@@ -30,6 +30,10 @@ public interface Node {
 	public String getId();
 
 	public void setId(String label);
+	
+	public String getResourceId();
+	
+	public void setResourceId(String resourceId);
 
 	public List<? extends FlowRelationship> getIncomingFlowRelationships();
 
