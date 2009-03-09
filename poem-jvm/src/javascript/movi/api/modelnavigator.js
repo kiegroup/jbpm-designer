@@ -133,7 +133,7 @@ MOVI.namespace("widget");
 			
 			// adjust navigator's height
 			this.setStyle("height", navigatorHeight + "px");
-			
+
 			// calculate dimensions of clipping rect
 			var scrollboxWidth = parseInt(scrollboxEl.getStyle("width"), 10);
 			var scrollboxHeight = parseInt(scrollboxEl.getStyle("height"), 10);
