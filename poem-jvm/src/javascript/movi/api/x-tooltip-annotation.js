@@ -117,7 +117,7 @@ MOVI.namespace("util");
 			
 			if (this._onclose) {
 				
-				this._onclose.fn(); //.call(this._onclose.sc, this);
+				this._onclose.fn(); 
 			}
 			
 			this.hide();
@@ -388,6 +388,7 @@ MOVI.namespace("util");
 
 				if (i == "c") {
 					this._content = new YAHOO.util.Element(el.cloneNode(true));
+					this._content.setStyle("overflow", "auto");
 				}
 				var img = new YAHOO.util.Element(document.createElement("img"), {
 					"src": sprite
