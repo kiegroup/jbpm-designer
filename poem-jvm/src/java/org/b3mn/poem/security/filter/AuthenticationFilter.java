@@ -99,36 +99,10 @@ public class AuthenticationFilter implements Filter {
 						authList);
 			}
 
+			//call garbage collector for expired tokens
+			this.removeExpiredTokens(authList);
+			
 			if (authTokenParam != null && !authTokenParam.equals("")) {
-
-				// remove all expired tokens
-				// GARBAGE COLLECTOR
-				Date curDate = new Date();
-				Long thirtyMinutes = new Date(
-						1000 * 60 * authenticationTokenExpirationTime)
-						.getTime();
-
-				int index = 0;
-				while (true) {
-					if (index < authList.size()) {
-						AuthenticationToken token = authList.get(index);
-						System.out.println("expires: "
-								+ (curDate.getTime() - token
-										.getLastRequestDate().getTime()));
-						if ((curDate.getTime() - token.getLastRequestDate()
-								.getTime()) > thirtyMinutes) {
-							authList.remove(index);
-						} else {
-							index++;
-						}
-					} else {
-						break;
-					}
-				}
-
-				servletContext.setAttribute(USER_AUTHENTIFICATION_TOKENS,
-						authList);
-				// END GARBAGE COLLECTOR
 
 				// find authentication token
 				Iterator<AuthenticationToken> iter = authList.iterator();
@@ -143,8 +117,25 @@ public class AuthenticationFilter implements Filter {
 						break;
 					}
 				}
+			} else if(openId != null){
+				//client-side request without authToken.
+				//update all tokens for that openid
+				Iterator<AuthenticationToken> iter = authList.iterator();
+
+				while (iter.hasNext()) {
+					AuthenticationToken token = iter.next();
+
+					if (token.getUserUniqueId().equals(openId)) {
+						// authentication token found. set openid
+						token.setLastRequestDate(new Date());
+					}
+				}
 			}
 
+			//store authentication token list
+			servletContext.setAttribute(USER_AUTHENTIFICATION_TOKENS,
+					authList);
+			
 			// If the user isn't logged in, set the OpenID to public
 			if (openId == null) {
 				openId = HandlerBase.getPublicUser();
@@ -164,5 +155,32 @@ public class AuthenticationFilter implements Filter {
 			chain.doFilter(req, res);
 		}
 	}
+	
+	/**
+	 * The garbage collector for invalid authentication tokens.
+	 * 
+	 * @param authList The list of currently stored authentication tokens
+	 */
+	private void removeExpiredTokens(List<AuthenticationToken> authList) {
+		Date curDate = new Date();
+		Long thirtyMinutes = new Date(
+				1000 * 60 * authenticationTokenExpirationTime)
+				.getTime();
 
+		int index = 0;
+		while (true) {
+			if (index < authList.size()) {
+				AuthenticationToken token = authList.get(index);
+				
+				if ((curDate.getTime() - token.getLastRequestDate()
+						.getTime()) > thirtyMinutes) {
+					authList.remove(index);
+				} else {
+					index++;
+				}
+			} else {
+				break;
+			}
+		}
+	}
 }
