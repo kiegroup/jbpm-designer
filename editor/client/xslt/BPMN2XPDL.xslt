@@ -61,7 +61,7 @@
     <xsl:param name="objectParent" />
     <!-- <xpdl:Object Id="{$objectParent/x:span[@class='oryx-id']}"> -->
     <xpdl:Object
-      Id="{$objectParent/@id}">
+      Id="{generate-id(.)}">
       <xsl:variable name="categories" select="$objectParent/x:span[@class='oryx-categories']" />
       <xsl:variable name="documentation" select="$objectParent/x:span[@class='oryx-documentation']" />
       <!-- Categories -->
@@ -546,9 +546,7 @@
 		  </xsl:for-each>
 	  </xsl:if>
 	  <!-- Check for elements that are not contained in a pool -->
-	  <!-- The following variable is only used if there is a background pool -->
 	  <!-- It must also be considered in the part creating the actual workflow processes -->
-	  <xsl:variable name="backgroundLaneId" select="generate-id(.)" />
   	  <xsl:if test="count($canvasChildren)>0">
 		<xpdl:Pool 
 						Id="{$canvasId}" 
@@ -561,7 +559,7 @@
 				ParentPool="{$canvasId}"
 				Name="Background Lane">
 				
-				<xpdl:Object Id="{$backgroundLaneId}">
+				<xpdl:Object Id="{generate-id(.)}">
 				<xpdl:Documentation><xsl:text>This Lane belongs to the background Pool and has been created automatically.</xsl:text></xpdl:Documentation>
 				</xpdl:Object>
 				<xpdl:NodeGraphicsInfos>
@@ -572,7 +570,7 @@
 				
 			  </xpdl:Lane>
 			</xpdl:Lanes>
-			<xpdl:Object Id="{$backgroundLaneId}">
+			<xpdl:Object Id="{generate-id(.)}">
 			<xpdl:Documentation><xsl:text>This is the background Pool, which has been created automatically.</xsl:text></xpdl:Documentation>
 			</xpdl:Object>
 			<xpdl:NodeGraphicsInfos>
