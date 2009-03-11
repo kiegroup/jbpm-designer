@@ -105,15 +105,32 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
     construct: function(facade){
         // Call super class constructor
         arguments.callee.$.construct.apply(this, arguments);
-        
+                
+        this.facade.offer({
+            'name': "Check soundness",//ORYX.I18N.BPMN2PNConverter.name,
+            'functionality': this.showCheckerWindow.bind(this),
+            'group': ORYX.I18N.BPMN2PNConverter.group,
+            'icon': ORYX.PATH + "images/checker_validation.png",
+            'description': "Checks current Petri net for different soundness criteria.",
+            'index': 3,
+            'minShape': 0,
+            'maxShape': 0
+        });
+    },
+    
+    showCheckerWindow: function(){
         var plugin = this;
         
         var CheckNode = Ext.extend(Ext.tree.TreeNode, {
             constructor: function(config) {
+                config.icon = CheckNode.UNKNOWN_STATUS;
+
                 CheckNode.superclass.constructor.apply(this, arguments);
                 
+                Ext.apply(this, config);
+                
                 if(this.clickHandler){
-                    this.on('click', this.clickHandler)
+                    this.on('click', this.clickHandler.bind(this));
                 }
             },
 
@@ -130,7 +147,8 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             
                 for(place in plugin.marking){
                     var placeShape = plugin.facade.getCanvas().getChildShapeByResourceId(place);
-                    placeShape.setProperty("oryx-numberoftokens", 0);
+                    if(placeShape)//place can be null if removed
+                        placeShape.setProperty("oryx-numberoftokens", 0);
                 }
                 // Show changes
                 plugin.facade.getCanvas().update();
@@ -148,13 +166,47 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 plugin.facade.getCanvas().update();
             },
             showErrors: function(errors){
-                this.setIcon(CheckNode.ERROR_STATUS);
+                // Remove all old error nodes
+                Ext.each(this.findChild("itemCls", "erorr"), function(child){
+                    child.remove();
+                });
+                
+                // Show errors
                 Ext.each(errors, function(error){
                     this.appendChild(new CheckNode({
                         icon: CheckNode.ERROR_STATUS,
-                        text: error
+                        text: error,
+                        itemCls: 'error'
                     }));
-                }.bind(this))
+                }.bind(this));
+            },
+            showOverlayWithStep: function(shapeIds){
+                Ext.each(shapeIds, function(shapeId, index){
+                    plugin.showOverlay(
+                        plugin.facade.getCanvas().getChildShapeByResourceId(shapeId), 
+                        {
+                            fill: "#FB7E02"//orange
+                        },
+                        ORYX.Editor.graft("http://www.w3.org/2000/svg", null, ['text', {
+                            "style": "font-size: 16px; font-weight: bold;"
+                        }, (index + 1)+"."]),
+                        "SE" //position in south east
+                    );
+                });
+            },
+            showOverlay: function(shapes){
+                if(shapes.length === 0)
+                    return;
+
+                if(! shapes[0] instanceof ORYX.Core.Node)
+                    shapes = plugin.getChildShapesByResourceIds(shapes)
+            
+                plugin.showOverlay(
+                    shapes, 
+                    {
+                        fill: "#FB7E02"//orange
+                    }
+                );
             }
         });
         CheckNode.UNKNOWN_STATUS = ORYX.PATH + 'images/soundness_checker/' + 'asterisk_yellow.png';
@@ -164,35 +216,29 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
         
         var DeadLocksNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                this.deadLocks = config.deadLocks;
-                config.icon = config.deadLocks.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS;
-                config.text = 'There are ' + config.deadLocks.length +' paths which lead to dead locks.';
+                config.qtip = '<b>Termination Criteria</b>: Makes sure that any process instance that starts in the initial state will eventually reach the final state. If any dead locks are detected, click to show one counter example.';
             
                 DeadLocksNode.superclass.constructor.apply(this, arguments);
             },
             clickHandler: function(node){
                 node.reset();
             
-                if(node.deadLocks.length == 0) return;
+                if(this.deadLocks.length == 0) return;
                 
                 var deadLock = node.deadLocks[0];
-                
-                plugin.showOverlay(
-                    plugin.getChildShapesByResourceIds(deadLock.path), 
-                    {
-                        fill: "red"
-                    }
-                );
-                
+                this.showOverlayWithStep(deadLock.path);
                 this.showMarking(deadLock.marking);
+            },
+            update: function(deadLocks){
+                this.deadLocks = deadLocks;
+                this.setIcon(this.deadLocks.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
+                this.setText('There are ' + this.deadLocks.length +' paths which lead to dead locks.');
             }
         });
         
         var ImproperTerminatingsNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                this.improperTerminatings = config.improperTerminatings;
-                config.icon = config.improperTerminatings.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS;
-                config.text = 'There are ' + config.improperTerminatings.length + ' markings which don\'t terminate properly.';
+                config.qtip = '<b>Proper Termination Criteria</b>: The final state is the only state reachable from the initial state in which there is a token in the final place. If any improper terminating states are detected, click to show one counter example.';
             
                 ImproperTerminatingsNode.superclass.constructor.apply(this, arguments);
             },
@@ -202,60 +248,113 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 if(node.improperTerminatings.length == 0) return;
                 
                 var improperTerminating = node.improperTerminatings[0];
-                
-                plugin.showOverlay(
-                    plugin.getChildShapesByResourceIds(improperTerminating.path), 
-                    {
-                        fill: "red"
-                    }
-                );
-                
+                this.showOverlayWithStep(improperTerminating.path);
                 this.showMarking(improperTerminating.marking);
+            },
+            update: function(improperTerminatings){
+                this.improperTerminatings = improperTerminatings;
+                
+                this.setIcon(this.improperTerminatings.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
+                this.setText('There are ' + this.improperTerminatings.length +' markings which don\'t terminate properly.');
             }
         });
         
         var DeadTransitionsNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                this.deadTransitions = config.deadTransitions;
-                config.icon = config.deadTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS;
-                config.text = 'There are ' + config.deadTransitions.length + ' dead transitions.';
+                config.qtip = '<b>No Dead Transitions Criteria</b>: Each transition can contribute to at least one process instance. Click to see all dead transitions.';
             
                 DeadTransitionsNode.superclass.constructor.apply(this, arguments);
             },
             clickHandler: function(node){
                 node.reset();
                 
-                plugin.showOverlay(
-                    plugin.getChildShapesByResourceIds(this.deadTransitions), 
-                    {
-                        fill: "red"
-                    }
-                );
+                this.showOverlay(this.deadTransitions);
+            },
+            update: function(deadTransitions){
+                this.deadTransitions = deadTransitions;
+                
+                this.setIcon(this.deadTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
+                this.setText('There are ' + this.deadTransitions.length +' dead transitions.');
             }
         });
         
         var NotParticipatingTransitionsNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                this.notParticipatingTransitions = config.notParticipatingTransitions;
-                config.icon = config.notParticipatingTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS;
-                config.text = 'There are ' + config.notParticipatingTransitions.length + ' transitions which aren\'t participating at any process instance.';
+                config.qtip = '<b>Transition Participation Criteria</b>: Each transition participates in at least one process instance that starts in the initial state and reaches the final state. Click to see all transitions not participating at any process instance.';
             
                 NotParticipatingTransitionsNode.superclass.constructor.apply(this, arguments);
             },
             clickHandler: function(node){
                 node.reset();
                 
-                plugin.showOverlay(
-                    plugin.getChildShapesByResourceIds(this.notParticipatingTransitions), 
-                    {
-                        fill: "red"
-                    }
-                );
+                this.showOverlay(this.notParticipatingTransitions);
+            },
+            update: function(notParticipatingTransitions){
+                this.notParticipatingTransitions = notParticipatingTransitions;
+                
+                this.setIcon(this.notParticipatingTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
+                this.setText('There are ' + this.notParticipatingTransitions.length +' transitions which aren\'t participating at any process instance.');
             }
         });
         
-        new Ext.Window({
-             width: '400',
+        this.checkerWindow = new Ext.Window({
+            title: 'Soundness Checks',
+            autoScroll: true,
+            width: '400',
+            tbar: [
+                {
+                    text: 'Check', 
+                    handler: function(){
+                        this.checkerWindow.check();
+                    }.bind(this)
+                },
+                {
+                    text: 'Hide Errors', 
+                    handler: function(){
+                        this.checkerWindow.getTree().getRootNode().reset();
+                    }.bind(this)
+                },
+                '->',
+                {
+                    text: 'Close', 
+                    handler: function(){
+                        this.checkerWindow.close();
+                    }.bind(this)
+                }
+            ],
+            getTree: function(){
+                return this.items.get(0);
+            },
+            check: function(renderAll){//call with renderAll=true if showing for the first time
+                var root = this.getTree().getRootNode();
+                
+                root.reset();
+                
+                Ext.each(root.childNodes, function(childNode){
+                    if(renderAll)//this expands all nodes so they're rendered a first time
+                        childNode.expand(true);
+                    childNode.collapse(true); //collapse deeply
+                    childNode.setIcon(CheckNode.LOADING_STATUS);
+                });
+                
+                Ext.Ajax.request({
+                    url: '/oryx/checksoundness',
+                    method: 'POST',
+                    success: function(request){
+                        var res = Ext.decode(request.responseText);
+                        
+                        Ext.each(root.childNodes, function(childNode){
+                            childNode.check(res);
+                        });
+                    },
+                    failure: function(){
+                    },
+                    params: {
+                        data: plugin.getSerializedDOM()
+                    }
+                });
+                
+            },
             items: [new Ext.tree.TreePanel({
                 useArrows: true,
                 autoScroll: true,
@@ -263,176 +362,202 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 animate: true,
                 containerScroll: true,
                 
-                root: new Ext.tree.TreeNode({
+                root: new CheckNode({
                     text: 'Checks',
                     id: 'source',
                     expanded: true
                 }),
                 listeners: {
                     render: function(treePanel){
+                        var structuralSoundNode = new CheckNode({
+                            text: 'Structural Sound (Workflow Net)',
+                            id: 'structuralSound',
+                            check: function(){
+                                this.checkInitialNode.update();
+                                this.checkFinalNode.update();
+                                this.checkConnectedNode.update(this.checkInitialNode.initialNodes, this.checkFinalNode.finalNodes);
+                                
+                                if(this.checkInitialNode.hasErrors() || this.checkFinalNode.hasErrors() || this.checkConnectedNode.hasErrors()){
+                                    this.setIcon(CheckNode.ERROR_STATUS);
+                                    this.expand();
+                                } else {
+                                    this.setIcon(CheckNode.OK_STATUS);
+                                }
+                            },
+                            checkInitialNode: new CheckNode({
+                                qtip: 'There must be exactly one initial node, which is the only node without any incoming edges.',
+                                update: function(){
+                                    this.initialNodes = [];
+                                    Ext.each(plugin.facade.getCanvas().getChildShapes(), function(shape){
+                                        if(shape.getIncomingShapes().length == 0){
+                                            this.initialNodes.push(shape);
+                                        }
+                                    }.bind(this));
+                                    
+                                    this.setText(this.initialNodes.length + ' initial nodes found.');
+                                    
+                                    this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
+                                },
+                                clickHandler: function(node){
+                                    node.reset();
+                                
+                                    this.showOverlay(this.initialNodes);
+                                },
+                                hasErrors: function(){
+                                    return this.initialNodes.length !== 1;
+                                }
+                            }),
+                            checkFinalNode: new CheckNode({
+                                qtip: 'There must be exactly one final node, which is the only node without any outgoing edges.',
+                                update: function(){
+                                    this.finalNodes = [];
+                                    Ext.each(plugin.facade.getCanvas().getChildShapes(), function(shape){
+                                        if(shape.getOutgoingShapes().length == 0){
+                                            this.finalNodes.push(shape);
+                                        }
+                                    }.bind(this));
+                                    
+                                    this.setText(this.finalNodes.length + ' final nodes found.');
+                                    
+                                    this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
+                                },
+                                clickHandler: function(node){
+                                    node.reset();
+                                
+                                    this.showOverlay(this.finalNodes);
+                                },
+                                hasErrors: function(){
+                                    return this.finalNodes.length !== 1;
+                                }
+                            }),
+                            checkConnectedNode: new CheckNode({
+                                qtip: 'Each node in the process model is on the path from the initial node to the final node.',
+                                update: function(initialNodes, finalNodes){
+                                    //Step through without semantic knowledge
+                                    if(initialNodes.length !== 1 || finalNodes.length !== 1){
+                                        this.setText("There are more than one initial or final nodes.");
+                                        this.setIcon(CheckNode.UNKNOWN_STATUS);
+                                        return;
+                                    }
+                                    
+                                    this.notParticipatingNodes = [];
+                                    Ext.each(plugin.facade.getCanvas().getChildShapes(), function(shape){
+                                        if(shape instanceof ORYX.Core.Node)
+                                            this.notParticipatingNodes.push(shape);
+                                    }.bind(this));
+                                    
+                                    this.passedNodes = [];
+                                    
+                                    this.findNotParticipatingNodes(initialNodes[0]);
+                                    
+                                    this.setText(this.notParticipatingNodes.length + ' nodes found which aren\'t on any path from beginning to end.');
+                                    
+                                    this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
+                                },
+                                clickHandler: function(node){
+                                    node.reset();
+                                
+                                    this.showOverlay(this.notParticipatingNodes);
+                                },
+                                findNotParticipatingNodes: function(currentNode){
+                                    this.passedNodes.push(currentNode);
+                                    this.notParticipatingNodes.remove(currentNode);
+                                    
+                                    Ext.each(currentNode.getOutgoingShapes(), function(nextNode){
+                                        if(!this.passedNodes.include(nextNode)){
+                                            this.findNotParticipatingNodes(nextNode);
+                                        };
+                                    }.bind(this));
+                                },
+                                hasErrors: function(){
+                                    return this.notParticipatingNodes.length !== 0;
+                                }
+                            })
+                        });
+                        structuralSoundNode.appendChild([
+                            structuralSoundNode.checkInitialNode,
+                            structuralSoundNode.checkFinalNode,
+                            structuralSoundNode.checkConnectedNode
+                        ]);
+                    
                         var soundNode = new CheckNode({
-                            icon: CheckNode.UNKNOWN_STATUS,
                             text: 'Sound',
                             id: 'sound',
-                            listeners: {
-                                click: function(node){
-                                    node.setIcon(CheckNode.LOADING_STATUS);
-                                    Ext.each(node.childNodes, function(childNode){
-                                        node.removeChild(childNode);
-                                    });
-                                    node.expand();
-                                    
-                                    Ext.Ajax.request({
-                                        url: '/oryx/checksoundness',
-                                        method: 'POST',
-                                        success: function(request){
-                                            var res = Ext.decode(request.responseText);
-                                            
-                                            if(res.errors.length !== 0){
-                                                node.showErrors(res.errors);
-                                                return;
-                                            }
-                                            
-                                            if (res.isSound) {
-                                                node.setIcon(CheckNode.OK_STATUS);
-                                            }
-                                            else {
-                                                node.setIcon(CheckNode.ERROR_STATUS);
-                                            }
-                                            
-                                            node.appendChild(new DeadTransitionsNode({
-                                                deadTransitions: res.deadTransitions
-                                            }));
-                                            
-                                            node.appendChild(new ImproperTerminatingsNode({
-                                                improperTerminatings: res.improperTerminatings
-                                            }));
-                                            
-                                            node.appendChild(new DeadLocksNode({
-                                                deadLocks: res.deadLocks
-                                            }));
-                                        },
-                                        failure: function(){
-                                        },
-                                        params: {
-                                            data: plugin.getSerializedDOM()
-                                        }
-                                    });
+                            check: function(res){
+                                if (res.isSound) {
+                                    this.setIcon(CheckNode.OK_STATUS);
                                 }
-                            }
+                                else {
+                                    this.setIcon(CheckNode.ERROR_STATUS);
+                                    this.expand();
+                                }
+                                
+                                this.deadTransitionsNode.update(res.deadTransitions);
+                                this.improperTerminatingsNode.update(res.improperTerminatings);
+                                this.deadLocksNode.update(res.deadLocks);
+                            },
+                            deadTransitionsNode: new DeadTransitionsNode({}),
+                            improperTerminatingsNode: new ImproperTerminatingsNode({}),
+                            deadLocksNode: new DeadLocksNode({})
                         });
+                        soundNode.appendChild([
+                            soundNode.deadTransitionsNode,
+                            soundNode.improperTerminatingsNode,
+                            soundNode.deadLocksNode
+                        ]);
                         
                         var weakSoundNode = new CheckNode({
-                            icon: CheckNode.UNKNOWN_STATUS,
                             text: 'WeakSound',
                             id: 'weakSound',
-                            listeners: {
-                                click: function(node){
-                                    node.setIcon(CheckNode.LOADING_STATUS);
-                                    Ext.each(node.childNodes, function(childNode){
-                                        node.removeChild(childNode);
-                                    });
-                                    node.expand();
-                                    
-                                    Ext.Ajax.request({
-                                        url: '/oryx/checksoundness',
-                                        method: 'POST',
-                                        success: function(request){
-                                            var res = Ext.decode(request.responseText);
-                                            
-                                            if(res.errors.length !== 0){
-                                                node.showErrors(res.errors);
-                                                return;
-                                            }
-                                            
-                                            if (res.isWeakSound) {
-                                                node.setIcon(CheckNode.OK_STATUS);
-                                            }
-                                            else {
-                                                node.setIcon(CheckNode.ERROR_STATUS);
-                                            }
-                                            
-                                            node.appendChild(new ImproperTerminatingsNode({
-                                                improperTerminatings: res.improperTerminatings
-                                            }));
-                                            
-                                            node.appendChild(new DeadLocksNode({
-                                                deadLocks: res.deadLocks
-                                            }));
-                                        },
-                                        failure: function(){
-                                        },
-                                        params: {
-                                            data: plugin.getSerializedDOM()
-                                        }
-                                    });
+                            check: function(res){
+                                if (res.isSound) {
+                                    this.setIcon(CheckNode.OK_STATUS);
                                 }
-                            }
+                                else {
+                                    this.setIcon(CheckNode.ERROR_STATUS);
+                                    this.expand();
+                                }
+
+                                this.improperTerminatingsNode.update(res.improperTerminatings);
+                                this.deadLocksNode.update(res.deadLocks);
+                            },
+                            deadTransitionsNode: new DeadTransitionsNode({}),
+                            improperTerminatingsNode: new ImproperTerminatingsNode({}),
+                            deadLocksNode: new DeadLocksNode({})
                         });
+                        weakSoundNode.appendChild([
+                            weakSoundNode.improperTerminatingsNode,
+                            weakSoundNode.deadLocksNode
+                        ]);
                         
                         var relaxedSoundNode = new CheckNode({
-                            icon: CheckNode.UNKNOWN_STATUS,
                             text: 'Relaxed Sound',
                             id: 'relaxedSound',
-                            listeners: {
-                                click: function(node){
-                                    node.setIcon(CheckNode.LOADING_STATUS);
-                                    Ext.each(node.childNodes, function(childNode){
-                                        node.removeChild(childNode);
-                                    });
-                                    node.expand();
-                                    
-                                    Ext.Ajax.request({
-                                        url: '/oryx/checksoundness',
-                                        method: 'POST',
-                                        success: function(request){
-                                            var res = Ext.decode(request.responseText);
-                                            
-                                            if(res.errors.length !== 0){
-                                                node.showErrors(res.errors);
-                                                return;
-                                            }
-                                            
-                                            if (res.isRelaxedSound) {
-                                                node.setIcon(CheckNode.OK_STATUS);
-                                            }
-                                            else {
-                                                node.setIcon(CheckNode.ERROR_STATUS);
-                                            }
-                                            
-                                            node.appendChild(new NotParticipatingTransitionsNode({
-                                                notParticipatingTransitions: res.notParticipatingTransitions
-                                            }));
-                                        },
-                                        failure: function(){
-                                        },
-                                        params: {
-                                            data: plugin.getSerializedDOM()
-                                        }
-                                    });
+                            check: function(res){
+                                if (res.isRelaxedSound) {
+                                    this.setIcon(CheckNode.OK_STATUS);
                                 }
-                            }
+                                else {
+                                    this.setIcon(CheckNode.ERROR_STATUS);
+                                    this.expand();
+                                }
+                                
+                                this.notParticipatingTransitionsNode.update(res.notParticipatingTransitions);
+                            },
+                            notParticipatingTransitionsNode: new NotParticipatingTransitionsNode({})
                         });
+                        relaxedSoundNode.appendChild([
+                            relaxedSoundNode.notParticipatingTransitionsNode
+                        ]);
                         
-                        treePanel.getRootNode().appendChild([soundNode, weakSoundNode, relaxedSoundNode]);
+                        treePanel.getRootNode().appendChild([structuralSoundNode, soundNode, weakSoundNode, relaxedSoundNode]);
+                        
                     }
                 }
             })]
-        }).show();
-        
-        this.facade.offer({
-            'name': ORYX.I18N.BPMN2PNConverter.name,
-            'functionality': this.exportIt.bind(this),
-            'group': ORYX.I18N.BPMN2PNConverter.group,
-            'icon': ORYX.PATH + "images/export2.png",
-            'description': ORYX.I18N.BPMN2PNConverter.desc,
-            'index': 3,
-            'minShape': 0,
-            'maxShape': 0
         });
-    },
-    
-    exportIt: function(){
-    
+        
+        this.checkerWindow.show();
+        this.checkerWindow.check(true);
     }
 });

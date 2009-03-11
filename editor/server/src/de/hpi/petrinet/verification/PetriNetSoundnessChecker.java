@@ -56,7 +56,7 @@ public class PetriNetSoundnessChecker {
 	 */
 	public boolean isRelaxedSound() {
 		calcNotParticipatingTransitions();
-		return notParticipatingTransitions.size() == 1;
+		return notParticipatingTransitions.size() == 0;
 	}
 
 	/**
