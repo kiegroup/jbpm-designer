@@ -85,8 +85,17 @@ ORYX.Plugins.ProcessLink = Clazz.extend({
 						]
 					]);
 
-		var link  = ORYX.Editor.graft("http://www.w3.org/2000/svg", null ,
-					[ 'a',
+		var link  = ORYX.Editor.graft("http://www.w3.org/2000/svg", null ,		
+						[ 'a',
+							{'target': '_blank'},
+							['path', { "style": "fill:#92BFFC;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.72", "d": "M0 1.44 L0 15.05 L11.91 15.05 L11.91 5.98 L7.37 1.44 L0 1.44 Z"}],
+							['path', { "style": "stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.72;fill:none;", "transform": "translate(7.5, -8.5)", "d": "M0 10.51 L0 15.05 L4.54 15.05"}],
+							['path', { "style": "fill:#f28226;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.72", "transform": "translate(-3, -1)", "d": "M0 8.81 L0 13.06 L5.95 13.06 L5.95 15.05 A50.2313 50.2313 -175.57 0 0 10.77 11.08 A49.9128 49.9128 -1.28 0 0 5.95 6.54 L5.95 8.81 L0 8.81 Z"}],
+						]);
+
+	/*
+	 * 
+	 * 					[ 'a',
 						{'target': '_blank'},
 						['path', { "style": "fill:none;stroke-width:0.5px; stroke:#000000", "d": "M7,4 l0,2"}],
 						['path', { "style": "fill:none;stroke-width:0.5px; stroke:#000000", "d": "M4,8 l-2,0 l0,6"}],
@@ -97,8 +106,8 @@ ORYX.Plugins.ProcessLink = Clazz.extend({
 						['rect', { "style": "fill:#96ff96;stroke:#000000;stroke-width:1", "width": 6, "height": 4, "x": 8, "y": 12}],
 						['rect', { "style": "fill:none;stroke:none;pointer-events:all", "width": 14, "height": 16, "x": 0, "y": 0}]
 					]);
-							
-	
+	 */
+		
 		// Set the link with the special namespace
 		link.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", url);
 		
