@@ -120,7 +120,8 @@ public class XFormsXHTMLExporter {
 		if(form.getHead()!=null) {
 			form.setHead((Element) doc.importNode(form.getHead(), true));
 			html.appendChild(form.getHead());
-			modifyHead(form.getHead());
+			// Head modification not working properly yet
+			//modifyHead(form.getHead());
 		} else {
 			Element head = (Element) html.appendChild(
 					doc.createElementNS("http://www.w3.org/1999/xhtml", 
