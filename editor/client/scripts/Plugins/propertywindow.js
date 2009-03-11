@@ -242,6 +242,9 @@ ORYX.Plugins.PropertyWindow = {
 		element = !element ? this.facade.getCanvas() : 
 							 element;
 							
+		// add the name of the stencil of the selected shape to the title
+		region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+element.getStencil().title()+')' )
+		
 		// Create the Properties
 		this.createProperties(element);
 	},
