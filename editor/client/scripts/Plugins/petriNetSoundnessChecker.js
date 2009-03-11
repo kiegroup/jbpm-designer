@@ -132,6 +132,8 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                     var placeShape = plugin.facade.getCanvas().getChildShapeByResourceId(place);
                     placeShape.setProperty("oryx-numberoftokens", 0);
                 }
+                // Show changes
+                plugin.facade.getCanvas().update();
                 
                 plugin.marking = undefined;
             },
@@ -142,6 +144,8 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                     var placeShape = plugin.facade.getCanvas().getChildShapeByResourceId(place);
                     placeShape.setProperty("oryx-numberoftokens", marking[place]);
                 }
+                // Show changes
+                plugin.facade.getCanvas().update();
             },
             showErrors: function(errors){
                 this.setIcon(CheckNode.ERROR_STATUS);

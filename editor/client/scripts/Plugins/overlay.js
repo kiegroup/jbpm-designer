@@ -290,8 +290,9 @@ ORYX.Plugins.Overlay = Clazz.extend({
         var attrMarkerValue		= attributes.stroke ? attrValue.slice(0, attrValue.length-1) + "; fill:" + attributes.stroke + ";}" : attrValue;
         var attrTextValue;
         if( attributes.fill ){
-        	attributes.fill		= "black";
-        	attrTextValue		= $H(attributes).toJSON().gsub(',', ';').gsub('"', '');
+            var copyAttr        = Object.clone(attributes);
+        	copyAttr.fill		= "black";
+        	attrTextValue		= $H(copyAttr).toJSON().gsub(',', ';').gsub('"', '');
         }
                 	
         // Create the CSS-Tags Style out of the ids and the attributes
