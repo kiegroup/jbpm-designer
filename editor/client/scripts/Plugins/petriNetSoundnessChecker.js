@@ -123,7 +123,8 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
         
         var CheckNode = Ext.extend(Ext.tree.TreeNode, {
             constructor: function(config) {
-                config.icon = CheckNode.UNKNOWN_STATUS;
+                if(!config.icon && !this.icon)
+                    config.icon = CheckNode.UNKNOWN_STATUS;
 
                 CheckNode.superclass.constructor.apply(this, arguments);
                 
@@ -167,17 +168,23 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             },
             showErrors: function(errors){
                 // Remove all old error nodes
-                Ext.each(this.findChild("itemCls", "erorr"), function(child){
-                    child.remove();
+                Ext.each(this.childNodes, function(child){
+                    if(child && child.itemCls === 'error')
+                        child.remove();
+                });
+                
+                // Show Unknown status on child nodes
+                Ext.each(this.childNodes, function(childNode){
+                    childNode.setIcon(CheckNode.UNKNOWN_STATUS);
                 });
                 
                 // Show errors
                 Ext.each(errors, function(error){
-                    this.appendChild(new CheckNode({
+                    this.insertBefore(new CheckNode({
                         icon: CheckNode.ERROR_STATUS,
                         text: error,
                         itemCls: 'error'
-                    }));
+                    }), this.childNodes[0]);
                 }.bind(this));
             },
             showOverlayWithStep: function(shapeIds){
@@ -343,9 +350,13 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                     success: function(request){
                         var res = Ext.decode(request.responseText);
                         
-                        Ext.each(root.childNodes, function(childNode){
-                            childNode.check(res);
-                        });
+                        root.showErrors(res.errors);
+                        
+                        if(res.errors.length === 0){
+                            Ext.each(root.childNodes, function(childNode){
+                                childNode.check(res);
+                            });
+                        }
                     },
                     failure: function(){
                     },
@@ -507,7 +518,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                         ]);
                         
                         var weakSoundNode = new CheckNode({
-                            text: 'WeakSound',
+                            text: 'Weak Sound',
                             id: 'weakSound',
                             check: function(res){
                                 if (res.isSound) {
