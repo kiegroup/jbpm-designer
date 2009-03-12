@@ -1,0 +1,354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: movi   shapeselect.js  (YUI Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1236862905.33" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1236862905.33" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1236862905.33"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1236862905.33"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>movi&nbsp; <span class="subtitle">0.1.1</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_movi.html" title="movi">movi</a>
+                
+                 &gt; shapeselect.js (source view) 
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
+<div class="highlight"><pre><span class="c">/**</span>
+<span class="c"> * Copyright (c) 2009</span>
+<span class="c"> * Jan-Felix Schwarz</span>
+<span class="c"> *</span>
+<span class="c"> * Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c"> * copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c"> * to deal in the Software without restriction, including without limitation</span>
+<span class="c"> * the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c"> * and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c"> * Software is furnished to do so, subject to the following conditions:</span>
+<span class="c"> *</span>
+<span class="c"> * The above copyright notice and this permission notice shall be included in</span>
+<span class="c"> * all copies or substantial portions of the Software.</span>
+<span class="c"> *</span>
+<span class="c"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
+<span class="c"> * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="c"> * DEALINGS IN THE SOFTWARE.</span>
+<span class="c"> **/</span>
+
+
+<span class="nx">MOVI</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;util&quot;</span><span class="p">);</span>
+
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	
+	<span class="kd">var</span> <span class="nx">_SELECT_RECT_CLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;movi-select-rect&quot;</span><span class="o">,</span>
+		<span class="nx">_HIGHLIGHT_RECT_CLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;movi-highlight-rect&quot;</span><span class="o">;</span>
+		
+	<span class="kd">var</span> <span class="nx">Marker</span> 	<span class="o">=</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="o">,</span>
+		<span class="nx">Event</span> 	<span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Event</span><span class="o">;</span> 
+	
+	<span class="c">/**</span>
+<span class="c">     * Enbable shape selection for the specified model viewer</span>
+<span class="c">     * @namespace MOVI.util</span>
+<span class="c">     * @class MOVI.util.ShapeSelect</span>
+<span class="c">     * @constructor</span>
+<span class="c">	 * @param {ModelViewer} modelviewer The ModelViewer for that shape selection is enabled</span>
+<span class="c">	 * @param {Shape*} shapes (optional) The subset of shapes that are selectable. If not specified </span>
+<span class="c">	 * all shapes are selectable.</span>
+<span class="c">	 * @param {Boolean} multiselect (optional) If set to true, multiple shapes can be selected (default is false).</span>
+<span class="c">     */</span>
+    <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">ShapeSelect</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">modelviewer</span><span class="o">,</span> <span class="nx">shapes</span><span class="o">,</span> <span class="nx">multiselect</span><span class="p">)</span> <span class="p">{</span>
+	
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">modelviewer</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;No model viewer specified for shape select.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;shapeselect.js&quot;</span><span class="p">);</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="p">}</span>
+		
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">shapes</span><span class="p">))</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="nx">shapes</span><span class="o">==</span><span class="kc">true</span><span class="p">)</span> <span class="nx">multiselect</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+			<span class="nx">shapes</span> <span class="o">=</span> <span class="nx">modelviewer</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">getNodes</span><span class="p">();</span> <span class="c">// only nodes supported atm</span>
+		<span class="p">}</span>
+		
+		<span class="k">this</span><span class="p">.</span><span class="nx">_allowMultiselect</span> <span class="o">=</span> <span class="nx">multiselect</span><span class="o">;</span>
+		
+		<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">shapes</span><span class="p">)</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">shape</span> <span class="o">=</span> <span class="nx">modelviewer</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">shapes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+			
+			<span class="k">if</span><span class="p">(</span><span class="nx">shape</span><span class="p">.</span><span class="nx">parentShape</span><span class="o">!=</span><span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">shape</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s2">&quot;mouseover&quot;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onMouseOver</span><span class="o">,</span> <span class="nx">shape</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+				<span class="nx">shape</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s2">&quot;mouseout&quot;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onMouseOut</span><span class="o">,</span> <span class="nx">shape</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+				<span class="nx">shape</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onClick</span><span class="o">,</span> <span class="nx">shape</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_selectableShapes</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">shape</span><span class="o">;</span>
+			<span class="p">}</span>
+			
+		<span class="p">}</span>
+		
+		<span class="nx">modelviewer</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">reset</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">)</span>
+		
+		<span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Marker</span><span class="p">();</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarker</span><span class="p">.</span><span class="nx">setRectClassName</span><span class="p">(</span><span class="nx">_SELECT_RECT_CLASS_NAME</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarker</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_init</span><span class="p">();</span>
+	<span class="p">};</span>
+	
+	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">ShapeSelect</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+		
+		<span class="nx">_selectableShapes</span><span class="o">:</span> <span class="p">{}</span><span class="o">,</span>
+		
+		<span class="nx">_selectedShapes</span><span class="o">:</span> <span class="p">{}</span><span class="o">,</span>
+		
+		<span class="nx">_highlightMarkers</span><span class="o">:</span> <span class="p">{}</span><span class="o">,</span>
+		
+		<span class="nx">_selectionMarker</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="nx">_selectionChangedCallback</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span><span class="o">,</span>
+		
+		<span class="nx">_allowMultiselect</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+		
+		<span class="nx">_init</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="c">// create highlighting markers</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectableShapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectableShapes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+				<span class="kd">var</span> <span class="nx">marker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Marker</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+				<span class="nx">marker</span><span class="p">.</span><span class="nx">setRectClassName</span><span class="p">(</span><span class="nx">_HIGHLIGHT_RECT_CLASS_NAME</span><span class="p">);</span>
+				<span class="nx">marker</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_highlightMarkers</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">marker</span><span class="o">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">_onMouseOver</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ev</span><span class="o">,</span> <span class="nx">shape</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">Event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">(</span><span class="nx">ev</span><span class="p">);</span>
+			
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">])</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">highlight</span><span class="p">(</span><span class="nx">shape</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">_onMouseOut</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ev</span><span class="o">,</span> <span class="nx">shape</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">Event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">(</span><span class="nx">ev</span><span class="p">);</span>
+			
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">])</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">unhighlight</span><span class="p">(</span><span class="nx">shape</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">_onClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ev</span><span class="o">,</span> <span class="nx">shape</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">Event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">(</span><span class="nx">ev</span><span class="p">);</span>
+			
+			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">])</span> <span class="p">{</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">deselect</span><span class="p">(</span><span class="nx">shape</span><span class="p">);</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_allowMultiselect</span><span class="p">)</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">_reset</span><span class="p">();</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">shape</span><span class="p">);</span>	
+			<span class="p">}</span>
+				
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">_reset</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarker</span><span class="p">.</span><span class="nx">removeShape</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+				<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+			<span class="p">}</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Add the specified shapes to the current selection</span>
+<span class="c">		 * @method select</span>
+<span class="c">		 * @param {[Shape] | Shape} shapes The shapes to add to the selection</span>
+<span class="c">		 */</span>
+		<span class="nx">select</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">shapes</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">shapes</span><span class="p">))</span> <span class="nx">shapes</span> <span class="o">=</span> <span class="p">[</span><span class="nx">shapes</span><span class="p">];</span>
+			
+			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">shapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">shapes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+				
+				<span class="k">this</span><span class="p">.</span><span class="nx">unhighlight</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+			
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectableShapes</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">])</span> <span class="p">{</span>
+					<span class="nx">MOVI</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Specified shape with resource id &quot;</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span> <span class="o">+</span> 
+							 <span class="s2">&quot; is not selectable.&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="s2">&quot;shapeselect.js&quot;</span><span class="p">);</span>
+					<span class="k">continue</span><span class="o">;</span>
+				<span class="p">}</span>
+		
+				<span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">s</span><span class="o">;</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarker</span><span class="p">.</span><span class="nx">addShape</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+				
+			<span class="p">}</span>
+			
+			<span class="k">this</span><span class="p">.</span><span class="nx">_selectionChangedCallback</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getSelectedShapes</span><span class="p">()</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarker</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span> 
+		
+		<span class="c">/**</span>
+<span class="c">		 * Remove the specified shapes from the current selection</span>
+<span class="c">		 * @method deselect</span>
+<span class="c">		 * @param {[Shape] | Shape} shapes The shapes to remove from the selection</span>
+<span class="c">		 */</span>
+		<span class="nx">deselect</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">shapes</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">shapes</span><span class="p">))</span> <span class="nx">shapes</span> <span class="o">=</span> <span class="p">[</span><span class="nx">shapes</span><span class="p">];</span>
+			
+			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">shapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">shapes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+				<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">];</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarker</span><span class="p">.</span><span class="nx">removeShape</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+			<span class="p">}</span>
+			
+			<span class="k">this</span><span class="p">.</span><span class="nx">_selectionChangedCallback</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getSelectedShapes</span><span class="p">()</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarkers</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Highlight the specified shape by showing the highlighting marker</span>
+<span class="c">		 * @method highlight</span>
+<span class="c">		 * @param {Shape} shape The shape to be highlighted</span>
+<span class="c">		 */</span>
+		<span class="nx">highlight</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">shape</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_highlightMarkers</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">].</span><span class="nx">show</span><span class="p">();</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Unhighlight the specified shape by hiding the highlighting marker</span>
+<span class="c">		 * @method unhighlight</span>
+<span class="c">		 * @param {Shape} shape The shape to be unhighlighted</span>
+<span class="c">		 */</span>
+		<span class="nx">unhighlight</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">shape</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_highlightMarkers</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">].</span><span class="nx">hide</span><span class="p">();</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Reset the current selection</span>
+<span class="c">		 * @method reset</span>
+<span class="c">		 */</span>
+		<span class="nx">reset</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getSelectedShapes</span><span class="p">().</span><span class="nx">length</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+				<span class="k">return</span><span class="o">;</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_reset</span><span class="p">();</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_selectionChangedCallback</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getSelectedShapes</span><span class="p">()</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectionMarkers</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Returns the currently selected shapes</span>
+<span class="c">		 * @method getSelectShapes</span>
+<span class="c">		 * @returns {[Shape]} An array of selected Shape objects</span>
+<span class="c">		 */</span>
+		<span class="nx">getSelectedShapes</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">selected</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">)</span>
+				<span class="nx">selected</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedShapes</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+			<span class="k">return</span> <span class="nx">selected</span><span class="o">;</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Enables the specificatio of a callback to be executed when the selection</span>
+<span class="c">		 * changes (shapes are added to or removed from the current selection)</span>
+<span class="c">		 * @method getSelectShapes</span>
+<span class="c">		 * @returns {[Shape]} An array of selected Shape objects</span>
+<span class="c">		 */</span>
+		<span class="nx">onSelectionChanged</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+			<span class="c">// TODO add params for execution scope etc.</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_selectionChangedCallback</span> <span class="o">=</span> <span class="nx">callback</span><span class="o">;</span>
+		<span class="p">}</span>
+		
+	<span class="p">}</span>
+	
+	
+<span class="p">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_movi.html" title="movi">movi</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="MOVI.model.Canvas.html" title="MOVI.model.Canvas">MOVI.model.Canvas</a></li>
+                                <li class=""><a href="MOVI.model.Edge.html" title="MOVI.model.Edge">MOVI.model.Edge</a></li>
+                                <li class=""><a href="MOVI.model.Node.html" title="MOVI.model.Node">MOVI.model.Node</a></li>
+                                <li class=""><a href="MOVI.model.Shape.html" title="MOVI.model.Shape">MOVI.model.Shape</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencil.html" title="MOVI.stencilset.Stencil">MOVI.stencilset.Stencil</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencilset.html" title="MOVI.stencilset.Stencilset">MOVI.stencilset.Stencilset</a></li>
+                                <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
+                                <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
+                                <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
+                                <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="annotation.js.html" title="annotation.js">annotation.js</a></li>
+                                <li class=""><a href="canvas.js.html" title="canvas.js">canvas.js</a></li>
+                                <li class=""><a href="config.js.html" title="config.js">config.js</a></li>
+                                <li class=""><a href="edge.js.html" title="edge.js">edge.js</a></li>
+                                <li class=""><a href="marker.js.html" title="marker.js">marker.js</a></li>
+                                <li class=""><a href="modelnavigator.js.html" title="modelnavigator.js">modelnavigator.js</a></li>
+                                <li class=""><a href="modelviewer.js.html" title="modelviewer.js">modelviewer.js</a></li>
+                                <li class=""><a href="movi.js.html" title="movi.js">movi.js</a></li>
+                                <li class=""><a href="node.js.html" title="node.js">node.js</a></li>
+                                <li class=""><a href="shape.js.html" title="shape.js">shape.js</a></li>
+                                <li class="selected"><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
+                                <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
+                                <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.util.ShapeSelect.html#method_deselect", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "deselect"}, {"url": "MOVI.model.Shape.html#method_getAbsBounds", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getCanvas", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getCanvas"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectShapes", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectShapes"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.stencilset.Stencilset.html#method_getStencil", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "method", "name": "getStencil"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.util.ShapeSelect.html#method_highlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "highlight"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.model.Shape.html#property_parentShape", "access": "", "host": "MOVI.model.Shape", "type": "property", "name": "parentShape"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.util.ShapeSelect.html#method_reset", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "reset"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape()", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape()"}, {"url": "MOVI.util.ShapeSelect.html#method_select", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "select"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.stencilset.Stencilset.html#property_stencils", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "property", "name": "stencils"}, {"url": "MOVI.util.ShapeSelect.html#method_unhighlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "unhighlight"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}, {"url": "MOVI.model.Node.html#method_update", "access": "", "host": "MOVI.model.Node", "type": "method", "name": "update"}];
+</script>
+</body>
+</html>

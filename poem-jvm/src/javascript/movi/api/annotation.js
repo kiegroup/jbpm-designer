@@ -41,48 +41,16 @@ MOVI.namespace("util");
 		Element	= YAHOO.util.Element;
 	
 	/**
-     * Create the host element.
-     * @method _createHostElement
-     * @private
-     */
-    var _createHostElement = function() {
-        var el = document.createElement('div');
-        return el;
-    };
-
-	/**
-     * Create the bubble elements inside the host element.
-     * @method _createBubble
- 	 * @param {String} content The content to place inside the bubble
-     * @private
-     */
-	var _createBubble = function(content) {
-		this.set("className", _BUBBLE_HIDDEN_CLASS_NAME);
-		this.set("innerHTML", 	
-						"<div class=\"" + _BUBBLE_UL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_UR_CLASS_NAME + "\">" +
-					   	"<div class=\"" + _BUBBLE_LL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_LR_CLASS_NAME + "\">" + 
-					    	"<div class=\"" + _BUBBLE_BORDERTOP_CLASS_NAME + "\"></div>" +
-					   		"<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
-								"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\"></div>" +
-					        	content +
-					        "</div>" +
-					        "<div class=\"" + _BUBBLE_BORDERBOTTOM_CLASS_NAME + "\"></div>" +
-					   	"</div></div>" +
-					   	"</div></div>" +
-					    "<div class=\"" + _BUBBLE_ARROW_CLASS_NAME + "\"/>");
-	}
-	
-	/**
-     * Create an Annotation for a Marker to enrich the model with additional information 
+	 * Create an Annotation for a Marker to enrich the model with additional information 
 	 * and functionality. The Annotation renders a speech bubble containing arbitrary
 	 * XHTML content and attachs it to the Marker.
-     * @namespace MOVI.util
-     * @class MOVI.util.Annotation
-     * @extends YAHOO.util.Element
-     * @constructor
+	 * @namespace MOVI.util
+	 * @class MOVI.util.Annotation
+	 * @extends YAHOO.util.Element
+	 * @constructor
 	 * @param {Marker} marker The Marker to attach the Annotation to
 	 * @param {String} content The Annotation's inner HTML content 
-     */
+	 */
     MOVI.util.Annotation = function(marker, content) {
 	
 		if(!marker) {
@@ -204,5 +172,36 @@ MOVI.namespace("util");
 		}
 		
 	});
+	
+	/**
+     * Create the host element.
+	 * @method
+	 * @private
+     */
+    var _createHostElement = function() {
+        var el = document.createElement('div');
+        return el;
+    };
+
+	/**
+     * Create the bubble elements inside the host element.
+	 * @method
+	 * @private
+     */
+	var _createBubble = function(content) {
+		this.set("className", _BUBBLE_HIDDEN_CLASS_NAME);
+		this.set("innerHTML", 	
+						"<div class=\"" + _BUBBLE_UL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_UR_CLASS_NAME + "\">" +
+					   	"<div class=\"" + _BUBBLE_LL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_LR_CLASS_NAME + "\">" + 
+					    	"<div class=\"" + _BUBBLE_BORDERTOP_CLASS_NAME + "\"></div>" +
+					   		"<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
+								"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\"></div>" +
+					        	content +
+					        "</div>" +
+					        "<div class=\"" + _BUBBLE_BORDERBOTTOM_CLASS_NAME + "\"></div>" +
+					   	"</div></div>" +
+					   	"</div></div>" +
+					    "<div class=\"" + _BUBBLE_ARROW_CLASS_NAME + "\"/>");
+	}
 	
 })();

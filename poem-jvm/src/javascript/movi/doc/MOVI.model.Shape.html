@@ -1,0 +1,337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: movi  MOVI.model.Shape   (YUI Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1236862905.33" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1236862905.33" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1236862905.33"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1236862905.33"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>movi&nbsp; <span class="subtitle">0.1.1</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_movi.html" title="movi">movi</a>
+                 &gt; MOVI.model.Shape 
+                
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b property="yui:name">MOVI.model.Shape</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.Element.html" title="YAHOO.util.Element">YAHOO.util.Element</a>
+                        </span>
+
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses" rel="yui:subclasses">
+                            <dt>Known Subclasses:</dt>
+                            <dd>
+                                    <span rel="yui:subclass" resource="MOVI.model.Edge.html">
+                                    <a href="MOVI.model.Edge.html" property="yui:name" title="MOVI.model.Edge">MOVI.model.Edge</a>
+                                    </span>
+                                    <span rel="yui:subclass" resource="MOVI.model.Canvas.html">
+                                    <a href="MOVI.model.Canvas.html" property="yui:name" title="MOVI.model.Canvas">MOVI.model.Canvas</a>
+                                    </span>
+                                    <span rel="yui:subclass" resource="MOVI.model.Node.html">
+                                    <a href="MOVI.model.Node.html" property="yui:name" title="MOVI.model.Node">MOVI.model.Node</a>
+                                    </span>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description" property="yui:description">
+                        An abstract base class providing a wrapper object for all 
+model shapes (including the canvas, nodes, and edges).
+                    </div>
+
+                        <div class="section constructor details" rel="yui:constructor" resource="#constructor">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong property="yui:name">MOVI.model.Shape</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                jsonObj
+
+                                                , 
+                                                stencilset
+
+                                                , 
+                                                parent
+
+                                                , 
+                                                attr
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl rel="yui:parameters">
+                                            <dt>Parameters:</dt>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">jsonObj</span>
+                                                    &lt;<span property="yui:type">Object</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> The JSON object from which the new shape
+is created</span>
+                                                </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">stencilset</span>
+                                                    &lt;<span property="yui:type">Object</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> The stencilset for lookup of the shape's 
+stencil</span>
+                                                </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">parent</span>
+                                                    &lt;<span property="yui:type">Shape</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> The shapes's parent shape</span>
+                                                </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">attr</span>
+                                                    &lt;<span property="yui:type">Object</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> (optional) A key map of the shape element's 
+initial attributes</span>
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_parentShape">
+                                    <h4><a name="property_parentShape" property="yui:name">parentShape</a>
+                                        - <code><span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The shapes parent shape
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:method" resource="#method_getAbsBounds">
+                                    <h4>
+                                        <a name="method_getAbsBounds">getAbsBounds</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object} The absolute shape bounds accessible as 
+{ upperLeft: {x:Number,y:Number}, lowerRight: {x:Number,y:Number} 
+                                            <strong property="yui:name">getAbsBounds</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the shape's absolute bounds coordinates. 'Absolute' means
+relative to the canvas element rather than relative to the document
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Object} The absolute shape bounds accessible as 
+{ upperLeft: {x:Number,y:Number}, lowerRight: {x:Number,y:Number} 
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getCanvas">
+                                    <h4>
+                                        <a name="method_getCanvas">getCanvas</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Canvas
+                                            <strong property="yui:name">getCanvas</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the canvas that own this shape
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Canvas
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The Canvas the shape belongs to</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_movi.html" title="movi">movi</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="MOVI.model.Canvas.html" title="MOVI.model.Canvas">MOVI.model.Canvas</a></li>
+                                <li class=""><a href="MOVI.model.Edge.html" title="MOVI.model.Edge">MOVI.model.Edge</a></li>
+                                <li class=""><a href="MOVI.model.Node.html" title="MOVI.model.Node">MOVI.model.Node</a></li>
+                                <li class="selected"><a href="MOVI.model.Shape.html" title="MOVI.model.Shape">MOVI.model.Shape</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencil.html" title="MOVI.stencilset.Stencil">MOVI.stencilset.Stencil</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencilset.html" title="MOVI.stencilset.Stencilset">MOVI.stencilset.Stencilset</a></li>
+                                <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
+                                <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
+                                <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
+                                <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="annotation.js.html" title="annotation.js">annotation.js</a></li>
+                                <li class=""><a href="canvas.js.html" title="canvas.js">canvas.js</a></li>
+                                <li class=""><a href="config.js.html" title="config.js">config.js</a></li>
+                                <li class=""><a href="edge.js.html" title="edge.js">edge.js</a></li>
+                                <li class=""><a href="marker.js.html" title="marker.js">marker.js</a></li>
+                                <li class=""><a href="modelnavigator.js.html" title="modelnavigator.js">modelnavigator.js</a></li>
+                                <li class=""><a href="modelviewer.js.html" title="modelviewer.js">modelviewer.js</a></li>
+                                <li class=""><a href="movi.js.html" title="movi.js">movi.js</a></li>
+                                <li class=""><a href="node.js.html" title="node.js">node.js</a></li>
+                                <li class=""><a href="shape.js.html" title="shape.js">shape.js</a></li>
+                                <li class=""><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
+                                <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
+                                <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_parentShape" title="parentShape">parentShape</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="methodsList" class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#method_getAbsBounds" title="getAbsBounds">getAbsBounds</a></li>
+                                <li class=""><a href="#method_getCanvas" title="getCanvas">getCanvas</a></li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.model.Shape.html#method_getAbsBounds", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getCanvas", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getCanvas"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.model.Shape.html#property_parentShape", "access": "", "host": "MOVI.model.Shape", "type": "property", "name": "parentShape"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape()", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape()"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}, {"url": "MOVI.model.Node.html#method_update", "access": "", "host": "MOVI.model.Node", "type": "method", "name": "update"}];
+</script>
+</body>
+</html>

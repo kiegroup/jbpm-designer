@@ -21,9 +21,14 @@
  * DEALINGS IN THE SOFTWARE.
  **/
 
-
 // Declare the MOVI global namespace
 if (typeof MOVI == "undefined" || !MOVI) { var MOVI = {}; }
+
+/**
+ * Declare the movi module (needed for doc generation)
+ * @module movi
+ */
+
 
 /**
  * Returns the namespace specified and creates it if it doesn't exist

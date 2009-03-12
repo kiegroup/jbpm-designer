@@ -39,30 +39,25 @@ MOVI.namespace("stencilset");
 		this.namespace = jsonObj.namespace;
 		this.description = jsonObj.description;
 		
-		/**
-	     * A key map containing all stencils of the stencilset as 
-		 * values. Retrieve an entry using the stencil's id as 
-		 * the key.
-	     * @property stencils
-	     * @type Object
-	     */
-		this.stencils = {};
-		
 		if(!jsonObj.stencils) {
-			MOVI.log(	"Stencilset contains no stencíl definitions", 
-						"warning", 
-						"stencilset.js" );
-			return;
+			MOVI.log("Stencilset contains no stencil definitions", "warning", "stencilset.js" );
 		}
 		
 		for(key in jsonObj.stencils) {
 			var stencil = jsonObj.stencils[key];
 			this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil);
 		}
-		
-	}
+
+	};
 
 	MOVI.stencilset.Stencilset.prototype = {
+		
+		/**
+	     * A key map containing all stencils of the stencilset as values.
+		 * Retrieve an entry using the stencil's id as the key.
+	     * @property stencils
+	     */
+		stencils: {},
 		
 		/**
 	     * Returns the stencil object with the specified id. If
