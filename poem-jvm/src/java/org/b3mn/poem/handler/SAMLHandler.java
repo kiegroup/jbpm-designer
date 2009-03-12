@@ -183,6 +183,7 @@ public class SAMLHandler extends HandlerBase {
 		if(userId != null && !userId.equals("") && !userId.equals(getPublicUser())) {
 			curUser = new User(userId);
 		}
+		User publicUser = new User(getPublicUser());
 		
 		//logout current user so that future requests to Oryx
 		//will fail, in case the SAML authentication fails
@@ -276,6 +277,7 @@ public class SAMLHandler extends HandlerBase {
 			e.printStackTrace();
 			
 			res.setStatus(200);
+			publicUser.login(req, res);
 			retUrl = this.getReturnToUrl(retUrl, false, false, null);
 		}
 

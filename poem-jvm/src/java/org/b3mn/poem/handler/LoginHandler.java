@@ -113,6 +113,8 @@ public class LoginHandler extends HandlerBase {
     		if(openid != null && openid != "" && openid != getPublicUser()) {
     			User user = new User(openid);
     			user.removeAuthenticationAttributes(this.getServletContext(), req, res);
+    			User publicUser = new User(getPublicUser());
+    			publicUser.login(req, res);
     		}
     		res.sendRedirect(REPOSITORY_REDIRECT);
     		return;
@@ -143,7 +145,7 @@ public class LoginHandler extends HandlerBase {
 
     		//req.setAttribute("identifier", user.getOpenId());
     		user.addAuthentificationAttributes(this.getServletContext(), req, resp);
-    		
+    		user.login(req, resp);
     		
     		String rPage = req.getParameter("redirect");
     		resp.sendRedirect( rPage != null ? rPage : REPOSITORY_REDIRECT);

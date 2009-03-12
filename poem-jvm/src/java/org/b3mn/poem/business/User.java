@@ -317,7 +317,6 @@ public class User extends BusinessObject {
 			
 			if(authList != null) {
 			
-				System.out.println("adding token " + uuid.toString() + " " + openId);
 				try {
 					authList.add(new AuthenticationToken(uuid.toString(), openId));
 				} catch (AuthenticationTokenException e) {

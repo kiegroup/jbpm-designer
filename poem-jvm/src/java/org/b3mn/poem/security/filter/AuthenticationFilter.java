@@ -141,11 +141,11 @@ public class AuthenticationFilter implements Filter {
 				openId = HandlerBase.getPublicUser();
 				request.getSession().setAttribute("openid", openId);
 				user = new User(openId);
-				user.login(request, response);
+				//user.login(request, response);
 			} else {
 				Identity subject = Identity.ensureSubject(openId);
 				user = new User(subject);
-				user.login(request, response);
+				//user.login(request, response);
 			}
 			request.setAttribute("user", user);
 
