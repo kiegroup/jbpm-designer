@@ -1011,22 +1011,6 @@
 		<xsl:variable name="fromspecliteral" select="./oryx:fromspecliteral" />	
 		
 		<from>
-			<xsl:if test="$fromspecvariablename!='' and $fromspecpart!=''">
-				<xsl:attribute name="variable">
-					<xsl:value-of select="$fromspecvariablename" />
-				</xsl:attribute>
-				<xsl:attribute name="part">
-					<xsl:value-of select="$fromspecpart" />
-				</xsl:attribute>
-				<xsl:if test="$fromspecquery!='' or $fromspecquerylanguage!=''">
-					<query>
-						<xsl:attribute name="queryLanguage">
-							<xsl:value-of select="$fromspecquerylanguage" />
-						</xsl:attribute>
-						<xsl:value-of select="$fromspecquery" />
-					</query>	
-				</xsl:if>	
-			</xsl:if>
 		
 			<xsl:if test="$fromspecpartnerLink!='' or $fromspecendpointReference!=''">
 				<xsl:attribute name="partnerLink">
@@ -1057,6 +1041,23 @@
 				<literal>
 					<xsl:value-of select="$fromspecliteral" />
 				</literal>
+			</xsl:if>
+			
+			<xsl:if test="$fromspecvariablename!='' and $fromspecpart!=''">
+				<xsl:attribute name="variable">
+					<xsl:value-of select="$fromspecvariablename" />
+				</xsl:attribute>
+				<xsl:attribute name="part">
+					<xsl:value-of select="$fromspecpart" />
+				</xsl:attribute>
+				<xsl:if test="$fromspecquery!='' or $fromspecquerylanguage!=''">
+					<query>
+						<xsl:attribute name="queryLanguage">
+							<xsl:value-of select="$fromspecquerylanguage" />
+						</xsl:attribute>
+						<xsl:value-of select="$fromspecquery" />
+					</query>	
+				</xsl:if>	
 			</xsl:if>	
 		</from>
     </xsl:template>
@@ -1280,22 +1281,6 @@
 		<xsl:variable name="tospecexpression" select="./oryx:tospecexpression" />
 		
 		<to>
-			<xsl:if test="$tospecvariablename!='' and $tospecpart!=''">
-				<xsl:attribute name="variable">
-					<xsl:value-of select="$tospecvariablename" />
-				</xsl:attribute>
-				<xsl:attribute name="part">
-					<xsl:value-of select="$tospecpart" />
-				</xsl:attribute>
-				<xsl:if test="$tospecquery!='' or $tospecquerylanguage!=''">
-					<query>
-						<xsl:attribute name="queryLanguage">
-							<xsl:value-of select="$tospecquerylanguage" />
-						</xsl:attribute>
-						<xsl:value-of select="$tospecquery" />
-					</query>	
-				</xsl:if>
-			</xsl:if>
 					
 			<xsl:if test="$tospecpartnerLink!=''">
 				<xsl:attribute name="partnerLink">
@@ -1318,6 +1303,23 @@
 				</xsl:attribute>
 				<xsl:value-of select="$tospecexpression" />	
 			</xsl:if>	
+			
+			<xsl:if test="$tospecvariablename!='' and $tospecpart!=''">
+				<xsl:attribute name="variable">
+					<xsl:value-of select="$tospecvariablename" />
+				</xsl:attribute>
+				<xsl:attribute name="part">
+					<xsl:value-of select="$tospecpart" />
+				</xsl:attribute>
+				<xsl:if test="$tospecquery!='' or $tospecquerylanguage!=''">
+					<query>
+						<xsl:attribute name="queryLanguage">
+							<xsl:value-of select="$tospecquerylanguage" />
+						</xsl:attribute>
+						<xsl:value-of select="$tospecquery" />
+					</query>	
+				</xsl:if>
+			</xsl:if>
 		</to>	
     </xsl:template>
 	
@@ -1828,13 +1830,13 @@
 								<xsl:value-of select="$transCond_expLang" />
 							</xsl:attribute>
 						</xsl:if>
-					
-						<xsl:if test="$transCond_boolExp!=''">
-								<xsl:value-of select="$transCond_boolExp" />
-						</xsl:if>
 						
 						<xsl:if test="$transCond_opaque='true'">
 							<xsl:attribute name="transCond_opaque">yes</xsl:attribute>
+						</xsl:if>
+						
+						<xsl:if test="$transCond_boolExp!=''">
+							<xsl:value-of select="$transCond_boolExp" />
 						</xsl:if>
 					</transitionCondition>
 	
