@@ -260,7 +260,8 @@ MOVI.namespace("widget");
 		 * @private
 	     */
 		_loadImage: function(uri) {
-			this._image.set("src", uri + "/png");
+			// append timestamp to allow reloads of image
+			this._image.set("src", uri + "/png?" + (new Date()).getTime());
 		},
 		
 		/**
