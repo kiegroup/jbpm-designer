@@ -84,14 +84,14 @@
 	
 	<xsl:template name="find-all-participantRefs">
         <xsl:for-each select="//rdf:Description">
-			<xsl:variable name="typeString" select="./oryx:type" />	
+			<!--xsl:variable name="typeString" select="./oryx:type" />	
 			<xsl:variable name="type">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
 				</xsl:call-template>
 			</xsl:variable>
 			
-			<!--process>
+		
 			<xsl:if test="$type='process'">
 				<participantRef>
 					<xsl:variable name="name" select="./oryx:name" />
@@ -108,14 +108,13 @@
 	
 	<xsl:template name="find-all-properties">
         <xsl:for-each select="//rdf:Description">
-			<xsl:variable name="typeString" select="./oryx:type" />	
+			<!--xsl:variable name="typeString" select="./oryx:type" />	
 			<xsl:variable name="type">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
 				</xsl:call-template>
 			</xsl:variable>
 			
-			<!--process>
 			<xsl:if test="$type='process'">
 				<participantRef>
 					<xsl:variable name="name" select="./oryx:name" />

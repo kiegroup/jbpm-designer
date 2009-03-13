@@ -168,7 +168,9 @@
 						</xsl:attribute>
 					</xsl:if>
 					
-					<!--participant within participantSet-->
+					<!--find out all participants within this participantSet-->
+					<xsl:variable name="searchedSetID"><xsl:value-of select="@rdf:about" /></xsl:variable>   
+					
 					<xsl:for-each select="//rdf:Description">
 						<xsl:variable name="typeString" select="./oryx:type" />	
 						<xsl:variable name="type">
@@ -179,9 +181,10 @@
 						
 						<!--participant within participantSet-->
 						<xsl:if test="$type='participant'">
-							<xsl:variable name="withinParticipantSet" select="count(./raziel:outgoing)" />
+							
+							<xsl:variable name="currentOutGoingID" select="./raziel:outgoing" />
 
-							<xsl:if test="$withinParticipantSet!='0'">
+							<xsl:if test="$currentOutGoingID = $searchedSetID">
 								<participant>
 									<xsl:variable name="name" select="./oryx:name" />
 									<xsl:if test="$name!=''">
@@ -204,9 +207,9 @@
 										</xsl:attribute>
 									</xsl:if>
 								</participant>
-							</xsl:if>	
-						</xsl:if>
-						
+								
+							</xsl:if>
+						</xsl:if>	
 					</xsl:for-each>	
 				</participantSet>
 			</xsl:if>		

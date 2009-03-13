@@ -7303,7 +7303,7 @@
 					"id":"forEach",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"Scope",
+					"title":"forEach",
 					"value":"",
 					"description":"",
 					"readonly":false,
