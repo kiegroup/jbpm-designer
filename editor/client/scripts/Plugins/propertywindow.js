@@ -223,6 +223,9 @@ ORYX.Plugins.PropertyWindow = {
 	// extended by Kerstin (start)	
 	dialogClosed: function(field) {
 		// reopen the text field of the complex list field again
+
+		this.scope.afterEdit({grid:this.scope.grid, record:this.scope.grid.getStore().getAt(this.row), value:this.scope.grid.getStore().getAt(this.row).get("value")})
+		
 		this.scope.grid.startEditing(this.row, this.col);
 	},
 	// extended by Kerstin (end)
