@@ -7236,7 +7236,7 @@
 					"id":"forEach",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"Scope",
+					"title":"forEach",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -7560,8 +7560,8 @@
 				"role":"directedAssociation",
 				"connects": [
 					{
-						"from":"process",
-						"to":"participantSet"
+						"from":"participantSet"
+						"ro":"process"
 					},
 					{
 						"from":"participant",
@@ -7572,8 +7572,8 @@
 						"to":"participantSet"
 					},
 					{
-						"from":"process",
-						"to":"participant"
+						"from":"participant",
+						"to":"process"
 					}
 				]
 			}
