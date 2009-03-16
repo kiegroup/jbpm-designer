@@ -1,0 +1,84 @@
+{
+	"title":"BPEL4Chor grounding Extension",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpel4chor#",
+	"description":"BPEL4Chor grounding extension.",
+	"extends":"http://b3mn.org/stencilset/bpel4chor#",
+	"stencils":[
+		{
+			"type":"node",
+			"id":"properties",
+			"title":"properties",
+			"groups":["Grounding"],
+			"description":"properties in grounding",
+			"view":"others/node.grounding.properties.svg",
+			"icon":"task_none.png",
+			"roles": ["helpRoles"],
+			"properties": [
+				{
+					"id":"property",
+					"type":"Complex",
+					"title":"property",
+					"title_de":"property",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						},
+						{
+							"id":"WSDLProperty",
+							"name":"WSDLProperty",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true 
+						}
+					]
+				}
+			]
+		}
+	],
+	"properties": [		
+		{
+			"roles": [
+				"process"
+			],
+			"properties": [
+				{
+					"id":"WSDLProperty",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"WSDLProperty",
+					"title_de":"WSDLProperty",
+					"value":"QName",
+					"description":"",
+					"description_de":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
+				}
+			]
+		}
+	],
+	"rules": {
+		"connectionRules": [],
+		"cardinalityRules":[
+			{	
+				"role":"properties",
+				"maximumOccurrence":1
+			}
+		],
+		"containmentRules": [
+		]
+	}
+}

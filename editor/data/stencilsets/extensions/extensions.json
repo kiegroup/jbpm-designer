@@ -34,6 +34,13 @@
 			"description":"BPEL4Chor extension for adding a messageLink edge and several BPEL4Chor rules.",
 			"definition":"bpel4chor/bpel4chor.json",
 			"extends":"http://b3mn.org/stencilset/bpel#"
+		},
+		{
+			"title":"BPEL4Chor Grounding Extension",
+			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpel4chor#",
+			"description":"BPEL4Chor Grounding extension for adding grounding properties .",
+			"definition":"bpel4chor_grounding/bpel4chor_grounding.json",
+			"extends":"http://b3mn.org/stencilset/bpel4chor#"
 		}
 	]
 }
