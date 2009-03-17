@@ -178,8 +178,8 @@ ORYX.Plugins.PropertyWindow = {
 		var oldValue	= currentEl.properties[name]; 
 		var newValue	= option.value;
 		var facade		= this.facade;
+		
 
-		//console.log(newValue)
 		// Implement the specific command for property change
 		var commandClass = ORYX.Core.Command.extend({
 			construct: function(){
@@ -275,7 +275,7 @@ ORYX.Plugins.PropertyWindow = {
 				// Get the property pair
 				var name		= pair.title();
 				var attribute	= ce.properties[key];
-
+				
 				var editorGrid = undefined;
 				var editorRenderer = null;
 
@@ -310,13 +310,20 @@ ORYX.Plugins.PropertyWindow = {
 							break;
 						case ORYX.CONFIG.TYPE_CHOICE:
 							var items = pair.items();
+
 							// Generate a new list
 							//var optionTmpl = new Ext.Template('<option value="{value}">{value}</option>');
 							
 							var options = ['select', {style:'display:none'}];
 							items.each(function(value){ 
-								options.push(['option', {value:value.value()}, value.title()])})
+								/* Change attribute variable to show the title of the selected choice item */
+								if(value.value() == attribute)
+									attribute = value.title();
+									
+								options.push(['option', {value:value.value()}, value.title()]);
+								});
 							var select = ORYX.Editor.graft("http://www.w3.org/1999/xhtml", null, options);
+							
 							// Set the grid Editor
 							editorGrid = new Ext.Editor(new Ext.form.ComboBox({ typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title'}));
 							break;
