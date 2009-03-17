@@ -89,6 +89,10 @@ ORYX.Core.StencilSet.PropertyItem = Clazz.extend({
 	value: function() {
 		return this._jsonItem.value;
 	},
+	
+	title: function() {
+		return this._jsonItem.title
+	},
 
 	refToView: function() {
 		return this._jsonItem.refToView;

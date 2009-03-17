@@ -314,7 +314,8 @@ ORYX.Plugins.PropertyWindow = {
 							//var optionTmpl = new Ext.Template('<option value="{value}">{value}</option>');
 							
 							var options = ['select', {style:'display:none'}];
-							items.each(function(value){ options.push(['option', {value:value.value()}, value.value()])})
+							items.each(function(value){ 
+								options.push(['option', {value:value.value()}, value.title()])})
 							var select = ORYX.Editor.graft("http://www.w3.org/1999/xhtml", null, options);
 							// Set the grid Editor
 							editorGrid = new Ext.Editor(new Ext.form.ComboBox({ typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title'}));
