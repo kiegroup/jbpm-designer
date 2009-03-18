@@ -26,11 +26,11 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"description",
-					"type":"String",
+					"type":"Text",
 					"title":"Description",
 					"value":"",
 					"description":"Description of the tracker this tracker workflow operates on",
@@ -52,7 +52,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"projectId",
@@ -65,7 +65,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"projectSite",
@@ -78,7 +78,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"userName",
@@ -91,7 +91,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"password",
@@ -104,7 +104,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"path",
@@ -117,7 +117,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"trackerWorkflowRuleNamespace",
@@ -130,7 +130,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"version",
@@ -217,14 +217,14 @@
 					"id":"title",
 					"type":"String",
 					"title":"Name",
-					"value":"",
+					"value":"Precondition",
 					"description":"",
 					"tooltip":"Name of the tracker rule",
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"scope",
@@ -332,14 +332,14 @@
 					"id":"title",
 					"type":"String",
 					"title":"Name",
-					"value":"",
+					"value":"Invariant",
 					"description":"",
 					"tooltip":"Name of the tracker rule",
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"scope",
@@ -447,14 +447,14 @@
 					"id":"title",
 					"type":"String",
 					"title":"Name",
-					"value":"",
+					"value":"EntryAction",
 					"description":"",
 					"tooltip":"Name of the tracker rule",
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"scope",
@@ -568,14 +568,14 @@
 					"id":"title",
 					"type":"String",
 					"title":"Name",
-					"value":"",
+					"value":"ExitAction",
 					"description":"",
 					"tooltip":"Name of the tracker rule",
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"scope",
@@ -689,14 +689,14 @@
 					"id":"title",
 					"type":"String",
 					"title":"Name",
-					"value":"",
+					"value":"TriggeredAction",
 					"description":"",
 					"tooltip":"Name of the tracker rule",
 					"readonly":false,
 					"optional":true,
 					"refToView":"text",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				},
 				{
 					"id":"scope",
@@ -815,7 +815,7 @@
 					"optional":true,
 					"refToView":"text",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				}					
 			]
 		},
@@ -843,7 +843,7 @@
 					"optional":true,
 					"refToView":"text",
 					"length":"",
-					"wrapLines":true
+					"wrapLines":false
 				}						
 			]			
 		},		
