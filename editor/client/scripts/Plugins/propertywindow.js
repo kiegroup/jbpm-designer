@@ -58,20 +58,23 @@ ORYX.Plugins.PropertyWindow = {
 		this.columnModel = new Ext.grid.ColumnModel([
 			{
 				//id: 'name',
-				header: 	ORYX.I18N.PropertyWindow.name,
-				dataIndex: 	'name',
-				width: 		90,
-				sortable: 	true
-	        },{
+				header: ORYX.I18N.PropertyWindow.name,
+				dataIndex: 'name',
+				width: 90,
+				sortable: true,
+				renderer: this.tooltipRenderer.bind(this)
+			}, {
 				//id: 'value',
-				header: 	ORYX.I18N.PropertyWindow.value,
-				dataIndex: 	'value',
-				id:			'propertywindow_column_value',
-				width: 		90,
-				editor: 	new Ext.form.TextField({allowBlank: false}),
-				renderer: 	this.renderer.bind(this)
-	        }
-		])
+				header: ORYX.I18N.PropertyWindow.value,
+				dataIndex: 'value',
+				id: 'propertywindow_column_value',
+				width: 90,
+				editor: new Ext.form.TextField({
+					allowBlank: false
+				}),
+				renderer: this.renderer.bind(this)
+			}
+		]);
 
 		// creating the store for the model.
         this.dataSource = new Ext.data.Store({
@@ -129,8 +132,16 @@ ORYX.Plugins.PropertyWindow = {
 			return false
 		}
 	},
+	tooltipRenderer: function(value, p, record) {
+		/* Prepare tooltip */
+		p.cellAttr = 'title="' + record.data.gridProperties.tooltip + '"';
+		return value;
+	},
 	
-	renderer: function(value) {
+	renderer: function(value, p, record) {
+		
+		this.tooltipRenderer(value, p, record);
+				
 		if(value instanceof Date) {
 			// TODO: Date-Schema is not generic
 			value = value.dateFormat(ORYX.I18N.PropertyWindow.dateFormat);
@@ -368,12 +379,13 @@ ORYX.Plugins.PropertyWindow = {
 					attribute = String(attribute).search("http") !== 0 ? ("http://" + attribute) : attribute;
 					attribute = "<a href='" + attribute + "' target='_blank'>" + attribute.split("://")[1] + "</a>"
 				}
-
+				
 				// Push to the properties-array
 				this.properties.push([name, attribute, {
 					editor: editorGrid, 
 					propId: key, 
 					type: pair.type(), 
+					tooltip: pair.description(),
 					renderer: editorRenderer
 				}])
 
