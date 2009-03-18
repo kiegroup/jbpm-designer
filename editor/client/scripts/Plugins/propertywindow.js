@@ -832,7 +832,7 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 		        
 		var grid = new Ext.form.TextArea({
 	        anchor		: '100% 100%',
-			value		: unescape(this.value),			listeners	: {				focus: function(){					this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);				}.bind(this)			}		})
+			value		: this.value,			listeners	: {				focus: function(){					this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);				}.bind(this)			}		})
 		
 		
 		// Basic Dialog
@@ -840,8 +840,8 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 			layout		: 'anchor',
 			autoCreate	: true, 
 			title		: ORYX.I18N.PropertyWindow.text, 
-			height		: 350, 
-			width		: 300, 
+			height		: 500, 
+			width		: 500, 
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -865,7 +865,7 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
 					// store dialog input
-					var value = escape(grid.getValue());
+					var value = grid.getValue();
 					this.setValue(value);
 					
 					this.dataSource.getAt(this.row).set('value', value)
