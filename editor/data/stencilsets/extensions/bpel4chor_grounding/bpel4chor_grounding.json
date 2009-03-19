@@ -33,8 +33,8 @@
 							"optional":true 
 						},
 						{
-							"id":"WSDLProperty",
-							"name":"WSDLProperty",
+							"id":"WSDLproperty",
+							"name":"WSDLproperty",
 							"type":"String",
 							"value":"",
 							"width":100,
@@ -48,15 +48,15 @@
 	"properties": [		
 		{
 			"roles": [
-				"process"
+				"participant"
 			],
 			"properties": [
 				{
-					"id":"WSDLProperty",
+					"id":"WSDLproperty",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"WSDLProperty",
-					"title_de":"WSDLProperty",
+					"title":"WSDLproperty",
+					"title_de":"WSDLproperty",
 					"value":"QName",
 					"description":"",
 					"description_de":"",

@@ -12,11 +12,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import org.w3c.dom.Document;
 
 
 
@@ -91,15 +96,18 @@ public class BPEL4ChorExporter extends HttpServlet {
 		return res;
 	}
 	
+	/**************************  topology ***********************************/
     private void transformTopology (String rdfString, PrintWriter out){
   	   
 	   	// XSLT source
-	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
+	   	final String xsltFilename = System.getProperty("catalina.home") 
+	   			+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
 	   	final File xsltFile = new File(xsltFilename);
 	   	final Source xsltSource = new StreamSource(xsltFile);	
 	   	
 	   	// Transformer Factory
-	   	final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	   	final TransformerFactory transformerFactory = 
+	   			TransformerFactory.newInstance();
 	
 	   	// Get the rdf source
 	   	final Source rdfSource;
@@ -107,12 +115,14 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   	rdfSource = new StreamSource(rdf);
 	 
 	   	// Get the result string
-	   	String resultString = null;
+	   	String bufferResultString = null;
 	   	try {
-	   		Transformer transformer = transformerFactory.newTransformer(xsltSource);
+	   		Transformer transformer = transformerFactory
+	   					.newTransformer(xsltSource);
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
-	   		resultString = writer.toString();
+	   		bufferResultString = writer.toString();
+	   		String resultString = postprocessTopology(out, bufferResultString);
 	   		printResponse (out, "topology", resultString);
 	   	} catch (Exception e){
 	   		handleException(out, "topology", e); 
@@ -120,15 +130,54 @@ public class BPEL4ChorExporter extends HttpServlet {
 
    }
     
+    private String postprocessTopology (PrintWriter out, String oldString){
+ 	   
+ 	   StringWriter stringOut = new StringWriter();
+ 	   try {
+ 			// transform string to document
+ 			DocumentBuilderFactory factory = 
+ 				DocumentBuilderFactory.newInstance();
+ 			DocumentBuilder builder = factory.newDocumentBuilder();
+ 			InputStream oldResultInputStream = new ByteArrayInputStream
+ 								(oldString.getBytes());
+ 			Document oldDocument = builder.parse(oldResultInputStream);
+ 			
+ 			// rearrange document
+ 			Document newDocument = handleTopologyDocument(oldDocument);
+ 			
+ 			// transform document to string
+ 			TransformerFactory tFactory = TransformerFactory.newInstance();
+ 			Transformer transformer = tFactory.newTransformer();
+ 			DOMSource source = new DOMSource(newDocument);
+ 			StreamResult result = new StreamResult(stringOut);
+ 			transformer.transform(source, result);
+ 			stringOut.flush();
+ 	 
+ 		} catch (Exception e){
+ 			handleException(out,"topology", e); 
+ 		}
+ 		
+ 		return stringOut.toString();
+
+    }
+    
+    private Document handleTopologyDocument(Document oldDocument) {
+		// TODO Auto-generated method stub
+		return oldDocument;
+	}
+
+	/**************************  grounding *****************************/
     private void transformGrounding (String rdfString, PrintWriter out){
   	   
 	   	// XSLT source
-	   	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL4Chor_Grounding.xslt";
+	   	final String xsltFilename = System.getProperty("catalina.home") 
+	   				+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Grounding.xslt";
 	   	final File xsltFile = new File(xsltFilename);
 	   	final Source xsltSource = new StreamSource(xsltFile);	
 	   	
 	   	// Transformer Factory
-	   	final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	   	final TransformerFactory transformerFactory = 
+	   			TransformerFactory.newInstance();
 	
 	   	// Get the rdf source
 	   	final Source rdfSource;
@@ -136,25 +185,65 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   	rdfSource = new StreamSource(rdf);
 	 
 	   	// Get the result string
-	   	String resultString = null;
+	   	String bufferResultString = null;
 	   	try {
-	   		Transformer transformer = transformerFactory.newTransformer(xsltSource);
+	   		Transformer transformer = transformerFactory
+	   						.newTransformer(xsltSource);
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
-	   		resultString = writer.toString();
+	   		bufferResultString = writer.toString();
+	   		String resultString = postprocessGrounding
+	   						(out, bufferResultString);
 	   		printResponse (out, "grounding", resultString);
 	   	} catch (Exception e){
 	   		handleException(out, "grounding", e);
 	   	}
 
    }
-    
 
-    private void transformProcesses (String rdfString, PrintWriter out){
+    private String postprocessGrounding (PrintWriter out, String oldString){
+  	   
+  	   StringWriter stringOut = new StringWriter();
+  	   try {
+  			// transform string to document
+  			DocumentBuilderFactory factory = 
+  					DocumentBuilderFactory.newInstance();
+  			DocumentBuilder builder = factory.newDocumentBuilder();
+  			InputStream oldResultInputStream = new ByteArrayInputStream
+  						(oldString.getBytes());
+  			Document oldDocument = builder.parse(oldResultInputStream);
+  			
+  			// rearrange document
+  			Document newDocument = handleGroundingDocument(oldDocument);
+  			
+  			// transform document to string
+  			TransformerFactory tFactory = TransformerFactory.newInstance();
+  			Transformer transformer = tFactory.newTransformer();
+  			DOMSource source = new DOMSource(newDocument);
+  			StreamResult result = new StreamResult(stringOut);
+  			transformer.transform(source, result);
+  			stringOut.flush();
+  	 
+  		} catch (Exception e){
+  			handleException(out,"grounding", e); 
+  		}
+  		
+  		return stringOut.toString();
+
+     }
+    
+    private Document handleGroundingDocument(Document oldDocument) {
+		// TODO Auto-generated method stub
+		return oldDocument;
+	}
+
+    /****************************  processes  *******************************/
+	private void transformProcesses (String rdfString, PrintWriter out){
 	   
     	bpelExporter.transformProcesses (rdfString, out);
    }
     
+/***************************** print methods ********************************/
    private void printResponse(PrintWriter out, String type, String text){
 		out.print("{\"type\":\"" + type + "\",");
 		out.print("\"success\":true,");

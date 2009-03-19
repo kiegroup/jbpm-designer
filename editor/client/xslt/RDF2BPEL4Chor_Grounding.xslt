@@ -84,7 +84,7 @@
 	
 	<xsl:template name="find-all-participantRefs">
         <xsl:for-each select="//rdf:Description">
-			<!--xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="typeString" select="./oryx:type" />	
 			<xsl:variable name="type">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
@@ -92,7 +92,7 @@
 			</xsl:variable>
 			
 		
-			<xsl:if test="$type='process'">
+			<xsl:if test="$type='participant'">
 				<participantRef>
 					<xsl:variable name="name" select="./oryx:name" />
 					<xsl:if test="$name!=''">
@@ -100,33 +100,34 @@
 							<xsl:value-of select="$name" />
 						</xsl:attribute>
 					</xsl:if>
+					
+					<xsl:variable name="WSDLproperty" select="./oryx:wsdlproperty" />
+					<xsl:if test="$WSDLproperty!=''">
+						<xsl:attribute name="WSDLproperty">
+							<xsl:value-of select="$WSDLproperty" />
+						</xsl:attribute>
+					</xsl:if>
 				</participantRef>
-			</xsl:if-->	
+			</xsl:if>	
 		</xsl:for-each>
 	</xsl:template>	
 	
 	
 	<xsl:template name="find-all-properties">
         <xsl:for-each select="//rdf:Description">
-			<!--xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="typeString" select="./oryx:type" />	
 			<xsl:variable name="type">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
 				</xsl:call-template>
 			</xsl:variable>
 			
-			<xsl:if test="$type='process'">
-				<participantRef>
-					<xsl:variable name="name" select="./oryx:name" />
-					<xsl:if test="$name!=''">
-						<xsl:attribute name="name">
-							<xsl:value-of select="$name" />
-						</xsl:attribute>
-					</xsl:if>
-				</participantRef>
-			</xsl:if-->	
+			<xsl:if test="$type='properties'">
+				<xsl:call-template name="add-property-attribute"/>
+			</xsl:if>	
 		</xsl:for-each>
 	</xsl:template>
+
 
 	
 	<xsl:template name="add-otherxmlns-attribute">
@@ -160,6 +161,51 @@
 			</xsl:attribute>
 			
   			<xsl:call-template name="loop-for-adding-otherxmlns-attribute">
+   				<xsl:with-param name="i" select="$i + 1"/>
+   				<xsl:with-param name="count" select="$count"/>
+   				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>
+  			</xsl:call-template>
+ 		</xsl:if>
+    </xsl:template>
+	
+
+	<xsl:template name="add-property-attribute">
+		<xsl:variable name="property" select="./oryx:property" />
+		<xsl:if test="$property!=''">
+			<xsl:variable name="count">
+				<xsl:call-template name="get-number-of-elements-in-complex-type">
+					<xsl:with-param name="original_content" select="$property" />
+				</xsl:call-template>
+			</xsl:variable>
+			
+			<xsl:call-template name="loop-for-adding-property-attribute">
+				<xsl:with-param name="i">1</xsl:with-param>
+				<xsl:with-param name="count" select="$count" />
+				<xsl:with-param name="data-set" select="$property" />
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="loop-for-adding-property-attribute">
+		<xsl:param name="i"/>
+ 		<xsl:param name="count"/>
+		<xsl:param name="data-set"/>
+			
+ 		<xsl:if test="$i &lt;= $count">
+ 			<xsl:variable name="name" select="substring-before(substring-after($data-set, 'name%3A%22'), '%22%2C%20WSDLproperty') " />
+			<xsl:variable name="WSDLproperty" select="substring-before(substring-after($data-set, 'WSDLproperty%3A%22'), '%22%7D') " />
+			
+			<property>
+				<xsl:attribute name="name">
+					<xsl:value-of select="$name"/>
+				</xsl:attribute>
+				
+				<xsl:attribute name="WSDLproperty">
+					<xsl:value-of select="$WSDLproperty"/>
+				</xsl:attribute>
+			</property>
+  			
+			<xsl:call-template name="loop-for-adding-property-attribute">
    				<xsl:with-param name="i" select="$i + 1"/>
    				<xsl:with-param name="count" select="$count"/>
    				<xsl:with-param name="data-set" select="substring-after($data-set,'%22%7D%2C%20%7B')"/>

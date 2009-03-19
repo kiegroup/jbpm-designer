@@ -1242,7 +1242,7 @@
 					"type":"searcher",
 					"searchBPELId":"process","searchScopeId":"Scope",
 					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
-					"title":"partnerLinks",
+					"title":"partnerLink",
 					"title_de":"Partnerverbindungen",
 					"value":"NCName",
 					"description":"",
@@ -7197,11 +7197,12 @@
 					"prefix":"oryx",
 					"type":"String",
 					"title":"Type",
-					"value":"Reference",
+					"value":"",
 					"description":"",
-					"readonly":true,
+					"readonly":false,
 					"optional":false,
-					"length":""
+					"length":undefined,
+					"wrapLines":false
 				},
 				{
 					"id":"selects",
@@ -7274,11 +7275,12 @@
 					"prefix":"oryx",
 					"type":"String",
 					"title":"Type",
-					"value":"Set",
+					"value":"",
 					"description":"",
-					"readonly":true,
+					"readonly":false,
 					"optional":false,
-					"length":""
+					"length":undefined,
+					"wrapLines":false
 				},
 				{
 					"id":"copyto",
@@ -7366,6 +7368,62 @@
 					"refToView":"",
 					"length":""
 				},
+				{	
+					"id":"sender",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"sender",
+					"title_de":"Sender",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"sendActivity",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"sendActivity",
+					"title_de":"Sendactivität",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"receiver",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"receiver",
+					"title_de":"Empfänger",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"receiveActivity",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"receiveActivity",
+					"title_de":"Empfängactivität",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
 				{
 					"id":"bindSenderTo",
 					"prefix":"oryx",
@@ -7436,7 +7494,7 @@
 				"connects": [
 					{
 						"from":"participantSet",
-						"ro":"process"
+						"to":"process"
 					},
 					{
 						"from":"participant",
