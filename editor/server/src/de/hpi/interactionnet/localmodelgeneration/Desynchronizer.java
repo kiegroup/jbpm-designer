@@ -107,6 +107,7 @@ public class Desynchronizer {
 				Place ch = channelMap.get(t.toString());
 				if (ch != null) {
 					FlowRelationship newrel = factory.createFlowRelationship();
+					newnet.getFlowRelationships().add(newrel);
 					if (((InteractionTransition)t).getSender().getName().equals(r.getName())) {
 						newrel.setSource(newt);
 						newrel.setTarget(ch);
@@ -120,6 +121,7 @@ public class Desynchronizer {
 			// copy flow relationships
 			for (FlowRelationship rel: rnet.getFlowRelationships()) {
 				FlowRelationship newrel = factory.createFlowRelationship();
+				newnet.getFlowRelationships().add(newrel);
 				newrel.setSource(map.get(rel.getSource()));
 				newrel.setTarget(map.get(rel.getTarget()));
 			}

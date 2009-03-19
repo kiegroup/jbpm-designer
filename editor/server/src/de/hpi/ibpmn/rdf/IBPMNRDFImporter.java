@@ -29,6 +29,7 @@ import de.hpi.bpmn.TextAnnotation;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
 import de.hpi.bpmn.Activity.LoopType;
+import de.hpi.ibpmn.ComplexInteraction;
 import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.IBPMNFactory;
 import de.hpi.ibpmn.Interaction;
@@ -573,9 +574,14 @@ public class IBPMNRDFImporter {
 		Edge temp = new MessageFlow(); // only created temporarily - will not appear in diagram
 		setConnections(temp, node, c);
 		
-		Interaction i = (Interaction)temp.getTarget();
-		if (i != null)
-			i.setSenderRole((Pool)temp.getSource());
+		if (temp.getTarget() instanceof Interaction) {
+			Interaction i = (Interaction)temp.getTarget();
+			if (i != null)
+				i.setSenderRole((Pool)temp.getSource());
+		} else if (temp.getTarget() instanceof ComplexInteraction) {
+			((ComplexInteraction)temp.getTarget()).getOwners().add((Pool)temp.getSource());
+		}
+		
 		temp.setSource(null); // clean-up
 		temp.setTarget(null); // clean-up
 	}

@@ -32,8 +32,14 @@ public class InteractionTransition extends LabeledTransitionImpl {
 		this.sender = role;
 	}
 	
-	public String toString() {
+	@Override
+	public String getLabel() {
 		return sender+"=>"+receiver+" ("+messageType+")";
+	}
+
+	@Override
+	public String toString() {
+		return getLabel();
 	}
 
 }

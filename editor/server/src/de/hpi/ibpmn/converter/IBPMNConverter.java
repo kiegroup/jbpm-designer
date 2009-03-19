@@ -35,7 +35,7 @@ public class IBPMNConverter extends StandardConverter {
 	}
 
 	public class IBPMNConversionContext extends ConversionContext {
-		Map<Pool, Role> roleMap = new HashMap();
+		Map<Pool, Role> roleMap = new HashMap<Pool,Role>();
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class IBPMNConverter extends StandardConverter {
 			InteractionTransition t = ((InteractionNetFactory)pnfactory).createInteractionTransition();
 			net.getTransitions().add(t);
 			t.setId(id);
-			t.setLabel(label);
+//			t.setLabel(label);
 			t.setSender(findOrCreateRole((InteractionNet)net, i.getSenderRole(), (IBPMNConversionContext)c));
 			t.setReceiver(findOrCreateRole((InteractionNet)net, i.getReceiverRole(), (IBPMNConversionContext)c));
 			t.setMessageType(((Node)obj).getLabel());

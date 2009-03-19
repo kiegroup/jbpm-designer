@@ -929,6 +929,18 @@
 					"length":"30"
 				},
 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":["interactiontext"],
+					"length":"",
+					"wrapLines":true
+				},
+				{
 					"id":"documentation",
 					"type":"String",
 					"title":"Documentation",

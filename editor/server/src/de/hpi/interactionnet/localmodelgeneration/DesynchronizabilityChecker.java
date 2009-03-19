@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.PTNet;
+import de.hpi.PTnet.verification.MaxStatesExceededException;
 import de.hpi.PTnet.verification.WeakTerminationChecker;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.petrinet.Transition;
@@ -25,7 +26,16 @@ public class DesynchronizabilityChecker {
 			net.getFinalMarkings().addAll(new FinalMarkingsCalculator(net).getFinalMarkings());
 		List<Marking> finalMarkings = new ArrayList<Marking>();
 		PTNet dnet = new Desynchronizer().getDesynchronizedNet(net, finalMarkings);
-		return new WeakTerminationChecker(dnet, finalMarkings).check(conflictingTransitions);
+		try {
+			WeakTerminationChecker checker = new WeakTerminationChecker(dnet, finalMarkings);
+			boolean isOk = checker.check();
+			conflictingTransitions = checker.getConflictTransitions();
+			return isOk;
+		} catch (MaxStatesExceededException e) {
+			// mark all transitions TODO provide a nicer visualization
+			conflictingTransitions.addAll(net.getTransitions());
+			return false;
+		}
 	}
 
 }
