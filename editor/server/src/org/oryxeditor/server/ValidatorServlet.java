@@ -102,7 +102,7 @@ public class ValidatorServlet extends HttpServlet {
 			jsonObject.put("leadsToEnd", validator.leadsToEnd);
 			
 			JSONArray conflictingNodes = new JSONArray();
-			for(DiagramObject node: validator.getConflictingBPMNNodes()){
+			for(DiagramObject node: validator.getBadBPMNNodes()){
 				JSONObject nodeObject = new JSONObject();
 				nodeObject.put("id", node.getId());
 				conflictingNodes.put(nodeObject);
