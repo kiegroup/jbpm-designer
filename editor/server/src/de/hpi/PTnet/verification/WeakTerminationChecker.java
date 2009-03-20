@@ -7,6 +7,8 @@ import java.util.Set;
 
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.PTNet;
+import de.hpi.petrinet.FlowRelationship;
+import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 
 /**
@@ -29,6 +31,8 @@ import de.hpi.petrinet.Transition;
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ * 
+ * TODO reuse more sophisticated technique to decide on unboundedness
  */
 public class WeakTerminationChecker {
 	
@@ -38,6 +42,11 @@ public class WeakTerminationChecker {
 	protected Set<String> badMarkings;
 	protected Set<String> visitedMarkings;
 	protected Set<String> finalMarkings;
+	protected List<Transition> conflictTransitions;
+	protected List<Transition> deadlockingTransitions;
+	protected Transition unsafeTransition;
+	protected int stateCount;
+	protected int unsafeTransitionSearchDepth;
 	
 	public WeakTerminationChecker(PTNet net, List<Marking> finalMarkings) {
 		this.net = net;
@@ -48,6 +57,10 @@ public class WeakTerminationChecker {
 		this.finalMarkings = new HashSet<String>();
 		for (Marking m: finalMarkings)
 			this.finalMarkings.add(m.toString());
+		
+		this.conflictTransitions = new ArrayList<Transition>();
+		this.deadlockingTransitions = new ArrayList<Transition>();
+//		this.unsafeTransitions = new ArrayList<Transition>();
 	}
 	
 	/**
@@ -55,17 +68,18 @@ public class WeakTerminationChecker {
 	 * @param conflictingTransitions
 	 * @return
 	 */
-	public boolean check(List<Transition> conflictingTransitions) {
-		if (conflictingTransitions == null)
-			conflictingTransitions = new ArrayList<Transition>();
-		else
-			conflictingTransitions.clear();
+	public boolean check() throws MaxStatesExceededException {
+		conflictTransitions.clear();
+		deadlockingTransitions.clear();
+//		unsafeTransitions.clear();
+		unsafeTransition = null;
+		unsafeTransitionSearchDepth = -1;
 		
-		return doCheck(net.getInitialMarking(), conflictingTransitions, false);
+		stateCount = 0;
+		return doCheck(net.getInitialMarking(), false, 0);
 	}
 	
-	//TODO badTransitions is never used, what about this container? Just for optimization?
-	protected boolean doCheck(Marking marking, List<Transition> conflictingTransitions, boolean returnFalseIfVisited) {
+	protected boolean doCheck(Marking marking, boolean returnFalseIfVisited, int searchDepth) throws MaxStatesExceededException {
 		String markingStr = marking.toString();
 //		System.out.println("Checking marking "+markingStr);
 		
@@ -81,27 +95,81 @@ public class WeakTerminationChecker {
 		if (!alreadyVisited)
 			visitedMarkings.add(markingStr);
 		
+		stateCount++;
+		if (stateCount > MaxStatesExceededException.MAX_NUM_STATES)
+			throw new MaxStatesExceededException();
+		
 		boolean leadsToGoodMarking = finalMarkings.contains(markingStr);
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
 		List<Transition> badTransitions = new ArrayList<Transition>();
-		for (Transition t: transitions) {
-			Marking newmarking = interpreter.fireTransition(net, marking, t);
-			
-			boolean cresult = doCheck(newmarking, conflictingTransitions, alreadyVisited);
-			leadsToGoodMarking |= cresult;
-			if (!cresult)
-				badTransitions.add(t);
+		if (transitions.size() > 0) {
+			for (Transition t: transitions) {
+				Marking newmarking = interpreter.fireTransition(net, marking, t);
+				
+				// unsafe net?
+				Place unsafePlace = newmarking.findUnsafePlace();
+				if (unsafePlace != null) {
+					if (unsafeTransitionSearchDepth == -1 || searchDepth < unsafeTransitionSearchDepth) {
+						unsafeTransition = t;
+						unsafeTransitionSearchDepth = searchDepth;
+					}
+				}
+				
+				boolean cresult = doCheck(newmarking, alreadyVisited, searchDepth+1);
+				leadsToGoodMarking |= cresult;
+				if (!cresult)
+					badTransitions.add(t);
+			}
+		} else {
+			// is deadlock?
+			if (!leadsToGoodMarking) {
+				addDeadlockingTransitions(marking);
+			}
 		}
 		
 		if (leadsToGoodMarking) {
 			visitedMarkings.remove(markingStr);
 			goodMarkings.add(markingStr);
 			for (Transition t: badTransitions)
-				if (!conflictingTransitions.contains(t))
-					conflictingTransitions.add(t);
+				if (!conflictTransitions.contains(t))
+					conflictTransitions.add(t);
 		}
 		
 		return leadsToGoodMarking;
+	}
+
+	protected void addDeadlockingTransitions(Marking marking) {
+		for (Place p: marking.getMarkedPlaces()) {
+			for (FlowRelationship rel: p.getOutgoingFlowRelationships()) {
+				Transition t = (Transition)rel.getTarget();
+				if (!deadlockingTransitions.contains(t))
+					deadlockingTransitions.add(t);
+			}
+		}
+	}
+
+	/**
+	 * @return if there exists a path to a final marking then the list of conflict transitions are those transitions
+	 * that lead to not reaching a final marking any longer
+	 */
+	public List<Transition> getConflictTransitions() {
+		return conflictTransitions;
+	}
+
+	/**
+	 * @return if there is a deadlock then this list contains (some of) those transitions are returned that are partly enabled 
+	 * (at least one of the input places is marked)
+	 */
+	public List<Transition> getDeadlockingTransitions() {
+		return deadlockingTransitions;
+	}
+
+	/**
+	 * @return if there is an unsafe marking (at least two tokens on a place) then a transition is returned that produced such a marking 
+	 * and is preceeded by the shortest firing sequence   
+	 */
+	public Transition getUnsafeTransition() {
+		return unsafeTransition;
 	}
 
 }

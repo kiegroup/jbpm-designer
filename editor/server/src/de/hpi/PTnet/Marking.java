@@ -38,7 +38,7 @@ import de.hpi.petrinet.Place;
 public class Marking implements de.hpi.petrinet.Marking {
 	
 	private PetriNet net;
-	private Map<Place,Integer> marking = new HashMap();
+	private Map<Place,Integer> marking = new HashMap<Place,Integer>();
 	private String markingStr;
 	
 	public Marking(PetriNet net) {
@@ -124,6 +124,14 @@ public class Marking implements de.hpi.petrinet.Marking {
 				places.add(p);
 		}
 		return places;
+	}
+	
+	public Place findUnsafePlace() {
+		for (Place p: net.getPlaces()) {
+			if (getNumTokens(p) > 1)
+				return p;
+		}
+		return null;
 	}
 	
 	public boolean equals(Object o){
