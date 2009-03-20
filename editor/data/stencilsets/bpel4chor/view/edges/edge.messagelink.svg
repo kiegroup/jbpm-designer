@@ -5,7 +5,6 @@
 	oryx:edge="edge" >
 	<defs>
 		<marker id="start" oryx:optional="yes" oryx:enabled="yes" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
-	  		<!-- <path d="M 10 10 L 0 5 L 10 0" fill="none" stroke="black" /> -->
 	  		<circle cx="5" cy="5" r="5" fill="white" stroke="black" />
 	  	</marker>
 
@@ -14,6 +13,19 @@
 	  	</marker>
 	</defs>
 	<g id="edge">
-	    <path d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-dasharray="3, 4" marker-start="url(#start)" marker-end="url(#end)" />
+	    <path d="M10 50 L210 50" 
+	    	  stroke="black" 
+	    	  fill="none" 
+	    	  stroke-width="2" 
+	    	  stroke-dasharray="3, 4" 
+	    	  marker-start="url(#start)" 
+	    	  marker-end="url(#end)" />
+		<text id="label" 
+		  x="47" 
+		  y="7" 
+		  font-size="12" 
+		  font-family="Arial" 
+		  fill="black" 
+		  oryx:edgePosition="midtop"/>
 	</g>
 </svg>

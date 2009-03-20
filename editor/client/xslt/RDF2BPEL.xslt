@@ -32,7 +32,7 @@
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="currentParentID"><xsl:value-of select="(./raziel:parent/@rdf:resource)" /></xsl:variable>         
 			<xsl:if test="$currentParentID = $searchedParentID">
-      		  	<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+      		  	<xsl:variable name="currentID"><xsl:value-of select="@rdf:about" /></xsl:variable>
 				<xsl:variable name="typeString" select="./oryx:type" />	
 				<xsl:variable name="type">
 					<xsl:call-template name="get-exact-type">
@@ -199,7 +199,7 @@
 						<xsl:call-template name="add-outgoing-element"/>
 						
 				        <xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 					</assign>
 				</xsl:if>
@@ -356,7 +356,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>						
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </if>
 				</xsl:if>
@@ -367,7 +367,7 @@
 						<xsl:call-template name="add-bounds-attribute"/>
 						<xsl:call-template name="add-condition-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 					</elseif>				
 				</xsl:if>
@@ -377,7 +377,7 @@
 					<else>
 						<xsl:call-template name="add-bounds-attribute"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>						
 		            </else>
 				</xsl:if>
@@ -391,7 +391,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 					 	<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </flow>
 				</xsl:if>
@@ -406,7 +406,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>						
 				        <xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </pick>
 				</xsl:if>
@@ -422,7 +422,7 @@
 						<xsl:call-template name="add-correlations-element"/>
 						<xsl:call-template name="add-fromParts-element"/>
 					    <xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 					</onMessage>
 				</xsl:if>
@@ -436,7 +436,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>						
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </sequence>
 				</xsl:if>
@@ -451,7 +451,7 @@
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="add-condition-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </while>
 				</xsl:if>
@@ -466,7 +466,7 @@
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="add-standard-elements"/>						
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </repeatUntil>
 				</xsl:if>
@@ -498,7 +498,7 @@
 						<xsl:call-template name="add-completionCondition-element"/>
 						
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </forEach>
 				</xsl:if>
@@ -547,7 +547,7 @@
 						<xsl:call-template name="add-messageExchanges-element"/>
 						<xsl:call-template name="add-standard-elements"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </scope>
 				</xsl:if>
@@ -560,7 +560,7 @@
 						<xsl:call-template name="add-ForOrUntil-element"/>
 						<xsl:call-template name="add-repeatEvery-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </onAlarm>
 				</xsl:if>
@@ -577,7 +577,7 @@
 						<xsl:call-template name="add-correlations-element"/>
 						<xsl:call-template name="add-fromParts-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>	
 					</onEvent>
 				</xsl:if>
@@ -588,7 +588,7 @@
 						<xsl:call-template name="add-bounds-attribute"/>						
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </eventHandlers>
 				</xsl:if>
@@ -599,7 +599,7 @@
 						<xsl:call-template name="add-bounds-attribute"/>						
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </faultHandlers>
 				</xsl:if>
@@ -610,7 +610,7 @@
 						<xsl:call-template name="add-bounds-attribute"/>						
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </compensationHandler>
 				</xsl:if>
@@ -621,7 +621,7 @@
 						<xsl:call-template name="add-bounds-attribute"/>						
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </terminationHandler>
 				</xsl:if>
@@ -636,7 +636,7 @@
 						<xsl:call-template name="add-faultElement-attribute"/>
 						<xsl:call-template name="add-documentation-element"/>	
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </catch>
 				</xsl:if>
@@ -647,7 +647,7 @@
 						<xsl:call-template name="add-bounds-attribute"/>
 						<xsl:call-template name="add-documentation-element"/>
 						<xsl:call-template name="find-children-nodes">
-							<xsl:with-param name="searchedParentID"><xsl:value-of select="$realID" /></xsl:with-param>
+							<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
 					    </xsl:call-template>
 		            </catchAll>
 				</xsl:if>				
@@ -667,7 +667,7 @@
 	
 	
 	<xsl:template name="add-children-of-process-element">	
-		<xsl:variable name="realID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+		<xsl:variable name="currentID"><xsl:value-of select="@rdf:about" /></xsl:variable>
 		
         <xsl:call-template name="add-standard-attributes"/>
 		
@@ -713,7 +713,7 @@
 		<xsl:call-template name="add-messageExchanges-element"/>
 		
 		<xsl:call-template name="find-children-nodes">
-			<xsl:with-param name="searchedParentID" select="$realID" />
+			<xsl:with-param name="searchedParentID" select="$currentID" />
 	    </xsl:call-template>
 	</xsl:template>
 	

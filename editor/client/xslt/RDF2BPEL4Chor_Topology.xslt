@@ -46,10 +46,92 @@
 				<messageLinks>
 					<xsl:call-template name="find-all-messageLinks"/>
 				</messageLinks>	
+				
+				<nodeInfoSet>
+					<xsl:call-template name="record-process-infos"/>
+				</nodeInfoSet>
+				
 			</topology>	
 	 	</xsl:if>
 	</xsl:template>
 	
+	<xsl:template name="record-process-infos">
+        <xsl:for-each select="//rdf:Description">
+			<xsl:variable name="typeString" select="./oryx:type" />	
+			<xsl:variable name="type">
+				<xsl:call-template name="get-exact-type">
+					<xsl:with-param name="typeString" select="$typeString" />
+				</xsl:call-template>
+			</xsl:variable>
+			
+			<xsl:if test="$type='process'">
+				<xsl:variable name="processID"><xsl:value-of select="@rdf:about" /></xsl:variable>
+				<process>
+					<xsl:if test="$processID!=''">
+						<xsl:attribute name="processID">
+							<xsl:value-of select="$processID" />
+						</xsl:attribute>
+					</xsl:if>		
+				</process>	
+				
+				<xsl:call-template name="find-children-nodes">
+					<xsl:with-param name="searchedParentID"><xsl:value-of select="$processID" /></xsl:with-param>
+					<xsl:with-param name="processID"><xsl:value-of select="$processID" /></xsl:with-param>
+			    </xsl:call-template>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+	
+	<xsl:template name="find-children-nodes">
+		<xsl:param name="searchedParentID" />
+		<xsl:param name="processID" />
+		
+        <xsl:for-each select="//rdf:Description">
+			<xsl:variable name="currentParentID"><xsl:value-of select="(./raziel:parent/@rdf:resource)" /></xsl:variable>         
+			<xsl:if test="$currentParentID = $searchedParentID">
+      		  	<xsl:variable name="currentID" select="@rdf:about" />
+				<xsl:variable name="typeString" select="./oryx:type" />	
+				<xsl:variable name="type">
+					<xsl:call-template name="get-exact-type">
+						<xsl:with-param name="typeString" select="$typeString" />
+					</xsl:call-template>
+				</xsl:variable>
+				
+				<xsl:if test="$type='invoke' or 'reply' or 'onMessage' or 'receive'">
+					<sendOrReceiveActivity> 
+					
+						<xsl:variable name="name"><xsl:value-of select="./oryx:name" /></xsl:variable>
+						
+						<xsl:attribute name="name">
+							<xsl:value-of select="$name" />
+						</xsl:attribute>
+						
+						<xsl:attribute name="id">
+							<xsl:value-of select="$currentID" />
+						</xsl:attribute>
+						
+						<xsl:attribute name="processID">
+							<xsl:value-of select="$processID" />
+						</xsl:attribute>
+						
+						<xsl:if test="$type='invoke' or 'reply'">
+							<xsl:call-template name="add-outgoing-elements">
+								<xsl:with-param name="researchedTargetType">messageLink</xsl:with-param>
+							</xsl:call-template>
+						</xsl:if>
+						
+					</sendOrReceiveActivity>
+				</xsl:if>
+				
+				<xsl:call-template name="find-children-nodes">
+					<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
+					<xsl:with-param name="processID"><xsl:value-of select="$processID" /></xsl:with-param>
+			    </xsl:call-template>	
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>				
+				
+				
 	<xsl:template name="find-all-participantTypes">
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="typeString" select="./oryx:type" />	
@@ -61,7 +143,7 @@
 			
 			<!--participantTypes saved in processes-->
 			<xsl:if test="$type='process'">
-				<xsl:variable name="typeName" select="./oryx:participantype" />
+				<xsl:variable name="typeName" select="./oryx:participanttype" />
 					
 				<xsl:if test="$typeName!=''">
 					<participantType>
@@ -88,8 +170,8 @@
 			<xsl:if test="$type='participantSet'">
 				<xsl:variable name="outgoingLinks" select="count(./raziel:outgoing)" />
 				
-				<xsl:if test="outgoingLinks='0'">	
-					<xsl:variable name="typeName" select="./oryx:type" />
+				<xsl:if test="$outgoingLinks='0'">	
+					<xsl:variable name="typeName" select="./oryx:participanttype" />
 					<xsl:if test="$typeName!=''">
 						<participantType>
 							<xsl:attribute name="name">
@@ -104,8 +186,8 @@
 			<xsl:if test="$type='participant'">
 				<xsl:variable name="outgoingLinks" select="count(./raziel:outgoing)" />
 				
-				<xsl:if test="outgoingLinks='0'">	
-					<xsl:variable name="typeName" select="./oryx:type" />
+				<xsl:if test="$outgoingLinks='0'">	
+					<xsl:variable name="typeName" select="./oryx:participanttype" />
 					<xsl:if test="$typeName!=''">
 						<participantType>
 							<xsl:attribute name="name">
@@ -159,7 +241,9 @@
 						</xsl:attribute>
 					</xsl:if>
 					
-					<xsl:call-template name="add-outgoing-attribute"/>
+					<xsl:call-template name="add-outgoing-elements">
+						<xsl:with-param name="researchedTargetType">directedAssociation</xsl:with-param>
+					</xsl:call-template>
 				</participant>
 			</xsl:if>
 
@@ -214,7 +298,9 @@
 						</xsl:attribute>
 					</xsl:if>
 					
-					<xsl:call-template name="add-outgoing-attribute"/>
+					<xsl:call-template name="add-outgoing-elements">
+						<xsl:with-param name="researchedTargetType">directedAssociation</xsl:with-param>
+					</xsl:call-template>
 				</participantSet>
 			</xsl:if>		
 		</xsl:for-each>
@@ -233,38 +319,17 @@
 			<!--messageLink-->
 			<xsl:if test="$type='messageLink'">
 				<messageLink>
+					<xsl:variable name="currentID" select="@rdf:about" />
+					<xsl:if test="$currentID!=''">
+						<xsl:attribute name="id">
+							<xsl:value-of select="$currentID" />
+						</xsl:attribute>
+					</xsl:if>
+					
 					<xsl:variable name="name" select="./oryx:name" />
 					<xsl:if test="$name!=''">
 						<xsl:attribute name="name">
 							<xsl:value-of select="$name" />
-						</xsl:attribute>
-					</xsl:if>
-					
-					<xsl:variable name="sender" select="./oryx:sender" />
-					<xsl:if test="$sender!=''">
-						<xsl:attribute name="sender">
-							<xsl:value-of select="$sender" />
-						</xsl:attribute>
-					</xsl:if>
-					
-					<xsl:variable name="sendActivity" select="./oryx:sendactivity" />
-					<xsl:if test="$sendActivity!=''">
-						<xsl:attribute name="sendActivity">
-							<xsl:value-of select="$sendActivity" />
-						</xsl:attribute>
-					</xsl:if>
-					
-					<xsl:variable name="receiver" select="./oryx:receiver" />
-					<xsl:if test="$receiver!=''">
-						<xsl:attribute name="receiver">
-							<xsl:value-of select="$receiver" />
-						</xsl:attribute>
-					</xsl:if>
-					
-					<xsl:variable name="receiveActivity" select="./oryx:receiveactivity" />
-					<xsl:if test="$receiveActivity!=''">
-						<xsl:attribute name="receiveActivity">
-							<xsl:value-of select="$receiveActivity" />
 						</xsl:attribute>
 					</xsl:if>
 					
@@ -296,6 +361,10 @@
 						</xsl:attribute>
 					</xsl:if>
 
+					<xsl:call-template name="add-outgoing-elements">
+						<xsl:with-param name="researchedTargetType">all</xsl:with-param>
+					</xsl:call-template>
+					
 				</messageLink>
 			</xsl:if>	
 		</xsl:for-each>
@@ -340,32 +409,60 @@
  		</xsl:if>
     </xsl:template>
 	
-	<xsl:template name="add-outgoing-attribute">
+	<xsl:template name="add-outgoing-elements">
+		<xsl:param name="researchedTargetType"/>
+		
 		<xsl:variable name="numberOfOutgoingLinks" select="count(./raziel:outgoing)" />
 		<xsl:if test="$numberOfOutgoingLinks!=0">
-			<xsl:call-template name="loop-for-adding-outgoing-attribute">
+			<xsl:call-template name="loop-for-adding-outgoing-elements">
 				<xsl:with-param name="i">1</xsl:with-param>
 				<xsl:with-param name="count" select="$numberOfOutgoingLinks" />
+				<xsl:with-param name="researchedTargetType" select="$researchedTargetType" />
 			</xsl:call-template>
 		</xsl:if>	
 	</xsl:template>	
 	
-	<xsl:template name="loop-for-adding-outgoing-attribute">
+	<xsl:template name="loop-for-adding-outgoing-elements">
 		<xsl:param name="i"/>
  		<xsl:param name="count"/>
+		<xsl:param name="researchedTargetType"/>
 			
  		<xsl:if test="$i &lt;= $count">
- 			<xsl:variable name="linkID" select="(./raziel:outgoing/@rdf:resource)[$i]" />
+ 			<xsl:variable name="targetID" select="(./raziel:outgoing/@rdf:resource)[$i]" />
 			
-			<outgoingLink>
-				<xsl:attribute name="linkID">
-					<xsl:value-of select="$linkID" />
-				</xsl:attribute>
-			</outgoingLink>		
+			<xsl:for-each select="//rdf:Description">
+				<xsl:variable name="currentID"><xsl:value-of select="@rdf:about" /></xsl:variable>         
+				<xsl:if test="$currentID = $targetID">
+      		  		<xsl:variable name="typeString" select="./oryx:type" />	
+					<xsl:variable name="type">
+						<xsl:call-template name="get-exact-type">
+							<xsl:with-param name="typeString" select="$typeString" />
+						</xsl:call-template>
+					</xsl:variable>
+					
+					<xsl:if test="$researchedTargetType='all'">
+						<outgoingLink>
+							<xsl:attribute name="targetID">
+								<xsl:value-of select="$targetID" />
+							</xsl:attribute>
+						</outgoingLink>	
+					</xsl:if>
+						
+					<xsl:if test="$type=$researchedTargetType">
+						<outgoingLink>
+							<xsl:attribute name="targetID">
+								<xsl:value-of select="$targetID" />
+							</xsl:attribute>
+						</outgoingLink>	
+					</xsl:if>		
+				
+				</xsl:if>
+			</xsl:for-each>			
 			
-  			<xsl:call-template name="loop-for-adding-outgoing-attribute">
+  			<xsl:call-template name="loop-for-adding-outgoing-elements">
    				<xsl:with-param name="i" select="$i + 1"/>
    				<xsl:with-param name="count" select="$count"/>
+				<xsl:with-param name="researchedTargetType" select="$researchedTargetType" />
   			</xsl:call-template>
  		</xsl:if>
     </xsl:template>

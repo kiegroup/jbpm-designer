@@ -34,21 +34,6 @@
 					"wrapLines":false
 				},
 				{
-					"id":"participantType",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"participantType",
-					"title_de":"participantType",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
 					"id":"targetNamespace",
 					"prefix":"oryx",
 					"type":"String",
@@ -724,6 +709,21 @@
 							"optional":false 
 						}
 					]
+				},
+				{
+					"id":"participantType",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"participantType",
+					"title_de":"participantType",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				},
 				{
 					"id":"autoLayout",
@@ -7193,14 +7193,17 @@
 					"wrapLines":false
 				},
 				{
-					"id":"type",
+					"id":"participantType",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"Type",
+					"title":"participantType",
+					"title_de":"participantType",
 					"value":"",
 					"description":"",
+					"tooltip":"",
 					"readonly":false,
 					"optional":false,
+					"refToView":"",
 					"length":undefined,
 					"wrapLines":false
 				},
@@ -7271,14 +7274,17 @@
 					"wrapLines":false
 				},
 				{
-					"id":"type",
+					"id":"participantType",
 					"prefix":"oryx",
 					"type":"String",
-					"title":"Type",
+					"title":"participantType",
+					"title_de":"participantType",
 					"value":"",
 					"description":"",
+					"tooltip":"",
 					"readonly":false,
 					"optional":false,
+					"refToView":"",
 					"length":undefined,
 					"wrapLines":false
 				},
@@ -7351,7 +7357,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
+					"refToView":"label",
 					"length":""
 				},
 				{
@@ -7365,62 +7371,6 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{	
-					"id":"sender",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"sender",
-					"title_de":"Sender",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"sendActivity",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"sendActivity",
-					"title_de":"Sendactivität",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"receiver",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"receiver",
-					"title_de":"Empfänger",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},
-				{
-					"id":"receiveActivity",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"receiveActivity",
-					"title_de":"Empfängactivität",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
 					"refToView":"",
 					"length":""
 				},

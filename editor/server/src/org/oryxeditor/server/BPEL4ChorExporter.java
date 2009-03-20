@@ -74,12 +74,8 @@ public class BPEL4ChorExporter extends HttpServlet {
     	String rdfString = req.getParameter("data");
     	    	
     	transformTopology (rdfString, out);
-    	
-    	out.print(',');
 
     	transformGrounding (rdfString, out);
-    	
-    	out.print(',');
     	
     	transformProcesses (rdfString, out);
 
@@ -99,6 +95,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 	/**************************  topology ***********************************/
     private void transformTopology (String rdfString, PrintWriter out){
   	   
+    	System.out.println(rdfString);
 	   	// XSLT source
 	   	final String xsltFilename = System.getProperty("catalina.home") 
 	   			+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
@@ -124,6 +121,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   		bufferResultString = writer.toString();
 	   		String resultString = postprocessTopology(out, bufferResultString);
 	   		printResponse (out, "topology", resultString);
+	   	   	out.print(',');
 	   	} catch (Exception e){
 	   		handleException(out, "topology", e); 
 	   	}
@@ -186,22 +184,33 @@ public class BPEL4ChorExporter extends HttpServlet {
 	 
 	   	// Get the result string
 	   	String bufferResultString = null;
+	   	 String resultString = null;
 	   	try {
 	   		Transformer transformer = transformerFactory
 	   						.newTransformer(xsltSource);
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
 	   		bufferResultString = writer.toString();
-	   		String resultString = postprocessGrounding
+	   		resultString = postprocessGrounding
 	   						(out, bufferResultString);
-	   		printResponse (out, "grounding", resultString);
+	   		
 	   	} catch (Exception e){
 	   		handleException(out, "grounding", e);
+	   	}
+	   	
+	   	if (existsGrounding(resultString)){
+	   		printResponse (out, "grounding", resultString);
+	   		out.print(',');
 	   	}
 
    }
 
-    private String postprocessGrounding (PrintWriter out, String oldString){
+    private boolean existsGrounding(String resultString) {
+		return true;
+    	//return resultString.contains("WSDLproperty");
+	}
+
+	private String postprocessGrounding (PrintWriter out, String oldString){
   	   
   	   StringWriter stringOut = new StringWriter();
   	   try {

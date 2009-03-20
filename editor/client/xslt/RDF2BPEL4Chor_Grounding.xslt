@@ -62,7 +62,7 @@
 						</xsl:attribute>
 					</xsl:if>
 					
-					<xsl:variable name="portType" select="./oryx:portType" />
+					<xsl:variable name="portType" select="./oryx:porttype" />
 					<xsl:if test="$portType!=''">
 						<xsl:attribute name="portType">
 							<xsl:value-of select="$portType" />
