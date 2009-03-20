@@ -3495,12 +3495,12 @@
 				"fromtoall",
 				"canContainArtifacts"				
 			],
-			"layout": [ORYX.CONFIG.EVENT_LAYOUT_BPMN11_POOL],
+			/*"layout": [ORYX.CONFIG.EVENT_LAYOUT_BPMN11_POOL],*/
 				
 			
 			
-			/*"layout":function(shape) {		
-				alert('myPool')
+			"layout":function(shape) {		
+				
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
@@ -3604,7 +3604,7 @@
 					var upl = shape.bounds.upperLeft();
 					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
- 			},*/
+ 			},
 			"properties": [
 				{
 					"id":"poolId",
@@ -4269,9 +4269,9 @@
 				"fromtoall",
 				"canContainArtifacts"				
 			],	
-			"layout": [ORYX.CONFIG.EVENT_LAYOUT_BPMN11_LANE],
+			//"layout": [ORYX.CONFIG.EVENT_LAYOUT_BPMN11_LANE],
 			
-			/*"layout": function(shape) {		
+			"layout": function(shape) {		
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
@@ -4305,7 +4305,7 @@
 					var upl = shape.bounds.upperLeft();
 					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
- 			},*/	
+ 			},
 			"properties": [
 				{
 					"id":"id",
