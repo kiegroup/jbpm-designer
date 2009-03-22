@@ -1,7 +1,43 @@
 package org.oryxeditor.server;
 
+/**
+ * Copyright (c) 2008
+ * SAP Research
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ * 
+ * 
+ * The initial version of the code in this file has been developed by
+ * Stefan Krumnow and Falko Menge at SAP Research Brisbane and has been
+ * contributed to the Oryx project in October 2008 under the terms of the
+ * MIT License.
+ * 
+ * @author Stefan Krumnow
+ * @author Falko Menge
+ **/
+
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -15,8 +51,12 @@ public class ServiceComposerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String BASE_STENCILSET = "http://b3mn.org/stencilset/bpmn1.1#";
+
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
+	protected String baseUrl;
+	protected Repository repository;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		process(request, response);
@@ -29,10 +69,130 @@ public class ServiceComposerServlet extends HttpServlet {
 	protected void process(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
+		this.baseUrl = Repository.getBaseUrl(request);
+		this.repository = new Repository(baseUrl);
+
 		ArrayList<Service> services = parseParameters(request.getParameterMap());
-		println(services.toString());
+		//println(services.toString());
+
+		Date creationDate = new Date(System.currentTimeMillis());
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss.SSS");
+		String sessionName = "Service Composer Session " + dateFormat.format(creationDate);
+
+		ArrayList<String> stencilSetExtensionUrls = new ArrayList<String>();
+		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#");
+		stencilSetExtensionUrls.add(generateStencilSetExtension(sessionName, services));
+
+		String model = generateModel(sessionName, stencilSetExtensionUrls);
+		String modelUrl = repository.saveNewModel(model, "Service Composition " + dateFormat.format(creationDate));
+		response.setHeader("Location", baseUrl + modelUrl);
+		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 	}
 	
+	private String generateModel(String name, ArrayList<String> stencilSetExtensionUrls) {
+		String modelData = "<span class=\"oryx-ssextension\">http://oryx-editor.org/stencilsets/extensions/bpmn1.1servicecomposersubset#</span>";
+		ListIterator<String> iterator = stencilSetExtensionUrls.listIterator();
+		while (iterator.hasNext()) {
+			modelData += "<span class=\"oryx-ssextension\">" + iterator.next() + "</span>";
+		}
+		String model = repository.generateERDF(name, modelData); 
+		return model;
+	}
+
+	protected String generateStencilSetExtension(String extensionName, ArrayList<Service> services) {
+		String extension = generateJsonForStencilSetExtension(extensionName, services);
+		String extensionNamespace = getStencilSetExtensionNamespace(extensionName);
+		String extensionLocation = getStencilSetExtensionLocation(extensionName);
+		repository.saveStencilSetExtension(extensionLocation, extension);
+		repository.registerStencilSetExtension(
+				extensionName,
+				extensionNamespace,
+				getStencilSetExtensionDescription(extensionName, services),
+				extensionLocation,
+				BASE_STENCILSET
+				);
+		return extensionNamespace;
+	}
+
+	private String generateJsonForStencilSetExtension(
+			String extensionName, ArrayList<Service> services
+	) {
+		ArrayList<String> colors = new ArrayList<String>();
+		colors.add("#eefecc"); // green
+		colors.add("#cce5fe"); // light blue
+		colors.add("#e5ccfe"); // purple
+		colors.add("#ccccfe"); // dark blue
+		//colors.add("#ffeecc"); // red
+		//colors.add("#ffffcc"); // original yellow of BPMN stencil set
+		ListIterator<String> colorIterator = colors.listIterator();
+
+		Pattern pattern = Pattern.compile("([a-z])([A-Z0-9])");
+		
+		StringBuffer stencilsForOperations = new StringBuffer();
+		ListIterator<Service> serviceIterator = services.listIterator();
+		while (serviceIterator.hasNext()) {
+			Service service = serviceIterator.next();
+			if (!colorIterator.hasNext()) {
+				colorIterator = colors.listIterator();
+			}
+			String color = colorIterator.next();
+			ListIterator<PortType> portTypeIterator = service.portTypes.listIterator();
+			while (portTypeIterator.hasNext()) {
+				PortType portType = portTypeIterator.next();
+				ListIterator<Operation> operationIterator = portType.operations.listIterator();
+				while (operationIterator.hasNext()) {
+					Operation operation = operationIterator.next();
+					Matcher matcher = pattern.matcher(operation.name);
+					String taskName = matcher.replaceAll("$1 $2"); 
+					stencilsForOperations.append("{"
+							+ "\"type\": \"node\","
+							+ "\"id\":\""+createJsonId(portType.name + "-" + operation.name)+"\","
+							+ "\"superId\":\"Task\","
+							+ "\"title\":\""+taskName+"\","
+							+ "\"groups\":[\"Activities\"]," // The group 'Service Operations' appears too far on the bottom of the menu
+							+ "\"description\":\"An invocation of operation '" + operation.name
+								+ "' of port type '" + portType.name
+								+ "' of the service described in '" + service.wsdlUrl + "'.\","
+							+ "\"view\":\"activity/node.task.svg\","
+							+ "\"icon\":\"new_task.png\","
+							+ "\"roles\": [\"sequence_start\",\"sequence_end\",\"messageflow_start\", \"messageflow_end\",\"to_task_event\",\"from_task_event\",\"conditional_start\",\"default_start\", \"tc\", \"fromtoall\" ],"
+							+ "\"properties\": [ "
+								+ "{\"id\":\"name\",\"value\":\"" + taskName + "\" }, "
+								+ "{\"id\":\"bgColor\",\"value\":\"" + color + "\"}"
+							+ "  ]},\n"
+							);
+				}
+			}
+		}
+
+		return "{\"title\":\"" + extensionName + "\","
+			+ "\"namespace\":\"" + getStencilSetExtensionNamespace(extensionName) + "\","
+			+ "\"description\":\"" + getStencilSetExtensionDescription(extensionName, services) + "\","
+			+ "\"extends\":\"" + BASE_STENCILSET + "\","
+			+ "\"stencils\":[\n" + stencilsForOperations.toString() + "],"
+			+ "\"properties\":[],"
+			+ "\"rules\": {\"connectionRules\": [],\"cardinalityRules\": [],\"containmentRules\": []},\"removestencils\": [],\"removeproperties\": []}";
+	}
+
+	private String getStencilSetExtensionDescription(String extensionName,
+			ArrayList<Service> services) {
+		return "Extension for " + extensionName + " using " + services.size() + " services.";
+	}
+
+	private String getStencilSetExtensionNamespace(String extensionName) {
+		return "http://oryx-editor.org/stencilsets/extensions/bpmn1.1_" + extensionName.toLowerCase().replace(" ", "_") + "#";
+	}
+
+	private String getStencilSetExtensionLocation(String extensionName) {
+		return "servicecomposer/" + extensionName.toLowerCase().replace(" ", "_") + ".json";
+	}
+
+	private static String createJsonId (String name){
+		String result = name.toLowerCase();
+		result = result.replace(" ", "");
+		return result;
+	}
+
 	protected ArrayList<Service> parseParameters(Map<?, ?> parameterMap) {
 		TreeMap<String, String> sortedParameterMap = new TreeMap<String, String>();
 		for (Map.Entry<?, ?> parameter : parameterMap.entrySet()) {
