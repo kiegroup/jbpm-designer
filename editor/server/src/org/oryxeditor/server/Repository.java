@@ -40,6 +40,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -116,7 +118,7 @@ public class Repository {
 	 * @return
 	 */
 	public String generateERDF(String modelId, String modelData){
-		return generateERDF(modelId, modelData, DEFAULT_STENCILSET, DEFAULT_MODEL_TYPE);
+		return generateERDF(modelId, modelData, DEFAULT_STENCILSET, DEFAULT_MODEL_TYPE, null);
 	}
 
 	/**
@@ -126,7 +128,7 @@ public class Repository {
 	 * @return
 	 */
 	public String generateERDF(String modelId, String modelData, String stencilset){
-		return generateERDF(modelId, modelData, stencilset, DEFAULT_MODEL_TYPE);
+		return generateERDF(modelId, modelData, stencilset, DEFAULT_MODEL_TYPE, null);
 	}
 
 	/**
@@ -137,8 +139,45 @@ public class Repository {
 	 * @return
 	 */
 	public String generateERDF(String modelId, String modelData, String stencilset, String modelType){
+		return generateERDF(modelId, modelData, stencilset, modelType,
+				null);
+	}
+
+	/**
+	 * 
+	 * @param modelData
+	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
+	 * @param modelType
+	 * @param stencilSetExtensionUrls TODO
+	 * @return
+	 */
+	public String generateERDF(String modelId, String modelData, String stencilset, String modelType, ArrayList<String> stencilSetExtensionUrls){
 		String stencilsetLocation = baseUrl + "oryx" + stencilset;
-		return "<div id=\"oryx-canvas123\" class=\"-oryx-canvas\"><span class=\"oryx-type\">"+modelType+"</span><span class=\"oryx-id\">"+modelId+"</span><span class=\"oryx-name\"></span><span class=\"oryx-version\"></span><span class=\"oryx-author\"></span><span class=\"oryx-language\">English</span><span class=\"oryx-expressionlanguage\"></span><span class=\"oryx-querylanguage\"></span><span class=\"oryx-creationdate\"></span><span class=\"oryx-modificationdate\"></span><span class=\"oryx-pools\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-mode\">writable</span><span class=\"oryx-mode\">fullscreen</span><a rel=\"oryx-stencilset\" href=\""+stencilsetLocation+"\"/>"+modelData+"</div>";
+		//TODO: remove modelId, since it doesn't seem to be used any more
+		String erdf = "<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">"
+			+ "<span class=\"oryx-type\">" + modelType + "</span>"
+			+ "<span class=\"oryx-id\">" + modelId + "</span>"
+			+ "<span class=\"oryx-name\"></span>"
+			+ "<span class=\"oryx-version\"></span>"
+			+ "<span class=\"oryx-author\"></span>"
+			+ "<span class=\"oryx-language\">English</span>"
+			+ "<span class=\"oryx-expressionlanguage\"></span>"
+			+ "<span class=\"oryx-querylanguage\"></span>"
+			+ "<span class=\"oryx-creationdate\"></span>"
+			+ "<span class=\"oryx-modificationdate\"></span>"
+			+ "<span class=\"oryx-pools\"></span>"
+			+ "<span class=\"oryx-documentation\"></span>"
+			+ "<span class=\"oryx-mode\">writable</span>"
+			+ "<span class=\"oryx-mode\">fullscreen</span>"
+			+ "<a rel=\"oryx-stencilset\" href=\"" + stencilsetLocation + "\"/>";
+		if (stencilSetExtensionUrls != null) {
+			ListIterator<String> iterator = stencilSetExtensionUrls.listIterator();
+			while (iterator.hasNext()) {
+				erdf += "<span class=\"oryx-ssextension\">" + iterator.next() + "</span>";
+			}
+		}
+		erdf += modelData + "</div>";
+		return erdf;
 	}
 		
 	public String saveNewModel(String newModel, String name){

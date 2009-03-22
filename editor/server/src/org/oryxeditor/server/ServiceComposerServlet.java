@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,25 +81,24 @@ public class ServiceComposerServlet extends HttpServlet {
 		String sessionName = "Service Composer Session " + dateFormat.format(creationDate);
 
 		ArrayList<String> stencilSetExtensionUrls = new ArrayList<String>();
-		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#");
+		//stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#");
+		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset#");
 		stencilSetExtensionUrls.add(generateStencilSetExtension(sessionName, services));
 
-		String model = generateModel(sessionName, stencilSetExtensionUrls);
+		// generate BPMN model with a start event
+		String startEventId = "oryx_" + UUID.randomUUID().toString();
+		String model = repository.generateERDF(
+				sessionName, 
+				"<a rel=\"oryx-render\" href=\"#" + startEventId + "\"/></div><div id=\"" + startEventId + "\"><span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span><span class=\"oryx-id\"></span><span class=\"oryx-categories\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-name\"></span><span class=\"oryx-assignments\"></span><span class=\"oryx-pool\"></span><span class=\"oryx-lanes\"></span><span class=\"oryx-eventtype\">Start</span><span class=\"oryx-trigger\">None</span><span class=\"oryx-bgcolor\">#ffffff</span><span class=\"oryx-bounds\">15,225,45,255</span><a rel=\"raziel-parent\" href=\"#oryx-canvas123\"/>", 
+				"/stencilsets/bpmn1.1/bpmn1.1.json", 
+				BASE_STENCILSET,
+				stencilSetExtensionUrls
+				);
 		String modelUrl = repository.saveNewModel(model, "Service Composition " + dateFormat.format(creationDate));
 		response.setHeader("Location", baseUrl + modelUrl);
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 	}
 	
-	private String generateModel(String name, ArrayList<String> stencilSetExtensionUrls) {
-		String modelData = "<span class=\"oryx-ssextension\">http://oryx-editor.org/stencilsets/extensions/bpmn1.1servicecomposersubset#</span>";
-		ListIterator<String> iterator = stencilSetExtensionUrls.listIterator();
-		while (iterator.hasNext()) {
-			modelData += "<span class=\"oryx-ssextension\">" + iterator.next() + "</span>";
-		}
-		String model = repository.generateERDF(name, modelData); 
-		return model;
-	}
-
 	protected String generateStencilSetExtension(String extensionName, ArrayList<Service> services) {
 		String extension = generateJsonForStencilSetExtension(extensionName, services);
 		String extensionNamespace = getStencilSetExtensionNamespace(extensionName);
@@ -180,11 +180,11 @@ public class ServiceComposerServlet extends HttpServlet {
 	}
 
 	private String getStencilSetExtensionNamespace(String extensionName) {
-		return "http://oryx-editor.org/stencilsets/extensions/bpmn1.1_" + extensionName.toLowerCase().replace(" ", "_") + "#";
+		return "http://oryx-editor.org/stencilsets/extensions/bpmn_" + extensionName.toLowerCase().replace(" ", "_") + "#";
 	}
 
 	private String getStencilSetExtensionLocation(String extensionName) {
-		return "servicecomposer/" + extensionName.toLowerCase().replace(" ", "_") + ".json";
+		return "bpmnservicecompositionsubset/" + extensionName.toLowerCase().replace(" ", "_") + ".json";
 	}
 
 	private static String createJsonId (String name){
