@@ -94,8 +94,12 @@ public class ServiceComposerServlet extends HttpServlet {
 				BASE_STENCILSET,
 				stencilSetExtensionUrls
 				);
-		String modelUrl = repository.saveNewModel(model, "Service Composition " + dateFormat.format(creationDate));
-		response.setHeader("Location", baseUrl + modelUrl);
+		String modelUrl = baseUrl + repository.saveNewModel(model, "Service Composition " + dateFormat.format(creationDate));
+
+		// hack for reverse proxies:
+		modelUrl = modelUrl.substring(modelUrl.lastIndexOf("http://"));
+
+		response.setHeader("Location", modelUrl);
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 	}
 	
