@@ -48,8 +48,8 @@ public class WSDL2XFormsServlet extends HttpServlet {
 		String wsdlUrl = req.getParameter("wsdlUrl");
 
 		boolean outputXHTML = false;
-		String repesentation = req.getParameter("repesentation");
-		if (repesentation.equals("xhtml")) {
+		String representation = req.getParameter("representation");
+		if (representation != null && representation.equals("xhtml")) {
 			outputXHTML = true;
 		}
 		
@@ -106,6 +106,16 @@ public class WSDL2XFormsServlet extends HttpServlet {
 						+ "<body style=\"font-size: 75%; font-family: sans-serif;\">"
 						+ "<h1>Generated User Interfaces for Service: " + wsdlUrl + "</h1>"
 						+ "<a href=\"" + wsdlUrl + "\">View WSDL Definition of the Service</a>"
+						+ "<p>To execute the forms below, you will need an XForms-capable browser, e.g., "
+						+ "<a href=\"http://www.x-smiles.org/\">X-Smiles</a>, "
+						+ "<br />"
+						+ "or a suitable browser plugin, e.g., "
+						+ "<a href=\"https://addons.mozilla.org/en-US/firefox/addon/824\">the XForms extension for Firefox 2.x and 3.x</a> "
+						+ "or <a href=\"http://www.formsplayer.com/\">formsPlayer for Internet Explorer</a>."
+						+ "<br />"
+						+ "See also <a href=\"http://www.xml.com/pub/a/2003/09/10/xforms.html\">Ten Favorite XForms Engines</a> "
+						+ "and <a href=\"http://en.wikipedia.org/wiki/Xforms#Software_support\">XForms Software Support</a>."
+						+ "</p>"
 						);
 				for(String portType : forms.keySet()) {
 					resWriter.write("<h2>PortType: " + portType + "</h2>");
