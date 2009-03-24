@@ -46,6 +46,12 @@ public class WSDL2XFormsServlet extends HttpServlet {
 		Writer resWriter = res.getWriter();
 		
 		String wsdlUrl = req.getParameter("wsdlUrl");
+
+		boolean outputXHTML = false;
+		String repesentation = req.getParameter("repesentation");
+		if (repesentation.equals("xhtml")) {
+			outputXHTML = true;
+		}
 		
 		forms = new HashMap<String, Map<String, String>>();
 
@@ -90,20 +96,41 @@ public class WSDL2XFormsServlet extends HttpServlet {
 				i++;
 				
 			}
-			
-			resWriter.write("svc0=" + wsdlUrl);
-			int ptId=0;
-			for(String portType : forms.keySet()) {
-				resWriter.write("&svc0_pt" + ptId + "=" + portType);
-				int opId=0;
-				for(String operationName : forms.get(portType).keySet()) {
-					resWriter.write("&svc0_pt" + ptId + "_op" + opId + "=" + operationName);
-					resWriter.write("&svc0_pt" + ptId + "_op" + opId + "_ui0=" + forms.get(portType).get(operationName));
-					opId++;
+
+			if (outputXHTML) {
+				//TODO: examination of the HTTP Accept header (see http://www.w3.org/TR/xhtml-media-types/#media-types)
+				res.setContentType("application/xhtml+xml");
+				
+				resWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+						+ "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+						+ "<body style=\"font-size: 75%; font-family: sans-serif;\">"
+						+ "<h1>Generated User Interfaces for Service: " + wsdlUrl + "</h1>"
+						+ "<a href=\"" + wsdlUrl + "\">View WSDL Definition of the Service</a>"
+						);
+				for(String portType : forms.keySet()) {
+					resWriter.write("<h2>PortType: " + portType + "</h2>");
+					for(String operationName : forms.get(portType).keySet()) {
+						resWriter.write("<h3>Operation: " + operationName + "</h3>");
+						resWriter.write("<a href=\"" + forms.get(portType).get(operationName).replace("/backend", "/oryx/xformsexport?path=/backend") + "\">Run in XForms-capable Client</a> | ");
+						resWriter.write("<a href=\"" + forms.get(portType).get(operationName).replace("/backend", "/oryx/xformsexport-orbeon?path=/backend") + "\">Run on Server</a> | ");
+						resWriter.write("<a href=\"" + forms.get(portType).get(operationName) + "\">Open in Editor</a>");
+					}
 				}
-				ptId++;
+				resWriter.write("</body></html>");
+			} else {
+				resWriter.write("svc0=" + wsdlUrl);
+				int ptId=0;
+				for(String portType : forms.keySet()) {
+					resWriter.write("&svc0_pt" + ptId + "=" + portType);
+					int opId=0;
+					for(String operationName : forms.get(portType).keySet()) {
+						resWriter.write("&svc0_pt" + ptId + "_op" + opId + "=" + operationName);
+						resWriter.write("&svc0_pt" + ptId + "_op" + opId + "_ui0=" + forms.get(portType).get(operationName));
+						opId++;
+					}
+					ptId++;
+				}
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
