@@ -183,11 +183,11 @@
 				"readonly":false,
 				"optional":true,
 				"refToView":"",
-				"length":"100"
+				"length":""
 			},
 			{
 				"id":"text",
-				"type":"String",
+				"type":"Text",
 				"title":"Text",
 				"value":"",
 				"description":"the expression text to evaluate",
@@ -388,7 +388,7 @@
 			{
 				"id":"unique",
 				"type":"Boolean",
-				"title":"Service",
+				"title":"unique",
 				"value":false,
 				"description":"A value of true means that the result from the hibernate query should be obtained with method uniqueResult(). The default is false and in that case the list()  method will be used to get the result.",
 				"readonly":false,
@@ -397,7 +397,7 @@
 			},
 			{
 				"id":"query",
-				"type":"String",
+				"type":"Text",
 				"title":"Query",
 				"value":"",
 				"description":"The HQL query",
@@ -505,7 +505,7 @@
 			{
 				"id":"unique",
 				"type":"Boolean",
-				"title":"Service",
+				"title":"unique",
 				"value":false,
 				"description":"",
 				"readonly":false,
@@ -514,7 +514,7 @@
 			},
 			{
 				"id":"query",
-				"type":"String",
+				"type":"Text",
 				"title":"Query",
 				"value":"",
 				"description":"The SQL query",
@@ -869,6 +869,7 @@
 			"id",
 			"categories",
 			"documentation",
+			"name",
 			"sourceref",
 			"targetref",
 			"quantity",
