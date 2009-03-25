@@ -31,7 +31,8 @@ public class ReachabilityPath<FlowObject, Marking> implements Cloneable{
 	}
 	
 	public ReachabilityPath<FlowObject, Marking> clone(){
-		return new ReachabilityPath<FlowObject, Marking>(this.transitionPath);
+		LinkedList<ReachabilityTransition<FlowObject, Marking>> clonedTransitionList = (LinkedList<ReachabilityTransition<FlowObject, Marking>>)this.transitionPath.clone();
+		return new ReachabilityPath<FlowObject, Marking>(clonedTransitionList);
 	}
 	
 	/**

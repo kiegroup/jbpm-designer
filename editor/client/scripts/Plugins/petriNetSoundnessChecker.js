@@ -138,6 +138,9 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             setIcon: function(status) {
                 this.ui.getIconEl().src = status;
             },
+            getIcon: function(status) {
+                return this.ui.getIconEl().src;
+            },
             reset: function(){
                 plugin.hideOverlays();
                 this.hideMarking();
@@ -175,7 +178,10 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 
                 // Show Unknown status on child nodes
                 Ext.each(this.childNodes, function(childNode){
-                    childNode.setIcon(CheckNode.UNKNOWN_STATUS);
+                    // Only change icon if it is in loading state (otherwise structural soundness icon would be replaced)
+                    if(childNode.getIcon().search(CheckNode.LOADING_STATUS) > -1){
+                        childNode.setIcon(CheckNode.UNKNOWN_STATUS);
+                    }
                 });
                 
                 // Show errors
@@ -239,7 +245,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             update: function(deadLocks){
                 this.deadLocks = deadLocks;
                 this.setIcon(this.deadLocks.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.deadLocks.length +' paths which lead to dead locks.');
+                this.setText('There are ' + this.deadLocks.length +' paths that lead to dead locks.');
             }
         });
         
@@ -262,7 +268,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 this.improperTerminatings = improperTerminatings;
                 
                 this.setIcon(this.improperTerminatings.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.improperTerminatings.length +' markings which don\'t terminate properly.');
+                this.setText('There are ' + this.improperTerminatings.length +' markings that don\'t terminate properly.');
             }
         });
         
@@ -287,7 +293,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
         
         var NotParticipatingTransitionsNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                config.qtip = '<b>Transition Participation Criteria</b>: Each transition participates in at least one process instance that starts in the initial state and reaches the final state. Click to see all transitions not participating at any process instance.';
+                config.qtip = '<b>Transition Participation Criteria</b>: Each transition participates in at least one process instance that starts in the initial state and reaches the final state. Click to see all transitions not participating in any process instance.';
             
                 NotParticipatingTransitionsNode.superclass.constructor.apply(this, arguments);
             },
@@ -300,7 +306,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 this.notParticipatingTransitions = notParticipatingTransitions;
                 
                 this.setIcon(this.notParticipatingTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.notParticipatingTransitions.length +' transitions which aren\'t participating at any process instance.');
+                this.setText('There are ' + this.notParticipatingTransitions.length +' transitions that aren\'t participating in any process instance.');
             }
         });
         
@@ -344,6 +350,18 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                     childNode.setIcon(CheckNode.LOADING_STATUS);
                 });
                 
+                // Check for structural soundness (no server request needed and return, if any has been found       
+                if(! root.findChild("id", "structuralSound").check()){
+                    Ext.each(root.childNodes, function(childNode){
+                        // Only change icon if it is in loading state (otherwise structural soundness icon would be replaced)
+                        if(childNode.getIcon().search(CheckNode.LOADING_STATUS) > -1){
+                            childNode.setIcon(CheckNode.UNKNOWN_STATUS);
+                        }
+                    });
+                    return;
+                }
+                
+                // Check other soundness criteria which needs server requests
                 Ext.Ajax.request({
                     url: '/oryx/checksoundness',
                     method: 'POST',
@@ -353,9 +371,9 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                         root.showErrors(res.errors);
                         
                         if(res.errors.length === 0){
-                            Ext.each(root.childNodes, function(childNode){
-                                childNode.check(res);
-                            });
+                            root.findChild("id", "sound").check(res);
+                            root.findChild("id", "weakSound").check(res);
+                            root.findChild("id", "relaxedSound").check(res);
                         }
                     },
                     failure: function(){
@@ -383,6 +401,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                         var structuralSoundNode = new CheckNode({
                             text: 'Structural Sound (Workflow Net)',
                             id: 'structuralSound',
+                            /* Returns false when any error has been found */
                             check: function(){
                                 this.checkInitialNode.update();
                                 this.checkFinalNode.update();
@@ -391,21 +410,23 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                 if(this.checkInitialNode.hasErrors() || this.checkFinalNode.hasErrors() || this.checkConnectedNode.hasErrors()){
                                     this.setIcon(CheckNode.ERROR_STATUS);
                                     this.expand();
+                                    return false;
                                 } else {
                                     this.setIcon(CheckNode.OK_STATUS);
+                                    return true;
                                 }
                             },
                             checkInitialNode: new CheckNode({
-                                qtip: 'There must be exactly one initial node, which is the only node without any incoming edges.',
+                                qtip: 'There must be exactly one initial place, which is the only place without any incoming edges.',
                                 update: function(){
                                     this.initialNodes = [];
                                     Ext.each(plugin.facade.getCanvas().getChildShapes(), function(shape){
-                                        if(shape.getIncomingShapes().length == 0){
+                                        if(shape.getIncomingShapes().length == 0 && shape.getStencil().id().search(/Place/) > -1){
                                             this.initialNodes.push(shape);
                                         }
                                     }.bind(this));
                                     
-                                    this.setText(this.initialNodes.length + ' initial nodes found.');
+                                    this.setText(this.initialNodes.length + ' initial places found.');
                                     
                                     this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
                                 },
@@ -419,16 +440,16 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                 }
                             }),
                             checkFinalNode: new CheckNode({
-                                qtip: 'There must be exactly one final node, which is the only node without any outgoing edges.',
+                                qtip: 'There must be exactly one final place, which is the only place without any outgoing edges.',
                                 update: function(){
                                     this.finalNodes = [];
                                     Ext.each(plugin.facade.getCanvas().getChildShapes(), function(shape){
-                                        if(shape.getOutgoingShapes().length == 0){
+                                        if(shape.getOutgoingShapes().length == 0 && shape.getStencil().id().search(/Place/) > -1){
                                             this.finalNodes.push(shape);
                                         }
                                     }.bind(this));
                                     
-                                    this.setText(this.finalNodes.length + ' final nodes found.');
+                                    this.setText(this.finalNodes.length + ' final places found.');
                                     
                                     this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
                                 },
@@ -461,7 +482,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                     
                                     this.findNotParticipatingNodes(initialNodes[0]);
                                     
-                                    this.setText(this.notParticipatingNodes.length + ' nodes found which aren\'t on any path from beginning to end.');
+                                    this.setText(this.notParticipatingNodes.length + ' nodes that aren\'t on any path from beginning to end found.');
                                     
                                     this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
                                 },
@@ -521,7 +542,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                             text: 'Weak Sound',
                             id: 'weakSound',
                             check: function(res){
-                                if (res.isSound) {
+                                if (res.isWeakSound) {
                                     this.setIcon(CheckNode.OK_STATUS);
                                 }
                                 else {
@@ -565,7 +586,12 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                         
                     }
                 }
-            })]
+            })],
+            listeners: {
+                close: function(window){
+                    this.checkerWindow.getTree().getRootNode().reset();
+                }.bind(this)
+            }
         });
         
         this.checkerWindow.show();
