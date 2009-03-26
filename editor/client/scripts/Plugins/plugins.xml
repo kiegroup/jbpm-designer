@@ -104,7 +104,7 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
 		</plugin>
-        <plugin source="stepThroughPlugin.js" name="ORYX.Plugins.PetriNetStepThroughPlugin">
+		<plugin source="stepThroughPlugin.js" name="ORYX.Plugins.PetriNetStepThroughPlugin">
             <requires namespace="http://b3mn.org/stencilset/petrinet#"/>
         </plugin>
 		
@@ -165,6 +165,26 @@
 		
 		<plugin source="bpmn2xpdl.js" name="ORYX.Plugins.BPMN2XPDL">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
+		</plugin>
+		
+		<!-- Resource Perspective -->
+		<plugin source="bpmnResourcesSoDAdd.js" name="ORYX.Plugins.ResourcesSoDAdd">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
+		</plugin>
+		<plugin source="bpmnResourcesSoDShow.js" name="ORYX.Plugins.ResourcesSoDShow">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
+		</plugin>
+		<plugin source="bpmnResourcesBoDAdd.js" name="ORYX.Plugins.ResourcesBoDAdd">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
+		</plugin>
+		<plugin source="bpmnResourcesBoDShow.js" name="ORYX.Plugins.ResourcesBoDShow">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
+		</plugin>
+		<plugin source="bpmnResourceAssignment.js" name="ORYX.Plugins.ResourceAssignment">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
+		</plugin>
+		<plugin source="bpmnClearSodBodHighlights.js" name="ORYX.Plugins.ClearSodBodHighlights">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
 		</plugin>
 		
 		<!-- Following Plugins are examples to demonstrate certain functionality -->

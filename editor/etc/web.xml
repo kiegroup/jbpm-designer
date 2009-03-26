@@ -22,6 +22,19 @@
 	</servlet> -->
 	
 	<servlet>
+		<display-name>Resource List</display-name>
+		<servlet-name>ResourceList</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.ResourceList
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ResourceList</servlet-name>
+		<url-pattern>/resourceList</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<display-name>Oryx Legacy File Download Servlet</display-name>
 		<servlet-name>DownloadServlet</servlet-name>
 		<servlet-class>

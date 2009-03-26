@@ -398,8 +398,6 @@ ORYX.I18N.TreeGraphSupport.syntaxCheckName = "Syntax Check";
 ORYX.I18N.TreeGraphSupport.group = "Tree Graph Support";
 ORYX.I18N.TreeGraphSupport.syntaxCheckDesc = "Check the syntax of an tree graph structure";
 
-
-
 /** New Language Properties: 08.12.2008 */
 
 ORYX.I18N.PropertyWindow.title = "Properties";
@@ -428,3 +426,40 @@ Ext.MessageBox.buttonText.ok = "OK";
 if(!ORYX.I18N.BPMN2XPDL) ORYX.I18N.BPMN2XPDL = {};
 ORYX.I18N.BPMN2XPDL.group = "Export";
 ORYX.I18N.BPMN2XPDL.xpdlExport = "Export to XPDL";
+
+/** Resource Perspective Additions: 24 March 2009 */
+if(!ORYX.I18N.ResourcesSoDAdd) ORYX.I18N.ResourcesSoDAdd = {};
+
+ORYX.I18N.ResourcesSoDAdd.name = "Define Separation of Duties Contraint";
+ORYX.I18N.ResourcesSoDAdd.group = "Resource Perspective";
+ORYX.I18N.ResourcesSoDAdd.desc = "Define a Separation of Duties constraint for the selected tasks";
+
+if(!ORYX.I18N.ResourcesSoDShow) ORYX.I18N.ResourcesSoDShow = {};
+
+ORYX.I18N.ResourcesSoDShow.name = "Show Separation of Duties Constraints";
+ORYX.I18N.ResourcesSoDShow.group = "Resource Perspective";
+ORYX.I18N.ResourcesSoDShow.desc = "Show Separation of Duties constraints of the selected task";
+
+if(!ORYX.I18N.ResourcesBoDAdd) ORYX.I18N.ResourcesBoDAdd = {};
+
+ORYX.I18N.ResourcesBoDAdd.name = "Define Binding of Duties Constraint";
+ORYX.I18N.ResourcesBoDAdd.group = "Resource Perspective";
+ORYX.I18N.ResourcesBoDAdd.desc = "Define a Binding of Duties Constraint for the selected tasks";
+
+if(!ORYX.I18N.ResourcesBoDShow) ORYX.I18N.ResourcesBoDShow = {};
+
+ORYX.I18N.ResourcesBoDShow.name = "Show Binding of Duties Constraints";
+ORYX.I18N.ResourcesBoDShow.group = "Resource Perspective";
+ORYX.I18N.ResourcesBoDShow.desc = "Show Binding of Duties constraints of the selected task";
+
+if(!ORYX.I18N.ResourceAssignment) ORYX.I18N.ResourceAssignment = {};
+
+ORYX.I18N.ResourceAssignment.name = "Resource Assignment";
+ORYX.I18N.ResourceAssignment.group = "Resource Perspective";
+ORYX.I18N.ResourceAssignment.desc = "Assign resources to the selected task(s)";
+
+if(!ORYX.I18N.ClearSodBodHighlights) ORYX.I18N.ClearSodBodHighlights = {};
+
+ORYX.I18N.ClearSodBodHighlights.name = "Clear Highlights and Overlays";
+ORYX.I18N.ClearSodBodHighlights.group = "Resource Perspective";
+ORYX.I18N.ClearSodBodHighlights.desc = "Remove all Separation and Binding of Duties Highlights/ Overlays";

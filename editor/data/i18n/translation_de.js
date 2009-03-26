@@ -418,3 +418,40 @@ Ext.MessageBox.buttonText.ok = "OK";
 /** New Language Properties: 28.01.2009 */
 ORYX.I18N.BPMN2XPDL.group = "Export";
 ORYX.I18N.BPMN2XPDL.xpdlExport = "Nach XPDL exportieren";
+
+/** Resource Perspective Additions: 24 March 2009 */
+if(!ORYX.I18N.ResourcesSoDAdd) ORYX.I18N.ResourcesSoDAdd = {};
+
+ORYX.I18N.ResourcesSoDAdd.name = "Erstelle Separation of Duties Abhängigkeit";
+ORYX.I18N.ResourcesSoDAdd.group = "Resource Perspective";
+ORYX.I18N.ResourcesSoDAdd.desc = "Erstelle eine Separation of Duties Abhängigkeit für die selektierten Tasks";
+
+if(!ORYX.I18N.ResourcesSoDShow) ORYX.I18N.ResourcesSoDShow = {};
+
+ORYX.I18N.ResourcesSoDShow.name = "Zeige Separation of Duties Abhängigkeiten";
+ORYX.I18N.ResourcesSoDShow.group = "Resource Perspective";
+ORYX.I18N.ResourcesSoDShow.desc = "Zeige Separation of Duties Abhängigkeiten der selektierten Task";
+
+if(!ORYX.I18N.ResourcesBoDAdd) ORYX.I18N.ResourcesBoDAdd = {};
+
+ORYX.I18N.ResourcesBoDAdd.name = "Erstelle Binding of Duties Abhängigkeit";
+ORYX.I18N.ResourcesBoDAdd.group = "Resource Perspective";
+ORYX.I18N.ResourcesBoDAdd.desc = "Erstelle eine Binding of Duties Abhängigkeit für die selektierten Tasks";
+
+if(!ORYX.I18N.ResourcesBoDShow) ORYX.I18N.ResourcesBoDShow = {};
+
+ORYX.I18N.ResourcesBoDShow.name = "Zeige Binding of Duties Abhängikeiten";
+ORYX.I18N.ResourcesBoDShow.group = "Resource Perspective";
+ORYX.I18N.ResourcesBoDShow.desc = "Zeige Binding of Duties Abhängigkeiten für die selektierte Task";
+
+if(!ORYX.I18N.ResourceAssignment) ORYX.I18N.ResourceAssignment = {};
+
+ORYX.I18N.ResourceAssignment.name = "Ressourcenzuweisung";
+ORYX.I18N.ResourceAssignment.group = "Resource Perspective";
+ORYX.I18N.ResourceAssignment.desc = "Weise der/ den selektierten Task(s) Ressourcen zu";
+
+if(!ORYX.I18N.ClearSodBodHighlights) ORYX.I18N.ClearSodBodHighlights = {};
+
+ORYX.I18N.ClearSodBodHighlights.name = "Entferne Highlights und Overlays";
+ORYX.I18N.ClearSodBodHighlights.group = "Resource Perspective";
+ORYX.I18N.ClearSodBodHighlights.desc = "Entferne alle Separation und Binding of Duties Highlights/ Overlays";

@@ -34,6 +34,7 @@ ORYX.CONFIG = {
 	BPEL4CHOR_EXPORT_URL:		"/oryx/bpel4chorexporter",
 	TREEGRAPH_SUPPORT:			"/oryx/treegraphsupport",
 	XPDL4CHOR2BPEL4CHOR_TRANSFORMATION_URL: "/oryx/xpdl4chor2bpel4chor",
+	RESOURCE_LIST:				"/oryx/resourceList",
 	
 	/* Namespaces */
 	NAMESPACE_ORYX:				"http://www.b3mn.org/oryx",

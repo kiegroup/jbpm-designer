@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:oryx="http://www.b3mn.org/oryx"
+   width="40"
+   height="40"
+   version="1.0">
+  <defs></defs>
+  <oryx:magnets>
+  	<oryx:magnet oryx:cx="16" oryx:cy="16" oryx:default="yes" />
+  </oryx:magnets>
+  <g pointer-events="fill">
+    <circle id="frame" cx="16" cy="16" r="14" stroke="black" fill="white" stroke-width="3"/>
+   	<path stroke="white" fill="black" stroke-width="1" d="M8,11 L8,21 L24,21 L24,11 L16,17z"/>
+	<path stroke="white" fill="black" stroke-width="1" d="M7,10 L16,17 L25 10z"/>
+	<text font-size="11" 
+		id="text_name" 
+		x="16" y="32" 
+		oryx:align="top center" 
+		stroke="black"
+	></text>
+  </g>
+</svg>
