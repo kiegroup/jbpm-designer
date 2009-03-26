@@ -10740,7 +10740,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"length":"",
 					"refToView":"condition"
 				},
