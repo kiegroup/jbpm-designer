@@ -322,7 +322,7 @@ public class BPELExportPostprocessor {
     private void handleIfElement(Element currentNode) {
     	// remove the head "elseIf" of the first child in if-block
     	// find out the first "elseIf" element
-    	Element firstElseifChild = getChildElementWithNodeName (currentNode, "elseIf", false);
+    	Element firstElseifChild = getChildElementWithNodeName (currentNode, "elseif", false);
   
 		// replace the first "elseIf" with two inner elements "condition" and "activity" 
 		if (firstElseifChild != null){

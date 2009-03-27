@@ -162,8 +162,8 @@ public class BPELImporter extends HttpServlet {
 	   try {
 			// transform string to document
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
-  			factory.setNamespaceAware(true);
 			InputStream oldResultInputStream = new ByteArrayInputStream(oldString.getBytes());
 			Document oldDocument = builder.parse(oldResultInputStream);
 			

@@ -20,12 +20,5 @@
 	    	  stroke-dasharray="3, 4" 
 	    	  marker-start="url(#start)" 
 	    	  marker-end="url(#end)" />
-		<text id="label" 
-		  x="47" 
-		  y="7" 
-		  font-size="12" 
-		  font-family="Arial" 
-		  fill="black" 
-		  oryx:edgePosition="midtop"/>
 	</g>
 </svg>
