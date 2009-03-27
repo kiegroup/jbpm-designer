@@ -840,21 +840,6 @@
                       	"maximum":1
                   	}
            		]
-			},
-			{
-				"role":"connector",
-				"incomingEdges": [
-           			{
-                    	"role": "epcEdge",
-                        "maximum":2
-                	}
-                ],
-                  	"outgoingEdges": [
-                     {
-                      	"role": "epcEdge",
-                      	"maximum":2
-                  	}
-           		]
 			}
 		],
 		"containmentRules": [
