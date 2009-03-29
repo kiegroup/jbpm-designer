@@ -39,8 +39,6 @@ ORYX.Plugins.PropertyWindow = {
 	},
 	
 	init: function(){
-		// The current Element whos Properties will shown
-		this.currentElement = undefined;
 
 		// The parent div-node of the grid
 		this.node = ORYX.Editor.graft("http://www.w3.org/1999/xhtml",
@@ -53,6 +51,11 @@ ORYX.Plugins.PropertyWindow = {
 
 		// the properties array
 		this.properties = [];
+		
+		/* The currently selected shapes whos properties will shown */
+		this.shapeSelection = new Hash();
+		this.shapeSelection.shapes = new Array();
+		this.shapeSelection.commonProperties = new Array();
 
 		// creating the column model of the grid.
 		this.columnModel = new Ext.grid.ColumnModel([
@@ -184,9 +187,14 @@ ORYX.Plugins.PropertyWindow = {
 		//Ext1.0: option.grid.getDataSource().commitChanges();
 		option.grid.getStore().commitChanges();
 
-		var name 		= option.record.data.gridProperties.propId;
-		var currentEl 	= this.currentElement;
-		var oldValue	= currentEl.properties[name]; 
+		var key 			 = option.record.data.gridProperties.propId;
+		var selectedElements = this.shapeSelection.shapes;
+		
+		var oldValues = new Hash();
+		selectedElements.each(function(shape){
+			oldValues[shape.getId()] = shape.properties[key];
+		}); 	
+		
 		var newValue	= option.value;
 		var facade		= this.facade;
 		
@@ -194,22 +202,25 @@ ORYX.Plugins.PropertyWindow = {
 		// Implement the specific command for property change
 		var commandClass = ORYX.Core.Command.extend({
 			construct: function(){
-				this.el 		= currentEl;
-				this.oldValue 	= oldValue;
+				this.key 		= key;
+				this.selectedElements = selectedElements;
+				this.oldValues = oldValues;
 				this.newValue 	= newValue;
 				this.facade		= facade;
 			},			
 			execute: function(){
-				this.el.setProperty(name, this.newValue);
-				//this.el.update();
+				this.selectedElements.each(function(shape){
+					shape.setProperty(this.key, this.newValue);
+				}.bind(this));
 				this.facade.getCanvas().update();
-				this.facade.setSelection([this.el]);
+				this.facade.setSelection(this.selectedElements);
 			},
 			rollback: function(){
-				this.el.setProperty(name, this.oldValue);
-				//this.el.update();
+				this.selectedElements.each(function(shape){
+					shape.setProperty(this.key, this.oldValues[shape.getId()]);
+				}.bind(this));
 				this.facade.getCanvas().update();
-				this.facade.setSelection([this.el]);
+				this.facade.setSelection(this.selectedElements);
 			}
 		})		
 		// Instanciated the class
@@ -222,12 +233,12 @@ ORYX.Plugins.PropertyWindow = {
 		//this.currentElement.update();
 
 		// extended by Kerstin (start)
-		this.facade.raiseEvent({
-			type 	:ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, 
-			element	: this.currentElement,
-			name	: name,
-			value	: option.value
-		});
+//		this.facade.raiseEvent({
+//			type 	:ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, 
+//			element	: this.currentElement,
+//			name	: name,
+//			value	: option.value
+//		});
 		// extended by Kerstin (end)
 	},
 
@@ -240,52 +251,128 @@ ORYX.Plugins.PropertyWindow = {
 		this.scope.grid.startEditing(this.row, this.col);
 	},
 	// extended by Kerstin (end)
-
-	onSelectionChanged: function(event) {
-		
-		// Get the only one element
-		var element = event.elements.length == 1 ? 
-							event.elements.first():
-							undefined;
-		
-		// If there is a subSelection the get the sub selection					
-		element = !element && event.subSelection ?
-							event.subSelection : 
-							element;
-		
-		element = !element ? this.facade.getCanvas() : 
-							 element;
-							
-		// add the name of the stencil of the selected shape to the title
-		region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+element.getStencil().title()+')' )
-		
-		// Create the Properties
-		this.createProperties(element);
+	
+	/**
+	 * Changes the title of the property window panel according to the selected shapes.
+	 */
+	setPropertyWindowTitle: function() {
+		if(this.shapeSelection.shapes.length == 1) {
+			// add the name of the stencil of the selected shape to the title
+				region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+this.shapeSelection.shapes.first().getStencil().title()+')' );
+		} else {
+			region.setTitle(ORYX.I18N.PropertyWindow.title);
+		}
 	},
 	
-	createProperties: function(element) {
+	/**
+	 * Returns the set of stencils used by the passed shapes.
+	 */
+	getStencilSetOfSelection: function() {
+		var stencils = new Hash();
+		
+		this.shapeSelection.shapes.each(function(shape) {
+			stencils[shape.getStencil().id()] = shape.getStencil();
+		})
+		return stencils;
+	},
+	
+	/**
+	 * Identifies the common Properties of the selected shapes.
+	 */
+	identifyCommonProperties: function() {
+		this.shapeSelection.commonProperties.clear();
+		
+		/* 
+		 * A common property is a property, that is part of 
+		 * the stencil definition of the first and all other stencils.
+		 */
+		var stencils = this.getStencilSetOfSelection();
+		var firstStencil = stencils.values().first();
+		var comparingStencils = stencils.values().without(firstStencil);
+		
+		
+		if(comparingStencils.length == 0) {
+			this.shapeSelection.commonProperties = firstStencil.properties();
+		} else {
+			var properties = new Hash();
+			
+			/* put all properties of on stencil in a Hash */
+			firstStencil.properties().each(function(property){
+				properties[property.namespace() + '-' + property.id()] = property;
+			});
+			
+			/* Calculate intersection of properties. */
+			
+			comparingStencils.each(function(stencil){
+				var intersection = new Hash();
+				stencil.properties().each(function(property){
+					if(properties[property.namespace() + '-' + property.id()]){
+						intersection[property.namespace() + '-' + property.id()] =
+							property;
+					}
+				});
+				properties = intersection;	
+			});
+			
+			this.shapeSelection.commonProperties = properties.values();
+		}
+	},
+	
+	onSelectionChanged: function(event) {
+		/* Selected shapes */
+		this.shapeSelection.shapes = event.elements;
+		
+		/* Case: nothing selected */
+		if(event.elements.length == 0) {
+			this.shapeSelection.shapes = [this.facade.getCanvas()];
+		}
+		
+		this.setPropertyWindowTitle();
+		
+//		var element = event.elements.length == 1 ? 
+//							event.elements.first():
+//							undefined;
+//		
+//		//var element = event.element;
+//		
+//		// If there is a subSelection the get the sub selection					
+//		element = !element && event.subSelection ?
+//							event.subSelection : 
+//							element;
+//		
+//		element = !element ? this.facade.getCanvas() : 
+//							 element;
+//							
+//		// add the name of the stencil of the selected shape to the title
+//		region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+element.getStencil().title()+')' )
+		
+		this.identifyCommonProperties();
+		
+		// Create the Properties
+		
+		this.createProperties();
+	},
+	
+	/**
+	 * Creates the properties for the ExtJS-Grid from the properties of the
+	 * selected shapes.
+	 */
+	createProperties: function() {
 
 		this.grid.stopEditing();
 
-		/*if (this.currentElement == element) {
-			return;
-		}*/
-
-		this.currentElement = element;
 		this.properties = [];
 
-		if(this.currentElement) {
+		if(this.shapeSelection.commonProperties) {
 
 			// add new property lines
-			var ce = this.currentElement;
-			
-			this.currentElement.getStencil().properties().each((function(pair, index) {
+			this.shapeSelection.commonProperties.each((function(pair, index) {
 
 				var key = pair.prefix() + "-" + pair.id();
 				
 				// Get the property pair
 				var name		= pair.title();
-				var attribute	= ce.properties[key];
+				var attribute	= this.shapeSelection.shapes.first().properties[key];
 				
 				var editorGrid = undefined;
 				var editorRenderer = null;
@@ -392,11 +479,11 @@ ORYX.Plugins.PropertyWindow = {
 			}).bind(this));
 		}
 
-		this.setProperties(this.properties);
+		this.setProperties();
 	},
 
-	setProperties: function(properties) {
-		this.dataSource.loadData(properties);
+	setProperties: function() {
+		this.dataSource.loadData(this.properties);
 	}
 }
 ORYX.Plugins.PropertyWindow = Clazz.extend(ORYX.Plugins.PropertyWindow);
