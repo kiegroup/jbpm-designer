@@ -16,7 +16,8 @@
     <path
        d="M -4.5,16 L 16,-4.5 L 35.5,16 L 16,35.5z"
        id="frame"
-       style="fill:#ffffff;stroke:#000000;stroke-width:1" />
+       fill="#ffffff"
+       style="stroke:#000000;stroke-width:1" />
     <circle
        cx="16"
        cy="16"
@@ -30,6 +31,6 @@
     <path
        d="M 20.327514,22.344972 L 11.259248,22.344216 L 8.4577203,13.719549 L 15.794545,8.389969 L 23.130481,13.720774 L 20.327514,22.344972 z"
        id="middlePolygon"
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.39999998;stroke-linejoin:bevel;stroke-opacity:1" />
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.39999998;stroke-linejoin:bevel;stroke-opacity:1" />
   </g>
 </svg>

@@ -18,7 +18,8 @@
     <path
        d="M -4.5,16 L 16,-4.5 L 35.5,16 L 16,35.5z"
        id="frame"
-       style="fill:#ffffff;stroke:#000000;stroke-width:1" />
+       fill="#ffffff"
+       style="stroke:#000000;stroke-width:1" />
     <g
        id="cross">
       <path
