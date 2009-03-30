@@ -56,6 +56,7 @@ ORYX.Plugins.PropertyWindow = {
 		this.shapeSelection = new Hash();
 		this.shapeSelection.shapes = new Array();
 		this.shapeSelection.commonProperties = new Array();
+		this.shapeSelection.commonPropertiesValues = new Hash();
 
 		// creating the column model of the grid.
 		this.columnModel = new Ext.grid.ColumnModel([
@@ -210,7 +211,9 @@ ORYX.Plugins.PropertyWindow = {
 			},			
 			execute: function(){
 				this.selectedElements.each(function(shape){
-					shape.setProperty(this.key, this.newValue);
+					if(!shape.getStencil().property(this.key).readonly()) {
+						shape.setProperty(this.key, this.newValue);
+					}
 				}.bind(this));
 				this.facade.getCanvas().update();
 				this.facade.setSelection(this.selectedElements);
@@ -263,6 +266,31 @@ ORYX.Plugins.PropertyWindow = {
 			region.setTitle(ORYX.I18N.PropertyWindow.title);
 		}
 	},
+	/**
+	 * Sets this.shapeSelection.commonPropertiesValues.
+	 * If the value for a common property is not equal for each shape the value
+	 * is left empty in the property window.
+	 */
+	setCommonPropertiesValues: function() {
+		this.shapeSelection.commonPropertiesValues = new Hash();
+		this.shapeSelection.commonProperties.each(function(property){
+			var key = property.prefix() + "-" + property.id();
+			var emptyValue = false;
+			var firstShape = this.shapeSelection.shapes.first();
+			
+			this.shapeSelection.shapes.each(function(shape){
+				if(firstShape.properties[key] != shape.properties[key]) {
+					emptyValue = true;
+				}
+			}.bind(this));
+			
+			/* Set property value */
+			if(!emptyValue) {
+				this.shapeSelection.commonPropertiesValues[key]
+					= firstShape.properties[key];
+			}
+		}.bind(this));
+	},
 	
 	/**
 	 * Returns the set of stencils used by the passed shapes.
@@ -298,7 +326,8 @@ ORYX.Plugins.PropertyWindow = {
 			
 			/* put all properties of on stencil in a Hash */
 			firstStencil.properties().each(function(property){
-				properties[property.namespace() + '-' + property.id()] = property;
+				properties[property.namespace() + '-' + property.id() 
+							+ '-' + property.type()] = property;
 			});
 			
 			/* Calculate intersection of properties. */
@@ -306,9 +335,10 @@ ORYX.Plugins.PropertyWindow = {
 			comparingStencils.each(function(stencil){
 				var intersection = new Hash();
 				stencil.properties().each(function(property){
-					if(properties[property.namespace() + '-' + property.id()]){
-						intersection[property.namespace() + '-' + property.id()] =
-							property;
+					if(properties[property.namespace() + '-' + property.id()
+									+ '-' + property.type()]){
+						intersection[property.namespace() + '-' + property.id()
+										+ '-' + property.type()] = property;
 					}
 				});
 				properties = intersection;	
@@ -327,26 +357,14 @@ ORYX.Plugins.PropertyWindow = {
 			this.shapeSelection.shapes = [this.facade.getCanvas()];
 		}
 		
+		/* subselection available */
+		if(event.subSelection){
+			this.shapeSelection.shapes = [event.subSelection];
+		}
+		
 		this.setPropertyWindowTitle();
-		
-//		var element = event.elements.length == 1 ? 
-//							event.elements.first():
-//							undefined;
-//		
-//		//var element = event.element;
-//		
-//		// If there is a subSelection the get the sub selection					
-//		element = !element && event.subSelection ?
-//							event.subSelection : 
-//							element;
-//		
-//		element = !element ? this.facade.getCanvas() : 
-//							 element;
-//							
-//		// add the name of the stencil of the selected shape to the title
-//		region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+element.getStencil().title()+')' )
-		
 		this.identifyCommonProperties();
+		this.setCommonPropertiesValues();
 		
 		// Create the Properties
 		
@@ -372,7 +390,7 @@ ORYX.Plugins.PropertyWindow = {
 				
 				// Get the property pair
 				var name		= pair.title();
-				var attribute	= this.shapeSelection.shapes.first().properties[key];
+				var attribute	= this.shapeSelection.commonPropertiesValues[key];
 				
 				var editorGrid = undefined;
 				var editorRenderer = null;
@@ -470,7 +488,7 @@ ORYX.Plugins.PropertyWindow = {
 				// Push to the properties-array
 				this.properties.push([name, attribute, {
 					editor: editorGrid, 
-					propId: key, 
+					propId: key,
 					type: pair.type(), 
 					tooltip: pair.description(),
 					renderer: editorRenderer
