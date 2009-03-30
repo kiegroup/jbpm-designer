@@ -103,6 +103,8 @@ ORYX.I18N.Arrangement.ac = "Alignment Center";
 ORYX.I18N.Arrangement.acDesc = "Center";
 ORYX.I18N.Arrangement.ar = "Alignment Right";
 ORYX.I18N.Arrangement.arDesc = "Right";
+ORYX.I18N.Arrangement.as = "Alignment Same Size";
+ORYX.I18N.Arrangement.asDesc = "Same Size";
 
 if(!ORYX.I18N.BPELSupport) ORYX.I18N.BPELSupport = {};
 
