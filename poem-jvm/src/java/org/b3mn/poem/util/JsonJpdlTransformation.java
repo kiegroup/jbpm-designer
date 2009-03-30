@@ -78,6 +78,29 @@ public class JsonJpdlTransformation {
 		return jpdlRepresentation;
 	}
 	
+	private static String transformBoundsForNode(JSONObject node) {
+		// target format g="ulx,uly,width,height"
+		String g = " g=\"";
+		try {
+			JSONObject bounds = node.getJSONObject("bounds");
+			JSONObject upperLeft = bounds.getJSONObject("upperLeft");
+			JSONObject lowerRight = bounds.getJSONObject("lowerRight");
+			int ulx = upperLeft.getInt("x");
+			int uly = upperLeft.getInt("y");
+			int width = lowerRight.getInt("x") - ulx;
+			int height = lowerRight.getInt("y") - uly;
+			g += ulx + ",";
+			g += uly + ",";
+			g += width + ",";
+			g += height;
+			
+		} catch (JSONException e) {
+			// throw error, stencil without bounds(upperLeft(x,y),lowerRight(x,y)) is invalid
+		}
+		g += "\" ";
+		return g;
+	}
+	
 	private static String addEdges(JSONArray outgoings) {
 		String edges = "";
 		try {
@@ -124,7 +147,8 @@ public class JsonJpdlTransformation {
 	private static String transformStartEvent(JSONObject node) {
 		String transformedNode = "  <start";
 		transformedNode += addAttribute(node, "name", "name");
-
+		transformedNode += transformBoundsForNode(node);
+		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
@@ -143,6 +167,7 @@ public class JsonJpdlTransformation {
 	private static String transformState(JSONObject node) {
 		String transformedNode = "  <state";
 		transformedNode += addAttribute(node, "name", "name");
+		transformedNode += transformBoundsForNode(node);
 
 		// add outgoing edge
 		try {
@@ -165,6 +190,7 @@ public class JsonJpdlTransformation {
 		
 		transformedNode += addAttribute(node, "name", "name");
 		transformedNode += addAttribute(node, "expr", "expr");
+		transformedNode += transformBoundsForNode(node);
 		transformedNode += " >\n";
 		
 		// perhaps add handler
@@ -191,6 +217,7 @@ public class JsonJpdlTransformation {
 		String transformedNode = "  <fork";
 		
 		transformedNode += addAttribute(node, "name", "name");
+		transformedNode += transformBoundsForNode(node);
 		transformedNode += " >\n";
 		
 		// add outgoing edge
@@ -239,6 +266,7 @@ public class JsonJpdlTransformation {
 		transformedNode += addAttribute(node, "name", "name");
 		transformedNode += addAttribute(node, "state", "state");
 		transformedNode += addAttribute(node, "ends", "ends");
+		transformedNode += transformBoundsForNode(node);
 		transformedNode += " />\n";
 		
 		return transformedNode;
@@ -250,6 +278,7 @@ public class JsonJpdlTransformation {
 		transformedNode += addAttribute(node, "class", "class");
 		transformedNode += addAttribute(node, "method", "method");
 		transformedNode += addAttribute(node, "var", "var");
+		transformedNode += transformBoundsForNode(node);
 		
 		// TODO add fields, args
 		
@@ -273,6 +302,7 @@ public class JsonJpdlTransformation {
 		String transformedNode = "  <task";
 		transformedNode += addAttribute(node, "name", "name");
 		transformedNode += addAttribute(node, "assignee", "assignee");
+		transformedNode += transformBoundsForNode(node);
 		
 		// add outgoing edge
 		try {
@@ -296,6 +326,7 @@ public class JsonJpdlTransformation {
 		transformedNode += addAttribute(node, "expr", "expr");
 		transformedNode += addAttribute(node, "lang", "lang");
 		transformedNode += addAttribute(node, "var", "var");
+		transformedNode += transformBoundsForNode(node);
 		transformedNode += ">\n";
 		
 		// perhaps add text
@@ -324,6 +355,7 @@ public class JsonJpdlTransformation {
 		transformedNode += addAttribute(node, "name", "name");
 		transformedNode += addAttribute(node, "category", "category");
 		transformedNode += addAttribute(node, "service", "service");
+		transformedNode += transformBoundsForNode(node);
 		
 		// TODO add parts
 		
@@ -348,6 +380,7 @@ public class JsonJpdlTransformation {
 		transformedNode += addAttribute(node, "name", "name");
 		transformedNode += addAttribute(node, "var", "var");
 		transformedNode += addAttribute(node, "unique", "unique");
+		transformedNode += transformBoundsForNode(node);
 		transformedNode += ">\n";
 
 		// add query
@@ -378,6 +411,7 @@ public class JsonJpdlTransformation {
 		transformedNode += addAttribute(node, "name", "name");
 		transformedNode += addAttribute(node, "var", "var");
 		transformedNode += addAttribute(node, "unique", "unique");
+		transformedNode += transformBoundsForNode(node);
 		transformedNode += ">\n";
 
 		// add query
@@ -402,7 +436,5 @@ public class JsonJpdlTransformation {
 		transformedNode += "  </sql>\n";
 		return transformedNode;
 	}
-
-
 
 }

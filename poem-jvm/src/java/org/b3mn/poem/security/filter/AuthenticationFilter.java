@@ -78,8 +78,8 @@ public class AuthenticationFilter implements Filter {
 			// You can use any name without spaces as openId
 			// For example:
 			// String openId = "OryxUser";
-			String openId = (String) request.getSession()
-					.getAttribute("openid"); // Retrieve open id from session
+			String openId = "OryxUser";
+				//(String) request.getSession().getAttribute("openid"); // Retrieve open id from session
 
 			User user = null;
 
