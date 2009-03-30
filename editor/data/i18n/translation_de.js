@@ -103,6 +103,8 @@ ORYX.I18N.Arrangement.ac = "Vertikal mittig ausrichten";
 ORYX.I18N.Arrangement.acDesc = "Vertikal mittig ausrichten";
 ORYX.I18N.Arrangement.ar = "Rechts ausrichten";
 ORYX.I18N.Arrangement.arDesc = "Rechts ausrichten";
+ORYX.I18N.Arrangement.as = "Größenangleichung";
+ORYX.I18N.Arrangement.asDesc = "Größenangleichung";
 
 if(!ORYX.I18N.BPELSupport) ORYX.I18N.BPELSupport = {};
 
