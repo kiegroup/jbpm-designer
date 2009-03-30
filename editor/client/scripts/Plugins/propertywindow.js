@@ -263,7 +263,11 @@ ORYX.Plugins.PropertyWindow = {
 			// add the name of the stencil of the selected shape to the title
 				region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+this.shapeSelection.shapes.first().getStencil().title()+')' );
 		} else {
-			region.setTitle(ORYX.I18N.PropertyWindow.title);
+			region.setTitle(ORYX.I18N.PropertyWindow.title +' ('
+							+ this.shapeSelection.shapes.length
+							+ ' '
+							+ ORYX.I18N.PropertyWindow.selected 
+							+')');
 		}
 	},
 	/**

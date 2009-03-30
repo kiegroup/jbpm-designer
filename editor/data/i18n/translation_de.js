@@ -316,6 +316,7 @@ if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
 
 ORYX.I18N.PropertyWindow.name = "Name";
 ORYX.I18N.PropertyWindow.value = "Wert";
+ORYX.I18N.PropertyWindow.selected = "ausgewählt";
 ORYX.I18N.PropertyWindow.clickIcon = "Symbol anklicken";
 ORYX.I18N.PropertyWindow.add = "Hinzufügen";
 ORYX.I18N.PropertyWindow.rem = "Löschen";
