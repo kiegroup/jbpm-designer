@@ -183,8 +183,6 @@ ORYX.Plugins.PropertyWindow = {
 	},
 
 	afterEdit: function(option) {
-
-
 		//Ext1.0: option.grid.getDataSource().commitChanges();
 		option.grid.getStore().commitChanges();
 
@@ -246,11 +244,14 @@ ORYX.Plugins.PropertyWindow = {
 	},
 
 	// extended by Kerstin (start)	
-	dialogClosed: function(field) {
+	dialogClosed: function(data) {
+		this.scope.afterEdit({
+			grid:this.scope.grid, 
+			record:this.scope.grid.getStore().getAt(this.row), 
+			//value:this.scope.grid.getStore().getAt(this.row).get("value")
+			value: data
+		})
 		// reopen the text field of the complex list field again
-
-		this.scope.afterEdit({grid:this.scope.grid, record:this.scope.grid.getStore().getAt(this.row), value:this.scope.grid.getStore().getAt(this.row).get("value")})
-		
 		this.scope.grid.startEditing(this.row, this.col);
 	},
 	// extended by Kerstin (end)
@@ -666,7 +667,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 			
 			// store data and notify parent about the closed dialog
 			// parent has to handel this event and start editing the text field again
-			this.fireEvent('dialogClosed');
+			this.fireEvent('dialogClosed', this.data);
 			
 			Ext.form.ComplexListField.superclass.setValue.call(this, this.data);
         }
@@ -977,7 +978,7 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 			items		:[grid],
 			listeners	:{
 				hide: function(){
-					this.fireEvent('dialogClosed');
+					this.fireEvent('dialogClosed', this.data);
 					//this.focus.defer(10, this);
 					dialog.destroy();
 				}.bind(this)				
