@@ -38,7 +38,7 @@ import org.b3mn.poem.util.JsonJpdlTransformation;
 import org.b3mn.poem.util.RdfJsonTransformation;
 import org.w3c.dom.Document;
 
-@ExportHandler(uri="/jpdl", formatName="jPDL", iconUrl="/backend/images/silk/page_white_code.png")
+@ExportHandler(uri="/jpdl", formatName="jPDL", iconUrl="/backend/images/silk/jbpm.png")
 public class JpdlExporter extends HandlerBase {
 	
 	@Override
