@@ -1,5 +1,6 @@
 package org.b3mn.poem.util;
 
+import java.io.StringWriter;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -8,7 +9,7 @@ import org.json.JSONObject;
 
 public class JsonJpdlTransformation {
 	
-	private static String jpdlRepresentation;
+	private static StringWriter jpdlRepresentation;
 	private static HashMap<String, JSONObject> processNodes;
 	
 	public static String toJPDL(JSONObject jsonDoc) {
@@ -18,9 +19,11 @@ public class JsonJpdlTransformation {
 		try {
 			processProperties = jsonDoc.getJSONObject("properties");
 		
-			jpdlRepresentation = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			jpdlRepresentation += "<process name=\""+ processProperties.getString("name") 
-			+ "\" xmlns=\"http://jbpm.org/4/jpdl\">\n";
+			jpdlRepresentation = new StringWriter();
+			jpdlRepresentation.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+			jpdlRepresentation.write("<process name=\"");
+			jpdlRepresentation.write(processProperties.getString("name")); 
+			jpdlRepresentation.write("\" xmlns=\"http://jbpm.org/4/jpdl\">\n");
 		} catch (JSONException e) {
 			// Do nothing
 		}
@@ -42,31 +45,31 @@ public class JsonJpdlTransformation {
 				JSONObject currentElement = processElements.getJSONObject(i);
 				String currentElementID = currentElement.getJSONObject("stencil").getString("id");
 				if(currentElementID.equals("StartEvent")) 
-					jpdlRepresentation += transformStartEvent(currentElement);
+					jpdlRepresentation.write(transformStartEvent(currentElement));
 				else if(currentElementID.equals("wait")) 
-					jpdlRepresentation += transformState(currentElement);
+					jpdlRepresentation.write(transformState(currentElement));
 				else if(currentElementID.equals("Exclusive_Databased_Gateway"))
-					jpdlRepresentation += transformExclusive(currentElement);
+					jpdlRepresentation.write(transformExclusive(currentElement));
 				else if(currentElementID.equals("AND_Gateway")) 
-					jpdlRepresentation += transformParallel(currentElement);
+					jpdlRepresentation.write(transformParallel(currentElement));
 				else if(currentElementID.equals("EndEvent")) 
-					jpdlRepresentation += transformEndEvent(currentElement);
+					jpdlRepresentation.write(transformEndEvent(currentElement));
 				else if(currentElementID.equals("EndErrorEvent")) 
-					jpdlRepresentation += transformEndErrorEvent(currentElement);
+					jpdlRepresentation.write(transformEndErrorEvent(currentElement));
 				else if(currentElementID.equals("EndCancelEvent")) 
-					jpdlRepresentation += transformEndCancelEvent(currentElement);
+					jpdlRepresentation.write(transformEndCancelEvent(currentElement));
 				else if(currentElementID.equals("java"))
-					jpdlRepresentation += transformJava(currentElement);
+					jpdlRepresentation.write(transformJava(currentElement));
 				else if(currentElementID.equals("Task"))
-					jpdlRepresentation += transformTask(currentElement);
+					jpdlRepresentation.write(transformTask(currentElement));
 				else if(currentElementID.equals("script"))
-					jpdlRepresentation += transformScript(currentElement);
+					jpdlRepresentation.write(transformScript(currentElement));
 				else if(currentElementID.equals("esb")) 
-					jpdlRepresentation += transformEsb(currentElement);
+					jpdlRepresentation.write(transformEsb(currentElement));
 				else if(currentElementID.equals("hql")) 
-					jpdlRepresentation += transformHql(currentElement);
+					jpdlRepresentation.write(transformHql(currentElement));
 				else if(currentElementID.equals("sql")) 
-					jpdlRepresentation += transformSql(currentElement);
+					jpdlRepresentation.write(transformSql(currentElement));
 			}
 		
 		} catch (JSONException e) {
@@ -74,13 +77,14 @@ public class JsonJpdlTransformation {
 			e.printStackTrace();
 		}
 		
-		jpdlRepresentation += "</process>";
-		return jpdlRepresentation;
+		jpdlRepresentation.write("</process>");
+		return jpdlRepresentation.toString();
 	}
 	
 	private static String transformBoundsForNode(JSONObject node) {
 		// target format g="ulx,uly,width,height"
-		String g = " g=\"";
+		StringWriter g = new StringWriter();
+			g.write(" g=\"");
 		try {
 			JSONObject bounds = node.getJSONObject("bounds");
 			JSONObject upperLeft = bounds.getJSONObject("upperLeft");
@@ -89,114 +93,121 @@ public class JsonJpdlTransformation {
 			int uly = upperLeft.getInt("y");
 			int width = lowerRight.getInt("x") - ulx;
 			int height = lowerRight.getInt("y") - uly;
-			g += ulx + ",";
-			g += uly + ",";
-			g += width + ",";
-			g += height;
+			g.write(ulx + ",");
+			g.write(uly + ",");
+			g.write(width + ",");
+			g.write(String.valueOf(height));
 			
 		} catch (JSONException e) {
 			// throw error, stencil without bounds(upperLeft(x,y),lowerRight(x,y)) is invalid
 		}
-		g += "\" ";
-		return g;
+		g.write("\" ");
+		return g.toString();
 	}
 	
 	private static String addEdges(JSONArray outgoings) {
-		String edges = "";
+		StringWriter edges = new StringWriter();
 		try {
 			for(int i=0; i < outgoings.length(); i++) {
 				
 				// set target
-				edges += "    <transition to=\"";
+				edges.write("    <transition to=\"");
 				JSONObject edge = processNodes.get(outgoings.getJSONObject(i).getString("resourceId"));
 				JSONObject target = processNodes.get(edge.getJSONObject("target").getString("resourceId"));
-				edges += target.getJSONObject("properties").getString("name");
-				edges += "\" ";
+				edges.write(target.getJSONObject("properties").getString("name"));
+				edges.write("\" ");
 				
-				edges += addAttribute(edge, "name", "name");
+				edges.write(addAttribute(edge, "name", "name"));
 				
 				// perhaps add condition
 				try {
 					String expr = edge.getJSONObject("properties").getString("conditionexpression");
-					edges += ">\n";
-					edges += "      <condition expr=\"" + expr + "\" />\n";
-					edges += "    </transition>\n";
+					edges.write(">\n");
+					edges.write("      <condition expr=\"" + expr + "\" />\n");
+					edges.write("    </transition>\n");
 				} catch (JSONException e) {
-					edges += "/>\n";
+					edges.write("/>\n");
 				}
 			}	
 
 		} catch (JSONException e) {
 			// do nothing
 		}
-		return edges;
+		return edges.toString();
 	}
 	
 	private static String addAttribute(JSONObject node, String old_name, String new_name) {
-		String transformedAttribute = "";
+		StringWriter transformedAttribute = new StringWriter();
 		try {
 			String attribute = node.getJSONObject("properties").getString(old_name);
-			transformedAttribute += " " + new_name + "=\"" + attribute + "\"";
+			transformedAttribute.write(" ");
+			transformedAttribute.write(new_name);
+			transformedAttribute.write("=\"");
+			transformedAttribute.write(attribute);
+			transformedAttribute.write("\"");
 		} catch (JSONException e) {
 			// do nothing
 		}
-		return transformedAttribute;
+		return transformedAttribute.toString();
 		
 	}
 	
 	private static String transformStartEvent(JSONObject node) {
-		String transformedNode = "  <start";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += transformBoundsForNode(node);
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <start");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(transformBoundsForNode(node));
 		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			if(outgoings.length() == 0) transformedNode += " />\n";
+			if(outgoings.length() == 0) transformedNode.write(" />\n");
 			else {
-				transformedNode += ">\n";
-				transformedNode += addEdges(outgoings);
-				transformedNode += "  </start>\n";
+				transformedNode.write(">\n");
+				transformedNode.write(addEdges(outgoings));
+				transformedNode.write("  </start>\n");
 			}
 		} catch (JSONException e) {
-			transformedNode += " />\n";
+			transformedNode.write(" />\n");
 		}
-		return transformedNode;
+		return transformedNode.toString();
 	}
 	
 	private static String transformState(JSONObject node) {
-		String transformedNode = "  <state";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += transformBoundsForNode(node);
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <state");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(transformBoundsForNode(node));
 
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			if(outgoings.length() == 0) transformedNode += " />\n";
+			if(outgoings.length() == 0) transformedNode.write(" />\n");
 			else {
-				transformedNode += ">\n";
-				transformedNode += addEdges(outgoings);
-				transformedNode += "  </state>\n";
+				transformedNode.write(">\n");
+				transformedNode.write(addEdges(outgoings));
+				transformedNode.write("  </state>\n");
 			}
 		} catch (JSONException e) {
-			transformedNode += " />\n";
+			transformedNode.write(" />\n");
 		}
 		
-		return transformedNode;
+		return transformedNode.toString();
 	}
 	
 	private static String transformExclusive(JSONObject node) {
-		String transformedNode = "  <exclusive";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <exclusive");
 		
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "expr", "expr");
-		transformedNode += transformBoundsForNode(node);
-		transformedNode += " >\n";
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "expr", "expr"));
+		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(" >\n");
 		
 		// perhaps add handler
 		try {
 			String handler = node.getJSONObject("properties").getString("handler");
-			transformedNode += "<handler class=\"" + handler + "\" />\n";
+			transformedNode.write("<handler class=\"" + handler + "\" />\n");
 		} catch (JSONException e) {
 			// Do nothing
 		}
@@ -204,137 +215,144 @@ public class JsonJpdlTransformation {
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			transformedNode += addEdges(outgoings);
-			transformedNode += "  </exclusive>\n";
+			transformedNode.write(addEdges(outgoings));
+			transformedNode.write("  </exclusive>\n");
 		} catch (JSONException e) {
 			// Do nothing
 		}
 		
-		return transformedNode;
+		return transformedNode.toString();
 	}
 	
 	private static String transformParallel(JSONObject node) {
-		String transformedNode = "  <fork";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <fork");
 		
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += transformBoundsForNode(node);
-		transformedNode += " >\n";
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(" >\n");
 		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			transformedNode += addEdges(outgoings);
-			transformedNode += "  </fork>\n";
+			transformedNode.write(addEdges(outgoings));
+			transformedNode.write("  </fork>\n");
 		} catch (JSONException e) {
 			// Do nothing
 		}
 		
-		return transformedNode;
+		return transformedNode.toString();
 		
 	}
 	
 	private static String transformEndEvent(JSONObject node) {
-		String transformedNode = "  <end";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <end");
 		
-		transformedNode += addEndEventAttributes(node);
+		transformedNode.write(addEndEventAttributes(node));
 		
-		return transformedNode;
+		return transformedNode.toString();
 		
 	}
 	
 	private static String transformEndErrorEvent(JSONObject node) {
-		String transformedNode = "  <end-error";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <end-error");
 		
-		transformedNode += addEndEventAttributes(node);
+		transformedNode.write(addEndEventAttributes(node));
 		
-		return transformedNode;
+		return transformedNode.toString();
 		
 	}
 	
 	private static String transformEndCancelEvent(JSONObject node) {
-		String transformedNode = "  <end-cancel";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <end-cancel");
 		
-		transformedNode += addEndEventAttributes(node);
+		transformedNode.write(addEndEventAttributes(node));
 		
-		return transformedNode;
+		return transformedNode.toString();
 		
 	}
 	
 	private static String addEndEventAttributes(JSONObject node) {
-		String transformedNode = "";
+		StringWriter transformedNode = new StringWriter();
 		
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "state", "state");
-		transformedNode += addAttribute(node, "ends", "ends");
-		transformedNode += transformBoundsForNode(node);
-		transformedNode += " />\n";
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "state", "state"));
+		transformedNode.write(addAttribute(node, "ends", "ends"));
+		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(" />\n");
 		
-		return transformedNode;
+		return transformedNode.toString();
 	}
 
 	private static String transformJava(JSONObject node) {
-		String transformedNode = "  <java";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "class", "class");
-		transformedNode += addAttribute(node, "method", "method");
-		transformedNode += addAttribute(node, "var", "var");
-		transformedNode += transformBoundsForNode(node);
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <java");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "class", "class"));
+		transformedNode.write(addAttribute(node, "method", "method"));
+		transformedNode.write(addAttribute(node, "var", "var"));
+		transformedNode.write(transformBoundsForNode(node));
 		
 		// TODO add fields, args
 		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			if(outgoings.length() == 0) transformedNode += " />\n";
+			if(outgoings.length() == 0) transformedNode.write(" />\n");
 			else {
-				transformedNode += ">\n";
-				transformedNode += addEdges(outgoings);
-				transformedNode += "  </java>\n";
+				transformedNode.write(">\n");
+				transformedNode.write(addEdges(outgoings));
+				transformedNode.write("  </java>\n");
 			}
 		} catch (JSONException e) {
-			transformedNode += " />\n";
+			transformedNode.write(" />\n");
 		}
 		
-		return transformedNode;
+		return transformedNode.toString();
 	}
 	
 	private static String transformTask(JSONObject node) {
-		String transformedNode = "  <task";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "assignee", "assignee");
-		transformedNode += transformBoundsForNode(node);
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <task");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "assignee", "assignee"));
+		transformedNode.write(transformBoundsForNode(node));
 		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			if(outgoings.length() == 0) transformedNode += " />\n";
+			if(outgoings.length() == 0) transformedNode.write(" />\n");
 			else {
-				transformedNode += ">\n";
-				transformedNode += addEdges(outgoings);
-				transformedNode += "  </task>\n";
+				transformedNode.write(">\n");
+				transformedNode.write(addEdges(outgoings));
+				transformedNode.write("  </task>\n");
 			}
 		} catch (JSONException e) {
-			transformedNode += " />\n";
+			transformedNode.write(" />\n");
 		}
 		
-		return transformedNode;
+		return transformedNode.toString();
 	}
 
 	private static String transformScript(JSONObject node) {
-		String transformedNode = "  <script";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "expr", "expr");
-		transformedNode += addAttribute(node, "lang", "lang");
-		transformedNode += addAttribute(node, "var", "var");
-		transformedNode += transformBoundsForNode(node);
-		transformedNode += ">\n";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <script");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "expr", "expr"));
+		transformedNode.write(addAttribute(node, "lang", "lang"));
+		transformedNode.write(addAttribute(node, "var", "var"));
+		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(">\n");
 		
 		// perhaps add text
 		try {
 			String text = node.getJSONObject("properties").getString("text");
-			transformedNode += "    <text>\n      ";
-			transformedNode += text;
-			transformedNode += "\n    </text>\n";
+			transformedNode.write("    <text>\n      ");
+			transformedNode.write(text);
+			transformedNode.write("\n    </text>\n");
 		} catch (JSONException e) {
 			// Do nothing
 		}
@@ -342,53 +360,55 @@ public class JsonJpdlTransformation {
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			transformedNode += addEdges(outgoings);
+			transformedNode.write(addEdges(outgoings));
 		} catch (JSONException e) {
 			// Do nothing
 		}
-		transformedNode += "  </script>\n";
-		return transformedNode;
+		transformedNode.write("  </script>\n");
+		return transformedNode.toString();
 	}
 
 	private static String transformEsb(JSONObject node) {
-		String transformedNode = "  <esb";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "category", "category");
-		transformedNode += addAttribute(node, "service", "service");
-		transformedNode += transformBoundsForNode(node);
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <esb");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "category", "category"));
+		transformedNode.write(addAttribute(node, "service", "service"));
+		transformedNode.write(transformBoundsForNode(node));
 		
 		// TODO add parts
 		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			if(outgoings.length() == 0) transformedNode += " />\n";
+			if(outgoings.length() == 0) transformedNode.write(" />\n");
 			else {
-				transformedNode += ">\n";
-				transformedNode += addEdges(outgoings);
-				transformedNode += "  </esb>\n";
+				transformedNode.write(">\n");
+				transformedNode.write(addEdges(outgoings));
+				transformedNode.write("  </esb>\n");
 			}
 		} catch (JSONException e) {
-			transformedNode += " />\n";
+			transformedNode.write(" />\n");
 		}
 		
-		return transformedNode;
+		return transformedNode.toString();
 	}
 
 	private static String transformHql(JSONObject node) {
-		String transformedNode = "  <hql";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "var", "var");
-		transformedNode += addAttribute(node, "unique", "unique");
-		transformedNode += transformBoundsForNode(node);
-		transformedNode += ">\n";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <hql");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "var", "var"));
+		transformedNode.write(addAttribute(node, "unique", "unique"));
+		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(">\n");
 
 		// add query
 		try {
 			String query = node.getJSONObject("properties").getString("query");
-			transformedNode += "    <query>\n      ";
-			transformedNode += query;
-			transformedNode += "\n    </query>\n";
+			transformedNode.write("    <query>\n      ");
+			transformedNode.write(query);
+			transformedNode.write("\n    </query>\n");
 		} catch (JSONException e) {
 			// TODO throw Error - Query is required
 		}
@@ -398,28 +418,29 @@ public class JsonJpdlTransformation {
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			transformedNode += addEdges(outgoings);
+			transformedNode.write(addEdges(outgoings));
 		} catch (JSONException e) {
 			// Do nothing
 		}
-		transformedNode += "  </hql>\n";
-		return transformedNode;
+		transformedNode.write("  </hql>\n");
+		return transformedNode.toString();
 	}
 
 	private static String transformSql(JSONObject node) {
-		String transformedNode = "  <sql";
-		transformedNode += addAttribute(node, "name", "name");
-		transformedNode += addAttribute(node, "var", "var");
-		transformedNode += addAttribute(node, "unique", "unique");
-		transformedNode += transformBoundsForNode(node);
-		transformedNode += ">\n";
+		StringWriter transformedNode = new StringWriter();
+		transformedNode.write("  <sql");
+		transformedNode.write(addAttribute(node, "name", "name"));
+		transformedNode.write(addAttribute(node, "var", "var"));
+		transformedNode.write(addAttribute(node, "unique", "unique"));
+		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(">\n");
 
 		// add query
 		try {
 			String query = node.getJSONObject("properties").getString("query");
-			transformedNode += "    <query>\n      ";
-			transformedNode += query;
-			transformedNode += "\n    </query>\n";
+			transformedNode.write("    <query>\n      ");
+			transformedNode.write(query);
+			transformedNode.write("\n    </query>\n");
 		} catch (JSONException e) {
 			// TODO throw Error - Query is required
 		}
@@ -429,12 +450,12 @@ public class JsonJpdlTransformation {
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			transformedNode += addEdges(outgoings);
+			transformedNode.write(addEdges(outgoings));
 		} catch (JSONException e) {
 			// Do nothing
 		}
-		transformedNode += "  </sql>\n";
-		return transformedNode;
+		transformedNode.write("  </sql>\n");
+		return transformedNode.toString();
 	}
 
 }
