@@ -3522,21 +3522,19 @@
 							} else {
 								lanes.first().setProperty("oryx-showcaption", false);
 							}
+							// adapt height and width of the lane by size of the pool
+							// the lowerRight bound is equal to that of the containing pool
+							var singleLane = lanes.first();
+							var laneUpperLeft = singleLane.bounds.upperLeft();
+							laneUpperLeft.x = 30;
+							laneUpperLeft.y = 0;
+							var laneLowerRight = singleLane.bounds.lowerRight();
+							laneLowerRight.x = shape.bounds.width();
+							laneLowerRight.y = shape.bounds.height();
+							singleLane.bounds.set(laneUpperLeft, laneLowerRight);
+							
+							return;
 						}
-						
-						// adapt height and width of the lane by size of the pool
-						// the lowerRight bound is equal to that of the containing pool
-						var singleLane = lanes.first()
-						var laneUpperLeft = singleLane.bounds.upperLeft()
-						laneUpperLeft.x = 30
-						laneUpperLeft.y = 0
-						var laneLowerRight = singleLane.bounds.lowerRight()
-						laneLowerRight.x = shape.bounds.width()
-						laneLowerRight.y = shape.bounds.height()
-						singleLane.bounds.set(laneUpperLeft, laneLowerRight)
-						
-						return	
-						
 					} else {
 						lanes.each(function(lane) {
 							lane.setProperty("oryx-showcaption", true);
