@@ -11,8 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
+import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
 import de.hpi.bpmn.BPMNDiagram;
@@ -27,6 +30,9 @@ import de.hpi.ibpmn.IBPMNDiagram;
 import de.hpi.ibpmn.rdf.IBPMNRDFImporter;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
+import de.hpi.petrinet.PetriNet;
+import de.hpi.petrinet.serialization.erdf.PetriNeteRDFParser;
+import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -83,16 +89,30 @@ public class SyntaxCheckerServlet extends HttpServlet {
 	protected void processDocument(Document document, PrintWriter writer) {
 		String type = new StencilSetUtil().getStencilSet(document);
 		SyntaxChecker checker = null;
-		if (type.equals("bpmn.json") || type.equals("bpmneec.json"))
-			checker = getCheckerBPMN(document);
-		else if (type.equals("bpmn1.1.json"))
-			checker = getCheckerBPMN11(document);
-		else if (type.equals("ibpmn.json"))
-			checker = getCheckerIBPMN(document);
-		else if (type.equals("interactionpetrinets.json"))
-			checker = getCheckerIPN(document);
-		else if (type.equals("epc.json"))
-			checker = getCheckerEPC(document);
+		if(type != null){
+			if (type.equals("bpmn.json") || type.equals("bpmneec.json"))
+				checker = getCheckerBPMN(document);
+			else if (type.equals("bpmn1.1.json"))
+				checker = getCheckerBPMN11(document);
+			else if (type.equals("ibpmn.json"))
+				checker = getCheckerIBPMN(document);
+			else if (type.equals("interactionpetrinets.json"))
+				checker = getCheckerIPN(document);
+			else if (type.equals("epc.json"))
+				checker = getCheckerEPC(document);
+		}
+		
+		if(checker == null) {//try eRDF
+			try {
+				NamedNodeMap map = XPathAPI.selectSingleNode(document, "//a[@rel='oryx-stencilset']").getAttributes();
+				type = map.getNamedItem("href").getNodeValue();
+			} catch (TransformerException e) {
+				e.printStackTrace();
+			}
+			if(type != null && type.endsWith("petrinet.json")){
+				checker = getCheckerPetriNet(document);
+			}
+		}
 
 		if (checker == null) {
 			writer.print("{}");
@@ -134,5 +154,11 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		EPCDiagramRDFImporter importer = new EPCDiagramRDFImporter(document);
 		Diagram diagram = importer.loadEPCDiagram();
 		return new EPCSyntaxChecker(diagram);
+	}
+	
+	protected SyntaxChecker getCheckerPetriNet(Document document) {
+		PetriNeteRDFParser parser = new PetriNeteRDFParser(document);
+		PetriNet petrinet = parser.parse();
+		return new PetriNetSyntaxChecker(petrinet);
 	}
 }

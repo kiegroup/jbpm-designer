@@ -228,3 +228,12 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         return cross;
     }
 });
+
+ORYX.Plugins.PetrinetSyntaxChecker = ORYX.Plugins.SyntaxChecker.extend({
+    /*FIXME:: BPMN + EPC syntax checker needs rdf, but petri nets needs erdf.
+     * So we override getRDFFromDOM from AbstractPlugin to return erdf.
+     */
+    getRDFFromDOM: function(){
+        return this.facade.getERDF();
+    }
+});

@@ -109,7 +109,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
         this.facade.offer({
             'name': "Check soundness",//ORYX.I18N.BPMN2PNConverter.name,
             'functionality': this.showCheckerWindow.bind(this),
-            'group': ORYX.I18N.BPMN2PNConverter.group,
+            'group': "Verification",
             'icon': ORYX.PATH + "images/checker_validation.png",
             'description': "Checks current Petri net for different soundness criteria.",
             'index': 3,

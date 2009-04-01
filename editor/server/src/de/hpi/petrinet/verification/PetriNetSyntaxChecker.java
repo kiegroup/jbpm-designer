@@ -129,11 +129,11 @@ public class PetriNetSyntaxChecker extends AbstractSyntaxChecker {
 	}
 	
 	protected void addNodeError(Node node, String errorCode) {
-		errors.put(node.getId(), errorCode);
+		errors.put(node.getResourceId(), errorCode);
 	}
 
 	protected void addFlowRelationshipError(FlowRelationship rel, String errorCode) {
-		errors.put(rel.toString(), errorCode);
+		errors.put(rel.getResourceId(), errorCode);
 	}
 
 }
