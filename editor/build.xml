@@ -12,7 +12,7 @@
 	<property name="editor-build-root" value="${build-dir}/editor" />
 	
     <!-- Targets for oryx javascript documentation ****************************************************** -->
-    <taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpath="jsdoc-toolkit/jsdoctoolkit-ant-task-1.0.jar;jsdoc-toolkit/jsrun.jar"/>
+    <taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpath="jsdoc-toolkit/jsdoctoolkit-ant-task-1.0.jar;jsdoc-toolkit/jsrun.jar;editor/lib/js.jar"/>
     <target name="jsdoc-editor">
         <jsdoctoolkit jsdochome="jsdoc-toolkit/" template="jsdoc" outputdir="jsdoc/editor" inputdir="editor/client/scripts" depth="2">
         </jsdoctoolkit>
