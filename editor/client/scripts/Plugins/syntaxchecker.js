@@ -103,6 +103,8 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             onSuccess: function(request){
                 var resp = request.responseText.evalJSON();
                 
+                Ext.Msg.hide();
+                
                 if (resp instanceof Object) {
                     resp = $H(resp)
                     if (resp.size() > 0) {
@@ -117,7 +119,6 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
                 else {
                     if(options.onFailure) options.onFailure();
                 }
-                Ext.Msg.hide();
             }.bind(this),
             onFailure: function(){
                 Ext.Msg.hide();

@@ -38,7 +38,7 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	public boolean checkExactlyOneStartEvent;
 	
 	public EPCSyntaxChecker(Diagram diagram) {
-		diagram = diagram;
+		this.diagram = diagram;
 		errors = new HashMap<String,String>();
 		checkFunctionFollowsFunction = true;
 		checkExactlyOneStartEvent = true;
