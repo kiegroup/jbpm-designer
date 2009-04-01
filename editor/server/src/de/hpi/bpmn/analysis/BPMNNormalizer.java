@@ -39,6 +39,7 @@ import de.hpi.bpmn.StartTimerEvent;
 import de.hpi.bpmn.SubProcess;
 import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.XOREventBasedGateway;
+import de.hpi.diagram.OryxUUID;
 
 public class BPMNNormalizer {
 	BPMNDiagram diagram;
@@ -75,13 +76,11 @@ public class BPMNNormalizer {
 			else if (node instanceof SubProcess)
 				normalizeRecursively((SubProcess) node);
 			// TODO CompensationActivities shouldn't be counted here
-			else if (!(node instanceof IntermediateEvent)
-					&& node.getIncomingSequenceFlows().size() == 0)
-				nodesWithoutIncomingSequenceFlow.add(node);
-			// TODO CompensationActivities shouldn't be counted here
-			else if (!(node instanceof IntermediateEvent)
-					&& node.getOutgoingSequenceFlows().size() == 0) {
-				nodesWithoutOutgoingSequenceFlow.add(node);
+			else if (!(node instanceof IntermediateEvent)){
+				if(node.getIncomingSequenceFlows().size() == 0)
+					nodesWithoutIncomingSequenceFlow.add(node);
+				if(node.getOutgoingSequenceFlows().size() == 0)
+					nodesWithoutOutgoingSequenceFlow.add(node);
 			}
 			
 			if(node instanceof Activity){
@@ -233,6 +232,10 @@ public class BPMNNormalizer {
 
 	private SequenceFlow connectNodes(Node source, Node target) {
 		SequenceFlow seqFlow = new SequenceFlow();
+		
+		// Generate an id if it hasn't been set before
+		seqFlow.setId(OryxUUID.generate());
+		
 		seqFlow.setSource(source);
 		seqFlow.setTarget(target);
 		diagram.getEdges().add(seqFlow);
@@ -241,6 +244,8 @@ public class BPMNNormalizer {
 
 	private void addNode(Node node, Container process) {
 		diagram.getChildNodes().add(node);
+		// Generate an id if it hasn't been set before
+		if(node.getId() == null) node.setId(OryxUUID.generate());
 		node.setParent(process);
 		node.setProcess(process);
 	}

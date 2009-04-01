@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.analysis.BPMNNormalizer;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2pn.converter.Converter;
@@ -78,6 +79,10 @@ public class BPMN2PNServlet extends HttpServlet {
 		else if (type.equals("bpmn1.1.json"))
 			diagram = new BPMN11RDFImporter(document).loadBPMN();
 
+		// Normalize diagram
+		BPMNNormalizer normalizer = new BPMNNormalizer(diagram);
+		normalizer.normalize();
+		
 		Converter conv = new StandardConverter(diagram);
 		PetriNet pn = conv.convert();
 		
