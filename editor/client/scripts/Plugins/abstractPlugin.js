@@ -234,6 +234,38 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
     },
     
     /**
+     * Sets the editor in read only mode: Edges/ dockers cannot be moved anymore,
+     * shapes cannot be selected anymore.
+     * @methodOf ORYX.Plugins.AbstractPlugin.prototype
+     */
+    enableReadOnlyMode: function(){
+        //Edges cannot be moved anymore
+        this.facade.disableEvent(ORYX.CONFIG.EVENT_MOUSEDOWN);
+        
+        // Stop the user from editing the diagram while the plugin is active
+        this._stopSelectionChange = function(){
+            if(this.facade.getSelection().length > 0) {
+                this.facade.setSelection([]);
+            }
+        };
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SELECTION_CHANGED, this._stopSelectionChange.bind(this));
+    },
+    /**
+     * Disables read only mode, see @see
+     * @methodOf ORYX.Plugins.AbstractPlugin.prototype
+     * @see ORYX.Plugins.AbstractPlugin.prototype.enableReadOnlyMode
+     */
+    disableReadOnlyMode: function(){
+        // Edges can be moved now again
+        this.facade.enableEvent(ORYX.CONFIG.EVENT_MOUSEDOWN);
+        
+        if (this._stopSelectionChange) {
+            this.facade.unregisterOnEvent(ORYX.CONFIG.EVENT_SELECTION_CHANGED, this._stopSelectionChange.bind(this));
+            this._stopSelectionChange = undefined;
+        }
+    },
+    
+    /**
      * Extracts RDF from DOM.
      * @methodOf ORYX.Plugins.AbstractPlugin.prototype
      * @type {String} Extracted RFD. Null if there are transformation errors.
