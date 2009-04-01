@@ -1,4 +1,3 @@
-
 /**
  * Copyright (c) 2008, Gero Decker, refactored by Kai Schlichting
  *
@@ -61,18 +60,45 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         } else {
             this.checkForErrors({
                 onNoErrors: function(){
-                    button.toggle();
-                    this.active = !this.active;
+                    this.setActivated(button, false);
                     Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.noErrors);
-                },
+                }.bind(this),
                 onErrors: function(){
-                },
+                    this.enableDeactivationHandler(button);
+                }.bind(this),
                 onFailure: function(){
-                    button.toggle();
-                    this.active = !this.active;
+                    this.setActivated(button, false);
                     Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.invalid);
-                }
+                }.bind(this)
             });      
+        }
+    },
+    
+    /**
+     * Registers handler for deactivating syntax checker as soon as somewhere is clicked...
+     * @param {Ext.Button} Toolbar button
+     */
+    enableDeactivationHandler: function(button){
+        var deactivate = function(){
+            this.setActivated(button, false);
+            this.resetErrors();
+            this.facade.unregisterOnEvent(ORYX.CONFIG.EVENT_MOUSEDOWN, deactivate);
+        };
+        
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEDOWN, deactivate.bind(this));
+    },
+    
+    /**
+     * Sets the activated state of the plugin
+     * @param {Ext.Button} Toolbar button
+     * @param {Object} activated
+     */
+    setActivated: function(button, activated){
+        button.toggle(activated);
+        if(activated === undefined){
+            this.active = !this.active;
+        } else {
+            this.active = activated;
         }
     },
     
@@ -175,7 +201,7 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         }.bind(this))
         
         this.raisedEventIds = [];
-        this.active = !this.active;
+        this.active = false;
     },
     
     raiseOverlay: function(shape, errorMsg){
@@ -202,8 +228,3 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         return cross;
     }
 });
-
-// Define the events
-ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT = "checkForErrors";
-ORYX.Plugins.SyntaxChecker.RESET_ERRORS_EVENT = "resetErrors";
-ORYX.Plugins.SyntaxChecker.SHOW_ERRORS_EVENT = "showErrors";
