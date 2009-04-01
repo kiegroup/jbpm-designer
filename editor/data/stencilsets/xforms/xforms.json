@@ -77,7 +77,7 @@
 					"optional":true,
 					"length":"1000000",
 					"wrapLines":true
-				},
+				}
 			]
 		},	
  		{

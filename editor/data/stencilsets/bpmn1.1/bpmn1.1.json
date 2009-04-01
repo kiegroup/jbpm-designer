@@ -404,7 +404,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"value",
@@ -413,7 +413,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -422,8 +422,8 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
-						},
+							"optional":true
+						}
 					]
 				},
 				{
@@ -991,7 +991,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -1016,7 +1016,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -1151,7 +1151,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"value",
@@ -1160,7 +1160,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -1169,8 +1169,8 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
-						},
+							"optional":true
+						}
 					]
 				},
 				{
@@ -1706,7 +1706,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -1731,7 +1731,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -1866,7 +1866,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"value",
@@ -1875,7 +1875,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"correlation",
@@ -1884,8 +1884,8 @@
 							"type":"Boolean",
 							"value":"false",
 							"width":100,
-							"optional":true,
-						},
+							"optional":true
+						}
 					]
 				},
 				{
@@ -2414,7 +2414,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -2439,7 +2439,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -2675,7 +2675,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -2700,7 +2700,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -2899,7 +2899,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -2924,7 +2924,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -3101,7 +3101,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -3126,7 +3126,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -3341,7 +3341,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -3366,7 +3366,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -4718,7 +4718,7 @@
 						"type":"String",
 						"value":"",
 						"width":100,
-						"optional":false,
+						"optional":false
 					},
 					{
 						"id":"value",
@@ -4726,7 +4726,7 @@
 						"type":"String",
 						"value":"",
 						"width":100,
-						"optional":false,
+						"optional":false
 					},
 					{
 						"id":"correlation",
@@ -4734,8 +4734,8 @@
 						"type":"Boolean",
 						"value":"false",
 						"width":100,
-						"optional":true,
-					},
+						"optional":true
+					}
 					]
 				},
 				{
@@ -4746,7 +4746,7 @@
 					"value":true,
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"producedAtCompletion",
@@ -4756,7 +4756,7 @@
 					"value":true,
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},				
 				{
 					"id":"bgColor",
@@ -4866,7 +4866,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -4891,7 +4891,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -5046,7 +5046,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -5071,7 +5071,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -5268,7 +5268,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -5293,7 +5293,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -5470,7 +5470,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -5495,7 +5495,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -5649,7 +5649,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -5674,7 +5674,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -5752,7 +5752,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},			
 				{
 					"id":"bgColor",
@@ -5863,7 +5863,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -5888,7 +5888,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6058,7 +6058,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6083,7 +6083,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6254,7 +6254,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6279,7 +6279,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6489,7 +6489,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6514,7 +6514,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6726,7 +6726,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6751,7 +6751,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6941,7 +6941,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -6966,7 +6966,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7144,7 +7144,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7169,7 +7169,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7334,7 +7334,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7359,7 +7359,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7537,7 +7537,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7562,7 +7562,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7742,7 +7742,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7767,7 +7767,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7948,7 +7948,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -7973,7 +7973,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -8164,7 +8164,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -8189,7 +8189,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -8382,7 +8382,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -8407,7 +8407,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -8587,7 +8587,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -8612,7 +8612,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -8790,7 +8790,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -8815,7 +8815,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -9003,7 +9003,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -9028,7 +9028,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -9217,7 +9217,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -9242,7 +9242,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -9284,7 +9284,7 @@
 					"value":"None",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -9395,7 +9395,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -9420,7 +9420,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -9462,7 +9462,7 @@
 					"value":"Message",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"message",
@@ -9615,7 +9615,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -9640,7 +9640,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -9682,7 +9682,7 @@
 					"value":"Error",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"errorCode",
@@ -9692,7 +9692,7 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -9802,7 +9802,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -9827,7 +9827,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -9869,7 +9869,7 @@
 					"value":"Cancel",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -9979,7 +9979,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10004,7 +10004,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10046,7 +10046,7 @@
 					"value":"Compensation",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"ActivityRef",
@@ -10168,7 +10168,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10193,7 +10193,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10235,7 +10235,7 @@
 					"value":"Signal",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"SignalRef",
@@ -10356,7 +10356,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10381,7 +10381,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10423,7 +10423,7 @@
 					"value":"Multiple",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -10533,7 +10533,7 @@
 							"type":"String",
 							"value":"",
 							"width":100,
-							"optional":false,
+							"optional":false
 						},
 						{
 							"id":"assigntime",
@@ -10558,7 +10558,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10600,7 +10600,7 @@
 					"value":"Terminate",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				},
 				{
 					"id":"bgColor",
@@ -11192,7 +11192,7 @@
 					{
 						"from":"IntermediateCompensationEventCatching",
 						"to":["Task", "CollapsedSubprocess", "Subprocess"]
-					},
+					}
 				]
 			},
 			{
@@ -11205,7 +11205,7 @@
 					{
 						"from":"DataObject",
 						"to":["to_task_event"]
-					},
+					}
 				]
 			},
 			{
@@ -11267,14 +11267,14 @@
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:1,
+						maximum:1
 						
 					}
 				],
 				incomingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:0,
+						maximum:0
 						
 					}
 				]
@@ -11285,14 +11285,14 @@
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:0,
+						maximum:0
 						
 					}
 				],
 				incomingEdges: [
 					{
 						role:"SequenceFlow",
-						maximum:1,
+						maximum:1
 						
 					}
 				]
