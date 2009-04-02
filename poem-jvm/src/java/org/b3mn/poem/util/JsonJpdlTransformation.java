@@ -295,22 +295,64 @@ public class JsonJpdlTransformation {
 		transformedNode.write(addAttribute(node, "method", "method"));
 		transformedNode.write(addAttribute(node, "var", "var"));
 		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(" >\n");
 		
-		// TODO add fields, args
+		// add fields (optional) TODO type != string
+		try {
+			if(node.getJSONObject("properties").getJSONObject("field")
+									.getInt("totalCount") > 0) {
+				JSONArray parameters = node.getJSONObject("properties")
+									.getJSONObject("field").getJSONArray("items");
+	
+				for(int i = 0; i < parameters.length(); i++) {
+					JSONObject item = parameters.getJSONObject(i);
+					transformedNode.write("    <field");
+					
+					// add name (optional)
+					try {
+						String name = item.getString("f_name");
+						if(name.length() > 0)
+							transformedNode.write(" name=\"" + name + "\"");
+					} catch (JSONException e) {}
+					
+					transformedNode.write(" >\n");
+					// add string or object
+					try {
+						String type = item.getString("type").toLowerCase();
+						if(type.equals("string")) {
+							transformedNode.write(transformPrimititveElement(item));
+						}
+						else {
+						}
+					} catch (JSONException e) {}
+					transformedNode.write("    </field>\n");
+				}
+			}
+		} catch (JSONException e) {}
+		
+		// add args
+		try {
+			if(node.getJSONObject("properties").getJSONObject("arg")
+									.getInt("totalCount") > 0) {
+				JSONArray parameters = node.getJSONObject("properties")
+									.getJSONObject("arg").getJSONArray("items");
+	
+				for(int i = 0; i < parameters.length(); i++) {
+					JSONObject item = parameters.getJSONObject(i);
+					transformedNode.write("    <arg>\n");
+					// add argument node
+					transformedNode.write(transformPrimititveElement(item));
+					transformedNode.write("    </arg>\n");
+				}
+			}
+		} catch (JSONException e) {}
 		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			if(outgoings.length() == 0) transformedNode.write(" />\n");
-			else {
-				transformedNode.write(">\n");
-				transformedNode.write(addEdges(outgoings));
-				transformedNode.write("  </java>\n");
-			}
-		} catch (JSONException e) {
-			transformedNode.write(" />\n");
-		}
-		
+			transformedNode.write(addEdges(outgoings));
+		} catch (JSONException e) {}
+		transformedNode.write("  </java>\n");
 		return transformedNode.toString();
 	}
 	
@@ -375,60 +417,81 @@ public class JsonJpdlTransformation {
 		transformedNode.write(addAttribute(node, "category", "category"));
 		transformedNode.write(addAttribute(node, "service", "service"));
 		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(">\n");
 		
-		// TODO add parts
+		// add part (optional) TODO add transformation for type = object
+		try {
+			if(node.getJSONObject("properties").getJSONObject("part")
+									.getInt("totalCount") > 0) {
+				JSONArray parameters = node.getJSONObject("properties")
+									.getJSONObject("part").getJSONArray("items");
+	
+				for(int i = 0; i < parameters.length(); i++) {
+					JSONObject item = parameters.getJSONObject(i);
+					transformedNode.write("    <part");
+					
+					// add name (optional)
+					try {
+						String name = item.getString("p_name");
+						if(name.length() > 0)
+							transformedNode.write(" name=\"" + name + "\"");
+					} catch (JSONException e) {}
+					
+					// add expr (optional)
+					try {
+						String expr = item.getString("expr");
+						if(expr.length() > 0)
+							transformedNode.write(" expr=\"" + expr + "\"");
+					} catch (JSONException e) {}
+					
+					// add string or object (optional)
+					try {
+						String type = item.getString("type").toLowerCase();
+						if(type.equals("string")) {
+							transformedNode.write(">\n");
+							transformedNode.write(transformPrimititveElement(item));
+							transformedNode.write("    </part>\n");
+						}
+						else {
+							transformedNode.write(" />\n");
+						}
+					} catch (JSONException e) {}
+				}
+			}
+		} catch (JSONException e) {}
 		
-		// add outgoing edge
+		
+		// add outgoing edge (optional)
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
-			if(outgoings.length() == 0) transformedNode.write(" />\n");
-			else {
-				transformedNode.write(">\n");
-				transformedNode.write(addEdges(outgoings));
-				transformedNode.write("  </esb>\n");
-			}
-		} catch (JSONException e) {
-			transformedNode.write(" />\n");
-		}
+			transformedNode.write(addEdges(outgoings));
+		} catch (JSONException e) {}
 		
+		transformedNode.write("  </esb>\n");
 		return transformedNode.toString();
 	}
+	
 
 	private static String transformHql(JSONObject node) {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <hql");
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "var", "var"));
-		transformedNode.write(addAttribute(node, "unique", "unique"));
-		transformedNode.write(transformBoundsForNode(node));
-		transformedNode.write(">\n");
-
-		// add query
-		try {
-			String query = node.getJSONObject("properties").getString("query");
-			transformedNode.write("    <query>\n      ");
-			transformedNode.write(query);
-			transformedNode.write("\n    </query>\n");
-		} catch (JSONException e) {
-			// TODO throw Error - Query is required
-		}
-		
-		// TODO add parameters
-		
-		// add outgoing edge
-		try {
-			JSONArray outgoings = node.getJSONArray("outgoing");
-			transformedNode.write(addEdges(outgoings));
-		} catch (JSONException e) {
-			// Do nothing
-		}
+		transformedNode.write(addQLAttributes(node));
 		transformedNode.write("  </hql>\n");
 		return transformedNode.toString();
 	}
+	
 
 	private static String transformSql(JSONObject node) {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <sql");
+		transformedNode.write(addQLAttributes(node));
+		transformedNode.write("  </sql>\n");
+		return transformedNode.toString();
+	}
+	
+
+	private static String addQLAttributes(JSONObject node) {
+		StringWriter transformedNode = new StringWriter();
 		transformedNode.write(addAttribute(node, "name", "name"));
 		transformedNode.write(addAttribute(node, "var", "var"));
 		transformedNode.write(addAttribute(node, "unique", "unique"));
@@ -445,17 +508,58 @@ public class JsonJpdlTransformation {
 			// TODO throw Error - Query is required
 		}
 		
-		// TODO add parameters
+		// add parameters TODO add transformation for type = object
+		try {
+			if(node.getJSONObject("properties").getJSONObject("parameters")
+									.getInt("totalCount") > 0) {
+				JSONArray parameters = node.getJSONObject("properties")
+									.getJSONObject("parameters").getJSONArray("items");
+				transformedNode.write("    <parameters>\n");
+				for(int i = 0; i < parameters.length(); i++) {
+					JSONObject item = parameters.getJSONObject(i);
+					if(item.getString("type").toLowerCase().equals("string")) {
+						transformedNode.write(transformPrimititveElement(item));
+					}
+					
+				}
+				transformedNode.write("    </parameters>\n");
+			}
+		} catch (JSONException e) {}
 		
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
 			transformedNode.write(addEdges(outgoings));
-		} catch (JSONException e) {
-			// Do nothing
-		}
-		transformedNode.write("  </sql>\n");
+		} catch (JSONException e) {}
 		return transformedNode.toString();
+	}
+	
+	private static String transformPrimititveElement(JSONObject item) {
+		StringWriter element = new StringWriter();
+		
+		// add type (required)
+		try {
+			String type = item.getString("type").toLowerCase();
+			element.write("      <" + type);
+		} catch (JSONException e) {
+			// TODO throw Exception, type is required
+		}
+		
+		// add name (optional)
+		try {
+			String name = item.getString("name");
+			if( name.length() > 0)
+				element.write(" name=\"" + name + "\"");
+		} catch (JSONException e) {}
+		// add value (optional)
+		try {
+			String value = item.getString("value");
+			if( value.length() > 0)
+				element.write(" value=\"" + value + "\"");
+		} catch (JSONException e) {}
+		
+		element.write(" />\n");
+		return element.toString();
 	}
 
 }

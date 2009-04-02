@@ -81,8 +81,24 @@
 				"optional": 	true,
 				"complexItems": [
 				{
+					"id":"f_name",
+					"name":"Field Name",
+					"type":"String",
+					"value":"",
+					"width":100,
+					"optional":false 
+				},
+				{
+					"id":"type",
+					"name":"Type",
+					"type":"String",
+					"value":"",
+					"width":100,
+					"optional":false 
+				},
+				{
 					"id":"name",
-					"name":"Name",
+					"name":"String Name",
 					"type":"String",
 					"value":"",
 					"width":100,
@@ -90,7 +106,7 @@
 				},
 				{
 					"id":"value",
-					"name":"Value",
+					"name":"String Value",
 					"type":"String",
 					"value":"",
 					"width":100,
@@ -107,6 +123,14 @@
 				"readonly": 	false,
 				"optional": 	true,
 				"complexItems": [
+				{
+					"id":"name",
+					"name":"Name",
+					"type":"String",
+					"value":"",
+					"width":100,
+					"optional":false 
+				},
 				{
 					"id":"value",
 					"name":"Value",
@@ -300,20 +324,20 @@
 				"optional": 	true,
 				"complexItems": [
 					{
-						"id":"name",
-						"name":"Name",
+						"id":"p_name",
+						"name":"Part Name",
 						"type":"String",
 						"value":"",
 						"width":100,
-						"optional":false 
+						"optional":true 
 					},
 					{
-						"id":"value",
-						"name":"Value",
+						"id":"expr",
+						"name":"Epression",
 						"type":"String",
 						"value":"",
 						"width":100,
-						"optional":false,
+						"optional":true 
 					},
 					{
 						"id":"type",
@@ -321,7 +345,23 @@
 						"type":"String",
 						"value":"",
 						"width":100,
-						"optional":false,
+						"optional":true,
+					},
+					{
+						"id":"name",
+						"name":"StringName",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":true,
+					},
+					{
+						"id":"value",
+						"name":"StringValue",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":true,
 					},
 				],
 			},
