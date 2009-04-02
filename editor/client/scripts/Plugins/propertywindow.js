@@ -582,7 +582,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 		
 		jsonString = "{'totalCount':" + ds.getCount().toJSON() + 
 			", 'items':" + jsonString + "}";
-		return jsonString;
+		return Object.toJSON(jsonString.evalJSON());
 	},
 	
 	/**
