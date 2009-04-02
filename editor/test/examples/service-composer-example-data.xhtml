@@ -1,0 +1,88 @@
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events"
+       xmlns="http://www.w3.org/2002/xforms">
+<h:head>
+    <h:title>Example Data for Service Composer</h:title>
+    <model>
+        <instance>
+            <data xmlns="">
+                <!-- first service from the search results -->
+                <svc0>http://posr.no-ip.org/instantsvc/services/soap.php/ukCompaniesHouseEmulatorRpcLit?wsdl</svc0>
+                    <svc0_pt0>ukCompaniesHouseEmulatorRpcLitPortType</svc0_pt0>
+                    <!-- first operation of the first portType -->
+                    <svc0_pt0_op0>checkCompanyName</svc0_pt0_op0>
+                        <!-- name of the first part of the input message of the first operation -->
+                        <svc0_pt0_op0_in0_name>companyName</svc0_pt0_op0_in0_name>
+                        <!-- type of the first part of the input message of the first operation -->
+                        <svc0_pt0_op0_in0_type>http://www.w3.org/2001/XMLSchema^string</svc0_pt0_op0_in0_type>
+
+                        <!-- name of the first part of the output message of the first operation -->
+                        <svc0_pt0_op0_out0_name>return</svc0_pt0_op0_out0_name>
+                        <!-- targetNamespace of the xsd:schema in the wsdl:types section -->
+                        <svc0_pt0_op0_out0_type>http://posr.no-ip.org/instantsvc/services/soap.php/ukCompaniesHouseEmulatorRpcLit^ArrayOfukCompanyInfo</svc0_pt0_op0_out0_type>
+
+                        <!-- available user interfaces for the first operation -->
+                        <svc0_pt0_op0_ui0>http://localhost/service-uis/generated-by/ibm/checkCompanyName.xhtml</svc0_pt0_op0_ui0>
+                        <svc0_pt0_op0_ui1>http://localhost/service-uis/generated-by/tambet-matiisen/checkCompanyName.xhtml</svc0_pt0_op0_ui1>
+                        <svc0_pt0_op0_ui2>http://localhost/service-uis/generated-by/tambet-matiisen/checkCompanyName.edit.xhtml</svc0_pt0_op0_ui2>
+                    <svc0_pt0_op1>checkDisqualifiedDirectorsRegister</svc0_pt0_op1>
+                        <svc0_pt0_op1_ui0>http://localhost/service-uis/generated-by/ibm/checkDisqualifiedDirectorsRegister.xhtml</svc0_pt0_op1_ui0>
+                    <svc0_pt0_op2>fileForm10</svc0_pt0_op2>
+                        <svc0_pt0_op2_ui0>http://localhost/service-uis/generated-by/ibm/fileForm10.xhtml</svc0_pt0_op2_ui0>
+                        <svc0_pt0_op2_ui1>http://localhost/service-uis/generated-by/tambet-matiisen/fileForm10.xhtml</svc0_pt0_op2_ui1>
+                        <svc0_pt0_op2_ui2>http://localhost/service-uis/generated-by/tambet-matiisen/fileForm10.edit.xhtml</svc0_pt0_op2_ui2>
+                    <svc0_pt0_op3>fileForm12</svc0_pt0_op3>
+                        <svc0_pt0_op3_ui0>http://localhost/service-uis/generated-by/ibm/fileForm12.xhtml</svc0_pt0_op3_ui0>
+                <!-- rpc/literal -->
+                <svc1>http://posr.no-ip.org/instantsvc/services/soap.php/DirectorsRegisterService1236791708888?wsdl</svc1>
+                    <svc1_pt0>DirectorsRegisterService1236791708888PortType</svc1_pt0>
+                    <svc1_pt0_op0>findDirectors</svc1_pt0_op0>
+                        <svc1_pt0_op0_in0_name>findDirectors</svc1_pt0_op0_in0_name>
+                        <svc1_pt0_op0_in0_type>http://www.w3.org/2001/XMLSchema^string</svc1_pt0_op0_in0_type>
+                        <svc1_pt0_op0_out0_name>findDirectorsResponse</svc1_pt0_op0_out0_name>
+                        <svc1_pt0_op0_out0_type>http://posr.no-ip.org/instantsvc/services/soap.php/DirectorsRegisterService1236791708888^ArrayOfDirectorsRegisterService1236791708888Result</svc1_pt0_op0_out0_type>
+                <!-- document/literal -->
+                <svc2>http://ws.nominalia.com/WS/NominaliaWS.asmx?WSDL</svc2>
+                    <svc2_pt0>NominaliaWSSoap</svc2_pt0>
+                    <svc2_pt0_op0>checkDomain</svc2_pt0_op0>
+                        <svc2_pt0_op0_in0_name>parameters</svc2_pt0_op0_in0_name>
+                        <svc2_pt0_op0_in0_type>http://ws.nominalia.com/operations^checkDomain</svc2_pt0_op0_in0_type>
+                        <svc2_pt0_op0_out0_name>parameters</svc2_pt0_op0_out0_name>
+                        <svc2_pt0_op0_out0_type>http://ws.nominalia.com/operations^checkDomainResponse</svc2_pt0_op0_out0_type>
+                <!-- rpc/encoded -->
+                <svc3>http://mihannic.com/webservice/index.php?wsdl</svc3>
+                    <svc3_pt0>mihannicWSDLPortType</svc3_pt0>
+                    <svc3_pt0_op0>checkDomain</svc3_pt0_op0>
+                        <svc3_pt0_op0_in0_name>domain_name</svc3_pt0_op0_in0_name>
+                        <svc3_pt0_op0_in0_type>http://www.w3.org/2001/XMLSchema^string</svc3_pt0_op0_in0_type>
+                        <svc3_pt0_op0_out0_name>result</svc3_pt0_op0_out0_name>
+                        <svc3_pt0_op0_out0_type>http://www.w3.org/2001/XMLSchema^boolean</svc3_pt0_op0_out0_type>
+                        <svc3_pt0_op0_out1_name>whois</svc3_pt0_op0_out1_name>
+                        <svc3_pt0_op0_out1_type>http://www.w3.org/2001/XMLSchema^string</svc3_pt0_op0_out1_type>
+                        <svc3_pt0_op0_out2_name>error</svc3_pt0_op0_out2_name>
+                        <svc3_pt0_op0_out2_type>http://www.w3.org/2001/XMLSchema^string</svc3_pt0_op0_out2_type>
+            </data>
+        </instance>
+<!-- URL of this form: http://localhost/service-uis/generated-by/manually/service-composer.short.xhtml -->
+        <submission action="http://localhost:8180/oryx/servicecomposer"
+                    method="urlencoded-post" separator="&amp;" id="s"/>
+<!--
+        <submission action="http://localhost:4711/oryx/servicecomposer"
+                    method="get" separator="&amp;" id="s"/>
+        <submission action="http://posr.no-ip.org/oryx/servicecomposer"
+                    method="urlencoded-post" separator="&amp;" id="s"/>
+-->
+    </model>
+</h:head>
+<h:body style="font-family: sans-serif; font-size: 75%;">
+    <h:p>
+        The XForm in this page contains example data for the Service Composer.<h:br />
+        Just hit the button below to start modeling a service composition with a bunch of services.
+    </h:p>
+    <h:p>
+        <submit submission="s"><label>Start Service Composer...</label></submit>
+<!--
+        <send submission="s" ev:event="load"/>
+-->
+    </h:p>
+</h:body>
+</h:html>

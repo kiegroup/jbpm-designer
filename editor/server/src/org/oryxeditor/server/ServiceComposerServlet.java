@@ -28,6 +28,10 @@ package org.oryxeditor.server;
  * contributed to the Oryx project in October 2008 under the terms of the
  * MIT License.
  * 
+ * The XForm in editor/test/examples/service-composer-example-data.xhtml
+ * contains example data that illustrate the usage of the parameters and allows
+ * to directly start the Service Composer with a bunch of services.
+ *
  * @author Stefan Krumnow
  * @author Falko Menge
  **/
