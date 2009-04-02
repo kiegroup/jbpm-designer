@@ -106,10 +106,23 @@ public class RdfJsonTransformation {
 		object.put("properties", properties);
 		if(n.hasChildNodes()) {
 			for (Node child = n.getFirstChild(); child != null; child = child.getNextSibling()) {
-				if( !isReservedNodeName(child.getNodeName()) )
-					properties.put(child.getNodeName(), getContent(child));
-				else
+				if( !isReservedNodeName(child.getNodeName()) ) {
+					String content = getContent(child);
+					if(content==null) {
+						properties.put(child.getNodeName(), content);
+					} else {
+						try {
+							// try to parse property value to JSON object (for complex properties)
+							JSONObject jsonObj = new JSONObject(content);
+							properties.put(child.getNodeName(), jsonObj);
+						} catch (JSONException e) {
+							// non-JSON content
+							properties.put(child.getNodeName(), content);
+						}
+					}
+				} else {
 					handleReservedNodeName(child, object);
+				}
 			}
 		}
 	}
