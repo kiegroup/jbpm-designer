@@ -52,6 +52,17 @@ public class PetriNetSoundnessCheckerTest extends AbstractPetriNetTest{
 		checker2.calculateRG();
 		
 		assertTrue(checker2.isRelaxedSound());
+		
+		/**
+		 * A not relaxed sound petri net (when there are 2 tokens in final place, this isn't a final state)
+		 */
+		PetriNet net3 = this.openPetriNetFromFile("verification/notRelaxedSound2.xml");
+		PetriNetSoundnessChecker checker3 = new PetriNetSoundnessChecker(net3);
+		
+		checker3.calculateRG();
+		
+		assertFalse(checker3.isRelaxedSound());
+		assertEquals(2, checker3.getNotParticipatingTransitions().size());
 	}
 
 }

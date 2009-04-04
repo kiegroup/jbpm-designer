@@ -161,7 +161,7 @@ public class Marking implements de.hpi.petrinet.Marking {
 		boolean oneTokenOnFinalPlace = false;
 		for(Place place : net.getPlaces()){
 			if(place.isFinalPlace()){
-				if(this.getNumTokens(place) > 0) // if token on end place, all is okay 
+				if(this.getNumTokens(place) == 1) // if token on end place, all is okay 
 					oneTokenOnFinalPlace = true;
 			} else {
 				if(this.getNumTokens(place) > 0) // if token on intermediate place
