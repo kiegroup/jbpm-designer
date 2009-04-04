@@ -12,11 +12,58 @@
 	<property name="editor-build-root" value="${build-dir}/editor" />
 	
     <!-- Targets for oryx javascript documentation ****************************************************** -->
-    <taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpath="jsdoc-toolkit/jsdoctoolkit-ant-task-1.0.jar;jsdoc-toolkit/jsrun.jar;editor/lib/js.jar"/>
+	<path id="jsdoc.classpath">
+        <fileset file="${editor-src-root}/lib/js.jar" />
+        <fileset file="jsdoc-toolkit/jsrun.jar" />
+        <fileset file="jsdoc-toolkit/jsdoctoolkit-ant-task-1.0.jar" />
+    </path>
+    <taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpathref="jsdoc.classpath"/>
     <target name="jsdoc-editor">
         <jsdoctoolkit jsdochome="jsdoc-toolkit/" template="jsdoc" outputdir="jsdoc/editor" inputdir="editor/client/scripts" depth="2">
         </jsdoctoolkit>
     </target>
+    
+    <!-- Oryx JavaDoc -->
+    <target name="javadoc-editor">
+      <javadoc
+        excludepackagenames="org.test.supercsv.mock"
+          access="public"
+           destdir="javadoc/editor"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="org.Super.CSV.API"
+       >
+
+        <fileset dir="${editor-src-server}" defaultexcludes="yes">
+            <include name="**/*.java"/>
+        </fileset>
+      </javadoc>
+    </target>
+    
+    <!-- JsLint task,checking javascript- and stencilset-json-files -->
+    <taskdef name="jslint"
+      classname="net.happygiraffe.jslint.ant.JSLintTask"
+      classpath="lib/jslint4java-1.2.1+rhino.jar">
+    </taskdef>
+    <target name="jslint.check_js">
+        <jslint options="browser">
+            <formatter type="plain" />
+            <formatter type="xml" destfile="jslint.xml" />
+            <fileset dir="${editor-src-client}/scripts">
+                <include name="**/*.js"/>
+            </fileset>
+        </jslint>
+    </target>
+    <target name="jslint.check_json">
+        <jslint>
+            <formatter type="plain" />
+            <fileset dir="${editor-src-root}/data/stencilsets">
+                <include name="**/*.json"/>
+            </fileset>
+        </jslint>
+    </target>
+    
     
 	<!-- Oryx  targets (oryx.war) ****************************************************** -->
 	<target name="build-with-xhtml-test-files-flag">

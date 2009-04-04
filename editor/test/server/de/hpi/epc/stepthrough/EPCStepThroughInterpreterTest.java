@@ -19,7 +19,7 @@ import de.hpi.bpt.process.epc.Event;
 import de.hpi.bpt.process.epc.Function;
 import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.epc.AbstractEPCTest;
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 
 public class EPCStepThroughInterpreterTest extends AbstractEPCTest {
 	EPCStepThroughInterpreter epcST;

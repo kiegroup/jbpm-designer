@@ -94,6 +94,7 @@
     </target>
 	
 	<target name="test.editor.server.junit.run" depends="test.editor.server.prepare.compile">
+	      <mkdir dir="junit-results"/>
         <junit printsummary="withOutAndErr" haltonfailure="no">
             <classpath>
                 <path refid="test.editor.server.classpath"/>
@@ -103,8 +104,9 @@
             
             <formatter type="xml"/>
             
-            <batchtest>
+            <batchtest todir="junit-results">
                 <fileset dir="build/editor/test/server">
+                    <include name="**/*Test.class"/>
                     <include name="**/Test*.class"/>
                 </fileset>
             </batchtest>
