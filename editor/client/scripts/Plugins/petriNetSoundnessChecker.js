@@ -268,7 +268,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 this.improperTerminatings = improperTerminatings;
                 
                 this.setIcon(this.improperTerminatings.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.improperTerminatings.length +' markings that don\'t terminate properly.');
+                this.setText('There are ' + this.improperTerminatings.length +' markings covering the final marking.');
             }
         });
         
@@ -306,14 +306,14 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 this.notParticipatingTransitions = notParticipatingTransitions;
                 
                 this.setIcon(this.notParticipatingTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.notParticipatingTransitions.length +' transitions that aren\'t participating in any process instance.');
+                this.setText('There are ' + this.notParticipatingTransitions.length +' transitions that cannot participate in a properly terminating firing sequence.');
             }
         });
         
         this.checkerWindow = new Ext.Window({
             title: 'Soundness Checks',
             autoScroll: true,
-            width: '400',
+            width: '500',
             tbar: [
                 {
                     text: 'Check', 
@@ -467,7 +467,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                 update: function(initialNodes, finalNodes){
                                     //Step through without semantic knowledge
                                     if(initialNodes.length !== 1 || finalNodes.length !== 1){
-                                        this.setText("There are more than one initial or final nodes.");
+                                        this.setText("There must be exactly one initial and final place to perform further checks!");
                                         this.setIcon(CheckNode.UNKNOWN_STATUS);
                                         return;
                                     }
