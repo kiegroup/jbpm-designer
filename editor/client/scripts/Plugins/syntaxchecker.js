@@ -110,10 +110,15 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
      * @param {Function} [options.onNoErrors] Raised when model has no errors.
      * @param {Function} [options.onErrors] Raised when model has errors.
      * @param {Function} [options.onFailure] Raised when server communcation failed.
+     * @param {boolean} [options.showErrors=true] Display errors on nodes on canvas (by calling ORYX.Plugins.SyntaxChecker.prototype.showErrors)
      */
     checkForErrors: function(options){
-        if(!options)
-            options = {};
+        Ext.applyIf(options || {}, {
+          showErrors: true,
+          onErrors: Ext.emptyFn,
+          onNoErrors: Ext.emptyFn,
+          onFailure: Ext.emptyFn
+        });
             
         Ext.Msg.wait(ORYX.I18N.SyntaxChecker.checkingMessage);
         
@@ -134,21 +139,21 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
                 if (resp instanceof Object) {
                     resp = $H(resp)
                     if (resp.size() > 0) {
-                        this.showErrors(resp);
+                        if(options.showErrors) this.showErrors(resp);
                  
-                        if(options.onErrors) options.onErrors();
+                        options.onErrors();
                     }
                     else {
-                        if(options.onNoErrors) options.onNoErrors();
+                        options.onNoErrors();
                     }
                 }
                 else {
-                    if(options.onFailure) options.onFailure();
+                    options.onFailure();
                 }
             }.bind(this),
             onFailure: function(){
                 Ext.Msg.hide();
-                if(options.onFailure) options.onFailure();
+                options.onFailure();
             }
         });
     },
@@ -228,6 +233,10 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         return cross;
     }
 });
+
+ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT = "checkForErrors";
+ORYX.Plugins.SyntaxChecker.RESET_ERRORS_EVENT = "resetErrors";
+ORYX.Plugins.SyntaxChecker.SHOW_ERRORS_EVENT = "showErrors";
 
 ORYX.Plugins.PetrinetSyntaxChecker = ORYX.Plugins.SyntaxChecker.extend({
     /*FIXME:: BPMN + EPC syntax checker needs rdf, but petri nets needs erdf.

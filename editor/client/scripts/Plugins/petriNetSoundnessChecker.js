@@ -144,6 +144,8 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             reset: function(){
                 plugin.hideOverlays();
                 this.hideMarking();
+                // Reset syntax errors
+                plugin.facade.raiseEvent({type: ORYX.Plugins.SyntaxChecker.RESET_ERRORS_EVENT});
             },
             hideMarking: function(){
                 if(!plugin.marking)
@@ -311,7 +313,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
         });
         
         this.checkerWindow = new Ext.Window({
-            title: 'Soundness Checks',
+            title: 'Soundness Checker',
             autoScroll: true,
             width: '500',
             tbar: [
@@ -338,26 +340,50 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             getTree: function(){
                 return this.items.get(0);
             },
-            check: function(renderAll){//call with renderAll=true if showing for the first time
+            check: function(renderAll){
+                this.prepareCheck(renderAll);
+                this.checkSyntax(this.checkSoundness.bind(this));
+            },
+            prepareCheck: function(renderAll){//call with renderAll=true if showing for the first time
                 var root = this.getTree().getRootNode();
                 
                 root.reset();
                 
+                // Set loading status to all child nodes
                 Ext.each(root.childNodes, function(childNode){
                     if(renderAll)//this expands all nodes so they're rendered a first time
                         childNode.expand(true);
                     childNode.collapse(true); //collapse deeply
                     childNode.setIcon(CheckNode.LOADING_STATUS);
                 });
+            },
+            checkSyntax: function(callback){
+                plugin.facade.raiseEvent({
+                    type: ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT,
+                    onErrors: function(){
+                        Ext.Msg.alert("Syntax Check", "Some syntax errors have been found, please correct them!")
+                        this.turnLoadingIntoUnknownStatus();
+                    }.bind(this),
+                    onNoErrors: function(){
+                        callback();
+                    }
+                });
+            },
+            // All child nodes with loading status get unknown status
+            turnLoadingIntoUnknownStatus: function(){
+                Ext.each(this.getTree().getRootNode().childNodes, function(childNode){
+                    // Only change icon if it is in loading state (otherwise structural soundness icon would be replaced)
+                    if(childNode.getIcon().search(CheckNode.LOADING_STATUS) > -1){
+                        childNode.setIcon(CheckNode.UNKNOWN_STATUS);
+                    }
+                });
+            },
+            checkSoundness: function(){
+                var root = this.getTree().getRootNode();
                 
                 // Check for structural soundness (no server request needed and return, if any has been found       
                 if(! root.findChild("id", "structuralSound").check()){
-                    Ext.each(root.childNodes, function(childNode){
-                        // Only change icon if it is in loading state (otherwise structural soundness icon would be replaced)
-                        if(childNode.getIcon().search(CheckNode.LOADING_STATUS) > -1){
-                            childNode.setIcon(CheckNode.UNKNOWN_STATUS);
-                        }
-                    });
+                    this.turnLoadingIntoUnknownStatus();
                     return;
                 }
                 
