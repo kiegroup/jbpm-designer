@@ -12,20 +12,24 @@ public class JsonJpdlTransformation {
 	private static StringWriter jpdlRepresentation;
 	private static HashMap<String, JSONObject> processNodes;
 	
-	public static String toJPDL(JSONObject jsonDoc) {
+	public static String toJPDL(JSONObject jsonDoc) throws InvalidModelException {
+		
 		
 		// Transform process properties
 		JSONObject processProperties;
 		try {
 			processProperties = jsonDoc.getJSONObject("properties");
-		
+			
+			if (!processProperties.getString("ssextension")
+					.equals("http://oryx-editor.org/stencilsets/extensions/jbpm#"))
+				throw new InvalidModelException("Invalid model type BPMN 1.2 with jBPM extension is required.");
+			
 			jpdlRepresentation = new StringWriter();
-			jpdlRepresentation.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			jpdlRepresentation.write("<process name=\"");
 			jpdlRepresentation.write(processProperties.getString("name")); 
 			jpdlRepresentation.write("\" xmlns=\"http://jbpm.org/4/jpdl\">\n");
 		} catch (JSONException e) {
-			// Do nothing
+			throw new InvalidModelException("Invalid model type. BPMN 1.2 with jBPM extension is required.");
 		}
 		
 		
@@ -81,7 +85,7 @@ public class JsonJpdlTransformation {
 		return jpdlRepresentation.toString();
 	}
 	
-	private static String transformBoundsForNode(JSONObject node) {
+	private static String transformBoundsForNode(JSONObject node) throws InvalidModelException {
 		// target format g="ulx,uly,width,height"
 		StringWriter g = new StringWriter();
 			g.write(" g=\"");
@@ -100,6 +104,7 @@ public class JsonJpdlTransformation {
 			
 		} catch (JSONException e) {
 			// throw error, stencil without bounds(upperLeft(x,y),lowerRight(x,y)) is invalid
+			throw new InvalidModelException("Bounds " + e.getMessage().substring(10));
 		}
 		g.write("\" ");
 		return g.toString();
@@ -117,7 +122,7 @@ public class JsonJpdlTransformation {
 				edges.write(target.getJSONObject("properties").getString("name"));
 				edges.write("\" ");
 				
-				edges.write(addAttribute(edge, "name", "name"));
+				edges.write(addAttribute(edge, "name"));
 				
 				// perhaps add condition
 				try {
@@ -135,8 +140,17 @@ public class JsonJpdlTransformation {
 		}
 		return edges.toString();
 	}
+	private static String addAttribute(JSONObject node, String name){
+		String transformedAttribute = "";
+		try {
+			 return addAttribute(node, name, name, false);
+		} catch (InvalidModelException e) {
+			// do nothing, because attribute is optional
+		}
+		return transformedAttribute;
+	}
 	
-	private static String addAttribute(JSONObject node, String old_name, String new_name) {
+	private static String addAttribute(JSONObject node, String old_name, String new_name, boolean required) throws InvalidModelException {
 		StringWriter transformedAttribute = new StringWriter();
 		try {
 			String attribute = node.getJSONObject("properties").getString(old_name);
@@ -146,17 +160,23 @@ public class JsonJpdlTransformation {
 			transformedAttribute.write(attribute);
 			transformedAttribute.write("\"");
 		} catch (JSONException e) {
-			// do nothing
+			// throw exception if attribute is required
+			if(required)
+				throw new InvalidModelException("Attribute " + e.getMessage().substring(10));
 		}
 		return transformedAttribute.toString();
 		
 	}
 	
-	private static String transformStartEvent(JSONObject node) {
+	private static String transformStartEvent(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <start");
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(transformBoundsForNode(node));
+		try {
+			transformedNode.write(addAttribute(node, "name"));
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e) {
+			throw new InvalidModelException("Invalid StartEvent. " + e.getMessage());
+		}
 		
 		// add outgoing edge
 		try {
@@ -173,12 +193,15 @@ public class JsonJpdlTransformation {
 		return transformedNode.toString();
 	}
 	
-	private static String transformState(JSONObject node) {
+	private static String transformState(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <state");
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(transformBoundsForNode(node));
-
+		try {
+			transformedNode.write(addAttribute(node, "name"));
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid Wait Activity. " + e.getMessage());
+		}
 		// add outgoing edge
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
@@ -195,13 +218,16 @@ public class JsonJpdlTransformation {
 		return transformedNode.toString();
 	}
 	
-	private static String transformExclusive(JSONObject node) {
+	private static String transformExclusive(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <exclusive");
-		
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "expr", "expr"));
-		transformedNode.write(transformBoundsForNode(node));
+		try {
+			transformedNode.write(addAttribute(node, "name"));
+			transformedNode.write(addAttribute(node, "expr"));
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid Exclusive Gateway. " + e.getMessage());
+		}
 		transformedNode.write(" >\n");
 		
 		// perhaps add handler
@@ -216,20 +242,24 @@ public class JsonJpdlTransformation {
 		try {
 			JSONArray outgoings = node.getJSONArray("outgoing");
 			transformedNode.write(addEdges(outgoings));
-			transformedNode.write("  </exclusive>\n");
 		} catch (JSONException e) {
 			// Do nothing
 		}
 		
+		transformedNode.write("  </exclusive>\n");
 		return transformedNode.toString();
 	}
 	
-	private static String transformParallel(JSONObject node) {
+	private static String transformParallel(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <fork");
 		
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(addAttribute(node, "name"));
+		try {
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid Parallel Gateway. " + e.getMessage());
+		}
 		transformedNode.write(" >\n");
 		
 		// add outgoing edge
@@ -245,56 +275,65 @@ public class JsonJpdlTransformation {
 		
 	}
 	
-	private static String transformEndEvent(JSONObject node) {
+	private static String transformEndEvent(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <end");
-		
-		transformedNode.write(addEndEventAttributes(node));
-		
+		try {
+			transformedNode.write(addEndEventAttributes(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid End Event. " + e.getMessage());
+		}
 		return transformedNode.toString();
 		
 	}
 	
-	private static String transformEndErrorEvent(JSONObject node) {
+	private static String transformEndErrorEvent(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <end-error");
-		
-		transformedNode.write(addEndEventAttributes(node));
-		
+		try {
+			transformedNode.write(addEndEventAttributes(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid End Error Event. " + e.getMessage());
+		}
 		return transformedNode.toString();
 		
 	}
 	
-	private static String transformEndCancelEvent(JSONObject node) {
+	private static String transformEndCancelEvent(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <end-cancel");
-		
-		transformedNode.write(addEndEventAttributes(node));
-		
+		try {
+			transformedNode.write(addEndEventAttributes(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid End Cancel Event. " + e.getMessage());
+		}
 		return transformedNode.toString();
-		
 	}
 	
-	private static String addEndEventAttributes(JSONObject node) {
+	private static String addEndEventAttributes(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "state", "state"));
-		transformedNode.write(addAttribute(node, "ends", "ends"));
+		transformedNode.write(addAttribute(node, "name"));
+		transformedNode.write(addAttribute(node, "state"));
+		transformedNode.write(addAttribute(node, "ends"));
 		transformedNode.write(transformBoundsForNode(node));
 		transformedNode.write(" />\n");
 		
 		return transformedNode.toString();
 	}
 
-	private static String transformJava(JSONObject node) {
+	private static String transformJava(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <java");
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "class", "class"));
-		transformedNode.write(addAttribute(node, "method", "method"));
-		transformedNode.write(addAttribute(node, "var", "var"));
-		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(addAttribute(node, "name"));
+		transformedNode.write(addAttribute(node, "class"));
+		transformedNode.write(addAttribute(node, "method"));
+		transformedNode.write(addAttribute(node, "var"));
+		try {
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid Java Activitiy. " + e.getMessage());
+		}
 		transformedNode.write(" >\n");
 		
 		// add fields (optional) TODO type != string
@@ -320,7 +359,7 @@ public class JsonJpdlTransformation {
 					try {
 						String type = item.getString("type").toLowerCase();
 						if(type.equals("string")) {
-							transformedNode.write(transformPrimititveElement(item));
+							transformedNode.write(transformPrimitiveElement(item));
 						}
 						else {
 						}
@@ -341,7 +380,7 @@ public class JsonJpdlTransformation {
 					JSONObject item = parameters.getJSONObject(i);
 					transformedNode.write("    <arg>\n");
 					// add argument node
-					transformedNode.write(transformPrimititveElement(item));
+					transformedNode.write(transformPrimitiveElement(item));
 					transformedNode.write("    </arg>\n");
 				}
 			}
@@ -356,12 +395,16 @@ public class JsonJpdlTransformation {
 		return transformedNode.toString();
 	}
 	
-	private static String transformTask(JSONObject node) {
+	private static String transformTask(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <task");
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "assignee", "assignee"));
-		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(addAttribute(node, "name"));
+		transformedNode.write(addAttribute(node, "assignee"));
+		try {
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid Task Activitiy. " + e.getMessage());
+		}
 		
 		// add outgoing edge
 		try {
@@ -379,14 +422,18 @@ public class JsonJpdlTransformation {
 		return transformedNode.toString();
 	}
 
-	private static String transformScript(JSONObject node) {
+	private static String transformScript(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <script");
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "expr", "expr"));
-		transformedNode.write(addAttribute(node, "lang", "lang"));
-		transformedNode.write(addAttribute(node, "var", "var"));
-		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(addAttribute(node, "name"));
+		transformedNode.write(addAttribute(node, "expr"));
+		transformedNode.write(addAttribute(node, "lang"));
+		transformedNode.write(addAttribute(node, "var"));
+		try {
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid Script Activitiy. " + e.getMessage());
+		}
 		transformedNode.write(">\n");
 		
 		// perhaps add text
@@ -410,13 +457,17 @@ public class JsonJpdlTransformation {
 		return transformedNode.toString();
 	}
 
-	private static String transformEsb(JSONObject node) {
+	private static String transformEsb(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <esb");
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "category", "category"));
-		transformedNode.write(addAttribute(node, "service", "service"));
-		transformedNode.write(transformBoundsForNode(node));
+		transformedNode.write(addAttribute(node, "name"));
+		transformedNode.write(addAttribute(node, "category"));
+		transformedNode.write(addAttribute(node, "service"));
+		try {
+			transformedNode.write(transformBoundsForNode(node));
+		} catch (InvalidModelException e){
+			throw new InvalidModelException("Invalid ESB Activitiy. " + e.getMessage());
+		}
 		transformedNode.write(">\n");
 		
 		// add part (optional) TODO add transformation for type = object
@@ -449,7 +500,11 @@ public class JsonJpdlTransformation {
 						String type = item.getString("type").toLowerCase();
 						if(type.equals("string")) {
 							transformedNode.write(">\n");
-							transformedNode.write(transformPrimititveElement(item));
+							try {
+								transformedNode.write(transformPrimitiveElement(item));
+							} catch (InvalidModelException e1) {
+								throw new InvalidModelException("Invalid ESB Activitiy. Part " + i + ". " + e1.getMessage());
+							}
 							transformedNode.write("    </part>\n");
 						}
 						else {
@@ -471,30 +526,35 @@ public class JsonJpdlTransformation {
 		return transformedNode.toString();
 	}
 	
-
-	private static String transformHql(JSONObject node) {
+	private static String transformHql(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <hql");
-		transformedNode.write(addQLAttributes(node));
+		try {
+			transformedNode.write(addQLAttributes(node));
+		} catch (InvalidModelException e) {
+			throw new InvalidModelException("Invalid HQL Activity " + e.getMessage());
+		}
 		transformedNode.write("  </hql>\n");
 		return transformedNode.toString();
 	}
 	
-
-	private static String transformSql(JSONObject node) {
+	private static String transformSql(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
 		transformedNode.write("  <sql");
-		transformedNode.write(addQLAttributes(node));
+		try {
+			transformedNode.write(addQLAttributes(node));
+		} catch (InvalidModelException e) {
+			throw new InvalidModelException("Invalid SQL Activity " + e.getMessage());
+		}
 		transformedNode.write("  </sql>\n");
 		return transformedNode.toString();
 	}
 	
-
-	private static String addQLAttributes(JSONObject node) {
+	private static String addQLAttributes(JSONObject node) throws InvalidModelException {
 		StringWriter transformedNode = new StringWriter();
-		transformedNode.write(addAttribute(node, "name", "name"));
-		transformedNode.write(addAttribute(node, "var", "var"));
-		transformedNode.write(addAttribute(node, "unique", "unique"));
+		transformedNode.write(addAttribute(node, "name"));
+		transformedNode.write(addAttribute(node, "var"));
+		transformedNode.write(addAttribute(node, "unique"));
 		transformedNode.write(transformBoundsForNode(node));
 		transformedNode.write(">\n");
 
@@ -505,7 +565,8 @@ public class JsonJpdlTransformation {
 			transformedNode.write(query);
 			transformedNode.write("\n    </query>\n");
 		} catch (JSONException e) {
-			// TODO throw Error - Query is required
+			// throw Error - Query is required
+			throw new InvalidModelException(e.getMessage().substring(10));
 		}
 		
 		// add parameters TODO add transformation for type = object
@@ -517,8 +578,12 @@ public class JsonJpdlTransformation {
 				transformedNode.write("    <parameters>\n");
 				for(int i = 0; i < parameters.length(); i++) {
 					JSONObject item = parameters.getJSONObject(i);
-					if(item.getString("type").toLowerCase().equals("string")) {
-						transformedNode.write(transformPrimititveElement(item));
+					try {
+						if(item.getString("type").toLowerCase().equals("string")) {
+							transformedNode.write(transformPrimitiveElement(item));
+						}
+					} catch (InvalidModelException e1) {
+						throw new InvalidModelException("Parameter " + i + ". " + e1.getMessage());
 					}
 					
 				}
@@ -534,7 +599,7 @@ public class JsonJpdlTransformation {
 		return transformedNode.toString();
 	}
 	
-	private static String transformPrimititveElement(JSONObject item) {
+	private static String transformPrimitiveElement(JSONObject item) throws InvalidModelException {
 		StringWriter element = new StringWriter();
 		
 		// add type (required)
@@ -542,7 +607,8 @@ public class JsonJpdlTransformation {
 			String type = item.getString("type").toLowerCase();
 			element.write("      <" + type);
 		} catch (JSONException e) {
-			// TODO throw Exception, type is required
+			// throw Exception, type is required
+			throw new InvalidModelException("Type is missing.");
 		}
 		
 		// add name (optional)

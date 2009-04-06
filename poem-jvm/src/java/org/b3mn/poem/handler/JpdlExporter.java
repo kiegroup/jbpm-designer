@@ -60,13 +60,17 @@ public class JpdlExporter extends HandlerBase {
   			factory.setNamespaceAware(true);
   			DocumentBuilder builder = factory.newDocumentBuilder();
   			Document rdfDoc = builder.parse(new ByteArrayInputStream(rdfRepresentation.getBytes()));
-
-  			String jpdlRepresentation = JsonJpdlTransformation.toJPDL(RdfJsonTransformation.toJson(rdfDoc, serverUrl.toString()));
+  			out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+  			try {
+  				out.write(JsonJpdlTransformation.toJPDL(RdfJsonTransformation.toJson(rdfDoc, serverUrl.toString())));
+  			} catch (Exception e) {
+  				out.write("<error>");
+  				out.write(e.getMessage());
+  				out.write("</error>");
+  			}
   			
-  			out.write(jpdlRepresentation);
-  			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
     }
 }
