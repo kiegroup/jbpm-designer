@@ -978,7 +978,7 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 			items		:[grid],
 			listeners	:{
 				hide: function(){
-					this.fireEvent('dialogClosed', this.data);
+					this.fireEvent('dialogClosed', this.value);
 					//this.focus.defer(10, this);
 					dialog.destroy();
 				}.bind(this)				
@@ -998,6 +998,7 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
+					this.setValue(this.value);
                 	dialog.hide()
                 }.bind(this)
             }]
