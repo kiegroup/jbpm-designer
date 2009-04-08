@@ -676,7 +676,23 @@
 					"title":"Assignee",
 					"description":"id of the person to which this task must be assigned",
 					"readonly":false,
-					"optional":false
+					"optional":true
+				},
+				{
+					"id":"candidate-groups",
+					"type":"String",
+					"title":"Candidate Groups",
+					"description":"resolves to a comma separated list of groupIds. All the people in the groups will be candidates for this task.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"candidate-users",
+					"type":"String",
+					"title":"Candidate Users",
+					"description":"resolves to a comma separated list of userIds. All the users will be candidates for this task.",
+					"readonly":false,
+					"optional":true
 				},
 			]
 		},
