@@ -7554,7 +7554,7 @@
 			{
 				"role":"faultHandlers",
 				"contains": ["catch","catchAll"]
-			},
+			}
 		]
 	}
 }

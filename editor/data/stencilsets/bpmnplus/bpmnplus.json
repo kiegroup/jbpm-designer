@@ -393,7 +393,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -428,7 +428,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -970,7 +970,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -1005,7 +1005,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -1397,7 +1397,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -1502,7 +1502,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -1896,7 +1896,7 @@
 							"value":"##opaque",
 							"width":200,
 							"optional":false
-						},
+						}
 					]
 				},
 				{
@@ -2021,7 +2021,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -2126,7 +2126,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -2458,7 +2458,7 @@
 							"value":"##opaque",
 							"width":200,
 							"optional":false
-						},
+						}
 					]
 				},
 				{
@@ -2594,7 +2594,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -2699,7 +2699,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -3174,7 +3174,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -3279,7 +3279,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -3612,7 +3612,7 @@
 										"fromspecquerylanguage",
 										"fromspecquery",
 										"fromspecexpressionlanguage",
-										"fromspecexpression",							
+										"fromspecexpression"							
 									]
 								},
 								{
@@ -3766,7 +3766,7 @@
 										"tospecpart",
 										"tospecproperty",
 										"tospecquerylanguage",
-										"tospecquery",					
+										"tospecquery"
 									]
 								},
 								{
@@ -3850,7 +3850,7 @@
 							"value":"",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},			
 				{
@@ -3968,7 +3968,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -4073,7 +4073,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -4404,7 +4404,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -4509,7 +4509,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -4840,7 +4840,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -4945,7 +4945,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -5189,7 +5189,7 @@
 				"fromtoall",
 				"subProcess",
 				"assoc_start_from_set",
-				"assoc_start_from_ref",
+				"assoc_start_from_ref"
 			],
 			
             "properties": [
@@ -5283,7 +5283,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -5388,7 +5388,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -5790,7 +5790,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -5895,7 +5895,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -6001,7 +6001,7 @@
 			"roles": [
 				"noGateway",
 				"tc",
-				"fromtoall",
+				"fromtoall"
 			],
 			
             "properties": [
@@ -6095,7 +6095,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6200,7 +6200,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -6291,7 +6291,7 @@
 					"refToView":"handlerrect",
 					"fill":true,
 					"stroke":false
-				},
+				}
             ]
 		},
 // ************************ Timer Handler *****************************************
@@ -6306,7 +6306,7 @@
 			"roles": [
 				"noGateway",
 				"tc",
-				"fromtoall",				
+				"fromtoall"
 			],
 			
             "properties": [
@@ -6400,7 +6400,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6505,7 +6505,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -6596,7 +6596,7 @@
 					"refToView":"handlerrect",
 					"fill":true,
 					"stroke":false
-				},
+				}
             ]
 		},
 // ************************ Termination Handler *****************************************
@@ -6706,7 +6706,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -6811,7 +6811,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -6994,7 +6994,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7099,7 +7099,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -7273,7 +7273,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7397,7 +7397,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7522,7 +7522,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7647,7 +7647,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7774,7 +7774,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -7933,7 +7933,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -8077,7 +8077,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -8261,7 +8261,7 @@
 			"view":"artifact/node.data.object.svg",
 			"icon":"new_var_data_object.png",
 			"roles": [
-				"fromtoall",
+				"fromtoall"
 			],
 			"serialize":function(shape, data) {
 
@@ -8428,7 +8428,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -8618,7 +8618,7 @@
 										"querylanguage",
 										"query",
 										"expressionlanguage",
-										"expression",							
+										"expression"						
 									]
 								},
 								{
@@ -8712,7 +8712,7 @@
 							"value":"",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -8740,7 +8740,7 @@
 			"icon":"new_error_var.png",
 			"roles": [
 				"fromtoall",
-				"tc",
+				"tc"
 			],
 			"serialize":function(shape, data) {
 
@@ -8907,7 +8907,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},	
 				{
@@ -9013,7 +9013,7 @@
 			"icon":"new_message_var.png",
 			"roles": [
 				"fromtoall",
-				"tc",
+				"tc"
 			],
 			"serialize":function(shape, data) {
 
@@ -9180,7 +9180,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -9285,7 +9285,7 @@
 			"view":"artifact/node.data.object.counter.svg",
 			"icon":"new_counter_var.png",
 			"roles": [
-				"fromtoall",
+				"fromtoall"
 			],
 			"serialize":function(shape, data) {
 
@@ -9453,7 +9453,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -9650,7 +9650,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -9739,7 +9739,7 @@
 					"description":"The id of the scope that limits the context of the reference.",
 					"readonly":false,
 					"optional":true
-				},
+				}
 			]
 		},
 // ************************** Participant Set Data Object *******************
@@ -9884,7 +9884,7 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
 				},
 				{
@@ -9934,7 +9934,7 @@
 					"description":"The id of the scope that limits the context of the set.",
 					"readonly":false,
 					"optional":true
-				},
+				}
 			]
 		},		
 // *********************** Non-triggered Start Event *********************************		
@@ -10035,7 +10035,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10176,7 +10176,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10310,7 +10310,7 @@
 							"value":"##opaque",
 							"width":200,
 							"optional":false
-						},
+						}
 					]
 				},				
 				{
@@ -10436,7 +10436,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10637,7 +10637,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -10733,7 +10733,7 @@
 							"value":"##opaque",
 							"width":200,
 							"optional":false
-						},
+						}
 					]
 				},
 				{
@@ -10907,7 +10907,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -11126,7 +11126,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},			
 				{
@@ -11311,7 +11311,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},			
 				{
@@ -11498,7 +11498,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},				
 				{
@@ -11645,7 +11645,7 @@
 									"refToView":""
 								}
 							]
-						},
+						}
 					]
 				},
 				{
@@ -12258,9 +12258,9 @@
 							"value":"false",
 							"width":100,
 							"optional":true
-						},
+						}
 					]
-				},
+				}
 			]
 		}
 	],
@@ -12451,7 +12451,7 @@
 						role:"DefaultFlow",
 						maximum:1
 						
-					},					
+					}
 				],
 				incomingEdges: [
 					{
@@ -12572,7 +12572,7 @@
 					"tc",
 					"StartEvent",
 					"StartMessageEvent",
-					"StandardVariableDataObject",
+					"StandardVariableDataObject"
 				]
 			},
 			{
@@ -12580,14 +12580,14 @@
 				"contains": [
 					"tc",
 					"StartEvent",
-					"StartMessageEvent",
+					"StartMessageEvent"
 				]
 			},
 			{
 				"role":"Scope",
 				"contains": [
 					"CounterVariableDataObject",
-					"StandardVariableDataObject",
+					"StandardVariableDataObject"
 				]
 			},
 			{
