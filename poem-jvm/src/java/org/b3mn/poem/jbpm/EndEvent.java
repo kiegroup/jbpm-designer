@@ -46,7 +46,7 @@ public class EndEvent extends Node {
 	protected String writeAttributes() throws InvalidModelException {
 		StringWriter jpdl = new StringWriter();
 		jpdl.write(JsonToJpdl.transformAttribute("name", name));
-		if(!ends.equals("processinstance")) // processinstance is implicit
+		if(!ends.equals("processinstance")) // processinstance is default value
 			jpdl.write(JsonToJpdl.transformAttribute("ends", ends));
 		jpdl.write(JsonToJpdl.transformAttribute("state", state));
 		
