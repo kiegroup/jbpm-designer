@@ -33,8 +33,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.b3mn.poem.Identity;
+import org.b3mn.poem.jbpm.InvalidModelException;
+import org.b3mn.poem.jbpm.JsonToJpdl;
 import org.b3mn.poem.util.ExportHandler;
-import org.b3mn.poem.util.JsonJpdlTransformation;
 import org.b3mn.poem.util.RdfJsonTransformation;
 import org.w3c.dom.Document;
 
@@ -61,13 +62,15 @@ public class JpdlExporter extends HandlerBase {
   			DocumentBuilder builder = factory.newDocumentBuilder();
   			Document rdfDoc = builder.parse(new ByteArrayInputStream(rdfRepresentation.getBytes()));
   			out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+  			JsonToJpdl transformation = JsonToJpdl.createInstance(RdfJsonTransformation.toJson(rdfDoc, serverUrl.toString()));
+  			String result = "";
   			try {
-  				out.write(JsonJpdlTransformation.toJPDL(RdfJsonTransformation.toJson(rdfDoc, serverUrl.toString())));
-  			} catch (Exception e) {
-  				out.write("<error>");
-  				out.write(e.getMessage());
-  				out.write("</error>");
+  				result = transformation.transform();
+  				//out.write(JsonJpdlTransformation.toJPDL(RdfJsonTransformation.toJson(rdfDoc, serverUrl.toString())));
+  			} catch (InvalidModelException e) {
+  				result = "<error>" + e.getMessage() + "</error>";
   			}
+  			out.write(result);
   			
 		} catch (Exception e1) {
 			e1.printStackTrace();
