@@ -73,17 +73,6 @@ public class PetriNetSoundnessChecker {
 		return deadLockMarkings.size() == 0 && improperTerminatingMarkings.size() == 0;
 	}
 
-	public void checkLazySoundness() {
-		// 1. In Blättern ist in jeder Endstelle genau 1 Token
-		
-		// 2. All markings don't have more than 1 token on end place
-		for(Marking marking : rg.getMarkings()){
-			if(marking.getNumTokens(net.getFinalPlace()) > 1){
-				//...
-			}
-		}
-	}
-
 	/**
 	 * Calculate all markings which are leaves and are deadlocks (which aren't final markings)
 	 */
