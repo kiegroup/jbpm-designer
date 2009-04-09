@@ -1,7 +1,11 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+import java.util.UUID;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StartEvent extends Node {
@@ -37,6 +41,33 @@ public class StartEvent extends Node {
 		}
 
 		return jpdl.toString();
+	}
+	
+	public JSONObject toJson() throws JSONException {
+		
+		JSONObject stencil = new JSONObject();
+		stencil.put("id", "StartEvent");
+		
+		JSONArray outgoing = new JSONArray();
+		// TODO add outgoings
+		
+		JSONObject properties = new JSONObject();
+		properties.put("bgcolor", "#ffffff");
+		if( name != null)
+			properties.put("name", name);
+		
+		JSONArray childShapes = new JSONArray();
+		
+		JSONObject startEvent = new JSONObject();
+
+		startEvent.put("bounds", bounds.toJson());
+		startEvent.put("resourceId", "oryx_" + UUID.randomUUID().toString());
+		startEvent.put("stencil", stencil);
+		startEvent.put("outgoing", outgoing);
+		startEvent.put("properties", properties);
+		startEvent.put("childShapes", childShapes);
+		
+		return startEvent;
 	}
 }
 

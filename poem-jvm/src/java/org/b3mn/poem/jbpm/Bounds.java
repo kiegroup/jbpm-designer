@@ -32,4 +32,21 @@ public class Bounds {
 		return jpdl.toString();
 	}
 	
+	public JSONObject toJson() throws JSONException {
+
+		JSONObject lowerRight = new JSONObject();
+		lowerRight.put("x", ulx + width);
+		lowerRight.put("y", uly + height);
+		
+		JSONObject upperLeft = new JSONObject();
+		upperLeft.put("x", ulx);
+		upperLeft.put("y", uly);
+		
+		JSONObject bounds = new JSONObject();
+		bounds.put("lowerRight", lowerRight);
+		bounds.put("upperLeft", upperLeft);
+		
+		return bounds;
+	}
+	
 }

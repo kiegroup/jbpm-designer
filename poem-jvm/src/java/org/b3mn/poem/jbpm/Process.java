@@ -31,7 +31,7 @@ public class Process {
 		} catch (JSONException e) {}
 		
 		try {
-			this.description = process.getJSONObject("properties").getString("description");
+			this.description = process.getJSONObject("properties").getString("documentation");
 		} catch (JSONException e) {}
 		
 		childNodes = new ArrayList<Node>();
@@ -93,6 +93,38 @@ public class Process {
 		
 		jpdl.write("</process>");
 		return jpdl.toString();
+	}
+	
+	public String toJson() throws JSONException {
+		JSONObject process = new JSONObject();
+		
+		JSONObject stencilset = new JSONObject();
+		stencilset.put("url", "/oryx/stencilsets/bpmn1.1/bpmn1.1.json");
+		
+		JSONObject stencil =  new JSONObject();
+		stencil.put("id", "BPMNDiagram");
+		
+		JSONObject properties = new JSONObject();
+		properties.put("ssextension", "http://oryx-editor.org/stencilsets/extensions/jbpm#");
+		if(name != null) 
+			properties.put("name", name);
+		if(key != null)
+			properties.put("key", key);
+		if(version != null)
+			properties.put("version", version);
+		if(description != null)
+			properties.put("documentation", description);
+		
+		process.put("resourceId", "oryx-canvas123");
+		process.put("stencilset", stencilset);
+		process.put("stencil", stencil);
+		process.put("properties", properties);
+		JSONArray childShapes = new JSONArray();
+		
+		// TODO add all childShapes
+		
+		process.put("childShapes", childShapes);
+		return process.toString();
 	}
 	
 	

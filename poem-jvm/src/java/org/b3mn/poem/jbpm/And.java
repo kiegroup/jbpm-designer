@@ -16,7 +16,13 @@ public class And extends Node {
 	@Override
 	public String toJpdl() throws InvalidModelException {
 		StringWriter jpdl = new StringWriter();
-		jpdl.write("<fork");
+		String type = "";
+		if(outgoings.size() <= 1)
+			type = "join";
+		else
+			type = "fork";
+		
+		jpdl.write("<" + type);
 		
 		jpdl.write(JsonToJpdl.transformAttribute("name", name));
 		
@@ -31,7 +37,7 @@ public class And extends Node {
 			for (Transition t : outgoings) {
 				jpdl.write(t.toJpdl());
 			}
-			jpdl.write("</fork>\n");
+			jpdl.write("</"+ type +">\n");
 		} else {
 			jpdl.write(" />\n");
 		}
