@@ -146,15 +146,20 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   		bufferResultString = writer.toString();
 	   		String resultString = postprocessTopology(out, bufferResultString);
 	   		printResponse (out, "topology", resultString);
-	   	   	out.print(',');
 	   	} catch (Exception e){
 	   		handleException(out, "topology", e); 
 	   	}
+	   	
+	   	out.print(',');
 
    }
     
     private String postprocessTopology (PrintWriter out, String oldString){
  	   
+    	// initialize
+    	nodeMapForTopology.clear();
+    	messageLinkMapForTopology.clear();
+    	
  	   StringWriter stringOut = new StringWriter();
  	   try {
  			// transform string to document
@@ -419,6 +424,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 		// key :  link name - type String
 		// value : messageLinkElement - type Element
 		HashMap<String, Element> linkNameRecorder = new HashMap<String, Element>();
+		linkNameRecorder.clear();
 		
 		Set<String> messageLinkIDSet = messageLinkMapForTopology.keySet();
 		Iterator<String> IDSetIter = messageLinkIDSet.iterator();
@@ -663,7 +669,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 	 
 	   	// Get the result string
 	   	String bufferResultString = null;
-	   	 String resultString = null;
+	   	String resultString = null;
 	   	try {
 	   		Transformer transformer = transformerFactory
 	   						.newTransformer(xsltSource);
@@ -672,15 +678,19 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   		bufferResultString = writer.toString();
 	   		resultString = postprocessGrounding
 	   						(out, bufferResultString);
+		   	
+	   		if (existsGrounding(resultString)){
+		   		printResponse (out, "grounding", resultString);
+		   		out.print(',');
+	   		}
 	   		
 	   	} catch (Exception e){
 	   		handleException(out, "grounding", e);
-	   	}
-	   	
-	   	if (existsGrounding(resultString)){
-	   		printResponse (out, "grounding", resultString);
 	   		out.print(',');
 	   	}
+	   	
+
+	   		
 
    }
 
@@ -721,7 +731,6 @@ public class BPEL4ChorExporter extends HttpServlet {
      }
     
     private Document handleGroundingDocument(Document oldDocument) {
-		// TODO Auto-generated method stub
 		return oldDocument;
 	}
 

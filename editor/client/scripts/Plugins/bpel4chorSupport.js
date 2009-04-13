@@ -159,21 +159,26 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 	 * it is checked if the topology and process were generated
 	 * successfully.
 	 * 
-	 * @param {String} topology    The generated topology 
-	 * @param {String[]} processes The generated processes
+	 * @param {String}   topology     The generated topology 
+	 * @param {String}   grounding    The generated grounding 
+	 * @param {String[]} processes    The generated processes
 	 */
 	buildTransData: function(topology, grounding, processes) {
-		var data = [
-		    ["topology", topology, this.dialogSupport.getResultInfo(topology)],
-		    ["grounding", grounding, this.dialogSupport.getResultInfo(grounding)]
-		];
+		var data = [["topology", topology, this.dialogSupport.getResultInfo(topology)]];
+		
+		var counter = 1;
+		
+		if (grounding.indexOf("WSDLproperty")>0){
+			data[1]= ["grounding", grounding, this.dialogSupport.getResultInfo(grounding)];
+			counter++;
+		};
 		
 		for (var i = 0; i < processes.length; i++) {
 			var name = this.dialogSupport.getProcessName(processes[i]);
 			if (name == undefined) {
 				name = "Process " + (i+1);
 			}
-			data[i+2] = [name, processes[i], this.dialogSupport.getResultInfo(processes[i])];
+			data[i+counter] = [name, processes[i], this.dialogSupport.getResultInfo(processes[i])];
 		}	
 		
 		return data;
