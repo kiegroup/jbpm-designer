@@ -7069,7 +7069,7 @@
 					"type":"String",
 					"title":"messageName",
 					"title_de":"messageName",
-					"value":"NCName",
+					"value":"",
 					"description":"",
 					"tooltip":"",
 					"readonly":false,
