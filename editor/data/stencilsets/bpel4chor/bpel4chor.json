@@ -590,78 +590,7 @@
 							"optional":true
 						}
 					]			
-				},	
-				{
-					"id":"PartnerLinks",
-					"type":"Complex",
-					"title":"PartnerLinks",
-					"title_de":"PartnerVerbindungen",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"complexItems": [
-						{
-							"id":"name",
-							"name":"Name",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"PartnerLinkType",
-							"name":"PartnerLinkType",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false
-						},
-						{
-							"id":"myRole",
-							"name":"myRole",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":true
-						},
-						{
-							"id":"partnerRole",
-							"name":"partnerRole",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":true
-						},
-						{
-							"id":"initializePartnerRole",
-							"name":"initializePartnerRole",
-							"value":"",
-							"width":100,
-							"type":"Choice",
-							"optional":true,
-							"items": [
-								{
-									"id":"yes",
-									"title":"yes",
-									"title_de":"ja",
-									"value":"yes",
-									"tooltip":""
-								},
-								{
-									"id":"no",
-									"title":"no",
-									"title_de":"nein",
-									"value":"no",
-									"tooltip":""
-								}
-							]
-								
-						}
-
-						
-					]
-				},	
+				},
 				{
 					"id":"CorrelationSets",
 					"type":"Complex",
@@ -870,51 +799,6 @@
 							"refToView":"none"
 						}
 					]
-				},
-				{
-					"id":"partnerLink",
-					"prefix":"oryx",
-					"type":"searcher",
-					"searchBPELId":"process","searchScopeId":"Scope",
-					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
-					"title":"partnerLink",
-					"title_de":"Partnerverbindung",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"length":undefined
-				},
-				{
-					"id":"portType",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"portType",
-					"title_de":"Port-typ",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"operation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"operation",
-					"title_de":"Operation",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
 				},
 				{
 					"id":"inputVariable",
@@ -1237,51 +1121,6 @@
 					]
 				},
 				{
-					"id":"partnerLink",
-					"prefix":"oryx",
-					"type":"searcher",
-					"searchBPELId":"process","searchScopeId":"Scope",
-					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
-					"title":"partnerLink",
-					"title_de":"Partnerverbindungen",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"length":undefined
-				},
-				{
-					"id":"portType",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"portType",
-					"title_de":"Port-Typ",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"operation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"operation",
-					"title_de":"Operation",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
 					"id":"variable",
 					"prefix":"oryx",
 					"type":"searcher",
@@ -1527,51 +1366,6 @@
 							"refToView":"none"
 						}
 					]
-				},
-				{
-					"id":"partnerLink",
-					"prefix":"oryx",
-					"type":"searcher",
-					"searchBPELId":"process","searchScopeId":"Scope",
-					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
-					"title":"partnerLink",
-					"title_de":"Partnerverbindung",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"length":undefined
-				},
-				{
-					"id":"portType",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"portType",
-					"title_de":"Port-Typ",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"operation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"operation",
-					"title_de":"Operation",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
 				},
 				{
 					"id":"variable",
@@ -1957,52 +1751,6 @@
 					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
-				},
-				{
-					"id":"partnerLink",
-					"prefix":"oryx",
-					"type":"searcher",
-					"searchBPELId":"process","searchScopeId":"Scope",
-					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
-					"title":"partnerLink",
-					"title_de":"PartnerVerbindung",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"portType",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"portType",
-					"title_de":"Port-Typ",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"operation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"operation",
-					"title_de":"Operation",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
 				},
 				{
 					"id":"variable",
@@ -5128,51 +4876,6 @@
 					"refToView":"documentation",
 					"length":undefined,
 					"wrapLines":true
-				},
-				{
-					"id":"partnerLink",
-					"prefix":"oryx",
-					"type":"searcher",
-					"searchBPELId":"process","searchScopeId":"Scope",
-					"searchPropertieBPEL":"PartnerLinks","searchPropertieScope":"PartnerLinks",
-					"title":"partnerLink",
-					"title_de":"Partnerverbindung",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"length":undefined
-				},
-				{
-					"id":"portType",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"portType",
-					"title_de":"Port-Typ",
-					"value":"",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
-				},
-				{
-					"id":"operation",
-					"prefix":"oryx",
-					"type":"String",
-					"title":"operation",
-					"title_de":"Operation",
-					"value":"NCName",
-					"description":"",
-					"tooltip":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":undefined,
-					"wrapLines":false
 				},
 				{
 					"id":"choiceValue",
