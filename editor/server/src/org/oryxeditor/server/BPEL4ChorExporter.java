@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -80,6 +81,13 @@ public class BPEL4ChorExporter extends HttpServlet {
 	//         - type Object[]
 	private HashMap<String, Object[]> messageLinkMapForTopology = new HashMap<String, Object[]>();
 
+	// use a hash map to record all process-paticipantRef relationship
+	//
+	// in this hash map:
+	// key : process ID - type String
+	// value : {paticipantName}- type String
+	private HashMap<String, Object[]> processMapForTopology = new HashMap<String, Object[]>();
+
 
 	/**
      * The POST request.
@@ -120,7 +128,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 	/**************************  topology ***********************************/
     private void transformTopology (String rdfString, PrintWriter out){
   	   
-    	System.out.println(rdfString);
+    	//System.out.println(rdfString);
 	   	// XSLT source
 	   	final String xsltFilename = System.getProperty("catalina.home") 
 	   			+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
@@ -154,43 +162,39 @@ public class BPEL4ChorExporter extends HttpServlet {
 
    }
     
-    private String postprocessTopology (PrintWriter out, String oldString){
+    private String postprocessTopology (PrintWriter out, String oldString) throws Exception{
  	   
     	// initialize
     	nodeMapForTopology.clear();
     	messageLinkMapForTopology.clear();
     	
- 	   StringWriter stringOut = new StringWriter();
- 	   try {
- 			// transform string to document
- 			DocumentBuilderFactory factory = 
- 				DocumentBuilderFactory.newInstance();
- 			factory.setNamespaceAware(true);
- 			DocumentBuilder builder = factory.newDocumentBuilder();
- 			InputStream oldResultInputStream = new ByteArrayInputStream
- 								(oldString.getBytes());
- 			Document oldDocument = builder.parse(oldResultInputStream);
- 			
- 			// rearrange document
- 			Document newDocument = handleTopologyDocument(oldDocument);
- 			
- 			// transform document to string
- 			TransformerFactory tFactory = TransformerFactory.newInstance();
- 			Transformer transformer = tFactory.newTransformer();
- 			DOMSource source = new DOMSource(newDocument);
- 			StreamResult result = new StreamResult(stringOut);
- 			transformer.transform(source, result);
- 			stringOut.flush();
- 	 
- 		} catch (Exception e){
- 			handleException(out,"topology", e); 
- 		}
- 		
+ 	   	StringWriter stringOut = new StringWriter();
+ 	   	
+		// transform string to document
+		DocumentBuilderFactory factory = 
+			DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		InputStream oldResultInputStream = new ByteArrayInputStream
+							(oldString.getBytes());
+		Document oldDocument = builder.parse(oldResultInputStream);
+		
+		// rearrange document
+		Document newDocument = handleTopologyDocument(oldDocument);
+		
+		// transform document to string
+		TransformerFactory tFactory = TransformerFactory.newInstance();
+		Transformer transformer = tFactory.newTransformer();
+		DOMSource source = new DOMSource(newDocument);
+		StreamResult result = new StreamResult(stringOut);
+		transformer.transform(source, result);
+		stringOut.flush();
+ 
  		return stringOut.toString();
-
     }
     
     private Document handleTopologyDocument(Document oldDocument) {
+    	
 		Element topology = getChildElementWithNodeName(oldDocument, 
 				"topology", false);
 		
@@ -347,7 +351,6 @@ public class BPEL4ChorExporter extends HttpServlet {
 						childElement.setAttribute("participantBehaviorDescription", 
 								prefix + ":" + processName);
 					}
-					
 				}
 				
 			}
@@ -489,22 +492,22 @@ public class BPEL4ChorExporter extends HttpServlet {
 				String currentSendActivities = messageLink.getAttribute("sendActivities");
 				String currentReveiveActivities = messageLink.getAttribute("reveiveActivities");
 				
-				if (!currentSenders.contains(" ")){
+				if (currentSenders != null && !currentSenders.contains(" ")){
 					messageLink.setAttribute("sender", currentSenders);
 					messageLink.removeAttribute("senders");
 				}
 				
-				if (!currentReceivers.contains(" ")){
+				if (currentReceivers != null && !currentReceivers.contains(" ")){
 					messageLink.setAttribute("receiver", currentReceivers);
 					messageLink.removeAttribute("receivers");
 				}
 				
-				if (!currentSendActivities.contains(" ")){
+				if (currentSendActivities != null && !currentSendActivities.contains(" ")){
 					messageLink.setAttribute("sendActivity", currentSendActivities);
 					messageLink.removeAttribute("sendActivities");
 				}
 				
-				if (!currentReveiveActivities.contains(" ")){
+				if (currentReveiveActivities != null && !currentReveiveActivities.contains(" ")){
 					messageLink.setAttribute("reveiveActivity", currentReveiveActivities);
 					messageLink.removeAttribute("reveiveActivities");
 				}
@@ -668,71 +671,22 @@ public class BPEL4ChorExporter extends HttpServlet {
 	   	rdfSource = new StreamSource(rdf);
 	 
 	   	// Get the result string
-	   	String bufferResultString = null;
 	   	String resultString = null;
 	   	try {
 	   		Transformer transformer = transformerFactory
 	   						.newTransformer(xsltSource);
 	   		StringWriter writer = new StringWriter();
 	   		transformer.transform(rdfSource, new StreamResult(writer));
-	   		bufferResultString = writer.toString();
-	   		resultString = postprocessGrounding
-	   						(out, bufferResultString);
-		   	
-	   		if (existsGrounding(resultString)){
-		   		printResponse (out, "grounding", resultString);
-		   		out.print(',');
-	   		}
-	   		
+	   		resultString = writer.toString();
+	   		printResponse (out, "grounding", resultString); 		
 	   	} catch (Exception e){
 	   		handleException(out, "grounding", e);
-	   		out.print(',');
 	   	}
 	   	
-
+	   	out.print(',');
 	   		
 
    }
-
-    private boolean existsGrounding(String resultString) {
-		return true;
-    	//return resultString.contains("WSDLproperty");
-	}
-
-	private String postprocessGrounding (PrintWriter out, String oldString){
-  	   
-  	   StringWriter stringOut = new StringWriter();
-  	   try {
-  			// transform string to document
-  			DocumentBuilderFactory factory = 
-  					DocumentBuilderFactory.newInstance();
-  			DocumentBuilder builder = factory.newDocumentBuilder();
-  			InputStream oldResultInputStream = new ByteArrayInputStream
-  						(oldString.getBytes());
-  			Document oldDocument = builder.parse(oldResultInputStream);
-  			
-  			// rearrange document
-  			Document newDocument = handleGroundingDocument(oldDocument);
-  			
-  			// transform document to string
-  			TransformerFactory tFactory = TransformerFactory.newInstance();
-  			Transformer transformer = tFactory.newTransformer();
-  			DOMSource source = new DOMSource(newDocument);
-  			StreamResult result = new StreamResult(stringOut);
-  			transformer.transform(source, result);
-  			stringOut.flush();
-  	 
-  		} catch (Exception e){
-  			handleException(out,"grounding", e); 
-  		}
-  		
-  		return stringOut.toString();
-
-     }
-    
-    private Document handleGroundingDocument(Document oldDocument) {
-		return oldDocument;
-	}
 
     /****************************  processes  *******************************/
 	private void transformProcesses (String rdfString, PrintWriter out){

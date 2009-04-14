@@ -9,13 +9,13 @@
 	
 	<xsl:template match="rdf:Description">	
 		<xsl:variable name="typeString" select="./oryx:type" />	
-		<xsl:variable name="type">
+		<xsl:variable name="nodeType">
 			<xsl:call-template name="get-exact-type">
 				<xsl:with-param name="typeString" select="$typeString" />
 			</xsl:call-template>
 		</xsl:variable>
 
-		<xsl:if test="$type='worksheet'">
+		<xsl:if test="$nodeType='worksheet'">
 			<!-- root element -->
 			<topology>
 				<xsl:variable name="name" select="./oryx:name" />
@@ -95,14 +95,14 @@
 	<xsl:template name="find-all-messageLinks">
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="typeString" select="./oryx:type" />	
-			<xsl:variable name="type">
+			<xsl:variable name="nodeType">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
 				</xsl:call-template>
 			</xsl:variable>
 			
 			<!--messageLink-->
-			<xsl:if test="$type='messageLink'">
+			<xsl:if test="$nodeType='messageLink'">
 				<messageLink>
 					<xsl:variable name="currentID" select="@rdf:about" />
 					<xsl:if test="$currentID!=''">
@@ -159,14 +159,14 @@
 	<xsl:template name="find-all-participants">
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="typeString" select="./oryx:type" />	
-			<xsl:variable name="type">
+			<xsl:variable name="nodeType">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
 				</xsl:call-template>
 			</xsl:variable>
 			
 			<!--record all participant information-->
-			<xsl:if test="$type='participant'">
+			<xsl:if test="$nodeType='participant'">
 				<participant>
 					<xsl:variable name="name" select="./oryx:name" />
 					<xsl:if test="$name!=''">
@@ -215,6 +215,28 @@
 					</xsl:call-template>
 				</participant>
 			</xsl:if>
+			
+			<!--record all single process als participant-->
+			<xsl:if test="$nodeType='process'">
+				<participant>
+					<xsl:variable name="name" select="./oryx:name" />
+					<xsl:if test="$name!=''">
+						<xsl:attribute name="name">
+							<xsl:value-of select="$name" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:variable name="type" select="./oryx:participanttype" />
+					<xsl:if test="$type!=''">
+						<xsl:attribute name="type">
+							<xsl:value-of select="$type" />
+						</xsl:attribute>
+					</xsl:if>
+					<xsl:if test="$type=''">
+						<xsl:attribute name="type" select="./oryx:name" />
+					</xsl:if>
+				</participant>
+			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>	
 	
@@ -222,14 +244,14 @@
 	<xsl:template name="find-all-participantSets">
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="typeString" select="./oryx:type" />	
-			<xsl:variable name="type">
+			<xsl:variable name="nodeType">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
 				</xsl:call-template>
 			</xsl:variable>
 		
 			<!--participantSet-->
-			<xsl:if test="$type='participantSet'">
+			<xsl:if test="$nodeType='participantSet'">
 				<participantSet>
 					<xsl:variable name="id" select="@rdf:about" />
 					<xsl:if test="$id!=''">
@@ -237,7 +259,6 @@
 							<xsl:value-of select="$id" />
 						</xsl:attribute>
 					</xsl:if>
-					
 					
 					<xsl:variable name="name" select="./oryx:name" />
 					<xsl:if test="$name!=''">
@@ -286,14 +307,14 @@
 	<xsl:template name="find-all-participantTypes">
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="typeString" select="./oryx:type" />	
-			<xsl:variable name="type">
+			<xsl:variable name="nodeType">
 				<xsl:call-template name="get-exact-type">
 					<xsl:with-param name="typeString" select="$typeString" />
 				</xsl:call-template>
 			</xsl:variable>
 			
 			<!--participantTypes saved in processes-->
-			<xsl:if test="$type='process'">
+			<xsl:if test="$nodeType='process'">
 				<xsl:variable name="typeName" select="./oryx:participanttype" />
 					
 				<xsl:if test="$typeName!=''">
@@ -315,10 +336,28 @@
 						</xsl:if>					
 					</participantType>
 				</xsl:if>
+				
+				<xsl:if test="$typeName=''">
+					<participantType>
+						<xsl:attribute name="name" select="./oryx:name" />
+						
+						<xsl:variable name="processName" select="./oryx:name" />
+						<xsl:variable name="processNamespace" select="./oryx:targetnamespace" />
+						<xsl:if test="$processName!=''">
+							<xsl:attribute name="participantBehaviorDescription">
+								<xsl:value-of select="$processName" />
+							</xsl:attribute>
+							
+							<xsl:attribute name="processNamespace">
+								<xsl:value-of select="$processNamespace" />
+							</xsl:attribute>
+						</xsl:if>					
+					</participantType>
+				</xsl:if>
 			</xsl:if>	
 			
 			<!--participantTypes saved in participantSet-->
-			<xsl:if test="$type='participantSet'">
+			<xsl:if test="$nodeType='participantSet'">
 				<xsl:variable name="typeName" select="./oryx:participanttype" />
 				
 				<xsl:if test="$typeName!=''">
@@ -331,7 +370,7 @@
 			</xsl:if>	
 			
 			<!--participantTypes saved in participantRef-->
-			<xsl:if test="$type='participant'">
+			<xsl:if test="$nodeType='participant'">
 				<xsl:variable name="typeName" select="./oryx:participanttype" />
 				
 				<xsl:if test="$typeName!=''">
@@ -357,13 +396,13 @@
 			<xsl:if test="$currentParentID = $searchedParentID">
       		  	<xsl:variable name="currentID" select="@rdf:about" />
 				<xsl:variable name="typeString" select="./oryx:type" />	
-				<xsl:variable name="type">
+				<xsl:variable name="nodeType">
 					<xsl:call-template name="get-exact-type">
 						<xsl:with-param name="typeString" select="$typeString" />
 					</xsl:call-template>
 				</xsl:variable>
 				
-				<xsl:if test="$type='invoke' or 'reply' or 'onMessage' or 'receive'">
+				<xsl:if test="$nodeType='invoke' or 'reply' or 'onMessage' or 'receive'">
 					<sendOrReceiveActivity> 
 					
 						<xsl:variable name="name"><xsl:value-of select="./oryx:name" /></xsl:variable>
@@ -380,7 +419,7 @@
 							<xsl:value-of select="$processName" />
 						</xsl:attribute>
 						
-						<xsl:if test="$type='invoke' or 'reply'">
+						<xsl:if test="$nodeType='invoke' or 'reply'">
 							<xsl:call-template name="add-outgoing-elements">
 								<xsl:with-param name="researchedTargetType">messageLink</xsl:with-param>
 							</xsl:call-template>
