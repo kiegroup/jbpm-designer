@@ -39,7 +39,6 @@ ORYX.Plugins.Workflownets = {
 	handleSerialize: function(event) {
 		var shape = event.shape;
 		var data = event.data;
-		console.log("serialize");
 		var numOfOutgoings = shape.getOutgoingShapes().length;
 		data.push({
 				  name:"numOfOutgoings",
