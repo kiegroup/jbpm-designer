@@ -9,21 +9,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Java extends Node {
-	
+
 	private String clazz;
 	private String method;
 	private String var;
 	private List<Arg> args;
 	private List<Field> field;
-	
+
 	public Java(JSONObject java) {
-		
+
 		this.name = JsonToJpdl.readAttribute(java, "name");
 		this.clazz = JsonToJpdl.readAttribute(java, "class");
 		this.method = JsonToJpdl.readAttribute(java, "method");
 		this.var = JsonToJpdl.readAttribute(java, "var");
 		this.bounds = JsonToJpdl.readBounds(java);
-		
+
 		field = new ArrayList<Field>();
 		try {
 			JSONArray parameters = java.getJSONObject("properties")
@@ -32,9 +32,10 @@ public class Java extends Node {
 				JSONObject item = parameters.getJSONObject(i);
 				field.add(new Field(item));
 			}
-		} catch (JSONException e) {}
-		
-		args =  new ArrayList<Arg>();
+		} catch (JSONException e) {
+		}
+
+		args = new ArrayList<Arg>();
 		try {
 			JSONArray parameters = java.getJSONObject("properties")
 					.getJSONObject("arg").getJSONArray("items");
@@ -42,49 +43,54 @@ public class Java extends Node {
 				JSONObject item = parameters.getJSONObject(i);
 				args.add(new Arg(item));
 			}
-		} catch (JSONException e) {}
-		
+		} catch (JSONException e) {
+		}
+
 		this.outgoings = JsonToJpdl.readOutgoings(java);
 
 	}
-	
+
 	@Override
 	public String toJpdl() throws InvalidModelException {
 		StringWriter jpdl = new StringWriter();
 		jpdl.write("<java");
-		
+
 		jpdl.write(JsonToJpdl.transformAttribute("name", name));
-		
+
 		try {
 			jpdl.write(JsonToJpdl.transformRequieredAttribute("class", clazz));
-			jpdl.write(JsonToJpdl.transformRequieredAttribute("method", method));
+			jpdl
+					.write(JsonToJpdl.transformRequieredAttribute("method",
+							method));
 			jpdl.write(JsonToJpdl.transformRequieredAttribute("var", var));
 		} catch (InvalidModelException e) {
-			throw new InvalidModelException("Invalid Java activity. " + e.getMessage());
+			throw new InvalidModelException("Invalid Java activity. "
+					+ e.getMessage());
 		}
-		
-		if(bounds != null) {
+
+		if (bounds != null) {
 			jpdl.write(bounds.toJpdl());
 		} else {
-			throw new InvalidModelException("Invalid Java activity. Bounds is missing.");
+			throw new InvalidModelException(
+					"Invalid Java activity. Bounds is missing.");
 		}
-			
+
 		jpdl.write(" >\n");
-		
+
 		for (Field f : field) {
 			jpdl.write(f.toJpdl());
 		}
-		
+
 		for (Arg a : args) {
 			jpdl.write(a.toJpdl());
 		}
-		
+
 		for (Transition t : outgoings) {
 			jpdl.write(t.toJpdl());
 		}
-		
+
 		jpdl.write("</java>\n");
-		
+
 		return jpdl.toString();
 	}
 
@@ -110,6 +116,33 @@ public class Java extends Node {
 
 	public void setVar(String var) {
 		this.var = var;
+	}
+
+	@Override
+	public JSONObject toJson() throws JSONException {
+		JSONObject stencil = new JSONObject();
+		stencil.put("id", "java");
+
+		JSONArray outgoing = new JSONArray();
+		// TODO add outgoings
+
+		JSONObject properties = new JSONObject();
+		properties.put("bgcolor", "#ffffcc");
+		if (name != null)
+			properties.put("name", name);
+		if (clazz != null)
+			properties.put("class", clazz);
+		if (method != null)
+			properties.put("method", method);
+		if (var != null)
+			properties.put("var", var);
+
+		// TODO add fields and args
+
+		JSONArray childShapes = new JSONArray();
+
+		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
+				childShapes, bounds.toJson());
 	}
 
 }

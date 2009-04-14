@@ -30,7 +30,8 @@ public class Esb extends Node {
 				JSONObject item = parameters.getJSONObject(i);
 				part.add(new Part(item));
 			}
-		} catch (JSONException e) {}
+		} catch (JSONException e) {
+		}
 
 		this.outgoings = JsonToJpdl.readOutgoings(esb);
 	}
@@ -58,7 +59,7 @@ public class Esb extends Node {
 	public void setService(String service) {
 		this.service = service;
 	}
-	
+
 	@Override
 	public String toJpdl() throws InvalidModelException {
 		StringWriter jpdl = new StringWriter();
@@ -84,18 +85,42 @@ public class Esb extends Node {
 		}
 
 		jpdl.write(" >\n");
-		
+
 		for (Part p : part) {
 			jpdl.write(p.toJpdl());
 		}
-		
+
 		for (Transition t : outgoings) {
 			jpdl.write(t.toJpdl());
 		}
-		
+
 		jpdl.write("</esb>\n");
-		
+
 		return jpdl.toString();
 	}
 
+	@Override
+	public JSONObject toJson() throws JSONException {
+		JSONObject stencil = new JSONObject();
+		stencil.put("id", "esb");
+
+		JSONArray outgoing = new JSONArray();
+		// TODO add outgoings
+
+		JSONObject properties = new JSONObject();
+		properties.put("bgcolor", "#ffffcc");
+		if (name != null)
+			properties.put("name", name);
+		if (category != null)
+			properties.put("category", category);
+		if (service != null)
+			properties.put("service", service);
+
+		// TODO add parts
+
+		JSONArray childShapes = new JSONArray();
+
+		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
+				childShapes, bounds.toJson());
+	}
 }

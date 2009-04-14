@@ -1,7 +1,6 @@
 package org.b3mn.poem.jbpm;
 
-import java.io.StringWriter;
-
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EndErrorEvent extends EndEvent{
@@ -12,11 +11,16 @@ public class EndErrorEvent extends EndEvent{
 	
 	@Override
 	public String toJpdl() throws InvalidModelException {
-		StringWriter jpdl = new StringWriter();
-		jpdl.write("<end-error");
-		jpdl.write(writeAttributes());
-		return jpdl.toString();
+		String id = "end-error";
+		return writeJpdlAttributes(id).toString();
 
+	}
+	
+	@Override
+	public JSONObject toJson() throws JSONException {
+		String id = "EndErrorEvent";
+		
+		return writeJsonAttributes(id);
 	}
 
 }

@@ -2,6 +2,9 @@ package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Property extends WireObjectGroup {
 	
 	private String name;
@@ -22,6 +25,17 @@ public class Property extends WireObjectGroup {
 		jpdl.write(" />");
 		
 		return jpdl.toString();
+	}
+	
+	@Override
+	public JSONObject toJson() throws JSONException {
+		JSONObject property = new JSONObject();
+		if (name != null)
+			property.put("name", name);
+		if (value != null)
+			property.put("value", value);
+		
+		return property;
 	}
 
 	public String getName() {

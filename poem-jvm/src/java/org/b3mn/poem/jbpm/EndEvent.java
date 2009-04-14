@@ -2,22 +2,24 @@ package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EndEvent extends Node {
-	
+
 	protected String state;
 	protected String ends;
-	
+
 	public EndEvent(JSONObject endEvent) {
-		
+
 		this.name = JsonToJpdl.readAttribute(endEvent, "name");
 		this.ends = JsonToJpdl.readAttribute(endEvent, "ends");
 		this.state = JsonToJpdl.readAttribute(endEvent, "state");
 		this.bounds = JsonToJpdl.readBounds(endEvent);
-		
+
 	}
-	
+
 	public String getState() {
 		return state;
 	}
@@ -36,24 +38,55 @@ public class EndEvent extends Node {
 
 	@Override
 	public String toJpdl() throws InvalidModelException {
-		StringWriter jpdl = new StringWriter();
-		jpdl.write("<end");
-		jpdl.write(writeAttributes());
-		return jpdl.toString();
+		String id = "end";
+		return writeJpdlAttributes(id).toString();
 
 	}
-	
-	protected String writeAttributes() throws InvalidModelException {
+
+	@Override
+	public JSONObject toJson() throws JSONException {
+		String id = "EndEvent";
+
+		return writeJsonAttributes(id);
+	}
+
+	protected JSONObject writeJsonAttributes(String id) throws JSONException {
+		JSONObject stencil = new JSONObject();
+		stencil.put("id", id);
+
+		JSONArray outgoing = new JSONArray();
+
+		JSONObject properties = new JSONObject();
+		properties.put("bgcolor", "#ffffff");
+		if (name != null)
+			properties.put("name", name);
+		if (state != null)
+			properties.put("state", state);
+		if (ends != null)
+			properties.put("ends", ends);
+		else
+			properties.put("ends", "processinstance"); // default value
+
+		JSONArray childShapes = new JSONArray();
+
+		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
+				childShapes, bounds.toJson());
+	}
+
+	protected String writeJpdlAttributes(String id)
+			throws InvalidModelException {
 		StringWriter jpdl = new StringWriter();
+		jpdl.write("<" + id);
 		jpdl.write(JsonToJpdl.transformAttribute("name", name));
-		if(!ends.equals("processinstance")) // processinstance is default value
+		if (!ends.equals("processinstance")) // processinstance is default value
 			jpdl.write(JsonToJpdl.transformAttribute("ends", ends));
 		jpdl.write(JsonToJpdl.transformAttribute("state", state));
-		
-		if(bounds != null) {
+
+		if (bounds != null) {
 			jpdl.write(bounds.toJpdl());
 		} else {
-			throw new InvalidModelException("Invalid End Event. Bounds is missing.");
+			throw new InvalidModelException(
+					"Invalid End Event. Bounds is missing.");
 		}
 
 		jpdl.write(" />\n");
@@ -61,4 +94,3 @@ public class EndEvent extends Node {
 		return jpdl.toString();
 	}
 }
-

@@ -2,7 +2,6 @@ package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -121,12 +120,14 @@ public class Process {
 		process.put("properties", properties);
 		JSONArray childShapes = new JSONArray();
 		
-		// TODO add all childShapes
+		// add all childShapes
+		for(Node n : childNodes)
+			childShapes.put(n.toJson());
+		
+		// TODO add all Transitions
 		
 		process.put("childShapes", childShapes);
 		return process.toString();
 	}
-	
-	
 	
 }

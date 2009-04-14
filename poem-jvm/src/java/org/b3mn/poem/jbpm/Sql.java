@@ -2,6 +2,7 @@ package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,7 +25,7 @@ public class Sql extends Node {
 		} catch (JSONException e) {
 			this.parameters = null;
 		}
-		
+
 		this.bounds = JsonToJpdl.readBounds(sql);
 
 		this.outgoings = JsonToJpdl.readOutgoings(sql);
@@ -83,7 +84,7 @@ public class Sql extends Node {
 			throw new InvalidModelException(
 					"Invalid SQL activity. Query is missing.");
 		}
-		
+
 		if (parameters != null) {
 			jpdl.write(parameters.toJpdl());
 		}
@@ -95,6 +96,33 @@ public class Sql extends Node {
 		jpdl.write("</sql>\n");
 
 		return jpdl.toString();
+	}
+
+	@Override
+	public JSONObject toJson() throws JSONException {
+		JSONObject stencil = new JSONObject();
+		stencil.put("id", "sql");
+
+		JSONArray outgoing = new JSONArray();
+		// TODO add outgoings
+
+		JSONObject properties = new JSONObject();
+		properties.put("bgcolor", "#ffffcc");
+		if (name != null)
+			properties.put("name", name);
+		if (var != null)
+			properties.put("var", var);
+		if (unique != null)
+			properties.put("unique", unique.toString());
+		if (query != null)
+			properties.put("query", query);
+
+		// TODO add parameters
+
+		JSONArray childShapes = new JSONArray();
+
+		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
+				childShapes, bounds.toJson());
 	}
 
 }

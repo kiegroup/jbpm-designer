@@ -1,32 +1,36 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class State extends Node {
-	
+
 	public State(JSONObject state) {
-		
+
 		this.name = JsonToJpdl.readAttribute(state, "name");
 		this.bounds = JsonToJpdl.readBounds(state);
 		this.outgoings = JsonToJpdl.readOutgoings(state);
 
 	}
-	
+
 	@Override
 	public String toJpdl() throws InvalidModelException {
 		StringWriter jpdl = new StringWriter();
 		jpdl.write("<state");
-		
+
 		jpdl.write(JsonToJpdl.transformAttribute("name", name));
-		
-		if(bounds != null) {
+
+		if (bounds != null) {
 			jpdl.write(bounds.toJpdl());
 		} else {
-			throw new InvalidModelException("Invalid Wait activity. Bounds is missing.");
+			throw new InvalidModelException(
+					"Invalid Wait activity. Bounds is missing.");
 		}
-			
-		if(outgoings.size() > 0) {
+
+		if (outgoings.size() > 0) {
 			jpdl.write(" >\n");
 			for (Transition t : outgoings) {
 				jpdl.write(t.toJpdl());
@@ -37,6 +41,25 @@ public class State extends Node {
 		}
 
 		return jpdl.toString();
+	}
+
+	@Override
+	public JSONObject toJson() throws JSONException {
+		JSONObject stencil = new JSONObject();
+		stencil.put("id", "wait");
+
+		JSONArray outgoing = new JSONArray();
+		// TODO add outgoings
+
+		JSONObject properties = new JSONObject();
+		properties.put("bgcolor", "#ffffcc");
+		if (name != null)
+			properties.put("name", name);
+
+		JSONArray childShapes = new JSONArray();
+
+		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
+				childShapes, bounds.toJson());
 	}
 
 }
