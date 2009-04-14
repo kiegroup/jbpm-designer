@@ -3499,8 +3499,8 @@
 				
 			
 			
-			"layout":function(shape) {		
-				
+			/*"layout":function(shape) {		
+				console.log("pool layout: %o", shape);
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
@@ -3602,7 +3602,8 @@
 					var upl = shape.bounds.upperLeft();
 					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
- 			},
+ 			},*/
+ 			"layout" : [{"type" : "layout.bpmn11.pool"}],
 			"properties": [
 				{
 					"id":"poolId",
@@ -4269,7 +4270,8 @@
 			],	
 			//"layout": [ORYX.CONFIG.EVENT_LAYOUT_BPMN11_LANE],
 			
-			"layout": function(shape) {		
+			/*"layout": function(shape) {		
+				console.log("lane layout: %o", shape);
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn1.1#Lane");
 				});
@@ -4303,7 +4305,8 @@
 					var upl = shape.bounds.upperLeft();
 					shape.bounds.set(upl.x, upl.y, upl.x + shapeWidth, upl.y + shapeHeight);
 				}
- 			},
+ 			},*/
+ 			"layout" : [{"type" : "layout.bpmn11.lane"}],
 			"properties": [
 				{
 					"id":"id",

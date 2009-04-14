@@ -129,8 +129,12 @@
 			<requires namespace="http://b3mn.org/stencilset/xforms#"/>					
 		</plugin>
 		
+		<plugin source="xforms.js" name="ORYX.Plugins.XForms">
+			<requires namespace="http://b3mn.org/stencilset/xforms#"/>					
+		</plugin>
+		
 		<!-- BPMN1.1 specific plugins -->
-		<plugin source="bpmn1.1DiamondSwitch.js" name="ORYX.Plugins.BPMN11DiamondSwitch">
+		<plugin source="bpmn11.js" name="ORYX.Plugins.BPMN11">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 		</plugin>
 		
@@ -153,6 +157,11 @@
 			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>
 		</plugin>
         
+		<!-- plugin for workflownets -->
+		<plugin source="workflownets.js" name="ORYX.Plugins.Workflownets">
+			<requires namespace="http://www.example.org/workflownets#"/>	
+		</plugin>
+		
         <plugin source="bpmn2pn.js" name="ORYX.Plugins.BPMNImport">
             <requires namespace="http://b3mn.org/stencilset/petrinet#"/>
         </plugin>

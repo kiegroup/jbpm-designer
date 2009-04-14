@@ -35,7 +35,7 @@ if(!ORYX.Core.StencilSet) {ORYX.Core.StencilSet = {};}
  * 
  * This class represents one stencil of a stencil set.
  */
-ORYX.Core.StencilSet.Stencil = Clazz.extend({
+ORYX.Core.StencilSet.Stencil = {
 
 	/**
 	 * Constructor
@@ -109,17 +109,20 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 		
 		// init serialize callback
 		if(!this._jsonStencil.serialize) {
-			this._jsonStencil.serialize = function(shape, data) { return data;};
+			this._jsonStencil.serialize = {};
+			//this._jsonStencil.serialize = function(shape, data) { return data;};
 		}
 		
 		// init deserialize callback
 		if(!this._jsonStencil.deserialize) {
-			this._jsonStencil.deserialize = function(shape, data) { return data;};
+			this._jsonStencil.deserialize = {};
+			//this._jsonStencil.deserialize = function(shape, data) { return data;};
 		}
 		
 		// init layout callback
 		if(!this._jsonStencil.layout) {
-			this._jsonStencil.layout = function(shape) { return true; };
+			this._jsonStencil.layout = []
+			//this._jsonStencil.layout = function() {return true;}
 		}
 		
 		//TODO does not work correctly, if the url does not exist
@@ -266,15 +269,22 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	},
 
 	serialize: function(shape, data) {
-		return this._jsonStencil.serialize(shape, data);
+		return this._jsonStencil.serialize;
+		//return this._jsonStencil.serialize(shape, data);
 	},
 	
 	deserialize: function(shape, data) {
-		return this._jsonStencil.deserialize(shape, data);
+		return this._jsonStencil.deserialize;
+		//return this._jsonStencil.deserialize(shape, data);
 	},
 	
-	layout: function(shape, targetShape) {
-		return this._jsonStencil.layout(shape, targetShape);
+	// in which case is targetShape used?
+//	layout: function(shape, targetShape) {
+//		return this._jsonStencil.layout(shape, targetShape);
+//	},
+	// layout property to store events for layouting in plugins
+	layout: function(shape) {
+		return this._jsonStencil.layout
 	},
 	
 	addProperty: function(property, namespace) {
@@ -339,7 +349,9 @@ ORYX.Core.StencilSet.Stencil = Clazz.extend({
 	},
 
 	toString: function() { return "Stencil " + this.title() + " (" + this.id() + ")"; }
-});
+};
+
+ORYX.Core.StencilSet.Stencil = Clazz.extend(ORYX.Core.StencilSet.Stencil);
 
 /**
  * Transform a string into an xml document, the Safari way, as long as

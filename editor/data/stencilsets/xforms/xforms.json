@@ -14,10 +14,19 @@
 			"mayBeRoot":		true,
 			"hide":				true,
 			"roles":			["standard_container"],
-			"layout":function(shape) {
+			/*"layout":function(shape) {
 				 var raiseEvent = shape._delegateEvent.bind(shape);
-				 raiseEvent({type:'layout.rows',target:shape.rootNode,shape:shape,marginTop:50,marginLeft:50,spacingX:30,spacingY:30});
- 			},
+				 raiseEvent({type:'layout.rows', target:shape.rootNode,shape:shape,marginTop:50,marginLeft:50,spacingX:30,spacingY:30});
+ 			},*/
+ 			"layout": [
+ 				{ 
+ 					"type": 'layout.rows',
+					"marginTop": 50,
+					"marginLeft":50,
+					"spacingX":30,
+					"spacingY":30
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -91,7 +100,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {
+			/*"layout":function(shape) {
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -107,7 +116,14 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [
+ 				{
+ 					"type" 	: 'layout.xforms.label',
+ 					"moveY" : -1,
+ 					"moveX" : 0
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -297,7 +313,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -313,7 +329,14 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [
+ 				{
+ 					"type" 	: 'layout.xforms.label',
+ 					"moveY" : -1,
+ 					"moveX" : 0
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -503,7 +526,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -519,7 +542,14 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [
+ 				{
+ 					"type" 	: 'layout.xforms.label',
+ 					"moveY" : -1,
+ 					"moveX" : 0
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -709,7 +739,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -725,7 +755,14 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [
+ 				{
+ 					"type" 	: 'layout.xforms.label',
+ 					"moveY" : 0,
+ 					"moveX" : 0
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -879,7 +916,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -895,7 +932,14 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [
+ 				{
+ 					"type" 	: 'layout.xforms.label',
+ 					"moveY" : 0,
+ 					"moveX" : 0
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -1085,7 +1129,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -1101,7 +1145,14 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [
+ 				{
+ 					"type" 	: 'layout.xforms.label',
+ 					"moveY" : 0,
+ 					"moveX" : 0
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -1315,7 +1366,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -1340,7 +1391,8 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [{"type" : "layout.xforms.label.button"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -1518,7 +1570,7 @@
 			"roles": [
 				"core_form_controls"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -1543,7 +1595,8 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout" : [{"type" : "layout.xforms.label.button"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -1912,7 +1965,7 @@
 				"core_form_controls",
 				"list_ui_common_container"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 		
 				var items = shape.getChildNodes(false).findAll(function(node) {
 					return ((node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Item")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Itemset"));
@@ -1963,7 +2016,8 @@
 					});
 				}
 				
- 			},
+ 			},*/
+ 			"layout" : [{"type" : "layout.xforms.item"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -2178,7 +2232,7 @@
 				"core_form_controls",
 				"list_ui_common_container"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 		
 				var items = shape.getChildNodes(false).findAll(function(node) {
 					return ((node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Item")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Itemset"));
@@ -2229,7 +2283,8 @@
 					});
 				}
 				
- 			},
+ 			},*/
+ 			"layout" : [{"type" : "layout.xforms.item"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -2445,7 +2500,7 @@
 				"standard_container",
 				"ui_common_container"
 			],
-			"layout":function(shape) {
+			/*"layout":function(shape) {
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:50,marginLeft:10,spacingX:30,spacingY:30,exclude:["http://b3mn.org/stencilset/xforms#Label"]});
  				
@@ -2464,7 +2519,22 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout": [
+ 				{ 
+ 					"type": 'layout.rows',
+					"marginTop"	: 	50,
+					"marginLeft":	50,
+					"spacingX"	:	30,
+					"spacingY"	:	30,
+					"exclude"	:	["http://b3mn.org/stencilset/xforms#Label"]
+ 				},
+ 				{
+ 					"type" 	: 'layout.xforms.label',
+ 					"moveY" : -1,
+ 					"moveX" : 0
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -2644,10 +2714,19 @@
 				"standard_container",
 				"actions_container"
 			],
-			"layout":function(shape) {
+			/*"layout":function(shape) {
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:10,spacingX:30,spacingY:30});
- 			},
+ 			},*/
+ 			"layout": [
+ 				{ 
+ 					"type": 'layout.rows',
+					"marginTop"	: 	30,
+					"marginLeft":	10,
+					"spacingX"	:	30,
+					"spacingY"	:	30
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -2686,7 +2765,7 @@
 				"additional_form_controls",
 				"case_container"
 			],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var cases = shape.getChildNodes(false);
 				
 				var maxWidth = 0;
@@ -2715,7 +2794,8 @@
 					var upl = shape.bounds.upperLeft();
 					shape.bounds.set(upl.x, upl.y, upl.x + maxWidth, upl.y + shapeHeight + 20);
 				}
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.xforms.case"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -2895,10 +2975,19 @@
 				"standard_container",
 				"actions_container"
 			],
-			"layout":function(shape) {
+			/*"layout":function(shape) {
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:'layout.rows',shape:shape,marginTop:30,marginLeft:10,spacingX:30,spacingY:30});
- 			},
+ 			},*/
+ 			"layout": [
+ 				{ 
+ 					"type": 'layout.rows',
+					"marginTop"	: 	30,
+					"marginLeft":	10,
+					"spacingX"	:	30,
+					"spacingY"	:	30
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -3390,7 +3479,7 @@
 				"list_ui_common",
 				"labeled"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -3406,7 +3495,8 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.xforms.label.item"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -3458,7 +3548,7 @@
 				"list_ui_common",
 				"labeled"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/xforms#Label");
 				});
@@ -3474,7 +3564,8 @@
 						label.bounds.set(ul, lr);
 					});
 				}
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.xforms.label.item"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -3635,7 +3726,7 @@
 				"list_ui_common_container",
 				"labeled"
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 		
 				var items = shape.getChildNodes(false).findAll(function(node) {
 					return ((node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Item")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Choices")||(node.getStencil().id()==="http://b3mn.org/stencilset/xforms#Itemset"));
@@ -3686,7 +3777,8 @@
 					});
 				}
 				
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.xforms.item"}],
 			"properties": [
 				{
 					"id":"xf_id",
@@ -3714,7 +3806,7 @@
 				"actions_container",
 				"action"
 			],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var actions = shape.getChildNodes(false);
 
 				if(actions.length > 0) {
@@ -3739,7 +3831,8 @@
 					var lor = shape.bounds.lowerRight();
 					shape.bounds.set(upl.x, upl.y, lor.x, upl.y + shapeHeight + 15);
 				}
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.xforms.action"}],
 			"properties": [
 				{
 					"id":"xf_id",

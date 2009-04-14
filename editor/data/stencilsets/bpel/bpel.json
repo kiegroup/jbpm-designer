@@ -29,10 +29,11 @@
 			"view":"others/node.Bpel.svg",
 			"icon":"task.png",
 			"roles": ["singleActivityContainer"],
-			"layout":function(shape) {
+			/*"layout":function(shape) {
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
- 			},
+ 			},*/
+ 			"layout": [{"type":"layout.BPEL"}],
 			"properties": [
 				{
 					"id":"name",
@@ -761,10 +762,11 @@
 			"view":"action(ws)/node.action.invoke.svg",
 			"icon":"invoke.png",
 			"roles": ["activity","receiveActivity","sendActivity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
- 			},
+ 			},*/
+ 			"layout": [{"type":"layout.BPEL"}],
 			"properties": [
 				{
 					"id":"name",
@@ -1758,10 +1760,11 @@
 			"view":"pick/node.pick.svg",
 			"icon":"task.png",
 			"roles": ["activity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL,shape:shape});	
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.horizontal"}],
 			"properties": [
 				{
 					"id":"name",
@@ -1934,10 +1937,11 @@
 			"view":"pick/node.handler.onMessage.svg",
 			"icon":"onMessage.png",
 			"roles": ["singleActivityContainer","receiveActivity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"documentation",
@@ -2155,10 +2159,11 @@
 			"view":"flow and sequence/node.sequence.svg",
 			"icon":"sequence.png",
 			"roles": ["activity", "multiActivitiesContainer"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL,shape:shape});	
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.horizontal"}],
 			"properties": [
 				{
 					"id":"name",
@@ -2301,10 +2306,11 @@
 			"view":"flow and sequence/node.flow.svg",
 			"icon":"flow.png",
 			"roles": ["activity","multiActivitiesContainer"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_AUTORESIZE,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.autoresize"}],
 			"properties": [
 				{
 					"id":"name",
@@ -2518,10 +2524,11 @@
 			"view":"if/node.if_container.svg",
 			"icon":"if_container.png",
 			"roles": ["activity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_HORIZONTAL,shape:shape});	
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.horizontal"}],
 			"properties": [
 				{
 					"id":"name",
@@ -2664,10 +2671,11 @@
 			"view":"if/node.if_branch.svg",
 			"icon":"if_branch.png",
 			"roles": ["singleActivityContainer"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"condition_expressionLanguage",
@@ -2750,10 +2758,11 @@
 			"view":"if/node.else_branch.svg",
 			"icon":"else_branch.png",
 			"roles": ["singleActivityContainer", "lastChild"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"autoLayout",
@@ -2794,10 +2803,11 @@
 			"view":"loop/loop.while.svg",
 			"icon":"while.png",
 			"roles": ["singleActivityContainer","activity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"name",
@@ -2982,10 +2992,11 @@
 			"view":"loop/loop.repeatUntil.svg",
 			"icon":"repeatUntil.png",
 			"roles": ["singleActivityContainer","activity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"name",
@@ -3170,10 +3181,11 @@
 			"view":"loop/loop.foreach.svg",
 			"icon":"forEach.png",
 			"roles": ["activity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"name",
@@ -3481,10 +3493,11 @@
 			"view":"assignment/node.action.assign.svg",
 			"icon":"assign.png",
 			"roles": ["activity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});	
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.vertical"}],
 			"properties": [
 				{
 					"id":"name",
@@ -4296,10 +4309,11 @@
 			"view":"scope/node.scope.svg",
 			"icon":"scope.png",
 			"roles": ["singleActivityContainer","activity"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL"}],
 			"properties": [
 				{
 					"id":"name",
@@ -4873,10 +4887,11 @@
 			"view":"scope/node.handler.eventHandlers.svg",
 			"icon":"handler.png",
 			"roles": ["handler"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.vertical"}],
 			"properties": [
 				{
 					"id":"documentation",
@@ -4932,10 +4947,11 @@
 			"view":"others/node.shared.onAlarm.svg",
 			"icon":"onAlarm.png",
 			"roles": ["singleActivityContainer"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"documentation",
@@ -5105,10 +5121,11 @@
 			"view":"scope/node.handler.onEvent.svg",
 			"icon":"onEvent.png",
 			"roles": [],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"documentation",
@@ -5378,10 +5395,11 @@
 			"view":"scope/node.handler.faultHandlers.svg",
 			"icon":"handler.png",
 			"roles": ["handler"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.vertical"}],
 			"properties": [
 				{
 					"id":"documentation",
@@ -5437,10 +5455,11 @@
 			"view":"scope/node.compensate.compensateHandler.svg",
 			"icon":"handler.png",
 			"roles": ["singleActivityContainer","handler"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.vertical"}],
 			"properties": [
 				{
 					"id":"documentation",
@@ -5496,10 +5515,11 @@
 			"view":"scope/node.handler.terminationHandler.svg",
 			"icon":"handler.png",
 			"roles": ["singleActivityContainer","handler"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_VERTICAL,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.vertical"}],
 			"properties": [
 				{
 					"id":"documentation",
@@ -5555,10 +5575,11 @@
 			"view":"scope/node.handler.catch.svg",
 			"icon":"catch.png",
 			"roles": ["singleActivityContainer"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"faultName",
@@ -5672,10 +5693,11 @@
 			"view":"scope/node.handler.catchAll.svg",
 			"icon":"catchAll.png",
 			"roles": ["singleActivityContainer", "lastChild"],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
- 			},
+ 			},*/
+ 			"layout":[{"type":"layout.BPEL.singlechild"}],
 			"properties": [
 				{
 					"id":"documentation",

@@ -723,7 +723,7 @@ ORYX.Plugins.BPELLayouting = Clazz.extend({
 		// in a shape.
 		if (shape.getStencil().id() == shape.getStencil().namespace() + "process"
 		&& shape.isChanged){
-			this.facade.getCanvas().update();
+		//	this.facade.getCanvas().update();
 		}
 	}
 });

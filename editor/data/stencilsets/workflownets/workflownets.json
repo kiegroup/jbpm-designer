@@ -30,7 +30,7 @@
 			"description":"An atomic activity.",
 			"view":"activity.svg",
 			"icon":"activity.png",
-			"serialize":function(shape, data) {
+			/*"serialize":function(shape, data) {
 				var numOfOutgoings = shape.getOutgoingShapes().length;
 				data.push({
 						  name:"numOfOutgoings",
@@ -39,7 +39,8 @@
 						  type:"literal"
 						  });
 				return data;
-			},
+			},*/
+			"serialize":{"type":"Workflownets.Activity.serialize"},
 			"roles": ["activitySource", "activityTarget"],
 			"properties": [
 				{
