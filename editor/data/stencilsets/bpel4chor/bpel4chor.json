@@ -7100,6 +7100,34 @@
 					"length":""
 				},
 				{
+					"id":"sender",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"sender",
+					"title_de":"sender",
+					"value":"sender",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"receiver",
+					"prefix":"oryx",
+					"type":"String",
+					"title":"receiver",
+					"title_de":"receiver",
+					"value":"receiver",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},	
+				{
 					"id":"bindSenderTo",
 					"prefix":"oryx",
 					"type":"String",

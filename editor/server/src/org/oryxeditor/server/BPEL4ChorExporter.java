@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -81,12 +80,8 @@ public class BPEL4ChorExporter extends HttpServlet {
 	//         - type Object[]
 	private HashMap<String, Object[]> messageLinkMapForTopology = new HashMap<String, Object[]>();
 
-	// use a hash map to record all process-paticipantRef relationship
-	//
-	// in this hash map:
-	// key : process ID - type String
-	// value : {paticipantName}- type String
-	private HashMap<String, Object[]> processMapForTopology = new HashMap<String, Object[]>();
+	// use a array list to record all processes with process-paticipantRef relationships
+	private ArrayList<String> nonSingleProcessSet = new ArrayList<String>();
 
 
 	/**
@@ -215,7 +210,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 					}
 				}
 			}
-			
+
 			// handle each child elements
 			childrenList = topology.getChildNodes();
 			for (int i = 0; i < childrenList.getLength(); i++){
@@ -237,6 +232,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 				}
 			}
 
+			// delete all useless attributes and elements
 			cleanUp(topology);
 			
 		}
@@ -268,6 +264,10 @@ public class BPEL4ChorExporter extends HttpServlet {
 				
 				if (childElement.getNodeName().equals("messageLink")){
 					recordReceiveActivityOfMessageLink(childElement);
+				}
+				
+				if (childElement.getNodeName().equals("associationEdge")){
+					recordTargetOfAssociationEdge(childElement);
 				}
 			}
 		}
@@ -305,7 +305,10 @@ public class BPEL4ChorExporter extends HttpServlet {
 		
 		Element targetElement = getChildElementWithNodeName(currentElement, 
 				"outgoingLink", false);
+		if (targetElement == null) return;
+		
 		String receiveActivityID = targetElement.getAttribute("targetID");
+		if (receiveActivityID == null) return;	
 		
 		String sendActivityID;
 		
@@ -320,6 +323,20 @@ public class BPEL4ChorExporter extends HttpServlet {
 		messageLinkMapForTopology.put(messageLinkID, newItem);
 	}
 
+	private void recordTargetOfAssociationEdge(Element currentElement) {
+		
+		Element targetElement = getChildElementWithNodeName(currentElement, 
+				"outgoingLink", false);
+		if (targetElement == null) return;
+		
+		String targetID = targetElement.getAttribute("targetID");
+		if (targetID == null) return;
+		
+		if (!nonSingleProcessSet.contains(targetID)){
+			nonSingleProcessSet.add(targetID);
+		}
+	}
+	
 	private void handleParticipantTypesElement(Element participantTypes) {
 		
 		ArrayList<String> typeRecorder = new ArrayList<String>();
@@ -367,9 +384,35 @@ public class BPEL4ChorExporter extends HttpServlet {
 
 
 	private void handleParticipantsElement(Element participants) {
+		
+		ArrayList<Element> deletingList = new ArrayList<Element>();
+		
+		// handle single process
+		NodeList childrenList = participants.getChildNodes();
+		for (int i = 0; i < childrenList.getLength(); i++){
+			Node child = childrenList.item(i);
+			if (child instanceof Element &&
+					(child.getNodeName().equals("participant"))){
+				
+				// only process has an "id" attribute here
+				String id = ((Element) child).getAttribute("id");
+				if (id != null && nonSingleProcessSet.contains(id)){
+					deletingList.add((Element)child);	
+				}
+			}
+		}
+		
+		Iterator<Element> deletingListIter = deletingList.iterator();
+		while (deletingListIter.hasNext()){
+			Element deletingItem = deletingListIter.next();
+			participants.removeChild(deletingItem);
+		}
+		
+		
+		
 		ArrayList<Element[]> movingList = new ArrayList<Element[]>();
 		
-		NodeList childrenList = participants.getChildNodes();
+		childrenList = participants.getChildNodes();
 		for (int i = 0; i < childrenList.getLength(); i++){
 			Node child = childrenList.item(i);
 			if (child instanceof Element &&
@@ -443,17 +486,19 @@ public class BPEL4ChorExporter extends HttpServlet {
 				uselessLinks.add(currentMessageLink);
 			}
 			
+			String sender =  currentMessageLink.getAttribute("senders");
+			String receiver =  currentMessageLink.getAttribute("receivers");
 			String sendActivityID = getSendActivityIDInLinkMap(currentMessageLinkID);
 			String receiveActivityID = getReceiveActivityIDInLinkMap(currentMessageLinkID);
-			Element messageLink = linkNameRecorder.get(name);
+
 			
+			Element messageLink = linkNameRecorder.get(name);
+
 			// add send- and receiveActivity informations for messageLink
 			Element sendElement = getElementInNodeMap(sendActivityID);
-			String sender =  sendElement.getAttribute("processName");
 			String sendActivity =  sendElement.getAttribute("activityName");
 			
 			Element receiveElement = getElementInNodeMap(receiveActivityID);
-			String receiver =  receiveElement.getAttribute("processName");
 			String receiveActivity =  receiveElement.getAttribute("activityName");
 			
 			
@@ -516,6 +561,10 @@ public class BPEL4ChorExporter extends HttpServlet {
 	}
 
 	private String addItemInString(String newItem, String oldString) {
+		if (newItem == null){
+			return oldString;
+		}
+		
 		if (oldString.equals("")){
 			return newItem;
 		}

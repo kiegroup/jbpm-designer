@@ -118,6 +118,20 @@
 						</xsl:attribute>
 					</xsl:if>
 					
+					<xsl:variable name="sender" select="./oryx:sender" />
+					<xsl:if test="$sender!=''">
+						<xsl:attribute name="senders">
+							<xsl:value-of select="$sender" />
+						</xsl:attribute>
+					</xsl:if>
+					
+					<xsl:variable name="receiver" select="./oryx:receiver" />
+					<xsl:if test="$receiver!=''">
+						<xsl:attribute name="receivers">
+							<xsl:value-of select="$receiver" />
+						</xsl:attribute>
+					</xsl:if>
+					
 					<xsl:variable name="bindSenderTo" select="./oryx:bindsenderto" />
 					<xsl:if test="$bindSenderTo!=''">
 						<xsl:attribute name="bindSenderTo">
@@ -219,6 +233,13 @@
 			<!--record all single process als participant-->
 			<xsl:if test="$nodeType='process'">
 				<participant>
+					<xsl:variable name="id" select="@rdf:about" />
+					<xsl:if test="$id!=''">
+						<xsl:attribute name="id">
+							<xsl:value-of select="$id" />
+						</xsl:attribute>
+					</xsl:if>
+					
 					<xsl:variable name="name" select="./oryx:name" />
 					<xsl:if test="$name!=''">
 						<xsl:attribute name="name">
@@ -235,6 +256,7 @@
 					<xsl:if test="$type=''">
 						<xsl:attribute name="type" select="./oryx:name" />
 					</xsl:if>
+					
 				</participant>
 			</xsl:if>
 		</xsl:for-each>
@@ -389,7 +411,6 @@
 
 	<xsl:template name="find-children-nodes">
 		<xsl:param name="searchedParentID" />
-		<xsl:param name="processName" />
 		
         <xsl:for-each select="//rdf:Description">
 			<xsl:variable name="currentParentID"><xsl:value-of select="(./raziel:parent/@rdf:resource)" /></xsl:variable>         
@@ -415,10 +436,6 @@
 							<xsl:value-of select="$currentID" />
 						</xsl:attribute>
 						
-						<xsl:attribute name="processName">
-							<xsl:value-of select="$processName" />
-						</xsl:attribute>
-						
 						<xsl:if test="$nodeType='invoke' or 'reply'">
 							<xsl:call-template name="add-outgoing-elements">
 								<xsl:with-param name="researchedTargetType">messageLink</xsl:with-param>
@@ -430,7 +447,6 @@
 				
 				<xsl:call-template name="find-children-nodes">
 					<xsl:with-param name="searchedParentID"><xsl:value-of select="$currentID" /></xsl:with-param>
-					<xsl:with-param name="processName"><xsl:value-of select="$processName" /></xsl:with-param>
 			    </xsl:call-template>	
 			</xsl:if>
 		</xsl:for-each>
@@ -557,7 +573,6 @@
 			<xsl:if test="$type='process'">
 				<xsl:variable name="processID"><xsl:value-of select="@rdf:about" /></xsl:variable>
 				<xsl:variable name="participantType" select="./oryx:participanttype" />
-				<xsl:variable name="processName" select="./oryx:name" />
 					
 				<process>
 					<xsl:if test="$processID!=''">
@@ -575,7 +590,6 @@
 				
 				<xsl:call-template name="find-children-nodes">
 					<xsl:with-param name="searchedParentID"><xsl:value-of select="$processID" /></xsl:with-param>
-					<xsl:with-param name="processName"><xsl:value-of select="$processName" /></xsl:with-param>
 			    </xsl:call-template>
 			</xsl:if>
 		</xsl:for-each>

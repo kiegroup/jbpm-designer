@@ -112,7 +112,7 @@ public class BPELExporter extends HttpServlet {
     		return;
     	}
     	
-    	System.out.println(resultString);
+    	//System.out.println(resultString);
     	if (resultString != null){
     		try {
     	    	// do a post-processing on this result bpel document
