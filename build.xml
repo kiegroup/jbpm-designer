@@ -7,7 +7,7 @@
     
     <!-- Import ANT build scripts of sub projects -->
     <import file="editor/build.xml"/>
-    <import file="editor/test.xml"/>
+    <!--<import file="editor/test.xml"/>-->
     <import file="poem-jvm/build.xml"/>
     <import file="stick/build.xml"/>
     
