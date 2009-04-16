@@ -3,10 +3,12 @@ package org.b3mn.poem.jbpm;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class Java extends Node {
 
@@ -51,7 +53,14 @@ public class Java extends Node {
 	}
 	
 	public Java(org.w3c.dom.Node java) {
-		
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = java.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.clazz = JpdlToJson.getAttribute(attributes, "clazz");
+		this.method = JpdlToJson.getAttribute(attributes, "method");
+		this.var = JpdlToJson.getAttribute(attributes, var);
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+		// TODO add args and fields
 	}
 
 	@Override
@@ -127,8 +136,7 @@ public class Java extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "java");
 
-		JSONArray outgoing = new JSONArray();
-		// TODO add outgoings
+		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

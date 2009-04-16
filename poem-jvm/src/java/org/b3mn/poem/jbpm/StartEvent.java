@@ -21,7 +21,7 @@ public class StartEvent extends Node {
 	public StartEvent(org.w3c.dom.Node startEvent) {
 		this.uuid = UUID.randomUUID().toString();
 		NamedNodeMap attributes = startEvent.getAttributes();
-		this.name = attributes.getNamedItem("name").getNodeValue();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 

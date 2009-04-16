@@ -1,10 +1,13 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+import java.util.UUID;
 
+import org.apache.xpath.XPathAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class Xor extends Node {
 
@@ -20,9 +23,20 @@ public class Xor extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(xor);
 
 	}
-	
+
 	public Xor(org.w3c.dom.Node xor) {
-		
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = xor.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.expression = JpdlToJson.getAttribute(attributes, "expression");
+		try {
+			org.w3c.dom.Node handlerNode = XPathAPI.selectSingleNode(xor,
+					"/handler");
+			this.handler = handlerNode.getAttributes().getNamedItem("class")
+					.getNodeValue();
+		} catch (Exception e) {
+		}
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 
 	@Override
@@ -59,8 +73,7 @@ public class Xor extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "Exclusive_Databased_Gateway");
 
-		JSONArray outgoing = new JSONArray();
-		// TODO add outgoings
+		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffff");

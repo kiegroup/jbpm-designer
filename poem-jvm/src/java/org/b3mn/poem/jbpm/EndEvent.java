@@ -1,10 +1,12 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class EndEvent extends Node {
 
@@ -21,7 +23,12 @@ public class EndEvent extends Node {
 	}
 	
 	public EndEvent(org.w3c.dom.Node endEvent) {
-		
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = endEvent.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.ends = JpdlToJson.getAttribute(attributes, "ends");
+		this.state = JpdlToJson.getAttribute(attributes, "state");
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 
 	public String getState() {

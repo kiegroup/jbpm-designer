@@ -53,9 +53,9 @@ public class JpdlToJson {
 		return new Bounds(bounds.split(","));
 	}
 	
-	public static String getAttribute(NamedNodeMap attribtues, String name) {
-		if(attribtues.getNamedItem(name) != null)
-			return attribtues.getNamedItem(name).getNodeValue();
+	public static String getAttribute(NamedNodeMap attributes, String name) {
+		if(attributes.getNamedItem(name) != null)
+			return attributes.getNamedItem(name).getNodeValue();
 		return null;
 	}
 	

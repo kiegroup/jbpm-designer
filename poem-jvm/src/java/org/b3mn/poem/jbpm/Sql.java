@@ -1,10 +1,12 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class Sql extends Node {
 
@@ -33,7 +35,13 @@ public class Sql extends Node {
 	}
 	
 	public Sql(org.w3c.dom.Node sql) {
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = sql.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.unique = Boolean.parseBoolean(JpdlToJson.getAttribute(attributes, "unique"));
+		this.var = JpdlToJson.getAttribute(attributes, "var");
 		
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 
 	public String getVar() {
@@ -107,8 +115,7 @@ public class Sql extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "sql");
 
-		JSONArray outgoing = new JSONArray();
-		// TODO add outgoings
+		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

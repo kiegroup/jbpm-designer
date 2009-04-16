@@ -3,10 +3,12 @@ package org.b3mn.poem.jbpm;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class Esb extends Node {
 
@@ -37,7 +39,13 @@ public class Esb extends Node {
 	}
 	
 	public Esb(org.w3c.dom.Node esb) {
-		
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = esb.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.category = JpdlToJson.getAttribute(attributes, "category");
+		this.service = JpdlToJson.getAttribute(attributes, "service");
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+		// TODO add part
 	}
 
 	public String getCategory() {
@@ -108,8 +116,7 @@ public class Esb extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "esb");
 
-		JSONArray outgoing = new JSONArray();
-		// TODO add outgoings
+		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

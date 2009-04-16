@@ -1,10 +1,12 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class Task extends Node {
 
@@ -30,7 +32,15 @@ public class Task extends Node {
 	}
 	
 	public Task(org.w3c.dom.Node task) {
-		
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = task.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.assignee = JpdlToJson.getAttribute(attributes, "assignee");
+		this.candidateGroups = JpdlToJson.getAttribute(attributes, "candidate-groups");
+		this.candidateUsers = JpdlToJson.getAttribute(attributes, "candidate-users");
+		this.swimlane = JpdlToJson.getAttribute(attributes, "swimlane");
+
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 
 	public String getSwimlane() {
@@ -106,8 +116,7 @@ public class Task extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "Task");
 
-		JSONArray outgoing = new JSONArray();
-		// TODO add outgoings
+		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

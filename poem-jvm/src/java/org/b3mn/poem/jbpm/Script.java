@@ -1,10 +1,15 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+import java.util.UUID;
 
+import javax.xml.transform.TransformerException;
+
+import org.apache.xpath.XPathAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class Script extends Node {
 
@@ -26,7 +31,18 @@ public class Script extends Node {
 	}
 	
 	public Script(org.w3c.dom.Node script) {
-		
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = script.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.expression = JpdlToJson.getAttribute(attributes, "expr");
+		this.language = JpdlToJson.getAttribute(attributes, "lang");
+		this.variable = JpdlToJson.getAttribute(attributes, "var");
+		try {
+			org.w3c.dom.Node textNode = XPathAPI.selectSingleNode(script, "/text");
+			this.text = textNode.getTextContent();
+		} catch (TransformerException e) {
+		}
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 
 	@Override
@@ -100,8 +116,7 @@ public class Script extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "script");
 
-		JSONArray outgoing = new JSONArray();
-		// TODO add outgoings
+		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");
