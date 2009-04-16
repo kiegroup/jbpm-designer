@@ -23,13 +23,15 @@
 
 package org.b3mn.poem;
 
-import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import org.hibernate.Session;
-
-import java.util.List;
-import java.util.Iterator;
-import java.util.Date;
 
 @Entity
 public class Identity {

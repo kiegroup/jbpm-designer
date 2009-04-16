@@ -23,13 +23,12 @@
 
 package org.b3mn.poem;
 
-import javax.persistence.*;
-
-import org.hibernate.Session;
-
-import java.util.List;
-import java.util.Iterator;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity @Table(name="subject")
 public class Subject {

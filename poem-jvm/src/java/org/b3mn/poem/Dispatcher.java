@@ -23,31 +23,23 @@
 
 package org.b3mn.poem;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse; 
+import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.business.Model;
 import org.b3mn.poem.business.User;
 import org.b3mn.poem.handler.HandlerBase;
-import org.b3mn.poem.security.AuthenticationToken;
 import org.b3mn.poem.util.AccessRight;
 import org.b3mn.poem.util.ExportInfo;
 import org.b3mn.poem.util.HandlerInfo;
