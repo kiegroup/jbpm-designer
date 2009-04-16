@@ -23,15 +23,10 @@
 
 package org.b3mn.poem.business;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -47,9 +42,8 @@ import org.b3mn.poem.Persistance;
 import org.b3mn.poem.Subject;
 import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.manager.ConfigurationManager;
-
-import org.b3mn.poem.security.AuthenticationTokenException;
 import org.b3mn.poem.security.AuthenticationToken;
+import org.b3mn.poem.security.AuthenticationTokenException;
 
 
 

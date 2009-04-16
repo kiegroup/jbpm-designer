@@ -30,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.fop.datatypes.Length;
-import org.b3mn.poem.Access;
 import org.b3mn.poem.Dispatcher;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.Interaction;
