@@ -25,6 +25,10 @@
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
 		</plugin>	
+		
+		<plugin source="jpdlSupport.js" name="ORYX.Plugins.JPDLSupport">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
+		</plugin>	
 			
 		<plugin source="processLink.js" name="ORYX.Plugins.ProcessLink">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	

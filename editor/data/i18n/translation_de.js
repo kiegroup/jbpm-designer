@@ -256,6 +256,14 @@ ORYX.I18N.ERDFSupport.impBtn = "Importieren";
 ORYX.I18N.ERDFSupport.impProgress = "Importiere...";
 ORYX.I18N.ERDFSupport.close = "Schließen";
 
+if(!ORYX.I18N.jPDLSupport) ORYX.I18N.jPDLSupport = {};
+
+ORYX.I18N.jPDLSupport.group = "jPDL";
+ORYX.I18N.jPDLSupport.exp = "jPDL Export";
+ORYX.I18N.jPDLSupport.expDesc = "Exportieren nach jPDL";
+ORYX.I18N.jPDLSupport.imp = "jPDL Import";
+ORYX.I18N.jPDLSupport.impDesc = "jPDL Datei importieren";
+
 if(!ORYX.I18N.Save) ORYX.I18N.Save = {};
 
 ORYX.I18N.Save.group = "File";
