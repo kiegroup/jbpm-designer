@@ -24,11 +24,11 @@
 if(!ORYX.Plugins)
 	ORYX.Plugins = new Object();
 
-JPDLServletURL: '/jpdl',
-
 ORYX.Plugins.JPDLSupport = Clazz.extend({
 
 	facade: undefined,
+	
+	JPDLServletURL: '/jpdl',
 
 	/**
 	 * Offers the plugin functionality:
