@@ -20,6 +20,10 @@ public class Xor extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(xor);
 
 	}
+	
+	public Xor(org.w3c.dom.Node xor) {
+		
+	}
 
 	@Override
 	public String toJpdl() throws InvalidModelException {

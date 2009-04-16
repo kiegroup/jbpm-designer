@@ -28,6 +28,10 @@ public class Task extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(task);
 
 	}
+	
+	public Task(org.w3c.dom.Node task) {
+		
+	}
 
 	public String getSwimlane() {
 		return swimlane;

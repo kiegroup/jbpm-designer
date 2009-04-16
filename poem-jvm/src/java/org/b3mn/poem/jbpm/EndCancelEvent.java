@@ -9,6 +9,10 @@ public class EndCancelEvent extends EndEvent{
 		super(endEvent);
 	}
 	
+	public EndCancelEvent(org.w3c.dom.Node endEvent) {
+		super(endEvent);
+	}
+	
 	@Override
 	public String toJpdl() throws InvalidModelException {
 		String id = "end-cancel";

@@ -19,6 +19,10 @@ public class EndEvent extends Node {
 		this.bounds = JsonToJpdl.readBounds(endEvent);
 
 	}
+	
+	public EndEvent(org.w3c.dom.Node endEvent) {
+		
+	}
 
 	public String getState() {
 		return state;

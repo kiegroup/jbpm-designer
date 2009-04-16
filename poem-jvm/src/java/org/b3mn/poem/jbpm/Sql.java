@@ -31,6 +31,10 @@ public class Sql extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(sql);
 
 	}
+	
+	public Sql(org.w3c.dom.Node sql) {
+		
+	}
 
 	public String getVar() {
 		return var;

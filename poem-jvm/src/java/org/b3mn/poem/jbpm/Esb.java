@@ -35,6 +35,10 @@ public class Esb extends Node {
 
 		this.outgoings = JsonToJpdl.readOutgoings(esb);
 	}
+	
+	public Esb(org.w3c.dom.Node esb) {
+		
+	}
 
 	public String getCategory() {
 		return category;

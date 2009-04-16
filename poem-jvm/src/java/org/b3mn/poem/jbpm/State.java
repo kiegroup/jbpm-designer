@@ -15,6 +15,10 @@ public class State extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(state);
 
 	}
+	
+	public State(org.w3c.dom.Node state) {
+		
+	}
 
 	@Override
 	public String toJpdl() throws InvalidModelException {

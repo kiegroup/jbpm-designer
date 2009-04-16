@@ -49,6 +49,10 @@ public class Java extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(java);
 
 	}
+	
+	public Java(org.w3c.dom.Node java) {
+		
+	}
 
 	@Override
 	public String toJpdl() throws InvalidModelException {

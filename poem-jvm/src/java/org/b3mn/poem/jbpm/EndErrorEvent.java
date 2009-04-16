@@ -9,6 +9,10 @@ public class EndErrorEvent extends EndEvent{
 		super(endEvent);
 	}
 	
+	public EndErrorEvent(org.w3c.dom.Node endEvent) {
+		super(endEvent);
+	}
+	
 	@Override
 	public String toJpdl() throws InvalidModelException {
 		String id = "end-error";

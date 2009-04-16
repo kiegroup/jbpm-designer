@@ -15,6 +15,10 @@ public class And extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(and);
 
 	}
+	
+	public And(org.w3c.dom.Node and) {
+		
+	}
 
 	@Override
 	public String toJpdl() throws InvalidModelException {

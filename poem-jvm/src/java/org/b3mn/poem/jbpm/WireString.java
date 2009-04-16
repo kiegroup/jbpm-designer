@@ -34,7 +34,7 @@ public class WireString extends WireObjectGroup {
 			string.put("name", name);
 		if (value != null)
 			string.put("value", value);
-		string.put("typr", "string");
+		string.put("type", "string");
 		return string;
 	}
 

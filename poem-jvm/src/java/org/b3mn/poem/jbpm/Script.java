@@ -24,6 +24,10 @@ public class Script extends Node {
 
 		this.outgoings = JsonToJpdl.readOutgoings(script);
 	}
+	
+	public Script(org.w3c.dom.Node script) {
+		
+	}
 
 	@Override
 	public String toJpdl() throws InvalidModelException {

@@ -15,11 +15,20 @@ public class Bounds {
 		try {
 			JSONObject upperLeft = bounds.getJSONObject("upperLeft");
 			JSONObject lowerRight = bounds.getJSONObject("lowerRight");
-			ulx = upperLeft.getInt("x");
-			uly = upperLeft.getInt("y");
-			width = lowerRight.getInt("x") - ulx;
-			height = lowerRight.getInt("y") - uly;
+			this.ulx = upperLeft.getInt("x");
+			this.uly = upperLeft.getInt("y");
+			this.width = lowerRight.getInt("x") - ulx;
+			this.height = lowerRight.getInt("y") - uly;
 		} catch (JSONException e) {}
+	}
+	
+	public Bounds(String[] bounds) {
+		if(bounds.length == 4) {
+			this.ulx = Integer.parseInt(bounds[0]);
+			this.uly = Integer.parseInt(bounds[1]);
+			this.width = Integer.parseInt(bounds[2]);
+			this.height = Integer.parseInt(bounds[3]);
+		}
 	}
 	
 	public String toJpdl() {

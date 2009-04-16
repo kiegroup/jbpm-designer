@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 
 public class StartEvent extends Node {
 
@@ -15,6 +16,13 @@ public class StartEvent extends Node {
 		this.bounds = JsonToJpdl.readBounds(startEvent);
 		this.outgoings = JsonToJpdl.readOutgoings(startEvent);
 
+	}
+	
+	public StartEvent(org.w3c.dom.Node startEvent) {
+		this.uuid = UUID.randomUUID().toString();
+		NamedNodeMap attributes = startEvent.getAttributes();
+		this.name = attributes.getNamedItem("name").getNodeValue();
+		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 
 	@Override
@@ -49,8 +57,7 @@ public class StartEvent extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "StartEvent");
 
-		JSONArray outgoing = new JSONArray();
-		// TODO add outgoings
+		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffff");

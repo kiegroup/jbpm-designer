@@ -11,6 +11,10 @@ public class Hql extends Sql {
 	public Hql(JSONObject hql) {
 		super(hql);
 	}
+	
+	public Hql(org.w3c.dom.Node hql) {
+		super(hql);
+	}
 
 	@Override
 	public String toJpdl() throws InvalidModelException {
