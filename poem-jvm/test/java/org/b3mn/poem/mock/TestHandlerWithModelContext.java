@@ -4,11 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.business.Model;
 import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.util.AccessRight;
 import org.b3mn.poem.util.HandlerWithModelContext;
-import org.b3mn.poem.util.RestrictAccess;
 
 @HandlerWithModelContext(uri="/test", filterBrowser=true, accessRestriction=AccessRight.NONE, denyPublicUserAccess=true)
 public class TestHandlerWithModelContext extends HandlerBase {

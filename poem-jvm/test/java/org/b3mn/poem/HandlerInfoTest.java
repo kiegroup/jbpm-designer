@@ -3,9 +3,11 @@
  */
 package org.b3mn.poem;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.mock.TestHandlerWithModelContext;
 import org.b3mn.poem.mock.TestHandlerWithoutModelContext;
 import org.b3mn.poem.util.AccessRight;

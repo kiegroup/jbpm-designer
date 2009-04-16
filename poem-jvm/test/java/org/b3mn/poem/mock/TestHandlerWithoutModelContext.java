@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.handler.HandlerBase;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
-import org.json.JSONObject;
 
 @HandlerWithoutModelContext(uri="/test2", filterBrowser=true, denyPublicUserAccess=true)
 public class TestHandlerWithoutModelContext extends HandlerBase {
