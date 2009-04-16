@@ -33,7 +33,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.b3mn.poem.Dispatcher;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.handler.HandlerBase;
 
