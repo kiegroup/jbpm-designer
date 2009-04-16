@@ -23,18 +23,13 @@
 
 package org.b3mn.poem.handler;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.Interaction;
 import org.b3mn.poem.Persistance;
 import org.b3mn.poem.business.Model;
 import org.b3mn.poem.business.User;
@@ -43,7 +38,6 @@ import org.b3mn.poem.util.FilterMethod;
 import org.b3mn.poem.util.HandlerWithModelContext;
 import org.b3mn.poem.util.RestrictAccess;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 @HandlerWithModelContext(uri="/access")

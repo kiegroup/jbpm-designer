@@ -31,9 +31,7 @@ import org.b3mn.poem.Identity;
 import org.b3mn.poem.util.ExportInfo;
 import org.b3mn.poem.util.HandlerInfo;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
-import org.b3mn.poem.util.JavaBeanJsonTransformation;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 @HandlerWithoutModelContext(uri="/config")

@@ -34,7 +34,6 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.b3mn.poem.Representation;
-import org.b3mn.poem.util.ExportHandler;
 import org.b3mn.poem.util.HandlerWithModelContext;
 
 

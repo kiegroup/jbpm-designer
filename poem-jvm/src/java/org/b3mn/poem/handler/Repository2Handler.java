@@ -25,17 +25,12 @@ package org.b3mn.poem.handler;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.business.Model;
-import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 @HandlerWithoutModelContext(uri="/repository")
 public class Repository2Handler extends  HandlerBase {

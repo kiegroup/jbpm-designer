@@ -30,7 +30,6 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.business.Model;
 import org.b3mn.poem.util.HandlerWithModelContext;

@@ -14,7 +14,6 @@ import org.b3mn.poem.util.FilterMethod;
 import org.b3mn.poem.util.HandlerWithModelContext;
 import org.b3mn.poem.util.RestrictAccess;
 import org.b3mn.poem.util.SortMethod;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 

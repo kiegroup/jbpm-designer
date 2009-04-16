@@ -23,7 +23,6 @@
 
 package org.b3mn.poem.handler;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -23,11 +23,8 @@
 
 package org.b3mn.poem.handler;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +37,6 @@ import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.FilterMethod;
 import org.b3mn.poem.util.HandlerWithModelContext;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 @HandlerWithModelContext(uri="/tags")

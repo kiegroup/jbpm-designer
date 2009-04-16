@@ -24,29 +24,18 @@
 package org.b3mn.poem.handler;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.Persistance;
-import org.b3mn.poem.util.FilterMethod;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
-import org.b3mn.poem.util.SortMethod;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 @HandlerWithoutModelContext(uri="/filter")
 public class SortFilterHandler extends HandlerBase {

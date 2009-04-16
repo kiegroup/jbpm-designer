@@ -34,7 +34,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.jbpm.InvalidModelException;
-import org.b3mn.poem.jbpm.JpdlToJson;
 import org.b3mn.poem.jbpm.JsonToJpdl;
 import org.b3mn.poem.util.ExportHandler;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
@@ -43,7 +42,7 @@ import org.w3c.dom.Document;
 
 @HandlerWithoutModelContext(uri="/jpdl")
 @ExportHandler(uri="/jpdl", formatName="jPDL", iconUrl="/backend/images/silk/jbpm.png")
-public class JpdlHandler extends HandlerBase {
+public class JpdlExporter extends HandlerBase {
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object)  {
@@ -79,34 +78,5 @@ public class JpdlHandler extends HandlerBase {
 			e1.printStackTrace();
 		}
     }
-	
-	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object)  {
-		
-		res.setContentType("application/json");
-  		res.setStatus(200);	
-  		
-  		try {
-  			URL serverUrl = new URL( req.getScheme(),
-  	  		                         req.getServerName(),
-  	  		                         req.getServerPort(),
-  	  		                         "" );
-  			
-  			PrintWriter out = res.getWriter();
-  			String jpdlRepresentation = req.getParameter("data");
-  			
-  			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-  			factory.setNamespaceAware(true);
-  			DocumentBuilder builder = factory.newDocumentBuilder();
-  			Document jpdlDoc = builder.parse(new ByteArrayInputStream(jpdlRepresentation.getBytes()));
-  			
-  			String result = "";
-  			result = JpdlToJson.transform(jpdlDoc);
 
-  			out.write(result);
-  			
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-    }
 }

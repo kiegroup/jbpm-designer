@@ -27,14 +27,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.Subject;
 import org.b3mn.poem.business.User;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
-import org.b3mn.poem.util.JavaBeanJsonTransformation;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 @HandlerWithoutModelContext(uri="/user")
 public class UserHandler extends  HandlerBase {
