@@ -13,7 +13,7 @@ import org.b3mn.poem.jbpm.JpdlToJson;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
 import org.w3c.dom.Document;
 
-@HandlerWithoutModelContext(uri="/config")
+@HandlerWithoutModelContext(uri="/new_jpdl")
 
 public class JpdlImporter extends  HandlerBase {
 

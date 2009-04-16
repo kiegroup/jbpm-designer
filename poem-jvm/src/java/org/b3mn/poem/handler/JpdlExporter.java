@@ -36,11 +36,9 @@ import org.b3mn.poem.Identity;
 import org.b3mn.poem.jbpm.InvalidModelException;
 import org.b3mn.poem.jbpm.JsonToJpdl;
 import org.b3mn.poem.util.ExportHandler;
-import org.b3mn.poem.util.HandlerWithoutModelContext;
 import org.b3mn.poem.util.RdfJsonTransformation;
 import org.w3c.dom.Document;
 
-@HandlerWithoutModelContext(uri="/jpdl")
 @ExportHandler(uri="/jpdl", formatName="jPDL", iconUrl="/backend/images/silk/jbpm.png")
 public class JpdlExporter extends HandlerBase {
 	
