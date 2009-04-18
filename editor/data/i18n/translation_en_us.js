@@ -263,6 +263,14 @@ ORYX.I18N.jPDLSupport.exp = "Export to jPDL";
 ORYX.I18N.jPDLSupport.expDesc = "Export to jPDL";
 ORYX.I18N.jPDLSupport.imp = "Import from jPDL";
 ORYX.I18N.jPDLSupport.impDesc = "Import jPDL File";
+ORYX.I18N.jPDLSupport.impFailed = "Request for import of jPDL failed.";
+ORYX.I18N.jPDLSupport.error = "Error";
+ORYX.I18N.jPDLSupport.selectFile = "Select an jPDL (.xml) file or type in the jPDL to import it!";
+ORYX.I18N.jPDLSupport.file = "File";
+ORYX.I18N.jPDLSupport.impJPDL = "Import jPDL";
+ORYX.I18N.jPDLSupport.impBtn = "Import";
+ORYX.I18N.jPDLSupport.impProgress = "Importing...";
+ORYX.I18N.jPDLSupport.close = "Close";
 
 if(!ORYX.I18N.Save) ORYX.I18N.Save = {};
 

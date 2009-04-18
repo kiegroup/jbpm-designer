@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008
- * Willi Tscheschner
+ * Stefan Krumnow, Ole Eckermann
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -28,16 +28,11 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 
 	facade: undefined,
 	
-	JPDLServletURL: '/jpdl',
+	jPDLServletURL: '/backend/poem/new_jpdl',
 
-	/**
-	 * Offers the plugin functionality:
-	 * 
-	 */
 	construct: function(facade) {
 		
 		this.facade = facade;
-			
 			
 		this.facade.offer({
 			'name':				ORYX.I18N.jPDLSupport.exp,
@@ -64,41 +59,23 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 	},
 
 	
-	/**
-	 * Imports an AML description
-	 * 
-	 */
-	 importJPDL: function(){
+	importJPDL: function(){
 		this._showImportDialog();
 	},		
 
+	exportJPDL: function(){
+		alert("TODO: Integrate existing export..");
+	},
 	
-	/**
-	 * Imports an AML description
-	 * 
-	 */
-	 exportJPDL: function(){
-		alert("todo");
-	},	
-
-	
-	
-	/**
-	 * 
-	 * 
-	 * @param {Object} url
-	 * @param {Object} params
-	 * @param {Object} successcallback
-	 */
 	sendRequest: function( url, params, successcallback, failedcallback ){
 
 		var suc = false;
 
 		new Ajax.Request(url, {
-            method			: 'POST',
-            asynchronous	: false,
-            parameters		: params,
-			onSuccess		: function(transport) {
+           method			: 'POST',
+           asynchronous	: false,
+           parameters		: params,
+		   onSuccess		: function(transport) {
 				
 				suc = true;
 				
@@ -115,111 +92,26 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 					failedcallback();
 					
 				} else {
-					Ext.Msg.alert("Oryx", ORYX.I18N.ERDFSupport.impFailed);
+					Ext.Msg.alert("Oryx", ORYX.I18N.jPDLSupport.impFailed);
 					ORYX.log.warn("Import jPDL failed: " + transport.responseText);	
 				}
 				
 			}.bind(this)		
 		});
 		
-		
 		return suc;
 							
 	},
-
-
-	loadJPDL: function( erdfString, success, failed ){
+	
+	
+	
+	loadJSON: function( jsonString ){
 		
-		var s 	= erdfString;
-		s 		= s.startsWith('<?xml') ? s : '<?xml version="1.0" encoding="utf-8"?>'+s+'';	
-						
-		var parser	= new DOMParser();			
-		var doc 	=  parser.parseFromString( s ,"text/xml");
-							
-		if( doc.firstChild.tagName == "parsererror" ){
-
-			Ext.MessageBox.show({
-					title: 		ORYX.I18N.ERDFSupport.error,
- 					msg: 		ORYX.I18N.ERDFSupport.impFailed2 + doc.firstChild.textContent.escapeHTML(),
-					buttons: 	Ext.MessageBox.OK,
-					icon: 		Ext.MessageBox.ERROR
-				});
-																
-			if(failed)
-				failed();
-				
-		} else {
-			
-			this.facade.importERDF( doc );
-			
-			if(success)
-				success();
+		alert(jsonString);
 		
-		}
 	},
 
 	
-	throwWarning: function( text ){
-		Ext.MessageBox.show({
-					title: 		'Oryx',
- 					msg: 		text,
-					buttons: 	Ext.MessageBox.OK,
-					icon: 		Ext.MessageBox.WARNING
-				});
-	},
-	
-	/**
-	 * Opens a new window that shows the given XML content.
-	 * 
-	 * @param {Object} content The XML content to be shown.
-	 */
-	openXMLWindow: function(content) {
-		var win = window.open(
-		   'data:application/xml,' + encodeURIComponent(
-		     content
-		   ),
-		   '_blank', "resizable=yes,width=600,height=600,toolbar=0,scrollbars=yes"
-		);
-	},
-	
-	/**
-	 * Opens a download window for downloading the given content.
-	 * 
-	 */
-	openDownloadWindow: function(file, content) {
-		var win = window.open("");
-		if (win != null) {
-			win.document.open();
-			win.document.write("<html><body>");
-			var submitForm = win.document.createElement("form");
-			win.document.body.appendChild(submitForm);
-			
-			submitForm.appendChild( this.createHiddenElement("download", content));
-			submitForm.appendChild( this.createHiddenElement("file", file));
-			
-			
-			submitForm.method = "POST";
-			win.document.write("</body></html>");
-			win.document.close();
-			submitForm.action= ORYX.PATH + "/download";
-			submitForm.submit();
-		}		
-	},
-	
-	/**
-	 * Creates a hidden form element to communicate parameter values.
-	 * 
-	 * @param {Object} name  The name of the hidden field
-	 * @param {Object} value The value of the hidden field
-	 */
-	createHiddenElement: function(name, value) {
-		var newElement = document.createElement("input");
-		newElement.name=name;
-		newElement.type="hidden";
-		newElement.value = value;
-		return newElement
-	},
-
 	/**
 	 * Opens a upload dialog.
 	 * 
@@ -231,12 +123,12 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 	        labelWidth: 	50,
 	        defaultType: 	'textfield',
 	        items: [{
-	            text : 		ORYX.I18N.ERDFSupport.selectFile, 
+	            text : 		ORYX.I18N.jPDLSupport.selectFile, 
 				style : 	'font-size:12px;margin-bottom:10px;display:block;',
 	            anchor:		'100%',
 				xtype : 	'label' 
 	        },{
-	            fieldLabel: ORYX.I18N.ERDFSupport.file,
+	            fieldLabel: ORYX.I18N.jPDLSupport.file,
 	            name: 		'subject',
 				inputType : 'file',
 				style : 	'margin-bottom:10px;display:block;',
@@ -249,15 +141,13 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 	        }]
 	    });
 
-
-
 		// Create the panel
 		var dialog = new Ext.Window({ 
 			autoCreate: true, 
 			layout: 	'fit',
 			plain:		true,
 			bodyStyle: 	'padding:5px;',
-			title: 		ORYX.I18N.ERDFSupport.impERDF, 
+			title: 		ORYX.I18N.jPDLSupport.impJPDL, 
 			height: 	350, 
 			width:		500,
 			modal:		true,
@@ -268,25 +158,30 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 			items: 		[form],
 			buttons:[
 				{
-					text:ORYX.I18N.ERDFSupport.impBtn,
+					text:ORYX.I18N.jPDLSupport.impBtn,
 					handler:function(){
 						
-						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.ERDFSupport.impProgress});
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.jPDLSupport.impProgress});
 						loadMask.show();
 						
 						window.setTimeout(function(){
 					
+							var jpdlString =  form.items.items[2].getValue();
 							
-							var erdfString =  form.items.items[2].getValue();
-							this.loadJPDL(erdfString, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
-														
-														
-							
+							this.sendRequest(
+									this.jPDLServletURL,
+									{ 'data' : jpdlString },
+									function() { this.loadJSON();  loadMask.hide();  dialog.hide(); }.bind(this),
+									function() { loadMask.hide();  dialog.hide(); }.bind(this)
+								);
+
+							//this.loadJPDL(jpdlString, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
+
 						}.bind(this), 100);
 			
 					}.bind(this)
 				},{
-					text:ORYX.I18N.ERDFSupport.close,
+					text:ORYX.I18N.jPDLSupport.close,
 					handler:function(){
 						
 						dialog.hide();
