@@ -390,7 +390,10 @@ ORYX.I18N.View.zoomIn = "Zoom In";
 ORYX.I18N.View.zoomInDesc = "Zoom into the model";
 ORYX.I18N.View.zoomOut = "Zoom Out";
 ORYX.I18N.View.zoomOutDesc = "Zoom out of the model";
-
+ORYX.I18N.View.zoomStandard = "Zoom Standard";
+ORYX.I18N.View.zoomStandardDesc = "Zoom to the standard level";
+ORYX.I18N.View.zoomFitToModel = "Zoom fit to model";
+ORYX.I18N.View.zoomFitToModelDesc = "Zoom to fit the model size";
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
 
