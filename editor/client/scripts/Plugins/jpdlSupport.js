@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2008
+ * Copyright (c) 2009
  * Stefan Krumnow, Ole Eckermann
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -28,8 +28,13 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 
 	facade: undefined,
 	
-	jPDLServletURL: '/backend/poem/new_jpdl',
+	jPDLImporterUrl: '/backend/poem/new_jpdl',
+	jPDLExporterUrlSuffix: '/jpdl',
 
+	/**
+	 * constructor method
+	 * 
+	 */
 	construct: function(facade) {
 		
 		this.facade = facade;
@@ -64,10 +69,19 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 	},		
 
 	exportJPDL: function(){
-		alert("TODO: Integrate existing export..");
+		var loc = location.href;
+		var jpdlLoc ;
+		if ( loc.length > 4 && loc.substring(loc.length - 5) == "/self" ) {
+			jpdlLoc = loc.substring(0, loc.length - 5) + this.jPDLExporterUrlSuffix;
+		} else {
+			alert("TODO: Integrate existing export with new models.. ");
+			return ;
+		}
+		this._openExportWindow( jpdlLoc );
+		
 	},
 	
-	sendRequest: function( url, params, successcallback, failedcallback ){
+	_sendRequest: function( url, params, successcallback, failedcallback ){
 
 		var suc = false;
 
@@ -80,7 +94,7 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 				suc = true;
 				
 				if(successcallback){
-					successcallback( transport.result )	
+					successcallback( transport.responseText )	
 				}
 				
 			}.bind(this),
@@ -99,18 +113,35 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 			}.bind(this)		
 		});
 		
-		return suc;
-							
+		return suc;		
 	},
 	
-	
-	
-	loadJSON: function( jsonString ){
+	_loadJSON: function( jsonString ){
 		
+		// test data:
+		// jsonString = '{"resourceId":"oryx-canvas123","childShapes":[{"bounds":{"lowerRight":{"y":290,"x":360},"upperLeft":{"y":210,"x":260}},"resourceId":"oryx_66E0FE4E-8EBE-40A2-B478-171FBE2F990D","childShapes":[],"properties":{"bgcolor":"#ffffcc"},"stencil":{"id":"java"},"outgoing":[{"resourceId":"oryx_A5230798-DAD0-4683-9410-1F3E97FDD6C7"}]},{"bounds":{"lowerRight":{"y":253,"x":452},"upperLeft":{"y":225,"x":424}},"resourceId":"oryx_3C16ACDE-E39B-4DE6-AF01-11B75BA6FB44","childShapes":[],"properties":{"ends":"processinstance","bgcolor":"#ffffff"},"stencil":{"id":"EndEvent"},"outgoing":[]},{"bounds":{"lowerRight":{"y":254.4146918778988,"x":259.23511382536867},"upperLeft":{"y":251.9524956221012,"x":195.2180111746313}},"resourceId":"oryx_D3AED622-9567-45EA-BBB6-497333DCA5B3","target":{"resourceId":"oryx_66E0FE4E-8EBE-40A2-B478-171FBE2F990D"},"childShapes":[],"properties":{"conditiontype":"None"},"stencil":{"id":"SequenceFlow"},"outgoing":[{"resourceId":"oryx_66E0FE4E-8EBE-40A2-B478-171FBE2F990D"}]},{"bounds":{"lowerRight":{"y":270,"x":195},"upperLeft":{"y":240,"x":165}},"resourceId":"oryx_1B2C84D9-4CF0-461E-AE71-2A7A452E1CED","childShapes":[],"properties":{"bgcolor":"#ffffff"},"stencil":{"id":"StartEvent"},"outgoing":[{"resourceId":"oryx_D3AED622-9567-45EA-BBB6-497333DCA5B3"}]},{"bounds":{"lowerRight":{"y":244.42252340871437,"x":424.00592830824564},"upperLeft":{"y":237.53060159128563,"x":360.99407169175436}},"resourceId":"oryx_A5230798-DAD0-4683-9410-1F3E97FDD6C7","target":{"resourceId":"oryx_3C16ACDE-E39B-4DE6-AF01-11B75BA6FB44"},"childShapes":[],"properties":{"conditiontype":"None"},"stencil":{"id":"SequenceFlow"},"outgoing":[{"resourceId":"oryx_3C16ACDE-E39B-4DE6-AF01-11B75BA6FB44"}]}],"properties":{"ssextension":"http://oryx-editor.org/stencilsets/extensions/jbpm#"},"stencilset":{"url":"http://localhost:8080/oryx/stencilsets/bpmn1.1/bpmn1.1.json"},"stencil":{"id":"BPMNDiagram"}}';
 		alert(jsonString);
 		
+		if (jsonString) {
+			var jsonObj = jsonString.evalJSON();
+			if( jsonObj && this._hasStencilset(jsonObj) ) {
+				this.facade.importJSON(jsonString);
+			}
+		}
+		// TODO: Error Messages..
 	},
+	
+	_hasStencilset: function( jsonObj ){
+		// TODO: Implement real check.
+		alert(jsonObj);
+		return true;
+	},
+	
 
+	_openExportWindow: function( url ){
+		// TODO: Errors in jpdl document should be handled in Oryx UI
+		window.open( url );
+	}, 
 	
 	/**
 	 * Opens a upload dialog.
@@ -168,14 +199,12 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 					
 							var jpdlString =  form.items.items[2].getValue();
 							
-							this.sendRequest(
-									this.jPDLServletURL,
+							this._sendRequest(
+									this.jPDLImporterUrl,
 									{ 'data' : jpdlString },
-									function() { this.loadJSON();  loadMask.hide();  dialog.hide(); }.bind(this),
+									function( arg ) { this._loadJSON( arg );  loadMask.hide();  dialog.hide(); }.bind(this),
 									function() { loadMask.hide();  dialog.hide(); }.bind(this)
 								);
-
-							//this.loadJPDL(jpdlString, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
 
 						}.bind(this), 100);
 			
