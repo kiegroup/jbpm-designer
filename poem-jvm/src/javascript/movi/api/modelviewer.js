@@ -124,7 +124,7 @@ MOVI.namespace("widget");
 		 * @property canvas
 		 * @type Canvas
 		 */
-		canvas: {},
+		canvas: null,
 		
 		/**
 	     * Callback that is executed when the model is finished
@@ -270,6 +270,9 @@ MOVI.namespace("widget");
 	     * @param jsonObj The delivered JSON Object
 	     */
 		loadModelCallback: function(jsonObj) {
+			
+			if(this.canvas!=null)
+				this._scrollbox.removeChild(this.canvas);
 			
 			this.canvas = jsonObj;
 
