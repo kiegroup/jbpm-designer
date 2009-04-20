@@ -93,7 +93,8 @@ public class BPELExporter extends HttpServlet {
 	   rdfSource = new StreamSource(rdf);
 
 	   	// RDF2BPEL XSLT source
-   		final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
+	    final String xsltFilename = getServletContext().getRealPath("/xslt/RDF2BPEL.xslt");
+//   		final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
    		final File xsltFile = new File(xsltFilename);
    		final Source xsltSource = new StreamSource(xsltFile);	
    	

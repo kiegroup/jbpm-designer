@@ -136,7 +136,7 @@ ORYX.Plugins.Pnmlexport = Clazz.extend({
                         alert(pnmlfile); //errormessage
                     }
                     else {
-                        var absolutepath = "http://" + location.host + "/oryx/" + pnmlfile;
+                        var absolutepath = "http://" + location.host + ORYX.CONFIG.ROOT_PATH + pnmlfile;
                         var output = "<h2>Process: " +
                         self.document.title +
                         "</h2><a target=\"_blank\" href=\"" +

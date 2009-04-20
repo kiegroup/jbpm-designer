@@ -124,7 +124,7 @@ ORYX.Plugins.ResourceAssignment = Clazz.extend({
 	getResourceData: function(allocationType) { //Ajax request to get resource/ role information from servlet
 		var resp;
 		//get Resource List
-		new Ajax.Request('/oryx/resourceList', {
+		new Ajax.Request(ORYX.CONFIG.ROOT_PATH + 'resourceList', {
 			method: 'POST',
 			asynchronous: false,
 			parameters: {

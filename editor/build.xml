@@ -196,11 +196,10 @@
             <filelist id="coresourcefiles" dir="${editor-src-client}">
                 <file name='scripts/utils.js'/>
                 <file name='scripts/kickstart.js'/>
-                <file name='scripts/erdfparser.js'/>
-                <file name='scripts/datamanager.js'/>
-                <file name='scripts/clazz.js'/>
-                <file name='scripts/oryx.js'/>
-                <file name='scripts/config.js'/>
+				<file name='scripts/erdfparser.js'/>
+				<file name='scripts/datamanager.js'/>
+				<file name='scripts/config.js'/>
+				<file name='scripts/oryx.js'/>
                 <file name='scripts/Core/SVG/editpathhandler.js'/>
                 <file name='scripts/Core/SVG/minmaxpathhandler.js'/>
                 <file name='scripts/Core/SVG/pointspathhandler.js'/>

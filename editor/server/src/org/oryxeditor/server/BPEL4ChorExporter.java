@@ -100,10 +100,12 @@ public class BPEL4ChorExporter extends HttpServlet {
     	out.print("{\"res\":[");
     	
     	String rdfString = req.getParameter("data");
-    	    	
-    	transformTopology (rdfString, out);
+    	
+    	String contextPath = getServletContext().getRealPath("");
+    	
+    	transformTopology (rdfString, out, contextPath);
 
-    	transformGrounding (rdfString, out);
+    	transformGrounding (rdfString, out, contextPath);
     	
     	transformProcesses (rdfString, out);
 
@@ -121,12 +123,13 @@ public class BPEL4ChorExporter extends HttpServlet {
 	}
 	
 	/**************************  topology ***********************************/
-    private void transformTopology (String rdfString, PrintWriter out){
+    private void transformTopology (String rdfString, PrintWriter out, String contextPath){
   	   
     	//System.out.println(rdfString);
 	   	// XSLT source
-	   	final String xsltFilename = System.getProperty("catalina.home") 
-	   			+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
+    	final String xsltFilename = contextPath + "/xslt/RDF2BPEL4Chor_Topology.xslt";
+//	   	final String xsltFilename = System.getProperty("catalina.home") 
+//	   			+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Topology.xslt";
 	   	final File xsltFile = new File(xsltFilename);
 	   	final Source xsltSource = new StreamSource(xsltFile);	
 	   	
@@ -702,11 +705,12 @@ public class BPEL4ChorExporter extends HttpServlet {
 	}
 	
 	/**************************  grounding *****************************/
-    private void transformGrounding (String rdfString, PrintWriter out){
+    private void transformGrounding (String rdfString, PrintWriter out, String contextPath){
   	   
 	   	// XSLT source
-	   	final String xsltFilename = System.getProperty("catalina.home") 
-	   				+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Grounding.xslt";
+    	final String xsltFilename = contextPath + "/xslt/RDF2BPEL4Chor_Grounding.xslt";
+//	   	final String xsltFilename = System.getProperty("catalina.home") 
+//	   				+ "/webapps/oryx/xslt/RDF2BPEL4Chor_Grounding.xslt";
 	   	final File xsltFile = new File(xsltFilename);
 	   	final Source xsltSource = new StreamSource(xsltFile);	
 	   	

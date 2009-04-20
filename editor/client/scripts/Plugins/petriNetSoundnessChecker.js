@@ -389,7 +389,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 
                 // Check other soundness criteria which needs server requests
                 Ext.Ajax.request({
-                    url: '/oryx/checksoundness',
+                    url: ORYX.CONFIG.ROOT_PATH + 'checksoundness',
                     method: 'POST',
                     success: function(request){
                         var res = Ext.decode(request.responseText);

@@ -24,7 +24,7 @@
 Ext.ns("Oryx.Plugins");
 
 ORYX.Plugins.BPMNImport = Clazz.extend({
-    converterUrl: "/oryx/bpmn2pn",
+    converterUrl: ORYX.CONFIG.ROOT_PATH + "bpmn2pn",
     
     // Offers the plugin functionality
     construct: function(facade){

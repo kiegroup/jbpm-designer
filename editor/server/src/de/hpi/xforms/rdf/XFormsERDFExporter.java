@@ -243,6 +243,7 @@ public class XFormsERDFExporter {
 		appendXFormsField(writer, "nsdeclarations", nsDeclarations);
 		appendOryxField(writer, "mode", "writable");
 		appendOryxField(writer, "mode", "fullscreen");
+		//TODO do not assume that the web app is called "oryx"!!!
 		writer.append("<a rel=\"oryx-stencilset\" href=\"/oryx/stencilsets/xforms/xforms.json\"/>"); // TODO: HACK TO MAKE IT WORK FOR NOW
 
 		for(String id : context.getResourceIds()){

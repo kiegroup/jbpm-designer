@@ -117,12 +117,15 @@ public class WSDL2XFormsServlet extends HttpServlet {
 						+ "and <a href=\"http://en.wikipedia.org/wiki/Xforms#Software_support\">XForms Software Support</a>."
 						+ "</p>"
 						);
+				
+				String contextPath = req.getContextPath();
+				
 				for(String portType : forms.keySet()) {
 					resWriter.write("<h2>PortType: " + portType + "</h2>");
 					for(String operationName : forms.get(portType).keySet()) {
 						resWriter.write("<h3>Operation: " + operationName + "</h3>");
-						resWriter.write("<a href=\"" + forms.get(portType).get(operationName).replace("/backend", "/oryx/xformsexport?path=/backend") + "\">Run in XForms-capable Client</a> | ");
-						resWriter.write("<a href=\"" + forms.get(portType).get(operationName).replace("/backend", "/oryx/xformsexport-orbeon?path=/backend") + "\">Run on Server</a> | ");
+						resWriter.write("<a href=\"" + forms.get(portType).get(operationName).replace("/backend", contextPath + "/xformsexport?path=/backend") + "\">Run in XForms-capable Client</a> | ");
+						resWriter.write("<a href=\"" + forms.get(portType).get(operationName).replace("/backend", contextPath + "/xformsexport-orbeon?path=/backend") + "\">Run on Server</a> | ");
 						resWriter.write("<a href=\"" + forms.get(portType).get(operationName) + "\">Open in Editor</a>");
 					}
 				}

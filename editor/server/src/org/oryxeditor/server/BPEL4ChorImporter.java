@@ -109,7 +109,8 @@ public class BPEL4ChorImporter extends HttpServlet {
     	
     	// === prepare the xslt source ===
     	// BPEL2eRDF XSLT source
-    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/BPEL2eRDF.xslt";
+    	final String xsltFilename = getServletContext().getRealPath("/xslt/BPEL2eRDF.xslt");
+//    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/BPEL2eRDF.xslt";
     	final File bpel2eRDFxsltFile = new File(xsltFilename);
     	final Source bpel2eRDFxsltSource = new StreamSource(bpel2eRDFxsltFile);	
     	

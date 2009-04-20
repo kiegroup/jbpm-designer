@@ -52,13 +52,13 @@ public class AlternativesRenderer extends HttpServlet {
 	this.outFile = tmpPath + this.baseFilename + ".pdf";
 
 	try {
-
+		String contextPath = req.getContextPath();
 	    // store model in temporary svg file.
 	    BufferedWriter out = new BufferedWriter(new FileWriter(inFile));
 	    out.write(data);
 	    out.close();
 	    makePDF();
-	    res.getOutputStream().print("/oryx/tmp/" + this.baseFilename + ".pdf");
+	    res.getOutputStream().print(contextPath + "/tmp/" + this.baseFilename + ".pdf");
 
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block

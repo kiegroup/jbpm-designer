@@ -44,9 +44,9 @@ public class XFormsExportServlet extends HttpServlet {
 		
 		String rdf = req.getParameter("data");
 		String cssUrl = req.getParameter("css");
-
+		
 		if (cssUrl == null) {
-			cssUrl = "/oryx/css/xforms_default.css";
+			cssUrl = req.getContextPath() + "/css/xforms_default.css";
 		}
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -72,7 +72,7 @@ public class XFormsExportServlet extends HttpServlet {
 		if(path==null)
 			return;
 		if(cssUrl==null)
-			cssUrl = "/oryx/css/xforms_default.css";
+			cssUrl = req.getContextPath() + "/css/xforms_default.css";
 		
 		if(path.endsWith("/self")) path = path.substring(0, path.indexOf("/self"));
 		

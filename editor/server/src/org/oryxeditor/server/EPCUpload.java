@@ -96,7 +96,8 @@ public class EPCUpload extends HttpServlet {
     	}
 	   		
     	// epml2eRDF XSLT source
-    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/EPML2eRDF.xslt";
+    	final String xsltFilename = getServletContext().getRealPath("/xslt/EPML2eRDF.xslt");
+//    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/EPML2eRDF.xslt";
     	final File epml2eRDFxsltFile = new File(xsltFilename);
     	final Source epml2eRDFxsltSource = new StreamSource(epml2eRDFxsltFile);	
 
