@@ -198,6 +198,7 @@
                 <file name='scripts/kickstart.js'/>
 				<file name='scripts/erdfparser.js'/>
 				<file name='scripts/datamanager.js'/>
+                <file name='scripts/clazz.js'/>
 				<file name='scripts/config.js'/>
 				<file name='scripts/oryx.js'/>
                 <file name='scripts/Core/SVG/editpathhandler.js'/>
