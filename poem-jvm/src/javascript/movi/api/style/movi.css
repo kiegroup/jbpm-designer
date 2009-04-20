@@ -110,9 +110,14 @@
 
 /* MOVI ModelNavigator styles */
 
+.movi-navigator {
+    cursor: crosshair;
+}
+
 .movi-navigator-clippingrect {
 	position: absolute;
 	border: 1px solid black;
+	cursor: move;
 }
 
 .movi-navigator-img {

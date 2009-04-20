@@ -27,7 +27,8 @@ MOVI.namespace("widget");
 
 (function() {
 	
-	var _CLIPPING_RECT_CLASS_NAME = "movi-navigator-clippingrect",
+	var _NAVIGATOR_CLASS_NAME = "movi-navigator",
+		_CLIPPING_RECT_CLASS_NAME = "movi-navigator-clippingrect",
 		_NAVIGATOR_IMG_CLASS_NAME = "movi-navigator-img";
 	
 	/**
@@ -76,6 +77,8 @@ MOVI.namespace("widget");
 			
 		this._image = new YAHOO.util.Element(
 			this.getElementsByTagName("img")[0]);
+			
+		this.set("className", _NAVIGATOR_CLASS_NAME);
 		
 		// add event listeners to modelviewer's scrollbox
 		var scrollboxId = this.modelviewer.getScrollboxEl().get("id");
@@ -83,6 +86,12 @@ MOVI.namespace("widget");
 								scrollboxId, "scroll", this.update, this, true)) {
 			MOVI.log("Could not add event listener to scrollbox", "error", "modelnavigator.js");
 		}
+		
+		// add event listeners to modelnavigator
+		this._clippingRect.addListener("mousedown", this._onClippingRectDrag, this, this, true);
+		this._clippingRect.addListener("click", function(ev) { YAHOO.util.Event.stopEvent(ev); }, this, this, true);
+		this.addListener("click", this._onClick, this, this, true);
+		YAHOO.util.Event.addListener(document, "mouseup", this._onMouseUp, this, this, true);
 		
 		this.update();
 		
@@ -107,11 +116,83 @@ MOVI.namespace("widget");
 		_image: null,
 		
 		/**
+	     * The absolute position [x, y] of the navigator element 
+	     * @property _absXY
+		 * @type Array
+		 * @private
+	     */
+		_absXY: [],
+		
+		/**
+	     * The offset of the mouse pointer when dragging the clipping rect
+	     * @property _mouseOffset
+		 * @type Object
+		 * @private
+	     */
+		_mouseOffset: {x: 0, y: 0},
+		
+		/**
 		 * The ModelViewer that is navigated
 		 * @property modelviewer
 		 * @type ModelViewer
 		 */
 		modelviewer: null,
+		
+		/**
+		 * @method _onClippingRectDrag
+		 * @private
+		 */
+		_onClippingRectDrag: function(ev) {
+			YAHOO.util.Event.preventDefault(ev);
+			this._absXY = YAHOO.util.Dom.getXY(this);
+			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+			var clippingRectAbsXY = YAHOO.util.Dom.getXY(this._clippingRect);
+			this._mouseOffset.x = mouseAbsXY[0] - clippingRectAbsXY[0];
+			this._mouseOffset.y = mouseAbsXY[1] - clippingRectAbsXY[1];
+			this.addListener("mousemove", this._onClippingRectMove, this, this, true);
+		},
+		
+		/**
+		 * @method _onMouseUp
+		 * @private
+		 */
+		_onMouseUp: function(ev) {
+			YAHOO.util.Event.preventDefault(ev);
+			this.removeListener("mousemove", this._onClippingRectMove);
+		},
+		
+		/**
+		 * @method _onClick
+		 * @private
+		 */
+		_onClick: function(ev) {
+			
+			YAHOO.util.Event.preventDefault(ev);
+			this._absXY = YAHOO.util.Dom.getXY(this);
+			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+			var navigatorWidth = parseInt(this.getStyle("width"), 10);
+			var scale =  this.modelviewer.getImgWidth() / navigatorWidth;
+			var centerX = Math.round(scale * (mouseAbsXY[0] - this._absXY[0]));
+			var centerY = Math.round(scale * (mouseAbsXY[1] - this._absXY[1]));
+			this.modelviewer.centerScrollTo(centerX, centerY);
+		},
+		
+		/**
+		 * Callback method that is executed when the clipping rectangle is moved
+		 * @method _scrollMove
+		 * @private
+		 */
+		_onClippingRectMove: function(ev) {
+			YAHOO.util.Event.preventDefault(ev);
+			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+			var x = mouseAbsXY[0] - this._absXY[0] - this._mouseOffset.x,
+				y = mouseAbsXY[1] - this._absXY[1] - this._mouseOffset.y;
+			var navigatorWidth = parseInt(this.getStyle("width"), 10);
+			var scale =  this.modelviewer.getImgWidth() / navigatorWidth;
+			var scrollboxEl = this.modelviewer.getScrollboxEl();
+			scrollboxEl.set("scrollLeft", scale * x);
+			scrollboxEl.set("scrollTop", scale * y);
+		},
 		
 		/**
 	     * Callback to update the clipping rectangle's position and size.

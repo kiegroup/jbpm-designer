@@ -358,7 +358,7 @@ MOVI.namespace("widget");
 		 * Scrolls to the shape, i.e. centers the (canvas around the) shape 
 		 * within the scrollbox.
 		 * @method scrollToShape()
-		 * @param shape the shape or its resource id
+		 * @param {Shape} shape the shape or its resource id
 		 * @return {Element} The shape element / null if it does not exist
 		 * @throws Error if scrollbox dimensions cannot be calculated
 		 */
@@ -393,6 +393,26 @@ MOVI.namespace("widget");
 			}
 			
 			return shape;
+		},
+		
+		/**
+		 * Scrolls to the specified position, centers the (canvas around the) position 
+		 * within the scrollbox.
+		 * @method scrollToShape()
+		 * @param {Integer} x The center's x position
+		 * @param {Integer} y The center's y position
+		 * @throws Error if scrollbox dimensions cannot be calculated
+		 */
+		centerScrollTo: function(x, y) {
+			if(!YAHOO.lang.isNumber(x) || !YAHOO.lang.isNumber(y)) {
+				throw new TypeError("The coordinates passed to centerScrollTo(x, y) have to be of type Integer.", 
+									"modelviewer.js");
+			}
+			
+			var left = Math.round(x - parseInt(this.getScrollboxEl().getStyle("width"), 10)/2),
+				top  = Math.round(y - parseInt(this.getScrollboxEl().getStyle("height"), 10)/2);
+			this.getScrollboxEl().set("scrollLeft", left);
+			this.getScrollboxEl().set("scrollTop", top);
 		}
 		
 	});
