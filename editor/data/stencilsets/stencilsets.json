@@ -62,5 +62,13 @@
             "uri":"/bpmn1.1/bpmn1.1.json",
             "icon_url":"/bpmn1.1/bpmn1.1.png",
             "visible":false
+        },
+        {
+            "title":"Interaction Diagram",
+            "namespace":"http://b3mn.org/stencilset/interactiondiagram#",
+            "description":"An Interaction Diagrams describe interactions between an interviewed person and other people or systems.",
+            "uri":"/interactiondiagram/interactiondiagram.json",
+            "icon_url":"/interactiondiagram/interactiondiagram.png",
+            "visible":false
         }
 ]
