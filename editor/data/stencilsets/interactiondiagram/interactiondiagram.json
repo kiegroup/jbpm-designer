@@ -61,10 +61,8 @@
 			"view":"node.human-role.svg",
 			"icon":"node.human-role.png",
 			"roles": [
-				"from_active",
-				"to_active",
 				"diagramcontent",
-				"agentcontent"
+				"role"
 			],
 			"properties": [
 				{
@@ -112,10 +110,8 @@
 			"view":"node.system-role.svg",
 			"icon":"node.system-role.png",
 			"roles": [
-				"from_active",
-				"to_active",
-				"agentcontent",
-				"diagramcontent"
+				"diagramcontent",
+				"role"
 			],
 			"properties": [
 				{
@@ -167,9 +163,9 @@
 			],
 			"properties": [
 				{
-					"id":"Label",
+					"id":"InteractionType",
 					"type":"String",
-					"title":"Title",
+					"title":"Interaction Type",
 					"value":"",
 					"description":"",
 					"tooltip":"",
@@ -192,9 +188,7 @@
             "view":"node.textannotation.svg",
             "icon":"node.textannotation.png",
             "roles": [
-                "diagramcontent",
-                "from_artifact",
-                "to_artifact"
+                "diagramcontent"
             ],
             "properties": [
                 {
@@ -232,57 +226,14 @@
 	"rules": {
 		"connectionRules": [
 			{
-				"role":"BidirectionalConnection",
+				"role":"Interaction",
 				"connects": [
 					{
-						"from":"from_active",
-						"to":["to_channel"]
-					},
-					{
-						"from":"from_channel",
-						"to":["to_active"]
+						"from":"role",
+						"to":["role"]
 					}
 				]
 			},	
-			{
-				"role":"WriteAccess",
-				"connects": [
-					{
-						"from":"from_active",
-						"to":["to_passive"]
-					},
-					{
-						"from":"from_passive",
-						"to":["to_active"]
-					}
-				]
-			},	
-			{
-				"role":"ReadAccess",
-				"connects": [
-					{
-						"from":"from_active",
-						"to":["to_passive"]
-					},
-					{
-						"from":"from_passive",
-						"to":["to_active"]
-					}
-				]
-			},	
-			{
-				"role":"ModifyingAccess",
-				"connects": [
-					{
-						"from":"from_active",
-						"to":["to_storage"]
-					},
-					{
-						"from":"from_storage",
-						"to":["to_active"]
-					}
-				]
-			},
             {
                 "role":"UndirectedAssociation",
                 "connects": [

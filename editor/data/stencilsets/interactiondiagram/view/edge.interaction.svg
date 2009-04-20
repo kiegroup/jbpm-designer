@@ -21,5 +21,6 @@
 	</defs>
 	<g>
 	    <path id="edge" d="M 3 5 L 103 5" stroke="black" fill="none" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="round" marker-end="url(#Arrow2Mstart)" />
+        <text id="text" x="0" y="0" oryx:edgePosition="startTop"/>
 	</g>
 </svg>
