@@ -41,11 +41,18 @@ public class NewModelHandler extends HandlerBase {
 			stencilset = request.getParameter("stencilset");
 		}
 
-		String content = "<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">"
-			+ "<span class=\"oryx-mode\">writeable</span>"
-			+ "<span class=\"oryx-mode\">fullscreen</span>"
-			+ "<a href=\"" + "/oryx" + stencilset + "\" rel=\"oryx-stencilset\"></a>\n"
-			+ "</div>\n";
+		String content = 
+	        "<script type='text/javascript'>" +
+              "function onOryxResourcesLoaded(){" +
+                "new ORYX.Editor({"+
+                  "id: 'oryx-canvas123',"+
+                  "stencilset: {"+
+                  	"url: '/oryx"+stencilset + "'" +
+                  "}" +
+          		"});" +
+          	  "}" +
+          	"</script>";
+
 		response.getWriter().print(this.getOryxModel("New Process Model", content,
 				this.getLanguageCode(request), this.getCountryCode(request)));
 

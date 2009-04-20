@@ -1,4 +1,4 @@
-package org.b3mn.poem.util;
+package org.oryxeditor.server;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -101,7 +101,7 @@ public class RdfJsonTransformation {
 			return false;
 		if(n.hasChildNodes()){
 			//if there is the generatorAgent node
-			if(n.getFirstChild().getLocalName() != null && n.getFirstChild().getLocalName().equals("generatorAgent"))
+			if(n.getFirstChild().getLocalName().equals("generatorAgent"))
 				return false;
 		} else {
 			//if there isn't any child node

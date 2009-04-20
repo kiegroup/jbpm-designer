@@ -42,9 +42,18 @@ public class ModelHandler extends  HandlerBase {
 
 		Representation representation = object.read();
 		
+		String content = 
+	        "<script type='text/javascript'>" +
+              "function onOryxResourcesLoaded(){" +
+                "ORYX.Editor.createByUrl('" + getRelativeServerPath(request) + object.getUri() + "/json', {"+
+                  "id: 'oryx-canvas123'" +
+          		"});" +
+          	  "}" +
+          	"</script>";
 		response.setContentType("application/xhtml+xml");
+		
 		response.getWriter().println(this.getOryxModel(representation.getTitle(), 
-				representation.getContent(), this.getLanguageCode(request), 
+				content, this.getLanguageCode(request), 
 				this.getCountryCode(request)));
 		response.setStatus(200);
 	}

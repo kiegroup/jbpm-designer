@@ -41,7 +41,15 @@
 			org.oryxeditor.server.MultiDownloader
 		</servlet-class>
 	</servlet>
-	
+
+    <servlet>
+        <display-name>RDF 2 JSON Servlet</display-name>
+        <servlet-name>RDF2JSONServlet</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.RDF2JSONServlet
+        </servlet-class>
+    </servlet>
+    
 	<servlet>
 		<display-name>Oryx BPMN to PNML Export</display-name>
 		<servlet-name>ExportServlet</servlet-name>
@@ -296,6 +304,11 @@
 		<servlet-name>DesynchronizabilityServlet</servlet-name>
 		<url-pattern>/desynchronizability</url-pattern>
 	</servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RDF2JSONServlet</servlet-name>
+        <url-pattern>/rdf2json</url-pattern>
+    </servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>IBPMN2BPMNServlet</servlet-name>

@@ -71,6 +71,7 @@ var PROCESSDATA_REF = 'processdata';
 /**
  * The Data Management object. Use this one when interacting with page internal
  * data. Initialize data management by DataManager.init();
+ * @class DataManager
  */
 var DataManager = {
 	
@@ -159,7 +160,11 @@ var DataManager = {
 			DataManager.graft(XMLNS.XHTML,
 				$$('.' + PROCESSDATA_REF)[0], [
 				
-				'div', {'id': shape.resourceId}
+				'div', {
+                    'id': shape.resourceId,
+                    //This should be done in a more dynamic way!!!!!
+                    'class': (shape instanceof ORYX.Core.Canvas) ? "-oryx-canvas" : undefined
+                }
 			]);
 			
 		} else {

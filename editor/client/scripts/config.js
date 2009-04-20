@@ -5,7 +5,7 @@ ORYX.CONFIG = {
 	
 	VERSION_URL:				ORYX.PATH + "VERSION",
 	LICENSE_URL:				ORYX.PATH + "LICENSE",
-	
+    
 	/* Editor-Mode */
 	MODE_READONLY:				"readonly",
 	MODE_FULLSCREEN:			"fullscreen",
@@ -171,5 +171,5 @@ ORYX.CONFIG = {
 	KEY_Code_left:				37,
 	KEY_Code_right:				39,
 	KEY_Code_top:				38,
-	KEY_Code_bottom:			40,
+	KEY_Code_bottom:			40
 };

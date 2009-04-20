@@ -29,7 +29,7 @@ if(!ORYX.Core) {ORYX.Core = {};}
 
 /**
  * @classDescription Top Level uiobject.
- *
+ * @extends ORYX.Core.UIObject
  */
 ORYX.Core.AbstractShape = {
 
@@ -320,6 +320,52 @@ ORYX.Core.AbstractShape = {
 		}).bind(this));
 	},
 	
-	toString: function() { return "ORYX.Core.AbstractShape " + this.id }
+	toString: function() { return "ORYX.Core.AbstractShape " + this.id },
+    
+    /**
+     * Converts the shape to a JSON representation.
+     * @return {Object} A JSON object.
+     */
+     toJSON: function(){
+        var json = {
+            resourceId: this.resourceId,
+            properties: this.properties.inject({}, function(props, prop){
+              //Takes "my_property" instead of "oryx-my_property" as key
+              var key = prop[0].replace(/^[\w_]+-/, "");
+              props[key] = prop[1];
+              return props;
+            }),
+            stencil: {
+                id: this.getStencil().idWithoutNs()
+            },
+            childShapes: this.getChildShapes().map(function(shape){
+                return shape.toJSON()
+            })
+        };
+        
+        if(this.getOutgoingShapes){
+            json.outgoing = this.getOutgoingShapes().map(function(shape){
+                return {
+                    resourceId: shape.resourceId
+                };
+            });
+        }
+        
+        if(this.bounds){
+            json.bounds = { 
+                lowerRight: this.bounds.lowerRight(), 
+                upperLeft: this.bounds.upperLeft() 
+            };
+        }
+        
+        if(this.dockers){
+            json.dockers = this.dockers.map(function(docker){
+                return docker.getDockedShape() && docker.referencePoint ? docker.referencePoint : docker.bounds.center();
+            })
+        }
+        
+        return json;
+    }
  };
+ 
  ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(ORYX.Core.AbstractShape);

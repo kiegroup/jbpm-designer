@@ -141,7 +141,11 @@ public abstract class HandlerBase {
 	
 	// Returns the complete server path including the application e.g. 'http://localhost:8080/backend'
 	protected String getServerPath(HttpServletRequest req) {
-		return "http://" + req.getServerName() + ":" + String.valueOf(req.getServerPort()) + "/backend" + req.getServletPath();
+		return "http://" + req.getServerName() + ":" + String.valueOf(req.getServerPort()) + getRelativeServerPath(req);
+	}
+	
+	protected String getRelativeServerPath(HttpServletRequest req){
+		return "/backend" + req.getServletPath();
 	}
 	
 	// This method is called by the dispatcher before the first request is passed 

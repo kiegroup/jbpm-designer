@@ -226,6 +226,10 @@ ORYX.Core.StencilSet.Stencil = {
 	id: function() {
 		return this._jsonStencil.id;
 	},
+    
+    idWithoutNs: function(){
+        return this.id().replace(this.namespace(),"");
+    },
 
 	title: function() {
 		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "title");

@@ -23,6 +23,8 @@
 
 package org.b3mn.poem;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -32,6 +34,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -39,7 +44,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.b3mn.poem.util.JsonErdfTransformation;
+import org.b3mn.poem.util.RdfJsonTransformation;
 import org.hibernate.HibernateException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 @Entity
 public class Representation {
@@ -68,13 +77,54 @@ public class Representation {
     	return result;
     }
     
-    public String getContent() {
-    	String content = (String)Persistance.getSession().
-    		createSQLQuery("SELECT content.erdf FROM content WHERE id=:id").
-    		setLong("id", id).uniqueResult();
-    	Persistance.commit();
-    	return content;
+    /**
+     * @deprecated Replaced by {@link #getErdf()}.
+     */
+    @Deprecated public String getContent() {
+    	return getErdf();
 	}
+    
+    protected String getPureContent(){
+    	String content = (String)Persistance.getSession().
+		createSQLQuery("SELECT content.erdf FROM content WHERE id=:id").
+		setLong("id", id).uniqueResult();
+		Persistance.commit();
+		return content;
+    }
+    
+    static protected boolean isJson(String content){
+    	return !content.startsWith("<");
+    }
+
+    /**
+     * @deprecated Try to avoid using this function because {@link #getJson()} is more future-proof
+     */
+    @Deprecated public String getErdf(){
+    	String content = getPureContent();
+    	if(isJson(content)){
+    		return jsonToErdf(content);
+    	} else {
+    		return content;
+    	}
+    }
+    
+    public String getJson(){
+    	return getJson("");
+    }
+    
+    /**
+     * 
+     * @param serverUrl Used if json must be extracted from erdf and if a stencil set doesn't have any absolute URL
+     * @return
+     */
+    public String getJson(String serverUrl){
+    	String content = getPureContent();
+    	if(isJson(content)){
+    		return content;
+    	} else {  			
+    		return erdfToJson(content, serverUrl);
+    	}
+    }
     
 	public void setContent(String erdf) {
 		// Check whether the content already exists
@@ -252,6 +302,16 @@ public class Representation {
 	}
 	
 	public String getRdf(javax.servlet.ServletContext context) throws TransformerException {
+		String content = this.getPureContent();
+		if(isJson(content)){
+			return erdfToRdf(jsonToErdf(content));
+		} else {
+			return erdfToRdf(content);
+		}
+		
+	}
+	
+	protected static String erdfToRdf(String erdf) throws TransformerException{
 		String serializedDOM = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
 		"<html xmlns=\"http://www.w3.org/1999/xhtml\" " +
 		"xmlns:b3mn=\"http://b3mn.org/2007/b3mn\" " +
@@ -264,10 +324,9 @@ public class Representation {
 		"<link rel=\"schema.b3mn\" href=\"http://b3mn.org\" />" +
 		"<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />" +
 		"<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />" +
-		"</head><body>" + this.getContent() + "</body></html>";
+		"</head><body>" + erdf + "</body></html>";
         
-
-		InputStream xsltStream = context.getResourceAsStream("/WEB-INF/lib/extract-rdf.xsl");
+		InputStream xsltStream = Dispatcher.servletContext.getResourceAsStream("/WEB-INF/lib/extract-rdf.xsl");
         Source xsltSource = new StreamSource(xsltStream);
         Source erdfSource = new StreamSource(new StringReader(serializedDOM));
 
@@ -277,7 +336,30 @@ public class Representation {
         StringWriter output = new StringWriter();
         trans.transform(erdfSource, new StreamResult(output));
 		return output.toString();
-		
+	}
+	
+	protected static String erdfToJson(String erdf, String serverUrl){
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			Document rdfDoc = builder.parse(new ByteArrayInputStream(erdfToRdf(erdf).getBytes()));
+			return RdfJsonTransformation.toJson(rdfDoc, serverUrl).toString();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	protected static String jsonToErdf(String json){
+		return new JsonErdfTransformation(json).toString();
 	}
 	
 }

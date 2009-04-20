@@ -23,19 +23,14 @@
 
 package org.b3mn.poem.handler;
 
-import java.io.ByteArrayInputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.util.ExportHandler;
-import org.b3mn.poem.util.RdfJsonTransformation;
-import org.w3c.dom.Document;
 
 @ExportHandler(uri="/json", formatName="JSON", iconUrl="/backend/images/silk/page_white_code.png")
 public class JsonExporter extends HandlerBase {
@@ -48,21 +43,15 @@ public class JsonExporter extends HandlerBase {
   		
   		try {
   			URL serverUrl = new URL( req.getScheme(),
-  	  		                         req.getServerName(),
-  	  		                         req.getServerPort(),
-  	  		                         "" );
+                        req.getServerName(),
+                        req.getServerPort(),
+                        "" );
   			
-  			String prepend = req.getParameter("jsonp");
+ 			String prepend = req.getParameter("jsonp");
   			
   			PrintWriter out = res.getWriter();
-  			String rdfRepresentation = object.read().getRdf(this.getServletContext()); 
   			
-  			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-  			factory.setNamespaceAware(true);
-  			DocumentBuilder builder = factory.newDocumentBuilder();
-  			Document rdfDoc = builder.parse(new ByteArrayInputStream(rdfRepresentation.getBytes()));
-  			
-  			String jsonRepresentation = RdfJsonTransformation.toJson(rdfDoc, serverUrl.toString()).toString();
+  			String jsonRepresentation = object.read().getJson(serverUrl.toString());
   			
   			if(prepend==null)
   				out.write(jsonRepresentation);

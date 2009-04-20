@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +55,7 @@ public class Dispatcher extends HttpServlet {
 	private static String filterBrowserRedirectUrl = handlerRootPath + "repository";
 	private static String filterModelRedirectErrorUrl = "/error";
 	private static String filterBrowserRegexPattern = "MSIE \\d+\\.\\d+;";
+	public static ServletContext servletContext;
 	
 	protected Map<String, HandlerInfo> knownHandlers = new Hashtable<String, HandlerInfo>();
 	
@@ -83,13 +85,13 @@ public class Dispatcher extends HttpServlet {
 
 	public Dispatcher() {
 		HandlerBase.setDispatcher(this);
-
 	}
 	
 	@Override
 	public void init() throws ServletException {
 		super.init();
 		loadHandlerInfo();
+		servletContext = this.getServletContext();
 		//reloadFriendTable(); // ToDo: implement a bootloader. this operation isn't necessary at each start
 		
 		// load backend.properties
