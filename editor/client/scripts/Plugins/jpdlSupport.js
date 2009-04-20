@@ -45,7 +45,7 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 			'group': 			ORYX.I18N.jPDLSupport.group,
 			'icon': 			ORYX.PATH + "images/jpdl_export_icon.png",
 			'description': 		ORYX.I18N.jPDLSupport.expDesc,
-			'index': 			0,
+			'index': 			1,
 			'minShape': 		0,
 			'maxShape': 		0
 		});
@@ -56,7 +56,7 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 			'group': 			ORYX.I18N.jPDLSupport.group,
 			'icon': 			ORYX.PATH + "images/jpdl_import_icon.png",
 			'description': 		ORYX.I18N.jPDLSupport.impDesc,
-			'index': 			1,
+			'index': 			2,
 			'minShape': 		0,
 			'maxShape': 		0
 		});

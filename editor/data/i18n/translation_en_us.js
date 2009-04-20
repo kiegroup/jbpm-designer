@@ -258,7 +258,7 @@ ORYX.I18N.ERDFSupport.close = "Close";
 
 if(!ORYX.I18N.jPDLSupport) ORYX.I18N.jPDLSupport = {};
 
-ORYX.I18N.jPDLSupport.group = "jPDL";
+ORYX.I18N.jPDLSupport.group = "ExecBPMN";
 ORYX.I18N.jPDLSupport.exp = "Export to jPDL";
 ORYX.I18N.jPDLSupport.expDesc = "Export to jPDL";
 ORYX.I18N.jPDLSupport.imp = "Import from jPDL";
@@ -271,6 +271,14 @@ ORYX.I18N.jPDLSupport.impJPDL = "Import jPDL";
 ORYX.I18N.jPDLSupport.impBtn = "Import";
 ORYX.I18N.jPDLSupport.impProgress = "Importing...";
 ORYX.I18N.jPDLSupport.close = "Close";
+
+if(!ORYX.I18N.Bpmn2Bpel) ORYX.I18N.Bpmn2Bpel = {};
+
+ORYX.I18N.Bpmn2Bpel.group = "ExecBPMN";
+ORYX.I18N.Bpmn2Bpel.show = "Show transformed BPEL";
+ORYX.I18N.Bpmn2Bpel.showDesc = "Transforms BPMN to BPEL and shows the result in a new tab.";
+ORYX.I18N.Bpmn2Bpel.transfFailed = "Request for transformation to BPEL failed.";
+
 
 if(!ORYX.I18N.Save) ORYX.I18N.Save = {};
 
