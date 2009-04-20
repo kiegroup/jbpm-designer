@@ -6,7 +6,7 @@ if(!ORYX) var ORYX = {};
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
 //This is usally the name of the war file!
-ORYX.CONFIG.ROOT_PATH =					"/editor/";
+ORYX.CONFIG.ROOT_PATH =					"/oryx/";
 	
 ORYX.CONFIG.VERSION_URL =				ORYX.CONFIG.ROOT_PATH + "VERSION";
 ORYX.CONFIG.LICENSE_URL =				ORYX.CONFIG.ROOT_PATH + "LICENSE";
