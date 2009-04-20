@@ -28,6 +28,13 @@
 }
 
 
+/* MOVI Marker styles */
+
+.movi-marker {
+    position: absolute;
+}
+
+
 /* MOVI Annotation styles */
 
 .movi-bubble-hidden {
@@ -38,8 +45,8 @@
 	display:block;
 	position:absolute;
 	min-width: 100px;
-	margin-top: 29px; margin-left: -18px;
-	top:50%; left:100%;
+	margin-top: 29px; margin-left: -20px;
+	top:60%; left:100%;
 	filter: alpha(opacity:90);
 	KHTMLOpacity: 0.90;
 	MozOpacity: 0.90;

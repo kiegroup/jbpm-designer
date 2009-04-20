@@ -26,6 +26,8 @@ MOVI.namespace("util");
 
 (function() {
 	
+	var _MARKER_RECT_CLASS_NAME = "movi-marker";
+	
 	/**
      * Attach Marker objects to the model to highlight a shape or a set of shapes
 	 * by overlaying rectangles
@@ -33,7 +35,7 @@ MOVI.namespace("util");
      * @class MOVI.util.Marker
      * @extends YAHOO.util.Element
      * @constructor
-	 * @param {Shape|Shapes[]} shapes (optional) The shapes to mark
+	 * @param {Shape|Shapes[]} shapes The shapes to mark
 	 * @param {Object} style (optional) A key map of CSS style properties to be attached
 	 * to the shape marking rectangles.
      */
@@ -54,6 +56,9 @@ MOVI.namespace("util");
 			this.shapeRects[s.resourceId].setStyle("position", "absolute");
 			s.appendChild(this.shapeRects[s.resourceId]);
 		}
+		
+		this.markerRect = new YAHOO.util.Element(document.createElement('div'));
+		this.markerRect.set("className", _MARKER_RECT_CLASS_NAME);
 	
 		this._update();
 	};
@@ -95,6 +100,14 @@ MOVI.namespace("util");
 		_shapes: {},
 		
 		/**
+		 * The parent canvas element of this marker
+		 * @property shapes
+		 * @type Canvas
+		 * @private
+		 */
+		_canvas: null,
+		
+		/**
 		 * A key map containing all shape rectangle elements of the marker with the
 		 * associated shape resource IDs as keys
 		 * @property shapeRects
@@ -103,11 +116,24 @@ MOVI.namespace("util");
 		shapeRects: {},
 		
 		/**
-	     * Update style properties of the element
+		 * The marker's outer rectangle element
+		 * @property markerRect
+		 * @type Element
+		 */
+		markerRect: null,
+		
+		/**
+	     * Update style properties of the shape rectangle elements and update the bounds of the
+		 * outer marking rectangle element
 	     * @method _update
 	     * @private
 	     */
 		_update: function() {
+			
+			var canvas = null;
+			
+			/* update shape marking rectangle elements */
+			
 			for(i in this._shapes) {
 				var shape = this._shapes[i];
 				var rect = this.shapeRects[i];
@@ -139,11 +165,43 @@ MOVI.namespace("util");
 				rect.setStyle("height", height + "px");
 				
 				rect.set("className", this._className);
+				
+				if(canvas==null) canvas = shape.getCanvas();
 			}
+			
+			/* update outer marking rectangle element */
+			
+			if(canvas!=null) {
+				if(this._canvas==null) {
+					this._canvas = canvas;
+					this._canvas.appendChild(this.markerRect); // all marked shapes have to belong to the same canvas
+				}
+				
+				// get border widths
+				var bTWidth = parseInt(this.markerRect.getStyle("border-top-width")),
+					bRWidth = parseInt(this.markerRect.getStyle("border-right-width")),
+					bBWidth = parseInt(this.markerRect.getStyle("border-bottom-width")),
+					bLWidth = parseInt(this.markerRect.getStyle("border-left-width"));
+
+				var left = Math.round(this.getAbsBounds().upperLeft.x) - MOVI.util.Marker.PADDING;
+				var top = Math.round(this.getAbsBounds().upperLeft.y) - MOVI.util.Marker.PADDING;
+				var width = Math.round(this.getAbsBounds().lowerRight.x
+							- this.getAbsBounds().upperLeft.x) + 2*MOVI.util.Marker.PADDING
+							- bLWidth - bRWidth;
+				var height = Math.round(this.getAbsBounds().lowerRight.y
+							 - this.getAbsBounds().upperLeft.y) + 2*MOVI.util.Marker.PADDING
+						 	 - bTWidth - bBWidth;
+
+				this.markerRect.setStyle("left", left + "px");
+				this.markerRect.setStyle("top", top + "px");
+				this.markerRect.setStyle("width", width + "px");
+				this.markerRect.setStyle("height", height + "px");
+			}
+			
 		},
 		
 		/**
-	     * Wrapper for setting style properties of all marking rectangle elements
+	     * Wrapper for setting style properties of all shape marking rectangle elements
 	     * @method setRectStyle
 		 * @param {String} property The property
 		 * @param {String} value The value
@@ -155,7 +213,7 @@ MOVI.namespace("util");
 		
 		/**
 	     * Returns the value for the specified style property that is applied to each 
-		 * marking rectangle element
+		 * shape marking rectangle element
 	     * @method getRectStyle
 		 * @param {String} property The property
 		 * @returns {Object} A key map storing the style properties
@@ -165,7 +223,7 @@ MOVI.namespace("util");
 		},
 		
 		/**
-	     * Wrapper for setting the class name for all marking rectangle elements
+	     * Wrapper for setting the class name for all shape marking rectangle elements
 	     * @method setRectClassName
 		 * @param {String} className The class name value
 	     */
@@ -175,7 +233,7 @@ MOVI.namespace("util");
 		},
 		
 		/**
-	     * Return the class name applied for all marking rectangle elements
+	     * Return the class name applied for all shape marking rectangle elements
 	     * @method getRectClassName
 		 * @returns {String} The applied class name
 	     */
@@ -239,18 +297,20 @@ MOVI.namespace("util");
 		},
 		
 		/**
-	     * Convenience method to show all marking rectangles
+	     * Show the marker
 	     * @method show
 	     */
 		show: function() {
+			this.markerRect.setStyle("display", "block");
 			this.setRectStyle("display", "block");
 		},
 		
 		/**
-	     * Convenience method to hide all marking rectangles
+	     * Hide the marker
 	     * @method hide
 	     */
 		hide: function() {
+			this.markerRect.setStyle("display", "none");
 			this.setRectStyle("display", "none");
 		},
 		
@@ -265,7 +325,32 @@ MOVI.namespace("util");
 				delete this._shapes[i];
 				delete this.shapeRects[i];
 			}
-			
+			this.markerRect.get("element").parentNode.removeChild(this.markerRect.get("element"));
+			delete this.markerRect;
+		},
+		
+		/**
+	     * Returns the marker's absolute bounds coordinates. 'Absolute' means
+		 * relative to the canvas element rather than relative to the document
+	     * @method getAbsBounds
+		 * @return {Object} The absolute marker bounds accessible as 
+		 * { upperLeft: {x:Number,y:Number}, lowerRight: {x:Number,y:Number} }
+	     */
+		getAbsBounds: function() {
+			var upperLeft  = {x: undefined, y: undefined};
+				lowerRight = {x: undefined, y: undefined};
+			for(i in this._shapes) {
+				var bounds = this._shapes[i].getAbsBounds();
+				if(upperLeft.x == undefined || bounds.upperLeft.x < upperLeft.x)
+					upperLeft.x = bounds.upperLeft.x;
+				if(upperLeft.y == undefined || bounds.upperLeft.y < upperLeft.y)
+					upperLeft.y = bounds.upperLeft.y;
+				if(lowerRight.x == undefined || bounds.lowerRight.x > lowerRight.x)
+					lowerRight.x = bounds.lowerRight.x;
+				if(lowerRight.y == undefined || bounds.upperLeft.y > lowerRight.y)
+					lowerRight.y = bounds.lowerRight.y;
+			}
+			return { upperLeft: upperLeft, lowerRight: lowerRight };
 		}
 		
 	}

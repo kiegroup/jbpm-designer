@@ -138,7 +138,7 @@ MOVI.namespace("model");
 		parentShape: null,
 		
 		/**
-	     * Returns the canvas that own this shape
+	     * Returns the canvas that owns this shape
 	     * @method getCanvas
 		 * @return {Canvas} The Canvas the shape belongs to
 	     */

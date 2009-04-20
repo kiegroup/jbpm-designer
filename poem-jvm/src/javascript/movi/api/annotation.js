@@ -73,11 +73,7 @@ MOVI.namespace("util");
 			this.getElementsByClassName(_BUBBLE_CONTENT_CLASS_NAME)[0]);
 		
 		// attach to marker
-		for(key in marker.shapeRects) {
-			var rect = marker.shapeRects[key];
-			rect.appendChild(this);
-			break;
-		}
+		marker.markerRect.appendChild(this);
 		
 		this._marker = marker;
 		
@@ -136,6 +132,7 @@ MOVI.namespace("util");
 	     * @method show
 	     */
 		show: function() {
+			this._marker.show();
 			this.set("className", _BUBBLE_VISIBLE_CLASS_NAME);
 		},
 		

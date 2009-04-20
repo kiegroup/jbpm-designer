@@ -308,14 +308,14 @@ MOVI.namespace("widget");
 			try {
 				this.canvas.stencilset = new MOVI.stencilset.Stencilset(jsonObj);
 				this.canvas = new MOVI.model.Canvas(this, this.canvas);
-				this._scrollbox.appendChild(this.canvas);
-				this._onSuccess();
 			} catch(e) {
 				MOVI.log("A " + e.name + " occured while trying to load model: " + 
 							e.message, "error", "modelviewer.js");
 				this._onLoadFailure();
+				return;
 			}
-			
+			this._scrollbox.appendChild(this.canvas);
+			this._onSuccess();
 		},
 		
 		/**
