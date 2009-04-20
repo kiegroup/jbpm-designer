@@ -23,7 +23,7 @@ public class EndEvent extends Node {
 	}
 	
 	public EndEvent(org.w3c.dom.Node endEvent) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = endEvent.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.ends = JpdlToJson.getAttribute(attributes, "ends");

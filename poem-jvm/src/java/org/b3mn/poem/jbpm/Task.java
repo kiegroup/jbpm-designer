@@ -32,7 +32,7 @@ public class Task extends Node {
 	}
 	
 	public Task(org.w3c.dom.Node task) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = task.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.assignee = JpdlToJson.getAttribute(attributes, "assignee");

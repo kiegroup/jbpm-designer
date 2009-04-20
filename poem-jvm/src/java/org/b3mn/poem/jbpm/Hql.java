@@ -54,10 +54,11 @@ public class Hql extends Sql {
 		}
 
 		jpdl.write("</hql>\n");
-
 		return jpdl.toString();
 	}
-
+	
+	
+	
 	@Override
 	public JSONObject toJson() throws JSONException {
 		JSONObject stencil = new JSONObject();

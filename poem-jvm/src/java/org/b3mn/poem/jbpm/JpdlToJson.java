@@ -16,11 +16,11 @@ public class JpdlToJson {
 		Node root = getRootNode(doc);
 			
 		process = new Process(root);
+		process.createTransitions();
 		
 		try {
 			return process.toJson();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
@@ -65,6 +65,7 @@ public class JpdlToJson {
 	
 	public static JSONArray setTransitions(List<Transition> outgoings) throws JSONException {
 		JSONArray outgoing = new JSONArray();
+
 		for(Transition t : outgoings) {
 			JSONObject tt = new JSONObject();
 			tt.put("resourceId", t.getUuid());

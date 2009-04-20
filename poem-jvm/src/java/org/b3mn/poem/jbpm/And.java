@@ -19,7 +19,7 @@ public class And extends Node {
 	}
 	
 	public And(org.w3c.dom.Node and) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = and.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));

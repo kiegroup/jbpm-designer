@@ -31,7 +31,7 @@ public class Script extends Node {
 	}
 	
 	public Script(org.w3c.dom.Node script) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = script.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.expression = JpdlToJson.getAttribute(attributes, "expr");

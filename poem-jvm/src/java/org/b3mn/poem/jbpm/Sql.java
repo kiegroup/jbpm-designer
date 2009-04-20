@@ -35,7 +35,7 @@ public class Sql extends Node {
 	}
 	
 	public Sql(org.w3c.dom.Node sql) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = sql.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.unique = Boolean.parseBoolean(JpdlToJson.getAttribute(attributes, "unique"));

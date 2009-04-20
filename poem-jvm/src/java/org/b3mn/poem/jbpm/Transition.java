@@ -3,6 +3,7 @@ package org.b3mn.poem.jbpm;
 import java.io.StringWriter;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.NamedNodeMap;
@@ -13,6 +14,24 @@ public class Transition {
 	private String target;
 	private String condition;
 	private Node targetNode;
+	private Docker start;
+	private Docker end;
+
+	public Docker getStart() {
+		return start;
+	}
+
+	public void setStart(Docker start) {
+		this.start = start;
+	}
+
+	public Docker getEnd() {
+		return end;
+	}
+
+	public void setEnd(Docker end) {
+		this.end = end;
+	}
 
 	public Transition(JSONObject transition) {
 		try {
@@ -35,12 +54,12 @@ public class Transition {
 	}
 
 	public Transition(org.w3c.dom.Node transition) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = transition.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.condition = JpdlToJson.getAttribute(attributes, "condition");
-		String targetName = JpdlToJson.getAttribute(attributes, "to");
-		this.targetNode = JpdlToJson.getProcess().getTarget(targetName);
+		this.target = JpdlToJson.getAttribute(attributes, "to");
+		this.targetNode = JpdlToJson.getProcess().getTarget(target);
 	}
 
 	public Node getTargetNode() {
@@ -108,6 +127,50 @@ public class Transition {
 		}
 
 		return jpdl.toString();
+	}
+
+	public JSONObject toJson() throws JSONException {
+		JSONObject stencil = new JSONObject();
+		stencil.put("id", "SequenceFlow");
+
+		JSONObject targetAsJson = new JSONObject();
+		targetAsJson.put("resourceId", targetNode.getUuid());
+
+		JSONArray outgoing = new JSONArray();
+		outgoing.put(targetAsJson);
+
+		JSONObject properties = new JSONObject();
+		if (name != null)
+			properties.put("name", name);
+		if (condition != null) {
+			properties.put("conditionexpression", condition);
+			properties.put("conditiontype", "Expression");
+			properties.put("showdiamondmarker", "true");
+		} else {
+			properties.put("conditiontype", "None");
+			properties.put("showdiamondmarker", "false");
+		}
+		JSONArray childShapes = new JSONArray();
+
+		if (EndEvent.class.isAssignableFrom(targetNode.getClass())) {
+			end = new Docker(15, 15);
+		} else {
+			end = new Docker(50, 40);
+		}
+
+		JSONArray dockers = new JSONArray();
+		dockers.put(start.toJson());
+		dockers.put(end.toJson());
+
+		JSONObject node = new JSONObject();
+
+		node.put("resourceId", uuid);
+		node.put("stencil", stencil);
+		node.put("outgoing", outgoing);
+		node.put("properties", properties);
+		node.put("childShapes", childShapes);
+		node.put("dockers", dockers);
+		return node;
 	}
 
 }

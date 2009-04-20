@@ -25,7 +25,7 @@ public class Xor extends Node {
 	}
 
 	public Xor(org.w3c.dom.Node xor) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = xor.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.expression = JpdlToJson.getAttribute(attributes, "expression");

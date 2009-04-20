@@ -39,7 +39,7 @@ public class Esb extends Node {
 	}
 	
 	public Esb(org.w3c.dom.Node esb) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = esb.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.category = JpdlToJson.getAttribute(attributes, "category");

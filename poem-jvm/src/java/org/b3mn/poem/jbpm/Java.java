@@ -53,7 +53,7 @@ public class Java extends Node {
 	}
 	
 	public Java(org.w3c.dom.Node java) {
-		this.uuid = UUID.randomUUID().toString();
+		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = java.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.clazz = JpdlToJson.getAttribute(attributes, "clazz");

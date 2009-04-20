@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.xpath.XPathAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class Process {
 
@@ -20,11 +18,16 @@ public class Process {
 	private String description;
 	private List<org.b3mn.poem.jbpm.Node> childNodes;
 	private HashMap<String, org.b3mn.poem.jbpm.Node> children;
-
+	private Node root;
+	
 	public Process(Node root) {
+		this.root = root;
+		childNodes = new ArrayList<org.b3mn.poem.jbpm.Node>();
 		children = new HashMap<String, org.b3mn.poem.jbpm.Node>();
-
-		if (root.hasChildNodes())
+		
+		
+		if (root.hasChildNodes()) {
+			int x = 0;
 			try {
 				for (Node node = root.getFirstChild(); node != null; node = node
 						.getNextSibling()) {
@@ -59,33 +62,20 @@ public class Process {
 						item = new Xor(node);
 					if (item != null) {
 						childNodes.add(item);
-						String nodeName = node.getAttributes().getNamedItem(
-								"name").getNodeValue();
-						children.put(nodeName, item);
-					}
-				}
-				for (Node node = root.getFirstChild(); node != null; node = node
-						.getNextSibling()) {
-					String currentStencilName = node.getAttributes()
-							.getNamedItem("name").getNodeValue();
-					org.b3mn.poem.jbpm.Node currentStencil = children
-							.get(currentStencilName);
-
-					if (node.hasChildNodes()) {
-						List<Transition> outgoings = new ArrayList<Transition>();
-						NodeList childList = XPathAPI.selectNodeList(node, "/transition");
-						for (int i=0; i < childList.getLength(); i++) {
-							Node item = childList.item(i);
-							if (item.getNodeName().equals("transition")) {
-								Transition t = new Transition(item);
-								outgoings.add(t);
-							}
-							currentStencil.setOutgoings(outgoings);
+						try {
+							String nodeName = node.getAttributes()
+									.getNamedItem("name").getNodeValue();
+							children.put(nodeName, item);
+						} catch (Exception e) {
+							children.put("start" + x, item);
+							x++;
 						}
 					}
 				}
-			} catch (Exception e) {
+			} catch (Exception ee) {
+				System.err.println("FUCKING ERROR!!!");
 			}
+		}
 	}
 
 	public Process(JSONObject process) {
@@ -176,6 +166,41 @@ public class Process {
 		return jpdl.toString();
 	}
 
+	public void createTransitions() {
+		int x = 0;
+		for (Node node = root.getFirstChild(); node != null; node = node
+				.getNextSibling()) {
+			if (!node.getNodeName().equals("#text")) {
+				org.b3mn.poem.jbpm.Node currentStencil;
+				try {
+					String currentStencilName = node.getAttributes()
+							.getNamedItem("name").getNodeValue();
+					currentStencil = children.get(currentStencilName);
+				} catch (Exception e) {
+					currentStencil = children.get("start" + x);
+					x++;
+				}
+				List<Transition> outgoings = new ArrayList<Transition>();
+				if (node.hasChildNodes()) {
+					for (Node item = node.getFirstChild(); item != null; item = item
+							.getNextSibling()) {
+						System.out.println(item.getNodeName());
+						if (item.getNodeName().equals("transition")) {
+							Transition t = new Transition(item);
+							if(node.getNodeName().equals("start")) {
+								t.setStart(new Docker(15,15));
+							} else {
+								t.setStart(new Docker(50,40));
+							}
+							outgoings.add(t);
+						}
+					}
+				}
+				currentStencil.setOutgoings(outgoings);
+			}
+		}
+	}
+	
 	public String toJson() throws JSONException {
 		JSONObject process = new JSONObject();
 
@@ -204,10 +229,11 @@ public class Process {
 		JSONArray childShapes = new JSONArray();
 
 		// add all childShapes
-		for (org.b3mn.poem.jbpm.Node n : childNodes)
+		for (org.b3mn.poem.jbpm.Node n : childNodes) {
 			childShapes.put(n.toJson());
-
-		// TODO add all Transitions
+			for(Transition t : n.getOutgoings())
+				childShapes.put(t.toJson());
+		}
 
 		process.put("childShapes", childShapes);
 		return process.toString();
