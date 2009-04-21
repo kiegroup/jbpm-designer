@@ -235,7 +235,7 @@
 		</servlet-class>
 	</servlet>
 	
-<!--	
+
     <servlet>
         <display-name>Service Composer Servlet</display-name>
         <servlet-name>ServiceComposerServlet</servlet-name>
@@ -243,7 +243,15 @@
              org.oryxeditor.server.ServiceComposerServlet
         </servlet-class>
     </servlet>
--->
+	
+	<servlet>
+        <display-name>BPMN2BPEL Servlet</display-name>
+        <servlet-name>BPMN2BPELServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.BPMN2BPELServlet
+        </servlet-class>
+    </servlet>
+
 
 
 <!--	
@@ -390,12 +398,17 @@
 		<url-pattern>/jsonp</url-pattern>
 	</servlet-mapping>
 	
-<!--	
+	
     <servlet-mapping>
             <servlet-name>ServiceComposerServlet</servlet-name>
             <url-pattern>/servicecomposer</url-pattern>
     </servlet-mapping>
--->
+	
+	<servlet-mapping>
+            <servlet-name>BPMN2BPELServlet</servlet-name>
+            <url-pattern>/bpmn2bpel</url-pattern>
+    </servlet-mapping>
+
 
 	<jsp-config>
 		<taglib>
