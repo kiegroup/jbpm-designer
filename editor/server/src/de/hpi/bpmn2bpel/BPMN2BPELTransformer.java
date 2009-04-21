@@ -3,10 +3,14 @@
  */
 package de.hpi.bpmn2bpel;
 
+import java.util.Iterator;
+
 import org.w3c.dom.Document;
 
-import de.hpi.bpmn2bpel.factories.ProcessFactory;
+import de.hpi.bpel4chor.model.Pool;
+import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn2bpel.factories.ProcessFactory;
 
 /**
  * Copyright (c) 2009 Falko Menge
@@ -35,8 +39,15 @@ import de.hpi.bpmn.BPMNDiagram;
 public class BPMN2BPELTransformer {
 
 	public Document transform(BPMNDiagram diagram) {
-		//ProcessFactory factory = new ProcessFactory(diagram);
-
-		return null;
+		Document process = null;
+		ProcessFactory factory = new ProcessFactory(diagram);
+		// use only the first pool
+		// TODO rewrite to work without pools 
+		Iterator<Pool> it = diagram.getPools().iterator();
+		if (it.hasNext()) {
+			Output processOutput = new Output();
+			process = factory.transformProcess(it.next(), processOutput);
+		}
+		return process;
 	}
 }
