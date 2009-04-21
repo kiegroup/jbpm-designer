@@ -515,7 +515,7 @@ public class Diagram {
 	}
 	
 	/**
-	 * Determins the first participant set data object that is associated
+	 * Determines the first participant set data object that is associated
 	 * with the given activity. Only associations with direction To are
 	 * considered (association from data object to activity).
 	 * 
