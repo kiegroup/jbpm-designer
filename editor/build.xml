@@ -328,6 +328,10 @@
                 <include name="*.xsl"/>
             </lib>
             
+			<lib dir="${editor-src-root}/lib/xsd">
+            	<include name="*.xsd"/>
+            </lib>
+			
             <fileset dir="${editor-src-root}/client">           
                 <include name="${build-with-script-files-flag}"/>
             </fileset>
