@@ -134,6 +134,7 @@ MOVI.namespace("util");
 		show: function() {
 			this._marker.show();
 			this.set("className", _BUBBLE_VISIBLE_CLASS_NAME);
+			this.bringToFront();
 		},
 		
 		/**
@@ -166,6 +167,23 @@ MOVI.namespace("util");
 				data: data,
 				scope: scope
 			};
+		},
+		
+		/**
+	     * Brings the annotation to the front of all the other annotations on the canvas
+	     * @method bringToFront
+	     */
+		bringToFront: function() {
+			// detemine the maximal z-index of markers of visible annotation elements
+			var maxZIndex = 0;
+			var canvasEl = new Element(this.get("element").parentNode.parentNode);
+			var elements = canvasEl.getElementsByClassName(_BUBBLE_VISIBLE_CLASS_NAME);
+			for(key in elements) {
+				var zIndex = (new Element(elements[key].parentNode)).getStyle("z-index");
+				if(zIndex>maxZIndex) maxZIndex = zIndex;
+			}
+			// set the z-index of parent marker to maximum+1
+			this._marker.markerRect.setStyle("z-index", maxZIndex+1);
 		}
 		
 	});
