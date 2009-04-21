@@ -6,8 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import de.hpi.bpel4chor.model.Container;
-import de.hpi.bpel4chor.model.Diagram;
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.activities.BlockActivity;
 import de.hpi.bpel4chor.model.activities.EmptyTask;
@@ -17,10 +19,8 @@ import de.hpi.bpel4chor.model.activities.Gateway;
 import de.hpi.bpel4chor.model.activities.Task;
 import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.model.supporting.Expression;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * Class for mapping a generalized flow component to a folded task. The 
@@ -32,7 +32,7 @@ import de.hpi.bpel4chor.util.Output;
  */
 public class SynchronizingProcessMapper {
 		
-	private Diagram diagram = null;
+	private BPMNDiagram diagram = null;
 	private Document document = null;
 	private Container container = null;
 	private Component component = null;
@@ -116,7 +116,7 @@ public class SynchronizingProcessMapper {
 	 * @param parentContainer	the container, the component is contained in
 	 * @param component			the generalized flow component to map
 	 */
-	public SynchronizingProcessMapper(Diagram diagram, Document document,
+	public SynchronizingProcessMapper(BPMNDiagram diagram, Document document,
 			Container parentContainer, Component component) {
 		this.diagram = diagram;
 		this.document = document;

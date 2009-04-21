@@ -3,18 +3,20 @@ package de.hpi.bpmn2bpel.factories;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import de.hpi.bpel4chor.model.Container;
-import de.hpi.bpel4chor.model.Diagram;
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.activities.EndEvent;
 import de.hpi.bpel4chor.model.activities.FoldedTask;
 import de.hpi.bpel4chor.model.activities.Gateway;
 import de.hpi.bpel4chor.model.activities.StartEvent;
 import de.hpi.bpel4chor.model.connections.Transition;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * Class for Mapping a generalized flow component to a folded task. The 
@@ -25,7 +27,7 @@ import de.hpi.bpel4chor.util.Output;
  */
 public class GeneralizedFlowMapper {
 		
-	private Diagram diagram = null;
+	private BPMNDiagram diagram = null;
 	private Document document = null;
 	private Container container = null;
 	private Component component = null;
@@ -42,7 +44,7 @@ public class GeneralizedFlowMapper {
 	 * @param component			The generalized flow component to map
 	 * @param output			The output to print errors to.
 	 */
-	public GeneralizedFlowMapper(Diagram diagram, Document document,
+	public GeneralizedFlowMapper(BPMNDiagram diagram, Document document,
 			Container parentContainer, Component component, Output output) {
 		this.diagram = diagram;
 		this.document = document;

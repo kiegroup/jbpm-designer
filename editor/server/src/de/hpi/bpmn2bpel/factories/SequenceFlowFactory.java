@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import de.hpi.bpel4chor.model.Container;
-import de.hpi.bpel4chor.model.Diagram;
 import de.hpi.bpel4chor.model.Process;
 import de.hpi.bpel4chor.model.SubProcess;
 import de.hpi.bpel4chor.model.activities.Activity;
@@ -18,20 +21,18 @@ import de.hpi.bpel4chor.model.activities.FoldedTask;
 import de.hpi.bpel4chor.model.activities.Gateway;
 import de.hpi.bpel4chor.model.activities.Handler;
 import de.hpi.bpel4chor.model.activities.IntermediateEvent;
-import de.hpi.bpel4chor.model.activities.ServiceTask;
 import de.hpi.bpel4chor.model.activities.NoneTask;
 import de.hpi.bpel4chor.model.activities.ReceiveTask;
 import de.hpi.bpel4chor.model.activities.SendTask;
+import de.hpi.bpel4chor.model.activities.ServiceTask;
 import de.hpi.bpel4chor.model.activities.StartEvent;
 import de.hpi.bpel4chor.model.activities.Task;
 import de.hpi.bpel4chor.model.activities.ValidateTask;
 import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.model.supporting.Expression;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import de.hpi.bpel4chor.util.ListUtil;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * <p>This factory transforms the sequence flow contained in processes or 
@@ -52,7 +53,7 @@ public class SequenceFlowFactory {
 	private Container container = null;
 	private boolean errorHandler = false;
 	private boolean messageHandler = false;
-	private Diagram diagram = null;
+	private BPMNDiagram diagram = null;
 	private Document document = null;
 	private BasicActivityFactory basicFactory = null;
 	private SupportingFactory supportingFactory = null;
@@ -70,7 +71,7 @@ public class SequenceFlowFactory {
 	 *                  be transformed.
 	 * @param output    The {@link Output} to print errors to. 
 	 */
-	public SequenceFlowFactory(Diagram diagram, Document document, 
+	public SequenceFlowFactory(BPMNDiagram diagram, Document document, 
 			Container container, Output output) {
 		this.diagram = diagram;
 		this.container = container;

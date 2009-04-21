@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import de.hpi.bpel4chor.model.Container;
-import de.hpi.bpel4chor.model.Diagram;
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.activities.EndEvent;
 import de.hpi.bpel4chor.model.activities.Gateway;
@@ -19,6 +19,7 @@ import de.hpi.bpel4chor.model.activities.Task;
 import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.util.ListUtil;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * The Componentizer tries to find components within the activities of a 
@@ -28,7 +29,7 @@ import de.hpi.bpel4chor.util.Output;
 public class Componentizer {
 	
 	private Container container = null;
-	private Diagram diagram = null;
+	private BPMNDiagram diagram = null;
 	private Output output;
 	
 	/**
@@ -39,7 +40,7 @@ public class Componentizer {
 	 * @param container The container, that may contain components
 	 * @param output    The output to print errors to.
 	 */
-	public Componentizer(Diagram diagram, Container container, Output output) {
+	public Componentizer(BPMNDiagram diagram, Container container, Output output) {
 		this.diagram = diagram;
 		this.container = container;
 		this.output = output;

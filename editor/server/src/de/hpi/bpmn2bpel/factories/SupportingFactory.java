@@ -3,8 +3,11 @@ package de.hpi.bpmn2bpel.factories;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import de.hpi.bpel4chor.model.Container;
-import de.hpi.bpel4chor.model.Diagram;
 import de.hpi.bpel4chor.model.Process;
 import de.hpi.bpel4chor.model.Swimlane;
 import de.hpi.bpel4chor.model.activities.Scope;
@@ -18,10 +21,9 @@ import de.hpi.bpel4chor.model.supporting.Import;
 import de.hpi.bpel4chor.model.supporting.Loop;
 import de.hpi.bpel4chor.model.supporting.ToPart;
 import de.hpi.bpel4chor.model.supporting.ToSpec;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import de.hpi.bpel4chor.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * This factory is used for generating certain child elements of BPEL4Chor 
@@ -31,7 +33,7 @@ import de.hpi.bpel4chor.util.Output;
  */
 public class SupportingFactory {
 	
-	private Diagram diagram = null;
+	private BPMNDiagram diagram = null;
 	private Document document = null;
 	private Output output = null;
 	
@@ -46,7 +48,7 @@ public class SupportingFactory {
 	 * @param document  The document to create the BPEL4Chor elements for.
 	 * @param output    The {@link Output} to print errors to. 
 	 */
-	public SupportingFactory(Diagram diagram, Document document, Output output) {
+	public SupportingFactory(BPMNDiagram diagram, Document document, Output output) {
 		this.diagram = diagram;
 		this.document = document;
 		this.output = output;

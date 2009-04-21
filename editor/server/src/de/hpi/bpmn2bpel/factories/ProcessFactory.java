@@ -3,10 +3,14 @@ package de.hpi.bpmn2bpel.factories;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import de.hpi.bpel4chor.model.Diagram;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import de.hpi.bpel4chor.model.Process;
 import de.hpi.bpel4chor.model.Swimlane;
 import de.hpi.bpel4chor.model.activities.Activity;
@@ -18,10 +22,9 @@ import de.hpi.bpel4chor.model.activities.Scope;
 import de.hpi.bpel4chor.model.activities.StartEvent;
 import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.model.supporting.Import;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import de.hpi.bpel4chor.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * This factory generates the abstract BPEL processes from the processes
@@ -31,14 +34,14 @@ import de.hpi.bpel4chor.util.Output;
  */
 public class ProcessFactory {
 	
-	Diagram diagram = null;
+	BPMNDiagram diagram = null;
 	
 	/**
 	 * Constructor. Initializes the process factory.
 	 * 
 	 * @param diagram The diagram that contains the processes to be generated.
 	 */
-	public ProcessFactory(Diagram diagram) {
+	public ProcessFactory(BPMNDiagram diagram) {
 		this.diagram = diagram;
 	}
 	

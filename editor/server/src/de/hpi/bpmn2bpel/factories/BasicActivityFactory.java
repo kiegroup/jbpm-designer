@@ -2,18 +2,21 @@ package de.hpi.bpmn2bpel.factories;
 
 import java.util.Iterator;
 import java.util.List;
-import de.hpi.bpel4chor.model.Diagram;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.activities.AssignTask;
 import de.hpi.bpel4chor.model.activities.EmptyTask;
 import de.hpi.bpel4chor.model.activities.Event;
 import de.hpi.bpel4chor.model.activities.IntermediateEvent;
-import de.hpi.bpel4chor.model.activities.ServiceTask;
 import de.hpi.bpel4chor.model.activities.NoneTask;
 import de.hpi.bpel4chor.model.activities.ReceiveTask;
-import de.hpi.bpel4chor.model.activities.SendTask;
 import de.hpi.bpel4chor.model.activities.ResultCompensation;
 import de.hpi.bpel4chor.model.activities.ResultError;
+import de.hpi.bpel4chor.model.activities.SendTask;
+import de.hpi.bpel4chor.model.activities.ServiceTask;
 import de.hpi.bpel4chor.model.activities.StartEvent;
 import de.hpi.bpel4chor.model.activities.Task;
 import de.hpi.bpel4chor.model.activities.Trigger;
@@ -23,10 +26,9 @@ import de.hpi.bpel4chor.model.activities.ValidateTask;
 import de.hpi.bpel4chor.model.artifacts.VariableDataObject;
 import de.hpi.bpel4chor.model.connections.MessageFlow;
 import de.hpi.bpel4chor.model.supporting.Copy;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import de.hpi.bpel4chor.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * This factory transforms the basic BPEL4Chor activities assign, compensate, 
@@ -35,7 +37,7 @@ import de.hpi.bpel4chor.util.Output;
  */
 public class BasicActivityFactory {
 	
-	private Diagram diagram = null;
+	private BPMNDiagram diagram = null;
 	private Document document = null;
 	private SupportingFactory supportingFactory = null;
 	private StructuredElementsFactory structuredElementsFactory = null;
@@ -49,7 +51,7 @@ public class BasicActivityFactory {
 	 * @param document The target document for the generated BPEL4Chor elements
 	 * @param output   The Output to print errors to. 
 	 */
-	public BasicActivityFactory(Diagram diagram, Document document, Output output) {
+	public BasicActivityFactory(BPMNDiagram diagram, Document document, Output output) {
 		this.diagram = diagram;
 		this.document = document;
 		this.output = output;

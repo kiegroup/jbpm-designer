@@ -3,8 +3,11 @@ package de.hpi.bpmn2bpel.factories;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import de.hpi.bpel4chor.model.Container;
-import de.hpi.bpel4chor.model.Diagram;
 import de.hpi.bpel4chor.model.SubProcess;
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.activities.BlockActivity;
@@ -22,10 +25,9 @@ import de.hpi.bpel4chor.model.artifacts.VariableDataObject;
 import de.hpi.bpel4chor.model.connections.Association;
 import de.hpi.bpel4chor.model.supporting.Import;
 import de.hpi.bpel4chor.model.supporting.Loop;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import de.hpi.bpel4chor.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * This factory generates BPEL4Chor activity element that can have
@@ -35,7 +37,7 @@ import de.hpi.bpel4chor.util.Output;
  */
 public class StructuredElementsFactory {
 
-	private Diagram diagram = null;
+	private BPMNDiagram diagram = null;
 	private Document document = null;
 	private SupportingFactory supportingFactory = null;
 	private Output output = null;
@@ -48,7 +50,7 @@ public class StructuredElementsFactory {
 	 * @param document  The document to create the BPEL4Chor elements for.
 	 * @param output    The {@link Output} to print errors to. 
 	 */
-	public StructuredElementsFactory(Diagram diagram, Document document, Output output) {
+	public StructuredElementsFactory(BPMNDiagram diagram, Document document, Output output) {
 		this.diagram = diagram;
 		this.document = document;
 		this.output = output;
