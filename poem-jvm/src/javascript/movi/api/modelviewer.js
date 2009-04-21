@@ -305,9 +305,10 @@ MOVI.namespace("widget");
 	     * @param jsonObj The delivered JSON Object
 	     */
 		loadStencilSetCallback: function(jsonObj) {
+			var prefix = "movi_" + this._index + "-";
 			try {
 				this.canvas.stencilset = new MOVI.stencilset.Stencilset(jsonObj);
-				this.canvas = new MOVI.model.Canvas(this, this.canvas);
+				this.canvas = new MOVI.model.Canvas(this, this.canvas, prefix);
 			} catch(e) {
 				MOVI.log("A " + e.name + " occured while trying to load model: " + 
 							e.message, "error", "modelviewer.js");

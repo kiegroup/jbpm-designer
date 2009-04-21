@@ -38,15 +38,16 @@ MOVI.namespace("model");
 	 * the canvas
      * @param {Object} jsonObj The JSON object from which the new canvas
      * is created.
+	 * @param {String} prefix The element's ID prefix (unique per modelviewer)
      */
-    MOVI.model.Canvas = function(modelviewer, jsonObj) {
+    MOVI.model.Canvas = function(modelviewer, jsonObj, prefix) {
 	
 		this._modelviewer = modelviewer;
 
 		// element's attributes
 		var attr = {};
 		
-		MOVI.model.Canvas.superclass.constructor.call(this, jsonObj, jsonObj.stencilset, null, attr); 
+		MOVI.model.Canvas.superclass.constructor.call(this, jsonObj, jsonObj.stencilset, null, prefix, attr); 
 		
 		this.set("className", _CLASS_NAME);
 		

@@ -39,13 +39,14 @@ MOVI.namespace("model");
 	 * @param {Object} stencilset The stencilset for lookup of the node's 
 	 * stencil.
 	 * @param {Shape} parent The node's parent shape
+	 * @param {String} prefix The element's ID prefix (unique per modelviewer)
      */
-    MOVI.model.Node = function(jsonObj, stencilset, parent) {
+    MOVI.model.Node = function(jsonObj, stencilset, parent, prefix) {
 	
 		// element's attributes
 		var attr = {};
 		
-		MOVI.model.Node.superclass.constructor.call(this, jsonObj, stencilset, parent, attr); 
+		MOVI.model.Node.superclass.constructor.call(this, jsonObj, stencilset, parent, prefix, attr); 
 		this.set("className", _CLASS_NAME);
 		
 		this.update();
@@ -58,7 +59,6 @@ MOVI.namespace("model");
 	     * @method update
 	     */
 		update: function() {
-			
 			var left = Math.round(this.bounds.upperLeft.x);
 			var top = Math.round(this.bounds.upperLeft.y);
 			var width = Math.round(this.bounds.lowerRight.x - this.bounds.upperLeft.x);

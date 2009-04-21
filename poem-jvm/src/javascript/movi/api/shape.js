@@ -68,10 +68,11 @@ MOVI.namespace("model");
 	 * @param {Object} stencilset The stencilset for lookup of the shape's 
 	 * stencil
 	 * @param {Shape} parent The shapes's parent shape
+	 * @param {String} prefix The element's ID prefix (unique per modelviewer)
 	 * @param {Object} attr (optional) A key map of the shape element's 
      * initial attributes
      */
-    MOVI.model.Shape = function(jsonObj, stencilset, parent, attr) {
+    MOVI.model.Shape = function(jsonObj, stencilset, parent, prefix, attr) {
 		
 		YAHOO.lang.augmentObject(this, jsonObj, true);
 		
@@ -111,7 +112,7 @@ MOVI.namespace("model");
 		
 		MOVI.model.Shape.superclass.constructor.call(this, el, attr); 		
 		
-		this.set("id", this.resourceId);
+		this.set("id", prefix + this.resourceId);
 		
 		/* create child shape objects and append them as child elements */
 		
@@ -122,7 +123,7 @@ MOVI.namespace("model");
 		for(var i = 0; i<childSh.length; i++) { 
 			var child = childSh[i];
 			var subclass = _getSubclassForJSONObj(child, stencilset);
-			child = new subclass(child, stencilset, this);
+			child = new subclass(child, stencilset, this, prefix);
 			this.childShapes[child.resourceId] = child;
 			this.appendChild(child);
 		}

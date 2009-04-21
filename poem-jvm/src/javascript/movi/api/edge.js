@@ -39,13 +39,14 @@ MOVI.namespace("model");
 	 * @param {Object} stencilset The stencilset for lookup of the edge's 
 	 * stencil.
 	 * @param {Shape} parent The edges's parent shape
+	 * @param {String} prefix The element's ID prefix (unique per modelviewer)
      */
-    MOVI.model.Edge = function(jsonObj, stencilset, parent) {
+    MOVI.model.Edge = function(jsonObj, stencilset, parent, prefix) {
 	
 		// element's attributes
 		var attr = {};
 		
-		MOVI.model.Node.superclass.constructor.call(this, jsonObj, stencilset, parent, attr); 
+		MOVI.model.Node.superclass.constructor.call(this, jsonObj, stencilset, parent, prefix, attr); 
 		
 		this.set("className", _CLASS_NAME);
 	}
