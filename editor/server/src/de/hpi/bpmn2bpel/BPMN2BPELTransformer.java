@@ -35,7 +35,7 @@ import de.hpi.bpmn.BPMNDiagram;
 public class BPMN2BPELTransformer {
 
 	public Document transform(BPMNDiagram diagram) {
-		ProcessFactory factory = new ProcessFactory(diagram);
+		//ProcessFactory factory = new ProcessFactory(diagram);
 
 		return null;
 	}
