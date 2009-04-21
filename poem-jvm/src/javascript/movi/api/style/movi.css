@@ -111,6 +111,7 @@
 /* MOVI ModelNavigator styles */
 
 .movi-navigator {
+    position: relative;
     cursor: crosshair;
 }
 
