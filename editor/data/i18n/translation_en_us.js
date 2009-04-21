@@ -238,7 +238,6 @@ ORYX.I18N.EPCSupport.progressImp = "Import...";
 
 if(!ORYX.I18N.ERDFSupport) ORYX.I18N.ERDFSupport = {};
 
-ORYX.I18N.ERDFSupport.group = "ERDF";
 ORYX.I18N.ERDFSupport.exp = "Export to ERDF";
 ORYX.I18N.ERDFSupport.expDesc = "Export to ERDF";
 ORYX.I18N.ERDFSupport.imp = "Import from ERDF";
@@ -255,6 +254,8 @@ ORYX.I18N.ERDFSupport.impERDF = "Import ERDF";
 ORYX.I18N.ERDFSupport.impBtn = "Import";
 ORYX.I18N.ERDFSupport.impProgress = "Importing...";
 ORYX.I18N.ERDFSupport.close = "Close";
+ORYX.I18N.ERDFSupport.deprTitle = "Really export to eRDF?";
+ORYX.I18N.ERDFSupport.deprText = "Exporting to eRDF is not recommended anymore because the support will be stopped in future versions of the Oryx editor. If possible, export the model to JSON. Do you want to export anyway?";
 
 if(!ORYX.I18N.jPDLSupport) ORYX.I18N.jPDLSupport = {};
 
@@ -493,3 +494,23 @@ if(!ORYX.I18N.ClearSodBodHighlights) ORYX.I18N.ClearSodBodHighlights = {};
 ORYX.I18N.ClearSodBodHighlights.name = "Clear Highlights and Overlays";
 ORYX.I18N.ClearSodBodHighlights.group = "Resource Perspective";
 ORYX.I18N.ClearSodBodHighlights.desc = "Remove all Separation and Binding of Duties Highlights/ Overlays";
+
+/** New Language Properties: 21.04.2009 */
+ORYX.I18N.JSONSupport = {
+    imp: {
+        name: "Import from JSON",
+        desc: "Imports a model from JSON",
+        group: "Export",
+        selectFile: "Select an JSON (.json) file or type in JSON to import it!",
+        file: "File",
+        btnImp: "Import",
+        btnClose: "Close",
+        progress: "Importing ...",
+        syntaxError: "Syntax error in provided JSON!"
+    },
+    exp: {
+        name: "Export to JSON",
+        desc: "Exports current model to JSON",
+        group: "Export"
+    }
+};

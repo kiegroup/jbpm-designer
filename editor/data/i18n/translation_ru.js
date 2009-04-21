@@ -206,7 +206,6 @@ ORYX.I18N.EPCSupport.progressImp = "Импорт...";
 
 if(!ORYX.I18N.ERDFSupport) ORYX.I18N.ERDFSupport = {};
 
-//ORYX.I18N.ERDFSupport.group = "ERDF";
 ORYX.I18N.ERDFSupport.exp = "Экспорт в ERDF";
 ORYX.I18N.ERDFSupport.expDesc = "Экспорт в ERDF";
 ORYX.I18N.ERDFSupport.imp = "Имопрт  ERDF";
@@ -223,6 +222,8 @@ ORYX.I18N.ERDFSupport.impERDF = "Импорт ERDF";
 ORYX.I18N.ERDFSupport.impBtn = "Импорт";
 ORYX.I18N.ERDFSupport.impProgress = "Импорт...";
 ORYX.I18N.ERDFSupport.close = "Закрыть";
+//ORYX.I18N.ERDFSupport.deprTitle = "Do you really want to export to eRDF?";
+//ORYX.I18N.ERDFSupport.deprText = "Exporting to eRDF is not recommended anymore because the support will be stopped in future versions of the Oryx editor. If possible, export the model to JSON.";
 
 if(!ORYX.I18N.Save) ORYX.I18N.Save = {};
 

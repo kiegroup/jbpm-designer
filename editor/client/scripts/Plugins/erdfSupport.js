@@ -47,7 +47,8 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		this.facade.offer({
 			'name':				ORYX.I18N.ERDFSupport.exp,
 			'functionality': 	this.exportERDF.bind(this),
-			'group': 			ORYX.I18N.ERDFSupport.group,
+			'group': 			'Export',
+            dropDownGroupIcon: ORYX.PATH + "images/export2.png",
 			'icon': 			ORYX.PATH + "images/erdf_export_icon.png",
 			'description': 		ORYX.I18N.ERDFSupport.expDesc,
 			'index': 			0,
@@ -58,7 +59,8 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		this.facade.offer({
 			'name':				ORYX.I18N.ERDFSupport.imp,
 			'functionality': 	this.importERDF.bind(this),
-			'group': 			ORYX.I18N.ERDFSupport.group,
+			'group': 			'Export',
+            dropDownGroupIcon: ORYX.PATH + "images/import.png",
 			'icon': 			ORYX.PATH + "images/erdf_import_icon.png",
 			'description': 		ORYX.I18N.ERDFSupport.impDesc,
 			'index': 			1,
@@ -83,14 +85,22 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 	 * 
 	 */
 	exportERDF: function(){
-		
-		var s 	= this.facade.getERDF();
-		
-		//this.openXMLWindow( s );
-		this.openDownloadWindow(window.document.title + ".xml", s);
-	},	
-
-	
+        // Show deprecation message
+        Ext.Msg.show({
+           title:ORYX.I18N.ERDFSupport.deprTitle,
+           msg: ORYX.I18N.ERDFSupport.deprText,
+           buttons: Ext.Msg.YESNO,
+           fn: function(buttonId){
+               if(buttonId === 'yes'){
+                    var s   = this.facade.getERDF();
+                    
+                    //this.openXMLWindow( s );
+                    this.openDownloadWindow(window.document.title + ".xml", s);
+               }
+           }.bind(this),
+           icon: Ext.MessageBox.WARNING 
+        });
+	},
 	
 	/**
 	 * 
