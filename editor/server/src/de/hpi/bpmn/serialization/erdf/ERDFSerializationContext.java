@@ -8,6 +8,7 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.SubProcess;
 
 public class ERDFSerializationContext {
 	
@@ -24,15 +25,24 @@ public class ERDFSerializationContext {
 		this.resourceID = 0;
 		this.resourceIDs = new HashMap<DiagramObject, Integer>();
 		
-		for(Node node : bpmnDiagram.getChildNodes()) {
-			registerResource(node);
-		}
+		registerAllChildResources(bpmnDiagram.getChildNodes());
+		
 		for(Edge edge : bpmnDiagram.getEdges()) {
 			registerResource(edge);
 		}
 		
 	}
 
+	private void registerAllChildResources(Collection<Node> nodes) {
+		for(Node node : nodes) {
+			registerResource(node);
+			if (node instanceof SubProcess) {
+				registerAllChildResources(((SubProcess)node).getChildNodes());
+			}
+		}
+	}
+
+	
 	private void registerResource(DiagramObject d) {
 		resourceIDs.put(d, this.resourceID);
 		resourceID++;

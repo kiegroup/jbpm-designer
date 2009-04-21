@@ -1,5 +1,7 @@
 package de.hpi.bpel2bpmn.util;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -34,13 +36,15 @@ public class BPELParser {
 	
 	protected static final String BPEL_ABSTRACT_NS = "http://docs.oasis-open.org/wsbpel/2.0/process/abstract";
 	
-	protected static final String FILENAME_BPEL_EXECUTABLE_SCHEMA = "ws-bpel_executable.xsd";
-	protected static final String FILENAME_BPEL_ABSTRACT_SCHEMA = "ws-bpel_abstract.xsd";
-	protected static final String FILENAME_XML_DEFINITION_SCHEMA = "xml.xsd";
-	
-	protected boolean successfulValidation;
+	private static final String PATH_TO_LIB_DIR = File.separator + "webapps" + File.separator + "oryx" + File.separator + "WEB-INF" + File.separator + "lib" + File.separator;
 
-	protected String validationException = null;
+	protected static final String FILENAME_BPEL_EXECUTABLE_SCHEMA = System.getProperty("catalina.home") + PATH_TO_LIB_DIR + "ws-bpel_executable.xsd";
+	protected static final String FILENAME_BPEL_ABSTRACT_SCHEMA = System.getProperty("catalina.home") + PATH_TO_LIB_DIR + "ws-bpel_abstract.xsd";
+	protected static final String FILENAME_XML_DEFINITION_SCHEMA = System.getProperty("catalina.home") + PATH_TO_LIB_DIR + "xml.xsd";
+		
+	protected boolean successfulValidation = false;
+
+	protected String validationException = "";
 	
 	/**
 	 * We do not want to fetch the XML definition schema
@@ -66,7 +70,7 @@ public class BPELParser {
 				LSInput ret = domImplementationLS.createLSInput();
 				try {
 					// try to get the local copy of the schema
-					ret.setByteStream(this.getClass().getResourceAsStream("/"+FILENAME_XML_DEFINITION_SCHEMA));
+					ret.setByteStream(new FileInputStream(FILENAME_XML_DEFINITION_SCHEMA));
 				    return ret;
 				} catch (Exception e) {
 					return null;
@@ -108,7 +112,7 @@ public class BPELParser {
        factory.setNamespaceAware(true);
        
        Document doc = null;
-        
+       
         try {
         	
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -123,13 +127,13 @@ public class BPELParser {
                 constraintFactory.setResourceResolver(new BPELResolver(domImplementationLS));
 	            // should we validate against "executable" or "abstract" BPEL ?
 	            // default is "executable"
-	            Source bpelConstraints;
-	            if (doc.getDocumentElement().getNamespaceURI().equals(BPEL_ABSTRACT_NS)) {
-		            bpelConstraints = new StreamSource(this.getClass().getResourceAsStream("/"+FILENAME_BPEL_ABSTRACT_SCHEMA));
+                Source bpelConstraints = new StreamSource(new File(FILENAME_BPEL_EXECUTABLE_SCHEMA));
+	            if (doc.getDocumentElement().getNamespaceURI() != null) {
+		            if (doc.getDocumentElement().getNamespaceURI().equals(BPEL_ABSTRACT_NS)) {
+			            bpelConstraints = new StreamSource(new File(FILENAME_BPEL_ABSTRACT_SCHEMA));
+		            }
 	            }
-	            else {
-		            bpelConstraints = new StreamSource(this.getClass().getResourceAsStream("/"+FILENAME_BPEL_EXECUTABLE_SCHEMA));
-	            }
+	            
 	            Schema schema = constraintFactory.newSchema(bpelConstraints);
 	            Validator validator = schema.newValidator();
 	            try {

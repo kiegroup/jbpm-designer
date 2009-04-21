@@ -27,11 +27,11 @@ public class CompensateScopeMapping extends BasicActivityMapping {
 		setConnectionPointsWithControlLinks(node, event, event, null, mappingContext);
 		mappingContext.addMappingElementToSet(node,event);
 		
-		String annotationText = "Please note that there are several conceptual mismatches," +
-				" when mapping a BPEL 'compensate scope' activity to a compensation calling event in BPMN." +
-				" In contrast to BPEL, the event is non-blocking, thus execution continues immediately. In addition," +
-				" the compensation target has to be adapted, as compensation triggers are not propagated in BPMN (as with default handlers in BPEL).";
-		createAnnotationAndAssociation(annotationText,event,mappingContext);
+//		String annotationText = "Please note that there are several conceptual mismatches," +
+//				" when mapping a BPEL 'compensate scope' activity to a compensation calling event in BPMN." +
+//				" In contrast to BPEL, the event is non-blocking, thus execution continues immediately. In addition," +
+//				" the compensation target has to be adapted, as compensation triggers are not propagated in BPMN (as with default handlers in BPEL).";
+//		createAnnotationAndAssociation(annotationText,event,mappingContext);
 
 	}
 	

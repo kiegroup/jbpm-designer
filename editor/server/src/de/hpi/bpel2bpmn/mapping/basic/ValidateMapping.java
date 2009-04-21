@@ -23,9 +23,9 @@ public class ValidateMapping extends BasicActivityMapping {
 		setConnectionPointsWithControlLinks(node, task, task, null, mappingContext);
 		mappingContext.addMappingElementToSet(node,task);
 		
-		String annotationText = "A BPEL 'validate' activity cannot be mapped to BPMN. " +
-				"Here, we assume that data validation is performed by a specific task.";
-		createAnnotationAndAssociation(annotationText,task,mappingContext);
+//		String annotationText = "A BPEL 'validate' activity cannot be mapped to BPMN. " +
+//				"Here, we assume that data validation is performed by a specific task.";
+//		createAnnotationAndAssociation(annotationText,task,mappingContext);
 	}
 
 }

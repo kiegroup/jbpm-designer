@@ -132,6 +132,9 @@ public final class BPEL2BPMNMappingUtil {
 	public static Node getActivityChildNode(Node node) {
 		Node returnNode = null;
 		
+		if (node == null)
+			return returnNode;
+
 		for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
 			if (!(child instanceof Text)) {
 				if (BPEL_ACTIVITIES.contains(child.getNodeName())) {
@@ -151,6 +154,9 @@ public final class BPEL2BPMNMappingUtil {
 	 */
 	public static Collection<Node> getAllActivityChildNodes(Node node) {
 		Collection<Node> returnNodes = new HashSet<Node>();
+		
+		if (node == null)
+			return returnNodes;
 		
 		for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
 			if (!(child instanceof Text)) {
@@ -173,9 +179,13 @@ public final class BPEL2BPMNMappingUtil {
 	public static Collection<Node> getAllActivityChildNodesRecursively(Node node) {
 		Collection<Node> returnNodes = new HashSet<Node>();
 		
+		if (node == null) 
+			return returnNodes;
+		
 		for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
 			if (!(child instanceof Text)) {
 				if (BPEL_ACTIVITIES.contains(child.getNodeName())) {
+					returnNodes.add(child);
 					returnNodes.addAll(getAllActivityChildNodesRecursively(child));
 				}
 			}
@@ -196,6 +206,9 @@ public final class BPEL2BPMNMappingUtil {
 	public static Node getSpecificChildNode(Node node, String name) {
 		Node returnNode = null;
 		
+		if (node == null)
+			return returnNode;
+		
 		for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
 			if (child.getNodeName().equalsIgnoreCase(name)) {
 				returnNode = child;
@@ -208,6 +221,9 @@ public final class BPEL2BPMNMappingUtil {
 	public static Collection<Node> getAllSpecificChildNodes(Node node, String name) {
 		Collection<Node> returnNodes = new HashSet<Node>();
 		
+		if (node == null)
+			return returnNodes;
+
 		for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
 			if (child.getNodeName().equalsIgnoreCase(name)) {
 				returnNodes.add(child);
@@ -296,7 +312,7 @@ public final class BPEL2BPMNMappingUtil {
 		Map<String,String> transitionConditions = new HashMap<String,String>();
 		Node sourcesNode = getSpecificChildNode(node, "sources");
 		for (Node sourceNode : getAllSpecificChildNodes(sourcesNode, "source")) {
-			String linkName = sourceNode.getAttributes().getNamedItem("name").getNodeValue();
+			String linkName = sourceNode.getAttributes().getNamedItem("linkName").getNodeValue();
 			Node transitionNode = getSpecificChildNode(sourceNode, "transitionCondition");
 			// has the transition condition been set?
 			if (transitionNode != null) {
@@ -322,16 +338,17 @@ public final class BPEL2BPMNMappingUtil {
 	public static boolean isSuppressJoinFailure(Node node) {
 		boolean result = false;
 
-		if (node.getAttributes().getNamedItem("suppressJoinFailure") != null) {
-			if (node.getAttributes().getNamedItem("suppressJoinFailure").getNodeValue().equalsIgnoreCase("yes")) {
-				result = true;
-			}
-		} else {
-			if (node.getParentNode() != null) {
-				result = isSuppressJoinFailure(node.getParentNode());
+		if (node.getAttributes() != null) {
+			if (node.getAttributes().getNamedItem("suppressJoinFailure") != null) {
+				if (node.getAttributes().getNamedItem("suppressJoinFailure").getNodeValue().equalsIgnoreCase("yes")) {
+					result = true;
+				}
+			} else {
+				if (node.getParentNode() != null) {
+					result = isSuppressJoinFailure(node.getParentNode());
+				}
 			}
 		}
-
 		return result;
 	}
 	
@@ -343,6 +360,10 @@ public final class BPEL2BPMNMappingUtil {
 	 */
 	public static Collection<String> getAllIncomingControlLinkNames(Node node) {
 		Collection<String> names = new HashSet<String>();
+		
+		if (node == null)
+			return names;
+
 		Node targetsNode = getSpecificChildNode(node, "targets");
 		for (Node targetNode : getAllSpecificChildNodes(targetsNode, "target")) {
 			names.add(targetNode.getAttributes().getNamedItem("linkName").getNodeValue());
@@ -358,6 +379,10 @@ public final class BPEL2BPMNMappingUtil {
 	 */
 	public static Collection<String> getAllOutgoingControlLinkNames(Node node) {
 		Collection<String> names = new HashSet<String>();
+
+		if (node == null)
+			return names;
+		
 		Node sourcesNode = getSpecificChildNode(node, "sources");
 		for (Node sourceNode : getAllSpecificChildNodes(sourcesNode, "source")) {
 			names.add(sourceNode.getAttributes().getNamedItem("linkName").getNodeValue());

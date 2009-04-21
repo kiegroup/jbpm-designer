@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.w3c.dom.Document;
@@ -131,7 +130,7 @@ public class BPEL2BPMNServlet extends HttpServlet {
 	
     private void printError(PrintWriter out, String err){
     	if (out != null){
-    		out.print("{\"success\":\"false\", \"content\":\""+err+"\"}");
+    		out.print("\"success\":\"false\", \"content\":\""+err+"\"");
     	}
     }
     

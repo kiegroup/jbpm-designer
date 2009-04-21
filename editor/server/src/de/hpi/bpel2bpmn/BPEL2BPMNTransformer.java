@@ -1,8 +1,10 @@
 package de.hpi.bpel2bpmn;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Document;
@@ -12,17 +14,18 @@ import org.w3c.dom.Text;
 import de.hpi.bpel2bpmn.mapping.ElementMapping;
 import de.hpi.bpel2bpmn.mapping.MappingContext;
 import de.hpi.bpel2bpmn.mapping.ProcessMapping;
+import de.hpi.bpel2bpmn.mapping.basic.AssignMapping;
 import de.hpi.bpel2bpmn.mapping.basic.CompensateMapping;
 import de.hpi.bpel2bpmn.mapping.basic.CompensateScopeMapping;
 import de.hpi.bpel2bpmn.mapping.basic.EmptyMapping;
 import de.hpi.bpel2bpmn.mapping.basic.ExitMapping;
 import de.hpi.bpel2bpmn.mapping.basic.InvokeMapping;
+import de.hpi.bpel2bpmn.mapping.basic.OpaqueActivityMapping;
 import de.hpi.bpel2bpmn.mapping.basic.ReceiveMapping;
 import de.hpi.bpel2bpmn.mapping.basic.ReplyMapping;
 import de.hpi.bpel2bpmn.mapping.basic.RethrowMapping;
 import de.hpi.bpel2bpmn.mapping.basic.ThrowMapping;
 import de.hpi.bpel2bpmn.mapping.basic.WaitMapping;
-import de.hpi.bpel2bpmn.mapping.structured.ElseIfMapping;
 import de.hpi.bpel2bpmn.mapping.structured.FlowMapping;
 import de.hpi.bpel2bpmn.mapping.structured.ForeachMapping;
 import de.hpi.bpel2bpmn.mapping.structured.IfMapping;
@@ -32,9 +35,6 @@ import de.hpi.bpel2bpmn.mapping.structured.PickMapping;
 import de.hpi.bpel2bpmn.mapping.structured.ScopeMapping;
 import de.hpi.bpel2bpmn.mapping.structured.SequenceMapping;
 import de.hpi.bpel2bpmn.mapping.structured.WhileRepeatUntilMapping;
-import de.hpi.bpmn.IntermediateCancelEvent;
-import de.hpi.bpmn.IntermediateCompensationEvent;
-import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.Container;
@@ -42,11 +42,15 @@ import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.EndErrorEvent;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.Gateway;
+import de.hpi.bpmn.IntermediateCancelEvent;
+import de.hpi.bpmn.IntermediateCompensationEvent;
 import de.hpi.bpmn.IntermediateErrorEvent;
+import de.hpi.bpmn.IntermediateEvent;
 import de.hpi.bpmn.IntermediateMessageEvent;
 import de.hpi.bpmn.IntermediateMultipleEvent;
 import de.hpi.bpmn.IntermediatePlainEvent;
 import de.hpi.bpmn.IntermediateSignalEvent;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.SubProcess;
 
 public class BPEL2BPMNTransformer {
@@ -149,12 +153,14 @@ public class BPEL2BPMNTransformer {
 			FlowMapping.getInstance().mapElement(node, mappingContext);
 		} else if (nodeName.equals("if")) {
 			IfMapping.getInstance().mapElement(node, mappingContext);
-		} else if ((nodeName.equals("elseif")) || (nodeName.equals("else"))) {
-			ElseIfMapping.getInstance().mapElement(node, mappingContext);
 		} else if (nodeName.equals("foreach")) {
 			ForeachMapping.getInstance().mapElement(node, mappingContext);
 		} else if (nodeName.equals("scope")) {
 			ScopeMapping.getInstance().mapElement(node, mappingContext);
+		} else if (nodeName.equals("assign")) {
+			AssignMapping.getInstance().mapElement(node, mappingContext);
+		} else if (nodeName.equals("opaqueactivity")) {
+			OpaqueActivityMapping.getInstance().mapElement(node, mappingContext);
 		} else {
 			System.err.println("Did not find any mappings for node " + nodeName);
 		}
@@ -189,11 +195,13 @@ public class BPEL2BPMNTransformer {
 		 * 
 		 * If the mapping of the domNode contains a subprocess, we use it as the new parent.
 		 */
-		for (de.hpi.bpmn.Node node : mappingContext.getMappingElements().get(domNode)) {
-			if (node.getParent() == null)
-				node.setParent(parent);
-			if (node instanceof SubProcess) {
-				nextContainer = (Container) node;
+		if (mappingContext.getMappingElements().containsKey(domNode)) {
+			for (de.hpi.bpmn.Node node : mappingContext.getMappingElements().get(domNode)) {
+				if (node.getParent() == null)
+					node.setParent(parent);
+				if (node instanceof SubProcess) {
+					nextContainer = (Container) node;
+				}
 			}
 		}
 		
@@ -235,15 +243,22 @@ public class BPEL2BPMNTransformer {
 		 */
 		/*
 		 * -2-
+		 * Create plain end event for gateways without outgoing flow
+		 * They might have been created because of an if/pick/flow structure. 
+		 */
+		/*
+		 * -3-
 		 * Transform all intermediate events without outgoing flow into
 		 * end events of the same type.
 		 */
 		Collection<de.hpi.bpmn.Node> gatewaysToRemove = new HashSet<de.hpi.bpmn.Node>();
 		Collection<de.hpi.bpmn.Node> eventsToRemove = new HashSet<de.hpi.bpmn.Node>();
+		Map<Node, de.hpi.bpmn.Node> addToMappingContext = new HashMap<Node, de.hpi.bpmn.Node>();
 		for (Node domNode : mappingContext.getMappingElements().keySet()) {
 			for (de.hpi.bpmn.Node node : mappingContext.getMappingElements().get(domNode)) {
-				// -1-
+				// -1-, -2-
 				if (node instanceof Gateway) {
+					// -1-
 					if (node.getIncomingEdges().size() == 1 && node.getOutgoingEdges().size() == 1) {
 						Edge in = node.getIncomingEdges().get(0);
 						Edge out = node.getOutgoingEdges().get(0);
@@ -253,9 +268,19 @@ public class BPEL2BPMNTransformer {
 						mappingContext.getDiagram().getEdges().remove(out);
 						gatewaysToRemove.add(node);
 					}
+					// -2-
+					if (node.getOutgoingEdges().size() == 0) {
+						EndEvent event = mappingContext.getFactory().createEndPlainEvent();
+						event.setParent(node.getParent());
+						addToMappingContext.put(domNode, event);
+						SequenceFlow sequenceFlow = mappingContext.getFactory().createSequenceFlow();
+						sequenceFlow.setSource(node);
+						sequenceFlow.setTarget(event);
+						mappingContext.getDiagram().getEdges().add(sequenceFlow);
+					}
 				}
 				
-				// -2-
+				// -3-
 				// is the node an intermediate event without outgoing edges?
 				if (node instanceof IntermediateEvent && node.getOutgoingSequenceFlows().size() == 0) {
 					EndEvent event = null;
@@ -265,35 +290,53 @@ public class BPEL2BPMNTransformer {
 					} else if (node instanceof IntermediateCancelEvent) {
 						event = mappingContext.getFactory().createEndCancelEvent();
 					} else if (node instanceof IntermediateCompensationEvent) {
-						event = mappingContext.getFactory().createEndCompensationEvent();
+						if (((IntermediateCompensationEvent)node).isThrowing()) {
+							event = mappingContext.getFactory().createEndCompensationEvent();
+						}
 					} else if (node instanceof IntermediateMessageEvent) {
-						event = mappingContext.getFactory().createEndMessageEvent();
+						if (((IntermediateMessageEvent)node).isThrowing()) {
+							event = mappingContext.getFactory().createEndMessageEvent();
+						}
 					} else if (node instanceof IntermediateMultipleEvent) {
-						event = mappingContext.getFactory().createEndMultipleEvent();
+						if (((IntermediateMultipleEvent)node).isThrowing()) {
+							event = mappingContext.getFactory().createEndMultipleEvent();
+						}
 					} else if (node instanceof IntermediatePlainEvent) {
 						event = mappingContext.getFactory().createEndPlainEvent();
 					} else if (node instanceof IntermediateSignalEvent) {
-						event = mappingContext.getFactory().createEndSignalEvent();
+						if (((IntermediateSignalEvent)node).isThrowing()) {
+							event = mappingContext.getFactory().createEndSignalEvent();
+						}				
 					}
 					if (event != null) {
-						Collection<Edge> incomingEdges = node.getIncomingEdges();
-						for (Edge e : incomingEdges) {
+						List<Edge> tmpList = new ArrayList<Edge>();
+						for(Edge e : node.getIncomingEdges()) {
+							tmpList.add(e);
+						}
+						for(Edge e : tmpList) {
 							e.setTarget(event);
 						}
 						event.setLabel(node.getLabel());
 						event.setParent(node.getParent());
+						mappingContext.addMappingElementToSet(domNode,event);
 						eventsToRemove.add(node);
 					}
 				}
 			}
-			// -1-
+			// -1-, -2-
 			// remove the gateways from the diagram
 			mappingContext.getDiagram().getChildNodes().removeAll(gatewaysToRemove);
 			// remove the gateways from the mapping context
 			mappingContext.getMappingElements().get(domNode).removeAll(gatewaysToRemove);
 			gatewaysToRemove.clear();
 			
-			// -2-
+			// add elements that were created in addition
+			for (Node n : addToMappingContext.keySet()){
+				mappingContext.addMappingElementToSet(n,addToMappingContext.get(n));
+			}
+			addToMappingContext.clear();
+			
+			// -3-
 			// remove the events from the diagram
 			mappingContext.getDiagram().getChildNodes().removeAll(eventsToRemove);
 			// remove the events from the mapping context

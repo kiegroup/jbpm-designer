@@ -2,6 +2,7 @@ package de.hpi.bpmn.serialization.erdf.templates;
 
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.EndCompensationEvent;
+import de.hpi.bpmn.EndErrorEvent;
 import de.hpi.bpmn.serialization.erdf.ERDFSerializationContext;
 
 public class EndErrorEventTemplate extends NonConnectorTemplate {
@@ -18,7 +19,7 @@ public class EndErrorEventTemplate extends NonConnectorTemplate {
 	public StringBuilder getCompletedTemplate(DiagramObject diagramObject,
 			ERDFSerializationContext transformationContext) {
 
-		EndCompensationEvent e = (EndCompensationEvent) diagramObject;
+		EndErrorEvent e = (EndErrorEvent) diagramObject;
 		
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#EndErrorEvent");

@@ -23,6 +23,7 @@ public class TextAnnotationTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(t));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#TextAnnotation");
+		appendOryxField(s,"text",t.getText());
 		appendStandardFields(s);
 		appendResourceEndPattern(s, diagramObject, transformationContext);
 		

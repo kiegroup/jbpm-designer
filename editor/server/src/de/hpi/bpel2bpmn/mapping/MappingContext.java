@@ -77,6 +77,9 @@ public class MappingContext {
 		this.mappingConnectionOutExpression = new HashMap<Node, String>();
 		this.controlLinkSource = new HashMap<String, DiagramObject>();
 		this.controlLinkTarget = new HashMap<String, DiagramObject>();
+		this.mappingElements = new HashMap<Node, Set<de.hpi.bpmn.Node>>();
+		this.controlLinkSourceTransitionConditions = new HashMap<String,String>();
+
 	}
 	
 	public BPMNDiagram getDiagram() {

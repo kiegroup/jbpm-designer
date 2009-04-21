@@ -27,11 +27,11 @@ public class CompensateMapping extends BasicActivityMapping {
 		setConnectionPointsWithControlLinks(node, event, event, null, mappingContext);
 		mappingContext.addMappingElementToSet(node,event);
 		
-		String annotationText = "Please note that there are several conceptual mismatches," +
-				" when mapping a BPEL 'compensate' activity to a compensation calling event in BPMN." +
-				" In contrast to BPEL, the event is non-blocking, thus execution continues immediately. In addition," +
-				" the region that is considered with compensation broadcasting is different in BPEL and BPMN.";
-		createAnnotationAndAssociation(annotationText,event,mappingContext);
+//		String annotationText = "Please note that there are several conceptual mismatches," +
+//				" when mapping a BPEL 'compensate' activity to a compensation calling event in BPMN." +
+//				" In contrast to BPEL, the event is non-blocking, thus execution continues immediately. In addition," +
+//				" the region that is considered with compensation broadcasting is different in BPEL and BPMN.";
+//		createAnnotationAndAssociation(annotationText,event,mappingContext);
 	}
 	
 }

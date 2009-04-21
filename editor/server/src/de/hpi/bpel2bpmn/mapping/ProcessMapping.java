@@ -23,6 +23,5 @@ public class ProcessMapping extends ElementMappingImpl {
 			name = "Imported BPEL Proces";
 		
 		mappingContext.getDiagram().setTitle(name);
-		
 	}
 }

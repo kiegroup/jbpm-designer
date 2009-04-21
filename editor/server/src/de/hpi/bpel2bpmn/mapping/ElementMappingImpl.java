@@ -72,7 +72,7 @@ public abstract class ElementMappingImpl implements ElementMapping {
 			
 			// set the control link connection points
 			for (String link : BPEL2BPMNMappingUtil.getAllIncomingControlLinkNames(node)) {
-				mappingContext.getControlLinkSource().put(link, complexGateway);
+				mappingContext.getControlLinkTarget().put(link, complexGateway);
 			}
 			
 			/*
@@ -168,11 +168,11 @@ public abstract class ElementMappingImpl implements ElementMapping {
 		
 		TextAnnotation annotation = mappingContext.getFactory().createTextAnnotation();
 		annotation.setParent(mappingContext.getDiagram());
-		annotation.setLabel(text);
+		annotation.setText(text);
 		
 		UndirectedAssociation association = mappingContext.getFactory().createUndirectedAssociation();
 		association.setSource(annotatedObject);
-		association.setTarget(annotatedObject);
+		association.setTarget(annotation);
 		
 		mappingContext.getDiagram().getEdges().add(association);
 	}

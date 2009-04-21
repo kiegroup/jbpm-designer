@@ -22,9 +22,9 @@ public class AssignMapping extends BasicActivityMapping {
 		setConnectionPointsWithControlLinks(node, task, task, null, mappingContext);
 		mappingContext.addMappingElementToSet(node,task);
 		
-		String annotationText = "Actually a BPEL 'assign' activity maps to the 'assignment' attribute" +
-				" of a BPMN element. In order to preserve the point in time the data mediation is performed" +
-				" we introduce a separate task representing the 'assign' activity.";
-		createAnnotationAndAssociation(annotationText,task,mappingContext);
+//		String annotationText = "Actually a BPEL 'assign' activity maps to the 'assignment' attribute" +
+//				" of a BPMN element. In order to preserve the point in time the data mediation is performed" +
+//				" we introduce a separate task representing the 'assign' activity.";
+//		createAnnotationAndAssociation(annotationText,task,mappingContext);
 	}
 }

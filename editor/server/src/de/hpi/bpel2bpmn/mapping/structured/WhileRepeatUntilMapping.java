@@ -56,7 +56,7 @@ public class WhileRepeatUntilMapping extends StructuredActivityMapping {
 		
 		// connect the start and end event with the mapping of the contained activity
 		DiagramObject in  = mappingContext.getMappingConnectionIn().get(activityNode);
-		DiagramObject out = mappingContext.getMappingConnectionIn().get(activityNode);
+		DiagramObject out = mappingContext.getMappingConnectionOut().get(activityNode);
 		String conditionExpression = mappingContext.getMappingConnectionOutExpression().get(activityNode);
 		
 		createSequenceFlowBetweenDiagramObjects(startEvent, in, null, mappingContext);
