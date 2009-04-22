@@ -93,19 +93,19 @@ MOVI.namespace("util");
 		
 		/**
 		 * A key map containing all marked shapes with their resource IDs as keys
-		 * @property shapes
+		 * @property _shapes
 		 * @type Object
 		 * @private
 		 */
 		_shapes: {},
 		
 		/**
-		 * The parent canvas element of this marker
-		 * @property shapes
-		 * @type Canvas
+		 * The callback object to be executed when the marker has changed
+		 * @property _changedCallback
+		 * @type Object
 		 * @private
 		 */
-		_canvas: null,
+		_changedCallback: null,
 		
 		/**
 		 * A key map containing all shape rectangle elements of the marker with the
@@ -121,6 +121,13 @@ MOVI.namespace("util");
 		 * @type Element
 		 */
 		markerRect: null,
+		
+		/**
+		 * The parent canvas element of this marker
+		 * @property canvas
+		 * @type Canvas
+		 */
+		canvas: null,
 		
 		/**
 	     * Update style properties of the shape rectangle elements and update the bounds of the
@@ -172,9 +179,9 @@ MOVI.namespace("util");
 			/* update outer marking rectangle element */
 			
 			if(canvas!=null) {
-				if(this._canvas==null) {
-					this._canvas = canvas;
-					this._canvas.appendChild(this.markerRect); // all marked shapes have to belong to the same canvas
+				if(this.canvas==null) {
+					this.canvas = canvas;
+					this.canvas.appendChild(this.markerRect); // all marked shapes have to belong to the same canvas
 				}
 				
 				// get border widths
@@ -198,6 +205,20 @@ MOVI.namespace("util");
 				this.markerRect.setStyle("height", height + "px");
 			}
 			
+		},
+		
+		/**
+	     * Executes the user-specified callback when the marker changed
+	     * @method _onChanged
+		 * @private
+	     */
+		_onChanged: function() {
+			if(!this._changedCallback) return;
+			this._changedCallback.callback.call(
+				this._changedCallback.scope,
+				this,
+				this._changedCallback.data
+			);
 		},
 		
 		/**
@@ -257,6 +278,7 @@ MOVI.namespace("util");
 			shape.appendChild(rect);
 			this.shapeRects[shape.resourceId] = rect;
 			this._update();
+			this._onChanged();
 		},
 		
 		/**
@@ -269,6 +291,7 @@ MOVI.namespace("util");
 			delete this.shapeRects[shape.resourceId];
 			delete this._shapes[shape.resourceId];
 			this._update();
+			this._onChanged()
 		},
 		
 		/**
@@ -282,6 +305,7 @@ MOVI.namespace("util");
 				delete this._shapes[key];
 			}
 			this._update();
+			this._onChanged()
 		},
 		
 		/**
@@ -351,6 +375,28 @@ MOVI.namespace("util");
 					lowerRight.y = bounds.lowerRight.y;
 			}
 			return { upperLeft: upperLeft, lowerRight: lowerRight };
+		},
+		
+		/**
+		 * Specify callback to be executed when the marker changes
+		 * (shapes are added to or removed from the marker)
+		 * @param {Function} callback The callback method
+		 * @param {Object} scope (optional) The execution scope of the callback 
+		 * (in none is specified the context of the Marker object is used)
+		 * @param {Object} data (optional) An optional data object to pass to the callback method
+		 * @method onChanged
+		 */
+		onChanged: function(callback, scope, data) {
+			if(!YAHOO.lang.isFunction(callback)) {
+				throw new TypeError("Specified callback is not a function.", "error", "shapeselect.js");
+				return;
+			}
+			if(!scope) scope = this;
+			this._changedCallback = {
+				callback: callback,
+				scope: scope,
+				data: data
+			};
 		}
 		
 	}

@@ -32,7 +32,7 @@
 
 .movi-marker {
     position: absolute;
-    z-index: 3;
+    z-index: 1;
 }
 
 
@@ -46,8 +46,7 @@
 	display:block;
 	position:absolute;
 	min-width: 100px;
-	margin-top: 29px; margin-left: -20px;
-	top:60%; left:100%;
+	margin-top: 29px; margin-left: -17px;
 	filter: alpha(opacity:90);
 	KHTMLOpacity: 0.90;
 	MozOpacity: 0.90;
@@ -94,7 +93,7 @@
 }
 
 .movi-bubble-bc {
-	padding-left: 4px; padding-right: 4px;
+	padding: 8px 8px 4px 8px;
 	background-color: #D6D6D6; 
 	border-left: 2px solid #777777;
 	border-right: 2px solid #777777;	

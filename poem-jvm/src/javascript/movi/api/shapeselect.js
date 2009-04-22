@@ -60,15 +60,15 @@ MOVI.namespace("util");
 			var shape = modelviewer.canvas.shapes[key];
 			
 			if(shape.parentShape!=null) {
-				shape.addListener("mouseover", this._onMouseOver, shape, this, true);
-				shape.addListener("mouseout", this._onMouseOut, shape, this, true);
-				shape.addListener("click", this._onClick, shape, this, true);
+				shape.addListener("mouseover", this._onMouseOver, shape, this);
+				shape.addListener("mouseout", this._onMouseOut, shape, this);
+				shape.addListener("click", this._onClick, shape, this);
 				this._selectableShapes[shape.resourceId] = shape;
 			}
 			
 		}
 		
-		modelviewer.canvas.addListener("click", this.reset, null, this, true)
+		modelviewer.canvas.addListener("click", this.reset, null, this)
 		
 		this._selectionMarker = new Marker();
 		this._selectionMarker.setRectClassName(_SELECT_RECT_CLASS_NAME);
@@ -86,7 +86,7 @@ MOVI.namespace("util");
 		
 		_selectionMarker: null,
 		
-		_selectionChangedCallback: function() {},
+		_selectionChangedCallback: null,
 		
 		_allowMultiselect: false,
 		
@@ -103,14 +103,14 @@ MOVI.namespace("util");
 		
 		_onMouseOver: function(ev, shape) {
 			Event.stopPropagation(ev);
-			
+		
 			if(!this._selectedShapes[shape.resourceId])
 				this.highlight(shape);
 		},
 		
 		_onMouseOut: function(ev, shape) {
 			Event.stopPropagation(ev);
-			
+		
 			if(!this._selectedShapes[shape.resourceId])
 				this.unhighlight(shape);
 		},
@@ -126,6 +126,15 @@ MOVI.namespace("util");
 				this.select(shape);	
 			}
 				
+		},
+		
+		_onSelectionChanged: function() {
+			if(!this._selectionChangedCallback) return;
+			this._selectionChangedCallback.callback.call(
+				this._selectionChangedCallback.scope,
+				this,
+				this._selectionChangedCallback.data
+			);
 		},
 		
 		_reset: function() {
@@ -160,7 +169,7 @@ MOVI.namespace("util");
 				
 			}
 			
-			this._selectionChangedCallback(this.getSelectedShapes(), this._selectionMarker);
+			this._onSelectionChanged();
 		}, 
 		
 		/**
@@ -177,7 +186,7 @@ MOVI.namespace("util");
 				this._selectionMarker.removeShape(s);
 			}
 			
-			this._selectionChangedCallback(this.getSelectedShapes(), this._selectionMarkers);
+			this._onSelectionChanged();
 		},
 		
 		/**
@@ -206,7 +215,7 @@ MOVI.namespace("util");
 			if(this.getSelectedShapes().length==0)
 				return;
 			this._reset();
-			this._selectionChangedCallback(this.getSelectedShapes(), this._selectionMarkers);
+			this._onSelectionChanged();
 		},
 		
 		/**
@@ -222,14 +231,26 @@ MOVI.namespace("util");
 		},
 		
 		/**
-		 * Enables the specificatio of a callback to be executed when the selection
-		 * changes (shapes are added to or removed from the current selection)
-		 * @method getSelectShapes
-		 * @returns {[Shape]} An array of selected Shape objects
+		 * Specify callback to be executed when the selection changes
+		 * (shapes are added to or removed from the current selection)
+		 * Example: 
+		 * @param {Function} callback The callback method
+		 * @param {Object} scope (optional) The execution scope of the callback 
+		 * (in none is specified the context of the ShapeSelect object is used)
+		 * @param {Any} data (optional) An optional data object to pass to the callback method
+		 * @method onSelectionChanged
 		 */
-		onSelectionChanged: function(callback) {
-			// TODO add params for execution scope etc.
-			this._selectionChangedCallback = callback;
+		onSelectionChanged: function(callback, scope, data) {
+			if(!YAHOO.lang.isFunction(callback)) {
+				throw new TypeError("Specified callback is not a function.", "error", "shapeselect.js");
+				return;
+			}
+			if(!scope) scope = this;
+			this._selectionChangedCallback = {
+				callback: callback,
+				scope: scope,
+				data: data
+			};
 		}
 		
 	}

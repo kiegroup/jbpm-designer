@@ -104,10 +104,10 @@
 				// enable selection
 				var multiselect = true;
 				var selection = new MOVI.util.ShapeSelect(modelviewer, multiselect);
-				selection.onSelectionChanged(function(shapes, marker) {
+				selection.onSelectionChanged(function() {
 					var resourceIds = "";
-					for(i in shapes) {
-						resourceIds += shapes[i].resourceId + ", "
+					for(i in selection.getSelectedShapes()) {
+						resourceIds += selection.getSelectedShapes()[i].resourceId + ", "
 					}
 					console.log("Selected shapes: " + resourceIds);
 				})

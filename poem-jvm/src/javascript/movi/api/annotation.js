@@ -72,10 +72,8 @@ MOVI.namespace("util");
 		this._content = new Element(
 			this.getElementsByClassName(_BUBBLE_CONTENT_CLASS_NAME)[0]);
 		
-		// attach to marker
-		marker.markerRect.appendChild(this);
-		
 		this._marker = marker;
+		this._marker.onChanged(this._update, this);
 		
 		(new Element(this.getElementsByClassName(_BUBBLE_CLOSEBUTTON_CLASS_NAME)[0]))
 			.addListener("click", this._close, this, this);
@@ -84,6 +82,8 @@ MOVI.namespace("util");
 		this.addListener("mouseover", function(ev) { Event.stopPropagation(ev) });
 		this.addListener("mouseout", function(ev) { Event.stopPropagation(ev) });
 		this.addListener("click", function(ev) { Event.stopPropagation(ev) });
+		
+		this._update();
 	}
 
 	MOVI.extend(MOVI.util.Annotation, Element, {
@@ -105,6 +105,14 @@ MOVI.namespace("util");
 		_marker: null,
 		
 		/**
+		 * The canvas that the annotation is attached to
+		 * @property _canvas
+		 * @type Canvas
+		 * @private
+		 */
+		_canvas: null,
+		
+		/**
 		 * The callback that is executed when the annotation bubble is closed
 		 * @property _closeCallback
 		 * @type Object
@@ -122,9 +130,26 @@ MOVI.namespace("util");
 			if(this._closeCallback) {
 				this._closeCallback.callback.call(
 					this._closeCallback.callback.scope,
+					this,
 					this._closeCallback.callback.data
 				);
 			}
+		},
+		
+		/**
+	     * Update the position of the annotation bubble
+	     * @method _update
+		 * @private
+	     */
+		_update: function() {
+			if(!this._canvas) {
+				this._canvas = this._marker.canvas;
+				if(this._canvas) this._canvas.appendChild(this);
+			}
+			var bounds = this._marker.getAbsBounds();
+			this.setStyle("left", bounds.lowerRight.x + "px");
+			this.setStyle("top", 
+				(bounds.upperLeft.y + (bounds.lowerRight.y-bounds.upperLeft.y)*0.6) + "px");
 		},
 		
 		/**
@@ -158,14 +183,14 @@ MOVI.namespace("util");
 		 * closed using the close button
 	     * @method onClose
 		 * @param {Function} callback The callback function
-		 * @param {Any} data The variable to pass to the callback function
 		 * @param {Object} scope The object to use as the scope for the callback
+		 * @param {Any} data The variable to pass to the callback function
 	     */
-		onClose: function(callback, data, scope) {
+		onClose: function(callback, scope, data) {
 			this._closeCallback = {
 				callback: callback,
-				data: data,
-				scope: scope
+				scope: scope,
+				data: data
 			};
 		},
 		
@@ -179,7 +204,7 @@ MOVI.namespace("util");
 			var canvasEl = new Element(this.get("element").parentNode.parentNode);
 			var elements = canvasEl.getElementsByClassName(_BUBBLE_VISIBLE_CLASS_NAME);
 			for(key in elements) {
-				var zIndex = (new Element(elements[key].parentNode)).getStyle("z-index");
+				var zIndex = parseInt((new Element(elements[key].parentNode)).getStyle("z-index"), 10);
 				if(zIndex>maxZIndex) maxZIndex = zIndex;
 			}
 			// set the z-index of parent marker to maximum+1
