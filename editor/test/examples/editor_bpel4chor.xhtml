@@ -38,13 +38,18 @@
     </head>
 
     <body style="display: block; overflow: hidden;">
-		<div id="processdata" style="display:none"></div>
-		<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;">
-
-			<a href="./stencilsets/bpel4chor/bpel4chor.json" rel="oryx-stencilset"></a>
-			
-			<span class="oryx-mode">writeable</span>
-			<span class="oryx-mode">fullscreen</span>
-		</div>
+      <script type='text/javascript'>
+          function onOryxResourcesLoaded(){
+            new ORYX.Editor({
+              id: 'oryx-canvas123',
+              stencilset: {
+                url: '/oryx/stencilsets/bpel4chor/bpel4chor.json'
+              },
+              stencil: {
+                id: 'worksheet'
+              }
+          });
+        }
+      </script>
     </body>
 </html>
