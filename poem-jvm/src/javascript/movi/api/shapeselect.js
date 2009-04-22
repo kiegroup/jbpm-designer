@@ -231,6 +231,15 @@ MOVI.namespace("util");
 		},
 		
 		/**
+		 * Returns the marker of the current selection
+		 * @method getSelectionMarker
+		 * @returns {Marker} The selection marker
+		 */
+		getSelectionMarker: function() {
+			return this._selectionMarker;
+		},
+		
+		/**
 		 * Specify callback to be executed when the selection changes
 		 * (shapes are added to or removed from the current selection)
 		 * Example: 
