@@ -217,7 +217,7 @@ public class RdfJsonTransformation {
 		String dockersString = getContent(n);
 		if(dockersString==null) return null;
 		
-		String[] dockerPoints = dockersString.replaceAll("  #", "").split(" ");
+		String[] dockerPoints = dockersString.replaceAll("\\s*#\\s*$", "").split(" ");
 		JSONArray dockers = new JSONArray();
 		
 		JSONObject currentDocker = null;
