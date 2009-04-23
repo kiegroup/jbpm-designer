@@ -168,7 +168,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 		
 		var counter = 1;
 		
-		if (grounding.indexOf("WSDLproperty")>0){
+		if (grounding.indexOf("operation")>0){
 			data[1]= ["grounding", grounding, this.dialogSupport.getResultInfo(grounding)];
 			counter++;
 		};
