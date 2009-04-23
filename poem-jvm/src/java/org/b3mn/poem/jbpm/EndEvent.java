@@ -29,6 +29,8 @@ public class EndEvent extends Node {
 		this.ends = JpdlToJson.getAttribute(attributes, "ends");
 		this.state = JpdlToJson.getAttribute(attributes, "state");
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+		this.bounds.setWidth(30);
+		this.bounds.setHeight(30);
 	}
 
 	public String getState() {

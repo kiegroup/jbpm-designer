@@ -11,6 +11,30 @@ public class Bounds {
 	private int height = 80;
 	private int width = 100;
 	
+	public void setUlx(int ulx) {
+		this.ulx = ulx;
+	}
+	public void setUly(int uly) {
+		this.uly = uly;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public int getUlx() {
+		return ulx;
+	}
+	public int getUly() {
+		return uly;
+	}
+	public int getHeight() {
+		return height;
+	}
+	public int getWidth() {
+		return width;
+	}
+	public void setWidth(int width) {
+		this.width = width;
+	}
 	public Bounds() {
 		
 	}

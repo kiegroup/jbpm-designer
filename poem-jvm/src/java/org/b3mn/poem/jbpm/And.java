@@ -23,6 +23,8 @@ public class And extends Node {
 		NamedNodeMap attributes = and.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+		this.bounds.setWidth(40);
+		this.bounds.setHeight(40);
 	}
 
 	@Override

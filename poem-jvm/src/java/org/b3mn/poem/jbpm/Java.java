@@ -56,9 +56,9 @@ public class Java extends Node {
 		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = java.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
-		this.clazz = JpdlToJson.getAttribute(attributes, "clazz");
+		this.clazz = JpdlToJson.getAttribute(attributes, "class");
 		this.method = JpdlToJson.getAttribute(attributes, "method");
-		this.var = JpdlToJson.getAttribute(attributes, var);
+		this.var = JpdlToJson.getAttribute(attributes, "var");
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 		// TODO add args and fields
 	}

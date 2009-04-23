@@ -3,7 +3,6 @@ package org.b3mn.poem.jbpm;
 import java.io.StringWriter;
 import java.util.UUID;
 
-import org.apache.xpath.XPathAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,14 +28,15 @@ public class Xor extends Node {
 		NamedNodeMap attributes = xor.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.expression = JpdlToJson.getAttribute(attributes, "expression");
-		try {
-			org.w3c.dom.Node handlerNode = XPathAPI.selectSingleNode(xor,
-					"/handler");
-			this.handler = handlerNode.getAttributes().getNamedItem("class")
-					.getNodeValue();
-		} catch (Exception e) {
-		}
+		if (xor.hasChildNodes())
+			for (org.w3c.dom.Node a = xor.getFirstChild(); a != null; a = a.getNextSibling())
+				if(a.getNodeName().equals("handler")) {
+					this.handler = a.getAttributes().getNamedItem("class").getNodeValue();
+					break;
+				}
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+		this.bounds.setWidth(40);
+		this.bounds.setHeight(40);
 	}
 
 	@Override

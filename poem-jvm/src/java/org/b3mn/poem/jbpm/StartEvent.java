@@ -23,6 +23,8 @@ public class StartEvent extends Node {
 		NamedNodeMap attributes = startEvent.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+		this.bounds.setWidth(30);
+		this.bounds.setHeight(30);
 	}
 
 	@Override

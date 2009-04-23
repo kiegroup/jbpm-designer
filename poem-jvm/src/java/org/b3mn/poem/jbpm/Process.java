@@ -8,6 +8,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class Process {
@@ -19,12 +20,17 @@ public class Process {
 	private List<org.b3mn.poem.jbpm.Node> childNodes;
 	private HashMap<String, org.b3mn.poem.jbpm.Node> children;
 	private Node root;
-	
+
 	public Process(Node rootNode) {
 		this.root = rootNode;
 		childNodes = new ArrayList<org.b3mn.poem.jbpm.Node>();
 		children = new HashMap<String, org.b3mn.poem.jbpm.Node>();
 		
+		NamedNodeMap attributes = root.getAttributes();
+		this.name = JpdlToJson.getAttribute(attributes, "name");
+		this.key = JpdlToJson.getAttribute(attributes, "key");
+		this.version = JpdlToJson.getAttribute(attributes, "version");
+		this.description = JpdlToJson.getAttribute(attributes, "description");
 		
 		if (root.hasChildNodes()) {
 			int x = 0;
@@ -141,7 +147,6 @@ public class Process {
 				if (item != null)
 					childNodes.add(item);
 			}
-			// TODO construct Transitions
 		} catch (JSONException e) {
 		}
 	}
@@ -186,11 +191,9 @@ public class Process {
 							.getNextSibling()) {
 						if (item.getNodeName().equals("transition")) {
 							Transition t = new Transition(item);
-							if(node.getNodeName().equals("start")) {
-								t.setStart(new Docker(15,15));
-							} else {
-								t.setStart(new Docker(50,40));
-							}
+							t.setStart(new Docker(currentStencil.getBounds()
+									.getWidth() / 2, currentStencil.getBounds()
+									.getHeight() / 2));
 							outgoings.add(t);
 						}
 					}
@@ -199,7 +202,7 @@ public class Process {
 			}
 		}
 	}
-	
+
 	public String toJson() throws JSONException {
 		JSONObject process = new JSONObject();
 
@@ -230,7 +233,7 @@ public class Process {
 		// add all childShapes
 		for (org.b3mn.poem.jbpm.Node n : childNodes) {
 			childShapes.put(n.toJson());
-			for(Transition t : n.getOutgoings())
+			for (Transition t : n.getOutgoings())
 				childShapes.put(t.toJson());
 		}
 

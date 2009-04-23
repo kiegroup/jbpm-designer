@@ -3,9 +3,6 @@ package org.b3mn.poem.jbpm;
 import java.io.StringWriter;
 import java.util.UUID;
 
-import javax.xml.transform.TransformerException;
-
-import org.apache.xpath.XPathAPI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,11 +34,12 @@ public class Script extends Node {
 		this.expression = JpdlToJson.getAttribute(attributes, "expr");
 		this.language = JpdlToJson.getAttribute(attributes, "lang");
 		this.variable = JpdlToJson.getAttribute(attributes, "var");
-		try {
-			org.w3c.dom.Node textNode = XPathAPI.selectSingleNode(script, "/text");
-			this.text = textNode.getTextContent();
-		} catch (TransformerException e) {
-		}
+		if (script.hasChildNodes())
+			for (org.w3c.dom.Node a = script.getFirstChild(); a != null; a = a.getNextSibling())
+				if(a.getNodeName().equals("text")) {
+					this.text = a.getTextContent();
+					break;
+				}
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 	}
 

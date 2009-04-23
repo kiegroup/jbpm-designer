@@ -8,8 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.NamedNodeMap;
 
-import com.sun.org.apache.xpath.internal.XPathAPI;
-
 public class Sql extends Node {
 
 	protected String var;

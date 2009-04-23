@@ -16,7 +16,9 @@ public class Transition {
 	private Node targetNode;
 	private Docker start;
 	private Docker end;
-
+	//private List<Docker> dockers;
+	
+	
 	public Docker getStart() {
 		return start;
 	}
@@ -152,18 +154,15 @@ public class Transition {
 		}
 		JSONArray childShapes = new JSONArray();
 
-		if (EndEvent.class.isAssignableFrom(targetNode.getClass())) {
-			end = new Docker(15, 15);
-		} else {
-			end = new Docker(50, 40);
-		}
+		end = new Docker(targetNode.getBounds().getWidth() / 2, targetNode
+				.getBounds().getHeight() / 2);
 
 		Bounds bounds = new Bounds();
-		
+
 		JSONArray dockers = new JSONArray();
 		dockers.put(start.toJson());
 		dockers.put(end.toJson());
-		
+
 		JSONObject node = new JSONObject();
 		node.put("resourceId", uuid);
 		node.put("stencil", stencil);

@@ -122,6 +122,8 @@ public class Task extends Node {
 		properties.put("bgcolor", "#ffffcc");
 		if (name != null)
 			properties.put("name", name);
+		if (assignee != null)
+			properties.put("assignee", assignee);
 		if (candidateGroups != null)
 			properties.put("candidate-groups", candidateGroups);
 		if (candidateUsers != null)
