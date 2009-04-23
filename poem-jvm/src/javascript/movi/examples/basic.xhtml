@@ -101,6 +101,12 @@
 				
 				annotation.show();
 				
+				var marker2 = new MOVI.util.Marker(
+					modelviewer.canvas.getShape("oryx_EE31AEEA-63F9-481A-A8D0-E231E06129DD"),
+					{"border": "2px solid blue"}
+				);
+				marker2.addIcon("northwest", "http://bpt.hpi.uni-potsdam.de/pub/TWiki/OryxSkin/hpi.png");
+				
 				// enable selection
 				var multiselect = true;
 				var selection = new MOVI.util.ShapeSelect(modelviewer, multiselect);

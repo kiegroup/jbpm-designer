@@ -26,7 +26,9 @@ MOVI.namespace("util");
 
 (function() {
 	
-	var _MARKER_RECT_CLASS_NAME = "movi-marker";
+	var _MARKER_RECT_CLASS_NAME = "movi-marker",
+		_ICON_CLASS_NAME = "movi-marker-icon",
+		_ICON_MARGIN = -10; 
 	
 	/**
      * Attach Marker objects to the model to highlight a shape or a set of shapes
@@ -43,6 +45,17 @@ MOVI.namespace("util");
 		
 		if(!shapes) shapes = [];
 		if(!YAHOO.lang.isArray(shapes)) shapes = [shapes];
+		
+		this._icons = {
+			north: null,
+			west: null,
+			south: null,
+			east: null,
+			northwest: null,
+			southwest: null,
+			northeast: null,
+			southeast: null
+		};
 		
 		this._style = style || {};
 		this.shapeRects = {};
@@ -81,7 +94,7 @@ MOVI.namespace("util");
 		 * @type Object
 		 * @private
 		 */
-		_style: {},
+		_style: null,
 		
 		/**
 		 * The class name that is specified for each shape marking rectangle.
@@ -97,7 +110,7 @@ MOVI.namespace("util");
 		 * @type Object
 		 * @private
 		 */
-		_shapes: {},
+		_shapes: null,
 		
 		/**
 		 * The callback object to be executed when the marker has changed
@@ -108,12 +121,20 @@ MOVI.namespace("util");
 		_changedCallback: null,
 		
 		/**
+		 * A hash map containing the icon elements with their orientation as key
+		 * @property _icons
+		 * @type Object
+		 * @private
+		 */
+		_icons: null,
+		
+		/**
 		 * A key map containing all shape rectangle elements of the marker with the
 		 * associated shape resource IDs as keys
 		 * @property shapeRects
 		 * @type { Integer : Element }
 		 */
-		shapeRects: {},
+		shapeRects: null,
 		
 		/**
 		 * The marker's outer rectangle element
@@ -181,7 +202,16 @@ MOVI.namespace("util");
 			if(canvas!=null) {
 				if(this.canvas==null) {
 					this.canvas = canvas;
-					this.canvas.appendChild(this.markerRect); // all marked shapes have to belong to the same canvas
+					
+					// canvas is now set for the marker because the first shape has been added
+					// now we can append the elements to the dom 
+					// (all marked shapes have to belong to the same canvas)
+					this.canvas.appendChild(this.markerRect); 
+					for(orientation in this._icons) {
+						if(this._icons[orientation])
+							this.canvas.appendChild(this._icons[orientation]); 
+					}
+					
 				}
 				
 				// get border widths
@@ -205,6 +235,64 @@ MOVI.namespace("util");
 				this.markerRect.setStyle("height", height + "px");
 			}
 			
+			/* update icons */
+			this._updateIcons()
+		},
+		
+		/**
+	     * Update positions of the icons appended to the marker
+	     * @method _updateIcons
+	     * @private
+	     */
+		_updateIcons: function() {
+			var bounds = this.getAbsBounds();
+			for(orientation in this._icons) {
+				var left, top, margin;
+				var icon = this._icons[orientation];
+				if(icon) {
+					
+					var width = parseInt(icon.getStyle("width"), 10); 
+					var height = parseInt(icon.getStyle("height"), 10);
+
+					if(orientation=="north") {
+						left = Math.round(bounds.upperLeft.x + (bounds.lowerRight.x - bounds.upperLeft.x - width)/2);
+						top = bounds.upperLeft.y - height;
+						margin = -_ICON_MARGIN + "px 0 0 0";
+					} else if(orientation=="west") {
+						left = bounds.lowerRight.x;
+						top = Math.round(bounds.upperLeft.y + (bounds.lowerRight.y - bounds.upperLeft.y - height)/2);
+						margin = "0 0 0 " + _ICON_MARGIN + "px";
+					} else if(orientation=="south") {
+						left = Math.round(bounds.upperLeft.x + (bounds.lowerRight.x - bounds.upperLeft.x - width)/2);
+						top = bounds.lowerRight.y;
+						margin = _ICON_MARGIN + "px 0 0 0";
+					} else if(orientation=="east") {
+						left = bounds.upperLeft.x - width;
+						top = Math.round(bounds.upperLeft.y + (bounds.lowerRight.y - bounds.upperLeft.y - height)/2);
+						margin = "0 0 0 " + -_ICON_MARGIN + "px";
+					} else if(orientation=="northwest") {
+						left = bounds.lowerRight.x;
+						top = bounds.upperLeft.y - height;
+						margin = -_ICON_MARGIN + "px 0 0 " + _ICON_MARGIN + "px";
+					} else if(orientation=="southwest") {
+						left = bounds.lowerRight.x;
+						top = bounds.lowerRight.y;
+						margin = _ICON_MARGIN + "px 0 0 " + _ICON_MARGIN + "px";
+					} else if(orientation=="northeast") {
+						left = bounds.upperLeft.x - width;
+						top = bounds.upperLeft.y - height;
+						margin = -_ICON_MARGIN + "px 0 0 " + -_ICON_MARGIN + "px";
+					} else if(orientation=="southeast") {
+						left = bounds.upperLeft.x - width;
+						top = bounds.lowerRight.y;
+						margin = _ICON_MARGIN + "px 0 0 " + -_ICON_MARGIN + "px";
+					}
+					
+					icon.setStyle("left", left + "px");
+					icon.setStyle("top", top + "px");
+					icon.setStyle("margin", margin);
+				}
+			}
 		},
 		
 		/**
@@ -397,6 +485,71 @@ MOVI.namespace("util");
 				scope: scope,
 				data: data
 			};
+		},
+		
+		/**
+		 * Append an icon element to the bounds of the marker
+		 * @param {String} orientation The orientation where to position the icon.
+		 * Possible values: 'north', 'west', 'south', 'east', 'northwest', 'southwest', 'northeast', 'southeast'
+		 * @param {HTMLElement|String} icon An HTMLElement object representing the icon, or a String specifying
+		 * the URL of an image for the icon.
+		 * @return {Element} A reference to the new icon element
+		 * @method addIcon
+		 */
+		addIcon: function(orientation, icon) {
+			if(!YAHOO.lang.isString(orientation)) {
+				throw new TypeError("The orientation paramter is expected to be of type String", "error", "marker.js");
+				return;
+			}
+			
+			if(YAHOO.lang.isString(icon)) {
+				var img = new Image();
+				var self = this;
+				img.onload = function() {
+					self._updateIcons.call(self);
+				};
+				img.src = icon;
+				
+				icon = new YAHOO.util.Element(img);
+			} else {
+				icon = new YAHOO.util.Element(icon);
+			}
+			
+			icon.set("className", _ICON_CLASS_NAME);
+
+			for(var key in this._icons) {
+				if(key == orientation) {
+					if(this._icons[orientation]) this.removeIcon(orientation);
+					if(this.canvas) this.canvas.appendChild(icon);
+					this._icons[key] = icon;
+					this._updateIcons();
+					return icon;
+				}
+			}
+			
+			throw new Error("The specified orientation is not valid.", "error", "marker.js");
+		},
+		
+		/**
+		 * Remove the icon that currently resides in the specified orientation from the marker 
+		 * @param {String} orientation The orientation of the icon to remove.
+		 * @method removeIcon
+		 */
+		removeIcon: function(orientation) {
+			if(this._icons[orientation] && this.canvas) 
+				this.canvas.removeChild(this._icons[orientation]);
+			this._icons[orientation] = null;
+		},
+		
+		/**
+		 * Returns the icon element at the specified orientation.
+		 * @param {String} orientation The orientation of the icon
+		 * @return {Element} The icon at the specified orientation (null if no icon resides at that
+		 * orientation)
+		 * @method getIcon
+		 */
+		getIcon: function(orientation) {
+			return this._icons[orientation];
 		}
 		
 	}

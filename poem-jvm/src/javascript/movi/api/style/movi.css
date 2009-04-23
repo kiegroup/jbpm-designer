@@ -19,12 +19,12 @@
 
 .movi-node {
 	position: absolute;
-	z-index: 2;
+	z-index: 4;
 }
 
 .movi-edge {
 	position: absolute;
-	z-index: 2;
+	z-index: 4;
 }
 
 
@@ -33,6 +33,11 @@
 .movi-marker {
     position: absolute;
     z-index: 1;
+}
+
+.movi-marker-icon {
+    position: absolute;
+    z-index: 5;
 }
 
 
@@ -51,7 +56,7 @@
 	KHTMLOpacity: 0.90;
 	MozOpacity: 0.90;
 	opacity: 0.90;
-	z-index: 3;
+	z-index: 6;
 }
 
 .movi-bubble-ul {
@@ -132,11 +137,11 @@
 .movi-select-rect {
 	position: absolute;
 	border: 2px solid red;
-	z-index: 2;
+	z-index: 3;
 }
 
 .movi-highlight-rect {
 	position: absolute;
 	border: 1px dotted red;
-	z-index: 1;
+	z-index: 2;
 }
