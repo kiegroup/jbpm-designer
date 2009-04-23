@@ -38,13 +38,15 @@
     </head>
 
     <body style="display: block; overflow: hidden;">
-
-		<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width:1200px; height:600px;">
-
-			<a href="./stencilsets/bpmn1.1/bpmn1.1.json" rel="oryx-stencilset"></a>
-			
-			<span class="oryx-mode">writeable</span>
-			<span class="oryx-mode">fullscreen</span>
-		</div>
+      <script type='text/javascript'>
+          function onOryxResourcesLoaded(){
+            new ORYX.Editor({
+              id: 'oryx-canvas123',
+              stencilset: {
+                url: '/oryx/stencilsets/bpmn1.1/bpmn1.1.json'
+              }
+          });
+        }
+      </script>
     </body>
 </html>

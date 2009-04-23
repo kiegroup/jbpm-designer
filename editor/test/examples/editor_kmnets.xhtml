@@ -36,12 +36,15 @@
     </head>
 
     <body style="display: block; overflow: hidden;">
-		<div class="processdata" style="display: none;">
-			<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width: 1200px; height: 600px;">
-				<a rel="oryx-stencilset" href="./stencilsets/kmnets/kmnets.json"/>
-				<span class="oryx-mode">writable</span>
-				<span class="oryx-mode">fullscreen</span>
-			</div>
-		</div>
+      <script type='text/javascript'>
+          function onOryxResourcesLoaded(){
+            new ORYX.Editor({
+              id: 'oryx-canvas123',
+              stencilset: {
+                url: '/oryx/stencilsets/kmnets/kmnets.json'
+              }
+          });
+        }
+      </script>
 	</body>
 </html>

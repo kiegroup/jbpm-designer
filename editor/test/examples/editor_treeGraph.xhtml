@@ -36,13 +36,15 @@
     </head>
 
     <body style="display: block; overflow: hidden;">
-		<div class="processdata" style="display: none;">
-			<div class="-oryx-canvas" id="oryx-canvas123" style="display: none; width: 1200px; height: 600px;">
-				<span class="oryx-type">http://b3mn.org/stencilset/treeGraph#Diagram</span>
-				<span class="oryx-mode">writable</span>
-				<span class="oryx-mode">fullscreen</span>
-				<a rel="oryx-stencilset" href="./stencilsets/treeGraph/treeGraph.json"/>
-			</div>
-		</div>
+      <script type='text/javascript'>
+          function onOryxResourcesLoaded(){
+            new ORYX.Editor({
+              id: 'oryx-canvas123',
+              stencilset: {
+                url: '/oryx/stencilsets/treeGraph/treeGraph.json'
+              }
+          });
+        }
+      </script>
 	</body>
 </html>

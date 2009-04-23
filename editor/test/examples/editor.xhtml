@@ -23,20 +23,18 @@
         <link rel="schema.raziel" href="http://raziel.org/" />
     </head>
     <body style="display: block; overflow: hidden;">
-        <div class="processdata" style="display: none;">
-          <script type='text/javascript'>
-              function onOryxResourcesLoaded(){
-                new ORYX.Editor({
-                  id: 'oryx-canvas123',
-                  stencilset: {
-                    url: '/oryx/stencilsets/bpmn1.1/bpmn1.1.json'
-                  },
-                  stencil: {
-                    id: 'BPMNDiagram'
-                  }
-              });
-            }
-          </script>
-        </div>
+      <script type='text/javascript'>
+          function onOryxResourcesLoaded(){
+            new ORYX.Editor({
+              id: 'oryx-canvas123',
+              stencilset: {
+                url: '/oryx/stencilsets/bpmn1.1/bpmn1.1.json'
+              },
+              stencil: {
+                id: 'BPMNDiagram'
+              }
+          });
+        }
+      </script>
     </body>
 </html>
