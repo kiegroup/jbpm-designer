@@ -37,7 +37,7 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 			'group': ORYX.I18N.XFormsSerialization.group,
 			'icon': ORYX.PATH + "images/xforms_import.png",
 			'description': ORYX.I18N.XFormsSerialization.importXFormsDesc,
-			'index': 2,
+			'index': 3,
 			'minShape': 0,
 			'maxShape': 0});
 	},

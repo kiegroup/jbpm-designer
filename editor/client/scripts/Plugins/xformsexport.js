@@ -26,7 +26,7 @@ if(!ORYX.Plugins)
 
 ORYX.Plugins.XFormsExport = Clazz.extend({
 	
-	CSS_URL: "http://oryx-editor.org/oryx/css/xforms_default.css",
+	CSS_URL: "/oryx/css/xforms_default.css",
 
 	facade: undefined,
 
@@ -39,7 +39,7 @@ ORYX.Plugins.XFormsExport = Clazz.extend({
 			'group': ORYX.I18N.XFormsSerialization.group,
 			'icon': ORYX.PATH + "images/xforms_export.png",
 			'description': ORYX.I18N.XFormsSerialization.exportXFormsDesc,
-			'index': 1,
+			'index': 2,
 			'minShape': 0,
 			'maxShape': 0});
 	},

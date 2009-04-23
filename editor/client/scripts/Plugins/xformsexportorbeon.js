@@ -26,7 +26,7 @@ if(!ORYX.Plugins)
 
 ORYX.Plugins.XFormsExportOrbeon = Clazz.extend({
 	
-	CSS_URL: "http://localhost:8081/oryx/css/xforms_orbeon.css",
+	CSS_URL: "/oryx/css/xforms_default.css",
 
 	facade: undefined,
 
@@ -34,10 +34,10 @@ ORYX.Plugins.XFormsExportOrbeon = Clazz.extend({
 		this.facade = facade;
 
 		this.facade.offer({
-			'name':ORYX.I18N.XFormsSerialization.exportXForms,
+			'name': "Run XForm with Orbeon",
 			'functionality': this.exportIt.bind(this),
 			'group': ORYX.I18N.XFormsSerialization.group,
-			'icon': ORYX.PATH + "images/xforms_export.png",
+			'icon': ORYX.PATH + "images/xforms_orbeon_export.png",
 			'description': 'XForms export for Orbeon',
 			'index': 1,
 			'minShape': 0,
