@@ -108,6 +108,17 @@
 		</servlet-class>
 	</servlet>
 	
+<!--
+	<servlet>
+		<display-name>
+			BPEL 2 BPMN Transformation
+		</display-name>
+		<servlet-name>BPEL2BPMNServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.BPEL2BPMNServlet
+		</servlet-class>
+	</servlet>
+-->
 	<servlet>
 		<display-name>
 			Oryx IBPMN 2 BPMN Converter
@@ -317,6 +328,11 @@
         <servlet-name>RDF2JSONServlet</servlet-name>
         <url-pattern>/rdf2json</url-pattern>
     </servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>BPEL2BPMNServlet</servlet-name>
+		<url-pattern>/bpel2bpmn</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>IBPMN2BPMNServlet</servlet-name>
