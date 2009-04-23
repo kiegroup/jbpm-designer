@@ -428,10 +428,11 @@ ORYX.I18N.PropertyWindow.title = "Eigenschaften";
 if(!ORYX.I18N.ShapeRepository) ORYX.I18N.ShapeRepository = {};
 ORYX.I18N.ShapeRepository.title = "Shape Verzeichnis";
 
-ORYX.I18N.Save.dialogDesciption = "Bitte ändern sie den Namen und die Beschreibung.";
+ORYX.I18N.Save.dialogDesciption = "Bitte geben Sie einen Namen, eine Beschreibung und einen Kommentar ein.";
 ORYX.I18N.Save.dialogLabelTitle = "Titel";
 ORYX.I18N.Save.dialogLabelDesc = "Beschreibung";
 ORYX.I18N.Save.dialogLabelType = "Typ";
+ORYX.I18N.Save.dialogLabelComment = "Revisionskommentar";
 
 ORYX.I18N.Validator.name = "BPMN Überprüfung";
 ORYX.I18N.Validator.description = "Überprüfung von BPMN Modellen";
