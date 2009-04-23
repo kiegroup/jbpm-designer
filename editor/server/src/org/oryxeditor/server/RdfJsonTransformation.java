@@ -181,6 +181,10 @@ public class RdfJsonTransformation {
 			String stencilsetUrl = getAttributeValue(n, "rdf:resource");
 			if(!stencilsetUrl.startsWith(hostUrl))
 				stencilsetUrl = hostUrl + stencilsetUrl;
+			
+			//hack for reverse proxies:
+			stencilsetUrl = stencilsetUrl.substring(stencilsetUrl.lastIndexOf("http://"));
+			
 			stencilset.put("url", stencilsetUrl);
 			object.put("stencilset", stencilset);
 			
