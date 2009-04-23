@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.NamedNodeMap;
 
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
 public class Sql extends Node {
 
 	protected String var;
@@ -33,15 +35,23 @@ public class Sql extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(sql);
 
 	}
-	
+
 	public Sql(org.w3c.dom.Node sql) {
 		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = sql.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
-		this.unique = Boolean.parseBoolean(JpdlToJson.getAttribute(attributes, "unique"));
+		this.unique = Boolean.parseBoolean(JpdlToJson.getAttribute(attributes,
+				"unique"));
 		this.var = JpdlToJson.getAttribute(attributes, "var");
-		
+
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+
+		if (sql.hasChildNodes())
+			for (org.w3c.dom.Node a = sql.getFirstChild(); a != null; a = a.getNextSibling())
+				if(a.getNodeName().equals("query")) {
+					this.query = a.getTextContent();
+					break;
+				}
 	}
 
 	public String getVar() {

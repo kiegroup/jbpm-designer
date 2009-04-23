@@ -20,8 +20,8 @@ public class Process {
 	private HashMap<String, org.b3mn.poem.jbpm.Node> children;
 	private Node root;
 	
-	public Process(Node root) {
-		this.root = root;
+	public Process(Node rootNode) {
+		this.root = rootNode;
 		childNodes = new ArrayList<org.b3mn.poem.jbpm.Node>();
 		children = new HashMap<String, org.b3mn.poem.jbpm.Node>();
 		
@@ -73,7 +73,7 @@ public class Process {
 					}
 				}
 			} catch (Exception ee) {
-				System.err.println("FUCKING ERROR!!!");
+				ee.printStackTrace();
 			}
 		}
 	}
@@ -184,7 +184,6 @@ public class Process {
 				if (node.hasChildNodes()) {
 					for (Node item = node.getFirstChild(); item != null; item = item
 							.getNextSibling()) {
-						System.out.println(item.getNodeName());
 						if (item.getNodeName().equals("transition")) {
 							Transition t = new Transition(item);
 							if(node.getNodeName().equals("start")) {

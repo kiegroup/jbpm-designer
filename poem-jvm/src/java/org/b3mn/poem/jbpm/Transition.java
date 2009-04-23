@@ -158,18 +158,20 @@ public class Transition {
 			end = new Docker(50, 40);
 		}
 
+		Bounds bounds = new Bounds();
+		
 		JSONArray dockers = new JSONArray();
 		dockers.put(start.toJson());
 		dockers.put(end.toJson());
-
+		
 		JSONObject node = new JSONObject();
-
 		node.put("resourceId", uuid);
 		node.put("stencil", stencil);
 		node.put("outgoing", outgoing);
 		node.put("properties", properties);
 		node.put("childShapes", childShapes);
 		node.put("dockers", dockers);
+		node.put("bounds", bounds.toJson());
 		return node;
 	}
 

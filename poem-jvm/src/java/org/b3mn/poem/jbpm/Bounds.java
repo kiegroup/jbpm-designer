@@ -11,6 +11,9 @@ public class Bounds {
 	private int height = 80;
 	private int width = 100;
 	
+	public Bounds() {
+		
+	}
 	public Bounds(JSONObject bounds) {
 		try {
 			JSONObject upperLeft = bounds.getJSONObject("upperLeft");
