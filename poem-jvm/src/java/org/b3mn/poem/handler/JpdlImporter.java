@@ -8,10 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.xpath.XPathAPI;
 import org.b3mn.poem.Identity;
 import org.b3mn.poem.jbpm.JpdlToJson;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 @HandlerWithoutModelContext(uri="/new_jpdl")
 
@@ -33,8 +35,8 @@ public class JpdlImporter extends  HandlerBase {
 				Document jpdlDoc = builder.parse(new ByteArrayInputStream(jpdlRepresentation.getBytes()));
 				
 				String result = "";
+				Node node = XPathAPI.selectSingleNode(jpdlDoc, "//sql", jpdlDoc.getDocumentElement());
 				result = JpdlToJson.transform(jpdlDoc);
-
 				out.write(result);
 				
 		} catch (Exception e1) {
