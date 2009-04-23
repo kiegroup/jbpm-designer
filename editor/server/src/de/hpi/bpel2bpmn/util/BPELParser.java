@@ -1,6 +1,5 @@
 package de.hpi.bpel2bpmn.util;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -155,7 +154,7 @@ public class BPELParser {
 	}
 
 	public String getValidationException() {
-		return validationException.replaceAll("\"", "'");
+		return validationException.replaceAll("\"", "").replaceAll("\\{", "").replaceAll("\\}", "").replaceAll("\n", "");
 	}
 
 	public boolean isSuccessfulValidation() {

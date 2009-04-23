@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 
 import de.hpi.bpel2bpmn.BPEL2BPMNTransformer;
@@ -47,9 +48,12 @@ public class BPEL2BPMNServlet extends HttpServlet {
 	private static final long serialVersionUID = 128489343034029L;
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
     	// Get the PrintWriter
-    	res.setContentType("text/plain");
+    	res.setContentType("text/html");
+    	res.setStatus(200);
+
+		JSONObject object = new JSONObject();
+
     	PrintWriter out = null;
     	try {
     	    out = res.getWriter();
@@ -60,10 +64,10 @@ public class BPEL2BPMNServlet extends HttpServlet {
     	// No isMultipartContent => Error
     	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
     	if (!isMultipartContent){
-    		printError(out, "No Multipart Content transmitted.");
+    		printError(object, out, "No Multipart Content transmitted.");
 			return ;
     	}
-    	
+
     	// Get the uploaded file
     	final FileItemFactory factory = new DiskFileItemFactory();
     	final ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
@@ -72,11 +76,11 @@ public class BPEL2BPMNServlet extends HttpServlet {
     	try {
     		items = servletFileUpload.parseRequest(req);
     		if (items.size() != 1){
-    			printError(out, "Not exactly one File.");
+    			printError(object, out, "Not exactly one File.");
     			return ;
     		}
     	} catch (FileUploadException e) {
-    		handleException(out, e); 
+    		handleException(object, out, e); 
 	   		return;
     	} 
     	final FileItem fileItem = (FileItem)items.get(0);	
@@ -86,57 +90,65 @@ public class BPEL2BPMNServlet extends HttpServlet {
 		Document doc = parser.parseBPELFile(fileItem.getInputStream());
 		
 		if (doc == null) {
-			printError(out, "The file could not be parsed.");
+			printError(object, out, "The file could not be parsed.");
 			return;
 		}
-		
+
 		// try to map the BPEL process to BPMN
 		BPMNDiagram diagram = null;
 		try {
 	    	BPEL2BPMNTransformer transformer = new BPEL2BPMNTransformer(doc);
 	    	diagram = transformer.mapBPEL2BPMN();
 		} catch (Exception e) {
-			printError(out, "BPEL could not be mapped to BPMN.");
+			printError(object, out, "BPEL could not be mapped to BPMN.");
 			return;
 		}
 		
 		if (diagram == null) {
-			printError(out, "BPMN diagram could not be created.");
+			printError(object, out, "BPMN diagram could not be created.");
 			return;
 		}
 
 		// serialize the resulting BPMN
 		try {
 	    	BPMNeRDFSerializer serializer = new BPMNeRDFSerializer();
-	    	String eRDF = serializer.serializeBPMNDiagram(diagram).replaceAll("\"", "'");
+	    	String eRDF = serializer.serializeBPMNDiagram(diagram).replaceAll("\"", "'").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
-    		out.print("\"success\":\"true\", ");
-
+			object.put("success", true);
+			
 			// check for XML schema validation errors
 			if (parser.isSuccessfulValidation()) {
-	    		out.print("\"successValidation\":\"true\", \"validationError\":\"\", ");
+				object.put("successValidation", true);
+				object.put("validationError", "");
 			}
 			else {
-	    		out.print("\"successValidation\":\"false\", \"validationError\":\""+parser.getValidationException()+"\", ");
+				object.put("successValidation", false);
+				object.put("validationError", parser.getValidationException());
 			}
-			
-    		out.print("\"content\":\""+eRDF+"\"");
-
+			object.put("content", eRDF);
+				
+			object.write(out);
 		} catch (Exception e) {
-			printError(out, "Resulting BPMN diagram could not be serialized.");
+			printError(object, out, "Resulting BPMN diagram could not be serialized.");
 			return;
 		}
 	}
 	
-    private void printError(PrintWriter out, String err){
-    	if (out != null){
-    		out.print("\"success\":\"false\", \"content\":\""+err+"\"");
+    private void printError(JSONObject object, PrintWriter out, String err){
+    	if (object != null){
+    		try {
+        		object.put("success", false);
+        		object.put("content", err);
+    			object.write(out);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
     	}
     }
     
-	private void handleException(PrintWriter out, Exception e) {
+	private void handleException(JSONObject object, PrintWriter out, Exception e) {
 		e.printStackTrace();
-		printError(out, e.getLocalizedMessage());
+		printError(object, out, e.getLocalizedMessage());
 	}
 
 }
