@@ -31,7 +31,7 @@
 			"id":"Diagram",
 			"title":"Diagram",
 			"groups":[],
-			"description":"A Diagram",
+			"description":"An Interaction Diagram",
 			"view":"node.diagram.svg",
 			"icon":"node.diagram.png",
 			"roles": [
@@ -77,6 +77,16 @@
 					"refToView":"text",
 					"length":"",
 					"wrapLines":true
+                },
+                {
+					"id":"isTheConsideredRole",
+					"type":"Boolean",
+					"title":"Is the considered Role",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"thickBorder"
                 },
                 {
                     "id":"URL",
