@@ -142,7 +142,7 @@
 			"roles": [
 				"fromtoall"				
 			],
-			"layout":function(shape) {	
+			/*"layout":function(shape) {	
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmnplus#Lane");
 				});
@@ -174,8 +174,10 @@
 						label.x = 12;
 					});
 				}
- 			},
- 			"serialize":function(shape, data) {
+ 			},*/
+ 			"layout": [{'type': 'layout.bpmnplus.pool'}],
+ 			"serialize": {'type':'serialize.bpmnplus.pool'},
+ 			/*"serialize":function(shape, data) {
  				var poolId = shape.resourceId;
 				
 				var processId = shape.properties["oryx-processid"];
@@ -192,7 +194,7 @@
 				}
 				
 				return data;	
-			},
+			},*/
 			"properties": [
 
 				{
@@ -705,7 +707,7 @@
 			"roles": [
 				"fromtoall"				
 			],
-			"layout":function(shape) {		
+			/*"layout":function(shape) {		
 				var lanes = shape.getChildNodes(false).findAll(function(node) {
 					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmnplus#Lane");
 				});
@@ -769,7 +771,9 @@
 					processRec.value=processId;
 				}
 				return data;	
-			},
+			},*/
+			"layout": [{"type":"layout.bpmnplus.poolset"}],
+			"serialize" : {"type": "seriliaze.bpmnplus.pool"},
 			"properties": [
 
 				{
@@ -8263,7 +8267,7 @@
 			"roles": [
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
+			/*"serialize":function(shape, data) {
 
 				
 				// serialize pool, poolSet, process and subProcess
@@ -8339,7 +8343,8 @@
 				}
 				
 				return data;
-			},
+			},*/
+			"serialize" : {"type":"serialize.bpmnplus.variable"},
 			"properties": [
 
 				{
@@ -8742,7 +8747,9 @@
 				"fromtoall",
 				"tc"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.variable"},
+			/*"serialize":function(shape, data) {
+			
 
 				
 				// serialize pool, poolSet, process and subProcess
@@ -8818,7 +8825,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -9015,7 +9022,8 @@
 				"fromtoall",
 				"tc"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.variable"},
+			/*"serialize":function(shape, data) {
 
 				
 				// serialize pool, poolSet, process and subProcess
@@ -9091,7 +9099,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -9287,7 +9295,8 @@
 			"roles": [
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.variable"},
+			/*"serialize":function(shape, data) {
 
 				
 				// serialize pool, poolSet, process and subProcess
@@ -9364,7 +9373,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -9523,7 +9532,8 @@
 				"fromtoall",
 				"tc"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.dataobject"},
+			/*"serialize":function(shape, data) {
 
 				
 				// serialize pool or poolSet
@@ -9561,7 +9571,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -9757,7 +9767,8 @@
 				"fromtoall",
 				"tc"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.dataobject"},
+			/*"serialize":function(shape, data) {
 
 				
 				// serialize pool or poolSet
@@ -9795,7 +9806,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -11012,7 +11023,8 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.attachedevent"},
+			/*"serialize":function(shape, data) {
 
 				
 				var attached;
@@ -11043,7 +11055,7 @@
 			 	}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -11197,7 +11209,8 @@
 				"fromtoall",
 				"tc"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.attachedevent"},
+			/*"serialize":function(shape, data) {
 
 				
 				var attached;
@@ -11228,7 +11241,7 @@
 			 	}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -11384,7 +11397,8 @@
 				"tc",
 				"fromtoall"
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.attachedevent"},
+			/*"serialize":function(shape, data) {
 
 				
 				var attached;
@@ -11415,7 +11429,7 @@
 			 	}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -11923,7 +11937,8 @@
 			"icon":"new_association_undirected.png",
 			"roles": [
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.unidirectedassociation"},
+			/*"serialize":function(shape, data) {
 				var sources = shape.getIncomingShapes();
 				var switched = false;
 				if (sources.length > 0) {
@@ -11983,7 +11998,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -12032,7 +12047,8 @@
 			"icon":"new_association_directed.png",
 			"roles": [
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.directedassociation"},
+			/*"serialize":function(shape, data) {
 
 				
 				var sources = shape.getIncomingShapes();
@@ -12101,7 +12117,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{
@@ -12150,7 +12166,8 @@
 			"icon":"new_messageflow.png",
 			"roles": [
 			],
-			"serialize":function(shape, data) {
+			"serialize" : {"type":"serialize.bpmnplus.messageflow"},
+			/*"serialize":function(shape, data) {
 
 				var sources = shape.getIncomingShapes();
 				if (sources.length > 0) {
@@ -12181,7 +12198,7 @@
 				}
 				
 				return data;
-			},
+			},*/
 			"properties": [
 
 				{

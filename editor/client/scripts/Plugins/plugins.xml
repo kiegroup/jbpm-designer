@@ -151,6 +151,15 @@
 		<plugin source="bpmnplus2bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
 			<requires namespace="http://b3mn.org/stencilset/bpmnplus#"/>	
 		</plugin>
+		
+		<!-- BPMN+ specific plugins -->
+		<plugin source="bpmnplusLayout.js" name="ORYX.Plugins.BPMNPlusLayout">
+			<requires namespace="http://b3mn.org/stencilset/bpmnplus#"/>	
+		</plugin>
+		
+		<plugin source="bpmnplusSerialization.js" name="ORYX.Plugins.BPMNPlusSerialization">
+			<requires namespace="http://b3mn.org/stencilset/bpmnplus#"/>	
+		</plugin>
 				
 		<!-- plugin for BPEL and BPEL4Chor editor --> 
 		<plugin source="bpelSupport.js" name="ORYX.Plugins.BPELSupport">
