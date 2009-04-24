@@ -171,6 +171,17 @@ MOVI.namespace("util");
 		},
 		
 		/**
+	     * Toggle show/hide the annotation bubble
+	     * @method toggle
+	     */
+		toggle: function() {
+			if(this.hasClass(_BUBBLE_VISIBLE_CLASS_NAME))
+				this.hide();
+			else 
+				this.show();
+		},
+		
+		/**
 	     * Remove the element from the DOM
 	     * @method remove
 	     */

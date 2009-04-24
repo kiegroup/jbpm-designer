@@ -427,6 +427,17 @@ MOVI.namespace("util");
 		},
 		
 		/**
+	     * Toggle show/hide the marker
+	     * @method toggle
+	     */
+		toggle: function() {
+			if(this.getStyle("display")=="none")
+				this.show();
+			else 
+				this.hide();
+		},
+		
+		/**
 	     * Remove the marker elements from the DOM
 	     * @method remove
 	     */
