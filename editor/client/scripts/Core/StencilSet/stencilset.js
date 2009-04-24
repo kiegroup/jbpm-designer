@@ -67,12 +67,23 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         this._stencils = new Hash();
 		this._availableStencils = new Hash();
         
-        new Ajax.Request(source, {
-            asynchronous: false,
-            method: 'get',
-            onSuccess: this._init.bind(this),
-            onFailure: this._cancelInit.bind(this)
-        });
+		if(ORYX.CONFIG.STENCILSET_HANDLER.length > 0) {
+			//get the url of the stencil set json file
+			new Ajax.Request(source, {
+	            asynchronous: false,
+	            method: 'get',
+	            onSuccess: this._getJSONURL.bind(this),
+	            onFailure: this._cancelInit.bind(this)
+	        });
+		} else {
+			new Ajax.Request(source, {
+	            asynchronous: false,
+	            method: 'get',
+	            onSuccess: this._init.bind(this),
+	            onFailure: this._cancelInit.bind(this)
+	        });
+		}
+        
         if (this.errornous) 
             throw "Loading stencil set " + source + " failed.";
     },
@@ -312,6 +323,16 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
                 description = "";
         }
     },
+	
+	_getJSONURL: function(response) {
+		this._baseUrl = response.responseText.substring(0, response.responseText.lastIndexOf("/") + 1);
+		new Ajax.Request(response.responseText, {
+            asynchronous: false,
+            method: 'get',
+            onSuccess: this._init.bind(this),
+            onFailure: this._cancelInit.bind(this)
+        });
+	},
     
     /**
      * This method is called when the HTTP request to get the requested stencil
