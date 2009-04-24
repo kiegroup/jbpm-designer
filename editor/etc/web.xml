@@ -41,6 +41,14 @@
 			org.oryxeditor.server.MultiDownloader
 		</servlet-class>
 	</servlet>
+    
+    <servlet>
+        <display-name>Feedback Servlet</display-name>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.FeedbackServlet
+        </servlet-class>
+    </servlet>
 
     <servlet>
         <display-name>RDF 2 JSON Servlet</display-name>
@@ -418,6 +426,11 @@
     <servlet-mapping>
             <servlet-name>ServiceComposerServlet</servlet-name>
             <url-pattern>/servicecomposer</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+            <servlet-name>FeedbackServlet</servlet-name>
+            <url-pattern>/feedback</url-pattern>
     </servlet-mapping>
 	
 	<servlet-mapping>

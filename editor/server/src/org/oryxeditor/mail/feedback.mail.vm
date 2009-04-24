@@ -1,0 +1,12 @@
+================= Contact
+Name: $name
+E-Mail: $email
+
+================= Message
+$description
+
+================= Environment (Browser, Plugins, ....)
+$environment
+
+================= Attached Model
+$model
