@@ -329,11 +329,11 @@
         <url-pattern>/rdf2json</url-pattern>
     </servlet-mapping>
 
-	<servlet-mapping>
+<!--	<servlet-mapping>
 		<servlet-name>BPEL2BPMNServlet</servlet-name>
 		<url-pattern>/bpel2bpmn</url-pattern>
 	</servlet-mapping>
-
+-->
 	<servlet-mapping>
 		<servlet-name>IBPMN2BPMNServlet</servlet-name>
 		<url-pattern>/ibpmn2bpmn</url-pattern>
