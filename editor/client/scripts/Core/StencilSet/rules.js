@@ -57,7 +57,12 @@ ORYX.Core.StencilSet.Rules = {
 		this._cardinalityRules = new Hash();
 		this._containmentRules = new Hash();
 	},
-
+	
+	/**
+	 * Call this method to initialize the rules for a stencil set
+	 * and all of its active extensions.
+	 * @param {Object} stencilSet
+	 */
 	initializeRules: function(stencilSet) {
 		
 		var existingSS = this._stencilSets.find(function(ss) {
@@ -91,8 +96,16 @@ ORYX.Core.StencilSet.Rules = {
 		else {
 			this._stencilSets.push(stencilSet);
 			
-			var jsonRules = stencilSet.jsonRules();
+			var jsonRules = new Hash(stencilSet.jsonRules());
 			var namespace = stencilSet.namespace();
+			var stencils = stencilSet.stencils();
+			
+			stencilSet.extensions().values().each(function(extension) {
+				if(extension.rules) 
+					jsonRules = jsonRules.merge(new Hash(extension.rules));
+				if(extension.stencils) 
+					stencils = stencils.concat(extension.stencils);
+			});
 			
 			this._stencils = this._stencils.concat(stencilSet.stencils());
 			
@@ -100,6 +113,7 @@ ORYX.Core.StencilSet.Rules = {
 			var cr = this._connectionRules;
 			if (jsonRules.connectionRules) {
 				jsonRules.connectionRules.each((function(rules){
+					//console.log(rules.role + " - " + rules.connects);
 					if (this._isRoleOfOtherNamespace(rules.role)) {
 						if (!cr[rules.role]) {
 							cr[rules.role] = new Hash();

@@ -235,8 +235,6 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 						this._stencils[oStencil.id()] = oStencil;
 						this._availableStencils[oStencil.id()] = oStencil;
 					}.bind(this));
-					
-					
 				}
 				
 				//load additional properties
@@ -285,6 +283,68 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 		} catch (e) {
 			ORYX.Log.debug("StencilSet.addExtension: Something went wrong when initialising the stencil set extension. " + e);
 		}	
+	},
+	
+	removeExtension: function(namespace) {
+		var jsonExtension = this._extensions[namespace];
+		if(jsonExtension) {
+			
+			//unload extension's stencils
+			if(jsonExtension.stencils) {
+				$A(jsonExtension.stencils).each(function(stencil) {
+					var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this);            
+					delete this._stencils[oStencil.id()]; // maybe not ??
+					delete this._availableStencils[oStencil.id()];
+				}.bind(this));
+			}
+			
+			//unload extension's properties
+			if (jsonExtension.properties) {
+				var stencils = this._stencils.values();
+				
+				stencils.each(function(stencil){
+					var roles = stencil.roles();
+					
+					jsonExtension.properties.each(function(prop){
+						prop.roles.any(function(role){
+							role = jsonExtension["extends"] + role;
+							if (roles.member(role)) {
+								prop.properties.each(function(property){
+									stencil.removeProperty(property.id);
+								});
+								
+								return true;
+							}
+							else 
+								return false;
+						})
+					})
+				}.bind(this));
+			}
+			
+			//restore removed stencil properties
+			if(jsonExtension.removeproperties) {
+				jsonExtension.removeproperties.each(function(remprop) {
+					var stencil = this.stencil(jsonExtension["extends"] + remprop.stencil);
+					if(stencil) {
+						var stencilJson = $A(this._jsonObject.stencils).find(function(s) { return s.id == stencil.id() });
+						remprop.properties.each(function(propId) {
+							var propertyJson = $A(stencilJson.properties).find(function(p) { return p.id == propId });
+							stencil.addProperty(propertyJson, this.namespace());
+						}.bind(this));
+					}
+				}.bind(this));
+			}
+			
+			//restore removed stencils
+			if(jsonExtension.removestencils) {
+				$A(jsonExtension.removestencils).each(function(remstencil) {
+					var sId = jsonExtension["extends"] + remstencil;
+					this._availableStencils[sId] = this._stencils[sId];
+				}.bind(this));
+			}
+		}
+		delete this._extensions[namespace];
 	},
     
     __handleStencilset: function(response){

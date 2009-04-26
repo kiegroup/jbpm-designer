@@ -63,5 +63,23 @@
 			"definition":"bpel4chor_grounding/bpel4chor_grounding.json",
 			"extends":"http://b3mn.org/stencilset/bpel4chor#"
 		}
+	],
+	"perspectives": [
+		{
+			"title":"Academic BPMN",
+			"namespace":"http://oryx-editor.org/stencilsets/perspectives/academicbpmn#",
+			"description":"Academic perspective on BPMN. Features the complete standard.",
+			"stencilset":"http://b3mn.org/stencilset/bpmn1.1#",
+			"extensions": []
+		},
+		{
+			"title":"Beginner BPMN",
+			"namespace":"http://oryx-editor.org/stencilsets/perspectives/beginnerbpmn#",
+			"description":"BPMN for beginners. Features a basic subset of the standard.",
+			"stencilset":"http://b3mn.org/stencilset/bpmn1.1#",
+			"extensions": [
+				"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#"
+			]
+		}
 	]
 }
