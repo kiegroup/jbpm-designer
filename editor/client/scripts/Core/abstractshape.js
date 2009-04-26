@@ -28,10 +28,13 @@ if(!ORYX) {var ORYX = {};}
 if(!ORYX.Core) {ORYX.Core = {};}
 
 /**
- * @classDescription Top Level uiobject.
+ * Top Level uiobject.
+ * @class ORYX.Core.AbstractShape
  * @extends ORYX.Core.UIObject
  */
-ORYX.Core.AbstractShape = {
+ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
+/** @lends ORYX.Core.AbstractShape.prototype */
+{
 
 	/**
 	 * Constructor
@@ -118,6 +121,16 @@ ORYX.Core.AbstractShape = {
 
 		return result;
 	},
+    
+    /**
+     * @param {Object} shape
+     * @return {boolean} true if any of shape's childs is given shape
+     */
+    hasChildShape: function(shape){
+        return this.getChildShapes().any(function(child){
+            return (child === shape) || child.hasChildShape(shape);
+        });
+    },
 	
 	/**
 	 * 
@@ -324,7 +337,7 @@ ORYX.Core.AbstractShape = {
     
     /**
      * Converts the shape to a JSON representation.
-     * @return {Object} A JSON object.
+     * @return {Object} A JSON object with included ORYX.Core.AbstractShape.JSONHelper and getShape() method.
      */
      toJSON: function(){
         var json = {
@@ -364,8 +377,67 @@ ORYX.Core.AbstractShape = {
             })
         }
         
+        Ext.apply(json, ORYX.Core.AbstractShape.JSONHelper);
+        
+        // do not pollute the json attributes (for serialization), so put the corresponding
+        // shape is encapsulated in a method
+        json.getShape = function(){
+            return this;
+        }.bind(this);
+        
         return json;
     }
- };
+ });
  
- ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(ORYX.Core.AbstractShape);
+/**
+ * @namespace Collection of methods which can be used on a shape json object (ORYX.Core.AbstractShape#toJSON()).
+ * @example
+ * Ext.apply(shapeAsJson, ORYX.Core.AbstractShape.JSONHelper);
+ */
+ORYX.Core.AbstractShape.JSONHelper = {
+     /**
+      * Iterates over each child shape.
+      * @param {Object} iterator Iterator function getting a child shape and his parent as arguments.
+      * @param {boolean} [deep=false] Iterate recursively (childShapes of childShapes)
+      * @param {boolean} [modify=false] If true, the result of the iterator function is taken as new shape, return false to delete it. This enables modifying the object while iterating through the child shapes.
+      * @example
+      * // Increases the lowerRight x value of each direct child shape by one. 
+      * myShapeAsJson.eachChild(function(shape, parentShape){
+      *     shape.bounds.lowerRight.x = shape.bounds.lowerRight.x + 1;
+      *     return shape;
+      * }, false, true);
+      */
+     eachChild: function(iterator, deep, modify){
+         if(!this.childShapes) return;
+         
+         var newChildShapes = []; //needed if modify = true
+         
+         this.childShapes.each(function(shape){
+             var res = iterator(shape, this);
+             if(res) newChildShapes.push(res); //if false is returned, and modify = true, current shape is deleted.
+             
+             if(deep) shape.eachChild(iterator, deep, modify);
+         }.bind(this));
+         
+         if(modify) this.childShapes = newChildShapes;
+     },
+     
+     getChildShapes: function(deep){
+         var allShapes = this.childShapes;
+         
+         if(deep){
+             this.eachChild(function(shape){
+                 allShapes = allShapes.concat(shape.getChildShapes(deep));
+             }, true);
+         }
+         
+         return allShapes;
+     },
+     
+     /**
+      * @return {String} Serialized JSON object
+      */
+     serialize: function(){
+         return Ext.encode(this);
+     }
+ }
