@@ -47,6 +47,16 @@
             "icon_url":"/fmcblockdiagram/fmcblockdiagram.png",
             "visible":true
         },
+/*
+        {
+            "title":"Interaction Diagram",
+            "namespace":"http://b3mn.org/stencilset/interactiondiagram#",
+            "description":"An Interaction Diagrams describe interactions between an interviewed person and other people or systems.",
+            "uri":"/interactiondiagram/interactiondiagram.json",
+            "icon_url":"/interactiondiagram/interactiondiagram.png",
+            "visible":true
+        },
+*/
         {
             "title":"XForms",
             "namespace":"http://b3mn.org/stencilset/xforms#",
@@ -55,20 +65,22 @@
             "icon_url":"/xforms/xforms.png",
             "visible":true
         },
+/*
+        {
+            "title":"BPMN+",
+            "namespace":"http://b3mn.org/stencilset/bpmnplus#",
+            "description":"BPMN+ stencil set specification.",
+            "uri":"/bpmnplus/bpmnplus.json",
+            "icon_url":"/bpmn1.1/bpmn1.1.png",
+            "visible":true
+        },
+*/
         {
             "title":"BPMN-Q",
             "namespace":"http://b3mn.org/stencilset/bpmnq#",
             "description":"BPMN-Q querying shapes.",
             "uri":"/bpmn1.1/bpmn1.1.json",
             "icon_url":"/bpmn1.1/bpmn1.1.png",
-            "visible":false
-        },
-        {
-            "title":"Interaction Diagram",
-            "namespace":"http://b3mn.org/stencilset/interactiondiagram#",
-            "description":"An Interaction Diagrams describe interactions between an interviewed person and other people or systems.",
-            "uri":"/interactiondiagram/interactiondiagram.json",
-            "icon_url":"/interactiondiagram/interactiondiagram.png",
             "visible":false
         }
 ]
