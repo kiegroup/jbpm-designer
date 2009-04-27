@@ -24,14 +24,17 @@
 if(!ORYX.Plugins)
 	ORYX.Plugins = new Object();
 
-ORYX.Plugins.JPDLSupport = Clazz.extend({
+ORYX.Plugins.JPDLSupport = ORYX.Plugins.AbstractPlugin.extend({
 
 	facade: undefined,
 	
 	jPDLImporterUrl: '/backend/poem/new_jpdl',
 	jPDLExporterUrlSuffix: '/jpdl',
 	
-	stencilSetExtensionSuffix: '/jbpm#',
+	stencilSetExtensionNamespace: 'http://oryx-editor.org/stencilsets/extensions/jbpm#',
+	stencilSetExtensionDefinition: 'jbpm/jbpm.json',
+	
+	stencilSetNamespace: 'http://b3mn.org/stencilset/bpmn1.1#',
 	stencilSetUrlSuffix: '/bpmn1.1/bpmn1.1.json',
 
 	/**
@@ -52,7 +55,7 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 			'minShape': 		0,
 			'maxShape': 		0,
 			'maxShape': 		0,
-			'isEnabled': 		this.isStencilSetExtensionLoaded.bind(this)
+			'isEnabled': 		this._isJpdlStencilSetExtensionLoaded.bind(this)
 		});
 					
 		this.facade.offer({
@@ -63,49 +66,54 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 			'description': 		ORYX.I18N.jPDLSupport.impDesc,
 			'index': 			2,
 			'minShape': 		0,
-			'maxShape': 		0,
-			'isEnabled': 		this.isStencilSetExtensionLoaded.bind(this)
+			'maxShape': 		0
 		});
 
 	},
 	
-	isStencilSetExtensionLoaded: function() {
-		return this.facade.getStencilSets().values().any(
-			function(ss){ 
-				return ss.extensions().keys().any(
-					function(extensionKey) {
-						return extensionKey.endsWith(this.stencilSetExtensionSuffix);
-					}.bind(this)
-				);
-			}.bind(this)
-		);
+	/**
+	 * Checks if the jPDL stencil set is loaded right now.
+	 */
+	_isJpdlStencilSetExtensionLoaded: function() {
+		return this.isStencilSetExtensionLoaded(this.stencilSetExtensionNamespace);
 	},
 
-	
+	/**
+	 * Imports jPDL
+	 * 
+	 */
 	importJPDL: function(){
-		// TODO: Load extension on import..
 		this._showImportDialog();
 	},		
 
+	/**
+	 * Exports jPDL
+	 * 
+	 */
 	exportJPDL: function(){
+		// TODO: save?
 		var loc = location.href;
 		var jpdlLoc ;
 		if ( loc.length > 4 && loc.substring(loc.length - 5) == "/self" ) {
 			jpdlLoc = loc.substring(0, loc.length - 5) + this.jPDLExporterUrlSuffix;
-		} else {		// test data:
+		} else {
 			alert("TODO: Integrate existing export with new models.. ");
 			return ;
 		}
-		this._openExportWindow( jpdlLoc );
+		this._doExport( jpdlLoc );
 		
 	},
 	
-	_sendRequest: function( url, params, successcallback, failedcallback ){
+	/**
+	 * Sends request to a given URL.
+	 * 
+	 */
+	_sendRequest: function( url, method, params, successcallback, failedcallback ){
 
 		var suc = false;
 
 		new Ajax.Request(url, {
-           method			: 'POST',
+           method			: method,
            asynchronous	: false,
            parameters		: params,
 		   onSuccess		: function(transport) {
@@ -125,7 +133,7 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 					failedcallback();
 					
 				} else {
-					Ext.Msg.alert("Oryx", ORYX.I18N.jPDLSupport.impFailed);
+					this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedReq);
 					ORYX.log.warn("Import jPDL failed: " + transport.responseText);	
 				}
 				
@@ -135,22 +143,63 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 		return suc;		
 	},
 	
+	/**
+	 * Loads JSON into the editor
+	 * 
+	 */
 	_loadJSON: function( jsonString ){
 		
 		if (jsonString) {
 			var jsonObj = jsonString.evalJSON();
 			if( jsonObj && this._hasStencilset(jsonObj) ) {
-				if ( ! this.isStencilSetExtensionLoaded() ) {
-					// TODO: Load extension on import..
+				if ( this._isJpdlStencilSetExtensionLoaded() ) {
+					this.facade.importJSON(jsonString);
+				} else {
+					Ext.MessageBox.confirm(
+						ORYX.I18N.jPDLSupport.loadSseQuestionTitle,
+						ORYX.I18N.jPDLSupport.loadSseQuestionBody,
+						function(btn){
+							if (btn == 'yes') {
+								
+								if (this.loadStencilSetExtension(this.stencilSetNamespace, this.stencilSetExtensionDefinition)){
+									this.facade.importJSON(jsonString);
+								} else {
+									this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJson);
+								}
+								
+							} else {
+								this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJsonAbort);
+							}
+						},
+						this
+					);
 				}
-				this.facade.importJSON(jsonString);
+				
+			} else {
+				this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJson);
 			}
+		} else {
+			this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJson);
 		}
-		// TODO: Error Messages..
 	},
 	
+	loadStencilSetExtension: function(stencilSetNamespace, stencilSetExtensionDefinition) {
+		var stencilset = this.facade.getStencilSets()[stencilSetNamespace];
+		if (stencilset) {
+			stencilset.addExtension(ORYX.CONFIG.SS_EXTENSIONS_FOLDER + stencilSetExtensionDefinition);
+			this.facade.getRules().initializeRules(stencilset);
+			this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+			return true;
+		} 
+		return false;
+	},
+	
+	/**
+	 * Checks if a json object references the jPDL stencil set extension.
+	 * 
+	 */
 	_hasStencilset: function( jsonObj ){
-		return jsonObj.properties.ssextension.endsWith(this.stencilSetExtensionSuffix) && jsonObj.stencilset.url.endsWith(this.stencilSetUrlSuffix);
+		return jsonObj.properties.ssextension == this.stencilSetExtensionNamespace && jsonObj.stencilset.url.endsWith(this.stencilSetUrlSuffix);
 	},
 	
 
@@ -158,9 +207,26 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 	 * Opens an export window / tab.
 	 * 
 	 */
-	_openExportWindow: function( url ){
-		// TODO: Errors in jpdl document should be handled in Oryx UI
-		window.open( url );
+	_doExport: function( url ){
+		
+		this._sendRequest(
+			url,
+			'GET',
+			{ },
+			function( result ) { 
+				var parser = new DOMParser();
+				var parsedResult = parser.parseFromString(result, "text/xml");
+				if (parsedResult.firstChild.localName == "error") {
+					this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.expFailedXml + parsedResult.firstChild.firstChild.data);
+				} else {
+					this.openXMLWindow(result);
+				}
+			}.bind(this),
+			function() { 
+				this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.expFailedReq);
+		 	}.bind(this)
+		);
+		
 	}, 
 	
 	/**
@@ -221,6 +287,7 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 							
 							this._sendRequest(
 									this.jPDLImporterUrl,
+									'POST',
 									{ 'data' : jpdlString },
 									function( arg ) { this._loadJSON( arg );  loadMask.hide();  dialog.hide(); }.bind(this),
 									function() { loadMask.hide();  dialog.hide(); }.bind(this)
@@ -257,6 +324,15 @@ ORYX.Plugins.JPDLSupport = Clazz.extend({
 				form.items.items[2].setValue( text );
 			}, true)
 
+	},
+	
+	_showErrorMessageBox: function(title, msg){
+        Ext.MessageBox.show({
+           title: title,
+           msg: msg,
+           buttons: Ext.MessageBox.OK,
+           icon: Ext.MessageBox.ERROR
+       });
 	}
 	
 });

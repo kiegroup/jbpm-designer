@@ -287,5 +287,22 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
             Ext.Msg.alert("Oryx", error);
             return null;
         }
-    }
+    },
+    
+ 
+    /**
+	 * Checks if a certain stencil set is loaded right now.
+	 * 
+	 */
+	isStencilSetExtensionLoaded: function(stencilSetExtensionNamespace) {
+		return this.facade.getStencilSets().values().any(
+			function(ss){ 
+				return ss.extensions().keys().any(
+					function(extensionKey) {
+						return extensionKey == stencilSetExtensionNamespace;
+					}.bind(this)
+				);
+			}.bind(this)
+		);
+	}
 });
