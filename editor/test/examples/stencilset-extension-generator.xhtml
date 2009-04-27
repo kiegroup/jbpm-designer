@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <style type="text/css">
+            body {
+                font-size: 75%;
+                font-family: sans-serif;
+            }
+            input {
+                display: block;
+                width: 22em;
+            }
+        </style>
+    </head>
+    <body>
+        <form enctype="multipart/form-data" action="http://localhost:8180/oryx/stencilset-extension-generator" method="post">
+            <input name="base-stencil-set" type="text" value="http://b3mn.org/stencilset/bpmn1.1#" />
+            <!-- will be mapped to superId property in order to morph stencils when dropped to canvas -->
+            <input name="base-stencil" type="text" value="Task" />
+            <!-- properties the columns will be mapped to -->
+            <input name="column-property-mapping" type="text" value="group,name,documentation,refuri" />
+            <!-- CSV file containing the data of the stencils to be generated -->
+            <input name="csv-file" type="file" />
+            <input type="submit" value="generate stencil set extension" />
+        </form>
+    </body>
+</html>
