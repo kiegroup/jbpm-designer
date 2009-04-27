@@ -101,8 +101,14 @@ ORYX.Core.StencilSet.Rules = {
 			var stencils = stencilSet.stencils();
 			
 			stencilSet.extensions().values().each(function(extension) {
-				if(extension.rules) 
-					jsonRules = jsonRules.merge(new Hash(extension.rules));
+				if(extension.rules) {
+					if(extension.rules.connectionRules)
+						jsonRules.connectionRules = jsonRules.connectionRules.concat(extension.rules.connectionRules);
+					if(extension.rules.cardinalityRules)
+						jsonRules.cardinalityRules = jsonRules.cardinalityRules.concat(extension.rules.cardinalityRules);
+					if(extension.rules.containmentRules)
+						jsonRules.containmentRules = jsonRules.containmentRules.concat(extension.rules.containmentRules);
+				}
 				if(extension.stencils) 
 					stencils = stencils.concat(extension.stencils);
 			});
@@ -113,7 +119,6 @@ ORYX.Core.StencilSet.Rules = {
 			var cr = this._connectionRules;
 			if (jsonRules.connectionRules) {
 				jsonRules.connectionRules.each((function(rules){
-					//console.log(rules.role + " - " + rules.connects);
 					if (this._isRoleOfOtherNamespace(rules.role)) {
 						if (!cr[rules.role]) {
 							cr[rules.role] = new Hash();
