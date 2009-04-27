@@ -6,7 +6,7 @@ if(!ORYX) var ORYX = {};
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
 //This is usually the name of the war file!
-ORYX.CONFIG.ROOT_PATH =					"/oryx/";
+ORYX.CONFIG.ROOT_PATH =					"./";
 	
 ORYX.CONFIG.VERSION_URL =				ORYX.CONFIG.ROOT_PATH + "VERSION";
 ORYX.CONFIG.LICENSE_URL =				ORYX.CONFIG.ROOT_PATH + "LICENSE";
@@ -181,5 +181,16 @@ ORYX.CONFIG.KEY_Code_enter =			12;
 ORYX.CONFIG.KEY_Code_left =				37;
 ORYX.CONFIG.KEY_Code_right =			39;
 ORYX.CONFIG.KEY_Code_top =				38;
-ORYX.CONFIG.KEY_Code_bottom =			40
+ORYX.CONFIG.KEY_Code_bottom =			40;
+
+/* Supported Meta Keys */
+	
+ORYX.CONFIG.META_KEY_META_CTRL = 		"metactrl";
+ORYX.CONFIG.META_KEY_ALT = 				"alt";
+ORYX.CONFIG.META_KEY_SHIFT = 			"shift";
+
+/* Key Actions */
+
+ORYX.CONFIG.KEY_ACTION_DOWN = 			"down";
+ORYX.CONFIG.KEY_ACTION_UP = 			"up";
 
