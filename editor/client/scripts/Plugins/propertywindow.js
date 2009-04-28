@@ -354,6 +354,9 @@ ORYX.Plugins.PropertyWindow = {
 	},
 	
 	onSelectionChanged: function(event) {
+		/* Event to call afterEdit method */
+		this.grid.stopEditing();
+		
 		/* Selected shapes */
 		this.shapeSelection.shapes = event.elements;
 		
@@ -381,9 +384,6 @@ ORYX.Plugins.PropertyWindow = {
 	 * selected shapes.
 	 */
 	createProperties: function() {
-
-		this.grid.stopEditing();
-
 		this.properties = [];
 
 		if(this.shapeSelection.commonProperties) {
@@ -651,7 +651,6 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 			return;
         },
         hide : function(){
-
 
             var dl = this.dialogListeners;
             this.dialog.un("show", dl.show,  this);
