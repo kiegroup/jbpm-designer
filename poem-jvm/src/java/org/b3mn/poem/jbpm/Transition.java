@@ -1,6 +1,8 @@
 package org.b3mn.poem.jbpm;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONArray;
@@ -16,9 +18,8 @@ public class Transition {
 	private Node targetNode;
 	private Docker start;
 	private Docker end;
-	//private List<Docker> dockers;
-	
-	
+	private List<Docker> dockers;
+
 	public Docker getStart() {
 		return start;
 	}
@@ -62,6 +63,23 @@ public class Transition {
 		this.condition = JpdlToJson.getAttribute(attributes, "condition");
 		this.target = JpdlToJson.getAttribute(attributes, "to");
 		this.targetNode = JpdlToJson.getProcess().getTarget(target);
+		this.dockers = new ArrayList<Docker>();
+		String g = JpdlToJson.getAttribute(attributes, "g");
+		if (g != null) {
+			String[] middleDockers = g.split(":")[0].split(";");
+			for (int i = 0; i < middleDockers.length; i++) {
+				if (middleDockers[i].length() > 1) {
+					String[] dockerPosition = middleDockers[i].split(",");
+					if (dockerPosition.length == 2) {
+						Docker d = new Docker(Integer
+								.parseInt(dockerPosition[0]), Integer
+								.parseInt(dockerPosition[1]));
+						dockers.add(d);
+					}
+				}
+			}
+		}
+
 	}
 
 	public Node getTargetNode() {
@@ -159,9 +177,12 @@ public class Transition {
 
 		Bounds bounds = new Bounds();
 
-		JSONArray dockers = new JSONArray();
-		dockers.put(start.toJson());
-		dockers.put(end.toJson());
+		JSONArray allDockers = new JSONArray();
+		allDockers.put(start.toJson());
+		for(Docker d : dockers) {
+			allDockers.put(d.toJson());
+		}
+		allDockers.put(end.toJson());
 
 		JSONObject node = new JSONObject();
 		node.put("resourceId", uuid);
@@ -169,7 +190,7 @@ public class Transition {
 		node.put("outgoing", outgoing);
 		node.put("properties", properties);
 		node.put("childShapes", childShapes);
-		node.put("dockers", dockers);
+		node.put("dockers", allDockers);
 		node.put("bounds", bounds.toJson());
 		return node;
 	}

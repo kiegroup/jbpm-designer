@@ -6,6 +6,7 @@ import org.json.JSONObject;
 public class Docker {
 	private int x;
 	private int y;
+	
 	public int getX() {
 		return x;
 	}

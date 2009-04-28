@@ -76,8 +76,8 @@ public class Hql extends Sql {
 			properties.put("unique", unique.toString());
 		if (query != null)
 			properties.put("query", query);
-
-		// TODO add parameters
+		if(parameters != null)
+			properties.put("parameters", parameters.toJson());
 
 		JSONArray childShapes = new JSONArray();
 

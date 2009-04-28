@@ -51,7 +51,7 @@ public class Java extends Node {
 		this.outgoings = JsonToJpdl.readOutgoings(java);
 
 	}
-	
+
 	public Java(org.w3c.dom.Node java) {
 		this.uuid = "oryx_" + UUID.randomUUID().toString();
 		NamedNodeMap attributes = java.getAttributes();
@@ -72,9 +72,7 @@ public class Java extends Node {
 
 		try {
 			jpdl.write(JsonToJpdl.transformRequieredAttribute("class", clazz));
-			jpdl
-					.write(JsonToJpdl.transformRequieredAttribute("method",
-							method));
+			jpdl.write(JsonToJpdl.transformRequieredAttribute("method", method));
 			jpdl.write(JsonToJpdl.transformRequieredAttribute("var", var));
 		} catch (InvalidModelException e) {
 			throw new InvalidModelException("Invalid Java activity. "

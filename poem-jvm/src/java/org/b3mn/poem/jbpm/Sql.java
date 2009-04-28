@@ -45,11 +45,13 @@ public class Sql extends Node {
 		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
 
 		if (sql.hasChildNodes())
-			for (org.w3c.dom.Node a = sql.getFirstChild(); a != null; a = a.getNextSibling())
-				if(a.getNodeName().equals("query")) {
+			for (org.w3c.dom.Node a = sql.getFirstChild(); a != null; a = a
+					.getNextSibling()) {
+				if (a.getNodeName().equals("query"))
 					this.query = a.getTextContent();
-					break;
-				}
+				if (a.getNodeName().equals("parameters"))
+					this.parameters = new Parameters(a);
+			}
 	}
 
 	public String getVar() {
@@ -135,9 +137,9 @@ public class Sql extends Node {
 			properties.put("unique", unique.toString());
 		if (query != null)
 			properties.put("query", query);
-
-		// TODO add parameters
-
+		if(parameters != null)
+			properties.put("parameters", parameters.toJson());
+		
 		JSONArray childShapes = new JSONArray();
 
 		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,

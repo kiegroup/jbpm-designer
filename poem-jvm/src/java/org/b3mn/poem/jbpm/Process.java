@@ -25,13 +25,13 @@ public class Process {
 		this.root = rootNode;
 		childNodes = new ArrayList<org.b3mn.poem.jbpm.Node>();
 		children = new HashMap<String, org.b3mn.poem.jbpm.Node>();
-		
+
 		NamedNodeMap attributes = root.getAttributes();
 		this.name = JpdlToJson.getAttribute(attributes, "name");
 		this.key = JpdlToJson.getAttribute(attributes, "key");
 		this.version = JpdlToJson.getAttribute(attributes, "version");
 		this.description = JpdlToJson.getAttribute(attributes, "description");
-		
+
 		if (root.hasChildNodes()) {
 			int x = 0;
 			try {
