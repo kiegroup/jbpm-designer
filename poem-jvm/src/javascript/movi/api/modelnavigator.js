@@ -78,7 +78,7 @@ MOVI.namespace("widget");
 		this._image = new YAHOO.util.Element(
 			this.getElementsByTagName("img")[0]);
 			
-		this.set("className", _NAVIGATOR_CLASS_NAME);
+		this.addClass(_NAVIGATOR_CLASS_NAME);
 		
 		// add event listeners to modelviewer's scrollbox
 		var scrollboxId = this.modelviewer.getScrollboxEl().get("id");
