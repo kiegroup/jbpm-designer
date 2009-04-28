@@ -310,6 +310,9 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 			var name 	= obj.name;
 			var prefix 	= obj.prefix;
 			var value 	= obj.value;
+            
+            // Complex properties can be real json objects, encode them to a string
+            if(Ext.type(value) === "object") value = Ext.encode(value);
 
 			switch(prefix + "-" + name){
 				case 'raziel-parent': 
@@ -343,11 +346,22 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
         var json = {
             resourceId: this.resourceId,
             properties: this.properties.inject({}, function(props, prop){
+              var key = prop[0];
+              var value = prop[1];
+                
+              //If complex property, value should be a json object
+              if(this.getStencil().property(key)
+                && this.getStencil().property(key).type() === ORYX.CONFIG.TYPE_COMPLEX 
+                && Ext.type(value) === "string"){
+                  try {value = Ext.decode(value);} catch(error){}
+              }
+              
               //Takes "my_property" instead of "oryx-my_property" as key
-              var key = prop[0].replace(/^[\w_]+-/, "");
-              props[key] = prop[1];
+              key = key.replace(/^[\w_]+-/, "");
+              props[key] = value;
+              
               return props;
-            }),
+            }.bind(this)),
             stencil: {
                 id: this.getStencil().idWithoutNs()
             },
