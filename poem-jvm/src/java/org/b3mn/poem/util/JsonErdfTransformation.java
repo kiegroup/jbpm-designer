@@ -147,7 +147,6 @@ public class JsonErdfTransformation {
 			JSONArray outgoings = shape.getJSONArray("outgoing");
 			for(int i = 0; i < outgoings.length(); i++){
 				shapeEl.appendChild(createRazielNsResourceElement("outgoing", "#"+outgoings.getJSONObject(i).getString("resourceId")));
-				shapeEl.appendChild(createRazielNsResourceElement("target", "#"+outgoings.getJSONObject(i).getString("resourceId")));
 			}
 		}
 		
@@ -165,6 +164,11 @@ public class JsonErdfTransformation {
 				dockers = docker.getString("x") + " " + docker.getString("y") + " " + dockers;
 			}
 			shapeEl.appendChild(createOryxNsElement("docker", dockers));
+		}
+		
+		// Target
+		if(shape.has("target")){
+			shapeEl.appendChild(createRazielNsResourceElement("target", "#"+shape.getJSONObject("target").getString("resourceId")));
 		}
 		
 		return root.appendChild(shapeEl);
