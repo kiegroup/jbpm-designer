@@ -358,7 +358,7 @@ MOVI.namespace("widget");
 		/**
 		 * Scrolls to the shape, i.e. centers the (canvas around the) shape 
 		 * within the scrollbox.
-		 * @method scrollToShape()
+		 * @method scrollToShape
 		 * @param {Shape} shape the shape or its resource id
 		 * @return {Element} The shape element / null if it does not exist
 		 * @throws Error if scrollbox dimensions cannot be calculated
@@ -399,7 +399,7 @@ MOVI.namespace("widget");
 		/**
 		 * Scrolls to the specified position, centers the (canvas around the) position 
 		 * within the scrollbox.
-		 * @method scrollToShape()
+		 * @method centerScrollTo
 		 * @param {Integer} x The center's x position
 		 * @param {Integer} y The center's y position
 		 * @throws Error if scrollbox dimensions cannot be calculated
