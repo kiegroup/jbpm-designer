@@ -64,7 +64,7 @@ public class Hql extends Sql {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "hql");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

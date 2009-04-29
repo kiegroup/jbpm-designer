@@ -18,10 +18,10 @@ public class Esb extends Node {
 
 	public Esb(JSONObject esb) {
 
-		this.name = JsonToJpdl.readAttribute(esb, "name");
-		this.category = JsonToJpdl.readAttribute(esb, "category");
-		this.service = JsonToJpdl.readAttribute(esb, "service");
-		this.bounds = JsonToJpdl.readBounds(esb);
+		this.name = JsonToJpdl.getAttribute(esb, "name");
+		this.category = JsonToJpdl.getAttribute(esb, "category");
+		this.service = JsonToJpdl.getAttribute(esb, "service");
+		this.bounds = JsonToJpdl.getBounds(esb);
 
 		this.part = new ArrayList<Part>();
 
@@ -35,7 +35,7 @@ public class Esb extends Node {
 		} catch (JSONException e) {
 		}
 
-		this.outgoings = JsonToJpdl.readOutgoings(esb);
+		this.outgoings = JsonToJpdl.getOutgoings(esb);
 	}
 	
 	public Esb(org.w3c.dom.Node esb) {
@@ -116,7 +116,7 @@ public class Esb extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "esb");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

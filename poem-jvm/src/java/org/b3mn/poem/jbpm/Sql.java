@@ -17,10 +17,10 @@ public class Sql extends Node {
 
 	public Sql(JSONObject sql) {
 
-		this.name = JsonToJpdl.readAttribute(sql, "name");
-		this.var = JsonToJpdl.readAttribute(sql, "var");
-		this.unique = new Boolean(JsonToJpdl.readAttribute(sql, "unique"));
-		this.query = JsonToJpdl.readAttribute(sql, "query");
+		this.name = JsonToJpdl.getAttribute(sql, "name");
+		this.var = JsonToJpdl.getAttribute(sql, "var");
+		this.unique = new Boolean(JsonToJpdl.getAttribute(sql, "unique"));
+		this.query = JsonToJpdl.getAttribute(sql, "query");
 		try {
 			this.parameters = new Parameters(sql.getJSONObject("properties")
 					.getJSONObject("parameters"));
@@ -28,9 +28,9 @@ public class Sql extends Node {
 			this.parameters = null;
 		}
 
-		this.bounds = JsonToJpdl.readBounds(sql);
+		this.bounds = JsonToJpdl.getBounds(sql);
 
-		this.outgoings = JsonToJpdl.readOutgoings(sql);
+		this.outgoings = JsonToJpdl.getOutgoings(sql);
 
 	}
 
@@ -125,7 +125,7 @@ public class Sql extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "sql");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

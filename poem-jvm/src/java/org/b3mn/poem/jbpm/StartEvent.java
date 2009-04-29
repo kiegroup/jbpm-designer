@@ -12,9 +12,9 @@ public class StartEvent extends Node {
 
 	public StartEvent(JSONObject startEvent) {
 
-		this.name = JsonToJpdl.readAttribute(startEvent, "name");
-		this.bounds = JsonToJpdl.readBounds(startEvent);
-		this.outgoings = JsonToJpdl.readOutgoings(startEvent);
+		this.name = JsonToJpdl.getAttribute(startEvent, "name");
+		this.bounds = JsonToJpdl.getBounds(startEvent);
+		this.outgoings = JsonToJpdl.getOutgoings(startEvent);
 
 	}
 	
@@ -59,7 +59,7 @@ public class StartEvent extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "StartEvent");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffff");

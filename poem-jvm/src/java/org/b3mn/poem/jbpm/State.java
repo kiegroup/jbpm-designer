@@ -12,9 +12,9 @@ public class State extends Node {
 
 	public State(JSONObject state) {
 
-		this.name = JsonToJpdl.readAttribute(state, "name");
-		this.bounds = JsonToJpdl.readBounds(state);
-		this.outgoings = JsonToJpdl.readOutgoings(state);
+		this.name = JsonToJpdl.getAttribute(state, "name");
+		this.bounds = JsonToJpdl.getBounds(state);
+		this.outgoings = JsonToJpdl.getOutgoings(state);
 
 	}
 	
@@ -57,7 +57,7 @@ public class State extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "wait");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

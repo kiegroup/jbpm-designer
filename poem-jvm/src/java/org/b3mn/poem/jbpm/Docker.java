@@ -33,4 +33,8 @@ public class Docker {
 		return o;
 	}
 	
+	public String toJpdl() {
+		return x + "," + y;
+	}
+	
 }

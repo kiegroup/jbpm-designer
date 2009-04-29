@@ -4,7 +4,6 @@ import java.io.StringWriter;
 
 public class WireObjectType extends WireObjectGroup {
 	
-	private String name;
 	private String clazz;
 	private String object;
 	
@@ -38,15 +37,4 @@ public class WireObjectType extends WireObjectGroup {
 	public void setObject(String object) {
 		this.object = object;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	
-
 }

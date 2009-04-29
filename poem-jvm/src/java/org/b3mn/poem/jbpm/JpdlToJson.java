@@ -13,6 +13,7 @@ public class JpdlToJson {
 	private static Process process;
 	
 	public static String transform(Document doc) {
+		// trigger for transformation
 		Node root = getRootNode(doc);
 			
 		process = new Process(root);
@@ -30,6 +31,7 @@ public class JpdlToJson {
 	public static JSONObject createJsonObject(String uuid, JSONObject stencil,
 			JSONArray outgoing, JSONObject properties, JSONArray childShapes,
 			JSONObject bounds) throws JSONException {
+		// create Oryx compliant JSONObject for Node
 		JSONObject node = new JSONObject();
 
 		node.put("bounds", bounds);
@@ -63,7 +65,7 @@ public class JpdlToJson {
 		return process;
 	}
 	
-	public static JSONArray setTransitions(List<Transition> outgoings) throws JSONException {
+	public static JSONArray getTransitions(List<Transition> outgoings) throws JSONException {
 		JSONArray outgoing = new JSONArray();
 
 		for(Transition t : outgoings) {

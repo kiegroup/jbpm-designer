@@ -17,14 +17,14 @@ public class Script extends Node {
 
 	public Script(JSONObject script) {
 
-		this.name = JsonToJpdl.readAttribute(script, "name");
-		this.expression = JsonToJpdl.readAttribute(script, "expr");
-		this.language = JsonToJpdl.readAttribute(script, "lang");
-		this.variable = JsonToJpdl.readAttribute(script, "var");
-		this.text = JsonToJpdl.readAttribute(script, "text");
-		this.bounds = JsonToJpdl.readBounds(script);
+		this.name = JsonToJpdl.getAttribute(script, "name");
+		this.expression = JsonToJpdl.getAttribute(script, "expr");
+		this.language = JsonToJpdl.getAttribute(script, "lang");
+		this.variable = JsonToJpdl.getAttribute(script, "var");
+		this.text = JsonToJpdl.getAttribute(script, "text");
+		this.bounds = JsonToJpdl.getBounds(script);
 
-		this.outgoings = JsonToJpdl.readOutgoings(script);
+		this.outgoings = JsonToJpdl.getOutgoings(script);
 	}
 	
 	public Script(org.w3c.dom.Node script) {
@@ -114,7 +114,7 @@ public class Script extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "script");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

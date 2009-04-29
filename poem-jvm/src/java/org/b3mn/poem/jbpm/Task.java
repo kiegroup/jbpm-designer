@@ -14,20 +14,20 @@ public class Task extends Node {
 	private String candidateGroups;
 	private String candidateUsers;
 	private String swimlane;
-
+	
 	public Task(JSONObject task) {
 
-		this.name = JsonToJpdl.readAttribute(task, "name");
-		this.assignee = JsonToJpdl.readAttribute(task, "assignee");
+		this.name = JsonToJpdl.getAttribute(task, "name");
+		this.assignee = JsonToJpdl.getAttribute(task, "assignee");
 		if (assignee == null) {
-			this.candidateGroups = JsonToJpdl.readAttribute(task,
+			this.candidateGroups = JsonToJpdl.getAttribute(task,
 					"candidate-groups");
-			this.candidateUsers = JsonToJpdl.readAttribute(task,
+			this.candidateUsers = JsonToJpdl.getAttribute(task,
 					"candidate-users");
-			this.swimlane = JsonToJpdl.readAttribute(task, "swimlane");
+			this.swimlane = JsonToJpdl.getAttribute(task, "swimlane");
 		}
-		this.bounds = JsonToJpdl.readBounds(task);
-		this.outgoings = JsonToJpdl.readOutgoings(task);
+		this.bounds = JsonToJpdl.getBounds(task);
+		this.outgoings = JsonToJpdl.getOutgoings(task);
 
 	}
 	
@@ -116,7 +116,7 @@ public class Task extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "Task");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

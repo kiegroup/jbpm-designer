@@ -10,12 +10,16 @@ public class Swimlane {
 	private String candidateGroups;
 	private String candidateUsers;
 	
+	// TODO Integrate Swimline in transformation.
+	// Swimlane as child of process.
+	// Swimlane is not parent of any Task.
+	
 	public Swimlane(JSONObject swimlane) {
-		this.name = JsonToJpdl.readAttribute(swimlane, "name");
-		this.assignee = JsonToJpdl.readAttribute(swimlane, "assignee");
+		this.name = JsonToJpdl.getAttribute(swimlane, "name");
+		this.assignee = JsonToJpdl.getAttribute(swimlane, "assignee");
 		if(assignee == null) {
-			this.candidateGroups = JsonToJpdl.readAttribute(swimlane, "candidate-groups");
-			this.candidateUsers = JsonToJpdl.readAttribute(swimlane, "candidate-users");
+			this.candidateGroups = JsonToJpdl.getAttribute(swimlane, "candidate-groups");
+			this.candidateUsers = JsonToJpdl.getAttribute(swimlane, "candidate-users");
 		}
 	}
 

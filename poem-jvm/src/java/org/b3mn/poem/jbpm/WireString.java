@@ -6,8 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WireString extends WireObjectGroup {
-	
-	private String name;
+
 	private String value;
 	
 	public WireString(String name, String value) {
@@ -36,14 +35,6 @@ public class WireString extends WireObjectGroup {
 			string.put("value", value);
 		string.put("type", "string");
 		return string;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getValue() {

@@ -12,9 +12,9 @@ public class And extends Node {
 
 	public And(JSONObject and) {
 
-		this.name = JsonToJpdl.readAttribute(and, "name");
-		this.bounds = JsonToJpdl.readBounds(and);
-		this.outgoings = JsonToJpdl.readOutgoings(and);
+		this.name = JsonToJpdl.getAttribute(and, "name");
+		this.bounds = JsonToJpdl.getBounds(and);
+		this.outgoings = JsonToJpdl.getOutgoings(and);
 
 	}
 	
@@ -65,7 +65,7 @@ public class And extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "AND_Gateway");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffff");

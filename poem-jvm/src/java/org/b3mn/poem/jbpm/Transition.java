@@ -20,23 +20,8 @@ public class Transition {
 	private Docker end;
 	private List<Docker> dockers;
 
-	public Docker getStart() {
-		return start;
-	}
-
-	public void setStart(Docker start) {
-		this.start = start;
-	}
-
-	public Docker getEnd() {
-		return end;
-	}
-
-	public void setEnd(Docker end) {
-		this.end = end;
-	}
-
 	public Transition(JSONObject transition) {
+		this.dockers = new ArrayList<Docker>();
 		try {
 			this.name = transition.getJSONObject("properties")
 					.getString("name");
@@ -54,6 +39,23 @@ public class Transition {
 					transition.getJSONObject("target").getString("resourceId"));
 		} catch (JSONException e) {
 		}
+		try {
+			JSONArray dockerArray = transition.getJSONArray("dockers");
+			// Create path dockers. Start and end will be ignored.
+			if (dockerArray.length() > 2)
+				for (int i = 1; i < dockerArray.length() - 1; i++) {
+					try {
+						JSONObject docker = dockerArray.getJSONObject(i);
+						int x = Math.round(Float.parseFloat(docker
+								.getString("x")));
+						int y = Math.round(Float.parseFloat(docker
+								.getString("y")));
+						dockers.add(new Docker(x, y));
+					} catch (JSONException e) {
+					}
+				}
+		} catch (JSONException f) {
+		}
 	}
 
 	public Transition(org.w3c.dom.Node transition) {
@@ -66,10 +68,11 @@ public class Transition {
 		this.dockers = new ArrayList<Docker>();
 		String g = JpdlToJson.getAttribute(attributes, "g");
 		if (g != null) {
-			String[] middleDockers = g.split(":")[0].split(";");
-			for (int i = 0; i < middleDockers.length; i++) {
-				if (middleDockers[i].length() > 1) {
-					String[] dockerPosition = middleDockers[i].split(",");
+			// Create path dockers. Start and end are missing.
+			String[] pathDockers = g.split(":")[0].split(";");
+			for (int i = 0; i < pathDockers.length; i++) {
+				if (pathDockers[i].length() > 1) {
+					String[] dockerPosition = pathDockers[i].split(",");
 					if (dockerPosition.length == 2) {
 						Docker d = new Docker(Integer
 								.parseInt(dockerPosition[0]), Integer
@@ -122,6 +125,22 @@ public class Transition {
 		this.uuid = uuid;
 	}
 
+	public Docker getStart() {
+		return start;
+	}
+
+	public void setStart(Docker start) {
+		this.start = start;
+	}
+
+	public Docker getEnd() {
+		return end;
+	}
+
+	public void setEnd(Docker end) {
+		this.end = end;
+	}
+
 	public String toJpdl() throws InvalidModelException {
 		StringWriter jpdl = new StringWriter();
 		jpdl.write("<transition");
@@ -135,8 +154,21 @@ public class Transition {
 		} else {
 			throw new InvalidModelException("Invalid edge. Target is missing.");
 		}
+		
+		if (dockers.size() > 0) {
+			// g="120,42;120,45:0,0"
+			String dockerString = "";
+			for(Docker d : dockers) {
+				dockerString += d.toJpdl();
+				if(dockers.indexOf(d) == dockers.size() - 1)
+					dockerString += ":";
+				else
+					dockerString += ";";
+			}
+			jpdl.write(JsonToJpdl.transformAttribute("g", dockerString));
+		}
 
-		if (condition != null) {
+		if (condition != null && !condition.equals("")) {
 			jpdl.write(">\n");
 			jpdl.write("<condition expr=\"");
 			jpdl.write(condition);
@@ -179,7 +211,7 @@ public class Transition {
 
 		JSONArray allDockers = new JSONArray();
 		allDockers.put(start.toJson());
-		for(Docker d : dockers) {
+		for (Docker d : dockers) {
 			allDockers.put(d.toJson());
 		}
 		allDockers.put(end.toJson());

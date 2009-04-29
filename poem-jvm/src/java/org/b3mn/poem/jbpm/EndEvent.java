@@ -15,10 +15,10 @@ public class EndEvent extends Node {
 
 	public EndEvent(JSONObject endEvent) {
 
-		this.name = JsonToJpdl.readAttribute(endEvent, "name");
-		this.ends = JsonToJpdl.readAttribute(endEvent, "ends");
-		this.state = JsonToJpdl.readAttribute(endEvent, "state");
-		this.bounds = JsonToJpdl.readBounds(endEvent);
+		this.name = JsonToJpdl.getAttribute(endEvent, "name");
+		this.ends = JsonToJpdl.getAttribute(endEvent, "ends");
+		this.state = JsonToJpdl.getAttribute(endEvent, "state");
+		this.bounds = JsonToJpdl.getBounds(endEvent);
 
 	}
 	

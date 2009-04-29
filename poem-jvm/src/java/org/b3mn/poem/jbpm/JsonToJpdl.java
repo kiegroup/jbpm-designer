@@ -40,6 +40,8 @@ public class JsonToJpdl {
 	}
 
 	public String transform() throws InvalidModelException {
+		// trigger for transformation
+		
 		// Check if model is of type BPMN 1.2 + jBPM
 		try {
 			JSONArray extensions = this.processData.getJSONArray("ssextensions");
@@ -91,7 +93,7 @@ public class JsonToJpdl {
 		return jpdl.toString();
 	}
 
-	public static String readAttribute(JSONObject node, String name) {
+	public static String getAttribute(JSONObject node, String name) {
 		try {
 			return node.getJSONObject("properties").getString(name);
 		} catch (JSONException e) {
@@ -99,7 +101,7 @@ public class JsonToJpdl {
 		}
 	}
 
-	public static Bounds readBounds(JSONObject node) {
+	public static Bounds getBounds(JSONObject node) {
 		try {
 			return new Bounds(node.getJSONObject("bounds"));
 		} catch (JSONException e) {
@@ -107,7 +109,7 @@ public class JsonToJpdl {
 		}
 	}
 
-	public static List<Transition> readOutgoings(JSONObject node) {
+	public static List<Transition> getOutgoings(JSONObject node) {
 		List<Transition> outgoings = new ArrayList<Transition>();
 		try {
 			JSONArray outs = node.getJSONArray("outgoing");

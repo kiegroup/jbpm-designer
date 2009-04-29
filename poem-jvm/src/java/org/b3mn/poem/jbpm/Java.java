@@ -20,11 +20,11 @@ public class Java extends Node {
 
 	public Java(JSONObject java) {
 
-		this.name = JsonToJpdl.readAttribute(java, "name");
-		this.clazz = JsonToJpdl.readAttribute(java, "class");
-		this.method = JsonToJpdl.readAttribute(java, "method");
-		this.var = JsonToJpdl.readAttribute(java, "var");
-		this.bounds = JsonToJpdl.readBounds(java);
+		this.name = JsonToJpdl.getAttribute(java, "name");
+		this.clazz = JsonToJpdl.getAttribute(java, "class");
+		this.method = JsonToJpdl.getAttribute(java, "method");
+		this.var = JsonToJpdl.getAttribute(java, "var");
+		this.bounds = JsonToJpdl.getBounds(java);
 
 		field = new ArrayList<Field>();
 		try {
@@ -48,7 +48,7 @@ public class Java extends Node {
 		} catch (JSONException e) {
 		}
 
-		this.outgoings = JsonToJpdl.readOutgoings(java);
+		this.outgoings = JsonToJpdl.getOutgoings(java);
 
 	}
 
@@ -134,7 +134,7 @@ public class Java extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "java");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffcc");

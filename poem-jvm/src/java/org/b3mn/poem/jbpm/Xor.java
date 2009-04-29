@@ -15,11 +15,11 @@ public class Xor extends Node {
 
 	public Xor(JSONObject xor) {
 
-		this.name = JsonToJpdl.readAttribute(xor, "name");
-		this.expression = JsonToJpdl.readAttribute(xor, "expr");
-		this.handler = JsonToJpdl.readAttribute(xor, "handler");
-		this.bounds = JsonToJpdl.readBounds(xor);
-		this.outgoings = JsonToJpdl.readOutgoings(xor);
+		this.name = JsonToJpdl.getAttribute(xor, "name");
+		this.expression = JsonToJpdl.getAttribute(xor, "expr");
+		this.handler = JsonToJpdl.getAttribute(xor, "handler");
+		this.bounds = JsonToJpdl.getBounds(xor);
+		this.outgoings = JsonToJpdl.getOutgoings(xor);
 
 	}
 
@@ -73,7 +73,7 @@ public class Xor extends Node {
 		JSONObject stencil = new JSONObject();
 		stencil.put("id", "Exclusive_Databased_Gateway");
 
-		JSONArray outgoing = JpdlToJson.setTransitions(outgoings);
+		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
 		JSONObject properties = new JSONObject();
 		properties.put("bgcolor", "#ffffff");

@@ -9,30 +9,50 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Parameters {
-	private List<WireObjectGroup> parameters;
+	private List<WireString> parameters;
 
-	public Parameters(org.w3c.dom.Node parameters) {
-
+	public Parameters(org.w3c.dom.Node params) {
+		// <parameters>
+		// <string name="taskName" value="%i%" />
+		// </parameters>
+		this.parameters = new ArrayList<WireString>();
+		if (params.hasChildNodes())
+			for (org.w3c.dom.Node n = params.getFirstChild(); n != null; n = n
+					.getNextSibling())
+				// TODO handle WireObjectType
+				if (n.getNodeName().equals("string"))
+					try {
+						String name = n.getAttributes().getNamedItem("name")
+								.getNodeValue();
+						String value = n.getAttributes().getNamedItem("value")
+								.getNodeValue();
+						WireString m = new WireString(name, value);
+						this.parameters.add(m);
+					} catch (Exception e) {
+						// name or value is missing for parameter.
+						// parameter is ignored.
+					}
 	}
 
 	public Parameters(JSONObject parameters) {
-		this.parameters = new ArrayList<WireObjectGroup>();
+		this.parameters = new ArrayList<WireString>();
 		try {
 			JSONArray items = parameters.getJSONArray("items");
 			for (int i = 0; i < items.length(); i++) {
 				JSONObject item = items.getJSONObject(i);
-				WireObjectGroup newItem = null;
+				WireString newItem = null;
 				try {
 					if (item.getString("type").toLowerCase().equals("string")) {
 						String sName = item.getString("name");
 						String sValue = item.getString("value");
 						newItem = new WireString(sName, sValue);
 					}
-					if (item.getString("type").toLowerCase().equals("object")) {
-						String oName = item.getString("name");
-						newItem = new WireObjectType(oName);
-					}
-				} catch (JSONException e) {
+					// TODO Handle WireObjectType
+					//if (item.getString("type").toLowerCase().equals("object")) {
+					//	String oName = item.getString("name");
+					//	newItem = new WireObjectType(oName);
+					//}
+				} catch (JSONException d) {
 				}
 				if (item != null)
 					this.parameters.add(newItem);
@@ -41,11 +61,11 @@ public class Parameters {
 		}
 	}
 
-	public List<WireObjectGroup> getParameters() {
+	public List<WireString> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(List<WireObjectGroup> parameters) {
+	public void setParameters(List<WireString> parameters) {
 		this.parameters = parameters;
 	}
 
@@ -62,17 +82,19 @@ public class Parameters {
 	}
 
 	public JSONObject toJson() throws JSONException {
-		JSONObject parameters = new JSONObject();
-		parameters.put("totalCount", 1);
+		JSONObject params = new JSONObject();
+		params.put("totalCount", parameters.size());
 		JSONArray items = new JSONArray();
-		JSONObject a = new JSONObject();
-		a.put("name", "a");
-		a.put("value", "b");
-		a.put("type", "string");
-		items.put(a);
-		parameters.put("items", items);
+		for(WireString item : parameters) {
+			JSONObject a = new JSONObject();
+			a.put("name", item.getName());
+			a.put("value", item.getValue());
+			a.put("type", "string");
+			items.put(a);
+		}
+		params.put("items", items);
 
-		return parameters;
+		return params;
 	}
 
 }
