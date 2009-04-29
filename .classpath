@@ -147,17 +147,17 @@
 	<classpathentry kind="lib" path="poem-jvm/lib/log4j-over-slf4j-1.5.5.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/not-yet-commons-ssl-0.3.9.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/opensaml-2.2.2.jar"/>
-	<classpathentry kind="lib" path="poem-jvm/lib/openws-1.2.1.jar"/>
+	<classpathentry kind="lib" path="poem-jvm/lib/openws-1.2.2.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/resolver-2.9.1.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/serializer-2.9.1.jar"/>
-	<classpathentry kind="lib" path="poem-jvm/lib/slf4j-api-1.5.2.jar"/>
+	<classpathentry kind="lib" path="poem-jvm/lib/slf4j-api-1.5.5.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/slf4j-jdk14-1.5.2.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/velocity-1.5.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xalan-2.7.1.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xercesImpl-2.9.1.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xml-apis-2.9.1.jar"/>
 	<classpathentry kind="lib" path="poem-jvm/lib/xmlsec-1.4.2.jar"/>
-	<classpathentry kind="lib" path="poem-jvm/lib/xmltooling-1.1.1.jar"/>
+	<classpathentry kind="lib" path="poem-jvm/lib/xmltooling-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-java-client-driver.jar"/>
 	<classpathentry kind="lib" path="editor/lib/orbeon-xforms-filter.jar"/>
 	<classpathentry kind="lib" path="editor/lib/saxon9-dom.jar"/>
