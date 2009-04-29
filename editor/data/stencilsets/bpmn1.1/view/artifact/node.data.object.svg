@@ -24,8 +24,8 @@
 		
 		<rect id="unvisibleBorder" x="0" y="0" height="97" width="88" stroke="none" fill="none" oryx:resize="horizontal vertical"/>
 		
-		<text font-size="14" id="text_name" x="44" y="48.5" align="middle center" oryx:fittoelem="unvisibleBorder" stroke="black" />
+		<text font-size="14" id="text_name" x="44" y="48.5" oryx:align="middle center" oryx:fittoelem="unvisibleBorder" stroke="black" />
 		
-		<text font-size="11" id="text_state" x="44" y="87" align="middle center" stroke="black" oryx:anchors="bottom" />
+		<text font-size="11" id="text_state" x="44" y="87" oryx:align="middle center" stroke="black" oryx:anchors="bottom" />
     </g>
 </svg>
