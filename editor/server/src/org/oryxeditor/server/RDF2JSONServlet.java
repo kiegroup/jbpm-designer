@@ -34,7 +34,7 @@ public class RDF2JSONServlet extends HttpServlet {
   			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
   			factory.setNamespaceAware(true);
   			DocumentBuilder builder = factory.newDocumentBuilder();
-  			Document rdfDoc = builder.parse(new ByteArrayInputStream(rdfRepresentation.getBytes()));
+  			Document rdfDoc = builder.parse(new ByteArrayInputStream(rdfRepresentation.getBytes("UTF-8")));
   			
   			String jsonRepresentation = RdfJsonTransformation.toJson(rdfDoc, serverUrl.toString()).toString();
 
