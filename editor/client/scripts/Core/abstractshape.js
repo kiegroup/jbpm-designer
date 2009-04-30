@@ -387,7 +387,9 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
         
         if(this.dockers){
             json.dockers = this.dockers.map(function(docker){
-                return docker.getDockedShape() && docker.referencePoint ? docker.referencePoint : docker.bounds.center();
+                var d = docker.getDockedShape() && docker.referencePoint ? docker.referencePoint : docker.bounds.center();
+                d.getDocker = function(){return docker;};
+                return d;
             })
         }
         
