@@ -97,7 +97,7 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
                     anchor: '100%'
                 }, {
                     xtype: 'checkbox',
-                    boxLabel: 'Attach current model <img src="' + ORYX.CONFIG.ROOT_PATH + '/images/information.png" ext:qtip="This information can be helpful for debugging purposes. If your model contains some sensible data, remove it before or uncheck this behavior."/>',
+                    boxLabel: 'Attach current model <img src="' + ORYX.CONFIG.ROOT_PATH + '/images/information.png" ext:qtip="This information can be helpful for debugging purposes. If your model contains some sensitive data, remove it before or uncheck this behavior."/>',
                     hideLabel: true,
                     checked: true,
                     listeners: {
