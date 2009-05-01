@@ -372,7 +372,7 @@ if(!ORYX.I18N.StepThroughPlugin) ORYX.I18N.StepThroughPlugin = {};
 
 ORYX.I18N.StepThroughPlugin.group = "Step Through";
 ORYX.I18N.StepThroughPlugin.stepThrough = "Step Through";
-ORYX.I18N.StepThroughPlugin.stepThroughDesc = "Step through your BPMN model";
+ORYX.I18N.StepThroughPlugin.stepThroughDesc = "Step through your model";
 ORYX.I18N.StepThroughPlugin.undo = "Undo";
 ORYX.I18N.StepThroughPlugin.undoDesc = "Undo one Step";
 ORYX.I18N.StepThroughPlugin.error = "Can't step through this diagram.";

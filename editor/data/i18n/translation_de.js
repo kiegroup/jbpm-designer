@@ -371,7 +371,7 @@ if(!ORYX.I18N.StepThroughPlugin) ORYX.I18N.StepThroughPlugin = {};
 
 ORYX.I18N.StepThroughPlugin.group = "Step Through";
 ORYX.I18N.StepThroughPlugin.stepThrough = "Schrittweise Ausführung";
-ORYX.I18N.StepThroughPlugin.stepThroughDesc = "Schrittweise Ausführung des BPMN Modells";
+ORYX.I18N.StepThroughPlugin.stepThroughDesc = "Schrittweise Ausführung des Modells";
 ORYX.I18N.StepThroughPlugin.undo = "Rückgängig";
 ORYX.I18N.StepThroughPlugin.undoDesc = "Rückgängig";
 ORYX.I18N.StepThroughPlugin.error = "Ausführung des Modells nicht möglich.";
