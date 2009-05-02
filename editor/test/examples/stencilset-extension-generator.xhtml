@@ -13,13 +13,28 @@
     </head>
     <body>
         <form enctype="multipart/form-data" action="http://localhost:8180/oryx/stencilset-extension-generator" method="post">
-            <input name="base-stencil-set" type="text" value="http://b3mn.org/stencilset/bpmn1.1#" />
-            <!-- will be mapped to superId property in order to morph stencils when dropped to canvas -->
-            <input name="base-stencil" type="text" value="Task" />
+            <input name="modelNamePrefix" type="text"
+                   value="Generated Model using " />
+            <input name="stencilSetExtensionNamePrefix" type="text"
+                   value="Generated Stencil Set Extension" />
+            <input name="baseStencilSetPath" type="text"
+                   value="/stencilsets/bpmn1.1/bpmn1.1.json" />
+            <input name="baseStencilSet" type="text"
+                   value="http://b3mn.org/stencilset/bpmn1.1#" />
+            <input name="stencilSetExtension" type="text"
+                   value="http://oryx-editor.org/stencilsets/extensions/bpmn-design-thinking-subset#" />
+            <input name="stencilSetExtension" type="text"
+                   value="http://oryx-editor.org/stencilsets/extensions/bpmnwikirefs#" />
+            <!-- mapped to superId property in order to morph stencils when dropped to canvas -->
+            <input name="baseStencil" type="text"
+                   value="Task" />
             <!-- properties the columns will be mapped to -->
-            <input name="column-property-mapping" type="text" value="group,name,documentation,refuri" />
+            <input name="columnPropertyMapping" type="text"
+                   value="group,name,documentation,refuri" />
             <!-- CSV file containing the data of the stencils to be generated -->
-            <input name="csv-file" type="file" />
+            <input name="csvFile" type="file" />
+            <input name="additionalERDFContentForGeneratedModel" type="text"
+                   value="" />
             <input type="submit" value="generate stencil set extension" />
         </form>
     </body>
