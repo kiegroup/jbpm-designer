@@ -33,14 +33,7 @@ package org.oryxeditor.server;
  * @author Jan-Felix Schwarz 
  **/
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +49,6 @@ public class Repository {
 	public static final String DEFAULT_STENCILSET = "/stencilsets/bpmn1.1/bpmn1.1.json";
 	public static final String DEFAULT_TYPE = "http://b3mn.org/stencilset/bpmn1.1#";
 	public static final String DEFAULT_MODEL_TYPE = "http://b3mn.org/stencilset/bpmn1.1#BPMNDiagram";
-	private static final String STENCILSET_EXTENSIONS_PATH = System.getProperty("catalina.home") + "/webapps/oryx/stencilsets/extensions/";;
 
 	/**
 	 * URL prefix for the backend, e.g., http://localhost:8180/
@@ -151,7 +143,7 @@ public class Repository {
 	 * @param stencilSetExtensionUrls TODO
 	 * @return
 	 */
-	public String generateERDF(String modelId, String modelData, String stencilset, String modelType, ArrayList<String> stencilSetExtensionUrls){
+	public String generateERDF(String modelId, String modelData, String stencilset, String modelType, List<String> stencilSetExtensionUrls){
 		String stencilsetLocation = baseUrl + "oryx" + stencilset;
 		//TODO: remove modelId, since it doesn't seem to be used any more
 		String erdf = "<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">"
@@ -231,61 +223,4 @@ public class Repository {
 		}
 		return result;
 	}
-
-	public void saveStencilSetExtension(String extensionLocation,
-			String extension) {
-		File extensionFile = new File(STENCILSET_EXTENSIONS_PATH + extensionLocation);
-		if (!extensionFile.exists()) {
-			try {
-				extensionFile.createNewFile();
-				BufferedWriter extensionFileWriter = new BufferedWriter(new FileWriter(extensionFile));
-				extensionFileWriter.write(extension);
-				extensionFileWriter.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void registerStencilSetExtension(String name,
-			String namespace, String description,
-			String location, String baseStencilset) {
-
-		File extensionFile = new File(STENCILSET_EXTENSIONS_PATH + location);
-		File configFile = new File(STENCILSET_EXTENSIONS_PATH + "extensions.json");
-
-		if (extensionFile.exists() && configFile.exists()) {
-			String extensionDeclaration = "\t\t{\n"
-				+ "\t\t\t\"title\":\"" + name + "\",\n"
-				+ "\t\t\t\"namespace\":\"" + namespace + "\",\n"
-				+ "\t\t\t\"description\":\"" + description + "\",\n"
-				+ "\t\t\t\"definition\":\"" + location + "\",\n"
-				+ "\t\t\t\"extends\":\"" + baseStencilset + "\"\n"
-				+ "\t\t},";
-			
-			BufferedReader configFileReader;
-			try {
-				configFileReader = new BufferedReader(new FileReader(configFile));
-				StringBuffer currentConfig = new StringBuffer();
-				String line;
-				while ((line = configFileReader.readLine()) != null){
-					currentConfig.append(line+"\n");
-				}
-				// insert extension at the beginning of the list
-				currentConfig.insert(currentConfig.indexOf("\"extensions\": [\n") + 16, extensionDeclaration +"\n");
-				configFileReader.close();
-				BufferedWriter configFileWriter = new BufferedWriter(new FileWriter(configFile));
-				configFileWriter.write(currentConfig.toString());
-				configFileWriter.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
 }

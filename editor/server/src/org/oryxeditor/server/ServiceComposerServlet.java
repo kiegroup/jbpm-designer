@@ -103,6 +103,7 @@ public class ServiceComposerServlet extends HttpServlet {
 		// hack for reverse proxies:
 		modelUrl = modelUrl.substring(modelUrl.lastIndexOf("http://"));
 
+		// redirect client to editor with that newly generated model
 		response.setHeader("Location", modelUrl);
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 	}
@@ -111,8 +112,8 @@ public class ServiceComposerServlet extends HttpServlet {
 		String extension = generateJsonForStencilSetExtension(extensionName, services);
 		String extensionNamespace = getStencilSetExtensionNamespace(extensionName);
 		String extensionLocation = getStencilSetExtensionLocation(extensionName);
-		repository.saveStencilSetExtension(extensionLocation, extension);
-		repository.registerStencilSetExtension(
+		StencilSetExtensionGenerator.saveStencilSetExtension(extensionLocation, extension);
+		StencilSetExtensionGenerator.registerStencilSetExtension(
 				extensionName,
 				extensionNamespace,
 				getStencilSetExtensionDescription(extensionName, services),
