@@ -253,7 +253,16 @@
 			org.oryxeditor.server.StencilSetJSONPServlet
 		</servlet-class>
 	</servlet>
-	
+
+<!--
+    <servlet>
+        <display-name>Stencilset Extension Generator Servlet</display-name>
+        <servlet-name>StencilSetExtensionGeneratorServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.StencilSetExtensionGeneratorServlet
+        </servlet-class>
+    </servlet>
+-->
 
     <servlet>
         <display-name>Service Composer Servlet</display-name>
@@ -421,8 +430,14 @@
 		<servlet-name>StencilSetJSONPServlet</servlet-name>
 		<url-pattern>/jsonp</url-pattern>
 	</servlet-mapping>
-	
-	
+
+<!--
+    <servlet-mapping>
+            <servlet-name>StencilSetExtensionGeneratorServlet</servlet-name>
+            <url-pattern>/stencilset-extension-generator</url-pattern>
+    </servlet-mapping>
+-->
+
     <servlet-mapping>
             <servlet-name>ServiceComposerServlet</servlet-name>
             <url-pattern>/servicecomposer</url-pattern>

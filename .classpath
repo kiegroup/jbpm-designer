@@ -164,5 +164,6 @@
 	<classpathentry kind="lib" path="editor/lib/saxon9.jar"/>
 	<classpathentry kind="lib" path="editor/lib/activation.jar"/>
 	<classpathentry kind="lib" path="editor/lib/mail.jar"/>
+	<classpathentry kind="lib" path="editor/lib/SuperCSV-1.52.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
