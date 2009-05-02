@@ -264,6 +264,7 @@
     </servlet>
 -->
 
+<!--
     <servlet>
         <display-name>Service Composer Servlet</display-name>
         <servlet-name>ServiceComposerServlet</servlet-name>
@@ -271,6 +272,7 @@
              org.oryxeditor.server.ServiceComposerServlet
         </servlet-class>
     </servlet>
+-->
 	
 	<servlet>
         <display-name>BPMN2BPEL Servlet</display-name>
@@ -438,10 +440,12 @@
     </servlet-mapping>
 -->
 
+<!--
     <servlet-mapping>
             <servlet-name>ServiceComposerServlet</servlet-name>
             <url-pattern>/servicecomposer</url-pattern>
     </servlet-mapping>
+-->
     
     <servlet-mapping>
             <servlet-name>FeedbackServlet</servlet-name>
@@ -505,7 +509,7 @@
 	</filter>
 -->
 	<!--
-		Any web resource under /xforms-jsp is processed by the XForms engine
+		Any web resource under /xformsexport-orbeon is processed by the Orbeon XForms engine
 	-->
 <!--
 	<filter-mapping>
