@@ -67,13 +67,30 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 		}).bind(this));
 		
 		// if super stencil was defined, also regard stencil's properties:
-		stencil.properties().each((function(property) {
-			var key = property.prefix() + "-" + property.id();
-			this.properties[key] = property.value();
-			this.propertiesChanged[key] = true;
-		}).bind(this));
-		
-		
+		if (stencil._jsonStencil.superId) {
+			stencil.properties().each((function(property) {
+				var key = property.prefix() + "-" + property.id();
+				var value = property.value();
+				var oldValue = this.properties[key];
+				this.properties[key] = value;
+				this.propertiesChanged[key] = true;
+
+				// Raise an event, to show that the property has changed
+				// required for plugins like processLink.js
+				window.setTimeout( function(){
+
+					this._delegateEvent({
+							type	: ORYX.CONFIG.EVENT_PROPERTY_CHANGED, 
+							name	: key, 
+							value	: value,
+							oldValue: oldValue
+						});
+
+				}.bind(this), 10)
+
+			}).bind(this));
+		}
+
 	},
 
 	layout: function() {
