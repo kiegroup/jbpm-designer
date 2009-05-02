@@ -81,7 +81,6 @@
 			"stencil": "Task",
 			"properties": [
 				"categories",
-				"documentation",
 				"assignments",
 				"pool",
 				"lanes",
