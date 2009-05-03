@@ -50,4 +50,10 @@ public interface Marking {
 	 * @return true
 	 */
 	boolean isFinalMarking();
+	
+	/**
+	 * Culculates if given marking is a deadlock.
+	 * @return true if deadlock.
+	 */
+	boolean isDeadlock();
 }

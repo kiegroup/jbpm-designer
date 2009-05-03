@@ -83,7 +83,7 @@ public class PetriNetSoundnessChecker {
 		deadLockMarkings = new HashSet<Marking>();
 
 		for (Marking m : rg.getLeaves()) {
-			if(!m.isFinalMarking()){
+			if(m.isDeadlock()){
 				deadLockMarkings.add(m);
 			}
 		}

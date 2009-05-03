@@ -247,7 +247,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             update: function(deadLocks){
                 this.deadLocks = deadLocks;
                 this.setIcon(this.deadLocks.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.deadLocks.length +' paths that lead to dead locks.');
+                this.setText('There is '+(this.deadLocks.length == 0 ? 'no' : 'a')+' path that leads to a deadlock.');
             }
         });
         

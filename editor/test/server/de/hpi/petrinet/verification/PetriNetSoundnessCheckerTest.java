@@ -62,7 +62,11 @@ public class PetriNetSoundnessCheckerTest extends AbstractPetriNetTest{
 		checker3.calculateRG();
 		
 		assertFalse(checker3.isRelaxedSound());
+		assertFalse(checker3.isSound());
+		assertFalse(checker3.isWeakSound());
 		assertEquals(2, checker3.getNotParticipatingTransitions().size());
+		// Should have no deadlocks
+		assertEquals(0, checker3.getDeadLockMarkings().size());
 	}
 
 }

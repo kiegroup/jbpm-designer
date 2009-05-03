@@ -12,10 +12,11 @@ import org.json.JSONObject;
 
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
+import de.hpi.petrinet.Transition;
 
 
 /**
- * Copyright (c) 2008 Gero Decker
+ * Copyright (c) 2008 Gero Decker, Kai Schlichting
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -70,17 +71,17 @@ public class Marking implements de.hpi.petrinet.Marking {
 	}
 
 	public void setNumTokens(Place p, int numTokens) {
-		markingStr = null;
+		reset();
 		marking.put(p, numTokens);
 	}
 
 	public void addToken(Place p) {
-		markingStr = null;
+		reset();
 		setNumTokens(p, getNumTokens(p) + 1);
 	}
 
 	public boolean removeToken(Place p) {
-		markingStr = null;
+		reset();
 		int numTokens = getNumTokens(p);
 		if (numTokens > 0) {
 			setNumTokens(p, numTokens-1);
@@ -113,7 +114,7 @@ public class Marking implements de.hpi.petrinet.Marking {
 		return markingStr;
 	}
 	
-	public void reset() {
+	protected void reset() {
 		markingStr = null;
 	}
 
@@ -158,17 +159,40 @@ public class Marking implements de.hpi.petrinet.Marking {
 	 * the end state of a workflow net (a Petri net with 1 end place) 
 	 */
 	public boolean isFinalMarking() {
-		boolean oneTokenOnFinalPlace = false;
+		return !hasTokenOnIntermediatePlace() && hasOneTokenOnFinalPlace();
+	}
+	
+	public List<Transition> getEnabledTransitions(){
+		return net.getInterpreter().getEnabledTransitions(net, this);
+	}
+	
+	public boolean hasEnabledTransitions(){
+		return getEnabledTransitions().size() > 0;
+	}
+	
+	/**
+	 * Returns true if there is a token on a non-final place, but no transition can fire anymore.
+	 */
+	public boolean isDeadlock(){
+		return hasTokenOnIntermediatePlace() && !hasEnabledTransitions();
+	}
+	
+	protected boolean hasOneTokenOnFinalPlace(){
 		for(Place place : net.getPlaces()){
-			if(place.isFinalPlace()){
-				if(this.getNumTokens(place) == 1) // if token on end place, all is okay 
-					oneTokenOnFinalPlace = true;
-			} else {
-				if(this.getNumTokens(place) > 0) // if token on intermediate place
-					return false;
+			if(place.isFinalPlace() && this.getNumTokens(place) == 1){
+				return true;
 			}
 		}
 		
-		return oneTokenOnFinalPlace;
+		return false;
+	}
+	
+	protected boolean hasTokenOnIntermediatePlace(){
+		for(Place place : net.getPlaces()){
+			if(!place.isFinalPlace() && this.getNumTokens(place) > 0){
+				return true;
+			}
+		}
+		return false;
 	}
 }
