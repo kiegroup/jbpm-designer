@@ -142,6 +142,7 @@ ORYX.CONFIG.EVENT_LAYOUT_BPEL_AUTORESIZE =	"layout.BPEL.autoresize";
 ORYX.CONFIG.EVENT_AUTOLAYOUT_LAYOUT =		"autolayout.layout";
 ORYX.CONFIG.EVENT_UNDO_EXECUTE =			"undo.execute";
 ORYX.CONFIG.EVENT_UNDO_ROLLBACK =			"undo.rollback";
+ORYX.CONFIG.EVENT_BUTTON_UPDATE =           "toolbar.button.update";
 	
 ORYX.CONFIG.EVENT_SHOW_PROPERTYWINDOW =		"propertywindow.show";
 	

@@ -30,8 +30,11 @@ ORYX.Plugins.Validator = Clazz.extend({
         this.active = false;
         this.raisedEventIds = [];
         
+        this.buttonId = ORYX.Editor.provideId();
+        
         this.facade.offer({
             'name': ORYX.I18N.Validator.name,
+            'id': this.buttonId,
             'functionality': this.load.bind(this),
             'group': "Verification",
             'icon': ORYX.PATH + "images/checker_validation.png",
@@ -51,6 +54,15 @@ ORYX.Plugins.Validator = Clazz.extend({
         else {
             this.validate();
         }
+    },
+    
+    setActive: function(active){
+        this.active = active;
+        this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_BUTTON_UPDATE,
+            id: this.buttonId,
+            pressed: active
+        });
     },
     
     hideOverlays: function(){
@@ -169,21 +181,22 @@ ORYX.Plugins.BPMNValidator = Ext.extend(ORYX.Plugins.Validator, {
         var conflictingNodes = result.conflictingNodes;
         var leadsToEnd = result.leadsToEnd;
         
+        // Only stay active if there is anything to visualize
+        this.setActive(conflictingNodes.size() > 0);
+        
         if (!leadsToEnd) {
-            Ext.Msg.alert("Oryx", "The process will never reach a final state!");
+            Ext.Msg.alert("Validation Result", "The process will never reach a final state!");
         }
-        else if (conflictingNodes.size() > 0) {
+        if (conflictingNodes.size() > 0) {
             conflictingNodes.each(function(node){
                 sh = this.facade.getCanvas().getChildShapeByResourceId(node.id);
                 if (sh) {
                     this.showOverlay(sh, "Some following pathes will never reach a final state!");
                 }
-            }
-.bind(this));
-            this.active = !this.active;
+            }.bind(this));
         }
-        else {
-            Ext.Msg.alert("Oryx", "No validation errors found!")
+        if(leadsToEnd && conflictingNodes.size() === 0) {
+            Ext.Msg.alert("Validation Result", "No validation errors found!");
         }
     }
 });
@@ -264,5 +277,7 @@ ORYX.Plugins.EPCValidator = Ext.extend(ORYX.Plugins.Validator, {
         message += "<p><i>Remark: Set titles of functions and events to get some nicer output (names instead of ids)</i></p>"
         
         Ext.Msg.alert('Validation Result', message);
+        
+        this.setActive(false);
     }
 });
