@@ -2,10 +2,13 @@ package de.hpi.petrinet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.w3c.dom.Document;
 
 import de.hpi.diagram.verification.SyntaxChecker;
@@ -15,7 +18,7 @@ import de.hpi.petrinet.verification.PetriNetInterpreter;
 import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
 
 /**
- * Copyright (c) 2008 Gero Decker
+ * Copyright (c) 2008 Gero Decker, Matthias Weidlich
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +44,10 @@ public class PetriNet {
 	protected List<Transition> transitions;
 	protected List<FlowRelationship> flowRelationships;
 	protected List<Place> finalPlaces;
+	protected List<Place> initialPlaces;
 
+	protected TransitiveClosure transitiveClosure;
+	
 	public List<FlowRelationship> getFlowRelationships() {
 		if (flowRelationships == null)
 			flowRelationships = new MyFlowRelationshipList();
@@ -50,23 +56,54 @@ public class PetriNet {
 	
 	public List<Place> getPlaces() {
 		if (places == null)
-			places = new ArrayList();
+			places = new ArrayList<Place>();
 		return places;
 	}
 
 	public List<Transition> getTransitions() {
 		if (transitions == null)
-			transitions = new ArrayList();
+			transitions = new ArrayList<Transition>();
 		return transitions;
+	}
+
+	public List<Node> getNodes() {
+		List<Node> nodes = new ArrayList<Node>();
+		nodes.addAll(getPlaces());
+		nodes.addAll(getTransitions());
+		return nodes;
 	}
 	
 	public SyntaxChecker getSyntaxChecker() {
 		return new PetriNetSyntaxChecker(this);
 	}
 
-	// TODO to be implemented
+	/**
+	 * Creates a deep copy of whole Petri net. All places,
+	 * transitions and flows are copied, whereas the source
+	 * and targets for the latter are also set accordingly.
+	 * 
+	 * @return the copy of the Petri net
+	 */
 	public PetriNet getCopy() {
-		return null;
+		PetriNet copy = PetriNetFactory.eINSTANCE.createPetriNet();
+		Map<Node,Node> nodeCopies = new HashMap<Node, Node>();
+		for(Place p : this.getPlaces()) {
+			Place p2 = p.getCopy();
+			copy.getPlaces().add(p2);
+			nodeCopies.put(p, p2);
+		}
+		for(Transition t : this.getTransitions()) {
+			Transition t2 = t.getCopy();
+			copy.getTransitions().add(t2);
+			nodeCopies.put(t, t2);
+		}
+		for(FlowRelationship f : this.getFlowRelationships()) {
+			FlowRelationship newF = f.getCopy();
+			newF.setSource(nodeCopies.get(f.getSource()));
+			newF.setTarget(nodeCopies.get(f.getTarget()));
+			copy.getFlowRelationships().add(newF);
+		}
+		return copy;
 	}
 
 	public PetriNetFactory getFactory() {
@@ -144,6 +181,79 @@ public class PetriNet {
 		return this.getFinalPlaces().get(0);
 	}
 	
+	/**
+	 * Returns all initial places of this petri net (cached).
+	 */
+	public List<Place> getInitialPlaces(){
+		if (initialPlaces == null) {
+			initialPlaces = new LinkedList<Place>();
+			for (Place place : this.getPlaces()) {
+				if (place.isInitialPlace()) {
+					initialPlaces.add(place);
+				}
+			}
+		}
+
+		return initialPlaces;
+	}
+
+	/**
+	 * Returns the first initial place, intended for use in workflow nets.
+	 */
+	public Place getInitialPlace(){
+		return this.getInitialPlaces().get(0);
+	}
+
+	/**
+	 * Checks whether the net is a free choice net.
+	 * 
+	 * @return true, if the net is free-choice
+	 */
+	public boolean isFreeChoiceNet() {
+		boolean isFC = true;
+		
+		outer:
+		for(Transition t1 : this.getTransitions()) {
+			for(Transition t2 : this.getTransitions()) {
+				Collection<Node> preT1 = t1.getPrecedingNodes();
+				Collection<Node> preT2 = t2.getPrecedingNodes();
+				if (CollectionUtils.containsAny(preT1, preT2)) {
+					preT1.retainAll(preT2);
+					isFC &= (preT1.size() == preT2.size());
+					if (!isFC)
+						break outer;
+				}
+			}
+		}
+		return isFC;
+	}
+
+	/**
+	 * Checks whether the net is a workflow net. Such a net has
+	 * exactly one initial and one final place and every place and 
+	 * transition is one a path from i to o.
+	 * 
+	 * @return true, if the net is a workflow net
+	 */
+	public boolean isWorkflowNet() {
+		boolean isWF = (this.getInitialPlaces().size() == 1) && (this.getFinalPlaces().size() == 1);
+		// maybe we already know that the net is not a workflow net
+		if (!isWF)
+			return isWF;
+		
+		int in = this.getNodes().indexOf(this.getInitialPlace());
+		int out = this.getNodes().indexOf(this.getFinalPlace());
+		for (Node n : this.getNodes()) {
+			int j = this.getNodes().indexOf(n);
+			if (j == in || j == out)
+				continue;
+			isWF &= this.transitiveClosure.isPath(in, j);
+			isWF &= this.transitiveClosure.isPath(j, out);
+		}
+		return isWF;
+	}
+
+	
 	protected class MyFlowRelationshipList extends ArrayList<FlowRelationship> {
 		
 		private static final long serialVersionUID = 7350067193890668068L;
@@ -189,5 +299,12 @@ public class PetriNet {
 			return super.removeAll(mylist);
 		}
 	}
+
+	public TransitiveClosure getTransitiveClosure() {
+		if (this.transitiveClosure == null)
+			this.transitiveClosure = new TransitiveClosure(this);
+		return this.transitiveClosure;
+	}
+
 	
 }

@@ -27,4 +27,14 @@ public interface Place extends Node {
 	 * Returns true if place is a final place.
 	 */
 	boolean isFinalPlace();
+	
+	/**
+	 * Returns true if place is an initial place.
+	 */
+	boolean isInitialPlace();
+	
+	/**
+	 * get a copy of the place
+	 */
+	public Place getCopy();
 }

@@ -50,4 +50,9 @@ public class Bounds {
 	public Point getCenterRelative(){
 		return new Point((x2 - x1)/2, (y2 - y1)/2);
 	}
+	
+	public Bounds getCopy() {
+		Bounds b = new Bounds(this.getX1(),this.getY1(),this.getX2(),this.getY2());
+		return b;
+	}
 }

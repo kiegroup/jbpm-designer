@@ -47,6 +47,16 @@ public class ExecNode extends NodeImpl {
 		this.locators.add(locator);
 	}
 	
+	public ExecNode getCopy() {
+		ExecNode n = (ExecNode) super.getCopy();
+		n.setGuard(this.getGuard());
+		n.setRolename(this.getRolename());
+		n.setContextPlaceID(this.getContextPlaceID());
+		for(Locator l : this.getLocators())
+			n.addLocator(l.getCopy());
+		return n;
+	}
+	
 }
 
 

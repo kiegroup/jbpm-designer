@@ -1,5 +1,6 @@
 package de.hpi.petrinet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hpi.util.Bounds;
@@ -43,5 +44,10 @@ public interface Node {
 	
 	public Bounds getBounds();
 	public void setBounds(Bounds bounds);
+	
+	public Node getCopy();
 
+	public List<Node> getPrecedingNodes();
+	
+	public List<Node> getSucceedingNodes();
 }

@@ -88,5 +88,12 @@ public class FlowRelationship {
 	public void setResourceId(String resourceId) {
 		this.resourceId = resourceId;
 	}
+	
+	public FlowRelationship getCopy() {
+		FlowRelationship f = new FlowRelationship();
+		f.setId(this.getId());
+		f.setResourceId(this.getResourceId());
+		return f;
+	}
 
 }

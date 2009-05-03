@@ -3,6 +3,8 @@ package de.hpi.petrinet;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hpi.PTnet.PTNetFactory;
+import de.hpi.bpt.process.petri.FlowRelation;
 import de.hpi.util.Bounds;
 
 /**
@@ -82,6 +84,30 @@ public class NodeImpl implements Node {
 	public void setResourceId(String resourceId) {
 		this.resourceId = resourceId;
 	}
+	
+	public Node getCopy() {
+		Node n = new NodeImpl();
+		n.setId(this.id);
+		n.setBounds(this.getBounds().getCopy());
+		return n;
+	}
+	
+	public List<Node> getPrecedingNodes() {
+		List<Node> nodes = new ArrayList<Node>();
+		for(FlowRelationship f : this.getIncomingFlowRelationships()) {
+			nodes.add(f.getSource());
+		}
+		return nodes;
+	}
+	
+	public List<Node> getSucceedingNodes() {
+		List<Node> nodes = new ArrayList<Node>();
+		for(FlowRelationship f : this.getOutgoingFlowRelationships()) {
+			nodes.add(f.getTarget());
+		}
+		return nodes;
+	}
+
 
 }
 

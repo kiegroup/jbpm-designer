@@ -1,5 +1,7 @@
 package de.hpi.petrinet;
 
+import de.hpi.PTnet.PTNetFactory;
+
 /**
  * Copyright (c) 2008 Gero Decker
  * 
@@ -35,6 +37,14 @@ public class PlaceImpl extends NodeImpl implements Place {
 	 */
 	public boolean isInitialPlace(){
 		return this.getIncomingFlowRelationships().size() == 0;
+	}
+	
+	/**
+	 * Returns a copy of the place
+	 */
+	public Place getCopy() {
+		Place p = (Place) super.getCopy();
+		return p;
 	}
 
 }

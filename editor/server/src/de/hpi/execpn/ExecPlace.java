@@ -63,5 +63,18 @@ public class ExecPlace extends ExecNode implements Place {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public boolean isInitialPlace() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
+	public ExecPlace getCopy() {
+		ExecPlace p = (ExecPlace) super.getCopy();
+		p.setType(this.getType());
+		p.setName(this.getName());
+		p.setModel(this.getModel());
+		return p;
+	}
+
 }

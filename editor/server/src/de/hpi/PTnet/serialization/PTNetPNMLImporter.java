@@ -39,7 +39,7 @@ public class PTNetPNMLImporter extends PetriNetPNMLImporter {
 	}
 
 	@Override
-	protected Place addPlace(PetriNet net, Node pnode, Map map) {
+	protected Place addPlace(PetriNet net, Node pnode, Map<String, de.hpi.petrinet.Node> map) {
 		Place p = super.addPlace(net, pnode, map);
 		
 		try {

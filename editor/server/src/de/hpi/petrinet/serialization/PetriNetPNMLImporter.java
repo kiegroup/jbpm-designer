@@ -44,9 +44,10 @@ public abstract class PetriNetPNMLImporter {
 		
 		PetriNet net = createPetriNet(netnode);
 		
-		Map map = new HashMap();
+		Map<String,de.hpi.petrinet.Node> map = new HashMap<String, de.hpi.petrinet.Node>();
 		
-		for (Node node=netnode.getFirstChild(); node.getNextSibling() != null; node=node.getNextSibling()) {
+		Node node = netnode.getFirstChild();
+		while (node != null ) {
 			if (node.getNodeName().equals("place")) {
 				addPlace(net, node, map);
 			} else if (node.getNodeName().equals("transition")) {
@@ -54,6 +55,7 @@ public abstract class PetriNetPNMLImporter {
 			} else if (node.getNodeName().equals("arc")) {
 				addArc(net, node, map);
 			}
+			node = node.getNextSibling();
 		}
 		
 		return net;
@@ -63,7 +65,7 @@ public abstract class PetriNetPNMLImporter {
 		return PetriNetFactory.eINSTANCE.createPetriNet();
 	}
 
-	protected Place addPlace(PetriNet net, Node pnode, Map map) {
+	protected Place addPlace(PetriNet net, Node pnode, Map<String, de.hpi.petrinet.Node> map) {
 		Place p = createPlace(net, pnode);
 		net.getPlaces().add(p);
 		String id = pnode.getAttributes().getNamedItem("id").getNodeValue();
@@ -77,7 +79,7 @@ public abstract class PetriNetPNMLImporter {
 		return PetriNetFactory.eINSTANCE.createPlace();
 	}
 
-	protected Transition addTransition(PetriNet net, Node tnode, Map map) {
+	protected Transition addTransition(PetriNet net, Node tnode, Map<String,de.hpi.petrinet.Node> map) {
 		String label = getContent(getChild(getChild(tnode, "name"), "value"));
 		if (label == null)
 			label = getContent(getChild(getChild(tnode, "name"), "text"));
@@ -109,7 +111,7 @@ public abstract class PetriNetPNMLImporter {
 		return PetriNetFactory.eINSTANCE.createSilentTransition();
 	}
 
-	protected FlowRelationship addArc(PetriNet net, Node anode, Map map) {
+	protected FlowRelationship addArc(PetriNet net, Node anode, Map<String,de.hpi.petrinet.Node> map) {
 		FlowRelationship rel = createFlowRelationship(net, anode);
 		net.getFlowRelationships().add(rel);
 		

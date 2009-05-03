@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.hpi.PTnet.verification.BoundednessChecker;
 import de.hpi.PTnet.verification.PTNetInterpreter;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
@@ -32,6 +33,10 @@ import de.hpi.petrinet.Place;
 public class PTNet extends PetriNet {
 	
 	protected Marking marking;
+	
+	protected Boolean isBound;
+	
+	protected Boolean isLive;
 
 	@Override
 	public List<Place> getPlaces() {
@@ -46,13 +51,25 @@ public class PTNet extends PetriNet {
 		return marking;
 	}
 	
+	public void setInitialMarking(Marking marking) {
+		this.marking = marking;
+		this.marking.setNet(this);
+	}
+	
 	public PTNetFactory getFactory() {
 		return PTNetFactory.eINSTANCE;
 	}
 	
-	// TODO implement this
+	/**
+	 * Creates a copy of the PTNet. Note that the initial marking
+	 * is also copied.
+	 * 
+	 * @return the copy of the PTNet
+	 */
 	public PTNet getCopy() {
-		return null;
+		PTNet copy = (PTNet) super.getCopy();
+		copy.setInitialMarking(this.getInitialMarking().getCopy());
+		return copy;
 	}
 	
 //	@Override
@@ -79,6 +96,12 @@ public class PTNet extends PetriNet {
 		return getFactory().createInterpreter();
 	}
 
+	public boolean isBound() {
+		if (this.isBound == null)
+			this.isBound = new BoundednessChecker(new PTNetInterpreter(), this).checkBoundedness();
+		return this.isBound;
+	}
+		
 	protected class MyPlaceList extends ArrayList<Place> {
 		
 		private static final long serialVersionUID = -1042530176195412148L;

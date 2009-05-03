@@ -44,6 +44,11 @@ public class LabeledTransitionImpl extends NodeImpl implements LabeledTransition
 		return getId()+"("+getLabel()+")";
 	}
 
+	public LabeledTransition getCopy() {
+		LabeledTransition t = (LabeledTransition) super.getCopy();
+		t.setLabel(this.getLabel());
+		return t;
+	}
 }
 
 

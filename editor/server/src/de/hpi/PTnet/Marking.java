@@ -195,4 +195,12 @@ public class Marking implements de.hpi.petrinet.Marking {
 		}
 		return false;
 	}
+
+	public PetriNet getNet() {
+		return net;
+	}
+
+	public void setNet(PetriNet net) {
+		this.net = net;
+	}
 }

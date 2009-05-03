@@ -29,6 +29,11 @@ public class SilentTransitionImpl extends NodeImpl implements SilentTransition {
 	public boolean isSimilarTo(Node node) {
 		return (node instanceof SilentTransition);
 	}
+	
+	public SilentTransition getCopy() {
+		SilentTransition t = (SilentTransition) super.getCopy();
+		return t;
+	}
 
 }
 

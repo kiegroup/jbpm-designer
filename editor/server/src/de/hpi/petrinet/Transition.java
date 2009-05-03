@@ -25,4 +25,6 @@ public interface Transition extends Node {
 	
 	public boolean isSimilarTo(Node node);
 	
+	public Transition getCopy();
+	
 }

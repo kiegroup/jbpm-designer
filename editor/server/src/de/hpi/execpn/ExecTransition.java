@@ -14,4 +14,10 @@ public abstract class ExecTransition extends ExecNode implements Transition {
 		this.modelURL = modelURL;
 	}
 	
+	public ExecTransition getCopy(){
+		ExecTransition t = (ExecTransition) super.getCopy();
+		t.setModelURL(this.getModelURL());
+		return t;
+	}
+	
 }
