@@ -369,11 +369,13 @@ public class BPMN11RDFImporter {
 			c.connections.put(
 					getResourceId(getAttributeValue(n, "rdf:resource")), node);
 		} else if (node instanceof de.hpi.bpmn.Node) {
+			de.hpi.bpmn.Node cNode = ((de.hpi.bpmn.Node) node);
 			if (attribute.equals("parent")) {
-				c.parentRelationships.put((de.hpi.bpmn.Node) node,
-						getResourceId(getAttributeValue(n, "rdf:resource")));
-			} else if (attribute.equals(label)) {
-				((de.hpi.bpmn.Node) node).setLabel(getContent(n));
+				c.parentRelationships.put(cNode, getResourceId(getAttributeValue(n, "rdf:resource")));
+			} else if (attribute.equals(label) || attribute.equals("name")) {
+				if(cNode.getLabel() == null || cNode.getLabel().equals("")){
+					cNode.setLabel(getContent(n));
+				}
 			}
 		} else {
 			return false;
