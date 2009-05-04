@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <style type="text/css">
+            body {
+                font-size: 75%;
+                font-family: sans-serif;
+            }
+            input, textarea {
+                display: block;
+                width: 22em;
+            }
+        </style>
+    </head>
+    <body>
+        <h1><img src="images/HPDTRP_logo.jpg" title="HPI - Stanford Design Thinking Research Program" /></h1>
+        <h2>Create New Project</h2>
+        <form enctype="multipart/form-data" action="stencilset-extension-generator" method="post">
+            Project Name:
+            <input name="modelNamePrefix" type="hidden"
+                   value="" />
+            <input name="stencilSetExtensionNamePrefix" type="text"
+                   value="New Project" />
+            <input name="baseStencilSetPath" type="hidden"
+                   value="/stencilsets/bpmn1.1/bpmn1.1.json" />
+            <input name="baseStencilSet" type="hidden"
+                   value="http://b3mn.org/stencilset/bpmn1.1#" />
+            <input name="stencilSetExtension" type="hidden"
+                   value="http://oryx-editor.org/stencilsets/extensions/bpmn-design-thinking-subset#" />
+            <input name="stencilSetExtension" type="hidden"
+                   value="http://oryx-editor.org/stencilsets/extensions/bpmnwikirefs#" />
+            <!-- mapped to superId property in order to morph stencils when dropped to canvas -->
+            <input name="baseStencil" type="hidden"
+                   value="Task" />
+            <!-- properties the columns will be mapped to -->
+            <input name="columnPropertyMapping" type="hidden"
+                   value="group,name,documentation,refuri" />
+            <br />
+            Project Description:
+            <textarea name="modelDescription">A newly created project.</textarea>
+            <br />
+            CSV File with Activity Definitions:
+            <!-- CSV file containing the data of the stencils to be generated -->
+            <input name="csvFile" type="file" />
+            <input name="additionalERDFContentForGeneratedModel" type="hidden"
+                   value="" />
+            <br />
+            <input type="submit" value="Create Project" />
+        </form>
+    </body>
+</html>
