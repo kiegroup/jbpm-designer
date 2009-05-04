@@ -42,7 +42,6 @@
 		"OR_Gateway",
 		"Complex_Gateway",
 		"CollapsedPool",
-		"Group",
 		"StartEvent",
 		"StartMessageEvent",
 		"StartTimerEvent",
@@ -78,6 +77,19 @@
 	],
 	"removeproperties": [
 		{
+			"stencil": "BPMNDiagram",
+			"properties": [
+                "version",
+                "author",
+                "language",
+                "expressionlanguage",
+                "querylanguage",
+                "creationdate",
+                "modificationdate",
+                "pools"
+			]
+		},
+		{
 			"stencil": "Task",
 			"properties": [
 				"categories",
@@ -85,6 +97,7 @@
 				"pool",
 				"lanes",
 				"status",
+                "activitytype",
 				"performers",
 				"properties",
 				"inputsets",
@@ -94,6 +107,7 @@
 				"iorules",
 				"startquantity",
 				"completionquantity",
+                // cannot be removed: "looptype",
 				"loopcondition",
 				"loopcounter",
 				"loopmaximum",
@@ -102,6 +116,7 @@
 				"mi_ordering",
 				"mi_flowcondition",
 				"complexmi_condition",
+                // cannot be removed: "iscompensation",
 				"tasktype",
 				"inmessage",
 				"outmessage",
@@ -111,6 +126,88 @@
 				"performers",
 				"script",
 				"taskref"
+			]
+		},
+		{
+			"stencil": "Pool",
+			"properties": [
+                //"poolid",
+                "poolcategories",
+                //"pooldocumentation",
+                //"name",
+                "participantref",
+                "lanes",
+                // cannot be removed: "boundaryvisible",
+                "mainpool",
+                "processref",
+                "processname",
+                "processtype",
+                "status",
+                "adhoc",
+                "adhocordering",
+                "adhoccompletioncondition",
+                "suppressjoinfailure",
+                "enableinstancecompensation",
+                "processcategories",
+                "processdocumentation"
+			]
+		},
+		{
+			"stencil": "Lane",
+			"properties": [
+                "categories",
+                "parentpool",
+                "parentlane",
+                // cannot be removed: "showcaption"
+			]
+		},
+		{
+			"stencil": "Group",
+			"properties": [
+                "categories",
+                "artifacttype",
+                "pool",
+                "lanes"
+			]
+		},
+		{
+			"stencil": "TextAnnotation",
+			"properties": [
+                "artifacttype",
+                "pool",
+                "lanes"
+			]
+		},
+		{
+			"stencil": "DataObject",
+			"properties": [
+                "categories",
+                "artifacttype",
+                "pool",
+                "lanes",
+                "state",
+                "properties",
+                "requiredforstart",
+                "producedatcompletion",
+                //"bgcolor"
+			]
+		},
+		{
+			"stencil": "SequenceFlow",
+			"properties": [
+                "categories",
+                "sourceRef",
+                "targetRef",
+                "quantity"
+			]
+		},
+		{
+			"stencil": "Association_Undirected",
+			"properties": [
+                "categories",
+                "source",
+                "target",
+                "direction"
 			]
 		}
 	]
