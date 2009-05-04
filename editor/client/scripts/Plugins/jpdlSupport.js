@@ -225,8 +225,7 @@ ORYX.Plugins.JPDLSupport = ORYX.Plugins.AbstractPlugin.extend({
 			function() { 
 				this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.expFailedReq);
 		 	}.bind(this)
-		);
-		
+		)
 	}, 
 	
 	/**

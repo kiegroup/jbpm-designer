@@ -283,7 +283,9 @@ if(!ORYX.I18N.Bpmn2Bpel) ORYX.I18N.Bpmn2Bpel = {};
 
 ORYX.I18N.Bpmn2Bpel.group = "ExecBPMN";
 ORYX.I18N.Bpmn2Bpel.show = "Show transformed BPEL";
-ORYX.I18N.Bpmn2Bpel.showDesc = "Transforms BPMN to BPEL and shows the result in a new tab.";
+ORYX.I18N.Bpmn2Bpel.download = "Download transformed BPEL";
+ORYX.I18N.Bpmn2Bpel.showDesc = "Transforms BPMN to BPEL and shows the result in a new window.";
+ORYX.I18N.Bpmn2Bpel.downloadDesc = "Transforms BPMN to BPEL and offers to download the result.";
 ORYX.I18N.Bpmn2Bpel.transfFailed = "Request for transformation to BPEL failed.";
 
 
