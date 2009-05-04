@@ -535,4 +535,37 @@
 	<!--<welcome-file-list>
 		<welcome-file>/server</welcome-file>
 	</welcome-file-list>-->
+    
+    
+    <!-- Postmaster Config -->
+    <!-- example config for googlemail account -->
+    <context-param>
+        <description>The SMTP server to connect to</description>
+        <param-name>SMTP_HOST_NAME</param-name><param-value>smtp.gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <description>The default from email address</description>
+        <param-name>SMTP_EMAIL</param-name><param-value>mymail@googlemail.com</param-value>
+    </context-param>
+    <context-param>
+        <description>Default user name for SMTP</description>
+        <param-name>SMTP_AUTH_USER</param-name><param-value>mymail@googlemail.com</param-value>
+    </context-param>
+    <context-param>
+        <description>Default password for SMTP</description>
+        <param-name>SMTP_AUTH_PWD</param-name><param-value>mypassword</param-value>
+    </context-param>
+    <context-param>
+        <description>Default port for SMTP</description>
+        <param-name>SMTP_PORT</param-name><param-value>465</param-value>
+    </context-param>
+    <context-param>
+        <description>Enables debug mode</description>
+        <param-name>SMTP_DEBUG</param-name><param-value>true</param-value>
+    </context-param>
+    
+    <context-param>
+        <description>Recipient for feedback servlet</description>
+        <param-name>FEEDBACK_RECIPIENT_EMAIL</param-name><param-value>mymail@googlemail.com</param-value>
+    </context-param>
 </web-app>

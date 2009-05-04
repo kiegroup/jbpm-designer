@@ -13,9 +13,6 @@ import org.oryxeditor.mail.Postmaster;
 
 public class FeedbackServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	//TODO config file!!!!
-	private static String feedbackRecipient = "anyEmail";
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException  {
@@ -25,7 +22,7 @@ public class FeedbackServlet extends HttpServlet {
   			Message message = new Message();
   			message.setSubject(req.getParameter("subject"));
   			message.setFrom("Feedback");
-  			message.setRecipients(feedbackRecipient);
+  			message.setRecipients(getServletContext().getInitParameter("FEEDBACK_RECIPIENT_EMAIL"));
   			
   			VelocityContext context = new VelocityContext();
   			context.put("environment", req.getParameter("environment"));
@@ -36,6 +33,7 @@ public class FeedbackServlet extends HttpServlet {
   			
   			message.setMessageFromTemplate(Postmaster.defaultTemplatePath, "feedback.mail.vm", context, getServletContext());
   			
+  			Postmaster.configure(getServletContext());
   			Postmaster.deliver(message);
 		} catch (Exception e) {
 			e.printStackTrace();

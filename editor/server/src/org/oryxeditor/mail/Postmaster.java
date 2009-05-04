@@ -11,15 +11,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class Postmaster {
-	//TODO config file!!!!
-	//Sample config for GMail
-	private final static String SMTP_HOST_NAME = "smtp.gmail.com";
-	private final static String SMTP_EMAIL = "mymail@googlemail.com";
-	private final static String SMTP_AUTH_USER = "mymail@googlemail.com";
-	private final static String SMTP_AUTH_PWD = "mypassword";
-	private final static int SMTP_PORT = 465;
+	// Modify web.xml to set defaults.
+	private static String SMTP_HOST_NAME;
+	private static String SMTP_EMAIL;
+	private static String SMTP_AUTH_USER;
+	private static String SMTP_AUTH_PWD;
+	private static int SMTP_PORT;
 
-	private final static boolean DEBUG = true;
+	private static boolean SMTP_DEBUG = true;
 	
 	public final static String defaultTemplatePath = "/WEB-INF/classes/org/oryxeditor/mail"; 
 
@@ -52,7 +51,7 @@ public class Postmaster {
 					}
 				});
 
-		if (DEBUG)
+		if (SMTP_DEBUG)
 			session.setDebug(true);
 
 		MimeMessage msg = new MimeMessage(session);
@@ -68,5 +67,14 @@ public class Postmaster {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	static public void configure(javax.servlet.ServletContext c){
+		SMTP_HOST_NAME = c.getInitParameter("SMTP_HOST_NAME");
+		SMTP_EMAIL = c.getInitParameter("SMTP_EMAIL");
+		SMTP_AUTH_USER = c.getInitParameter("SMTP_AUTH_USER");
+		SMTP_AUTH_PWD = c.getInitParameter("SMTP_AUTH_PWD");
+		SMTP_PORT = Integer.valueOf(c.getInitParameter("SMTP_PORT"));
+		SMTP_DEBUG = Boolean.valueOf(c.getInitParameter("SMTP_DEBUG"));
 	}
 }

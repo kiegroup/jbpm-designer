@@ -1,6 +1,6 @@
 
 /**
- * Copyright (c) 2008, Gero Decker, refactored by Kai Schlichting
+ * Copyright (c) 2009, Kai Schlichting
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -126,7 +126,16 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
                 buttons: [{
                     text: 'Submit',
                     handler: function(button){
-                        button.ownerCt.form.submit();
+                        button.ownerCt.form.submit({
+                            waitMsg: "Sending message ...", 
+                            success: function(form, action){
+                                Ext.Msg.alert("Success", "The message has been successfully sent!");
+                                window.close();
+                            },
+                            failure: function(form, action){
+                                Ext.Msg.alert("Failure", "There have been problems while sending the message!");
+                            }
+                        });
                     }
                 }]
             }]
