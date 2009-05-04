@@ -5,7 +5,7 @@
                 font-size: 75%;
                 font-family: sans-serif;
             }
-            input {
+            input, textarea {
                 display: block;
                 width: 22em;
             }
@@ -33,8 +33,7 @@
                    value="group,name,documentation,refuri" />
             <!-- CSV file containing the data of the stencils to be generated -->
             <input name="csvFile" type="file" />
-            <input name="modelDescription" type="text"
-                   value="The initial version of this model has been created by the Stencilset Extension Generator." />
+            <textarea name="modelDescription">The initial version of this model has been created by the Stencilset Extension Generator.</textarea>
             <input name="additionalERDFContentForGeneratedModel" type="text"
                    value="" />
             <input type="submit" value="generate stencil set extension" />
