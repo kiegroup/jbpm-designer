@@ -27,7 +27,70 @@
 	"description":"A basic subset of BPMN that can be used for user research.",
 	"extends":"http://b3mn.org/stencilset/bpmn1.1#",
 	"stencils":[],
-	"properties":[],
+	"properties": [
+		{
+			"roles": [
+				"SequenceFlow"
+			],
+			"properties": [
+				{
+					"id":"communicationChannelType",
+					"type":"Choice",
+					"title":"Communication Channel Type",
+					"title_de":"Kommunikstionskanaltyp",
+					"description":"Communication Channel Type",
+					"description_de":"Kommunikstionskanaltyp",
+					"readonly":false,
+					"optional":false,
+                    "value":"UNCLASSIFIED",
+                    "items": [
+                        {
+                            "id":"c0",
+                            "title":"Unclassified",
+                            "value":"UNCLASSIFIED",
+                            "refToView":""
+                        },
+                        {
+                            "id":"c1",
+                            "title":"Telephone",
+                            "value":"TELEPHONE",
+                            "refToView":""
+                        },
+                        {
+                            "id":"c2",
+                            "title":"Fax",
+                            "value":"FAX",
+                            "refToView":""
+                        },
+                        {
+                            "id":"c3",
+                            "title":"Visit",
+                            "value":"VISIT",
+                            "refToView":""
+                        },
+                        {
+                            "id":"c4",
+                            "title":"E-Mail",
+                            "value":"EMAIL",
+                            "refToView":""
+                        },
+                        {
+                            "id":"c5",
+                            "title":"E-Mail with Attachment",
+                            "value":"EMAIL_WITH_ATTACHMENT",
+                            "refToView":""
+                        },
+                        {
+                            "id":"c6",
+                            "title":"Visit with Handover",
+                            "value":"VISIT_WITH_HANDOVER",
+                            "refToView":""
+                        }
+                    ]
+				}
+			]
+		}
+	],
 	"rules": {
 		"connectionRules": [],
         "cardinalityRules": [],
