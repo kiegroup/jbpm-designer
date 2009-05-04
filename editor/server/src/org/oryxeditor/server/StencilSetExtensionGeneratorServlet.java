@@ -67,7 +67,11 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 	/**
 	 * Request parameters are documented in
 	 * editor/test/examples/stencilset-extension-generator.xhtml
-	 * The parameter 'csvFile' is always required. 
+	 * The parameter 'csvFile' is always required.
+	 * An example CSV file can be found in
+	 * editor/test/examples/design-thinking-example-data.csv
+	 * which has been exported using OpenOffice.org from
+	 * editor/test/examples/design-thinking-example-data.ods
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
