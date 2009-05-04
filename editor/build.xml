@@ -248,6 +248,7 @@
         <copy todir='${editor-build-root}/images'>
             <fileset dir='${editor-src-client}/images' includes='**/*.png'/>
             <fileset dir='${editor-src-client}/images' includes='**/*.gif'/>
+            <fileset dir='${editor-src-client}/images' includes='**/*.jpg'/>
         </copy>
         <echo>
             Copied images into oryx build destination
