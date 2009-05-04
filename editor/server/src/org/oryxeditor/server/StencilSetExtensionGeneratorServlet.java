@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,8 +65,9 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 	protected Repository repository;
 	
 	/**
-	 * Required request parameters are documented in
+	 * Request parameters are documented in
 	 * editor/test/examples/stencilset-extension-generator.xhtml
+	 * The parameter 'csvFile' is always required. 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
@@ -74,16 +76,17 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 		this.repository = new Repository(baseUrl);
 		
 		// parameters and their default values
-		String modelNamePrefix               = "Generated Model using ";
-		String stencilSetExtensionNamePrefix = StencilSetExtensionGenerator.DEFAULT_STENCIL_SET_EXTENSION_NAME_PREFIX;
-		String baseStencilSetPath            = StencilSetExtensionGenerator.DEFAULT_BASE_STENCIL_SET_PATH;
-		String baseStencilSet                = StencilSetExtensionGenerator.DEFAULT_BASE_STENCIL_SET;
-		String baseStencil                   = StencilSetExtensionGenerator.DEFAULT_BASE_STENCIL;
-		List<String> stencilSetExtensionUrls = new ArrayList<String>();
-		String[] columnPropertyMapping = null;
-		String[] csvHeader = null;
+		String modelNamePrefix                         = "Generated Model using ";
+		String stencilSetExtensionNamePrefix           = StencilSetExtensionGenerator.DEFAULT_STENCIL_SET_EXTENSION_NAME_PREFIX;
+		String baseStencilSetPath                      = StencilSetExtensionGenerator.DEFAULT_BASE_STENCIL_SET_PATH;
+		String baseStencilSet                          = StencilSetExtensionGenerator.DEFAULT_BASE_STENCIL_SET;
+		String baseStencil                             = StencilSetExtensionGenerator.DEFAULT_BASE_STENCIL;
+		List<String> stencilSetExtensionUrls           = new ArrayList<String>();
+		String[] columnPropertyMapping                 = null;
+		String[] csvHeader                             = null;
 		List<Map<String,String>> stencilPropertyMatrix = new ArrayList<Map<String,String>>();
-		String additionalERDFContentForGeneratedModel = "";
+		String modelDescription                        = "The initial version of this model has been created by the Stencilset Extension Generator.";
+		String additionalERDFContentForGeneratedModel  = "";
 		
 		// Check that we have a file upload request
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -104,8 +107,8 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				    if (item.isFormField()) {
 				    	// ordinary form field
 				    	String value = Streams.asString(stream);
-				        System.out.println("Form field " + name + " with value "
-				            + value + " detected.");
+				        //System.out.println("Form field " + name + " with value "
+				        //    + value + " detected.");
 				        if (name.equals("modelNamePrefix")) {
 				        	modelNamePrefix = value;
 				        } else if (name.equals("stencilSetExtensionNamePrefix")) {
@@ -120,13 +123,15 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				        	baseStencil = value;
 			        	} else if (name.equals("columnPropertyMapping")) {
 				        	columnPropertyMapping = value.split(",");
+				        } else if (name.equals("modelDescription")) {
+				        	modelDescription = value;
 				        } else if (name.equals("additionalERDFContentForGeneratedModel")) {
 				        	additionalERDFContentForGeneratedModel = value;
 				        }
 				    } else {
 				    	// file field
-				        System.out.println("File field " + name + " with file name "
-				            + item.getName() + " detected.");
+				        //System.out.println("File field " + name + " with file name "
+				        //    + item.getName() + " detected.");
 				        // Process the input stream
 				        if (name.equals("csvFile")) {
 				        	CsvMapReader csvFileReader = new CsvMapReader(
@@ -146,11 +151,11 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				}
 	
 				
-				// generate stencilset
+				// generate stencil set
 				Date creationDate = new Date(System.currentTimeMillis());
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss.SSS");
 				String stencilSetExtensionName = stencilSetExtensionNamePrefix + " " + dateFormat.format(creationDate);
-	
+
 				stencilSetExtensionUrls.add(
 						StencilSetExtensionGenerator.generateStencilSetExtension(
 								stencilSetExtensionName,
@@ -164,13 +169,21 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				// generate new model
 				String modelName = modelNamePrefix + stencilSetExtensionName;
 				String model = repository.generateERDF(
-						modelName, 
+						UUID.randomUUID().toString(), 
 						additionalERDFContentForGeneratedModel, 
 						baseStencilSetPath, 
 						baseStencilSet,
-						stencilSetExtensionUrls
-						);
-				String modelUrl = baseUrl + repository.saveNewModel(model, modelName);
+						stencilSetExtensionUrls,
+						modelName,
+						modelDescription
+				);
+				String modelUrl = baseUrl + repository.saveNewModel(
+						model,
+						modelName,
+						modelDescription,
+						baseStencilSet,
+						baseStencilSetPath
+				);
 
 				// hack for reverse proxies:
 				modelUrl = modelUrl.substring(modelUrl.lastIndexOf("http://"));

@@ -12,7 +12,7 @@
         </style>
     </head>
     <body>
-        <form enctype="multipart/form-data" action="http://localhost:8180/oryx/stencilset-extension-generator" method="post">
+        <form enctype="multipart/form-data" action="stencilset-extension-generator" method="post">
             <input name="modelNamePrefix" type="text"
                    value="Generated Model using " />
             <input name="stencilSetExtensionNamePrefix" type="text"
@@ -33,6 +33,8 @@
                    value="group,name,documentation,refuri" />
             <!-- CSV file containing the data of the stencils to be generated -->
             <input name="csvFile" type="file" />
+            <input name="modelDescription" type="text"
+                   value="The initial version of this model has been created by the Stencilset Extension Generator." />
             <input name="additionalERDFContentForGeneratedModel" type="text"
                    value="" />
             <input type="submit" value="generate stencil set extension" />

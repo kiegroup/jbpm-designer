@@ -262,6 +262,7 @@ public class StencilSetExtensionGenerator {
 			String extensionLocation,
 			String extension
 	) {
+		// TODO harden this code to avoid security issues
 		File extensionFile = new File(STENCILSET_EXTENSIONS_PATH + extensionLocation);
 		if (!extensionFile.exists()) {
 			try {

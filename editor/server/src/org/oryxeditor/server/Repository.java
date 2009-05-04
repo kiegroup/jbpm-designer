@@ -49,6 +49,8 @@ public class Repository {
 	public static final String DEFAULT_STENCILSET = "/stencilsets/bpmn1.1/bpmn1.1.json";
 	public static final String DEFAULT_TYPE = "http://b3mn.org/stencilset/bpmn1.1#";
 	public static final String DEFAULT_MODEL_TYPE = "http://b3mn.org/stencilset/bpmn1.1#BPMNDiagram";
+	public static final String DEFAULT_MODEL_NAME = "Generated Model";
+	public static final String DEFAULT_MODEL_DESCRIPTION = "The initial version of this model has been generated automatically.";
 
 	/**
 	 * URL prefix for the backend, e.g., http://localhost:8180/
@@ -106,50 +108,154 @@ public class Repository {
 
 	/**
 	 * 
+	 * @param modelId
 	 * @param modelData
 	 * @return
 	 */
-	public String generateERDF(String modelId, String modelData){
-		return generateERDF(modelId, modelData, DEFAULT_STENCILSET, DEFAULT_MODEL_TYPE, null);
+	public String generateERDF(
+			String modelId,
+			String modelData
+	){
+		return generateERDF(
+				modelId,
+				modelData,
+				DEFAULT_STENCILSET,
+				DEFAULT_MODEL_TYPE,
+				null,
+				DEFAULT_MODEL_NAME, DEFAULT_MODEL_DESCRIPTION
+		);
 	}
 
 	/**
 	 * 
+	 * @param modelId
 	 * @param modelData
 	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
 	 * @return
 	 */
-	public String generateERDF(String modelId, String modelData, String stencilset){
-		return generateERDF(modelId, modelData, stencilset, DEFAULT_MODEL_TYPE, null);
+	public String generateERDF(
+			String modelId,
+			String modelData,
+			String stencilset
+	){
+		return generateERDF(
+				modelId,
+				modelData,
+				stencilset,
+				DEFAULT_MODEL_TYPE,
+				null,
+				DEFAULT_MODEL_NAME,
+				DEFAULT_MODEL_DESCRIPTION
+		);
 	}
 
 	/**
 	 * 
+	 * @param modelId
 	 * @param modelData
 	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
 	 * @param modelType
 	 * @return
 	 */
-	public String generateERDF(String modelId, String modelData, String stencilset, String modelType){
-		return generateERDF(modelId, modelData, stencilset, modelType,
-				null);
+	public String generateERDF(
+			String modelId,
+			String modelData,
+			String stencilset,
+			String modelType
+	){
+		return generateERDF(
+				modelId,
+				modelData,
+				stencilset,
+				modelType,
+				null,
+				DEFAULT_MODEL_NAME,
+				DEFAULT_MODEL_DESCRIPTION
+		);
 	}
 
 	/**
 	 * 
+	 * @param modelId
 	 * @param modelData
 	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
 	 * @param modelType
 	 * @param stencilSetExtensionUrls TODO
 	 * @return
 	 */
-	public String generateERDF(String modelId, String modelData, String stencilset, String modelType, List<String> stencilSetExtensionUrls){
+	public String generateERDF(
+			String modelId,
+			String modelData,
+			String stencilset,
+			String modelType,
+			List<String> stencilSetExtensionUrls
+	){
+		return generateERDF(
+				modelId,
+				modelData,
+				stencilset,
+				modelType,
+				stencilSetExtensionUrls,
+				DEFAULT_MODEL_NAME,
+				DEFAULT_MODEL_DESCRIPTION
+		);
+	}
+
+	/**
+	 * 
+	 * @param modelId
+	 * @param modelData
+	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
+	 * @param modelType
+	 * @param stencilSetExtensionUrls TODO
+	 * @param modelName TODO
+	 * @return
+	 */
+	public String generateERDF(
+			String modelId,
+			String modelData,
+			String stencilset,
+			String modelType,
+			List<String> stencilSetExtensionUrls,
+			String modelName
+	){
+		return generateERDF(
+				modelId,
+				modelData,
+				stencilset,
+				modelType,
+				stencilSetExtensionUrls,
+				modelName,
+				DEFAULT_MODEL_DESCRIPTION
+		);
+	}
+
+	/**
+	 * 
+	 * @param modelId
+	 * @param modelData
+	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
+	 * @param modelType
+	 * @param stencilSetExtensionUrls TODO
+	 * @param modelName TODO
+	 * @param modelDescription TODO
+	 * @return
+	 */
+	public String generateERDF(
+			String modelId,
+			String modelData,
+			String stencilset,
+			String modelType,
+			List<String> stencilSetExtensionUrls,
+			String modelName,
+			String modelDescription
+	){
 		String stencilsetLocation = baseUrl + "oryx" + stencilset;
 		//TODO: remove modelId, since it doesn't seem to be used any more
 		String erdf = "<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">"
 			+ "<span class=\"oryx-type\">" + modelType + "</span>"
 			+ "<span class=\"oryx-id\">" + modelId + "</span>"
-			+ "<span class=\"oryx-name\"></span>"
+			+ "<span class=\"oryx-name\">" + modelName + "</span>"
 			+ "<span class=\"oryx-version\"></span>"
 			+ "<span class=\"oryx-author\"></span>"
 			+ "<span class=\"oryx-language\">English</span>"
@@ -158,7 +264,7 @@ public class Repository {
 			+ "<span class=\"oryx-creationdate\"></span>"
 			+ "<span class=\"oryx-modificationdate\"></span>"
 			+ "<span class=\"oryx-pools\"></span>"
-			+ "<span class=\"oryx-documentation\"></span>"
+			+ "<span class=\"oryx-documentation\">" + modelDescription + "</span>"
 			+ "<span class=\"oryx-mode\">writable</span>"
 			+ "<span class=\"oryx-mode\">fullscreen</span>"
 			+ "<a rel=\"oryx-stencilset\" href=\"" + stencilsetLocation + "\"/>";
