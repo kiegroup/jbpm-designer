@@ -91,6 +91,7 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 		List<Map<String,String>> stencilPropertyMatrix = new ArrayList<Map<String,String>>();
 		String modelDescription                        = "The initial version of this model has been created by the Stencilset Extension Generator.";
 		String additionalERDFContentForGeneratedModel  = "";
+		String[] modelTags                             = null;
 		
 		// Check that we have a file upload request
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -129,6 +130,8 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				        	columnPropertyMapping = value.split(",");
 				        } else if (name.equals("modelDescription")) {
 				        	modelDescription = value;
+				        } else if (name.equals("modelTags")) {
+				        	modelTags = value.split(",");
 				        } else if (name.equals("additionalERDFContentForGeneratedModel")) {
 				        	additionalERDFContentForGeneratedModel = value;
 				        }
@@ -192,10 +195,16 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				// hack for reverse proxies:
 				modelUrl = modelUrl.substring(modelUrl.lastIndexOf("http://"));
 
+				// tag model
+				if (modelTags != null) {
+					for (String tagName : modelTags) {
+						repository.addTag(modelUrl, tagName.trim());
+					}
+				}
+				
 				// redirect client to editor with that newly generated model
 				response.setHeader("Location", modelUrl);
 				response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-				
 				
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block

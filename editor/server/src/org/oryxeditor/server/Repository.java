@@ -33,6 +33,7 @@ package org.oryxeditor.server;
  * @author Jan-Felix Schwarz 
  **/
 
+import java.io.IOException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
@@ -301,32 +303,62 @@ public class Repository {
 		String url = baseUrl + "backend/poem/repository/new?stencilset=" + stencilset;
 		try {
 		    HttpClient client = new HttpClient();
-		    PostMethod method = new PostMethod( url );
+		    PostMethod method = new PostMethod(url);
 
-			// Configure the form parameters
+			// configure the form parameters
 			method.addParameter("data", newModel);
 			method.addParameter("title", name);
 			method.addParameter("summary", summary);
 			method.addParameter("type", type);
 			method.addParameter("svg", svg);
-			 // Execute the POST method
-			 int statusCode = client.executeMethod( method );
-			 if( statusCode != -1 ) {
-		    	Header header = method.getResponseHeader("location");
-		    	result = header.getValue();
-		    	
-		    	//hack for reverse proxies:
+			// execute the POST method
+			int statusCode = client.executeMethod(method);
+			if(statusCode != -1) {
+				Header header = method.getResponseHeader("location");
+				result = header.getValue();
+
+				// hack for reverse proxies:
 				result = result.substring(result.lastIndexOf("http://"));
-		    	
-		    	if (result.startsWith(baseUrl)){
-		    		result = result.substring(baseUrl.length());
-		    	}
-			 } else {
-				 // TODO handle error
-			 }
+
+				if (result.startsWith(baseUrl)){
+					result = result.substring(baseUrl.length());
+				}
+			} else {
+				// TODO handle error
+			}
 		} catch( Exception e ) {
 			// TODO handle exception
 		}
 		return result;
+	}
+	
+	public void addTag(String modelUrl, String tagName) {
+		if (modelUrl.endsWith("/self")) {
+			modelUrl = modelUrl.substring(0, modelUrl.lastIndexOf("/self"));
+		}
+		String modelTagsUrl = modelUrl + "/tags";
+
+		HttpClient client = new HttpClient();
+	    PostMethod method = new PostMethod(modelTagsUrl);
+	    
+		// configure the form parameters
+		method.addParameter("tag_name", tagName);
+
+		// execute the POST method
+		int statusCode;
+		try {
+			statusCode = client.executeMethod(method);
+			if (statusCode != -1) {
+				// TODO return result
+			} else {
+				// TODO handle error
+			}
+		} catch (HttpException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
