@@ -30,6 +30,44 @@
 	"properties": [
 		{
 			"roles": [
+				"Task"
+			],
+			"properties": [
+				{
+					"id":"goals",
+					"type":"String",
+					"title":"Goals",
+					"title_de":"Ziele",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+                }
+            ]
+        },
+		{
+			"roles": [
+				"DataObject"
+			],
+			"properties": [
+				{
+					"id":"picture",
+					"type":"Url",
+					"title":"Picture",
+					"title_de":"Bild",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+                }
+            ]
+        },
+        {
+			"roles": [
 				"SequenceFlow"
 			],
 			"properties": [
