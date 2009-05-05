@@ -9,48 +9,60 @@
                 display: block;
                 width: 22em;
             }
+            .page {
+                margin: 0 auto;
+                width: 1000px;
+            }
+            .form {
+                margin: 0 auto;
+                width: 350px;
+            }
         </style>
     </head>
     <body>
-        <h1><img src="images/HPDTRP_logo.jpg" title="HPI - Stanford Design Thinking Research Program" /></h1>
-        <h2>Create New Project</h2>
-        <form enctype="multipart/form-data" action="stencilset-extension-generator" method="post">
-            Project Name:
-            <input name="modelNamePrefix" type="hidden"
-                   value="" />
-            <input name="stencilSetExtensionNamePrefix" type="text"
-                   value="New Project" />
-            <input name="baseStencilSetPath" type="hidden"
-                   value="/stencilsets/bpmn1.1/bpmn1.1.json" />
-            <input name="baseStencilSet" type="hidden"
-                   value="http://b3mn.org/stencilset/bpmn1.1#" />
-            <input name="stencilSetExtension" type="hidden"
-                   value="http://oryx-editor.org/stencilsets/extensions/bpmn-design-thinking-subset#" />
-            <input name="stencilSetExtension" type="hidden"
-                   value="http://oryx-editor.org/stencilsets/extensions/bpmnwikirefs#" />
-            <!-- mapped to superId property in order to morph stencils when dropped to canvas -->
-            <input name="baseStencil" type="hidden"
-                   value="Task" />
-            <!-- properties the columns will be mapped to -->
-            <input name="columnPropertyMapping" type="hidden"
-                   value="group,name,documentation,refuri" />
-            <br />
-            Project Description:
-            <textarea name="modelDescription">A newly created project.</textarea>
-            <br />
-            CSV File with Activity Definitions:
-            <!-- CSV file containing the data of the stencils to be generated.
-            An example CSV file can be found in
-            editor/test/examples/design-thinking-example-data.csv
-            which has been exported using OpenOffice.org from
-            editor/test/examples/design-thinking-example-data.ods
-            -->
-            <input name="csvFile" type="file" />
-            <input name="additionalERDFContentForGeneratedModel" type="hidden"
-                   value="&lt;a rel=&quot;oryx-render&quot; href=&quot;#oryx_EB1875A8-8F40-46F1-A37F-518239F75D75&quot;/&gt;&lt;a rel=&quot;oryx-render&quot; href=&quot;#oryx_F442CFC8-F018-4EEA-8FF2-3A0FB6524695&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;oryx_EB1875A8-8F40-46F1-A37F-518239F75D75&quot; class=&quot;undefined&quot;&gt;&lt;span class=&quot;oryx-type&quot;&gt;http://b3mn.org/stencilset/bpmn1.1#Pool&lt;/span&gt;&lt;span class=&quot;oryx-poolid&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-poolcategories&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-pooldocumentation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-name&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-participantref&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-lanes&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-boundaryvisible&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;oryx-mainpool&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processref&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processname&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processtype&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;oryx-status&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;oryx-adhoc&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-adhocordering&quot;&gt;Parallel&lt;/span&gt;&lt;span class=&quot;oryx-adhoccompletioncondition&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-suppressjoinfailure&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-enableinstancecompensation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processcategories&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processdocumentation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-refuri&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-bounds&quot;&gt;0,0,600,250&lt;/span&gt;&lt;a rel=&quot;raziel-parent&quot; href=&quot;#oryx-canvas123&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;oryx_F442CFC8-F018-4EEA-8FF2-3A0FB6524695&quot; class=&quot;undefined&quot;&gt;&lt;span class=&quot;oryx-type&quot;&gt;http://b3mn.org/stencilset/bpmn1.1#Lane&lt;/span&gt;&lt;span class=&quot;oryx-id&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-categories&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-documentation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-name&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-parentpool&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-parentlane&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-showcaption&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;oryx-refuri&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-bounds&quot;&gt;30,0,600,250&lt;/span&gt;&lt;a rel=&quot;raziel-parent&quot; href=&quot;#oryx_EB1875A8-8F40-46F1-A37F-518239F75D75&quot;/&gt;" />
-            <!-- TODO: generate UUIDs using http://www.broofa.com/Tools/Math.uuid.js -->
-            <br />
-            <input type="submit" value="Create Project" />
-        </form>
+        <div class="page">
+            <h1><img src="images/HPDTRP_logo.jpg" title="HPI - Stanford Design Thinking Research Program" /></h1>
+            <div class="form">
+                <h2>Create New Project</h2>
+                <form enctype="multipart/form-data" action="stencilset-extension-generator" method="post">
+                    Project Name:
+                    <input name="modelNamePrefix" type="hidden"
+                           value="" />
+                    <input name="stencilSetExtensionNamePrefix" type="text"
+                           value="New Project" />
+                    <input name="baseStencilSetPath" type="hidden"
+                           value="/stencilsets/bpmn1.1/bpmn1.1.json" />
+                    <input name="baseStencilSet" type="hidden"
+                           value="http://b3mn.org/stencilset/bpmn1.1#" />
+                    <input name="stencilSetExtension" type="hidden"
+                           value="http://oryx-editor.org/stencilsets/extensions/bpmn-design-thinking-subset#" />
+                    <input name="stencilSetExtension" type="hidden"
+                           value="http://oryx-editor.org/stencilsets/extensions/bpmnwikirefs#" />
+                    <!-- mapped to superId property in order to morph stencils when dropped to canvas -->
+                    <input name="baseStencil" type="hidden"
+                           value="Task" />
+                    <!-- properties the columns will be mapped to -->
+                    <input name="columnPropertyMapping" type="hidden"
+                           value="group,name,documentation,refuri" />
+                    <br />
+                    Project Description:
+                    <textarea name="modelDescription">A newly created project.</textarea>
+                    <br />
+                    CSV File with Activity Definitions:
+                    <!-- CSV file containing the data of the stencils to be generated.
+                    An example CSV file can be found in
+                    editor/test/examples/design-thinking-example-data.csv
+                    which has been exported using OpenOffice.org from
+                    editor/test/examples/design-thinking-example-data.ods
+                    -->
+                    <input name="csvFile" type="file" />
+                    <input name="additionalERDFContentForGeneratedModel" type="hidden"
+                           value="&lt;a rel=&quot;oryx-render&quot; href=&quot;#oryx_EB1875A8-8F40-46F1-A37F-518239F75D75&quot;/&gt;&lt;a rel=&quot;oryx-render&quot; href=&quot;#oryx_F442CFC8-F018-4EEA-8FF2-3A0FB6524695&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;oryx_EB1875A8-8F40-46F1-A37F-518239F75D75&quot; class=&quot;undefined&quot;&gt;&lt;span class=&quot;oryx-type&quot;&gt;http://b3mn.org/stencilset/bpmn1.1#Pool&lt;/span&gt;&lt;span class=&quot;oryx-poolid&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-poolcategories&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-pooldocumentation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-name&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-participantref&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-lanes&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-boundaryvisible&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;oryx-mainpool&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processref&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processname&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processtype&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;oryx-status&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;oryx-adhoc&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-adhocordering&quot;&gt;Parallel&lt;/span&gt;&lt;span class=&quot;oryx-adhoccompletioncondition&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-suppressjoinfailure&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-enableinstancecompensation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processcategories&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-processdocumentation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-refuri&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-bounds&quot;&gt;0,0,600,250&lt;/span&gt;&lt;a rel=&quot;raziel-parent&quot; href=&quot;#oryx-canvas123&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;oryx_F442CFC8-F018-4EEA-8FF2-3A0FB6524695&quot; class=&quot;undefined&quot;&gt;&lt;span class=&quot;oryx-type&quot;&gt;http://b3mn.org/stencilset/bpmn1.1#Lane&lt;/span&gt;&lt;span class=&quot;oryx-id&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-categories&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-documentation&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-name&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-parentpool&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-parentlane&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-showcaption&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;oryx-refuri&quot;&gt;&lt;/span&gt;&lt;span class=&quot;oryx-bounds&quot;&gt;30,0,600,250&lt;/span&gt;&lt;a rel=&quot;raziel-parent&quot; href=&quot;#oryx_EB1875A8-8F40-46F1-A37F-518239F75D75&quot;/&gt;" />
+                    <!-- TODO: generate UUIDs using http://www.broofa.com/Tools/Math.uuid.js -->
+                    <br />
+                    <input type="submit" value="Create Project" />
+                </form>
+            </div>
+        </div>
     </body>
 </html>
