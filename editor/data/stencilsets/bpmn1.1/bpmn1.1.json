@@ -50,7 +50,7 @@
 					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des Diagramms einfügen.",
 					"readonly":false,
 					"optional":true,
-					"length":"50",
+					"length":"",
 					"wrapLines":true
 				},
 				{
@@ -218,7 +218,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -963,7 +964,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -1678,7 +1680,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -2386,7 +2389,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -2647,7 +2651,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -2871,7 +2876,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -3073,7 +3079,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -3313,7 +3320,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -3650,7 +3658,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"participantRef",
@@ -3906,7 +3915,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				}
 			]
 		},
@@ -3975,7 +3985,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"participantRef",
@@ -4234,7 +4245,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},				
 				{
 					"id":"bgColor",
@@ -4353,7 +4365,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"parentPool",
@@ -4456,7 +4469,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"artifactType",
@@ -4553,7 +4567,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"artifactType",
@@ -4652,7 +4667,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"artifactType",
@@ -4841,7 +4857,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5021,7 +5038,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5243,7 +5261,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5445,7 +5464,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -5627,6 +5647,19 @@
 					"wrapLines":true
 				},
 				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				},
+				{
 					"id":"assignments",
 					"type":"Complex",
 					"title":"Assignments",
@@ -5679,18 +5712,6 @@
 							]
 						}
 					]
-				},
-				{
-					"id":"documentation",
-					"type":"String",
-					"title":"Documentation",
-					"title_de":"Dokumentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
 				},
 				{
 					"id":"pool",
@@ -5838,7 +5859,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6033,7 +6055,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6229,7 +6252,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6464,7 +6488,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6701,7 +6726,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -6916,7 +6942,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7119,7 +7146,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7309,7 +7337,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7512,7 +7541,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7717,7 +7747,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -7923,7 +7954,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8139,7 +8171,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8357,7 +8390,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8562,7 +8596,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8765,7 +8800,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -8978,7 +9014,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9192,7 +9229,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9370,7 +9408,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9590,7 +9629,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9777,7 +9817,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -9954,7 +9995,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -10143,7 +10185,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -10331,7 +10374,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -10508,7 +10552,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"assignments",
@@ -10678,7 +10723,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"sourceRef",
@@ -10829,7 +10875,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"source",
@@ -10927,7 +10974,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"source",
@@ -11023,7 +11071,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"source",
@@ -11119,7 +11168,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
-					"length":"30"
+					"length":"",
+					"wrapLines":true
 				},
 				{
 					"id":"source",
