@@ -17,8 +17,9 @@ import de.hpi.bpel4chor.model.activities.ResultCompensation;
 import de.hpi.bpel4chor.model.activities.ResultError;
 import de.hpi.bpel4chor.model.activities.SendTask;
 import de.hpi.bpel4chor.model.activities.ServiceTask;
-import de.hpi.bpel4chor.model.activities.StartEvent;
-import de.hpi.bpel4chor.model.activities.Task;
+import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn.StartMessageEvent;
+import de.hpi.bpmn.Task;
 import de.hpi.bpel4chor.model.activities.Trigger;
 import de.hpi.bpel4chor.model.activities.TriggerResultMessage;
 import de.hpi.bpel4chor.model.activities.TriggerTimer;
@@ -26,7 +27,7 @@ import de.hpi.bpel4chor.model.activities.ValidateTask;
 import de.hpi.bpel4chor.model.artifacts.VariableDataObject;
 import de.hpi.bpel4chor.model.connections.MessageFlow;
 import de.hpi.bpel4chor.model.supporting.Copy;
-import de.hpi.bpel4chor.util.BPELUtil;
+import de.hpi.bpmn2bpel.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
 
@@ -139,7 +140,7 @@ public class BasicActivityFactory {
 			Trigger eventTrigger, boolean createInstance) {
 		Element result = this.document.createElement("receive");
 		
-		BPELUtil.setStandardAttributes(result, event);
+//		BPELUtil.setStandardAttributes(result, event);
 		
 		if (createInstance)
 			result.setAttribute("createInstance", BPELUtil.booleanToYesNo(createInstance));
@@ -202,11 +203,63 @@ public class BasicActivityFactory {
 	 * 			The result is null if the trigger of the event is not a message trigger. 
 	 */
 	public Element createReceiveElement(StartEvent event, boolean createInstance) {
-		if (!event.getTriggerType().equals(IntermediateEvent.TRIGGER_MESSAGE)) {
+		//if (!event.getTriggerType().equals(IntermediateEvent.TRIGGER_MESSAGE)) {
+		if (!(event instanceof StartMessageEvent)) {
 			return null;
 		}
-
-		return createReceiveElement(event, event.getTrigger(), createInstance);
+		
+		Element result = this.document.createElement("receive");
+		
+		BPELUtil.setStandardAttributes(result, event);
+		
+		if (createInstance)
+			result.setAttribute("createInstance", BPELUtil.booleanToYesNo(createInstance));
+		
+		// must be determined here, because there may be no trigger defined
+//		VariableDataObject variable = 
+//			this.diagram.getStandardVariable(event, true);
+		VariableDataObject variable = null;
+		
+//		if ((eventTrigger != null) && 
+//				(eventTrigger instanceof TriggerResultMessage)) {
+//			TriggerResultMessage trigger = (TriggerResultMessage)eventTrigger;
+//			
+//			if (trigger.getMessageExchange() != null) {
+//				result.setAttribute("messageExchange", trigger.getMessageExchange());
+//			}
+//			
+//			Element correlations = 
+//				this.supportingFactory.createCorrelationsElement(
+//						trigger.getCorrelations());
+//			if (correlations != null) {
+//				result.appendChild(correlations);
+//			}
+//			
+//			if(trigger.isOpaqueOutput()) {
+//				result.setAttribute("variable", "##opaque");
+//				// the output variable is opaque so omit from parts and variable data objects
+//				variable = null;
+//			} else if (variable == null) {
+//				// create from part only if no variable data object found
+//				Element fromParts = 
+//					this.supportingFactory.createFromPartsElement(
+//							trigger.getFromParts());
+//				if (fromParts != null) {
+//					result.appendChild(fromParts);
+//				} else {
+//					this.output.addError("The message event must define an output variable.", event.getId());
+//				}
+//			} 
+//		}
+		
+		if (variable != null) {
+			result.setAttribute("variable", variable.getName());
+		}
+		
+		return result;
+		
+		//return createReceiveElement(event, event.getTrigger(), createInstance);
+		
 	}
 	
 	/**
@@ -257,7 +310,7 @@ public class BasicActivityFactory {
 	public Element createReceiveElement(ReceiveTask task) {
 		Element result = this.document.createElement("receive");
 		
-		BPELUtil.setStandardAttributes(result, task);
+//		BPELUtil.setStandardAttributes(result, task);
 		
 		if (task.getMessageExchange() != null) {
 			result.setAttribute("messageExchange", task.getMessageExchange());
@@ -288,7 +341,25 @@ public class BasicActivityFactory {
 			this.output.addError("The receive task must define an output variable.", task.getId());
 		}
 		
-		return createScopeForAttachedHandlers(result, task);
+//		return createScopeForAttachedHandlers(result, task);
+		return null;
+	}
+	
+	/**
+	 * Creates a raw BPEL invoke element from a {@link Task} in the first 
+	 * implentation.
+	 * 
+	 * @param task
+	 * 		The {@link Task} object representing the invoke
+	 * @return
+	 * 		The BPEL invoke element
+	 */
+	public Element createInvokeElement(Task task) {
+		Element invoke = this.document.createElement("invoke");
+		
+		BPELUtil.setStandardAttributes(invoke, task);
+		
+		return invoke;
 	}
 	
 	/**
@@ -327,7 +398,7 @@ public class BasicActivityFactory {
 	public Element createInvokeElement(ServiceTask task) {
 		Element invoke = this.document.createElement("invoke");
 		
-		BPELUtil.setStandardAttributes(invoke, task);
+//		BPELUtil.setStandardAttributes(invoke, task);
 		
 		Element correlations = 
 			this.supportingFactory.createCorrelationsElement(
@@ -422,7 +493,7 @@ public class BasicActivityFactory {
 	public Element createInvokeElement(SendTask task) {
 		Element invoke = this.document.createElement("invoke");
 		
-		BPELUtil.setStandardAttributes(invoke, task);
+//		BPELUtil.setStandardAttributes(invoke, task);
 		
 		Element correlations = 
 			this.supportingFactory.createCorrelationsElement(
@@ -550,40 +621,41 @@ public class BasicActivityFactory {
 	 * content. If a scope is not necessary, the given content is returned.
 	 */
 	private Element createScopeForAttachedHandlers(Element content, Task task) {
-		// create fault, compensation and termination handlers but they must 
-		// be located in an additional scope 
-		List<Element> faultHandlers = this.structuredElementsFactory.
-			createFaultHandlerElements(task);
-		Element compensationHandler = this.structuredElementsFactory.
-			createCompensationHandlerElement(task);
-		Element terminationHandler = 
-			this.structuredElementsFactory.createTerminationHandlerElement(task);
-		
-		if ((faultHandlers.size() > 0) || (compensationHandler != null) || 
-				(terminationHandler != null)) {
-			
-			Element scope = this.document.createElement("scope");
-			scope.setAttribute("name", BPELUtil.generateScopeName(task));
-			if (faultHandlers.size() > 0) {
-				Element faultHandlersElement = 
-					this.document.createElement("faultHandlers");
-				for (Iterator<Element> it = faultHandlers.iterator(); it.hasNext();) {
-					faultHandlersElement.appendChild(it.next());
-				}
-				scope.appendChild(faultHandlersElement);
-			}
-			
-			if (compensationHandler != null) {
-				scope.appendChild(compensationHandler);
-			}
-			
-			if (terminationHandler != null) {
-				scope.appendChild(terminationHandler);
-			}
-			scope.appendChild(content);
-			return scope;
-		}
-		return content;
+//		// create fault, compensation and termination handlers but they must 
+//		// be located in an additional scope 
+//		List<Element> faultHandlers = this.structuredElementsFactory.
+//			createFaultHandlerElements(task);
+//		Element compensationHandler = this.structuredElementsFactory.
+//			createCompensationHandlerElement(task);
+//		Element terminationHandler = 
+//			this.structuredElementsFactory.createTerminationHandlerElement(task);
+//		
+//		if ((faultHandlers.size() > 0) || (compensationHandler != null) || 
+//				(terminationHandler != null)) {
+//			
+//			Element scope = this.document.createElement("scope");
+//			scope.setAttribute("name", BPELUtil.generateScopeName(task));
+//			if (faultHandlers.size() > 0) {
+//				Element faultHandlersElement = 
+//					this.document.createElement("faultHandlers");
+//				for (Iterator<Element> it = faultHandlers.iterator(); it.hasNext();) {
+//					faultHandlersElement.appendChild(it.next());
+//				}
+//				scope.appendChild(faultHandlersElement);
+//			}
+//			
+//			if (compensationHandler != null) {
+//				scope.appendChild(compensationHandler);
+//			}
+//			
+//			if (terminationHandler != null) {
+//				scope.appendChild(terminationHandler);
+//			}
+//			scope.appendChild(content);
+//			return scope;
+//		}
+//		return content;
+		return null;
 	}
 	
 	/**
@@ -614,7 +686,7 @@ public class BasicActivityFactory {
 	private Element createReplyElement(SendTask task) {
 		Element reply = this.document.createElement("reply");
 		
-		BPELUtil.setStandardAttributes(reply, task);
+//		BPELUtil.setStandardAttributes(reply, task);
 		
 		if (task.getMessageExchange() != null) {
 			reply.setAttribute("messageExchange", task.getMessageExchange());
@@ -645,7 +717,8 @@ public class BasicActivityFactory {
 			this.output.addError("The send task must define an input variable.", task.getId());
 		}
 		
-		return createScopeForAttachedHandlers(reply, task);
+//		return createScopeForAttachedHandlers(reply, task);
+		return null;
 	}
 	
 	/**
@@ -666,7 +739,7 @@ public class BasicActivityFactory {
 	public Element createAssignElement(AssignTask task) {
 		Element assign = this.document.createElement("assign");
 		
-		BPELUtil.setStandardAttributes(assign, task);
+//		BPELUtil.setStandardAttributes(assign, task);
 		
 		if (task.getValidate() != null) {
 			assign.setAttribute("validate", task.getValidate());
@@ -684,7 +757,8 @@ public class BasicActivityFactory {
 			}
 		}
 		
-		return createScopeForAttachedHandlers(assign, task);
+//		return createScopeForAttachedHandlers(assign, task);
+		return null;
 	}
 	
 	/**
@@ -699,9 +773,10 @@ public class BasicActivityFactory {
 	public Element createEmptyElement(EmptyTask task) {
 		Element empty = this.document.createElement("empty");
 		
-		BPELUtil.setStandardAttributes(empty, task);
+//		BPELUtil.setStandardAttributes(empty, task);
 		
-		return createScopeForAttachedHandlers(empty, task);
+//		return createScopeForAttachedHandlers(empty, task);
+		return null;
 		
 	}
 	
@@ -717,9 +792,10 @@ public class BasicActivityFactory {
 	public Element createOpaqueElement(NoneTask task) {
 		Element opaque = this.document.createElement("opaqueActivity");
 		
-		BPELUtil.setStandardAttributes(opaque, task);
+//		BPELUtil.setStandardAttributes(opaque, task);
 		
-		return createScopeForAttachedHandlers(opaque, task);
+//		return createScopeForAttachedHandlers(opaque, task);
+		return null;
 	}
 	
 	/**
@@ -735,37 +811,38 @@ public class BasicActivityFactory {
 	 * @return 		The generated BPEL4Chor "compensate" or "compensateScope" element
 	 */
 	public Element createCompensateElement(IntermediateEvent event) {
-		Element result = null;
-		if ((event.getTrigger() != null) && (event.getTrigger() instanceof ResultCompensation)) {
-			ResultCompensation trigger = (ResultCompensation)event.getTrigger();
-			if (trigger.getActivity() != null) {
-				Activity act = trigger.getActivity();
-				String name = null;
-				if (act instanceof Task) {
-					if (act instanceof ServiceTask) {
-						name = act.getName();
-					} else {
-						// task must have an attached compensation event
-						if (act.getAttachedEvents(
-							IntermediateEvent.TRIGGER_COMPENSATION).isEmpty()) {
-							
-							this.output.addError("The task must have an attached compensation event to be compensated.", act.getId());
-							return null;
-						}
-						// scope created around task is compensated
-						name = BPELUtil.generateScopeName(act);
-					}
-				} else {
-					name = act.getName();
-				}
-				result = this.document.createElement("compensateScope");
-				result.setAttribute("target", name);
-				return result;
-			}
-		} 
-		result = this.document.createElement("compensate");
-		BPELUtil.setStandardAttributes(result, event);
-		return result;
+//		Element result = null;
+//		if ((event.getTrigger() != null) && (event.getTrigger() instanceof ResultCompensation)) {
+//			ResultCompensation trigger = (ResultCompensation)event.getTrigger();
+//			if (trigger.getActivity() != null) {
+//				Activity act = trigger.getActivity();
+//				String name = null;
+//				if (act instanceof Task) {
+//					if (act instanceof ServiceTask) {
+//						name = act.getName();
+//					} else {
+//						// task must have an attached compensation event
+//						if (act.getAttachedEvents(
+//							IntermediateEvent.TRIGGER_COMPENSATION).isEmpty()) {
+//							
+//							this.output.addError("The task must have an attached compensation event to be compensated.", act.getId());
+//							return null;
+//						}
+//						// scope created around task is compensated
+//						name = BPELUtil.generateScopeName(act);
+//					}
+//				} else {
+//					name = act.getName();
+//				}
+//				result = this.document.createElement("compensateScope");
+//				result.setAttribute("target", name);
+//				return result;
+//			}
+//		} 
+//		result = this.document.createElement("compensate");
+//		BPELUtil.setStandardAttributes(result, event);
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -791,38 +868,38 @@ public class BasicActivityFactory {
 	 */
 	public Element createThrowElement(IntermediateEvent event, boolean rethrowAllowed) {
 		Element result = null;
-		if (!event.getTriggerType().equals(IntermediateEvent.TRIGGER_ERROR)) {
-			return result;
-		}
-		if (event.getTrigger() == null) {
-			if (rethrowAllowed) {
-				result = this.document.createElement("rethrow");
-				BPELUtil.setStandardAttributes(result, event);
-			} else {
-				this.output.addError("The activity must define an error code, because a rethrow is not allowed in this context.", event.getId());
-				return null;
-			}
-		} else if (event.getTrigger() instanceof ResultError) {
-			ResultError trigger = (ResultError)event.getTrigger();
-			if (trigger.getErrorCode() == null || trigger.getErrorCode().equals("")) {
-				if (rethrowAllowed) {
-					result = this.document.createElement("rethrow");
-					BPELUtil.setStandardAttributes(result, event);
-				} else {
-					this.output.addError("The activity must define an error code because a rethrow is not allowed in this context.", event.getId());
-					return null;
-				}
-			} else {
-				result = this.document.createElement("throw");
-				BPELUtil.setStandardAttributes(result, event);
-				result.setAttribute("faultName", trigger.getErrorCode());
-				VariableDataObject faultVariable = 
-					this.diagram.getStandardVariable(event, false);
-				if (faultVariable != null) {
-					result.setAttribute("faultVariable", faultVariable.getName());
-				}
-			}
-		}
+//		if (!event.getTriggerType().equals(IntermediateEvent.TRIGGER_ERROR)) {
+//			return result;
+//		}
+//		if (event.getTrigger() == null) {
+//			if (rethrowAllowed) {
+//				result = this.document.createElement("rethrow");
+//				BPELUtil.setStandardAttributes(result, event);
+//			} else {
+//				this.output.addError("The activity must define an error code, because a rethrow is not allowed in this context.", event.getId());
+//				return null;
+//			}
+//		} else if (event.getTrigger() instanceof ResultError) {
+//			ResultError trigger = (ResultError)event.getTrigger();
+//			if (trigger.getErrorCode() == null || trigger.getErrorCode().equals("")) {
+//				if (rethrowAllowed) {
+//					result = this.document.createElement("rethrow");
+//					BPELUtil.setStandardAttributes(result, event);
+//				} else {
+//					this.output.addError("The activity must define an error code because a rethrow is not allowed in this context.", event.getId());
+//					return null;
+//				}
+//			} else {
+//				result = this.document.createElement("throw");
+//				BPELUtil.setStandardAttributes(result, event);
+//				result.setAttribute("faultName", trigger.getErrorCode());
+//				VariableDataObject faultVariable = 
+//					this.diagram.getStandardVariable(event, false);
+//				if (faultVariable != null) {
+//					result.setAttribute("faultVariable", faultVariable.getName());
+//				}
+//			}
+//		}
 		return result;
 	}
 	
@@ -844,27 +921,27 @@ public class BasicActivityFactory {
 	 */
 	public Element createWaitElement(IntermediateEvent event) {
 		Element result = null;
-		if ((event.getTrigger() != null) && 
-				(event.getTrigger() instanceof TriggerTimer)) {
-			
-			TriggerTimer trigger = (TriggerTimer)event.getTrigger();
-			result = this.document.createElement("wait");
-			BPELUtil.setStandardAttributes(result, event);
-			
-			if (trigger.getTimeDeadlineExpression() != null) {
-				result.appendChild(this.supportingFactory.createExpressionElement(
-						"until", trigger.getTimeDeadlineExpression()));
-			} else if (trigger.getTimeDurationExpression() != null) {
-				result.appendChild(this.supportingFactory.createExpressionElement(
-						"for", trigger.getTimeDurationExpression()));
-			} else {
-				this.output.addError("The duration or deadline expression of the wait activity could not be generated.", event.getId());
-				return null;
-			}
-		} else {
-			this.output.addError("The event must define a timer trigger element.", event.getId());
-			return null;
-		}
+//		if ((event.getTrigger() != null) && 
+//				(event.getTrigger() instanceof TriggerTimer)) {
+//			
+//			TriggerTimer trigger = (TriggerTimer)event.getTrigger();
+//			result = this.document.createElement("wait");
+//			BPELUtil.setStandardAttributes(result, event);
+//			
+//			if (trigger.getTimeDeadlineExpression() != null) {
+//				result.appendChild(this.supportingFactory.createExpressionElement(
+//						"until", trigger.getTimeDeadlineExpression()));
+//			} else if (trigger.getTimeDurationExpression() != null) {
+//				result.appendChild(this.supportingFactory.createExpressionElement(
+//						"for", trigger.getTimeDurationExpression()));
+//			} else {
+//				this.output.addError("The duration or deadline expression of the wait activity could not be generated.", event.getId());
+//				return null;
+//			}
+//		} else {
+//			this.output.addError("The event must define a timer trigger element.", event.getId());
+//			return null;
+//		}
 		return result;
 	}
 	
@@ -882,7 +959,7 @@ public class BasicActivityFactory {
 	 */
 	public Element createValidateElement(ValidateTask task) {
 		Element result = this.document.createElement("validate");
-		BPELUtil.setStandardAttributes(result, task);
+//		BPELUtil.setStandardAttributes(result, task);
 		
 		List<VariableDataObject> variables = 
 			this.diagram.getStandardVariables(task, false);
@@ -901,6 +978,7 @@ public class BasicActivityFactory {
 			result.setAttribute("variables", variablesStr);
 		}
 		
-		return createScopeForAttachedHandlers(result, task);
+//		return createScopeForAttachedHandlers(result, task);
+		return null;
 	}
 }

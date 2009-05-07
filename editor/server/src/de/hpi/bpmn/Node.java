@@ -1,5 +1,7 @@
 package de.hpi.bpmn;
 
+import java.util.List;
+
 import de.hpi.util.Bounds;
 
 
@@ -87,4 +89,15 @@ public abstract class Node extends DiagramObject {
 		}
 	}
 
+	public Node getPredecessor() {
+		List<SequenceFlow> sequenceFlows = this.getIncomingSequenceFlows();
+		// TODO: check assumption of only one incoming edge
+		return (Node) sequenceFlows.get(0).getSource();
+	}
+
+	public Node getSuccessor() {
+		List<SequenceFlow> sequenceFlows = this.getOutgoingSequenceFlows();
+		// TODO: check assumption of only one outgoing edge
+		return (Node) sequenceFlows.get(0).getTarget();
+	}
 }

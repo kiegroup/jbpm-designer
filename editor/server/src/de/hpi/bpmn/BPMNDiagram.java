@@ -374,10 +374,39 @@ public class BPMNDiagram implements Container {
 	}
 
 	/**
-	 * @return The pools in the diagram.
+	 * Returns a list of {@link Pool}, one for each identified process
+	 * 
+	 * @return 
+	 * 		The pools in the diagram.
 	 */
-	public List<de.hpi.bpel4chor.model.Pool> getPools() {
-		// TODO Required by BPMN2BPEL transformation.
+	public List<Pool> getPools() {
+		ArrayList<Pool> pools = new ArrayList<Pool>();
+		
+		for(Iterator<Container> it = this.getProcesses().iterator(); it.hasNext(); ) {
+			Pool processPool = getPoolOfProcess(it.next());
+			if (processPool != null) {
+				pools.add(processPool);
+			}
+		}
+		
+		return pools;
+	}
+	
+	/**
+	 * Search the process for a pool and returns it.
+	 * 
+	 * @param process
+	 * 		The process to handle
+	 * @return
+	 * 		The {@link Pool} if existing
+	 */
+	private Pool getPoolOfProcess(Container process) {
+		for(Iterator<Node> it = process.getChildNodes().iterator(); it.hasNext();) {
+			Node current = it.next();
+			if (current instanceof Pool) {
+				return (Pool) current;
+			}
+		}
 		return null;
 	}
 

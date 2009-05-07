@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.hpi.bpel4chor.model.Container;
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.activities.EndEvent;
 import de.hpi.bpel4chor.model.activities.Gateway;
@@ -19,7 +18,9 @@ import de.hpi.bpel4chor.model.activities.Task;
 import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.util.ListUtil;
 import de.hpi.bpel4chor.util.Output;
+
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.Container;
 
 /**
  * The Componentizer tries to find components within the activities of a 
@@ -270,23 +271,23 @@ public class Componentizer {
 	 * if no component was found that matches this pattern .
 	 */
 	private Component computeAttachedErrorEvents(boolean quasi) {
-		List<Task> tasks = this.container.getTasks();
-		for (Iterator<Task> it = tasks.iterator(); it.hasNext();) {
-			Task task = it.next();
-			Component comp = computeAttachedErrorEvents(task, quasi);
-			if (comp != null) {
-				return comp;
-			}
-		}
-		
-		List<Scope> scopes = this.container.getScopes();
-		for (Iterator<Scope> it = scopes.iterator(); it.hasNext();) {
-			Scope scope = it.next();
-			Component comp = computeAttachedErrorEvents(scope, quasi);
-			if (comp != null) {
-				return comp;
-			}
-		}
+//		List<Task> tasks = this.container.getTasks();
+//		for (Iterator<Task> it = tasks.iterator(); it.hasNext();) {
+//			Task task = it.next();
+//			Component comp = computeAttachedErrorEvents(task, quasi);
+//			if (comp != null) {
+//				return comp;
+//			}
+//		}
+//		
+//		List<Scope> scopes = this.container.getScopes();
+//		for (Iterator<Scope> it = scopes.iterator(); it.hasNext();) {
+//			Scope scope = it.next();
+//			Component comp = computeAttachedErrorEvents(scope, quasi);
+//			if (comp != null) {
+//				return comp;
+//			}
+//		}
 		return null;
 	}
 	
@@ -348,29 +349,29 @@ public class Componentizer {
 	 * If no sequence component was found the result is null. 
 	 */
 	private Component computeSequence() {
-		List<Activity> maxSequence = null;
-		for (Iterator<Activity> it = 
-			this.container.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (!isSuccessorOfXORDecision(act)) {
-				List<Activity> sequence = computeSequenceActivities(act);
-				if (sequence.size() > 1) {
-					if (maxSequence == null) {
-						maxSequence = sequence;
-					} else if (maxSequence.size() < sequence.size()) {
-						maxSequence = sequence;
-					}
-				}
-			}
-		}
-		if (maxSequence != null) {
-			Activity source = maxSequence.get(0);
-			Activity sink = maxSequence.get(maxSequence.size() - 1);
-			maxSequence.remove(sink);
-			maxSequence.remove(source);
-			List<Transition> transitions = computeTransitions(maxSequence, source, sink);
-			return new Component(Component.TYPE_SEQUENCE, maxSequence, transitions, source, sink);
-		}
+//		List<Activity> maxSequence = null;
+//		for (Iterator<Activity> it = 
+//			this.container.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (!isSuccessorOfXORDecision(act)) {
+//				List<Activity> sequence = computeSequenceActivities(act);
+//				if (sequence.size() > 1) {
+//					if (maxSequence == null) {
+//						maxSequence = sequence;
+//					} else if (maxSequence.size() < sequence.size()) {
+//						maxSequence = sequence;
+//					}
+//				}
+//			}
+//		}
+//		if (maxSequence != null) {
+//			Activity source = maxSequence.get(0);
+//			Activity sink = maxSequence.get(maxSequence.size() - 1);
+//			maxSequence.remove(sink);
+//			maxSequence.remove(source);
+//			List<Transition> transitions = computeTransitions(maxSequence, source, sink);
+//			return new Component(Component.TYPE_SEQUENCE, maxSequence, transitions, source, sink);
+//		}
 		return null;
 	}
 	
@@ -584,47 +585,47 @@ public class Componentizer {
 	 * @return A component that matches a (quasi) flow pattern.
 	 */
 	private Component computeFlow(boolean quasi) {
-		 List<Gateway> andSplits = 
-			 this.container.getSplitGateways(Gateway.TYPE_AND);
-		 List<Gateway> andJoins = 
-			 this.container.getJoinGateways(Gateway.TYPE_AND);
-		 List<Gateway> orJoins = 
-			 this.container.getJoinGateways(Gateway.TYPE_OR);
-		 
-		 if (andSplits.size()>0 && 
-				 (andJoins.size()>0 || orJoins.size()>0)) {
-			 for(Iterator<Gateway> itSplit = 
-				 andSplits.iterator(); itSplit.hasNext();) {
-				 
-				 Gateway andSplit = itSplit.next();
-				 
-				 for(Iterator<Gateway> itAnd = andJoins.iterator(); itAnd.hasNext();) {
-					 Gateway andJoin = itAnd.next();
-					 Component comp = null;
-					 if (quasi) {
-						 comp = computeQuasiFlow(andSplit, andJoin);
-					 } else {
-						 comp = computeFlow(andSplit, andJoin);
-					 }
-					 if (comp != null) {
-						 return comp;
-					 }
-				 }
-				 
-				 for(Iterator<Gateway> itOR = orJoins.iterator(); itOR.hasNext();) {
-					 Gateway orJoin = itOR.next();
-					 Component comp = null;
-					 if (quasi) {
-						 comp = computeQuasiFlow(andSplit, orJoin);
-					 } else {
-						 comp = computeFlow(andSplit, orJoin);
-					 }
-					 if (comp != null) {
-						 return comp;
-					 }
-				 }
-			 }
-		 }
+//		 List<Gateway> andSplits = 
+//			 this.container.getSplitGateways(Gateway.TYPE_AND);
+//		 List<Gateway> andJoins = 
+//			 this.container.getJoinGateways(Gateway.TYPE_AND);
+//		 List<Gateway> orJoins = 
+//			 this.container.getJoinGateways(Gateway.TYPE_OR);
+//		 
+//		 if (andSplits.size()>0 && 
+//				 (andJoins.size()>0 || orJoins.size()>0)) {
+//			 for(Iterator<Gateway> itSplit = 
+//				 andSplits.iterator(); itSplit.hasNext();) {
+//				 
+//				 Gateway andSplit = itSplit.next();
+//				 
+//				 for(Iterator<Gateway> itAnd = andJoins.iterator(); itAnd.hasNext();) {
+//					 Gateway andJoin = itAnd.next();
+//					 Component comp = null;
+//					 if (quasi) {
+//						 comp = computeQuasiFlow(andSplit, andJoin);
+//					 } else {
+//						 comp = computeFlow(andSplit, andJoin);
+//					 }
+//					 if (comp != null) {
+//						 return comp;
+//					 }
+//				 }
+//				 
+//				 for(Iterator<Gateway> itOR = orJoins.iterator(); itOR.hasNext();) {
+//					 Gateway orJoin = itOR.next();
+//					 Component comp = null;
+//					 if (quasi) {
+//						 comp = computeQuasiFlow(andSplit, orJoin);
+//					 } else {
+//						 comp = computeFlow(andSplit, orJoin);
+//					 }
+//					 if (comp != null) {
+//						 return comp;
+//					 }
+//				 }
+//			 }
+//		 }
 		 return null;
 	}
 
@@ -639,38 +640,38 @@ public class Componentizer {
 	 * @return A component that matches a (quasi)special flow pattern.
 	 */
 	private Component computeSpecialFlow(boolean quasi) {
-		 List<Gateway> orSplits = 
-			 this.container.getSplitGateways(Gateway.TYPE_OR);
-		 List<Gateway> orJoins = 
-			 this.container.getJoinGateways(Gateway.TYPE_OR);
-		 
-		 if ((orSplits.size()>0) && (orJoins.size()>0)) {
-			 for(Iterator<Gateway> itSplit = 
-				 orSplits.iterator(); itSplit.hasNext();) {
-				 
-				 Gateway orSplit = itSplit.next();
-				 
-				 for(Iterator<Gateway> itOr = 
-					 orJoins.iterator(); itOr.hasNext();) {
-					 
-					 Gateway orJoin = itOr.next();
-					 Component comp = null;
-					 if (quasi) {
-						 comp = computeQuasiFlow(orSplit, orJoin);
-					 } else {
-						 comp = computeFlow(orSplit, orJoin);
-					 }
-					 if (comp != null) {
-						 if (quasi) {
-							 comp.setType(Component.TYPE_QUASI_SPECIAL_FLOW);
-						 } else {
-							 comp.setType(Component.TYPE_SPECIAL_FLOW);
-						 }
-						 return comp;
-					 }
-				 }
-			 }
-		 }
+//		 List<Gateway> orSplits = 
+//			 this.container.getSplitGateways(Gateway.TYPE_OR);
+//		 List<Gateway> orJoins = 
+//			 this.container.getJoinGateways(Gateway.TYPE_OR);
+//		 
+//		 if ((orSplits.size()>0) && (orJoins.size()>0)) {
+//			 for(Iterator<Gateway> itSplit = 
+//				 orSplits.iterator(); itSplit.hasNext();) {
+//				 
+//				 Gateway orSplit = itSplit.next();
+//				 
+//				 for(Iterator<Gateway> itOr = 
+//					 orJoins.iterator(); itOr.hasNext();) {
+//					 
+//					 Gateway orJoin = itOr.next();
+//					 Component comp = null;
+//					 if (quasi) {
+//						 comp = computeQuasiFlow(orSplit, orJoin);
+//					 } else {
+//						 comp = computeFlow(orSplit, orJoin);
+//					 }
+//					 if (comp != null) {
+//						 if (quasi) {
+//							 comp.setType(Component.TYPE_QUASI_SPECIAL_FLOW);
+//						 } else {
+//							 comp.setType(Component.TYPE_SPECIAL_FLOW);
+//						 }
+//						 return comp;
+//					 }
+//				 }
+//			 }
+//		 }
 		 return null;
 	}
 	
@@ -737,38 +738,38 @@ public class Componentizer {
 	 * @return A component that matches a (quasi) if pattern.
 	 */
 	private Component computeIf(boolean quasi) {
-		List<Gateway> xorSplits = 
-			this.container.getSplitGateways(Gateway.TYPE_XOR);
-		List<Gateway> xorJoins = 
-			this.container.getJoinGateways(Gateway.TYPE_XOR);
-		List<Gateway> orJoins = 
-			this.container.getJoinGateways(Gateway.TYPE_OR);
-		
-		if (xorSplits.size()>0 && (xorJoins.size()>0 || orJoins.size()>0)) {
-			 for(Iterator<Gateway> itSplit = xorSplits.iterator(); itSplit.hasNext();) {
-				 Gateway xorSplit = itSplit.next();
-				 if ((xorSplit.getSplitType() != null) && 
-						 xorSplit.getSplitType().equals(Gateway.SPLIT_XOREVENT)) {
-					 continue;
-				 }
-				 
-				 for(Iterator<Gateway> itAnd = xorJoins.iterator(); itAnd.hasNext();) {
-					 Gateway xorJoin = itAnd.next();
-					 Component comp = computeIf(xorSplit, xorJoin, quasi);
-					 if (comp != null) {
-						 return comp;
-					 }
-				 }
-				 
-				 for(Iterator<Gateway> itOR = orJoins.iterator(); itOR.hasNext();) {
-					 Gateway orJoin = itOR.next();
-					 Component comp = computeIf(xorSplit, orJoin, quasi);
-					 if (comp != null) {
-						 return comp;
-					 }
-				 }
-			 }
-		}
+//		List<Gateway> xorSplits = 
+//			this.container.getSplitGateways(Gateway.TYPE_XOR);
+//		List<Gateway> xorJoins = 
+//			this.container.getJoinGateways(Gateway.TYPE_XOR);
+//		List<Gateway> orJoins = 
+//			this.container.getJoinGateways(Gateway.TYPE_OR);
+//		
+//		if (xorSplits.size()>0 && (xorJoins.size()>0 || orJoins.size()>0)) {
+//			 for(Iterator<Gateway> itSplit = xorSplits.iterator(); itSplit.hasNext();) {
+//				 Gateway xorSplit = itSplit.next();
+//				 if ((xorSplit.getSplitType() != null) && 
+//						 xorSplit.getSplitType().equals(Gateway.SPLIT_XOREVENT)) {
+//					 continue;
+//				 }
+//				 
+//				 for(Iterator<Gateway> itAnd = xorJoins.iterator(); itAnd.hasNext();) {
+//					 Gateway xorJoin = itAnd.next();
+//					 Component comp = computeIf(xorSplit, xorJoin, quasi);
+//					 if (comp != null) {
+//						 return comp;
+//					 }
+//				 }
+//				 
+//				 for(Iterator<Gateway> itOR = orJoins.iterator(); itOR.hasNext();) {
+//					 Gateway orJoin = itOR.next();
+//					 Component comp = computeIf(xorSplit, orJoin, quasi);
+//					 if (comp != null) {
+//						 return comp;
+//					 }
+//				 }
+//			 }
+//		}
 		return null;
 	}
 	
@@ -879,25 +880,25 @@ public class Componentizer {
 	 * @return A component that matches a (quasi) pick-pattern.
 	 */
 	private Component computePick(boolean quasi) {
-		List<Gateway> xorSplits = 
-			this.container.getEventBasedExclusiveDecisionGateways();
-		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
-		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
-		
-		if (xorSplits.size()>0 && (joins.size()>0)) {
-			for (Iterator<Gateway> it = xorSplits.iterator(); it.hasNext();) {
-				Gateway xorSplit = it.next();
-				for (Iterator<Gateway> itJoin = 
-					joins.iterator(); itJoin.hasNext();) {
-					
-					Gateway join = itJoin.next();
-					Component comp = computePick(xorSplit, join, quasi);
-					if (comp != null) {
-						return comp;
-					}
-				}
-			}
-		}
+//		List<Gateway> xorSplits = 
+//			this.container.getEventBasedExclusiveDecisionGateways();
+//		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
+//		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
+//		
+//		if (xorSplits.size()>0 && (joins.size()>0)) {
+//			for (Iterator<Gateway> it = xorSplits.iterator(); it.hasNext();) {
+//				Gateway xorSplit = it.next();
+//				for (Iterator<Gateway> itJoin = 
+//					joins.iterator(); itJoin.hasNext();) {
+//					
+//					Gateway join = itJoin.next();
+//					Component comp = computePick(xorSplit, join, quasi);
+//					if (comp != null) {
+//						return comp;
+//					}
+//				}
+//			}
+//		}
 		return null;
 	}
 	
@@ -921,48 +922,48 @@ public class Componentizer {
 	 * @return A component that matches a while-pattern.
 	 */
 	private Component computeWhile() {
-		List<Gateway> xorSplits = 
-			this.container.getDataBasedExclusiveDecisionGateways();
-		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
-		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
-		
-		for (Iterator<Gateway> itSplits = xorSplits.iterator(); itSplits.hasNext();) {
-			Gateway split = itSplits.next();
-			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
-				Gateway join = itJoin.next();
-				
-				// direct transition between join and split
-				if (join.getTransitionTo(split) == null) {
-					continue;
-				}
-				
-				// one element between split and join
-				Activity result = getElementBetween(split, join);
-				if (result == null) {
-					continue;
-				}
-				
-				// XOR-Split has only two outgoing transitions and
-				// XOR-Merge has only two incoming transitions
-				if ((split.getSourceFor().size() == 2) && 
-						(join.getTargetFor().size() == 2)) {
-					// check if transition from XOR-Merge to XOR-Split
-					Transition trans = split.getTransitionTo(result);
-					if ((trans == null) ||
-							(trans.getConditionType() == null) || 
-							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
-						this.output.addError("The outgoing transitions should define a transition condition.", split.getId());
-						break;
-					}
-					
-					List<Activity> act = new ArrayList<Activity>();
-					act.add(result);
-					return new Component(Component.TYPE_WHILE, act,
-							computeTransitions(act, join, split),
-							join, split);
-				}
-			}
-		}
+//		List<Gateway> xorSplits = 
+//			this.container.getDataBasedExclusiveDecisionGateways();
+//		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
+//		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
+//		
+//		for (Iterator<Gateway> itSplits = xorSplits.iterator(); itSplits.hasNext();) {
+//			Gateway split = itSplits.next();
+//			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
+//				Gateway join = itJoin.next();
+//				
+//				// direct transition between join and split
+//				if (join.getTransitionTo(split) == null) {
+//					continue;
+//				}
+//				
+//				// one element between split and join
+//				Activity result = getElementBetween(split, join);
+//				if (result == null) {
+//					continue;
+//				}
+//				
+//				// XOR-Split has only two outgoing transitions and
+//				// XOR-Merge has only two incoming transitions
+//				if ((split.getSourceFor().size() == 2) && 
+//						(join.getTargetFor().size() == 2)) {
+//					// check if transition from XOR-Merge to XOR-Split
+//					Transition trans = split.getTransitionTo(result);
+//					if ((trans == null) ||
+//							(trans.getConditionType() == null) || 
+//							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
+//						this.output.addError("The outgoing transitions should define a transition condition.", split.getId());
+//						break;
+//					}
+//					
+//					List<Activity> act = new ArrayList<Activity>();
+//					act.add(result);
+//					return new Component(Component.TYPE_WHILE, act,
+//							computeTransitions(act, join, split),
+//							join, split);
+//				}
+//			}
+//		}
 		return null;
 	}
 	
@@ -986,52 +987,52 @@ public class Componentizer {
 	 * @return A component that matches a repeat-pattern.
 	 */
 	private Component computeRepeat() {
-		List<Gateway> xorSplits = 
-			this.container.getDataBasedExclusiveDecisionGateways();
-		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
-		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
-		
-		for (Iterator<Gateway> itSplits = xorSplits.iterator(); itSplits.hasNext();) {
-			Gateway split = itSplits.next();
-			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
-				Gateway join = itJoin.next();
-				
-				// direct transition between split and join
-				Transition trans = split.getTransitionTo(join);
-				if (trans == null) {
-					continue;
-				}
-				
-				// one activity between join and split
-				Activity result = getElementBetween(join, split);
-				if (result == null) {
-					continue;
-				}
-				
-				// XOR-Split has only two outgoing transitions and
-				// XOR-Merge has only two incoming transitions
-				if ((split.getSourceFor().size() == 2) && 
-						(join.getTargetFor().size() == 2)) {
-					
-					// check if transition from XOR-split to XOR-merge with condition expression
-					if ((trans.getConditionType() == null) || 
-							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
-						this.output.addError("The transition should define a transition condition.", trans.getId());
-						break;
-					}
-					
-					List<Activity> act = new ArrayList<Activity>();
-					act.add(result);
-					
-					List<Transition> transitions = computeTransitions(act, join, split);
-					// add transition from split to join too
-					transitions.add(trans);
-					return new Component(Component.TYPE_REPEAT, act,
-							transitions,
-							join, split);
-				}
-			}
-		}
+//		List<Gateway> xorSplits = 
+//			this.container.getDataBasedExclusiveDecisionGateways();
+//		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
+//		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
+//		
+//		for (Iterator<Gateway> itSplits = xorSplits.iterator(); itSplits.hasNext();) {
+//			Gateway split = itSplits.next();
+//			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
+//				Gateway join = itJoin.next();
+//				
+//				// direct transition between split and join
+//				Transition trans = split.getTransitionTo(join);
+//				if (trans == null) {
+//					continue;
+//				}
+//				
+//				// one activity between join and split
+//				Activity result = getElementBetween(join, split);
+//				if (result == null) {
+//					continue;
+//				}
+//				
+//				// XOR-Split has only two outgoing transitions and
+//				// XOR-Merge has only two incoming transitions
+//				if ((split.getSourceFor().size() == 2) && 
+//						(join.getTargetFor().size() == 2)) {
+//					
+//					// check if transition from XOR-split to XOR-merge with condition expression
+//					if ((trans.getConditionType() == null) || 
+//							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
+//						this.output.addError("The transition should define a transition condition.", trans.getId());
+//						break;
+//					}
+//					
+//					List<Activity> act = new ArrayList<Activity>();
+//					act.add(result);
+//					
+//					List<Transition> transitions = computeTransitions(act, join, split);
+//					// add transition from split to join too
+//					transitions.add(trans);
+//					return new Component(Component.TYPE_REPEAT, act,
+//							transitions,
+//							join, split);
+//				}
+//			}
+//		}
 		return null;
 	}
 	
@@ -1059,59 +1060,59 @@ public class Componentizer {
 	 * @return A component that matches a repeat-while-pattern.
 	 */
 	private Component computeRepeatWhile() {
-		List<Gateway> xorSplits = 
-			this.container.getDataBasedExclusiveDecisionGateways();
-		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
-		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
-		
-		for (Iterator<Gateway> itSplits = xorSplits.iterator(); itSplits.hasNext();) {
-			Gateway split = itSplits.next();
-			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
-				Gateway join = itJoin.next();
-				
-				Activity resultFrom = getElementBetween(join, split);
-				if (resultFrom == null) {
-					// no path from XOR-merge to XOR-split with one element between
-					// continue search
-					continue;
-				}
-
-				// pattern is not applicable to communicating activities
-				// connected with message flow
-				if ((this.diagram.getMessageFlowsWithTarget(resultFrom.getId()).size() > 0) || 
-						(this.diagram.getMessageFlowWithSource(resultFrom.getId()) != null)) {
-					return null;
-				}
-				
-				Activity resultTo = getElementBetween(split, join);
-				if (resultTo == null) {
-					// no path from XOR-split to XOR-merge with one element between
-					// continue search
-					continue;
-				}
-				
-				// XOR-Split has only two outgoing transitions and
-				// XOR-Merge has only two incoming transitions
-				if ((split.getSourceFor().size() == 2) && 
-						(join.getTargetFor().size() == 2)) {
-					
-					Transition trans = split.getTransitionTo(resultTo);
-					if ((trans == null) ||
-							(trans.getConditionType() == null) || 
-							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
-						this.output.addError("The outgoing transitions should define a transition condition.", split.getId());
-						break;
-					}
-					
-					List<Activity> act = new ArrayList<Activity>();
-					act.add(resultTo);
-					act.add(resultFrom);
-					return new Component(Component.TYPE_REPEAT_WHILE, act,
-							computeTransitions(act, join, split),
-							join, split);
-				}
-			}
-		}
+//		List<Gateway> xorSplits = 
+//			this.container.getDataBasedExclusiveDecisionGateways();
+//		List<Gateway> joins = this.container.getJoinGateways(Gateway.TYPE_XOR);
+//		joins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
+//		
+//		for (Iterator<Gateway> itSplits = xorSplits.iterator(); itSplits.hasNext();) {
+//			Gateway split = itSplits.next();
+//			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
+//				Gateway join = itJoin.next();
+//				
+//				Activity resultFrom = getElementBetween(join, split);
+//				if (resultFrom == null) {
+//					// no path from XOR-merge to XOR-split with one element between
+//					// continue search
+//					continue;
+//				}
+//
+//				// pattern is not applicable to communicating activities
+//				// connected with message flow
+//				if ((this.diagram.getMessageFlowsWithTarget(resultFrom.getId()).size() > 0) || 
+//						(this.diagram.getMessageFlowWithSource(resultFrom.getId()) != null)) {
+//					return null;
+//				}
+//				
+//				Activity resultTo = getElementBetween(split, join);
+//				if (resultTo == null) {
+//					// no path from XOR-split to XOR-merge with one element between
+//					// continue search
+//					continue;
+//				}
+//				
+//				// XOR-Split has only two outgoing transitions and
+//				// XOR-Merge has only two incoming transitions
+//				if ((split.getSourceFor().size() == 2) && 
+//						(join.getTargetFor().size() == 2)) {
+//					
+//					Transition trans = split.getTransitionTo(resultTo);
+//					if ((trans == null) ||
+//							(trans.getConditionType() == null) || 
+//							(!trans.getConditionType().equals(Transition.TYPE_EXPRESSION))) {
+//						this.output.addError("The outgoing transitions should define a transition condition.", split.getId());
+//						break;
+//					}
+//					
+//					List<Activity> act = new ArrayList<Activity>();
+//					act.add(resultTo);
+//					act.add(resultFrom);
+//					return new Component(Component.TYPE_REPEAT_WHILE, act,
+//							computeTransitions(act, join, split),
+//							join, split);
+//				}
+//			}
+//		}
 		return null;
 	}
 	
@@ -1344,61 +1345,62 @@ public class Componentizer {
 	 * component was found.
 	 */
 	private Component computeGeneralizedFlow() { 
-		List<Gateway> andSplits = 
-			this.container.getSplitGateways(Gateway.TYPE_AND);
-		List<Gateway> andJoins = 
-			this.container.getJoinGateways(Gateway.TYPE_AND);
-		andJoins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
-		
-		int minCount = -1;
-		Set<Activity> minActivities = null;
-		Activity minStart = null;
-		Activity minEnd = null;
-		for (Iterator<Gateway> itSplit = 
-			andSplits.iterator(); itSplit.hasNext(); ) {
-			
-			Gateway andSplit = itSplit.next(); 
-			
-			for (Iterator<Gateway> itJoin = 
-				andJoins.iterator(); itJoin.hasNext();) {
-				
-				Gateway join = itJoin.next();
-				Set<Activity> set = getActivitiesFromTo(andSplit, join);
-				if (set != null) {
-					int i = set.size();
-					if (i <= 0) {
-						// no component found for this join
-						continue;
-					}
-					boolean found = checkGeneralizedFlowAct(set, andSplit, join);
-					if (found) {
-						found = gatewaySuccessorsContainedIn(andSplit,set);
-					}
-					if (found) {
-						found = gatewayPredecessorsContainedIn(join, set);
-					}
-					
-					if (found && ((minCount == -1) || (i < minCount))) {
-						minCount = i;
-						minActivities = set;
-						minStart = andSplit;
-						minEnd = join;
-					}
-				}
-			}
-		}
-		
-		// create component from activities
-		if (minActivities == null) {
-			return null;
-		}
-		List<Activity> activities = new ArrayList<Activity>(minActivities);
-		activities.remove(minStart);
-		activities.remove(minEnd);
-		return new Component(
-				Component.TYPE_GENERALISED_FLOW, activities,
-				computeTransitions(activities, minStart, minEnd),
-				minStart, minEnd);
+//		List<Gateway> andSplits = 
+//			this.container.getSplitGateways(Gateway.TYPE_AND);
+//		List<Gateway> andJoins = 
+//			this.container.getJoinGateways(Gateway.TYPE_AND);
+//		andJoins.addAll(this.container.getJoinGateways(Gateway.TYPE_OR));
+//		
+//		int minCount = -1;
+//		Set<Activity> minActivities = null;
+//		Activity minStart = null;
+//		Activity minEnd = null;
+//		for (Iterator<Gateway> itSplit = 
+//			andSplits.iterator(); itSplit.hasNext(); ) {
+//			
+//			Gateway andSplit = itSplit.next(); 
+//			
+//			for (Iterator<Gateway> itJoin = 
+//				andJoins.iterator(); itJoin.hasNext();) {
+//				
+//				Gateway join = itJoin.next();
+//				Set<Activity> set = getActivitiesFromTo(andSplit, join);
+//				if (set != null) {
+//					int i = set.size();
+//					if (i <= 0) {
+//						// no component found for this join
+//						continue;
+//					}
+//					boolean found = checkGeneralizedFlowAct(set, andSplit, join);
+//					if (found) {
+//						found = gatewaySuccessorsContainedIn(andSplit,set);
+//					}
+//					if (found) {
+//						found = gatewayPredecessorsContainedIn(join, set);
+//					}
+//					
+//					if (found && ((minCount == -1) || (i < minCount))) {
+//						minCount = i;
+//						minActivities = set;
+//						minStart = andSplit;
+//						minEnd = join;
+//					}
+//				}
+//			}
+//		}
+//		
+//		// create component from activities
+//		if (minActivities == null) {
+//			return null;
+//		}
+//		List<Activity> activities = new ArrayList<Activity>(minActivities);
+//		activities.remove(minStart);
+//		activities.remove(minEnd);
+//		return new Component(
+//				Component.TYPE_GENERALISED_FLOW, activities,
+//				computeTransitions(activities, minStart, minEnd),
+//				minStart, minEnd);
+				return null;
 	}
 	
 	/**
@@ -1413,57 +1415,58 @@ public class Componentizer {
 	 * was found.
 	 */
 	private Component computeSynchronizingProcessComponent() { 
-		List<Gateway> splits = 
-			this.container.getSplitGateways(Gateway.TYPE_AND);
-		splits.addAll(this.container.getSplitGateways(Gateway.TYPE_OR));
-		splits.addAll(this.container.getDataBasedExclusiveDecisionGateways());
-		List<Gateway> joins = this.container.getJoinGateways(null);	
-		
-		int minCount = -1;
-		Set<Activity> minActivities = null;
-		Activity minStart = null;
-		Activity minEnd = null;
-		for (Iterator<Gateway> itSplit = splits.iterator(); itSplit.hasNext(); ) {
-			Gateway split = itSplit.next(); 
-			
-			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
-				Gateway join = itJoin.next();
-				Set<Activity> set = getActivitiesFromTo(split, join);
-				if (set != null) {
-					int i = set.size();
-					if (i <= 0) {
-						// no component found for this join
-						continue;
-					}
-					boolean found = checkSynchronizingProcessAct(set, split, join);				
-					if (found) {
-						found = gatewaySuccessorsContainedIn(split,set);
-					}
-					if (found) {
-						found = gatewayPredecessorsContainedIn(join, set);
-					}
-					
-					if (found && ((minCount == -1) || (i < minCount))) {
-						minCount = i;
-						minActivities = set;
-						minStart = split;
-						minEnd = join;
-					}
-				}
-			}
-		}
-		
-		// create component from activities
-		if (minActivities == null) {
-			return null;
-		}
-		List<Activity> activities = new ArrayList<Activity>(minActivities);
-		activities.remove(minStart);
-		activities.remove(minEnd);
-		return new Component(
-				Component.TYPE_SYNCHRONIZING_PROCESS, activities,
-				computeTransitions(activities, minStart, minEnd),
-				minStart, minEnd);
+//		List<Gateway> splits = 
+//			this.container.getSplitGateways(Gateway.TYPE_AND);
+//		splits.addAll(this.container.getSplitGateways(Gateway.TYPE_OR));
+//		splits.addAll(this.container.getDataBasedExclusiveDecisionGateways());
+//		List<Gateway> joins = this.container.getJoinGateways(null);	
+//		
+//		int minCount = -1;
+//		Set<Activity> minActivities = null;
+//		Activity minStart = null;
+//		Activity minEnd = null;
+//		for (Iterator<Gateway> itSplit = splits.iterator(); itSplit.hasNext(); ) {
+//			Gateway split = itSplit.next(); 
+//			
+//			for (Iterator<Gateway> itJoin = joins.iterator(); itJoin.hasNext();) {
+//				Gateway join = itJoin.next();
+//				Set<Activity> set = getActivitiesFromTo(split, join);
+//				if (set != null) {
+//					int i = set.size();
+//					if (i <= 0) {
+//						// no component found for this join
+//						continue;
+//					}
+//					boolean found = checkSynchronizingProcessAct(set, split, join);				
+//					if (found) {
+//						found = gatewaySuccessorsContainedIn(split,set);
+//					}
+//					if (found) {
+//						found = gatewayPredecessorsContainedIn(join, set);
+//					}
+//					
+//					if (found && ((minCount == -1) || (i < minCount))) {
+//						minCount = i;
+//						minActivities = set;
+//						minStart = split;
+//						minEnd = join;
+//					}
+//				}
+//			}
+//		}
+//		
+//		// create component from activities
+//		if (minActivities == null) {
+//			return null;
+//		}
+//		List<Activity> activities = new ArrayList<Activity>(minActivities);
+//		activities.remove(minStart);
+//		activities.remove(minEnd);
+//		return new Component(
+//				Component.TYPE_SYNCHRONIZING_PROCESS, activities,
+//				computeTransitions(activities, minStart, minEnd),
+//				minStart, minEnd);
+					return null;
 	}
 	
 	/**
@@ -1540,22 +1543,22 @@ public class Componentizer {
 		if (result == null) {
 			result = computeSequence();
 		}
-		if (result == null) {
-			// compute other well-structured components
-			result = computeWellStructured();
-		}
-		
-		if (result == null) {
-			result = computeQuasiStructured();
-		}
-		
-		if (result == null) {
-			result = computeGeneralizedFlow();
-		}
-		
-		if (result == null) {
-			result = computeSynchronizingProcessComponent();
-		}
+//		if (result == null) {
+//			// compute other well-structured components
+//			result = computeWellStructured();
+//		}
+//		
+//		if (result == null) {
+//			result = computeQuasiStructured();
+//		}
+//		
+//		if (result == null) {
+//			result = computeGeneralizedFlow();
+//		}
+//		
+//		if (result == null) {
+//			result = computeSynchronizingProcessComponent();
+//		}
 		
 		return result;
 	}

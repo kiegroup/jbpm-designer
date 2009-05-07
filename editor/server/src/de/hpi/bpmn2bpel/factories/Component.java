@@ -2,9 +2,14 @@ package de.hpi.bpmn2bpel.factories;
 
 import java.util.Iterator;
 import java.util.List;
+
 import de.hpi.bpel4chor.model.Container;
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.connections.Transition;
+import de.hpi.bpmn.EndEvent;
+import de.hpi.bpmn.Node;
+import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn2bpel.model.Container4BPEL;
 
 /**
  * A Component can be determined in the sequence flow and represents components
@@ -42,7 +47,7 @@ import de.hpi.bpel4chor.model.connections.Transition;
  * source and sink object). The list of transitions contains the transitions
  * between the activities of the component. 
  */
-public class Component extends Container {
+public class Component implements Container4BPEL {
 	
 	public static final int TYPE_ATTACHED_EVENTS = 0;
 	public static final int TYPE_QUASI_ATTACHED_EVENTS = 1;
@@ -85,7 +90,7 @@ public class Component extends Container {
 	 */
 	public Component(int type, List<Activity> activities, 
 			List<Transition> transitions, Activity source, Activity sink) {
-		super(activities, transitions);
+//		super(activities, transitions);
 		this.sourceObject = source;
 		this.sinkObject = sink;
 		this.type = type; 
@@ -107,9 +112,9 @@ public class Component extends Container {
 				transitions.iterator(); it.hasNext();) {
 				
 				Transition trans = it.next();
-				if (!getTransitions().contains(trans)) {
-					return trans;
-				}
+//				if (!getTransitions().contains(trans)) {
+//					return trans;
+//				}
 			}
 		} else {
 			return this.sourceObject.getTransitionFrom(
@@ -134,9 +139,9 @@ public class Component extends Container {
 				transitions.iterator(); it.hasNext();) {
 				
 				Transition trans = it.next();
-				if (!getTransitions().contains(trans)) {
-					return trans;
-				}
+//				if (!getTransitions().contains(trans)) {
+//					return trans;
+//				}
 			}
 		} else {
 			return this.sinkObject.getTransitionTo(
@@ -219,4 +224,23 @@ public class Component extends Container {
 	public void setSink(Activity sink) {
 		this.sinkObject = sink;
 	}
+
+	@Override
+	public List<EndEvent> getEndEvents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<StartEvent> getStartEvents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Node> getChildNodes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

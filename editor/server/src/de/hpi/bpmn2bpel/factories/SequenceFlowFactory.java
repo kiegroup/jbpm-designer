@@ -9,30 +9,25 @@ import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.hpi.bpel4chor.model.Container;
-import de.hpi.bpel4chor.model.Process;
+import de.hpi.bpmn.Process;
 import de.hpi.bpel4chor.model.SubProcess;
-import de.hpi.bpel4chor.model.activities.Activity;
-import de.hpi.bpel4chor.model.activities.AssignTask;
+import de.hpi.bpmn.Activity;
 import de.hpi.bpel4chor.model.activities.BlockActivity;
-import de.hpi.bpel4chor.model.activities.EmptyTask;
-import de.hpi.bpel4chor.model.activities.EndEvent;
 import de.hpi.bpel4chor.model.activities.FoldedTask;
 import de.hpi.bpel4chor.model.activities.Gateway;
 import de.hpi.bpel4chor.model.activities.Handler;
 import de.hpi.bpel4chor.model.activities.IntermediateEvent;
-import de.hpi.bpel4chor.model.activities.NoneTask;
 import de.hpi.bpel4chor.model.activities.ReceiveTask;
-import de.hpi.bpel4chor.model.activities.SendTask;
-import de.hpi.bpel4chor.model.activities.ServiceTask;
-import de.hpi.bpel4chor.model.activities.StartEvent;
-import de.hpi.bpel4chor.model.activities.Task;
-import de.hpi.bpel4chor.model.activities.ValidateTask;
+import de.hpi.bpmn.Task;
 import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.model.supporting.Expression;
-import de.hpi.bpel4chor.util.ListUtil;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.EndEvent;
+import de.hpi.bpmn.Node;
+import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn.StartMessageEvent;
+import de.hpi.bpmn2bpel.model.Container4BPEL;
 
 /**
  * <p>This factory transforms the sequence flow contained in processes or 
@@ -50,7 +45,7 @@ import de.hpi.bpmn.BPMNDiagram;
  */
 public class SequenceFlowFactory {
 
-	private Container container = null;
+	private Container4BPEL container = null;
 	private boolean errorHandler = false;
 	private boolean messageHandler = false;
 	private BPMNDiagram diagram = null;
@@ -72,7 +67,7 @@ public class SequenceFlowFactory {
 	 * @param output    The {@link Output} to print errors to. 
 	 */
 	public SequenceFlowFactory(BPMNDiagram diagram, Document document, 
-			Container container, Output output) {
+			Container4BPEL container, Output output) {
 		this.diagram = diagram;
 		this.container = container;
 		this.document = document;
@@ -82,23 +77,23 @@ public class SequenceFlowFactory {
 		this.structuredFactory = new StructuredElementsFactory(diagram, document, this.output);
 		this.componentizer = new Componentizer(diagram, container, this.output);
 		
-		// determine if container is error or message handler
-		if (container instanceof SubProcess) {
-			SubProcess sub = (SubProcess)container;
-			if (sub.getBlockActivity() instanceof Handler) {
-				Handler handler = (Handler)sub.getBlockActivity();
-				if (handler.getHandlerType().equals(Handler.TYPE_FAULT)) {
-					this.errorHandler = true;
-					this.messageHandler = false;
-				} else if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE)){
-					this.messageHandler = true;
-					this.errorHandler = false;
-				} else {
-					this.messageHandler = false;
-					this.errorHandler = false;
-				}
-			}
-		}
+//		// determine if container is error or message handler
+//		if (container instanceof SubProcess) {
+//			SubProcess sub = (SubProcess)container;
+//			if (sub.getBlockActivity() instanceof Handler) {
+//				Handler handler = (Handler)sub.getBlockActivity();
+//				if (handler.getHandlerType().equals(Handler.TYPE_FAULT)) {
+//					this.errorHandler = true;
+//					this.messageHandler = false;
+//				} else if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE)){
+//					this.messageHandler = true;
+//					this.errorHandler = false;
+//				} else {
+//					this.messageHandler = false;
+//					this.errorHandler = false;
+//				}
+//			}
+//		}
 	}
 	
 	/**
@@ -124,39 +119,40 @@ public class SequenceFlowFactory {
 	 */
 	private List<IntermediateEvent> transfromToIntermiateEvent(
 			List<StartEvent> toTransform, boolean createInstance) {
-		List<IntermediateEvent> result = new ArrayList<IntermediateEvent>();
-		
-		for (Iterator<StartEvent> it = toTransform.iterator(); it.hasNext();) {
-			StartEvent event = it.next();
-			
-			if (event.getTriggerType().equals(StartEvent.TRIGGER_NONE)) {
-				continue;
-			}
-			
-			List<Transition> toKeep = event.getSourceFor();
-			
-			IntermediateEvent newEvent = 
-				new IntermediateEvent(event.getId(), event.getName(), 
-						event.getTriggerType(), event.getTrigger(), this.output);
-			if ((this.container instanceof Process) && (createInstance)) {
-				newEvent.setCreateInstance(true);
-			}
-			
-			this.container.removeActivity(event);
-			this.container.addActivity(newEvent);
-			
-			// keep transition from event to next activity
-			for (Iterator<Transition> itTrans = toKeep.iterator(); itTrans.hasNext();) {
-				Transition transition = itTrans.next();
-				transition.getTarget().addTargetFor(transition, this.output);
-				transition.setSource(newEvent, this.output);
-				newEvent.addSourceFor(transition, this.output);
-			}
-			this.container.addTransitions(toKeep);
-			result.add(newEvent);
-		}
-		
-		return result;
+//		List<IntermediateEvent> result = new ArrayList<IntermediateEvent>();
+//		
+//		for (Iterator<StartEvent> it = toTransform.iterator(); it.hasNext();) {
+//			StartEvent event = it.next();
+//			
+//			if (event.getTriggerType().equals(StartEvent.TRIGGER_NONE)) {
+//				continue;
+//			}
+//			
+//			List<Transition> toKeep = event.getSourceFor();
+//			
+//			IntermediateEvent newEvent = 
+//				new IntermediateEvent(event.getId(), event.getName(), 
+//						event.getTriggerType(), event.getTrigger(), this.output);
+//			if ((this.container instanceof Process) && (createInstance)) {
+//				newEvent.setCreateInstance(true);
+//			}
+//			
+//			this.container.removeActivity(event);
+//			this.container.addActivity(newEvent);
+//			
+//			// keep transition from event to next activity
+//			for (Iterator<Transition> itTrans = toKeep.iterator(); itTrans.hasNext();) {
+//				Transition transition = itTrans.next();
+//				transition.getTarget().addTargetFor(transition, this.output);
+//				transition.setSource(newEvent, this.output);
+//				newEvent.addSourceFor(transition, this.output);
+//			}
+//			this.container.addTransitions(toKeep);
+//			result.add(newEvent);
+//		}
+//		
+//		return result;
+			return null;
 	}
 	
 	/**
@@ -182,43 +178,43 @@ public class SequenceFlowFactory {
 	 * False, otherwise.
 	 */
 	private boolean getGatewaysTo(Activity start, List<Activity> visited, final List<Gateway> result) {		
-		if (visited == null) {
-			visited = new ArrayList<Activity>();
-		}
-		if (start == null) {
-			return false;
-		}
-		if (visited.contains(start)) {
-			return true;
-		} 
-		
-		visited.add(start);		
-		if (start instanceof EndEvent) {
-			return true;
-		}
-		
-		List<Activity> successors = start.getSuccessors();
-		if (successors == null || successors.isEmpty()) {
-			return false;
-		}
-		
-		if (start instanceof Gateway) {
-			// check if reachable from all paths and collect gateways
-			boolean reached = true;
-			for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
-				boolean endReached = getGatewaysTo(it.next(), visited, result);
-				if (!endReached) {
-					reached = false;
-				}
-			}
-			// add gateway if reachable
-			if (reached) {
-				result.add(0, (Gateway)start);
-				return true;
-			}
-		} else {
-			return getGatewaysTo(successors.get(0), visited, result);
-		}
+//		if (visited == null) {
+//			visited = new ArrayList<Activity>();
+//		}
+//		if (start == null) {
+//			return false;
+//		}
+//		if (visited.contains(start)) {
+//			return true;
+//		} 
+//		
+//		visited.add(start);		
+//		if (start instanceof EndEvent) {
+//			return true;
+//		}
+//		
+//		List<Activity> successors = start.getSuccessors();
+//		if (successors == null || successors.isEmpty()) {
+//			return false;
+//		}
+//		
+//		if (start instanceof Gateway) {
+//			// check if reachable from all paths and collect gateways
+//			boolean reached = true;
+//			for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
+//				boolean endReached = getGatewaysTo(it.next(), visited, result);
+//				if (!endReached) {
+//					reached = false;
+//				}
+//			}
+//			// add gateway if reachable
+//			if (reached) {
+//				result.add(0, (Gateway)start);
+//				return true;
+//			}
+//		} else {
+//			return getGatewaysTo(successors.get(0), visited, result);
+//		}
 	
 		return false;
 	}
@@ -237,139 +233,140 @@ public class SequenceFlowFactory {
 	 */
 	private Map<StartEvent, List<Gateway>> getStartGatewayMap(
 			List<StartEvent> startEvents) {
-		Map<StartEvent, List<Gateway>> startGatewayMap = 
-			new HashMap<StartEvent, List<Gateway>>(); 
-		
-		for (Iterator<StartEvent> it = startEvents.iterator(); it.hasNext();) {
-			StartEvent start = it.next();
-			List<Gateway> gateways = new ArrayList<Gateway>();
-			boolean reached = getGatewaysTo(start, null, gateways);
-			if (reached) {
-				startGatewayMap.put(start, gateways);
-			} else {
-				this.output.addError("The start event " +
-						"does not lead to an end event", start.getId());
-				return null;
-			}
-		}
-		return startGatewayMap;
+//		Map<StartEvent, List<Gateway>> startGatewayMap = 
+//			new HashMap<StartEvent, List<Gateway>>(); 
+//		
+//		for (Iterator<StartEvent> it = startEvents.iterator(); it.hasNext();) {
+//			StartEvent start = it.next();
+//			List<Gateway> gateways = new ArrayList<Gateway>();
+//			boolean reached = getGatewaysTo(start, null, gateways);
+//			if (reached) {
+//				startGatewayMap.put(start, gateways);
+//			} else {
+//				this.output.addError("The start event " +
+//						"does not lead to an end event", start.getId());
+//				return null;
+//			}
+//		}
+//		return startGatewayMap;
+		return null;
 	}
 	
-	/**
-	 * <p>Creates a new gateway to combine the given start events. The
-	 * gateway type parameter determines the type of the created gateway.
-	 * The created gateway is added to the container.</p>
-	 * 
-	 * <p>Inclusive gateways are not allowed for the combination. Thus, if the
-	 * gateway type is {@link Gateway#TYPE_OR} an error is added to the output
-	 * and the result will be null.</p>
-	 * 
-	 * @param startEvents Start events to be combined.
-	 * @param gatewayType The gateway type of the gateway to create.
-	 * 
-	 * @return The created gateway of null if an error occurred. 
-	 */
-	private Gateway createCombinatingGateway(List<StartEvent> startEvents, 
-			String gatewayType) {
-		
-		// createInstance for exclusive gateway allowed if it is at the start of the process
-		boolean createInstance = this.container instanceof Process;
-		
-		// create gateway
-		Gateway newGateway = null;
-		if (gatewayType.equals(Gateway.TYPE_OR)) {
-			this.output.addError("The start events " +
-					ListUtil.toString(startEvents) + "could not be combined: "+
-					"no inclusive gateways allowed for combining start events", startEvents.get(0).getId());
-			return null;
-		} else if (gatewayType.equals(Gateway.TYPE_AND)) {
-			newGateway = new Gateway(Gateway.TYPE_AND, null, true, this.output);
-		} else if (gatewayType.equals(Gateway.TYPE_XOR)) {
-			newGateway = new Gateway(Gateway.TYPE_XOR, Gateway.SPLIT_XOREVENT, 
-					createInstance, true, this.output);
-		} else {
-			this.output.addError("The start events " +
-					ListUtil.toString(startEvents) + "could not be combined: unknown gateway type.", startEvents.get(0).getId());
-			return null;
-		}
-		this.container.addActivity(newGateway);
-		return newGateway;
-	}
+//	/**
+//	 * <p>Creates a new gateway to combine the given start events. The
+//	 * gateway type parameter determines the type of the created gateway.
+//	 * The created gateway is added to the container.</p>
+//	 * 
+//	 * <p>Inclusive gateways are not allowed for the combination. Thus, if the
+//	 * gateway type is {@link Gateway#TYPE_OR} an error is added to the output
+//	 * and the result will be null.</p>
+//	 * 
+//	 * @param startEvents Start events to be combined.
+//	 * @param gatewayType The gateway type of the gateway to create.
+//	 * 
+//	 * @return The created gateway of null if an error occurred. 
+//	 */
+//	private Gateway createCombinatingGateway(List<StartEvent> startEvents, 
+//			String gatewayType) {
+//		
+//		// createInstance for exclusive gateway allowed if it is at the start of the process
+//		boolean createInstance = this.container instanceof Process;
+//		
+//		// create gateway
+//		Gateway newGateway = null;
+//		if (gatewayType.equals(Gateway.TYPE_OR)) {
+//			this.output.addError("The start events " +
+//					ListUtil.toString(startEvents) + "could not be combined: "+
+//					"no inclusive gateways allowed for combining start events", startEvents.get(0).getId());
+//			return null;
+//		} else if (gatewayType.equals(Gateway.TYPE_AND)) {
+//			newGateway = new Gateway(Gateway.TYPE_AND, null, true, this.output);
+//		} else if (gatewayType.equals(Gateway.TYPE_XOR)) {
+//			newGateway = new Gateway(Gateway.TYPE_XOR, Gateway.SPLIT_XOREVENT, 
+//					createInstance, true, this.output);
+//		} else {
+//			this.output.addError("The start events " +
+//					ListUtil.toString(startEvents) + "could not be combined: unknown gateway type.", startEvents.get(0).getId());
+//			return null;
+//		}
+//		this.container.addActivity(newGateway);
+//		return newGateway;
+//	}
 	
-	/**
-	 * <p>Combines the given start events with a gateway of the given type.
-	 * For this purpose a new Gateway with the given type will be created
-	 * (see {@link #createCombinatingGateway(List, String)}).</p>
-	 * 
-	 * <p>The given start events will be transformed into intermediate events
-	 * and a new non-triggered start event will be created as new starting
-	 * point for the sequence flow. Moreover, transitions from the
-	 * new start event to the new gateway and from the gateway to the
-	 * intermediate events will be created.</p> 
-	 * 
-	 * <p>As a result of previous combinations non-triggered start
-	 * events may be in the list of the start events to be combined. These
-	 * start events will not be transformed to intermediate events. They will
-	 * be removed and a transition from the combining gateway to the successor of
-	 * the start event will be created. If the successor is a gateway an the
-	 * combining gateway is an event-based decision gateway, an error is added
-	 * to the output.
-	 * 
-	 * @param startEvents The start events to combine.
-	 * @param gatewayType The gateway type of the gateway that combines the
-	 *                    start events.
-	 *                    
-	 * @return The new start event that was created during the combination. 
-	 */
-	private StartEvent combineWithGateway(List<StartEvent> startEvents, 
-			String gatewayType) {
-		
-		Gateway newGateway = createCombinatingGateway(startEvents, gatewayType);
-		if (newGateway == null) {
-			return null;
-		}
-		
-		// create new non-triggered start event
-		StartEvent start = new StartEvent(StartEvent.TRIGGER_NONE, null, 
-				true, this.output);
-		this.container.addActivity(start);
-		
-		// create intermediate events from start events
-		List<IntermediateEvent> newEvents = 
-			transfromToIntermiateEvent(startEvents, !gatewayType.equals(Gateway.TYPE_XOR));
-		
-		// insert transitions between new activities
-		Transition transFromStart = 
-			new Transition(start, newGateway, this.output);
-		this.container.addTransition(transFromStart);
-		
-		for (Iterator<IntermediateEvent> it = newEvents.iterator(); it.hasNext();) {
-			Transition transition = 
-				new Transition(newGateway, it.next(), this.output);
-			this.container.addTransition(transition);
-		}
-		
-		// remove non-triggered start events and add transition from gateway to successor
-		// this is not allowed if the gateway is an event-based decision gateway and 
-		// the successor is a gateway, too
-		for (Iterator<StartEvent> it = startEvents.iterator(); it.hasNext();) {
-			StartEvent startEvent = it.next();
-			if (startEvent.getTriggerType().equals(StartEvent.TRIGGER_NONE)) {
-				Activity successor = startEvent.getSuccessor();
-				if (gatewayType.equals(Gateway.TYPE_XOR) && (successor instanceof Gateway)) {
-					this.output.addError("The multiple start events could not " +
-							"be combined.", startEvent.getId());
-					return null;
-				}
-				
-				this.container.removeActivity(startEvent);
-				Transition transition = 
-					new Transition(newGateway, successor, this.output);
-				this.container.addTransition(transition);
-			}
-		}
-		return start;
-	}
+//	/**
+//	 * <p>Combines the given start events with a gateway of the given type.
+//	 * For this purpose a new Gateway with the given type will be created
+//	 * (see {@link #createCombinatingGateway(List, String)}).</p>
+//	 * 
+//	 * <p>The given start events will be transformed into intermediate events
+//	 * and a new non-triggered start event will be created as new starting
+//	 * point for the sequence flow. Moreover, transitions from the
+//	 * new start event to the new gateway and from the gateway to the
+//	 * intermediate events will be created.</p> 
+//	 * 
+//	 * <p>As a result of previous combinations non-triggered start
+//	 * events may be in the list of the start events to be combined. These
+//	 * start events will not be transformed to intermediate events. They will
+//	 * be removed and a transition from the combining gateway to the successor of
+//	 * the start event will be created. If the successor is a gateway an the
+//	 * combining gateway is an event-based decision gateway, an error is added
+//	 * to the output.
+//	 * 
+//	 * @param startEvents The start events to combine.
+//	 * @param gatewayType The gateway type of the gateway that combines the
+//	 *                    start events.
+//	 *                    
+//	 * @return The new start event that was created during the combination. 
+//	 */
+//	private StartEvent combineWithGateway(List<StartEvent> startEvents, 
+//			String gatewayType) {
+//		
+//		Gateway newGateway = createCombinatingGateway(startEvents, gatewayType);
+//		if (newGateway == null) {
+//			return null;
+//		}
+//		
+//		// create new non-triggered start event
+//		StartEvent start = new StartEvent(StartEvent.TRIGGER_NONE, null, 
+//				true, this.output);
+//		this.container.addActivity(start);
+//		
+//		// create intermediate events from start events
+//		List<IntermediateEvent> newEvents = 
+//			transfromToIntermiateEvent(startEvents, !gatewayType.equals(Gateway.TYPE_XOR));
+//		
+//		// insert transitions between new activities
+//		Transition transFromStart = 
+//			new Transition(start, newGateway, this.output);
+//		this.container.addTransition(transFromStart);
+//		
+//		for (Iterator<IntermediateEvent> it = newEvents.iterator(); it.hasNext();) {
+//			Transition transition = 
+//				new Transition(newGateway, it.next(), this.output);
+//			this.container.addTransition(transition);
+//		}
+//		
+//		// remove non-triggered start events and add transition from gateway to successor
+//		// this is not allowed if the gateway is an event-based decision gateway and 
+//		// the successor is a gateway, too
+//		for (Iterator<StartEvent> it = startEvents.iterator(); it.hasNext();) {
+//			StartEvent startEvent = it.next();
+//			if (startEvent.getTriggerType().equals(StartEvent.TRIGGER_NONE)) {
+//				Activity successor = startEvent.getSuccessor();
+//				if (gatewayType.equals(Gateway.TYPE_XOR) && (successor instanceof Gateway)) {
+//					this.output.addError("The multiple start events could not " +
+//							"be combined.", startEvent.getId());
+//					return null;
+//				}
+//				
+//				this.container.removeActivity(startEvent);
+//				Transition transition = 
+//					new Transition(newGateway, successor, this.output);
+//				this.container.addTransition(transition);
+//			}
+//		}
+//		return start;
+//	}
 	
 	/**
 	 * Counts the lists contained in the map that contain the given gateway.
@@ -448,100 +445,100 @@ public class SequenceFlowFactory {
 		return result;
 	}
 	
-	/**
-	 * Combines the start events in the map that have a path to the
-	 * given gateway. If there are multiple gateways with a path
-	 * to the given gateway, they are combined using 
-	 * {@link #combineWithGateway(List, String)}. After that the map is
-	 * updated by removing the entries for the combined gateways and inserting
-	 * an entry for the newly created start event.
-	 * 
-	 * @param map     A map that maps the start events to the list of reachable
-	 *                gateways.
-	 * @param gateway The gateway that merges the sequence flow of the start events 
-	 *                to be combined.
-	 *                
-	 * @return The new start events that was created during the combination.
-	 */
-	private StartEvent combineStartEventsForGateway(
-			Map<StartEvent, List<Gateway>> map, Gateway gateway) {
-		
-		StartEvent start = null;
-		
-		// get start events that have a path to this gateway, too
-		List<StartEvent> toCombine = new ArrayList<StartEvent>();
-		for (Iterator<StartEvent> it = map.keySet().iterator(); it.hasNext();) {
-			StartEvent nextStart = it.next();
-			if (map.get(nextStart).contains(gateway)) {
-				toCombine.add(nextStart);
-			}
-		}
-		
-		// combine start events using the appropriate gateway type
-		if (toCombine.size() > 1) {
-			start = combineWithGateway(toCombine, gateway.getGatewayType());
-			// replace lists in map with new list for new start event (without 
-			// given gateway) - take the longest list from those that were combined and 
-			// put to the map for the new start gateway
-			List<Gateway> newList = getLongestList(toCombine, map);
-			newList.remove(gateway);
-			
-			// remove old lists for combined start events
-			for (Iterator it = toCombine.iterator(); it.hasNext();) {
-				map.remove(it.next());
-			}
-			
-			if (start != null) {
-				// add new list for new start event
-				map.put(start, newList);
-			}
-		} else if (toCombine.size() == 1) {
-			StartEvent key = toCombine.get(0);
-			map.get(key).remove(gateway);
-		}
-		return start;
-	}
+//	/**
+//	 * Combines the start events in the map that have a path to the
+//	 * given gateway. If there are multiple gateways with a path
+//	 * to the given gateway, they are combined using 
+//	 * {@link #combineWithGateway(List, String)}. After that the map is
+//	 * updated by removing the entries for the combined gateways and inserting
+//	 * an entry for the newly created start event.
+//	 * 
+//	 * @param map     A map that maps the start events to the list of reachable
+//	 *                gateways.
+//	 * @param gateway The gateway that merges the sequence flow of the start events 
+//	 *                to be combined.
+//	 *                
+//	 * @return The new start events that was created during the combination.
+//	 */
+//	private StartEvent combineStartEventsForGateway(
+//			Map<StartEvent, List<Gateway>> map, Gateway gateway) {
+//		
+//		StartEvent start = null;
+//		
+//		// get start events that have a path to this gateway, too
+//		List<StartEvent> toCombine = new ArrayList<StartEvent>();
+//		for (Iterator<StartEvent> it = map.keySet().iterator(); it.hasNext();) {
+//			StartEvent nextStart = it.next();
+//			if (map.get(nextStart).contains(gateway)) {
+//				toCombine.add(nextStart);
+//			}
+//		}
+//		
+//		// combine start events using the appropriate gateway type
+//		if (toCombine.size() > 1) {
+//			start = combineWithGateway(toCombine, gateway.getGatewayType());
+//			// replace lists in map with new list for new start event (without 
+//			// given gateway) - take the longest list from those that were combined and 
+//			// put to the map for the new start gateway
+//			List<Gateway> newList = getLongestList(toCombine, map);
+//			newList.remove(gateway);
+//			
+//			// remove old lists for combined start events
+//			for (Iterator it = toCombine.iterator(); it.hasNext();) {
+//				map.remove(it.next());
+//			}
+//			
+//			if (start != null) {
+//				// add new list for new start event
+//				map.put(start, newList);
+//			}
+//		} else if (toCombine.size() == 1) {
+//			StartEvent key = toCombine.get(0);
+//			map.get(key).remove(gateway);
+//		}
+//		return start;
+//	}
 	
-	/**
-	 * <p>Combines the given start events to one start event. For this purpose
-	 * the gateways need to be determined that merge the sequence flow
-	 * of certain start events. The type of this gateway determines the type 
-	 * of the gateway that will be used to combine these start events. Not all
-	 * start events will be merged with the same gateway, so this combination
-	 * has to be done multiple times until no start event from the list is left.</p>
-	 * 
-	 * <p>The method assumes that there is only one end event in the sequence 
-	 * flow. Thus, multiple end events have to be combined first.</p>
-	 * 
-	 * @param startEvents The start events to be combined.
-	 * 
-	 * @return The new start event that is now the single start event in the 
-	 * sequence flow or null if an error occured during the combination.
-	 */
-	private StartEvent combineMultipleStartEvents(List<StartEvent> startEvents) {
-		if (startEvents.size() == 1) {
-			// check if start events has the right trigger in handlers and scopes
-			return startEvents.get(0);
-		}
-		
-		// get all gateways on the ways from start events to the end event
-		Map<StartEvent, List<Gateway>> map = getStartGatewayMap(startEvents/*, end*/);
-		if (map == null) {
-			return null;
-		}
-		
-		Gateway next = determineGateway(map);
-		StartEvent start = null;
-		while (next != null) {			
-			start = combineStartEventsForGateway(map, next);
-			if (start == null) {
-				// error occurred during generation
-				break;
-			}
-			next = determineGateway(map);
-		}
-		return start;
-	}
+//	/**
+//	 * <p>Combines the given start events to one start event. For this purpose
+//	 * the gateways need to be determined that merge the sequence flow
+//	 * of certain start events. The type of this gateway determines the type 
+//	 * of the gateway that will be used to combine these start events. Not all
+//	 * start events will be merged with the same gateway, so this combination
+//	 * has to be done multiple times until no start event from the list is left.</p>
+//	 * 
+//	 * <p>The method assumes that there is only one end event in the sequence 
+//	 * flow. Thus, multiple end events have to be combined first.</p>
+//	 * 
+//	 * @param startEvents The start events to be combined.
+//	 * 
+//	 * @return The new start event that is now the single start event in the 
+//	 * sequence flow or null if an error occured during the combination.
+//	 */
+//	private StartEvent combineMultipleStartEvents(List<StartEvent> startEvents) {
+//		if (startEvents.size() == 1) {
+//			// check if start events has the right trigger in handlers and scopes
+//			return startEvents.get(0);
+//		}
+//		
+//		// get all gateways on the ways from start events to the end event
+//		Map<StartEvent, List<Gateway>> map = getStartGatewayMap(startEvents/*, end*/);
+//		if (map == null) {
+//			return null;
+//		}
+//		
+//		Gateway next = determineGateway(map);
+//		StartEvent start = null;
+//		while (next != null) {			
+//			start = combineStartEventsForGateway(map, next);
+//			if (start == null) {
+//				// error occurred during generation
+//				break;
+//			}
+//			next = determineGateway(map);
+//		}
+//		return start;
+//	}
 	
 	/**
 	 * Checks if the start events alre valid. The validity depends on the
@@ -556,37 +553,37 @@ public class SequenceFlowFactory {
 	 * @return True if the start event is valid, false otherwise.
 	 */
 	private boolean isValidStartEvent(StartEvent start) {		
-		if (this.container instanceof SubProcess) {
-			BlockActivity act = ((SubProcess)this.container).getBlockActivity();
-			if (act instanceof Handler) {
-				Handler handler = (Handler)act;
-				if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE)) {
-					// message triggered start event
-					if (!start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
-						this.output.addError("The message event handler " +
-								"must have a message start event.", handler.getId());
-						return false;
-					}
-					return true;
-					
-				} else if (handler.getHandlerType().equals(Handler.TYPE_TIMER)) {
-					// timer triggered start event
-					if (!start.getTriggerType().equals(StartEvent.TRIGGER_TIMER)) {
-						this.output.addError("The timer event handler " +
-								"must have a timer start event.", handler.getId());
-						return false;
-					}
-					return true;
-				}
-			}
-		}
-		
-		// timer-triggered start event
-		if (start.getTriggerType().equals(StartEvent.TRIGGER_TIMER)) {
-			this.output.addError("The container " +
-				"is not allowed to contain a timer start event.", this.container.getId());
-			return false;
-		}
+//		if (this.container instanceof SubProcess) {
+//			BlockActivity act = ((SubProcess)this.container).getBlockActivity();
+//			if (act instanceof Handler) {
+//				Handler handler = (Handler)act;
+//				if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE)) {
+//					// message triggered start event
+//					if (!start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
+//						this.output.addError("The message event handler " +
+//								"must have a message start event.", handler.getId());
+//						return false;
+//					}
+//					return true;
+//					
+//				} else if (handler.getHandlerType().equals(Handler.TYPE_TIMER)) {
+//					// timer triggered start event
+//					if (!start.getTriggerType().equals(StartEvent.TRIGGER_TIMER)) {
+//						this.output.addError("The timer event handler " +
+//								"must have a timer start event.", handler.getId());
+//						return false;
+//					}
+//					return true;
+//				}
+//			}
+//		}
+//		
+//		// timer-triggered start event
+//		if (start.getTriggerType().equals(StartEvent.TRIGGER_TIMER)) {
+//			this.output.addError("The container " +
+//				"is not allowed to contain a timer start event.", this.container.getId());
+//			return false;
+//		}
 		return true;
 	}
 	
@@ -609,39 +606,39 @@ public class SequenceFlowFactory {
 	 * @return True if the start events are valid, false otherwise.
 	 */
 	private boolean isValidStartEvents(List<StartEvent> startEvents) {
-		// check if container contains at least one start event 
-		if (startEvents.size() < 1) {
-			this.output.addError(
-					"The process or sub-process " +
-					"must contain at least one start event.", this.container.getId());
-			return false;
-		} else if (startEvents.size() == 1) {
-			StartEvent start = startEvents.get(0);
-			return isValidStartEvent(start);
-		} else {
-			if (this.container instanceof SubProcess) {
-				BlockActivity act = ((SubProcess)this.container).getBlockActivity();
-				if (act instanceof Handler) {
-					Handler handler = (Handler)act;
-					if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE) ||
-							handler.getHandlerType().equals(Handler.TYPE_TIMER)) {
-						this.output.addError("The handler " +
-							"is not allowed to have multiple start events.", act.getId());
-						return false;
-					}
-				}
-			}
-			// check if each start event has a message or timer trigger defined
-			for (Iterator<StartEvent> it = startEvents.iterator(); it.hasNext();) {
-				StartEvent start = it.next();
-				if (start.getTriggerType().equals(StartEvent.TRIGGER_NONE)) {
-					this.output.addError("If there are multiple start events " +
-							"defined, the start events are not allowed to be non-triggered.", start.getId());
-					return false;
-				}
-			}
-
-		}
+//		// check if container contains at least one start event 
+//		if (startEvents.size() < 1) {
+//			this.output.addError(
+//					"The process or sub-process " +
+//					"must contain at least one start event.", this.container.getId());
+//			return false;
+//		} else if (startEvents.size() == 1) {
+//			StartEvent start = startEvents.get(0);
+//			return isValidStartEvent(start);
+//		} else {
+//			if (this.container instanceof SubProcess) {
+//				BlockActivity act = ((SubProcess)this.container).getBlockActivity();
+//				if (act instanceof Handler) {
+//					Handler handler = (Handler)act;
+//					if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE) ||
+//							handler.getHandlerType().equals(Handler.TYPE_TIMER)) {
+//						this.output.addError("The handler " +
+//							"is not allowed to have multiple start events.", act.getId());
+//						return false;
+//					}
+//				}
+//			}
+//			// check if each start event has a message or timer trigger defined
+//			for (Iterator<StartEvent> it = startEvents.iterator(); it.hasNext();) {
+//				StartEvent start = it.next();
+//				if (start.getTriggerType().equals(StartEvent.TRIGGER_NONE)) {
+//					this.output.addError("If there are multiple start events " +
+//							"defined, the start events are not allowed to be non-triggered.", start.getId());
+//					return false;
+//				}
+//			}
+//
+//		}
 		return true;
 	}
 	
@@ -657,44 +654,45 @@ public class SequenceFlowFactory {
 	 * @return The new end event that was created during the combination. 
 	 */
 	private EndEvent combineMultipleEndEvents() {
-		List<EndEvent> endEvents = this.container.getEndEvents();
-		if (endEvents.size() < 1) {
-			this.output.addError(
-					"The process or sub-process " +
-					"must contain at least one end event.", this.container.getId());
-			return null;
-		} else if (endEvents.size() == 1) {
-			return endEvents.get(0);
-		}
-		
-		// create new OR-gateway
-		Gateway gateway = new Gateway(Gateway.TYPE_OR, null, true, this.output);
-		this.container.addActivity(gateway);
-		
-		// create new non-triggered start event
-		EndEvent endEvent = new EndEvent(this.output);
-		
-		// remove end events
-		List<Transition> toKeep = new ArrayList<Transition>();
-		for (Iterator<EndEvent> it = endEvents.iterator(); it.hasNext();) {
-			EndEvent event = it.next();
-			toKeep.addAll(event.getTargetFor());
-			this.container.removeActivity(event);	
-		}
-		this.container.addActivity(endEvent);
-		
-		// add transition again
-		for (Iterator<Transition> it = toKeep.iterator(); it.hasNext();) {
-			Transition transition = it.next();
-			transition.setTarget(gateway, this.output);
-			gateway.addTargetFor(transition, this.output);
-			transition.getSource().addSourceFor(transition, this.output);
-			this.container.addTransition(transition);
-		}
-		
-		Transition transition = new Transition(gateway, endEvent, this.output);
-		this.container.addTransition(transition);
-		return endEvent;
+//		List<EndEvent> endEvents = this.container.getEndEvents();
+//		if (endEvents.size() < 1) {
+//			this.output.addError(
+//					"The process or sub-process " +
+//					"must contain at least one end event.", this.container.getId());
+//			return null;
+//		} else if (endEvents.size() == 1) {
+//			return endEvents.get(0);
+//		}
+//		
+//		// create new OR-gateway
+//		Gateway gateway = new Gateway(Gateway.TYPE_OR, null, true, this.output);
+//		this.container.addActivity(gateway);
+//		
+//		// create new non-triggered start event
+//		EndEvent endEvent = new EndEvent(this.output);
+//		
+//		// remove end events
+//		List<Transition> toKeep = new ArrayList<Transition>();
+//		for (Iterator<EndEvent> it = endEvents.iterator(); it.hasNext();) {
+//			EndEvent event = it.next();
+//			toKeep.addAll(event.getTargetFor());
+//			this.container.removeActivity(event);	
+//		}
+//		this.container.addActivity(endEvent);
+//		
+//		// add transition again
+//		for (Iterator<Transition> it = toKeep.iterator(); it.hasNext();) {
+//			Transition transition = it.next();
+//			transition.setTarget(gateway, this.output);
+//			gateway.addTargetFor(transition, this.output);
+//			transition.getSource().addSourceFor(transition, this.output);
+//			this.container.addTransition(transition);
+//		}
+//		
+//		Transition transition = new Transition(gateway, endEvent, this.output);
+//		this.container.addTransition(transition);
+//		return endEvent;
+		return null;
 	}
 	
 	/**
@@ -710,21 +708,27 @@ public class SequenceFlowFactory {
 	 * false otherwise.
 	 */
 	private boolean isTrivial(StartEvent start, EndEvent end) {
+		//TODO: Adapt to BPMN Model
 		if (start.getSuccessor().equals(end)) {
-			// start is follwed directly by the end event
+			// start is followed directly by the end event
 			// can only be mapped, if start is a message start event
-			if (start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
+			//if (start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
+			if (start instanceof StartMessageEvent) {
 				return true;
 			}
 			return false;
 		} else if (start.getSuccessor().equals(end.getPredecessor())) {
-			Activity act = start.getSuccessor();
-			if ((act instanceof Task) || (act instanceof BlockActivity) || 
-					(act instanceof IntermediateEvent)) {
-				if (act.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR).isEmpty()) {
-					return true;
-				}
+			Node act = start.getSuccessor();
+			
+			if (act instanceof Task) {
+				return true;
 			}
+//			if ((act instanceof Task) || (act instanceof BlockActivity) || 
+//					(act instanceof IntermediateEvent)) {
+//				if (act.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR).isEmpty()) {
+//					return true;
+//				}
+//			}
 		}
 		return false;
 	}
@@ -741,32 +745,37 @@ public class SequenceFlowFactory {
 	 * the task could not be mapped.
 	 */
 	private Element mapTask(Task task) {
-		Element result = null;
-		if (task instanceof ServiceTask) {
-			result = this.basicFactory.createInvokeElement((ServiceTask)task);
-		} else if (task instanceof ReceiveTask) {
-			result = this.basicFactory.createReceiveElement((ReceiveTask)task);
-		} else if (task instanceof SendTask) {
-			result = this.basicFactory.createSendingElement((SendTask)task);
-		} else if (task instanceof AssignTask) {
-			result = this.basicFactory.createAssignElement((AssignTask)task);
-		} else if (task instanceof ValidateTask) {		
-			result = this.basicFactory.createValidateElement((ValidateTask)task);
-		} else if (task instanceof EmptyTask) {
-			result = this.basicFactory.createEmptyElement((EmptyTask)task);
-		} else if (task instanceof NoneTask) {
-			result = this.basicFactory.createOpaqueElement((NoneTask)task);
-		} else if (task instanceof FoldedTask) {
-			result = ((FoldedTask)task).getBPELElement();
-		} else {
-			return null;
-		}
-				
-		if (task.getLoop() != null) {
-			Element loopElement = 
-				this.structuredFactory.createLoopElement(task, result);
-			return loopElement;
-		}
+		/* First implementation only maps a task to an invoke element */ 
+		
+		Element result = this.basicFactory.createInvokeElement(task);
+		
+		
+//		Element result = null;
+//		if (task instanceof ServiceTask) {
+//			result = this.basicFactory.createInvokeElement((ServiceTask)task);
+//		} else if (task instanceof ReceiveTask) {
+//			result = this.basicFactory.createReceiveElement((ReceiveTask)task);
+//		} else if (task instanceof SendTask) {
+//			result = this.basicFactory.createSendingElement((SendTask)task);
+//		} else if (task instanceof AssignTask) {
+//			result = this.basicFactory.createAssignElement((AssignTask)task);
+//		} else if (task instanceof ValidateTask) {		
+//			result = this.basicFactory.createValidateElement((ValidateTask)task);
+//		} else if (task instanceof EmptyTask) {
+//			result = this.basicFactory.createEmptyElement((EmptyTask)task);
+//		} else if (task instanceof NoneTask) {
+//			result = this.basicFactory.createOpaqueElement((NoneTask)task);
+//		} else if (task instanceof FoldedTask) {
+//			result = ((FoldedTask)task).getBPELElement();
+//		} else {
+//			return null;
+//		}
+//				
+//		if (task.getLoop() != null) {
+//			Element loopElement = 
+//				this.structuredFactory.createLoopElement(task, result);
+//			return loopElement;
+//		}
 		return result;
 	}
 	
@@ -864,29 +873,29 @@ public class SequenceFlowFactory {
 	 */
 	private Element mapTrivial(StartEvent start, EndEvent end) {
 		if (start.getSuccessor().equals(end)) {
-			// start is follwed directly by the end event
+			// start is followed directly by the end event
 			// can only be mapped, if start is a message start event
-			if (start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
+			//if (start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE)) {
+			if (start instanceof StartMessageEvent) {
 				return this.basicFactory.createReceiveElement(
 						start, this.container instanceof Process);
 			}
 		} else if (start.getSuccessor().equals(end.getPredecessor())) {
-			Activity successor = start.getSuccessor();
+			Activity successor = (Activity) start.getSuccessor();
 			Element result = null;
 			if (successor instanceof Task) {
 				result = mapTask((Task)successor);
-			} else if (successor instanceof BlockActivity) {
-				return mapBlockActivity((BlockActivity)successor);
-			} else if (successor instanceof IntermediateEvent) {
-				return mapIntermediateEvent((IntermediateEvent)successor);
+//			} else if (successor instanceof BlockActivity) {
+//				return mapBlockActivity((BlockActivity)successor);
+//			} else if (successor instanceof IntermediateEvent) {
+//				return mapIntermediateEvent((IntermediateEvent)successor);
 			} else {
 				this.output.addError(
 						"A trivial component was not generated correctly", successor.getId());
 				return null;
 			}
 			
-			if (start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE) && 
-					!this.messageHandler) {
+			if (start instanceof StartMessageEvent) {
 				// if start event is a message event, map start event as 
 				// receive and create additional sequence element 
 				// containing the receive and the already mapped element
@@ -902,6 +911,25 @@ public class SequenceFlowFactory {
 				resultSequence.appendChild(result);
 				return resultSequence;
 			}
+			
+			/* Code from Kerstin */ 
+//			if (start.getTriggerType().equals(StartEvent.TRIGGER_MESSAGE) && 
+//					!this.messageHandler) {
+//				// if start event is a message event, map start event as 
+//				// receive and create additional sequence element 
+//				// containing the receive and the already mapped element
+//				Element receive = this.basicFactory.createReceiveElement(
+//						start, this.container instanceof Process);
+//				
+//				if (result.getNodeName().equals("sequence")) {
+//					result.insertBefore(receive, result.getFirstChild());
+//					return result;
+//				}
+//				Element resultSequence = this.document.createElement("sequence");
+//				resultSequence.appendChild(receive);
+//				resultSequence.appendChild(result);
+//				return resultSequence;
+//			}
 			return result;
 		}
 		return null;
@@ -1005,22 +1033,23 @@ public class SequenceFlowFactory {
 	 * if the activity could not be mapped.
 	 */
 	public Element mapActivity(Activity act, List<Link> links, Expression joinCond) {
-		Element element = null;
-		if (act instanceof BlockActivity) {
-			element = mapBlockActivity((BlockActivity)act);
-		} else if (act instanceof Task) {
-			element = mapTask((Task)act);
-		} else if (act instanceof IntermediateEvent) {
-			element =  mapIntermediateEvent((IntermediateEvent)act);
-		} else {
-			this.output.addError("Activity " +
-				"could not be transformed to BPEL4Chor.", act.getId());
-			return null;
-		}
-		if (element != null) {
-			createSourcesAndTargets(act, element, links, joinCond);
-		}
-		return element;
+//		Element element = null;
+//		if (act instanceof BlockActivity) {
+//			element = mapBlockActivity((BlockActivity)act);
+//		} else if (act instanceof Task) {
+//			element = mapTask((Task)act);
+//		} else if (act instanceof IntermediateEvent) {
+//			element =  mapIntermediateEvent((IntermediateEvent)act);
+//		} else {
+//			this.output.addError("Activity " +
+//				"could not be transformed to BPEL4Chor.", act.getId());
+//			return null;
+//		}
+//		if (element != null) {
+//			createSourcesAndTargets(act, element, links, joinCond);
+//		}
+//		return element;
+		return null;
 	}
 	
 	/**
@@ -1035,23 +1064,24 @@ public class SequenceFlowFactory {
 	 * @return The created "sequence" element.
 	 */
 	private Element mapSequence(Component comp, List<Link> links) {
-		Element result = this.document.createElement("sequence");
-		Element element = mapActivity(comp.getSourceObject(), links);
-		if (element != null) {
-			result.appendChild(element);
-		}
-		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
-			element = mapActivity(it.next(), links);
-			if (element != null) {
-				result.appendChild(element);
-			}
-		}
-		
-		element = mapActivity(comp.getSinkObject(), links);
-		if (element != null) {
-			result.appendChild(element);
-		}
-		return result;
+//		Element result = this.document.createElement("sequence");
+//		Element element = mapActivity(comp.getSourceObject(), links);
+//		if (element != null) {
+//			result.appendChild(element);
+//		}
+//		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
+//			element = mapActivity(it.next(), links);
+//			if (element != null) {
+//				result.appendChild(element);
+//			}
+//		}
+//		
+//		element = mapActivity(comp.getSinkObject(), links);
+//		if (element != null) {
+//			result.appendChild(element);
+//		}
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -1067,8 +1097,9 @@ public class SequenceFlowFactory {
 	 * not be mapped.
 	 */
 	private Element mapAttachedEvents(Component comp, List<Link> links) {
-		Element result = mapActivity(comp.getSourceObject(), links);
-		return result;
+//		Element result = mapActivity(comp.getSourceObject(), links);
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -1086,23 +1117,24 @@ public class SequenceFlowFactory {
 	 * @return The created "flow" element.
 	 */
 	private Element mapFlow(Component comp, List<Link> links) {
-		Element result = this.document.createElement("flow");
-		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			result.appendChild(mapActivity(act, links));
-		}
-		
-		// direct association from source to sink object
-		for (Iterator<Activity> it = 
-			comp.getSourceObject().getSuccessors().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act.equals(comp.getSinkObject())) {
-				result.appendChild(this.document.createElement("empty"));
-				break;
-			}	
-		}
-		
-		return result;
+//		Element result = this.document.createElement("flow");
+//		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			result.appendChild(mapActivity(act, links));
+//		}
+//		
+//		// direct association from source to sink object
+//		for (Iterator<Activity> it = 
+//			comp.getSourceObject().getSuccessors().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act.equals(comp.getSinkObject())) {
+//				result.appendChild(this.document.createElement("empty"));
+//				break;
+//			}	
+//		}
+//		
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -1125,67 +1157,68 @@ public class SequenceFlowFactory {
 	 * @return The created "if" element.
 	 */
 	private Element mapIf(Component comp, List<Link> links) {
-		Element result = this.document.createElement("if");
-		Element defaultElement = null; 
-		
-		List<Transition> order = ((Gateway)
-			comp.getSourceObject()).determineEvaluationOrder();
-		
-		boolean first = true;
-		for (Iterator<Transition> it = order.iterator(); it.hasNext();) {
-			Transition trans = it.next();
-			Activity act = trans.getTarget();
-			Element element = null;
-			if (act.equals(comp.getSinkObject())) {
-				element = this.document.createElement("empty");
-			} else {
-				element = mapActivity(act, links);
-			}
-			if (trans.getConditionType() == null) {
-				this.output.addError("Transition " +
-					"must be conditional or a default flow", trans.getId());
-				return null;
-			}
-			if (trans.getConditionType().equals(Transition.TYPE_OTHERWISE)) {
-				if (defaultElement == null) {
-					defaultElement = this.document.createElement("else");
-					if (element != null) {
-						defaultElement.appendChild(element);
-					}
-				} else {
-					this.output.addError("There is more than one " +
-							"default sequence flow defined for this gateway", comp.getSourceObject().getId());
-					return null;
-				} 
-			} else if (!trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-				this.output.addError("A transition condition " +
-						"must be defined for transition ", trans.getId());
-				return null;
-		    } else if (first) {
-				Element condition = 
-					this.supportingFactory.createExpressionElement(
-							"condition", trans.getConditionExpression());
-				result.appendChild(condition);
-				if (element != null) {
-					result.appendChild(element);
-				}
-				first = false;
-			} else {
-				Element elseif = this.document.createElement("elseif");
-				Element condition = 
-					this.supportingFactory.createExpressionElement(
-							"condition", trans.getConditionExpression());
-				elseif.appendChild(condition);
-				elseif.appendChild(element);
-				result.appendChild(elseif);					
-			}
-		}
-		// default flow is appended at the end
-		if (defaultElement != null) {
-			result.appendChild(defaultElement);
-		}
-		
-		return result;
+//		Element result = this.document.createElement("if");
+//		Element defaultElement = null; 
+//		
+//		List<Transition> order = ((Gateway)
+//			comp.getSourceObject()).determineEvaluationOrder();
+//		
+//		boolean first = true;
+//		for (Iterator<Transition> it = order.iterator(); it.hasNext();) {
+//			Transition trans = it.next();
+//			Activity act = trans.getTarget();
+//			Element element = null;
+//			if (act.equals(comp.getSinkObject())) {
+//				element = this.document.createElement("empty");
+//			} else {
+//				element = mapActivity(act, links);
+//			}
+//			if (trans.getConditionType() == null) {
+//				this.output.addError("Transition " +
+//					"must be conditional or a default flow", trans.getId());
+//				return null;
+//			}
+//			if (trans.getConditionType().equals(Transition.TYPE_OTHERWISE)) {
+//				if (defaultElement == null) {
+//					defaultElement = this.document.createElement("else");
+//					if (element != null) {
+//						defaultElement.appendChild(element);
+//					}
+//				} else {
+//					this.output.addError("There is more than one " +
+//							"default sequence flow defined for this gateway", comp.getSourceObject().getId());
+//					return null;
+//				} 
+//			} else if (!trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
+//				this.output.addError("A transition condition " +
+//						"must be defined for transition ", trans.getId());
+//				return null;
+//		    } else if (first) {
+//				Element condition = 
+//					this.supportingFactory.createExpressionElement(
+//							"condition", trans.getConditionExpression());
+//				result.appendChild(condition);
+//				if (element != null) {
+//					result.appendChild(element);
+//				}
+//				first = false;
+//			} else {
+//				Element elseif = this.document.createElement("elseif");
+//				Element condition = 
+//					this.supportingFactory.createExpressionElement(
+//							"condition", trans.getConditionExpression());
+//				elseif.appendChild(condition);
+//				elseif.appendChild(element);
+//				result.appendChild(elseif);					
+//			}
+//		}
+//		// default flow is appended at the end
+//		if (defaultElement != null) {
+//			result.appendChild(defaultElement);
+//		}
+//		
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -1204,98 +1237,98 @@ public class SequenceFlowFactory {
 	 */
 	private Element mapPick(Component comp, List<Link> links) {
 		Element result = this.document.createElement("pick");
-		if (comp.getSourceObject() instanceof Gateway) {
-			if (((Gateway)comp.getSourceObject()).getCreateInstance()) {
-				result.setAttribute("createInstance", "yes");
-			}
-		}
-			
-		for (Iterator<Transition> it = 
-			comp.getSourceObject().getSourceFor().iterator(); it.hasNext();) {
-			Activity branchAct = it.next().getTarget();
-			Activity successor = branchAct.getSuccessor();
-			
-			// follow each branch to the target element
-			Element branch = null;
-			if (branchAct instanceof ReceiveTask) {
-				ReceiveTask task = (ReceiveTask)branchAct;
-				Element content = null;
-				if ((successor != null) && !successor.equals(comp.getSinkObject())) {
-					content = mapActivity(successor, links);
-				} else {
-					content = this.document.createElement("empty");
-				}
-				branch = this.structuredFactory.createOnMessageBranch(task, content);
-			} else if (branchAct instanceof IntermediateEvent) {
-				IntermediateEvent event = (IntermediateEvent)branchAct;
-				Element content = null;
-				if ((successor != null) && !successor.equals(comp.getSinkObject())) {
-					content = mapActivity(successor, links);
-				} else {
-					content = this.document.createElement("empty");
-				}
-				if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_MESSAGE)) {
-					branch = this.structuredFactory.createPickBranchElement(event, content);
-				} else if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_TIMER)) {
-					branch = this.structuredFactory.createPickBranchElement(event, content);
-				}
-			}
-			if (branch != null) {
-				result.appendChild(branch);
-			}
-		}
+//		if (comp.getSourceObject() instanceof Gateway) {
+//			if (((Gateway)comp.getSourceObject()).getCreateInstance()) {
+//				result.setAttribute("createInstance", "yes");
+//			}
+//		}
+//			
+//		for (Iterator<Transition> it = 
+//			comp.getSourceObject().getSourceFor().iterator(); it.hasNext();) {
+//			Activity branchAct = it.next().getTarget();
+//			Activity successor = branchAct.getSuccessor();
+//			
+//			// follow each branch to the target element
+//			Element branch = null;
+//			if (branchAct instanceof ReceiveTask) {
+//				ReceiveTask task = (ReceiveTask)branchAct;
+//				Element content = null;
+//				if ((successor != null) && !successor.equals(comp.getSinkObject())) {
+//					content = mapActivity(successor, links);
+//				} else {
+//					content = this.document.createElement("empty");
+//				}
+//				branch = this.structuredFactory.createOnMessageBranch(task, content);
+//			} else if (branchAct instanceof IntermediateEvent) {
+//				IntermediateEvent event = (IntermediateEvent)branchAct;
+//				Element content = null;
+//				if ((successor != null) && !successor.equals(comp.getSinkObject())) {
+//					content = mapActivity(successor, links);
+//				} else {
+//					content = this.document.createElement("empty");
+//				}
+//				if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_MESSAGE)) {
+//					branch = this.structuredFactory.createPickBranchElement(event, content);
+//				} else if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_TIMER)) {
+//					branch = this.structuredFactory.createPickBranchElement(event, content);
+//				}
+//			}
+//			if (branch != null) {
+//				result.appendChild(branch);
+//			}
+//		}
 		
 		return result;
 	}
 	
-	/**
-	 * Refines a quasi component where the sink gateway has additional incoming 
-	 * sequence flows, that do not belong to the component. 
-	 * As a result of the refinement the container contains another well-structured 
-	 * component.
-	 * 
-	 * <p>Refinement means that a new gateway is inserted before the sink gateway.
-	 * The sequence flows from the component activities are now leading to this
-	 * created gateway.</p>
-	 * 
-	 * <p>If the sink object of the component is not a gateway, an error is 
-	 * added to the output and the result will be null.</p>
-	 * 
-	 * @param comp The quasi-component to be refined.
-	 */
-	private void refineQuasi(Component comp) {
-		if (!(comp.getSinkObject() instanceof Gateway)) {
-			this.output.addError("A component was not generated correctly", comp.getSinkObject().getId());
-		}
-		Gateway oldGateway = (Gateway)comp.getSinkObject();
-		
-		// create new Gateway of the type of the target object
-		Gateway newGateway = new Gateway(oldGateway.getGatewayType(), 
-				oldGateway.getSplitType(), true, this.output);
-		this.container.addActivity(newGateway);
-		
-		// create Transition from new gateway to old gateway
-		this.container.addTransition(new Transition(newGateway, oldGateway, this.output));
-		
-		// change target of transitions from activties to new gateway
-		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			Transition trans = act.getTransitionTo(oldGateway);
-			if (trans != null) {
-				trans.setTarget(newGateway, this.output);
-				newGateway.addTargetFor(trans, this.output);
-				oldGateway.removeTargetFor(trans);
-			}
-		}
-		
-		// if direct transition from source to target change this one too
-		Transition trans = comp.getSourceObject().getTransitionTo(comp.getSinkObject());
-		if (trans != null) {
-			trans.setTarget(newGateway, this.output);
-			newGateway.addTargetFor(trans, this.output);
-			oldGateway.removeTargetFor(trans);
-		}
-	}
+//	/**
+//	 * Refines a quasi component where the sink gateway has additional incoming 
+//	 * sequence flows, that do not belong to the component. 
+//	 * As a result of the refinement the container contains another well-structured 
+//	 * component.
+//	 * 
+//	 * <p>Refinement means that a new gateway is inserted before the sink gateway.
+//	 * The sequence flows from the component activities are now leading to this
+//	 * created gateway.</p>
+//	 * 
+//	 * <p>If the sink object of the component is not a gateway, an error is 
+//	 * added to the output and the result will be null.</p>
+//	 * 
+//	 * @param comp The quasi-component to be refined.
+//	 */
+//	private void refineQuasi(Component comp) {
+//		if (!(comp.getSinkObject() instanceof Gateway)) {
+//			this.output.addError("A component was not generated correctly", comp.getSinkObject().getId());
+//		}
+//		Gateway oldGateway = (Gateway)comp.getSinkObject();
+//		
+//		// create new Gateway of the type of the target object
+//		Gateway newGateway = new Gateway(oldGateway.getGatewayType(), 
+//				oldGateway.getSplitType(), true, this.output);
+//		this.container.addActivity(newGateway);
+//		
+//		// create Transition from new gateway to old gateway
+//		this.container.addTransition(new Transition(newGateway, oldGateway, this.output));
+//		
+//		// change target of transitions from activties to new gateway
+//		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			Transition trans = act.getTransitionTo(oldGateway);
+//			if (trans != null) {
+//				trans.setTarget(newGateway, this.output);
+//				newGateway.addTargetFor(trans, this.output);
+//				oldGateway.removeTargetFor(trans);
+//			}
+//		}
+//		
+//		// if direct transition from source to target change this one too
+//		Transition trans = comp.getSourceObject().getTransitionTo(comp.getSinkObject());
+//		if (trans != null) {
+//			trans.setTarget(newGateway, this.output);
+//			newGateway.addTargetFor(trans, this.output);
+//			oldGateway.removeTargetFor(trans);
+//		}
+//	}
 	
 	/**
 	 * Checks if the activities are the only successors of the given activity.
@@ -1307,12 +1340,12 @@ public class SequenceFlowFactory {
 	 * false otherwise 
 	 */
 	private boolean isOnlySuccessors(Activity source, List<Activity> successors) {
-		for (Iterator<Transition> it = source.getSourceFor().iterator(); it.hasNext();) {
-			Transition trans = it.next();
-			if (!successors.contains(trans.getTarget())) {
-				return false;
-			}
-		}
+//		for (Iterator<Transition> it = source.getSourceFor().iterator(); it.hasNext();) {
+//			Transition trans = it.next();
+//			if (!successors.contains(trans.getTarget())) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 	
@@ -1326,12 +1359,12 @@ public class SequenceFlowFactory {
 	 * false otherwise
 	 */
 	private boolean isOnlyPredecessor(Activity target, List<Activity> predecessors) {
-		for (Iterator<Transition> it = target.getTargetFor().iterator(); it.hasNext();) {
-			Transition trans = it.next();
-			if (!predecessors.contains(trans.getSource())) {
-				return false;
-			}
-		}
+//		for (Iterator<Transition> it = target.getTargetFor().iterator(); it.hasNext();) {
+//			Transition trans = it.next();
+//			if (!predecessors.contains(trans.getSource())) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 	
@@ -1351,97 +1384,97 @@ public class SequenceFlowFactory {
 		return result;
 	}
 	
-	/**
-	 * Refines a quasi (special) flow component where the source gateway has
-	 * additional outgoing sequence flows and/or the sink gateway has additional
-	 * incoming sequence flows, that do not belong to the component.
-	 * As a result of the refinement the container contains another 
-	 * well-structured component.
-	 * 
-	 * <p>Refinement means that a new gateway is inserted before the 
-	 * source/sink gateway. The sequence flows from/to the component activities
-	 * are now emanating/leading to/from this created gateway.</p>
-	 * 
-	 * <p>If the source and the sink object of the component are not gateways,
-	 * an error is added to the output and the result will be null.</p>
-	 * 
-	 * @param comp    The quasi-component to be refined.
-	 * @param special True if the component is a special flow component, 
-	 *                false otherwise.
-	 */
-	private void refineQuasiFlow(Component comp, boolean special) {
-		if (!(comp.getSinkObject() instanceof Gateway)) {
-			this.output.addError("A quasi flow component " +
-					"was not generated correctly.", comp.getSinkObject().getId());
-			return;
-		}
-		if (!(comp.getSourceObject() instanceof Gateway)) {
-			this.output.addError("A quasi flow component " +
-					"was not generated correctly.", comp.getSourceObject().getId());
-			return;
-		}
-		
-		Gateway sourceGateway = (Gateway)comp.getSourceObject();
-		Gateway sinkGateway = (Gateway)comp.getSinkObject();
-		
-		// create new Gateways of the type of the target object
-		Gateway newSourceGateway = null;
-		Transition newSourceTrans = null;
-		if (!isOnlySuccessors(sourceGateway, comp.getActivities())) {
-			newSourceGateway = new Gateway(
-				sourceGateway.getGatewayType(), sourceGateway.getSplitType(), 
-				true, this.output);
-			this.container.addActivity(newSourceGateway);
-			newSourceTrans = new Transition(sourceGateway, newSourceGateway, this.output);
-			if (special) {
-				newSourceTrans.setConditionType(Transition.TYPE_EXPRESSION);
-				newSourceTrans.setConditionExpression(getRefinedInclCond());
-			} 
-			this.container.addTransition(newSourceTrans);
-		}
-		
-		Gateway newSinkGateway = null;
-		if (!isOnlyPredecessor(sinkGateway, comp.getActivities())) {
-			newSinkGateway = new Gateway(
-				sinkGateway.getGatewayType(), sinkGateway.getSplitType(), 
-				true, this.output);
-			this.container.addActivity(newSinkGateway);
-			this.container.addTransition(new Transition(newSinkGateway, 
-					sinkGateway, this.output));
-		}
-		
-		if ((newSourceGateway == null) && (newSinkGateway == null)) {
-			this.output.addError("A quasi flow component " +
-					"was not generated correctly.", comp.getId());
-		}
-		
-		// change transitions for activities:
-		// activities that were a successor of source Gateway are now 
-		// a successor of new source gateway
-		// activities that were a predecessor of sink Gateway are now 
-		// a predecessor of new sink gateway
-		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			
-			if (newSourceGateway != null) {
-				Transition transFrom = act.getTransitionFrom(sourceGateway);
-				if (transFrom != null) {
-					transFrom.setSource(newSourceGateway, this.output);
-					newSourceGateway.addSourceFor(transFrom, this.output);
-					sourceGateway.removeSourceFor(transFrom);
-				}
-			}
-			
-			if (newSinkGateway != null) {
-				Transition transTo = act.getTransitionTo(sinkGateway);
-				if (transTo != null) {
-					transTo.setTarget(newSinkGateway, this.output);
-					newSinkGateway.addTargetFor(transTo, this.output);
-					sinkGateway.removeTargetFor(transTo);
-				}			
-			}
-		}
-	}
+//	/**
+//	 * Refines a quasi (special) flow component where the source gateway has
+//	 * additional outgoing sequence flows and/or the sink gateway has additional
+//	 * incoming sequence flows, that do not belong to the component.
+//	 * As a result of the refinement the container contains another 
+//	 * well-structured component.
+//	 * 
+//	 * <p>Refinement means that a new gateway is inserted before the 
+//	 * source/sink gateway. The sequence flows from/to the component activities
+//	 * are now emanating/leading to/from this created gateway.</p>
+//	 * 
+//	 * <p>If the source and the sink object of the component are not gateways,
+//	 * an error is added to the output and the result will be null.</p>
+//	 * 
+//	 * @param comp    The quasi-component to be refined.
+//	 * @param special True if the component is a special flow component, 
+//	 *                false otherwise.
+//	 */
+//	private void refineQuasiFlow(Component comp, boolean special) {
+//		if (!(comp.getSinkObject() instanceof Gateway)) {
+//			this.output.addError("A quasi flow component " +
+//					"was not generated correctly.", comp.getSinkObject().getId());
+//			return;
+//		}
+//		if (!(comp.getSourceObject() instanceof Gateway)) {
+//			this.output.addError("A quasi flow component " +
+//					"was not generated correctly.", comp.getSourceObject().getId());
+//			return;
+//		}
+//		
+//		Gateway sourceGateway = (Gateway)comp.getSourceObject();
+//		Gateway sinkGateway = (Gateway)comp.getSinkObject();
+//		
+//		// create new Gateways of the type of the target object
+//		Gateway newSourceGateway = null;
+//		Transition newSourceTrans = null;
+//		if (!isOnlySuccessors(sourceGateway, comp.getActivities())) {
+//			newSourceGateway = new Gateway(
+//				sourceGateway.getGatewayType(), sourceGateway.getSplitType(), 
+//				true, this.output);
+//			this.container.addActivity(newSourceGateway);
+//			newSourceTrans = new Transition(sourceGateway, newSourceGateway, this.output);
+//			if (special) {
+//				newSourceTrans.setConditionType(Transition.TYPE_EXPRESSION);
+//				newSourceTrans.setConditionExpression(getRefinedInclCond());
+//			} 
+//			this.container.addTransition(newSourceTrans);
+//		}
+//		
+//		Gateway newSinkGateway = null;
+//		if (!isOnlyPredecessor(sinkGateway, comp.getActivities())) {
+//			newSinkGateway = new Gateway(
+//				sinkGateway.getGatewayType(), sinkGateway.getSplitType(), 
+//				true, this.output);
+//			this.container.addActivity(newSinkGateway);
+//			this.container.addTransition(new Transition(newSinkGateway, 
+//					sinkGateway, this.output));
+//		}
+//		
+//		if ((newSourceGateway == null) && (newSinkGateway == null)) {
+//			this.output.addError("A quasi flow component " +
+//					"was not generated correctly.", comp.getId());
+//		}
+//		
+//		// change transitions for activities:
+//		// activities that were a successor of source Gateway are now 
+//		// a successor of new source gateway
+//		// activities that were a predecessor of sink Gateway are now 
+//		// a predecessor of new sink gateway
+//		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			
+//			if (newSourceGateway != null) {
+//				Transition transFrom = act.getTransitionFrom(sourceGateway);
+//				if (transFrom != null) {
+//					transFrom.setSource(newSourceGateway, this.output);
+//					newSourceGateway.addSourceFor(transFrom, this.output);
+//					sourceGateway.removeSourceFor(transFrom);
+//				}
+//			}
+//			
+//			if (newSinkGateway != null) {
+//				Transition transTo = act.getTransitionTo(sinkGateway);
+//				if (transTo != null) {
+//					transTo.setTarget(newSinkGateway, this.output);
+//					newSinkGateway.addTargetFor(transTo, this.output);
+//					sinkGateway.removeTargetFor(transTo);
+//				}			
+//			}
+//		}
+//	}
 	
 	/**
 	 * Maps a repeat component to its BPEL4Chor representation. For this
@@ -1460,30 +1493,30 @@ public class SequenceFlowFactory {
 	 * @return The created "repeatUntil" element.
 	 */
 	private Element mapRepeat(Component comp, List<Link> links) {
-		if (comp.getActivities().size() == 1) {
-			Element result = this.document.createElement("repeatUntil");
-			Activity act = comp.getActivities().get(0);
-			
-			Element element = mapActivity(act, links);
-			result.appendChild(element);
-			
-			Transition trans = 
-				comp.getSinkObject().getTransitionTo(comp.getSourceObject());
-			
-			if (trans.getConditionType() == null || 
-					!trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-				this.output.addError("The transition " +
-						"must define a transition condition.", trans.getId());
-			} else {
-				Element condition = this.supportingFactory.createExpressionElement(
-						"condition", trans.getConditionExpression());
-					result.appendChild(condition);
-			}
-			
-			return result;
-		}
-		
-		this.output.addError("A repeat component was not generated correctly", comp.getId());
+//		if (comp.getActivities().size() == 1) {
+//			Element result = this.document.createElement("repeatUntil");
+//			Activity act = comp.getActivities().get(0);
+//			
+//			Element element = mapActivity(act, links);
+//			result.appendChild(element);
+//			
+//			Transition trans = 
+//				comp.getSinkObject().getTransitionTo(comp.getSourceObject());
+//			
+//			if (trans.getConditionType() == null || 
+//					!trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
+//				this.output.addError("The transition " +
+//						"must define a transition condition.", trans.getId());
+//			} else {
+//				Element condition = this.supportingFactory.createExpressionElement(
+//						"condition", trans.getConditionExpression());
+//					result.appendChild(condition);
+//			}
+//			
+//			return result;
+//		}
+//		
+//		this.output.addError("A repeat component was not generated correctly", comp.getId());
 		return null;
 	}
 	
@@ -1505,60 +1538,60 @@ public class SequenceFlowFactory {
 	 * @return The created "sequence" element.
 	 */
 	private Element mapRepeatWhile(Component comp, List<Link> links) {
-		if (comp.getActivities().size() == 2) {
-			Activity t1 = null;
-			Activity t2 = null;
-			Transition condTrans = null;
-			
-			// determine first and second activity
-			for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
-				Activity act = it.next();
-				
-				if (comp.getSinkObject().getTransitionTo(act) != null) {
-					t2 = act;
-					condTrans = comp.getSinkObject().getTransitionTo(act);
-				} else if (comp.getSinkObject().getTransitionFrom(act) != null) {
-					t1 = act;
-				}
-			}
-			if (t1 == null || t2 == null) {
-				this.output.addError(
-						"A repeat while component was not generated correctly", comp.getId());
-			} else {
-				Element result = this.document.createElement("sequence");
-				Element element = mapActivity(t1, links);
-				result.appendChild(element);
-				
-				// create while elemnt
-				Element whileElement = this.document.createElement("while");
-				if (condTrans == null) {
-					this.output.addError(
-							"The outgoing transitions of this gateway " +
-							"must define transition conditions.", 
-							comp.getSinkObject().getId());
-				} else if ((condTrans.getConditionType() == null) ||
-						!condTrans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-					this.output.addError("The transition " +
-							"must define a transition condition.", condTrans.getId());
-				} else {
-					Element condition = this.supportingFactory.createExpressionElement(
-							"condition", condTrans.getConditionExpression());
-						whileElement.appendChild(condition);
-				}
-				
-				Element sequence = this.document.createElement("sequence");
-				element = mapActivity(t2, links);
-				sequence.appendChild(element);
-				element = mapActivity(t1, links);
-				sequence.appendChild(element);
-				whileElement.appendChild(sequence);
-				
-				result.appendChild(whileElement);
-				return result;
-			}
-		} else {
-			this.output.addError("A repeat-while component was not generated correctly", comp.getId());
-		}
+//		if (comp.getActivities().size() == 2) {
+//			Activity t1 = null;
+//			Activity t2 = null;
+//			Transition condTrans = null;
+//			
+//			// determine first and second activity
+//			for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
+//				Activity act = it.next();
+//				
+//				if (comp.getSinkObject().getTransitionTo(act) != null) {
+//					t2 = act;
+//					condTrans = comp.getSinkObject().getTransitionTo(act);
+//				} else if (comp.getSinkObject().getTransitionFrom(act) != null) {
+//					t1 = act;
+//				}
+//			}
+//			if (t1 == null || t2 == null) {
+//				this.output.addError(
+//						"A repeat while component was not generated correctly", comp.getId());
+//			} else {
+//				Element result = this.document.createElement("sequence");
+//				Element element = mapActivity(t1, links);
+//				result.appendChild(element);
+//				
+//				// create while elemnt
+//				Element whileElement = this.document.createElement("while");
+//				if (condTrans == null) {
+//					this.output.addError(
+//							"The outgoing transitions of this gateway " +
+//							"must define transition conditions.", 
+//							comp.getSinkObject().getId());
+//				} else if ((condTrans.getConditionType() == null) ||
+//						!condTrans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
+//					this.output.addError("The transition " +
+//							"must define a transition condition.", condTrans.getId());
+//				} else {
+//					Element condition = this.supportingFactory.createExpressionElement(
+//							"condition", condTrans.getConditionExpression());
+//						whileElement.appendChild(condition);
+//				}
+//				
+//				Element sequence = this.document.createElement("sequence");
+//				element = mapActivity(t2, links);
+//				sequence.appendChild(element);
+//				element = mapActivity(t1, links);
+//				sequence.appendChild(element);
+//				whileElement.appendChild(sequence);
+//				
+//				result.appendChild(whileElement);
+//				return result;
+//			}
+//		} else {
+//			this.output.addError("A repeat-while component was not generated correctly", comp.getId());
+//		}
 		return null;
 	}
 	
@@ -1579,29 +1612,29 @@ public class SequenceFlowFactory {
 	 * @return The created "while" element.
 	 */
 	private Element mapWhile(Component comp, List<Link> links) {
-		if (comp.getActivities().size() == 1) {
-			Activity act = comp.getActivities().get(0);
-			Transition condTrans = 
-				comp.getSinkObject().getTransitionTo(act);
-			if (condTrans == null) {
-				this.output.addError(
-						"A while component was not generated correctly", comp.getId());
-			} else {
-				Element result = this.document.createElement("while");
-				if (condTrans.getConditionType() == null || 
-						!condTrans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-					this.output.addError("The transition " +
-							"must define a transition condition.", condTrans.getId());
-				} else {
-					result.appendChild(this.supportingFactory.createExpressionElement(
-							"condition", condTrans.getConditionExpression()));
-					result.appendChild(mapActivity(act, links));
-					return result;
-				}
-			}
-		} else {
-			this.output.addError("A while component was not generated correctly", comp.getId());
-		}
+//		if (comp.getActivities().size() == 1) {
+//			Activity act = comp.getActivities().get(0);
+//			Transition condTrans = 
+//				comp.getSinkObject().getTransitionTo(act);
+//			if (condTrans == null) {
+//				this.output.addError(
+//						"A while component was not generated correctly", comp.getId());
+//			} else {
+//				Element result = this.document.createElement("while");
+//				if (condTrans.getConditionType() == null || 
+//						!condTrans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
+//					this.output.addError("The transition " +
+//							"must define a transition condition.", condTrans.getId());
+//				} else {
+//					result.appendChild(this.supportingFactory.createExpressionElement(
+//							"condition", condTrans.getConditionExpression()));
+//					result.appendChild(mapActivity(act, links));
+//					return result;
+//				}
+//			}
+//		} else {
+//			this.output.addError("A while component was not generated correctly", comp.getId());
+//		}
 		return null;
 	}
 	
@@ -1619,70 +1652,70 @@ public class SequenceFlowFactory {
 	 */
 	private Element mapSpecialFlow(Component comp) {
 		Element result = this.document.createElement("flow");
-		Element links = this.document.createElement("links");
-		Element empty = this.document.createElement("empty");
-		
-		// sources of empty element
-		Element sources = this.document.createElement("sources");
-		result.appendChild(links);
-		result.appendChild(empty);
-		
-		//boolean defaultFound = false;
-		List<Transition> transitions = comp.getSourceObject().getSourceFor();
-		
-		for (Iterator<Transition> it = transitions.iterator(); it.hasNext();) {
-			Transition trans = it.next();
-			// create link for links element
-			Element link = this.document.createElement("link");
-			String linkName = null;
-			if (trans.getName() != null) { 
-				linkName = trans.getName();
-			} else {
-				linkName = trans.getId();
-			}
-			link.setAttribute("name", linkName);
-			links.appendChild(link);
-			
-			// create targets for target activity of transition
-			Activity act = trans.getTarget();
-			Element element = null;
-			if (act.equals(comp.getSinkObject())) {
-				// create additional empty element for direct 
-				// transitions from source to sink object
-				element = this.document.createElement("empty");
-			} else {
-				element = mapActivity(act, null);
-			}
-			Element targets = this.document.createElement("targets");
-			Element target = this.document.createElement("target");
-			target.setAttribute("linkName", linkName);
-			targets.appendChild(target);
-			if (element.getFirstChild() == null) {
-				element.appendChild(targets);
-			} else {
-				element.insertBefore(targets, element.getFirstChild());
-			}
-			
-			// create source for sources element in the empty activity
-			Element source = this.document.createElement("source");
-			source.setAttribute("linkName", linkName);
-			if (trans.getConditionType() != null) {
-					if (trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
-						Element condition =
-							this.supportingFactory.createExpressionElement(
-								"transitionCondition", trans.getConditionExpression());
-						source.appendChild(condition);
-					} else {
-						this.output.addError(
-							"There are only conditional sequence flows " +
-							"allowed to be connected with this inclusive gateway", 
-							trans.getSource().getId());
-					}
-			}
-			sources.appendChild(source);
-			result.appendChild(element);
-		}
-		empty.appendChild(sources);
+//		Element links = this.document.createElement("links");
+//		Element empty = this.document.createElement("empty");
+//		
+//		// sources of empty element
+//		Element sources = this.document.createElement("sources");
+//		result.appendChild(links);
+//		result.appendChild(empty);
+//		
+//		//boolean defaultFound = false;
+//		List<Transition> transitions = comp.getSourceObject().getSourceFor();
+//		
+//		for (Iterator<Transition> it = transitions.iterator(); it.hasNext();) {
+//			Transition trans = it.next();
+//			// create link for links element
+//			Element link = this.document.createElement("link");
+//			String linkName = null;
+//			if (trans.getName() != null) { 
+//				linkName = trans.getName();
+//			} else {
+//				linkName = trans.getId();
+//			}
+//			link.setAttribute("name", linkName);
+//			links.appendChild(link);
+//			
+//			// create targets for target activity of transition
+//			Activity act = trans.getTarget();
+//			Element element = null;
+//			if (act.equals(comp.getSinkObject())) {
+//				// create additional empty element for direct 
+//				// transitions from source to sink object
+//				element = this.document.createElement("empty");
+//			} else {
+//				element = mapActivity(act, null);
+//			}
+//			Element targets = this.document.createElement("targets");
+//			Element target = this.document.createElement("target");
+//			target.setAttribute("linkName", linkName);
+//			targets.appendChild(target);
+//			if (element.getFirstChild() == null) {
+//				element.appendChild(targets);
+//			} else {
+//				element.insertBefore(targets, element.getFirstChild());
+//			}
+//			
+//			// create source for sources element in the empty activity
+//			Element source = this.document.createElement("source");
+//			source.setAttribute("linkName", linkName);
+//			if (trans.getConditionType() != null) {
+//					if (trans.getConditionType().equals(Transition.TYPE_EXPRESSION)) {
+//						Element condition =
+//							this.supportingFactory.createExpressionElement(
+//								"transitionCondition", trans.getConditionExpression());
+//						source.appendChild(condition);
+//					} else {
+//						this.output.addError(
+//							"There are only conditional sequence flows " +
+//							"allowed to be connected with this inclusive gateway", 
+//							trans.getSource().getId());
+//					}
+//			}
+//			sources.appendChild(source);
+//			result.appendChild(element);
+//		}
+//		empty.appendChild(sources);
 		
 		return result;
 	}
@@ -1713,41 +1746,42 @@ public class SequenceFlowFactory {
 	 * could not be folded.
 	 */
 	public FoldedTask createAndInsertFoldedTask(Component comp, Element element) {
-		if (element == null) {
-			return null;
-		}
-		
-		FoldedTask task = new FoldedTask(element, this.container, this.output);
-		Transition toTask = comp.getEntry();
-		if (toTask == null) {
-			this.output.addError("A component could not be folded.", comp.getId());
-			return null;
-		}
-		
-		Transition fromTask = comp.getExit();
-		if (fromTask == null) {
-			this.output.addError("A component could not be folded.", comp.getId());
-			return null;
-		}
-		
-		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
-			this.container.removeActivity(it.next());
-		}
-		this.container.removeActivity(comp.getSourceObject());
-		this.container.removeActivity(comp.getSinkObject());
-		
-		this.container.addActivity(task);
-		
-		// add transitions again
-		toTask.setTarget(task, this.output);
-		task.addTargetFor(toTask, this.output);
-		toTask.getSource().addSourceFor(toTask, this.output);
-		fromTask.setSource(task, this.output);
-		task.addSourceFor(fromTask, this.output);
-		fromTask.getTarget().addTargetFor(fromTask, this.output);
-		this.container.addTransition(toTask);
-		this.container.addTransition(fromTask);
-		return task;
+//		if (element == null) {
+//			return null;
+//		}
+//		
+//		FoldedTask task = new FoldedTask(element, this.container, this.output);
+//		Transition toTask = comp.getEntry();
+//		if (toTask == null) {
+//			this.output.addError("A component could not be folded.", comp.getId());
+//			return null;
+//		}
+//		
+//		Transition fromTask = comp.getExit();
+//		if (fromTask == null) {
+//			this.output.addError("A component could not be folded.", comp.getId());
+//			return null;
+//		}
+//		
+//		for (Iterator<Activity> it = comp.getActivities().iterator(); it.hasNext();) {
+//			this.container.removeActivity(it.next());
+//		}
+//		this.container.removeActivity(comp.getSourceObject());
+//		this.container.removeActivity(comp.getSinkObject());
+//		
+//		this.container.addActivity(task);
+//		
+//		// add transitions again
+//		toTask.setTarget(task, this.output);
+//		task.addTargetFor(toTask, this.output);
+//		toTask.getSource().addSourceFor(toTask, this.output);
+//		fromTask.setSource(task, this.output);
+//		task.addSourceFor(fromTask, this.output);
+//		fromTask.getTarget().addTargetFor(fromTask, this.output);
+//		this.container.addTransition(toTask);
+//		this.container.addTransition(fromTask);
+//		return task;
+		return null;
 	}
 	
 	/**
@@ -1767,46 +1801,47 @@ public class SequenceFlowFactory {
 	 * if the component is a quasi-component or if it could not be mapped.
 	 */
 	public FoldedTask foldComponent(Component comp, List<Link> links) {
-		Element element = null;
-		if (comp.getType() == Component.TYPE_ATTACHED_EVENTS) {
-			element = mapAttachedEvents(comp, links);
-		} else if (comp.getType() == Component.TYPE_FLOW) {
-			element = mapFlow(comp, links);
-		} else if (comp.getType() == Component.TYPE_IF) {
-			element = mapIf(comp, links);
-		} else if (comp.getType() == Component.TYPE_PICK) {
-			element = mapPick(comp, links);
-		} else if (comp.getType() == Component.TYPE_QUASI_ATTACHED_EVENTS) {
-			refineQuasi(comp);
-		} else if (comp.getType() == Component.TYPE_QUASI_FLOW) {
-			refineQuasiFlow(comp, false);
-		} else if (comp.getType() == Component.TYPE_QUASI_IF) {
-			refineQuasi(comp);
-		} else if (comp.getType() == Component.TYPE_QUASI_SPECIAL_FLOW) {
-			refineQuasiFlow(comp, true);
-		} else if (comp.getType() == Component.TYPE_QUASI_PICK) {
-			refineQuasi(comp);
-		} else if (comp.getType() == Component.TYPE_REPEAT) {
-			element = mapRepeat(comp, links);
-		} else if (comp.getType() == Component.TYPE_REPEAT_WHILE) {
-			element = mapRepeatWhile(comp, links);
-		} else if (comp.getType() == Component.TYPE_SEQUENCE) {
-			element = mapSequence(comp, links);
-		} else if (comp.getType() == Component.TYPE_SPECIAL_FLOW) {
-			element = mapSpecialFlow(comp);
-		} else if (comp.getType() == Component.TYPE_WHILE) {
-			element = mapWhile(comp, links);
-		} else if (comp.getType() == Component.TYPE_GENERALISED_FLOW) {
-			return new GeneralizedFlowMapper(
-					this.diagram, this.document, this.container, comp, this.output).
-					mapGeneralizedFlow();
-		} else if (comp.getType() == Component.TYPE_SYNCHRONIZING_PROCESS) {
-			return new SynchronizingProcessMapper(
-					this.diagram, this.document, this.container, comp).
-						mapSynchronizingProcess(this.output);
-		}
-			
-		return createAndInsertFoldedTask(comp, element);
+//		Element element = null;
+//		if (comp.getType() == Component.TYPE_ATTACHED_EVENTS) {
+//			element = mapAttachedEvents(comp, links);
+//		} else if (comp.getType() == Component.TYPE_FLOW) {
+//			element = mapFlow(comp, links);
+//		} else if (comp.getType() == Component.TYPE_IF) {
+//			element = mapIf(comp, links);
+//		} else if (comp.getType() == Component.TYPE_PICK) {
+//			element = mapPick(comp, links);
+//		} else if (comp.getType() == Component.TYPE_QUASI_ATTACHED_EVENTS) {
+//			refineQuasi(comp);
+//		} else if (comp.getType() == Component.TYPE_QUASI_FLOW) {
+//			refineQuasiFlow(comp, false);
+//		} else if (comp.getType() == Component.TYPE_QUASI_IF) {
+//			refineQuasi(comp);
+//		} else if (comp.getType() == Component.TYPE_QUASI_SPECIAL_FLOW) {
+//			refineQuasiFlow(comp, true);
+//		} else if (comp.getType() == Component.TYPE_QUASI_PICK) {
+//			refineQuasi(comp);
+//		} else if (comp.getType() == Component.TYPE_REPEAT) {
+//			element = mapRepeat(comp, links);
+//		} else if (comp.getType() == Component.TYPE_REPEAT_WHILE) {
+//			element = mapRepeatWhile(comp, links);
+//		} else if (comp.getType() == Component.TYPE_SEQUENCE) {
+//			element = mapSequence(comp, links);
+//		} else if (comp.getType() == Component.TYPE_SPECIAL_FLOW) {
+//			element = mapSpecialFlow(comp);
+//		} else if (comp.getType() == Component.TYPE_WHILE) {
+//			element = mapWhile(comp, links);
+//		} else if (comp.getType() == Component.TYPE_GENERALISED_FLOW) {
+//			return new GeneralizedFlowMapper(
+//					this.diagram, this.document, this.container, comp, this.output).
+//					mapGeneralizedFlow();
+//		} else if (comp.getType() == Component.TYPE_SYNCHRONIZING_PROCESS) {
+//			return new SynchronizingProcessMapper(
+//					this.diagram, this.document, this.container, comp).
+//						mapSynchronizingProcess(this.output);
+//		}
+//			
+//		return createAndInsertFoldedTask(comp, element);
+		return null;
 	}
 	
 	/**
@@ -1824,12 +1859,30 @@ public class SequenceFlowFactory {
 	 *         container or null if the sequence flow could not be mapped. 
 	 */
 	public Element transformSequenceFlow() {
-		EndEvent end = combineMultipleEndEvents();
+		
+//		EndEvent end = combineMultipleEndEvents();
+		// handled by Normalizer
+		List<EndEvent> endEvents = this.container.getEndEvents();
+		if (endEvents.size() != 1) {
+			this.output.addError(
+					"The process or sub-process " +
+					"must contain at exactly one end event.", ""); //this.container.getId());
+			return null;
+		}
+		EndEvent end = endEvents.get(0);
 		
 		List<StartEvent> startEvents = this.container.getStartEvents();
 		StartEvent start = null;
 		if (isValidStartEvents(startEvents)) {
-			start = combineMultipleStartEvents(startEvents);
+			// handled by Normalizer
+			//start = combineMultipleStartEvents(startEvents);
+			if (startEvents.size() != 1) {
+				this.output.addError(
+						"The process or sub-process " +
+						"must contain at exactly one start event.", ""); //this.container.getId());
+				return null;
+			}
+			start = startEvents.get(0);
 		}
 		
 		if ((start == null) || (end == null)) {
@@ -1837,23 +1890,23 @@ public class SequenceFlowFactory {
 		}
 		
 		while (!isTrivial(start, end)) {
-			Component component = this.componentizer.getNextComponent();
-			if (component != null) {
-				FoldedTask task = foldComponent(component);
-				if ((task == null) && !component.isQuasi() ) {
-					this.output.addError("Diagram can not be transformed to " +
-							"BPEL4Chor. Component was not folded correctly.", 
-							this.container.getId());
-					return null;
-				}
-			} else {
-				this.output.addError("Diagram can not be transformed to " +
-						"BPEL4Chor. No component found", this.container.getId());
-				for (Activity a: this.container.getActivities()) {
-					this.output.addError("Activity could not be transformed", a.getId());
-				}
-				return null;
-			}
+//			Component component = this.componentizer.getNextComponent();
+//			if (component != null) {
+//				FoldedTask task = foldComponent(component);
+//				if ((task == null) && !component.isQuasi() ) {
+//					this.output.addError("Diagram can not be transformed to " +
+//							"BPEL4Chor. Component was not folded correctly.", 
+//							"this.container.getId()");
+//					return null;
+//				}
+//			} else {
+//				this.output.addError("Diagram can not be transformed to " +
+//						"BPEL4Chor. No component found", "this.container.getId()");
+//				for (Activity a: this.container.getActivities()) {
+//					this.output.addError("Activity could not be transformed", a.getId());
+//				}
+//				return null;
+//			}
 		}
 		
 		return mapTrivial(start, end);

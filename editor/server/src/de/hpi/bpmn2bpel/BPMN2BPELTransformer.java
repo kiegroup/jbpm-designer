@@ -7,9 +7,10 @@ import java.util.Iterator;
 
 import org.w3c.dom.Document;
 
-import de.hpi.bpel4chor.model.Pool;
+
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.Container;
 import de.hpi.bpmn2bpel.factories.ProcessFactory;
 
 /**
@@ -43,7 +44,7 @@ public class BPMN2BPELTransformer {
 		ProcessFactory factory = new ProcessFactory(diagram);
 		// use only the first pool
 		// TODO rewrite to work without pools 
-		Iterator<Pool> it = diagram.getPools().iterator();
+		Iterator<de.hpi.bpmn.Pool> it = diagram.getPools().iterator();
 		if (it.hasNext()) {
 			Output processOutput = new Output();
 			process = factory.transformProcess(it.next(), processOutput);

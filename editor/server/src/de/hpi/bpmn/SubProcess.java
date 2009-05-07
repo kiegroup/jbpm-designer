@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hpi.bpmn.serialization.BPMNSerialization;
+import de.hpi.bpmn2bpel.model.Container4BPEL;
 
-public class SubProcess extends Activity implements Container {
+public class SubProcess extends Activity implements Container, Container4BPEL {
 	
 	protected List<Node> childNodes;
 	protected boolean adhoc;
@@ -54,6 +55,18 @@ public class SubProcess extends Activity implements Container {
 		newnode.setParallelOrdering(this.isParallelOrdering());
 		newnode.setCompletionCondition(this.getCompletionCondition());
 		return newnode;
+	}
+
+	@Override
+	public List<EndEvent> getEndEvents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<StartEvent> getStartEvents() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

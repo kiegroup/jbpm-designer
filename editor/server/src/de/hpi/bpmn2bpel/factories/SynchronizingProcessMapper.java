@@ -123,9 +123,9 @@ public class SynchronizingProcessMapper {
 		this.container = parentContainer;
 		this.component = component;
 		
-		// component activities also must contain the source and sink object
-		this.component.addActivity(component.getSinkObject());
-		this.component.addActivity(component.getSourceObject());
+//		// component activities also must contain the source and sink object
+//		this.component.addActivity(component.getSinkObject());
+//		this.component.addActivity(component.getSourceObject());
 	}
 	
 	/**
@@ -291,30 +291,30 @@ public class SynchronizingProcessMapper {
 	 * @param output The output to add errors to.
 	 */
 	private void refineConditions(Output output) {
-		List<Gateway> splits = 
-			this.component.getDataBasedExclusiveDecisionGateways();
-		for (Iterator<Gateway> it = splits.iterator(); it.hasNext();) {
-			Gateway gateway = it.next();
-			Map<Transition, String> map = getRefinedConditions(gateway, output);
-			if (map == null) {
-				// error occurred
-				return;
-			}
-			for (Iterator<Transition> itKey = 
-					map.keySet().iterator(); itKey.hasNext();) {
-				Transition trans = itKey.next();
-				String refinedCondition = map.get(trans);
-				if (trans.getConditionExpression() != null) {
-					trans.getConditionExpression().setExpression(refinedCondition);
-				} else {
-					Expression expr = new Expression();
-					expr.setExpression(refinedCondition);
-					expr.setExpressionLanguage(
-							"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
-					trans.setConditionExpression(expr);
-				}
-			}
-		}
+//		List<Gateway> splits = 
+//			this.component.getDataBasedExclusiveDecisionGateways();
+//		for (Iterator<Gateway> it = splits.iterator(); it.hasNext();) {
+//			Gateway gateway = it.next();
+//			Map<Transition, String> map = getRefinedConditions(gateway, output);
+//			if (map == null) {
+//				// error occurred
+//				return;
+//			}
+//			for (Iterator<Transition> itKey = 
+//					map.keySet().iterator(); itKey.hasNext();) {
+//				Transition trans = itKey.next();
+//				String refinedCondition = map.get(trans);
+//				if (trans.getConditionExpression() != null) {
+//					trans.getConditionExpression().setExpression(refinedCondition);
+//				} else {
+//					Expression expr = new Expression();
+//					expr.setExpression(refinedCondition);
+//					expr.setExpressionLanguage(
+//							"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+//					trans.setConditionExpression(expr);
+//				}
+//			}
+//		}
 	}
 	
 	/**
@@ -437,13 +437,13 @@ public class SynchronizingProcessMapper {
 	 */
 	private List<TEC> preTECSets(Activity x) {
 		List<TEC> result = new ArrayList<TEC>();
-		for (Iterator<Activity> it = x.getPredecessors().iterator(); it.hasNext();) {
-			Activity pred = it.next();
-			if (this.component.getActivities().contains(pred)) {
-				List<TEC> list = preTECSetsFlow(pred,x);
-				result.addAll(list);
-			}
-		}
+//		for (Iterator<Activity> it = x.getPredecessors().iterator(); it.hasNext();) {
+//			Activity pred = it.next();
+//			if (this.component.getActivities().contains(pred)) {
+//				List<TEC> list = preTECSetsFlow(pred,x);
+//				result.addAll(list);
+//			}
+//		}
 		return result;
 	}
 	
@@ -477,53 +477,53 @@ public class SynchronizingProcessMapper {
 	 */
 	private List<Link> calcTransCond() {		
 		List<Link> links = new ArrayList<Link>();
-		for (Iterator<Activity> it = 
-			this.component.getActivities().iterator(); it.hasNext();) {
-			
-			Activity target = it.next();
-			if ((target instanceof Task) || (target instanceof Event) || 
-					(target instanceof BlockActivity)) {
-				
-				// generate link for each source TE of the target activity
-				List<TEC> tecs = preTECSets(target);
-				for (Iterator<TEC> itTEC = tecs.iterator(); itTEC.hasNext();) {
-					TEC next = itTEC.next();
-					Expression transCond = null;
-					for (Iterator<Expression> itExp = 
-						next.expressions.iterator(); itExp.hasNext();) {
-						
-						Expression exp = itExp.next();
-						if ((exp == null) || (exp.getExpression() == null)) {
-							// opaque expression will not be combined
-							transCond = exp;
-						} else {
-							// combine expressions in TEC with conjunction
-							String expStr = exp.getExpression();
-							if (transCond == null) {
-								transCond = new Expression();
-								transCond.setExpression(expStr);
-							} else {
-								transCond.setExpression(transCond.getExpression() + " and " + expStr);
-							}
-							if (exp.getExpressionLanguage() != null) {
-								transCond.setExpressionLanguage(exp.getExpressionLanguage());
-							}
-						}
-					}
-
-					for (Iterator<Activity> itAct = next.activities.iterator(); itAct.hasNext();) {
-						Activity source = itAct.next();
-						// check if link already exists
-						if (getLink(links, source, target) == null) {
-							// create link
-							Link link = new Link(source, target, transCond, this.linkCounter);
-							this.linkCounter++;
-							links.add(link);
-						}
-					}
-				}
-			}
-		}
+//		for (Iterator<Activity> it = 
+//			this.component.getActivities().iterator(); it.hasNext();) {
+//			
+//			Activity target = it.next();
+//			if ((target instanceof Task) || (target instanceof Event) || 
+//					(target instanceof BlockActivity)) {
+//				
+//				// generate link for each source TE of the target activity
+//				List<TEC> tecs = preTECSets(target);
+//				for (Iterator<TEC> itTEC = tecs.iterator(); itTEC.hasNext();) {
+//					TEC next = itTEC.next();
+//					Expression transCond = null;
+//					for (Iterator<Expression> itExp = 
+//						next.expressions.iterator(); itExp.hasNext();) {
+//						
+//						Expression exp = itExp.next();
+//						if ((exp == null) || (exp.getExpression() == null)) {
+//							// opaque expression will not be combined
+//							transCond = exp;
+//						} else {
+//							// combine expressions in TEC with conjunction
+//							String expStr = exp.getExpression();
+//							if (transCond == null) {
+//								transCond = new Expression();
+//								transCond.setExpression(expStr);
+//							} else {
+//								transCond.setExpression(transCond.getExpression() + " and " + expStr);
+//							}
+//							if (exp.getExpressionLanguage() != null) {
+//								transCond.setExpressionLanguage(exp.getExpressionLanguage());
+//							}
+//						}
+//					}
+//
+//					for (Iterator<Activity> itAct = next.activities.iterator(); itAct.hasNext();) {
+//						Activity source = itAct.next();
+//						// check if link already exists
+//						if (getLink(links, source, target) == null) {
+//							// create link
+//							Link link = new Link(source, target, transCond, this.linkCounter);
+//							this.linkCounter++;
+//							links.add(link);
+//						}
+//					}
+//				}
+//			}
+//		}
 		return links;
 	}
 	
@@ -538,48 +538,48 @@ public class SynchronizingProcessMapper {
 	 */
 	private Map<Activity, Expression> calcJoinCond(List<Link> links, Output output) {
 		Map<Activity, Expression> joinConds = new HashMap<Activity, Expression>();
-		for (Iterator<Activity> it = this.component.getActivities().iterator(); it.hasNext();) {
-			Activity target = it.next();
-			
-			if ((target instanceof Task) || (target instanceof Event) || 
-					(target instanceof BlockActivity)) {
-				
-				List<TEC> tecs = preTECSets(target);
-				Expression joinCond = new Expression();
-				joinCond.setExpressionLanguage(
-						"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
-				
-				for (Iterator<TEC> itTEC = tecs.iterator(); itTEC.hasNext();) {
-					TEC next = itTEC.next();
-					String joinPart = "";
-					for (Iterator<Activity> itAct = next.activities.iterator();
-							itAct.hasNext();) {
-						Activity source = itAct.next();
-						// determine link name for link with source and target and 
-						// combine it in the appropriate way
-						Link link = getLink(links, source, target);
-						if (link != null) {
-							joinPart = joinPart + "$" + link.getName();
-							if (itAct.hasNext()) {
-								joinPart = joinPart + " and ";
-							}
-						} else {
-							output.addError("A link could not be generated " +
-									"for a synchronizing process pattern.", source.getId());
-						}
-					}
-					if (!joinPart.equals("")) {
-						if (joinCond.getExpression() == null) {
-							joinCond.setExpression("(" + joinPart + ")");
-						} else {
-							joinCond.setExpression(joinCond.getExpression() + " or (" + joinPart + ")");
-						}
-					}
-					
-				}
-				joinConds.put(target, joinCond);
-			}
-		}
+//		for (Iterator<Activity> it = this.component.getActivities().iterator(); it.hasNext();) {
+//			Activity target = it.next();
+//			
+//			if ((target instanceof Task) || (target instanceof Event) || 
+//					(target instanceof BlockActivity)) {
+//				
+//				List<TEC> tecs = preTECSets(target);
+//				Expression joinCond = new Expression();
+//				joinCond.setExpressionLanguage(
+//						"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+//				
+//				for (Iterator<TEC> itTEC = tecs.iterator(); itTEC.hasNext();) {
+//					TEC next = itTEC.next();
+//					String joinPart = "";
+//					for (Iterator<Activity> itAct = next.activities.iterator();
+//							itAct.hasNext();) {
+//						Activity source = itAct.next();
+//						// determine link name for link with source and target and 
+//						// combine it in the appropriate way
+//						Link link = getLink(links, source, target);
+//						if (link != null) {
+//							joinPart = joinPart + "$" + link.getName();
+//							if (itAct.hasNext()) {
+//								joinPart = joinPart + " and ";
+//							}
+//						} else {
+//							output.addError("A link could not be generated " +
+//									"for a synchronizing process pattern.", source.getId());
+//						}
+//					}
+//					if (!joinPart.equals("")) {
+//						if (joinCond.getExpression() == null) {
+//							joinCond.setExpression("(" + joinPart + ")");
+//						} else {
+//							joinCond.setExpression(joinCond.getExpression() + " or (" + joinPart + ")");
+//						}
+//					}
+//					
+//				}
+//				joinConds.put(target, joinCond);
+//			}
+//		}
 		return joinConds;
 	}
 	
@@ -599,28 +599,29 @@ public class SynchronizingProcessMapper {
 	 */
 	private FoldedTask finishMapping(Output output) {
 		Element flowElement = this.document.createElement("flow");
-		List<Link> links = calcTransCond();
-		Map<Activity, Expression> joinConds = calcJoinCond(links, output);
-		Element linksElement = 
-			new SupportingFactory(this.diagram, this.document, output).createLinks(links);
-		
-		flowElement.appendChild(linksElement);
-		
-		SequenceFlowFactory factory = 
-			new SequenceFlowFactory(this.diagram, this.document, this.component, output); 
-		for (Iterator<Activity> it = this.component.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if ((act instanceof Task) || (act instanceof Event) || 
-					(act instanceof BlockActivity)) {
-				Element element = factory.mapActivity(act, links, joinConds.get(act));
-				if (element != null) {
-					flowElement.appendChild(element);
-				}
-			}
-		}
-		
-		FoldedTask task = new FoldedTask(flowElement, this.container, output);
-		return task;
+//		List<Link> links = calcTransCond();
+//		Map<Activity, Expression> joinConds = calcJoinCond(links, output);
+//		Element linksElement = 
+//			new SupportingFactory(this.diagram, this.document, output).createLinks(links);
+//		
+//		flowElement.appendChild(linksElement);
+//		
+//		SequenceFlowFactory factory = 
+//			new SequenceFlowFactory(this.diagram, this.document, this.component, output); 
+//		for (Iterator<Activity> it = this.component.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if ((act instanceof Task) || (act instanceof Event) || 
+//					(act instanceof BlockActivity)) {
+//				Element element = factory.mapActivity(act, links, joinConds.get(act));
+//				if (element != null) {
+//					flowElement.appendChild(element);
+//				}
+//			}
+//		}
+//		
+//		FoldedTask task = new FoldedTask(flowElement, this.container, output);
+//		return task;
+		return null;
 	}
 	
 	/**
@@ -632,65 +633,66 @@ public class SynchronizingProcessMapper {
 	 * @return The folded task that was created during the mapping.
 	 */
 	public FoldedTask mapSynchronizingProcess(Output output) {
-		Activity source = this.component.getSourceObject();
-		Activity sink = this.component.getSinkObject();
-		
-		// transition to the source object
-		Transition toAh = this.component.getEntry();
-		if (toAh == null) {
-			output.addError("A component could not be folded.", this.component.getId());
-			return null;
-		}
-		
-		// transition to the sink object
-		Transition fromIc = this.component.getExit();
-		if (fromIc == null) {
-			output.addError("A component could not be folded.", this.component.getId());
-			return null;
-		}
-		
-		// insert empty task before source
-		EmptyTask ah = new EmptyTask(output);
-		ah.setParentContainer(source.getParentContainer());
-		source.removeTargetFor(toAh);
-		Transition fromAh = new Transition(ah, source, output);
-		toAh.setTarget(ah, output);
-		ah.addTargetFor(toAh, output);
-		this.component.addTransition(fromAh);
-		this.component.setSource(ah);
-		this.component.getActivities().add(0, ah);
-		
-		// insert empty task after sink object
-		EmptyTask ic = new EmptyTask(output);
-		ic.setParentContainer(sink.getParentContainer());
-		sink.removeSourceFor(fromIc);
-		Transition toIc = new Transition(sink, ic, output);
-		fromIc.setSource(ic, output);
-		ic.addSourceFor(fromIc, output);
-		this.component.addTransition(toIc);
-		this.component.setSink(ic);
-		this.component.addActivity(ic);
-		
-		// refine conditions emanating from data-based exlusive gateway
-		refineConditions(output);
-		
-		// map to BPEL and create folded task
-		FoldedTask task = finishMapping(output);
-
-		// remove component activities from container
-		this.container.removeActivities(this.component.getActivities());
-		this.container.removeTransitions(this.component.getTransitions());
-		
-		// add transitions again
-		toAh.setTarget(task, output);
-		toAh.getSource().addSourceFor(toAh, output);
-		task.addTargetFor(toAh, output);
-		fromIc.setSource(task, output);
-		fromIc.getTarget().addTargetFor(fromIc, output);
-		task.addSourceFor(fromIc, output);
-		this.container.addTransition(toAh);
-		this.container.addTransition(fromIc);
-		this.container.addActivity(task);
-		return task;
+//		Activity source = this.component.getSourceObject();
+//		Activity sink = this.component.getSinkObject();
+//		
+//		// transition to the source object
+//		Transition toAh = this.component.getEntry();
+//		if (toAh == null) {
+//			output.addError("A component could not be folded.", this.component.getId());
+//			return null;
+//		}
+//		
+//		// transition to the sink object
+//		Transition fromIc = this.component.getExit();
+//		if (fromIc == null) {
+//			output.addError("A component could not be folded.", this.component.getId());
+//			return null;
+//		}
+//		
+//		// insert empty task before source
+//		EmptyTask ah = new EmptyTask(output);
+//		ah.setParentContainer(source.getParentContainer());
+//		source.removeTargetFor(toAh);
+//		Transition fromAh = new Transition(ah, source, output);
+//		toAh.setTarget(ah, output);
+//		ah.addTargetFor(toAh, output);
+//		this.component.addTransition(fromAh);
+//		this.component.setSource(ah);
+//		this.component.getActivities().add(0, ah);
+//		
+//		// insert empty task after sink object
+//		EmptyTask ic = new EmptyTask(output);
+//		ic.setParentContainer(sink.getParentContainer());
+//		sink.removeSourceFor(fromIc);
+//		Transition toIc = new Transition(sink, ic, output);
+//		fromIc.setSource(ic, output);
+//		ic.addSourceFor(fromIc, output);
+//		this.component.addTransition(toIc);
+//		this.component.setSink(ic);
+//		this.component.addActivity(ic);
+//		
+//		// refine conditions emanating from data-based exlusive gateway
+//		refineConditions(output);
+//		
+//		// map to BPEL and create folded task
+//		FoldedTask task = finishMapping(output);
+//
+//		// remove component activities from container
+//		this.container.removeActivities(this.component.getActivities());
+//		this.container.removeTransitions(this.component.getTransitions());
+//		
+//		// add transitions again
+//		toAh.setTarget(task, output);
+//		toAh.getSource().addSourceFor(toAh, output);
+//		task.addTargetFor(toAh, output);
+//		fromIc.setSource(task, output);
+//		fromIc.getTarget().addTargetFor(fromIc, output);
+//		task.addSourceFor(fromIc, output);
+//		this.container.addTransition(toAh);
+//		this.container.addTransition(fromIc);
+//		this.container.addActivity(task);
+//		return task;
+		return null;
 	}
 }

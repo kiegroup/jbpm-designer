@@ -53,8 +53,8 @@ public class GeneralizedFlowMapper {
 		this.output = output;
 		
 		// component activities also must contain the source and sink object
-		this.component.addActivity(component.getSinkObject());
-		this.component.addActivity(component.getSourceObject());
+//		this.component.addActivity(component.getSinkObject());
+//		this.component.addActivity(component.getSourceObject());
 	}
 	
 	/**
@@ -68,21 +68,22 @@ public class GeneralizedFlowMapper {
 	 * @return The gateways contained in the component
 	 */
 	private List<Gateway> getGateways(boolean withSource, boolean withSink) {
-		List<Gateway> result = new ArrayList<Gateway>();
-		for (Iterator<Activity> it = 
-			this.component.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act instanceof Gateway) {
-				result.add((Gateway)act);
-			}
-		}
-		if (!withSource) {
-			result.remove(this.component.getSourceObject());
-		}
-		if (!withSink) {
-			result.remove(this.component.getSinkObject());
-		}
-		return result;
+//		List<Gateway> result = new ArrayList<Gateway>();
+//		for (Iterator<Activity> it = 
+//			this.component.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act instanceof Gateway) {
+//				result.add((Gateway)act);
+//			}
+//		}
+//		if (!withSource) {
+//			result.remove(this.component.getSourceObject());
+//		}
+//		if (!withSink) {
+//			result.remove(this.component.getSinkObject());
+//		}
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -94,22 +95,23 @@ public class GeneralizedFlowMapper {
 	 * @return The fork gateways contained in the component
 	 */
 	private List<Gateway> getForkGateways(boolean withSource) {
-		List<Gateway> result = new ArrayList<Gateway>();
-		for (Iterator<Activity> it = 
-			this.component.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act instanceof Gateway) {
-				Gateway gateway = (Gateway)act;
-				if (isForkGateway(gateway)) {
-					result.add(gateway);
-				}
-			}
-		}
-		
-		if (!withSource) {
-			result.remove(this.component.getSourceObject());
-		}
-		return result;
+//		List<Gateway> result = new ArrayList<Gateway>();
+//		for (Iterator<Activity> it = 
+//			this.component.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act instanceof Gateway) {
+//				Gateway gateway = (Gateway)act;
+//				if (isForkGateway(gateway)) {
+//					result.add(gateway);
+//				}
+//			}
+//		}
+//		
+//		if (!withSource) {
+//			result.remove(this.component.getSourceObject());
+//		}
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -121,22 +123,23 @@ public class GeneralizedFlowMapper {
 	 * @return The join gateways contained in the component
 	 */
 	private List<Gateway> getJoinGateways(boolean withSink) {
-		List<Gateway> result = new ArrayList<Gateway>();
-		for (Iterator<Activity> it = 
-			this.component.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act instanceof Gateway) {
-				Gateway gateway = (Gateway)act;
-				if (isJoinGateway(gateway)) {
-						result.add(gateway);
-				}
-			}
-		}
-
-		if (!withSink) {
-			result.remove(this.component.getSinkObject());
-		}
-		return result;
+//		List<Gateway> result = new ArrayList<Gateway>();
+//		for (Iterator<Activity> it = 
+//			this.component.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act instanceof Gateway) {
+//				Gateway gateway = (Gateway)act;
+//				if (isJoinGateway(gateway)) {
+//						result.add(gateway);
+//				}
+//			}
+//		}
+//
+//		if (!withSink) {
+//			result.remove(this.component.getSinkObject());
+//		}
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -144,15 +147,15 @@ public class GeneralizedFlowMapper {
 	 * predecessor
 	 */
 	private Gateway getSequentialForkGateways() {
-		List<Gateway> forkGateways = getForkGateways(false);
-		for (Iterator<Gateway> it = forkGateways.iterator(); it.hasNext();) {
-			Gateway gateway = it.next();
-			Activity predecessor = gateway.getPredecessor();
-			if ((predecessor instanceof Gateway) && 
-				(isForkGateway((Gateway)gateway.getPredecessor()))) {
-				return gateway;
-			}
-		}
+//		List<Gateway> forkGateways = getForkGateways(false);
+//		for (Iterator<Gateway> it = forkGateways.iterator(); it.hasNext();) {
+//			Gateway gateway = it.next();
+//			Activity predecessor = gateway.getPredecessor();
+//			if ((predecessor instanceof Gateway) && 
+//				(isForkGateway((Gateway)gateway.getPredecessor()))) {
+//				return gateway;
+//			}
+//		}
 		return null;
 	}
 	
@@ -163,29 +166,29 @@ public class GeneralizedFlowMapper {
 	 * is changed to the predecessor fork gateway. 
 	 */
 	private void removeSequentialForkGateways() {
-		Gateway sequentialGateway = getSequentialForkGateways();
-		while (sequentialGateway != null) {
-			Gateway predecessor = (Gateway)sequentialGateway.getPredecessor();
-			
-			// change source of outgoing transitions of gateway to predecessor
-			for (Iterator<Transition> it = 
-				sequentialGateway.getSourceFor().iterator(); it.hasNext();) {
-				Transition trans = it.next();
-				trans.setSource(predecessor, this.output);
-				predecessor.addSourceFor(trans, this.output);
-			}
-			// remove transition between gateways
-			Transition trans = predecessor.getTransitionTo(sequentialGateway);
-			predecessor.removeSourceFor(trans);
-			this.component.getTransitions().remove(trans);
-			this.container.getTransitions().remove(trans);
-			
-			// remove gateway
-			this.component.getActivities().remove(sequentialGateway);
-			this.container.getActivities().remove(sequentialGateway);
-			
-			sequentialGateway = getSequentialForkGateways();
-		}
+//		Gateway sequentialGateway = getSequentialForkGateways();
+//		while (sequentialGateway != null) {
+//			Gateway predecessor = (Gateway)sequentialGateway.getPredecessor();
+//			
+//			// change source of outgoing transitions of gateway to predecessor
+//			for (Iterator<Transition> it = 
+//				sequentialGateway.getSourceFor().iterator(); it.hasNext();) {
+//				Transition trans = it.next();
+//				trans.setSource(predecessor, this.output);
+//				predecessor.addSourceFor(trans, this.output);
+//			}
+//			// remove transition between gateways
+//			Transition trans = predecessor.getTransitionTo(sequentialGateway);
+//			predecessor.removeSourceFor(trans);
+//			this.component.getTransitions().remove(trans);
+//			this.container.getTransitions().remove(trans);
+//			
+//			// remove gateway
+//			this.component.getActivities().remove(sequentialGateway);
+//			this.container.getActivities().remove(sequentialGateway);
+//			
+//			sequentialGateway = getSequentialForkGateways();
+//		}
 	}
 	
 	/**
@@ -248,30 +251,30 @@ public class GeneralizedFlowMapper {
 	 * 
 	 */
 	private void removeSequentialJoinGateways() { 
-		Gateway sequentialGateway = getSequentialJoinGateways();
-		while (sequentialGateway != null) {
-			Gateway successor = (Gateway)sequentialGateway.getSuccessor();
-			
-			// change target of incoming transitions of gateway to successor
-			for (Iterator<Transition> it = 
-				sequentialGateway.getTargetFor().iterator(); it.hasNext();) {
-				Transition trans = it.next();
-				trans.setTarget(successor, this.output);
-				successor.addTargetFor(trans, this.output);
-			}
-			
-			// remove transition between gateways
-			Transition trans = successor.getTransitionFrom(sequentialGateway);
-			successor.removeTargetFor(trans);
-			this.component.getTransitions().remove(trans);
-			this.container.getTransitions().remove(trans);
-			
-			// remove gateway
-			this.component.getActivities().remove(sequentialGateway);
-			this.container.getActivities().remove(sequentialGateway);
-			
-			sequentialGateway = getSequentialJoinGateways();
-		}
+//		Gateway sequentialGateway = getSequentialJoinGateways();
+//		while (sequentialGateway != null) {
+//			Gateway successor = (Gateway)sequentialGateway.getSuccessor();
+//			
+//			// change target of incoming transitions of gateway to successor
+//			for (Iterator<Transition> it = 
+//				sequentialGateway.getTargetFor().iterator(); it.hasNext();) {
+//				Transition trans = it.next();
+//				trans.setTarget(successor, this.output);
+//				successor.addTargetFor(trans, this.output);
+//			}
+//			
+//			// remove transition between gateways
+//			Transition trans = successor.getTransitionFrom(sequentialGateway);
+//			successor.removeTargetFor(trans);
+//			this.component.getTransitions().remove(trans);
+//			this.container.getTransitions().remove(trans);
+//			
+//			// remove gateway
+//			this.component.getActivities().remove(sequentialGateway);
+//			this.container.getActivities().remove(sequentialGateway);
+//			
+//			sequentialGateway = getSequentialJoinGateways();
+//		}
 	}
 	
 	/** 
@@ -323,38 +326,39 @@ public class GeneralizedFlowMapper {
 	 * @return A list with the created links
 	 */
 	private List<Link> deriveLinks() {
-		List<Link> result = new ArrayList<Link>();
-		for (Iterator<Gateway> it = 
-			getDirectJoinGateways().iterator(); it.hasNext();) {
-			Gateway g = it.next();
-			while (g.getTargetFor().size() > 1) {
-				// get in(g) and select a fork gateway
-				List<Activity> predecessors = g.getPredecessors();
-				Gateway x = getFirstFork(predecessors);
-				if (x != null) {
-					// create link
-					if (!x.equals(this.component.getSourceObject()) && 
-							!g.equals(this.component.getSinkObject())) {
-						Link link = new Link(x.getPredecessor(), 
-								g.getSuccessor(), this.linkCounter);
-						this.linkCounter++;
-						result.add(link);
-					}
-					
-					// remove transition from x to g
-					Transition trans = x.getTransitionTo(g);
-					this.component.getTransitions().remove(trans);
-					this.container.getTransitions().remove(trans);
-					g.removeTargetFor(trans);
-					x.removeSourceFor(trans);
-				} else {
-					// this break is not part of the paper algorithm
-					// while condition |in(g) sec G^F_C| > 1 would be better in the paper (error?)
-					break;
-				}
-			}
-		}
-		return result;
+//		List<Link> result = new ArrayList<Link>();
+//		for (Iterator<Gateway> it = 
+//			getDirectJoinGateways().iterator(); it.hasNext();) {
+//			Gateway g = it.next();
+//			while (g.getTargetFor().size() > 1) {
+//				// get in(g) and select a fork gateway
+//				List<Activity> predecessors = g.getPredecessors();
+//				Gateway x = getFirstFork(predecessors);
+//				if (x != null) {
+//					// create link
+//					if (!x.equals(this.component.getSourceObject()) && 
+//							!g.equals(this.component.getSinkObject())) {
+//						Link link = new Link(x.getPredecessor(), 
+//								g.getSuccessor(), this.linkCounter);
+//						this.linkCounter++;
+//						result.add(link);
+//					}
+//					
+//					// remove transition from x to g
+//					Transition trans = x.getTransitionTo(g);
+//					this.component.getTransitions().remove(trans);
+//					this.container.getTransitions().remove(trans);
+//					g.removeTargetFor(trans);
+//					x.removeSourceFor(trans);
+//				} else {
+//					// this break is not part of the paper algorithm
+//					// while condition |in(g) sec G^F_C| > 1 would be better in the paper (error?)
+//					break;
+//				}
+//			}
+//		}
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -366,23 +370,23 @@ public class GeneralizedFlowMapper {
 	 *
 	 */
 	private void reduceNeedlessGateways() {
-		List<Gateway> gateways = getGateways(false, false);
-		for (Iterator<Gateway> it = gateways.iterator(); it.hasNext();) {
-			Gateway gateway = it.next();
-			if ((gateway.getSourceFor().size() == 1) && 
-				(gateway.getTargetFor().size() == 1)) {
-				// remove gateway
-				Activity pred = gateway.getPredecessor();
-				Activity succ = gateway.getSuccessor();
-				this.component.removeActivity(gateway);
-				this.container.removeActivity(gateway);
-				
-				// create new Transition replacing the gateway
-				Transition trans = new Transition(pred, succ, this.output);
-				this.container.addTransition(trans);
-				this.component.getTransitions().add(trans);
-			}
-		}
+//		List<Gateway> gateways = getGateways(false, false);
+//		for (Iterator<Gateway> it = gateways.iterator(); it.hasNext();) {
+//			Gateway gateway = it.next();
+//			if ((gateway.getSourceFor().size() == 1) && 
+//				(gateway.getTargetFor().size() == 1)) {
+//				// remove gateway
+//				Activity pred = gateway.getPredecessor();
+//				Activity succ = gateway.getSuccessor();
+//				this.component.removeActivity(gateway);
+//				this.container.removeActivity(gateway);
+//				
+//				// create new Transition replacing the gateway
+//				Transition trans = new Transition(pred, succ, this.output);
+//				this.container.addTransition(trans);
+//				this.component.getTransitions().add(trans);
+//			}
+//		}
 	}
 	
 	/**
@@ -399,35 +403,36 @@ public class GeneralizedFlowMapper {
 	 * not a folded task. 
 	 */
 	private FoldedTask finishFlow(List<Link> links) {
-		if (this.component.getActivities().size() != 1) {
-			this.output.addError("A generalized flow pattern could not be mapped correctly.", this.component.getId());
-			return null;
-		}
-		
-		Activity act = this.component.getActivities().get(0);
-		if (!(act instanceof FoldedTask)) {
-			this.output.addError("A generalized flow pattern could not be mapped correctly.", this.component.getId());
-			return null;
-		}
-		
-		Element element = ((FoldedTask)act).getBPELElement();
-		if (element == null) {
-			this.output.addError("An Activity could not be mapped correctly, since the BPELElement is null", act.getId());
-			return null;
-		}
-		Element linksElement = 
-			new SupportingFactory(this.diagram, 
-					this.document, this.output).createLinks(links);
-		if (linksElement != null) {
-			Node child = element.getFirstChild();
-			if (child == null) {
-				element.appendChild(linksElement);
-			} else {
-				element.insertBefore(linksElement, child);
-			}
-		}
-		
-		return (FoldedTask)act;
+//		if (this.component.getActivities().size() != 1) {
+//			this.output.addError("A generalized flow pattern could not be mapped correctly.", this.component.getId());
+//			return null;
+//		}
+//		
+//		Activity act = this.component.getActivities().get(0);
+//		if (!(act instanceof FoldedTask)) {
+//			this.output.addError("A generalized flow pattern could not be mapped correctly.", this.component.getId());
+//			return null;
+//		}
+//		
+//		Element element = ((FoldedTask)act).getBPELElement();
+//		if (element == null) {
+//			this.output.addError("An Activity could not be mapped correctly, since the BPELElement is null", act.getId());
+//			return null;
+//		}
+//		Element linksElement = 
+//			new SupportingFactory(this.diagram, 
+//					this.document, this.output).createLinks(links);
+//		if (linksElement != null) {
+//			Node child = element.getFirstChild();
+//			if (child == null) {
+//				element.appendChild(linksElement);
+//			} else {
+//				element.insertBefore(linksElement, child);
+//			}
+//		}
+//		
+//		return (FoldedTask)act;
+		return null;
 	}
 	
 	/**
@@ -442,60 +447,60 @@ public class GeneralizedFlowMapper {
 	 * @param links The links that were already created in the preparation of the mapping
 	 */
 	private void doMapping(List<Link> links) {
-		// transform component into a task and attached the appropriate BPEL Code
-		// and replace start and end events by the original elements
-		Activity target = this.component.getSinkObject();
-		SequenceFlowFactory factory = 
-			new SequenceFlowFactory(this.diagram, this.document, 
-					this.component, this.output);
-		
-		Componentizer componentizer = new Componentizer(
-				this.diagram, this.component, this.output);
-
-		List<FoldedTask> foldedTasks = new ArrayList<FoldedTask>(); 
-		
-		Component next = componentizer.getNextComponent();
-		while (next != null) {
-			if (next.getType()== Component.TYPE_GENERALISED_FLOW) {
-				// derive an additional link from any arc connecting 
-				// an activity(no gateway) to a join gateway
-				List<Gateway> gateways = getJoinGateways(false);
-				if (gateways.size() > 0) {
-					Gateway g = gateways.get(0);
-					Activity x = null;
-					List<Activity> preds = g.getPredecessors();
-					for (Iterator<Activity> it = preds.iterator(); it.hasNext();) {
-						Activity act = it.next();
-						if (!(act instanceof Gateway)) {
-							x = act;
-							break;
-						} 
-					}
-					Activity succ = g.getSuccessor();
-					if (x != null && succ != null) {
-						Transition trans = x.getTransitionTo(g);
-						links.add(new Link(x, succ, this.linkCounter));
-						this.linkCounter++;
-						trans.setTarget(target, this.output);
-						g.removeTargetFor(trans);
-						target.addTargetFor(trans, this.output);
-					} else if ((succ != null) && (g.getTargetFor().size() == 1)) {
-						// remove g
-						Transition trans = g.getTargetFor().get(0);
-						g.removeTargetFor(trans);
-						this.component.removeActivity(g);
-						trans.setTarget(succ, this.output);
-						succ.addTargetFor(trans, this.output);
-					}
-				} else {
-					this.output.addError("The generalized flow component was not generated correctly.", this.component.getId());
-					break;
-				}
-			} else {
-				foldedTasks.add(factory.foldComponent(next, links));
-			}
-			next = componentizer.getNextComponent();
-		}
+//		// transform component into a task and attached the appropriate BPEL Code
+//		// and replace start and end events by the original elements
+//		Activity target = this.component.getSinkObject();
+//		SequenceFlowFactory factory = 
+//			new SequenceFlowFactory(this.diagram, this.document, 
+//					this.component, this.output);
+//		
+//		Componentizer componentizer = new Componentizer(
+//				this.diagram, this.component, this.output);
+//
+//		List<FoldedTask> foldedTasks = new ArrayList<FoldedTask>(); 
+//		
+//		Component next = componentizer.getNextComponent();
+//		while (next != null) {
+//			if (next.getType()== Component.TYPE_GENERALISED_FLOW) {
+//				// derive an additional link from any arc connecting 
+//				// an activity(no gateway) to a join gateway
+//				List<Gateway> gateways = getJoinGateways(false);
+//				if (gateways.size() > 0) {
+//					Gateway g = gateways.get(0);
+//					Activity x = null;
+//					List<Activity> preds = g.getPredecessors();
+//					for (Iterator<Activity> it = preds.iterator(); it.hasNext();) {
+//						Activity act = it.next();
+//						if (!(act instanceof Gateway)) {
+//							x = act;
+//							break;
+//						} 
+//					}
+//					Activity succ = g.getSuccessor();
+//					if (x != null && succ != null) {
+//						Transition trans = x.getTransitionTo(g);
+//						links.add(new Link(x, succ, this.linkCounter));
+//						this.linkCounter++;
+//						trans.setTarget(target, this.output);
+//						g.removeTargetFor(trans);
+//						target.addTargetFor(trans, this.output);
+//					} else if ((succ != null) && (g.getTargetFor().size() == 1)) {
+//						// remove g
+//						Transition trans = g.getTargetFor().get(0);
+//						g.removeTargetFor(trans);
+//						this.component.removeActivity(g);
+//						trans.setTarget(succ, this.output);
+//						succ.addTargetFor(trans, this.output);
+//					}
+//				} else {
+//					this.output.addError("The generalized flow component was not generated correctly.", this.component.getId());
+//					break;
+//				}
+//			} else {
+//				foldedTasks.add(factory.foldComponent(next, links));
+//			}
+//			next = componentizer.getNextComponent();
+//		}
 	}
 
 	
@@ -507,84 +512,85 @@ public class GeneralizedFlowMapper {
 	 * could not be mapped.
 	 */
 	public FoldedTask mapGeneralizedFlow() {		
-		Transition toTask = this.component.getEntry();
-		if (toTask == null) {
-			this.output.addError("A component could not be folded.", this.component.getId());
-			return null;
-		}
-		
-		Transition fromTask = this.component.getExit();
-		if (fromTask == null) {
-			this.output.addError("A component could not be folded.", this.component.getId());
-			return null;
-		}
-		
-		// store existing activities and transitions in a new list because the original lists
-		// will be changed during the mapping
-		List<Activity> toRemoveAct = 
-			new ArrayList<Activity>(this.component.getActivities());
-		List<Transition> toRemoveTrans = 
-			new ArrayList<Transition>(this.component.getTransitions());
-		
-		toRemoveTrans.addAll(this.component.getSourceObject().getSourceFor());
-		toRemoveTrans.addAll(this.component.getSinkObject().getTargetFor());
-		
-		// prepare mapping
-		removeSequentialForkGateways();
-		removeSequentialJoinGateways();		
-		
-		List<Link> links = deriveLinks();
-		reduceNeedlessGateways();
-		
-		// store incoming and outgoing element of component and the transitions
-		Activity source = this.component.getSourceObject();
-		Activity target = this.component.getSinkObject();
-		Transition incoming = source.getTargetFor().get(0);
-		Transition outgoing = target.getSourceFor().get(0);
-		
-		// remove the connecting to these elements in the component and
-		source.removeTargetFor(incoming);
-		target.removeSourceFor(outgoing);
-		
-		// add a start and end event
-		StartEvent start = new StartEvent(StartEvent.TRIGGER_NONE, null, 
-				true, this.output);
-		EndEvent end = new EndEvent(this.output);
-		
-		Transition startTrans = new Transition(start, source, 
-				this.output);
-		Transition endTrans = new Transition(target, end, 
-				this.output);
-		
-		this.component.addActivity(start);
-		this.component.addActivity(end);
-		
-		this.component.addTransition(startTrans);
-		this.component.addTransition(endTrans);
-		
-		// do actual mapping
-		doMapping(links);
-		
-		// create folded task from remaining activity
-		this.component.removeActivity(start);
-		this.component.removeActivity(end);
-		this.component.removeTransition(startTrans);
-		this.component.removeTransition(endTrans);
-
-		// remove component activities from container
-		this.container.removeActivities(toRemoveAct);
-		this.container.removeTransitions(toRemoveTrans);
-		
-		FoldedTask task = finishFlow(links);
-		if (task == null) {
-			return null;
-		}
-		
-		// add transitions again
-		toTask.setTarget(task, this.output);
-		task.addTargetFor(toTask, this.output);
-		fromTask.setSource(task, this.output);
-		task.addSourceFor(fromTask, this.output);
-		return task;
+//		Transition toTask = this.component.getEntry();
+//		if (toTask == null) {
+//			this.output.addError("A component could not be folded.", this.component.getId());
+//			return null;
+//		}
+//		
+//		Transition fromTask = this.component.getExit();
+//		if (fromTask == null) {
+//			this.output.addError("A component could not be folded.", this.component.getId());
+//			return null;
+//		}
+//		
+//		// store existing activities and transitions in a new list because the original lists
+//		// will be changed during the mapping
+//		List<Activity> toRemoveAct = 
+//			new ArrayList<Activity>(this.component.getActivities());
+//		List<Transition> toRemoveTrans = 
+//			new ArrayList<Transition>(this.component.getTransitions());
+//		
+//		toRemoveTrans.addAll(this.component.getSourceObject().getSourceFor());
+//		toRemoveTrans.addAll(this.component.getSinkObject().getTargetFor());
+//		
+//		// prepare mapping
+//		removeSequentialForkGateways();
+//		removeSequentialJoinGateways();		
+//		
+//		List<Link> links = deriveLinks();
+//		reduceNeedlessGateways();
+//		
+//		// store incoming and outgoing element of component and the transitions
+//		Activity source = this.component.getSourceObject();
+//		Activity target = this.component.getSinkObject();
+//		Transition incoming = source.getTargetFor().get(0);
+//		Transition outgoing = target.getSourceFor().get(0);
+//		
+//		// remove the connecting to these elements in the component and
+//		source.removeTargetFor(incoming);
+//		target.removeSourceFor(outgoing);
+//		
+//		// add a start and end event
+//		StartEvent start = new StartEvent(StartEvent.TRIGGER_NONE, null, 
+//				true, this.output);
+//		EndEvent end = new EndEvent(this.output);
+//		
+//		Transition startTrans = new Transition(start, source, 
+//				this.output);
+//		Transition endTrans = new Transition(target, end, 
+//				this.output);
+//		
+//		this.component.addActivity(start);
+//		this.component.addActivity(end);
+//		
+//		this.component.addTransition(startTrans);
+//		this.component.addTransition(endTrans);
+//		
+//		// do actual mapping
+//		doMapping(links);
+//		
+//		// create folded task from remaining activity
+//		this.component.removeActivity(start);
+//		this.component.removeActivity(end);
+//		this.component.removeTransition(startTrans);
+//		this.component.removeTransition(endTrans);
+//
+//		// remove component activities from container
+//		this.container.removeActivities(toRemoveAct);
+//		this.container.removeTransitions(toRemoveTrans);
+//		
+//		FoldedTask task = finishFlow(links);
+//		if (task == null) {
+//			return null;
+//		}
+//		
+//		// add transitions again
+//		toTask.setTarget(task, this.output);
+//		task.addTargetFor(toTask, this.output);
+//		fromTask.setSource(task, this.output);
+//		task.addSourceFor(fromTask, this.output);
+//		return task;
+		return null;
 	}
 }

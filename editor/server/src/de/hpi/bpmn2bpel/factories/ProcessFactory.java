@@ -1,9 +1,5 @@
 package de.hpi.bpmn2bpel.factories;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -11,20 +7,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.hpi.bpel4chor.model.Process;
 import de.hpi.bpel4chor.model.Swimlane;
-import de.hpi.bpel4chor.model.activities.Activity;
-import de.hpi.bpel4chor.model.activities.EndEvent;
-import de.hpi.bpel4chor.model.activities.Gateway;
-import de.hpi.bpel4chor.model.activities.Handler;
-import de.hpi.bpel4chor.model.activities.IntermediateEvent;
 import de.hpi.bpel4chor.model.activities.Scope;
-import de.hpi.bpel4chor.model.activities.StartEvent;
-import de.hpi.bpel4chor.model.connections.Transition;
-import de.hpi.bpel4chor.model.supporting.Import;
-import de.hpi.bpel4chor.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.Container;
+import de.hpi.bpmn.Pool;
+import de.hpi.bpmn2bpel.model.Container4BPEL;
 
 /**
  * This factory generates the abstract BPEL processes from the processes
@@ -53,47 +43,47 @@ public class ProcessFactory {
 	 * @param swimlane       The swimlane to take the attribute values from.
 	 */
 	private void setProcessAttributes(Element processElement, Swimlane swimlane) {
-		String name = swimlane.getProcess().getName();
-		if (name == null || name.equals("")) {
-			name = swimlane.getName();
-		}
-		processElement.setAttribute("name", name);
-		processElement.setAttribute("targetNamespace", swimlane.getTargetNamespace());
-		if (swimlane.getProcess().getQueryLanguage() != null) {
-			processElement.setAttribute("queryLanguage", 
-					swimlane.getProcess().getQueryLanguage().toASCIIString());
-		} else if (this.diagram.getQueryLanguage() != null) {
-			processElement.setAttribute("queryLanguage", 
-					this.diagram.getQueryLanguage().toASCIIString());
-		}
-		
-		if (swimlane.getProcess().getExpressionLanguage() != null) {
-			processElement.setAttribute("expressionLanguage", 
-					swimlane.getProcess().getExpressionLanguage().toASCIIString());
-		} else if (this.diagram.getExpressionLanguage() != null) {
-			processElement.setAttribute("expressionLanguage", 
-					this.diagram.getExpressionLanguage().toASCIIString());
-		}
-		
-		processElement.setAttribute("suppressJoinFailure", 
-				BPELUtil.booleanToYesNo(swimlane.getProcess().isSuppressJoinFailure()));
-		processElement.setAttribute("exitOnStandardFault", 
-				BPELUtil.booleanToYesNo(swimlane.getProcess().isExitOnStandardFault()));
-		processElement.setAttribute("xmlns", "http://docs.oasis-open.org/wsbpel/2.0/process/abstract");
-		processElement.setAttribute("abstractProcessProfile", "urn:HPI_IAAS:choreography:profile:2006/12");
-		processElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		processElement.setAttribute("xmlns:wsu","http://schemas.xmlsoap.org/ws/2002/07/utility/");
-				
-		if (swimlane.getImports() != null) {
-			for (Iterator<Import> it = swimlane.getImports().iterator(); it.hasNext();) {
-				Import imp = it.next();
-				processElement.setAttribute("xmlns:" + imp.getPrefix(), imp.getNamespace());
-			}
-		}
-		
-		processElement.setAttribute("xsi:schemaLocation", 
-				"http://docs.oasis-open.org/wsbpel/2.0/process/abstract "+
-				"http://docs.oasis-open.org/wsbpel/2.0/OS/process/abstract/ws-bpel_abstract_common_base.xsd");
+//		String name = swimlane.getProcess().getName();
+//		if (name == null || name.equals("")) {
+//			name = swimlane.getName();
+//		}
+//		processElement.setAttribute("name", name);
+//		processElement.setAttribute("targetNamespace", swimlane.getTargetNamespace());
+//		if (swimlane.getProcess().getQueryLanguage() != null) {
+//			processElement.setAttribute("queryLanguage", 
+//					swimlane.getProcess().getQueryLanguage().toASCIIString());
+//		} else if (this.diagram.getQueryLanguage() != null) {
+//			processElement.setAttribute("queryLanguage", 
+//					this.diagram.getQueryLanguage().toASCIIString());
+//		}
+//		
+//		if (swimlane.getProcess().getExpressionLanguage() != null) {
+//			processElement.setAttribute("expressionLanguage", 
+//					swimlane.getProcess().getExpressionLanguage().toASCIIString());
+//		} else if (this.diagram.getExpressionLanguage() != null) {
+//			processElement.setAttribute("expressionLanguage", 
+//					this.diagram.getExpressionLanguage().toASCIIString());
+//		}
+//		
+//		processElement.setAttribute("suppressJoinFailure", 
+//				BPELUtil.booleanToYesNo(swimlane.getProcess().isSuppressJoinFailure()));
+//		processElement.setAttribute("exitOnStandardFault", 
+//				BPELUtil.booleanToYesNo(swimlane.getProcess().isExitOnStandardFault()));
+//		processElement.setAttribute("xmlns", "http://docs.oasis-open.org/wsbpel/2.0/process/abstract");
+//		processElement.setAttribute("abstractProcessProfile", "urn:HPI_IAAS:choreography:profile:2006/12");
+//		processElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+//		processElement.setAttribute("xmlns:wsu","http://schemas.xmlsoap.org/ws/2002/07/utility/");
+//				
+//		if (swimlane.getImports() != null) {
+//			for (Iterator<Import> it = swimlane.getImports().iterator(); it.hasNext();) {
+//				Import imp = it.next();
+//				processElement.setAttribute("xmlns:" + imp.getPrefix(), imp.getNamespace());
+//			}
+//		}
+//		
+//		processElement.setAttribute("xsi:schemaLocation", 
+//				"http://docs.oasis-open.org/wsbpel/2.0/process/abstract "+
+//				"http://docs.oasis-open.org/wsbpel/2.0/OS/process/abstract/ws-bpel_abstract_common_base.xsd");
 		
 	}
 	
@@ -125,84 +115,84 @@ public class ProcessFactory {
 	 * fault handler. The result is null if such a scope does not exist. 
 	 */
 	private Scope modeledScopeForHandlers(Process process) {
-		List<StartEvent> startEvents = process.getStartEvents();
-		List<EndEvent> endEvents = process.getEndEvents();
-		List<Scope> scopes = process.getScopes();
-		List<Gateway> gateways = process.getGateways();
-		
-		if ((startEvents.size() == 1) && (endEvents.size() == 1) && 
-				(scopes.size() == 1) && (gateways.size() == 1)) {
-			StartEvent startEvent = startEvents.get(0);
-			EndEvent endEvent = endEvents.get(0);
-			Gateway gateway = gateways.get(0);
-			Scope scope = scopes.get(0);
-			List<IntermediateEvent> faultEvents = 
-				scope.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR);
-			
-			// gateway has to be exclusive or inclusive
-			if (!gateway.getGatewayType().equals(Gateway.TYPE_XOR) &&
-					!gateway.getGatewayType().equals(Gateway.TYPE_OR)) {
-				return null;
-			}
-			
-			if ((scope.getIsolated() != null) && scope.getIsolated().equals("yes")) {
-				return null;
-			}
-			
-			if (scope.getLoop() != null) {
-				return null;
-			}
-			
-			if (faultEvents.isEmpty()) {
-				return null;
-			}
-			
-			if ((!scope.getAttachedEvents(IntermediateEvent.TRIGGER_COMPENSATION).isEmpty()) ||
-					(!scope.getAttachedEvents(IntermediateEvent.TRIGGER_TERMINATION).isEmpty())) {
-				return null;
-			}
-			
-			// relation from start to scope
-			if (!startEvent.getSourceFor().isEmpty()) {
-				Transition trans = startEvent.getSourceFor().get(0);
-				if (!trans.getTarget().equals(scope)) {
-					return null;
-				}
-			}
-			
-			// relation from scope to gateway
-			if (!scope.getSourceFor().isEmpty()) {
-				Transition trans = scope.getSourceFor().get(0);
-				if (!trans.getTarget().equals(gateway)) {
-					return null;
-				}
-			}
-			
-			// fault events connected with fault handler
-			for (Iterator<IntermediateEvent> it = faultEvents.iterator(); it.hasNext();) {
-				Handler handler = it.next().getConnectedHandler();
-				if (handler == null || 
-						!handler.getHandlerType().equals(Handler.TYPE_FAULT) || 
-						handler.getSourceFor().isEmpty()) {
-					return null;
-				}
-				// relation from fault handlers to gateway
-				Transition trans = handler.getSourceFor().get(0);
-				if (!trans.getTarget().equals(gateway)) {
-					return null;
-				}
-			}
-			
-			// relation from gateway to end event
-			if (!gateway.getSourceFor().isEmpty()) {
-				Transition trans = gateway.getSourceFor().get(0);
-				if (!trans.getTarget().equals(endEvent)) {
-					return null;
-				}
-			}
-			
-			return scope;
-		}
+//		List<StartEvent> startEvents = process.getStartEvents();
+//		List<EndEvent> endEvents = process.getEndEvents();
+//		List<Scope> scopes = process.getScopes();
+//		List<Gateway> gateways = process.getGateways();
+//		
+//		if ((startEvents.size() == 1) && (endEvents.size() == 1) && 
+//				(scopes.size() == 1) && (gateways.size() == 1)) {
+//			StartEvent startEvent = startEvents.get(0);
+//			EndEvent endEvent = endEvents.get(0);
+//			Gateway gateway = gateways.get(0);
+//			Scope scope = scopes.get(0);
+//			List<IntermediateEvent> faultEvents = 
+//				scope.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR);
+//			
+//			// gateway has to be exclusive or inclusive
+//			if (!gateway.getGatewayType().equals(Gateway.TYPE_XOR) &&
+//					!gateway.getGatewayType().equals(Gateway.TYPE_OR)) {
+//				return null;
+//			}
+//			
+//			if ((scope.getIsolated() != null) && scope.getIsolated().equals("yes")) {
+//				return null;
+//			}
+//			
+//			if (scope.getLoop() != null) {
+//				return null;
+//			}
+//			
+//			if (faultEvents.isEmpty()) {
+//				return null;
+//			}
+//			
+//			if ((!scope.getAttachedEvents(IntermediateEvent.TRIGGER_COMPENSATION).isEmpty()) ||
+//					(!scope.getAttachedEvents(IntermediateEvent.TRIGGER_TERMINATION).isEmpty())) {
+//				return null;
+//			}
+//			
+//			// relation from start to scope
+//			if (!startEvent.getSourceFor().isEmpty()) {
+//				Transition trans = startEvent.getSourceFor().get(0);
+//				if (!trans.getTarget().equals(scope)) {
+//					return null;
+//				}
+//			}
+//			
+//			// relation from scope to gateway
+//			if (!scope.getSourceFor().isEmpty()) {
+//				Transition trans = scope.getSourceFor().get(0);
+//				if (!trans.getTarget().equals(gateway)) {
+//					return null;
+//				}
+//			}
+//			
+//			// fault events connected with fault handler
+//			for (Iterator<IntermediateEvent> it = faultEvents.iterator(); it.hasNext();) {
+//				Handler handler = it.next().getConnectedHandler();
+//				if (handler == null || 
+//						!handler.getHandlerType().equals(Handler.TYPE_FAULT) || 
+//						handler.getSourceFor().isEmpty()) {
+//					return null;
+//				}
+//				// relation from fault handlers to gateway
+//				Transition trans = handler.getSourceFor().get(0);
+//				if (!trans.getTarget().equals(gateway)) {
+//					return null;
+//				}
+//			}
+//			
+//			// relation from gateway to end event
+//			if (!gateway.getSourceFor().isEmpty()) {
+//				Transition trans = gateway.getSourceFor().get(0);
+//				if (!trans.getTarget().equals(endEvent)) {
+//					return null;
+//				}
+//			}
+//			
+//			return scope;
+//		}
 		return null;
 	}
 	
@@ -217,39 +207,39 @@ public class ProcessFactory {
 	 * @param scope   The scope to copy the elements from.
 	 */
 	private void moveElementsToProcess(Process process, Scope scope) {
-		// remove start and end event from process
-		List<StartEvent> startEvents = process.getStartEvents();
-		process.getActivities().removeAll(startEvents);
-		
-		List<EndEvent> endEvents = process.getEndEvents();
-		process.getActivities().removeAll(endEvents);
-		
-		// remove transitions from process
-		process.getTransitions().clear();
-		
-		// remove all Activities except event handlers from process
-		List<Activity> toRemove = new ArrayList<Activity>();
-		for (Iterator<Activity> it = process.getActivities().iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act instanceof Handler) {
-				Handler handler = (Handler)act;
-				if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE) || 
-						(handler.getHandlerType().equals(Handler.TYPE_TIMER))) {
-					continue;
-				}
-			}
-			toRemove.add(act);
-		}
-		process.removeActivities(toRemove);
-		
-		// add scope activities to process
-		process.getActivities().addAll(scope.getSubProcess().getActivities());
-		
-		// add scope transitions to process
-		process.getTransitions().addAll(scope.getSubProcess().getTransitions());
-		
-		// remove scope from process
-		process.getActivities().remove(scope);
+//		// remove start and end event from process
+//		List<StartEvent> startEvents = process.getStartEvents();
+//		process.getActivities().removeAll(startEvents);
+//		
+//		List<EndEvent> endEvents = process.getEndEvents();
+//		process.getActivities().removeAll(endEvents);
+//		
+//		// remove transitions from process
+//		process.getTransitions().clear();
+//		
+//		// remove all Activities except event handlers from process
+//		List<Activity> toRemove = new ArrayList<Activity>();
+//		for (Iterator<Activity> it = process.getActivities().iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act instanceof Handler) {
+//				Handler handler = (Handler)act;
+//				if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE) || 
+//						(handler.getHandlerType().equals(Handler.TYPE_TIMER))) {
+//					continue;
+//				}
+//			}
+//			toRemove.add(act);
+//		}
+//		process.removeActivities(toRemove);
+//		
+//		// add scope activities to process
+//		process.getActivities().addAll(scope.getSubProcess().getActivities());
+//		
+//		// add scope transitions to process
+//		process.getTransitions().addAll(scope.getSubProcess().getTransitions());
+//		
+//		// remove scope from process
+//		process.getActivities().remove(scope);
 	}
 	
 	/**
@@ -271,59 +261,70 @@ public class ProcessFactory {
 	 * 
 	 * @return The created process element.
 	 */
-	private Element createProcessElement(Document document, Swimlane swimlane, Output output) {
+	private Element createProcessElement(Document document, Pool pool, Output output) {
 		Element processElement = document.createElement("process");
-		setProcessAttributes(processElement, swimlane);
-		Process process = swimlane.getProcess();
+//		setProcessAttributes(processElement, swimlane);
+		
+		Container container = pool.getProcess();
+		Container4BPEL process = null;
+		if (container instanceof Container4BPEL) {
+			process = (Container4BPEL) container;
+		} else {
+			output.addError(
+					"de.hpi.bpmn.Pool.getProcess() returned an unexpected type.",
+					""
+			);
+		}
+		
 		SupportingFactory supportingFactory = 
 			new SupportingFactory(this.diagram, document, output);
 		
-		// imports
-		List<Element> importElements = 
-			supportingFactory.createImportElements(swimlane);
-		for (Iterator<Element> it = importElements.iterator(); it.hasNext();) {
-			processElement.appendChild(it.next());
-		}
-		// messageExchanges
-		Element messageExchangesElement = 
-			supportingFactory.createMessageExchangesElement(process);
-		if (messageExchangesElement != null) {
-			processElement.appendChild(messageExchangesElement);
-		}
-		
-		// variables
-		Element variablesElement = 
-			supportingFactory.createVariablesElement(swimlane, process);
-		if (variablesElement != null) {
-			processElement.appendChild(variablesElement);
-		}
-		
-		// correlations
-		Element correlationsElement = 
-			supportingFactory.createCorrelationSetsElement(process);
-		if (correlationsElement != null) {
-			processElement.appendChild(correlationsElement);
-		}
-		
-		// fault handlers of process must be modeled with additional scope
-		Scope scope = modeledScopeForHandlers(process);
-		if (scope != null) {
-			
-			Element element = new StructuredElementsFactory(
-					this.diagram, document, output).createFaultHandlersElement(scope);
-			if (element != null) {
-				processElement.appendChild(element);
-			}
-			moveElementsToProcess(process, scope);
-		}
-		
-		// event handlers
-		Element eventHandlersElement = 
-			new StructuredElementsFactory(this.diagram, document, output).
-				createEventHandlersElement(process);
-		if (eventHandlersElement != null) {
-			processElement.appendChild(eventHandlersElement);
-		}
+//		// imports
+//		List<Element> importElements = 
+//			supportingFactory.createImportElements(swimlane);
+//		for (Iterator<Element> it = importElements.iterator(); it.hasNext();) {
+//			processElement.appendChild(it.next());
+//		}
+//		// messageExchanges
+//		Element messageExchangesElement = 
+//			supportingFactory.createMessageExchangesElement(process);
+//		if (messageExchangesElement != null) {
+//			processElement.appendChild(messageExchangesElement);
+//		}
+//		
+//		// variables
+//		Element variablesElement = 
+//			supportingFactory.createVariablesElement(swimlane, process);
+//		if (variablesElement != null) {
+//			processElement.appendChild(variablesElement);
+//		}
+//		
+//		// correlations
+//		Element correlationsElement = 
+//			supportingFactory.createCorrelationSetsElement(process);
+//		if (correlationsElement != null) {
+//			processElement.appendChild(correlationsElement);
+//		}
+//		
+//		// fault handlers of process must be modeled with additional scope
+//		Scope scope = modeledScopeForHandlers(process);
+//		if (scope != null) {
+//			
+//			Element element = new StructuredElementsFactory(
+//					this.diagram, document, output).createFaultHandlersElement(scope);
+//			if (element != null) {
+//				processElement.appendChild(element);
+//			}
+//			moveElementsToProcess(process, scope);
+//		}
+//		
+//		// event handlers
+//		Element eventHandlersElement = 
+//			new StructuredElementsFactory(this.diagram, document, output).
+//				createEventHandlersElement(process);
+//		if (eventHandlersElement != null) {
+//			processElement.appendChild(eventHandlersElement);
+//		}
 		
 		// sequence flow
 		Element sequenceFlow = 
@@ -337,22 +338,22 @@ public class ProcessFactory {
 	}
 	
 	/**
-	 * Transforms the process contained in the given swimlane to a BPEL
+	 * Transforms the process contained in the given {@link Pool} to a BPEL
 	 * abstract process.
 	 * 
-	 * @param swimlane The swimlane containing the process to be created.
-	 * @param output   The Output to print erros to.
+	 * @param pool The {@pool} containing the process to be created.
+	 * @param output   The Output to print errors to.
 	 * 
 	 * @return The created process. The result is null if a 
-	 * {@link ParserConfigurationException} occured.
+	 * {@link ParserConfigurationException} occurred.
 	 */
-	public Document transformProcess(Swimlane swimlane, Output output) {
+	public Document transformProcess(Pool pool, Output output) {
 		DocumentBuilder builder;
 		try {
 			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document process = builder.newDocument();
 			
-			Element processElement = createProcessElement(process, swimlane, output);
+			Element processElement = createProcessElement(process, pool, output);
 			
 			process.appendChild(processElement);
 			return process;

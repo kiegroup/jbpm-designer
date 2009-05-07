@@ -230,7 +230,7 @@ public class BPMNNormalizer {
 		}
 	}
 
-	private SequenceFlow connectNodes(Node source, Node target) {
+	protected SequenceFlow connectNodes(Node source, Node target) {
 		SequenceFlow seqFlow = new SequenceFlow();
 		
 		// Generate an id if it hasn't been set before
@@ -242,7 +242,7 @@ public class BPMNNormalizer {
 		return seqFlow;
 	}
 
-	private void addNode(Node node, Container process) {
+	protected void addNode(Node node, Container process) {
 		diagram.getChildNodes().add(node);
 		// Generate an id if it hasn't been set before
 		if(node.getId() == null) node.setId(OryxUUID.generate());
@@ -250,7 +250,7 @@ public class BPMNNormalizer {
 		node.setProcess(process);
 	}
 
-	private void removeNode(Node node) {
+	protected void removeNode(Node node) {
 		diagram.getChildNodes().remove(node);
 		node.setParent(null);
 		node.setProcess(null);

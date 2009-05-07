@@ -106,51 +106,51 @@ public class StructuredElementsFactory {
 	private Element createCatchElement(IntermediateEvent event, 
 			Handler handler, String errorCode) {
 		Element result = this.document.createElement("catch");
-		result.setAttribute("faultName", errorCode);
-		
-		VariableDataObject faultVar = this.diagram.getFaultVariable(event);
-		if (faultVar != null) {
-			result.setAttribute("faultVariable", faultVar.getName());
-			
-			String value = faultVar.getVariableTypeValue();
-			String prefix = value.substring(0, value.indexOf(':'));
-			if (value.indexOf(':') < 0) {
-				this.output.addError("There is a prefix missing for the " +
-						"variable type value "+ value + 
-						" of this fault variable ", faultVar.getId());
-				return null;
-			}
-			Import imp = event.getParentSwimlane().getImportForPrefix(prefix);
-			if (imp == null) {
-				this.output.addError(
-						"There is an import element missing for the prefix " 
-						+ prefix + " of this fault variable ", faultVar.getId());
-				return null;
-			}
-			
-			if (faultVar.getVariableType().equals(
-					VariableDataObject.VARIABLE_TYPE_MESSAGE)) {	
-				result.setAttribute("faultMessageType", value); 			
-			} else if (faultVar.getVariableType().equals(
-					VariableDataObject.VARIABLE_TYPE_XML_ELEMENT)) {
-				result.setAttribute("faultElement", value);
-			} else {
-				this.output.addError(
-						"The type of the fault variable defined in this handler " +
-						 "cannot be determined.", handler.getId());
-				return null;
-			}
-		}
-	
-		Element sequenceFlow = new SequenceFlowFactory(
-				this.diagram, this.document, handler.getSubProcess(), 
-					this.output).transformSequenceFlow();
-		if (sequenceFlow != null) {
-			// create additional scope if fault handler has
-			// additional variables defined
-			result.appendChild(createHandlerScope(handler, sequenceFlow));
-		}
-		
+//		result.setAttribute("faultName", errorCode);
+//		
+//		VariableDataObject faultVar = this.diagram.getFaultVariable(event);
+//		if (faultVar != null) {
+//			result.setAttribute("faultVariable", faultVar.getName());
+//			
+//			String value = faultVar.getVariableTypeValue();
+//			String prefix = value.substring(0, value.indexOf(':'));
+//			if (value.indexOf(':') < 0) {
+//				this.output.addError("There is a prefix missing for the " +
+//						"variable type value "+ value + 
+//						" of this fault variable ", faultVar.getId());
+//				return null;
+//			}
+//			Import imp = event.getParentSwimlane().getImportForPrefix(prefix);
+//			if (imp == null) {
+//				this.output.addError(
+//						"There is an import element missing for the prefix " 
+//						+ prefix + " of this fault variable ", faultVar.getId());
+//				return null;
+//			}
+//			
+//			if (faultVar.getVariableType().equals(
+//					VariableDataObject.VARIABLE_TYPE_MESSAGE)) {	
+//				result.setAttribute("faultMessageType", value); 			
+//			} else if (faultVar.getVariableType().equals(
+//					VariableDataObject.VARIABLE_TYPE_XML_ELEMENT)) {
+//				result.setAttribute("faultElement", value);
+//			} else {
+//				this.output.addError(
+//						"The type of the fault variable defined in this handler " +
+//						 "cannot be determined.", handler.getId());
+//				return null;
+//			}
+//		}
+//	
+//		Element sequenceFlow = new SequenceFlowFactory(
+//				this.diagram, this.document, handler.getSubProcess(), 
+//					this.output).transformSequenceFlow();
+//		if (sequenceFlow != null) {
+//			// create additional scope if fault handler has
+//			// additional variables defined
+//			result.appendChild(createHandlerScope(handler, sequenceFlow));
+//		}
+//		
 		return result;
 	}
 	
@@ -168,16 +168,16 @@ public class StructuredElementsFactory {
 	private Element createCatchAllElement(Handler handler) {
 		Element result = this.document.createElement("catchAll");
 		
-		Element sequenceFlow = 
-			new SequenceFlowFactory(
-					this.diagram, this.document, handler.getSubProcess(), 
-					this.output).transformSequenceFlow();
-		
-		if (sequenceFlow != null) {
-			// create additional scope if fault handler has
-			// additional variables defined
-			result.appendChild(createHandlerScope(handler, sequenceFlow));
-		}
+//		Element sequenceFlow = 
+//			new SequenceFlowFactory(
+//					this.diagram, this.document, handler.getSubProcess(), 
+//					this.output).transformSequenceFlow();
+//		
+//		if (sequenceFlow != null) {
+//			// create additional scope if fault handler has
+//			// additional variables defined
+//			result.appendChild(createHandlerScope(handler, sequenceFlow));
+//		}
 		return result;
 	}
 	
@@ -290,37 +290,37 @@ public class StructuredElementsFactory {
 	 */
 	public Element createTerminationHandlerElement(Activity activity) {
 		
-		List<IntermediateEvent> attachedTermEvents = 
-			activity.getAttachedEvents(IntermediateEvent.TRIGGER_TERMINATION);
-		
-		if (attachedTermEvents.size() > 1) {
-			this.output.addError("The activity " +
-				"is not allowed to have more than one termination event attached. ", activity.getId());
-			return null;
-		} 
-		
-		if (!attachedTermEvents.isEmpty()) {
-			IntermediateEvent event = attachedTermEvents.get(0);
-			Handler termHandler = event.getConnectedHandler();
-			
-			if (termHandler == null) {
-				this.output.addError("A termination handler attached the event " +
-						"could not be found.", event.getId());
-				return null;
-			}
-			
-			Element result = this.document.createElement("terminationHandler");
-			Element sequenceFlow = new SequenceFlowFactory(
-					this.diagram,this.document, termHandler.getSubProcess(), 
-					this.output).transformSequenceFlow();
-			if (sequenceFlow != null) {							
-				// create additional scope if termination handler has
-				// additional variables defined
-				result.appendChild(createHandlerScope(termHandler, sequenceFlow));
-			}
-			
-			return result;
-		}
+//		List<IntermediateEvent> attachedTermEvents = 
+//			activity.getAttachedEvents(IntermediateEvent.TRIGGER_TERMINATION);
+//		
+//		if (attachedTermEvents.size() > 1) {
+//			this.output.addError("The activity " +
+//				"is not allowed to have more than one termination event attached. ", activity.getId());
+//			return null;
+//		} 
+//		
+//		if (!attachedTermEvents.isEmpty()) {
+//			IntermediateEvent event = attachedTermEvents.get(0);
+//			Handler termHandler = event.getConnectedHandler();
+//			
+//			if (termHandler == null) {
+//				this.output.addError("A termination handler attached the event " +
+//						"could not be found.", event.getId());
+//				return null;
+//			}
+//			
+//			Element result = this.document.createElement("terminationHandler");
+//			Element sequenceFlow = new SequenceFlowFactory(
+//					this.diagram,this.document, termHandler.getSubProcess(), 
+//					this.output).transformSequenceFlow();
+//			if (sequenceFlow != null) {							
+//				// create additional scope if termination handler has
+//				// additional variables defined
+//				result.appendChild(createHandlerScope(termHandler, sequenceFlow));
+//			}
+//			
+//			return result;
+//		}
 		return null;
 	}
 	
@@ -344,35 +344,35 @@ public class StructuredElementsFactory {
 	 */
 	public Element createCompensationHandlerElement( Activity activity) {
 
-		List<IntermediateEvent> attachedCompEvents = 
-			activity.getAttachedEvents(IntermediateEvent.TRIGGER_COMPENSATION);
-		if (attachedCompEvents.size() > 1) {
-			this.output.addError(
-				"The activity is not allowed to " +
-				"have more than one compensation event attached.",
-				activity.getId());
-		} 
-		if (!attachedCompEvents.isEmpty()) {
-			IntermediateEvent event = attachedCompEvents.get(0);
-			Handler compHandler = 
-				this.diagram.getAssociatedCompensationHandler(event);
-			if (compHandler == null) {
-				this.output.addError("A compensation handler attached to this event " +
-						"could not be found.", event.getId());
-				return null;
-			}
-			
-			Element result = this.document.createElement("compensationHandler");
-			Element sequenceFlow = new SequenceFlowFactory(
-					this.diagram, this.document, compHandler.getSubProcess(), 
-					this.output).transformSequenceFlow();
-			if (sequenceFlow != null) {
-				// create additional scope if compensation handler has
-				// additional variables defined
-				result.appendChild(createHandlerScope(compHandler, sequenceFlow));
-			}
-			return result;
-		}
+//		List<IntermediateEvent> attachedCompEvents = 
+//			activity.getAttachedEvents(IntermediateEvent.TRIGGER_COMPENSATION);
+//		if (attachedCompEvents.size() > 1) {
+//			this.output.addError(
+//				"The activity is not allowed to " +
+//				"have more than one compensation event attached.",
+//				activity.getId());
+//		} 
+//		if (!attachedCompEvents.isEmpty()) {
+//			IntermediateEvent event = attachedCompEvents.get(0);
+//			Handler compHandler = 
+//				this.diagram.getAssociatedCompensationHandler(event);
+//			if (compHandler == null) {
+//				this.output.addError("A compensation handler attached to this event " +
+//						"could not be found.", event.getId());
+//				return null;
+//			}
+//			
+//			Element result = this.document.createElement("compensationHandler");
+//			Element sequenceFlow = new SequenceFlowFactory(
+//					this.diagram, this.document, compHandler.getSubProcess(), 
+//					this.output).transformSequenceFlow();
+//			if (sequenceFlow != null) {
+//				// create additional scope if compensation handler has
+//				// additional variables defined
+//				result.appendChild(createHandlerScope(compHandler, sequenceFlow));
+//			}
+//			return result;
+//		}
 		return null;
 	}
 	
@@ -388,62 +388,62 @@ public class StructuredElementsFactory {
 	public Element createScopeElement(BlockActivity activity) {
 		Element result = this.document.createElement("scope");
 		
-		// attributes
-		if (activity.getExitOnStandardFault() != null) {
-			result.setAttribute("exitOnStandardFault", activity.getExitOnStandardFault());
-		}
-		if (activity.getIsolated() != null) {
-			result.setAttribute("isolated", activity.getIsolated());
-		}
-		
-		// create elements
-		Element variables = this.supportingFactory.createVariablesElement(
-					activity.getParentSwimlane(), activity.getSubProcess());
-		
-		Element messageExchanges = null;
-		Element correlationSets = null;
-		if (activity instanceof Scope) {
-			Scope scope = (Scope)activity;
-			messageExchanges = 
-				this.supportingFactory.createMessageExchangesElement(scope);
-			correlationSets = 
-				this.supportingFactory.createCorrelationSetsElement(scope);
-		}
-		
-		Element faultElement = createFaultHandlersElement(activity);
-		Element compElement = createCompensationHandlerElement(activity);
-		Element terminationElement = createTerminationHandlerElement(activity);		
-		Element eventHandlers = createEventHandlersElement(
-				activity.getSubProcess());
-		Element sequenceFlow = new SequenceFlowFactory(
-				this.diagram, this.document, activity.getSubProcess(), 
-				this.output).transformSequenceFlow();
-		
-		// keep order of elements
-		if (messageExchanges != null) {
-			result.appendChild(messageExchanges);
-		}
-		if (variables != null) {
-			result.appendChild(variables);
-		}
-		if (correlationSets != null) {
-			result.appendChild(correlationSets);
-		}
-		if (faultElement != null) {
-			result.appendChild(faultElement);
-		}
-		if (compElement != null) {
-			result.appendChild(compElement);
-		}
-		if (terminationElement != null) {
-			result.appendChild(terminationElement);
-		}
-		if (eventHandlers != null) {
-			result.appendChild(eventHandlers);
-		}
-		if (sequenceFlow != null) {
-			result.appendChild(sequenceFlow);
-		}
+//		// attributes
+//		if (activity.getExitOnStandardFault() != null) {
+//			result.setAttribute("exitOnStandardFault", activity.getExitOnStandardFault());
+//		}
+//		if (activity.getIsolated() != null) {
+//			result.setAttribute("isolated", activity.getIsolated());
+//		}
+//		
+//		// create elements
+//		Element variables = this.supportingFactory.createVariablesElement(
+//					activity.getParentSwimlane(), activity.getSubProcess());
+//		
+//		Element messageExchanges = null;
+//		Element correlationSets = null;
+//		if (activity instanceof Scope) {
+//			Scope scope = (Scope)activity;
+//			messageExchanges = 
+//				this.supportingFactory.createMessageExchangesElement(scope);
+//			correlationSets = 
+//				this.supportingFactory.createCorrelationSetsElement(scope);
+//		}
+//		
+//		Element faultElement = createFaultHandlersElement(activity);
+//		Element compElement = createCompensationHandlerElement(activity);
+//		Element terminationElement = createTerminationHandlerElement(activity);		
+//		Element eventHandlers = createEventHandlersElement(
+//				activity.getSubProcess());
+//		Element sequenceFlow = new SequenceFlowFactory(
+//				this.diagram, this.document, activity.getSubProcess(), 
+//				this.output).transformSequenceFlow();
+//		
+//		// keep order of elements
+//		if (messageExchanges != null) {
+//			result.appendChild(messageExchanges);
+//		}
+//		if (variables != null) {
+//			result.appendChild(variables);
+//		}
+//		if (correlationSets != null) {
+//			result.appendChild(correlationSets);
+//		}
+//		if (faultElement != null) {
+//			result.appendChild(faultElement);
+//		}
+//		if (compElement != null) {
+//			result.appendChild(compElement);
+//		}
+//		if (terminationElement != null) {
+//			result.appendChild(terminationElement);
+//		}
+//		if (eventHandlers != null) {
+//			result.appendChild(eventHandlers);
+//		}
+//		if (sequenceFlow != null) {
+//			result.appendChild(sequenceFlow);
+//		}
 		
 		return result;
 	}
@@ -695,24 +695,24 @@ public class StructuredElementsFactory {
 	 * @param result       The element to add the scope content to.
 	 */
 	private void appendLoopScope(Activity activity, Element scopeContent, Element result) {
-		if (scopeContent != null) {
-			if (!scopeContent.getNodeName().equals("scope")) {
-				Element scope = this.document.createElement("scope");
-				scope.appendChild(scopeContent);
-				result.appendChild(scope);
-			} else {
-				result.appendChild(scopeContent);
-			}
-		} else if (activity instanceof BlockActivity){
-			// generate sequence flow
-			SubProcess subProcess = ((BlockActivity)activity).getSubProcess();
-			Element sequenceFlow = new SequenceFlowFactory(
-					this.diagram, this.document,subProcess, 
-					this.output).transformSequenceFlow();
-			if (sequenceFlow != null) {
-				appendLoopScope(activity, sequenceFlow, result);
-			}
-		}
+//		if (scopeContent != null) {
+//			if (!scopeContent.getNodeName().equals("scope")) {
+//				Element scope = this.document.createElement("scope");
+//				scope.appendChild(scopeContent);
+//				result.appendChild(scope);
+//			} else {
+//				result.appendChild(scopeContent);
+//			}
+//		} else if (activity instanceof BlockActivity){
+//			// generate sequence flow
+//			SubProcess subProcess = ((BlockActivity)activity).getSubProcess();
+//			Element sequenceFlow = new SequenceFlowFactory(
+//					this.diagram, this.document,subProcess, 
+//					this.output).transformSequenceFlow();
+//			if (sequenceFlow != null) {
+//				appendLoopScope(activity, sequenceFlow, result);
+//			}
+//		}
 	}
 	
 	/**
@@ -760,34 +760,34 @@ public class StructuredElementsFactory {
 	 */
 	private Element createMultipleLoop(Task task, Element scopeContent) {
 		Element result = this.document.createElement("forEach");
-		Loop loop = task.getLoop();
-		BPELUtil.setStandardAttributes(result, task);
-		String name = "forEach_" + task.getName();
-		result.setAttribute("name", name);
-		
-		if (loop.getOrdering() != null) {
-			if (loop.getOrdering().equals(Loop.ORDERING_PARALLEL)) {
-				result.setAttribute("parallel", "yes");
-			} else {
-				result.setAttribute("parallel", "no");
-			}
-		}
-		
-		VariableDataObject counter = this.diagram.getCounterVariable(task);
-		if ((counter == null) && (this.diagram.getLoopCounterSet(task) == null )) {
-			// create loop counter automatically
-			counter = generateLoopCounter(task, name);
-		}
-		appendLoopCounterAttrEl(counter, loop, result);
-		
-		Element condition = 
-			this.supportingFactory.createCompletionCondition(loop);
-		if (condition != null) {
-			result.appendChild(condition);
-		}
-		
-		appendLoopScope(task, scopeContent, result);
-		
+//		Loop loop = task.getLoop();
+//		BPELUtil.setStandardAttributes(result, task);
+//		String name = "forEach_" + task.getName();
+//		result.setAttribute("name", name);
+//		
+//		if (loop.getOrdering() != null) {
+//			if (loop.getOrdering().equals(Loop.ORDERING_PARALLEL)) {
+//				result.setAttribute("parallel", "yes");
+//			} else {
+//				result.setAttribute("parallel", "no");
+//			}
+//		}
+//		
+//		VariableDataObject counter = this.diagram.getCounterVariable(task);
+//		if ((counter == null) && (this.diagram.getLoopCounterSet(task) == null )) {
+//			// create loop counter automatically
+//			counter = generateLoopCounter(task, name);
+//		}
+//		appendLoopCounterAttrEl(counter, loop, result);
+//		
+//		Element condition = 
+//			this.supportingFactory.createCompletionCondition(loop);
+//		if (condition != null) {
+//			result.appendChild(condition);
+//		}
+//		
+//		appendLoopScope(task, scopeContent, result);
+//		
 		return result;
 	}
 	
@@ -806,33 +806,33 @@ public class StructuredElementsFactory {
 	 */
 	private Element createMultipleLoop(BlockActivity loopingActivity, Element scopeContent) {
 		Element result = this.document.createElement("forEach");
-		Loop loop = loopingActivity.getLoop();
-		
-		BPELUtil.setStandardAttributes(result, loopingActivity);
-		if (loop.getOrdering() != null) {
-			if (loop.getOrdering().equals(Loop.ORDERING_PARALLEL)) {
-				result.setAttribute("parallel", "yes");
-			} else {
-				result.setAttribute("parallel", "no");
-			}
-		}
-		
-		VariableDataObject counter = 
-			this.diagram.getCounterVariable(loopingActivity);
-		if ((counter == null) && 
-				(this.diagram.getLoopCounterSet(loopingActivity) == null )) {
-			this.output.addError("Loop counter is missing.", loopingActivity.getId());
-		} else {
-			appendLoopCounterAttrEl(counter, loop, result);
-		}
-		
-		Element condition =
-			this.supportingFactory.createCompletionCondition(loop);
-		if (condition != null) {
-			result.appendChild(condition);
-		}
-		
-		appendLoopScope(loopingActivity, scopeContent, result);
+//		Loop loop = loopingActivity.getLoop();
+//		
+//		BPELUtil.setStandardAttributes(result, loopingActivity);
+//		if (loop.getOrdering() != null) {
+//			if (loop.getOrdering().equals(Loop.ORDERING_PARALLEL)) {
+//				result.setAttribute("parallel", "yes");
+//			} else {
+//				result.setAttribute("parallel", "no");
+//			}
+//		}
+//		
+//		VariableDataObject counter = 
+//			this.diagram.getCounterVariable(loopingActivity);
+//		if ((counter == null) && 
+//				(this.diagram.getLoopCounterSet(loopingActivity) == null )) {
+//			this.output.addError("Loop counter is missing.", loopingActivity.getId());
+//		} else {
+//			appendLoopCounterAttrEl(counter, loop, result);
+//		}
+//		
+//		Element condition =
+//			this.supportingFactory.createCompletionCondition(loop);
+//		if (condition != null) {
+//			result.appendChild(condition);
+//		}
+//		
+//		appendLoopScope(loopingActivity, scopeContent, result);
 		
 		return result;
 	}
@@ -874,30 +874,30 @@ public class StructuredElementsFactory {
 	private Element createWhileLoop(Activity loopingActivity, Element content) {
 		Element result = this.document.createElement("while");
 		
-		if (loopingActivity.getLoop().getLoopCondition() != null) {
-			result.appendChild(this.supportingFactory.createExpressionElement(
-				"condition", loopingActivity.getLoop().getLoopCondition()));
-		} else {
-			this.output.addError("The loop " +
-					"must define a loop condition.", loopingActivity.getId());
-		}
-		
-		BPELUtil.setStandardAttributes(result, loopingActivity);
-		
-		if (content != null) {
-			result.appendChild(content);
-		} else if (loopingActivity instanceof BlockActivity){
-			BlockActivity activity = (BlockActivity)loopingActivity;
-			Element sequenceFlow = new SequenceFlowFactory(
-					this.diagram, this.document, activity.getSubProcess(), 
-					this.output).transformSequenceFlow();
-			if (sequenceFlow != null) {
-				result.appendChild(sequenceFlow);
-			}
-		} else {
-			this.output.addError("Content of looping activity " +
-				"could not be generated.", loopingActivity.getId());
-		}
+//		if (loopingActivity.getLoop().getLoopCondition() != null) {
+//			result.appendChild(this.supportingFactory.createExpressionElement(
+//				"condition", loopingActivity.getLoop().getLoopCondition()));
+//		} else {
+//			this.output.addError("The loop " +
+//					"must define a loop condition.", loopingActivity.getId());
+//		}
+//		
+//		BPELUtil.setStandardAttributes(result, loopingActivity);
+//		
+//		if (content != null) {
+//			result.appendChild(content);
+//		} else if (loopingActivity instanceof BlockActivity){
+//			BlockActivity activity = (BlockActivity)loopingActivity;
+//			Element sequenceFlow = new SequenceFlowFactory(
+//					this.diagram, this.document, activity.getSubProcess(), 
+//					this.output).transformSequenceFlow();
+//			if (sequenceFlow != null) {
+//				result.appendChild(sequenceFlow);
+//			}
+//		} else {
+//			this.output.addError("Content of looping activity " +
+//				"could not be generated.", loopingActivity.getId());
+//		}
 		
 		return result;
 	}
@@ -919,30 +919,30 @@ public class StructuredElementsFactory {
 	private Element createRepeatUntilLoop(Activity loopingActivity, Element content) {
 		Element result = this.document.createElement("repeatUntil");
 		
-		BPELUtil.setStandardAttributes(result, loopingActivity);
-				
-		if (content != null) {
-			result.appendChild(content);
-		} else if (loopingActivity instanceof BlockActivity){
-			BlockActivity activity = (BlockActivity)loopingActivity;
-			Element sequenceFlow = new SequenceFlowFactory(
-					this.diagram, this.document, activity.getSubProcess(), 
-					this.output).transformSequenceFlow();
-			if (sequenceFlow != null) {
-				result.appendChild(sequenceFlow);
-			}
-		} else {
-			this.output.addError("Content of looping activity " +
-					"could not be generated.", loopingActivity.getId());
-		}
-		
-		if (loopingActivity.getLoop().getLoopCondition() != null) {
-			result.appendChild(this.supportingFactory.createExpressionElement(
-				"condition", loopingActivity.getLoop().getLoopCondition()));
-		} else {
-			this.output.addError("The loop " +
-					"must define a loop condition.", loopingActivity.getId());
-		}
+//		BPELUtil.setStandardAttributes(result, loopingActivity);
+//				
+//		if (content != null) {
+//			result.appendChild(content);
+//		} else if (loopingActivity instanceof BlockActivity){
+//			BlockActivity activity = (BlockActivity)loopingActivity;
+//			Element sequenceFlow = new SequenceFlowFactory(
+//					this.diagram, this.document, activity.getSubProcess(), 
+//					this.output).transformSequenceFlow();
+//			if (sequenceFlow != null) {
+//				result.appendChild(sequenceFlow);
+//			}
+//		} else {
+//			this.output.addError("Content of looping activity " +
+//					"could not be generated.", loopingActivity.getId());
+//		}
+//		
+//		if (loopingActivity.getLoop().getLoopCondition() != null) {
+//			result.appendChild(this.supportingFactory.createExpressionElement(
+//				"condition", loopingActivity.getLoop().getLoopCondition()));
+//		} else {
+//			this.output.addError("The loop " +
+//					"must define a loop condition.", loopingActivity.getId());
+//		}
 		
 		return result;
 	}
