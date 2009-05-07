@@ -122,8 +122,10 @@ public class BPELParser {
 	            SchemaFactory constraintFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
                 DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
                 DOMImplementationLS domImplementationLS = (DOMImplementationLS)registry.getDOMImplementation("LS");
-	            // set our own resolver implementation
-                constraintFactory.setResourceResolver(new BPELResolver(domImplementationLS));
+                if (domImplementationLS != null) {
+		            // set our own resolver implementation
+	                constraintFactory.setResourceResolver(new BPELResolver(domImplementationLS));
+                }
 	            // should we validate against "executable" or "abstract" BPEL ?
 	            // default is "executable"
                 Source bpelConstraints = new StreamSource(new File(FILENAME_BPEL_EXECUTABLE_SCHEMA));
