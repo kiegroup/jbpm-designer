@@ -9,6 +9,7 @@ import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn.Task;
 import de.hpi.bpmn2bpel.model.Container4BPEL;
 
 /**
@@ -236,6 +237,11 @@ public class Component implements Container4BPEL {
 	}
 
 	public List<Node> getChildNodes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Task> getTasks() {
 		// TODO Auto-generated method stub
 		return null;
 	}

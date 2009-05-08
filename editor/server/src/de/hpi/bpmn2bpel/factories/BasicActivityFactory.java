@@ -358,6 +358,7 @@ public class BasicActivityFactory {
 		Element invoke = this.document.createElement("invoke");
 		
 		BPELUtil.setStandardAttributes(invoke, task);
+		invoke.setAttribute("group", task.getColor());
 		
 		return invoke;
 	}

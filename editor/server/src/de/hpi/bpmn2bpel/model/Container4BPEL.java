@@ -5,6 +5,7 @@ import java.util.List;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn.Task;
 
 
 public interface Container4BPEL extends Container {
@@ -131,14 +132,14 @@ public interface Container4BPEL extends Container {
 //	 * @return A list with scopes of the container. 
 //	 */
 //	public List<Scope> getScopes();
-//
-//	/**
-//	 * Collects the tasks that are contained in the container.
-//	 * 
-//	 * @return A list with tasks of the container. 
-//	 */
-//	public List<Task> getTasks();
-//
+
+	/**
+	 * Collects the tasks that are contained in the container.
+	 * 
+	 * @return A list with tasks of the container. 
+	 */
+	public List<Task> getTasks();
+
 //	/**
 //	 * Collects the split gateways of the given type that are contained in 
 //	 * the container. A split gateway is a gateway that has more than one 

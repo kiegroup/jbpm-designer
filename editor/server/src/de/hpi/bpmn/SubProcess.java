@@ -43,12 +43,12 @@ public class SubProcess extends Activity implements Container, Container4BPEL {
 		this.parallelOrdering = parallelOrdering;
 	}
 	
-	@Override
+	
 	public StringBuilder getSerialization(BPMNSerialization serialization) {
 		return serialization.getSerializationForDiagramObject(this);
 	}
 
-	@Override
+	
 	public Node getCopy() {
 		SubProcess newnode = (SubProcess)super.getCopy();
 		newnode.setAdhoc(this.isAdhoc());
@@ -63,6 +63,11 @@ public class SubProcess extends Activity implements Container, Container4BPEL {
 	}
 
 	public List<StartEvent> getStartEvents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Task> getTasks() {
 		// TODO Auto-generated method stub
 		return null;
 	}

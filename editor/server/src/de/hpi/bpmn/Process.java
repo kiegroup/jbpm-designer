@@ -39,5 +39,18 @@ public class Process implements Container, Container4BPEL {
 		
 		return StartEvents;
 	}
+	
+	public List<Task> getTasks() {
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		
+		for(Iterator<Node> it = this.getChildNodes().iterator(); it.hasNext();) {
+			Node node = it.next();
+			if (node instanceof Task) {
+				tasks.add((Task) node);
+			}
+		}
+		
+		return tasks;
+	}
 
 }

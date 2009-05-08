@@ -3,7 +3,9 @@
  */
 package de.hpi.bpmn2bpel;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.w3c.dom.Document;
 
@@ -11,6 +13,8 @@ import org.w3c.dom.Document;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
+import de.hpi.bpmn2bpel.TransformationResult.Type;
+import de.hpi.bpmn2bpel.factories.DeploymentDescriptorFactory;
 import de.hpi.bpmn2bpel.factories.ProcessFactory;
 
 /**
@@ -39,8 +43,9 @@ import de.hpi.bpmn2bpel.factories.ProcessFactory;
  */
 public class BPMN2BPELTransformer {
 
-	public Document transform(BPMNDiagram diagram) {
+	public List<TransformationResult> transform(BPMNDiagram diagram) {
 		Document process = null;
+		List<TransformationResult> results = new ArrayList<TransformationResult>();
 		ProcessFactory factory = new ProcessFactory(diagram);
 		// use only the first pool
 		// TODO rewrite to work without pools 
@@ -48,7 +53,15 @@ public class BPMN2BPELTransformer {
 		if (it.hasNext()) {
 			Output processOutput = new Output();
 			process = factory.transformProcess(it.next(), processOutput);
+			results.add(new TransformationResult(Type.PROCESS, process));
 		}
-		return process;
+		
+		/* Create deployment descriptor for Apache ODE */ 
+		
+		DeploymentDescriptorFactory deploymentFactory = new DeploymentDescriptorFactory(diagram);
+		results.add(new TransformationResult(Type.DEPLOYMENT_DESCRIPTOR, 
+				deploymentFactory.generateDeploymentDescriptor()));
+		
+		return results;
 	}
 }

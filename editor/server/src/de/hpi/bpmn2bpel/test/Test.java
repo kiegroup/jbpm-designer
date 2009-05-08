@@ -3,6 +3,7 @@ package de.hpi.bpmn2bpel.test;
 import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,15 +19,18 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.analysis.BPMNSESENormalizer;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn2bpel.BPMN2BPELTransformer;
+import de.hpi.bpmn2bpel.TransformationResult;
 
 public class Test {
+	
+	static StringBuilder response;
 
 	/**
 	 * @param args
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) {
-		String path = "C:\\Dokumente und Einstellungen\\Sven\\workspace\\oryx2\\editor\\server\\src\\de\\hpi\\bpmn2bpel\\test\\";
+		String path = "C:\\Users\\sven.wagner-boysen\\workspace\\oryx\\editor\\server\\src\\de\\hpi\\bpmn2bpel\\test\\";
 //		File file = new File(path + "AndGatewayTest-Oryx.xml");
 //		File file = new File(path + "bpel_trivial1.xml");
 		File file = new File(path + "bpel_trivial2.xml");
@@ -47,24 +51,65 @@ public class Test {
 			normalizer.normalize();
 			
 			BPMN2BPELTransformer transformer = new BPMN2BPELTransformer();
-			Document doc = transformer.transform(diagram);
-
-
-			OutputFormat format = new OutputFormat(doc);
-			format.setIndenting(true);
-			format.setPreserveSpace(true);
-			format.setLineSeparator(System.getProperty("line.separator"));
-			format.setMethod(Method.XHTML);
+			List<TransformationResult> results = transformer.transform(diagram);
 			
+			response = new StringBuilder();
 			
-			StringWriter sw = new StringWriter();
-			XMLSerializer serial = new XMLSerializer(sw, format);
-			DOMSerializer domserial = serial.asDOMSerializer();
-			domserial.serialize(doc);
-			System.out.println(sw.getBuffer().toString());
+			for(TransformationResult result : results) {
+				if(result.getType().equals(TransformationResult.Type.PROCESS)) {
+					appendResult("process", result.getDocument());
+				}
+				if(result.getType().equals(TransformationResult.Type.DEPLOYMENT_DESCRIPTOR)) {
+					appendResult("deploy", result.getDocument());
+				}
+			}
+			
+			System.out.println(response.toString());
+
+//			OutputFormat format = new OutputFormat(doc);
+//			format.setIndenting(true);
+//			format.setPreserveSpace(true);
+//			format.setLineSeparator(System.getProperty("line.separator"));
+//			format.setMethod(Method.XHTML);
+//			
+//			
+//			StringWriter sw = new StringWriter();
+//			XMLSerializer serial = new XMLSerializer(sw, format);
+//			DOMSerializer domserial = serial.asDOMSerializer();
+//			domserial.serialize(doc);
+//			System.out.println(sw.getBuffer().toString());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private static void appendResult(String param, Document result) {
+		OutputFormat format = new OutputFormat(result);
+		format.setIndenting(true);
+		format.setPreserveSpace(true);
+		format.setLineSeparator(System.getProperty("line.separator"));
+		format.setMethod(Method.XHTML);
+		
+		
+		StringWriter sw = new StringWriter();
+		XMLSerializer serial = new XMLSerializer(sw, format);
+		try {
+			DOMSerializer domserial = serial.asDOMSerializer();
+			domserial.serialize(result);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		if(response.length() == 0) {
+			response.append(param);
+			response.append("=");
+			response.append(sw.getBuffer().toString());
+		} else {
+			response.append("&");
+			response.append(param);
+			response.append("=");
+			response.append(sw.getBuffer().toString());
 		}
 	}
 
