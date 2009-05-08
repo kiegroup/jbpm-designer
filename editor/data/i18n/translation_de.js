@@ -515,3 +515,8 @@ ORYX.I18N.JSONSupport = {
         group: "Export"
     }
 };
+
+/** New Language Properties: 08.05.2009 */
+if(!ORYX.I18N.BPMN2XHTML) ORYX.I18N.BPMN2XHTML = {};
+ORYX.I18N.BPMN2XHTML.group = "Export";
+ORYX.I18N.BPMN2XHTML.XHTMLExport = "XHTML Dokumentation exportieren";

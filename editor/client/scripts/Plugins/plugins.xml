@@ -204,6 +204,10 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
 		
+		<plugin source="bpmn2xhtml.js" name="ORYX.Plugins.BPMN2XHTML">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
+		</plugin>
+		
 		<!-- Resource Perspective -->
 		<plugin source="bpmnResourcesSoDAdd.js" name="ORYX.Plugins.ResourcesSoDAdd">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
