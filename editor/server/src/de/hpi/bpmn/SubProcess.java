@@ -57,13 +57,11 @@ public class SubProcess extends Activity implements Container, Container4BPEL {
 		return newnode;
 	}
 
-	@Override
 	public List<EndEvent> getEndEvents() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public List<StartEvent> getStartEvents() {
 		// TODO Auto-generated method stub
 		return null;

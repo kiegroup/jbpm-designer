@@ -18,7 +18,6 @@ import de.hpi.bpmn.analysis.BPMNSESENormalizer;
 public class ANDGatewaySplit extends ANDGateway implements Split {
 	
 
-	@Override
 	public SequenceFlow getIncomingSequenceFlow() {
 		if(this.getIncomingSequenceFlows().size() != 1) {
 			return null;

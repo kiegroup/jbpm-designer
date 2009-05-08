@@ -16,7 +16,6 @@ public class Process implements Container, Container4BPEL {
 		return childNodes;
 	}
 
-	@Override
 	public List<EndEvent> getEndEvents() {
 		ArrayList<EndEvent> endEvents = new ArrayList<EndEvent>();
 		for(Iterator<Node> it = getChildNodes().iterator(); it.hasNext();) {
@@ -29,7 +28,6 @@ public class Process implements Container, Container4BPEL {
 		return endEvents;
 	}
 
-	@Override
 	public List<StartEvent> getStartEvents() {
 		ArrayList<StartEvent> StartEvents = new ArrayList<StartEvent>();
 		for(Iterator<Node> it = getChildNodes().iterator(); it.hasNext();) {

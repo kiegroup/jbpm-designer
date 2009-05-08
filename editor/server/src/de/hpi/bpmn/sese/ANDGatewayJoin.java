@@ -18,7 +18,6 @@ import de.hpi.bpmn.analysis.BPMNSESENormalizer;
  */
 public class ANDGatewayJoin extends ANDGateway implements Join {
 	
-	@Override
 	public SequenceFlow getOutgoingSequenceFlow() {
 		if(this.getIncomingSequenceFlows().size() != 1) {
 			return null;

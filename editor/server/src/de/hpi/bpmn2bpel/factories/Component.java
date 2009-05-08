@@ -225,19 +225,16 @@ public class Component implements Container4BPEL {
 		this.sinkObject = sink;
 	}
 
-	@Override
 	public List<EndEvent> getEndEvents() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public List<StartEvent> getStartEvents() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public List<Node> getChildNodes() {
 		// TODO Auto-generated method stub
 		return null;
