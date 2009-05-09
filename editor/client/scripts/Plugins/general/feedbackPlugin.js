@@ -30,10 +30,10 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
         arguments.callee.$.construct.apply(this, arguments);
         
         this.facade.offer({
-            'name': "Feedback",
+            'name': ORYX.I18N.Feedback.name,
             'functionality': this.showWindow.bind(this),
             'group': "Help",
-            'description': "Contact us for any kind of feedback!",
+            'description': ORYX.I18N.Feedback.desc,
             'icon': ORYX.PATH + "images/feedback.png",
             'index': 0,
             'minShape': 0,
@@ -43,7 +43,7 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
     
     showWindow: function(){
         var window = new Ext.Window({
-            title: "Contact us for any kind of feedback!",
+            title: ORYX.I18N.Feedback.pTitle,
             width: '50%',
             closable: true,
             items: [{
@@ -59,7 +59,7 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
                         items: {
                             xtype: 'textfield',
                             name: 'name',
-                            fieldLabel: 'Name',
+                            fieldLabel: ORYX.I18N.Feedback.pName,
                             anchor: '98%'
                         }
                     }, {
@@ -68,7 +68,7 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
                         items: {
                             xtype: 'textfield',
                             name: 'email',
-                            fieldLabel: 'E-Mail',
+                            fieldLabel: ORYX.I18N.Feedback.pEmail,
                             vtype: 'email',
                             anchor: '100%'
                         }
@@ -86,18 +86,18 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
                     mode: 'local',
                     typeAhead: true,
                     triggerAction: 'all',
-                    fieldLabel: 'Subject *'
+                    fieldLabel: ORYX.I18N.Feedback.pSubject + ' *'
                 }, {
                     xtype: 'textarea',
                     name: 'description',
                     allowBlank: false,
-                    fieldLabel: 'Description/ Message *',
-                    emptyText: '* Please provide as detailed information as possible so that we can understand your request.\n* For bug reports, please list the steps how to reproduce the problem and describe the output you expected.',
+                    fieldLabel: ORYX.I18N.Feedback.pMsg + ' *',
+                    emptyText: ORYX.I18N.Feedback.pEmpty,
                     height: 200,
                     anchor: '100%'
                 }, {
                     xtype: 'checkbox',
-                    boxLabel: 'Attach current model <img src="' + ORYX.CONFIG.ROOT_PATH + '/images/information.png" ext:qtip="This information can be helpful for debugging purposes. If your model contains some sensitive data, remove it before or uncheck this behavior."/>',
+                    boxLabel: ORYX.I18N.Feedback.pAttach + ' <img src="' + ORYX.CONFIG.ROOT_PATH + '/images/information.png" ext:qtip="' + ORYX.I18N.Feedback.pAttachDesc + '"/>',
                     hideLabel: true,
                     checked: true,
                     listeners: {
@@ -118,22 +118,22 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
                     name: 'model'
                 }, {
                     xtype: 'textarea',
-                    fieldLabel: 'Information about your browser and environment <img src="' + ORYX.CONFIG.ROOT_PATH + '/images/information.png" ext:qtip="This information has been auto-detected from your browser. It can be helpful if you encountered a bug associated with browser-specific behavior."/>',
+                    fieldLabel: ORYX.I18N.Feedback.pBrowser + ' <img src="' + ORYX.CONFIG.ROOT_PATH + '/images/information.png" ext:qtip="' + ORYX.I18N.Feedback.pBrowserDesc + '"/>',
                     anchor: '100%',
                     name: 'environment',
                     value: this.getEnv()
                 }],
                 buttons: [{
-                    text: 'Submit',
+                    text: ORYX.I18N.Feedback.submit,
                     handler: function(button){
                         button.ownerCt.form.submit({
-                            waitMsg: "Sending message ...", 
+                            waitMsg: ORYX.I18N.Feedback.sending, 
                             success: function(form, action){
-                                Ext.Msg.alert("Success", "The message has been successfully sent!");
+                                Ext.Msg.alert(ORYX.I18N.Feedback.success, ORYX.I18N.Feedback.successMsg);
                                 window.close();
                             },
                             failure: function(form, action){
-                                Ext.Msg.alert("Failure", "There have been problems while sending the message!");
+                                Ext.Msg.alert(ORYX.I18N.Feedback.failure, ORYX.I18N.Feedback.failureMsg);
                             }
                         });
                     }

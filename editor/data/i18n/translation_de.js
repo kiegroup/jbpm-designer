@@ -528,3 +528,23 @@ if(!ORYX.I18N.JSONImport) ORYX.I18N.JSONImport = {};
 ORYX.I18N.JSONImport.title = "JSON Import";
 ORYX.I18N.JSONImport.wrongSS = "Das Stencil Set der importierten Datei ({0}) entspricht nicht dem geladenen Stencil Set ({1})."
 
+if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
+
+ORYX.I18N.Feedback.name = "Feedback";
+ORYX.I18N.Feedback.desc = "Bitte senden Sie uns Ihr Feedback!";
+ORYX.I18N.Feedback.pTitle = "Bitte senden Sie uns Ihr Feedback!";
+ORYX.I18N.Feedback.pName = "Name";
+ORYX.I18N.Feedback.pEmail = "E-Mail";
+ORYX.I18N.Feedback.pSubject = "Betreff";
+ORYX.I18N.Feedback.pMsg = "Nachricht";
+ORYX.I18N.Feedback.pEmpty = "* Bitte geben Sie uns so genaue Informationen wie möglich.\n* Falls Sie einen Fehler gefunden haben, beschreiben Sie bitte die Schritte, die den Fehler verursacht haben.";
+ORYX.I18N.Feedback.pAttach = "Ihr Model der Nachricht anfügen";
+ORYX.I18N.Feedback.pAttachDesc = "Ihr Modell kann uns bei der Fehlersuche helfen. Der Inhalt des Modells wird vertraulich behandelt. Wenn Sie nicht möchten, daß das Modell an uns geschickt wird, entfernen Sie bitte das Häckchen.";
+ORYX.I18N.Feedback.pBrowser = "Browser- und Systeminformationen";
+ORYX.I18N.Feedback.pBrowserDesc = "Diese Informationen wurde automatisch von Ihrem Browser ermittelt und können uns helfen, den Fehler zu finden.";
+ORYX.I18N.Feedback.submit = "Nachricht senden";
+ORYX.I18N.Feedback.sending = "Sende Nachricht ...";
+ORYX.I18N.Feedback.success = "Nachricht gesendet";
+ORYX.I18N.Feedback.successMsg = "Vielen Dank. Ihr Feedback wurde an uns übermittelt.";
+ORYX.I18N.Feedback.failure = "Fehler";
+ORYX.I18N.Feedback.failureMsg = "Beim Senden der Nachricht ist ein Fehler aufgetreten.";
