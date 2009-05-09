@@ -507,7 +507,7 @@ ORYX.I18N.JSONSupport = {
         btnImp: "Importieren",
         btnClose: "Schließen",
         progress: "Importieren ...",
-        syntaxError: "Syntaxfehler im JSON!"
+        syntaxError: "Syntaxfehler"
     },
     exp: {
         name: "Nach JSON exportieren",
@@ -520,3 +520,11 @@ ORYX.I18N.JSONSupport = {
 if(!ORYX.I18N.BPMN2XHTML) ORYX.I18N.BPMN2XHTML = {};
 ORYX.I18N.BPMN2XHTML.group = "Export";
 ORYX.I18N.BPMN2XHTML.XHTMLExport = "XHTML Dokumentation exportieren";
+
+
+/** New Language Properties: 09.05.2009 */
+if(!ORYX.I18N.JSONImport) ORYX.I18N.JSONImport = {};
+
+ORYX.I18N.JSONImport.title = "JSON Import";
+ORYX.I18N.JSONImport.wrongSS = "Das Stencil Set der importierten Datei ({0}) entspricht nicht dem geladenen Stencil Set ({1})."
+

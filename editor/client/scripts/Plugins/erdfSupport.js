@@ -204,11 +204,11 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 		var stencilSetUrl	= stencilSetNode.getAttribute('href').split("/")
 		stencilSetUrl		= stencilSetUrl[stencilSetUrl.length-2] + "/" + stencilSetUrl[stencilSetUrl.length-1];
 		
-		var isLoaded = this.facade.getStencilSets().values().any(function(ss){ return ss.source().endsWith( stencilSetUrl ) })
-		if( !isLoaded ){
-			this.throwWarning(ORYX.I18N.ERDFSupport.wrongSS);
-			return false
-		}
+//		var isLoaded = this.facade.getStencilSets().values().any(function(ss){ return ss.source().endsWith( stencilSetUrl ) })
+//		if( !isLoaded ){
+//			this.throwWarning(ORYX.I18N.ERDFSupport.wrongSS);
+//			return false
+//		}
 				
 		return true;
 	},

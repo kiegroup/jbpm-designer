@@ -13,7 +13,7 @@ import org.w3c.dom.Text;
 public class RdfJsonTransformation {
 	
 	private final static String[] reservedNodeNames = 
-		{ "rdf:type", "type", "mode", "stencilset", "render", "bounds", "dockers", "outgoing", "target", "parent", "ssextension" };
+		{ "rdf:type", "type", "mode", "stencilset", "render", "bounds", "dockers", "outgoing", "target", "parent", "ssextension", "ssnamespace" };
 	
 	private static JSONObject canvas;
 	private static Map<String,JSONObject> objects; // resourceId -> JSONObject
@@ -177,7 +177,14 @@ public class RdfJsonTransformation {
 			object.put("target", target);
 			
 		} else if(n.getNodeName().equals("stencilset")) {
-			JSONObject stencilset = new JSONObject();
+			JSONObject stencilset;
+			if(object.has("stencilset")) {
+				stencilset = object.getJSONObject("stencilset");
+			} else {
+				stencilset = new JSONObject();
+				object.put("stencilset", stencilset);
+			}
+			
 			String stencilsetUrl = getAttributeValue(n, "rdf:resource");
 			if(!stencilsetUrl.startsWith(hostUrl))
 				stencilsetUrl = hostUrl + stencilsetUrl;
@@ -186,7 +193,20 @@ public class RdfJsonTransformation {
 			stencilsetUrl = stencilsetUrl.substring(stencilsetUrl.lastIndexOf("http://"));
 			
 			stencilset.put("url", stencilsetUrl);
-			object.put("stencilset", stencilset);
+			
+		} else if(n.getNodeName().equals("ssnamespace")) {
+			JSONObject stencilset;
+			if(object.has("stencilset")) {
+				stencilset = object.getJSONObject("stencilset");
+			} else {
+				stencilset = new JSONObject();
+				object.put("stencilset", stencilset);
+			}
+			
+			String namespace = getAttributeValue(n, "rdf:resource");
+
+			stencilset.put("namespace", namespace);
+			
 			
 		}
 			
@@ -221,7 +241,7 @@ public class RdfJsonTransformation {
 		String dockersString = getContent(n);
 		if(dockersString==null) return null;
 		
-		String[] dockerPoints = dockersString.replaceAll("\\s*#\\s*$", "").split(" ");
+		String[] dockerPoints = dockersString.replaceAll("#|\\s+"," ").trim().split(" ");
 		JSONArray dockers = new JSONArray();
 		
 		JSONObject currentDocker = null;

@@ -270,7 +270,13 @@ var DataManager = {
 			DataManager.addTriple( new ERDF.Triple(
 				shapeResource,
 				{prefix: "oryx", name: "stencilset"},
-				new ERDF.Resource(stencilset.source())
+				new ERDF.Resource(stencilset.source().replace(/&/g, "%26"))
+			));
+			
+			DataManager.addTriple( new ERDF.Triple(
+				shapeResource,
+				{prefix: "oryx", name: "ssnamespace"},
+				new ERDF.Resource(stencilset.namespace())
 			));
 			
 			stencilset.extensions().keys().each(function(extension) {

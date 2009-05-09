@@ -67,7 +67,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         this._stencils = new Hash();
 		this._availableStencils = new Hash();
         
-		if(ORYX.CONFIG.STENCILSET_HANDLER.length > 0) {
+		if(ORYX.CONFIG.BACKEND_SWITCH) {
 			//get the url of the stencil set json file
 			new Ajax.Request(source, {
 	            asynchronous: false,
@@ -386,6 +386,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 	
 	_getJSONURL: function(response) {
 		this._baseUrl = response.responseText.substring(0, response.responseText.lastIndexOf("/") + 1);
+		this._source = response.responseText;
 		new Ajax.Request(response.responseText, {
             asynchronous: false,
             method: 'get',
