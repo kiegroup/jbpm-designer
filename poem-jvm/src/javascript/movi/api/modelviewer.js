@@ -281,10 +281,18 @@ MOVI.namespace("widget");
 				this._onFailure();
 			}
 			
+			if(this.canvas.stencilset.url.substring(0, 7)!="http://") {
+				// relative stencilset url, make absolute
+				// guess server base url (model url substring until first slash)
+				var index = this._modelUri.substring(7).indexOf("/");
+				this.canvas.stencilset.url = this._modelUri.substring(0, 7+index) + this.canvas.stencilset.url;
+			}
+			
 			var jsonp = encodeURIComponent(
 				"MOVI.widget.ModelViewer.getInstance(" + 
 				this._index + ").loadStencilSetCallback");
 			var i = this.canvas.stencilset.url.indexOf("/stencilsets/");
+			
 			var url = this.canvas.stencilset.url.substring(0, i) +
 				"/jsonp?resource=" + encodeURIComponent(this.canvas.stencilset.url.substring(i+13)) + 
 				"&jsonp=" + jsonp;
