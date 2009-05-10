@@ -81,6 +81,7 @@ public class BPMN2PNServlet extends HttpServlet {
 
 		// Normalize diagram
 		BPMNNormalizer normalizer = new BPMNNormalizer(diagram);
+		normalizer.normalizeMultipleEndEvents = false;
 		normalizer.normalize();
 		
 		Converter conv = new StandardConverter(diagram);

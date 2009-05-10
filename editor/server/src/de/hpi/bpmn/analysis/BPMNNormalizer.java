@@ -43,6 +43,8 @@ import de.hpi.diagram.OryxUUID;
 
 public class BPMNNormalizer {
 	BPMNDiagram diagram;
+	
+	public boolean normalizeMultipleEndEvents = true; 
 
 	public BPMNNormalizer(BPMNDiagram diagram) {
 		this.diagram = diagram;
@@ -114,13 +116,13 @@ public class BPMNNormalizer {
 			return;
 
 		StartPlainEvent start = new StartPlainEvent();
-		addNode(start, process);
+		addNode(start, nodes.get(0));
 
 		if (nodes.size() == 1) {
 			connectNodes(start, nodes.get(0));
 		} else { // node splitting gateway is needed
 			ANDGateway gateway = new ANDGateway();
-			addNode(gateway, process);
+			addNode(gateway, nodes.get(0));
 
 			connectNodes(start, gateway);
 
@@ -137,13 +139,13 @@ public class BPMNNormalizer {
 			return;
 
 		EndPlainEvent end = new EndPlainEvent();
-		addNode(end, process);
+		addNode(end, nodes.get(0));
 
 		if (nodes.size() == 1) { // node splitting gateway is needed
 			connectNodes(nodes.get(0), end);
 		} else {
 			ANDGateway gateway = new ANDGateway();
-			addNode(gateway, process);
+			addNode(gateway, nodes.get(0));
 
 			connectNodes(gateway, end);
 
@@ -159,19 +161,21 @@ public class BPMNNormalizer {
 			return;
 
 		StartPlainEvent start = new StartPlainEvent();
-		addNode(start, process);
+		addNode(start, startEvents.get(0));
 
 		XOREventBasedGateway gateway = new XOREventBasedGateway();
-		addNode(gateway, process);
+		addNode(gateway, startEvents.get(0));
 
 		connectNodes(start, gateway);
 
 		for (StartEvent s : startEvents) {
+			Container sParent = s.getParent();
+			
 			removeNode(s);
 
 			IntermediateEvent iEvent = convertToIntermediateEvent(s);
 
-			addNode(iEvent, process);
+			addNode(iEvent, process, sParent);
 
 			// Connect new intermediate event with outgoing from replacing start
 			// event
@@ -184,21 +188,25 @@ public class BPMNNormalizer {
 	// Do not pass any terminate events!
 	private void normalizeMultipleEndEvents(Container process,
 			Vector<EndEvent> endEvents) {
+		if(!normalizeMultipleEndEvents) return;
+		
 		EndPlainEvent end = new EndPlainEvent();
-		addNode(end, process);
+		addNode(end, endEvents.get(0));
 
 		ORGateway gateway = new ORGateway();
-		addNode(gateway, process);
+		addNode(gateway, endEvents.get(0));
 
 		connectNodes(gateway, end);
 
 		int index = 0;
 		for (EndEvent e : endEvents) {
+			Container eParent = e.getParent();
+			
 			removeNode(e);
 
 			IntermediateEvent iEvent = convertToIntermediateEvent(e);
 
-			addNode(iEvent, process);
+			addNode(iEvent, process, eParent);
 
 			e.getIncomingEdges().get(0).setTarget(iEvent);
 
@@ -214,7 +222,7 @@ public class BPMNNormalizer {
 	protected void normalizeMultipleFlowsForActivity(Container process, Node activity){
 		if(activity.getIncomingSequenceFlows().size() > 1){
 			XORDataBasedGateway gateway = new XORDataBasedGateway();
-			addNode(gateway, process);
+			addNode(gateway, activity);
 			for(SequenceFlow seqFlow : activity.getIncomingSequenceFlows()){
 				seqFlow.setTarget(gateway);
 			}
@@ -222,7 +230,7 @@ public class BPMNNormalizer {
 		}
 		if(activity.getOutgoingSequenceFlows().size() > 1){
 			ANDGateway gateway = new ANDGateway();
-			addNode(gateway, process);
+			addNode(gateway, activity);
 			for(SequenceFlow seqFlow : activity.getOutgoingSequenceFlows()){
 				seqFlow.setSource(gateway);
 			}
@@ -242,12 +250,21 @@ public class BPMNNormalizer {
 		return seqFlow;
 	}
 
-	protected void addNode(Node node, Container process) {
-		diagram.getChildNodes().add(node);
+	protected void addNode(Node node, Container process, Container parent) {
 		// Generate an id if it hasn't been set before
 		if(node.getId() == null) node.setId(OryxUUID.generate());
-		node.setParent(process);
+		// Add to parent
+		node.setParent(parent);
 		node.setProcess(process);
+	}
+	
+	/**
+	 * 
+	 * @param node Node to add.
+	 * @param fromNode Node which is used to set the parent and process of given node to add.
+	 */
+	protected void addNode(Node node, Node fromNode) {
+		addNode(node, fromNode.getProcess(), fromNode.getParent());
 	}
 
 	protected void removeNode(Node node) {

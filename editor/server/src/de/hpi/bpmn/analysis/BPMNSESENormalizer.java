@@ -11,7 +11,6 @@ import de.hpi.bpmn.Lane;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.Pool;
 import de.hpi.bpmn.SequenceFlow;
-import de.hpi.bpmn.XORDataBasedGateway;
 import de.hpi.bpmn.sese.ANDGatewayJoin;
 import de.hpi.bpmn.sese.ANDGatewaySplit;
 
@@ -58,8 +57,8 @@ public class BPMNSESENormalizer extends BPMNNormalizer{
 			lane.getChildNodes().addAll(process.getChildNodes());
 			newPool.getChildNodes().add(lane);
 			
-			addNode(newPool, process);
-			addNode(lane, process);
+			addNode(newPool, process, process);
+			addNode(lane, process, process);
 		}
 		
 	}
@@ -123,9 +122,11 @@ public class BPMNSESENormalizer extends BPMNNormalizer{
 		if (gateway instanceof ANDGateway) {
 			/* Create the new join and split AndGateways */
 			ANDGatewayJoin joinAndGateway = new ANDGatewayJoin();
-			addNode(joinAndGateway, process);
+			//TODO set another node as parent instead of process??
+			addNode(joinAndGateway, process, process);
 			ANDGatewaySplit splitAndGateway = new ANDGatewaySplit();
-			addNode(splitAndGateway, process);
+			//TODO set another node as parent instead of process??
+			addNode(splitAndGateway, process, process);
 			
 			/* Adapt sequence flow to new gateways */
 			for(SequenceFlow seqFlow : gateway.getIncomingSequenceFlows()) {
@@ -157,7 +158,8 @@ public class BPMNSESENormalizer extends BPMNNormalizer{
 	private void convertToJoinGateway(Gateway gateway, Container process) {
 		if(gateway instanceof ANDGateway) {
 			ANDGatewayJoin agj = new ANDGatewayJoin();
-			addNode(agj, process);
+			//TODO set another node as parent instead of process??
+			addNode(agj, process, process);
 			
 			/* Adapt sequence flow to new gateways */
 			for(SequenceFlow seqFlow : gateway.getIncomingSequenceFlows()) {
@@ -181,7 +183,8 @@ public class BPMNSESENormalizer extends BPMNNormalizer{
 	private void convertToSplitGateway(Gateway gateway, Container process) {
 		if(gateway instanceof ANDGateway) {
 			ANDGatewaySplit ags = new ANDGatewaySplit();
-			addNode(ags, process);
+			//TODO set another node as parent instead of process??
+			addNode(ags, process, process);
 			
 			/* Adapt sequence flow to new gateways */
 			for(SequenceFlow seqFlow : gateway.getIncomingSequenceFlows()) {
