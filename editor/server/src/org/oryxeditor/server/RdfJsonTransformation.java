@@ -1,3 +1,9 @@
+/*
+ * ATTENTION: Please synch these files with each other!
+ * org.oryxeditor.server.RdfJsonTransformation
+ * org.b3mn.poem.util.RdfJsonTransformation
+ */
+
 package org.oryxeditor.server;
 
 import java.util.HashMap;
@@ -13,7 +19,7 @@ import org.w3c.dom.Text;
 public class RdfJsonTransformation {
 	
 	private final static String[] reservedNodeNames = 
-		{ "rdf:type", "type", "mode", "stencilset", "render", "bounds", "dockers", "outgoing", "target", "parent", "ssextension", "ssnamespace" };
+	{ "rdf:type", "type", "mode", "stencilset", "render", "bounds", "dockers", "outgoing", "target", "parent", "ssextension", "ssnamespace" };
 	
 	private static JSONObject canvas;
 	private static Map<String,JSONObject> objects; // resourceId -> JSONObject
@@ -101,7 +107,7 @@ public class RdfJsonTransformation {
 			return false;
 		if(n.hasChildNodes()){
 			//if there is the generatorAgent node
-			if(n.getFirstChild().getLocalName().equals("generatorAgent"))
+			if(n.getFirstChild().getLocalName() != null && n.getFirstChild().getLocalName().equals("generatorAgent"))
 				return false;
 		} else {
 			//if there isn't any child node
@@ -193,7 +199,7 @@ public class RdfJsonTransformation {
 			stencilsetUrl = stencilsetUrl.substring(stencilsetUrl.lastIndexOf("http://"));
 			
 			stencilset.put("url", stencilsetUrl);
-			
+
 		} else if(n.getNodeName().equals("ssnamespace")) {
 			JSONObject stencilset;
 			if(object.has("stencilset")) {
