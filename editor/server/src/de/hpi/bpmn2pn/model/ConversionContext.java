@@ -8,11 +8,11 @@ import de.hpi.petrinet.Place;
 
 public class ConversionContext {
 	public ConversionConfiguration config = null;
-	public Map<Object, Place> map = new HashMap(); // key = edge or
+	public Map<Object, Place> map = new HashMap<Object, Place>(); // key = edge or
 	// event-based gateway
 	// or attached event,
 	// value = place
-	public Map<Container, SubProcessPlaces> subprocessMap = new HashMap();
+	public Map<Container, SubProcessPlaces> subprocessMap = new HashMap<Container, SubProcessPlaces>();
 	public boolean ancestorHasExcpH = false;
 
 	public SubProcessPlaces getSubprocessPlaces(Container container) {

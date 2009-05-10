@@ -25,6 +25,6 @@ public interface Transition extends Node {
 	
 	public boolean isSimilarTo(Node node);
 	
-	public Transition getCopy();
-	
+	Object clone() throws CloneNotSupportedException;
+
 }

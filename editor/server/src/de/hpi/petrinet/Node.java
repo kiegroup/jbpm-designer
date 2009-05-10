@@ -1,6 +1,5 @@
 package de.hpi.petrinet;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hpi.util.Bounds;
@@ -26,7 +25,7 @@ import de.hpi.util.Bounds;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface Node {
+public interface Node extends Cloneable {
 	
 	public String getId();
 
@@ -45,8 +44,6 @@ public interface Node {
 	public Bounds getBounds();
 	public void setBounds(Bounds bounds);
 	
-	public Node getCopy();
-
 	public List<Node> getPrecedingNodes();
 	
 	public List<Node> getSucceedingNodes();

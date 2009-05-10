@@ -14,10 +14,14 @@ public abstract class ExecTransition extends ExecNode implements Transition {
 		this.modelURL = modelURL;
 	}
 	
-	public ExecTransition getCopy(){
-		ExecTransition t = (ExecTransition) super.getCopy();
-		t.setModelURL(this.getModelURL());
-		return t;
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		ExecTransition clone = (ExecTransition) super.clone();
+		
+		if (this.getModelURL() != null)
+			clone.setModelURL(new String(this.getModelURL()));
+		return clone;
 	}
+
 	
 }

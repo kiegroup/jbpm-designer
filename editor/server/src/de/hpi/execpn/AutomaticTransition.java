@@ -2,6 +2,7 @@ package de.hpi.execpn;
 
 import de.hpi.petrinet.Node;
 import de.hpi.petrinet.SilentTransition;
+import de.hpi.petrinet.SilentTransitionImpl;
 
 
 public class AutomaticTransition extends ExecTransition implements SilentTransition {
@@ -54,6 +55,24 @@ public class AutomaticTransition extends ExecTransition implements SilentTransit
 
 	public boolean isSimilarTo(Node node) {
 		return (node instanceof AutomaticTransition);
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		AutomaticTransition clone = (AutomaticTransition) super.clone();
+		
+		if (this.getAction() != null)
+			clone.setAction(new String(this.getAction()));
+		if (this.getTask() != null)
+			clone.setTask(new String(this.getTask()));
+		if (this.getLabel() != null)
+			clone.setLabel(new String(this.getLabel()));
+		if (this.getModelURL() != null)
+			clone.setModelURL(new String(this.getModelURL()));
+		if (this.getXsltURL() != null)
+			clone.setXsltURL(new String(this.getXsltURL()));
+		
+		return clone;
 	}
 
 }

@@ -25,9 +25,7 @@ import org.json.JSONObject;
  * SOFTWARE.
  */
 public interface Marking {
-	
-	Marking getCopy();
-	
+		
 	int getNumTokens(Place p);
 	
 	/**

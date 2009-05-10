@@ -25,7 +25,7 @@ import de.hpi.util.Bounds;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class FlowRelationship {
+public class FlowRelationship implements Cloneable {
 	
 	protected Node source;
 	protected Node target;
@@ -89,11 +89,16 @@ public class FlowRelationship {
 		this.resourceId = resourceId;
 	}
 	
-	public FlowRelationship getCopy() {
-		FlowRelationship f = new FlowRelationship();
-		f.setId(this.getId());
-		f.setResourceId(this.getResourceId());
-		return f;
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		FlowRelationship clone = (FlowRelationship) super.clone();
+		
+		if (this.getId() != null)
+			clone.setId(new String(this.getId()));
+		if (this.getResourceId() != null)
+			clone.setResourceId(new String(this.getResourceId()));
+
+		return clone;
 	}
 
 }

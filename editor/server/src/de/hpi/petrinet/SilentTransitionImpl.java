@@ -30,11 +30,12 @@ public class SilentTransitionImpl extends NodeImpl implements SilentTransition {
 		return (node instanceof SilentTransition);
 	}
 	
-	public SilentTransition getCopy() {
-		SilentTransition t = (SilentTransition) super.getCopy();
-		return t;
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		SilentTransition clone = (SilentTransitionImpl) super.clone();
+		return clone;
 	}
-
+	
 }
 
 

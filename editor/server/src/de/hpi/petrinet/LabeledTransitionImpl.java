@@ -43,12 +43,15 @@ public class LabeledTransitionImpl extends NodeImpl implements LabeledTransition
 	public String toString() {
 		return getId()+"("+getLabel()+")";
 	}
-
-	public LabeledTransition getCopy() {
-		LabeledTransition t = (LabeledTransition) super.getCopy();
-		t.setLabel(this.getLabel());
-		return t;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		LabeledTransition clone = (LabeledTransitionImpl) super.clone();
+		if (this.getLabel() != null)
+			clone.setLabel(new String(this.getLabel()));
+		return clone;
 	}
+
 }
 
 

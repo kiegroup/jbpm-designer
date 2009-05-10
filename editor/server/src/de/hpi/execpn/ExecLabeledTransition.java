@@ -1,6 +1,7 @@
 package de.hpi.execpn;
 
 import de.hpi.petrinet.LabeledTransition;
+import de.hpi.petrinet.LabeledTransitionImpl;
 import de.hpi.petrinet.Node;
 
 /**
@@ -41,6 +42,18 @@ public class ExecLabeledTransition extends ExecTransition implements LabeledTran
 
 	public void setTask(String taskId) {
 		this.task = taskId;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		ExecLabeledTransition clone = (ExecLabeledTransition) super.clone();
+		if (this.getLabel() != null)
+			clone.setLabel(new String(this.getLabel()));
+		if (this.getTask() != null)
+			clone.setTask(new String(this.getTask()));
+		if (this.getAction() != null)
+			clone.setAction(new String(this.getAction()));
+		return clone;
 	}
 
 }

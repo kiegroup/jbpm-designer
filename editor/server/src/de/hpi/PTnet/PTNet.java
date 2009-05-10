@@ -36,8 +36,6 @@ public class PTNet extends PetriNet {
 	
 	protected Boolean isBound;
 	
-	protected Boolean isLive;
-
 	@Override
 	public List<Place> getPlaces() {
 		if (places == null)
@@ -64,12 +62,21 @@ public class PTNet extends PetriNet {
 	 * Creates a copy of the PTNet. Note that the initial marking
 	 * is also copied.
 	 * 
-	 * @return the copy of the PTNet
+	 * @return the clone of the PTNet
 	 */
-	public PTNet getCopy() {
-		PTNet copy = (PTNet) super.getCopy();
-		copy.setInitialMarking(this.getInitialMarking().getCopy());
-		return copy;
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		PTNet clone = (PTNet) super.clone();
+		Marking cloneMarking = new Marking(clone);
+		
+		for (Place p : clone.getPlaces()) {
+			for (Place p2 : this.getPlaces()) {
+				if (p.getId().equals(p2.getId())) 
+					cloneMarking.setNumTokens(p, this.marking.getNumTokens(p2));
+			}
+		}
+		clone.setInitialMarking(cloneMarking);
+		return clone;
 	}
 	
 //	@Override

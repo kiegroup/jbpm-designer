@@ -29,8 +29,4 @@ public class Locator {
 		this.xpath = xpath;
 	}
 	
-	public Locator getCopy() {
-		Locator l = new Locator(this.getName(),this.getDatatype(),this.getXpath());
-		return l;
-	}
 }

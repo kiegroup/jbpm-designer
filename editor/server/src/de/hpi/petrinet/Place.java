@@ -22,7 +22,7 @@ package de.hpi.petrinet;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public interface Place extends Node {
+public interface Place extends Node, Cloneable {
 	/**
 	 * Returns true if place is a final place.
 	 */
@@ -32,9 +32,7 @@ public interface Place extends Node {
 	 * Returns true if place is an initial place.
 	 */
 	boolean isInitialPlace();
+
+	Object clone() throws CloneNotSupportedException;
 	
-	/**
-	 * get a copy of the place
-	 */
-	public Place getCopy();
 }

@@ -38,7 +38,7 @@ import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PetriNet {
+public class PetriNet implements Cloneable {
 	
 	protected List<Place> places;
 	protected List<Transition> transitions;
@@ -82,28 +82,42 @@ public class PetriNet {
 	 * transitions and flows are copied, whereas the source
 	 * and targets for the latter are also set accordingly.
 	 * 
-	 * @return the copy of the Petri net
+	 * @return the clone of the Petri net
 	 */
-	public PetriNet getCopy() {
-		PetriNet copy = PetriNetFactory.eINSTANCE.createPetriNet();
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		PetriNet clone = (PetriNet) super.clone();
 		Map<Node,Node> nodeCopies = new HashMap<Node, Node>();
+		
+		clone.setPlaces(new ArrayList<Place>());		
+		// will be generated when needed
+		clone.setInitialPlaces(null);
+		clone.setFinalPlaces(null);
+		
 		for(Place p : this.getPlaces()) {
-			Place p2 = p.getCopy();
-			copy.getPlaces().add(p2);
+			Place p2 = (Place) p.clone();
+			clone.getPlaces().add(p2);
 			nodeCopies.put(p, p2);
 		}
+
+		clone.setTransitions(new ArrayList<Transition>());
 		for(Transition t : this.getTransitions()) {
-			Transition t2 = t.getCopy();
-			copy.getTransitions().add(t2);
+			Transition t2 = (Transition) t.clone();
+			clone.getTransitions().add(t2);
 			nodeCopies.put(t, t2);
 		}
+
+		clone.setFlowRelationships(new ArrayList<FlowRelationship>());
 		for(FlowRelationship f : this.getFlowRelationships()) {
-			FlowRelationship newF = f.getCopy();
+			FlowRelationship newF = (FlowRelationship) f.clone();
 			newF.setSource(nodeCopies.get(f.getSource()));
 			newF.setTarget(nodeCopies.get(f.getTarget()));
-			copy.getFlowRelationships().add(newF);
+			clone.getFlowRelationships().add(newF);
 		}
-		return copy;
+		
+		// will be generated if needed
+		clone.setTransitiveClosure(null);
+		return clone;
 	}
 
 	public PetriNetFactory getFactory() {
@@ -215,12 +229,15 @@ public class PetriNet {
 		outer:
 		for(Transition t1 : this.getTransitions()) {
 			for(Transition t2 : this.getTransitions()) {
+				if (t1.equals(t2))
+					continue;
 				Collection<Node> preT1 = t1.getPrecedingNodes();
 				Collection<Node> preT2 = t2.getPrecedingNodes();
 				if (CollectionUtils.containsAny(preT1, preT2)) {
 					preT1.retainAll(preT2);
-					isFC &= (preT1.size() == preT2.size());
-					if (!isFC)
+					boolean tmp = (preT1.size() == preT2.size());
+					isFC &= tmp;
+					if (!isFC) 
 						break outer;
 				}
 			}
@@ -304,6 +321,30 @@ public class PetriNet {
 		if (this.transitiveClosure == null)
 			this.transitiveClosure = new TransitiveClosure(this);
 		return this.transitiveClosure;
+	}
+
+	public void setPlaces(List<Place> places) {
+		this.places = places;
+	}
+
+	public void setTransitions(List<Transition> transitions) {
+		this.transitions = transitions;
+	}
+
+	public void setFlowRelationships(List<FlowRelationship> flowRelationships) {
+		this.flowRelationships = flowRelationships;
+	}
+
+	public void setFinalPlaces(List<Place> finalPlaces) {
+		this.finalPlaces = finalPlaces;
+	}
+
+	public void setInitialPlaces(List<Place> initialPlaces) {
+		this.initialPlaces = initialPlaces;
+	}
+
+	public void setTransitiveClosure(TransitiveClosure transitiveClosure) {
+		this.transitiveClosure = transitiveClosure;
 	}
 
 	

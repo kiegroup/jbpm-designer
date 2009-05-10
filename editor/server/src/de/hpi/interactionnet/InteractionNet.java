@@ -41,7 +41,6 @@ public class InteractionNet extends PTNet {
 		return InteractionNetFactory.eINSTANCE;
 	}
 
-	@Override
 	public InteractionNet getCopy() {
 		InteractionNetFactory factory = getFactory();
 		InteractionNet newnet = factory.createInteractionNet();

@@ -1,6 +1,5 @@
 package de.hpi.petrinet;
 
-import de.hpi.PTnet.PTNetFactory;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -23,7 +22,7 @@ import de.hpi.PTnet.PTNetFactory;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PlaceImpl extends NodeImpl implements Place {
+public class PlaceImpl extends NodeImpl implements Place, Cloneable {
 
 	/**
 	 * Returns true if place has no outgoing arcs.
@@ -41,9 +40,11 @@ public class PlaceImpl extends NodeImpl implements Place {
 	
 	/**
 	 * Returns a copy of the place
+	 * @throws CloneNotSupportedException 
 	 */
-	public Place getCopy() {
-		Place p = (Place) super.getCopy();
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Place p = (PlaceImpl) super.clone();
 		return p;
 	}
 

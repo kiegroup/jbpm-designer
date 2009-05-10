@@ -3,8 +3,6 @@ package de.hpi.petrinet;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hpi.PTnet.PTNetFactory;
-import de.hpi.bpt.process.petri.FlowRelation;
 import de.hpi.util.Bounds;
 
 /**
@@ -84,11 +82,19 @@ public class NodeImpl implements Node {
 	public void setResourceId(String resourceId) {
 		this.resourceId = resourceId;
 	}
-	
-	public Node getCopy() {
-		Node n = new NodeImpl();
-		n.setId(this.id);
-		n.setBounds(this.getBounds().getCopy());
+		
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Node n = (Node) super.clone();
+		
+		if (this.getId() != null)
+			n.setId(this.id);
+		
+		if (this.getResourceId() != null)
+			n.setResourceId(this.resourceId);
+		
+		if (this.getBounds() != null)
+			n.setBounds((Bounds) this.getBounds().clone());
 		return n;
 	}
 	

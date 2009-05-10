@@ -69,12 +69,4 @@ public class ExecPlace extends ExecNode implements Place {
 		return false;
 	}
 	
-	public ExecPlace getCopy() {
-		ExecPlace p = (ExecPlace) super.getCopy();
-		p.setType(this.getType());
-		p.setName(this.getName());
-		p.setModel(this.getModel());
-		return p;
-	}
-
 }
