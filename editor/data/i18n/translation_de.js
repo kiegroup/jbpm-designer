@@ -521,7 +521,6 @@ if(!ORYX.I18N.BPMN2XHTML) ORYX.I18N.BPMN2XHTML = {};
 ORYX.I18N.BPMN2XHTML.group = "Export";
 ORYX.I18N.BPMN2XHTML.XHTMLExport = "XHTML Dokumentation exportieren";
 
-
 /** New Language Properties: 09.05.2009 */
 if(!ORYX.I18N.JSONImport) ORYX.I18N.JSONImport = {};
 
@@ -548,3 +547,9 @@ ORYX.I18N.Feedback.success = "Nachricht gesendet";
 ORYX.I18N.Feedback.successMsg = "Vielen Dank. Ihr Feedback wurde an uns übermittelt.";
 ORYX.I18N.Feedback.failure = "Fehler";
 ORYX.I18N.Feedback.failureMsg = "Beim Senden der Nachricht ist ein Fehler aufgetreten.";
+
+/** New Language Properties: 11.05.2009 */
+if(!ORYX.I18N.BPMN2DTRPXMI) ORYX.I18N.BPMN2DTRPXMI = {};
+ORYX.I18N.BPMN2DTRPXMI.group = "Export";
+ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExport = "Nach XMI exportieren (Design Thinking)";
+ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription = "Exportiert das aktuelle Model nach XMI (erfordert die Stencil Set Extension 'BPMN Subset for Design Thinking')";

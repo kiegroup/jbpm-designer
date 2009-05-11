@@ -555,3 +555,9 @@ ORYX.I18N.Feedback.success = "Success";
 ORYX.I18N.Feedback.successMsg = "Thank you for your feedback!";
 ORYX.I18N.Feedback.failure = "Failure";
 ORYX.I18N.Feedback.failureMsg = "The message could not be sent!";
+
+/** New Language Properties: 11.05.2009 */
+if(!ORYX.I18N.BPMN2DTRPXMI) ORYX.I18N.BPMN2DTRPXMI = {};
+ORYX.I18N.BPMN2DTRPXMI.group = "Export";
+ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExport = "Export to XMI (Design Thinking)";
+ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription = "Exports current model to XMI (requires stencil set extension 'BPMN Subset for Design Thinking')"; 

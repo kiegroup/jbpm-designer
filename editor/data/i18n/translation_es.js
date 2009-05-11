@@ -395,3 +395,36 @@ Ext.MessageBox.buttonText.ok = "Ok";
 //if(!ORYX.I18N.BPMN2XHTML) ORYX.I18N.BPMN2XHTML = {};
 //ORYX.I18N.BPMN2XHTML.group = "Export";
 //ORYX.I18N.BPMN2XHTML.XHTMLExport = "Export XHTML Documentation";
+
+/** New Language Properties: 09.05.2009 */
+//if(!ORYX.I18N.JSONImport) ORYX.I18N.JSONImport = {};
+//
+//ORYX.I18N.JSONImport.title = "JSON Import";
+//ORYX.I18N.JSONImport.wrongSS = "The stencil set of the imported file ({0}) does not match to the loaded stencil set ({1})."
+//
+//if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
+//
+//ORYX.I18N.Feedback.name = "Feedback";
+//ORYX.I18N.Feedback.desc = "Contact us for any kind of feedback!";
+//ORYX.I18N.Feedback.pTitle = "Contact us for any kind of feedback!";
+//ORYX.I18N.Feedback.pName = "Name";
+//ORYX.I18N.Feedback.pEmail = "E-Mail";
+//ORYX.I18N.Feedback.pSubject = "Subject";
+//ORYX.I18N.Feedback.pMsg = "Description/Message";
+//ORYX.I18N.Feedback.pEmpty = "* Please provide as detailed information as possible so that we can understand your request.\n* For bug reports, please list the steps how to reproduce the problem and describe the output you expected.";
+//ORYX.I18N.Feedback.pAttach = "Attach current model";
+//ORYX.I18N.Feedback.pAttachDesc = "This information can be helpful for debugging purposes. If your model contains some sensitive data, remove it before or uncheck this behavior.";
+//ORYX.I18N.Feedback.pBrowser = "Information about your browser and environment";
+//ORYX.I18N.Feedback.pBrowserDesc = "This information has been auto-detected from your browser. It can be helpful if you encountered a bug associated with browser-specific behavior.";
+//ORYX.I18N.Feedback.submit = "Send Message";
+//ORYX.I18N.Feedback.sending = "Sending message ...";
+//ORYX.I18N.Feedback.success = "Success";
+//ORYX.I18N.Feedback.successMsg = "Thank you for your feedback!";
+//ORYX.I18N.Feedback.failure = "Failure";
+//ORYX.I18N.Feedback.failureMsg = "The message could not be sent!";
+
+/** New Language Properties: 11.05.2009 */
+//if(!ORYX.I18N.BPMN2DTRPXMI) ORYX.I18N.BPMN2DTRPXMI = {};
+//ORYX.I18N.BPMN2DTRPXMI.group = "Export";
+//ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExport = "Export to XMI (Design Thinking)";
+//ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription = "Exports current model to XMI (requires stencil set extension 'BPMN Subset for Design Thinking')";
