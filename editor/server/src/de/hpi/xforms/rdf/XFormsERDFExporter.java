@@ -113,28 +113,10 @@ public class XFormsERDFExporter {
 	private void getStencilSetJson(String stencilsetPath) {
 		try {
 			String jsonString = readFileAsString(stencilsetPath);
-			
-			// HACK: remove all layout functions to get valid JSON
-			String validJsonString = removeLayoutFunctions(jsonString);
-			
-			stencilSetJsonObj = new JSONObject(validJsonString);
+			stencilSetJsonObj = new JSONObject(jsonString);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private String removeLayoutFunctions(String jsonString) {
-		// REGEX dont work well with grammars... lets do it by hand
-		String result = "";
-		int i = 0;
-		int j = jsonString.indexOf("\"layout\"");
-		while(j>0) {
-			result += jsonString.substring(i, j);
-			i = jsonString.indexOf("\"properties\"", j+1);
-			j = jsonString.indexOf("\"layout\"", i+1);
-		}
-		if(i>0) result += jsonString.substring(i);
-		return result;
 	}
 	
 	public void exportERDF(Writer writer) {
@@ -294,6 +276,7 @@ public class XFormsERDFExporter {
 		String submissionId = element.getAttributes().get("submission");
 		if(submissionId!=null) {
 			Submission submission = getSubmissionById(submissionId);
+			System.out.println("Submission action: " + submission.getAttributes().get("action"));
 			if(submission!=null) {
 				for(String field : submission.getAttributes().keySet()) {
 					if(!field.equals("id"))
