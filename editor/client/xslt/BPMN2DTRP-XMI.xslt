@@ -19,7 +19,13 @@
                     <xsl:for-each select="//rdf:Description[oryx:type='http://b3mn.org/stencilset/bpmn1.1#Task' and raziel:parent/@rdf:resource = current()/@rdf:about]">
                         <activities name="{oryx:name}" description="{oryx:documentation}" id="{@rdf:about}" goals="{oryx:goals}" end="{//rdf:Description[oryx:type='http://b3mn.org/stencilset/bpmn1.1#SequenceFlow' and raziel:target/@rdf:resource = current()/@rdf:about][1]/@rdf:about}">
                         
-                        <xsl:for-each select="//rdf:Description[oryx:type='http://b3mn.org/stencilset/bpmn1.1#SequenceFlow' and raziel:outgoing/@rdf:resource = current()/@rdf:about]">
+                        <xsl:for-each select="
+                            //rdf:Description [
+                                oryx:type = 'http://b3mn.org/stencilset/bpmn1.1#SequenceFlow'
+                                and
+                                current()/raziel:outgoing/@rdf:resource = @rdf:about
+                            ]
+                        ">
                             <xsl:variable name="edgeName" select="oryx:name" />
                             <xsl:choose>
                                 <!-- TODO: avoid code duplication since the only difference is start/@name -->
