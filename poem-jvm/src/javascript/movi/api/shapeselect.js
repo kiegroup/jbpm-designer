@@ -56,10 +56,9 @@ MOVI.namespace("util");
 		
 		this._allowMultiselect = multiselect;
 		
-		this._selectableShapes = {},
-		this._selectedShapes = {},
-		this._highlightMarkers = {},
-		
+		this._selectableShapes = {};
+		this._selectedShapes = {};
+		this._highlightMarkers = {};
 		
 		for(key in shapes) {
 			var shape = modelviewer.canvas.shapes[key];
