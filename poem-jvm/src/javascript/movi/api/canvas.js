@@ -51,6 +51,7 @@ MOVI.namespace("model");
 		
 		this.set("className", _CLASS_NAME);
 		
+		this.shapes = {};
 		this._indexShapes();
 		
 		this._update();
@@ -73,7 +74,7 @@ MOVI.namespace("model");
 		 * @property shapes
 		 * @type Object
 		 */
-		shapes: {},
+		shapes: null,
 		
 		/**
 	     * Index all shapes owned by the model. Deep traverse canvas'
@@ -142,6 +143,10 @@ MOVI.namespace("model");
 			return this._modelviewer;
 		},
 		
+		/**
+		 *
+		 *
+		 */
 		getNodes: function() {
 			var nodes = {};
 			for(key in this.shapes) {
