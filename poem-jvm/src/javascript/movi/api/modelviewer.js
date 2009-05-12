@@ -80,9 +80,9 @@ MOVI.namespace("widget");
 		if(YAHOO.lang.isNumber(id)) {
 			return _instances[id];
 		} else {
-			for(key in _instances) {
-				if(_instances[key].get("id")==id)
-					return _instances[key];
+			for(var i = 0; i < _instances.length; i++) {
+				if(_instances[i].get("id")==id)
+					return _instances[i];
 			}
 		}
 	};

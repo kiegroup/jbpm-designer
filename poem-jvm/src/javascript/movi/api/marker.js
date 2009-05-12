@@ -62,7 +62,7 @@ MOVI.namespace("util");
 
 		this._shapes = {};
 		// create shape rect elements
-		for(i in shapes) {
+		for(var i = 0; i < shapes.length; i++) {
 			var s = shapes[i];
 			this._shapes[s.resourceId] = s;
 			this.shapeRects[s.resourceId] = new YAHOO.util.Element(document.createElement('div'));
