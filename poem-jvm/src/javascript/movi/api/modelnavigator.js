@@ -93,6 +93,9 @@ MOVI.namespace("widget");
 		this.addListener("click", this._onClick, this, this, true);
 		YAHOO.util.Event.addListener(document, "mouseup", this._onMouseUp, this, this, true);
 		
+		this._absXY = [];
+		this._mouseOffset = {x: 0, y: 0};
+		
 		this.update();
 		
     };
@@ -121,7 +124,7 @@ MOVI.namespace("widget");
 		 * @type Array
 		 * @private
 	     */
-		_absXY: [],
+		_absXY: null,
 		
 		/**
 	     * The offset of the mouse pointer when dragging the clipping rect
@@ -129,7 +132,7 @@ MOVI.namespace("widget");
 		 * @type Object
 		 * @private
 	     */
-		_mouseOffset: {x: 0, y: 0},
+		_mouseOffset: null,
 		
 		/**
 		 * The ModelViewer that is navigated

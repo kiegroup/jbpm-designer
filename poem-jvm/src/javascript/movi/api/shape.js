@@ -178,10 +178,24 @@ MOVI.namespace("model");
 			return absBounds;
 		},
 		
+		/**
+		 * Tests if the shape has children
+		 * @method hasChildShapes
+		 * @return {Boolean} true if the shape has children, false otherwise
+		 */
 		hasChildShapes: function() {
 			for(key in this.childShapes)
 				return true;
 			return false;
+		},
+		
+		/**
+		 * Returns the stencil of this shape
+		 * @method getStencil
+		 * @return {Stencil} The stencil object
+		 */
+		getStencil: function() {
+			return this.stencil;
 		}
 		
 		// TODO: Doc for shape attributes from JSON

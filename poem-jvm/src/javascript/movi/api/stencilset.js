@@ -39,6 +39,8 @@ MOVI.namespace("stencilset");
 		this.namespace = jsonObj.namespace;
 		this.description = jsonObj.description;
 		
+		this.stencils = {};
+		
 		if(!jsonObj.stencils) {
 			MOVI.log("Stencilset contains no stencil definitions", "warning", "stencilset.js" );
 		}
@@ -57,7 +59,7 @@ MOVI.namespace("stencilset");
 		 * Retrieve an entry using the stencil's id as the key.
 	     * @property stencils
 	     */
-		stencils: {},
+		stencils: null,
 		
 		/**
 	     * Returns the stencil object with the specified id. If

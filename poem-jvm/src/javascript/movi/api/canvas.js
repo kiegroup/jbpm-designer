@@ -144,8 +144,9 @@ MOVI.namespace("model");
 		},
 		
 		/**
-		 *
-		 *
+		 * Returns all nodes of the model
+		 * @method getNodes
+		 * @return {Object} A key map (String -> Node) of all nodes with their resource ids as keys
 		 */
 		getNodes: function() {
 			var nodes = {};
@@ -156,6 +157,11 @@ MOVI.namespace("model");
 			return nodes;
 		},
 		
+		/**
+		 * Returns all edges of the model
+		 * @method getEdges
+		 * @return {Object} A key map (String -> Node) of all edges with their resource ids as keys
+		 */
 		getEdges: function() {
 			var edges = {};
 			for(key in this.shapes) {

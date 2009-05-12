@@ -65,6 +65,8 @@ MOVI.namespace("widget");
 		this.appendChild(this._scrollbox);
 		
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
+		
+		this._loadOptions = {};
     };
 
 	/**
@@ -101,7 +103,7 @@ MOVI.namespace("widget");
 		 * @type Object
 		 * @private
 	     */
-		_loadOptions: {},
+		_loadOptions: null,
 		
 		/**
 	     * The canvas container Element realizing scrolling

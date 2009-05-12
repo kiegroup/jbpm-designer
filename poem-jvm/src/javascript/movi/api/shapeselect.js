@@ -56,6 +56,11 @@ MOVI.namespace("util");
 		
 		this._allowMultiselect = multiselect;
 		
+		this._selectableShapes = {},
+		this._selectedShapes = {},
+		this._highlightMarkers = {},
+		
+		
 		for(key in shapes) {
 			var shape = modelviewer.canvas.shapes[key];
 			
@@ -78,11 +83,11 @@ MOVI.namespace("util");
 	
 	MOVI.util.ShapeSelect.prototype = {
 		
-		_selectableShapes: {},
+		_selectableShapes: null,
 		
-		_selectedShapes: {},
+		_selectedShapes: null,
 		
-		_highlightMarkers: {},
+		_highlightMarkers: null,
 		
 		_selectionMarker: null,
 		
