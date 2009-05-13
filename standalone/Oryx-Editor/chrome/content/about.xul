@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://Oryx-Editor/content/skin/standard/about.css" type="text/css"?> 
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+        
+    title="About"
+    buttons="accept"
+    buttonlabelaccept="OK"
+    ondialogaccept="" 
+    onload=""
+    maxwidth="400px"
+    flex="1">
+<script type="application/x-javascript" src="chrome://Oryx-Editor/content/about.js"/>
+	<grid>
+		<columns>
+			<column flex="1"/>
+			<column flex="2"/>
+		</columns>
+		<rows>
+		    <row>
+		    	<image src="chrome://Oryx-Editor/content/images/oryx.png" style="border: 1px solid black; width: 192px; height:120px"/>
+		  
+			    <vbox align="center">
+			    	<text value="" style="font-weight: bold; font-size:18px; text-align:center;"/>
+			    	<text value="" style="font-weight: bold; font-size:18px; text-align:center;"/>
+			    
+			        <text value=" Oryx Standalone Client" style="font-weight: bold; font-size:18px; text-align:center;"/>
+			        <text value="http://www.oryx-editor.org" style="color: blue; text-decoration: underline; text-align:center;" onclick="externalLoad('http://www.oryx-editor.org');"/>
+				</vbox>
+			</row>
+			<row>
+			    <text value="Copyright 2009 Oryx" style="font-weight: bold; font-size:12px;word-wrap: normal"/>
+				
+			</row>
+		</rows>
+	</grid>
+	<separator style="groove-thin"/>
+	
+	<description id="Desc" style="font-size:10px;word-wrap: normal;">
+					Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+					files (the "Software"), to deal in the Software without 
+					restriction, including without limitation the rights to use, 
+					copy, modify, merge, publish, distribute, sublicense, and/or sell 
+					copies of the Software, and to permit persons to whom the 
+					Software is furnished to do so, subject to the following 
+					conditions:
+	</description>
+	<description id="Desc" style="font-size:10px;word-wrap: normal;">		
+					The above copyright notice and this permission notice shall be 
+					included in all copies or substantial portions of the Software.
+	</description>
+	<description id="Desc" style="font-size:10px;word-wrap: normal;">				
+					THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+					EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+					OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+					NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+					HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+					WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+					FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+					OTHER DEALINGS IN THE SOFTWARE. 
+	</description>
+
+
+</dialog>

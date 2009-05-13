@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<prefwindow id="appPreferences"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            onload="gConnectionsDialog.checkForSystemProxy();gConnectionsDialog.proxyTypeChanged();"
+            onbeforeaccept="return (gConnectionsDialog.beforeAccept());"
+            >
+		   <script type="application/x-javascript" src="chrome://Oryx-Editor/content/md5.js"/> 
+          <script type="application/x-javascript" src="chrome://Oryx-Editor/content/connection.js"/>
+          
+  <prefpane id="ConnectionsDialogPane">
+    <preferences>
+	  <preference id="oryx.option.pass"       	  name="oryx.option.pass"            type="string"/>
+      <preference id="oryx.start.url"       	  name="oryx.start.url"            type="string"/>
+      <preference id="network.proxy.type"         name="network.proxy.type"         type="int" onchange="gConnectionsDialog.proxyTypeChanged();"/>
+      <preference id="network.proxy.http"         name="network.proxy.http"         type="string"/>
+      <preference id="network.proxy.http_port"    name="network.proxy.http_port"    type="int"/>
+      <preference id="network.proxy.ftp"          name="network.proxy.ftp"          type="string"/>
+      <preference id="network.proxy.ftp_port"     name="network.proxy.ftp_port"     type="int"/>
+      <preference id="network.proxy.ssl"          name="network.proxy.ssl"          type="string"/>
+      <preference id="network.proxy.ssl_port"     name="network.proxy.ssl_port"     type="int"/>
+      <preference id="network.proxy.socks"        name="network.proxy.socks"        type="string"/>
+      <preference id="network.proxy.socks_port"   name="network.proxy.socks_port"   type="int"/>
+      <preference id="network.proxy.gopher"       name="network.proxy.gopher"       type="string"/>
+      <preference id="network.proxy.gopher_port"  name="network.proxy.gopher_port"  type="int"/>
+      <preference id="network.proxy.socks_version"  name="network.proxy.socks_version"  type="int"/>
+      <preference id="network.proxy.no_proxies_on"  name="network.proxy.no_proxies_on"  type="string"/>
+      <preference id="network.proxy.autoconfig_url" name="network.proxy.autoconfig_url" type="string"/>
+      <preference id="network.proxy.share_proxy_settings" name="network.proxy.share_proxy_settings"
+                  type="bool"/>
+      
+      <preference id="pref.advanced.proxies.disable_button.reload"
+                  name="pref.advanced.proxies.disable_button.reload"
+                  type="bool"/>
+
+      <preference id="network.proxy.backup.ftp"          name="network.proxy.backup.ftp"          type="string"/>
+      <preference id="network.proxy.backup.ftp_port"     name="network.proxy.backup.ftp_port"     type="int"/>
+      <preference id="network.proxy.backup.ssl"          name="network.proxy.backup.ssl"          type="string"/>
+      <preference id="network.proxy.backup.ssl_port"     name="network.proxy.backup.ssl_port"     type="int"/>
+      <preference id="network.proxy.backup.socks"        name="network.proxy.backup.socks"        type="string"/>
+      <preference id="network.proxy.backup.socks_port"   name="network.proxy.backup.socks_port"   type="int"/>
+      <preference id="network.proxy.backup.gopher"       name="network.proxy.backup.gopher"       type="string"/>
+      <preference id="network.proxy.backup.gopher_port"  name="network.proxy.backup.gopher_port"  type="int"/>
+    </preferences>
+    <groupbox>
+    	
+     
+
+       <caption label="Connection"/>
+	  <!--   <hbox align="center">
+      <label value="Optional Password"/>
+    	<textbox id="pass1" flex="1" />
+      </hbox>
+	  <hbox align="center">
+      <label value="Repeat Password"/>
+		<textbox id="pass2" flex="1" />
+      </hbox>
+      -->
+             <hbox align="center">
+      <label value="Oryx-Url"/>
+    	<textbox id="oryxStartUrl" flex="1" preference="oryx.start.url"/>
+      </hbox>
+      <radiogroup id="networkProxyType" preference="network.proxy.type">
+        <radio value="0" label="No Proxy"/>
+        <radio value="4" label="Auto-Detect-Proxy-Configuration"/>
+        <radio value="5" label="System"  id="systemPref" hidden="true"/>
+        <radio value="1" label="Manual Configuration"/>
+        <grid class="indent" flex="1">
+          <columns>
+            <column/>
+            <column flex="1"/>
+          </columns>
+          <rows>
+            <row align="center">
+              <hbox pack="end">
+                <label value="Http Proxy" control="networkProxyHTTP"/>
+              </hbox>
+              <hbox align="center">
+                <textbox id="networkProxyHTTP" flex="1"
+                         preference="network.proxy.http" onsyncfrompreference="return gConnectionsDialog.readHTTPProxyServer();"/>
+                <label value="Port" control="networkProxyHTTP_Port"/>
+                <textbox id="networkProxyHTTP_Port" type="number" max="65535" size="5"
+                         preference="network.proxy.http_port" onsyncfrompreference="return gConnectionsDialog.readHTTPProxyPort();"/>
+              </hbox>
+            </row>
+            <row>
+              <hbox/>
+              <hbox>
+                <checkbox id="shareAllProxies" label="Share Proxy for all"
+                          preference="network.proxy.share_proxy_settings"
+                          onsyncfrompreference="return gConnectionsDialog.updateProtocolPrefs();"/>
+              </hbox>
+            </row>
+            <row align="center">
+              <hbox pack="end">
+                <label value="SSL-Proxy" control="networkProxySSL"/>
+              </hbox>
+              <hbox align="center">
+                <textbox id="networkProxySSL" flex="1" preference="network.proxy.ssl"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('ssl', false);"/>
+                <label value="Port" control="networkProxySSL_Port"/>
+                <textbox id="networkProxySSL_Port" type="number" max="65535" size="5" preference="network.proxy.ssl_port"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('ssl', true);"/>
+              </hbox>
+            </row>
+            <row align="center">
+              <hbox pack="end">
+                <label value="FTP-Proxy" control="networkProxyFTP"/>
+              </hbox>
+              <hbox align="center">
+                <textbox id="networkProxyFTP" flex="1" preference="network.proxy.ftp"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('ftp', false);"/>
+                <label value="Port" control="networkProxyFTP_Port"/>
+                <textbox id="networkProxyFTP_Port" type="number" max="65535" size="5" preference="network.proxy.ftp_port"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('ftp', true);"/>
+              </hbox>
+            </row>
+            <row align="center">
+              <hbox pack="end">
+                <label value="Gopher-Proxy" control="networkProxyGopher"/>
+              </hbox>
+              <hbox align="center">
+                <textbox id="networkProxyGopher" flex="1" preference="network.proxy.gopher"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('gopher', false);"/>
+                <label value="Port"  control="networkProxyGopher_Port"/>
+                <textbox id="networkProxyGopher_Port" type="number" max="65535" size="5" preference="network.proxy.gopher_port"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('gopher', true);"/>
+              </hbox>
+            </row>
+            <row align="center">
+              <hbox pack="end">
+                <label value="SOCKS-Host" control="networkProxySOCKS"/>
+              </hbox>
+              <hbox align="center">
+                <textbox id="networkProxySOCKS" flex="1" preference="network.proxy.socks"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('socks', false);"/>
+                <label value="Port" accesskey="SOCKSport.accesskey;" control="networkProxySOCKS_Port"/>
+                <textbox id="networkProxySOCKS_Port" type="number" max="65535" size="5" preference="network.proxy.socks_port"
+                         onsyncfrompreference="return gConnectionsDialog.readProxyProtocolPref('socks', true);"/>
+              </hbox>
+            </row>
+            <row>
+              <spacer/>
+              <radiogroup id="networkProxySOCKSVersion" orient="horizontal"
+                          preference="network.proxy.socks_version">
+                <radio id="networkProxySOCKSVersion4" value="4" label="socks4"  />
+                <radio id="networkProxySOCKSVersion5" value="5" label="socks5" />
+              </radiogroup>
+            </row>
+          </rows>
+        </grid>
+        <radio value="2" label="Network-Proxy-Autoconfig-URL:" />
+        <hbox class="indent" flex="1" align="center">
+          <textbox id="networkProxyAutoconfigURL" flex="1" preference="network.proxy.autoconfig_url"
+                   oninput="gConnectionsDialog.updateReloadButton();"/>
+          <button id="autoReload" icon="refresh"
+                  label="reload"
+                  oncommand="gConnectionsDialog.reloadPAC();" 
+                  preference="pref.advanced.proxies.disable_button.reload"/>
+        </hbox>
+      </radiogroup>
+    </groupbox>
+  </prefpane>
+</prefwindow>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+        <window id="Oryx" title="Oryx" sizemode="maximized"
+                xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+                onload="load(Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch).getCharPref('oryx.start.url'));">
+                
+        <script type="application/x-javascript">
+			   function _getBrowser() {
+   					 return document.getElementById("content");
+  				};
+                function FillInHTMLTooltip(tipElement)
+                 {
+                 
+                   var tipNode = document.getElementById("aHTMLTooltip");
+                 
+                   if(!tipElement.getAttribute("title"))
+                        return false
+                   tipNode.setAttribute("label", tipElement.getAttribute("title"));
+                  
+                  
+                   return true;
+                 };
+                 function load(uri){
+                 try{
+                 	_getBrowser().loadURI(uri,null,null);
+                 	}catch(e){alert(e);}
+                 };
+                 function stop(){
+                 	_getBrowser.stop();};
+
+            </script>
+		
+      <toolbar>
+      <!--
+      <toolbarbutton label="Start" oncommand="load(Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch).getCharPref('oryx.start.url'));"/>
+      <toolbarbutton label="Config" oncommand="load('about:config');"/>
+      -->
+      
+      <toolbarbutton label="Options" oncommand="window.openDialog('chrome://Oryx-Editor/content/options.xul', '','chrome,centerscreen,modal', '');"/>
+      <toolbarbutton label="About" oncommand="window.openDialog('chrome://Oryx-Editor/content/about.xul', '','chrome,centerscreen,modal', '');"/>
+      
+    
+      </toolbar><tooltip id="aHTMLTooltip" onpopupshowing="return FillInHTMLTooltip(document.tooltipNode);"></tooltip>
+      <browser 
+      	id="content"
+      	name="content" 
+      	type="content-primary" 
+      	tooltip="aHTMLTooltip"
+      	flex="1"></browser>
+
+      </window>
