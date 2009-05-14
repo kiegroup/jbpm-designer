@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2009 Falko Menge
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:oryx="http://oryx-editor.org/"
     xmlns:raziel="http://raziel.org/"
-    >
+>
 
-    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"
+        doctype-public="-//W3C//DTD XHTML Basic 1.1//EN"
+        doctype-system="http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd"
+        cdata-section-elements="script style"
+    />
 
+    <!-- Suppress text output by default for all modes. -->
+    <xsl:template match="text()|@*" mode="#all"/>
+
+    <!-- Root Node -->
     <xsl:template match="/">
         <html>
             <head>
+                <title>Documentation generated out of a BPMN Model</title>
                 <style type="text/css">
-      <xsl:text>
+      <xsl:text><![CDATA[
          body {
             font-size: 75%;
             font-family: sans-serif;
@@ -26,8 +56,8 @@
          h1, h2, h3 {
             margin-top: 0px;
          }
-      </xsl:text>
-                    </style>
+      ]]></xsl:text>
+                </style>
             </head>
             <body>
                 <xsl:for-each select="//rdf:Description[oryx:type='http://b3mn.org/stencilset/bpmn1.1#BPMNDiagram']">
