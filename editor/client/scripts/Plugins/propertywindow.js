@@ -229,17 +229,16 @@ ORYX.Plugins.PropertyWindow = {
 		
 		// Execute the command
 		this.facade.executeCommands([command]);
-		
-		
-		//this.currentElement.update();
+
 
 		// extended by Kerstin (start)
-//		this.facade.raiseEvent({
-//			type 	:ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, 
-//			element	: this.currentElement,
-//			name	: name,
-//			value	: option.value
-//		});
+//
+		this.facade.raiseEvent({
+			type 		: ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, 
+			elements	: selectedElements,
+			key			: key,
+			value		: option.value
+		});
 		// extended by Kerstin (end)
 	},
 
