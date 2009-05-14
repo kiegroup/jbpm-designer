@@ -56,10 +56,10 @@ MOVI.namespace("widget");
 
 		var existingScrollboxArr = this.getElementsByClassName(_SCROLLBOX_CLASS_NAME);
 		if(existingScrollboxArr.length==1) {
-			// use existing scrollbox element
+			// use existing scrollbox element if available
 			this._scrollbox = new YAHOO.util.Element(existingScrollboxArr[0]);
 		} else {
-			// create scrollbox element
+			// otherwise create the scrollbox element
 			this._scrollbox = new YAHOO.util.Element(document.createElement("div"));
 			this._scrollbox.addClass(_SCROLLBOX_CLASS_NAME);
 			this.appendChild(this._scrollbox);
