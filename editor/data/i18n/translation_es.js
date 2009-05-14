@@ -428,3 +428,9 @@ Ext.MessageBox.buttonText.ok = "Ok";
 //ORYX.I18N.BPMN2DTRPXMI.group = "Export";
 //ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExport = "Export to XMI (Design Thinking)";
 //ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription = "Exports current model to XMI (requires stencil set extension 'BPMN Subset for Design Thinking')";
+
+/** New Language Properties: 14.05.2009 */
+//if(!ORYX.I18N.RDFExport) ORYX.I18N.RDFExport = {};
+//ORYX.I18N.RDFExport.group = "Export";
+//ORYX.I18N.RDFExport.rdfExport = "Export to RDF";
+//ORYX.I18N.RDFExport.rdfExportDescription = "Exports current model to the XML serialization defined for the Resource Description Framework (RDF)";

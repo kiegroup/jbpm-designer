@@ -21,8 +21,9 @@
 		</plugin>
 		<plugin source="renameShapes.js" name="ORYX.Plugins.RenameShapes" />
 		<plugin source="erdfSupport.js" name="ORYX.Plugins.ERDFSupport" />
-        <plugin source="jsonSupport.js" name="ORYX.Plugins.JSONSupport" />
-        <plugin source="general/feedbackPlugin.js" name="ORYX.Plugins.FeedbackPlugin" />
+		<plugin source="jsonSupport.js" name="ORYX.Plugins.JSONSupport" />
+		<plugin source="rdfExport.js" name="ORYX.Plugins.RDFExport" />
+		<plugin source="general/feedbackPlugin.js" name="ORYX.Plugins.FeedbackPlugin" />
 		<plugin source="undo.js" name="ORYX.Plugins.Undo" />
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
@@ -211,7 +212,7 @@
 		<plugin source="bpmn2dtrp-xmi.js" name="ORYX.Plugins.BPMN2DTRPXMI">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
-		
+				
 		<!-- Resource Perspective -->
 		<plugin source="bpmnResourcesSoDAdd.js" name="ORYX.Plugins.ResourcesSoDAdd">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	

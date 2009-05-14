@@ -557,3 +557,9 @@ if(!ORYX.I18N.BPMN2DTRPXMI) ORYX.I18N.BPMN2DTRPXMI = {};
 ORYX.I18N.BPMN2DTRPXMI.group = "Export";
 ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExport = "Nach XMI exportieren (Design Thinking)";
 ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription = "Exportiert das aktuelle Model nach XMI (erfordert die Stencil Set Extension 'BPMN Subset for Design Thinking')";
+
+/** New Language Properties: 14.05.2009 */
+if(!ORYX.I18N.RDFExport) ORYX.I18N.RDFExport = {};
+ORYX.I18N.RDFExport.group = "Export";
+ORYX.I18N.RDFExport.rdfExport = "Nach RDF exportieren";
+ORYX.I18N.RDFExport.rdfExportDescription = "Exportiert das aktuelle Model in die XML-Serialisierung des Resource Description Frameworks (RDF)";
