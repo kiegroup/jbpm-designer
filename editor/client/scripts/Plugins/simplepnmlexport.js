@@ -36,6 +36,7 @@ ORYX.Plugins.SimplePnmlexport = Clazz.extend({
             'functionality': this.exportIt.bind(this),
             'group': ORYX.I18N.SimplePnmlexport.group,
             dropDownGroupIcon: ORYX.PATH + "images/export2.png",
+			'icon': ORYX.PATH + "images/page_white_gear.png",
             'description': ORYX.I18N.SimplePnmlexport.desc,
             'index': 1,
             'minShape': 0,
