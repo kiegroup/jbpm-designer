@@ -10,6 +10,8 @@
     <property name="editor-src-client" value="${editor-src-root}/client" />
     <property name="editor-src-server" value="${editor-src-root}/server" />
     <property name="editor-build-root" value="${build-dir}/editor" />
+	<!-- parses plugin xml-->
+	<xmlproperty file="${editor-src-client}/scripts/Plugins/plugins.xml" collapseAttributes="true"/>
     
     <!-- Targets for oryx javascript documentation ****************************************************** -->
     <path id="jsdoc.classpath">
@@ -229,7 +231,9 @@
                 <file name='scripts/Core/edge.js'/>
                 <file name='scripts/Core/command.js'/>
             </filelist>
-            <fileset dir="${editor-src-client}/scripts/Plugins" includes="**/*.js"/>
+			<!-- load all sources from plugins defined in the plugins.xml-->
+			<filelist dir="${editor-src-client}/scripts/Plugins/" files="${config.plugins.plugin.source}"/>
+            <!--<fileset dir="${editor-src-client}/scripts/Plugins" includes="**/*.js"/>-->
         </concat>
         <echo>
             Concatenated source files into oryx.js

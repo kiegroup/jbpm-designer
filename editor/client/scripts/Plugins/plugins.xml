@@ -22,7 +22,7 @@
 		<plugin source="renameShapes.js" name="ORYX.Plugins.RenameShapes" />
 		<plugin source="erdfSupport.js" name="ORYX.Plugins.ERDFSupport" />
         <plugin source="jsonSupport.js" name="ORYX.Plugins.JSONSupport" />
-        <plugin source="feedbackPlugin.js" name="ORYX.Plugins.FeedbackPlugin" />
+        <plugin source="general/feedbackPlugin.js" name="ORYX.Plugins.FeedbackPlugin" />
 		<plugin source="undo.js" name="ORYX.Plugins.Undo" />
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
