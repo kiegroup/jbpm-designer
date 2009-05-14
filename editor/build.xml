@@ -230,6 +230,7 @@
                 <file name='scripts/Core/node.js'/>
                 <file name='scripts/Core/edge.js'/>
                 <file name='scripts/Core/command.js'/>
+            	<file name='scripts/Core/abstractPlugin.js'/>
             </filelist>
 			<!-- load all sources from plugins defined in the plugins.xml-->
 			<filelist dir="${editor-src-client}/scripts/Plugins/" files="${config.plugins.plugin.source}"/>
