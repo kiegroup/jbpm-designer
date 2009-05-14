@@ -146,7 +146,7 @@ ORYX.Plugins.BPEL4ChorSupport = Clazz.extend({
 			
 		} catch (error){
 			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
-			Ext.Msg.alert("Oryx", error);
+			Ext.Msg.alert(ORYX.I18N.Oryx.title, error);
 	 	}
     
 	},

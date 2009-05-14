@@ -80,7 +80,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 	 */
 	sendRequest: function(options){
 
-		var waitingpanel = new Ext.Window({id:'oryx-loading-panel_epc2bpmn',bodyStyle:'padding: 8px',title:'Oryx',width:230,height:55,modal:true,resizable:false,closable:false,frame:true,html:'<span style="font-size:11px;">Please wait while Oryx is importing...</span>'})
+		var waitingpanel = new Ext.Window({id:'oryx-loading-panel_epc2bpmn',bodyStyle:'padding: 8px',title:'Oryx',width:230,height:55,modal:true,resizable:false,closable:false,frame:true,html:'<span style="font-size:11px;">Please wait while importing...</span>'})
 		waitingpanel.show()
 		
 		if( !options || !options.url ){ return }
@@ -100,7 +100,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			 		try{
 						this.doTransform( request.responseText, options);
 					} catch(e) {
-						Ext.Msg.alert("Oryx","An Error is occured while importing!");
+						Ext.Msg.alert(ORYX.I18N.Oryx.title,"An Error is occured while importing!");
 					}
 					
 					Ext.getCmp("oryx-loading-panel_epc2bpmn").close();
@@ -120,7 +120,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 				// Disable the loading panel
 				this.facade.raiseEvent({ type: ORYX.CONFIG.EVENT_LOADING_DISABLE});	
 				
-				Ext.Msg.alert("Oryx", "Request to server failed!");
+				Ext.Msg.alert(ORYX.I18N.Oryx.title, "Request to server failed!");
 			
 			}.bind(this)
         });
@@ -736,7 +736,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 	 * @param {Object} message
 	 */
 	throwErrorMessage: function(message){
-		Ext.Msg.alert( 'Oryx', message )
+		Ext.Msg.alert( ORYX.I18N.Oryx.title, message )
 	},
 	
 	/** ********************************************************
@@ -859,7 +859,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					
 		
 		var windowPanel = new Ext.Window({
-					    title:			"Oryx - Transform EPC to BPMN",
+					    title:			ORYX.I18N.Oryx.title + " - Transform EPC to BPMN",
 					    width:			400,
 						id:				'transform-epc-bpmn-id-panel',
 						cls:			'transform-epc-bpmn-window',

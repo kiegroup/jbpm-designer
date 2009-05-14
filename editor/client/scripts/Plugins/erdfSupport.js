@@ -134,7 +134,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 					failedcallback();
 					
 				} else {
-					Ext.Msg.alert("Oryx", ORYX.I18N.ERDFSupport.impFailed);
+					Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.ERDFSupport.impFailed);
 					ORYX.log.warn("Import ERDF failed: " + transport.responseText);	
 				}
 				
@@ -215,7 +215,7 @@ ORYX.Plugins.ERDFSupport = Clazz.extend({
 	
 	throwWarning: function( text ){
 		Ext.MessageBox.show({
-					title: 		'Oryx',
+					title: 		ORYX.I18N.Oryx.title,
  					msg: 		text,
 					buttons: 	Ext.MessageBox.OK,
 					icon: 		Ext.MessageBox.WARNING

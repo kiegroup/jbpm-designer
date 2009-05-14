@@ -133,7 +133,7 @@ ORYX.Plugins.JPDLSupport = ORYX.Plugins.AbstractPlugin.extend({
 					failedcallback();
 					
 				} else {
-					this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedReq);
+					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedReq);
 					ORYX.log.warn("Import jPDL failed: " + transport.responseText);	
 				}
 				
@@ -164,11 +164,11 @@ ORYX.Plugins.JPDLSupport = ORYX.Plugins.AbstractPlugin.extend({
 								if (this.loadStencilSetExtension(this.stencilSetNamespace, this.stencilSetExtensionDefinition)){
 									this.facade.importJSON(jsonString);
 								} else {
-									this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJson);
+									this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedJson);
 								}
 								
 							} else {
-								this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJsonAbort);
+								this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedJsonAbort);
 							}
 						},
 						this
@@ -176,10 +176,10 @@ ORYX.Plugins.JPDLSupport = ORYX.Plugins.AbstractPlugin.extend({
 				}
 				
 			} else {
-				this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJson);
+				this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedJson);
 			}
 		} else {
-			this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.impFailedJson);
+			this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedJson);
 		}
 	},
 	
@@ -217,13 +217,13 @@ ORYX.Plugins.JPDLSupport = ORYX.Plugins.AbstractPlugin.extend({
 				var parser = new DOMParser();
 				var parsedResult = parser.parseFromString(result, "text/xml");
 				if (parsedResult.firstChild.localName == "error") {
-					this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.expFailedXml + parsedResult.firstChild.firstChild.data);
+					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.expFailedXml + parsedResult.firstChild.firstChild.data);
 				} else {
 					this.openXMLWindow(result);
 				}
 			}.bind(this),
 			function() { 
-				this._showErrorMessageBox("Oryx", ORYX.I18N.jPDLSupport.expFailedReq);
+				this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.expFailedReq);
 		 	}.bind(this)
 		)
 	}, 

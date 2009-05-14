@@ -12,7 +12,8 @@ ORYX.I18N.Language = "en_us"; //Pattern <ISO language code>_<ISO country code> i
 
 if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 
-ORYX.I18N.Oryx.pleaseWait = "Please wait while Oryx is loading...";
+ORYX.I18N.Oryx.title	= "Oryx";
+ORYX.I18N.Oryx.pleaseWait = "Please wait while loading...";
 ORYX.I18N.Oryx.notLoggedOn = "Not logged on";
 
 if(!ORYX.I18N.AddDocker) ORYX.I18N.AddDocker = {};
@@ -503,6 +504,12 @@ if(!ORYX.I18N.ClearSodBodHighlights) ORYX.I18N.ClearSodBodHighlights = {};
 ORYX.I18N.ClearSodBodHighlights.name = "Clear Highlights and Overlays";
 ORYX.I18N.ClearSodBodHighlights.group = "Resource Perspective";
 ORYX.I18N.ClearSodBodHighlights.desc = "Remove all Separation and Binding of Duties Highlights/ Overlays";
+
+
+if(!ORYX.I18N.Perspective) ORYX.I18N.Perspective = {};
+ORYX.I18N.Perspective.no = "No Perspective"
+ORYX.I18N.Perspective.noTip = "Unload the current perspective"
+
 
 /** New Language Properties: 21.04.2009 */
 ORYX.I18N.JSONSupport = {

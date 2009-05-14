@@ -125,7 +125,7 @@ ORYX.Plugins.DesynchronizabilityOverlay = Clazz.extend({
 
 						} else {
 
-							Ext.Msg.alert("Oryx", ORYX.I18N.DesynchronizabilityOverlay.sync);
+							Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.sync);
 							// var win = window.open('data:text/plain,' +request.responseText, '_blank', "resizable=yes,width=640,height=480,toolbar=0,scrollbars=yes");
 						}
 						} else if (resp.syntaxerrors) {
@@ -133,19 +133,19 @@ ORYX.Plugins.DesynchronizabilityOverlay = Clazz.extend({
 							// Get all Valid ResourceIDs and collect all shapes
 //							var shapes = transitions.collect(function(res){ return this.facade.getCanvas().getChildShapeByResourceId( res ) }.bind(this)).compact();
 
-							Ext.Msg.alert("Oryx", ORYX.I18N.DesynchronizabilityOverlay.error.replace(/1/, resp.syntaxerrors.length));
+							Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.error.replace(/1/, resp.syntaxerrors.length));
 
 //							this.active = !this.active;				
 
 						} else {
-							Ext.Msg.alert("Oryx", ORYX.I18N.DesynchronizabilityOverlay.invalid);
+							Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.invalid);
 						}
 				}.bind(this)
 			});
 			
 		} catch (error){
 			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
-			Ext.Msg.alert("Oryx", error);
+			Ext.Msg.alert(ORYX.I18N.Oryx.title, error);
 	 	}
 
 		}

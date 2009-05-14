@@ -88,7 +88,7 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
 					}
 				}
 	            Ext.Msg.show({
-	            	title	: 'Oryx',
+	            	title	: ORYX.I18N.Oryx.title,
 	            	msg		: request.responseText,
 	            	icon		: Ext.MessageBox.INFO
 	            });
@@ -98,7 +98,7 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
                         
 			onFailure: function(request){
             	Ext.Msg.show({
-				   title	: 'Oryx',
+				   title	: ORYX.I18N.Oryx.title,
 				   msg		: 'An error occurs while sending request!',
 				   icon		: Ext.MessageBox.WARNING
 				});

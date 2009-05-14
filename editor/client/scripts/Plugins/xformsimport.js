@@ -84,7 +84,7 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 					failedcallback();
 					
 				} else {
-					Ext.Msg.alert("Oryx", ORYX.I18N.XFormsSerialization.impFailed);
+					Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.XFormsSerialization.impFailed);
 					ORYX.log.warn("Import XForms failed: " + transport.responseText);	
 				}
 				
@@ -158,7 +158,7 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 	
 	throwWarning: function( text ){
 		Ext.MessageBox.show({
-					title: 		'Oryx',
+					title: 		ORYX.I18N.Oryx.title,
  					msg: 		text,
 					buttons: 	Ext.MessageBox.OK,
 					icon: 		Ext.MessageBox.WARNING

@@ -101,7 +101,7 @@ ORYX.Plugins.IBPMN2BPMN = Clazz.extend({
 					failedcallback( );
 					
 				} else {
-					Ext.Msg.alert("Oryx", ORYX.I18N.ERDFSupport.impFailed);
+					Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.ERDFSupport.impFailed);
 					ORYX.log.warn("Transform failed: " + transport.responseText);	
 				}
 				

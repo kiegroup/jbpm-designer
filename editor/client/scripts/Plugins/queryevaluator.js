@@ -278,14 +278,14 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 					this.facade.raiseEvent({
 						type:ORYX.CONFIG.EVENT_LOADING_DISABLE
 					});
-					Ext.Msg.alert("Oryx", "Server encountered an error (" + response.statusText + ").\n"
+					Ext.Msg.alert(ORYX.I18N.Oryx.title, "Server encountered an error (" + response.statusText + ").\n"
 						+ response.responseText);
 				}.bind(this)
 			});
 			
 		} catch (error){
 			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
-			Ext.Msg.alert("Oryx", error);
+			Ext.Msg.alert(ORYX.I18N.Oryx.title, error);
 	 	}
 
 	},
@@ -345,7 +345,7 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 	 */
 	processProcessList: function(processList){
 		if(processList.length == 0) {
-			Ext.Msg.alert("Oryx", "Found no matching processes!");
+			Ext.Msg.alert(ORYX.I18N.Oryx.title, "Found no matching processes!");
 			return;
 		} 
 		

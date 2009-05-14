@@ -73,7 +73,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
 		
 		//if parameter does not start with <, it is an error message.
 		if(!erdf.startsWith("<")) {
-			Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.failed + erdf);
+			Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.AMLSupport.failed + erdf);
             ORYX.Log.warn("Import AML failed: " + erdf);
 			return;
 		}
@@ -230,7 +230,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             
         } 
         catch (e) {
-            Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.failed2 + e);
+            Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.AMLSupport.failed2 + e);
             ORYX.Log.warn("Import AML failed: " + e);
         }
         
@@ -265,7 +265,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             
             onFailure: function(transport){
             
-                Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.failed2);
+                Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.AMLSupport.failed2);
                 ORYX.Log.warn("Import AML failed: " + transport.responseText);
                 
             }
@@ -273,7 +273,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
             
             on403: function(transport){
             
-                Ext.Msg.alert("Oryx", ORYX.I18N.AMLSupport.noRights);
+                Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.AMLSupport.noRights);
                 ORYX.Log.warn("Import AML failed: " + transport.responseText);
                 
             }
@@ -474,7 +474,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         var extWindow = new Ext.Window({
             width: 327,
             height: 'auto',
-            title: 'Oryx',
+            title: ORYX.I18N.Oryx.title,
             floating: true,
             shim: true,
             modal: true,
@@ -571,7 +571,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
         // Create a new Window
         var extWindow2 = new Ext.Window({
             width: 'auto',
-            title: 'Oryx',
+            title: ORYX.I18N.Oryx.title,
             floating: true,
             shim: true,
             modal: true,
@@ -598,7 +598,7 @@ ORYX.Plugins.AMLSupport = Clazz.extend({
      * @param {Object} message
      */
     throwErrorMessage: function(message){
-        Ext.Msg.alert('Oryx', message)
+        Ext.Msg.alert(ORYX.I18N.Oryx.title, message)
     },
 
 });

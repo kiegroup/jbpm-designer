@@ -61,14 +61,14 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             this.checkForErrors({
                 onNoErrors: function(){
                     this.setActivated(button, false);
-                    Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.noErrors);
+                    Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.noErrors);
                 }.bind(this),
                 onErrors: function(){
                     this.enableDeactivationHandler(button);
                 }.bind(this),
                 onFailure: function(){
                     this.setActivated(button, false);
-                    Ext.Msg.alert("Oryx", ORYX.I18N.SyntaxChecker.invalid);
+                    Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.invalid);
                 }.bind(this)
             });      
         }
