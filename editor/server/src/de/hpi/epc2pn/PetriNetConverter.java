@@ -121,9 +121,7 @@ public class PetriNetConverter {
 		}
 		
 		if ((source instanceof Place && target instanceof Transition) || (source instanceof Transition && target instanceof Place)) {
-			FlowRelationship flow = this.pnfactory.createFlowRelationship();
-			flow.setSource(source);
-			flow.setTarget(target);
+			createFlowRelationship(net, source, target);
 		}
 		else if ((source instanceof Place && target instanceof Place)) {
 			connectTwoPlaces(net, source, target, "helper transition " + c.getId() + f.toString());
