@@ -23,9 +23,9 @@ package de.hpi.bp;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import de.hpi.PTnet.PTNet;
 import de.hpi.petrinet.Node;
@@ -33,6 +33,25 @@ import de.hpi.petrinet.Place;
 import de.hpi.petrinet.Transition;
 
 public class TrueConcurrencyRelation {
+	
+	private class NodePair {
+		
+		private Node n1;
+		private Node n2;
+		
+		public NodePair(Node n1, Node n2) {
+			this.n1 = n1;
+			this.n2 = n2;
+		}
+		
+		public Node getFirstNode() {
+			return this.n1;
+		}
+		
+		public Node getSecondNode() {
+			return this.n2;
+		}
+	}
 
 	private PTNet pn;
 	
@@ -127,9 +146,10 @@ public class TrueConcurrencyRelation {
 	 * Helper method for calculating the concurrency 
 	 * relation (see Kovalyov and Esparza (1996)).
 	 */
-	protected void processConcNodes(Map<Node, Node> concNodes, boolean isFC) {
-		for(Node x : concNodes.keySet()) {
-			Node p = concNodes.get(x);
+	protected void processConcNodes(Set<NodePair> concNodes, boolean isFC) {
+		for(NodePair pair : concNodes) {
+			Node x = pair.getFirstNode();
+			Node p = pair.getSecondNode();
 
 			List<Node> outNodes = p.getSucceedingNodes();
 			// optimization for free-choice nets
@@ -142,15 +162,15 @@ public class TrueConcurrencyRelation {
 				if (nodeConcurrentToNodes(x, t.getPrecedingNodes())) {
 					
 					Collection<Node> sucT = t.getSucceedingNodes();
-					Map<Node, Node> concNodes2 = new HashMap<Node,Node>();
+					Set<NodePair> concNodes2 = new HashSet<NodePair>();
 										
 					for(Node s : sucT) {
 						if (!areTrueConcurrent(x,s))
-							concNodes2.put(x, s);
+							concNodes2.add(new NodePair(x,s));
 					}
 					// not sure, whether this is needed
 					if (x instanceof Place)
-						concNodes2.put(t, x);
+						concNodes2.add(new NodePair(t,x));
 					
 					setNodeConcurrentToNodes(x,sucT);
 					setNodesConcurrent(x,t);
@@ -160,11 +180,11 @@ public class TrueConcurrencyRelation {
 		}
 	}
 	
-	protected void addAllCombinations(Map<Node,Node> combinations, List<Node> nodes) {
+	protected void addAllCombinations(Set<NodePair> combinations, List<Node> nodes) {
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = i + 1; j < nodes.size(); j++) {
-				combinations.put(nodes.get(i), nodes.get(j));
-				combinations.put(nodes.get(j), nodes.get(i));
+				combinations.add(new NodePair(nodes.get(i), nodes.get(j)));
+				combinations.add(new NodePair(nodes.get(j), nodes.get(i)));
 			}
 		}
 	}
@@ -182,7 +202,7 @@ public class TrueConcurrencyRelation {
 		this.matrix = new boolean[this.pn.getNodes().size()][this.pn.getNodes().size()];
 
 		// here we collect concurrent nodes 
-		Map<Node, Node> concNodes = new HashMap<Node,Node>();
+		Set<NodePair> concNodes = new HashSet<NodePair>();
 		
 		/*
 		 * Initialization of the algorithm

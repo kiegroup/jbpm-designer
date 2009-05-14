@@ -119,6 +119,8 @@ public class BehaviouralProfile {
 	}
 	
 	public Collection<Node> getNodesInRelation(Node n, CharacteristicRelationType relationType) {
+		if (matrix == null)
+			deriveBehaviouralProfile();
 		Collection<Node> nodes = new ArrayList<Node>();
 		int index = this.pn.getNodes().indexOf(n);
 		
@@ -130,7 +132,24 @@ public class BehaviouralProfile {
 		return nodes;
 	}
 	
+	public void printAllNodes(CharacteristicRelationType relationType) {
+		if (matrix == null)
+			deriveBehaviouralProfile();
+		for(Node n1 : this.pn.getNodes()) {
+			int index1 = this.pn.getNodes().indexOf(n1);
+			for(Node n2 : this.pn.getNodes()) {
+				if (n1.equals(n2))
+					continue;
+				int index2 = this.pn.getNodes().indexOf(n2);
+				if (matrix[index1][index2].equals(relationType))
+					System.out.println(relationType + " -- " + n1 + " : " + n2);
+			}
+		}
+	}
+	
 	public String toString(){
+		if (matrix == null)
+			deriveBehaviouralProfile();
 		StringBuilder sb = new StringBuilder();
 		sb.append("------------------------------------------\n");
 		sb.append("Behavioural Profile Matrix\n");
