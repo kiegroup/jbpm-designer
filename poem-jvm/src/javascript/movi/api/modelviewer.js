@@ -54,15 +54,20 @@ MOVI.namespace("widget");
 		
     	MOVI.widget.ModelViewer.superclass.constructor.call(this, el); 
 
-		this.set("innerHTML", "");
+		var existingScrollboxArr = this.getElementsByClassName(_SCROLLBOX_CLASS_NAME);
+		if(existingScrollboxArr.length==1) {
+			// use existing scrollbox element
+			this._scrollbox = new YAHOO.util.Element(existingScrollboxArr[0]);
+		} else {
+			// create scrollbox element
+			this._scrollbox = new YAHOO.util.Element(document.createElement("div"));
+			this._scrollbox.addClass(_SCROLLBOX_CLASS_NAME);
+			this.appendChild(this._scrollbox);
+		}
 		
-	  	// create scrollbox element
-		this._scrollbox = new YAHOO.util.Element(document.createElement("div"));
-		this._scrollbox.set("className", _SCROLLBOX_CLASS_NAME);
 		this._scrollbox.set("id", _SCROLLBOX_CLASS_NAME + this._index);
 		this._scrollbox.set("innerHTML", "<img id=\"" + _MODELIMG_CLASS_NAME + this._index + 
 							"\" alt=\"oryx model\" class=\"" + _MODELIMG_CLASS_NAME + "\" />");
-		this.appendChild(this._scrollbox);
 		
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
 		
