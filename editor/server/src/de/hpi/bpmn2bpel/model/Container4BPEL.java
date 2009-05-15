@@ -2,8 +2,11 @@ package de.hpi.bpmn2bpel.model;
 
 import java.util.List;
 
+import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.EndEvent;
+import de.hpi.bpmn.Node;
+import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.Task;
 
@@ -16,17 +19,17 @@ public interface Container4BPEL extends Container {
 //	 * If the id was not set, the result is null.
 //	 */
 //	public String getId();
-//
-//	/**
-//	 * @return The activities of the container
-//	 */
-//	public List<Activity> getActivities();
-//
-//	/**
-//	 * @return The transitions of the container
-//	 */
-//	public List<Transition> getTransitions();
-//
+
+	/**
+	 * @return The activities of the container
+	 */
+	public List<Activity> getActivities();
+
+	/**
+	 * @return The transitions of the container
+	 */
+	public List<SequenceFlow> getTransitions();
+
 //	/**
 //	 * Sets the id of the container.
 //	 * 
@@ -34,22 +37,34 @@ public interface Container4BPEL extends Container {
 //	 */
 //	public void setId(String id);
 //
-//	/**
-//	 * Adds an activity to the list of the container's activities.
-//	 * 
-//	 * @param activity The activity to add.
-//	 */
-//	public void addActivity(Activity activity);
-//
-//	/**
-//	 * Removes an Activity from the container's activities.
-//	 * The transitions with this activity as source or target will be 
-//	 * removed from the container's transitions as well.
-//	 * 
-//	 * @param activity The activity to remove from the container
-//	 */
-//	public void removeActivity(Activity activity);
-//
+	/**
+	 * Adds a node to the list of the container's nodes.
+	 * 
+	 * @param node The node to add.
+	 */
+	public void addNode(Node node);
+
+	/**
+	 * Removes a {@link Node} from the container's child nodes.
+	 * The transitions with this node as source or target will be 
+	 * removed from the container's transitions as well.
+	 * 
+	 * @param node The {@link Node} to remove from the container
+	 */
+	public void removeNode(Node node);
+	
+	/**
+	 * Connects two nodes with each other and returns the connecting sequence flow.
+	 * 
+	 * @param source
+	 * 			The source node
+	 * @param target
+	 * 			The target node
+	 * @return
+	 * 			The connecting sequence flow
+	 */
+	public SequenceFlow connectNodes(Node source, Node target);
+
 //	/**
 //	 * Removes the activities from list of the container's
 //	 * activities. Transitions with these activities as source or

@@ -33,7 +33,8 @@ public class Test {
 		String path = "C:\\Users\\sven.wagner-boysen\\workspace\\oryx\\editor\\server\\src\\de\\hpi\\bpmn2bpel\\test\\";
 //		File file = new File(path + "AndGatewayTest-Oryx.xml");
 //		File file = new File(path + "bpel_trivial1.xml");
-		File file = new File(path + "bpel_trivial2.xml");
+//		File file = new File(path + "bpel_trivial2.xml");
+		File file = new File(path + "bpel_sequence_test.xml");
 		
 		
 		try {

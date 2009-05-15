@@ -60,6 +60,8 @@ public class BPMN2BPELServlet extends HttpServlet {
 	}
 	
 	protected void processDocument(Document document, PrintWriter writer) {
+		response.setLength(0);
+		
 		String type = new StencilSetUtil().getStencilSet(document);
 		BPMNDiagram diagram = null;
 		if (type.equals("bpmn.json"))
@@ -83,6 +85,8 @@ public class BPMN2BPELServlet extends HttpServlet {
 				appendResult("deploy", result.getDocument());
 			}
 		}
+		
+		writer.write(response.toString());
 	}
 	
 	private void appendResult(String param, Document result) {

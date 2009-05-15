@@ -62,43 +62,60 @@ public class ServiceComposerServlet extends HttpServlet {
 	protected HttpServletResponse response;
 	protected String baseUrl;
 	protected Repository repository;
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-		process(request, response);
-    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) {
 		process(request, response);
-    }
+	}
 
-	protected void process(HttpServletRequest request, HttpServletResponse response) {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) {
+		process(request, response);
+	}
+
+	protected void process(HttpServletRequest request,
+			HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
 		this.baseUrl = Repository.getBaseUrl(request);
 		this.repository = new Repository(baseUrl);
 
 		ArrayList<Service> services = parseParameters(request.getParameterMap());
-		//println(services.toString());
+		// println(services.toString());
 
 		Date creationDate = new Date(System.currentTimeMillis());
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss.SSS");
-		String sessionName = "Service Composer Session " + dateFormat.format(creationDate);
+		String sessionName = "Service Composer Session "
+				+ dateFormat.format(creationDate);
 
 		ArrayList<String> stencilSetExtensionUrls = new ArrayList<String>();
-		//stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#");
+		// stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#");
 		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset#");
-		stencilSetExtensionUrls.add(generateStencilSetExtension(sessionName, services));
-
+		stencilSetExtensionUrls.add(generateStencilSetExtension(sessionName,
+				services));
+		
+		/* Add StencilSetExtension GoldenEye SES Astra Bachelorproject */
+		if (request.getParameter("type") != null) {
+			if (request.getParameter("type").equals("goldeneye")) {
+				GoldenEyeStencilSetExtensionGenerator.
+				generateGoldenEyeStencilSet(sessionName + "GoldenEye" ,services);
+			}
+		}
+		
 		// generate BPMN model with a start event
 		String startEventId = "oryx_" + UUID.randomUUID().toString();
 		String model = repository.generateERDF(
-				sessionName, 
-				"<a rel=\"oryx-render\" href=\"#" + startEventId + "\"/></div><div id=\"" + startEventId + "\"><span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span><span class=\"oryx-id\"></span><span class=\"oryx-categories\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-name\"></span><span class=\"oryx-assignments\"></span><span class=\"oryx-pool\"></span><span class=\"oryx-lanes\"></span><span class=\"oryx-eventtype\">Start</span><span class=\"oryx-trigger\">None</span><span class=\"oryx-bgcolor\">#ffffff</span><span class=\"oryx-bounds\">15,225,45,255</span><a rel=\"raziel-parent\" href=\"#oryx-canvas123\"/>", 
-				"/stencilsets/bpmn1.1/bpmn1.1.json", 
-				BASE_STENCILSET,
-				stencilSetExtensionUrls
-				);
-		String modelUrl = baseUrl + repository.saveNewModel(model, "Service Composition " + dateFormat.format(creationDate));
+						sessionName,
+						"<a rel=\"oryx-render\" href=\"#"
+								+ startEventId
+								+ "\"/></div><div id=\""
+								+ startEventId
+								+ "\"><span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span><span class=\"oryx-id\"></span><span class=\"oryx-categories\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-name\"></span><span class=\"oryx-assignments\"></span><span class=\"oryx-pool\"></span><span class=\"oryx-lanes\"></span><span class=\"oryx-eventtype\">Start</span><span class=\"oryx-trigger\">None</span><span class=\"oryx-bgcolor\">#ffffff</span><span class=\"oryx-bounds\">15,225,45,255</span><a rel=\"raziel-parent\" href=\"#oryx-canvas123\"/>",
+						"/stencilsets/bpmn1.1/bpmn1.1.json", BASE_STENCILSET,
+						stencilSetExtensionUrls);
+		String modelUrl = baseUrl
+				+ repository.saveNewModel(model, "Service Composition "
+						+ dateFormat.format(creationDate));
 
 		// hack for reverse proxies:
 		modelUrl = modelUrl.substring(modelUrl.lastIndexOf("http://"));
@@ -107,36 +124,35 @@ public class ServiceComposerServlet extends HttpServlet {
 		response.setHeader("Location", modelUrl);
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 	}
-	
-	protected String generateStencilSetExtension(String extensionName, ArrayList<Service> services) {
-		String extension = generateJsonForStencilSetExtension(extensionName, services);
+
+	protected String generateStencilSetExtension(String extensionName,
+			ArrayList<Service> services) {
+		String extension = generateJsonForStencilSetExtension(extensionName,services);
 		String extensionNamespace = getStencilSetExtensionNamespace(extensionName);
 		String extensionLocation = getStencilSetExtensionLocation(extensionName);
 		StencilSetExtensionGenerator.saveStencilSetExtension(extensionLocation, extension);
 		StencilSetExtensionGenerator.registerStencilSetExtension(
 				extensionName,
-				extensionNamespace,
-				getStencilSetExtensionDescription(extensionName, services),
+				extensionNamespace, 
+				getStencilSetExtensionDescription(extensionName, services), 
 				extensionLocation,
-				BASE_STENCILSET
-				);
+				BASE_STENCILSET);
 		return extensionNamespace;
 	}
 
-	private String generateJsonForStencilSetExtension(
-			String extensionName, ArrayList<Service> services
-	) {
+	private String generateJsonForStencilSetExtension(String extensionName,
+			ArrayList<Service> services) {
 		ArrayList<String> colors = new ArrayList<String>();
 		colors.add("#eefecc"); // green
 		colors.add("#cce5fe"); // light blue
 		colors.add("#e5ccfe"); // purple
 		colors.add("#ccccfe"); // dark blue
-		//colors.add("#ffeecc"); // red
-		//colors.add("#ffffcc"); // original yellow of BPMN stencil set
+		// colors.add("#ffeecc"); // red
+		// colors.add("#ffffcc"); // original yellow of BPMN stencil set
 		ListIterator<String> colorIterator = colors.listIterator();
 
 		Pattern pattern = Pattern.compile("([a-z])([A-Z0-9])");
-		
+
 		StringBuffer stencilsForOperations = new StringBuffer();
 		ListIterator<Service> serviceIterator = services.listIterator();
 		while (serviceIterator.hasNext()) {
@@ -149,54 +165,79 @@ public class ServiceComposerServlet extends HttpServlet {
 			while (portTypeIterator.hasNext()) {
 				PortType portType = portTypeIterator.next();
 				ListIterator<Operation> operationIterator = portType.operations.listIterator();
+				
 				while (operationIterator.hasNext()) {
 					Operation operation = operationIterator.next();
 					Matcher matcher = pattern.matcher(operation.name);
-					String taskName = matcher.replaceAll("$1 $2"); 
-					stencilsForOperations.append("{"
-							+ "\"type\": \"node\","
-							+ "\"id\":\""+createJsonId(portType.name + "-" + operation.name)+"\","
-							+ "\"superId\":\"Task\","
-							+ "\"title\":\""+taskName+"\","
-							+ "\"groups\":[\"Activities\"]," // The group 'Service Operations' appears too far on the bottom of the menu
-							+ "\"description\":\"An invocation of operation '" + operation.name
-								+ "' of port type '" + portType.name
-								+ "' of the service described in '" + service.wsdlUrl + "'.\","
-							+ "\"view\":\"activity/node.task.svg\","
-							+ "\"icon\":\"new_task.png\","
-							+ "\"roles\": [\"sequence_start\",\"sequence_end\",\"messageflow_start\", \"messageflow_end\",\"to_task_event\",\"from_task_event\",\"conditional_start\",\"default_start\", \"tc\", \"fromtoall\" ],"
-							+ "\"properties\": [ "
-								+ "{\"id\":\"name\",\"value\":\"" + taskName + "\" }, "
-								+ "{\"id\":\"bgColor\",\"value\":\"" + color + "\"}"
-							+ "  ]},\n"
-							);
+					String taskName = matcher.replaceAll("$1 $2");
+					stencilsForOperations.append("{" + "\"type\": \"node\"," + "\"id\":\""
+									+ createJsonId(portType.name + "-"
+											+ operation.name)
+									+ "\","
+									+ "\"superId\":\"Task\","
+									+ "\"title\":\""
+									+ taskName
+									+ "\","
+									+ "\"groups\":[\"Activities\"]," // The group 'Service Operations' appears too far on the bottom of the menu
+									+ "\"description\":\"An invocation of operation '"
+									+ operation.name
+									+ "' of port type '"
+									+ portType.name
+									+ "' of the service described in '"
+									+ service.wsdlUrl
+									+ "'.\","
+									+ "\"view\":\"activity/node.task.svg\","
+									+ "\"icon\":\"new_task.png\","
+									+ "\"roles\": [\"sequence_start\",\"sequence_end\",\"messageflow_start\", \"messageflow_end\",\"to_task_event\",\"from_task_event\",\"conditional_start\",\"default_start\", \"tc\", \"fromtoall\" ],"
+									+ "\"properties\": [ "
+									+ "{\"id\":\"name\",\"value\":\""
+									+ taskName + "\" }, "
+									+ "{\"id\":\"bgColor\",\"value\":\""
+									+ color + "\"}" + "  ]},\n");
+					/* Create data objects for each service method input and output message */
+					//String, Integer, Double, Enum, Boolean 
+					
+					
 				}
 			}
 		}
 
-		return "{\"title\":\"" + extensionName + "\","
-			+ "\"namespace\":\"" + getStencilSetExtensionNamespace(extensionName) + "\","
-			+ "\"description\":\"" + getStencilSetExtensionDescription(extensionName, services) + "\","
-			+ "\"extends\":\"" + BASE_STENCILSET + "\","
-			+ "\"stencils\":[\n" + stencilsForOperations.toString() + "],"
-			+ "\"properties\":[],"
-			+ "\"rules\": {\"connectionRules\": [],\"cardinalityRules\": [],\"containmentRules\": []},\"removestencils\": [],\"removeproperties\": []}";
+		return "{\"title\":\""
+				+ extensionName
+				+ "\","
+				+ "\"namespace\":\""
+				+ getStencilSetExtensionNamespace(extensionName)
+				+ "\","
+				+ "\"description\":\""
+				+ getStencilSetExtensionDescription(extensionName, services)
+				+ "\","
+				+ "\"extends\":\""
+				+ BASE_STENCILSET
+				+ "\","
+				+ "\"stencils\":[\n"
+				+ stencilsForOperations.toString()
+				+ "],"
+				+ "\"properties\":[],"
+				+ "\"rules\": {\"connectionRules\": [],\"cardinalityRules\": [],\"containmentRules\": []},\"removestencils\": [],\"removeproperties\": []}";
 	}
 
 	private String getStencilSetExtensionDescription(String extensionName,
 			ArrayList<Service> services) {
-		return "Extension for " + extensionName + " using " + services.size() + " services.";
+		return "Extension for " + extensionName + " using " + services.size()
+				+ " services.";
 	}
 
 	private String getStencilSetExtensionNamespace(String extensionName) {
-		return "http://oryx-editor.org/stencilsets/extensions/bpmn_" + extensionName.toLowerCase().replace(" ", "_") + "#";
+		return "http://oryx-editor.org/stencilsets/extensions/bpmn_"
+				+ extensionName.toLowerCase().replace(" ", "_") + "#";
 	}
 
 	private String getStencilSetExtensionLocation(String extensionName) {
-		return "bpmnservicecompositionsubset/" + extensionName.toLowerCase().replace(" ", "_") + ".json";
+		return "bpmnservicecompositionsubset/"
+				+ extensionName.toLowerCase().replace(" ", "_") + ".json";
 	}
 
-	private static String createJsonId (String name){
+	private static String createJsonId(String name) {
 		String result = name.toLowerCase();
 		result = result.replace(" ", "");
 		return result;
@@ -205,90 +246,107 @@ public class ServiceComposerServlet extends HttpServlet {
 	protected ArrayList<Service> parseParameters(Map<?, ?> parameterMap) {
 		TreeMap<String, String> sortedParameterMap = new TreeMap<String, String>();
 		for (Map.Entry<?, ?> parameter : parameterMap.entrySet()) {
-			sortedParameterMap.put(parameter.getKey().toString(), ((String[]) parameter.getValue())[0]);
+			sortedParameterMap.put(parameter.getKey().toString(),
+					((String[]) parameter.getValue())[0]);
 		}
 		ArrayList<Service> services = new ArrayList<Service>();
 		Pattern pattern = Pattern.compile("^svc[0-9]+$");
-		for (Map.Entry<String, String> parameter : sortedParameterMap.entrySet()) {
+		for (Map.Entry<String, String> parameter : sortedParameterMap
+				.entrySet()) {
 			String key = parameter.getKey();
 			Matcher matcher = pattern.matcher(key);
-    		if (matcher.matches()) {
-    			String value = parameter.getValue();
-    			services.add(new Service(key, value, sortedParameterMap));
-    		}
+			if (matcher.matches()) {
+				String value = parameter.getValue();
+				services.add(new Service(key, value, sortedParameterMap));
+			}
 		}
 		return services;
 	}
-	
+
 	protected void println(String output) {
 		try {
 			response.getWriter().println(output);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
-	
+
 	static class Service {
 		public String wsdlUrl;
+		public String name;
+		public String namespace;
 		public ArrayList<PortType> portTypes;
-		
+
 		public Service(String id, String wsdlUrl, Map<String, String> parameterMap) {
+			
 			this.wsdlUrl = wsdlUrl;
+			
 			portTypes = new ArrayList<PortType>();
 			for (Map.Entry<String, String> parameter : parameterMap.entrySet()) {
 				String key = parameter.getKey();
-	    		if (key.matches("^" + id + "_pt[0-9]+$")) {
-	    			String value = parameter.getValue();
-	    			portTypes.add(new PortType(key, value, parameterMap));
-	    		}
+				if (key.matches("^" + id + "_pt[0-9]+$")) {
+					String value = parameter.getValue();
+					portTypes.add(new PortType(key, value, parameterMap));
+				} else if (key.matches("^" + id + "_name$")) {
+					/* Get web service name */
+					this.name = parameter.getValue();
+				} else if (key.matches("^" + id + "_ns$")) {
+					/* Get web service targetnamespace */
+					this.namespace = parameter.getValue();
+				}
 			}
 		}
-		
+
 		public String toString() {
 			return wsdlUrl + "\n" + portTypes.toString() + "\n";
 		}
 	}
-	
+
 	static class PortType {
 		public String name;
 		public ArrayList<Operation> operations;
-		
-		public PortType (String id, String name,  Map<String, String> parameterMap) {
+
+		public PortType(String id, String name, Map<String, String> parameterMap) {
 			this.name = name;
 			operations = new ArrayList<Operation>();
 			for (Map.Entry<String, String> parameter : parameterMap.entrySet()) {
 				String key = parameter.getKey();
-	    		if (key.matches("^" + id + "_op[0-9]+$")) {
-	    			String value = parameter.getValue();
-	    			operations.add(new Operation(key, value, parameterMap));
-	    		}
+				if (key.matches("^" + id + "_op[0-9]+$")) {
+					String value = parameter.getValue();
+					operations.add(new Operation(key, value, parameterMap));
+				}
 			}
 		}
-		
+
 		public String toString() {
 			return name + "\n" + operations.toString() + "\n";
 		}
 	}
-	
+
 	static class Operation {
 		public String name;
 		public Map<String, String> inputParts;
 		public Map<String, String> outputParts;
+		public String inputMessage;
+		public String outputMessage;
 		public ArrayList<String> uiUrls;
 
-		public Operation(String id, String name, Map<String, String> parameterMap) {
+		public Operation(String id, String name,
+				Map<String, String> parameterMap) {
 			this.name = name;
 			inputParts = new TreeMap<String, String>();
 			outputParts = new TreeMap<String, String>();
 			uiUrls = new ArrayList<String>();
-			Pattern pattern = Pattern.compile("^(" + id + "_((in)|(out))[0-9]+)_name$");
+			Pattern pattern = Pattern.compile("^(" + id
+					+ "_((in)|(out))[0-9]+)_name$");
 			for (Map.Entry<String, String> parameter : parameterMap.entrySet()) {
 				String key = parameter.getKey();
 				Matcher matcher = pattern.matcher(key);
 				if (matcher.matches()) {
-					String partName =  parameter.getValue();
-					Pattern pattern2 = Pattern.compile("^" + matcher.group(1) + "_type$");
+					String partName = parameter.getValue();
+					Pattern pattern2 = Pattern.compile("^" + matcher.group(1)
+							+ "_type$");
 					for (Map.Entry<String, String> parameter2 : parameterMap.entrySet()) {
 						String key2 = parameter2.getKey();
 						Matcher matcher2 = pattern2.matcher(key2);
@@ -302,15 +360,22 @@ public class ServiceComposerServlet extends HttpServlet {
 						}
 					}
 				} else if (key.matches("^" + id + "_ui[0-9]+$")) {
-	    			String value = parameter.getValue();
-	    			uiUrls.add(value);
-	    		}
+					String value = parameter.getValue();
+					uiUrls.add(value);
+				} else if (key.matches("^" + id + "_inmsg$")) {
+					/* Get operation input message */
+					this.inputMessage = parameter.getValue();
+				} else if (key.matches("^" + id + "_outmsg$")) {
+					this.outputMessage = parameter.getValue();
+				}
+
 			}
 		}
-		
+
 		public String toString() {
-			return name + "\n" + inputParts.toString() + "\n" + outputParts.toString() + "\n" + uiUrls.toString() + "\n";
+			return name + "\n" + inputParts.toString() + "\n"
+					+ outputParts.toString() + "\n" + uiUrls.toString() + "\n";
 		}
 	}
-	
+
 }

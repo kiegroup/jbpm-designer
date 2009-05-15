@@ -71,5 +71,41 @@ public class SubProcess extends Activity implements Container, Container4BPEL {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	/**
+	 * Retrieve all {@link Activity} contain by the process.
+	 * 
+	 * @return
+	 * 		List of {@link Activity}
+	 */
+	public List<Activity> getActivities() {
+		ArrayList<Activity> activities = new ArrayList<Activity>();
+		for(Node node : this.getChildNodes()) {
+			if (node instanceof Activity) {
+				activities.add((Activity) node);
+			}
+		}
+		return activities;
+	}
+
+	public void addNode(Node node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public SequenceFlow connectNodes(Node source, Node target) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<SequenceFlow> getTransitions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeNode(Node node) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

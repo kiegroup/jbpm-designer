@@ -147,7 +147,7 @@ public class DeploymentDescriptorFactory {
 			Element processElement, Process process) {
 		for(Task t : process.getTasks()) {
 			Element invoke = document.createElement("invoke");
-			invoke.setAttribute("name", t.getLabel());
+//			invoke.setAttribute("name", t.getLabel());
 			
 			//TODO handle partner links
 			

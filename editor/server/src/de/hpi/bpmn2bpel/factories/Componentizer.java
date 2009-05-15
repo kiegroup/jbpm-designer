@@ -6,21 +6,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.hpi.bpel4chor.model.activities.Activity;
-import de.hpi.bpel4chor.model.activities.EndEvent;
-import de.hpi.bpel4chor.model.activities.Gateway;
+import de.hpi.bpmn.Activity;
+import de.hpi.bpmn.Node;
+import de.hpi.bpmn.EndEvent;
+import de.hpi.bpmn.SequenceFlow;
+import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn.Gateway;
 import de.hpi.bpel4chor.model.activities.Handler;
 import de.hpi.bpel4chor.model.activities.IntermediateEvent;
 import de.hpi.bpel4chor.model.activities.ReceiveTask;
-import de.hpi.bpel4chor.model.activities.Scope;
-import de.hpi.bpel4chor.model.activities.StartEvent;
-import de.hpi.bpel4chor.model.activities.Task;
 import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.util.ListUtil;
 import de.hpi.bpel4chor.util.Output;
-
 import de.hpi.bpmn.BPMNDiagram;
-import de.hpi.bpmn.Container;
+import de.hpi.bpmn.sese.XOREventBasedGatewaySplit;
+import de.hpi.bpmn2bpel.model.Container4BPEL;
 
 /**
  * The Componentizer tries to find components within the activities of a 
@@ -29,7 +29,7 @@ import de.hpi.bpmn.Container;
  */
 public class Componentizer {
 	
-	private Container container = null;
+	private Container4BPEL container = null;
 	private BPMNDiagram diagram = null;
 	private Output output;
 	
@@ -41,7 +41,7 @@ public class Componentizer {
 	 * @param container The container, that may contain components
 	 * @param output    The output to print errors to.
 	 */
-	public Componentizer(BPMNDiagram diagram, Container container, Output output) {
+	public Componentizer(BPMNDiagram diagram, Container4BPEL container, Output output) {
 		this.diagram = diagram;
 		this.container = container;
 		this.output = output;
@@ -50,35 +50,35 @@ public class Componentizer {
 	/**
 	 * <p>Computes all transitions between the given activities.</p>
 	 * 
-	 * <p> These are transitions, that originate from the source activity, 
-	 * that lead to the target activity or that have a source or target 
+	 * <p> These are transitions, that originate from the source node, 
+	 * that lead to the target node or that have a source or target 
 	 * contained in the activities list.</p>
 	 * 
 	 * <p>The list does not contain duplicated entries.</p>
 	 * 
 	 * @param activities activities that are source or target of a transition.
-	 * @param source     source activity of a transition
-	 * @param target	 target activitiy of a transition
+	 * @param source     source node of a transition
+	 * @param target	 target node of a transition
 	 *  
 	 * @return List with transitions originating or leading to
 	 * the given activities.
 	 */
-	private List<Transition> computeTransitions(List<Activity> activities, 
-			Activity source, Activity target) {
-		HashSet<Transition> set = new HashSet<Transition>();
-		for (Iterator<Activity> it = activities.iterator(); it.hasNext();) {
-			Activity act = it.next();
-			List<Transition> sourceFor = null;
-			List<Transition> targetFor = null;
+	private List<SequenceFlow> computeTransitions(List<Node> activities, 
+			Node source, Node target) {
+		HashSet<SequenceFlow> set = new HashSet<SequenceFlow>();
+		for (Iterator<Node> it = activities.iterator(); it.hasNext();) {
+			Node act = it.next();
+			List<SequenceFlow> sourceFor = null;
+			List<SequenceFlow> targetFor = null;
 			if (act.equals(source)) {
 				// if source is also contained in activities
-				sourceFor = act.getSourceFor();
+				sourceFor = act.getOutgoingSequenceFlows();
 			} else if (act.equals(target)) {
 				// if target is also contained in activities
-				targetFor = act.getTargetFor();
+				targetFor = act.getIncomingSequenceFlows();
 			} else {
-				sourceFor = act.getSourceFor();
-				targetFor = act.getTargetFor();
+				sourceFor = act.getOutgoingSequenceFlows();
+				targetFor = act.getIncomingSequenceFlows();
 			}
 			if (sourceFor != null) {
 				set.addAll(sourceFor);
@@ -89,15 +89,15 @@ public class Componentizer {
 		}
 		
 		// add transitions from the source activity
-		if (source.getSourceFor() != null) {
-			set.addAll(source.getSourceFor());
+		if (source.getOutgoingSequenceFlows() != null) {
+			set.addAll(source.getOutgoingSequenceFlows());
 		}
 		
 		// add transitions that lead to the target activity
-		if (target.getTargetFor() != null) {
-			set.addAll(target.getTargetFor());
+		if (target.getIncomingSequenceFlows() != null) {
+			set.addAll(target.getIncomingSequenceFlows());
 		}
-		return new ArrayList<Transition>(set);
+		return new ArrayList<SequenceFlow>(set);
 	}
 	
 	/**
@@ -110,20 +110,21 @@ public class Componentizer {
 	 * has no error events attached.
 	 */
 	private List<Handler> getErrorHandlers(Activity activity) {
-		List<Handler> result = new ArrayList<Handler>();
-		List<IntermediateEvent> errorEvents = 
-			activity.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR);
-		if (errorEvents.isEmpty()) {
-			return null;
-		}
-		for (Iterator<IntermediateEvent> itEvents = errorEvents.iterator(); itEvents.hasNext();) {
-			Handler errorHandler = 
-				itEvents.next().getConnectedHandler();
-			if (errorHandler != null) {
-				result.add(errorHandler);
-			}
-		}
-		return result;
+//		List<Handler> result = new ArrayList<Handler>();
+//		List<IntermediateEvent> errorEvents = 
+//			activity.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR);
+//		if (errorEvents.isEmpty()) {
+//			return null;
+//		}
+//		for (Iterator<IntermediateEvent> itEvents = errorEvents.iterator(); itEvents.hasNext();) {
+//			Handler errorHandler = 
+//				itEvents.next().getConnectedHandler();
+//			if (errorHandler != null) {
+//				result.add(errorHandler);
+//			}
+//		}
+//		return result;
+		return null;
 	}
 	
 	/**
@@ -138,70 +139,70 @@ public class Componentizer {
 	 * attached-events-pattern or null if such a pattern could not be found.
 	 */
 	private Gateway getAttachedErrorEventSinkObject(Activity activity) {
-		List<Handler> errorHandlers = getErrorHandlers(activity);
-		if ((errorHandlers == null) || errorHandlers.isEmpty()) {
-			return null;
-		}
-		
-		Gateway gateway = null;
-		int counter = 0;
-		List<Activity> predecessors = new ArrayList<Activity>();
-		
-		// the error handler that misses a gateway
-		Handler missing = null;
-		
-		for (Iterator<Handler> itHandler = 
-			errorHandlers.iterator(); itHandler.hasNext();) {
-			Handler errorHandler = itHandler.next();
-			
-			// check if successor of handler is a gateway
-			Activity target = errorHandler.getSuccessor();
-			if (target instanceof Gateway) {
-				Gateway targetGateway = (Gateway)target;
-				
-				// check if this gateway is equals to the gateways the other event handlers lead to
-				if (targetGateway.getGatewayType().equals(Gateway.TYPE_OR) || 
-						targetGateway.getGatewayType().equals(Gateway.TYPE_XOR)) {
-					if (gateway == null) {
-						gateway = targetGateway;
-					} else if (!gateway.equals(targetGateway)) {
-						this.output.addError("Each error handler must lead to the same gateway.", activity.getId());
-						return null;
-					}
-					predecessors.add(errorHandler);
-					counter++;
-				} else {
-					missing = errorHandler;
-					break;
-				}
-			} else {
-				missing = errorHandler;
-				break;
-			}
-		}
-		
-		if (missing != null) {
-			this.output.addError("The outgoing transition of this error handler " +
-					" must lead to an inclusive or"+
-					" exclusive merge gateway.", missing.getId());
-			return null;
-		}
-		
-		if (gateway == null) {
-			return null;
-		}
-
-		// check if gateway is successor of activity
-		if ((activity.getSuccessor() != null) && 
-			activity.getSuccessor().equals(gateway)) {
-			return gateway;
-		}
-		
-		
-		this.output.addError("The successor of this activity " +
-				" must be the gateway with id "+ 
-				gateway.getId(), activity.getId());
-		this.output.addError("This gateway has to be the successor of the acitivity with id "+activity.getId(), gateway.getId());
+//		List<Handler> errorHandlers = getErrorHandlers(activity);
+//		if ((errorHandlers == null) || errorHandlers.isEmpty()) {
+//			return null;
+//		}
+//		
+//		Gateway gateway = null;
+//		int counter = 0;
+//		List<Activity> predecessors = new ArrayList<Activity>();
+//		
+//		// the error handler that misses a gateway
+//		Handler missing = null;
+//		
+//		for (Iterator<Handler> itHandler = 
+//			errorHandlers.iterator(); itHandler.hasNext();) {
+//			Handler errorHandler = itHandler.next();
+//			
+//			// check if successor of handler is a gateway
+//			Activity target = errorHandler.getSuccessor();
+//			if (target instanceof Gateway) {
+//				Gateway targetGateway = (Gateway)target;
+//				
+//				// check if this gateway is equals to the gateways the other event handlers lead to
+//				if (targetGateway.getGatewayType().equals(Gateway.TYPE_OR) || 
+//						targetGateway.getGatewayType().equals(Gateway.TYPE_XOR)) {
+//					if (gateway == null) {
+//						gateway = targetGateway;
+//					} else if (!gateway.equals(targetGateway)) {
+//						this.output.addError("Each error handler must lead to the same gateway.", activity.getId());
+//						return null;
+//					}
+//					predecessors.add(errorHandler);
+//					counter++;
+//				} else {
+//					missing = errorHandler;
+//					break;
+//				}
+//			} else {
+//				missing = errorHandler;
+//				break;
+//			}
+//		}
+//		
+//		if (missing != null) {
+//			this.output.addError("The outgoing transition of this error handler " +
+//					" must lead to an inclusive or"+
+//					" exclusive merge gateway.", missing.getId());
+//			return null;
+//		}
+//		
+//		if (gateway == null) {
+//			return null;
+//		}
+//
+//		// check if gateway is successor of activity
+//		if ((activity.getSuccessor() != null) && 
+//			activity.getSuccessor().equals(gateway)) {
+//			return gateway;
+//		}
+//		
+//		
+//		this.output.addError("The successor of this activity " +
+//				" must be the gateway with id "+ 
+//				gateway.getId(), activity.getId());
+//		this.output.addError("This gateway has to be the successor of the acitivity with id "+activity.getId(), gateway.getId());
 		return null;
 	}
 	
@@ -229,33 +230,33 @@ public class Componentizer {
 	 * error events and error handlers. 
 	 */
 	private Component computeAttachedErrorEvents(Activity activity, boolean quasi) {
-		List<IntermediateEvent> errorEvents = 
-			activity.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR);
-		
-		Gateway sinkGateway = getAttachedErrorEventSinkObject(activity);
-		if (sinkGateway != null) {
-			List<Activity> activities = new ArrayList<Activity>();
-			activities.addAll(errorEvents);
-			List<Handler> errorHandlers = getErrorHandlers(activity);
-			activities.addAll(errorHandlers);
-			if (quasi) {
-				return new Component(
-						Component.TYPE_QUASI_ATTACHED_EVENTS,activities,
-						computeTransitions(activities, activity, sinkGateway),
-						activity, sinkGateway);
-			}
-			
-			// check if gateway has only incoming transitions from error handlers or the task
-			List<Activity> predecessors = new ArrayList<Activity>();
-			predecessors.addAll(errorHandlers);
-			predecessors.add(activity);
-			if (isOnlyPredecessor(sinkGateway, predecessors)) {
-				return new Component(
-						Component.TYPE_ATTACHED_EVENTS, activities, 
-						computeTransitions(activities, activity, sinkGateway),
-						activity, sinkGateway);
-			}
-		}
+//		List<IntermediateEvent> errorEvents = 
+//			activity.getAttachedEvents(IntermediateEvent.TRIGGER_ERROR);
+//		
+//		Gateway sinkGateway = getAttachedErrorEventSinkObject(activity);
+//		if (sinkGateway != null) {
+//			List<Activity> activities = new ArrayList<Activity>();
+//			activities.addAll(errorEvents);
+//			List<Handler> errorHandlers = getErrorHandlers(activity);
+//			activities.addAll(errorHandlers);
+//			if (quasi) {
+//				return new Component(
+//						Component.TYPE_QUASI_ATTACHED_EVENTS,activities,
+//						computeTransitions(activities, activity, sinkGateway),
+//						activity, sinkGateway);
+//			}
+//			
+//			// check if gateway has only incoming transitions from error handlers or the task
+//			List<Activity> predecessors = new ArrayList<Activity>();
+//			predecessors.addAll(errorHandlers);
+//			predecessors.add(activity);
+//			if (isOnlyPredecessor(sinkGateway, predecessors)) {
+//				return new Component(
+//						Component.TYPE_ATTACHED_EVENTS, activities, 
+//						computeTransitions(activities, activity, sinkGateway),
+//						activity, sinkGateway);
+//			}
+//		}
 		return null;
 	}
 	
@@ -300,14 +301,10 @@ public class Componentizer {
 	 * @return 		True, if the activity is the successor of an event-based
 	 * 				decision gateway, false otherwise
 	 */
-	private boolean isSuccessorOfXORDecision(Activity act) {
-		Activity pred = act.getPredecessor();
-		if (pred instanceof Gateway) {
-			Gateway gateway = (Gateway)pred;
-			if ((gateway.getSplitType() != null) && 
-					gateway.getSplitType().equals(Gateway.SPLIT_XOREVENT)) {
-				return true;
-			}
+	private boolean isSuccessorOfXORDecision(Node act) {
+		Node pred = act.getPredecessor();
+		if (pred instanceof XOREventBasedGatewaySplit) {
+			return true;
 		}
 		return false;
 	}
@@ -318,20 +315,21 @@ public class Componentizer {
 	 * <p>A sequence is defined as connected activities without a gateway, 
 	 * start or end event between them.</p>
 	 * 
-	 * @param act The activity, the sequence should start
+	 * @param node The node, the sequence should start
 	 * 
 	 * @return The list of sequence activities inclusive the given activity.
 	 */
-	private List<Activity> computeSequenceActivities(Activity act) {
-		List<Activity> sequence = new ArrayList<Activity>();
-		while (act != null) {
-			if ((act instanceof Gateway) ||
-					(act instanceof StartEvent) ||
-						(act instanceof EndEvent)) {
+	private List<Node> computeSequenceActivities(Node act) {
+		Node node = act;
+		List<Node> sequence = new ArrayList<Node>();
+		while (node != null) {
+			if ((node instanceof Gateway) ||
+					(node instanceof StartEvent) ||
+						(node instanceof EndEvent)) {
 				break;
 			}
-			sequence.add(act);
-			act = act.getSuccessor();
+			sequence.add(node);
+			node = node.getSuccessor();
 		}
 		return sequence;
 	}
@@ -341,7 +339,7 @@ public class Componentizer {
 	 * 
 	 * <p>For each activity the sequence activities are computed using
 	 * the method {@link #computeSequenceActivities(Activity)}. After that the 
-	 * sequence with the maximal size is choosen.</p> 
+	 * sequence with the maximal size is chosen.</p> 
 	 * 
 	 * @return The maximal component that matches the sequence pattern. 
 	 * The first activity is the source object and the last activity is the sink object. 
@@ -349,29 +347,29 @@ public class Componentizer {
 	 * If no sequence component was found the result is null. 
 	 */
 	private Component computeSequence() {
-//		List<Activity> maxSequence = null;
-//		for (Iterator<Activity> it = 
-//			this.container.getActivities().iterator(); it.hasNext();) {
-//			Activity act = it.next();
-//			if (!isSuccessorOfXORDecision(act)) {
-//				List<Activity> sequence = computeSequenceActivities(act);
-//				if (sequence.size() > 1) {
-//					if (maxSequence == null) {
-//						maxSequence = sequence;
-//					} else if (maxSequence.size() < sequence.size()) {
-//						maxSequence = sequence;
-//					}
-//				}
-//			}
-//		}
-//		if (maxSequence != null) {
-//			Activity source = maxSequence.get(0);
-//			Activity sink = maxSequence.get(maxSequence.size() - 1);
-//			maxSequence.remove(sink);
-//			maxSequence.remove(source);
-//			List<Transition> transitions = computeTransitions(maxSequence, source, sink);
-//			return new Component(Component.TYPE_SEQUENCE, maxSequence, transitions, source, sink);
-//		}
+		List<Node> maxSequence = null;
+		for (Iterator<Node> it = 
+			this.container.getChildNodes().iterator(); it.hasNext();) {
+			Node act = it.next();
+			if (!isSuccessorOfXORDecision(act)) {
+				List<Node> sequence = computeSequenceActivities(act);
+				if (sequence.size() > 1) {
+					if (maxSequence == null) {
+						maxSequence = sequence;
+					} else if (maxSequence.size() < sequence.size()) {
+						maxSequence = sequence;
+					}
+				}
+			}
+		}
+		if (maxSequence != null) {
+			Node source = maxSequence.get(0);
+			Node sink = maxSequence.get(maxSequence.size() - 1);
+			maxSequence.remove(sink);
+			maxSequence.remove(source);
+			List<SequenceFlow> transitions = computeTransitions(maxSequence, source, sink);
+			return new Component(Component.TYPE_SEQUENCE, maxSequence, transitions, source, sink);
+		}
 		return null;
 	}
 	
@@ -390,32 +388,32 @@ public class Componentizer {
 	 */
 	private List<Activity> getElementsBetween(Activity source, Activity target) {
 		List<Activity> successors = null;
-		if (source instanceof Gateway) {
-			successors = ((Gateway)source).getSuccessors();
-		} else if (source.getSuccessor() != null) {
-			successors = new ArrayList<Activity>();
-			successors.add(source.getSuccessor());
-		} else {
-			return null;
-		}
-		
-		// check if all successors are valid and return null otherwise
-		for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act instanceof Gateway) {
-				if (!act.equals(target)) {
-					// no direct path from successor to target
-					return null;
-				}
-				continue;
-			} else if ((act instanceof StartEvent) || 
-				(act instanceof EndEvent)) {
-				return null;
-			} else if (act.getSuccessor().equals(target)) {
-				continue;
-			}
-			return null;
-		}
+//		if (source instanceof Gateway) {
+//			successors = ((Gateway)source).getSuccessors();
+//		} else if (source.getSuccessor() != null) {
+//			successors = new ArrayList<Activity>();
+//			successors.add(source.getSuccessor());
+//		} else {
+//			return null;
+//		}
+//		
+//		// check if all successors are valid and return null otherwise
+//		for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act instanceof Gateway) {
+//				if (!act.equals(target)) {
+//					// no direct path from successor to target
+//					return null;
+//				}
+//				continue;
+//			} else if ((act instanceof StartEvent) || 
+//				(act instanceof EndEvent)) {
+//				return null;
+//			} else if (act.getSuccessor().equals(target)) {
+//				continue;
+//			}
+//			return null;
+//		}
 		return successors;	
 	}
 	
@@ -432,20 +430,20 @@ public class Componentizer {
 	 */
 	private Activity getElementBetween(Gateway source, Gateway target) {
 		Activity result = null;
-		List<Activity> successors = source.getSuccessors();
-		
-		// check if all successors are valid and return null otherwise
-		for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (!(act instanceof Gateway) && 
-				(act.getSuccessor() != null) &&
-				act.getSuccessor().equals(target)) {
-				if (result != null) {
-					return null;
-				}
-				result = act;
-			}
-		}
+//		List<Activity> successors = source.getSuccessors();
+//		
+//		// check if all successors are valid and return null otherwise
+//		for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (!(act instanceof Gateway) && 
+//				(act.getSuccessor() != null) &&
+//				act.getSuccessor().equals(target)) {
+//				if (result != null) {
+//					return null;
+//				}
+//				result = act;
+//			}
+//		}
 		return result;	
 	}
 	
@@ -462,12 +460,12 @@ public class Componentizer {
 	 * false otherwise 
 	 */
 	private boolean isOnlySuccessors(Activity source, List<Activity> successors) {
-		for (Iterator<Transition> it = source.getSourceFor().iterator(); it.hasNext();) {
-			Transition trans = it.next();
-			if (!successors.contains(trans.getTarget())) {
-				return false;
-			}
-		}
+//		for (Iterator<Transition> it = source.getSourceFor().iterator(); it.hasNext();) {
+//			Transition trans = it.next();
+//			if (!successors.contains(trans.getTarget())) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 	
@@ -484,12 +482,12 @@ public class Componentizer {
 	 * the list, false otherwise
 	 */
 	private boolean isOnlyPredecessor(Activity target, List<Activity> predecessors) {
-		for (Iterator<Transition> it = target.getTargetFor().iterator(); it.hasNext();) {
-			Transition trans = it.next();
-			if (!predecessors.contains(trans.getSource())) {
-				return false;
-			}
-		}
+//		for (Iterator<Transition> it = target.getTargetFor().iterator(); it.hasNext();) {
+//			Transition trans = it.next();
+//			if (!predecessors.contains(trans.getSource())) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 	
@@ -511,31 +509,31 @@ public class Componentizer {
 	 * source and sink object. If no component was found the result is null.
 	 */
 	private Component computeQuasiFlow(Gateway source, Gateway sink) {
-		List<Activity> X = source.getSuccessors();
-		List<Activity> Y = sink.getPredecessors();
-		
-		// compute intersection
-		List<Activity> Z = ListUtil.intersect(X, Y);
-		
-		if (!ListUtil.isEqual(X, Y)) {
-			int counter = 0;
-			// count the activities that are not gateways
-			for (Iterator it = Z.iterator(); it.hasNext();) {
-				if (!(it.next() instanceof Gateway)) {
-					counter++;
-				}
-			}
-			
-			if (counter > 1) {
-				List<Activity> quasiActivities = new ArrayList<Activity>(X);
-				quasiActivities.addAll(Y);
-				quasiActivities.remove(Z);
-				return new Component(
-						Component.TYPE_QUASI_FLOW, 
-						Z, computeTransitions(Z, source, sink),
-						source, sink);
-			}
-		}
+//		List<Activity> X = source.getSuccessors();
+//		List<Activity> Y = sink.getPredecessors();
+//		
+//		// compute intersection
+//		List<Activity> Z = ListUtil.intersect(X, Y);
+//		
+//		if (!ListUtil.isEqual(X, Y)) {
+//			int counter = 0;
+//			// count the activities that are not gateways
+//			for (Iterator it = Z.iterator(); it.hasNext();) {
+//				if (!(it.next() instanceof Gateway)) {
+//					counter++;
+//				}
+//			}
+//			
+//			if (counter > 1) {
+//				List<Activity> quasiActivities = new ArrayList<Activity>(X);
+//				quasiActivities.addAll(Y);
+//				quasiActivities.remove(Z);
+//				return new Component(
+//						Component.TYPE_QUASI_FLOW, 
+//						Z, computeTransitions(Z, source, sink),
+//						source, sink);
+//			}
+//		}
 		return null;
 	}
 	
@@ -556,21 +554,21 @@ public class Componentizer {
 	 * source and sink object. If no component was found the result is null.
 	 */
 	private Component computeFlow(Gateway source, Gateway sink) {
-		List<Activity> result = getElementsBetween(source, sink);
-		if (result != null) {
-			List<Activity> activities = new ArrayList<Activity>();
-			activities.addAll(result);
-			
-			// this condition must be fulfilled too
-			if(isOnlyPredecessor(sink, result) && 
-					(isOnlySuccessors(source, result))) {
-				return new Component(
-						Component.TYPE_FLOW, 
-						activities, 
-						computeTransitions(activities, source, sink),
-						source, sink);
-			}
-		 }
+//		List<Activity> result = getElementsBetween(source, sink);
+//		if (result != null) {
+//			List<Activity> activities = new ArrayList<Activity>();
+//			activities.addAll(result);
+//			
+//			// this condition must be fulfilled too
+//			if(isOnlyPredecessor(sink, result) && 
+//					(isOnlySuccessors(source, result))) {
+//				return new Component(
+//						Component.TYPE_FLOW, 
+//						activities, 
+//						computeTransitions(activities, source, sink),
+//						source, sink);
+//			}
+//		 }
 		 return null;
 	}
 	
@@ -697,33 +695,33 @@ public class Componentizer {
 	 * source and sink object. If no component was found the result is null.
 	 */
 	private Component computeIf(Gateway source, Gateway sink, boolean quasi) {
-		List<Activity> result = getElementsBetween(source, sink);
-		if (result != null) {
-			List<Activity> activities = new ArrayList<Activity>();
-			activities.addAll(result);
-			if (quasi) {
-				// this condition is enough
-				// add all activities, that have a transition to the target gateway				
-				return new Component(
-						Component.TYPE_QUASI_IF, 
-						activities, computeTransitions(activities, source, sink),
-						source, sink);
-			} else {
-				// this condition must be fulfilled too
-				activities.add(sink);
-				if (isOnlySuccessors(source, activities)) {
-					activities.remove(sink);
-					activities.add(source);
-					if (isOnlyPredecessor(sink, activities)) {
-						return new Component(
-								Component.TYPE_IF, 
-								result, 
-								computeTransitions(result, source, sink),
-								source, sink);
-					}
-				}
-			}
-		 }
+//		List<Activity> result = getElementsBetween(source, sink);
+//		if (result != null) {
+//			List<Activity> activities = new ArrayList<Activity>();
+//			activities.addAll(result);
+//			if (quasi) {
+//				// this condition is enough
+//				// add all activities, that have a transition to the target gateway				
+//				return new Component(
+//						Component.TYPE_QUASI_IF, 
+//						activities, computeTransitions(activities, source, sink),
+//						source, sink);
+//			} else {
+//				// this condition must be fulfilled too
+//				activities.add(sink);
+//				if (isOnlySuccessors(source, activities)) {
+//					activities.remove(sink);
+//					activities.add(source);
+//					if (isOnlyPredecessor(sink, activities)) {
+//						return new Component(
+//								Component.TYPE_IF, 
+//								result, 
+//								computeTransitions(result, source, sink),
+//								source, sink);
+//					}
+//				}
+//			}
+//		 }
 		 return null;
 	}
 	
@@ -786,22 +784,22 @@ public class Componentizer {
 	 */
 	private List<Activity> getPickBranches(Gateway xorEventGateway) {
 		List<Activity> result = new ArrayList<Activity>();
-		for (Iterator<Transition> it = xorEventGateway.getSourceFor().iterator(); it.hasNext();) {
-			Activity act = it.next().getTarget();
-			if (act instanceof IntermediateEvent) {
-				IntermediateEvent event = (IntermediateEvent)act;
-				if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_MESSAGE) || 
-						(event.getTriggerType().equals(IntermediateEvent.TRIGGER_TIMER))) {
-					result.add(act);
-				}
-			} else if (act instanceof ReceiveTask) {
-				if (act.getLoop() == null) {
-					result.add(act);
-				}
-			} else {
-				return null;
-			}
-		}
+//		for (Iterator<Transition> it = xorEventGateway.getSourceFor().iterator(); it.hasNext();) {
+//			Activity act = it.next().getTarget();
+//			if (act instanceof IntermediateEvent) {
+//				IntermediateEvent event = (IntermediateEvent)act;
+//				if (event.getTriggerType().equals(IntermediateEvent.TRIGGER_MESSAGE) || 
+//						(event.getTriggerType().equals(IntermediateEvent.TRIGGER_TIMER))) {
+//					result.add(act);
+//				}
+//			} else if (act instanceof ReceiveTask) {
+//				if (act.getLoop() == null) {
+//					result.add(act);
+//				}
+//			} else {
+//				return null;
+//			}
+//		}
 		return result;
 	}
 	
@@ -829,42 +827,42 @@ public class Componentizer {
 	 * source and sink object. If no component was found the result is null.
 	 */
 	private Component computePick(Gateway source, Gateway sink, boolean quasi) {
-		List<Activity> pickBranches = getPickBranches(source);
-		if (pickBranches == null) {
-			return null;
-		}
-		
-		List<Activity> between = new ArrayList<Activity>();
-		for (Iterator<Activity> itPick = pickBranches.iterator(); itPick.hasNext();) {
-			Activity act = itPick.next();
-			
-			// compute elements between pick elements and join gateway
-			List<Activity> result = getElementsBetween(act, sink);
-			if (result != null) {
-				between.addAll(result);
-			} else {
-				return null;
-			}
-		}
-		
-		// join gateway can be reached from all pick gateways
-		// elements in between represent the elements between 
-		// the pick branches and the join gateway
-		List<Activity> predecessors = new ArrayList<Activity>();
-		predecessors.addAll(pickBranches);
-		predecessors.addAll(between);
-		if (quasi) {
-			return new Component(
-					Component.TYPE_QUASI_PICK, predecessors,
-					computeTransitions(predecessors, source, sink), 
-					source, sink);
-		}
-		if (isOnlyPredecessor(sink, predecessors)) {
-			return new Component(
-					Component.TYPE_PICK, predecessors, 
-					computeTransitions(predecessors, source, sink), 
-					source, sink);
-		}
+//		List<Activity> pickBranches = getPickBranches(source);
+//		if (pickBranches == null) {
+//			return null;
+//		}
+//		
+//		List<Activity> between = new ArrayList<Activity>();
+//		for (Iterator<Activity> itPick = pickBranches.iterator(); itPick.hasNext();) {
+//			Activity act = itPick.next();
+//			
+//			// compute elements between pick elements and join gateway
+//			List<Activity> result = getElementsBetween(act, sink);
+//			if (result != null) {
+//				between.addAll(result);
+//			} else {
+//				return null;
+//			}
+//		}
+//		
+//		// join gateway can be reached from all pick gateways
+//		// elements in between represent the elements between 
+//		// the pick branches and the join gateway
+//		List<Activity> predecessors = new ArrayList<Activity>();
+//		predecessors.addAll(pickBranches);
+//		predecessors.addAll(between);
+//		if (quasi) {
+//			return new Component(
+//					Component.TYPE_QUASI_PICK, predecessors,
+//					computeTransitions(predecessors, source, sink), 
+//					source, sink);
+//		}
+//		if (isOnlyPredecessor(sink, predecessors)) {
+//			return new Component(
+//					Component.TYPE_PICK, predecessors, 
+//					computeTransitions(predecessors, source, sink), 
+//					source, sink);
+//		}
 		return null;
 	}
 	
@@ -1160,30 +1158,30 @@ public class Componentizer {
 			Activity source, Activity target, final List<Activity> path) {
 		Set<Activity> activities = new HashSet<Activity>();
 		
-		for (Iterator<Transition> it = source.getSourceFor().iterator(); it.hasNext();) {
-			Activity nextSource = it.next().getTarget();
-			if ((nextSource instanceof EndEvent) ||
-					(nextSource == null) || 
-					path.contains(nextSource)) {
-				// path does not lead to the target activity
-				// or contains a cycle
-				return null;
-			} else if (nextSource.equals(target)){
-				// path does lead to the target activity
-				activities.addAll(path);
-			} else {
-				// add element to the path that is examined in this step
-				// and search for the next element
-				path.add(nextSource);
-				Set<Activity> pathsFound = getActivitiesFromTo(nextSource, target, path);
-				if (pathsFound != null) {
-					activities.addAll(pathsFound);
-					path.remove(nextSource);
-				} else {
-					return null;
-				}
-			}
-		}
+//		for (Iterator<Transition> it = source.getSourceFor().iterator(); it.hasNext();) {
+//			Activity nextSource = it.next().getTarget();
+//			if ((nextSource instanceof EndEvent) ||
+//					(nextSource == null) || 
+//					path.contains(nextSource)) {
+//				// path does not lead to the target activity
+//				// or contains a cycle
+//				return null;
+//			} else if (nextSource.equals(target)){
+//				// path does lead to the target activity
+//				activities.addAll(path);
+//			} else {
+//				// add element to the path that is examined in this step
+//				// and search for the next element
+//				path.add(nextSource);
+//				Set<Activity> pathsFound = getActivitiesFromTo(nextSource, target, path);
+//				if (pathsFound != null) {
+//					activities.addAll(pathsFound);
+//					path.remove(nextSource);
+//				} else {
+//					return null;
+//				}
+//			}
+//		}
 		return activities;
 	}
 	
@@ -1200,14 +1198,14 @@ public class Componentizer {
 	 */
 	private boolean gatewaySuccessorsContainedIn(
 			Gateway gateway, Set<Activity> containedIn) {
-		List<Activity> successors = gateway.getSuccessors();
-		if (successors.size() > 1) {
-			for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
-				if (!containedIn.contains(it.next())) {
-					return false;
-				}
-			}
-		}
+//		List<Activity> successors = gateway.getSuccessors();
+//		if (successors.size() > 1) {
+//			for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
+//				if (!containedIn.contains(it.next())) {
+//					return false;
+//				}
+//			}
+//		}
 		return true;
 	}
 	
@@ -1224,14 +1222,14 @@ public class Componentizer {
 	 */
 	private boolean gatewayPredecessorsContainedIn(
 			Gateway gateway, Set<Activity> containedIn) {
-		List<Activity> predecessors = gateway.getPredecessors();
-		if (predecessors.size() > 1) {
-			for (Iterator<Activity> it = predecessors.iterator(); it.hasNext();) {
-				if (!containedIn.contains(it.next())) {
-					return false;
-				}
-			}
-		}
+//		List<Activity> predecessors = gateway.getPredecessors();
+//		if (predecessors.size() > 1) {
+//			for (Iterator<Activity> it = predecessors.iterator(); it.hasNext();) {
+//				if (!containedIn.contains(it.next())) {
+//					return false;
+//				}
+//			}
+//		}
 		return true;
 	}
 	
@@ -1251,21 +1249,21 @@ public class Componentizer {
 	 */
 	private boolean completeGatewayContainedIn(
 			Gateway gateway, Set<Activity> containedIn, Gateway source, Gateway target) {
-		List<Activity> predecessors = gateway.getPredecessors();
-		for (Iterator<Activity> it = predecessors.iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (!(containedIn.contains(act) || act.equals(source))) {
-				return false;
-			}
-		}
-		
-		List<Activity> successors = gateway.getSuccessors();
-		for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (!(containedIn.contains(act) || act.equals(target))) {
-				return false;
-			}
-		}
+//		List<Activity> predecessors = gateway.getPredecessors();
+//		for (Iterator<Activity> it = predecessors.iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (!(containedIn.contains(act) || act.equals(source))) {
+//				return false;
+//			}
+//		}
+//		
+//		List<Activity> successors = gateway.getSuccessors();
+//		for (Iterator<Activity> it = successors.iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (!(containedIn.contains(act) || act.equals(target))) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 	
@@ -1285,21 +1283,21 @@ public class Componentizer {
 	private boolean checkGeneralizedFlowAct(
 			Set<Activity> set, Gateway source, Gateway target) {
 		
-		for (Iterator<Activity> it = set.iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act instanceof Gateway) {
-				Gateway gateway = (Gateway) act;				
-				if (gateway.getGatewayType().equals(Gateway.TYPE_XOR)) {
-					return false;
-				} else if (gateway.getGatewayType().equals(Gateway.TYPE_OR) && 
-					(gateway.getSourceFor().size() > 1)) {
-						return false;
-				} else if (!completeGatewayContainedIn(
-						gateway, set, source, target)) {
-					return false;
-				}
-			}
-		}
+//		for (Iterator<Activity> it = set.iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act instanceof Gateway) {
+//				Gateway gateway = (Gateway) act;				
+//				if (gateway.getGatewayType().equals(Gateway.TYPE_XOR)) {
+//					return false;
+//				} else if (gateway.getGatewayType().equals(Gateway.TYPE_OR) && 
+//					(gateway.getSourceFor().size() > 1)) {
+//						return false;
+//				} else if (!completeGatewayContainedIn(
+//						gateway, set, source, target)) {
+//					return false;
+//				}
+//			}
+//		}
 		return true;
 	}
 	
@@ -1317,18 +1315,18 @@ public class Componentizer {
 	 *  in a synchronzing process pattern, false otherwise.
 	 */
 	private boolean checkSynchronizingProcessAct(Set<Activity> set, Gateway source, Gateway target) {
-		for (Iterator<Activity> it = set.iterator(); it.hasNext();) {
-			Activity act = it.next();
-			if (act instanceof Gateway) {
-				Gateway gateway = (Gateway) act;				
-				if (gateway.getGatewayType().equals(Gateway.TYPE_XOR) && 
-						(gateway.getSplitType().equals(Gateway.SPLIT_XOREVENT))) {
-					return false;
-				} else if (!completeGatewayContainedIn(gateway, set, source, target)) {
-					return false;
-				}
-			}
-		}
+//		for (Iterator<Activity> it = set.iterator(); it.hasNext();) {
+//			Activity act = it.next();
+//			if (act instanceof Gateway) {
+//				Gateway gateway = (Gateway) act;				
+//				if (gateway.getGatewayType().equals(Gateway.TYPE_XOR) && 
+//						(gateway.getSplitType().equals(Gateway.SPLIT_XOREVENT))) {
+//					return false;
+//				} else if (!completeGatewayContainedIn(gateway, set, source, target)) {
+//					return false;
+//				}
+//			}
+//		}
 		return true;
 	}
 

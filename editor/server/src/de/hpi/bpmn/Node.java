@@ -1,7 +1,10 @@
 package de.hpi.bpmn;
 
+import java.util.Iterator;
 import java.util.List;
 
+import de.hpi.bpel4chor.model.activities.Activity;
+import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.util.Bounds;
 
 
@@ -88,16 +91,77 @@ public abstract class Node extends DiagramObject {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * Returns the predecessor of this node, if there is exactly one, 
+	 * null otherwise.
+	 * 
+	 * @return
+	 * 		The predecessor {@link Node}
+	 */
 	public Node getPredecessor() {
 		List<SequenceFlow> sequenceFlows = this.getIncomingSequenceFlows();
-		// TODO: check assumption of only one incoming edge
+		
+		/* Assure that there is exactly one valid predecessor */ 
+		if (sequenceFlows.size() != 1) {
+			return null;
+		}
+		
 		return (Node) sequenceFlows.get(0).getSource();
 	}
-
+	
+	/**
+	 * Returns the successor of this node, if there is exactly one, 
+	 * null otherwise.
+	 * 
+	 * @return
+	 * 		The successor {@link Node}
+	 */
 	public Node getSuccessor() {
 		List<SequenceFlow> sequenceFlows = this.getOutgoingSequenceFlows();
-		// TODO: check assumption of only one outgoing edge
+		
+		/* Assure that there is exactly one valid successor */ 
+		if (sequenceFlows.size() != 1) {
+			return null;
+		}
+		
 		return (Node) sequenceFlows.get(0).getTarget();
+	}
+	
+	
+	/**
+	 * Determines the sequence flow that leads to this node
+	 * from the given node.
+	 * 
+	 * @param node The source node of the sequence flow.
+	 * 
+	 * @return The first sequence flow from act to this node.
+	 */
+	public SequenceFlow getSequenceFlowFrom(Node node) {
+		for (SequenceFlow seqFlow : this.getIncomingSequenceFlows()) {
+			
+			if (seqFlow.getSource().equals(node)) {
+				return seqFlow;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Determines the sequence flow that leads from this node
+	 * to the given node.
+	 * 
+	 * @param node The source node of the sequence flow.
+	 * 
+	 * @return The first sequence flow from act to this node.
+	 */
+	public SequenceFlow getSequenceFlowTo(Node node) {
+		for (SequenceFlow seqFlow : this.getOutgoingSequenceFlows()) {
+			
+			if (seqFlow.getTarget().equals(node)) {
+				return seqFlow;
+			}
+		}
+		return null;
 	}
 }

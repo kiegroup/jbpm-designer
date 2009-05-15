@@ -68,6 +68,11 @@ public abstract class DiagramObject implements Comparable{
 		return seqList;
 	}
 	
+	public void removeEdge(Edge edge) {
+		this.outgoingEdges.remove(edge);
+		this.incomingEdges.remove(edge);
+	}
+	
 //	Added by Ahmed Awad
 	public boolean equals(Object other) {
 		if (resourceId != null && other instanceof DiagramObject)
