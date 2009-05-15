@@ -13,10 +13,10 @@ import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
 public class InteractionNetSyntaxCheckerImpl extends PetriNetSyntaxChecker
 		implements SyntaxChecker {
 
-	private static final String SENDER_NOT_SET = "Sender not set";
-	private static final String RECEIVER_NOT_SET = "Receiver not set";
-	private static final String MESSAGETYPE_NOT_SET = "Message type not set";
-	private static final String ROLE_NOT_SET = "Role not set";
+	private static final String SENDER_NOT_SET = "InteractionNet_SENDER_NOT_SET";
+	private static final String RECEIVER_NOT_SET = "InteractionNet_RECEIVER_NOT_SET";
+	private static final String MESSAGETYPE_NOT_SET = "InteractionNet_MESSAGETYPE_NOT_SET";
+	private static final String ROLE_NOT_SET = "InteractionNet_ROLE_NOT_SET";
 
 	public InteractionNetSyntaxCheckerImpl(InteractionNet net) {
 		super(net);

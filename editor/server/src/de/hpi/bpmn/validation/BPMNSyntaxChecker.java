@@ -44,7 +44,7 @@ import de.hpi.diagram.verification.AbstractSyntaxChecker;
  * SOFTWARE.
  */
 public class BPMNSyntaxChecker extends AbstractSyntaxChecker {
-	
+/*	
 	protected static final String NO_SOURCE = "An edge must have a source.";
 	protected static final String NO_TARGET = "An edge must have a target.";
 	protected static final String DIFFERENT_PROCESS = "Source and target node must be contained in the same process.";
@@ -59,6 +59,21 @@ public class BPMNSyntaxChecker extends AbstractSyntaxChecker {
 	protected static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "End events must not have outgoing sequence flow.";
 	protected static final String EVENTBASEDGATEWAY_BADCONTINUATION = "Event-based gateways must not be followed by gateways or subprocesses.";
 	protected static final String NODE_NOT_ALLOWED = "Node type is not allowed.";
+*/
+	protected static final String NO_SOURCE = "BPMN_NO_SOURCE";
+	protected static final String NO_TARGET = "BPMN_NO_TARGET";
+	protected static final String DIFFERENT_PROCESS = "BPMN_DIFFERENT_PROCESS";
+	protected static final String SAME_PROCESS = "BPMN_SAME_PROCESS";
+	protected static final String FLOWOBJECT_NOT_CONTAINED_IN_PROCESS = "BPMN_FLOWOBJECT_NOT_CONTAINED_IN_PROCESS";
+	protected static final String ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "BPMN_ENDEVENT_WITHOUT_INCOMING_CONTROL_FLOW";
+	protected static final String STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "BPMN_STARTEVENT_WITHOUT_OUTGOING_CONTROL_FLOW";
+//	protected static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "BPMN_INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW";
+	protected static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "BPMN_STARTEVENT_WITH_INCOMING_CONTROL_FLOW";
+	protected static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "BPMN_ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW";
+	protected static final String ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "BPMN_ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW";
+	protected static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "BPMN_ENDEVENT_WITH_OUTGOING_CONTROL_FLOW";
+	protected static final String EVENTBASEDGATEWAY_BADCONTINUATION = "BPMN_EVENTBASEDGATEWAY_BADCONTINUATION";
+	protected static final String NODE_NOT_ALLOWED = "BPMN_NODE_NOT_ALLOWED";
 
 	protected BPMNDiagram diagram;
 	

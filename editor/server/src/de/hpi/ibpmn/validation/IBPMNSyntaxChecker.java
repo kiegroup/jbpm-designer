@@ -11,11 +11,15 @@ import de.hpi.ibpmn.Interaction;
  * @author Gero.Decker
  */
 public class IBPMNSyntaxChecker extends BPMNSyntaxChecker {
-
+/*
 	protected static final String NO_ROLE_SET = "Interactions must have a sender and a receiver role set";
 	protected static final String NO_INCOMING_SEQFLOW = "This node must have incoming sequence flow.";
 	protected static final String NO_OUTGOING_SEQFLOW = "This node must have outgoing sequence flow.";
-
+*/
+	protected static final String NO_ROLE_SET = "IBPMN_NO_ROLE_SET";
+	protected static final String NO_INCOMING_SEQFLOW = "IBPMN_NO_INCOMING_SEQFLOW";
+	protected static final String NO_OUTGOING_SEQFLOW = "IBPMN_NO_INCOMING_SEQFLOW";
+	
 	public IBPMNSyntaxChecker(IBPMNDiagram diagram) {
 		super(diagram);
 	}

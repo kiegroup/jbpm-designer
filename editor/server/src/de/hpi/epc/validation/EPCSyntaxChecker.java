@@ -11,13 +11,13 @@ import de.hpi.diagram.DiagramObject;
 import de.hpi.diagram.verification.AbstractSyntaxChecker;
 
 public class EPCSyntaxChecker extends AbstractSyntaxChecker {
-	
+/*	
 	private static final String NO_SOURCE = "Each edge must have a source";
 	private static final String NO_TARGET = "Each edge must have a target";
 	private static final String NOT_CONNECTED = "Node must be connected with edges";
 	private static final String NOT_CONNECTED_2 = "Node must be connected with more edges";
 	private static final String TOO_MANY_EDGES = "Node has too many connected edges";
-	private static final String NO_CORRECT_CONNECTOR = "Node is no correct conector";
+	private static final String NO_CORRECT_CONNECTOR = "Node is no correct connector";
 	
 	private static final String MANY_STARTS = "There must be only one start event";
 	//private static final String MANY_ENDS = "There must be only one end event";
@@ -28,6 +28,23 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	private static final String EVENT_AFTER_EVENT =  "There must be no event after an event";
 	private static final String PI_AFTER_FUNCTION =  "There must be no process interface after a function";
 	private static final String FUNCTION_AFTER_PI =  "There must be no function after a process interface";
+*/
+	private static final String NO_SOURCE = "EPC_NO_SOURCE";
+	private static final String NO_TARGET = "EPC_NO_TARGET";
+	private static final String NOT_CONNECTED = "EPC_NOT_CONNECTED";
+	private static final String NOT_CONNECTED_2 = "EPC_NOT_CONNECTED_2";
+	private static final String TOO_MANY_EDGES = "EPC_TOO_MANY_EDGES";
+	private static final String NO_CORRECT_CONNECTOR = "EPC_NO_CORRECT_CONNECTOR";
+	
+	private static final String MANY_STARTS = "EPC_MANY_STARTS";
+	//private static final String MANY_ENDS = "There must be only one end event";
+	
+	private static final String FUNCTION_AFTER_OR = "EPC_FUNCTION_AFTER_OR";
+	private static final String PI_AFTER_OR = "EPC_PI_AFTER_OR";
+	private static final String FUNCTION_AFTER_FUNCTION =  "EPC_FUNCTION_AFTER_FUNCTION";
+	private static final String EVENT_AFTER_EVENT =  "EPC_EVENT_AFTER_EVENT";
+	private static final String PI_AFTER_FUNCTION =  "EPC_PI_AFTER_FUNCTION";
+	private static final String FUNCTION_AFTER_PI =  "EPC_FUNCTION_AFTER_PI";
 
 	protected Diagram diagram;
 	

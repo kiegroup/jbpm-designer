@@ -187,12 +187,15 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         errors.keys().each(function(value){
             var sh = this.facade.getCanvas().getChildShapeByResourceId(value);
             if (sh) {
-                this.raiseOverlay(sh, errors[value]);
+                this.raiseOverlay(sh, this.parseCodeToMsg(errors[value]));
             }
         }.bind(this));
         this.active = !this.active;
     },
-    
+    parseCodeToMsg: function(code){
+		
+		return ORYX.I18N.SyntaxChecker[code]||code;
+	},
     /**
      * Resets all (displayed) errors
      * @methodOf ORYX.Plugins.SyntaxChecker.prototype

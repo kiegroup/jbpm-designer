@@ -33,12 +33,18 @@ import de.hpi.petrinet.Transition;
  * SOFTWARE.
  */
 public class PetriNetSyntaxChecker extends AbstractSyntaxChecker {
-
+/*
 	private static final String NOT_BIPARTITE = "The graph is not bipartite";
 	private static final String NO_LABEL = "Label not set for a labeled transition";
 	private static final String NO_ID = "There is a node without id";
 	private static final String SAME_SOURCE_AND_TARGET = "Two flow relationships have the same source and target";
 	private static final String NODE_NOT_SET = "A node is not set for a flowrelationship";
+*/	
+	private static final String NOT_BIPARTITE = "PetriNet_NOT_BIPARTITE";
+	private static final String NO_LABEL = "PetriNet_NO_LABEL";
+	private static final String NO_ID = "PetriNet_NO_ID";
+	private static final String SAME_SOURCE_AND_TARGET = "PetriNet_SAME_SOURCE_AND_TARGET";
+	private static final String NODE_NOT_SET = "PetriNet_NODE_NOT_SET";
 	
 	protected PetriNet net;
 	
