@@ -145,3 +145,40 @@
 	border: 1px dotted red;
 	z-index: 2;
 }
+
+
+/* MOVI Toolbar styles */
+
+.movi-toolbar {
+   border: 1px solid #ccc;
+   height: inherit;
+}
+
+.movi-toolbar-group {
+    width: inherit;
+    float: left;
+    padding: 0 2px;
+    border-right: 1px solid #ccc;
+    margin: 2px 0;
+}
+
+.movi-toolbar-group .movi-toolbar-group-label {
+    font-size: 6pt;
+    margin-bottom: 2px;
+}
+
+.movi-toolbar-button {
+    margin: 0px 1px;
+    padding: 2px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    float: left;
+    cursor: pointer;
+    width: inherit; height: inherit;
+    line-height: 0px; font-size: 0pt;
+}
+.movi-toolbar-button:hover {
+    background-color: #fff;
+    border-bottom-color: #aaa;
+    border-right-color: #aaa;
+}

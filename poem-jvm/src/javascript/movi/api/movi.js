@@ -142,7 +142,8 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 									moviBase + "/marker.js", 
 									moviBase + "/annotation.js",
 									moviBase + "/modelnavigator.js", 
-									moviBase + "/shapeselect.js" ], {
+									moviBase + "/shapeselect.js", 
+									moviBase + "/toolbar.js" ], {
 				onSuccess: callback,  // execute user specified callback
 				onFailure: function() {
 					throw new Error("Unable to load MOVI modules from base dir '" + moviBase + "'", "movi.js");

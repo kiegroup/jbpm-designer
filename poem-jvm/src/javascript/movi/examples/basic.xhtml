@@ -42,6 +42,7 @@
 
 		    		<div class="yui-u">
 						<div id="modelnavigator" />
+						<div id="toolbar" />
 			    	</div>
 
 				</div>
@@ -53,12 +54,14 @@
 		<script type="text/javascript">
 
 			var modelviewer;
+			var toolbar;
 		
 			MOVI.init(
 				function() {
 				
 					modelviewer = new MOVI.widget.ModelViewer("modelviewer");
-					modelviewer.loadModel("http://oryx-editor.org/backend/poem/model/2321"	, 
+				//	modelviewer.loadModel("http://oryx-editor.org/backend/poem/model/2321"	, 
+				    modelviewer.loadModel("http://oryx.bpmn-community.org/backend/poem/model/243",
 						{ onSuccess: init }
 					);
 					
@@ -75,39 +78,59 @@
 			
 			function setUpUI() {
 				
+				// create model navigator
 				var	modelnavigator = new MOVI.widget.ModelNavigator("modelnavigator", modelviewer);
 				
+				// create toolbar
+				toolbar = new MOVI.widget.Toolbar("toolbar", modelviewer);
+				toolbar.addButton({
+				    icon: "http://bpt.hpi.uni-potsdam.de/pub/TWiki/OryxSkin/hpi.png",
+				    tooltip: "my custom button",
+				    group: "Gruppe 1",
+				    callback: function() { alert("hello world!") }
+				});
+				toolbar.addButton({
+				    icon: "http://bpt.hpi.uni-potsdam.de/pub/TWiki/OryxSkin/hpi.png",
+				    tooltip: "my custom button2",
+				    group: "Gruppe 1",
+				    callback: function() { alert("hello world2!") }
+				});
+				toolbar.showGroupCaptions();
+				
+				// enable resizing
 				var resize = new YAHOO.util.Resize("modelviewer", {
 		            handles: ['b'],
 		            minHeight: 150
 		        });
-		
 				resize.on("resize", modelnavigator.update, modelnavigator, true);
-
 				resize.reset();
 			}
 			
 			function doStuffWithModel() {
 				
+				// set a marker
 				var marker = new MOVI.util.Marker(
-					modelviewer.canvas.getShape("oryx_0FE6099D-21DF-4225-A24D-DB50049FDAF7"),
+				//	modelviewer.canvas.getShape("oryx_0FE6099D-21DF-4225-A24D-DB50049FDAF7"),
+				    modelviewer.canvas.getShape("oryx_27F267D6-B0F7-46C7-976C-A64D406A152E"),
 					{"border": "2px solid blue"}
 				);
 				
+				// attach an annotation to the marker
 				var annotation = new MOVI.util.Annotation(
 					marker, 
 					"&lt;p&gt;This is an annotation.&lt;/p&gt;"
 				);
-				
 				annotation.show();
 				
+				// set another marker and attach an icon
 				var marker2 = new MOVI.util.Marker(
-					modelviewer.canvas.getShape("oryx_EE31AEEA-63F9-481A-A8D0-E231E06129DD"),
+				    modelviewer.canvas.getShape("movi_0-oryx_F36C4667-2BE9-4B16-B2D9-5516CCC9A99C"),
+				//	modelviewer.canvas.getShape("oryx_EE31AEEA-63F9-481A-A8D0-E231E06129DD"),
 					{"border": "2px solid blue"}
 				);
 				marker2.addIcon("northwest", "http://bpt.hpi.uni-potsdam.de/pub/TWiki/OryxSkin/hpi.png");
 				
-				// enable selection
+				// enable shape selection
 				var multiselect = true;
 				var selection = new MOVI.util.ShapeSelect(modelviewer, multiselect);
 				selection.onSelectionChanged(function() {
@@ -115,9 +138,11 @@
 					for(i in selection.getSelectedShapes()) {
 						resourceIds += selection.getSelectedShapes()[i].resourceId + ", "
 					}
-					console.log("Selected shapes: " + resourceIds);
+					if(console) console.log("Selected shapes: " + resourceIds);
 				})
 				
+				// enable zooming
+				//var zooming = new MOVI.util.ModelZoom(modelviewer, toolbar);
 			}
 			
 			

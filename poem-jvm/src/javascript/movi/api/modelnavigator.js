@@ -44,7 +44,7 @@ MOVI.namespace("widget");
 		this.set("innerHTML", 
 				"<img class=\"" + _NAVIGATOR_IMG_CLASS_NAME + "\" />" + 
 				"<div class=\"" + _CLIPPING_RECT_CLASS_NAME + "\" />");
-	}
+	};
 	
 	/**
      * The ModelNavigator widget is a UI control that enables users to navigate
