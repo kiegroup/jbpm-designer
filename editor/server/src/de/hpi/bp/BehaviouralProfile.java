@@ -79,27 +79,33 @@ public class BehaviouralProfile {
 					setMatrixEntry(index1,index2,CharacteristicRelationType.Exclusive);
 				}
 				else if (closure.isPath(index1, index2) && !closure.isPath(index2, index1)) {
-					setMatrixEntry(index1,index2,CharacteristicRelationType.StrictOrder);
+					setMatrixEntryOrder(index1,index2);
 				}
 				else if (closure.isPath(index2, index1) && !closure.isPath(index1, index2)) {
-					setMatrixEntry(index1,index2,CharacteristicRelationType.ReversedStrictOrder);
+					setMatrixEntryOrder(index2,index1);
 				}
 			}
 		}
 	}
 	
 	/**
-	 * As the matrix of the behavioral profile is symmetric, we 
-	 * use this procedure to set a certain dependency between
-	 * two nodes.
+	 * As the matrix of the behavioral profile is symmetric for
+	 * the exclusive and concurrency relation, we use this procedure 
+	 * to set these dependency between two nodes.
 	 * 
 	 * @param i
 	 * @param j
 	 * @param type
 	 */
 	protected void setMatrixEntry(int i, int j, CharacteristicRelationType type) {
+		assert(type.equals(CharacteristicRelationType.Concurrency)||type.equals(CharacteristicRelationType.Exclusive));
 		this.matrix[i][j] = type;
 		this.matrix[j][i] = type;
+	}
+	
+	protected void setMatrixEntryOrder(int from, int to) {
+		this.matrix[from][to] = CharacteristicRelationType.StrictOrder;
+		this.matrix[to][from] = CharacteristicRelationType.ReversedStrictOrder;
 	}
 	
 	public boolean areConcurrent(Node n1, Node n2) {
