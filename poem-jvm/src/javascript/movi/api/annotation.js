@@ -215,6 +215,7 @@ MOVI.namespace("util");
 			var canvasEl = new Element(this.get("element").parentNode.parentNode);
 			var elements = canvasEl.getElementsByClassName(_BUBBLE_VISIBLE_CLASS_NAME);
 			for(key in elements) {
+				if (elements[key] instanceof Function || !elements[key]){continue}
 				var zIndex = parseInt((new Element(elements[key].parentNode)).getStyle("z-index"), 10);
 				if(zIndex>maxZIndex) maxZIndex = zIndex;
 			}
