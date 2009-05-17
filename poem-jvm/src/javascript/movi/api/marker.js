@@ -431,7 +431,7 @@ MOVI.namespace("util");
 	     * @method toggle
 	     */
 		toggle: function() {
-			if(this.getStyle("display")=="none")
+			if(this.markerRect.getStyle("display")=="none")
 				this.show();
 			else 
 				this.hide();
