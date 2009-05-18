@@ -228,7 +228,6 @@ MOVI.namespace("util");
 						if(this._showOnZoomEnd) this.show();
 					}, this, true);
 					
-					
 				}
 				
 				// get border widths
