@@ -80,6 +80,8 @@ MOVI.namespace("widget");
 		this.slider.setValue(100, true);
 		
 		this.slider.subscribe('change', this.onChange, this, true);
+		this.slider.subscribe('slideStart', this._onSlideStart, this, true);
+		this.slider.subscribe('slideEnd', this._onSlideEnd, this, true);
 	};
 	
 	MOVI.extend(MOVI.widget.ZoomSlider, YAHOO.util.Element, {
@@ -90,6 +92,24 @@ MOVI.namespace("widget");
 		 * @type YAHOO.widget.Slider
 		 */
 		slider: null,
+		
+		/**
+		 * Callback that is executed when sliding starts
+		 * @method _onSlideStart
+		 * @private
+		 */
+		_onSlideStart: function() {
+			this.modelviewer.onZoomLevelChangeStart.fire(this.modelviewer.getZoomLevel());
+		},
+		
+		/**
+		 * Callback that is executed when sliding ends
+		 * @method _onSlideEnd
+		 * @private
+		 */
+		_onSlideEnd: function() {
+			this.modelviewer.onZoomLevelChangeEnd.fire(this.modelviewer.getZoomLevel());
+		},
 		
 		/**
 		 * Callback method that is executed when the slider is changed. Updates the zoom level of the model viewer.

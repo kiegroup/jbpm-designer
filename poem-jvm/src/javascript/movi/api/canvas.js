@@ -54,7 +54,7 @@ MOVI.namespace("model");
 		this.shapes = {};
 		this._indexShapes();
 		
-		this._modelviewer.onZoomLevelChanged.subscribe(this._update, this, true);
+		this._modelviewer.onZoomLevelChangeEnd.subscribe(this._update, this, true);
 		
 		this._update();
 		

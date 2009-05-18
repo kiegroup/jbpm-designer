@@ -49,7 +49,7 @@ MOVI.namespace("model");
 		MOVI.model.Node.superclass.constructor.call(this, jsonObj, stencilset, parent, prefix, attr); 
 		this.set("className", _CLASS_NAME);
 		
-		this.getCanvas().getModelViewer().onZoomLevelChanged.subscribe(this.update, this, true);
+		this.getCanvas().getModelViewer().onZoomLevelChangeEnd.subscribe(this.update, this, true);
 		
 		this.update();
 	}

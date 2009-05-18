@@ -88,7 +88,7 @@ MOVI.namespace("widget");
 		}
 		
 		// add event listener for zooming
-		this.modelviewer.onZoomLevelChanged.subscribe(this.update, this, true);
+		this.modelviewer.onZoomLevelChange.subscribe(this.update, this, true);
 		
 		// add event listeners to modelnavigator
 		this._clippingRect.addListener("mousedown", this._onClippingRectDrag, this, this, true);

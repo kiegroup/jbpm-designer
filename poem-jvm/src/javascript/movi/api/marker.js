@@ -215,10 +215,18 @@ MOVI.namespace("util");
 					
 					// now that we have our canvas and therefore the model viewer we can subscribe
 					// to the zoom event
-					if(!this._zoomSubscribed) {  // only subscribe once
-						this.canvas.getModelViewer().onZoomLevelChanged.subscribe(this._update, this, true);
-						this._zoomSubscribed = true;
-					}
+					this.canvas.getModelViewer().onZoomLevelChangeStart.subscribe(function() {
+						if(this.markerRect.getStyle("display")=="none") {
+							this._showOnZoomEnd = false;
+						} else {
+							this.hide();
+							this._showOnZoomEnd = true;
+						}
+					}, this, true);
+					this.canvas.getModelViewer().onZoomLevelChangeEnd.subscribe(function() {
+						this._update();
+						if(this._showOnZoomEnd) this.show();
+					}, this, true);
 					
 					
 				}

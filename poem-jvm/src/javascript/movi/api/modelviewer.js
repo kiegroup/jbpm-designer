@@ -54,7 +54,9 @@ MOVI.namespace("widget");
 		
     	MOVI.widget.ModelViewer.superclass.constructor.call(this, el); 
 
-		this.onZoomLevelChanged = new YAHOO.util.CustomEvent("movi-zoomLevelChanged", this); 
+		this.onZoomLevelChange = new YAHOO.util.CustomEvent("movi-zoomLevelChange", this); 
+		this.onZoomLevelChangeStart = new YAHOO.util.CustomEvent("movi-zoomLevelChangeStart", this); 
+		this.onZoomLevelChangeEnd = new YAHOO.util.CustomEvent("movi-zoomLevelChangeEnd", this); 
 
 		var existingScrollboxArr = this.getElementsByClassName(_SCROLLBOX_CLASS_NAME);
 		if(existingScrollboxArr.length==1) {
@@ -170,10 +172,26 @@ MOVI.namespace("widget");
 		
 		/**
 		 * The event that is triggered when the model zoom level changes
-		 * @property onZoomLevelChanged
+		 * @property onZoomLevelChange
 		 * @type YAHOO.util.CustomEvent
 		 */
-		onZoomLevelChanged: null,
+		onZoomLevelChange: null,
+		
+		/**
+		 * The event that is triggered when the model zoom level change starts
+		 * (on zoom slider slideStart event)
+		 * @property onZoomLevelChangeStart
+		 * @type YAHOO.util.CustomEvent
+		 */
+		onZoomLevelChangeStart: null,
+		
+		/**
+		 * The event that is triggered when the model zoom level change is finished
+		 * (on zoom slider slideEnd event)
+		 * @property onZoomLevelChangeEnd
+		 * @type YAHOO.util.CustomEvent
+		 */
+		onZoomLevelChangeEnd: null,
 		
 		/**
 	     * Callback that is executed when the model is finished
@@ -523,8 +541,9 @@ MOVI.namespace("widget");
 		 * Set the model zoom level in percent (minimum: 0, maximum: 100)
 		 * @method setZoomLevel
 		 * @param {Number} percent The zoom level in percent
+		 * @param {String} notify The type of the event that is fired to notify the zoom level change
 		 */
-		setZoomLevel: function(percent) {
+		setZoomLevel: function(percent, notify) {
 			if(!YAHOO.lang.isNumber(percent)) {
 				throw new TypeError("The parameter passed to have to setZoomLevel has to be of type Number.", 
 									"modelviewer.js");
@@ -540,7 +559,7 @@ MOVI.namespace("widget");
 			this._image.setStyle("width", Math.round(this.getImgWidth()*this._zoomLevel/100) + "px");
 			this._image.setStyle("height", Math.round(this.getImgHeight()*this._zoomLevel/100) + "px");
 			
-			this.onZoomLevelChanged.fire(this._zoomLevel);
+			this.onZoomLevelChange.fire(this._zoomLevel);
 		},
 		
 		/**
