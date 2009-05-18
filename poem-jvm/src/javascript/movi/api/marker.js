@@ -437,6 +437,9 @@ MOVI.namespace("util");
 		show: function() {
 			this.markerRect.setStyle("display", "block");
 			this.setRectStyle("display", "block");
+			for(orientation in this._icons) {
+				this._icons[orientation].setStyle("display", "block");
+			}
 		},
 		
 		/**
@@ -446,6 +449,9 @@ MOVI.namespace("util");
 		hide: function() {
 			this.markerRect.setStyle("display", "none");
 			this.setRectStyle("display", "none");
+			for(orientation in this._icons) {
+				this._icons[orientation].setStyle("display", "none");
+			}
 		},
 		
 		/**
