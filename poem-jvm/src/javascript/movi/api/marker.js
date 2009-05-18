@@ -438,7 +438,8 @@ MOVI.namespace("util");
 			this.markerRect.setStyle("display", "block");
 			this.setRectStyle("display", "block");
 			for(orientation in this._icons) {
-				this._icons[orientation].setStyle("display", "block");
+				if(this._icons[orientation]) 
+					this._icons[orientation].setStyle("display", "block");
 			}
 		},
 		
@@ -450,7 +451,8 @@ MOVI.namespace("util");
 			this.markerRect.setStyle("display", "none");
 			this.setRectStyle("display", "none");
 			for(orientation in this._icons) {
-				this._icons[orientation].setStyle("display", "none");
+				if(this._icons[orientation]) 
+					this._icons[orientation].setStyle("display", "none");
 			}
 		},
 		
