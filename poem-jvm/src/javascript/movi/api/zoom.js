@@ -79,7 +79,7 @@ MOVI.namespace("widget");
 		// set the initial value of the slider instance
 		this.slider.setValue(100, true);
 		
-		this.slider.subscribe('change', this._onChange, this, true);
+		this.slider.subscribe('change', this.onChange, this, true);
 	};
 	
 	MOVI.extend(MOVI.widget.ZoomSlider, YAHOO.util.Element, {
@@ -92,13 +92,14 @@ MOVI.namespace("widget");
 		slider: null,
 		
 		/**
-		 * @method _onChange
-		 * @private
+		 * Callback method that is executed when the slider is changed. Updates the zoom level of the model viewer.
+		 * This method should also be called when the model viewer is resized.
+		 * @method onChange
 		 */
-		_onChange: function() {
+		onChange: function() {
 			// calculate minimal zoom factor (stop zooming out when model fits model viewer)
-			var scaleHorizontal = parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10) / this.modelviewer.getImgWidth();
-			var scaleVertical = parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10) / this.modelviewer.getImgHeight();
+			var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)-5) / this.modelviewer.getImgWidth();
+			var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)-5) / this.modelviewer.getImgHeight();
 			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
 			if(scale>1)	scale = 1;
 			var minZoomFactor = scale*100;
@@ -109,11 +110,12 @@ MOVI.namespace("widget");
 		},
 		
 		/**
-		 * Update the state of the slider control to current model zoom level
+		 * Update the state of the slider control to current model zoom level.
+		 * This method should be called when the model viewer's zoom level has been changed.
 		 * @method update
 		 */
 		update: function() {
-			
+			// TODO: implement me
 		}
 		
 		
