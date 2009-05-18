@@ -107,7 +107,7 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 	
 	// load required YUI modules
 	var yuiLoader = new YAHOO.util.YUILoader({
-		require: yuiModules.concat(["yahoo", "dom", "element", "get", "event", "logger"]), 
+		require: yuiModules.concat(["yahoo", "dom", "element", "get", "event", "logger", "slider"]), 
 		base: _YUI_BASE_DIR,
 		loadOptional: true,
 		filter: "RAW",
@@ -143,7 +143,8 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 									moviBase + "/annotation.js",
 									moviBase + "/modelnavigator.js", 
 									moviBase + "/shapeselect.js", 
-									moviBase + "/toolbar.js" ], {
+									moviBase + "/toolbar.js",
+									moviBase + "/zoom.js" ], {
 				onSuccess: callback,  // execute user specified callback
 				onFailure: function() {
 					throw new Error("Unable to load MOVI modules from base dir '" + moviBase + "'", "movi.js");

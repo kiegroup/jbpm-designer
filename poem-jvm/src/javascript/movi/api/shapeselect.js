@@ -252,7 +252,6 @@ MOVI.namespace("util");
 		/**
 		 * Specify callback to be executed when the selection changes
 		 * (shapes are added to or removed from the current selection)
-		 * Example: 
 		 * @param {Function} callback The callback method
 		 * @param {Object} scope (optional) The execution scope of the callback 
 		 * (in none is specified the context of the ShapeSelect object is used)
@@ -261,7 +260,7 @@ MOVI.namespace("util");
 		 */
 		onSelectionChanged: function(callback, scope, data) {
 			if(!YAHOO.lang.isFunction(callback)) {
-				throw new TypeError("Specified callback is not a function.", "error", "shapeselect.js");
+				throw new TypeError("Specified callback is not a function.", "shapeselect.js");
 				return;
 			}
 			if(!scope) scope = this;

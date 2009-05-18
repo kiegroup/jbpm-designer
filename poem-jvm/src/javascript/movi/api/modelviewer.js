@@ -54,6 +54,8 @@ MOVI.namespace("widget");
 		
     	MOVI.widget.ModelViewer.superclass.constructor.call(this, el); 
 
+		this.onZoomLevelChanged = new YAHOO.util.CustomEvent("movi-zoomLevelChanged", this); 
+
 		var existingScrollboxArr = this.getElementsByClassName(_SCROLLBOX_CLASS_NAME);
 		if(existingScrollboxArr.length==1) {
 			// use existing scrollbox element if available
@@ -127,11 +129,51 @@ MOVI.namespace("widget");
 		_image: null,
 		
 		/**
+	     * The original width of the image
+	     * @property _imageWidth
+		 * @type Integer
+		 * @private
+	     */
+		_imageWidth: 0,
+		
+		/**
+	     * The original height of the image
+	     * @property _imageHeight
+		 * @type Integer
+		 * @private
+	     */
+		_imageHeight: 0,
+		
+		/**
+	     * The model zoom level in percent
+	     * @property _zoomLevel
+		 * @type Number
+		 * @private
+	     */
+		_zoomLevel: 100,
+		
+		/**
+	     * An array that stores tokens that identify resources to load. Loading of these resources is 
+		 * synchronized before the model load success callback is executed
+	     * @property _syncResources
+		 * @type Array
+		 * @private
+	     */
+		_syncResources: null,
+		
+		/**
 		 * The model's canvas
 		 * @property canvas
 		 * @type Canvas
 		 */
 		canvas: null,
+		
+		/**
+		 * The event that is triggered when the model zoom level changes
+		 * @property onZoomLevelChanged
+		 * @type YAHOO.util.CustomEvent
+		 */
+		onZoomLevelChanged: null,
 		
 		/**
 	     * Callback that is executed when the model is finished
@@ -197,6 +239,32 @@ MOVI.namespace("widget");
 			else if(this._loadOptions.onFailure)
 				this._loadOptions.onFailure.call(scope, this);
 		},
+		
+		/**
+	     * Synchronization of asynchronous resource loading. When all resources (model image and 
+		 * model data) are loaded successfully this method will trigger the execution of the 
+		 * model load success callback.
+		 * @method _syncLoadingReady
+	     * @param resource {String} A string that identifies the successfully loaded resource ("image" or "data")
+		 * @private
+	     */
+		_syncLoadingReady: function(resource) {
+			var i = this._syncResources.indexOf(resource);
+			if(i>=0) {
+				this._syncResources.splice(i, 1);
+			}
+			
+			if(this._syncResources.length==0)
+				this._onSuccess();
+		},
+		
+		/**
+	     * Returns the model viewer index (unique per page)
+	     * @method getIndex
+	     */
+		getIndex: function() {
+			return this._index;
+		},
 
 		/**
 	     * Loads the specified Oryx model in the viewer.
@@ -244,6 +312,9 @@ MOVI.namespace("widget");
 			this._loadOptions = opt || {};
 			if(!this._loadOptions.timeout)
 				this._loadOptions.timeout = 15000; // default timeout
+				
+			this._syncResources = new Array();
+			this._syncResources.push("data"); // include model data in synchronization
 			
 			var jsonp = encodeURIComponent(
 				"MOVI.widget.ModelViewer.getInstance(" + 
@@ -267,8 +338,22 @@ MOVI.namespace("widget");
 		 * @private
 	     */
 		_loadImage: function(uri) {
+			
+			this._syncResources.push("image"); // include image loading in synchronization
+			
 			// append timestamp to allow reloads of the image
-			this._image.set("src", uri + "/png?" + (new Date()).getTime());
+			var imgUrl = uri + "/png?" + (new Date()).getTime();
+			this._image.set("src", imgUrl);
+			
+			// get image size when available
+			var img = new Image();
+			var self = this;
+			img.onload = function() {
+				self._imageWidth = parseInt(self._image.getStyle("width"), 10);
+				self._imageHeight = parseInt(self._image.getStyle("height"), 10);
+				self._syncLoadingReady("image"); // notify successful loading of image
+			};
+			img.src = imgUrl;
 		},
 		
 		/**
@@ -331,25 +416,26 @@ MOVI.namespace("widget");
 				return;
 			}
 			this._scrollbox.appendChild(this.canvas);
-			this._onSuccess();
+			
+			this._syncLoadingReady("data"); // notify successful loading of data
 		},
 		
 		/**
-		 * Returns the width of the model image element in pixels
+		 * Returns the original width (100% zoom level) of the model image element in pixels
 		 * @method getImgWidth
 		 * @return {Integer} The image width
 		 */
 		getImgWidth: function() {
-			return this._image.get("width");
+			return this._imageWidth;
 		},
 		
 		/**
-		 * Returns the height of the model image element in pixels
+		 * Returns the original height (100% zoom level) of the model image element in pixels
 		 * @method getImgHeight
 		 * @return {Integer} The image height
 		 */
 		getImgHeight: function() {
-			return this._image.get("height");
+			return this._imageHeight;
 		},
 		
 		/**
@@ -395,10 +481,12 @@ MOVI.namespace("widget");
 					x: bounds.upperLeft.x + (bounds.lowerRight.x - bounds.upperLeft.x)/2,
 					y: bounds.upperLeft.y + (bounds.lowerRight.y - bounds.upperLeft.y)/2
 				}
+				
+				var zoomFactor = this.getZoomLevel()/100;
 
 				var target = {
-					x: parseInt(origin.x - parseInt(w[1])/2 ),
-					y: parseInt(origin.y - parseInt(h[1])/2 )
+					x: parseInt(origin.x*zoomFactor - parseInt(w[1])/2 ),
+					y: parseInt(origin.y*zoomFactor - parseInt(h[1])/2 )
 				}
 
 				this.getScrollboxEl().set("scrollTop", target.y);
@@ -429,6 +517,39 @@ MOVI.namespace("widget");
 				top  = Math.round(y - parseInt(this.getScrollboxEl().getStyle("height"), 10)/2);
 			this.getScrollboxEl().set("scrollLeft", left);
 			this.getScrollboxEl().set("scrollTop", top);
+		},
+		
+		/**
+		 * Set the model zoom level in percent (minimum: 0, maximum: 100)
+		 * @method setZoomLevel
+		 * @param {Number} percent The zoom level in percent
+		 */
+		setZoomLevel: function(percent) {
+			if(!YAHOO.lang.isNumber(percent)) {
+				throw new TypeError("The parameter passed to have to setZoomLevel has to be of type Number.", 
+									"modelviewer.js");
+			}
+			if(percent<=0) {
+				throw new RangeError("The zoom level must be greater than 0.", "modelviewer.js");
+			} else if(percent>100) {
+				throw new RangeError("The zoom level must not be greater than 100.", "modelviewer.js");
+			}
+			
+			this._zoomLevel = percent;
+			
+			this._image.setStyle("width", Math.round(this.getImgWidth()*this._zoomLevel/100) + "px");
+			this._image.setStyle("height", Math.round(this.getImgHeight()*this._zoomLevel/100) + "px");
+			
+			this.onZoomLevelChanged.fire(this._zoomLevel);
+		},
+		
+		/**
+		 * Returns the model zoom level in percent (minimum: 0, maximum: 100)
+		 * @method getZoomLevel
+		 * @return {Number} The current model zoom level in percent
+		 */
+		getZoomLevel: function() {
+			return this._zoomLevel;
 		}
 		
 	});

@@ -54,6 +54,8 @@ MOVI.namespace("model");
 		this.shapes = {};
 		this._indexShapes();
 		
+		this._modelviewer.onZoomLevelChanged.subscribe(this._update, this, true);
+		
 		this._update();
 		
 	}
@@ -99,6 +101,7 @@ MOVI.namespace("model");
 	     * @private
 	     */
 		_update: function() {
+			var zoomFactor = this._modelviewer.getZoomLevel() / 100;
 			var minX, minY;
 			for(i in this.childShapes) {
 				if(minX==undefined) minX = this.childShapes[i].getAbsBounds().upperLeft.x;
@@ -113,10 +116,10 @@ MOVI.namespace("model");
 				this.childShapes[i].bounds.lowerRight.y -= minY;
 				this.childShapes[i].update();
 			}
-			var left = (MOVI.config.MODEL_MARGIN / 2) + "px";
-			var top = (MOVI.config.MODEL_MARGIN / 2) + "px";
-			var width = (this._modelviewer.getImgWidth() - MOVI.config.MODEL_MARGIN) + "px";
-			var height = (this._modelviewer.getImgHeight() - MOVI.config.MODEL_MARGIN) + "px";
+			var left = (MOVI.config.MODEL_MARGIN / 2)*zoomFactor + "px";
+			var top = (MOVI.config.MODEL_MARGIN / 2)*zoomFactor + "px";
+			var width = (this._modelviewer.getImgWidth() - MOVI.config.MODEL_MARGIN)*zoomFactor + "px";
+			var height = (this._modelviewer.getImgHeight() - MOVI.config.MODEL_MARGIN)*zoomFactor + "px";
 			this.setStyle("left", left);
 			this.setStyle("top", top);
 			this.setStyle("width", width);

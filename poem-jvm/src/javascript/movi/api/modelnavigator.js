@@ -84,8 +84,11 @@ MOVI.namespace("widget");
 		var scrollboxId = this.modelviewer.getScrollboxEl().get("id");
 		if(!scrollboxId || !YAHOO.util.Event.addListener(
 								scrollboxId, "scroll", this.update, this, true)) {
-			MOVI.log("Could not add event listener to scrollbox", "error", "modelnavigator.js");
+			throw new Error("Could not add event listener to scrollbox", "modelnavigator.js");
 		}
+		
+		// add event listener for zooming
+		this.modelviewer.onZoomLevelChanged.subscribe(this.update, this, true);
 		
 		// add event listeners to modelnavigator
 		this._clippingRect.addListener("mousedown", this._onClippingRectDrag, this, this, true);
@@ -169,14 +172,14 @@ MOVI.namespace("widget");
 		 * @private
 		 */
 		_onClick: function(ev) {
-			
 			YAHOO.util.Event.preventDefault(ev);
 			this._absXY = YAHOO.util.Dom.getXY(this);
 			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
 			var navigatorWidth = parseInt(this.getStyle("width"), 10);
 			var scale =  this.modelviewer.getImgWidth() / navigatorWidth;
-			var centerX = Math.round(scale * (mouseAbsXY[0] - this._absXY[0]));
-			var centerY = Math.round(scale * (mouseAbsXY[1] - this._absXY[1]));
+			var zoomFactor = this.modelviewer.getZoomLevel() / 100;
+			var centerX = Math.round(scale * (mouseAbsXY[0] - this._absXY[0]) * zoomFactor);
+			var centerY = Math.round(scale * (mouseAbsXY[1] - this._absXY[1]) * zoomFactor);
 			this.modelviewer.centerScrollTo(centerX, centerY);
 		},
 		
@@ -192,9 +195,10 @@ MOVI.namespace("widget");
 				y = mouseAbsXY[1] - this._absXY[1] - this._mouseOffset.y;
 			var navigatorWidth = parseInt(this.getStyle("width"), 10);
 			var scale =  this.modelviewer.getImgWidth() / navigatorWidth;
+			var zoomFactor = this.modelviewer.getZoomLevel() / 100;
 			var scrollboxEl = this.modelviewer.getScrollboxEl();
-			scrollboxEl.set("scrollLeft", scale * x);
-			scrollboxEl.set("scrollTop", scale * y);
+			scrollboxEl.set("scrollLeft", Math.round(scale * x * zoomFactor));
+			scrollboxEl.set("scrollTop", Math.round(scale * y * zoomFactor));
 		},
 		
 		/**
@@ -204,6 +208,8 @@ MOVI.namespace("widget");
 	     * @method update
 	     */
 		update: function() {
+			var zoomFactor = this.modelviewer.getZoomLevel() / 100;
+			
 			var pngUrl = this.modelviewer.getModelUri() + "/png";
 			var scrollboxEl = this.modelviewer.getScrollboxEl();
 				
@@ -226,14 +232,14 @@ MOVI.namespace("widget");
 			this.setStyle("height", navigatorHeight + "px");
 			
 			// calculate position of clipping rect
-			var left = Math.round(scale * scrollboxEl.get("scrollLeft"));
-			var top = Math.round(scale * scrollboxEl.get("scrollTop"));
+			var left = Math.round(scale * scrollboxEl.get("scrollLeft") / zoomFactor);
+			var top = Math.round(scale * scrollboxEl.get("scrollTop") / zoomFactor);
 
 			// calculate dimensions of clipping rect
 			var scrollboxWidth = parseInt(scrollboxEl.getStyle("width"), 10);
 			var scrollboxHeight = parseInt(scrollboxEl.getStyle("height"), 10);
-			var clippingRectWidth = Math.round(scale * scrollboxWidth);
-			var clippingRectHeight = Math.round(scale * scrollboxHeight);
+			var clippingRectWidth = Math.round(scale * scrollboxWidth / zoomFactor);
+			var clippingRectHeight = Math.round(scale * scrollboxHeight / zoomFactor);
 			if(left+clippingRectWidth>navigatorWidth) clippingRectWidth = navigatorWidth-left;
 			if(top+clippingRectHeight>navigatorHeight) clippingRectHeight = navigatorHeight-top;
 			

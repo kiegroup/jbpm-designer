@@ -49,6 +49,8 @@ MOVI.namespace("model");
 		MOVI.model.Node.superclass.constructor.call(this, jsonObj, stencilset, parent, prefix, attr); 
 		this.set("className", _CLASS_NAME);
 		
+		this.getCanvas().getModelViewer().onZoomLevelChanged.subscribe(this.update, this, true);
+		
 		this.update();
 	}
 	
@@ -59,10 +61,12 @@ MOVI.namespace("model");
 	     * @method update
 	     */
 		update: function() {
-			var left = Math.round(this.bounds.upperLeft.x);
-			var top = Math.round(this.bounds.upperLeft.y);
-			var width = Math.round(this.bounds.lowerRight.x - this.bounds.upperLeft.x);
-			var height = Math.round(this.bounds.lowerRight.y - this.bounds.upperLeft.y);
+			var zoomFactor = this.getCanvas().getModelViewer().getZoomLevel() / 100;
+			
+			var left = Math.round(this.bounds.upperLeft.x * zoomFactor);
+			var top = Math.round(this.bounds.upperLeft.y * zoomFactor);
+			var width = Math.round((this.bounds.lowerRight.x - this.bounds.upperLeft.x) * zoomFactor);
+			var height = Math.round((this.bounds.lowerRight.y - this.bounds.upperLeft.y) * zoomFactor);
 			
 			this.setStyle("left", left + "px");
 			this.setStyle("top", top + "px");

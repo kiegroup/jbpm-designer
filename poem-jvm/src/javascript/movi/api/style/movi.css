@@ -182,3 +182,19 @@
     border-bottom-color: #aaa;
     border-right-color: #aaa;
 }
+
+
+/* MOVI Zoom Slider styles */
+
+.movi-zoomslider {
+    background: transparent url('../img/slider-track.gif') no-repeat scroll 7px 12px;
+    height:28px;
+    position:relative;
+    width:100px;
+}
+
+.movi-zoomslider-thumb {
+    position: absolute;
+    width: 17px; height: 21px;
+    background: transparent url('../img/slider-thumb.gif') no-repeat 0 0;
+}

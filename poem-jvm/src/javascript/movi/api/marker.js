@@ -166,6 +166,9 @@ MOVI.namespace("util");
 				var shape = this._shapes[i];
 				var rect = this.shapeRects[i];
 				
+				if(canvas==null) canvas = shape.getCanvas();
+				var zoomFactor = canvas.getModelViewer().getZoomLevel() / 100;
+				
 				// apply styles
 				for(prop in this._style) 
 					rect.setStyle(prop, this._style[prop]);
@@ -180,11 +183,11 @@ MOVI.namespace("util");
 							
 				var left = - MOVI.util.Marker.PADDING;
 				var top = - MOVI.util.Marker.PADDING;
-				var width = Math.round(shape.bounds.lowerRight.x
-							- shape.bounds.upperLeft.x) + 2*MOVI.util.Marker.PADDING
+				var width = Math.round((shape.bounds.lowerRight.x
+							- shape.bounds.upperLeft.x)*zoomFactor) + 2*MOVI.util.Marker.PADDING
 							- bLWidth - bRWidth;
-				var height = Math.round(shape.bounds.lowerRight.y
-							 - shape.bounds.upperLeft.y) + 2*MOVI.util.Marker.PADDING
+				var height = Math.round((shape.bounds.lowerRight.y
+							 - shape.bounds.upperLeft.y)*zoomFactor) + 2*MOVI.util.Marker.PADDING
 						 	 - bTWidth - bBWidth;				
 			
 				rect.setStyle("left", left + "px");
@@ -193,8 +196,6 @@ MOVI.namespace("util");
 				rect.setStyle("height", height + "px");
 				
 				rect.set("className", this._className);
-				
-				if(canvas==null) canvas = shape.getCanvas();
 			}
 			
 			/* update outer marking rectangle element */
@@ -212,6 +213,14 @@ MOVI.namespace("util");
 							this.canvas.appendChild(this._icons[orientation]); 
 					}
 					
+					// now that we have our canvas and therefore the model viewer we can subscribe
+					// to the zoom event
+					if(!this._zoomSubscribed) {  // only subscribe once
+						this.canvas.getModelViewer().onZoomLevelChanged.subscribe(this._update, this, true);
+						this._zoomSubscribed = true;
+					}
+					
+					
 				}
 				
 				// get border widths
@@ -220,13 +229,13 @@ MOVI.namespace("util");
 					bBWidth = parseInt(this.markerRect.getStyle("border-bottom-width")),
 					bLWidth = parseInt(this.markerRect.getStyle("border-left-width"));
 
-				var left = Math.round(this.getAbsBounds().upperLeft.x) - MOVI.util.Marker.PADDING;
-				var top = Math.round(this.getAbsBounds().upperLeft.y) - MOVI.util.Marker.PADDING;
-				var width = Math.round(this.getAbsBounds().lowerRight.x
-							- this.getAbsBounds().upperLeft.x) + 2*MOVI.util.Marker.PADDING
+				var left = Math.round(this.getAbsBounds().upperLeft.x)*zoomFactor - MOVI.util.Marker.PADDING;
+				var top = Math.round(this.getAbsBounds().upperLeft.y)*zoomFactor - MOVI.util.Marker.PADDING;
+				var width = Math.round((this.getAbsBounds().lowerRight.x
+							- this.getAbsBounds().upperLeft.x)*zoomFactor) + 2*MOVI.util.Marker.PADDING
 							- bLWidth - bRWidth;
-				var height = Math.round(this.getAbsBounds().lowerRight.y
-							 - this.getAbsBounds().upperLeft.y) + 2*MOVI.util.Marker.PADDING
+				var height = Math.round((this.getAbsBounds().lowerRight.y
+							 - this.getAbsBounds().upperLeft.y)*zoomFactor) + 2*MOVI.util.Marker.PADDING
 						 	 - bTWidth - bBWidth;
 
 				this.markerRect.setStyle("left", left + "px");
@@ -245,6 +254,12 @@ MOVI.namespace("util");
 	     * @private
 	     */
 		_updateIcons: function() {
+			
+			if(this.canvas)
+				var zoomFactor = this.canvas.getModelViewer().getZoomLevel() / 100;
+			else
+				var zoomFactor = 1.0;
+			
 			var bounds = this.getAbsBounds();
 			for(orientation in this._icons) {
 				var left, top, margin;
@@ -255,36 +270,36 @@ MOVI.namespace("util");
 					var height = parseInt(icon.getStyle("height"), 10);
 
 					if(orientation=="north") {
-						left = Math.round(bounds.upperLeft.x + (bounds.lowerRight.x - bounds.upperLeft.x - width)/2);
-						top = bounds.upperLeft.y - height;
+						left = Math.round(bounds.upperLeft.x*zoomFactor + ((bounds.lowerRight.x-bounds.upperLeft.x)*zoomFactor - width)/2);
+						top = bounds.upperLeft.y*zoomFactor - height;
 						margin = -_ICON_MARGIN + "px 0 0 0";
 					} else if(orientation=="west") {
-						left = bounds.lowerRight.x;
-						top = Math.round(bounds.upperLeft.y + (bounds.lowerRight.y - bounds.upperLeft.y - height)/2);
+						left = bounds.lowerRight.x*zoomFactor;
+						top = Math.round(bounds.upperLeft.y*zoomFactor + ((bounds.lowerRight.y-bounds.upperLeft.y)*zoomFactor - height)/2);
 						margin = "0 0 0 " + _ICON_MARGIN + "px";
 					} else if(orientation=="south") {
-						left = Math.round(bounds.upperLeft.x + (bounds.lowerRight.x - bounds.upperLeft.x - width)/2);
-						top = bounds.lowerRight.y;
+						left = Math.round(bounds.upperLeft.x*zoomFactor + ((bounds.lowerRight.x-bounds.upperLeft.x)*zoomFactor - width)/2);
+						top = bounds.lowerRight.y*zoomFactor;
 						margin = _ICON_MARGIN + "px 0 0 0";
 					} else if(orientation=="east") {
-						left = bounds.upperLeft.x - width;
-						top = Math.round(bounds.upperLeft.y + (bounds.lowerRight.y - bounds.upperLeft.y - height)/2);
+						left = bounds.upperLeft.x*zoomFactor - width;
+						top = Math.round(bounds.upperLeft.y*zoomFactor + ((bounds.lowerRight.y-bounds.upperLeft.y)*zoomFactor - height)/2);
 						margin = "0 0 0 " + -_ICON_MARGIN + "px";
 					} else if(orientation=="northwest") {
-						left = bounds.lowerRight.x;
-						top = bounds.upperLeft.y - height;
+						left = bounds.lowerRight.x*zoomFactor;
+						top = bounds.upperLeft.y*zoomFactor - height;
 						margin = -_ICON_MARGIN + "px 0 0 " + _ICON_MARGIN + "px";
 					} else if(orientation=="southwest") {
-						left = bounds.lowerRight.x;
-						top = bounds.lowerRight.y;
+						left = bounds.lowerRight.x*zoomFactor;
+						top = bounds.lowerRight.y*zoomFactor;
 						margin = _ICON_MARGIN + "px 0 0 " + _ICON_MARGIN + "px";
 					} else if(orientation=="northeast") {
-						left = bounds.upperLeft.x - width;
-						top = bounds.upperLeft.y - height;
+						left = bounds.upperLeft.x*zoomFactor - width;
+						top = bounds.upperLeft.y*zoomFactor - height;
 						margin = -_ICON_MARGIN + "px 0 0 " + -_ICON_MARGIN + "px";
 					} else if(orientation=="southeast") {
-						left = bounds.upperLeft.x - width;
-						top = bounds.lowerRight.y;
+						left = bounds.upperLeft.x*zoomFactor - width;
+						top = bounds.lowerRight.y*zoomFactor;
 						margin = _ICON_MARGIN + "px 0 0 " + -_ICON_MARGIN + "px";
 					}
 					
