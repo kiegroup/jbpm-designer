@@ -541,9 +541,10 @@ MOVI.namespace("widget");
 		 * Set the model zoom level in percent (minimum: 0, maximum: 100)
 		 * @method setZoomLevel
 		 * @param {Number} percent The zoom level in percent
-		 * @param {String} notify The type of the event that is fired to notify the zoom level change
+		 * @param {Boolean} notifyStartEnd (optional) If set to false markers, annotations and shape rects will 
+		 * not be updated. Default is true.
 		 */
-		setZoomLevel: function(percent, notify) {
+		setZoomLevel: function(percent, notifyStartEnd) {
 			if(!YAHOO.lang.isNumber(percent)) {
 				throw new TypeError("The parameter passed to have to setZoomLevel has to be of type Number.", 
 									"modelviewer.js");
@@ -559,7 +560,10 @@ MOVI.namespace("widget");
 			this._image.setStyle("width", Math.round(this.getImgWidth()*this._zoomLevel/100) + "px");
 			this._image.setStyle("height", Math.round(this.getImgHeight()*this._zoomLevel/100) + "px");
 			
+			// fire events
+			if(notifyStartEnd!==false) this.onZoomLevelChangeStart.fire(this._zoomLevel);
 			this.onZoomLevelChange.fire(this._zoomLevel);
+			if(notifyStartEnd!==false) this.onZoomLevelChangeEnd.fire(this._zoomLevel);
 		},
 		
 		/**

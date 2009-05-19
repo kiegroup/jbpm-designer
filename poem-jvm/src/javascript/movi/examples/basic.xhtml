@@ -87,14 +87,14 @@
 				toolbar.addButton({
 				    icon: "http://bpt.hpi.uni-potsdam.de/pub/TWiki/OryxSkin/hpi.png",
 				    tooltip: "my custom button",
-				    group: "Gruppe 1",
+				    group: "Group 1",
 				    callback: function() { alert("hello world!") }
 				});
 				toolbar.addButton({
 				    icon: "http://bpt.hpi.uni-potsdam.de/pub/TWiki/OryxSkin/hpi.png",
 				    tooltip: "my custom button2",
-				    group: "Gruppe 1",
-				    callback: function() { alert("hello world2!") }
+				    group: "Group 1",
+				    callback: function() { alert("hello world 2!") }
 				});
 				toolbar.showGroupCaptions();
 				
@@ -148,11 +148,17 @@
 					if(console) console.log("Selected shapes: " + resourceIds);
 				})
 				
-				// enable zooming
-				//var zooming = new MOVI.util.ModelZoom(modelviewer, toolbar);
+				// show fullscreen
+				var fullscreenViewer = new MOVI.widget.FullscreenViewer(modelviewer);
+				toolbar.addButton({
+				    icon: "arrow_out.png",
+				    caption: 'fullscreen',
+				    tooltip: 'View the model in fullscreen mode',
+				    group: 'View options',
+				    callback: fullscreenViewer.open,
+				    scope: fullscreenViewer
+				});
 			}
-			
-			
 			
 		</script>
 		

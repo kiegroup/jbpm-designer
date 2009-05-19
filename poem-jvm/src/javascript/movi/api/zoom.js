@@ -26,10 +26,13 @@ MOVI.namespace("widget");
 
 (function() {
 	
-	var _SLIDER_CLASS_NAME			= "movi-zoomslider",
-		_SLIDER_THUMB_CLASS_NAME	= "movi-zoomslider-thumb",
-		_SLIDER_WIDTH				= 100,
-		_SLIDER_STEP				= 1;
+	var _SLIDER_CLASS_NAME					= "movi-zoomslider",
+		_SLIDER_THUMB_CLASS_NAME			= "movi-zoomslider-thumb",
+		_SLIDER_WIDTH						= 100,
+		_SLIDER_STEP						= 1,
+		_FULLSCREEN_LIGHTBOX_CLASS_NAME		= "movi-fullscreen-lightbox",
+		_FULLSCREEN_MASK_CLASS_NAME			= "movi-fullscreen-mask",
+		_FULLSCREEN_CONTAINER_CLASS_NAME	= "movi-fullscreen-modelcontainer";
 	
 	/**
      * Add image to the host element and create the clipping rectangle element.
@@ -44,6 +47,15 @@ MOVI.namespace("widget");
 					"<div id=\"" + _SLIDER_THUMB_CLASS_NAME + this.modelviewer.getIndex() + "\" class=\"" + _SLIDER_THUMB_CLASS_NAME + "\"></div>" +
 				"</div>");
 	};
+	
+	/**
+     * Returns the scale to fit the model to the model viewer
+     * @method _calculateFitToViewerScale
+     * @private
+     */
+	var _calculateFitToViewerScale = function() {
+		
+	}
 	
 	/**
      * The ZoomSlider widget is a slider UI control that enables users to adjust the
@@ -118,15 +130,15 @@ MOVI.namespace("widget");
 		 */
 		onChange: function() {
 			// calculate minimal zoom factor (stop zooming out when model fits model viewer)
-			var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)-5) / this.modelviewer.getImgWidth();
-			var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)-5) / this.modelviewer.getImgHeight();
+			var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)) / this.modelviewer.getImgWidth();
+			var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)) / this.modelviewer.getImgHeight();
 			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
 			if(scale>1)	scale = 1;
 			var minZoomFactor = scale*100;
 			var maxZoomFactor = 100;
 			
 			var zoomStep = (maxZoomFactor-minZoomFactor) / _SLIDER_WIDTH;
-			this.modelviewer.setZoomLevel(minZoomFactor + this.slider.getValue() * zoomStep);
+			this.modelviewer.setZoomLevel(minZoomFactor + this.slider.getValue() * zoomStep, false);
 		},
 		
 		/**
@@ -150,13 +162,46 @@ MOVI.namespace("widget");
 	});
 	
 	
+	
+	/**
+	 * Swap two nodes. In IE, we use the native method, for others we
+	 * emulate the IE behavior
+	 * @method _swapNode
+	 * @param n1 the first node to swap
+	 * @param n2 the other node to swap
+	 * @private
+	 */
+	var _swapNode = function(n1, n2) {
+	    if (n1.swapNode) {
+	        n1.swapNode(n2);
+	    } else {
+	        var p = n2.parentNode;
+	        var s = n2.nextSibling;
+
+	        if (s == n1) {
+	            p.insertBefore(n1, n2);
+	        } else if (n2 == n1.nextSibling) {
+	            p.insertBefore(n2, n1);
+	        } else {
+	            n1.parentNode.replaceChild(n2, n1);
+	            p.insertBefore(n1, s);
+	        }
+	    }
+	};
+	
 	/**
      * 
      * @method _setUpHostElementFullscreenViewer
      * @private
      */
 	var _setUpHostElementFullscreenViewer = function() {
-		this.set("innerHTML", "");
+		var el = new YAHOO.util.Element(document.createElement('div'));
+		el.set("innerHTML", 
+			"<div class=\"hd\"></div>" +
+		    "<div class=\"bd\"><div class=\"" + _FULLSCREEN_CONTAINER_CLASS_NAME + "\"></div></div>" +
+		    "<div class=\"ft\"></div>");
+		(new YAHOO.util.Element(document.body)).appendChild(el);
+		return el;
 	};
 	
 	/**
@@ -169,13 +214,85 @@ MOVI.namespace("widget");
      */
     MOVI.widget.FullscreenViewer = function(modelviewer) {
 	
+		this.modelviewer = modelviewer;
+		
+		var el = _setUpHostElementFullscreenViewer();
+		el.addClass(_FULLSCREEN_LIGHTBOX_CLASS_NAME);
+		var elId = _FULLSCREEN_LIGHTBOX_CLASS_NAME+this.modelviewer.getIndex();
+		el.set("id", elId);
+		
+		MOVI.widget.FullscreenViewer.superclass.constructor.call(this, el);
+		
+		this.dialog = new YAHOO.widget.Dialog(elId, {
+			fixedcenter: true,
+			visible: false,
+			draggable: true,
+			modal: true,
+			close: true,
+			constraintoviewport: true
+		});
+		
+		this.dialog.render();
+		
+		// add listener to close button
+		YAHOO.util.Event.on(
+			YAHOO.util.Dom.getElementsByClassName("container-close", "a", elId), 
+			"click",
+			this.close, this, true
+		);
+		
+		this._fullscreenContainer = new YAHOO.util.Element(el.getElementsByClassName(_FULLSCREEN_CONTAINER_CLASS_NAME)[0]);
+		this._modelViewerPlaceholder = new YAHOO.util.Element(document.createElement("div"));
+		this._fullscreenContainer.appendChild(this._modelViewerPlaceholder);
 	};
 	
 	MOVI.extend(MOVI.widget.FullscreenViewer, YAHOO.util.Element, {
 		
+		/**
+		 * The fullscreen model viewer conatainer element
+		 * @property _fullscreenContainer
+		 * @type YAHOO.util.Element
+		 * @private
+		 */
+		_fullscreenContainer: null,
 		
-		addToolbarButton: function(toolbar) {
+		/**
+		 * A placeholder element that is swapped with the original model viewer element
+		 * @property _modelViewerPlaceholder
+		 * @type YAHOO.util.Element
+		 * @private
+		 */
+		_modelViewerPlaceholder: null,
+		
+		/**
+		 * The Dialog widget that represents the lightbox
+		 * @property dialog
+		 * @type YAHOO.widget.Dialog
+		 */
+		dialog: null,
+		
+		open: function() {
+			this.dialog.cfg.setProperty("width", (YAHOO.util.Dom.getViewportWidth()-20)+"px");
+			this.dialog.cfg.setProperty("height", (YAHOO.util.Dom.getViewportHeight()-20)+"px");
+			_swapNode(this.modelviewer.getScrollboxEl().get("element"), this._modelViewerPlaceholder.get("element"));
 			
+			// zoom to fit to fullscreen
+			var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)-5) / this.modelviewer.getImgWidth();
+			var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)-5) / this.modelviewer.getImgHeight();
+			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
+			if(scale>1)	scale = 1;
+			
+			// store original zoom factor
+			this._originalZoomLevel = this.modelviewer.getZoomLevel();
+			this.modelviewer.setZoomLevel(scale*100);
+			
+			this.dialog.show();
+		},
+		
+		close: function() {
+			_swapNode(this.modelviewer.getScrollboxEl().get("element"), this._modelViewerPlaceholder.get("element"));
+			this.modelviewer.setZoomLevel(this._originalZoomLevel);
+			this.dialog.hide();
 		}
 		
 	});

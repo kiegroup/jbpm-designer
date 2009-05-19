@@ -107,7 +107,7 @@ MOVI.init = function(callback, moviBase, yuiReadyCallback, yuiModules) {
 	
 	// load required YUI modules
 	var yuiLoader = new YAHOO.util.YUILoader({
-		require: yuiModules.concat(["yahoo", "dom", "element", "get", "event", "logger", "slider"]), 
+		require: yuiModules.concat(["yahoo", "dom", "element", "get", "event", "logger", "slider", "container"]), 
 		base: _YUI_BASE_DIR,
 		loadOptional: true,
 		filter: "RAW",

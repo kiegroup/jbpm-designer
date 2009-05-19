@@ -198,3 +198,26 @@
     width: 17px; height: 21px;
     background: transparent url('../img/slider-thumb.gif') no-repeat 0 0;
 }
+
+
+/* MOVI Fullscreen Viewer styles */
+
+.movi-fullscreen-lightbox {
+    text-align: left;
+}
+
+.movi-fullscreen-lightbox .bd, .movi-fullscreen-lightbox .ft {
+    background-color: #FFFFFF ! important;
+}
+
+.movi-fullscreen-mask {
+    -moz-opacity: 0.8;
+    opacity:.80;
+    filter: alpha(opacity=80);
+    background-color:#2f2f2f;
+}
+
+.movi-fullscreen-modelcontainer {
+    height: 100%;
+    margin: 10px 0;
+}
