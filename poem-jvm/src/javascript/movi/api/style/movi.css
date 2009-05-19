@@ -210,13 +210,6 @@
     background-color: #FFFFFF ! important;
 }
 
-.movi-fullscreen-mask {
-    -moz-opacity: 0.8;
-    opacity:.80;
-    filter: alpha(opacity=80);
-    background-color:#2f2f2f;
-}
-
 .movi-fullscreen-modelcontainer {
     height: 100%;
     margin: 10px 0;

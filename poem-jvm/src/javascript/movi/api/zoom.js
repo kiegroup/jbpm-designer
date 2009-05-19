@@ -31,7 +31,6 @@ MOVI.namespace("widget");
 		_SLIDER_WIDTH						= 100,
 		_SLIDER_STEP						= 1,
 		_FULLSCREEN_LIGHTBOX_CLASS_NAME		= "movi-fullscreen-lightbox",
-		_FULLSCREEN_MASK_CLASS_NAME			= "movi-fullscreen-mask",
 		_FULLSCREEN_CONTAINER_CLASS_NAME	= "movi-fullscreen-modelcontainer";
 	
 	/**
