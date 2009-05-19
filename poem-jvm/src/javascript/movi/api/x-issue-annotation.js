@@ -38,6 +38,8 @@ MOVI.namespace("util");
 		
 		// append annotation to first marker rect
 		for(key in marker.shapeRects) {
+			if(!YAHOO.lang.hasOwnProperty(marker.shapeRects, key)) continue;
+			
 			marker.shapeRects[key].appendChild(this);
 			break;
 		}

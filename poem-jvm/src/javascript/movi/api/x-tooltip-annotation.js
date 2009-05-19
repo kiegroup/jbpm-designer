@@ -37,6 +37,7 @@ MOVI.namespace("util");
 		var first_shape = marker.getShapes()[0];
 		var first_rect = null;
 		for(key in marker.shapeRects) {
+			if(!YAHOO.lang.hasOwnProperty(marker.shapeRects, key)) continue;
 			first_rect = marker.shapeRects[key];
 			break;
 		}

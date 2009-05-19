@@ -89,6 +89,8 @@ MOVI.namespace("model");
 		_indexShapes: function(recShape) {
 			recShape = recShape || this;
 			for(key in recShape.childShapes) {
+				if(!YAHOO.lang.hasOwnProperty(recShape.childShapes, key)) continue;
+				
 				var child = recShape.childShapes[key];
 				this.shapes[child.resourceId] = child;
 				this._indexShapes(child);
@@ -104,12 +106,16 @@ MOVI.namespace("model");
 			var zoomFactor = this._modelviewer.getZoomLevel() / 100;
 			var minX, minY;
 			for(i in this.childShapes) {
+				if(!YAHOO.lang.hasOwnProperty(this.childShapes, i)) continue;
+				
 				if(minX==undefined) minX = this.childShapes[i].getAbsBounds().upperLeft.x;
 				else minX = Math.min(minX, this.childShapes[i].getAbsBounds().upperLeft.x);
 				if(minY==undefined) minY = this.childShapes[i].getAbsBounds().upperLeft.y;
 				else minY = Math.min(minY, this.childShapes[i].getAbsBounds().upperLeft.y);
 			}
 			for(i in this.childShapes) {
+				if(!YAHOO.lang.hasOwnProperty(this.childShapes, i)) continue;
+				
 				this.childShapes[i].bounds.upperLeft.x -= minX;
 				this.childShapes[i].bounds.upperLeft.y -= minY;
 				this.childShapes[i].bounds.lowerRight.x -= minX;
@@ -154,6 +160,8 @@ MOVI.namespace("model");
 		getNodes: function() {
 			var nodes = {};
 			for(key in this.shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this.shapes, key)) continue;
+				
 				if(this.shapes[key].stencil.type=="node")
 					nodes[key] = this.shapes[key];
 			}
@@ -168,6 +176,8 @@ MOVI.namespace("model");
 		getEdges: function() {
 			var edges = {};
 			for(key in this.shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this.shapes, key)) continue;
+				
 				if(this.shapes[key].stencil.type=="edge")
 					edges[key] = this.shapes[key];
 			}

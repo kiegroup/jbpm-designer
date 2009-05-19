@@ -61,7 +61,8 @@ MOVI.namespace("util");
 		this._highlightMarkers = {};
 		
 		for(key in shapes) {
-			if (shapes[key] instanceof Function){continue}
+			if(!YAHOO.lang.hasOwnProperty(shapes, key)) continue;
+			
 			var shape = modelviewer.canvas.shapes[key];
 			
 			if(shape.parentShape!=null) {
@@ -98,7 +99,8 @@ MOVI.namespace("util");
 		_init: function() {
 			// create highlighting markers
 			for(key in this._selectableShapes) {
-				if (this._selectableShapes[key] instanceof Function){continue}
+				if(!YAHOO.lang.hasOwnProperty(this._selectableShapes, key)) continue;
+				
 				var s = this._selectableShapes[key];
 				var marker = new Marker(s);
 				marker.setRectClassName(_HIGHLIGHT_RECT_CLASS_NAME);
@@ -145,7 +147,8 @@ MOVI.namespace("util");
 		
 		_reset: function() {
 			for(key in this._selectedShapes) {
-				if (this._selectableShapes[key] instanceof Function){continue}
+				if(!YAHOO.lang.hasOwnProperty(this._selectableShapes, key)) continue;
+				
 				var s = this._selectedShapes[key];
 				this._selectionMarker.removeShape(s);
 				delete this._selectedShapes[key];
@@ -161,7 +164,8 @@ MOVI.namespace("util");
 			if(!YAHOO.lang.isArray(shapes)) shapes = [shapes];
 			
 			for(key in shapes) {
-				if (shapes[key] instanceof Function){continue}
+				if(!YAHOO.lang.hasOwnProperty(shapes, key)) continue;
+				
 				var s = shapes[key];
 				
 				this.unhighlight(s);
@@ -189,7 +193,8 @@ MOVI.namespace("util");
 			if(!YAHOO.lang.isArray(shapes)) shapes = [shapes];
 			
 			for(key in shapes) {
-				if (shapes[key] instanceof Function || !shapes[key]){continue}
+				if(!YAHOO.lang.hasOwnProperty(shapes, key)) continue;
+				
 				var s = shapes[key];
 				delete this._selectedShapes[s.resourceId];
 				this._selectionMarker.removeShape(s);
@@ -234,9 +239,12 @@ MOVI.namespace("util");
 		 */
 		getSelectedShapes: function() {
 			var selected = new Array();
-			for(key in this._selectedShapes)
-				if (this._selectedShapes[key] instanceof Function){continue}
+			for(key in this._selectedShapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._selectedShapes, key)) continue;
+				
 				selected.push(this._selectedShapes[key]);
+			}
+				
 			return selected;
 		},
 		

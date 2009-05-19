@@ -142,7 +142,7 @@
 				var selection = new MOVI.util.ShapeSelect(modelviewer, multiselect);
 				selection.onSelectionChanged(function() {
 					var resourceIds = "";
-					for(i in selection.getSelectedShapes()) {
+					for(var i = 0; i &lt; selection.getSelectedShapes().length; i++) {
 						resourceIds += selection.getSelectedShapes()[i].resourceId + ", "
 					}
 					if(console) console.log("Selected shapes: " + resourceIds);

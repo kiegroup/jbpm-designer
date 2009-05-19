@@ -85,6 +85,8 @@ MOVI.namespace("widget");
 			this.set("innerHTML", "");
 			
 			for(key in this._groups) {
+				if(!YAHOO.lang.hasOwnProperty(this._groups, key)) continue;
+				
 				var group = this._groups[key];
 				
 				var groupEl = new YAHOO.util.Element(document.createElement("div"));

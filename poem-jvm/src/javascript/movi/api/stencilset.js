@@ -46,6 +46,8 @@ MOVI.namespace("stencilset");
 		}
 		
 		for(key in jsonObj.stencils) {
+			if(!YAHOO.lang.hasOwnProperty(jsonObj.stencils, key)) continue;
+			
 			var stencil = jsonObj.stencils[key];
 			this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil);
 		}

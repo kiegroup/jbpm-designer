@@ -163,6 +163,8 @@ MOVI.namespace("util");
 			/* update shape marking rectangle elements */
 			
 			for(i in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, i)) continue;
+				
 				var shape = this._shapes[i];
 				var rect = this.shapeRects[i];
 				
@@ -170,8 +172,10 @@ MOVI.namespace("util");
 				var zoomFactor = canvas.getModelViewer().getZoomLevel() / 100;
 				
 				// apply styles
-				for(prop in this._style) 
+				for(prop in this._style) {
+					if(!YAHOO.lang.hasOwnProperty(this._style, prop)) continue;
 					rect.setStyle(prop, this._style[prop]);
+				}
 				
 				/* adjust position */
 				
@@ -209,6 +213,8 @@ MOVI.namespace("util");
 					// (all marked shapes have to belong to the same canvas)
 					this.canvas.appendChild(this.markerRect); 
 					for(orientation in this._icons) {
+						if(!YAHOO.lang.hasOwnProperty(this._icons, orientation)) continue;
+						
 						if(this._icons[orientation])
 							this.canvas.appendChild(this._icons[orientation]); 
 					}
@@ -269,6 +275,8 @@ MOVI.namespace("util");
 			
 			var bounds = this.getAbsBounds();
 			for(orientation in this._icons) {
+				if(!YAHOO.lang.hasOwnProperty(this._icons, orientation)) continue;
+				
 				var left, top, margin;
 				var icon = this._icons[orientation];
 				if(icon) {
@@ -410,6 +418,8 @@ MOVI.namespace("util");
 	     */
 		removeAllShapes: function() {
 			for(key in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, key)) continue;
+				
 				this._shapes[key].removeChild(this.shapeRects[key]);
 				delete this.shapeRects[key];
 				delete this._shapes[key];
@@ -425,8 +435,11 @@ MOVI.namespace("util");
 	     */
 		getShapes: function() {
 			var marked = new Array();
-			for(key in this._shapes)
+			for(key in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, key)) continue;
 				marked.push(this._shapes[key]);
+			}
+				
 			return marked;
 		},
 		
@@ -438,6 +451,7 @@ MOVI.namespace("util");
 			this.markerRect.setStyle("display", "block");
 			this.setRectStyle("display", "block");
 			for(orientation in this._icons) {
+				if(!YAHOO.lang.hasOwnProperty(this._icons, orientation)) continue;
 				if(this._icons[orientation]) 
 					this._icons[orientation].setStyle("display", "block");
 			}
@@ -451,6 +465,7 @@ MOVI.namespace("util");
 			this.markerRect.setStyle("display", "none");
 			this.setRectStyle("display", "none");
 			for(orientation in this._icons) {
+				if(!YAHOO.lang.hasOwnProperty(this._icons, orientation)) continue;
 				if(this._icons[orientation]) 
 					this._icons[orientation].setStyle("display", "none");
 			}
@@ -473,6 +488,8 @@ MOVI.namespace("util");
 	     */
 		remove: function() {
 			for(i in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, i)) continue;
+				
 				var rect = this.shapeRects[i];
 				rect.get("element").parentNode.removeChild(rect.get("element"));
 				delete this._shapes[i];
@@ -493,6 +510,8 @@ MOVI.namespace("util");
 			var upperLeft  = {x: undefined, y: undefined};
 				lowerRight = {x: undefined, y: undefined};
 			for(i in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, i)) continue;
+				
 				var bounds = this._shapes[i].getAbsBounds();
 				if(upperLeft.x == undefined || bounds.upperLeft.x < upperLeft.x)
 					upperLeft.x = bounds.upperLeft.x;
@@ -559,7 +578,9 @@ MOVI.namespace("util");
 			icon.set("className", _ICON_CLASS_NAME);
 
 			for(var key in this._icons) {
-				if(key == orientation) {
+				if(!YAHOO.lang.hasOwnProperty(this._icons, key)) continue;
+				
+				if(key === orientation) {
 					if(this._icons[orientation]) this.removeIcon(orientation);
 					if(this.canvas) this.canvas.appendChild(icon);
 					this._icons[key] = icon;
