@@ -38,16 +38,27 @@ public class BehaviouralProfile {
 	
 	protected CharacteristicRelationType[][] matrix;
 
+	protected TrueConcurrencyRelation trueConcurrency;
+	
 	public BehaviouralProfile(PTNet pn) {
 		this.pn = pn;
 		this.matrix = null;
+		deriveBehaviouralProfile();
+	}
+	
+	public PTNet getNet() {
+		return this.pn;
+	}
+	
+	public TrueConcurrencyRelation getTrueConcurrency() {
+		return this.trueConcurrency;
 	}
 	
 	protected void deriveBehaviouralProfile() {
 		this.matrix = new CharacteristicRelationType[this.pn.getNodes().size()][this.pn.getNodes().size()];
 
 		TransitiveClosure closure = new TransitiveClosure(this.pn);
-		TrueConcurrencyRelation trueConcurrency = new TrueConcurrencyRelation(this.pn);
+		trueConcurrency = new TrueConcurrencyRelation(this.pn);
 		
 		for(Node n1 : this.pn.getNodes()) {
 			int index1 = this.pn.getNodes().indexOf(n1);
@@ -144,9 +155,9 @@ public class BehaviouralProfile {
 		for(Node n1 : this.pn.getNodes()) {
 			int index1 = this.pn.getNodes().indexOf(n1);
 			for(Node n2 : this.pn.getNodes()) {
-				if (n1.equals(n2))
-					continue;
 				int index2 = this.pn.getNodes().indexOf(n2);
+				if (index2 > index1)
+					continue;
 				if (matrix[index1][index2].equals(relationType))
 					System.out.println(relationType + " -- " + n1 + " : " + n2);
 			}
@@ -168,6 +179,29 @@ public class BehaviouralProfile {
 		}
 		sb.append("------------------------------------------\n");
 		return sb.toString();
+	}
+	
+	/**
+	 * Checks equality for two behavioural profiles
+	 * 
+	 * Returns false, if both matrices are not based on the same
+	 * Petri net.
+	 * 
+	 * @param profile that should be compared
+	 * @return true, if the given profile is equivalent to this profile
+	 */
+	public boolean equals (BehaviouralProfile profile) {
+		if (!this.pn.equals(profile.getNet()))
+			return false;
+		
+		boolean equal = true;
+		
+		for(Node n1 : this.pn.getNodes()) {
+			for(Node n2 : this.pn.getNodes()) {
+				equal &= this.getRelationForNodes(n1, n2).equals(profile.getRelationForNodes(n1, n2));
+			}
+		}
+		return equal;
 	}
 
 }

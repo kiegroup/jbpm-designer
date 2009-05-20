@@ -23,8 +23,10 @@ package de.hpi.bp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.hpi.PTnet.PTNet;
@@ -51,16 +53,22 @@ public class TrueConcurrencyRelation {
 		public Node getSecondNode() {
 			return this.n2;
 		}
+		
+		public String toString() {
+			return "(" + this.n1.toString() + " | " + this.n2.toString() + ")";
+		}
 	}
 
 	private PTNet pn;
 	
 	private boolean[][] matrix;
 	
+	private Map<Node,Set<Node>> indirectPlaces;
+	
 	public TrueConcurrencyRelation(PTNet pn) {
 		this.pn = pn;
 		this.matrix = null;
-		calculateTrueConcurrencyMatrix();
+		this.indirectPlaces = new HashMap<Node, Set<Node>>();
 	}
 	
 	/**
@@ -72,7 +80,9 @@ public class TrueConcurrencyRelation {
 	 * @return true, if both nodes are concurrent.
 	 */
 	public boolean areTrueConcurrent(Node n1, Node n2) {
-		assert(matrix != null);
+		if (this.matrix == null)
+			calculateTrueConcurrencyMatrix();
+
 		int index1 = this.pn.getNodes().indexOf(n1);
 		int index2 = this.pn.getNodes().indexOf(n2);
 		return matrix[index1][index2];
@@ -89,39 +99,22 @@ public class TrueConcurrencyRelation {
 	 * @return true, if both nodes are concurrent.
 	 */
 	public boolean areTrueConcurrent(int i, int j) {
-		assert(matrix != null);
+		if (this.matrix == null)
+			calculateTrueConcurrencyMatrix();
 		return matrix[i][j];
 	}
-	
-	protected boolean allNodesConcurrent(Collection<Node> nodes1) {
-		boolean nok = false;
 		
-		for(Node n1 : nodes1) {
-			int index1 = this.pn.getNodes().indexOf(n1);
-			for(Node n2 : nodes1) {
-				if (n1.equals(n2))
-					continue;
-				int index2 = this.pn.getNodes().indexOf(n2);
-				if (!this.matrix[index1][index2])
-					nok = true;
-			}
-		}
-		return !nok;
-	}
-	
 	protected boolean nodeConcurrentToNodes(Node n, Collection<Node> nodes) {
-		boolean notConc = false;
+		boolean conc = true;
 		int i = this.pn.getNodes().indexOf(n);
 		for(Node n2 : nodes) {
-			if (n.equals(n))
-				continue;
 			int j = this.pn.getNodes().indexOf(n2);
-			notConc |= (!this.matrix[i][j]);
+			conc &= this.matrix[i][j];
 		}
-		return !notConc;
+		return conc;
 	}
-	
-	private void setAllNodesConcurrent(Collection<Node> nodes) {
+
+	protected void setAllNodesConcurrent(Collection<Node> nodes) {
 		for(Node n : nodes) {
 			setNodeConcurrentToNodes(n,nodes);
 		}
@@ -136,6 +129,7 @@ public class TrueConcurrencyRelation {
 	protected void setNodesConcurrent(Node n1, Node n2) {
 		if (n1.equals(n2))
 			return;
+		
 		int index1 = this.pn.getNodes().indexOf(n1);
 		int index2 = this.pn.getNodes().indexOf(n2);
 		this.matrix[index1][index2] = true;
@@ -151,32 +145,63 @@ public class TrueConcurrencyRelation {
 			Node x = pair.getFirstNode();
 			Node p = pair.getSecondNode();
 
-			List<Node> outNodes = p.getSucceedingNodes();
 			// optimization for free-choice nets
-			if ((isFC) && (!outNodes.isEmpty())) {
-				outNodes = new ArrayList<Node>();
-				outNodes.add(p.getSucceedingNodes().get(0));
-			}
-			
-			for (Node t : outNodes) {
-				if (nodeConcurrentToNodes(x, t.getPrecedingNodes())) {
-					
-					Collection<Node> sucT = t.getSucceedingNodes();
-					Set<NodePair> concNodes2 = new HashSet<NodePair>();
-										
-					for(Node s : sucT) {
-						if (!areTrueConcurrent(x,s))
-							concNodes2.add(new NodePair(x,s));
+			if (isFC) {
+				if (!p.getSucceedingNodes().isEmpty()) {
+					Node t = p.getSucceedingNodes().get(0);
+					if (nodeConcurrentToNodes(x, t.getPrecedingNodes())) {
+						Collection<Node> sucP = p.getSucceedingNodes();
+						
+						Set<NodePair> concNodes2 = new HashSet<NodePair>();
+
+						if (x instanceof Place) {
+							for(Node u : sucP) {
+								if (!areTrueConcurrent(x,u)) 
+									concNodes2.add(new NodePair(u,x));
+							}
+						}
+						
+						for(Node pp : this.indirectPlaces.get(p)) {
+							if (!areTrueConcurrent(x,pp)) {
+								concNodes2.add(new NodePair(x,pp));
+								if (x instanceof Place)
+									concNodes2.add(new NodePair(pp,x));
+							}
+						}
+						
+						setNodeConcurrentToNodes(x, sucP);
+						setNodeConcurrentToNodes(x, this.indirectPlaces.get(p));
+
+						processConcNodes(concNodes2, isFC);
 					}
-					// not sure, whether this is needed
-					if (x instanceof Place)
-						concNodes2.add(new NodePair(t,x));
-					
-					setNodeConcurrentToNodes(x,sucT);
-					setNodesConcurrent(x,t);
-					processConcNodes(concNodes2, isFC);
 				}
 			}
+			else {
+				for (Node t : p.getSucceedingNodes()) {
+					if (nodeConcurrentToNodes(x, t.getPrecedingNodes())) {
+						
+						Collection<Node> sucT = t.getSucceedingNodes();
+						Set<NodePair> concNodes2 = new HashSet<NodePair>();
+											
+						for(Node s : sucT) {
+							if (!areTrueConcurrent(x,s)) {
+								concNodes2.add(new NodePair(x,s));
+								if (x instanceof Place)
+									concNodes2.add(new NodePair(s,x));
+							}
+						}
+
+						if (x instanceof Place)
+							concNodes2.add(new NodePair(t,x));
+						
+						setNodeConcurrentToNodes(x,sucT);
+						setNodesConcurrent(x,t);
+						processConcNodes(concNodes2, isFC);
+					}
+				}
+				
+			}
+			
 		}
 	}
 	
@@ -218,6 +243,25 @@ public class TrueConcurrencyRelation {
 		}
 		
 		/*
+		 * The optimisation of the algorithm for free-choice nets
+		 * requires the calculation of the set of places indirectly 
+		 * succeeding a certain place.
+		 */
+		if (this.pn.isFreeChoiceNet()) {
+			for (Node n : this.pn.getNodes()) {
+				if (n instanceof Place) {
+					Set<Node> nodes = new HashSet<Node>();
+					for (Node t2 : n.getSucceedingNodes()) {
+						for (Node n2 : t2.getSucceedingNodes()) {
+							nodes.add(n2);
+						}
+					}
+					indirectPlaces.put(n, nodes);
+				}
+			}
+		}
+		
+		/*
 		 * Actual algorithm to build up the matrix.
 		 * It runs faster for free-choice nets than for arbitrary nets.
 		 */
@@ -225,6 +269,8 @@ public class TrueConcurrencyRelation {
 	}
 	
 	public String toString(){
+		if (this.matrix == null)
+			calculateTrueConcurrencyMatrix();
 		StringBuilder sb = new StringBuilder();
 		sb.append("------------------------------------------\n");
 		sb.append("True Concurrency Matrix\n");
@@ -237,5 +283,36 @@ public class TrueConcurrencyRelation {
 		}
 		sb.append("------------------------------------------\n");
 		return sb.toString();
+	}
+	
+	/**
+	 * Get the Petri net.
+
+	 * @return Petri net
+	 */
+	public PTNet getNet() {
+		return this.pn;
+	}
+	
+	/**
+	 * Checks equality for two true concurrency matrices
+	 * 
+	 * Returns false, if both matrices are not based on the same
+	 * Petri net.
+	 * 
+	 * @param relation that should be compared
+	 * @return true, if the given relation is equivalent to this relation
+	 */
+	public boolean equals(TrueConcurrencyRelation relation) {
+		if (!this.pn.equals(relation.getNet()))
+			return false;
+		
+		boolean equal = true;
+		for(Node n1 : this.pn.getNodes()) {
+			for(Node n2 : this.pn.getNodes()) {
+				equal &= (this.areTrueConcurrent(n1, n2) == relation.areTrueConcurrent(n1, n2));
+			}
+		}
+		return equal;
 	}
 }
