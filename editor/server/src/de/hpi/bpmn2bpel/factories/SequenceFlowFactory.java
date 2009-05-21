@@ -13,6 +13,7 @@ import de.hpi.bpmn.Process;
 import de.hpi.bpel4chor.model.SubProcess;
 import de.hpi.bpmn.Activity;
 import de.hpi.bpel4chor.model.activities.BlockActivity;
+import de.hpi.bpmn2bpel.model.BPELDataObject;
 import de.hpi.bpmn2bpel.model.FoldedTask;
 import de.hpi.bpel4chor.model.activities.Gateway;
 import de.hpi.bpel4chor.model.activities.Handler;
@@ -23,6 +24,7 @@ import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.model.supporting.Expression;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.SequenceFlow;
@@ -1106,7 +1108,7 @@ public class SequenceFlowFactory {
 	 * @return The created BPEL element the activity represents or null if the
 	 *         activity could not be mapped.
 	 */
-	public Element mapActivity(Node act, List<Link> links) {
+	public List<Element> mapActivity(Node act, List<Link> links) {
 		return mapActivity(act, links, null);
 	}
 
@@ -1125,12 +1127,24 @@ public class SequenceFlowFactory {
 	 * @return The created BPEL4Chor element the activity represents or null if
 	 *         the activity could not be mapped.
 	 */
-	public Element mapActivity(Node act, List<Link> links, Expression joinCond) {
+	public List<Element> mapActivity(Node act, List<Link> links, Expression joinCond) {
+		ArrayList<Element> elements = new ArrayList<Element>();
 		Element element = null;
 		// if (act instanceof BlockActivity) {
 		// element = mapBlockActivity((BlockActivity)act);
 		/* } else */if (act instanceof Task) {
-			element = mapTask((Task) act);
+			
+			/* Insert assign task, if an DataObject is connected */
+			DataObject dataObject = ((Task)act).getFirstInputDataObject();
+			if (dataObject instanceof BPELDataObject) {
+				Element assign = this.basicFactory.createAssignElement((BPELDataObject) dataObject, (Task) act);
+				if (assign != null) {
+					elements.add(assign);
+				}
+			}
+			
+			
+			elements.add(mapTask((Task) act));
 		} // else if (act instanceof IntermediateEvent) {
 		// element = mapIntermediateEvent((IntermediateEvent)act);
 		// } else {
@@ -1141,7 +1155,7 @@ public class SequenceFlowFactory {
 		if (element != null) {
 			createSourcesAndTargets(act, element, links, joinCond);
 		}
-		return element;
+		return elements;
 	}
 
 	/**
@@ -1159,15 +1173,18 @@ public class SequenceFlowFactory {
 	 */
 	private Element mapSequence(Component comp, List<Link> links) {
 		Element result = this.document.createElement("sequence");
-		Element element = mapActivity(comp.getSourceObject(), links);
-		if (element != null) {
-			result.appendChild(element);
+		List<Element> elements = mapActivity(comp.getSourceObject(), links);
+		
+		/* Append mapped elements. Typically this is a sequence of an assign and
+		 * an invoke element */
+		for(Element element : elements) {
+			result.appendChild(element);			
 		}
 		
 		for (Node node : comp.getChildNodes()) {
-			element = mapActivity(node, links);
-			if (element != null) {
-				result.appendChild(element);
+			elements = mapActivity(node, links);
+			for(Element element : elements) {
+				result.appendChild(element);			
 			}
 		}
 //		for (Iterator<Activity> it = comp.getActivities().iterator(); it
@@ -1178,10 +1195,11 @@ public class SequenceFlowFactory {
 //			}
 //		}
 
-		element = mapActivity(comp.getSinkObject(), links);
-		if (element != null) {
-			result.appendChild(element);
+		elements = mapActivity(comp.getSinkObject(), links);
+		for(Element element : elements) {
+			result.appendChild(element);			
 		}
+		
 		return result;
 	}
 

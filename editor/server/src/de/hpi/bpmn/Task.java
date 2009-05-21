@@ -11,7 +11,23 @@ public class Task extends Activity {
 	protected String rightDelegateTask;
 	protected String form;
 	protected String color;
-
+	
+	
+	/**
+	 * Searches for the first input data object and returns it.
+	 * 
+	 * @return
+	 * 		The input data object
+	 */
+	public DataObject getFirstInputDataObject() {
+		for (Edge e : this.getIncomingEdges()) {
+			if ((e instanceof Association) && (e.source instanceof DataObject) ) {
+				return (DataObject) e.source;
+			}
+		}
+		return null;
+	}
+	
 	public String getColor() {
 		return color;
 	}

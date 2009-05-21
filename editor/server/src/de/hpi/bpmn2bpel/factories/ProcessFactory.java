@@ -40,47 +40,49 @@ public class ProcessFactory {
 	 * values are taken from the swimlane, the process is contained in.
 	 * 
 	 * @param processElement The process element to add the attributes to.
-	 * @param swimlane       The swimlane to take the attribute values from.
+	 * @param pool       The {@link Pool} to take the attribute values from.
 	 */
-	private void setProcessAttributes(Element processElement, Swimlane swimlane) {
-//		String name = swimlane.getProcess().getName();
-//		if (name == null || name.equals("")) {
-//			name = swimlane.getName();
-//		}
-//		processElement.setAttribute("name", name);
-//		processElement.setAttribute("targetNamespace", swimlane.getTargetNamespace());
-//		if (swimlane.getProcess().getQueryLanguage() != null) {
+	private void setProcessAttributes(Element processElement, Pool pool) {
+		String name = pool.getLabel().trim();
+		
+		processElement.setAttribute("name", name);
+		processElement.setAttribute("targetNamespace", "http://sesastra.com/goldeneye/");
+		
+//		if (pool.getProcess().getQueryLanguage() != null) {
 //			processElement.setAttribute("queryLanguage", 
-//					swimlane.getProcess().getQueryLanguage().toASCIIString());
+//					pool.getProcess().getQueryLanguage().toASCIIString());
 //		} else if (this.diagram.getQueryLanguage() != null) {
 //			processElement.setAttribute("queryLanguage", 
 //					this.diagram.getQueryLanguage().toASCIIString());
 //		}
 //		
-//		if (swimlane.getProcess().getExpressionLanguage() != null) {
+//		if (pool.getProcess().getExpressionLanguage() != null) {
 //			processElement.setAttribute("expressionLanguage", 
-//					swimlane.getProcess().getExpressionLanguage().toASCIIString());
+//					pool.getProcess().getExpressionLanguage().toASCIIString());
 //		} else if (this.diagram.getExpressionLanguage() != null) {
 //			processElement.setAttribute("expressionLanguage", 
 //					this.diagram.getExpressionLanguage().toASCIIString());
 //		}
-//		
+		
 //		processElement.setAttribute("suppressJoinFailure", 
-//				BPELUtil.booleanToYesNo(swimlane.getProcess().isSuppressJoinFailure()));
+//				BPELUtil.booleanToYesNo(pool.getProcess().isSuppressJoinFailure()));
 //		processElement.setAttribute("exitOnStandardFault", 
-//				BPELUtil.booleanToYesNo(swimlane.getProcess().isExitOnStandardFault()));
-//		processElement.setAttribute("xmlns", "http://docs.oasis-open.org/wsbpel/2.0/process/abstract");
+//				BPELUtil.booleanToYesNo(pool.getProcess().isExitOnStandardFault()));
+		
+		processElement.setAttribute("suppressJoinFailure", "yes");
+		
+		processElement.setAttribute("xmlns", "http://docs.oasis-open.org/wsbpel/2.0/process/abstract");
 //		processElement.setAttribute("abstractProcessProfile", "urn:HPI_IAAS:choreography:profile:2006/12");
-//		processElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-//		processElement.setAttribute("xmlns:wsu","http://schemas.xmlsoap.org/ws/2002/07/utility/");
-//				
-//		if (swimlane.getImports() != null) {
-//			for (Iterator<Import> it = swimlane.getImports().iterator(); it.hasNext();) {
+		processElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		processElement.setAttribute("xmlns:wsu","http://schemas.xmlsoap.org/ws/2002/07/utility/");
+				
+//		if (pool.getImports() != null) {
+//			for (Iterator<Import> it = pool.getImports().iterator(); it.hasNext();) {
 //				Import imp = it.next();
 //				processElement.setAttribute("xmlns:" + imp.getPrefix(), imp.getNamespace());
 //			}
 //		}
-//		
+		
 //		processElement.setAttribute("xsi:schemaLocation", 
 //				"http://docs.oasis-open.org/wsbpel/2.0/process/abstract "+
 //				"http://docs.oasis-open.org/wsbpel/2.0/OS/process/abstract/ws-bpel_abstract_common_base.xsd");
@@ -263,7 +265,7 @@ public class ProcessFactory {
 	 */
 	private Element createProcessElement(Document document, Pool pool, Output output) {
 		Element processElement = document.createElement("process");
-//		setProcessAttributes(processElement, swimlane);
+		setProcessAttributes(processElement, pool);
 		
 		Container container = pool.getProcess();
 		Container4BPEL process = null;
@@ -292,13 +294,13 @@ public class ProcessFactory {
 //			processElement.appendChild(messageExchangesElement);
 //		}
 //		
-//		// variables
-//		Element variablesElement = 
-//			supportingFactory.createVariablesElement(swimlane, process);
-//		if (variablesElement != null) {
-//			processElement.appendChild(variablesElement);
-//		}
-//		
+		/* Create variables of the BPEL process */
+		Element variablesElement = 
+			supportingFactory.createVariablesElement(null, null);
+		if (variablesElement != null) {
+			processElement.appendChild(variablesElement);
+		}
+		
 //		// correlations
 //		Element correlationsElement = 
 //			supportingFactory.createCorrelationSetsElement(process);

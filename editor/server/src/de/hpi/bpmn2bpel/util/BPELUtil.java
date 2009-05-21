@@ -1,5 +1,13 @@
 package de.hpi.bpmn2bpel.util;
 
+import java.io.StringWriter;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.w3c.dom.Element;
 
 import de.hpi.bpel4chor.model.activities.Activity;
@@ -143,5 +151,35 @@ public class BPELUtil {
 //			element.setAttribute("suppressJoinFailure", 
 //				act.getSuppressJoinFailure());
 //		}
+	}
+	
+	/**
+	 * Creates the String representation of a XML node and returns it.
+	 * 
+	 * @param node
+	 * 		The source XML node
+	 * @return
+	 * 		The XML node as a String
+	 */
+	public static String xmlNodeToString(org.w3c.dom.Node node) {
+		String xmlString = null;
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance()
+					.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			//initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(new StringWriter());
+			DOMSource source = new DOMSource(node);
+			transformer.transform(source, result);
+			xmlString = result.getWriter().toString();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
+		}
+		return xmlString;
 	}
 }

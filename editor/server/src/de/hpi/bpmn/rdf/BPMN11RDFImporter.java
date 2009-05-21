@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -63,6 +66,7 @@ import de.hpi.bpmn.Activity.MIFlowCondition;
 import de.hpi.bpmn.Activity.MIOrdering;
 import de.hpi.bpmn.Activity.TestTime;
 import de.hpi.bpmn.exec.ExecDataObject;
+import de.hpi.bpmn2bpel.model.BPELDataObject;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -256,6 +260,10 @@ public class BPMN11RDFImporter {
 					// addAssociation_Unidirectional(diagram, node, map);
 					// } else if (type.equals("Association_Undirected")) {
 					// addAssociation_Undirected(diagram, node, map);
+				}
+				/* Map additional DataObjects [BPMN2BPEL]*/
+				else if (type.startsWith("dataobject-")) {
+					addBPELDataObjecte(node, c);
 				}
 			}
 		}
@@ -826,6 +834,76 @@ public class BPMN11RDFImporter {
 				// TODO: add further attributes...
 				if (attribute.equals("state")) {
 					obj.setState(getContent(n)); }
+				else {
+					handleStandardAttributes(attribute, n, obj, c, "name");
+				}
+			}
+		}
+		
+		if (obj.getId() == null)
+			obj.setId(obj.getResourceId());
+	}
+	
+	protected void addBPELDataObjecte(Node node, ImportContext c) {
+		BPELDataObject obj = factory.createBpelDataObject();
+		obj.setResourceId(getResourceId(node));
+		
+		
+		c.diagram.getDataObjects().add(obj);
+		c.objects.put(obj.getResourceId(), obj);
+		
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(
+						n.getNodeName().indexOf(':') + 1);
+
+				if (attribute.equals("state")) {
+					obj.setState(getContent(n)); 
+				
+					/* Set message type attribute */
+				} else if (attribute.equals("messagetype")) {
+					obj.setMessageType(getContent(n));
+				
+					/* Set web method parameters values for properties property */
+				} else if (attribute.equals("properties")) {
+					JSONObject params = null;
+					try {
+						JSONObject jsonAttribute = new JSONObject(getContent(n));
+						params = jsonAttribute.getJSONArray("items").getJSONObject(0);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					obj.setProperties(params);
+				}
+				
+				/* Set namespace attribute */
+				else if (attribute.equals("namespace")) {
+					obj.setNamespace(getContent(n));
+				
+				} 
+				
+				/* Set servicename attribute */
+				else if (attribute.equals("servicename")) {
+					obj.setServiceName(getContent(n));
+				
+				}
+				
+				/* Set operation attribute */
+				else if (attribute.equals("operation")) {
+					obj.setOperation(getContent(n));
+				
+				}
+				
+				/* Set port type attribute */
+				else if (attribute.equals("porttype")) {
+					obj.setPortType(getContent(n));
+				
+				}
+				
 				else {
 					handleStandardAttributes(attribute, n, obj, c, "name");
 				}

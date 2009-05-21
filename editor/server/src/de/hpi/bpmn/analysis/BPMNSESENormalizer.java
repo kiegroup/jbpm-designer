@@ -52,7 +52,8 @@ public class BPMNSESENormalizer extends BPMNNormalizer{
 		if (!(process.getChildNodes().get(0) instanceof Pool)) {
 			
 			/* Create a new pool around and append the process */
-			Pool newPool = factory.createPool();			
+			Pool newPool = factory.createPool();	
+			newPool.setLabel("satellite");
 			Lane lane = factory.createLane();
 			lane.getChildNodes().addAll(process.getChildNodes());
 			newPool.getChildNodes().add(lane);

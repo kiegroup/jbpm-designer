@@ -16,14 +16,18 @@ import de.hpi.bpel4chor.model.supporting.Correlation;
 import de.hpi.bpel4chor.model.supporting.CorrelationSet;
 import de.hpi.bpel4chor.model.supporting.Expression;
 import de.hpi.bpel4chor.model.supporting.FromPart;
-import de.hpi.bpel4chor.model.supporting.FromSpec;
+import de.hpi.bpmn2bpel.model.supporting.FromSpec;
+import de.hpi.bpmn2bpel.model.supporting.FromSpec.fromTypes;
+import de.hpi.bpmn2bpel.model.supporting.ToSpec.toTypes;
 import de.hpi.bpel4chor.model.supporting.Import;
 import de.hpi.bpel4chor.model.supporting.Loop;
 import de.hpi.bpel4chor.model.supporting.ToPart;
-import de.hpi.bpel4chor.model.supporting.ToSpec;
+import de.hpi.bpmn2bpel.model.supporting.ToSpec;
 import de.hpi.bpel4chor.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.DataObject;
+import de.hpi.bpmn2bpel.model.BPELDataObject;
 
 /**
  * This factory is used for generating certain child elements of BPEL4Chor 
@@ -68,14 +72,20 @@ public class SupportingFactory {
 	 * @return The created "from" or "to" element.
 	 */
 	private Element createVariableSpec(String elementName, String varName, 
-			String part, String query, String queryLanguage) {
+			String part, String query, String queryLanguage, String header) {
 		Element result = this.document.createElement(elementName);
+		
 		if (varName == null || varName.equals("")) {
 			this.output.addGeneralError("A " + elementName + 
 				" element of the type Variable must define a variable name.");
 		} else {
 			result.setAttribute("variable", varName);
 		}
+		
+		if(header != null) {
+			result.setAttribute("header", header);
+		}
+		
 		if (part != null) {
 			result.setAttribute("part", part);
 		}
@@ -161,7 +171,8 @@ public class SupportingFactory {
 	 */
 	private Element createVariableToSpec(ToSpec toSpec) {
 		return createVariableSpec(TO, toSpec.getVariableName(), 
-				toSpec.getPart(), toSpec.getQuery(), toSpec.getQueryLanguage());
+				toSpec.getPart(), toSpec.getQuery(), toSpec.getQueryLanguage(), 
+				toSpec.getHeader());
 	}
 	
 	/**
@@ -208,12 +219,12 @@ public class SupportingFactory {
 		}
 		
 		Element result = null;
-		String type = toSpec.getType();
-		if (type.equals(ToSpec.TYPE_VARIABLE)) {
+		toTypes type = toSpec.getType();
+		if (type.equals(toTypes.VARIABLE)) {
 			result = createVariableToSpec(toSpec);
-		} else if (type.equals(ToSpec.TYPE_VAR_PROPERTY)) {
+		} else if (type.equals(toTypes.VARPROPERTY)) {
 			result = createVariablePropertyToSpec(toSpec);
-		} else if (type.equals(ToSpec.TYPE_EXPRESSION)) {
+		} else if (type.equals(toTypes.EXPRESSION)) {
 			createExpressionToSpec(toSpec);
 		} else {
 			// empty toSpec
@@ -235,7 +246,7 @@ public class SupportingFactory {
 	private Element createVariableFromSpec(FromSpec fromSpec) {
 		return createVariableSpec(FROM, fromSpec.getVariableName(), 
 				fromSpec.getPart(), fromSpec.getQuery(), 
-				fromSpec.getQueryLanguage());
+				fromSpec.getQueryLanguage(), null);
 	}
 	
 	/**
@@ -282,22 +293,29 @@ public class SupportingFactory {
 		}
 		
 		Element result = null;
-		String type = fromSpec.getType();
-		if (type.equals(FromSpec.TYPE_VARIABLE)) {
+		fromTypes type = fromSpec.getType();
+		
+		if (type.equals(fromTypes.VARIABLE)) {
 			result = createVariableFromSpec(fromSpec);
-		} else if (type.equals(FromSpec.TYPE_VAR_PROPERTY)) {
+		} else if (type.equals(fromTypes.VARPROPERTY)) {
 			result = createVariablePropertyFromSpec(fromSpec);
-		} else if (type.equals(FromSpec.TYPE_EXPRESSION)) {
+		} else if (type.equals(fromTypes.EXPRESSION)) {
 			result = createExpressionFromSpec(fromSpec);
-		} else if (type.equals(FromSpec.TYPE_LITERAL)) {
+		} else if (type.equals(fromTypes.LITERAL)) {
 			result = this.document.createElement("from");
 			Element literal = this.document.createElement("literal");
-			literal.appendChild(
-					this.document.createTextNode(fromSpec.getLiteral()));
+			
+			if (fromSpec.getLiteral() instanceof Element) {
+				literal.appendChild((Element) fromSpec.getLiteral());
+			} else if (fromSpec.getLiteral() instanceof String) {
+				literal.appendChild(
+						this.document.createTextNode((String) fromSpec.getLiteral()));			
+			}
+			
 			result.appendChild(literal);
-		} else if (type.equals(FromSpec.TYPE_EMPTY)) {
+		} else if (type.equals(fromTypes.EMPTY)) {
 			result = this.document.createElement("from");
-		} else if (type.equals(FromSpec.TYPE_OPAQUE)) {
+		} else if (type.equals(fromTypes.OPAQUE)) {
 			result = this.document.createElement("opaqueFrom");	
 		}
 		return result;
@@ -369,45 +387,45 @@ public class SupportingFactory {
 	public Element createVariableElement(Swimlane swimlane, 
 			VariableDataObject dataObject) {
 		Element result = this.document.createElement("variable");
-		result.setAttribute("name", dataObject.getName());
-	
-		String value = dataObject.getVariableTypeValue();
-		String prefix = value.substring(0, value.indexOf(':'));
-		if (value.indexOf(':') < 0) {
-			this.output.addError(
-					"There is a prefix missing for the variable type value " +
-					value + "of this variable ", dataObject.getId());
-			return result;
-		}
-		// set import
-		Import imp = swimlane.getImportForPrefix(prefix);
-		if (imp == null) {
-			this.output.addError(
-					"There is an import element missing for the prefix " +
-					prefix + "of this variable ", dataObject.getId());
-			return result;
-		}
-		
-		// set type
-		if (dataObject.getVariableType().equals(
-				VariableDataObject.VARIABLE_TYPE_MESSAGE)) {	
-			result.setAttribute("messageType", value); 			
-		} else if (dataObject.getVariableType().equals(
-				VariableDataObject.VARIABLE_TYPE_XML_ELEMENT)) {
-			result.setAttribute("element", value);
-		} else if ((dataObject.getVariableType().equals(
-				VariableDataObject.VARIABLE_TYPE_XML_TYPE))) {
-			result.setAttribute("type", value);
-		} else {
-			this.output.addError("The type of this variable " +
-					"could not be determined.", dataObject.getName());
-		}
-		
-		// set fromSpec
-		Element fromSpec = createFromSpecElement(dataObject.getFromSpec());
-		if (fromSpec != null) {
-			result.appendChild(fromSpec);
-		}
+//		result.setAttribute("name", dataObject.getName());
+//	
+//		String value = dataObject.getVariableTypeValue();
+//		String prefix = value.substring(0, value.indexOf(':'));
+//		if (value.indexOf(':') < 0) {
+//			this.output.addError(
+//					"There is a prefix missing for the variable type value " +
+//					value + "of this variable ", dataObject.getId());
+//			return result;
+//		}
+//		// set import
+//		Import imp = swimlane.getImportForPrefix(prefix);
+//		if (imp == null) {
+//			this.output.addError(
+//					"There is an import element missing for the prefix " +
+//					prefix + "of this variable ", dataObject.getId());
+//			return result;
+//		}
+//		
+//		// set type
+//		if (dataObject.getVariableType().equals(
+//				VariableDataObject.VARIABLE_TYPE_MESSAGE)) {	
+//			result.setAttribute("messageType", value); 			
+//		} else if (dataObject.getVariableType().equals(
+//				VariableDataObject.VARIABLE_TYPE_XML_ELEMENT)) {
+//			result.setAttribute("element", value);
+//		} else if ((dataObject.getVariableType().equals(
+//				VariableDataObject.VARIABLE_TYPE_XML_TYPE))) {
+//			result.setAttribute("type", value);
+//		} else {
+//			this.output.addError("The type of this variable " +
+//					"could not be determined.", dataObject.getName());
+//		}
+//		
+//		// set fromSpec
+//		Element fromSpec = createFromSpecElement(dataObject.getFromSpec());
+//		if (fromSpec != null) {
+//			result.appendChild(fromSpec);
+//		}
 		
 		return result;
 	}
@@ -418,29 +436,34 @@ public class SupportingFactory {
 	 * 
 	 * @param swimlane  The swimlane, the container belongs to
 	 * @param container The container that contains the variable data objects
+	 * 		At the moment it creates a variable for each {@link BPELDataObject} 
+	 * 		contained in the {@link BPMNDiagram}
 	 * 
 	 * @return The created "variables" element or null, if there are no 
 	 * standard variable data objects in the container.
 	 */
 	public Element createVariablesElement(Swimlane swimlane, Container container) {
 		Element result = this.document.createElement("variables");
-		boolean found = false;
-		for (Iterator<VariableDataObject> it = 
-			this.diagram.getVariableDataObjects().iterator();it.hasNext();) {
-			VariableDataObject dataObject = it.next();
-			if ((dataObject.getContainer() != null) &&
-					dataObject.getContainer().equals(container) &&
-					dataObject.getType().equals(VariableDataObject.TYPE_STANDARD)) {
-				Element variable = createVariableElement(swimlane, dataObject);
-				result.appendChild(variable);
-				found = true;
+		
+		// TODO: Get only DataObject for a concrete process
+		for ( DataObject dataObject : this.diagram.getDataObjects()) {
+			/* Only map BPELDataObjects */
+			if (!(dataObject instanceof BPELDataObject)) {
+				continue;
 			}
 			
+			BPELDataObject bpelDataObject = (BPELDataObject) dataObject;
+			
+			Element variable = this.document.createElement("variable");
+			variable.setAttribute("name", bpelDataObject.getId());
+			variable.setAttribute("messageType", 
+					bpelDataObject.getNamespace() + ":" + bpelDataObject.getMessageType());
+			
+			/* Append variable */
+			result.appendChild(variable);
 		}
-		if (found) {
-			return result;
-		} 
-		return null;
+
+		return result;
 	}
 	
 	/**
