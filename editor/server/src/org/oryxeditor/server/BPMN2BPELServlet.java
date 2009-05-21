@@ -23,6 +23,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.analysis.BPMNNormalizer;
+import de.hpi.bpmn.analysis.BPMNSESENormalizer;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2bpel.BPMN2BPELTransformer;
@@ -70,7 +71,7 @@ public class BPMN2BPELServlet extends HttpServlet {
 			diagram = new BPMN11RDFImporter(document).loadBPMN();
 
 		/* Normalize diagram */
- 		BPMNNormalizer normalizer = new BPMNNormalizer(diagram);
+ 		BPMNSESENormalizer normalizer = new BPMNSESENormalizer(diagram);
 		normalizer.normalize();
 		
 		/* Transform to BPEL */

@@ -56,7 +56,7 @@ public class ServiceComposerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String BASE_STENCILSET = "http://b3mn.org/stencilset/bpmn1.1#";
+	public static final String BASE_STENCILSET = "http://b3mn.org/stencilset/bpmn1.1#";
 
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
@@ -97,8 +97,8 @@ public class ServiceComposerServlet extends HttpServlet {
 		/* Add StencilSetExtension GoldenEye SES Astra Bachelorproject */
 		if (request.getParameter("type") != null) {
 			if (request.getParameter("type").equals("goldeneye")) {
-				GoldenEyeStencilSetExtensionGenerator.
-				generateGoldenEyeStencilSet(sessionName + "GoldenEye" ,services);
+				stencilSetExtensionUrls.add(GoldenEyeStencilSetExtensionGenerator.
+				generateGoldenEyeStencilSet(sessionName + "GoldenEye" ,services));
 			}
 		}
 		
@@ -194,10 +194,6 @@ public class ServiceComposerServlet extends HttpServlet {
 									+ taskName + "\" }, "
 									+ "{\"id\":\"bgColor\",\"value\":\""
 									+ color + "\"}" + "  ]},\n");
-					/* Create data objects for each service method input and output message */
-					//String, Integer, Double, Enum, Boolean 
-					
-					
 				}
 			}
 		}
