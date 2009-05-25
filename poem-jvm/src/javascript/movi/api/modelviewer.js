@@ -573,7 +573,20 @@ MOVI.namespace("widget");
 		 */
 		getZoomLevel: function() {
 			return this._zoomLevel;
+		},
+		
+		/**
+		 * Set the model zoom level so that the model fits in height and width to the model viewer
+		 * @method fitModelToViewer
+		 */
+		fitModelToViewer: function() {
+			var scaleHorizontal = (parseInt(this.getScrollboxEl().getStyle("width"), 10)-5) / this.getImgWidth();
+			var scaleVertical = (parseInt(this.getScrollboxEl().getStyle("height"), 10)-5) / this.getImgHeight();
+			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
+			if(scale>1)	scale = 1;
+			this.setZoomLevel(scale*100);
 		}
+		
 		
 	});
 	
