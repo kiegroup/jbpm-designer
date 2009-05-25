@@ -48,13 +48,17 @@ MOVI.namespace("widget");
 	};
 	
 	/**
-     * Returns the scale to fit the model to the model viewer
-     * @method _calculateFitToViewerScale
-     * @private
-     */
-	var _calculateFitToViewerScale = function() {
-		
-	}
+	 * Calculate the minimal zoom factor (stop zooming out when model fits the model viewer in height and width)
+	 * @method _getMinZoomFactor
+	 * @private
+	 */
+	var _getMinZoomFactor = function() {
+		var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)) / this.modelviewer.getImgWidth();
+		var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)) / this.modelviewer.getImgHeight();
+		var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
+		if(scale>1)	scale = 1;
+		return scale*100;
+	};
 	
 	/**
      * The ZoomSlider widget is a slider UI control that enables users to adjust the
@@ -87,8 +91,7 @@ MOVI.namespace("widget");
 			0, _SLIDER_WIDTH, _SLIDER_STEP
 		); 
 		 
-		// set the initial value of the slider instance
-		this.slider.setValue(100, true);
+		this.update();
 		
 		this.slider.subscribe('change', this.onChange, this, true);
 		this.slider.subscribe('slideStart', this._onSlideStart, this, true);
@@ -128,12 +131,7 @@ MOVI.namespace("widget");
 		 * @method onChange
 		 */
 		onChange: function() {
-			// calculate minimal zoom factor (stop zooming out when model fits model viewer)
-			var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)) / this.modelviewer.getImgWidth();
-			var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)) / this.modelviewer.getImgHeight();
-			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
-			if(scale>1)	scale = 1;
-			var minZoomFactor = scale*100;
+			var minZoomFactor = _getMinZoomFactor();
 			var maxZoomFactor = 100;
 			
 			var zoomStep = (maxZoomFactor-minZoomFactor) / _SLIDER_WIDTH;
@@ -146,12 +144,7 @@ MOVI.namespace("widget");
 		 * @method update
 		 */
 		update: function() {
-			// calculate minimal zoom factor
-			var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)-5) / this.modelviewer.getImgWidth();
-			var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)-5) / this.modelviewer.getImgHeight();
-			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
-			if(scale>1)	scale = 1;
-			var minZoomFactor = scale*100;
+			var minZoomFactor = _getMinZoomFactor();
 			var maxZoomFactor = 100;
 			
 			var zoomStep = (maxZoomFactor-minZoomFactor) / _SLIDER_WIDTH;
@@ -276,14 +269,11 @@ MOVI.namespace("widget");
 			_swapNode(this.modelviewer.getScrollboxEl().get("element"), this._modelViewerPlaceholder.get("element"));
 			
 			// zoom to fit to fullscreen
-			var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)-5) / this.modelviewer.getImgWidth();
-			var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)-5) / this.modelviewer.getImgHeight();
-			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
-			if(scale>1)	scale = 1;
+			var minZoomFactor = _getMinZoomFactor();
 			
 			// store original zoom factor
 			this._originalZoomLevel = this.modelviewer.getZoomLevel();
-			this.modelviewer.setZoomLevel(scale*100);
+			this.modelviewer.setZoomLevel(minZoomFactor*100);
 			
 			this.dialog.show();
 		},
