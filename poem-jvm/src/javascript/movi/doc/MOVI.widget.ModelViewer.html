@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: movi  MOVI.widget.ModelViewer   (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1236862905.33" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1236862905.33" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1236862905.33"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1236862905.33"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1243248572.91"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1243248572.91"></script>
 </head>
 
 <body id="yahoo-com">
@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>movi&nbsp; <span class="subtitle">0.1.1</span></h3>
+        <h3>movi&nbsp; <span class="subtitle">0.2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_movi.html" title="movi">movi</a>
                  &gt; MOVI.widget.ModelViewer 
@@ -114,6 +114,53 @@ exist in the document.</span>
 
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:property" resource="#property_onZoomLevelChange">
+                                    <h4><a name="property_onZoomLevelChange" property="yui:name">onZoomLevelChange</a>
+                                        - <code><span property="yui:type">YAHOO.util.CustomEvent</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The event that is triggered when the model zoom level changes
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_onZoomLevelChangeEnd">
+                                    <h4><a name="property_onZoomLevelChangeEnd" property="yui:name">onZoomLevelChangeEnd</a>
+                                        - <code><span property="yui:type">YAHOO.util.CustomEvent</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The event that is triggered when the model zoom level change is finished
+(on zoom slider slideEnd event)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_onZoomLevelChangeStart">
+                                    <h4><a name="property_onZoomLevelChangeStart" property="yui:name">onZoomLevelChangeStart</a>
+                                        - <code><span property="yui:type">YAHOO.util.CustomEvent</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The event that is triggered when the model zoom level change starts
+(on zoom slider slideStart event)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -123,6 +170,105 @@ exist in the document.</span>
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="" rel="yui:method" resource="#method_centerScrollTo">
+                                    <h4>
+                                        <a name="method_centerScrollTo">centerScrollTo</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">centerScrollTo</strong>
+                                           (
+                                                
+                                                        
+                                                         x
+                                                    
+                                                
+                                                        , 
+                                                         y
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Scrolls to the specified position, centers the (canvas around the) position 
+within the scrollbox.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">x</span>
+                                                        &lt;<span property="yui:type">Integer</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The center's x position</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">y</span>
+                                                        &lt;<span property="yui:type">Integer</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The center's y position</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fitModelToViewer">
+                                    <h4>
+                                        <a name="method_fitModelToViewer">fitModelToViewer</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">fitModelToViewer</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Set the model zoom level so that the model fits in height and width to the model viewer
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_getImgHeight">
                                     <h4>
                                         <a name="method_getImgHeight">getImgHeight</a></h4>
@@ -138,7 +284,7 @@ exist in the document.</span>
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Returns the height of the model image element in pixels
+                                            Returns the original height (100% zoom level) of the model image element in pixels
                                         </div>
 
                                         <div class="description">
@@ -175,7 +321,7 @@ exist in the document.</span>
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Returns the width of the model image element in pixels
+                                            Returns the original width (100% zoom level) of the model image element in pixels
                                         </div>
 
                                         <div class="description">
@@ -187,6 +333,43 @@ exist in the document.</span>
                                                         Integer
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The image width</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getIndex">
+                                    <h4>
+                                        <a name="method_getIndex">getIndex</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">getIndex</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the model viewer index (unique per page)
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
                                                 </dl>
 
 
@@ -276,6 +459,43 @@ or the id of the instance's host DIV element.</span>
                                                         Element
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The scrollbox Element</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getZoomLevel">
+                                    <h4>
+                                        <a name="method_getZoomLevel">getZoomLevel</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong property="yui:name">getZoomLevel</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the model zoom level in percent (minimum: 0, maximum: 100)
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Number
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The current model zoom level in percent</dd>
                                                 </dl>
 
 
@@ -630,16 +850,16 @@ This method is taken from YUI's YAHOO object.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method_scrollToShape()">
+                                    <div class="" rel="yui:method" resource="#method_scrollToShape">
                                     <h4>
-                                        <a name="method_scrollToShape()">scrollToShape()</a></h4>
+                                        <a name="method_scrollToShape">scrollToShape</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                         
                                         
                                         Element
-                                            <strong property="yui:name">scrollToShape()</strong>
+                                            <strong property="yui:name">scrollToShape</strong>
                                            (
                                                 
                                                         
@@ -660,7 +880,7 @@ within the scrollbox.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">shape</span>
-                                                        &lt;<span property="yui:type">object</span>&gt;
+                                                        &lt;<span property="yui:type">Shape</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> the shape or its resource id</span>
                                                         </dd>
@@ -672,6 +892,68 @@ within the scrollbox.
                                                         Element
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The shape element / null if it does not exist</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_setZoomLevel">
+                                    <h4>
+                                        <a name="method_setZoomLevel">setZoomLevel</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">setZoomLevel</strong>
+                                           (
+                                                
+                                                        
+                                                         percent
+                                                    
+                                                
+                                                        , 
+                                                         notifyStartEnd
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Set the model zoom level in percent (minimum: 0, maximum: 100)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">percent</span>
+                                                        &lt;<span property="yui:type">Number</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The zoom level in percent</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">notifyStartEnd</span>
+                                                        &lt;<span property="yui:type">Boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> (optional) If set to false markers, annotations and shape rects will 
+not be updated. Default is true.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
                                                 </dl>
 
 
@@ -720,8 +1002,11 @@ within the scrollbox.
                                 <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
                                 <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
                                 <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
                                 <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
                                 <li class="selected"><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                                <li class=""><a href="MOVI.widget.Toolbar.html" title="MOVI.widget.Toolbar">MOVI.widget.Toolbar</a></li>
+                                <li class=""><a href="MOVI.widget.ZoomSlider.html" title="MOVI.widget.ZoomSlider">MOVI.widget.ZoomSlider</a></li>
                         </ul>
                     </div>
 
@@ -741,6 +1026,10 @@ within the scrollbox.
                                 <li class=""><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
                                 <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
                                 <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                                <li class=""><a href="toolbar.js.html" title="toolbar.js">toolbar.js</a></li>
+                                <li class=""><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
+                                <li class=""><a href="x-tooltip-annotation.js.html" title="x-tooltip-annotation.js">x-tooltip-annotation.js</a></li>
+                                <li class=""><a href="zoom.js.html" title="zoom.js">zoom.js</a></li>
                         </ul>
                     </div>
 
@@ -748,22 +1037,30 @@ within the scrollbox.
                         <h4>Properties</h4>
                         <ul class="content">        
                                 <li class=""><a href="#property_canvas" title="canvas">canvas</a></li>
+                                <li class=""><a href="#property_onZoomLevelChange" title="onZoomLevelChange">onZoomLevelChange</a></li>
+                                <li class=""><a href="#property_onZoomLevelChangeEnd" title="onZoomLevelChangeEnd">onZoomLevelChangeEnd</a></li>
+                                <li class=""><a href="#property_onZoomLevelChangeStart" title="onZoomLevelChangeStart">onZoomLevelChangeStart</a></li>
                         </ul>
                     </div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class=""><a href="#method_centerScrollTo" title="centerScrollTo">centerScrollTo</a></li>
+                                <li class=""><a href="#method_fitModelToViewer" title="fitModelToViewer">fitModelToViewer</a></li>
                                 <li class=""><a href="#method_getImgHeight" title="getImgHeight">getImgHeight</a></li>
                                 <li class=""><a href="#method_getImgWidth" title="getImgWidth">getImgWidth</a></li>
+                                <li class=""><a href="#method_getIndex" title="getIndex">getIndex</a></li>
                                 <li class=""><a href="#method_getInstance" title="getInstance">getInstance</a></li>
                                 <li class=""><a href="#method_getScrollboxEx" title="getScrollboxEx">getScrollboxEx</a></li>
+                                <li class=""><a href="#method_getZoomLevel" title="getZoomLevel">getZoomLevel</a></li>
                                 <li class=""><a href="#method_init" title="init">init</a></li>
                                 <li class=""><a href="#method_loadModel" title="loadModel">loadModel</a></li>
                                 <li class=""><a href="#method_loadModelCallback" title="loadModelCallback">loadModelCallback</a></li>
                                 <li class=""><a href="#method_loadStencilSetCallback" title="loadStencilSetCallback">loadStencilSetCallback</a></li>
                                 <li class=""><a href="#method_namespace" title="namespace">namespace</a></li>
-                                <li class=""><a href="#method_scrollToShape()" title="scrollToShape()">scrollToShape()</a></li>
+                                <li class=""><a href="#method_scrollToShape" title="scrollToShape">scrollToShape</a></li>
+                                <li class=""><a href="#method_setZoomLevel" title="setZoomLevel">setZoomLevel</a></li>
                         </ul>
                     </div>
 
@@ -778,7 +1075,7 @@ within the scrollbox.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape()", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape()"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}];
+    ALL_YUI_PROPS = [{"url": "MOVI.util.Marker.html#method_addIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addIcon"}, {"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.util.Annotation.html#method_bringToFront", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "bringToFront"}, {"url": "MOVI.util.Marker.html#property_canvas", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#method_centerScrollTo", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "centerScrollTo"}, {"url": "MOVI.widget.ModelViewer.html#method_fitModelToViewer", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "fitModelToViewer"}, {"url": "MOVI.util.Marker.html#method_getAbsBounds", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Canvas.html#method_getEdges", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getEdges"}, {"url": "MOVI.util.Marker.html#method_getIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getIcon"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getIndex", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getIndex"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.model.Canvas.html#method_getNodes", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getNodes"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.widget.ModelViewer.html#method_getZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getZoomLevel"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.util.Marker.html#property_markerRect", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "markerRect"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.util.Marker.html#method_onChanged", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "onChanged"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChange", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChange"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeEnd", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeEnd"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeStart", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeStart"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeIcon"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_setZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "setZoomLevel"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.util.Annotation.html#method_toggle", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "toggle"}, {"url": "MOVI.util.Marker.html#method_toggle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "toggle"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}];
 </script>
 </body>
 </html>

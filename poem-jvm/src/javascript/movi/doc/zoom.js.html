@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: movi   zoom.js  (YUI Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1243248572.91"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1243248572.91"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>movi&nbsp; <span class="subtitle">0.2</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_movi.html" title="movi">movi</a>
+                
+                 &gt; zoom.js (source view) 
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
+<div class="highlight"><pre><span class="c">/**</span>
+<span class="c"> * Copyright (c) 2009</span>
+<span class="c"> * Jan-Felix Schwarz</span>
+<span class="c"> *</span>
+<span class="c"> * Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c"> * copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c"> * to deal in the Software without restriction, including without limitation</span>
+<span class="c"> * the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c"> * and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c"> * Software is furnished to do so, subject to the following conditions:</span>
+<span class="c"> *</span>
+<span class="c"> * The above copyright notice and this permission notice shall be included in</span>
+<span class="c"> * all copies or substantial portions of the Software.</span>
+<span class="c"> *</span>
+<span class="c"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
+<span class="c"> * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="c"> * DEALINGS IN THE SOFTWARE.</span>
+<span class="c"> **/</span>
+
+
+<span class="nx">MOVI</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;widget&quot;</span><span class="p">);</span>
+
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	
+	<span class="kd">var</span> <span class="nx">_SLIDER_CLASS_NAME</span>					<span class="o">=</span> <span class="s2">&quot;movi-zoomslider&quot;</span><span class="o">,</span>
+		<span class="nx">_SLIDER_THUMB_CLASS_NAME</span>			<span class="o">=</span> <span class="s2">&quot;movi-zoomslider-thumb&quot;</span><span class="o">,</span>
+		<span class="nx">_SLIDER_WIDTH</span>						<span class="o">=</span> <span class="mi">100</span><span class="o">,</span>
+		<span class="nx">_SLIDER_STEP</span>						<span class="o">=</span> <span class="mi">1</span><span class="o">,</span>
+		<span class="nx">_FULLSCREEN_LIGHTBOX_CLASS_NAME</span>		<span class="o">=</span> <span class="s2">&quot;movi-fullscreen-lightbox&quot;</span><span class="o">,</span>
+		<span class="nx">_FULLSCREEN_CONTAINER_CLASS_NAME</span>	<span class="o">=</span> <span class="s2">&quot;movi-fullscreen-modelcontainer&quot;</span><span class="o">;</span>
+	
+	<span class="c">/**</span>
+<span class="c">     * Add image to the host element and create the clipping rectangle element.</span>
+<span class="c">	 * Ensure that host element&#39;s position is not static to allow absolute</span>
+<span class="c">	 * positioning of the clipping rect relative to the host element</span>
+<span class="c">     * @method _setUpHostElementZoomSlider</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+	<span class="kd">var</span> <span class="nx">_setUpHostElementZoomSlider</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;innerHTML&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;&lt;div id=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">_SLIDER_CLASS_NAME</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getIndex</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;\&quot; class=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">_SLIDER_CLASS_NAME</span> <span class="o">+</span> <span class="s2">&quot;\&quot; title=\&quot;Zoom Slider\&quot;&gt;&quot;</span> <span class="o">+</span>
+					<span class="s2">&quot;&lt;div id=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">_SLIDER_THUMB_CLASS_NAME</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getIndex</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;\&quot; class=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">_SLIDER_THUMB_CLASS_NAME</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&quot;</span> <span class="o">+</span>
+				<span class="s2">&quot;&lt;/div&gt;&quot;</span><span class="p">);</span>
+	<span class="p">};</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Calculate the minimal zoom level in percent (stop zooming out when model fits the model viewer in height and width)</span>
+<span class="c">	 * @method _getMinZoomLevel</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="kd">var</span> <span class="nx">_getMinZoomLevel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">modelviewer</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">scaleHorizontal</span> <span class="o">=</span> <span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getScrollboxEl</span><span class="p">().</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">)</span><span class="o">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">/</span> <span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getImgWidth</span><span class="p">();</span>
+		<span class="kd">var</span> <span class="nx">scaleVertical</span> <span class="o">=</span> <span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getScrollboxEl</span><span class="p">().</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span><span class="o">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">/</span> <span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getImgHeight</span><span class="p">();</span>
+		<span class="kd">var</span> <span class="nx">scale</span> <span class="o">=</span> <span class="p">(</span><span class="nx">scaleHorizontal</span> <span class="o">&lt;</span> <span class="nx">scaleVertical</span><span class="p">)</span> <span class="o">?</span> <span class="nx">scaleHorizontal</span> <span class="o">:</span> <span class="nx">scaleVertical</span><span class="o">;</span>
+		<span class="k">if</span><span class="p">(</span><span class="nx">scale</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>	<span class="nx">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+		<span class="k">return</span> <span class="nx">scale</span><span class="o">*</span><span class="mi">100</span><span class="o">;</span>
+	<span class="p">};</span>
+	
+	<span class="c">/**</span>
+<span class="c">     * The ZoomSlider widget is a slider UI control that enables users to adjust the</span>
+<span class="c"> 	 * zoom level of a model viewer.</span>
+<span class="c">     * @namespace MOVI.widget</span>
+<span class="c">     * @class MOVI.widget.ZoomSlider</span>
+<span class="c">     * @constructor</span>
+<span class="c">	 * @param {HTMLElement | String } el The id of the container DIV element that will </span>
+<span class="c">	 * wrap the ZoomSlider, or a reference to a DIV element. The DIV element must</span>
+<span class="c">	 * exist in the document.</span>
+<span class="c">	 * @param {ModelViewer} modelviewer The ModelViewer for that zooming is enabled</span>
+<span class="c">     */</span>
+    <span class="nx">MOVI</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">ZoomSlider</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">modelviewer</span><span class="p">)</span> <span class="p">{</span>
+	
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">modelviewer</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;No model viewer specified for zoom slider&quot;</span><span class="o">,</span> <span class="s2">&quot;zoom.js&quot;</span><span class="p">);</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="p">}</span>
+	
+		<span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span> <span class="o">=</span> <span class="nx">modelviewer</span><span class="o">;</span>
+		
+    	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">ZoomSlider</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">el</span><span class="p">);</span>
+	
+		<span class="nx">_setUpHostElementZoomSlider</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+		
+		<span class="c">// instantiate the slider</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">slider</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">Slider</span><span class="p">.</span><span class="nx">getHorizSlider</span><span class="p">(</span>
+			<span class="nx">_SLIDER_CLASS_NAME</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getIndex</span><span class="p">()</span><span class="o">,</span> 
+			<span class="nx">_SLIDER_THUMB_CLASS_NAME</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getIndex</span><span class="p">()</span><span class="o">,</span> 
+			<span class="mi">0</span><span class="o">,</span> <span class="nx">_SLIDER_WIDTH</span><span class="o">,</span> <span class="nx">_SLIDER_STEP</span>
+		<span class="p">);</span> 
+		 
+		<span class="k">this</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+		
+		<span class="k">this</span><span class="p">.</span><span class="nx">slider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">slider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;slideStart&#39;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onSlideStart</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">slider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;slideEnd&#39;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onSlideEnd</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+	<span class="p">};</span>
+	
+	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">ZoomSlider</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="o">,</span> <span class="p">{</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * The slider UI element</span>
+<span class="c">		 * @property slider</span>
+<span class="c">		 * @type YAHOO.widget.Slider</span>
+<span class="c">		 */</span>
+		<span class="nx">slider</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Callback that is executed when sliding starts</span>
+<span class="c">		 * @method _onSlideStart</span>
+<span class="c">		 * @private</span>
+<span class="c">		 */</span>
+		<span class="nx">_onSlideStart</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">onZoomLevelChangeStart</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getZoomLevel</span><span class="p">());</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Callback that is executed when sliding ends</span>
+<span class="c">		 * @method _onSlideEnd</span>
+<span class="c">		 * @private</span>
+<span class="c">		 */</span>
+		<span class="nx">_onSlideEnd</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">onZoomLevelChangeEnd</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getZoomLevel</span><span class="p">());</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Callback method that is executed when the slider is changed. Updates the zoom level of the model viewer.</span>
+<span class="c">		 * This method should also be called when the model viewer is resized.</span>
+<span class="c">		 * @method onChange</span>
+<span class="c">		 */</span>
+		<span class="nx">onChange</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">minZoomLevel</span> <span class="o">=</span> <span class="nx">_getMinZoomLevel</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">);</span>
+			<span class="kd">var</span> <span class="nx">maxZoomLevel</span> <span class="o">=</span> <span class="mi">100</span><span class="o">;</span>
+			
+			<span class="kd">var</span> <span class="nx">zoomStep</span> <span class="o">=</span> <span class="p">(</span><span class="nx">maxZoomLevel</span><span class="o">-</span><span class="nx">minZoomLevel</span><span class="p">)</span> <span class="o">/</span> <span class="nx">_SLIDER_WIDTH</span><span class="o">;</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">setZoomLevel</span><span class="p">(</span><span class="nx">minZoomLevel</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">slider</span><span class="p">.</span><span class="nx">getValue</span><span class="p">()</span> <span class="o">*</span> <span class="nx">zoomStep</span><span class="o">,</span> <span class="kc">false</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Update the state of the slider control to current model zoom level.</span>
+<span class="c">		 * This method should be called when the model viewer&#39;s zoom level has been changed.</span>
+<span class="c">		 * @method update</span>
+<span class="c">		 */</span>
+		<span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">minZoomLevel</span> <span class="o">=</span> <span class="nx">_getMinZoomLevel</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">);</span>
+			<span class="kd">var</span> <span class="nx">maxZoomLevel</span> <span class="o">=</span> <span class="mi">100</span><span class="o">;</span>
+			
+			<span class="kd">var</span> <span class="nx">zoomStep</span> <span class="o">=</span> <span class="p">(</span><span class="nx">maxZoomLevel</span><span class="o">-</span><span class="nx">minZoomLevel</span><span class="p">)</span> <span class="o">/</span> <span class="nx">_SLIDER_WIDTH</span><span class="o">;</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">slider</span><span class="p">.</span><span class="nx">setValue</span><span class="p">((</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getZoomLevel</span><span class="p">()</span> <span class="o">-</span> <span class="nx">minZoomLevel</span><span class="p">)</span> <span class="o">*</span> <span class="nx">zoomStep</span><span class="p">);</span>
+		<span class="p">}</span>
+		
+	<span class="p">});</span>
+	
+	
+	
+	<span class="c">/**</span>
+<span class="c">	 * Swap two nodes. In IE, we use the native method, for others we</span>
+<span class="c">	 * emulate the IE behavior</span>
+<span class="c">	 * @method _swapNode</span>
+<span class="c">	 * @param n1 the first node to swap</span>
+<span class="c">	 * @param n2 the other node to swap</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="kd">var</span> <span class="nx">_swapNode</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n1</span><span class="o">,</span> <span class="nx">n2</span><span class="p">)</span> <span class="p">{</span>
+	    <span class="k">if</span> <span class="p">(</span><span class="nx">n1</span><span class="p">.</span><span class="nx">swapNode</span><span class="p">)</span> <span class="p">{</span>
+	        <span class="nx">n1</span><span class="p">.</span><span class="nx">swapNode</span><span class="p">(</span><span class="nx">n2</span><span class="p">);</span>
+	    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	        <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">n2</span><span class="p">.</span><span class="nx">parentNode</span><span class="o">;</span>
+	        <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">n2</span><span class="p">.</span><span class="nx">nextSibling</span><span class="o">;</span>
+
+	        <span class="k">if</span> <span class="p">(</span><span class="nx">s</span> <span class="o">==</span> <span class="nx">n1</span><span class="p">)</span> <span class="p">{</span>
+	            <span class="nx">p</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">n1</span><span class="o">,</span> <span class="nx">n2</span><span class="p">);</span>
+	        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">n2</span> <span class="o">==</span> <span class="nx">n1</span><span class="p">.</span><span class="nx">nextSibling</span><span class="p">)</span> <span class="p">{</span>
+	            <span class="nx">p</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">n2</span><span class="o">,</span> <span class="nx">n1</span><span class="p">);</span>
+	        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	            <span class="nx">n1</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">replaceChild</span><span class="p">(</span><span class="nx">n2</span><span class="o">,</span> <span class="nx">n1</span><span class="p">);</span>
+	            <span class="nx">p</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">n1</span><span class="o">,</span> <span class="nx">s</span><span class="p">);</span>
+	        <span class="p">}</span>
+	    <span class="p">}</span>
+	<span class="p">};</span>
+	
+	<span class="c">/**</span>
+<span class="c">     * </span>
+<span class="c">     * @method _setUpHostElementFullscreenViewer</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+	<span class="kd">var</span> <span class="nx">_setUpHostElementFullscreenViewer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">));</span>
+		<span class="nx">el</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;innerHTML&quot;</span><span class="o">,</span> 
+			<span class="s2">&quot;&lt;div class=\&quot;hd\&quot;&gt;&lt;/div&gt;&quot;</span> <span class="o">+</span>
+		    <span class="s2">&quot;&lt;div class=\&quot;bd\&quot;&gt;&lt;div class=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">_FULLSCREEN_CONTAINER_CLASS_NAME</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&lt;/div&gt;&quot;</span> <span class="o">+</span>
+		    <span class="s2">&quot;&lt;div class=\&quot;ft\&quot;&gt;&lt;/div&gt;&quot;</span><span class="p">);</span>
+		<span class="p">(</span><span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">)).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+		<span class="k">return</span> <span class="nx">el</span><span class="o">;</span>
+	<span class="p">};</span>
+	
+	<span class="c">/**</span>
+<span class="c">     * The FullscreenViewer widget is a UI widget that displays the complete model in a</span>
+<span class="c">	 * lightbox fullscreen view.</span>
+<span class="c">     * @namespace MOVI.widget</span>
+<span class="c">     * @class MOVI.widget.FullscreenViewer</span>
+<span class="c">     * @constructor</span>
+<span class="c">	 * @param {ModelViewer} modelviewer The ModelViewer for that is viewed in fullscreen mode</span>
+<span class="c">     */</span>
+    <span class="nx">MOVI</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FullscreenViewer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">modelviewer</span><span class="p">)</span> <span class="p">{</span>
+	
+		<span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span> <span class="o">=</span> <span class="nx">modelviewer</span><span class="o">;</span>
+		
+		<span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">_setUpHostElementFullscreenViewer</span><span class="p">();</span>
+		<span class="nx">el</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">_FULLSCREEN_LIGHTBOX_CLASS_NAME</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">elId</span> <span class="o">=</span> <span class="nx">_FULLSCREEN_LIGHTBOX_CLASS_NAME</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getIndex</span><span class="p">();</span>
+		<span class="nx">el</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="o">,</span> <span class="nx">elId</span><span class="p">);</span>
+		
+		<span class="nx">MOVI</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FullscreenViewer</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">el</span><span class="p">);</span>
+		
+		<span class="k">this</span><span class="p">.</span><span class="nx">dialog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">Dialog</span><span class="p">(</span><span class="nx">elId</span><span class="o">,</span> <span class="p">{</span>
+			<span class="nx">fixedcenter</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="nx">visible</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+			<span class="nx">draggable</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="nx">modal</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="nx">close</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="nx">constraintoviewport</span><span class="o">:</span> <span class="kc">true</span>
+		<span class="p">});</span>
+		
+		<span class="k">this</span><span class="p">.</span><span class="nx">dialog</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+		
+		<span class="c">// add listener to close button</span>
+		<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="s2">&quot;container-close&quot;</span><span class="o">,</span> <span class="s2">&quot;a&quot;</span><span class="o">,</span> <span class="nx">elId</span><span class="p">)</span><span class="o">,</span> 
+			<span class="s2">&quot;click&quot;</span><span class="o">,</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">close</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span>
+		<span class="p">);</span>
+		
+		<span class="k">this</span><span class="p">.</span><span class="nx">_fullscreenContainer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="nx">_FULLSCREEN_CONTAINER_CLASS_NAME</span><span class="p">)[</span><span class="mi">0</span><span class="p">]);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_modelViewerPlaceholder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">));</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_fullscreenContainer</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_modelViewerPlaceholder</span><span class="p">);</span>
+	<span class="p">};</span>
+	
+	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FullscreenViewer</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="o">,</span> <span class="p">{</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * The fullscreen model viewer conatainer element</span>
+<span class="c">		 * @property _fullscreenContainer</span>
+<span class="c">		 * @type YAHOO.util.Element</span>
+<span class="c">		 * @private</span>
+<span class="c">		 */</span>
+		<span class="nx">_fullscreenContainer</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * A placeholder element that is swapped with the original model viewer element</span>
+<span class="c">		 * @property _modelViewerPlaceholder</span>
+<span class="c">		 * @type YAHOO.util.Element</span>
+<span class="c">		 * @private</span>
+<span class="c">		 */</span>
+		<span class="nx">_modelViewerPlaceholder</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * The Dialog widget that represents the lightbox</span>
+<span class="c">		 * @property dialog</span>
+<span class="c">		 * @type YAHOO.widget.Dialog</span>
+<span class="c">		 */</span>
+		<span class="nx">dialog</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="nx">open</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">dialog</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getViewportWidth</span><span class="p">()</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="p">);</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">dialog</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getViewportHeight</span><span class="p">()</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="p">);</span>
+			<span class="nx">_swapNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getScrollboxEl</span><span class="p">().</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_modelViewerPlaceholder</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">));</span>
+			
+			<span class="c">// zoom to fit to fullscreen</span>
+			<span class="kd">var</span> <span class="nx">minZoomLevel</span> <span class="o">=</span> <span class="nx">_getMinZoomLevel</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">);</span>
+		
+			<span class="c">// store original zoom factor</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_originalZoomLevel</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getZoomLevel</span><span class="p">();</span>
+			<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">minZoomLevel</span><span class="p">)</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">setZoomLevel</span><span class="p">(</span><span class="nx">minZoomLevel</span><span class="p">);</span>
+			
+			<span class="k">this</span><span class="p">.</span><span class="nx">dialog</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">close</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">_swapNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">getScrollboxEl</span><span class="p">().</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_modelViewerPlaceholder</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">));</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">modelviewer</span><span class="p">.</span><span class="nx">setZoomLevel</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_originalZoomLevel</span><span class="p">);</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">dialog</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+		<span class="p">}</span>
+		
+	<span class="p">});</span>
+	
+	
+<span class="p">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_movi.html" title="movi">movi</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="MOVI.model.Canvas.html" title="MOVI.model.Canvas">MOVI.model.Canvas</a></li>
+                                <li class=""><a href="MOVI.model.Edge.html" title="MOVI.model.Edge">MOVI.model.Edge</a></li>
+                                <li class=""><a href="MOVI.model.Node.html" title="MOVI.model.Node">MOVI.model.Node</a></li>
+                                <li class=""><a href="MOVI.model.Shape.html" title="MOVI.model.Shape">MOVI.model.Shape</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencil.html" title="MOVI.stencilset.Stencil">MOVI.stencilset.Stencil</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencilset.html" title="MOVI.stencilset.Stencilset">MOVI.stencilset.Stencilset</a></li>
+                                <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
+                                <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
+                                <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
+                                <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
+                                <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                                <li class=""><a href="MOVI.widget.Toolbar.html" title="MOVI.widget.Toolbar">MOVI.widget.Toolbar</a></li>
+                                <li class=""><a href="MOVI.widget.ZoomSlider.html" title="MOVI.widget.ZoomSlider">MOVI.widget.ZoomSlider</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="annotation.js.html" title="annotation.js">annotation.js</a></li>
+                                <li class=""><a href="canvas.js.html" title="canvas.js">canvas.js</a></li>
+                                <li class=""><a href="config.js.html" title="config.js">config.js</a></li>
+                                <li class=""><a href="edge.js.html" title="edge.js">edge.js</a></li>
+                                <li class=""><a href="marker.js.html" title="marker.js">marker.js</a></li>
+                                <li class=""><a href="modelnavigator.js.html" title="modelnavigator.js">modelnavigator.js</a></li>
+                                <li class=""><a href="modelviewer.js.html" title="modelviewer.js">modelviewer.js</a></li>
+                                <li class=""><a href="movi.js.html" title="movi.js">movi.js</a></li>
+                                <li class=""><a href="node.js.html" title="node.js">node.js</a></li>
+                                <li class=""><a href="shape.js.html" title="shape.js">shape.js</a></li>
+                                <li class=""><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
+                                <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
+                                <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                                <li class=""><a href="toolbar.js.html" title="toolbar.js">toolbar.js</a></li>
+                                <li class=""><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
+                                <li class=""><a href="x-tooltip-annotation.js.html" title="x-tooltip-annotation.js">x-tooltip-annotation.js</a></li>
+                                <li class="selected"><a href="zoom.js.html" title="zoom.js">zoom.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "MOVI.widget.Toolbar.html#method_addButton", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "addButton"}, {"url": "MOVI.util.Marker.html#method_addIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addIcon"}, {"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.util.Annotation.html#method_bringToFront", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "bringToFront"}, {"url": "MOVI.util.Marker.html#property_canvas", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#method_centerScrollTo", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "centerScrollTo"}, {"url": "MOVI.util.ShapeSelect.html#method_deselect", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "deselect"}, {"url": "MOVI.widget.FullscreenViewer.html#property_dialog", "access": "", "host": "MOVI.widget.FullscreenViewer", "type": "property", "name": "dialog"}, {"url": "MOVI.widget.ModelViewer.html#method_fitModelToViewer", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "fitModelToViewer"}, {"url": "MOVI.util.Marker.html#method_getAbsBounds", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getAbsBounds", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getCanvas", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getCanvas"}, {"url": "MOVI.model.Canvas.html#method_getEdges", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getEdges"}, {"url": "MOVI.util.Marker.html#method_getIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getIcon"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getIndex", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getIndex"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.model.Canvas.html#method_getNodes", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getNodes"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectionMarker", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectionMarker"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectShapes", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectShapes"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.model.Shape.html#method_getStencil", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getStencil"}, {"url": "MOVI.stencilset.Stencilset.html#method_getStencil", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "method", "name": "getStencil"}, {"url": "MOVI.widget.ModelViewer.html#method_getZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getZoomLevel"}, {"url": "MOVI.model.Shape.html#method_hasChildShapes", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "hasChildShapes"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.widget.Toolbar.html#method_hideGroupCaptions", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "hideGroupCaptions"}, {"url": "MOVI.util.ShapeSelect.html#method_highlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "highlight"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.util.Marker.html#property_markerRect", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "markerRect"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.widget.Toolbar.html#property_modelviewer", "access": "", "host": "MOVI.widget.Toolbar", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.widget.ZoomSlider.html#method_onChange", "access": "", "host": "MOVI.widget.ZoomSlider", "type": "method", "name": "onChange"}, {"url": "MOVI.util.Marker.html#method_onChanged", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "onChanged"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.ShapeSelect.html#method_onSelectionChanged", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "onSelectionChanged"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChange", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChange"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeEnd", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeEnd"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeStart", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeStart"}, {"url": "MOVI.model.Shape.html#property_parentShape", "access": "", "host": "MOVI.model.Shape", "type": "property", "name": "parentShape"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeIcon"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.util.ShapeSelect.html#method_reset", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "reset"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape"}, {"url": "MOVI.util.ShapeSelect.html#method_select", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "select"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_setZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "setZoomLevel"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.widget.Toolbar.html#method_showGroupCaptions", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "showGroupCaptions"}, {"url": "MOVI.widget.ZoomSlider.html#property_slider", "access": "", "host": "MOVI.widget.ZoomSlider", "type": "property", "name": "slider"}, {"url": "MOVI.stencilset.Stencilset.html#property_stencils", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "property", "name": "stencils"}, {"url": "MOVI.util.Annotation.html#method_toggle", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "toggle"}, {"url": "MOVI.util.Marker.html#method_toggle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "toggle"}, {"url": "MOVI.util.ShapeSelect.html#method_unhighlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "unhighlight"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}, {"url": "MOVI.model.Node.html#method_update", "access": "", "host": "MOVI.model.Node", "type": "method", "name": "update"}, {"url": "MOVI.widget.ZoomSlider.html#method_update", "access": "", "host": "MOVI.widget.ZoomSlider", "type": "method", "name": "update"}];
+</script>
+</body>
+</html>

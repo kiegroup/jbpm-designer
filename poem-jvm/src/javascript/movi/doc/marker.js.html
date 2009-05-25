@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: movi   marker.js  (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1236862905.33" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1236862905.33" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1236862905.33"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1236862905.33"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1243248572.91"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1243248572.91"></script>
 </head>
 
 <body id="yahoo-com">
@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>movi&nbsp; <span class="subtitle">0.1.1</span></h3>
+        <h3>movi&nbsp; <span class="subtitle">0.2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_movi.html" title="movi">movi</a>
                 
@@ -75,6 +75,10 @@
 
 <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 	
+	<span class="kd">var</span> <span class="nx">_MARKER_RECT_CLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;movi-marker&quot;</span><span class="o">,</span>
+		<span class="nx">_ICON_CLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;movi-marker-icon&quot;</span><span class="o">,</span>
+		<span class="nx">_ICON_MARGIN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="o">;</span> 
+	
 	<span class="c">/**</span>
 <span class="c">     * Attach Marker objects to the model to highlight a shape or a set of shapes</span>
 <span class="c">	 * by overlaying rectangles</span>
@@ -82,7 +86,7 @@
 <span class="c">     * @class MOVI.util.Marker</span>
 <span class="c">     * @extends YAHOO.util.Element</span>
 <span class="c">     * @constructor</span>
-<span class="c">	 * @param {Shape|Shapes[]} shapes (optional) The shapes to mark</span>
+<span class="c">	 * @param {Shape|Shapes[]} shapes The shapes to mark</span>
 <span class="c">	 * @param {Object} style (optional) A key map of CSS style properties to be attached</span>
 <span class="c">	 * to the shape marking rectangles.</span>
 <span class="c">     */</span>
@@ -91,18 +95,32 @@
 		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">shapes</span><span class="p">)</span> <span class="nx">shapes</span> <span class="o">=</span> <span class="p">[];</span>
 		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">shapes</span><span class="p">))</span> <span class="nx">shapes</span> <span class="o">=</span> <span class="p">[</span><span class="nx">shapes</span><span class="p">];</span>
 		
+		<span class="k">this</span><span class="p">.</span><span class="nx">_icons</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="nx">north</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+			<span class="nx">west</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+			<span class="nx">south</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+			<span class="nx">east</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+			<span class="nx">northwest</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+			<span class="nx">southwest</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+			<span class="nx">northeast</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+			<span class="nx">southeast</span><span class="o">:</span> <span class="kc">null</span>
+		<span class="p">};</span>
+		
 		<span class="k">this</span><span class="p">.</span><span class="nx">_style</span> <span class="o">=</span> <span class="nx">style</span> <span class="o">||</span> <span class="p">{};</span>
 		<span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span> <span class="o">=</span> <span class="p">{};</span>
 
 		<span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span> <span class="o">=</span> <span class="p">{};</span>
 		<span class="c">// create shape rect elements</span>
-		<span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">shapes</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">shapes</span><span class="p">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
 			<span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">shapes</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">s</span><span class="o">;</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">));</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">].</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;position&quot;</span><span class="o">,</span> <span class="s2">&quot;absolute&quot;</span><span class="p">);</span>
 			<span class="nx">s</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">s</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">]);</span>
 		<span class="p">}</span>
+		
+		<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">));</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;className&quot;</span><span class="o">,</span> <span class="nx">_MARKER_RECT_CLASS_NAME</span><span class="p">);</span>
 	
 		<span class="k">this</span><span class="p">.</span><span class="nx">_update</span><span class="p">();</span>
 	<span class="p">};</span>
@@ -125,7 +143,7 @@
 <span class="c">		 * @type Object</span>
 <span class="c">		 * @private</span>
 <span class="c">		 */</span>
-		<span class="nx">_style</span><span class="o">:</span> <span class="p">{}</span><span class="o">,</span>
+		<span class="nx">_style</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
 <span class="c">		 * The class name that is specified for each shape marking rectangle.</span>
@@ -137,11 +155,27 @@
 		
 		<span class="c">/**</span>
 <span class="c">		 * A key map containing all marked shapes with their resource IDs as keys</span>
-<span class="c">		 * @property shapes</span>
+<span class="c">		 * @property _shapes</span>
 <span class="c">		 * @type Object</span>
 <span class="c">		 * @private</span>
 <span class="c">		 */</span>
-		<span class="nx">_shapes</span><span class="o">:</span> <span class="p">{}</span><span class="o">,</span>
+		<span class="nx">_shapes</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * The callback object to be executed when the marker has changed</span>
+<span class="c">		 * @property _changedCallback</span>
+<span class="c">		 * @type Object</span>
+<span class="c">		 * @private</span>
+<span class="c">		 */</span>
+		<span class="nx">_changedCallback</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * A hash map containing the icon elements with their orientation as key</span>
+<span class="c">		 * @property _icons</span>
+<span class="c">		 * @type Object</span>
+<span class="c">		 * @private</span>
+<span class="c">		 */</span>
+		<span class="nx">_icons</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
 <span class="c">		 * A key map containing all shape rectangle elements of the marker with the</span>
@@ -149,21 +183,48 @@
 <span class="c">		 * @property shapeRects</span>
 <span class="c">		 * @type { Integer : Element }</span>
 <span class="c">		 */</span>
-		<span class="nx">shapeRects</span><span class="o">:</span> <span class="p">{}</span><span class="o">,</span>
+		<span class="nx">shapeRects</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
-<span class="c">	     * Update style properties of the element</span>
+<span class="c">		 * The marker&#39;s outer rectangle element</span>
+<span class="c">		 * @property markerRect</span>
+<span class="c">		 * @type Element</span>
+<span class="c">		 */</span>
+		<span class="nx">markerRect</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * The parent canvas element of this marker</span>
+<span class="c">		 * @property canvas</span>
+<span class="c">		 * @type Canvas</span>
+<span class="c">		 */</span>
+		<span class="nx">canvas</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">	     * Update style properties of the shape rectangle elements and update the bounds of the</span>
+<span class="c">		 * outer marking rectangle element</span>
 <span class="c">	     * @method _update</span>
 <span class="c">	     * @private</span>
 <span class="c">	     */</span>
 		<span class="nx">_update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			
+			<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			
+			<span class="c">/* update shape marking rectangle elements */</span>
+			
 			<span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="o">,</span> <span class="nx">i</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				
 				<span class="kd">var</span> <span class="nx">shape</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 				<span class="kd">var</span> <span class="nx">rect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 				
+				<span class="k">if</span><span class="p">(</span><span class="nx">canvas</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">shape</span><span class="p">.</span><span class="nx">getCanvas</span><span class="p">();</span>
+				<span class="kd">var</span> <span class="nx">zoomFactor</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getModelViewer</span><span class="p">().</span><span class="nx">getZoomLevel</span><span class="p">()</span> <span class="o">/</span> <span class="mi">100</span><span class="o">;</span>
+				
 				<span class="c">// apply styles</span>
-				<span class="k">for</span><span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_style</span><span class="p">)</span> 
+				<span class="k">for</span><span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_style</span><span class="p">)</span> <span class="p">{</span>
+					<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_style</span><span class="o">,</span> <span class="nx">prop</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
 					<span class="nx">rect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="nx">prop</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_style</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
+				<span class="p">}</span>
 				
 				<span class="c">/* adjust position */</span>
 				
@@ -175,11 +236,11 @@
 							
 				<span class="kd">var</span> <span class="nx">left</span> <span class="o">=</span> <span class="o">-</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span><span class="o">;</span>
 				<span class="kd">var</span> <span class="nx">top</span> <span class="o">=</span> <span class="o">-</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span><span class="o">;</span>
-				<span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span>
-							<span class="o">-</span> <span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span>
+				<span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">((</span><span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span>
+							<span class="o">-</span> <span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span>
 							<span class="o">-</span> <span class="nx">bLWidth</span> <span class="o">-</span> <span class="nx">bRWidth</span><span class="o">;</span>
-				<span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span>
-							 <span class="o">-</span> <span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span>
+				<span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">((</span><span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span>
+							 <span class="o">-</span> <span class="nx">shape</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span>
 						 	 <span class="o">-</span> <span class="nx">bTWidth</span> <span class="o">-</span> <span class="nx">bBWidth</span><span class="o">;</span>				
 			
 				<span class="nx">rect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="o">,</span> <span class="nx">left</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">);</span>
@@ -189,10 +250,146 @@
 				
 				<span class="nx">rect</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;className&quot;</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_className</span><span class="p">);</span>
 			<span class="p">}</span>
+			
+			<span class="c">/* update outer marking rectangle element */</span>
+			
+			<span class="k">if</span><span class="p">(</span><span class="nx">canvas</span><span class="o">!=</span><span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="nx">canvas</span><span class="o">;</span>
+					
+					<span class="c">// canvas is now set for the marker because the first shape has been added</span>
+					<span class="c">// now we can append the elements to the dom </span>
+					<span class="c">// (all marked shapes have to belong to the same canvas)</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">);</span> 
+					<span class="k">for</span><span class="p">(</span><span class="nx">orientation</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">)</span> <span class="p">{</span>
+						<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="o">,</span> <span class="nx">orientation</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+						
+						<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">])</span>
+							<span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">]);</span> 
+					<span class="p">}</span>
+					
+					<span class="c">// now that we have our canvas and therefore the model viewer we can subscribe</span>
+					<span class="c">// to the zoom event</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">getModelViewer</span><span class="p">().</span><span class="nx">onZoomLevelChangeStart</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+						<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;none&quot;</span><span class="p">)</span> <span class="p">{</span>
+							<span class="k">this</span><span class="p">.</span><span class="nx">_showOnZoomEnd</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+						<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+							<span class="k">this</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+							<span class="k">this</span><span class="p">.</span><span class="nx">_showOnZoomEnd</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+						<span class="p">}</span>
+					<span class="p">}</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">getModelViewer</span><span class="p">().</span><span class="nx">onZoomLevelChangeEnd</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+						<span class="k">this</span><span class="p">.</span><span class="nx">_update</span><span class="p">();</span>
+						<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_showOnZoomEnd</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+					<span class="p">}</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="p">);</span>
+					
+				<span class="p">}</span>
+				
+				<span class="c">// get border widths</span>
+				<span class="kd">var</span> <span class="nx">bTWidth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;border-top-width&quot;</span><span class="p">))</span><span class="o">,</span>
+					<span class="nx">bRWidth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;border-right-width&quot;</span><span class="p">))</span><span class="o">,</span>
+					<span class="nx">bBWidth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;border-bottom-width&quot;</span><span class="p">))</span><span class="o">,</span>
+					<span class="nx">bLWidth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;border-left-width&quot;</span><span class="p">));</span>
+
+				<span class="kd">var</span> <span class="nx">left</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getAbsBounds</span><span class="p">().</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span><span class="o">;</span>
+				<span class="kd">var</span> <span class="nx">top</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getAbsBounds</span><span class="p">().</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span><span class="o">;</span>
+				<span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">((</span><span class="k">this</span><span class="p">.</span><span class="nx">getAbsBounds</span><span class="p">().</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span>
+							<span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">getAbsBounds</span><span class="p">().</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span>
+							<span class="o">-</span> <span class="nx">bLWidth</span> <span class="o">-</span> <span class="nx">bRWidth</span><span class="o">;</span>
+				<span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">((</span><span class="k">this</span><span class="p">.</span><span class="nx">getAbsBounds</span><span class="p">().</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span>
+							 <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">getAbsBounds</span><span class="p">().</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Marker</span><span class="p">.</span><span class="nx">PADDING</span>
+						 	 <span class="o">-</span> <span class="nx">bTWidth</span> <span class="o">-</span> <span class="nx">bBWidth</span><span class="o">;</span>
+
+				<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="o">,</span> <span class="nx">left</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;top&quot;</span><span class="o">,</span> <span class="nx">top</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="nx">width</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="nx">height</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">);</span>
+			<span class="p">}</span>
+			
+			<span class="c">/* update icons */</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_updateIcons</span><span class="p">()</span>
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
-<span class="c">	     * Wrapper for setting style properties of all marking rectangle elements</span>
+<span class="c">	     * Update positions of the icons appended to the marker</span>
+<span class="c">	     * @method _updateIcons</span>
+<span class="c">	     * @private</span>
+<span class="c">	     */</span>
+		<span class="nx">_updateIcons</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			
+			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">)</span>
+				<span class="kd">var</span> <span class="nx">zoomFactor</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">getModelViewer</span><span class="p">().</span><span class="nx">getZoomLevel</span><span class="p">()</span> <span class="o">/</span> <span class="mi">100</span><span class="o">;</span>
+			<span class="k">else</span>
+				<span class="kd">var</span> <span class="nx">zoomFactor</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
+			
+			<span class="kd">var</span> <span class="nx">bounds</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getAbsBounds</span><span class="p">();</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">orientation</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="o">,</span> <span class="nx">orientation</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				
+				<span class="kd">var</span> <span class="nx">left</span><span class="o">,</span> <span class="nx">top</span><span class="o">,</span> <span class="nx">margin</span><span class="o">;</span>
+				<span class="kd">var</span> <span class="nx">icon</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">];</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">icon</span><span class="p">)</span> <span class="p">{</span>
+					
+					<span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">icon</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">)</span><span class="o">,</span> <span class="mi">10</span><span class="p">);</span> 
+					<span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">icon</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span><span class="o">,</span> <span class="mi">10</span><span class="p">);</span>
+
+					<span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;north&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">+</span> <span class="p">((</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span><span class="o">-</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">width</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">height</span><span class="o">;</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="o">-</span><span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px 0 0 0&quot;</span><span class="o">;</span>
+					<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;west&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="o">;</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">+</span> <span class="p">((</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span><span class="o">-</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">height</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="s2">&quot;0 0 0 &quot;</span> <span class="o">+</span> <span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+					<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;south&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">+</span> <span class="p">((</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span><span class="o">-</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">width</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="o">;</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px 0 0 0&quot;</span><span class="o">;</span>
+					<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;east&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">width</span><span class="o">;</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">+</span> <span class="p">((</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span><span class="o">-</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">height</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="s2">&quot;0 0 0 &quot;</span> <span class="o">+</span> <span class="o">-</span><span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+					<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;northwest&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="o">;</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">height</span><span class="o">;</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="o">-</span><span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px 0 0 &quot;</span> <span class="o">+</span> <span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+					<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;southwest&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="o">;</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="o">;</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px 0 0 &quot;</span> <span class="o">+</span> <span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+					<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;northeast&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">width</span><span class="o">;</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">height</span><span class="o">;</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="o">-</span><span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px 0 0 &quot;</span> <span class="o">+</span> <span class="o">-</span><span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+					<span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">orientation</span><span class="o">==</span><span class="s2">&quot;southeast&quot;</span><span class="p">)</span> <span class="p">{</span>
+						<span class="nx">left</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="o">*</span><span class="nx">zoomFactor</span> <span class="o">-</span> <span class="nx">width</span><span class="o">;</span>
+						<span class="nx">top</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span><span class="o">*</span><span class="nx">zoomFactor</span><span class="o">;</span>
+						<span class="nx">margin</span> <span class="o">=</span> <span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px 0 0 &quot;</span> <span class="o">+</span> <span class="o">-</span><span class="nx">_ICON_MARGIN</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+					<span class="p">}</span>
+					
+					<span class="nx">icon</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="o">,</span> <span class="nx">left</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">);</span>
+					<span class="nx">icon</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;top&quot;</span><span class="o">,</span> <span class="nx">top</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">);</span>
+					<span class="nx">icon</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;margin&quot;</span><span class="o">,</span> <span class="nx">margin</span><span class="p">);</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">	     * Executes the user-specified callback when the marker changed</span>
+<span class="c">	     * @method _onChanged</span>
+<span class="c">		 * @private</span>
+<span class="c">	     */</span>
+		<span class="nx">_onChanged</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_changedCallback</span><span class="p">)</span> <span class="k">return</span><span class="o">;</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_changedCallback</span><span class="p">.</span><span class="nx">callback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_changedCallback</span><span class="p">.</span><span class="nx">scope</span><span class="o">,</span>
+				<span class="k">this</span><span class="o">,</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_changedCallback</span><span class="p">.</span><span class="nx">data</span>
+			<span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">	     * Wrapper for setting style properties of all shape marking rectangle elements</span>
 <span class="c">	     * @method setRectStyle</span>
 <span class="c">		 * @param {String} property The property</span>
 <span class="c">		 * @param {String} value The value</span>
@@ -204,7 +401,7 @@
 		
 		<span class="c">/**</span>
 <span class="c">	     * Returns the value for the specified style property that is applied to each </span>
-<span class="c">		 * marking rectangle element</span>
+<span class="c">		 * shape marking rectangle element</span>
 <span class="c">	     * @method getRectStyle</span>
 <span class="c">		 * @param {String} property The property</span>
 <span class="c">		 * @returns {Object} A key map storing the style properties</span>
@@ -214,7 +411,7 @@
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
-<span class="c">	     * Wrapper for setting the class name for all marking rectangle elements</span>
+<span class="c">	     * Wrapper for setting the class name for all shape marking rectangle elements</span>
 <span class="c">	     * @method setRectClassName</span>
 <span class="c">		 * @param {String} className The class name value</span>
 <span class="c">	     */</span>
@@ -224,7 +421,7 @@
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
-<span class="c">	     * Return the class name applied for all marking rectangle elements</span>
+<span class="c">	     * Return the class name applied for all shape marking rectangle elements</span>
 <span class="c">	     * @method getRectClassName</span>
 <span class="c">		 * @returns {String} The applied class name</span>
 <span class="c">	     */</span>
@@ -248,6 +445,7 @@
 			<span class="nx">shape</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rect</span><span class="p">);</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">rect</span><span class="o">;</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_update</span><span class="p">();</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_onChanged</span><span class="p">();</span>
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
@@ -260,6 +458,7 @@
 			<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">];</span>
 			<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">shape</span><span class="p">.</span><span class="nx">resourceId</span><span class="p">];</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_update</span><span class="p">();</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_onChanged</span><span class="p">()</span>
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
@@ -268,11 +467,14 @@
 <span class="c">	     */</span>
 		<span class="nx">removeAllShapes</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="o">,</span> <span class="nx">key</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				
 				<span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
 				<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
 				<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
 			<span class="p">}</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_update</span><span class="p">();</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_onChanged</span><span class="p">()</span>
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
@@ -282,25 +484,51 @@
 <span class="c">	     */</span>
 		<span class="nx">getShapes</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 			<span class="kd">var</span> <span class="nx">marked</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
-			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">)</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="o">,</span> <span class="nx">key</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
 				<span class="nx">marked</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+			<span class="p">}</span>
+				
 			<span class="k">return</span> <span class="nx">marked</span><span class="o">;</span>
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
-<span class="c">	     * Convenience method to show all marking rectangles</span>
+<span class="c">	     * Show the marker</span>
 <span class="c">	     * @method show</span>
 <span class="c">	     */</span>
 		<span class="nx">show</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">setRectStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">orientation</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="o">,</span> <span class="nx">orientation</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">])</span> 
+					<span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">].</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
+			<span class="p">}</span>
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
-<span class="c">	     * Convenience method to hide all marking rectangles</span>
+<span class="c">	     * Hide the marker</span>
 <span class="c">	     * @method hide</span>
 <span class="c">	     */</span>
 		<span class="nx">hide</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">setRectStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">orientation</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="o">,</span> <span class="nx">orientation</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">])</span> 
+					<span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">].</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">	     * Toggle show/hide the marker</span>
+<span class="c">	     * @method toggle</span>
+<span class="c">	     */</span>
+		<span class="nx">toggle</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+			<span class="k">else</span> 
+				<span class="k">this</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
 		<span class="p">}</span><span class="o">,</span>
 		
 		<span class="c">/**</span>
@@ -309,12 +537,130 @@
 <span class="c">	     */</span>
 		<span class="nx">remove</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 			<span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="o">,</span> <span class="nx">i</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				
 				<span class="kd">var</span> <span class="nx">rect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 				<span class="nx">rect</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">).</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">));</span>
 				<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 				<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 			<span class="p">}</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">).</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">));</span>
+			<span class="nx">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">markerRect</span><span class="o">;</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">	     * Returns the marker&#39;s absolute bounds coordinates. &#39;Absolute&#39; means</span>
+<span class="c">		 * relative to the canvas element rather than relative to the document</span>
+<span class="c">	     * @method getAbsBounds</span>
+<span class="c">		 * @return {Object} The absolute marker bounds accessible as </span>
+<span class="c">		 * { upperLeft: {x:Number,y:Number}, lowerRight: {x:Number,y:Number} }</span>
+<span class="c">	     */</span>
+		<span class="nx">getAbsBounds</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">upperLeft</span>  <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="kc">undefined</span><span class="o">,</span> <span class="nx">y</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">};</span>
+				<span class="nx">lowerRight</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="kc">undefined</span><span class="o">,</span> <span class="nx">y</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">};</span>
+			<span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="o">,</span> <span class="nx">i</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				
+				<span class="kd">var</span> <span class="nx">bounds</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_shapes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">getAbsBounds</span><span class="p">();</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
+					<span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">x</span><span class="o">;</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span>
+					<span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span><span class="o">;</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
+					<span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">x</span><span class="o">;</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">upperLeft</span><span class="p">.</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span>
+					<span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">lowerRight</span><span class="p">.</span><span class="nx">y</span><span class="o">;</span>
+			<span class="p">}</span>
+			<span class="k">return</span> <span class="p">{</span> <span class="nx">upperLeft</span><span class="o">:</span> <span class="nx">upperLeft</span><span class="o">,</span> <span class="nx">lowerRight</span><span class="o">:</span> <span class="nx">lowerRight</span> <span class="p">};</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Specify callback to be executed when the marker changes</span>
+<span class="c">		 * (shapes are added to or removed from the marker)</span>
+<span class="c">		 * @param {Function} callback The callback method</span>
+<span class="c">		 * @param {Object} scope (optional) The execution scope of the callback </span>
+<span class="c">		 * (in none is specified the context of the Marker object is used)</span>
+<span class="c">		 * @param {Object} data (optional) An optional data object to pass to the callback method</span>
+<span class="c">		 * @method onChanged</span>
+<span class="c">		 */</span>
+		<span class="nx">onChanged</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="o">,</span> <span class="nx">scope</span><span class="o">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">callback</span><span class="p">))</span> <span class="p">{</span>
+				<span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s2">&quot;Specified callback is not a function.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;shapeselect.js&quot;</span><span class="p">);</span>
+				<span class="k">return</span><span class="o">;</span>
+			<span class="p">}</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">scope</span><span class="p">)</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_changedCallback</span> <span class="o">=</span> <span class="p">{</span>
+				<span class="nx">callback</span><span class="o">:</span> <span class="nx">callback</span><span class="o">,</span>
+				<span class="nx">scope</span><span class="o">:</span> <span class="nx">scope</span><span class="o">,</span>
+				<span class="nx">data</span><span class="o">:</span> <span class="nx">data</span>
+			<span class="p">};</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Append an icon element to the bounds of the marker</span>
+<span class="c">		 * @param {String} orientation The orientation where to position the icon.</span>
+<span class="c">		 * Possible values: &#39;north&#39;, &#39;west&#39;, &#39;south&#39;, &#39;east&#39;, &#39;northwest&#39;, &#39;southwest&#39;, &#39;northeast&#39;, &#39;southeast&#39;</span>
+<span class="c">		 * @param {HTMLElement|String} icon An HTMLElement object representing the icon, or a String specifying</span>
+<span class="c">		 * the URL of an image for the icon.</span>
+<span class="c">		 * @return {Element} A reference to the new icon element</span>
+<span class="c">		 * @method addIcon</span>
+<span class="c">		 */</span>
+		<span class="nx">addIcon</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">orientation</span><span class="o">,</span> <span class="nx">icon</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">orientation</span><span class="p">))</span> <span class="p">{</span>
+				<span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s2">&quot;The orientation paramter is expected to be of type String&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;marker.js&quot;</span><span class="p">);</span>
+				<span class="k">return</span><span class="o">;</span>
+			<span class="p">}</span>
 			
+			<span class="k">if</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">icon</span><span class="p">))</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+				<span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+				<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+					<span class="nx">self</span><span class="p">.</span><span class="nx">_updateIcons</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">self</span><span class="p">);</span>
+				<span class="p">};</span>
+				<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">icon</span><span class="o">;</span>
+				
+				<span class="nx">icon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="nx">icon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nx">icon</span><span class="p">);</span>
+			<span class="p">}</span>
+			
+			<span class="nx">icon</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;className&quot;</span><span class="o">,</span> <span class="nx">_ICON_CLASS_NAME</span><span class="p">);</span>
+
+			<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="o">,</span> <span class="nx">key</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
+				
+				<span class="k">if</span><span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">orientation</span><span class="p">)</span> <span class="p">{</span>
+					<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">])</span> <span class="k">this</span><span class="p">.</span><span class="nx">removeIcon</span><span class="p">(</span><span class="nx">orientation</span><span class="p">);</span>
+					<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">icon</span><span class="p">);</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">icon</span><span class="o">;</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">_updateIcons</span><span class="p">();</span>
+					<span class="k">return</span> <span class="nx">icon</span><span class="o">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;The specified orientation is not valid.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;marker.js&quot;</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Remove the icon that currently resides in the specified orientation from the marker </span>
+<span class="c">		 * @param {String} orientation The orientation of the icon to remove.</span>
+<span class="c">		 * @method removeIcon</span>
+<span class="c">		 */</span>
+		<span class="nx">removeIcon</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">orientation</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">)</span> 
+				<span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">]);</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * Returns the icon element at the specified orientation.</span>
+<span class="c">		 * @param {String} orientation The orientation of the icon</span>
+<span class="c">		 * @return {Element} The icon at the specified orientation (null if no icon resides at that</span>
+<span class="c">		 * orientation)</span>
+<span class="c">		 * @method getIcon</span>
+<span class="c">		 */</span>
+		<span class="nx">getIcon</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">orientation</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_icons</span><span class="p">[</span><span class="nx">orientation</span><span class="p">];</span>
 		<span class="p">}</span>
 		
 	<span class="p">}</span>
@@ -346,8 +692,11 @@
                                 <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
                                 <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
                                 <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
                                 <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
                                 <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                                <li class=""><a href="MOVI.widget.Toolbar.html" title="MOVI.widget.Toolbar">MOVI.widget.Toolbar</a></li>
+                                <li class=""><a href="MOVI.widget.ZoomSlider.html" title="MOVI.widget.ZoomSlider">MOVI.widget.ZoomSlider</a></li>
                         </ul>
                     </div>
 
@@ -367,6 +716,10 @@
                                 <li class=""><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
                                 <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
                                 <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                                <li class=""><a href="toolbar.js.html" title="toolbar.js">toolbar.js</a></li>
+                                <li class=""><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
+                                <li class=""><a href="x-tooltip-annotation.js.html" title="x-tooltip-annotation.js">x-tooltip-annotation.js</a></li>
+                                <li class=""><a href="zoom.js.html" title="zoom.js">zoom.js</a></li>
                         </ul>
                     </div>
 
@@ -383,7 +736,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.util.ShapeSelect.html#method_deselect", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "deselect"}, {"url": "MOVI.model.Shape.html#method_getAbsBounds", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getCanvas", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getCanvas"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectShapes", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectShapes"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.stencilset.Stencilset.html#method_getStencil", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "method", "name": "getStencil"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.util.ShapeSelect.html#method_highlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "highlight"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.model.Shape.html#property_parentShape", "access": "", "host": "MOVI.model.Shape", "type": "property", "name": "parentShape"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.util.ShapeSelect.html#method_reset", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "reset"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape()", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape()"}, {"url": "MOVI.util.ShapeSelect.html#method_select", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "select"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.stencilset.Stencilset.html#property_stencils", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "property", "name": "stencils"}, {"url": "MOVI.util.ShapeSelect.html#method_unhighlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "unhighlight"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}, {"url": "MOVI.model.Node.html#method_update", "access": "", "host": "MOVI.model.Node", "type": "method", "name": "update"}];
+    ALL_YUI_PROPS = [{"url": "MOVI.widget.Toolbar.html#method_addButton", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "addButton"}, {"url": "MOVI.util.Marker.html#method_addIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addIcon"}, {"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.util.Annotation.html#method_bringToFront", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "bringToFront"}, {"url": "MOVI.util.Marker.html#property_canvas", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#method_centerScrollTo", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "centerScrollTo"}, {"url": "MOVI.util.ShapeSelect.html#method_deselect", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "deselect"}, {"url": "MOVI.widget.FullscreenViewer.html#property_dialog", "access": "", "host": "MOVI.widget.FullscreenViewer", "type": "property", "name": "dialog"}, {"url": "MOVI.widget.ModelViewer.html#method_fitModelToViewer", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "fitModelToViewer"}, {"url": "MOVI.util.Marker.html#method_getAbsBounds", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getAbsBounds", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getCanvas", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getCanvas"}, {"url": "MOVI.model.Canvas.html#method_getEdges", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getEdges"}, {"url": "MOVI.util.Marker.html#method_getIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getIcon"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getIndex", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getIndex"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.model.Canvas.html#method_getNodes", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getNodes"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectionMarker", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectionMarker"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectShapes", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectShapes"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.model.Shape.html#method_getStencil", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getStencil"}, {"url": "MOVI.stencilset.Stencilset.html#method_getStencil", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "method", "name": "getStencil"}, {"url": "MOVI.widget.ModelViewer.html#method_getZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getZoomLevel"}, {"url": "MOVI.model.Shape.html#method_hasChildShapes", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "hasChildShapes"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.widget.Toolbar.html#method_hideGroupCaptions", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "hideGroupCaptions"}, {"url": "MOVI.util.ShapeSelect.html#method_highlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "highlight"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.util.Marker.html#property_markerRect", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "markerRect"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.widget.Toolbar.html#property_modelviewer", "access": "", "host": "MOVI.widget.Toolbar", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.widget.ZoomSlider.html#method_onChange", "access": "", "host": "MOVI.widget.ZoomSlider", "type": "method", "name": "onChange"}, {"url": "MOVI.util.Marker.html#method_onChanged", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "onChanged"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.ShapeSelect.html#method_onSelectionChanged", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "onSelectionChanged"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChange", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChange"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeEnd", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeEnd"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeStart", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeStart"}, {"url": "MOVI.model.Shape.html#property_parentShape", "access": "", "host": "MOVI.model.Shape", "type": "property", "name": "parentShape"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeIcon"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.util.ShapeSelect.html#method_reset", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "reset"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape"}, {"url": "MOVI.util.ShapeSelect.html#method_select", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "select"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_setZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "setZoomLevel"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.widget.Toolbar.html#method_showGroupCaptions", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "showGroupCaptions"}, {"url": "MOVI.widget.ZoomSlider.html#property_slider", "access": "", "host": "MOVI.widget.ZoomSlider", "type": "property", "name": "slider"}, {"url": "MOVI.stencilset.Stencilset.html#property_stencils", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "property", "name": "stencils"}, {"url": "MOVI.util.Annotation.html#method_toggle", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "toggle"}, {"url": "MOVI.util.Marker.html#method_toggle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "toggle"}, {"url": "MOVI.util.ShapeSelect.html#method_unhighlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "unhighlight"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}, {"url": "MOVI.model.Node.html#method_update", "access": "", "host": "MOVI.model.Node", "type": "method", "name": "update"}, {"url": "MOVI.widget.ZoomSlider.html#method_update", "access": "", "host": "MOVI.widget.ZoomSlider", "type": "method", "name": "update"}];
 </script>
 </body>
 </html>

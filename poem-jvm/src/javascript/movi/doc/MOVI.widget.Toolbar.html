@@ -1,0 +1,378 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: movi  MOVI.widget.Toolbar   (YUI Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1243248572.91"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1243248572.91"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>movi&nbsp; <span class="subtitle">0.2</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_movi.html" title="movi">movi</a>
+                 &gt; MOVI.widget.Toolbar 
+                
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b property="yui:name">MOVI.widget.Toolbar</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.Element.html" title="YAHOO.util.Element">YAHOO.util.Element</a>
+                        </span>
+
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description" property="yui:description">
+                        The Toolbar widget is a UI control that hosts buttons to trigger certain
+functionality. It allows generic registration of new toolbar buttons.
+                    </div>
+
+                        <div class="section constructor details" rel="yui:constructor" resource="#constructor">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong property="yui:name">MOVI.widget.Toolbar</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl rel="yui:parameters">
+                                            <dt>Parameters:</dt>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">el</span>
+                                                    &lt;<span property="yui:type">HTMLElement | String </span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> The id of the container DIV element that will 
+wrap the Toolbar, or a reference to a DIV element. The DIV element must
+exist in the document.</span>
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_modelviewer">
+                                    <h4><a name="property_modelviewer" property="yui:name">modelviewer</a>
+                                        - <code><span property="yui:type">ModelViewer</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The ModelViewer that is controlled
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:method" resource="#method_addButton">
+                                    <h4>
+                                        <a name="method_addButton">addButton</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong property="yui:name">addButton</strong>
+                                           (
+                                                
+                                                        
+                                                         data
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Add a new button to the toolbar
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">data</span>
+                                                        &lt;<span property="yui:type">Object} config Button configuration: 
+<dl>
+<dt>{String} icon (optional)</dt>
+<dd>
+The URL of an icon image
+</dd>
+<dt>{String} caption (optional)</dt>
+<dd>
+The caption of the button
+</dd>
+<dt>{String} tooltip (optional)</dt>
+<dd>
+A tooltip message for the button
+</dd>
+<dt>{String} group (optional)</dt>
+<dd>
+The button group to append the new button to. If no such group exists
+it will be created. Groups are positioned in the order they were created.
+</dd>
+<dt>{Function} callback</dt>
+<dd>The callback method when the button is triggered.</dd>
+<dt>{Object} scope (optional)</dt>
+<dd>The execution scope for the callback.</dd>
+<dt>{Any</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> (optional)</dt>
+<dd>
+An optional data object to pass to the callback method
+</dd>
+</dl></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        String
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">An index to reference the button in the toolbar</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_hideGroupCaptions">
+                                    <h4>
+                                        <a name="method_hideGroupCaptions">hideGroupCaptions</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">hideGroupCaptions</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Hide captions for the button groups. (Per default captions are not shown)
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_showGroupCaptions">
+                                    <h4>
+                                        <a name="method_showGroupCaptions">showGroupCaptions</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">showGroupCaptions</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Show captions for the button groups. (Per default captions are not shown)
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_movi.html" title="movi">movi</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="MOVI.model.Canvas.html" title="MOVI.model.Canvas">MOVI.model.Canvas</a></li>
+                                <li class=""><a href="MOVI.model.Edge.html" title="MOVI.model.Edge">MOVI.model.Edge</a></li>
+                                <li class=""><a href="MOVI.model.Node.html" title="MOVI.model.Node">MOVI.model.Node</a></li>
+                                <li class=""><a href="MOVI.model.Shape.html" title="MOVI.model.Shape">MOVI.model.Shape</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencil.html" title="MOVI.stencilset.Stencil">MOVI.stencilset.Stencil</a></li>
+                                <li class=""><a href="MOVI.stencilset.Stencilset.html" title="MOVI.stencilset.Stencilset">MOVI.stencilset.Stencilset</a></li>
+                                <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
+                                <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
+                                <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
+                                <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
+                                <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                                <li class="selected"><a href="MOVI.widget.Toolbar.html" title="MOVI.widget.Toolbar">MOVI.widget.Toolbar</a></li>
+                                <li class=""><a href="MOVI.widget.ZoomSlider.html" title="MOVI.widget.ZoomSlider">MOVI.widget.ZoomSlider</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="annotation.js.html" title="annotation.js">annotation.js</a></li>
+                                <li class=""><a href="canvas.js.html" title="canvas.js">canvas.js</a></li>
+                                <li class=""><a href="config.js.html" title="config.js">config.js</a></li>
+                                <li class=""><a href="edge.js.html" title="edge.js">edge.js</a></li>
+                                <li class=""><a href="marker.js.html" title="marker.js">marker.js</a></li>
+                                <li class=""><a href="modelnavigator.js.html" title="modelnavigator.js">modelnavigator.js</a></li>
+                                <li class=""><a href="modelviewer.js.html" title="modelviewer.js">modelviewer.js</a></li>
+                                <li class=""><a href="movi.js.html" title="movi.js">movi.js</a></li>
+                                <li class=""><a href="node.js.html" title="node.js">node.js</a></li>
+                                <li class=""><a href="shape.js.html" title="shape.js">shape.js</a></li>
+                                <li class=""><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
+                                <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
+                                <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                                <li class=""><a href="toolbar.js.html" title="toolbar.js">toolbar.js</a></li>
+                                <li class=""><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
+                                <li class=""><a href="x-tooltip-annotation.js.html" title="x-tooltip-annotation.js">x-tooltip-annotation.js</a></li>
+                                <li class=""><a href="zoom.js.html" title="zoom.js">zoom.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_modelviewer" title="modelviewer">modelviewer</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="methodsList" class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#method_addButton" title="addButton">addButton</a></li>
+                                <li class=""><a href="#method_hideGroupCaptions" title="hideGroupCaptions">hideGroupCaptions</a></li>
+                                <li class=""><a href="#method_showGroupCaptions" title="showGroupCaptions">showGroupCaptions</a></li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "MOVI.widget.Toolbar.html#method_addButton", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "addButton"}, {"url": "MOVI.util.Marker.html#method_addIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addIcon"}, {"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.util.Annotation.html#method_bringToFront", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "bringToFront"}, {"url": "MOVI.util.Marker.html#property_canvas", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#property_canvas", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "canvas"}, {"url": "MOVI.widget.ModelViewer.html#method_centerScrollTo", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "centerScrollTo"}, {"url": "MOVI.util.ShapeSelect.html#method_deselect", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "deselect"}, {"url": "MOVI.widget.ModelViewer.html#method_fitModelToViewer", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "fitModelToViewer"}, {"url": "MOVI.util.Marker.html#method_getAbsBounds", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getAbsBounds", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Shape.html#method_getCanvas", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getCanvas"}, {"url": "MOVI.model.Canvas.html#method_getEdges", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getEdges"}, {"url": "MOVI.util.Marker.html#method_getIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getIcon"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgHeight", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgHeight"}, {"url": "MOVI.widget.ModelViewer.html#method_getImgWidth", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getImgWidth"}, {"url": "MOVI.widget.ModelViewer.html#method_getIndex", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getIndex"}, {"url": "MOVI.widget.ModelViewer.html#method_getInstance", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getInstance"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.model.Canvas.html#method_getNodes", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getNodes"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_getScrollboxEx", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getScrollboxEx"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectionMarker", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectionMarker"}, {"url": "MOVI.util.ShapeSelect.html#method_getSelectShapes", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "getSelectShapes"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.model.Shape.html#method_getStencil", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "getStencil"}, {"url": "MOVI.stencilset.Stencilset.html#method_getStencil", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "method", "name": "getStencil"}, {"url": "MOVI.widget.ModelViewer.html#method_getZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "getZoomLevel"}, {"url": "MOVI.model.Shape.html#method_hasChildShapes", "access": "", "host": "MOVI.model.Shape", "type": "method", "name": "hasChildShapes"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.widget.Toolbar.html#method_hideGroupCaptions", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "hideGroupCaptions"}, {"url": "MOVI.util.ShapeSelect.html#method_highlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "highlight"}, {"url": "MOVI.widget.ModelViewer.html#method_init", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "init"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModel"}, {"url": "MOVI.widget.ModelViewer.html#method_loadModelCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadModelCallback"}, {"url": "MOVI.widget.ModelViewer.html#method_loadStencilSetCallback", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "loadStencilSetCallback"}, {"url": "MOVI.util.Marker.html#property_markerRect", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "markerRect"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.widget.ModelNavigator.html#property_modelviewer", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "property", "name": "modelviewer"}, {"url": "MOVI.widget.Toolbar.html#property_modelviewer", "access": "", "host": "MOVI.widget.Toolbar", "type": "property", "name": "modelviewer"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.widget.ModelViewer.html#method_namespace", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "namespace"}, {"url": "MOVI.util.Marker.html#method_onChanged", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "onChanged"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.ShapeSelect.html#method_onSelectionChanged", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "onSelectionChanged"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChange", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChange"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeEnd", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeEnd"}, {"url": "MOVI.widget.ModelViewer.html#property_onZoomLevelChangeStart", "access": "", "host": "MOVI.widget.ModelViewer", "type": "property", "name": "onZoomLevelChangeStart"}, {"url": "MOVI.model.Shape.html#property_parentShape", "access": "", "host": "MOVI.model.Shape", "type": "property", "name": "parentShape"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeIcon"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.util.ShapeSelect.html#method_reset", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "reset"}, {"url": "MOVI.widget.ModelViewer.html#method_scrollToShape", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "scrollToShape"}, {"url": "MOVI.util.ShapeSelect.html#method_select", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "select"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.widget.ModelViewer.html#method_setZoomLevel", "access": "", "host": "MOVI.widget.ModelViewer", "type": "method", "name": "setZoomLevel"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.widget.Toolbar.html#method_showGroupCaptions", "access": "", "host": "MOVI.widget.Toolbar", "type": "method", "name": "showGroupCaptions"}, {"url": "MOVI.stencilset.Stencilset.html#property_stencils", "access": "", "host": "MOVI.stencilset.Stencilset", "type": "property", "name": "stencils"}, {"url": "MOVI.util.Annotation.html#method_toggle", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "toggle"}, {"url": "MOVI.util.Marker.html#method_toggle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "toggle"}, {"url": "MOVI.util.ShapeSelect.html#method_unhighlight", "access": "", "host": "MOVI.util.ShapeSelect", "type": "method", "name": "unhighlight"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}, {"url": "MOVI.widget.ModelNavigator.html#method_update", "access": "", "host": "MOVI.widget.ModelNavigator", "type": "method", "name": "update"}, {"url": "MOVI.model.Node.html#method_update", "access": "", "host": "MOVI.model.Node", "type": "method", "name": "update"}];
+</script>
+</body>
+</html>

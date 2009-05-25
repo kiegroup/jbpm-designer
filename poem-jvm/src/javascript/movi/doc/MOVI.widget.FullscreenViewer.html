@@ -2,7 +2,7 @@
 <html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: movi   edge.js  (YUI Library)</title>
+	<title>API: movi  MOVI.widget.FullscreenViewer   (YUI Library)</title>
 
 	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
 	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
@@ -19,8 +19,8 @@
         <h3>movi&nbsp; <span class="subtitle">0.2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_movi.html" title="movi">movi</a>
+                 &gt; MOVI.widget.FullscreenViewer 
                 
-                 &gt; edge.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
                 Search: <input autocomplete="off" id="searchinput" />
@@ -43,78 +43,93 @@
                 </fieldset>
             </form>
 
-                    <div id="srcout">
-                        <style>
-                            #doc3 .classopts { display:none; }
-                        </style>
-<div class="highlight"><pre><span class="c">/**</span>
-<span class="c"> * Copyright (c) 2009</span>
-<span class="c"> * Jan-Felix Schwarz</span>
-<span class="c"> *</span>
-<span class="c"> * Permission is hereby granted, free of charge, to any person obtaining a</span>
-<span class="c"> * copy of this software and associated documentation files (the &quot;Software&quot;),</span>
-<span class="c"> * to deal in the Software without restriction, including without limitation</span>
-<span class="c"> * the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
-<span class="c"> * and/or sell copies of the Software, and to permit persons to whom the</span>
-<span class="c"> * Software is furnished to do so, subject to the following conditions:</span>
-<span class="c"> *</span>
-<span class="c"> * The above copyright notice and this permission notice shall be included in</span>
-<span class="c"> * all copies or substantial portions of the Software.</span>
-<span class="c"> *</span>
-<span class="c"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
-<span class="c"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
-<span class="c"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
-<span class="c"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
-<span class="c"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
-<span class="c"> * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class="c"> * DEALINGS IN THE SOFTWARE.</span>
-<span class="c"> **/</span>
+                    <h2>
+                        
 
+                        
+                        
+                            Class <b property="yui:name">MOVI.widget.FullscreenViewer</b>
+                        <span class="extends">
+                        </span>
 
-<span class="nx">MOVI</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">);</span>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
 
-<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-	
-	<span class="kd">var</span> <span class="nx">_CLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;movi-edge&quot;</span><span class="o">;</span>
-	
-	<span class="c">/**</span>
-<span class="c">     * A wrapper class for model edges.</span>
-<span class="c">     * @namespace MOVI.model</span>
-<span class="c">     * @class MOVI.model.Edge</span>
-<span class="c">     * @extends MOVI.model.Shape</span>
-<span class="c">     * @constructor</span>
-<span class="c">     * @param {Object} jsonObj The JSON object from which the new edge</span>
-<span class="c">     * is created.</span>
-<span class="c">	 * @param {Object} stencilset The stencilset for lookup of the edge&#39;s </span>
-<span class="c">	 * stencil.</span>
-<span class="c">	 * @param {Shape} parent The edges&#39;s parent shape</span>
-<span class="c">	 * @param {String} prefix The element&#39;s ID prefix (unique per modelviewer)</span>
-<span class="c">     */</span>
-    <span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Edge</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">jsonObj</span><span class="o">,</span> <span class="nx">stencilset</span><span class="o">,</span> <span class="nx">parent</span><span class="o">,</span> <span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
-	
-		<span class="c">// element&#39;s attributes</span>
-		<span class="kd">var</span> <span class="nx">attr</span> <span class="o">=</span> <span class="p">{};</span>
-		
-		<span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Node</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">jsonObj</span><span class="o">,</span> <span class="nx">stencilset</span><span class="o">,</span> <span class="nx">parent</span><span class="o">,</span> <span class="nx">prefix</span><span class="o">,</span> <span class="nx">attr</span><span class="p">);</span> 
-		
-		<span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;className&quot;</span><span class="o">,</span> <span class="nx">_CLASS_NAME</span><span class="p">);</span>
-	<span class="p">}</span>
-	
-	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Edge</span><span class="o">,</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Shape</span><span class="o">,</span> <span class="p">{</span>
-		
-		<span class="c">/**</span>
-<span class="c">	     * Update style properties of the element</span>
-<span class="c">	     * @method update</span>
-<span class="c">	     */</span>
-		<span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-			
-		<span class="p">}</span>
-		
-	<span class="p">});</span>
-	
-<span class="p">})();</span>
-</pre></div>
+                    <div class="summary description" property="yui:description">
+                        The FullscreenViewer widget is a UI widget that displays the complete model in a
+lightbox fullscreen view.
                     </div>
+
+                        <div class="section constructor details" rel="yui:constructor" resource="#constructor">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong property="yui:name">MOVI.widget.FullscreenViewer</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                modelviewer
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl rel="yui:parameters">
+                                            <dt>Parameters:</dt>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">modelviewer</span>
+                                                    &lt;<span property="yui:type">ModelViewer</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> The ModelViewer for that is viewed in fullscreen mode</span>
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_dialog">
+                                    <h4><a name="property_dialog" property="yui:name">dialog</a>
+                                        - <code><span property="yui:type">YAHOO.widget.Dialog</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The Dialog widget that represents the lightbox
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
 			</div>
 		</div>
 		<div class="yui-b">
@@ -139,7 +154,7 @@
                                 <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
                                 <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
                                 <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
-                                <li class=""><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
+                                <li class="selected"><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
                                 <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
                                 <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
                                 <li class=""><a href="MOVI.widget.Toolbar.html" title="MOVI.widget.Toolbar">MOVI.widget.Toolbar</a></li>
@@ -153,7 +168,7 @@
                                 <li class=""><a href="annotation.js.html" title="annotation.js">annotation.js</a></li>
                                 <li class=""><a href="canvas.js.html" title="canvas.js">canvas.js</a></li>
                                 <li class=""><a href="config.js.html" title="config.js">config.js</a></li>
-                                <li class="selected"><a href="edge.js.html" title="edge.js">edge.js</a></li>
+                                <li class=""><a href="edge.js.html" title="edge.js">edge.js</a></li>
                                 <li class=""><a href="marker.js.html" title="marker.js">marker.js</a></li>
                                 <li class=""><a href="modelnavigator.js.html" title="modelnavigator.js">modelnavigator.js</a></li>
                                 <li class=""><a href="modelviewer.js.html" title="modelviewer.js">modelviewer.js</a></li>
@@ -170,6 +185,12 @@
                         </ul>
                     </div>
 
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_dialog" title="dialog">dialog</a></li>
+                        </ul>
+                    </div>
 
 
 

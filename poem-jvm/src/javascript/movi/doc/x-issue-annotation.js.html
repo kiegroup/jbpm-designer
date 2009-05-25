@@ -2,7 +2,7 @@
 <html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: movi   edge.js  (YUI Library)</title>
+	<title>API: movi   x-issue-annotation.js  (YUI Library)</title>
 
 	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
 	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
@@ -20,7 +20,7 @@
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_movi.html" title="movi">movi</a>
                 
-                 &gt; edge.js (source view) 
+                 &gt; x-issue-annotation.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
                 Search: <input autocomplete="off" id="searchinput" />
@@ -49,65 +49,106 @@
                         </style>
 <div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * Copyright (c) 2009</span>
-<span class="c"> * Jan-Felix Schwarz</span>
+<span class="c"> * Matthias Kunze</span>
 <span class="c"> *</span>
-<span class="c"> * Permission is hereby granted, free of charge, to any person obtaining a</span>
-<span class="c"> * copy of this software and associated documentation files (the &quot;Software&quot;),</span>
-<span class="c"> * to deal in the Software without restriction, including without limitation</span>
-<span class="c"> * the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
-<span class="c"> * and/or sell copies of the Software, and to permit persons to whom the</span>
-<span class="c"> * Software is furnished to do so, subject to the following conditions:</span>
-<span class="c"> *</span>
-<span class="c"> * The above copyright notice and this permission notice shall be included in</span>
-<span class="c"> * all copies or substantial portions of the Software.</span>
-<span class="c"> *</span>
-<span class="c"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
-<span class="c"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
-<span class="c"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
-<span class="c"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
-<span class="c"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
-<span class="c"> * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
-<span class="c"> * DEALINGS IN THE SOFTWARE.</span>
-<span class="c"> **/</span>
+<span class="c"> * This software is provided under the same terms as the MOVI API package.</span>
+<span class="c"> */</span>
 
-
-<span class="nx">MOVI</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">);</span>
+<span class="nx">MOVI</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;util&quot;</span><span class="p">);</span>
 
 <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 	
-	<span class="kd">var</span> <span class="nx">_CLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;movi-edge&quot;</span><span class="o">;</span>
-	
-	<span class="c">/**</span>
-<span class="c">     * A wrapper class for model edges.</span>
-<span class="c">     * @namespace MOVI.model</span>
-<span class="c">     * @class MOVI.model.Edge</span>
-<span class="c">     * @extends MOVI.model.Shape</span>
-<span class="c">     * @constructor</span>
-<span class="c">     * @param {Object} jsonObj The JSON object from which the new edge</span>
-<span class="c">     * is created.</span>
-<span class="c">	 * @param {Object} stencilset The stencilset for lookup of the edge&#39;s </span>
-<span class="c">	 * stencil.</span>
-<span class="c">	 * @param {Shape} parent The edges&#39;s parent shape</span>
-<span class="c">	 * @param {String} prefix The element&#39;s ID prefix (unique per modelviewer)</span>
-<span class="c">     */</span>
-    <span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Edge</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">jsonObj</span><span class="o">,</span> <span class="nx">stencilset</span><span class="o">,</span> <span class="nx">parent</span><span class="o">,</span> <span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
-	
-		<span class="c">// element&#39;s attributes</span>
-		<span class="kd">var</span> <span class="nx">attr</span> <span class="o">=</span> <span class="p">{};</span>
-		
-		<span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Node</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">jsonObj</span><span class="o">,</span> <span class="nx">stencilset</span><span class="o">,</span> <span class="nx">parent</span><span class="o">,</span> <span class="nx">prefix</span><span class="o">,</span> <span class="nx">attr</span><span class="p">);</span> 
-		
-		<span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;className&quot;</span><span class="o">,</span> <span class="nx">_CLASS_NAME</span><span class="p">);</span>
+	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">setStyle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="o">,</span> <span class="nx">style</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">style</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">element</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="nx">i</span><span class="o">,</span> <span class="nx">style</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+		<span class="p">}</span>
 	<span class="p">}</span>
 	
-	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Edge</span><span class="o">,</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">Shape</span><span class="o">,</span> <span class="p">{</span>
+    <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">XIssueAnnotation</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">marker</span><span class="o">,</span> <span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">marker</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s2">&quot;No marker given&quot;</span><span class="o">,</span> <span class="nx">marker</span><span class="p">);</span>
+		<span class="p">}</span>
 		
-		<span class="c">/**</span>
-<span class="c">	     * Update style properties of the element</span>
-<span class="c">	     * @method update</span>
-<span class="c">	     */</span>
-		<span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">switch</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">case</span> <span class="s2">&quot;low&quot;</span><span class="o">:</span>    <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+			<span class="nx">case</span> <span class="s2">&quot;medium&quot;</span><span class="o">:</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+			<span class="nx">case</span> <span class="s2">&quot;high&quot;</span><span class="o">:</span>   <span class="nx">index</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+			<span class="nx">default</span><span class="o">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s2">&quot;Index out of range (low, medium, high)&quot;</span><span class="p">)</span>
+		<span class="p">}</span>
+		
+		<span class="c">// create host element</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_host</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">);</span>
+		<span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">XIssueAnnotation</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_host</span><span class="o">,</span> <span class="p">{</span>
+			<span class="s2">&quot;className&quot;</span><span class="o">:</span> <span class="s2">&quot;x-issue-annotation&quot;</span>
+		<span class="p">});</span>
+		
+		<span class="c">// create child elements</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_draw</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+		
+		<span class="c">// append annotation to first marker rect</span>
+		<span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">marker</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">marker</span><span class="p">.</span><span class="nx">shapeRects</span><span class="o">,</span> <span class="nx">key</span><span class="p">))</span> <span class="k">continue</span><span class="o">;</span>
 			
+			<span class="nx">marker</span><span class="p">.</span><span class="nx">shapeRects</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+			<span class="k">break</span><span class="o">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="nx">MOVI</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">XIssueAnnotation</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="o">,</span> <span class="p">{</span>
+		
+		<span class="nx">show</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">hide</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_content</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;innerHTML&quot;</span><span class="o">,</span> <span class="nx">num</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">close</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;innerHTML&quot;</span><span class="o">,</span> <span class="s2">&quot;&quot;</span><span class="p">);</span>
+			<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="p">}</span><span class="o">,</span>
+		
+		<span class="nx">_draw</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+			
+			<span class="kd">var</span> <span class="nx">size</span> <span class="o">=</span> <span class="mi">30</span><span class="o">;</span> <span class="c">// size of one sprite element</span>
+			<span class="kd">var</span> <span class="nx">sprite</span> <span class="o">=</span> <span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">XIssueAnnotation</span><span class="p">.</span><span class="nx">sprite</span> <span class="o">||</span> <span class="s2">&quot;../api/img/x-issue-sprite.png&quot;</span><span class="o">;</span>
+			
+			<span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="k">this</span><span class="o">,</span> <span class="p">{</span>
+				<span class="s2">&quot;position&quot;</span><span class="o">:</span> <span class="s2">&quot;absolute&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;left&quot;</span><span class="o">:</span> <span class="o">-</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">size</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;bottom&quot;</span><span class="o">:</span> <span class="o">-</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">size</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;width&quot;</span><span class="o">:</span> <span class="nx">size</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;height&quot;</span><span class="o">:</span> <span class="nx">size</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;overflow&quot;</span><span class="o">:</span> <span class="s2">&quot;hidden&quot;</span>
+			<span class="p">});</span>
+			
+			<span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">)</span><span class="o">,</span> <span class="p">{</span>
+				<span class="nx">src</span><span class="o">:</span> <span class="nx">sprite</span>
+			<span class="p">});</span>
+			<span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="nx">img</span><span class="o">,</span> <span class="p">{</span>
+				<span class="nx">position</span><span class="o">:</span> <span class="s2">&quot;absolute&quot;</span><span class="o">,</span>
+				<span class="nx">left</span><span class="o">:</span> <span class="o">-</span><span class="p">(</span><span class="nx">index</span><span class="o">*</span><span class="nx">size</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;px&quot;</span>
+			<span class="p">});</span>
+			
+			<span class="k">this</span><span class="p">.</span><span class="nx">_content</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">));</span>
+			<span class="nx">MOVI</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_content</span><span class="o">,</span> <span class="p">{</span>
+				<span class="s2">&quot;position&quot;</span><span class="o">:</span> <span class="s2">&quot;absolute&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;top&quot;</span><span class="o">:</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">size</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;left&quot;</span><span class="o">:</span> <span class="s2">&quot;0px&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;width&quot;</span><span class="o">:</span> <span class="nx">size</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;text-align&quot;</span><span class="o">:</span><span class="s2">&quot;center&quot;</span><span class="o">,</span>
+				<span class="s2">&quot;font-size&quot;</span><span class="o">:</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;px&quot;</span>
+			<span class="p">});</span>
+
+			<span class="k">this</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_content</span><span class="p">);</span>
 		<span class="p">}</span>
 		
 	<span class="p">});</span>
@@ -153,7 +194,7 @@
                                 <li class=""><a href="annotation.js.html" title="annotation.js">annotation.js</a></li>
                                 <li class=""><a href="canvas.js.html" title="canvas.js">canvas.js</a></li>
                                 <li class=""><a href="config.js.html" title="config.js">config.js</a></li>
-                                <li class="selected"><a href="edge.js.html" title="edge.js">edge.js</a></li>
+                                <li class=""><a href="edge.js.html" title="edge.js">edge.js</a></li>
                                 <li class=""><a href="marker.js.html" title="marker.js">marker.js</a></li>
                                 <li class=""><a href="modelnavigator.js.html" title="modelnavigator.js">modelnavigator.js</a></li>
                                 <li class=""><a href="modelviewer.js.html" title="modelviewer.js">modelviewer.js</a></li>
@@ -164,7 +205,7 @@
                                 <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
                                 <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
                                 <li class=""><a href="toolbar.js.html" title="toolbar.js">toolbar.js</a></li>
-                                <li class=""><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
+                                <li class="selected"><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
                                 <li class=""><a href="x-tooltip-annotation.js.html" title="x-tooltip-annotation.js">x-tooltip-annotation.js</a></li>
                                 <li class=""><a href="zoom.js.html" title="zoom.js">zoom.js</a></li>
                         </ul>

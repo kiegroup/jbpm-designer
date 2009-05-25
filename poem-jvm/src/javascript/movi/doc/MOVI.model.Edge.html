@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: movi  MOVI.model.Edge   (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1236862905.33" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1236862905.33" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1236862905.33"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1236862905.33"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1243248572.91"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1243248572.91"></script>
 </head>
 
 <body id="yahoo-com">
@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>movi&nbsp; <span class="subtitle">0.1.1</span></h3>
+        <h3>movi&nbsp; <span class="subtitle">0.2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_movi.html" title="movi">movi</a>
                  &gt; MOVI.model.Edge 
@@ -80,6 +80,9 @@
 
                                                 , 
                                                 parent
+
+                                                , 
+                                                prefix
                                     )
                                 </code>
                                 <div class="description">
@@ -104,6 +107,12 @@ stencil.</span>
                                                     &lt;<span property="yui:type">Shape</span>&gt;
                                                     </code>
                                                     <span property="yui:description"> The edges's parent shape</span>
+                                                </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">prefix</span>
+                                                    &lt;<span property="yui:type">String</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"> The element's ID prefix (unique per modelviewer)</span>
                                                 </dd>
                                         </dl>
                                     
@@ -184,7 +193,13 @@ stencil.</span>
                                             <a class="" href="MOVI.model.Shape.html#method_getAbsBounds" property="yui:name" title="getAbsBounds">getAbsBounds</a><span class="">,</span>
                                             </span>
                                             <span rel="yui:method" resource="MOVI.model.Shape.html#method_getCanvas">                                        
-                                            <a class="" href="MOVI.model.Shape.html#method_getCanvas" property="yui:name" title="getCanvas">getCanvas</a>
+                                            <a class="" href="MOVI.model.Shape.html#method_getCanvas" property="yui:name" title="getCanvas">getCanvas</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="MOVI.model.Shape.html#method_getStencil">                                        
+                                            <a class="" href="MOVI.model.Shape.html#method_getStencil" property="yui:name" title="getStencil">getStencil</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="MOVI.model.Shape.html#method_hasChildShapes">                                        
+                                            <a class="" href="MOVI.model.Shape.html#method_hasChildShapes" property="yui:name" title="hasChildShapes">hasChildShapes</a>
                                             </span>
                                     </code>
                                 </div>
@@ -225,8 +240,11 @@ stencil.</span>
                                 <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
                                 <li class=""><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
                                 <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
                                 <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
                                 <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                                <li class=""><a href="MOVI.widget.Toolbar.html" title="MOVI.widget.Toolbar">MOVI.widget.Toolbar</a></li>
+                                <li class=""><a href="MOVI.widget.ZoomSlider.html" title="MOVI.widget.ZoomSlider">MOVI.widget.ZoomSlider</a></li>
                         </ul>
                     </div>
 
@@ -246,6 +264,10 @@ stencil.</span>
                                 <li class=""><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
                                 <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
                                 <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                                <li class=""><a href="toolbar.js.html" title="toolbar.js">toolbar.js</a></li>
+                                <li class=""><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
+                                <li class=""><a href="x-tooltip-annotation.js.html" title="x-tooltip-annotation.js">x-tooltip-annotation.js</a></li>
+                                <li class=""><a href="zoom.js.html" title="zoom.js">zoom.js</a></li>
                         </ul>
                     </div>
 
@@ -268,7 +290,7 @@ stencil.</span>
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}];
+    ALL_YUI_PROPS = [{"url": "MOVI.util.Annotation.html#method_bringToFront", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "bringToFront"}, {"url": "MOVI.model.Canvas.html#method_getEdges", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getEdges"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.model.Canvas.html#method_getNodes", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getNodes"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Annotation.html#method_toggle", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "toggle"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}];
 </script>
 </body>
 </html>

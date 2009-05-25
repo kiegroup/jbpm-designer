@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: movi  MOVI.util.Marker   (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1236862905.33" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1236862905.33" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1243248572.91" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1243248572.91" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1236862905.33"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1236862905.33"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1243248572.91"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1243248572.91"></script>
 </head>
 
 <body id="yahoo-com">
@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>movi&nbsp; <span class="subtitle">0.1.1</span></h3>
+        <h3>movi&nbsp; <span class="subtitle">0.2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_movi.html" title="movi">movi</a>
                  &gt; MOVI.util.Marker 
@@ -87,7 +87,7 @@ by overlaying rectangles
                                                     <code><span property="yui:name">shapes</span>
                                                     &lt;<span property="yui:type">Shape|Shapes[]</span>&gt;
                                                     </code>
-                                                    <span property="yui:description"> (optional) The shapes to mark</span>
+                                                    <span property="yui:description"> The shapes to mark</span>
                                                 </dd>
                                                 <dd rel="yui:parameter">
                                                     <code><span property="yui:name">style</span>
@@ -108,6 +108,36 @@ to the shape marking rectangles.</span>
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_canvas">
+                                    <h4><a name="property_canvas" property="yui:name">canvas</a>
+                                        - <code><span property="yui:type">Canvas</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The parent canvas element of this marker
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_markerRect">
+                                    <h4><a name="property_markerRect" property="yui:name">markerRect</a>
+                                        - <code><span property="yui:type">Element</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The marker's outer rectangle element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_MOVI.util.Marker.PADDING">
                                     <h4><a name="property_MOVI.util.Marker.PADDING" property="yui:name">MOVI.util.Marker.PADDING</a>
                                         - <code>static <span property="yui:type">integer</span></code>
@@ -151,6 +181,69 @@ associated shape resource IDs as keys
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="" rel="yui:method" resource="#method_addIcon">
+                                    <h4>
+                                        <a name="method_addIcon">addIcon</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Element
+                                            <strong property="yui:name">addIcon</strong>
+                                           (
+                                                
+                                                        
+                                                         orientation
+                                                    
+                                                
+                                                        , 
+                                                         icon
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Append an icon element to the bounds of the marker
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">orientation</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The orientation where to position the icon.
+Possible values: 'north', 'west', 'south', 'east', 'northwest', 'southwest', 'northeast', 'southeast'</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">icon</span>
+                                                        &lt;<span property="yui:type">HTMLElement|String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An HTMLElement object representing the icon, or a String specifying
+the URL of an image for the icon.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Element
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">A reference to the new icon element</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_addShape">
                                     <h4>
                                         <a name="method_addShape">addShape</a></h4>
@@ -202,6 +295,98 @@ associated shape resource IDs as keys
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_getAbsBounds">
+                                    <h4>
+                                        <a name="method_getAbsBounds">getAbsBounds</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object} The absolute marker bounds accessible as 
+{ upperLeft: {x:Number,y:Number}, lowerRight: {x:Number,y:Number} 
+                                            <strong property="yui:name">getAbsBounds</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the marker's absolute bounds coordinates. 'Absolute' means
+relative to the canvas element rather than relative to the document
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Object} The absolute marker bounds accessible as 
+{ upperLeft: {x:Number,y:Number}, lowerRight: {x:Number,y:Number} 
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getIcon">
+                                    <h4>
+                                        <a name="method_getIcon">getIcon</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Element
+                                            <strong property="yui:name">getIcon</strong>
+                                           (
+                                                
+                                                        
+                                                         orientation
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the icon element at the specified orientation.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">orientation</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The orientation of the icon</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Element
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The icon at the specified orientation (null if no icon resides at that
+orientation)</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_getRectClassName">
                                     <h4>
                                         <a name="method_getRectClassName">getRectClassName</a></h4>
@@ -217,7 +402,7 @@ associated shape resource IDs as keys
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Return the class name applied for all marking rectangle elements
+                                            Return the class name applied for all shape marking rectangle elements
                                         </div>
 
                                         <div class="description">
@@ -260,7 +445,7 @@ associated shape resource IDs as keys
                                         
                                         <div class="description" property="yui:description">
                                             Returns the value for the specified style property that is applied to each 
-marking rectangle element
+shape marking rectangle element
                                         </div>
 
                                         <div class="description">
@@ -357,11 +542,84 @@ marking rectangle element
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Convenience method to hide all marking rectangles
+                                            Hide the marker
                                         </div>
 
                                         <div class="description">
 
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_onChanged">
+                                    <h4>
+                                        <a name="method_onChanged">onChanged</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">onChanged</strong>
+                                           (
+                                                
+                                                        
+                                                         callback
+                                                    
+                                                
+                                                        , 
+                                                         scope
+                                                    
+                                                
+                                                        , 
+                                                         data
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Specify callback to be executed when the marker changes
+(shapes are added to or removed from the marker)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">callback</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The callback method</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">scope</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> (optional) The execution scope of the callback 
+(in none is specified the context of the Marker object is used)</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">data</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> (optional) An optional data object to pass to the callback method</span>
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -453,6 +711,57 @@ marking rectangle element
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_removeIcon">
+                                    <h4>
+                                        <a name="method_removeIcon">removeIcon</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">removeIcon</strong>
+                                           (
+                                                
+                                                        
+                                                         orientation
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Remove the icon that currently resides in the specified orientation from the marker
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">orientation</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The orientation of the icon to remove.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_removeShape">
                                     <h4>
                                         <a name="method_removeShape">removeShape</a></h4>
@@ -524,7 +833,7 @@ marking rectangle element
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Wrapper for setting the class name for all marking rectangle elements
+                                            Wrapper for setting the class name for all shape marking rectangle elements
                                         </div>
 
                                         <div class="description">
@@ -579,7 +888,7 @@ marking rectangle element
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Wrapper for setting style properties of all marking rectangle elements
+                                            Wrapper for setting style properties of all shape marking rectangle elements
                                         </div>
 
                                         <div class="description">
@@ -631,7 +940,44 @@ marking rectangle element
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Convenience method to show all marking rectangles
+                                            Show the marker
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_toggle">
+                                    <h4>
+                                        <a name="method_toggle">toggle</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">toggle</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Toggle show/hide the marker
                                         </div>
 
                                         <div class="description">
@@ -691,8 +1037,11 @@ marking rectangle element
                                 <li class=""><a href="MOVI.util.Annotation.html" title="MOVI.util.Annotation">MOVI.util.Annotation</a></li>
                                 <li class="selected"><a href="MOVI.util.Marker.html" title="MOVI.util.Marker">MOVI.util.Marker</a></li>
                                 <li class=""><a href="MOVI.util.ShapeSelect.html" title="MOVI.util.ShapeSelect">MOVI.util.ShapeSelect</a></li>
+                                <li class=""><a href="MOVI.widget.FullscreenViewer.html" title="MOVI.widget.FullscreenViewer">MOVI.widget.FullscreenViewer</a></li>
                                 <li class=""><a href="MOVI.widget.ModelNavigator.html" title="MOVI.widget.ModelNavigator">MOVI.widget.ModelNavigator</a></li>
                                 <li class=""><a href="MOVI.widget.ModelViewer.html" title="MOVI.widget.ModelViewer">MOVI.widget.ModelViewer</a></li>
+                                <li class=""><a href="MOVI.widget.Toolbar.html" title="MOVI.widget.Toolbar">MOVI.widget.Toolbar</a></li>
+                                <li class=""><a href="MOVI.widget.ZoomSlider.html" title="MOVI.widget.ZoomSlider">MOVI.widget.ZoomSlider</a></li>
                         </ul>
                     </div>
 
@@ -712,12 +1061,18 @@ marking rectangle element
                                 <li class=""><a href="shapeselect.js.html" title="shapeselect.js">shapeselect.js</a></li>
                                 <li class=""><a href="stencil.js.html" title="stencil.js">stencil.js</a></li>
                                 <li class=""><a href="stencilset.js.html" title="stencilset.js">stencilset.js</a></li>
+                                <li class=""><a href="toolbar.js.html" title="toolbar.js">toolbar.js</a></li>
+                                <li class=""><a href="x-issue-annotation.js.html" title="x-issue-annotation.js">x-issue-annotation.js</a></li>
+                                <li class=""><a href="x-tooltip-annotation.js.html" title="x-tooltip-annotation.js">x-tooltip-annotation.js</a></li>
+                                <li class=""><a href="zoom.js.html" title="zoom.js">zoom.js</a></li>
                         </ul>
                     </div>
 
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
+                                <li class=""><a href="#property_canvas" title="canvas">canvas</a></li>
+                                <li class=""><a href="#property_markerRect" title="markerRect">markerRect</a></li>
                                 <li class=""><a href="#property_MOVI.util.Marker.PADDING" title="MOVI.util.Marker.PADDING">MOVI.util.Marker.PADDING</a></li>
                                 <li class=""><a href="#property_shapeRects" title="shapeRects">shapeRects</a></li>
                         </ul>
@@ -726,17 +1081,23 @@ marking rectangle element
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class=""><a href="#method_addIcon" title="addIcon">addIcon</a></li>
                                 <li class=""><a href="#method_addShape" title="addShape">addShape</a></li>
+                                <li class=""><a href="#method_getAbsBounds" title="getAbsBounds">getAbsBounds</a></li>
+                                <li class=""><a href="#method_getIcon" title="getIcon">getIcon</a></li>
                                 <li class=""><a href="#method_getRectClassName" title="getRectClassName">getRectClassName</a></li>
                                 <li class=""><a href="#method_getRectStyle" title="getRectStyle">getRectStyle</a></li>
                                 <li class=""><a href="#method_getShapes" title="getShapes">getShapes</a></li>
                                 <li class=""><a href="#method_hide" title="hide">hide</a></li>
+                                <li class=""><a href="#method_onChanged" title="onChanged">onChanged</a></li>
                                 <li class=""><a href="#method_remove" title="remove">remove</a></li>
                                 <li class=""><a href="#method_removeAllShapes" title="removeAllShapes">removeAllShapes</a></li>
+                                <li class=""><a href="#method_removeIcon" title="removeIcon">removeIcon</a></li>
                                 <li class=""><a href="#method_removeShape" title="removeShape">removeShape</a></li>
                                 <li class=""><a href="#method_setRectClassName" title="setRectClassName">setRectClassName</a></li>
                                 <li class=""><a href="#method_setRectStyle" title="setRectStyle">setRectStyle</a></li>
                                 <li class=""><a href="#method_show" title="show">show</a></li>
+                                <li class=""><a href="#method_toggle" title="toggle">toggle</a></li>
                         </ul>
                     </div>
 
@@ -751,7 +1112,7 @@ marking rectangle element
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}];
+    ALL_YUI_PROPS = [{"url": "MOVI.util.Marker.html#method_addIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addIcon"}, {"url": "MOVI.util.Marker.html#method_addShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "addShape"}, {"url": "MOVI.util.Annotation.html#method_bringToFront", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "bringToFront"}, {"url": "MOVI.util.Marker.html#property_canvas", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "canvas"}, {"url": "MOVI.util.Marker.html#method_getAbsBounds", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getAbsBounds"}, {"url": "MOVI.model.Canvas.html#method_getEdges", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getEdges"}, {"url": "MOVI.util.Marker.html#method_getIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getIcon"}, {"url": "MOVI.model.Canvas.html#method_getModelViewer", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getModelViewer"}, {"url": "MOVI.model.Canvas.html#method_getNodes", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getNodes"}, {"url": "MOVI.util.Marker.html#method_getRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectClassName"}, {"url": "MOVI.util.Marker.html#method_getRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getRectStyle"}, {"url": "MOVI.model.Canvas.html#method_getShape", "access": "", "host": "MOVI.model.Canvas", "type": "method", "name": "getShape"}, {"url": "MOVI.util.Marker.html#method_getShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "getShapes"}, {"url": "MOVI.util.Annotation.html#method_hide", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#method_hide", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "hide"}, {"url": "MOVI.util.Marker.html#property_markerRect", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "markerRect"}, {"url": "MOVI.model.Canvas.html#property_modelBorder", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "modelBorder"}, {"url": "MOVI.util.Marker.html#property_MOVI.util.Marker.PADDING", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "MOVI.util.Marker.PADDING"}, {"url": "MOVI.util.Marker.html#method_onChanged", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "onChanged"}, {"url": "MOVI.util.Annotation.html#method_onClose", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "onClose"}, {"url": "MOVI.util.Annotation.html#method_remove", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_remove", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "remove"}, {"url": "MOVI.util.Marker.html#method_removeAllShapes", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeAllShapes"}, {"url": "MOVI.util.Marker.html#method_removeIcon", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeIcon"}, {"url": "MOVI.util.Marker.html#method_removeShape", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "removeShape"}, {"url": "MOVI.util.Marker.html#method_setRectClassName", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectClassName"}, {"url": "MOVI.util.Marker.html#method_setRectStyle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "setRectStyle"}, {"url": "MOVI.util.Marker.html#property_shapeRects", "access": "", "host": "MOVI.util.Marker", "type": "property", "name": "shapeRects"}, {"url": "MOVI.model.Canvas.html#property_shapes", "access": "", "host": "MOVI.model.Canvas", "type": "property", "name": "shapes"}, {"url": "MOVI.util.Annotation.html#method_show", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "show"}, {"url": "MOVI.util.Marker.html#method_show", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "show"}, {"url": "MOVI.util.Annotation.html#method_toggle", "access": "", "host": "MOVI.util.Annotation", "type": "method", "name": "toggle"}, {"url": "MOVI.util.Marker.html#method_toggle", "access": "", "host": "MOVI.util.Marker", "type": "method", "name": "toggle"}, {"url": "MOVI.model.Edge.html#method_update", "access": "", "host": "MOVI.model.Edge", "type": "method", "name": "update"}];
 </script>
 </body>
 </html>
