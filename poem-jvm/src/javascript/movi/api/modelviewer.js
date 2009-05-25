@@ -267,7 +267,10 @@ MOVI.namespace("widget");
 		 * @private
 	     */
 		_syncLoadingReady: function(resource) {
-			var i = this._syncResources.indexOf(resource);
+			// get index of resource in array
+			for(var i=0; i<this._syncResources.length; i++) {
+				if(this._syncResources[i]==resource) break;
+			}
 			if(i>=0) {
 				this._syncResources.splice(i, 1);
 			}
