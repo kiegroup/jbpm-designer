@@ -325,6 +325,7 @@ MOVI.namespace("widget");
 				this._onLoadFailure();
 			}
 			
+			if(uri.charAt(uri.length-1)=="/") uri = uri.substr(0, uri.length-1);
 			this._modelUri = uri;
 			
 			this._loadOptions = opt || {};
