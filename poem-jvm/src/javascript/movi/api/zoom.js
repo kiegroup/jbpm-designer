@@ -48,13 +48,13 @@ MOVI.namespace("widget");
 	};
 	
 	/**
-	 * Calculate the minimal zoom factor (stop zooming out when model fits the model viewer in height and width)
-	 * @method _getMinZoomFactor
+	 * Calculate the minimal zoom level in percent (stop zooming out when model fits the model viewer in height and width)
+	 * @method _getMinZoomLevel
 	 * @private
 	 */
-	var _getMinZoomFactor = function() {
-		var scaleHorizontal = (parseInt(this.modelviewer.getScrollboxEl().getStyle("width"), 10)) / this.modelviewer.getImgWidth();
-		var scaleVertical = (parseInt(this.modelviewer.getScrollboxEl().getStyle("height"), 10)) / this.modelviewer.getImgHeight();
+	var _getMinZoomLevel = function(modelviewer) {
+		var scaleHorizontal = (parseInt(modelviewer.getScrollboxEl().getStyle("width"), 10)) / modelviewer.getImgWidth();
+		var scaleVertical = (parseInt(modelviewer.getScrollboxEl().getStyle("height"), 10)) / modelviewer.getImgHeight();
 		var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
 		if(scale>1)	scale = 1;
 		return scale*100;
@@ -131,11 +131,11 @@ MOVI.namespace("widget");
 		 * @method onChange
 		 */
 		onChange: function() {
-			var minZoomFactor = _getMinZoomFactor();
-			var maxZoomFactor = 100;
+			var minZoomLevel = _getMinZoomLevel(this.modelviewer);
+			var maxZoomLevel = 100;
 			
-			var zoomStep = (maxZoomFactor-minZoomFactor) / _SLIDER_WIDTH;
-			this.modelviewer.setZoomLevel(minZoomFactor + this.slider.getValue() * zoomStep, false);
+			var zoomStep = (maxZoomLevel-minZoomLevel) / _SLIDER_WIDTH;
+			this.modelviewer.setZoomLevel(minZoomLevel + this.slider.getValue() * zoomStep, false);
 		},
 		
 		/**
@@ -144,11 +144,11 @@ MOVI.namespace("widget");
 		 * @method update
 		 */
 		update: function() {
-			var minZoomFactor = _getMinZoomFactor();
-			var maxZoomFactor = 100;
+			var minZoomLevel = _getMinZoomLevel(this.modelviewer);
+			var maxZoomLevel = 100;
 			
-			var zoomStep = (maxZoomFactor-minZoomFactor) / _SLIDER_WIDTH;
-			this.slider.setValue((this.modelviewer.getZoomLevel() - minZoomFactor) * zoomStep);
+			var zoomStep = (maxZoomLevel-minZoomLevel) / _SLIDER_WIDTH;
+			this.slider.setValue((this.modelviewer.getZoomLevel() - minZoomLevel) * zoomStep);
 		}
 		
 	});
@@ -269,11 +269,12 @@ MOVI.namespace("widget");
 			_swapNode(this.modelviewer.getScrollboxEl().get("element"), this._modelViewerPlaceholder.get("element"));
 			
 			// zoom to fit to fullscreen
-			var minZoomFactor = _getMinZoomFactor();
-			
+			var minZoomLevel = _getMinZoomLevel(this.modelviewer);
+		
 			// store original zoom factor
 			this._originalZoomLevel = this.modelviewer.getZoomLevel();
-			this.modelviewer.setZoomLevel(minZoomFactor*100);
+			console.log(minZoomLevel)
+			this.modelviewer.setZoomLevel(minZoomLevel);
 			
 			this.dialog.show();
 		},
