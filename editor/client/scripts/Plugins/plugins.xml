@@ -55,7 +55,9 @@
 		<plugin source="file.js" name="ORYX.Plugins.File" />
 		<plugin source="file.js" name="ORYX.Plugins.Save"/>
 		
-		<plugin source="view.js" name="ORYX.Plugins.View" />
+		<plugin source="view.js" name="ORYX.Plugins.View">
+			<property zoomLevel="2" maxFitToScreenLevel="1.24" />
+		</plugin>
 		<plugin source="dragdropresize.js" name="ORYX.Plugins.DragDropResize" />
 		<plugin source="grouping.js" name="ORYX.Plugins.Grouping">
 			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#" />

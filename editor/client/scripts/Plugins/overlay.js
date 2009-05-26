@@ -108,8 +108,13 @@ ORYX.Plugins.Overlay = Clazz.extend({
 
 		}	
 		
+		var isSVG = true
+		try {
+			isSVG = options.node && options.node instanceof SVGElement;
+		} catch(e){}
+		
 		// Checks if node is setted and if this is an SVGElement		
-		if ( options.node && options.node instanceof SVGElement) {
+		if ( options.node && isSVG) {
 			
 			options["_temps"] = []
 						

@@ -272,21 +272,51 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
      */
     getRDFFromDOM: function(){
         //convert to RDF
-        var parser = new DOMParser();
-        var parsedDOM = parser.parseFromString(this.getSerializedDOM(), "text/xml");
-        var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
-        var xsltProcessor = new XSLTProcessor();
-        var xslRef = document.implementation.createDocument("", "", null);
-        xslRef.async = false;
-        xslRef.load(xsltPath);
-        xsltProcessor.importStylesheet(xslRef);
-        try {
-            var rdf = xsltProcessor.transformToDocument(parsedDOM);
-            return (new XMLSerializer()).serializeToString(rdf);
-        } catch (error) {
-            Ext.Msg.alert("Oryx", error);
-            return null;
-        }
+		try {
+			var xsl = "";
+			source=ORYX.PATH + "lib/extract-rdf.xsl";
+			new Ajax.Request(source, {
+				asynchronous: false,
+				method: 'get',
+				onSuccess: function(transport){
+					xsl = transport.responseText
+				}.bind(this),
+				onFailure: (function(transport){
+					ORYX.Log.error("XSL load failed" + transport);
+				}).bind(this)
+			});
+			/*
+			 var parser = new DOMParser();
+			 var parsedDOM = parser.parseFromString(this.getSerializedDOM(), "text/xml");
+			 var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
+			 var xsltProcessor = new XSLTProcessor();
+			 var xslRef = document.implementation.createDocument("", "", null);
+			 xslRef.async = false;
+			 xslRef.load(xsltPath);
+			 xsltProcessor.importStylesheet(xslRef);
+			 try {
+			 var rdf = xsltProcessor.transformToDocument(parsedDOM);
+			 return (new XMLSerializer()).serializeToString(rdf);
+			 } catch (error) {
+			 Ext.Msg.alert("Oryx", error);
+			 return null;
+			 }*/
+			var domParser = new DOMParser();
+			var xmlObject = domParser.parseFromString(this.getSerializedDOM(), "text/xml");
+			var xslObject = domParser.parseFromString(xsl, "text/xml");
+			var xsltProcessor = new XSLTProcessor();
+			xsltProcessor.importStylesheet(xslObject);
+			var result = xsltProcessor.transformToFragment(xmlObject, document);
+			
+			var serializer = new XMLSerializer();
+			
+			return serializer.serializeToString(result);
+		}catch(e){
+			alert("Oryx", error);
+			return "";
+		}
+
+		
     },
     
  
