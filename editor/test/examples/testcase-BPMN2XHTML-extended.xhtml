@@ -1,0 +1,961 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:oryx="http://oryx-editor.org/"
+      xmlns:raziel="http://raziel.org/">
+   <head>
+      <title>Documentation generated out of a BPMN Model</title>
+      <style type="text/css"><![CDATA[
+         body {
+            font-size: 75%;
+            font-family: sans-serif;
+         }
+         .page {
+            width: 1000px;
+            margin: 0 auto;
+         }
+         .screen {
+            width: 450px;
+            margin: 0 auto;
+            height: 100%;
+         }
+         svg, .intercationdiagram {
+            width: 412px;
+            margin-bottom: 5px;
+            padding: 5px;
+            border: 1px solid lightgrey;
+            background-color: white;
+         }
+
+         #interaction {background-color:#f2dbe1}
+         #role {background-color:#d7e7ed}
+         #activity {background-color:#ffefae}
+         #artefact {background-color:#fadec9 /* #f7e4d6 */}
+         #other {background-color:#e5e6e8}
+
+         .screenshot {border: 1px solid #ccc; padding:5px; background-color:white; width:200px; margin:5px 10px; float:left;}
+ 
+         .xsnazzy h1, .xsnazzy h2, .xsnazzy p {margin:0 10px;}
+         /*
+         .xsnazzy h1 {font-size:2.5em; color:#fc0;}
+         .xsnazzy h2 {font-size:2em; color:#234; border:0;}
+         .xsnazzy h2 {padding-top:0.5em; padding-left:10px;}
+         */
+         .xsnazzy p {padding-bottom:0.5em; /*color:#f9f9f9;*/}
+         .xsnazzy {background: transparent; margin:1em 0;}
+         .xsnazzy ul, .xsnazzy li {padding:0 10px; list-style:disc; list-style-position: inside;}
+ 
+         .xsnazzy em {display:block; width:0; height:0; color:#d8d8ee; overflow:hidden; border-top:12px solid #f9f9f9; border-left:12px dotted transparent; border-right:12px dotted transparent; margin-left:50px;}
+         /* hack for IE5.5 */
+         * html .xsnazzy em {width:24px; height:12px; w\idth:0; hei\ght:0;}
+         .xsnazzy span {display:block; width:0; height:0; color:#f9f9f9; overflow:hidden; border-top:10px solid #7f7f9c; border-left:10px dotted transparent; border-right:10px dotted transparent; margin-left:52px; margin-top:-15px;}
+         * html .xsnazzy span {width:20px; height:10px; w\idth:0; hei\ght:0;}
+ 
+         .xb1, .xb2, .xb3, .xb4, .xb5, .xb6, .xb7 {display:block; overflow:hidden; font-size:0;}
+         .xb1, .xb2, .xb3, .xb4, .xb5, .xb6 {height:1px;}
+         .xb4, .xb5, .xb6, .xb7 {background:#ccc; border-left:1px solid #f9f9f9; border-right:1px solid #f9f9f9;}
+ 
+         .xb1 {margin:0 8px; background:#f9f9f9;}
+         .xb2 {margin:0 6px; background:#f9f9f9;}
+         .xb3 {margin:0 4px; background:#f9f9f9;}
+         .xb4 {margin:0 3px; background:#7f7f9c; border-width:0 5px;}
+
+         .xb5 {margin:0 2px; background:#7f7f9c; border-width:0 4px;}
+         .xb6 {margin:0 2px; background:#7f7f9c; border-width:0 3px;}
+         .xb7 {margin:0 1px; background:#7f7f9c; border-width:0 3px; height:2px;}
+
+         .xboxcontent {display:block; background:#7f7f9c; border:3px solid #f9f9f9; border-width:0 3px;}
+      ]]></style>
+      <script type="text/javascript"><![CDATA[
+            var stack = new Array();
+
+            function jumpToScreen(currentElement, targetScreenId) {
+                // hide current screen
+                var currentScreenId = stack.pop();
+                var currentScreen = returnObjById(currentScreenId); //findParentNodeByClass('screen', currentElement)
+                currentScreen.style.display = 'none';
+                stack.push(currentScreen.getAttribute('id')); // put it back
+
+                // show next screen
+                stack.push(targetScreenId); // put new screen's id on the stack, so that we know where we are
+                returnObjById(targetScreenId).style.display = 'block';
+            }
+
+            function goBack(currentElement) {
+                // hide current screen
+                returnObjById(stack.pop()).style.display = 'none';
+
+                // show previous screen
+                currentScreenId = stack.pop();
+                currentScreen = returnObjById(currentScreenId); //findParentNodeByClass('screen', currentElement)
+                currentScreen.style.display = 'block';
+                stack.push(currentScreen.getAttribute('id')); // put it back
+            }
+
+            // helper functions
+
+            function findParentNodeByClass(parentClass, childObj) {
+                var testObj = childObj.parentNode;
+                var count = 1;
+                while (testObj && testObj.getAttribute('class') != parentClass) {
+                    testObj = testObj.parentNode;
+                    count++;
+                }
+                return testObj;
+            }
+
+            function returnObjById( id )
+            {
+                if (document.getElementById)
+                    var returnVar = document.getElementById(id);
+                else if (document.all)
+                    var returnVar = document.all[id];
+                else if (document.layers)
+                    var returnVar = document.layers[id];
+                return returnVar;
+            }
+        ]]></script>
+   </head>
+   <body onload="onLoad();">
+      <div class="page">
+         <h1>
+            <img src="images/HPDTRP_logo.jpg"
+                 title="HPI - Stanford Design Thinking Research Program"/>
+         </h1>
+         <div id="oryx-canvas123" class="screen" style="display: block;">
+            <script type="text/javascript"><![CDATA[
+                    function onLoad() {
+                        stack.push('oryx-canvas123');
+                        var allDivs = document.getElementsByTagName('div');
+                        for (var i = 0; i < allDivs.length; i++) {
+                            if (allDivs[i].getAttribute('class') == 'screen' && allDivs[i].getAttribute('id') != 'oryx-canvas123') {
+                                allDivs[i].style.display = 'none';
+                            }
+                        }
+                    }
+                ]]></script>
+            <a name="oryx-canvas123">
+               <h1>Writing and Publishing Articles</h1>
+            </a>
+            <p>This process describes the writing, reviewing, and publishing of articles.</p>
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="interaction"/>
+               <b class="xb5" id="interaction"/>
+               <b class="xb6" id="interaction"/>
+               <b class="xb7" id="interaction"/>
+               <div class="xboxcontent" id="interaction">
+                  <h2>Interactions</h2>
+                  <p>
+                     <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                          width="394pt"
+                          height="182pt"
+                          viewBox="0.00 0.00 394.00 182.00">
+                        <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 178)">
+                           <title>Test-Case3 2009-05-05 13-08-02.812</title>
+                           <polygon style="fill:white;stroke:white;" points="-4,4 -4,-178 390,-178 390,4 -4,4"/>
+                           <g id="node1" class="node">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_F15AEAF4-3AB2-4107-91A9-CDB909AE175C</title>
+                              <a xlink:href="javascript:jumpToScreen(this, 'oryx_813ABCFD-06B1-4788-B59D-8894B6BE5193');"
+                                 xlink:title="Author">
+                                 <image xlink:href="images/design-thinking/human-role.png" width="26px" height="54px"
+                                        preserveAspectRatio="xMinYMin meet"
+                                        x="26"
+                                        y="-119"/>
+                                 <polygon style="fill:none;stroke:black;stroke-width:2;"
+                                          points="78,-131 1.93248e-14,-131 5.29438e-15,-53 78,-53 78,-131"/>
+                                 <text text-anchor="middle" x="39" y="-60.9"
+                                       style="font-family:Verdana;font-size:14.00;">Author</text>
+                              </a>
+                           </g>
+                           <g id="node2" class="node">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_C6DF5A68-6719-47E5-BD8D-FA2DBD0C229F</title>
+                              <a xlink:href="javascript:jumpToScreen(this, 'oryx_7100003F-49CF-4FBA-AEB4-459A50A8FF8C');"
+                                 xlink:title="Reviewer">
+                                 <image xlink:href="images/design-thinking/human-role.png" width="26px" height="54px"
+                                        preserveAspectRatio="xMinYMin meet"
+                                        x="180"
+                                        y="-162"/>
+                                 <polygon style="fill:none;stroke:black;stroke-width:2;"
+                                          points="233,-174.5 153,-174.5 153,-95.5 233,-95.5 233,-174.5"/>
+                                 <text text-anchor="middle" x="193" y="-103.9"
+                                       style="font-family:Verdana;font-size:14.00;">Reviewer</text>
+                              </a>
+                           </g>
+                           <g id="edge2" class="edge">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_F15AEAF4-3AB2-4107-91A9-CDB909AE175C-&gt;http://localhost:8180/backend/poem/model/205/self#oryx_C6DF5A68-6719-47E5-BD8D-FA2DBD0C229F</title>
+                              <path style="fill:none;stroke:black;" d="M78,-97C98,-101 122,-108 142,-115"/>
+                              <polygon style="fill:black;stroke:black;"
+                                       points="141.416,-118.479 152,-118 143.427,-111.774 141.416,-118.479"/>
+                           </g>
+                           <g id="node3" class="node">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_3D2DFFCA-C894-4D2D-A092-5FDA22D63049</title>
+                              <a xlink:href="javascript:jumpToScreen(this, 'oryx_AAEA394B-1A7B-4425-A8AF-FA605CACF184');"
+                                 xlink:title="Publisher">
+                                 <image xlink:href="images/design-thinking/human-role.png" width="26px" height="54px"
+                                        preserveAspectRatio="xMinYMin meet"
+                                        x="180"
+                                        y="-66"/>
+                                 <polygon style="fill:none;stroke:black;stroke-width:2;"
+                                          points="234,-78.5 152,-78.5 152,0.5 234,0.5 234,-78.5"/>
+                                 <text text-anchor="middle" x="193" y="-7.9"
+                                       style="font-family:Verdana;font-size:14.00;">Publisher</text>
+                              </a>
+                           </g>
+                           <g id="edge6" class="edge">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_F15AEAF4-3AB2-4107-91A9-CDB909AE175C-&gt;http://localhost:8180/backend/poem/model/205/self#oryx_3D2DFFCA-C894-4D2D-A092-5FDA22D63049</title>
+                              <path style="fill:none;stroke:black;" d="M78,-73C98,-65 121,-57 142,-50"/>
+                              <polygon style="fill:black;stroke:black;"
+                                       points="143.427,-53.2259 152,-47 141.416,-46.5212 143.427,-53.2259"/>
+                           </g>
+                           <g id="edge4" class="edge">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_C6DF5A68-6719-47E5-BD8D-FA2DBD0C229F-&gt;http://localhost:8180/backend/poem/model/205/self#oryx_F15AEAF4-3AB2-4107-91A9-CDB909AE175C</title>
+                              <path style="fill:none;stroke:black;" d="M152,-130C133,-125 109,-118 88,-112"/>
+                              <polygon style="fill:black;stroke:black;"
+                                       points="88.584,-108.521 78,-109 86.5725,-115.226 88.584,-108.521"/>
+                           </g>
+                           <g id="edge10" class="edge">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_3D2DFFCA-C894-4D2D-A092-5FDA22D63049-&gt;http://localhost:8180/backend/poem/model/205/self#oryx_F15AEAF4-3AB2-4107-91A9-CDB909AE175C</title>
+                              <path style="fill:none;stroke:black;" d="M152,-59C132,-67 109,-75 88,-81"/>
+                              <polygon style="fill:black;stroke:black;"
+                                       points="86.5725,-77.7741 78,-84 88.584,-84.4788 86.5725,-77.7741"/>
+                           </g>
+                           <g id="node4" class="node">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_86583DCA-1B77-48CB-85BA-2FF5030F5E07</title>
+                              <a xlink:href="javascript:jumpToScreen(this, 'oryx_42CB4F36-85CB-4499-A3E4-6DA1626391C1');"
+                                 xlink:title="Admin">
+                                 <image xlink:href="images/design-thinking/human-role.png" width="26px" height="54px"
+                                        preserveAspectRatio="xMinYMin meet"
+                                        x="334"
+                                        y="-66"/>
+                                 <polygon style="fill:none;stroke:black;stroke-width:2;"
+                                          points="386,-78 308,-78 308,-1.93248e-14 386,1.72085e-15 386,-78"/>
+                                 <text text-anchor="middle" x="347" y="-7.9"
+                                       style="font-family:Verdana;font-size:14.00;">Admin</text>
+                              </a>
+                           </g>
+                           <g id="edge8" class="edge">
+                              <title>http://localhost:8180/backend/poem/model/205/self#oryx_3D2DFFCA-C894-4D2D-A092-5FDA22D63049-&gt;http://localhost:8180/backend/poem/model/205/self#oryx_86583DCA-1B77-48CB-85BA-2FF5030F5E07</title>
+                              <path style="fill:none;stroke:black;" d="M234,-39C254,-39 277,-39 298,-39"/>
+                              <polygon style="fill:black;stroke:black;"
+                                       points="298,-42.5001 308,-39 298,-35.5001 298,-42.5001"/>
+                           </g>
+                        </g>
+                     </svg>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="interaction"/>
+               <b class="xb6" id="interaction"/>
+               <b class="xb5" id="interaction"/>
+               <b class="xb4" id="interaction"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb7" id="role"/>
+               <div class="xboxcontent" id="role">
+                  <h2>Roles</h2>
+                  <p>
+                     <a href="#oryx_42CB4F36-85CB-4499-A3E4-6DA1626391C1"
+                        onclick="jumpToScreen(this, 'oryx_42CB4F36-85CB-4499-A3E4-6DA1626391C1'); return false;">Admin</a>
+                     <br/>
+                     <a href="#oryx_813ABCFD-06B1-4788-B59D-8894B6BE5193"
+                        onclick="jumpToScreen(this, 'oryx_813ABCFD-06B1-4788-B59D-8894B6BE5193'); return false;">Author</a>
+                     <br/>
+                     <a href="#oryx_AAEA394B-1A7B-4425-A8AF-FA605CACF184"
+                        onclick="jumpToScreen(this, 'oryx_AAEA394B-1A7B-4425-A8AF-FA605CACF184'); return false;">Publisher</a>
+                     <br/>
+                     <a href="#oryx_7100003F-49CF-4FBA-AEB4-459A50A8FF8C"
+                        onclick="jumpToScreen(this, 'oryx_7100003F-49CF-4FBA-AEB4-459A50A8FF8C'); return false;">Reviewer</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb4" id="role"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <h2>Activities</h2>
+                  <p>
+                     <a href="#oryx_2035FB2B-CF4F-4BF9-BCDD-E0B74E70CF45"
+                        onclick="jumpToScreen(this, 'oryx_2035FB2B-CF4F-4BF9-BCDD-E0B74E70CF45'); return false;">Approve for publication</a>
+                     <br/>
+                     <a href="#oryx_6FB4D5A9-56A0-4A70-8367-14032B207C44"
+                        onclick="jumpToScreen(this, 'oryx_6FB4D5A9-56A0-4A70-8367-14032B207C44'); return false;">Incorporate corrections</a>
+                     <br/>
+                     <a href="#oryx_E1167235-3E98-49C8-8D76-8927816D126D"
+                        onclick="jumpToScreen(this, 'oryx_E1167235-3E98-49C8-8D76-8927816D126D'); return false;">Initial
+research</a>
+                     <br/>
+                     <a href="#oryx_13C518F4-8B91-4353-A6F0-52091EF7EE03"
+                        onclick="jumpToScreen(this, 'oryx_13C518F4-8B91-4353-A6F0-52091EF7EE03'); return false;">Insert article into CMS</a>
+                     <br/>
+                     <a href="#oryx_591F1BB1-776C-48C9-BEF1-D7CB5658BEFD"
+                        onclick="jumpToScreen(this, 'oryx_591F1BB1-776C-48C9-BEF1-D7CB5658BEFD'); return false;">Order
+article</a>
+                     <br/>
+                     <a href="#oryx_36957D18-43BF-4A4A-99F8-4C61DEDA53F8"
+                        onclick="jumpToScreen(this, 'oryx_36957D18-43BF-4A4A-99F8-4C61DEDA53F8'); return false;">Review
+article</a>
+                     <br/>
+                     <a href="#oryx_BE8DA25C-D339-4888-B233-C079617263CB"
+                        onclick="jumpToScreen(this, 'oryx_BE8DA25C-D339-4888-B233-C079617263CB'); return false;">Write
+article</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb7" id="artefact"/>
+               <div class="xboxcontent" id="artefact">
+                  <h2>Artefacts</h2>
+                  <p>
+                     <a href="#oryx_67F29F61-1F72-45B7-AC5A-199234419D80"
+                        onclick="jumpToScreen(this, 'oryx_67F29F61-1F72-45B7-AC5A-199234419D80'); return false;">.doc
+file</a>
+                     <br/>
+                     <a href="#oryx_4D035794-3D57-4D28-8304-8BB880F5C61B"
+                        onclick="jumpToScreen(this, 'oryx_4D035794-3D57-4D28-8304-8BB880F5C61B'); return false;">.doc
+file</a>
+                     <br/>
+                     <a href="#oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49"
+                        onclick="jumpToScreen(this, 'oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49'); return false;">corrections</a>
+                     <br/>
+                     <a href="#oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4"
+                        onclick="jumpToScreen(this, 'oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4'); return false;">printed 
+article</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+         </div>
+         <div id="oryx_67F29F61-1F72-45B7-AC5A-199234419D80" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb7" id="artefact"/>
+               <div class="xboxcontent" id="artefact">
+                  <a name="oryx_67F29F61-1F72-45B7-AC5A-199234419D80">
+                     <h1>Artefact: .doc
+file</h1>
+                  </a>
+                  <p>Binary DOC files often contain more text formatting information (as well as scripts and undo information) than files using other document file formats like Rich Text Format and HyperText Markup Language, but are usually less widely compatible.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/DOC_(computing)" target="_blank">Detailed Description of the Artefact '.doc file'</a>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_4D035794-3D57-4D28-8304-8BB880F5C61B" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb7" id="artefact"/>
+               <div class="xboxcontent" id="artefact">
+                  <a name="oryx_4D035794-3D57-4D28-8304-8BB880F5C61B">
+                     <h1>Artefact: .doc
+file</h1>
+                  </a>
+                  <p>Binary DOC files often contain more text formatting information (as well as scripts and undo information) than files using other document file formats like Rich Text Format and HyperText Markup Language, but are usually less widely compatible.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/DOC_(computing)" target="_blank">Detailed Description of the Artefact '.doc file'</a>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb7" id="artefact"/>
+               <div class="xboxcontent" id="artefact">
+                  <a name="oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49">
+                     <h1>Artefact: corrections</h1>
+                  </a>
+                  <p>Correction, via the identical French from the Latin corrigĕre 'to make straight (again)', is an action to rectify, to make right a wrong.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Correction" target="_blank">Detailed Description of the Artefact 'corrections'</a>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb7" id="artefact"/>
+               <div class="xboxcontent" id="artefact">
+                  <a name="oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4">
+                     <h1>Artefact: printed 
+article</h1>
+                  </a>
+                  <p>An article is a stand-alone section of a larger written work. These nonfictional prose compositions appear in magazines, newspapers, academic journals, the Internet or any other type of publication.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Article_(publishing)" target="_blank">Detailed Description of the Artefact 'printed
+article'</a>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="artefact"/>
+               <b class="xb6" id="artefact"/>
+               <b class="xb5" id="artefact"/>
+               <b class="xb4" id="artefact"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_42CB4F36-85CB-4499-A3E4-6DA1626391C1" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb7" id="role"/>
+               <div class="xboxcontent" id="role">
+                  <a name="oryx_42CB4F36-85CB-4499-A3E4-6DA1626391C1">
+                     <h1>Role: Admin</h1>
+                  </a>
+                  <p>A system administrator, systems administrator, or sysadmin, is a person employed to maintain and operate a computer system and/or network. System administrators may be members of an information technology department.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/System_administrator" target="_blank">Detailed Description of the Role 'Admin'</a>
+                  </p>
+                  <p>
+                     <strong>Conducted Activities:</strong>
+                     <br/>
+                     <a href="#oryx_13C518F4-8B91-4353-A6F0-52091EF7EE03"
+                        onclick="jumpToScreen(this, 'oryx_13C518F4-8B91-4353-A6F0-52091EF7EE03'); return false;">Insert article into CMS</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb4" id="role"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_813ABCFD-06B1-4788-B59D-8894B6BE5193" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb7" id="role"/>
+               <div class="xboxcontent" id="role">
+                  <a name="oryx_813ABCFD-06B1-4788-B59D-8894B6BE5193">
+                     <h1>Role: Author</h1>
+                  </a>
+                  <p>An author is defined both as "the person who originates or gives existence to anything" and that authorship determines responsibility for what is created. The second entry goes on to clarify that, when using the term author, the "anything" which is created is most usually associated with written work.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Author" target="_blank">Detailed Description of the Role 'Author'</a>
+                  </p>
+                  <p>
+                     <strong>Conducted Activities:</strong>
+                     <br/>
+                     <a href="#oryx_E1167235-3E98-49C8-8D76-8927816D126D"
+                        onclick="jumpToScreen(this, 'oryx_E1167235-3E98-49C8-8D76-8927816D126D'); return false;">Initial
+research</a>
+                     <br/>
+                     <a href="#oryx_BE8DA25C-D339-4888-B233-C079617263CB"
+                        onclick="jumpToScreen(this, 'oryx_BE8DA25C-D339-4888-B233-C079617263CB'); return false;">Write
+article</a>
+                     <br/>
+                     <a href="#oryx_6FB4D5A9-56A0-4A70-8367-14032B207C44"
+                        onclick="jumpToScreen(this, 'oryx_6FB4D5A9-56A0-4A70-8367-14032B207C44'); return false;">Incorporate corrections</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb4" id="role"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_AAEA394B-1A7B-4425-A8AF-FA605CACF184" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb7" id="role"/>
+               <div class="xboxcontent" id="role">
+                  <a name="oryx_AAEA394B-1A7B-4425-A8AF-FA605CACF184">
+                     <h1>Role: Publisher</h1>
+                  </a>
+                  <p>The publisher usually controls the advertising and other marketing tasks, but may subcontract various aspects of the process to specialist publisher marketing agencies. In many companies, editing, proofreading, layout, design and other aspects of the production process are done by freelancers.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Publisher" target="_blank">Detailed Description of the Role 'Publisher'</a>
+                  </p>
+                  <p>
+                     <strong>Conducted Activities:</strong>
+                     <br/>
+                     <a href="#oryx_591F1BB1-776C-48C9-BEF1-D7CB5658BEFD"
+                        onclick="jumpToScreen(this, 'oryx_591F1BB1-776C-48C9-BEF1-D7CB5658BEFD'); return false;">Order
+article</a>
+                     <br/>
+                     <a href="#oryx_2035FB2B-CF4F-4BF9-BCDD-E0B74E70CF45"
+                        onclick="jumpToScreen(this, 'oryx_2035FB2B-CF4F-4BF9-BCDD-E0B74E70CF45'); return false;">Approve for publication</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb4" id="role"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_7100003F-49CF-4FBA-AEB4-459A50A8FF8C" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb7" id="role"/>
+               <div class="xboxcontent" id="role">
+                  <a name="oryx_7100003F-49CF-4FBA-AEB4-459A50A8FF8C">
+                     <h1>Role: Reviewer</h1>
+                  </a>
+                  <p>A reviewer is a person who writes critical reviews for a newspaper or other publication.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Reviewer" target="_blank">Detailed Description of the Role 'Reviewer'</a>
+                  </p>
+                  <p>
+                     <strong>Conducted Activities:</strong>
+                     <br/>
+                     <a href="#oryx_36957D18-43BF-4A4A-99F8-4C61DEDA53F8"
+                        onclick="jumpToScreen(this, 'oryx_36957D18-43BF-4A4A-99F8-4C61DEDA53F8'); return false;">Review
+article</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="role"/>
+               <b class="xb6" id="role"/>
+               <b class="xb5" id="role"/>
+               <b class="xb4" id="role"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_2035FB2B-CF4F-4BF9-BCDD-E0B74E70CF45" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <a name="oryx_2035FB2B-CF4F-4BF9-BCDD-E0B74E70CF45">
+                     <h1>Activity: Approve for publication</h1>
+                  </a>
+                  <p>Publishing is the process of production and dissemination of literature or information – the activity of making information available for public view.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Publishing" target="_blank">Detailed Description of the Activity 'Approve for publication'</a>
+                  </p>
+                  <p>
+                     <strong>Required Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_67F29F61-1F72-45B7-AC5A-199234419D80"
+                        onclick="jumpToScreen(this, 'oryx_67F29F61-1F72-45B7-AC5A-199234419D80'); return false;">.doc
+file</a>
+                     <br/>
+                  </p>
+                  <p>
+                     <strong>Produced Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_4D035794-3D57-4D28-8304-8BB880F5C61B"
+                        onclick="jumpToScreen(this, 'oryx_4D035794-3D57-4D28-8304-8BB880F5C61B'); return false;">.doc
+file</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_6FB4D5A9-56A0-4A70-8367-14032B207C44" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <a name="oryx_6FB4D5A9-56A0-4A70-8367-14032B207C44">
+                     <h1>Activity: Incorporate corrections</h1>
+                  </a>
+                  <p>Improve means to make something better.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Improve" target="_blank">Detailed Description of the Activity 'Incorporate corrections'</a>
+                  </p>
+                  <p>
+                     <strong>Required Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49"
+                        onclick="jumpToScreen(this, 'oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49'); return false;">corrections</a>
+                     <br/>
+                  </p>
+                  <p>
+                     <strong>Produced Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_67F29F61-1F72-45B7-AC5A-199234419D80"
+                        onclick="jumpToScreen(this, 'oryx_67F29F61-1F72-45B7-AC5A-199234419D80'); return false;">.doc
+file</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_E1167235-3E98-49C8-8D76-8927816D126D" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <a name="oryx_E1167235-3E98-49C8-8D76-8927816D126D">
+                     <h1>Activity: Initial
+research</h1>
+                  </a>
+                  <p>Research is defined as human activity based on intellectual application in the investigation of matter.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Research" target="_blank">Detailed Description of the Activity 'Initial
+research'</a>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_13C518F4-8B91-4353-A6F0-52091EF7EE03" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <a name="oryx_13C518F4-8B91-4353-A6F0-52091EF7EE03">
+                     <h1>Activity: Insert article into CMS</h1>
+                  </a>
+                  <p>A content management system (CMS) is a computer application used to create, edit, manage, search and publish various kinds of digital media and electronic text.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Content_management_system" target="_blank">Detailed Description of the Activity 'Insert article into CMS'</a>
+                  </p>
+                  <p>
+                     <strong>Required Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_4D035794-3D57-4D28-8304-8BB880F5C61B"
+                        onclick="jumpToScreen(this, 'oryx_4D035794-3D57-4D28-8304-8BB880F5C61B'); return false;">.doc
+file</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_591F1BB1-776C-48C9-BEF1-D7CB5658BEFD" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <a name="oryx_591F1BB1-776C-48C9-BEF1-D7CB5658BEFD">
+                     <h1>Activity: Order
+article</h1>
+                  </a>
+                  <p>The publisher may decide that he wants to have an article and orders one from an author.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Order_(business)" target="_blank">Detailed Description of the Activity 'Order
+article'</a>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_36957D18-43BF-4A4A-99F8-4C61DEDA53F8" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <a name="oryx_36957D18-43BF-4A4A-99F8-4C61DEDA53F8">
+                     <h1>Activity: Review
+article</h1>
+                  </a>
+                  <p>A review is an evaluation of a publication</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Review" target="_blank">Detailed Description of the Activity 'Review
+article'</a>
+                  </p>
+                  <p>
+                     <strong>Required Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4"
+                        onclick="jumpToScreen(this, 'oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4'); return false;">printed 
+article</a>
+                     <br/>
+                  </p>
+                  <p>
+                     <strong>Produced Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49"
+                        onclick="jumpToScreen(this, 'oryx_E794E43A-A2E5-4064-BCBF-554CAD451C49'); return false;">corrections</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+         <div id="oryx_BE8DA25C-D339-4888-B233-C079617263CB" class="screen">
+            <div class="xsnazzy">
+               <b class="xb1"/>
+               <b class="xb2"/>
+               <b class="xb3"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb7" id="activity"/>
+               <div class="xboxcontent" id="activity">
+                  <a name="oryx_BE8DA25C-D339-4888-B233-C079617263CB">
+                     <h1>Activity: Write
+article</h1>
+                  </a>
+                  <p>An article is a stand-alone section of a larger written work. These nonfictional prose compositions appear in magazines, newspapers, academic journals, the Internet or any other type of publication.</p>
+                  <p>
+                     <a href="http://en.wikipedia.org/wiki/Article_(publishing)" target="_blank">Detailed Description of the Activity 'Write
+article'</a>
+                  </p>
+                  <p>
+                     <strong>Produced Artefacts:</strong>
+                     <br/>
+                     <a href="#oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4"
+                        onclick="jumpToScreen(this, 'oryx_D00CF1BA-33EE-4753-B1E2-D0CD6BBE6BB4'); return false;">printed 
+article</a>
+                     <br/>
+                  </p>
+                  <div style="clear:left;"/>
+               </div>
+               <b class="xb7" id="activity"/>
+               <b class="xb6" id="activity"/>
+               <b class="xb5" id="activity"/>
+               <b class="xb4" id="activity"/>
+               <b class="xb3"/>
+               <b class="xb2"/>
+               <b class="xb1"/>
+            </div>
+            <p>
+               <a href="" onclick="goBack(this); return false;">back</a>
+            </p>
+         </div>
+      </div>
+   </body>
+</html>
