@@ -35,7 +35,7 @@ THE SOFTWARE.
     />
 
     <!-- Suppress text output by default for all modes. -->
-    <xsl:template match="text()|@*" mode="#all"/>
+    <xsl:template match="text()|@*"/><!-- mode="#all" cause an NS_ERROR_FAILURE in FF3 => probably XSLT 2.0 -->
 
     <!-- Root Node -->
     <xsl:template match="/">
