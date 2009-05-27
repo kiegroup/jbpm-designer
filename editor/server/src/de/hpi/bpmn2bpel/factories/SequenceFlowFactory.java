@@ -111,6 +111,54 @@ public class SequenceFlowFactory {
 		// }
 		// }
 	}
+	
+	/**
+	 * Constructor. Initializes the sequence flow factory with the diagram and
+	 * the container that contains the sequence flow to be transformed. Also 
+	 * passes BPEL process element because of namespace prefix issues.
+	 * 
+	 * @param diagram
+	 *            The diagram the container belongs to.
+	 * @param document
+	 *            The document to create the BPEL elements for.
+	 * @param container
+	 *            The container that contains the sequence flow that will be
+	 *            transformed.
+	 * @param output
+	 *            The {@link Output} to print errors to.
+	 */
+	public SequenceFlowFactory(BPMNDiagram diagram, Document document,
+			Container4BPEL container, Output output, Element processElement) {
+		this.diagram = diagram;
+		this.container = container;
+		this.document = document;
+		this.output = output;
+		this.basicFactory = new BasicActivityFactory(diagram, document,
+				this.output, processElement);
+		this.supportingFactory = new SupportingFactory(diagram, document,
+				this.output);
+		this.structuredFactory = new StructuredElementsFactory(diagram,
+				document, this.output);
+		this.componentizer = new Componentizer(diagram, container, this.output);
+
+		// // determine if container is error or message handler
+		// if (container instanceof SubProcess) {
+		// SubProcess sub = (SubProcess)container;
+		// if (sub.getBlockActivity() instanceof Handler) {
+		// Handler handler = (Handler)sub.getBlockActivity();
+		// if (handler.getHandlerType().equals(Handler.TYPE_FAULT)) {
+		// this.errorHandler = true;
+		// this.messageHandler = false;
+		// } else if (handler.getHandlerType().equals(Handler.TYPE_MESSAGE)){
+		// this.messageHandler = true;
+		// this.errorHandler = false;
+		// } else {
+		// this.messageHandler = false;
+		// this.errorHandler = false;
+		// }
+		// }
+		// }
+	}
 
 	/**
 	 * <p>
@@ -963,15 +1011,20 @@ public class SequenceFlowFactory {
 						this.container instanceof Process);
 			}
 		} else if (start.getSuccessor().equals(end.getPredecessor())) {
-			Activity successor = (Activity) start.getSuccessor();
+			Node successor = start.getSuccessor();
 			Element result = null;
-			if (successor instanceof Task) {
+			List<Element> resultElements = null;
+			if (successor instanceof FoldedTask) {
 				result = mapTask((Task) successor);
 				// } else if (successor instanceof BlockActivity) {
 				// return mapBlockActivity((BlockActivity)successor);
 				// } else if (successor instanceof IntermediateEvent) {
 				// return mapIntermediateEvent((IntermediateEvent)successor);
-			} else {
+			} else if (successor instanceof Task) {
+				/* Handles the trivial case Start, one task, end */
+				resultElements = mapActivity(successor, null);
+			}
+			else {
 				this.output.addError(
 						"A trivial component was not generated correctly",
 						successor.getId());
@@ -985,14 +1038,18 @@ public class SequenceFlowFactory {
 				Element receive = this.basicFactory.createReceiveElement(start,
 						this.container instanceof Process);
 
-				if (result.getNodeName().equals("sequence")) {
+				if (result != null && result.getNodeName().equals("sequence")) {
 					result.insertBefore(receive, result.getFirstChild());
 					return result;
 				}
+				
+				
 				Element resultSequence = this.document
 						.createElement("sequence");
 				resultSequence.appendChild(receive);
-				resultSequence.appendChild(result);
+				for (Element e : resultElements) {
+					resultSequence.appendChild(e);
+				}
 				return resultSequence;
 			}
 
@@ -2107,6 +2164,38 @@ public class SequenceFlowFactory {
 			}
 		}
 
-		return mapTrivial(start, end);
+		Element sequence = mapTrivial(start, end);
+		
+		
+		/* Assign response message content */
+		
+		Element responseAssign = this.document.createElement("assign");
+		Element copy = this.document.createElement("copy");
+		
+		/* Create from part */
+		Element from = this.document.createElement("from");
+		Element literal = this.document.createElement("literal");
+		literal.setTextContent("Process finished");
+		from.appendChild(literal);
+		copy.appendChild(from);
+		
+		/* Create to part */
+		Element to = this.document.createElement("to");
+		to.setAttribute("part", "payload");
+		to.setAttribute("variable", "output");
+		copy.appendChild(to);
+		
+		responseAssign.appendChild(copy);
+		sequence.appendChild(responseAssign);
+		
+		/* Append reply for process response */
+		Element reply = this.document.createElement("reply");
+		reply.setAttribute("partnerLink", "InvokeProcessPartnerLink");
+		reply.setAttribute("portType", "tns:InvokeProcess");
+		reply.setAttribute("operation", "process");
+		reply.setAttribute("variable", "output");
+		sequence.appendChild(reply);
+		
+		return sequence;
 	}
 }

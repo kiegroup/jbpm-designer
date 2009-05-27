@@ -1,8 +1,11 @@
 package de.hpi.bpmn2bpel.factories;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,7 +30,9 @@ import de.hpi.bpel4chor.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DataObject;
+import de.hpi.bpmn.Task;
 import de.hpi.bpmn2bpel.model.BPELDataObject;
+import de.hpi.bpmn2bpel.model.Container4BPEL;
 
 /**
  * This factory is used for generating certain child elements of BPEL4Chor 
@@ -40,9 +45,27 @@ public class SupportingFactory {
 	private BPMNDiagram diagram = null;
 	private Document document = null;
 	private Output output = null;
+	private Element processElement = null;
 	
 	private static final String FROM = "from";
 	private static final String TO = "to";
+	
+	/**
+	 * Constructor. Initializes the supporting factory with the
+	 * diagram that contains the elements to be transformed.
+	 *  
+	 * @param diagram   The diagram to be transformed.
+	 * @param document  The document to create the BPEL4Chor elements for.
+	 * @param output    The {@link Output} to print errors to. 
+	 * @param process
+	 * 			The process XML element to lookup and set namespace prefixes
+	 */
+	public SupportingFactory(BPMNDiagram diagram, Document document, Output output, Element process) {
+		this.diagram = diagram;
+		this.document = document;
+		this.output = output;
+		this.processElement = process; 
+	}
 	
 	/**
 	 * Constructor. Initializes the supporting factory with the
@@ -306,7 +329,7 @@ public class SupportingFactory {
 			Element literal = this.document.createElement("literal");
 			
 			if (fromSpec.getLiteral() instanceof Element) {
-				literal.appendChild((Element) fromSpec.getLiteral());
+				literal = (Element) fromSpec.getLiteral();
 			} else if (fromSpec.getLiteral() instanceof String) {
 				literal.appendChild(
 						this.document.createTextNode((String) fromSpec.getLiteral()));			
@@ -454,16 +477,90 @@ public class SupportingFactory {
 			
 			BPELDataObject bpelDataObject = (BPELDataObject) dataObject;
 			
+			/* Request variable */
 			Element variable = this.document.createElement("variable");
 			variable.setAttribute("name", bpelDataObject.getId());
 			variable.setAttribute("messageType", 
-					bpelDataObject.getNamespace() + ":" + bpelDataObject.getMessageType());
+					getAndSetPrefixForNamespaceURI(bpelDataObject.getNamespace()) 
+					+ ":" 
+					+ bpelDataObject.getMessageType());
+			
+			/* Append variable */
+			result.appendChild(variable);
+			
+			/* Response variable */
+			variable = this.document.createElement("variable");
+			variable.setAttribute("name", bpelDataObject.getId() + "Response");
+			variable.setAttribute("messageType", 
+					getAndSetPrefixForNamespaceURI(bpelDataObject.getNamespace()) 
+					+ ":" 
+					+ bpelDataObject.getMessageType() + "Response");
 			
 			/* Append variable */
 			result.appendChild(variable);
 		}
+		
+		/* Append default variables */
+		for (Element e : createDefaultRequestAndResponseVariables()) {
+			result.appendChild(e);
+		}
 
 		return result;
+	}
+	
+	/**
+	 * Creates an input and an output variable used by the receive and reply 
+	 * activities.
+	 * 
+	 * @return
+	 * 		Both variables contained in a list
+	 */
+	private List<Element> createDefaultRequestAndResponseVariables() {
+		ArrayList<Element> variables = new ArrayList<Element>();
+		
+		/* Create input variable */
+		Element variable = this.document.createElement("variable");
+		variable.setAttribute("name", "input");
+		variable.setAttribute("messageType", "tns:InvokeProcessRequestMessage");
+		variables.add(variable);
+		
+		/* Create output variable */
+		variable = this.document.createElement("variable");
+		variable.setAttribute("name", "output");
+		variable.setAttribute("messageType", "tns:InvokeProcessResponseMessage");
+		variables.add(variable);
+		
+		return variables;
+	}
+	
+	/**
+	 * Returns the prefix to a given namespaceURI. 
+	 * The basic steps are: 
+	 * <ul>
+	 * 	<li>Lookup the namespaceURI on the document</li>
+	 *  <li>If no proper prefix is found, the prefix is created</li>
+	 * </ul>
+	 * 
+	 * @param namespaceURI
+	 * 		The namespace URI of the requested prefix
+	 * @return
+	 * 		The prefix as String
+	 */
+	protected String getAndSetPrefixForNamespaceURI(String namespaceURI) {
+		/* Process element is not known */
+		if (this.processElement == null) {
+			return null;
+		}
+		String prefix = this.processElement.lookupPrefix(namespaceURI);
+		
+		/* Create the prefix if none existing */
+		if (prefix == null) {
+			prefix = "ns_" + UUID.randomUUID().toString();
+			this.processElement.setAttribute("xmlns:" 
+					+ prefix, namespaceURI);
+		}
+		
+		return prefix;
 	}
 	
 	/**
@@ -612,6 +709,35 @@ public class SupportingFactory {
 		return result;
 	}
 	
+	public List<Element> createImportElements(Container4BPEL process) {
+		List<Element> imports = new ArrayList<Element>();
+		
+		/* The import of the process's service description */
+		Element processWSDLimport = this.document.createElement("import");
+		processWSDLimport.setAttribute("location", "InvokeProcess.wsdl");
+		processWSDLimport.setAttribute("namespace", ProcessFactory.targetNamespace);
+		processWSDLimport.setAttribute("importType", "http://schemas.xmlsoap.org/wsdl/");
+		imports.add(processWSDLimport);
+		
+		/* Create an import for each used web service */
+		for (Task task : process.getTasks()) {
+			if (!(task.getFirstInputDataObject() instanceof BPELDataObject)) {
+				continue;
+			}
+			BPELDataObject dataObject = (BPELDataObject) task.getFirstInputDataObject();
+			
+			/* Create import */
+			Element importElement = this.document.createElement("import");
+			importElement.setAttribute("location", dataObject.getServiceName() + ".wsdl");
+			importElement.setAttribute("namespace", dataObject.getNamespace());
+			importElement.setAttribute("importType", "http://schemas.xmlsoap.org/wsdl/");
+			imports.add(importElement);
+		}
+		
+		return imports;
+		
+	}
+	
 	/**
 	 * Creates a "messageExchanges" element containing a "messageExchange"
 	 * element for each message exchange defined in the given list.
@@ -705,5 +831,75 @@ public class SupportingFactory {
 			return result;
 		}
 		return null;
+	}
+	
+	/**
+	 * Creates the partnerLinks of a process. One for each task it not existing.
+	 * @param process 
+	 * 
+	 * @return
+	 * 		The partner links element
+	 */
+	public Element createPartnerLinksElement(Container4BPEL process) {
+		/* All partner links */
+		Map<String, Map<String, String>> allPartnerLinks = new HashMap<String, Map<String, String>>();
+		
+		/* Add a new part link for each task with the name 'serviceName'PartnerLink 
+		 * if this one does not exist */
+		for (Task task : process.getTasks()) {
+			if (!(task.getFirstInputDataObject() instanceof BPELDataObject)) {
+				continue;
+			}
+			BPELDataObject dataObject = (BPELDataObject) task.getFirstInputDataObject();
+			
+			/* Check if this partner link already exists */
+			if(allPartnerLinks.get(dataObject.getServiceName() + "PartnerLink") != null) {
+				continue;
+			}
+			
+			/* Create a new partner link */
+			Map<String, String> partnerLink = new HashMap<String, String>();
+			partnerLink.put("name", dataObject.getServiceName() + "PartnerLink");
+			partnerLink.put("partnerLinkType", "tns:" 
+					+	dataObject.getServiceName() + "PartnerLinkType");
+			partnerLink.put("partnerRole", dataObject.getServiceName() + "Provider");
+			
+			allPartnerLinks.put(partnerLink.get("name"), partnerLink);
+		}
+		
+		Element partnerLinks = this.document.createElement("partnerLinks");
+		
+		/* Append XML element for each partner link */
+		for (Map<String, String> pl : allPartnerLinks.values()) {
+			Element xmlPl = this.document.createElement("partnerLink");
+			xmlPl.setAttribute("name", pl.get("name"));
+			xmlPl.setAttribute("partnerLinkType", pl.get("partnerLinkType"));
+			xmlPl.setAttribute("partnerRole", pl.get("partnerRole"));
+			
+			partnerLinks.appendChild(xmlPl);
+		}
+		
+		/* Append partner link to provide the process */
+		partnerLinks.appendChild(createInvokeProcessPartnerLink());
+		
+		return partnerLinks;
+	}
+	
+	/**
+	 * Creates the partner link for the initial receive element to start the 
+	 * process.
+	 * 
+	 * @return
+	 * 		The partner link element.
+	 */
+	private Element createInvokeProcessPartnerLink() {
+		Element partnerLink = this.document.createElement("partnerLink");
+		
+		/* Set partner link attributes */
+		partnerLink.setAttribute("name", "InvokeProcessPartnerLink");
+		partnerLink.setAttribute("partnerLinkType", "tns:" + "InvokeProcess");
+		partnerLink.setAttribute("myRole", "InvokeProcessProvider");
+		
+		return partnerLink;
 	}
 }

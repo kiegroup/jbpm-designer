@@ -49,7 +49,7 @@ public class BasicActivityFactory {
 	
 	/**
 	 * Constructor. Initializes the factory with the diagram and the 
-	 * target document, the generated BPEL4Chor elements will be contained in. 
+	 * target document, the generated BPEL elements will be contained in. 
 	 * 
 	 * @param diagram  The diagram the activities are modeled in
 	 * @param document The target document for the generated BPEL4Chor elements
@@ -60,6 +60,26 @@ public class BasicActivityFactory {
 		this.document = document;
 		this.output = output;
 		this.supportingFactory = new SupportingFactory(diagram, document, this.output);
+		this.structuredElementsFactory = 
+			new StructuredElementsFactory(diagram, document, this.output);
+	}
+	
+	/**
+	 * Constructor. Initializes the factory with the diagram and the 
+	 * target document, the generated BPEL elements will be contained in. Also 
+	 * passes the BPEL process element because of namespace issues.
+	 * 
+	 * @param diagram  The diagram the activities are modeled in
+	 * @param document The target document for the generated BPEL4Chor elements
+	 * @param output   The Output to print errors to.
+	 * @param processElement
+	 * 		The BPEL process XML element
+	 */
+	public BasicActivityFactory(BPMNDiagram diagram, Document document, Output output, Element processElement) {
+		this.diagram = diagram;
+		this.document = document;
+		this.output = output;
+		this.supportingFactory = new SupportingFactory(diagram, document, this.output, processElement);
 		this.structuredElementsFactory = 
 			new StructuredElementsFactory(diagram, document, this.output);
 	}
@@ -212,6 +232,13 @@ public class BasicActivityFactory {
 		}
 		
 		Element result = this.document.createElement("receive");
+		
+		/* Set necessary attributes to provide and start the process */
+		result.setAttribute("partnerLink", "InvokeProcessPartnerLink");
+		result.setAttribute("serviceName", "InvokeProcess");
+		result.setAttribute("operation", "process");
+		result.setAttribute("portType", "tns:" + "InvokeProcess");
+		result.setAttribute("variable", "input");
 		
 		BPELUtil.setStandardAttributes(result, event);
 		
@@ -366,12 +393,17 @@ public class BasicActivityFactory {
 			BPELDataObject bpelInputData  = (BPELDataObject) inputData;
 			
 			/* Set invoke element's attributes */
-			invoke.setAttribute("group", "#" + task.getColor() + "_" + bpelInputData.getServiceName() + "#" );
+			invoke.setAttribute("group", task.getColor());
 			invoke.setAttribute("serviceName", bpelInputData.getServiceName());
 			invoke.setAttribute("partnerLink", bpelInputData.getServiceName() + "PartnerLink");
 			invoke.setAttribute("operation", bpelInputData.getOperation());
 			invoke.setAttribute("inputVariable", bpelInputData.getId());
-			invoke.setAttribute("portType", bpelInputData.getPortType());
+			invoke.setAttribute("outputVariable", bpelInputData.getId() + "Response");
+			invoke.setAttribute("portType", 
+					this.supportingFactory.getAndSetPrefixForNamespaceURI(
+							bpelInputData.getNamespace()) 
+					+ ":" 
+					+ bpelInputData.getPortType());
 			
 		}
 		
@@ -800,6 +832,8 @@ public class BasicActivityFactory {
 	 */
 	public Element createAssignElement(BPELDataObject dataObject, Task task) {
 		Element assign = this.document.createElement("assign");
+		assign.setAttribute("validate", "no");
+		
 		/* Get all input data objects of the BPELDataObject */
 		List<BPELDataObject> bpelDataObjects = dataObject.getSourceBPELDataObjects();
 		
@@ -852,7 +886,7 @@ public class BasicActivityFactory {
 		Element targetServiceURL = this.document.createElementNS(
 				"http://goldeneye.org/header/", 
 				"targetServiceURL");
-		targetServiceURL.setTextContent("#" + group + "_" + serviceName);
+		targetServiceURL.setTextContent("#" + group + "_" + serviceName + "#");
 		literal.appendChild(targetServiceURL);
 		
 		fromSpec.setLiteral(literal);

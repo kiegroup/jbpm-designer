@@ -1,5 +1,8 @@
 package de.hpi.bpmn2bpel.factories;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,6 +27,9 @@ import de.hpi.bpmn2bpel.model.Container4BPEL;
  */
 public class ProcessFactory {
 	
+	/* The default target namespace of the BPEL process */
+	static final String targetNamespace = "http://sesastra.com/goldeneye/";
+	
 	BPMNDiagram diagram = null;
 	
 	/**
@@ -46,7 +52,8 @@ public class ProcessFactory {
 		String name = pool.getLabel().trim();
 		
 		processElement.setAttribute("name", name);
-		processElement.setAttribute("targetNamespace", "http://sesastra.com/goldeneye/");
+		processElement.setAttribute("targetNamespace", targetNamespace);
+		processElement.setAttribute("id", "process");
 		
 //		if (pool.getProcess().getQueryLanguage() != null) {
 //			processElement.setAttribute("queryLanguage", 
@@ -71,10 +78,11 @@ public class ProcessFactory {
 		
 		processElement.setAttribute("suppressJoinFailure", "yes");
 		
-		processElement.setAttribute("xmlns", "http://docs.oasis-open.org/wsbpel/2.0/process/abstract");
+		processElement.setAttribute("xmlns", "http://docs.oasis-open.org/wsbpel/2.0/process/executable");
 //		processElement.setAttribute("abstractProcessProfile", "urn:HPI_IAAS:choreography:profile:2006/12");
-		processElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		processElement.setAttribute("xmlns:wsu","http://schemas.xmlsoap.org/ws/2002/07/utility/");
+//		processElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+//		processElement.setAttribute("xmlns:wsu","http://schemas.xmlsoap.org/ws/2002/07/utility/");
+		processElement.setAttribute("xmlns:tns", targetNamespace);
 				
 //		if (pool.getImports() != null) {
 //			for (Iterator<Import> it = pool.getImports().iterator(); it.hasNext();) {
@@ -279,21 +287,29 @@ public class ProcessFactory {
 		}
 		
 		SupportingFactory supportingFactory = 
-			new SupportingFactory(this.diagram, document, output);
+			new SupportingFactory(this.diagram, document, output, processElement);
 		
-//		// imports
-//		List<Element> importElements = 
-//			supportingFactory.createImportElements(swimlane);
-//		for (Iterator<Element> it = importElements.iterator(); it.hasNext();) {
-//			processElement.appendChild(it.next());
-//		}
+		// imports
+		List<Element> importElements = 
+			supportingFactory.createImportElements(process);
+		for (Element importElement : importElements) {
+			processElement.appendChild(importElement);
+		}
+		
 //		// messageExchanges
 //		Element messageExchangesElement = 
 //			supportingFactory.createMessageExchangesElement(process);
 //		if (messageExchangesElement != null) {
 //			processElement.appendChild(messageExchangesElement);
 //		}
-//		
+		
+		/* Create partner links of the BPEL process */
+		Element partnerLinksElement = supportingFactory.
+										createPartnerLinksElement(process);
+		if (partnerLinksElement != null) {
+			processElement.appendChild(partnerLinksElement);
+		}
+		
 		/* Create variables of the BPEL process */
 		Element variablesElement = 
 			supportingFactory.createVariablesElement(null, null);
@@ -330,7 +346,7 @@ public class ProcessFactory {
 		
 		// sequence flow
 		Element sequenceFlow = 
-			new SequenceFlowFactory(this.diagram, document, process, output)
+			new SequenceFlowFactory(this.diagram, document, process, output, processElement)
 				.transformSequenceFlow();
 		if (sequenceFlow != null) {
 			processElement.appendChild(sequenceFlow);

@@ -13,6 +13,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -36,7 +38,7 @@ public class BPMN2BPELServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 3184239975651510296L;
 	
-	StringBuilder response = new StringBuilder();
+	JSONObject response = null;
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) {
 		try {
@@ -61,7 +63,7 @@ public class BPMN2BPELServlet extends HttpServlet {
 	}
 	
 	protected void processDocument(Document document, PrintWriter writer) {
-		response.setLength(0);
+		response = new JSONObject();
 		
 		String type = new StencilSetUtil().getStencilSet(document);
 		BPMNDiagram diagram = null;
@@ -82,9 +84,9 @@ public class BPMN2BPELServlet extends HttpServlet {
 			if(result.getType().equals(TransformationResult.Type.PROCESS)) {
 				appendResult("process", result.getDocument());
 			}
-			if(result.getType().equals(TransformationResult.Type.DEPLOYMENT_DESCRIPTOR)) {
-				appendResult("deploy", result.getDocument());
-			}
+//			if(result.getType().equals(TransformationResult.Type.DEPLOYMENT_DESCRIPTOR)) {
+//				appendResult("deploy", result.getDocument());
+//			}
 		}
 		
 		writer.write(response.toString());
@@ -107,16 +109,23 @@ public class BPMN2BPELServlet extends HttpServlet {
 			// TODO: handle exception
 		}
 		
-		if(response.length() == 0) {
-			response.append(param);
-			response.append("=");
-			response.append(sw.getBuffer().toString());
-		} else {
-			response.append("&");
-			response.append(param);
-			response.append("=");
-			response.append(sw.getBuffer().toString());
+		try {
+			response.put(param, sw.getBuffer().toString());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+//		if(response.length() == 0) {
+//			response.append(param);
+//			response.append("=");
+//			response.append(sw.getBuffer().toString());
+//		} else {
+//			response.append("&");
+//			response.append(param);
+//			response.append("=");
+//			response.append(sw.getBuffer().toString());
+//		}
 	}
 
 	 

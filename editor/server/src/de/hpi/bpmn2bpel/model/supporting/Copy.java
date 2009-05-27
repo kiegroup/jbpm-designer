@@ -65,6 +65,11 @@ public class Copy {
 		for (int i = 0; i < parameterNames.length(); i++) {
 			/* Create parameter */
 			Element param = this.xmlDocument.createElement(parameterNames.getString(i));
+			
+			/* Set empty default namespace for parameter */
+			param.setAttribute("xmlns", "");
+			
+			/* Add parameter content */
 			param.setTextContent(parameters.getString(parameterNames.getString(i)));
 			
 			/* Append parameter to literal element */
@@ -72,7 +77,9 @@ public class Copy {
 		}
 		
 		/* Set from spec */
-		from.setLiteral(literalContent);
+		Element literal  = this.xmlDocument.createElement("literal");
+		literal.appendChild(literalContent);
+		from.setLiteral(literal);
 		setFromSpec(from);
 	}
 	
