@@ -10,13 +10,8 @@ var gConnectionsDialog = {
 	alert("no match");
 	return false;
   },
-  beforeAccept: function(){
-	if(this.evalPass() && this.beforeAccept2()){
-		return true;
-	}
-	return "fuck"
-  },
-  beforeAccept2: function ()
+
+  beforeAccept: function ()
   {
     var proxyTypePref = document.getElementById("network.proxy.type");
     if (proxyTypePref.value == 2) {
