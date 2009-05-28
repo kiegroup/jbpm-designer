@@ -7698,6 +7698,7 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
+				"FromEventbasedGateway",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary"
 			],
