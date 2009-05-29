@@ -862,6 +862,7 @@ public class SupportingFactory {
 			partnerLink.put("name", dataObject.getServiceName() + "PartnerLink");
 			partnerLink.put("partnerLinkType", "tns:" 
 					+	dataObject.getServiceName() + "PartnerLinkType");
+			partnerLink.put("serviceName", dataObject.getServiceName());
 			partnerLink.put("partnerRole", dataObject.getServiceName() + "Provider");
 			
 			allPartnerLinks.put(partnerLink.get("name"), partnerLink);
@@ -875,6 +876,7 @@ public class SupportingFactory {
 			xmlPl.setAttribute("name", pl.get("name"));
 			xmlPl.setAttribute("partnerLinkType", pl.get("partnerLinkType"));
 			xmlPl.setAttribute("partnerRole", pl.get("partnerRole"));
+			xmlPl.setAttribute("serviceName", pl.get("serviceName"));
 			
 			partnerLinks.appendChild(xmlPl);
 		}
@@ -899,6 +901,7 @@ public class SupportingFactory {
 		partnerLink.setAttribute("name", "InvokeProcessPartnerLink");
 		partnerLink.setAttribute("partnerLinkType", "tns:" + "InvokeProcess");
 		partnerLink.setAttribute("myRole", "InvokeProcessProvider");
+		partnerLink.setAttribute("serviceName", "InvokeProcess");
 		
 		return partnerLink;
 	}

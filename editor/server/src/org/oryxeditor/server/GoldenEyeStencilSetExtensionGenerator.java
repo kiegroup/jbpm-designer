@@ -359,7 +359,7 @@ public class GoldenEyeStencilSetExtensionGenerator {
 		portTypeProp.put("id", "porttype");
 		portTypeProp.put("title", "PortType");
 		portTypeProp.put("type", "String");
-		portTypeProp.put("value", service.namespace + ":" + portType.name);
+		portTypeProp.put("value", portType.name);
 		portTypeProp.put("readonly", true);
 		jsonProperties.put(portTypeProp);
 		

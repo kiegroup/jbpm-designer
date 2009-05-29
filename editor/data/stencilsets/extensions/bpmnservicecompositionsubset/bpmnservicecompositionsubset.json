@@ -4,25 +4,7 @@
 	"description":"A basic subset of BPMN that can be used in the Service Composer.",
 	"extends":"http://b3mn.org/stencilset/bpmn1.1#",
 	"stencils":[],
-	"properties":[
-		{
-			"roles": [
-				"DataObject"
-			],
-			"properties": [
-				{
-					"id":"messageType",
-					"type":"String",
-					"title":"WSDL_MessageType",
-					"value":"",
-					"description":"The WSDL Message Type",
-					"readonly":true,
-					"optional":false,
-					"refToView":""
-                }
-            ]
-        }
-	],
+	"properties":[],
 	"rules": {
 		"connectionRules": [],
         "cardinalityRules": [],
@@ -39,7 +21,6 @@
 		"Lane",
 		"Group",
 		"TextAnnotation",
-		"StartMessageEvent",
 		"StartTimerEvent",
 		"StartConditionalEvent",
 		"StartSignalEvent",
@@ -68,7 +49,6 @@
 		"EndTerminateEvent",
 		"MessageFlow",
 		"Association_Undirected",
-		"Association_Unidirectional",
 		"Association_Bidirectional"
 	],
 	"removeproperties": [

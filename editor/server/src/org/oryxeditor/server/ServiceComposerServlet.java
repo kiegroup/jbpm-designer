@@ -110,7 +110,7 @@ public class ServiceComposerServlet extends HttpServlet {
 								+ startEventId
 								+ "\"/></div><div id=\""
 								+ startEventId
-								+ "\"><span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#StartEvent</span><span class=\"oryx-id\"></span><span class=\"oryx-categories\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-name\"></span><span class=\"oryx-assignments\"></span><span class=\"oryx-pool\"></span><span class=\"oryx-lanes\"></span><span class=\"oryx-eventtype\">Start</span><span class=\"oryx-trigger\">None</span><span class=\"oryx-bgcolor\">#ffffff</span><span class=\"oryx-bounds\">15,225,45,255</span><a rel=\"raziel-parent\" href=\"#oryx-canvas123\"/>",
+								+ "\"><span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#StartMessageEvent</span><span class=\"oryx-id\"></span><span class=\"oryx-categories\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-name\"></span><span class=\"oryx-assignments\"></span><span class=\"oryx-pool\"></span><span class=\"oryx-lanes\"></span><span class=\"oryx-eventtype\">Start</span><span class=\"oryx-trigger\">Message</span><span class=\"oryx-message\"></span><span class=\"oryx-implementation\">Web Service</span><span class=\"oryx-bgcolor\">#ffffff</span><span class=\"oryx-bounds\">15,225,45,255</span><a rel=\"raziel-parent\" href=\"#oryx-canvas123\"/>",
 						"/stencilsets/bpmn1.1/bpmn1.1.json", BASE_STENCILSET,
 						stencilSetExtensionUrls);
 		String modelUrl = baseUrl
