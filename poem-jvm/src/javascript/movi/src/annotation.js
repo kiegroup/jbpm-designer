@@ -147,7 +147,6 @@ MOVI.namespace("util");
 				this._canvas = this._marker.canvas;
 				if(this._canvas) {
 					this._canvas.appendChild(this);
-					
 					// now that we have our canvas and therefore the model viewer we can subscribe
 					// to the zoom event
 					this._canvas.getModelViewer().onZoomLevelChangeStart.subscribe(function() {
@@ -165,6 +164,9 @@ MOVI.namespace("util");
 					
 					zoomFactor = this._canvas.getModelViewer().getZoomLevel() / 100;
 					
+				} else {
+					// canvas not available, update again when it becomes available
+					this._marker.onCanvasAvailable(this._update, this);
 				}
 			} else {
 				zoomFactor = this._canvas.getModelViewer().getZoomLevel() / 100;
@@ -235,6 +237,9 @@ MOVI.namespace("util");
 	     * @method bringToFront
 	     */
 		bringToFront: function() {
+			// if element has not been added to the dom do nothing
+			if(!this.get("element").parentNode) return;
+			
 			// detemine the maximal z-index of markers of visible annotation elements
 			var maxZIndex = 0;
 			var canvasEl = new Element(this.get("element").parentNode.parentNode);

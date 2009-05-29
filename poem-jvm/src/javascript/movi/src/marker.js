@@ -121,6 +121,14 @@ MOVI.namespace("util");
 		_changedCallback: null,
 		
 		/**
+		 * The callback object to be executed when the canvas object the marker belongs to is available
+		 * @property _canvasAvailableCallback
+		 * @type Object
+		 * @private
+		 */
+		_canvasAvailableCallback: null,
+		
+		/**
 		 * A hash map containing the icon elements with their orientation as key
 		 * @property _icons
 		 * @type Object
@@ -234,6 +242,7 @@ MOVI.namespace("util");
 						if(this._showOnZoomEnd) this.show();
 					}, this, true);
 					
+					this._onCanvasAvailable();
 				}
 				
 				// get border widths
@@ -336,6 +345,20 @@ MOVI.namespace("util");
 				this._changedCallback.scope,
 				this,
 				this._changedCallback.data
+			);
+		},
+		
+		/**
+	     * Executes the user-specified callback when the canvas object the marker belongs to is available
+	     * @method _onCanvasAvailable
+		 * @private
+	     */
+		_onCanvasAvailable: function() {
+			if(!this._canvasAvailableCallback) return;
+			this._canvasAvailableCallback.callback.call(
+				this._canvasAvailableCallback.scope,
+				this,
+				this._canvasAvailableCallback.data
 			);
 		},
 		
@@ -536,11 +559,32 @@ MOVI.namespace("util");
 		 */
 		onChanged: function(callback, scope, data) {
 			if(!YAHOO.lang.isFunction(callback)) {
-				throw new TypeError("Specified callback is not a function.", "error", "shapeselect.js");
+				throw new TypeError("Specified callback is not a function.", "error", "marker.js");
 				return;
 			}
 			if(!scope) scope = this;
 			this._changedCallback = {
+				callback: callback,
+				scope: scope,
+				data: data
+			};
+		},
+		
+		/**
+		 * Specify callback to be executed when the canvas object the marker belongs to is available
+		 * @param {Function} callback The callback method
+		 * @param {Object} scope (optional) The execution scope of the callback 
+		 * (in none is specified the context of the Marker object is used)
+		 * @param {Object} data (optional) An optional data object to pass to the callback method
+		 * @method onCanvasAvailable
+		 */
+		onCanvasAvailable: function(callback, scope, data) {
+			if(!YAHOO.lang.isFunction(callback)) {
+				throw new TypeError("Specified callback is not a function.", "error", "marker.js");
+				return;
+			}
+			if(!scope) scope = this;
+			this._canvasAvailableCallback = {
 				callback: callback,
 				scope: scope,
 				data: data

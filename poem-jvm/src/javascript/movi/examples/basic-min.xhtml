@@ -2,10 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>MOVI Example</title>
-		<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader.js" />
-		<script type="text/javascript" src="../src/movi.js" />
+		<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/utilities/utilities.js&amp;2.7.0/build/container/container-min.js&amp;2.7.0/build/logger/logger-min.js&amp;2.7.0/build/slider/slider-min.js"></script>
+		<script type="text/javascript" src="../build/movi-min.js" />
 		
 		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" />
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/assets/skins/sam/skin.css" />
+		<link rel="stylesheet" type="text/css" href="../build/style/movi.css" />
+		<!--[if IE]>
+            <link rel="stylesheet" type="text/css" href="../build/style/movi_ie.css" />
+        <![endif]-->
 		
 		<style type="text/css">
 			#modelviewer {
@@ -57,19 +62,14 @@
 			var modelviewer;
 			var toolbar;
 		
-			MOVI.init(
-				function() {
+			(function() {
 				
-					modelviewer = new MOVI.widget.ModelViewer("modelviewer");
-					modelviewer.loadModel("http://oryx-editor.org/backend/poem/model/2321", 
-						{ onSuccess: init }
-					);
-					
-				},
-				"../src",
-				undefined,
-				["resize"]
-			);
+			    modelviewer = new MOVI.widget.ModelViewer("modelviewer");
+			    modelviewer.loadModel("http://oryx-editor.org/backend/poem/model/2321", 
+			    	{ onSuccess: init }
+			    );
+			
+			})();
 			
 			function init() {
 				setUpUI();
@@ -99,17 +99,6 @@
 				
 				// create zoom slider
 				zoomslider = new MOVI.widget.ZoomSlider("zoomslider", modelviewer)
-				
-				// enable resizing
-				var resize = new YAHOO.util.Resize("modelviewer", {
-		            handles: ['b'],
-		            minHeight: 150
-		        });
-				resize.on("resize", function() {
-				    modelnavigator.update.call(modelnavigator);
-				    zoomslider.onChange.call(zoomslider);
-				}, this, true);
-				resize.reset();
 			}
 			
 			function doStuffWithModel() {

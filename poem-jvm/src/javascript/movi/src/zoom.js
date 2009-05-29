@@ -273,7 +273,6 @@ MOVI.namespace("widget");
 		
 			// store original zoom factor
 			this._originalZoomLevel = this.modelviewer.getZoomLevel();
-			console.log(minZoomLevel)
 			this.modelviewer.setZoomLevel(minZoomLevel);
 			
 			this.dialog.show();

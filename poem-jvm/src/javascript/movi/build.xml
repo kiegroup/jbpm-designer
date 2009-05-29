@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="MOVI API">
+
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="lib.dir" value="lib" />
+	
+	<path id="yuicompressor.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="yuicompressor-2.4.2.jar"/>
+            <include name="yui-compressor-ant-task-0.4.jar"/>
+        </fileset>
+    </path> 
+    
+    <taskdef name="yui-compressor" 
+    		classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
+ 		<classpath refid="yuicompressor.classpath" />
+	</taskdef>
+	
+	<target name="prepare">
+    	<mkdir dir="${build.dir}"/>
+   	</target>
+	
+	<target name="js.concatenate" depends="prepare">
+    	<concat destfile="${build.dir}/movi.js">
+        	<filelist id="movijs" dir="${src.dir}">
+                <file name='movi.js'/>
+                <file name='config.js'/> 
+				<file name='modelviewer.js'/> 
+				<file name='stencil.js'/> 
+				<file name='stencilset.js'/>
+				<file name='shape.js'/>
+				<file name='node.js'/>
+				<file name='edge.js'/> 
+				<file name='canvas.js'/>
+				<file name='marker.js'/> 
+				<file name='annotation.js'/>
+				<file name='modelnavigator.js'/>
+				<file name='shapeselect.js'/> 
+				<file name='toolbar.js'/>
+				<file name='zoom.js'/>
+            </filelist>
+    	</concat>
+	</target>
+	
+	<target name="js.minify" depends="js.concatenate">
+		<yui-compressor warn="false" charset="UTF-8" fromdir="${build.dir}" todir="${build.dir}">
+        	<include name="movi.js" />
+    	</yui-compressor>
+	</target>
+	
+	<target name="build" depends="js.minify">
+		<copy todir='${build.dir}/style'>
+            <filelist id="movicss" dir="${src.dir}/style">
+                <file name='movi.css'/>
+                <file name='movi_ie.css'/> 
+            </filelist>
+        </copy>
+		<copy todir='${build.dir}/img'>
+            <fileset dir='${src.dir}/img' includes='*.png'/>
+            <fileset dir='${src.dir}/img' includes='*.gif'/>
+            <fileset dir='${src.dir}/img' includes='*.jpg'/>
+        </copy>
+	</target>
+	
+	<target name="clean">
+        <delete dir="${build.dir}" />
+    </target>
+	
+</project>
