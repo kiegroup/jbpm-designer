@@ -271,7 +271,11 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 						});
                         
                     }
-					this.processProcessList(processList);
+					try {
+						this.processProcessList(processList);
+					} catch (error) {
+						Ext.Msg.alert(ORYX.I18N.Oryx.title, error);
+					}
                 }.bind(this),
 				
 				onFailure: function(response){
@@ -288,28 +292,6 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 			Ext.Msg.alert(ORYX.I18N.Oryx.title, error);
 	 	}
 
-	},
-	
-	raiseOverlay: function(shape, errorMsg) {
-		
-		var id = "queryeval." + this.raisedEventIds.length;
-		
-		var cross = ORYX.Editor.graft("http://www.w3.org/2000/svg", null ,
-			['path', {
-				"title":errorMsg, "stroke-width": 5.0, "stroke":"red", "d":  "M20,-5 L5,-20 M5,-5 L20,-20", "line-captions": "round"
-				}]);
-
-/*		this.facade.raiseEvent({
-			type: 			ORYX.CONFIG.EVENT_OVERLAY_SHOW,
-			id: 			id,
-			shapes: 		[shape],
-			node:			cross,
-			nodePosition:	shape instanceof ORYX.Core.Edge ? "START" : "NW"
-		});		
-*/		
-		this.raisedEventIds.push(id);
-		
-		return cross;		
 	},
 	
     processResultGraph: function(xmlNode){
@@ -347,7 +329,9 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 		if(processList.length == 0) {
 			Ext.Msg.alert(ORYX.I18N.Oryx.title, "Found no matching processes!");
 			return;
-		} 
+		}
+		
+		this.isRendering = true;
 		
 		// load process model meta data
 		processList.each(this.getModelMetaData.bind(this));
@@ -382,10 +366,10 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
                 text     : 'Close',
                 handler  : function(){
                     myProcsPopup.close();
-                }
+                }.bind(this)
             }]
 
-		})
+		});
 		
 		var tableModel = new Ext.data.SimpleStore({
 			fields: [
@@ -394,35 +378,23 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 				{name: 'title'}, //, mapping: 'metadata.title'},
 				{name: 'type'}, //, mapping: 'metadata.type'},
 				{name: 'author'}, //, mapping: 'metadata.author'},
-//				{name: 'elements', type: 'auto', mapping: 'elements'}
 			],
 			data : data
 		});
-//		tableModel.loadData(processList);
 		
-/*		var iconPanel = new Ext.grid.GridPanel({
-			store:	tableModel,
-			columns: [
-				{id: 'id', header: "ID", width: 360, dataIndex: 'id'},
-				{header: "Elements", width: 300, dataIndex: 'elements'}
-			],
-			stripeRows: true,
-	        autoExpandColumn: 'id',
-	        height:350,
-	        width:600,
-	        title:'Array Grid'
-		}); */
 		var iconPanel = new Ext.Panel({
 			border	: false,
-	        items	: new this.dataGridPanel({store: tableModel //, listeners:{click:this._onSelectionChange.bind(this), dblclick:this._onDblClick.bind(this)}
+	        items	: new this.dataGridPanel({
+				store       : tableModel, 
+				listeners   :{
+					dblclick:this._onDblClick.bind(this)
+				}
 			})
 	    });
 		
-		// grid.getSelectionModel().selectFirstRow();
-		
-
 		myProcsPopup.add(iconPanel);
-		// iconPanel.show();
+		
+		this.isRendering = false;
 		
 		myProcsPopup.show();
 	},
@@ -437,30 +409,55 @@ ORYX.Plugins.QueryEvaluator = Clazz.extend({
 					processEntry.metadata = transport.responseText.evalJSON();
 				}.bind(this),
 				onFailure		: function() {
-					alert("Error loading model meta data.")
+					Ext.MessageBox.alert(ORYX.I18N.Oryx.title, "Error loading model meta data.");
 				}.bind(this)
 			});
+		
+	},
+	
+	_onDblClick: function(dataGrid, index, node, e){
+		
+		// Get the uri from the clicked model
+		var model_id 	= dataGrid.getRecord( node ).data.id
+				
+		// Select the new range
+		dataGrid.selectRange(index, index)
+		
+		// remove the last URI segment
+		var slashPos = model_id.lastIndexOf("/");		
+		var uri	= model_id.substr(0, slashPos) + "/self";
+
+		// Open the model in Editor
+		var editor = window.open( uri );
+		window.setTimeout(
+	        function() {
+                if(!editor || !editor.opener || editor.closed) {
+                        Ext.MessageBox.alert(ORYX.I18N.Oryx.title, ORYX.I18N.Oryx.editorOpenTimeout).setIcon(Ext.MessageBox.QUESTION)
+                }
+	        }, 5000);			
+		
 	},
 	
 	dataGridPanel : Ext.extend(Ext.DataView, {
 		multiSelect		: true,
 		//simpleSelect	: true, 
-	    cls				: 'repository_iconview',
+	    cls				: 'iconview',
 	    itemSelector	: 'dd',
 	    overClass		: 'over',
 		selectedClass	: 'selected',
 	    tpl : new Ext.XTemplate(
-	        '<div>',
-				'<dl>',
+        '<div>',
+			'<dl class="repository_iconview" style="width: 100%;max-width: 1000px;">',
 	            '<tpl for=".">',
-					'<dd>',
-					'<div class="image"><img src="{icon}" title="{title}"/></div>',
-		            '<div><span class="title" title="{[ values.title.length + (values.type.length*0.8) > 30 ? values.title : "" ]}">{[ values.title.truncate(30 - (values.type.length*0.8)) ]}</span><span class="author" unselectable="on">({type})</span></div>',
+					'<dd style="width: 200px; height: 105px; padding: 10px; border: 1px solid #EEEEEE; font-family: tahoma,arial,san-serif; font-size: 9px; display: block; margin: 5px; text-align: left; float: left;" >',
+					'<div class="image" style="width: 200px;height: 80px;padding-bottom: 10px;text-align: center;vertical-align: middle;display:table-cell;">',
+					 '<img src="{icon}" title="{title}" style="max-width: 190px;max-height: 70px;"/></div>',
+		            '<div><span class="title" title="{[ values.title.length + (values.type.length*0.8) > 30 ? values.title : "" ]}" style="font-weight: bold;font-size: 11px;color: #555555;">{[ values.title.truncate(30 - (values.type.length*0.8)) ]}</span><span class="author" unselectable="on">({type})</span></div>',
 		            '<div><span class="type">{author}</span></div>',
 					'</dd>',
 	            '</tpl>',
-				'</dl>',
-	        '</div>'
+			'</dl>',
+        '</div>'
 	    )
 	}), 
 	
