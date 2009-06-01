@@ -1,7 +1,6 @@
 package de.hpi.bpmn2bpel.factories;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,28 +8,24 @@ import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.hpi.bpmn.Process;
 import de.hpi.bpel4chor.model.SubProcess;
-import de.hpi.bpmn.Activity;
 import de.hpi.bpel4chor.model.activities.BlockActivity;
-import de.hpi.bpmn2bpel.model.BPELDataObject;
-import de.hpi.bpmn2bpel.model.FoldedTask;
 import de.hpi.bpel4chor.model.activities.Gateway;
 import de.hpi.bpel4chor.model.activities.Handler;
 import de.hpi.bpel4chor.model.activities.IntermediateEvent;
-import de.hpi.bpel4chor.model.activities.ReceiveTask;
-import de.hpi.bpmn.Task;
-import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.bpel4chor.model.supporting.Expression;
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.BPMNDiagram;
-import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.EndEvent;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.Process;
 import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.StartMessageEvent;
+import de.hpi.bpmn.Task;
 import de.hpi.bpmn2bpel.model.Container4BPEL;
+import de.hpi.bpmn2bpel.model.FoldedTask;
 
 /**
  * <p>
@@ -1047,6 +1042,8 @@ public class SequenceFlowFactory {
 				Element resultSequence = this.document
 						.createElement("sequence");
 				resultSequence.appendChild(receive);
+				
+				
 				for (Element e : resultElements) {
 					resultSequence.appendChild(e);
 				}
@@ -1191,14 +1188,22 @@ public class SequenceFlowFactory {
 		// element = mapBlockActivity((BlockActivity)act);
 		/* } else */if (act instanceof Task) {
 			
-			/* Insert assign task, if an DataObject is connected */
-			DataObject dataObject = ((Task)act).getFirstInputDataObject();
-			if (dataObject instanceof BPELDataObject) {
-				Element assign = this.basicFactory.createAssignElement((BPELDataObject) dataObject, (Task) act);
-				if (assign != null) {
-					elements.add(assign);
-				}
-			}
+			/* 
+			 * Insert assign element to set web service method's parameter values.
+			 * All necessary pieces of information are attached to the task 
+			 * object.
+			 */
+			Element assign = this.basicFactory.createAssignElement((Task) act);
+			elements.add(assign);
+			
+//			/* Insert assign task, if an DataObject is connected */
+//			DataObject dataObject = ((Task)act).getFirstInputDataObject();
+//			if (dataObject instanceof BPELDataObject) {
+//				Element assign = this.basicFactory.createAssignElement((BPELDataObject) dataObject, (Task) act);
+//				if (assign != null) {
+//					elements.add(assign);
+//				}
+//			}
 			
 			
 			elements.add(mapTask((Task) act));
@@ -2165,7 +2170,6 @@ public class SequenceFlowFactory {
 		}
 
 		Element sequence = mapTrivial(start, end);
-		
 		
 		/* Assign response message content */
 		

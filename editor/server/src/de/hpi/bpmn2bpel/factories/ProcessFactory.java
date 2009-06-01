@@ -312,7 +312,7 @@ public class ProcessFactory {
 		
 		/* Create variables of the BPEL process */
 		Element variablesElement = 
-			supportingFactory.createVariablesElement(null, null);
+			supportingFactory.createVariablesElement(null, process);
 		if (variablesElement != null) {
 			processElement.appendChild(variablesElement);
 		}

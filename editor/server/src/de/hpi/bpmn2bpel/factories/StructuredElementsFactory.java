@@ -70,15 +70,15 @@ public class StructuredElementsFactory {
 	 * if no variables are present in the handler.
 	 */
 	private Element createHandlerScope(Handler handler, Element content) {
-		Element scope = this.document.createElement("scope");
-		Element variablesElement = this.supportingFactory.createVariablesElement(
-					handler.getParentSwimlane(), handler.getSubProcess());
-		
-		if (variablesElement != null) {
-			scope.appendChild(variablesElement);
-			scope.appendChild(content);
-			return scope;
-		} 
+//		Element scope = this.document.createElement("scope");
+//		Element variablesElement = this.supportingFactory.createVariablesElement(
+//					handler.getParentSwimlane(), handler.getSubProcess());
+//		
+//		if (variablesElement != null) {
+//			scope.appendChild(variablesElement);
+//			scope.appendChild(content);
+//			return scope;
+//		} 
 		return content;
 	}
 	

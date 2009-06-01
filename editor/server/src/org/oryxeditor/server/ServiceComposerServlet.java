@@ -72,7 +72,30 @@ public class ServiceComposerServlet extends HttpServlet {
 			HttpServletResponse response) {
 		process(request, response);
 	}
-
+	
+	
+	/**
+	 * Method to process the HTTP request. 
+	 * The basic steps are:
+	 * <ul>
+	 * 	<li>
+	 * 		Parse the POST parameters and identify the services and their 
+	 * 		properties. 
+	 * 	</li>
+	 * 	<li>
+	 * 		Create a suitable stencil set extension based on the services. 
+	 * 	</li>
+	 * 	<li>
+	 * 		Build and save a new model using the stencil set extension. 
+	 * 	</li>
+	 * </ul>
+	 * 
+	 * 
+	 * @param request
+	 * 		The HTTP request
+	 * @param response
+	 * 		The HTTP response
+	 */
 	protected void process(HttpServletRequest request,
 			HttpServletResponse response) {
 		this.request = request;
@@ -94,13 +117,13 @@ public class ServiceComposerServlet extends HttpServlet {
 		stencilSetExtensionUrls.add(generateStencilSetExtension(sessionName,
 				services));
 		
-		/* Add StencilSetExtension GoldenEye SES Astra Bachelorproject */
-		if (request.getParameter("type") != null) {
-			if (request.getParameter("type").equals("goldeneye")) {
-				stencilSetExtensionUrls.add(GoldenEyeStencilSetExtensionGenerator.
-				generateGoldenEyeStencilSet(sessionName + "GoldenEye" ,services));
-			}
-		}
+//		/* Add StencilSetExtension GoldenEye SES Astra Bachelorproject */
+//		if (request.getParameter("type") != null) {
+//			if (request.getParameter("type").equals("goldeneye")) {
+//				stencilSetExtensionUrls.add(GoldenEyeStencilSetExtensionGeneratorServlet.
+//				generateGoldenEyeStencilSet(sessionName + "GoldenEye" ,services));
+//			}
+//		}
 		
 		// generate BPMN model with a start event
 		String startEventId = "oryx_" + UUID.randomUUID().toString();
@@ -160,7 +183,9 @@ public class ServiceComposerServlet extends HttpServlet {
 			if (!colorIterator.hasNext()) {
 				colorIterator = colors.listIterator();
 			}
+			
 			String color = colorIterator.next();
+			
 			ListIterator<PortType> portTypeIterator = service.portTypes.listIterator();
 			while (portTypeIterator.hasNext()) {
 				PortType portType = portTypeIterator.next();

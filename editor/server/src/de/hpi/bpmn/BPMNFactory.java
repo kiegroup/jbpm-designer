@@ -1,7 +1,6 @@
 package de.hpi.bpmn;
 
 import de.hpi.bpmn.exec.ExecDataObject;
-import de.hpi.bpmn2bpel.model.BPELDataObject;
 
 public class BPMNFactory {
 	
@@ -182,9 +181,4 @@ public class BPMNFactory {
 	public UndirectedAssociation createUndirectedAssociation() {
 		return new UndirectedAssociation();
 	}
-	
-	public BPELDataObject createBpelDataObject() {
-		return new BPELDataObject();
-	}
-
 }

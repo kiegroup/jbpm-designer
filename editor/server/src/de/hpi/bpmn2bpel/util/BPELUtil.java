@@ -1,6 +1,8 @@
 package de.hpi.bpmn2bpel.util;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -13,6 +15,7 @@ import org.w3c.dom.Element;
 import de.hpi.bpel4chor.model.activities.Activity;
 import de.hpi.bpel4chor.model.supporting.Correlation;
 import de.hpi.bpmn.Node;
+import de.hpi.bpmn.Task;
 
 /**
  * This class provides helper methods for generating the BPEL4Chor elements.
@@ -181,5 +184,44 @@ public class BPELUtil {
 			return null;
 		}
 		return xmlString;
+	}
+	
+	/**
+	 * Returns a distinct list of services
+	 * 
+	 * @param services
+	 * 		The source services list
+	 * @return
+	 * 		The resulting distinct service list
+	 */
+	public static List<Task> getDistinctServiceList(List<Task> services) {
+		ArrayList<Task> distinctServices = new ArrayList<Task>();
+		
+		for (Task service : services) {
+			if(!isServiceContainedInList(service, distinctServices)) {
+				distinctServices.add(service);
+			}
+		}
+		
+		return distinctServices;
+	}
+	
+	/**
+	 * Returns true if service is contained in services.
+	 *  
+	 * @param service
+	 * @param services
+	 * 
+	 * @return
+	 * 		The search result
+	 */
+	private static boolean isServiceContainedInList(Task service, List<Task> services) {
+		for (Task task : services) {
+			if (task.describesEqualService(service)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

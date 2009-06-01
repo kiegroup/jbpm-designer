@@ -65,7 +65,6 @@ import de.hpi.bpmn.Activity.MIFlowCondition;
 import de.hpi.bpmn.Activity.MIOrdering;
 import de.hpi.bpmn.Activity.TestTime;
 import de.hpi.bpmn.exec.ExecDataObject;
-import de.hpi.bpmn2bpel.model.BPELDataObject;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -260,9 +259,13 @@ public class BPMN11RDFImporter {
 					// } else if (type.equals("Association_Undirected")) {
 					// addAssociation_Undirected(diagram, node, map);
 				}
-				/* Map additional DataObjects [BPMN2BPEL]*/
-				else if (type.startsWith("dataobject-")) {
-					addBPELDataObjecte(node, c);
+//				/* Map additional DataObjects [BPMN2BPEL]*/
+//				else if (type.startsWith("dataobject-")) {
+//					addBPELDataObjecte(node, c);
+//				} 
+				/* Map special task used by BPMN2BPEL transformation */
+				else if (type.startsWith("task-")) {
+					addTask(node,c);
 				}
 			}
 		}
@@ -496,12 +499,57 @@ public class BPMN11RDFImporter {
 
 				// TODO: add further attributes...
 				if (attribute.equals("bgcolor")){
-					
+
 					task.setColor(getContent(n));
-				} else {
+
+					/* Set input message type attribute */
+				} else if (attribute.equals("inmessagetype")) {
+					task.setInMessageType(getContent(n));
+					
+					/* Set input message type attribute */
+				} else if (attribute.equals("outmessagetype")) {
+					task.setOutMessageType(getContent(n));	
+
+					/* Set web method parameters values for properties property */
+				} else if (attribute.equals("inputsets")) {
+					JSONObject params = null;
+					try {
+						JSONObject jsonAttribute = new JSONObject(getContent(n));
+						params = jsonAttribute.getJSONArray("items").getJSONObject(0);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					task.setInputSets(params);
+				}
+
+				/* Set namespace attribute */
+				else if (attribute.equals("namespace")) {
+					task.setNamespace(getContent(n));
+
+				} 
+
+				/* Set servicename attribute */
+				else if (attribute.equals("servicename")) {
+					task.setServiceName(getContent(n));
+
+				}
+
+				/* Set operation attribute */
+				else if (attribute.equals("operation")) {
+					task.setOperation(getContent(n));
+
+				}
+
+				/* Set port type attribute */
+				else if (attribute.equals("porttype")) {
+					task.setPortType(getContent(n));
+
+				}
+				else {
 					handleStandardAttributes(attribute, n, task, c, "name");
 				}
-				
+
 
 			}
 		}
@@ -843,76 +891,6 @@ public class BPMN11RDFImporter {
 			obj.setId(obj.getResourceId());
 	}
 	
-	protected void addBPELDataObjecte(Node node, ImportContext c) {
-		BPELDataObject obj = factory.createBpelDataObject();
-		obj.setResourceId(getResourceId(node));
-		
-		
-		c.diagram.getDataObjects().add(obj);
-		c.objects.put(obj.getResourceId(), obj);
-		
-		if (node.hasChildNodes()) {
-			Node n = node.getFirstChild();
-			while ((n = n.getNextSibling()) != null) {
-				if (n instanceof Text)
-					continue;
-				String attribute = n.getNodeName().substring(
-						n.getNodeName().indexOf(':') + 1);
-
-				if (attribute.equals("state")) {
-					obj.setState(getContent(n)); 
-				
-					/* Set message type attribute */
-				} else if (attribute.equals("messagetype")) {
-					obj.setMessageType(getContent(n));
-				
-					/* Set web method parameters values for properties property */
-				} else if (attribute.equals("properties")) {
-					JSONObject params = null;
-					try {
-						JSONObject jsonAttribute = new JSONObject(getContent(n));
-						params = jsonAttribute.getJSONArray("items").getJSONObject(0);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					obj.setProperties(params);
-				}
-				
-				/* Set namespace attribute */
-				else if (attribute.equals("namespace")) {
-					obj.setNamespace(getContent(n));
-				
-				} 
-				
-				/* Set servicename attribute */
-				else if (attribute.equals("servicename")) {
-					obj.setServiceName(getContent(n));
-				
-				}
-				
-				/* Set operation attribute */
-				else if (attribute.equals("operation")) {
-					obj.setOperation(getContent(n));
-				
-				}
-				
-				/* Set port type attribute */
-				else if (attribute.equals("porttype")) {
-					obj.setPortType(getContent(n));
-				
-				}
-				
-				else {
-					handleStandardAttributes(attribute, n, obj, c, "name");
-				}
-			}
-		}
-		
-		if (obj.getId() == null)
-			obj.setId(obj.getResourceId());
-	}
-
 	protected void addTextAnnotation(Node node, ImportContext c) {
 		TextAnnotation ta = factory.createTextAnnotation();
 		ta.setResourceId(getResourceId(node));

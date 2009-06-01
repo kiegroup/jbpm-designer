@@ -1,5 +1,6 @@
 package de.hpi.bpmn2bpel.factories;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,24 +16,23 @@ import de.hpi.bpel4chor.model.activities.NoneTask;
 import de.hpi.bpel4chor.model.activities.ReceiveTask;
 import de.hpi.bpel4chor.model.activities.SendTask;
 import de.hpi.bpel4chor.model.activities.ServiceTask;
-import de.hpi.bpmn.DataObject;
-import de.hpi.bpmn.StartEvent;
-import de.hpi.bpmn.StartMessageEvent;
-import de.hpi.bpmn.Task;
 import de.hpi.bpel4chor.model.activities.Trigger;
 import de.hpi.bpel4chor.model.activities.TriggerResultMessage;
 import de.hpi.bpel4chor.model.activities.ValidateTask;
 import de.hpi.bpel4chor.model.artifacts.VariableDataObject;
 import de.hpi.bpel4chor.model.connections.MessageFlow;
+import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.StartEvent;
+import de.hpi.bpmn.StartMessageEvent;
+import de.hpi.bpmn.Task;
+import de.hpi.bpmn2bpel.model.Container4BPEL;
 import de.hpi.bpmn2bpel.model.supporting.Copy;
 import de.hpi.bpmn2bpel.model.supporting.FromSpec;
 import de.hpi.bpmn2bpel.model.supporting.ToSpec;
 import de.hpi.bpmn2bpel.model.supporting.FromSpec.fromTypes;
 import de.hpi.bpmn2bpel.model.supporting.ToSpec.toTypes;
-import de.hpi.bpmn2bpel.model.BPELDataObject;
 import de.hpi.bpmn2bpel.util.BPELUtil;
-import de.hpi.bpel4chor.util.Output;
-import de.hpi.bpmn.BPMNDiagram;
 
 /**
  * This factory transforms the basic BPEL4Chor activities assign, compensate, 
@@ -235,7 +235,8 @@ public class BasicActivityFactory {
 		
 		/* Set necessary attributes to provide and start the process */
 		result.setAttribute("partnerLink", "InvokeProcessPartnerLink");
-		result.setAttribute("serviceName", "InvokeProcess");
+		result.setAttribute("serviceName", "InvokeProcess_" 
+								+ this.diagram.getId().replace(" ", "_"));
 		result.setAttribute("operation", "process");
 		result.setAttribute("portType", "tns:" + "InvokeProcess");
 		result.setAttribute("variable", "input");
@@ -388,25 +389,20 @@ public class BasicActivityFactory {
 		Element invoke = this.document.createElement("invoke");
 		
 		BPELUtil.setStandardAttributes(invoke, task);
-		DataObject inputData = task.getFirstInputDataObject();
-		if (inputData instanceof BPELDataObject) {
-			BPELDataObject bpelInputData  = (BPELDataObject) inputData;
-			
-			/* Set invoke element's attributes */
-			invoke.setAttribute("group", task.getColor());
-			invoke.setAttribute("serviceName", bpelInputData.getServiceName());
-			invoke.setAttribute("partnerLink", bpelInputData.getServiceName() + "PartnerLink");
-			invoke.setAttribute("operation", bpelInputData.getOperation());
-			invoke.setAttribute("inputVariable", bpelInputData.getId());
-			invoke.setAttribute("outputVariable", bpelInputData.getId() + "Response");
-			invoke.setAttribute("portType", 
-					this.supportingFactory.getAndSetPrefixForNamespaceURI(
-							bpelInputData.getNamespace()) 
-					+ ":" 
-					+ bpelInputData.getPortType());
-			
-		}
-		
+
+		/* Set invoke element's attributes */
+		invoke.setAttribute("group", task.getColor());
+		invoke.setAttribute("serviceName", task.getServiceName());
+		invoke.setAttribute("partnerLink", task.getServiceName() + "PartnerLink");
+		invoke.setAttribute("operation", task.getOperation());
+		invoke.setAttribute("inputVariable", task.getId());
+		invoke.setAttribute("outputVariable", task.getId() + "Response");
+		invoke.setAttribute("portType", 
+				this.supportingFactory.getAndSetPrefixForNamespaceURI(
+						task.getNamespace()) 
+						+ ":" 
+						+ task.getPortType());
+
 		return invoke;
 	}
 	
@@ -770,7 +766,66 @@ public class BasicActivityFactory {
 	}
 	
 	/**
-	 * <p>Creates the BPEL4Chor "assign" element from an assign task.</p>
+	 * Creates an assign task that copies token and reporting service URL into 
+	 * the soap header of each web service method message. Both information are 
+	 * necessary for the GoldenEye project.
+	 *  
+	 * @param process
+	 * 		The business process
+	 * @return
+	 * 		The assign task element
+	 */
+	public Element createHeaderAssignElementForProcessInputRedirect(Container4BPEL process) {
+		Element assign = this.document.createElement("assign");
+		
+		for (Task task : BPELUtil.getDistinctServiceList(process.getTasks())) {
+			/* Copy token */
+			Copy copy = prepareCopyForHeaderMetaData(task.getId(), "token");
+			Element copyElement = createCopyElement(copy);
+			assign.appendChild(copyElement);
+			
+			/* Copy reporting service URL */
+			copy = prepareCopyForHeaderMetaData(task.getId(), "reportingService");
+			copyElement = createCopyElement(copy);
+			assign.appendChild(copyElement);
+		}
+		
+		return assign;
+	}
+	
+	
+	/**
+	 * Creates a copy object to copy token and reporting service URL to the 
+	 * appropriate variable.
+	 * 
+	 * @param variableName
+	 * 		The name of the target variable
+	 * @param property
+	 * 		The part of the header to copy
+	 * @return
+	 * 		The prepared copy object
+	 */
+	private Copy prepareCopyForHeaderMetaData(String variableName, String property) {
+		Copy copy = new Copy();
+		FromSpec from = new FromSpec();
+		from.setType(fromTypes.VARIABLE);
+		from.setPart("payload");
+		from.setVariableName("input");
+		from.setQueryLanguage("urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+		from.setQuery("<![CDATA[tns:" + property + "]]>");
+		copy.setFromSpec(from);
+		
+		ToSpec to = new ToSpec();
+		to.setType(toTypes.VARIABLE);
+		to.setVariableName(variableName);
+		to.setHeader(property);
+		copy.setToSpec(to);
+		
+		return copy;
+	}
+	
+	/**
+	 * <p>Creates the BPEL "assign" element from an task.</p>
 	 * 
 	 * <p>The standard, validate and copy 
 	 * attributes and elements are taken from the task.</p>
@@ -782,33 +837,79 @@ public class BasicActivityFactory {
 	 * 
 	 * @param task	The task, to generate the assign element from. 
 	 * 
-	 * @return 		The generated BPEL4Chor "assign" element
+	 * @return 		The generated BPEL "assign" element
 	 */
-	public Element createAssignElement(AssignTask task) {
-//		Element assign = this.document.createElement("assign");
+	public Element createAssignElement(Task task) {
+		Element assign = this.document.createElement("assign");
+		assign.setAttribute("validate", "no");
 		
-////		BPELUtil.setStandardAttributes(assign, task);
-//		
-//		if (task.getValidate() != null) {
-//			assign.setAttribute("validate", task.getValidate());
-//		}
-//		
-//		List<Copy> copy = task.getCopyElements();
-//		if (copy.isEmpty()) {
-//			this.output.addError("The assign task must define at least one copy statement.", task.getId());
-//			return assign;
-//		}
-//		for (Iterator<Copy> it = copy.iterator(); it.hasNext();) {
-//			Element copyElement = createCopyElement(it.next(), task);
-//			if (copyElement != null) {
-//				assign.appendChild(copyElement);
-//			}
-//		}
+		/* Get all input data objects of the BPELDataObject */
+		//TODO create copy element for each input dataobject
 		
-//		return createScopeForAttachedHandlers(assign, task);
-		return null;
+		Copy copy = prepareCopyObject(task);
+		
+		Element copyElement = createCopyElement(copy);
+		if (copyElement != null) {
+			assign.appendChild(copyElement);
+		}
+		
+		/* Copy token and reporting service url */
+		for (Copy metaCopy : createCopyForMetaParameters(task.getId())) {
+			assign.appendChild(createCopyElement(metaCopy));
+		}
+		
+		/* Set header information for proxy usage */
+		copy = createCopyObjectForHeader(task.getId(), task.getColor(), 
+				task.getServiceName());
+		copyElement = createCopyElement(copy);
+		if (copyElement != null) {
+			assign.appendChild(copyElement);
+		}
+		
+		return assign;
 	}
 	
+	/**
+	 * Creates the BPEL copy elements to pass the token and reporting service URL
+	 * as web service method parameters.
+	 * 
+	 * @return
+	 * 		The list of copy objects
+	 */
+	private List<Copy> createCopyForMetaParameters(String targetVariable) {
+		ArrayList<Copy> copies = new ArrayList<Copy>();
+		
+		/* Copy token */
+		Copy copy = new Copy();
+		FromSpec from = new FromSpec();
+		from.setType(fromTypes.EXPRESSION);
+		from.setExpression("$input.payload/tns:token");
+		copy.setFromSpec(from);
+		
+		ToSpec to = new ToSpec();
+		to.setType(toTypes.EXPRESSION);
+		to.setExpression("$" + targetVariable + ".parameters/token");
+		copy.setToSpec(to);
+		
+		copies.add(copy);
+		
+		/* Copy reporting service URL */
+		copy = new Copy();
+		from = new FromSpec();
+		from.setType(fromTypes.EXPRESSION);
+		from.setExpression("$input.payload/tns:reportingService");
+		copy.setFromSpec(from);
+		
+		to = new ToSpec();
+		to.setType(toTypes.EXPRESSION);
+		to.setExpression("$" + targetVariable + ".parameters/reportingService");
+		copy.setToSpec(to);
+		
+		copies.add(copy);
+		
+		return copies;
+	}
+
 	/**
 	 * Creates the assign element related to a {@link BPELDataObject} and its 
 	 * connected {@link Task}. The basic steps are: 
@@ -830,30 +931,30 @@ public class BasicActivityFactory {
 	 * @return
 	 * 		The bpel assign element
 	 */
-	public Element createAssignElement(BPELDataObject dataObject, Task task) {
-		Element assign = this.document.createElement("assign");
-		assign.setAttribute("validate", "no");
-		
-		/* Get all input data objects of the BPELDataObject */
-		List<BPELDataObject> bpelDataObjects = dataObject.getSourceBPELDataObjects();
-		
-		//TODO create copy element for each bpelDataObjects
-		Copy copy = prepareCopyObject(dataObject);
-		
-		Element copyElement = createCopyElement(copy);
-		if (copyElement != null) {
-			assign.appendChild(copyElement);
-		}
-		
-		copy = createCopyObjectForHeader(dataObject.getId(), task.getColor(), 
-				dataObject.getServiceName());
-		copyElement = createCopyElement(copy);
-		if (copyElement != null) {
-			assign.appendChild(copyElement);
-		}
-		
-		return assign;
-	}
+//	public Element createAssignElement(BPELDataObject dataObject, Task task) {
+//		Element assign = this.document.createElement("assign");
+////		assign.setAttribute("validate", "no");
+////		
+////		/* Get all input data objects of the BPELDataObject */
+////		List<BPELDataObject> bpelDataObjects = dataObject.getSourceBPELDataObjects();
+////		
+////		//TODO create copy element for each bpelDataObjects
+////		Copy copy = prepareCopyObject(dataObject);
+////		
+////		Element copyElement = createCopyElement(copy);
+////		if (copyElement != null) {
+////			assign.appendChild(copyElement);
+////		}
+////		
+////		copy = createCopyObjectForHeader(dataObject.getId(), task.getColor(), 
+////				dataObject.getServiceName());
+////		copyElement = createCopyElement(copy);
+////		if (copyElement != null) {
+////			assign.appendChild(copyElement);
+////		}
+//		
+//		return assign;
+//	}
 	
 	/**
 	 * Creates the from and to specification of the copy object that assigns the
@@ -899,24 +1000,24 @@ public class BasicActivityFactory {
 	}
 
 	/**
-	 * Creates a {@link Copy} object based on the passed {@link BPELDataObject}.
+	 * Creates a {@link Copy} object based on the passed {@link Task}.
 	 * 
 	 * @param dataObject
-	 * 		The source {@link BPELDataObject}
+	 * 		The source {@link Task}
 	 * @return
 	 * 		The resulting copy object
 	 */
-	private Copy prepareCopyObject(BPELDataObject dataObject) {
+	private Copy prepareCopyObject(Task task) {
 		Copy copyObj = new Copy(this.document);
 		copyObj.setIgnoreMissingFromData("yes");
 		
 		try {
-			copyObj.setFromSpecBasedOnDataObject(dataObject);
+			copyObj.setFromSpecBasedOnTask(task);
 		} catch (JSONException e) {
 			return null;
 		}
 		
-		copyObj.setToSpecBasedOnDataObject(dataObject);
+		copyObj.setToSpecBasedOnTask(task);
 		
 		return copyObj;
 	}

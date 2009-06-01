@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.hpi.bpel4chor.model.Container;
 import de.hpi.bpel4chor.model.Process;
 import de.hpi.bpel4chor.model.Swimlane;
 import de.hpi.bpel4chor.model.activities.Scope;
@@ -19,20 +19,18 @@ import de.hpi.bpel4chor.model.supporting.Correlation;
 import de.hpi.bpel4chor.model.supporting.CorrelationSet;
 import de.hpi.bpel4chor.model.supporting.Expression;
 import de.hpi.bpel4chor.model.supporting.FromPart;
-import de.hpi.bpmn2bpel.model.supporting.FromSpec;
-import de.hpi.bpmn2bpel.model.supporting.FromSpec.fromTypes;
-import de.hpi.bpmn2bpel.model.supporting.ToSpec.toTypes;
 import de.hpi.bpel4chor.model.supporting.Import;
 import de.hpi.bpel4chor.model.supporting.Loop;
 import de.hpi.bpel4chor.model.supporting.ToPart;
-import de.hpi.bpmn2bpel.model.supporting.ToSpec;
-import de.hpi.bpel4chor.util.BPELUtil;
+import de.hpi.bpmn2bpel.util.BPELUtil;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
-import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.Task;
-import de.hpi.bpmn2bpel.model.BPELDataObject;
 import de.hpi.bpmn2bpel.model.Container4BPEL;
+import de.hpi.bpmn2bpel.model.supporting.FromSpec;
+import de.hpi.bpmn2bpel.model.supporting.ToSpec;
+import de.hpi.bpmn2bpel.model.supporting.FromSpec.fromTypes;
+import de.hpi.bpmn2bpel.model.supporting.ToSpec.toTypes;
 
 /**
  * This factory is used for generating certain child elements of BPEL4Chor 
@@ -248,7 +246,7 @@ public class SupportingFactory {
 		} else if (type.equals(toTypes.VARPROPERTY)) {
 			result = createVariablePropertyToSpec(toSpec);
 		} else if (type.equals(toTypes.EXPRESSION)) {
-			createExpressionToSpec(toSpec);
+			result = createExpressionToSpec(toSpec);
 		} else {
 			// empty toSpec
 			result = this.document.createElement("to");
@@ -459,48 +457,45 @@ public class SupportingFactory {
 	 * 
 	 * @param swimlane  The swimlane, the container belongs to
 	 * @param container The container that contains the variable data objects
-	 * 		At the moment it creates a variable for each {@link BPELDataObject} 
-	 * 		contained in the {@link BPMNDiagram}
+	 * 		At the moment it creates a variable for each {@link Task} 
+	 * 		contained in the {@link Container4BPEL}
 	 * 
 	 * @return The created "variables" element or null, if there are no 
 	 * standard variable data objects in the container.
 	 */
-	public Element createVariablesElement(Swimlane swimlane, Container container) {
+	public Element createVariablesElement(Swimlane swimlane, Container4BPEL container) {
 		Element result = this.document.createElement("variables");
 		
-		// TODO: Get only DataObject for a concrete process
-		for ( DataObject dataObject : this.diagram.getDataObjects()) {
-			/* Only map BPELDataObjects */
-			if (!(dataObject instanceof BPELDataObject)) {
-				continue;
-			}
-			
-			BPELDataObject bpelDataObject = (BPELDataObject) dataObject;
-			
+		/* 
+		 * Create the input and output variables for each 
+		 * web service method call 
+		 */
+		for (Task task : container.getTasks()) {
 			/* Request variable */
 			Element variable = this.document.createElement("variable");
-			variable.setAttribute("name", bpelDataObject.getId());
+			variable.setAttribute("name", task.getId());
 			variable.setAttribute("messageType", 
-					getAndSetPrefixForNamespaceURI(bpelDataObject.getNamespace()) 
+					getAndSetPrefixForNamespaceURI(task.getNamespace()) 
 					+ ":" 
-					+ bpelDataObject.getMessageType());
+					+ task.getInMessageType());
 			
 			/* Append variable */
 			result.appendChild(variable);
 			
 			/* Response variable */
 			variable = this.document.createElement("variable");
-			variable.setAttribute("name", bpelDataObject.getId() + "Response");
+			variable.setAttribute("name", task.getId() + "Response");
 			variable.setAttribute("messageType", 
-					getAndSetPrefixForNamespaceURI(bpelDataObject.getNamespace()) 
+					getAndSetPrefixForNamespaceURI(task.getNamespace()) 
 					+ ":" 
-					+ bpelDataObject.getMessageType() + "Response");
+					+ task.getOutMessageType());
 			
 			/* Append variable */
 			result.appendChild(variable);
+			
 		}
 		
-		/* Append default variables */
+		/* Append default variables, used by the process service */
 		for (Element e : createDefaultRequestAndResponseVariables()) {
 			result.appendChild(e);
 		}
@@ -720,16 +715,12 @@ public class SupportingFactory {
 		imports.add(processWSDLimport);
 		
 		/* Create an import for each used web service */
-		for (Task task : process.getTasks()) {
-			if (!(task.getFirstInputDataObject() instanceof BPELDataObject)) {
-				continue;
-			}
-			BPELDataObject dataObject = (BPELDataObject) task.getFirstInputDataObject();
+		for (Task task : BPELUtil.getDistinctServiceList(process.getTasks())) {
 			
 			/* Create import */
 			Element importElement = this.document.createElement("import");
-			importElement.setAttribute("location", dataObject.getServiceName() + ".wsdl");
-			importElement.setAttribute("namespace", dataObject.getNamespace());
+			importElement.setAttribute("location", task.getServiceName() + ".wsdl");
+			importElement.setAttribute("namespace", task.getNamespace());
 			importElement.setAttribute("importType", "http://schemas.xmlsoap.org/wsdl/");
 			imports.add(importElement);
 		}
@@ -846,24 +837,20 @@ public class SupportingFactory {
 		
 		/* Add a new part link for each task with the name 'serviceName'PartnerLink 
 		 * if this one does not exist */
-		for (Task task : process.getTasks()) {
-			if (!(task.getFirstInputDataObject() instanceof BPELDataObject)) {
-				continue;
-			}
-			BPELDataObject dataObject = (BPELDataObject) task.getFirstInputDataObject();
+		for (Task task : BPELUtil.getDistinctServiceList(process.getTasks())) {
 			
 			/* Check if this partner link already exists */
-			if(allPartnerLinks.get(dataObject.getServiceName() + "PartnerLink") != null) {
+			if(allPartnerLinks.get(task.getServiceName() + "PartnerLink") != null) {
 				continue;
 			}
 			
 			/* Create a new partner link */
 			Map<String, String> partnerLink = new HashMap<String, String>();
-			partnerLink.put("name", dataObject.getServiceName() + "PartnerLink");
+			partnerLink.put("name", task.getServiceName() + "PartnerLink");
 			partnerLink.put("partnerLinkType", "tns:" 
-					+	dataObject.getServiceName() + "PartnerLinkType");
-			partnerLink.put("serviceName", dataObject.getServiceName());
-			partnerLink.put("partnerRole", dataObject.getServiceName() + "Provider");
+					+	task.getServiceName() + "PartnerLinkType");
+			partnerLink.put("serviceName", task.getServiceName());
+			partnerLink.put("partnerRole", task.getServiceName() + "Provider");
 			
 			allPartnerLinks.put(partnerLink.get("name"), partnerLink);
 		}
@@ -901,7 +888,8 @@ public class SupportingFactory {
 		partnerLink.setAttribute("name", "InvokeProcessPartnerLink");
 		partnerLink.setAttribute("partnerLinkType", "tns:" + "InvokeProcess");
 		partnerLink.setAttribute("myRole", "InvokeProcessProvider");
-		partnerLink.setAttribute("serviceName", "InvokeProcess");
+		partnerLink.setAttribute("serviceName", "InvokeProcess_" 
+							+ this.diagram.getId().replace(" ", "_") );
 		
 		return partnerLink;
 	}

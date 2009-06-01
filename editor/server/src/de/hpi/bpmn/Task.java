@@ -1,5 +1,7 @@
 package de.hpi.bpmn;
 
+import org.json.JSONObject;
+
 import de.hpi.bpmn.serialization.BPMNSerialization;
 
 public class Task extends Activity {
@@ -11,6 +13,21 @@ public class Task extends Activity {
 	protected String rightDelegateTask;
 	protected String form;
 	protected String color;
+	
+	/* The input message type of the operation */
+	private String inMessageType;
+	/* The output message type of the operation */
+	private String outMessageType;
+	/* The values of the web service's parameters */
+	private JSONObject inputSets;
+	/* The namespace of the related web service */
+	private String namespace;
+	/* The name of the related web service */
+	private String serviceName;
+	/* The used operation of the related web service */
+	private String operation;
+	/* The related port type */
+	private String portType;
 	
 	
 	/**
@@ -28,12 +45,93 @@ public class Task extends Activity {
 		return null;
 	}
 	
+	/**
+	 * Checks if task describes the same web service as this task.
+	 * Two tasks are equal concerning their services, if and only if 
+	 * <ul>
+	 * 	<li>the namespace</li>
+	 * 	<li>the service name</li>
+	 * 	<li>and the operation are equal</li>
+	 * </ul>
+	 * 
+	 * @param task
+	 * 		The task to compare with
+	 * @return
+	 * 		The check result
+	 */
+	public boolean describesEqualService(Task task) {
+		if(this.namespace.equals(task.getNamespace())
+				&& this.serviceName.equals(task.getServiceName())
+				&& this.operation.equals(task.getOperation())) {
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public String getColor() {
 		return color;
 	}
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public String getInMessageType() {
+		return inMessageType;
+	}
+
+	public void setInMessageType(String inMessageType) {
+		this.inMessageType = inMessageType;
+	}
+
+	public void setOutMessageType(String outMessageType) {
+		this.outMessageType = outMessageType;
+	}
+
+	public String getOutMessageType() {
+		return outMessageType;
+	}
+
+	public JSONObject getInputSets() {
+		return inputSets;
+	}
+
+	public void setInputSets(JSONObject inputSets) {
+		this.inputSets = inputSets;
+	}
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+
+	public String getPortType() {
+		return portType;
+	}
+
+	public void setPortType(String portType) {
+		this.portType = portType;
 	}
 
 	public boolean isSkippable() {

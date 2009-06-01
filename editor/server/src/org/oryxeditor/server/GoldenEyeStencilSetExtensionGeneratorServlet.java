@@ -3,9 +3,16 @@
  */
 package org.oryxeditor.server;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,15 +32,76 @@ import org.oryxeditor.server.ServiceComposerServlet.Service;
  * @author Sven Wagner-Boysen
  *
  */
-public class GoldenEyeStencilSetExtensionGenerator {
+public class GoldenEyeStencilSetExtensionGeneratorServlet extends ServiceComposerServlet{
 	
 	
-	/** Enumeration to distinguish variable types {@code INPUT} and {@code OUTPUT}. */
-	private enum TypeOfVariable {
-		/** The method call is meant to process an input variable. */
-		INPUT, 
-		/** The method call is meant to process an output variable. */
-		OUTPUT
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2255306279308291665L;
+	
+//	/** Enumeration to distinguish variable types {@code INPUT} and {@code OUTPUT}. */
+//	private enum TypeOfVariable {
+//		/** The method call is meant to process an input variable. */
+//		INPUT, 
+//		/** The method call is meant to process an output variable. */
+//		OUTPUT
+//	}
+	
+	
+	/* (non-Javadoc)
+	 * @see org.oryxeditor.server.ServiceComposerServlet#process(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
+	protected void process(HttpServletRequest request,
+			HttpServletResponse response) {
+		this.request = request;
+		this.response = response;
+		this.baseUrl = Repository.getBaseUrl(request);
+		this.repository = new Repository(baseUrl);
+
+		ArrayList<Service> services = parseParameters(request.getParameterMap());
+
+		Date creationDate = new Date(System.currentTimeMillis());
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss.SSS");
+		String sessionName = "GoldenEye TestCase "
+				+ dateFormat.format(creationDate);
+
+		ArrayList<String> stencilSetExtensionUrls = new ArrayList<String>();
+
+//		stencilSetExtensionUrls.add(generateStencilSetExtension(sessionName,
+//				services));
+		
+		/* Add StencilSetExtension GoldenEye SES Astra Bachelorproject */
+		stencilSetExtensionUrls.add(
+				generateGoldenEyeStencilSet(sessionName + "GoldenEye" ,services));
+		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset-goldeneye#");
+		
+		// generate BPMN model with a start event
+		String startEventId = "oryx_" + UUID.randomUUID().toString();
+		
+		/* Prepare generated model */
+		StringBuilder modelData = new StringBuilder();
+		modelData.append("<a rel=\"oryx-render\" href=\"#");
+		modelData.append(startEventId);
+		modelData.append("\"/></div><div id=\"");
+		modelData.append(startEventId);
+		modelData.append("\"><span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#StartMessageEvent</span><span class=\"oryx-id\"></span><span class=\"oryx-categories\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-name\"></span><span class=\"oryx-assignments\"></span><span class=\"oryx-pool\"></span><span class=\"oryx-lanes\"></span><span class=\"oryx-eventtype\">Start</span><span class=\"oryx-trigger\">Message</span><span class=\"oryx-message\"></span><span class=\"oryx-implementation\">Web Service</span><span class=\"oryx-bgcolor\">#ffffff</span><span class=\"oryx-bounds\">15,225,45,255</span><a rel=\"raziel-parent\" href=\"#oryx-canvas123\"/>");
+		
+		String model = repository.generateERDF(
+						sessionName,
+						modelData.toString(),
+						"/stencilsets/bpmn1.1/bpmn1.1.json", BASE_STENCILSET,
+						stencilSetExtensionUrls);
+		
+		String modelUrl = baseUrl
+				+ repository.saveNewModel(model, sessionName);
+
+		// hack for reverse proxies:
+		modelUrl = modelUrl.substring(modelUrl.lastIndexOf("http://"));
+
+		// redirect client to editor with that newly generated model
+		response.setHeader("Location", modelUrl);
+		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 	}
 	
 	/**
@@ -46,7 +114,7 @@ public class GoldenEyeStencilSetExtensionGenerator {
 	 * @return
 	 * 		The stencil set extension URL
 	 */
-	public static String generateGoldenEyeStencilSet(String extensionName, List<Service> services) {
+	protected String generateGoldenEyeStencilSet(String extensionName, List<Service> services) {
 		String extensionNamespace = StencilSetExtensionGenerator.getStencilSetExtensionNamespace(extensionName);
 		String extension;
 		try {
@@ -68,7 +136,7 @@ public class GoldenEyeStencilSetExtensionGenerator {
 	/**
 	 * Generates the JSON String for the stencil set extension. It contains: 
 	 * <ul> 
-	 * 	<li>DataObjects for each service's operation input part</li>
+	 * 	<li>A task stencil for each service's operation</li>
 	 * </ul>
 	 * 
 	 * @param extensionName
@@ -79,25 +147,23 @@ public class GoldenEyeStencilSetExtensionGenerator {
 	 * 		The resulting stencil set extension
 	 * @throws JSONException 
 	 */
-	private static String generateJsonForStencilSetExtension(String extensionName, List<Service> services) throws JSONException {
-		/* The array of data object stencils */
-		JSONArray dataObjectStencils = new JSONArray();
+	private String generateJsonForStencilSetExtension(String extensionName, List<Service> services) throws JSONException {
+		/* The array of task object stencils */
+		JSONArray taskStencils = new JSONArray();
 		
 		/* The whole stencil set extension */
-//		StringBuffer stencilSetExtension = new StringBuffer();
 		JSONObject stencilSetExtension = new JSONObject();
 
-		/* Generate data objects for each service operation input parts */
+		/* Generate a task object for each service operation */
 		for (Service service : services) {
 			for (PortType portType : service.portTypes) {
 				for (Operation operation : portType.operations) {
-					dataObjectStencils.put(generateDataObjectStencil(
+					taskStencils.put(generateTaskObjectStencil(
 							service, 
 							operation, 
 							portType, 
-							TypeOfVariable.INPUT, 
-							createJsonId("dataobject-" + service.name + "-" + operation.name), 
-							generatePropertiesProperty(operation, TypeOfVariable.INPUT)));
+							createJsonId("task-" + service.name + "-" + operation.name), 
+							generatePropertiesProperty(operation)));
 				}
 			}
 		}
@@ -108,35 +174,16 @@ public class GoldenEyeStencilSetExtensionGenerator {
 		stencilSetExtension.put("namespace", StencilSetExtensionGenerator.getStencilSetExtensionNamespace(extensionName));
 		stencilSetExtension.put("description", getStencilSetExtensionDescription(extensionName, services));
 		stencilSetExtension.put("extends", ServiceComposerServlet.BASE_STENCILSET);
-		stencilSetExtension.put("stencils", dataObjectStencils);
+		stencilSetExtension.put("stencils", taskStencils);
 		stencilSetExtension.put("properties", new JSONArray());
 		stencilSetExtension.put("removestencils", new JSONArray());
 		stencilSetExtension.put("removeproperties", new JSONArray());
-		
-		
-//		stencilSetExtension.append("{\"title\":\"");
-//		stencilSetExtension.append(extensionName);
-//		stencilSetExtension.append("\",");
-//		stencilSetExtension.append("\"namespace\":\"");
-//		stencilSetExtension.append(StencilSetExtensionGenerator.getStencilSetExtensionNamespace(extensionName));
-//		stencilSetExtension.append("\",");
-//		stencilSetExtension.append("\"description\":\"");
-//		stencilSetExtension.append(getStencilSetExtensionDescription(extensionName, services));
-//		stencilSetExtension.append("\",");
-//		stencilSetExtension.append("\"extends\":\"");
-//		stencilSetExtension.append(ServiceComposerServlet.BASE_STENCILSET);
-//		stencilSetExtension.append("\",");
-//		stencilSetExtension.append("\"stencils\":[\n");
-//		stencilSetExtension.append(dataObjectStencils.toString());
-//		stencilSetExtension.append("],");
-//		stencilSetExtension.append("\"properties\":[],");
-//		stencilSetExtension.append("\"rules\": {\"connectionRules\": [],\"cardinalityRules\": [],\"containmentRules\": []},\"removestencils\": [],\"removeproperties\": []}");
 		
 		return stencilSetExtension.toString(4);
 	}
 	
 	/**
-	 * Creates the {@code Properties} property of a {@code DataObject}
+	 * Creates the {@code InputSets} property of a {@code Task}
 	 * 
 	 * @param operation
 	 * 		The operation that belongs to the data object
@@ -146,11 +193,11 @@ public class GoldenEyeStencilSetExtensionGenerator {
 	 * 		The JSONString of the properties property
 	 * @throws JSONException 
 	 */
-	private static JSONObject generatePropertiesProperty(Operation operation, TypeOfVariable type) throws JSONException {
+	private JSONObject generatePropertiesProperty(Operation operation) throws JSONException {
 		JSONObject property = new JSONObject();
-		property.put("id", "properties");
+		property.put("id", "inputsets");
 		property.put("type", "Complex");
-		property.put("title", "Properties");
+		property.put("title", "InputSets");
 		property.put("description", "The input params for " + operation.name);
 		
 		/* Generate default value */
@@ -177,7 +224,7 @@ public class GoldenEyeStencilSetExtensionGenerator {
 	 * 		The complex items {@code JSONArray}
 	 * @throws JSONException 
 	 */
-	private static JSONArray generateComplexItems(Map<String, String> params) throws JSONException {
+	private JSONArray generateComplexItems(Map<String, String> params) throws JSONException {
 		JSONArray complexItems = new JSONArray();
 		
 		for (String key : params.keySet() ) {
@@ -185,7 +232,7 @@ public class GoldenEyeStencilSetExtensionGenerator {
 			String varType = params.get(key);
 			JSONObject complexItem = new JSONObject();
 			
-			complexItem.put("id", key.toLowerCase());
+			complexItem.put("id", key);
 			complexItem.put("name", key);
 			complexItem.put("width", 100);
 			
@@ -244,7 +291,7 @@ public class GoldenEyeStencilSetExtensionGenerator {
 	 * 		The oryx stencil set string of the choice options
 	 * @throws JSONException 
 	 */
-	private static JSONArray generateChoiceItems(String choicesString) throws JSONException {
+	private JSONArray generateChoiceItems(String choicesString) throws JSONException {
 		String[] choices = choicesString.split(",");
 		JSONArray items = new JSONArray();
 		
@@ -261,50 +308,52 @@ public class GoldenEyeStencilSetExtensionGenerator {
 	}
 
 	/**
-	 * Creates the stencil set {@code JSONObject} for a data object.
+	 * Creates the stencil {@code JSONObject} for a task object.
 	 * 
-	 * @param dataObjectName
-	 * 		The name of the data object
-	 * @param type
-	 * 		Determines, if this is either an {@code OUTPUT} or {@code INPUT} variable
 	 * @param id
 	 * 		The stencil's identifier
-	 * @param operationName
-	 * 		The name of the operation the variable belongs to
-	 * @param serviceName
-	 * 		The service name the variable belongs to
-	 * @param properties
-	 * 		The parameters stored in the variable
+	 * @param operation
+	 * 		The operation the task belongs to
+	 * @param service
+	 * 		The service the task belongs to
+	 * @param inputSets
+	 * 		The parameters to invoke the server method
 	 * @return
 	 * 		The stencil's {@code JSONObject}
 	 * @throws JSONException 
 	 */
-	private static JSONObject generateDataObjectStencil(
+	private JSONObject generateTaskObjectStencil(
 			Service service, 
 			Operation operation,
 			PortType portType,
-			TypeOfVariable type, 
 			String id,
-			JSONObject properties) throws JSONException {
+			JSONObject inputSets) throws JSONException {
 		
-		JSONObject dataObjectStencil = new JSONObject();
+		JSONObject taskStencil = new JSONObject();
 		
-		dataObjectStencil.put("type", "node");
-		dataObjectStencil.put("id", id);
-//		dataObjectStencil.put("superId", "DataObject");
-		dataObjectStencil.put("title", operation.name + " Variable");
-		dataObjectStencil.put("groups", new JSONArray("[\"Artifacts\"]"));
-		dataObjectStencil.put("description", "The " 
-				+ type.toString().toLowerCase() +
-				"variable to operation '" + operation.name + "' " 
+		taskStencil.put("type", "node");
+		taskStencil.put("id", id);
+		taskStencil.put("title", operation.name);
+		taskStencil.put("groups", new JSONArray("[\"Activities\"]"));
+		taskStencil.put("description",
+				"The task to operation '" + operation.name + "' " 
 				+ "of the service '" + service.name + "'");
 		
 		/* Graphical representation */
-		dataObjectStencil.put("view", "artifact/node.data.object.svg");
-		dataObjectStencil.put("icon", "new_data_object.png");
+		taskStencil.put("view", "activity/node.task.svg");
+		taskStencil.put("icon", "new_task.png");
 				
 		/* Set connection roles */
-		dataObjectStencil.put("roles", new JSONArray("[\"DataObject\",\"fromtoall\"]"));
+		taskStencil.put("roles", new JSONArray("[\"Task\"," +
+				"\"sequence_start\"," +
+				"\"sequence_end\"," +
+				"\"messageflow_start\"," +
+				"\"messageflow_end\"," +
+				"\"to_task_event\"," +
+				"\"from_task_event\"," +
+				"\"tc\"," +
+				"\"fromtoall\"," +
+				"\"FromEventbasedGateway\"]\""));
 		
 		/* Set stencil's properties */
 		JSONArray jsonProperties = new JSONArray();
@@ -314,8 +363,8 @@ public class GoldenEyeStencilSetExtensionGenerator {
 		name.put("id", "name");
 		name.put("title", "Name");
 		name.put("type", "String");
-		name.put("value", operation.name + " Variable");
-		name.put("refToView","text_name");
+		name.put("value", operation.name + " Task");
+		name.put("refToView","acttext");
 		jsonProperties.put(name);
 		
 		/* Create namespace property */
@@ -345,44 +394,121 @@ public class GoldenEyeStencilSetExtensionGenerator {
 		operationNameProp.put("readonly", true);
 		jsonProperties.put(operationNameProp);
 		
-		/* Create property messageType */
-		JSONObject messageTypeProp = new JSONObject();
-		messageTypeProp.put("id", "messagetype");
-		messageTypeProp.put("title", "MessageType");
-		messageTypeProp.put("type", "String");
-		messageTypeProp.put("value", operation.inputMessage);
-		messageTypeProp.put("readonly", true);
-		jsonProperties.put(messageTypeProp);
+		/* Create property InMessageType */
+		JSONObject inMessageTypeProp = new JSONObject();
+		inMessageTypeProp.put("id", "inmessagetype");
+		inMessageTypeProp.put("title", "InMessageType");
+		inMessageTypeProp.put("type", "String");
+		inMessageTypeProp.put("value", operation.inputMessage);
+		inMessageTypeProp.put("readonly", true);
+		jsonProperties.put(inMessageTypeProp);
+		
+		/* Create property OutMessageType */
+		JSONObject outMessageTypeProp = new JSONObject();
+		outMessageTypeProp.put("id", "outmessagetype");
+		outMessageTypeProp.put("title", "OutMessageType");
+		outMessageTypeProp.put("type", "String");
+		outMessageTypeProp.put("value", operation.outputMessage);
+		outMessageTypeProp.put("readonly", true);
+		jsonProperties.put(outMessageTypeProp);
 		
 		/* Create property port type */
 		JSONObject portTypeProp = new JSONObject();
-		portTypeProp.put("id", "porttype");
+		portTypeProp.put("id", "portType");
 		portTypeProp.put("title", "PortType");
 		portTypeProp.put("type", "String");
 		portTypeProp.put("value", portType.name);
 		portTypeProp.put("readonly", true);
 		jsonProperties.put(portTypeProp);
 		
-		/* Append properties property */
-		jsonProperties.put(properties);
+		/* Append input sets property */
+		jsonProperties.put(inputSets);
 		
-		dataObjectStencil.put("properties", jsonProperties);
+		/* Append standard task properties */
+		for (JSONObject property : createStandardTaskProperties()) {
+			jsonProperties.put(property);
+		}
 		
-		return dataObjectStencil;
+		taskStencil.put("properties", jsonProperties);
+		
+		return taskStencil;
 	}
 	
-	private static String createJsonId(String name) {
+	/**
+	 * Create the standard properties of a task object.
+	 * 
+	 * @return
+	 * 		A list of JSON object properties
+	 * @throws JSONException 
+	 */
+	private List<JSONObject> createStandardTaskProperties() throws JSONException {
+		ArrayList<JSONObject> properties = new ArrayList<JSONObject>();
+		
+		JSONObject bgColor = new JSONObject();
+		bgColor.put("id", "bgColor");
+		bgColor.put("type", "Color");
+		bgColor.put("title", "Background Color");
+		bgColor.put("value", "#ffffcc");
+		bgColor.put("refToView", "taskrect");
+		bgColor.put("fill", true);
+		bgColor.put("stroke", false);
+		properties.add(bgColor);
+		
+		JSONObject loopType = new JSONObject();
+		loopType.put("id", "loopType");
+		loopType.put("type", "Choice");
+		loopType.put("title", "LoopType");
+		loopType.put("value", "None");
+		
+		/* LoopType choice items */
+		JSONArray loopTypeItems = new JSONArray();
+		loopTypeItems.put(new JSONObject("{" +
+				"\"id\":\"c1\"," +
+				"\"title\":\"None\"," +
+				"\"value\":\"None\"," +
+				"\"refToView\":\"none\"" +
+				"}"));
+		loopTypeItems.put(new JSONObject("{" +
+				"\"id\":\"c2\"," +
+				"\"title\":\"Standard\"," +
+				"\"value\":\"Standard\"," +
+				"\"refToView\":\"loop\"" +
+				"}"));
+		loopTypeItems.put(new JSONObject("{" +
+				"\"id\":\"c3\"," +
+				"\"title\":\"MultiInstance\"," +
+				"\"value\":\"MultiInstance\"," +
+				"\"refToView\":\"multiple\"" +
+				"}"));
+		
+		
+		loopType.put("items", loopTypeItems);
+		properties.add(loopType);
+		
+		/* Compensation property */
+		JSONObject compensationProp = new JSONObject();
+		compensationProp.put("id", "isCompensation");
+		compensationProp.put("type", "Boolean");
+		compensationProp.put("title", "isCompensation");
+		compensationProp.put("value", false);
+		compensationProp.put("refToView", "compensation");
+		properties.add(compensationProp);
+		
+		return properties;
+	}
+	
+	private String createJsonId(String name) {
 		String result = name.toLowerCase();
 		result = result.replace(" ", "");
 		return result;
 	}
 	
-	private static String getStencilSetExtensionLocation(String extensionName) {
+	private String getStencilSetExtensionLocation(String extensionName) {
 		return "bpmnservicecompositionsubset/"
 				+ extensionName.toLowerCase().replace(" ", "_") + ".json";
 	}
 	
-	private static String getStencilSetExtensionDescription(String extensionName,
+	private String getStencilSetExtensionDescription(String extensionName,
 			List<Service> services) {
 		return "Extension for " + extensionName + " using " + services.size()
 				+ " services.";

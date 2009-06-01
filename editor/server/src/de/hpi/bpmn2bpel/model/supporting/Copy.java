@@ -1,17 +1,12 @@
 package de.hpi.bpmn2bpel.model.supporting;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import de.hpi.bpmn2bpel.util.BPELUtil;
-import de.hpi.bpmn2bpel.model.BPELDataObject;
+import de.hpi.bpmn.Task;
 import de.hpi.bpmn2bpel.model.supporting.FromSpec.fromTypes;
 import de.hpi.bpmn2bpel.model.supporting.ToSpec.toTypes;
 
@@ -43,23 +38,23 @@ public class Copy {
 	}
 
 	/**
-	 * Generates the from part based on the value of the properties property of
-	 * a data object.
+	 * Generates the from part based on the value of the input sets property of
+	 * a task.
 	 * 
-	 * @param inputDataObject
-	 * 			The properties value.
+	 * @param task
+	 * 			The related task.
 	 * @throws JSONException 
 	 */
-	public void setFromSpecBasedOnDataObject(BPELDataObject inputDataObject) throws JSONException {
+	public void setFromSpecBasedOnTask(Task taskObject) throws JSONException {
 		FromSpec from = new FromSpec();
 		from.setType(fromTypes.LITERAL);
 		
 		/* Create variable element tag, equal to the related operation name */
 		Element literalContent = this.xmlDocument.createElementNS(
-				inputDataObject.getNamespace(), inputDataObject.getOperation());
+				taskObject.getNamespace(), taskObject.getOperation());
 		
 		/* Add parameter values from the properties property */
-		JSONObject parameters = inputDataObject.getProperties();
+		JSONObject parameters = taskObject.getInputSets();
 		JSONArray parameterNames = parameters.names();
 		
 		for (int i = 0; i < parameterNames.length(); i++) {
@@ -156,20 +151,20 @@ public class Copy {
 	}
 	
 	/**
-	 * Creates to part of the copy element from the passed data object. Basically 
-	 * it only sets the name of the variable from the information of the data 
+	 * Creates to part of the copy element from the passed task object. Basically 
+	 * it only sets the name of the variable from the information of the task 
 	 * object.
 	 * 
-	 * @param dataObject
-	 * 		The source data object
+	 * @param task
+	 * 		The source task object
 	 */
-	public void setToSpecBasedOnDataObject(BPELDataObject dataObject) {
+	public void setToSpecBasedOnTask(Task task) {
 		ToSpec to = new ToSpec();
 		
 		/* The message part of a generated service should name 'parameters' */
 		to.setType(toTypes.VARIABLE);
 		to.setPart("parameters");
-		to.setVariableName(dataObject.getId());
+		to.setVariableName(task.getId());
 		
 		this.setToSpec(to);
 	}
