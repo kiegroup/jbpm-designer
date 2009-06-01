@@ -29,10 +29,8 @@ if(!ORYX.Core) {ORYX.Core = {};}
 if(!ORYX.Core.StencilSet) {ORYX.Core.StencilSet = {};}
 
 /**
- * Class Rules
- * uses Prototpye 1.5.0
- * uses Inheritance
- *
+ * Class Rules uses Prototpye 1.5.0 uses Inheritance
+ * 
  * This class implements the API to check the stencil sets' rules.
  */
 ORYX.Core.StencilSet.Rules = {
@@ -52,16 +50,20 @@ ORYX.Core.StencilSet.Rules = {
 		this._cachedCardSE = new Hash();
 		this._cachedCardTE = new Hash();
 		this._cachedContainPC = new Hash();
+		this._cachedMorphRS = new Hash();
 		
 		this._connectionRules = new Hash();
 		this._cardinalityRules = new Hash();
 		this._containmentRules = new Hash();
+		this._morphingRules = new Hash();
 	},
 	
 	/**
-	 * Call this method to initialize the rules for a stencil set
-	 * and all of its active extensions.
-	 * @param {Object} stencilSet
+	 * Call this method to initialize the rules for a stencil set and all of its
+	 * active extensions.
+	 * 
+	 * @param {Object}
+	 *            stencilSet
 	 */
 	initializeRules: function(stencilSet) {
 		
@@ -69,7 +71,7 @@ ORYX.Core.StencilSet.Rules = {
 							return (ss.namespace() == stencilSet.namespace());
 						});
 		if (existingSS) {
-			//reinitialize all rules
+			// reinitialize all rules
 			var stencilsets = this._stencilSets.clone();
 			stencilsets = stencilsets.without(existingSS);
 			stencilsets.push(stencilSet);
@@ -83,10 +85,12 @@ ORYX.Core.StencilSet.Rules = {
 			this._cachedCardSE = new Hash();
 			this._cachedCardTE = new Hash();
 			this._cachedContainPC = new Hash();
+			this._cachedMorphRS = new Hash();
 			
 			this._connectionRules = new Hash();
 			this._cardinalityRules = new Hash();
 			this._containmentRules = new Hash();
+			this._morphingRules = new Hash();
 			
 			stencilsets.each(function(ss){
 				this.initializeRules(ss);
@@ -108,6 +112,8 @@ ORYX.Core.StencilSet.Rules = {
 						jsonRules.cardinalityRules = jsonRules.cardinalityRules.concat(extension.rules.cardinalityRules);
 					if(extension.rules.containmentRules)
 						jsonRules.containmentRules = jsonRules.containmentRules.concat(extension.rules.containmentRules);
+					if(extension.rules.morphingRules)
+						jsonRules.morphingRules = jsonRules.morphingRules.concat(extension.rules.morphingRules);
 				}
 				if(extension.stencils) 
 					stencils = stencils.concat(extension.stencils);
@@ -115,7 +121,7 @@ ORYX.Core.StencilSet.Rules = {
 			
 			this._stencils = this._stencils.concat(stencilSet.stencils());
 			
-			//init connection rules
+			// init connection rules
 			var cr = this._connectionRules;
 			if (jsonRules.connectionRules) {
 				jsonRules.connectionRules.each((function(rules){
@@ -165,7 +171,7 @@ ORYX.Core.StencilSet.Rules = {
 				}).bind(this));
 			}
 			
-			//init cardinality rules
+			// init cardinality rules
 			var cardr = this._cardinalityRules;
 			if (jsonRules.cardinalityRules) {
 				jsonRules.cardinalityRules.each((function(rules){
@@ -211,7 +217,7 @@ ORYX.Core.StencilSet.Rules = {
 				}).bind(this));
 			}
 			
-			//init containment rules
+			// init containment rules
 			var conr = this._containmentRules;
 			if (jsonRules.containmentRules) {
 				jsonRules.containmentRules.each((function(rules){
@@ -235,7 +241,33 @@ ORYX.Core.StencilSet.Rules = {
 					}).bind(this));
 				}).bind(this));
 			}
+			
+			// init morphing rules
+			var morphr = this._morphingRules;
+			if (jsonRules.morphingRules) {
+				jsonRules.morphingRules.each((function(rules){
+					var morphrKey;
+					if (this._isRoleOfOtherNamespace(rules.role)) {
+						morphrKey = rules.role;
+					}
+					else {
+						morphrKey = namespace + rules.role;
+					}
+					if (!morphr[morphrKey]) {
+						morphr[morphrKey] = [];
+					}
+					rules.baseMorphs.each((function(baseMorphStencilId){
+						morphr[morphrKey].push(this._getStencilById(namespace + baseMorphStencilId));
+					}).bind(this));
+				}).bind(this));
+			}
 		}
+	},
+	
+	_getStencilById: function(id) {
+		return this._stencils.find(function(stencil) {
+			return stencil.id()==id;
+		});
 	},
 	
 	_cacheConnect: function(args) {
@@ -334,34 +366,56 @@ ORYX.Core.StencilSet.Rules = {
 		
 		return result;
 	},
+	
+	/**
+	 * Returns all stencils belonging to a morph group. (calculation result is
+	 * cached)
+	 */
+	_cacheMorph: function(role) {
+		
+		var morphs = this._cachedMorphRS[role];
+		
+		if(!morphs) {
+			morphs = [];
+			
+			if(this._morphingRules.keys().include(role)) {
+				morphs = this._stencils.select(function(stencil) {
+					return stencil.roles().include(role);
+				});
+			}
+			
+			this._cachedMorphRS[role] = morphs;
+		}
+		return morphs;
+	},
 
 	/** Begin connection rules' methods */
 	
 	/**
 	 * 
-	 * @param {Object} args
-	 *  sourceStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  sourceShape:   ORYX.Core.Shape | undefined
-	 *  
-	 *  At least sourceStencil or sourceShape has to be specified
-	 *  
+	 * @param {Object}
+	 *            args sourceStencil: ORYX.Core.StencilSet.Stencil | undefined
+	 *            sourceShape: ORYX.Core.Shape | undefined
+	 * 
+	 * At least sourceStencil or sourceShape has to be specified
+	 * 
 	 * @return {Array} Array of stencils of edges that can be outgoing edges of
-	 * 				   the source.
+	 *         the source.
 	 */
 	outgoingEdgeStencils: function(args) {
-		//check arguments
+		// check arguments
 		if(!args.sourceShape && !args.sourceStencil) {
 			return [];
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.sourceShape) {
 			args.sourceStencil = args.sourceShape.getStencil();
 		}
 		
 		var _edges = [];
 		
-		//test each edge, if it can connect to source
+		// test each edge, if it can connect to source
 		this._stencils.each((function(stencil) {
 			if(stencil.type() === "edge") {
 				var newArgs = Object.clone(args);
@@ -377,29 +431,29 @@ ORYX.Core.StencilSet.Rules = {
 
 	/**
 	 * 
-	 * @param {Object} args
-	 *  targetStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  targetShape:   ORYX.Core.Shape | undefined
-	 *  
-	 *  At least targetStencil or targetShape has to be specified
-	 *  
+	 * @param {Object}
+	 *            args targetStencil: ORYX.Core.StencilSet.Stencil | undefined
+	 *            targetShape: ORYX.Core.Shape | undefined
+	 * 
+	 * At least targetStencil or targetShape has to be specified
+	 * 
 	 * @return {Array} Array of stencils of edges that can be incoming edges of
-	 * 				   the target.
+	 *         the target.
 	 */
 	incomingEdgeStencils: function(args) {
-		//check arguments
+		// check arguments
 		if(!args.targetShape && !args.targetStencil) {
 			return [];
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.targetShape) {
 			args.targetStencil = args.targetShape.getStencil();
 		}
 		
 		var _edges = [];
 		
-		//test each edge, if it can connect to source
+		// test each edge, if it can connect to source
 		this._stencils.each((function(stencil) {
 			if(stencil.type() === "edge") {
 				var newArgs = Object.clone(args);
@@ -415,25 +469,25 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {Object} args
-	 *  edgeStencil:   ORYX.Core.StencilSet.Stencil | undefined
-	 *  edgeShape:     ORYX.Core.Edge | undefined
-	 *  targetStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  targetShape:   ORYX.Core.Node | undefined
-	 *  
-	 *  At least edgeStencil or edgeShape has to be specified!!!
-	 *  
-	 *  @return {Array} Returns an array of stencils that can be source of 
-	 *  				the specified edge.
+	 * @param {Object}
+	 *            args edgeStencil: ORYX.Core.StencilSet.Stencil | undefined
+	 *            edgeShape: ORYX.Core.Edge | undefined targetStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined targetShape:
+	 *            ORYX.Core.Node | undefined
+	 * 
+	 * At least edgeStencil or edgeShape has to be specified!!!
+	 * 
+	 * @return {Array} Returns an array of stencils that can be source of the
+	 *         specified edge.
 	 */
 	sourceStencils: function(args) {
-		//check arguments
+		// check arguments
 		if(!args || 
 		   !args.edgeShape && !args.edgeStencil) {
 			return [];
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.targetShape) {
 			args.targetStencil = args.targetShape.getStencil();
 		}
@@ -444,7 +498,7 @@ ORYX.Core.StencilSet.Rules = {
 		
 		var _sources = [];
 		
-		//check each stencil, if it can be a source
+		// check each stencil, if it can be a source
 		this._stencils.each((function(stencil) {
 			var newArgs = Object.clone(args);
 			newArgs.sourceStencil = stencil;
@@ -458,25 +512,25 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {Object} args
-	 *  edgeStencil:   ORYX.Core.StencilSet.Stencil | undefined
-	 *  edgeShape:     ORYX.Core.Edge | undefined
-	 *  sourceStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  sourceShape:   ORYX.Core.Node | undefined
-	 *  
-	 *  At least edgeStencil or edgeShape has to be specified!!!
-	 *  
-	 *  @return {Array} Returns an array of stencils that can be target of 
-	 *  				the specified edge.
+	 * @param {Object}
+	 *            args edgeStencil: ORYX.Core.StencilSet.Stencil | undefined
+	 *            edgeShape: ORYX.Core.Edge | undefined sourceStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined sourceShape:
+	 *            ORYX.Core.Node | undefined
+	 * 
+	 * At least edgeStencil or edgeShape has to be specified!!!
+	 * 
+	 * @return {Array} Returns an array of stencils that can be target of the
+	 *         specified edge.
 	 */
 	targetStencils: function(args) {
-		//check arguments
+		// check arguments
 		if(!args || 
 		   !args.edgeShape && !args.edgeStencil) {
 			return [];
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.sourceShape) {
 			args.sourceStencil = args.sourceShape.getStencil();
 		}
@@ -487,7 +541,7 @@ ORYX.Core.StencilSet.Rules = {
 		
 		var _targets = [];
 		
-		//check stencil, if it can be a target
+		// check stencil, if it can be a target
 		this._stencils.each((function(stencil) {
 			var newArgs = Object.clone(args);
 			newArgs.targetStencil = stencil;
@@ -501,20 +555,20 @@ ORYX.Core.StencilSet.Rules = {
 
 	/**
 	 * 
-	 * @param {Object} args
-	 *  edgeStencil:   ORYX.Core.StencilSet.Stencil
-	 *  edgeShape:     ORYX.Core.Edge |undefined
-	 *  sourceStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  sourceShape:   ORYX.Core.Node |undefined
-	 *  targetStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  targetShape:   ORYX.Core.Node |undefined
-	 *  
-	 *  At least source or target has to be specified!!!
-	 *  
-	 *  @return {Boolean} Returns, if the edge can connect source and target.
+	 * @param {Object}
+	 *            args edgeStencil: ORYX.Core.StencilSet.Stencil edgeShape:
+	 *            ORYX.Core.Edge |undefined sourceStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined sourceShape:
+	 *            ORYX.Core.Node |undefined targetStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined targetShape:
+	 *            ORYX.Core.Node |undefined
+	 * 
+	 * At least source or target has to be specified!!!
+	 * 
+	 * @return {Boolean} Returns, if the edge can connect source and target.
 	 */
 	canConnect: function(args) {	
-		//check arguments
+		// check arguments
 		if(!args ||
 		   (!args.sourceShape && !args.sourceStencil &&
 		    !args.targetShape && !args.targetStencil) ||
@@ -522,7 +576,7 @@ ORYX.Core.StencilSet.Rules = {
 		   	return false; 
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.sourceShape) {
 			args.sourceStencil = args.sourceShape.getStencil();
 		}
@@ -567,7 +621,7 @@ ORYX.Core.StencilSet.Rules = {
 				else
 					result = edge;
 			}
-		} else { //args.targetStencil
+		} else { // args.targetStencil
 			var target = this._cachedConnectTE[args.targetStencil.id()];
 			
 			if(!target)
@@ -582,7 +636,7 @@ ORYX.Core.StencilSet.Rules = {
 			}
 		}	
 			
-		//check cardinality
+		// check cardinality
 		if (result) {
 			if(args.sourceShape) {
 				var source = this._cachedCardSE[args.sourceStencil.id()];
@@ -649,20 +703,20 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {Object} args
-	 *  edgeStencil:   ORYX.Core.StencilSet.Stencil
-	 *  edgeShape:     ORYX.Core.Edge |undefined
-	 *  sourceStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  sourceShape:   ORYX.Core.Node |undefined
-	 *  targetStencil: ORYX.Core.StencilSet.Stencil | undefined
-	 *  targetShape:   ORYX.Core.Node |undefined
-	 *  
-	 *  At least source or target has to be specified!!!
-	 *  
-	 *  @return {Boolean} Returns, if the edge can connect source and target.
+	 * @param {Object}
+	 *            args edgeStencil: ORYX.Core.StencilSet.Stencil edgeShape:
+	 *            ORYX.Core.Edge |undefined sourceStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined sourceShape:
+	 *            ORYX.Core.Node |undefined targetStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined targetShape:
+	 *            ORYX.Core.Node |undefined
+	 * 
+	 * At least source or target has to be specified!!!
+	 * 
+	 * @return {Boolean} Returns, if the edge can connect source and target.
 	 */
 	_canConnect: function(args) {
-		//check arguments
+		// check arguments
 		if(!args ||
 		   (!args.sourceShape && !args.sourceStencil &&
 		    !args.targetShape && !args.targetStencil) ||
@@ -670,7 +724,7 @@ ORYX.Core.StencilSet.Rules = {
 		   	return false; 
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.sourceShape) {
 			args.sourceStencil = args.sourceShape.getStencil();
 		}
@@ -681,13 +735,13 @@ ORYX.Core.StencilSet.Rules = {
 			args.edgeStencil = args.edgeShape.getStencil();
 		}
 
-		//1. check connection rules
+		// 1. check connection rules
 		var resultCR;
 		
-		//get all connection rules for this edge
+		// get all connection rules for this edge
 		var edgeRules = this._getConnectionRulesOfEdgeStencil(args.edgeStencil);
 
-		//check connection rules, if the source can be connected to the target 
+		// check connection rules, if the source can be connected to the target
 		// with the specified edge.
 		if(edgeRules.keys().length === 0) {
 			resultCR = false;
@@ -706,7 +760,7 @@ ORYX.Core.StencilSet.Rules = {
 						return true;
 					}
 				});
-			} else { //!args.sourceStencil -> there is args.targetStencil
+			} else { // !args.sourceStencil -> there is args.targetStencil
 				resultCR = edgeRules.values().any(function(targetRoles) {
 					return args.targetStencil.roles().any(function(targetRole) {
 						return targetRoles.member(targetRole);
@@ -725,11 +779,10 @@ ORYX.Core.StencilSet.Rules = {
 
 	/**
 	 * 
-	 * @param {Object} args
-	 *  containingStencil: ORYX.Core.StencilSet.Stencil
-	 *  containingShape:   ORYX.Core.AbstractShape
-	 *  containedStencil:  ORYX.Core.StencilSet.Stencil
-	 *  containedShape:    ORYX.Core.Shape
+	 * @param {Object}
+	 *            args containingStencil: ORYX.Core.StencilSet.Stencil
+	 *            containingShape: ORYX.Core.AbstractShape containedStencil:
+	 *            ORYX.Core.StencilSet.Stencil containedShape: ORYX.Core.Shape
 	 */
 	canContain: function(args) {
 		if(!args ||
@@ -738,7 +791,7 @@ ORYX.Core.StencilSet.Rules = {
 		   	return false;
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.containedShape) {
 			args.containedStencil = args.containedShape.getStencil();
 		}
@@ -786,11 +839,10 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {Object} args
-	 *  containingStencil: ORYX.Core.StencilSet.Stencil
-	 *  containingShape:   ORYX.Core.AbstractShape
-	 *  containedStencil:  ORYX.Core.StencilSet.Stencil
-	 *  containedShape:    ORYX.Core.Shape
+	 * @param {Object}
+	 *            args containingStencil: ORYX.Core.StencilSet.Stencil
+	 *            containingShape: ORYX.Core.AbstractShape containedStencil:
+	 *            ORYX.Core.StencilSet.Stencil containedShape: ORYX.Core.Shape
 	 */
 	_canContain: function(args) {
 		if(!args ||
@@ -799,7 +851,7 @@ ORYX.Core.StencilSet.Rules = {
 		   	return false;
 		}
 		
-		//init arguments
+		// init arguments
 		if(args.containedShape) {
 			args.containedStencil = args.containedShape.getStencil();
 		}
@@ -810,7 +862,7 @@ ORYX.Core.StencilSet.Rules = {
 		
 		if(args.containingShape) {
 			if(args.containingShape instanceof ORYX.Core.Edge) {
-				//edges cannot contain other shapes
+				// edges cannot contain other shapes
 				return false;
 			}
 		}
@@ -818,7 +870,7 @@ ORYX.Core.StencilSet.Rules = {
 		
 		var result;
 		
-		//check containment rules
+		// check containment rules
 		result = args.containingStencil.roles().any((function(role) {
 			var roles = this._containmentRules[role];
 			if(roles) {
@@ -834,13 +886,130 @@ ORYX.Core.StencilSet.Rules = {
 	},
 	
 	/** End containment rules' methods */
+	
+	
+	/** Begin morphing rules' methods */
+	
+	/**
+	 * 
+	 * @param {Object}
+	 *           args 
+	 *            stencil: ORYX.Core.StencilSet.Stencil | undefined 
+	 *            shape: ORYX.Core.Shape | undefined
+	 * 
+	 * At least stencil or shape has to be specified
+	 * 
+	 * @return {Array} Array of stencils that the passed stencil/shape can be
+	 *         transformed to (w/o the current stencil)
+	 */
+	morphStencils: function(args) {
+		// check arguments
+		if(!args.stencil && !args.shape) {
+			return [];
+		}
+		
+		// init arguments
+		if(args.shape) {
+			args.stencil = args.shape.getStencil();
+		}
+		
+		var _morphStencils = [];
+		args.stencil.roles().each(function(role) {
+			this._cacheMorph(role).each(function(stencil) {
+				if(stencil.id()!=args.stencil.id()) {
+					_morphStencils.push(stencil);
+				}
+			})
+		}.bind(this));
+
+		return _morphStencils.uniq();
+	},
+	
+	/**
+	 * @return {Array} An array of all base morph stencils
+	 */
+	baseMorphs: function() {
+		var _baseMorphs = [];
+		this._morphingRules.each(function(pair) {
+			pair.value.each(function(baseMorph) {
+				_baseMorphs.push(baseMorph);
+			});
+		});
+		return _baseMorphs;
+	},
+	
+	/**
+	 * 
+	 * @param {Object}
+	 *            args 
+	 *            sourceStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined 
+	 *            sourceShape:
+	 *            ORYX.Core.Node |undefined 
+	 *            targetStencil:
+	 *            ORYX.Core.StencilSet.Stencil | undefined 
+	 *            targetShape:
+	 *            ORYX.Core.Node |undefined
+	 * 
+	 * 
+	 * @return {Stencil} Returns, the stencil for the connecting edge 
+	 * or null if connection is not possible
+	 */
+	connectMorph: function(args) {	
+		// check arguments
+		if(!args ||
+		   (!args.sourceShape && !args.sourceStencil &&
+		    !args.targetShape && !args.targetStencil)) {
+		   	return false; 
+		}
+		
+		// init arguments
+		if(args.sourceShape) {
+			args.sourceStencil = args.sourceShape.getStencil();
+		}
+		if(args.targetShape) {
+			args.targetStencil = args.targetShape.getStencil();
+		}
+		
+		var incoming = this.incomingEdgeStencils(args);
+		var outgoing = this.outgoingEdgeStencils(args);
+		
+		var edgeStencils = incoming.select(function(e) { return outgoing.member(e); }); // intersection of sets
+		var baseEdgeStencils = this.baseMorphs().select(function(e) { return edgeStencils.member(e); }); // again: intersection of sets
+		
+		if(baseEdgeStencils.size()>0)
+			return baseEdgeStencils[0]; // return any of the possible base morphs
+		else if(edgeStencils.size()>0)
+			return edgeStencils[0];	// return any of the possible stencils
+		
+		return null; //connection not possible
+	},
+	
+	/**
+	 * 
+	 * @param {ORYX.Core.StencilSet.Stencil}
+	 *            morph
+	 * 
+	 * @return {Boolean} Returns true if the morphs in the morph group of the
+	 * specified morph shall be displayed in the shape menu
+	 */
+	showInShapeMenu: function(morph) {
+		this._morphingRules.each(function(pair) {
+			pair.value.each(function(baseMorph) {
+				return false;
+			});
+		});
+	},
+	
+	/** End morphing rules' methods */
 
 
 	/** Helper methods */
 
 	/**
 	 * 
-	 * @param {String} role
+	 * @param {String}
+	 *            role
 	 * 
 	 * @return {Array} Returns an array of stencils that can act as role.
 	 */
@@ -852,10 +1021,11 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {String} role
+	 * @param {String}
+	 *            role
 	 * 
 	 * @return {Array} Returns an array of stencils that can act as role and
-	 * 				   have the type 'edge'.
+	 *         have the type 'edge'.
 	 */
 	_edgesWithRole: function(role) {
 		return this._stencils.findAll(function(stencil) {
@@ -865,10 +1035,11 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {String} role
+	 * @param {String}
+	 *            role
 	 * 
 	 * @return {Array} Returns an array of stencils that can act as role and
-	 * 				   have the type 'node'.
+	 *         have the type 'node'.
 	 */
 	_nodesWithRole: function(role) {
 		return this._stencils.findAll(function(stencil) {
@@ -878,11 +1049,13 @@ ORYX.Core.StencilSet.Rules = {
 
 	/**
 	 * 
-	 * @param {ORYX.Core.StencilSet.Stencil} parent
-	 * @param {ORYX.Core.StencilSet.Stencil} child
+	 * @param {ORYX.Core.StencilSet.Stencil}
+	 *            parent
+	 * @param {ORYX.Core.StencilSet.Stencil}
+	 *            child
 	 * 
-	 * @returns {Boolean} Returns the maximum occurrence of shapes of the 
-	 * 					  stencil's type inside the parent.
+	 * @returns {Boolean} Returns the maximum occurrence of shapes of the
+	 *          stencil's type inside the parent.
 	 */
 	_getMaximumOccurrence: function(parent, child) {
 		var max;
@@ -903,12 +1076,12 @@ ORYX.Core.StencilSet.Rules = {
 
 	/**
 	 * 
-	 * @param {Object} args
-	 *  sourceStencil: ORYX.Core.Node
-	 *  edgeStencil: ORYX.Core.StencilSet.Stencil
-	 *  
-	 *  @return {Boolean} Returns, the maximum number of outgoing edges of 
-	 *  				  the type specified by edgeStencil of the sourceShape.
+	 * @param {Object}
+	 *            args sourceStencil: ORYX.Core.Node edgeStencil:
+	 *            ORYX.Core.StencilSet.Stencil
+	 * 
+	 * @return {Boolean} Returns, the maximum number of outgoing edges of the
+	 *         type specified by edgeStencil of the sourceShape.
 	 */
 	_getMaximumNumberOfOutgoingEdge: function(args) {
 		if(!args ||
@@ -941,12 +1114,12 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {Object} args
-	 *  targetStencil: ORYX.Core.StencilSet.Stencil
-	 *  edgeStencil: ORYX.Core.StencilSet.Stencil
-	 *  
-	 *  @return {Boolean} Returns the maximum number of incoming edges of 
-	 *  				  the type specified by edgeStencil of the targetShape.
+	 * @param {Object}
+	 *            args targetStencil: ORYX.Core.StencilSet.Stencil edgeStencil:
+	 *            ORYX.Core.StencilSet.Stencil
+	 * 
+	 * @return {Boolean} Returns the maximum number of incoming edges of the
+	 *         type specified by edgeStencil of the targetShape.
 	 */
 	_getMaximumNumberOfIncomingEdge: function(args) {
 		if(!args ||
@@ -977,9 +1150,11 @@ ORYX.Core.StencilSet.Rules = {
 	
 	/**
 	 * 
-	 * @param {ORYX.Core.StencilSet.Stencil} edgeStencil
+	 * @param {ORYX.Core.StencilSet.Stencil}
+	 *            edgeStencil
 	 * 
-	 * @return {Hash} Returns a hash map of all connection rules for edgeStencil.
+	 * @return {Hash} Returns a hash map of all connection rules for
+	 *         edgeStencil.
 	 */
 	_getConnectionRulesOfEdgeStencil: function(edgeStencil) {
 		var edgeRules = new Hash();

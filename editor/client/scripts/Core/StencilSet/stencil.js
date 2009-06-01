@@ -271,6 +271,12 @@ ORYX.Core.StencilSet.Stencil = {
 	roles: function() {
 		return this._jsonStencil.roles;
 	},
+	
+	defaultAlign: function() {
+		if(!this._jsonStencil.defaultAlign)
+			return "west";
+		return this._jsonStencil.defaultAlign;
+	},
 
 	serialize: function(shape, data) {
 		return this._jsonStencil.serialize;

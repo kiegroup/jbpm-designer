@@ -362,6 +362,7 @@ if(!ORYX.I18N.ShapeMenuPlugin) ORYX.I18N.ShapeMenuPlugin = {};
 
 ORYX.I18N.ShapeMenuPlugin.drag = "Ziehen";
 ORYX.I18N.ShapeMenuPlugin.clickDrag = "Klicken oder ziehen";
+ORYX.I18N.ShapeMenuPlugin.morphMsg = "Shape morphen";
 
 if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
 

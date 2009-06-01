@@ -6,12 +6,7 @@
 		<!-- following plugins require Ext -->		
 		<plugin source="toolbar.js" name="ORYX.Plugins.Toolbar" />
 		
-		<plugin source="shapemenu.js" name="ORYX.Plugins.ShapeMenuPlugin">			
-			<property group="Z-Order" align="Oryx_Top" />
-			<property group="Alignment" align="Oryx_Top" />
-			<property group="Grouping" align="Oryx_Top" />
-			<property group="Edit" align="Oryx_Left" />					
-		</plugin>
+		<plugin source="shapemenu.js" name="ORYX.Plugins.ShapeMenuPlugin" />
 		<plugin source="selectssperspective.js" name="ORYX.Plugins.SelectStencilSetPerspective" />
 		<plugin source="shaperepository.js" name="ORYX.Plugins.ShapeRepository" />
 		<plugin source="propertywindow.js" name="ORYX.Plugins.PropertyWindow" />

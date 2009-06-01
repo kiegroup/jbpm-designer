@@ -169,7 +169,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"FromEventbasedGateway"
+				"FromEventbasedGateway",
+				"ActivitiesMorph"
 			],
 			"properties": [
 				{
@@ -915,7 +916,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"ActivitiesMorph"
 			],
 			"properties": [
 				{
@@ -1631,7 +1633,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"canContainArtifacts"
+				"canContainArtifacts",
+				"ActivitiesMorph"
 			],
 			"properties": [
 				{
@@ -2341,7 +2344,8 @@
 				"sequence_start",
 				"sequence_end",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"GatewaysMorph"
 			],
 			"properties": [
 				{
@@ -2603,7 +2607,8 @@
 			"roles": [
 				"sequence_end",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"GatewaysMorph"
 			],
 			"properties": [
 				{
@@ -2828,7 +2833,8 @@
 				"sequence_start",
 				"sequence_end",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"GatewaysMorph"
 			],
 			"properties": [
 				{
@@ -3031,7 +3037,8 @@
 				"sequence_start",
 				"sequence_end",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"GatewaysMorph"
 			],
 			"properties": [
 				{
@@ -3272,7 +3279,8 @@
 				"sequence_start",
 				"sequence_end",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"GatewaysMorph"
 			],
 			"properties": [
 				{
@@ -4516,9 +4524,11 @@
 			"description_de":"Jedes Objekt kann durch eine Text-Anmerkung kommentiert werden.",
 			"view":"artifact/node.text.annotation.svg",
 			"icon":"new_text_annotation.png",
+			"defaultAlign":"northwest",
 			"roles": [
 				"from_artifact",
-				"to_artifact"
+				"to_artifact",
+				"TextAnnotationMorph"
 			],
 			"properties": [
 				{
@@ -4614,10 +4624,12 @@
 			"groups_de":["Artefakte"],
 			"view":"artifact/node.data.object.svg",
 			"icon":"new_data_object.png",
+			"defaultAlign":"southwest",
 			"roles": [
 				"from_artifact",
 				"to_artifact",
-				"fromtoall"
+				"fromtoall",
+				"DataObjectMorph"
 			],
 			"properties": [
 				{
@@ -4802,14 +4814,15 @@
 			"description":"Untyped events, typically starts or ends.",
 			"description_de":"Untypisierte Ereignisse, i. d. R. am Start oder Ende eines Prozesses.",
 			"view":"startevent/node.event.start.svg",
-			"icon":"startevent/node.event.start.png",		
+			"icon":"startevent/node.event.start.png",	
 			"roles": [
 				"sequence_start",
 				"to_task_event",
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Startevents_all"
+				"Startevents_all",
+				"StartEventsMorph"
 			],
 			"properties": [
 				{
@@ -4990,7 +5003,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Startevents_all"
+				"Startevents_all",
+				"StartEventsMorph"
 			],
 			"properties": [
 				{
@@ -5213,7 +5227,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Startevents_all"
+				"Startevents_all",
+				"StartEventsMorph"
 			],
 			"properties": [
 				{
@@ -5416,7 +5431,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Startevents_all"
+				"Startevents_all",
+				"StartEventsMorph"
 			],
 			"properties": [
 				{
@@ -5608,7 +5624,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Startevents_all"
+				"Startevents_all",
+				"StartEventsMorph"
 			],
 			"properties": [
 				{
@@ -5811,7 +5828,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Startevents_all"
+				"Startevents_all",
+				"StartEventsMorph"
 			],
 			"properties": [
 				{
@@ -6007,7 +6025,8 @@
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEvent",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -6203,8 +6222,8 @@
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary",
-				"FromEventbasedGateway"
-				
+				"FromEventbasedGateway",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -6440,7 +6459,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -6678,7 +6698,8 @@
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary",
-				"FromEventbasedGateway"
+				"FromEventbasedGateway",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -6894,7 +6915,8 @@
 				"onBoundaryOnly",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -7098,7 +7120,8 @@
 				"from_task_event",
 				"onBoundaryOnly",
 				"fromtoall",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -7289,7 +7312,8 @@
 				"from_task_event",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -7493,7 +7517,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -7700,7 +7725,8 @@
 				"fromtoall",
 				"FromEventbasedGateway",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -7907,7 +7933,8 @@
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary",
-				"FromEventbasedGateway"
+				"FromEventbasedGateway",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -8124,7 +8151,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -8343,7 +8371,8 @@
 				"tc",
 				"fromtoall",
 				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary"
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -8549,7 +8578,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -8753,7 +8783,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -8967,7 +8998,8 @@
 				"to_task_event",
 				"from_task_event",
 				"tc",
-				"fromtoall"
+				"fromtoall",
+				"IntermediateEventsMorph"
 			],
 			"properties": [
 				{
@@ -9182,7 +9214,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all",
+				"EndEventsMorph"
 			],
 			"properties": [
 				{
@@ -9361,7 +9394,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"				
+				"Endevents_all",
+				"EndEventsMorph"				
 			],
 			"properties": [
 				{
@@ -9582,7 +9616,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all",
+				"EndEventsMorph"
 			],
 			"properties": [
 				{
@@ -9770,7 +9805,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all",
+				"EndEventsMorph"
 			],
 			"properties": [
 				{
@@ -9948,7 +9984,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all",
+				"EndEventsMorph"
 			],
 			"properties": [
 				{
@@ -10138,7 +10175,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all",
+				"EndEventsMorph"
 			],
 			"properties": [
 				{
@@ -10327,7 +10365,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all",
+				"EndEventsMorph"
 			],
 			"properties": [
 				{
@@ -10505,7 +10544,8 @@
 				"from_task_event",
 				"tc",
 				"fromtoall",
-				"Endevents_all"
+				"Endevents_all",
+				"EndEventsMorph"
 			],
 			"properties": [
 				{
@@ -10678,6 +10718,7 @@
 			"view":"connection/connection.sequenceflow.svg",
 			"icon":"new_sequenceflow.png",
 			"roles": [
+				"ConnectingObjectsMorph"
 			],
 			"properties": [
 				{
@@ -10829,6 +10870,7 @@
 			"view":"connection/connection.messageflow.svg",
 			"icon":"new_messageflow.png",
 			"roles": [
+				"ConnectingObjectsMorph"
 			],
 			"properties": [
 				{
@@ -10928,6 +10970,7 @@
 			"view":"connection/connection.association.undirected.svg",
 			"icon":"new_association_undirected.png",
 			"roles": [
+				"ConnectingObjectsMorph"
 			],
 			"properties": [
 				{
@@ -11025,6 +11068,7 @@
 			"view":"connection/connection.association.unidirectional.svg",
 			"icon":"new_association_unidirectional.png",
 			"roles": [
+				"ConnectingObjectsMorph"
 			],
 			"properties": [
 				{
@@ -11122,6 +11166,7 @@
 			"view":"connection/connection.association.bidirectional.svg",
 			"icon":"new_association_bidirectional.png",
 			"roles": [
+				"ConnectingObjectsMorph"
 			],
 			"properties": [
 				{
@@ -11394,6 +11439,41 @@
 				"contains": [
 					"tc"
 				]
+			}
+		],
+		"morphingRules": [
+			{
+				"role": "ActivitiesMorph",
+				"baseMorphs": ["Task"]
+			},
+			{
+				"role": "GatewaysMorph",
+				"baseMorphs": ["Exclusive_Databased_Gateway"]
+			},
+			{
+				"role": "StartEventsMorph",
+				"baseMorphs": ["StartEvent"],
+				"showInShapeMenu":false
+			},
+			{
+				"role": "IntermediateEventsMorph",
+				"baseMorphs": ["IntermediateEvent"]
+			},
+			{
+				"role": "EndEventsMorph",
+				"baseMorphs": ["EndEvent"]
+			},
+			{
+				"role": "TextAnnotationMorph",
+				"baseMorphs": ["TextAnnotation"]
+			},
+			{
+				"role": "DataObjectMorph",
+				"baseMorphs": ["DataObject"]
+			},
+			{
+				"role": "ConnectingObjectsMorph",
+				"baseMorphs": ["SequenceFlow"]
 			}
 		]
 	}
