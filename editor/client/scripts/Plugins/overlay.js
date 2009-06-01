@@ -272,6 +272,11 @@ ORYX.Plugins.Overlay = Clazz.extend({
 	},
 	
 	
+	/**
+	 * Set the given css attributes to that node
+	 * @param {HTMLElement} node
+	 * @param {Object} attributes
+	 */
 	setAttributes: function( node, attributes ) {
 		
 		
@@ -307,19 +312,26 @@ ORYX.Plugins.Overlay = Clazz.extend({
 		var s = csstags.join(" ") + "\n" 
 		
 		// And add to the end of the style tag
-		this.styleNode.innerHTML += s;
+		this.styleNode.appendChild(document.createTextNode(s));
 		
 		
 	},
 	
+	/**
+	 * Deletes all attributes which are
+	 * added in a special style sheet for that node
+	 * @param {HTMLElement} node 
+	 */
 	deleteAttributes: function( node ) {
 				
-		var el 	= this.styleNode.innerHTML.split("\n");
-		el 		= el.findAll(function(e){ return !e.startsWith( '#' + node.id ) });
+		// Get all children which contains the node id		
+		var delEl = $A(this.styleNode.childNodes)
+					 .findAll(function(e){ return e.textContent.include( '#' + node.id ) });
 		
-		this.styleNode.innerHTML = el.join("\n")
-		
-		
+		// Remove all of them
+		delEl.each(function(el){
+			el.parentNode.removeChild(el);
+		});		
 	},
 	
 	getAllChilds: function( node ){
