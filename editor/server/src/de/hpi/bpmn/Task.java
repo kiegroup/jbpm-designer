@@ -1,5 +1,8 @@
 package de.hpi.bpmn;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 
 import de.hpi.bpmn.serialization.BPMNSerialization;
@@ -31,18 +34,20 @@ public class Task extends Activity {
 	
 	
 	/**
-	 * Searches for the first input data object and returns it.
+	 * Returns all input {@link DataObject}s
 	 * 
 	 * @return
-	 * 		The input data object
+	 * 		A list of input data objects
 	 */
-	public DataObject getFirstInputDataObject() {
+	public List<DataObject> getInputDataObjects() {
+		ArrayList<DataObject> dataObjects = new ArrayList<DataObject>();
+		
 		for (Edge e : this.getIncomingEdges()) {
 			if ((e instanceof Association) && (e.source instanceof DataObject) ) {
-				return (DataObject) e.source;
+				dataObjects.add((DataObject) e.source);
 			}
 		}
-		return null;
+		return dataObjects;
 	}
 	
 	/**

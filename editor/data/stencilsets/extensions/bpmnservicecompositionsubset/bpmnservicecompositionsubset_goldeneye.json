@@ -1,0 +1,72 @@
+{
+	"title":"BPMN Subset for GoldenEye project",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset-goldeneye#",
+	"description":"A basic subset of BPMN that can be used to model satellit test cases.",
+	"extends":"http://b3mn.org/stencilset/bpmn1.1#",
+	"stencils":[],
+	"properties":[
+		{
+			"roles": [
+					"DataObject"
+			],
+			"properties": [ 
+				{
+					"id":"targetofcopy",
+					"type":"String",
+					"title":"Copy Return To",
+					"description":"Determines the input parameter, where to copy the return value of another web server method call.",
+					"readonly":false,
+					"optional":true
+				}
+			]
+		}
+	],
+	"rules": {
+		"connectionRules": [],
+        "cardinalityRules": [],
+		"containmentRules": []
+	},
+	"removestencils": [
+		"Task",
+		"CollapsedSubprocess",
+		"Subprocess",
+		"Exclusive_Eventbased_Gateway",
+		"OR_Gateway",
+		"Complex_Gateway",
+		"Pool",
+		"CollapsedPool",
+		"Lane",
+		"Group",
+		"TextAnnotation",
+		"StartTimerEvent",
+		"StartConditionalEvent",
+		"StartSignalEvent",
+		"StartMultipleEvent",
+		"IntermediateEvent",
+		"IntermediateMessageEventCatching",
+		"IntermediateMessageEventThrowing",
+		"IntermediateTimerEvent",
+		"IntermediateErrorEvent",
+		"IntermediateCancelEvent",
+		"IntermediateCompensationEventCatching",
+		"IntermediateCompensationEventThrowing",
+		"IntermediateConditionalEvent",
+		"IntermediateSignalEventCatching",
+		"IntermediateSignalEventThrowing",
+		"IntermediateMultipleEventCatching",
+		"IntermediateMultipleEventThrowing",
+		"IntermediateLinkEventCatching",
+		"IntermediateLinkEventThrowing",
+		"EndMessageEvent",
+		"EndErrorEvent",
+		"EndCancelEvent",
+		"EndCompensationEvent",
+		"EndSignalEvent",
+		"EndMultipleEvent",
+		"EndTerminateEvent",
+		"MessageFlow",
+		"Association_Undirected",
+		"Association_Bidirectional"
+	],
+	"removeproperties": []
+}

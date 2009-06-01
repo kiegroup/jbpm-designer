@@ -23,6 +23,7 @@ import de.hpi.bpel4chor.model.artifacts.VariableDataObject;
 import de.hpi.bpel4chor.model.connections.MessageFlow;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.StartEvent;
 import de.hpi.bpmn.StartMessageEvent;
 import de.hpi.bpmn.Task;
@@ -843,14 +844,19 @@ public class BasicActivityFactory {
 		Element assign = this.document.createElement("assign");
 		assign.setAttribute("validate", "no");
 		
-		/* Get all input data objects of the BPELDataObject */
-		//TODO create copy element for each input dataobject
 		
 		Copy copy = prepareCopyObject(task);
 		
 		Element copyElement = createCopyElement(copy);
 		if (copyElement != null) {
 			assign.appendChild(copyElement);
+		}
+		
+		/* Get all input data objects of the Task, they shell be handled copy
+		 * elements. Input data object are used to describe the handover of 
+		 * parameters */
+		for (Copy handoverCopy : createCopyObjectForHandoverParameters(task)) {
+			assign.appendChild(createCopyElement(handoverCopy));
 		}
 		
 		/* Copy token and reporting service url */
@@ -867,6 +873,45 @@ public class BasicActivityFactory {
 		}
 		
 		return assign;
+	}
+	
+	/**
+	 * Creates a copy object to describe the handover of an output parameter
+	 * to an input parameter.
+	 * 
+	 * @param task
+	 * 		The {@link Task} object.
+	 * @return
+	 * 		A list of the resulting {@link Copy} objects.
+	 */
+	private List<Copy> createCopyObjectForHandoverParameters(Task task) {
+		ArrayList<Copy> handoverCopies = new ArrayList<Copy>();
+		
+		for (DataObject dataObject : task.getInputDataObjects()) {
+			/* Get source parameter */
+			Task sourceTask = dataObject.getFirstInputTask();
+			if (sourceTask == null) {
+				continue;
+			}
+			
+			/* Copy parameter */
+			Copy copy = new Copy();
+			FromSpec from = new FromSpec();
+			from.setType(fromTypes.EXPRESSION);
+			from.setExpression("$" + sourceTask.getId() 
+					+ "Response" + ".parameters/return");
+			copy.setFromSpec(from);
+			
+			ToSpec to = new ToSpec();
+			to.setType(toTypes.EXPRESSION);
+			to.setExpression("$" + task.getId() 
+					+ ".parameters/" + dataObject.getTargetOfCopy());
+			copy.setToSpec(to);
+			
+			handoverCopies.add(copy);
+		}
+		
+		return handoverCopies;
 	}
 	
 	/**

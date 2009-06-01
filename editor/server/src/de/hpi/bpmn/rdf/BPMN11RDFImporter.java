@@ -881,6 +881,12 @@ public class BPMN11RDFImporter {
 				// TODO: add further attributes...
 				if (attribute.equals("state")) {
 					obj.setState(getContent(n)); }
+				
+				/* Set the target parameter of a copy task. Used by BPMN2BPEL */
+				else if (attribute.equals("targetofcopy")) {
+					obj.setTargetOfCopy(getContent(n));
+				}
+				
 				else {
 					handleStandardAttributes(attribute, n, obj, c, "name");
 				}
