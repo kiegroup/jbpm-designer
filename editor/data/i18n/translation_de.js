@@ -383,7 +383,7 @@ ORYX.I18N.StepThroughPlugin.executing = "Führe aus";
 if(!ORYX.I18N.SyntaxChecker) ORYX.I18N.SyntaxChecker = {};
 
 ORYX.I18N.SyntaxChecker.group = "Verification";
-ORYX.I18N.SyntaxChecker.name = "Syntax Prüfer";
+ORYX.I18N.SyntaxChecker.name = "Syntax-Checker";
 ORYX.I18N.SyntaxChecker.desc = "Überprüfung der Syntax";
 ORYX.I18N.SyntaxChecker.noErrors = "Es wurden keine Syntaxfehler gefunden.";
 ORYX.I18N.SyntaxChecker.invalid = "Ungültige Antwort vom Server.";
@@ -625,15 +625,15 @@ ORYX.I18N.SyntaxChecker.notice = "Bitte bewegen Sie den Mauszeiger über ein rot
 ORYX.I18N.Validator.result = "Validierungsergebnis";
 ORYX.I18N.Validator.noErrors = "Es wurden keine Fehler gefunden.";
 ORYX.I18N.Validator.bpmnDeadlockTitle = "Deadlock";
-ORYX.I18N.Validator.bpmnDeadlock = "Dieses Element verursacht einen Deadlock.";
-ORYX.I18N.Validator.bpmnUnsafeTitle = "Unsafe";
-ORYX.I18N.Validator.bpmnUnsafe = "Das Modell ist unsafe.";
+ORYX.I18N.Validator.bpmnDeadlock = "Dieses Element verursacht einen Deadlock, d.h. in manchen Situationen können nicht alle eingehenden Kanten und Nachrichtenflüsse aktiviert werden.";
+ORYX.I18N.Validator.bpmnUnsafeTitle = "Fehlende Synchronisation";
+ORYX.I18N.Validator.bpmnUnsafe = "Es findet eine mehrfache Aktivierung statt. Dadurch ist Synchronisierung nicht gewährleistet.";
 
 ORYX.I18N.Validator.syntaxErrorsTitle = "Syntaxfehler";
-ORYX.I18N.Validator.syntaxErrorsMsg = "Der Prozess kann nicht validiert werden, weil es Syntaxfehler entfällt.";
+ORYX.I18N.Validator.syntaxErrorsMsg = "Das Modell kann nicht validiert werden, weil es Syntaxfehler enthält.";
 	
 ORYX.I18N.Validator.error = "Validierung fehlgeschlagen";
-ORYX.I18N.Validator.errorDesc = 'Ups! Es tut uns leid, aber die Valdierung konnte nicht durchgeführt werden. Wenn Sie uns über die Feedback-Funktion Ihr Modell zuschicken, hilft es uns, den Fehler zu identifizieren und zu beheben.';
+ORYX.I18N.Validator.errorDesc = 'Es tut uns leid, aber die Valdierung konnte nicht durchgeführt werden. Wenn Sie uns über die Supportanfrage-Funktion Ihr Modell zuschicken, hilft es uns, den Fehler zu identifizieren und zu beheben.';
 
 ORYX.I18N.Validator.epcIsSound = "<p><b>The EPC is sound, no problems found!</b></p>";
 ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";

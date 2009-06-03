@@ -630,20 +630,20 @@ ORYX.I18N.Edge = "Edge";
 ORYX.I18N.Node = "Node";
 
 /** New Language Properties: 03.06.2009*/
-ORYX.I18N.SyntaxChecker.notice = "Move the mouse over a red cross icon to get the error message.";
+ORYX.I18N.SyntaxChecker.notice = "Move the mouse over a red cross icon to see the error message.";
 
 ORYX.I18N.Validator.result = "Validation Result";
 ORYX.I18N.Validator.noErrors = "No validation errors found.";
 ORYX.I18N.Validator.bpmnDeadlockTitle = "Deadlock";
-ORYX.I18N.Validator.bpmnDeadlock = "This node results in a deadlock.";
-ORYX.I18N.Validator.bpmnUnsafeTitle = "Unsafe";
-ORYX.I18N.Validator.bpmnUnsafe = "The process is unsafe.";
+ORYX.I18N.Validator.bpmnDeadlock = "This node results in a deadlock. There are situations where not all incoming branches are activated.";
+ORYX.I18N.Validator.bpmnUnsafeTitle = "Lack of synchronization";
+ORYX.I18N.Validator.bpmnUnsafe = "This model suffers from lack of synchronization. The marked element is activated from multiple incoming branches.";
 
 ORYX.I18N.Validator.syntaxErrorsTitle = "Syntax Error";
-ORYX.I18N.Validator.syntaxErrorsMsg = "The process cannot be validated, because it contains syntax errors.";
+ORYX.I18N.Validator.syntaxErrorsMsg = "The process cannot be validated because it contains syntax errors.";
 	
 ORYX.I18N.Validator.error = "Validation failed";
-ORYX.I18N.Validator.errorDesc = 'Oops! We are sorry, but the validation of your process failed. It would help us identifying the problem, if you sent us your process model via the "Send Feedback" function.';
+ORYX.I18N.Validator.errorDesc = 'We are sorry, but the validation of your process failed. It would help us identifying the problem, if you sent us your process model via the "Send Feedback" function.';
 
 ORYX.I18N.Validator.epcIsSound = "<p><b>The EPC is sound, no problems found!</b></p>";
 ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";
