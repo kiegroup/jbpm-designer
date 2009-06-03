@@ -45,40 +45,49 @@ public class BPMNValidator {
 	protected BPMNDiagram diagram;
 	protected Map<String,String> errors;
 	public boolean leadsToEnd;
-	public List<DiagramObject> badBPMNNodes;
+	public List<DiagramObject> deadlockBPMNNodes;
+	DiagramObject unsafeBPMNNode;
 	
 	public BPMNValidator(BPMNDiagram diagram) {
 		this.diagram = diagram;
 		this.errors = new HashMap<String,String>();
-		badBPMNNodes = new ArrayList<DiagramObject>();
+		deadlockBPMNNodes = new ArrayList<DiagramObject>();
+		unsafeBPMNNode = null;
 	}
 	
 	//Use leadsToGoodMarking and bpmnNodes to see Validation results
 	public void validate() {
 		HighPetriNet net = new HighConverter(this.diagram).convert();
 		WeakTerminationChecker checker = new WeakTerminationChecker(net, getFinalMarking(net));
-		List<Transition> badTransitions = new ArrayList<Transition>();
+		List<Transition> deadlockTransitions = new ArrayList<Transition>();
 		
 		try {
 			leadsToEnd = checker.check();
-			badTransitions.addAll(checker.getDeadlockingTransitions());
-			if (checker.getUnsafeTransition() != null)
-				badTransitions.add(checker.getUnsafeTransition());
+			deadlockTransitions.addAll(checker.getDeadlockingTransitions());
 		} catch (MaxStatesExceededException e) {
 			leadsToEnd = false;
 		}
 		
 		//add bpmn objects belonging to a conflicting transition to conflictingBPMNNodes
-		badBPMNNodes.clear();
-		for(Transition t : badTransitions){
+		deadlockBPMNNodes.clear();
+		for(Transition t : deadlockTransitions){
 			DiagramObject obj = null;
 			if (t instanceof HighSilentTransition){
 				obj = ((HighSilentTransition)t).getBPMNObj();
 			} else {
 				obj = ((HighLabeledTransition)t).getBPMNObj();
 			}
-			if(!badBPMNNodes.contains(obj))
-				badBPMNNodes.add(obj);
+			if(!deadlockBPMNNodes.contains(obj))
+				deadlockBPMNNodes.add(obj);
+		}
+		
+		//if the net is unsafe (lack of synchronisation), there is exactly one unsafe node
+		if(checker.getUnsafeTransition() != null) {
+			if (checker.getUnsafeTransition() instanceof HighSilentTransition){
+				unsafeBPMNNode = ((HighSilentTransition)checker.getUnsafeTransition()).getBPMNObj();
+			} else {
+				unsafeBPMNNode = ((HighLabeledTransition)checker.getUnsafeTransition()).getBPMNObj();
+			}
 		}
 	}
 	
@@ -108,11 +117,11 @@ public class BPMNValidator {
 		return markings;
 	}
 
-	public List<DiagramObject> getBadBPMNNodes() {
-		return badBPMNNodes;
+	public List<DiagramObject> getDeadlockBPMNNodes() {
+		return deadlockBPMNNodes;
 	}
-
-	public void setBadBPMNNodes(List<DiagramObject> badBPMNNodes) {
-		this.badBPMNNodes = badBPMNNodes;
+	
+	public DiagramObject getUnsafeBPMNNode() {
+		return unsafeBPMNNode;
 	}
 }

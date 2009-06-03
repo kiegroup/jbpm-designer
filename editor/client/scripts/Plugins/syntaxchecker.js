@@ -61,7 +61,12 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             this.checkForErrors({
                 onNoErrors: function(){
                     this.setActivated(button, false);
-                    Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.noErrors);
+                    this.facade.raiseEvent({
+            			type:ORYX.CONFIG.EVENT_LOADING_STATUS,
+            			text:ORYX.I18N.SyntaxChecker.noErrors,
+            			timeout:10000
+            		});
+                    //Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.noErrors);
                 }.bind(this),
                 onErrors: function(){
                     this.enableDeactivationHandler(button);
@@ -191,6 +196,13 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             }
         }.bind(this));
         this.active = !this.active;
+        
+        //show a status message with a hint to the error messages in the tooltip
+        this.facade.raiseEvent({
+			type:ORYX.CONFIG.EVENT_LOADING_STATUS,
+			text:ORYX.I18N.SyntaxChecker.notice,
+			timeout:10000
+		});
     },
     parseCodeToMsg: function(code){
 		
@@ -214,9 +226,10 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
     
     raiseOverlay: function(shape, errorMsg){
         var id = "syntaxchecker." + this.raisedEventIds.length;
-        
+        var crossId = ORYX.Editor.provideId();
         var cross = ORYX.Editor.graft("http://www.w3.org/2000/svg", null, ['path', {
-            "title": errorMsg,
+            "id":crossId,
+            "title":"",
             "stroke-width": 5.0,
             "stroke": "red",
             "d": "M20,-5 L5,-20 M5,-5 L20,-20",
@@ -229,6 +242,12 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             shapes: [shape],
             node: cross,
             nodePosition: shape instanceof ORYX.Core.Edge ? "START" : "NW"
+        });
+        
+        var tooltip = new Ext.ToolTip({
+        	showDelay:50,
+        	html:errorMsg,
+        	target:crossId
         });
         
         this.raisedEventIds.push(id);
