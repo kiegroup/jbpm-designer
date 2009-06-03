@@ -514,8 +514,11 @@ public class BPMN11RDFImporter {
 				} else if (attribute.equals("inputsets")) {
 					JSONObject params = null;
 					try {
-						JSONObject jsonAttribute = new JSONObject(getContent(n));
-						params = jsonAttribute.getJSONArray("items").getJSONObject(0);
+						String content = getContent(n);
+						if(content != null) {
+							JSONObject jsonAttribute = new JSONObject(getContent(n));
+							params = jsonAttribute.getJSONArray("items").getJSONObject(0);
+						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
