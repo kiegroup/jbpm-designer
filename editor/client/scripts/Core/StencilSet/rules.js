@@ -939,6 +939,14 @@ ORYX.Core.StencilSet.Rules = {
 	},
 	
 	/**
+	 * Returns true if there are morphing rules defines
+	 * @return {boolean} 
+	 */
+	containsMorphingRules: function(){
+		return this._stencilSets.any(function(ss){ return !!ss.jsonRules().morphingRules});
+	},
+	
+	/**
 	 * 
 	 * @param {Object}
 	 *            args 
@@ -986,19 +994,19 @@ ORYX.Core.StencilSet.Rules = {
 	},
 	
 	/**
-	 * 
-	 * @param {ORYX.Core.StencilSet.Stencil}
-	 *            morph
-	 * 
+	 * Return true if the stencil should be located in the shape menu
+	 * @param {ORYX.Core.StencilSet.Stencil} morph
 	 * @return {Boolean} Returns true if the morphs in the morph group of the
 	 * specified morph shall be displayed in the shape menu
 	 */
-	showInShapeMenu: function(morph) {
-		this._morphingRules.each(function(pair) {
-			pair.value.each(function(baseMorph) {
-				return false;
-			});
-		});
+	showInShapeMenu: function(stencil) {
+		return 	this._stencilSets.any(function(ss){
+				    return ss.jsonRules().morphingRules
+							.any(function(r){
+								return 	stencil.roles().include(ss.namespace() + r.role) 
+										&& r.showInShapeMenu !== false;
+							})
+				});
 	},
 	
 	/** End morphing rules' methods */

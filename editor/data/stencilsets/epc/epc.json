@@ -79,9 +79,11 @@
 			"description_de":"Ereignis",
 			"view":"node.event.svg",
 			"icon":"new_event.png",
+			"defaultAlign":"south",
 			"roles": [
 				"event",
-				"all"
+				"all",
+				"EventMorph"
 			],
 			"properties": [
 				{
@@ -151,9 +153,11 @@
 			"description_de":"Funktion",
 			"view":"node.function.svg",
 			"icon":"new_function.png",
+			"defaultAlign":"south",
 			"roles": [
 				"function",
-				"all"
+				"all",
+				"FunctionMorph"
 			],
 			"properties": [
 				{
@@ -237,11 +241,13 @@
 			"description_de":"UND-Regel",
 			"view":"node.and.svg",
 			"icon":"new_and.png",
-			"intersectionType":"ellipse",			
+			"intersectionType":"ellipse",	
+			"defaultAlign":"south",		
 			"roles": [
 				"andConnector",
 				"connector",
-				"all"
+				"all",
+				"ConnectorMorph"
 			],
 			"properties": [		
 				{
@@ -270,10 +276,12 @@
 			"view":"node.xor.svg",
 			"icon":"new_xor.png",
 			"intersectionType":"ellipse",
+			"defaultAlign":"south",
 			"roles": [
 				"orXorConnector",
 				"connector",
-				"all"
+				"all",
+				"ConnectorMorph"
 			],
 			"properties": [		
 				{
@@ -302,10 +310,12 @@
 			"view":"node.or.svg",
 			"icon":"new_or.png",
 			"intersectionType":"ellipse",
+			"defaultAlign":"south",
 			"roles": [
 				"orXorConnector",
 				"connector",
-				"all"
+				"all",
+				"ConnectorMorph"
 			],
 			"properties": [		
 				{
@@ -335,7 +345,8 @@
 			"icon":"new_flow.png",
 			"roles": [
 				"epcEdge",
-				"all"
+				"all",
+				"ConnectingObjectsMorph"
 			],
 			"properties": [
 							{
@@ -364,9 +375,11 @@
 			"description_de":"Prozessschnittstelle",
 			"view":"node.pInterface.svg",
 			"icon":"new_pInterface.png",
+			"defaultAlign":"south",
 			"roles": [
 				"interface",
-				"all"
+				"all",
+				"ProcessInterfaceMorph"
 			],
 			"properties": [
 				{
@@ -435,9 +448,11 @@
 			"description_de":"Organisationseinheit",
 			"view":"node.organization.svg",
 			"icon":"new_organization.png",
+			"defaultAlign":"east",
 			"roles": [
 				"InRelWithF",
-				"all"
+				"all",
+				"OrganisationMorph"
 			],
 			"properties": [
 				{
@@ -491,9 +506,11 @@
 			"description_de":"Position",
 			"view":"node.position.svg",
 			"icon":"new_position.png",
+			"defaultAlign":"east",
 			"roles": [
 				"InRelWithF",
-				"all"
+				"all",
+				"OrganisationMorph"
 			],
 			"properties": [
 				{
@@ -548,10 +565,12 @@
 			"description":"Dokument",
 			"view":"node.data.svg",
 			"icon":"new_data.png",
+			"defaultAlign":"west",
 			"roles": [
 				"InRelWithF",
 				"InRelWithE",
-				"all"
+				"all",
+				"DataMorph"
 			],
 			"properties": [
 				{
@@ -605,9 +624,11 @@
 			"description_de":"System / Anwendung",
 			"view":"node.system.svg",
 			"icon":"new_system.png",
+			"defaultAlign":"east",
 			"roles": [
 				"InRelWithF",
-				"all"
+				"all",
+				"OrganisationMorph"
 			],
 			"properties": [
 				{
@@ -718,7 +739,8 @@
 			"icon":"new_relation.png",
 			"roles": [
 				"relationEdge",
-				"all"
+				"all",
+				"ConnectingObjectsMorph"
 			],
 			"properties": [
 				{
@@ -848,6 +870,36 @@
 				"contains": [
 					"all"
 				]
+			}
+		],
+		"morphingRules": [
+			{
+				"role": "EventMorph",
+				"baseMorphs": ["Event"]
+			},
+			{
+				"role": "FunctionMorph",
+				"baseMorphs": ["Function"]
+			},
+			{
+				"role": "ConnectorMorph",
+				"baseMorphs": ["XorConnector"]
+			},
+			{
+				"role": "ProcessInterfaceMorph",
+				"baseMorphs": ["ProcessInterface"],
+			},
+			{
+				"role": "OrganisationMorph",
+				"baseMorphs": ["Organization"],
+			},
+			{
+				"role": "DataMorph",
+				"baseMorphs": ["Data"],
+			},
+			{
+				"role": "ConnectingObjectsMorph",
+				"baseMorphs": ["SequenceFlow"]
 			}
 		]
 	}

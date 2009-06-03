@@ -274,7 +274,7 @@ ORYX.Core.StencilSet.Stencil = {
 	
 	defaultAlign: function() {
 		if(!this._jsonStencil.defaultAlign)
-			return "west";
+			return "east";
 		return this._jsonStencil.defaultAlign;
 	},
 

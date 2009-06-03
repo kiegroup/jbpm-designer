@@ -4524,7 +4524,7 @@
 			"description_de":"Jedes Objekt kann durch eine Text-Anmerkung kommentiert werden.",
 			"view":"artifact/node.text.annotation.svg",
 			"icon":"new_text_annotation.png",
-			"defaultAlign":"northwest",
+			"defaultAlign":"northeast",
 			"roles": [
 				"from_artifact",
 				"to_artifact",
@@ -4624,7 +4624,7 @@
 			"groups_de":["Artefakte"],
 			"view":"artifact/node.data.object.svg",
 			"icon":"new_data_object.png",
-			"defaultAlign":"southwest",
+			"defaultAlign":"southeast",
 			"roles": [
 				"from_artifact",
 				"to_artifact",
