@@ -625,7 +625,25 @@ ORYX.I18N.SyntaxChecker.PetriNet_NO_ID = "There is a node without id";
 ORYX.I18N.SyntaxChecker.PetriNet_SAME_SOURCE_AND_TARGET = "Two flow relationships have the same source and target";
 ORYX.I18N.SyntaxChecker.PetriNet_NODE_NOT_SET = "A node is not set for a flowrelationship";
 
-
 /** New Language Properties: 02.06.2009*/
 ORYX.I18N.Edge = "Edge";
 ORYX.I18N.Node = "Node";
+
+/** New Language Properties: 03.06.2009*/
+ORYX.I18N.SyntaxChecker.notice = "Move the mouse over a red cross icon to get the error message.";
+
+ORYX.I18N.Validator.result = "Validation Result";
+ORYX.I18N.Validator.noErrors = "No validation errors found.";
+ORYX.I18N.Validator.bpmnDeadlockTitle = "Deadlock";
+ORYX.I18N.Validator.bpmnDeadlock = "This node results in a deadlock.";
+ORYX.I18N.Validator.bpmnUnsafeTitle = "Unsafe";
+ORYX.I18N.Validator.bpmnUnsafe = "The process is unsafe.";
+
+ORYX.I18N.Validator.syntaxErrorsTitle = "Syntax Error";
+ORYX.I18N.Validator.syntaxErrorsMsg = "The process cannot be validated, because it contains syntax errors.";
+	
+ORYX.I18N.Validator.error = "Validation failed";
+ORYX.I18N.Validator.errorDesc = 'Oops! We are sorry, but the validation of your process failed. It would help us identifying the problem, if you sent us your process model via the "Send Feedback" function.';
+
+ORYX.I18N.Validator.epcIsSound = "<p><b>The EPC is sound, no problems found!</b></p>";
+ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";
