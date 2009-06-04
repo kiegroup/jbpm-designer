@@ -47,6 +47,11 @@ table-layout:fixed;
 	   height: 30px;
 }
 
+.x-panel-editor-north .x-panel-body .x-panel-body,
+.x-panel-editor-north .x-panel-body .x-panel-bwrap {
+	overflow:visible;
+}
+
 #oryx_editor_header .openid{
 	font-family:tahoma;
 	font-size:11px;
