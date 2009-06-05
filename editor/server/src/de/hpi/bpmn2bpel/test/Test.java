@@ -36,7 +36,8 @@ public class Test {
 //		File file = new File(path + "bpel_dataobject.xml");
 //		File file = new File(path + "bpel_calculator_test.xml");
 //		File file = new File(path + "bpel_calculator2_test.xml");
-		File file = new File(path + "bpel_calculator_with_dataobject_test.xml");
+//		File file = new File(path + "bpel_calculator_with_dataobject_test.xml");
+		File file = new File(path + "bpel_uplink_signal_test.xml");
 		
 		
 		try {

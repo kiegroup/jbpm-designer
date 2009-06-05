@@ -274,6 +274,17 @@
     </servlet>
 -->
 	
+<!--	
+	<servlet>
+        <display-name>GoldenEye Servlet</display-name>
+        <servlet-name>GoldenEyeServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.GoldenEyeStencilSetExtensionGeneratorServlet
+        </servlet-class>
+    </servlet>
+-->
+
+	
 	<servlet>
         <display-name>BPMN2BPEL Servlet</display-name>
         <servlet-name>BPMN2BPELServlet</servlet-name>
@@ -440,13 +451,21 @@
     </servlet-mapping>
 -->
 
-<!--
+
+<!--  
     <servlet-mapping>
             <servlet-name>ServiceComposerServlet</servlet-name>
             <url-pattern>/servicecomposer</url-pattern>
     </servlet-mapping>
 -->
-    
+
+<!--	
+	<servlet-mapping>
+            <servlet-name>GoldenEyeServlet</servlet-name>
+            <url-pattern>/goldeneye</url-pattern>
+    </servlet-mapping>
+-->
+
     <servlet-mapping>
             <servlet-name>FeedbackServlet</servlet-name>
             <url-pattern>/feedback</url-pattern>

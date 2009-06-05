@@ -942,12 +942,12 @@ public class BasicActivityFactory {
 		copy = new Copy();
 		from = new FromSpec();
 		from.setType(fromTypes.EXPRESSION);
-		from.setExpression("$input.payload/tns:reportingService");
+		from.setExpression("$input.payload/tns:reportingServiceUrl");
 		copy.setFromSpec(from);
 		
 		to = new ToSpec();
 		to.setType(toTypes.EXPRESSION);
-		to.setExpression("$" + targetVariable + ".parameters/reportingService");
+		to.setExpression("$" + targetVariable + ".parameters/reportingServiceUrl");
 		copy.setToSpec(to);
 		
 		copies.add(copy);

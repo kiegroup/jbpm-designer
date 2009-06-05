@@ -35,7 +35,7 @@
 <iscompensation xmlns="http://oryx-editor.org/"/>
 <inmessagetype xmlns="http://oryx-editor.org/">add</inmessagetype>
 <bgcolor xmlns="http://oryx-editor.org/">#ffffcc</bgcolor>
-<inputsets xmlns="http://oryx-editor.org/">{"items":[{"token":"","reportingService":"","j":"5","i":"3"}],"totalCount":1}</inputsets>
+<inputsets xmlns="http://oryx-editor.org/">{"items":[{"token":"","reportingServiceUrl":"","j":"5","i":"3"}],"totalCount":1}</inputsets>
 <namespace xmlns="http://oryx-editor.org/">http://calculator.me.org/</namespace>
 <docker xmlns="http://oryx-editor.org/"> # </docker>
 <outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_B852DA58-64E1-47E9-9582-482E5C4E694C"/>
@@ -72,7 +72,7 @@
 <iscompensation xmlns="http://oryx-editor.org/"/>
 <inmessagetype xmlns="http://oryx-editor.org/">add</inmessagetype>
 <bgcolor xmlns="http://oryx-editor.org/">#ffffcc</bgcolor>
-<inputsets xmlns="http://oryx-editor.org/">{"items":[{"token":"","reportingService":"","j":"5","i":"3"}],"totalCount":1}</inputsets>
+<inputsets xmlns="http://oryx-editor.org/">{"items":[{"token":"","reportingServiceUrl":"","j":"5","i":"3"}],"totalCount":1}</inputsets>
 <namespace xmlns="http://oryx-editor.org/">http://calculator.me.org/</namespace>
 <docker xmlns="http://oryx-editor.org/"> # </docker>
 <outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_906A7824-FF7A-4DF9-94C5-440BA9D5901A"/>

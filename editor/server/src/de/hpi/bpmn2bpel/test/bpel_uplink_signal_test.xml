@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:admin="http://webns.net/mvcb/" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<rdf:Description rdf:about="">
+<admin:generatorAgent rdf:resource="http://purl.org/NET/erdf/extract"/>
+</rdf:Description>
+<rdf:Description rdf:about=""/>
+<rdf:Description rdf:about="#oryx_a559a595-b276-437f-8d13-22ad7cbad879">
+<type xmlns="http://oryx-editor.org/">StartMessageEvent</type>
+<bounds xmlns="http://oryx-editor.org/">45,255,15,225</bounds>
+<message xmlns="http://oryx-editor.org/"/>
+<id xmlns="http://oryx-editor.org/"/>
+<trigger xmlns="http://oryx-editor.org/">Message</trigger>
+<pool xmlns="http://oryx-editor.org/"/>
+<implementation xmlns="http://oryx-editor.org/">Web Service</implementation>
+
+<name xmlns="http://oryx-editor.org/"/>
+<documentation xmlns="http://oryx-editor.org/"/>
+<categories xmlns="http://oryx-editor.org/"/>
+<assignments xmlns="http://oryx-editor.org/"/>
+<bgcolor xmlns="http://oryx-editor.org/">#ffffff</bgcolor>
+<eventtype xmlns="http://oryx-editor.org/">Start</eventtype>
+<lanes xmlns="http://oryx-editor.org/"/>
+<docker xmlns="http://oryx-editor.org/"> # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_318F95BC-B56F-4717-9CBF-6C65D3857D89"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_C5F3B8B7-3B57-44A9-927F-EB742A31F679">
+<type xmlns="http://oryx-editor.org/">task-uplinksignalservice-preparestation</type>
+
+<bounds xmlns="http://oryx-editor.org/">220,280,120,200</bounds>
+<operation xmlns="http://oryx-editor.org/">prepareStation</operation>
+<looptype xmlns="http://oryx-editor.org/">None</looptype>
+<porttype xmlns="http://oryx-editor.org/">UplinkSignalServiceEndpoint</porttype>
+<outmessagetype xmlns="http://oryx-editor.org/">tns:prepareStationResponse</outmessagetype>
+<name xmlns="http://oryx-editor.org/">prepareStation Task</name>
+<servicename xmlns="http://oryx-editor.org/">UplinkSignalService</servicename>
+<iscompensation xmlns="http://oryx-editor.org/"/>
+<inmessagetype xmlns="http://oryx-editor.org/">tns:prepareStation</inmessagetype>
+
+<bgcolor xmlns="http://oryx-editor.org/">#ffffcc</bgcolor>
+<inputsets xmlns="http://oryx-editor.org/">{"items":[{"reportingServiceUrl":"","polarization":"H","token":"","uplinkFrequency":"13889500000.0","eirp":"20.0"}],"totalCount":1}</inputsets>
+<namespace xmlns="http://oryx-editor.org/">http://communicator.uplinksignal.goldeneye.ses_astra.lu/</namespace>
+<docker xmlns="http://oryx-editor.org/"> # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_2531D9A2-A3F7-458E-9BD1-7ABCF295F0EC"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_318F95BC-B56F-4717-9CBF-6C65D3857D89">
+<type xmlns="http://oryx-editor.org/">SequenceFlow</type>
+<bounds xmlns="http://oryx-editor.org/">119.78125,241,45.21875,239</bounds>
+
+<targetref xmlns="http://oryx-editor.org/"/>
+<id xmlns="http://oryx-editor.org/"/>
+<showdiamondmarker xmlns="http://oryx-editor.org/">false</showdiamondmarker>
+<name xmlns="http://oryx-editor.org/"/>
+<documentation xmlns="http://oryx-editor.org/"/>
+<quantity xmlns="http://oryx-editor.org/">1</quantity>
+<conditiontype xmlns="http://oryx-editor.org/">None</conditiontype>
+<categories xmlns="http://oryx-editor.org/"/>
+<conditionexpression xmlns="http://oryx-editor.org/"/>
+<sourceref xmlns="http://oryx-editor.org/"/>
+<docker xmlns="http://oryx-editor.org/">50 40 15 15  # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_C5F3B8B7-3B57-44A9-927F-EB742A31F679"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+
+<target xmlns="http://raziel.org/" rdf:resource="#oryx_C5F3B8B7-3B57-44A9-927F-EB742A31F679"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_267523D6-F3D7-442C-8004-9A7181FB06E7">
+<type xmlns="http://oryx-editor.org/">task-uplinksignalservice-starttransmission</type>
+<bounds xmlns="http://oryx-editor.org/">395,280,295,200</bounds>
+<operation xmlns="http://oryx-editor.org/">startTransmission</operation>
+<looptype xmlns="http://oryx-editor.org/">None</looptype>
+<porttype xmlns="http://oryx-editor.org/">UplinkSignalServiceEndpoint</porttype>
+<outmessagetype xmlns="http://oryx-editor.org/">tns:startTransmissionResponse</outmessagetype>
+<name xmlns="http://oryx-editor.org/">startTransmission Task</name>
+
+<servicename xmlns="http://oryx-editor.org/">UplinkSignalService</servicename>
+<iscompensation xmlns="http://oryx-editor.org/"/>
+<inmessagetype xmlns="http://oryx-editor.org/">tns:startTransmission</inmessagetype>
+<bgcolor xmlns="http://oryx-editor.org/">#ffffcc</bgcolor>
+<inputsets xmlns="http://oryx-editor.org/">{"items":[{"reportingServiceUrl":"","token":"","uplinkFrequency":"13889500000.0"}],"totalCount":1}</inputsets>
+<namespace xmlns="http://oryx-editor.org/">http://communicator.uplinksignal.goldeneye.ses_astra.lu/</namespace>
+<docker xmlns="http://oryx-editor.org/"> # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_DD79AFA5-2EDD-4E12-BE9B-769250783AF7"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="#oryx_2531D9A2-A3F7-458E-9BD1-7ABCF295F0EC">
+<type xmlns="http://oryx-editor.org/">SequenceFlow</type>
+<bounds xmlns="http://oryx-editor.org/">294.78125,241,220.21875,239</bounds>
+<targetref xmlns="http://oryx-editor.org/"/>
+<id xmlns="http://oryx-editor.org/"/>
+<showdiamondmarker xmlns="http://oryx-editor.org/">false</showdiamondmarker>
+<name xmlns="http://oryx-editor.org/"/>
+<documentation xmlns="http://oryx-editor.org/"/>
+<quantity xmlns="http://oryx-editor.org/">1</quantity>
+<conditiontype xmlns="http://oryx-editor.org/">None</conditiontype>
+<categories xmlns="http://oryx-editor.org/"/>
+<conditionexpression xmlns="http://oryx-editor.org/"/>
+
+<sourceref xmlns="http://oryx-editor.org/"/>
+<docker xmlns="http://oryx-editor.org/">50 40 50 40  # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_267523D6-F3D7-442C-8004-9A7181FB06E7"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+<target xmlns="http://raziel.org/" rdf:resource="#oryx_267523D6-F3D7-442C-8004-9A7181FB06E7"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_36B726BC-34DD-4537-A07A-E46C21D6CC98">
+<type xmlns="http://oryx-editor.org/">task-uplinksignalservice-monitoreirp</type>
+<bounds xmlns="http://oryx-editor.org/">570,280,470,200</bounds>
+<operation xmlns="http://oryx-editor.org/">monitorEirp</operation>
+<looptype xmlns="http://oryx-editor.org/">None</looptype>
+<porttype xmlns="http://oryx-editor.org/">UplinkSignalServiceEndpoint</porttype>
+
+<outmessagetype xmlns="http://oryx-editor.org/">tns:monitorEirpResponse</outmessagetype>
+<name xmlns="http://oryx-editor.org/">monitorEirp Task</name>
+<servicename xmlns="http://oryx-editor.org/">UplinkSignalService</servicename>
+<iscompensation xmlns="http://oryx-editor.org/"/>
+<inmessagetype xmlns="http://oryx-editor.org/">tns:monitorEirp</inmessagetype>
+<bgcolor xmlns="http://oryx-editor.org/">#ffffcc</bgcolor>
+<inputsets xmlns="http://oryx-editor.org/">{"items":[{"reportingServiceUrl":"","polarization":"H","token":"","frequency":"13889500000.0"}],"totalCount":1}</inputsets>
+<namespace xmlns="http://oryx-editor.org/">http://communicator.uplinksignal.goldeneye.ses_astra.lu/</namespace>
+<docker xmlns="http://oryx-editor.org/"> # </docker>
+
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_9E8CAD03-7A99-4D86-B461-6238AB62E5CB"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_DD79AFA5-2EDD-4E12-BE9B-769250783AF7">
+<type xmlns="http://oryx-editor.org/">SequenceFlow</type>
+<bounds xmlns="http://oryx-editor.org/">469.78125,241,395.21875,239</bounds>
+<targetref xmlns="http://oryx-editor.org/"/>
+<id xmlns="http://oryx-editor.org/"/>
+<showdiamondmarker xmlns="http://oryx-editor.org/">false</showdiamondmarker>
+<name xmlns="http://oryx-editor.org/"/>
+<documentation xmlns="http://oryx-editor.org/"/>
+<quantity xmlns="http://oryx-editor.org/">1</quantity>
+<conditiontype xmlns="http://oryx-editor.org/">None</conditiontype>
+
+<categories xmlns="http://oryx-editor.org/"/>
+<conditionexpression xmlns="http://oryx-editor.org/"/>
+<sourceref xmlns="http://oryx-editor.org/"/>
+<docker xmlns="http://oryx-editor.org/">50 40 50 40  # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_36B726BC-34DD-4537-A07A-E46C21D6CC98"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+<target xmlns="http://raziel.org/" rdf:resource="#oryx_36B726BC-34DD-4537-A07A-E46C21D6CC98"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_65AEBD2C-CE04-4CD4-A11D-F4D3D7891E10">
+<type xmlns="http://oryx-editor.org/">task-uplinksignalservice-stoptransmission</type>
+<bounds xmlns="http://oryx-editor.org/">745,280,645,200</bounds>
+<operation xmlns="http://oryx-editor.org/">stopTransmission</operation>
+<looptype xmlns="http://oryx-editor.org/">None</looptype>
+
+<porttype xmlns="http://oryx-editor.org/">UplinkSignalServiceEndpoint</porttype>
+<outmessagetype xmlns="http://oryx-editor.org/">tns:stopTransmissionResponse</outmessagetype>
+<name xmlns="http://oryx-editor.org/">stopTransmission Task</name>
+<servicename xmlns="http://oryx-editor.org/">UplinkSignalService</servicename>
+<iscompensation xmlns="http://oryx-editor.org/"/>
+<inmessagetype xmlns="http://oryx-editor.org/">tns:stopTransmission</inmessagetype>
+<bgcolor xmlns="http://oryx-editor.org/">#ffffcc</bgcolor>
+<inputsets xmlns="http://oryx-editor.org/">{"items":[{"reportingServiceUrl":"","token":"","uplinkFrequency":"13889500000.0"}],"totalCount":1}</inputsets>
+<namespace xmlns="http://oryx-editor.org/">http://communicator.uplinksignal.goldeneye.ses_astra.lu/</namespace>
+
+<docker xmlns="http://oryx-editor.org/"> # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_AAF6183F-B024-4B8B-80EC-E0FB9D9566E8"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_9E8CAD03-7A99-4D86-B461-6238AB62E5CB">
+<type xmlns="http://oryx-editor.org/">SequenceFlow</type>
+<bounds xmlns="http://oryx-editor.org/">644.78125,241,570.21875,239</bounds>
+<targetref xmlns="http://oryx-editor.org/"/>
+<id xmlns="http://oryx-editor.org/"/>
+<showdiamondmarker xmlns="http://oryx-editor.org/">false</showdiamondmarker>
+<name xmlns="http://oryx-editor.org/"/>
+<documentation xmlns="http://oryx-editor.org/"/>
+
+<quantity xmlns="http://oryx-editor.org/">1</quantity>
+<conditiontype xmlns="http://oryx-editor.org/">None</conditiontype>
+<categories xmlns="http://oryx-editor.org/"/>
+<conditionexpression xmlns="http://oryx-editor.org/"/>
+<sourceref xmlns="http://oryx-editor.org/"/>
+<docker xmlns="http://oryx-editor.org/">50 40 50 40  # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_65AEBD2C-CE04-4CD4-A11D-F4D3D7891E10"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+<target xmlns="http://raziel.org/" rdf:resource="#oryx_65AEBD2C-CE04-4CD4-A11D-F4D3D7891E10"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_99CC75CD-3419-488B-852D-FCEAC68D616A">
+<type xmlns="http://oryx-editor.org/">EndEvent</type>
+<bounds xmlns="http://oryx-editor.org/">848,254,820,226</bounds>
+
+<id xmlns="http://oryx-editor.org/"/>
+<result xmlns="http://oryx-editor.org/">None</result>
+<pool xmlns="http://oryx-editor.org/"/>
+<name xmlns="http://oryx-editor.org/"/>
+<documentation xmlns="http://oryx-editor.org/"/>
+<categories xmlns="http://oryx-editor.org/"/>
+<assignments xmlns="http://oryx-editor.org/"/>
+<bgcolor xmlns="http://oryx-editor.org/">#ffffff</bgcolor>
+<eventtype xmlns="http://oryx-editor.org/">End</eventtype>
+<lanes xmlns="http://oryx-editor.org/"/>
+<docker xmlns="http://oryx-editor.org/"> # </docker>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+
+</rdf:Description>
+<rdf:Description rdf:about="#oryx_AAF6183F-B024-4B8B-80EC-E0FB9D9566E8">
+<type xmlns="http://oryx-editor.org/">SequenceFlow</type>
+<bounds xmlns="http://oryx-editor.org/">819.96875,240,745.953125,240</bounds>
+<targetref xmlns="http://oryx-editor.org/"/>
+<id xmlns="http://oryx-editor.org/"/>
+<showdiamondmarker xmlns="http://oryx-editor.org/">false</showdiamondmarker>
+<name xmlns="http://oryx-editor.org/"/>
+<documentation xmlns="http://oryx-editor.org/"/>
+<quantity xmlns="http://oryx-editor.org/">1</quantity>
+<conditiontype xmlns="http://oryx-editor.org/">None</conditiontype>
+<categories xmlns="http://oryx-editor.org/"/>
+
+<conditionexpression xmlns="http://oryx-editor.org/"/>
+<sourceref xmlns="http://oryx-editor.org/"/>
+<docker xmlns="http://oryx-editor.org/">14 14 50 40  # </docker>
+<outgoing xmlns="http://raziel.org/" rdf:resource="#oryx_99CC75CD-3419-488B-852D-FCEAC68D616A"/>
+<parent xmlns="http://raziel.org/" rdf:resource="#oryx-canvas123"/>
+<target xmlns="http://raziel.org/" rdf:resource="#oryx_99CC75CD-3419-488B-852D-FCEAC68D616A"/>
+</rdf:Description>
+<rdf:Description rdf:about="#oryx-canvas123">
+<rdf:type rdf:resource="http://oryx-editor.org/canvas"/>
+<type xmlns="http://oryx-editor.org/">BPMNDiagram</type>
+<bounds xmlns="http://oryx-editor.org/">1485,1050,0,0</bounds>
+<id xmlns="http://oryx-editor.org/">GoldenEye TestCase 2009-06-04 15-33-39.578</id>
+<author xmlns="http://oryx-editor.org/"/>
+
+<modificationdate xmlns="http://oryx-editor.org/"/>
+<name xmlns="http://oryx-editor.org/">Generated Model</name>
+<documentation xmlns="http://oryx-editor.org/">The initial version of this model has been generated automatically.</documentation>
+<language xmlns="http://oryx-editor.org/">English</language>
+<expressionlanguage xmlns="http://oryx-editor.org/"/>
+<pools xmlns="http://oryx-editor.org/"/>
+<creationdate xmlns="http://oryx-editor.org/"/>
+<querylanguage xmlns="http://oryx-editor.org/"/>
+<version xmlns="http://oryx-editor.org/"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_a559a595-b276-437f-8d13-22ad7cbad879"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_C5F3B8B7-3B57-44A9-927F-EB742A31F679"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_318F95BC-B56F-4717-9CBF-6C65D3857D89"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_267523D6-F3D7-442C-8004-9A7181FB06E7"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_2531D9A2-A3F7-458E-9BD1-7ABCF295F0EC"/>
+
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_36B726BC-34DD-4537-A07A-E46C21D6CC98"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_DD79AFA5-2EDD-4E12-BE9B-769250783AF7"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_65AEBD2C-CE04-4CD4-A11D-F4D3D7891E10"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_9E8CAD03-7A99-4D86-B461-6238AB62E5CB"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_99CC75CD-3419-488B-852D-FCEAC68D616A"/>
+<render xmlns="http://oryx-editor.org/" rdf:resource="#oryx_AAF6183F-B024-4B8B-80EC-E0FB9D9566E8"/>
+<stencilset xmlns="http://oryx-editor.org/" rdf:resource="http://172.16.17.9:8080/oryx/stencilsets/bpmn1.1/bpmn1.1.json"/>
+</rdf:Description>
+</rdf:RDF>

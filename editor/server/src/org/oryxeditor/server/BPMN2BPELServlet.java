@@ -13,6 +13,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jdom.input.DOMBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -93,21 +96,37 @@ public class BPMN2BPELServlet extends HttpServlet {
 	}
 	
 	private void appendResult(String param, Document result) {
-		OutputFormat format = new OutputFormat(result);
-		format.setIndenting(true);
-		format.setPreserveSpace(true);
-		format.setLineSeparator(System.getProperty("line.separator"));
-		format.setMethod(Method.XHTML);
-		
 		
 		StringWriter sw = new StringWriter();
-		XMLSerializer serial = new XMLSerializer(sw, format);
+		DOMBuilder builder = new DOMBuilder();
+		org.jdom.Document jdomDoc = builder.build(result);
+		
+		XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+		
 		try {
-			DOMSerializer domserial = serial.asDOMSerializer();
-			domserial.serialize(result);
-		} catch (Exception e) {
-			// TODO: handle exception
+//			out.output(jdomDoc, System.out);
+			out.output(jdomDoc, sw);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
+		
+//		OutputFormat format = new OutputFormat(result);
+//		format.setIndenting(true);
+//		format.setPreserveSpace(true);
+//		format.setLineSeparator(System.getProperty("line.separator"));
+//		format.setMethod(Method.XML);
+		
+		
+//		XMLSerializer serial = new XMLSerializer(sw, format);
+//		try {
+//			DOMSerializer domserial = serial.asDOMSerializer();
+//			domserial.serialize(result);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 		
 		try {
 			response.put(param, sw.getBuffer().toString());
