@@ -307,6 +307,7 @@ ORYX.I18N.Save.saved = "Saved!";
 ORYX.I18N.Save.failed = "Saving failed.";
 ORYX.I18N.Save.noRights = "You have no rights to save changes.";
 ORYX.I18N.Save.saving = "Saving";
+ORYX.I18N.Save.saveAsHint = "The process diagram is stored under:";
 
 if(!ORYX.I18N.File) ORYX.I18N.File = {};
 

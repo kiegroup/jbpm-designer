@@ -305,6 +305,7 @@ ORYX.I18N.Save.saved = "Gespeichert";
 ORYX.I18N.Save.failed = "Das Speichern ist fehlgeschlagen.";
 ORYX.I18N.Save.noRights = "Sie haben nicht die erforderlichen Rechte, um Änderungen zu speichern.";
 ORYX.I18N.Save.saving = "Speichern";
+ORYX.I18N.Save.saveAsHint = "Das Diagramm wurde unter folgendem Link gespeichert:";
 
 if(!ORYX.I18N.File) ORYX.I18N.File = {};
 
