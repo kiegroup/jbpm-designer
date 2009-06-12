@@ -23,7 +23,7 @@
 if (!ORYX.Plugins) 
     ORYX.Plugins = new Object();
 
-ORYX.Plugins.Validator = Clazz.extend({
+ORYX.Plugins.Validator = ORYX.Plugins.AbstractPlugin.extend({
     construct: function(facade){
         this.facade = facade;
         
@@ -76,47 +76,6 @@ ORYX.Plugins.Validator = Clazz.extend({
         
         this.raisedEventIds = [];
     },
-    
-    getRdf: function(){
-        // Force to set all resource IDs
-        var serializedDOM = DataManager.serializeDOM(this.facade);
-        
-        //add namespaces
-        serializedDOM = '<?xml version="1.0" encoding="utf-8"?>' +
-        '<html xmlns="http://www.w3.org/1999/xhtml" ' +
-        'xmlns:b3mn="http://b3mn.org/2007/b3mn" ' +
-        'xmlns:ext="http://b3mn.org/2007/ext" ' +
-        'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ' +
-        'xmlns:atom="http://b3mn.org/2007/atom+xhtml">' +
-        '<head profile="http://purl.org/NET/erdf/profile">' +
-        '<link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />' +
-        '<link rel="schema.dcTerms" href="http://purl.org/dc/terms/ " />' +
-        '<link rel="schema.b3mn" href="http://b3mn.org" />' +
-        '<link rel="schema.oryx" href="http://oryx-editor.org/" />' +
-        '<link rel="schema.raziel" href="http://raziel.org/" />' +
-        '<base href="' +
-        location.href.split("?")[0] +
-        '" />' +
-        '</head><body>' +
-        serializedDOM +
-        '</body></html>';
-        
-        //convert to RDF
-        var parser = new DOMParser();
-        var parsedDOM = parser.parseFromString(serializedDOM, "text/xml");
-        var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
-        var xsltProcessor = new XSLTProcessor();
-        var xslRef = document.implementation.createDocument("", "", null);
-        xslRef.async = false;
-        xslRef.load(xsltPath);
-        xsltProcessor.importStylesheet(xslRef);
-        
-        var rdf = xsltProcessor.transformToDocument(parsedDOM);
-        var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
-        
-        return serialized_rdf;
-    },
-    
     validate: function(button){
         this.facade.raiseEvent({
             type: ORYX.CONFIG.EVENT_LOADING_ENABLE,
@@ -129,7 +88,7 @@ ORYX.Plugins.Validator = Clazz.extend({
             asynchronous: false,
             parameters: {
                 resource: location.href,
-                data: this.getRdf()
+                data: this.getRDFFromDOM()
             },
             onSuccess: function(request){
                 var result = Ext.decode(request.responseText);

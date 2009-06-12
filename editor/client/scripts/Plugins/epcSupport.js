@@ -29,7 +29,7 @@ if(!ORYX.Plugins)
  * 
  * 
  */
-ORYX.Plugins.EPCSupport = Clazz.extend({
+ORYX.Plugins.EPCSupport = ORYX.Plugins.AbstractPlugin.extend({
 
 	facade: undefined,
 
@@ -175,16 +175,26 @@ ORYX.Plugins.EPCSupport = Clazz.extend({
 		if (domContent == null) {
 			return new String("Parse Error: \nThe given dom content is null.");
 		}
+		var xsl = "";
+		source=ORYX.PATH + "lib/extract-rdf.xsl";
+		new Ajax.Request(source, {
+			asynchronous: false,
+			method: 'get',
+			onSuccess: function(transport){
+				xsl = transport.responseText
+			}.bind(this),
+			onFailure: (function(transport){
+				ORYX.Log.error("XSL load failed" + transport);
+			}).bind(this)
+		});
 		var result;
 		var resultString;
 		var xsltProcessor = new XSLTProcessor();
-		var xslRef = document.implementation.createDocument("", "", null);
-		xslRef.async = false;
-		xslRef.load(xsltPath);
-		
-		xsltProcessor.importStylesheet(xslRef);
+		var domParser = new DOMParser();
+		var xslObject = domParser.parseFromString(xsl, "text/xml");
+		xsltProcessor.importStylesheet(xslObject);
 		try {
-			result = xsltProcessor.transformToDocument(domContent);
+			result = xsltProcessor.transformToFragment(domContent, document);
 		} catch (error){
 			return new String("Parse Error: "+error.name + "\n" + error.message);
 		}

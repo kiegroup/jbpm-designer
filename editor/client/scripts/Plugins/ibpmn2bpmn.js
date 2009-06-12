@@ -151,17 +151,26 @@ ORYX.Plugins.IBPMN2BPMN = Clazz.extend({
 				
 			}.bind(this);
 			
-
+			var xsl = "";
+			source=ORYX.PATH + "lib/extract-rdf.xsl";
+			new Ajax.Request(source, {
+				asynchronous: false,
+				method: 'get',
+				onSuccess: function(transport){
+					xsl = transport.responseText
+				}.bind(this),
+				onFailure: (function(transport){
+					ORYX.Log.error("XSL load failed" + transport);
+				}).bind(this)
+			});
+			
 			var parser = new DOMParser();
 			var parsedDOM = parser.parseFromString(s, "text/xml");
-			var xsltPath = ORYX.PATH + "lib/extract-rdf.xsl";
+			var xslObject = domParser.parseFromString(xsl, "text/xml");
 			var xsltProcessor = new XSLTProcessor();
-			var xslRef = document.implementation.createDocument("", "", null);
-			xslRef.async = false;
-			xslRef.load(xsltPath);
-			xsltProcessor.importStylesheet(xslRef);
+			xsltProcessor.importStylesheet(xslObject);
 			try {
-				var rdf = xsltProcessor.transformToDocument(parsedDOM);
+				var rdf = xsltProcessor.transformToFragment(parsedDOM, document);
 				var serialized_rdf = (new XMLSerializer()).serializeToString(rdf);
 				if (!serialized_rdf.startsWith("<?xml")) {
 					serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;

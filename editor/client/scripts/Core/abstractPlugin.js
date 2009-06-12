@@ -128,16 +128,25 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 
         var parser 		= new DOMParser();
         var parsedData 	= parser.parseFromString(data, "text/xml");
-        var xsltPath 	= stylesheet;
+		source=stylesheet;
+		new Ajax.Request(source, {
+			asynchronous: false,
+			method: 'get',
+			onSuccess: function(transport){
+				xsl = transport.responseText
+			}.bind(this),
+			onFailure: (function(transport){
+				ORYX.Log.error("XSL load failed" + transport);
+			}).bind(this)
+		});
         var xsltProcessor = new XSLTProcessor();
-        var xslRef 		= document.implementation.createDocument("", "", null);
-        xslRef.async 	= false;
-        xslRef.load(xsltPath);
-        xsltProcessor.importStylesheet(xslRef);
+		var domParser = new DOMParser();
+		var xslObject = domParser.parseFromString(xsl, "text/xml");
+        xsltProcessor.importStylesheet(xslObject);
         
         try {
         	
-            var newData 		= xsltProcessor.transformToDocument(parsedData);
+            var newData 		= xsltProcessor.transformToFragment(parsedData, document);
             var serializedData 	= (new XMLSerializer()).serializeToString(newData);
             
             // Firefox 2 to 3 problem?!
