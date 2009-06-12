@@ -648,3 +648,11 @@ ORYX.I18N.Validator.errorDesc = 'We are sorry, but the validation of your proces
 
 ORYX.I18N.Validator.epcIsSound = "<p><b>The EPC is sound, no problems found!</b></p>";
 ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";
+
+/** New Language Properties: 05.06.2009*/
+if(!ORYX.I18N.RESIZE) ORYX.I18N.RESIZE = {};
+ORYX.I18N.RESIZE.tip = "Increase canvas size:";
+ORYX.I18N.RESIZE.N = "Top";
+ORYX.I18N.RESIZE.W = "Left";
+ORYX.I18N.RESIZE.S ="Down";
+ORYX.I18N.RESIZE.E ="Right";
