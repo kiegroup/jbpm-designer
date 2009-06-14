@@ -74,40 +74,43 @@ ORYX.Plugins.DesynchronizabilityOverlay = ORYX.Plugins.AbstractPlugin.extend({
 					data: serialized_rdf
 				},
 				onSuccess: function(request){
-						var resp = request.responseText.evalJSON();
-
-						if (resp.conflicttransitions) {
-						if (resp.conflicttransitions.length > 0) {
-						
-							// Get all Valid ResourceIDs and collect all shapes
-							var transitionshapes = resp.conflicttransitions.collect(function(res){ return this.facade.getCanvas().getChildShapeByResourceId( res ) }.bind(this)).compact();
-
-							this.facade.raiseEvent({
-								type: 			ORYX.CONFIG.EVENT_OVERLAY_SHOW,
-								id: 			"desynchronizability",
-								shapes: 		transitionshapes,
-								attributes: 	{fill: "red", stroke: "black"}
-							});
-
-							this.active = !this.active;				
-
-						} else {
-
-							Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.sync);
-							// var win = window.open('data:text/plain,' +request.responseText, '_blank', "resizable=yes,width=640,height=480,toolbar=0,scrollbars=yes");
-						}
-						} else if (resp.syntaxerrors) {
-
-							// Get all Valid ResourceIDs and collect all shapes
-//							var shapes = transitions.collect(function(res){ return this.facade.getCanvas().getChildShapeByResourceId( res ) }.bind(this)).compact();
-
-							Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.error.replace(/1/, resp.syntaxerrors.length));
-
-//							this.active = !this.active;				
-
-						} else {
-							Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.invalid);
-						}
+					var resp = request.responseText.evalJSON();
+	
+					if (resp.conflicttransitions) {
+					if (resp.conflicttransitions.length > 0) {
+					
+						// Get all Valid ResourceIDs and collect all shapes
+						var transitionshapes = resp.conflicttransitions.collect(function(res){ 
+							return this.facade.getCanvas()
+								.getChildShapeByResourceId( res ) 
+						}.bind(this)).compact();
+	
+						this.facade.raiseEvent({
+							type: 			ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+							id: 			"desynchronizability",
+							shapes: 		transitionshapes,
+							attributes: 	{fill: "red", stroke: "black"}
+						});
+	
+						this.active = !this.active;				
+	
+					} else {
+	
+						Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.sync);
+						// var win = window.open('data:text/plain,' +request.responseText, '_blank', "resizable=yes,width=640,height=480,toolbar=0,scrollbars=yes");
+					}
+					} else if (resp.syntaxerrors) {
+	
+						// Get all Valid ResourceIDs and collect all shapes
+	//							var shapes = transitions.collect(function(res){ return this.facade.getCanvas().getChildShapeByResourceId( res ) }.bind(this)).compact();
+	
+						Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.error.replace(/1/, resp.syntaxerrors.length));
+	
+	//							this.active = !this.active;				
+	
+					} else {
+						Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.DesynchronizabilityOverlay.invalid);
+					}
 				}.bind(this)
 			});
 			
