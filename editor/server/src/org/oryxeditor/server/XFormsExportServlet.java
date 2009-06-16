@@ -1,9 +1,8 @@
 package org.oryxeditor.server;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.Writer;
+import java.io.StringWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,17 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
-/*import org.w3c.dom.DOMImplementation;                                                                                           
-import org.w3c.dom.bootstrap.DOMImplementationRegistry;                                                                           
-import org.w3c.dom.ls.DOMImplementationLS;                                                                                        
-import org.w3c.dom.ls.LSOutput;                                                                                                   
-import org.w3c.dom.ls.LSSerializer;*/                                                                                             
 
-import com.sun.org.apache.xml.internal.serialize.DOMSerializer;
-import com.sun.org.apache.xml.internal.serialize.Method;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+
 
 import de.hpi.xforms.XForm;
 import de.hpi.xforms.rdf.XFormsRDFImporter;
@@ -54,7 +47,7 @@ public class XFormsExportServlet extends HttpServlet {
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-			exportForm(new BufferedWriter(res.getWriter()), document, cssUrl);
+			res.getWriter().write(exportForm(document, cssUrl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,13 +77,13 @@ public class XFormsExportServlet extends HttpServlet {
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes()));
-			exportForm(new BufferedWriter(res.getWriter()), document, cssUrl);
+			res.getWriter().write(exportForm(document, cssUrl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void exportForm(Writer writer, Document document, String cssUrl) {
+	private String exportForm(Document document, String cssUrl) {
 		
 		try {
 			
@@ -117,21 +110,22 @@ public class XFormsExportServlet extends HttpServlet {
 			serializer.write(xhtmlDoc, output);*/
 			
 			OutputFormat format = new OutputFormat(xhtmlDoc);
+			format.setLineWidth(65);
 			format.setIndenting(true);
-			format.setPreserveSpace(true);
-			format.setLineSeparator(System.getProperty("line.separator"));
-			format.setMethod(Method.XHTML);
+			format.setLineSeparator("\n");
+
+			// TODO: newlines in output (weird it doesn't work)
+		    
+		    StringWriter output = new StringWriter();
+		    XMLSerializer serial = new XMLSerializer(output, format);
+			serial.serialize(xhtmlDoc);
 			
-			// TODO: newlines in serialize output (weird it doesn't work)
-			
-			XMLSerializer serial = new XMLSerializer(writer, format);
-			DOMSerializer domserial = serial.asDOMSerializer();
-			domserial.serialize(xhtmlDoc); 
+			return output.toString();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		return "error";
 	}
 
 }

@@ -9,6 +9,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,7 +27,9 @@ import de.hpi.xforms.*;
  * @author jan-felix.schwarz@student.hpi.uni-potsdam.de
  * 
  */
+
 public class XFormsRDFImporter {
+	private static final String PREFIX = "instance('data')/";
 	
 	protected Document doc;
 	protected Document instanceModelDoc;
@@ -66,6 +71,19 @@ public class XFormsRDFImporter {
 		c.objects.put("#oryx-canvas123", c.form);
 
 		if(root.hasChildNodes()) {
+			
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder;
+			try {
+				builder = factory.newDocumentBuilder();
+				instanceModelDoc = builder.newDocument();
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			}
+			
+			Element element = (Element) instanceModelDoc.createElement("model");
+			instanceModelDoc.appendChild(element);
+						
 			for (Node node = root.getFirstChild(); node != null; node = node.getNextSibling()) {
 				
 				if (node instanceof Text)
@@ -231,9 +249,15 @@ public class XFormsRDFImporter {
 					if (attribute.equals("parent")) {
 						c.parentRelationships.put(element, getResourceId(getAttributeValue(n, "rdf:resource")));
 					}
-					
+					if (attribute.equals("nodeset") && prefix == null) {
+						try {
+							String path = generateCodeTable(c, content, element);
+							element.getAttributes().put(attribute, path);
+						} catch (JSONException e) {
+							element.getAttributes().put(attribute, content);
+						}
+					}
 				}
-				
 			}
 		}
 	}
@@ -270,7 +294,7 @@ public class XFormsRDFImporter {
 				bind.getAttributes().put("id", bindId);
 				element.getAttributes().put("bind", bindId);*/
 				
-				if((element instanceof XFormsUIElement) && (!xPath.startsWith("/")))
+				if((element instanceof XFormsUIElement) && (!xPath.startsWith("/")) && !xPath.startsWith(PREFIX))
 					xPath = getNodesetContext((XFormsUIElement) element) + xPath;
 				bind.getAttributes().put("nodeset", xPath);
 				
@@ -341,27 +365,46 @@ public class XFormsRDFImporter {
 	
 	private void addModel(ImportContext c) {
 		c.form.getModel().setInstance(factory.createInstance());
-		if((c.form.getHead()==null) && (instanceModelDoc==null))
+		if((c.form.getHead()==null))
 			generateInstanceModelDoc(c);
 		c.form.getModel().getInstance().setContent(instanceModelDoc);
 	}
 	
-	private void generateInstanceModelDoc(ImportContext c) {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
+	private String generateCodeTable(ImportContext c, String content, XFormsElement element) throws JSONException {
+		JSONObject nodes = new JSONObject(content);
 		try {
-			builder = factory.newDocumentBuilder();
-			instanceModelDoc = builder.newDocument();
-		} catch (ParserConfigurationException e) {
+			JSONArray items = nodes.getJSONArray("items");
+			String id = element.getAttributes().get("id");
+			
+			Element codeTable = (Element) instanceModelDoc.createElement(id);
+			instanceModelDoc.getFirstChild().appendChild(codeTable);
+
+			for(int j=0; j < items.length(); j++) {
+				Node item = (Node) instanceModelDoc.createElement("item");
+				
+				Node name = (Node) instanceModelDoc.createElement("name");
+				name.setTextContent(items.getJSONObject(j).getString("name"));
+				item.appendChild(name);
+				try {
+					Node value = (Node) instanceModelDoc.createElement("value");
+					value.setTextContent(items.getJSONObject(j).getString("value"));
+					item.appendChild(value);
+				} catch (Exception e) {}
+				
+				codeTable.appendChild(item);
+			}
+			return "instance('" + id + "')/item";
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		return "";
+	}
+	
+	private void generateInstanceModelDoc(ImportContext c) {
 		// instance model generation
-		// this could be obsolete if XForms implementation supports lazy authoring
 		
 		Element root = (Element) instanceModelDoc.createElement("data");
-		root.setAttribute("xmlns", "");
-		instanceModelDoc.appendChild(root);
+		instanceModelDoc.getFirstChild().appendChild(root);
 		
 		for(XFormsElement element : c.objects.values()) {
 			if(!(element instanceof XFormsUIElement)) continue;
@@ -370,16 +413,22 @@ public class XFormsRDFImporter {
 			String xPath = uiElement.getAttributes().get("ref");
 			if(xPath!=null) {
 				if(!xPath.startsWith("/")) xPath = getNodesetContext(uiElement) + xPath;
-				
+
 				Node instanceModelNode = (Node) root;
-				
 				// handle references to attributes
 				if(xPath.split("@").length==2)
 					xPath = xPath.split("@")[0];
 				
-				for(String tagName : xPath.split("/")) {
+				if(xPath.startsWith(PREFIX))
+					xPath = xPath.substring(PREFIX.length());
+				uiElement.getAttributes().put("ref", PREFIX + xPath);
+				
+				String[] tags = xPath.split("/");
+				Node child = null;
+				for(int i = 0; i < tags.length; i++) {
+					String tagName = tags[i];
 					if(tagName.length()>0) {
-						Node child = getChild(instanceModelNode, tagName);
+						child = getChild(instanceModelNode, tagName);
 						if(child==null) {
 							// create new element
 							child = (Node) instanceModelDoc.createElement(tagName);
@@ -388,9 +437,10 @@ public class XFormsRDFImporter {
 						instanceModelNode = child;
 					}
 				}
-				
+				String defaultValue = uiElement.getAttributes().get("default");
+				if(defaultValue != null)
+					child.setTextContent(defaultValue);
 			}
-			
 		}
 	}
 	
@@ -406,6 +456,7 @@ public class XFormsRDFImporter {
 				nodeset = element.getAttributes().get("ref");		 // ... then for ref attr
 			if((nodeset!=null) && !nodeset.equals("") && !nodeset.equals("/"))
 				nodesetContext = nodeset + "/" + nodesetContext;
+			if(nodesetContext.startsWith(PREFIX)) break;
 		}
 		return nodesetContext;
 	}
@@ -561,9 +612,10 @@ public class XFormsRDFImporter {
 		handleAttributes(node, item, c);
 		
 		Value value = factory.createValue();
+		value.setContent(getContent(getChild(node, "xf_value")));
 		handleAttributes(node, value, "value_", c);
 		if(((value.getAttributes().get("ref")!=null) && !value.getAttributes().get("ref").equals("/"))
-				|| (value.getAttributes().get("value")!=null) || (value.getAttributes().get("bind")!=null))
+				|| (value.getContent()!=null) || (value.getAttributes().get("bind")!=null))
 			item.setValue(value);
 	}
 	
@@ -574,14 +626,15 @@ public class XFormsRDFImporter {
 		handleAttributes(node, itemset, c);
 		
 		Value value = factory.createValue();
+		value.getAttributes().put("ref", getContent(getChild(node, "xf_value_ref")));
 		handleAttributes(node, value, "value_", c);
 		if(((value.getAttributes().get("ref")!=null) && !value.getAttributes().get("ref").equals("/")) 
-				|| (value.getAttributes().get("value")!=null) || (value.getAttributes().get("bind")!=null))
+				|| (value.getContent()!=null) || (value.getAttributes().get("bind")!=null))
 			itemset.setValue(value);
 		
 		Copy copy = factory.createCopy();
 		handleAttributes(node, copy, "copy_", c);
-		if(((value.getAttributes().get("ref")!=null) && !value.getAttributes().get("ref").equals("/"))
+		if(((copy.getAttributes().get("ref")!=null) && !copy.getAttributes().get("ref").equals("/"))
 				|| (copy.getAttributes().get("bind")!=null))
 			itemset.setCopy(copy);
 	}

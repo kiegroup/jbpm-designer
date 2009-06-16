@@ -182,34 +182,42 @@ public class XFormsXHTMLExporter {
 	}
 
 	private void generateHead(String cssUrl, Element head) {
+		// Title
 		Element title = (Element) head.appendChild(
 				doc.createElementNS("http://www.w3.org/1999/xhtml", 
 						nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":title"));
 		title.appendChild(doc.createCDATASection(form.getAttributes().get("name")));
 		
+		// Style Sheet
 		Element link = (Element) head.appendChild(
 				doc.createElementNS("http://www.w3.org/1999/xhtml", nsPrefixes.get("http://www.w3.org/1999/xhtml") + ":link"));
 		link.setAttribute("rel", "stylesheet");
 		link.setAttribute("media", "screen");
 		link.setAttribute("href", cssUrl);
 		
+		// Model Node
 		Element model = (Element) head.appendChild(
 				doc.createElementNS("http://www.w3.org/2002/xforms", 
 						nsPrefixes.get("http://www.w3.org/2002/xforms") + ":model"));
 		addAttributes(model, form.getModel());
 		
-		Element instance = (Element) model.appendChild(
-				doc.createElementNS("http://www.w3.org/2002/xforms", 
-						nsPrefixes.get("http://www.w3.org/2002/xforms") + ":instance"));
-		Node instanceChild = form.getModel().getInstance().getContent().getFirstChild();
+		// Instance Nodes
+		Node instanceChild = form.getModel().getInstance().getContent().getFirstChild().getFirstChild();
 		while(instanceChild!=null) {
+			Element instance = (Element) model.appendChild(
+					doc.createElementNS("http://www.w3.org/2002/xforms", 
+							nsPrefixes.get("http://www.w3.org/2002/xforms") + ":instance"));
+			instance.setAttribute("xmlns", "");
+			instance.setAttribute("id", instanceChild.getNodeName());
 			instance.appendChild(doc.importNode(instanceChild, true));
-			instanceChild = instanceChild.getNextSibling();
+			instanceChild = instanceChild.getNextSibling();		
 		}
 		
+		// Bindings
 		for(Bind bind : form.getModel().getBinds())
 			addElementsRecursive(model, bind);
 		
+		// Submissions
 		for(Submission submission : form.getModel().getSubmissions())
 			addElementsRecursive(model, submission);
 		

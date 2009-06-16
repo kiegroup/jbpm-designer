@@ -20,6 +20,7 @@ public abstract class FormControl extends XFormsUIElement implements ActionConta
 		super();
 		attributes.put("ref", null);
 		attributes.put("bind", null);
+		attributes.put("default", null);
 	}
 
 	public Help getHelp() {

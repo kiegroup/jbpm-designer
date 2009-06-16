@@ -65,26 +65,26 @@
 				},
 				{
 					"id":"xf_head",
-					"type":"String",
+					"type":"text",
 					"title":"head",
 					"prefix":"oryx",
 					"value":"",
 					"description":"The form page's head markup.",
-					"readonly":true,
+					"readonly":false,
 					"optional":true,
-					"length":"1000000",
+					"length":"",
 					"wrapLines":true
 				},
 				{
 					"id":"xf_nsdeclarations",
-					"type":"String",
+					"type":"text",
 					"title":"namespaces",
 					"prefix":"oryx",
 					"value":"",
 					"description":"The original namespace declarations (serialized).",
-					"readonly":true,
+					"readonly":false,
 					"optional":true,
-					"length":"1000000",
+					"length":"",
 					"wrapLines":true
 				}
 			]
@@ -138,6 +138,18 @@
 					"length":"30"
 				},
 				{
+					"id":"xf_default",
+					"type":"String",
+					"title":"default value",
+					"prefix":"oryx",
+					"value":"",
+					"description":"The default value is displayed, when the form is loaded.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
 					"id":"xf_ref",
 					"type":"String",
 					"title":"ref",
@@ -174,23 +186,35 @@
 					"items": [
 						{
 							"id":"c1",
-							"title":"c1",
+							"title":"full",
 							"value":"full",
 							"refToView":""
 						},
 						{
 							"id":"c2",
-							"title":"c2",
+							"title":"compact",
 							"value":"compact",
 							"refToView":""
 						},
 						{
 							"id":"c3",
-							"title":"c3",
+							"title":"minimal",
 							"value":"minimal",
 							"refToView":""
 						}
 					]
+				},
+				{
+					"id":"xf_incremental",
+					"type":"Boolean",
+					"title":"incremental",
+					"prefix":"oryx",
+					"value":true,
+					"description":"If true, this form control will generate additional xforms-value-changed events",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"min":"0"
 				},
 				{
 					"id":"xf_navindex",
@@ -564,6 +588,18 @@
 					"length":"30"
 				},
 				{
+					"id":"xf_default",
+					"type":"text",
+					"title":"default value",
+					"prefix":"oryx",
+					"value":"",
+					"description":"The default value is displayed, when the form is loaded.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
 					"id":"xf_ref",
 					"type":"String",
 					"title":"ref",
@@ -600,19 +636,19 @@
 					"items": [
 						{
 							"id":"c1",
-							"title":"c1",
+							"title":"full",
 							"value":"full",
 							"refToView":""
 						},
 						{
 							"id":"c2",
-							"title":"c2",
+							"title":"compact",
 							"value":"compact",
 							"refToView":""
 						},
 						{
 							"id":"c3",
-							"title":"c3",
+							"title":"minimal",
 							"value":"minimal",
 							"refToView":""
 						}
@@ -2299,11 +2335,23 @@
 					"length":"30"
 				},
 				{
+					"id":"xf_default",
+					"type":"String",
+					"title":"default value",
+					"prefix":"oryx",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
 					"id":"xf_ref",
 					"type":"String",
 					"title":"ref",
 					"prefix":"oryx",
-					"value":"/",
+					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -2323,19 +2371,19 @@
 					"items": [
 						{
 							"id":"c1",
-							"title":"c1",
+							"title":"full",
 							"value":"full",
 							"refToView":""
 						},
 						{
 							"id":"c2",
-							"title":"c2",
+							"title":"compact",
 							"value":"compact",
 							"refToView":""
 						},
 						{
 							"id":"c3",
-							"title":"c3",
+							"title":"minimal",
 							"value":"minimal",
 							"refToView":""
 						}
@@ -2370,7 +2418,7 @@
 					"type":"Choice",
 					"title":"selection",
 					"prefix":"oryx",
-					"value":"closed",
+					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
@@ -2378,13 +2426,13 @@
 					"items": [
 						{
 							"id":"c1",
-							"title":"c1",
+							"title":"closed",
 							"value":"closed",
 							"refToView":""
 						},
 						{
 							"id":"c2",
-							"title":"c2",
+							"title":"open",
 							"value":"open",
 							"refToView":""
 						}
@@ -2395,7 +2443,7 @@
 					"type":"Boolean",
 					"title":"incremental",
 					"prefix":"oryx",
-					"value":true,
+					"value":"",
 					"description":"When true, this form control will generate additional xforms-value-changed events.",
 					"readonly":false,
 					"optional":true,
@@ -3580,16 +3628,31 @@
 					"length":"30"
 				},
 				{
-					"id":"xf_nodeset",
-					"type":"String",
+					"id":"nodeset",
+					"type":"Complex",
 					"title":"nodeset",
-					"prefix":"oryx",
-					"value":"/",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"100"
+					"value":"",
+					"description":"Defines the items, the Itemset contains.",
+					"readonly": 	false,
+					"optional": 	true,
+					"complexItems": [
+					{
+						"id":"name",
+						"name":"Name",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false 
+					},
+					{
+						"id":"value",
+						"name":"Value",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":true 
+					},
+					],
 				},
 				{
 					"id":"xf_copy_ref",
