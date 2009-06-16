@@ -317,7 +317,8 @@
 			"description":"A place.",
 			"view":"node.place.svg",
 			"icon":"new_place.png",
-			"intersectionType":"ellipse",			
+			"intersectionType":"ellipse",	
+			"fixedAspectRatio":true,		
 			"roles": [
 				"place",
 				"fromtoall"

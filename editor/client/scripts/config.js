@@ -77,6 +77,9 @@ ORYX.CONFIG.SHAPEMENU_BOTTOM =			"Oryx_Bottom";
 ORYX.CONFIG.SHAPEMENU_LEFT =			"Oryx_Left";
 ORYX.CONFIG.SHAPEMENU_TOP =				"Oryx_Top";
 
+	/* Morph-Menu Item */
+ORYX.CONFIG.MORPHITEM_DISABLED =		"Oryx_MorphItem_disabled";
+
 	/* Property type names */
 ORYX.CONFIG.TYPE_STRING =				"string";
 ORYX.CONFIG.TYPE_BOOLEAN =				"boolean";
@@ -121,6 +124,8 @@ ORYX.CONFIG.EVENT_CANVAS_SHAPEADDED =		"shapeadded";
 ORYX.CONFIG.EVENT_PROPERTY_CHANGED =		"propertyChanged";
 ORYX.CONFIG.EVENT_DRAGDROP_START =			"dragdrop.start";
 ORYX.CONFIG.EVENT_DRAGDROP_END =			"dragdrop.end";
+ORYX.CONFIG.EVENT_RESIZE_START =			"resize.start";
+ORYX.CONFIG.EVENT_RESIZE_END =				"resize.end";
 ORYX.CONFIG.EVENT_DRAGDOCKER_DOCKED =		"dragDocker.docked";
 ORYX.CONFIG.EVENT_HIGHLIGHT_SHOW =			"highlight.showHighlight";
 ORYX.CONFIG.EVENT_HIGHLIGHT_HIDE =			"highlight.hideHighlight";

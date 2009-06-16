@@ -251,6 +251,10 @@ ORYX.Core.StencilSet.Stencil = {
 		return this._jsonStencil.icon;
 	},
 	
+	fixedAspectRatio: function() {
+		return this._jsonStencil.fixedAspectRatio === true;
+	},
+	
 	hasMultipleRepositoryEntries: function() {
 		return (this.getRepositoryEntries().length > 0);
 	},

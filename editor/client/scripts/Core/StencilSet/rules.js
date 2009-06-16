@@ -900,7 +900,7 @@ ORYX.Core.StencilSet.Rules = {
 	 * At least stencil or shape has to be specified
 	 * 
 	 * @return {Array} Array of stencils that the passed stencil/shape can be
-	 *         transformed to (w/o the current stencil)
+	 *         transformed to (including the current stencil itself)
 	 */
 	morphStencils: function(args) {
 		// check arguments
@@ -916,9 +916,7 @@ ORYX.Core.StencilSet.Rules = {
 		var _morphStencils = [];
 		args.stencil.roles().each(function(role) {
 			this._cacheMorph(role).each(function(stencil) {
-				if(stencil.id()!=args.stencil.id()) {
-					_morphStencils.push(stencil);
-				}
+				_morphStencils.push(stencil);
 			})
 		}.bind(this));
 

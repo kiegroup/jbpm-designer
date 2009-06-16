@@ -270,16 +270,18 @@ table-layout:fixed;
 }
 /** End Resizer **/
 
-body {
 
-}
-
-.Oryx_ShapeMenu {
-
+.Oryx_ShapeMenu .Oryx_MorphItem_disabled {
+	font-weight: bold;
+	cursor:default;
+	opacity:.3;
+	-moz-opacity:.3;
+	filter:alpha(opacity=30);
+	border: 1px solid #000;
 }
 
 .Oryx_hover {
-	
+	background: url(../images/shapemenu_highlight.png) no-repeat 1px 1px;
 }
 
 .Oryx_down {
@@ -352,11 +354,20 @@ body {
 
 /*** Resizer ***/
 
-.resizer {
+.resizer_southeast {
 	position:relative;
 	background:url(../lib/ext-2.0.2/resources/images/default/sizer/se-handle-dark.gif);
 	width:10px; 
 	height:10px; 
+	cursor: se-resize;
+}
+
+.resizer_northwest {
+	position:relative;
+	background:url(../lib/ext-2.0.2/resources/images/default/sizer/nw-handle-dark.gif);
+	width:10px; 
+	height:10px; 
+	cursor: nw-resize;
 }
 
 /*** Selection Frame ***/
