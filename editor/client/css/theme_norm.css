@@ -11,6 +11,10 @@ width: 160px;
 table-layout:fixed;
 }
 
+/* Hide tiny small blue dot on the lower top of a menu */
+.x-menu {
+	overflow:hidden;
+}
 
 .x-grid3-row-table {
 	table-layout: fixed;
