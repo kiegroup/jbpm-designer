@@ -280,7 +280,7 @@
     
     <target name='compress'>
         
-        <tempfile property="compress.temp" destDir="${editor-build-root}"/>
+        <tempfile property="compress.temp" suffix=".js" prefix="compressed" destDir="${editor-build-root}"/>
         
         <java dir="${editor-build-root}" jar="${editor-src-root}/lib/custom_rhino.jar" fork="true"
          failonerror="true" output='${compress.temp}'>
@@ -305,17 +305,6 @@
     
     <target name="dist">
         <mkdir dir="${target-dir}"/>
-        
-        <!--
-        <echo>Creating zip for offline or php use, and online war file.</echo>
-        <zip destfile="dist/oryx.zip">
-        <fileset dir="build">
-        <exclude name="*.php"/>
-        <exclude name="classes/"/>
-        </fileset>
-        
-        </zip>
-        -->
         
         <echo>
             Creating web application archive. ${deploy-xhtml}
