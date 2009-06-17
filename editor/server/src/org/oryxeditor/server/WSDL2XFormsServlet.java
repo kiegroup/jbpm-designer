@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -72,6 +74,14 @@ public class WSDL2XFormsServlet extends HttpServlet {
 			int i=0;
 			for(Document xformsDoc : xformsDocs) {
 				
+				OutputFormat format = new OutputFormat(xformsDoc);
+				format.setLineWidth(65);
+				format.setIndenting(true);
+				format.setLineSeparator("\n");
+			    XMLSerializer serial = new XMLSerializer(System.out, format);
+				serial.serialize(xformsDoc);
+				if(true) continue;
+				
 				XFormsXHTMLImporter importer = new XFormsXHTMLImporter(xformsDoc);
 				XForm form = importer.getXForm();
 				
@@ -90,7 +100,7 @@ public class WSDL2XFormsServlet extends HttpServlet {
 						modelName, 
 						"http://b3mn.org/stencilset/xforms#", 
 						"/stencilsets/xforms/xforms.json");
-				
+				System.out.println("NUMMER: " + i);
 				addResponseParams(xformsDoc.getDocumentElement(), modelUrl.substring(modelUrl.lastIndexOf("http://")));
 				
 				i++;
