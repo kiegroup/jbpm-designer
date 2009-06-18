@@ -411,7 +411,7 @@ public class XFormsRDFImporter {
 			XFormsUIElement uiElement = (XFormsUIElement) element;
 			
 			String xPath = uiElement.getAttributes().get("ref");
-			if(xPath!=null) {
+			if(xPath!=null && (!xPath.startsWith("instance('") || xPath.startsWith(PREFIX)) ) {
 				if(!xPath.startsWith("/")) xPath = getNodesetContext(uiElement) + xPath;
 
 				Node instanceModelNode = (Node) root;
