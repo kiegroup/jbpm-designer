@@ -56,6 +56,7 @@ ORYX.Core.StencilSet.Rules = {
 		this._cardinalityRules = new Hash();
 		this._containmentRules = new Hash();
 		this._morphingRules = new Hash();
+		this._layoutRules = new Hash();
 	},
 	
 	/**
@@ -91,6 +92,7 @@ ORYX.Core.StencilSet.Rules = {
 			this._cardinalityRules = new Hash();
 			this._containmentRules = new Hash();
 			this._morphingRules = new Hash();
+			this._layoutRules = new Hash();
 			
 			stencilsets.each(function(ss){
 				this.initializeRules(ss);
@@ -261,6 +263,39 @@ ORYX.Core.StencilSet.Rules = {
 					}).bind(this));
 				}).bind(this));
 			}
+			
+			// init layouting rules
+			var layoutRules = this._layoutRules;
+			if (jsonRules.layoutRules) {
+				jsonRules.layoutRules.each(function(rules){
+					var layoutKey;
+					if (this._isRoleOfOtherNamespace(rules.role)) {
+						layoutKey = rules.role;
+					}
+					else {
+						layoutKey = namespace + rules.role;
+					}
+					if (!layoutRules[layoutKey]) {
+						layoutRules[layoutKey] = {};
+					}
+					if (rules["in"]){
+						layoutRules[layoutKey]["in"] = {
+							"t": rules["in"]["t"]||1,
+							"r": rules["in"]["r"]||1,
+							"b": rules["in"]["b"]||1,
+							"l": rules["in"]["l"]||1,
+						};
+					}
+					if (rules["out"]){
+						layoutRules[layoutKey]["out"] = {
+							"t": rules["out"]["t"]||1,
+							"r": rules["out"]["r"]||1,
+							"b": rules["out"]["b"]||1,
+							"l": rules["out"]["l"]||1,
+						};
+					}
+				}.bind(this));
+			}			
 		}
 	},
 	
@@ -388,7 +423,7 @@ ORYX.Core.StencilSet.Rules = {
 		}
 		return morphs;
 	},
-
+	
 	/** Begin connection rules' methods */
 	
 	/**
@@ -1010,6 +1045,50 @@ ORYX.Core.StencilSet.Rules = {
 	/** End morphing rules' methods */
 
 
+	/** Begin layouting rules' methods */
+	
+	/**
+	 * Returns a set on "in" and "out" layouting rules for a given shape
+	 * @param {Object} shape
+	 * @return {Object} "in" and "out" with a default value of {"t":1, "r":1, "b":1, "r":1} if not specified in the json
+	 */
+	getLayoutingRules : function(shape){
+		
+		if (!shape||!(shape instanceof ORYX.Core.Shape)){ return }
+		
+		var layout = {"in":{},"out":{}};
+		
+		var parseValues = function(o, v){
+			if (o && o[v]){
+				["t","r","b","l"].each(function(d){
+					layout[v][d]=Math.max(o[v][d],layout[v][d]||0);
+				});
+			}
+		}
+		
+		// For each role
+		shape.getStencil().roles().each(function(role) {
+			// check if there are layout information
+			if (this._layoutRules[role]){
+				// if so, parse those information to the 'layout' variable
+				parseValues(this._layoutRules[role], "in");
+				parseValues(this._layoutRules[role], "out");
+			}
+		}.bind(this));
+		
+		// Make sure, that every attribute has an value,
+		// otherwise set 1
+		["in","out"].each(function(v){
+			["t","r","b","l"].each(function(d){
+					layout[v][d]=layout[v][d]!==undefined?layout[v][d]:1;
+				});
+		})
+		
+		return layout;
+	},
+	
+	/** End layouting rules' methods */
+	
 	/** Helper methods */
 
 	/**

@@ -221,6 +221,7 @@
                 <file name='scripts/Core/uiobject.js'/>
                 <file name='scripts/Core/abstractshape.js'/>
                 <file name='scripts/Core/canvas.js'/>
+                <file name='scripts/Core/apiHandler.js'/>
                 <file name='scripts/Core/main.js'/>
                 <file name='scripts/Core/svgDrag.js'/>
                 <file name='scripts/Core/shape.js'/>
@@ -231,6 +232,7 @@
                 <file name='scripts/Core/edge.js'/>
                 <file name='scripts/Core/command.js'/>
             	<file name='scripts/Core/abstractPlugin.js'/>
+            	<file name='scripts/Core/abstractLayouter.js'/>
             </filelist>
 			<!-- load all sources from plugins defined in the plugins.xml-->
 			<filelist dir="${editor-src-client}/scripts/Plugins/" files="${config.plugins.plugin.source}"/>
@@ -298,7 +300,18 @@
             <fileset file="license"/>
             <fileset file="${compress.temp}"/>
         </concat>
-        
+
+        <concat destfile='${editor-build-root}/oryx.all.js'>
+            <fileset file="license"/>
+			<fileset file="${editor-src-root}/lib/path_parser.js"/>
+			<fileset file="${editor-src-root}/lib/prototype-1.5.1.js"/>
+			<fileset file="${editor-src-root}/lib/ext-2.0.2/adapter/ext/ext-base.js"/>
+			<fileset file="${editor-src-root}/lib/ext-2.0.2/ext-all.js"/>
+			<fileset file="${editor-src-root}/lib/ext-2.0.2/color-field.js"/>
+			<fileset file="${editor-src-root}/data/i18n/translation_en_us.js"/>
+            <fileset file="${compress.temp}"/>
+        </concat>
+		        
         <delete file='${compress.temp}'/>
         
     </target>

@@ -328,7 +328,6 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 		
     },
     
- 
     /**
 	 * Checks if a certain stencil set is loaded right now.
 	 * 
@@ -343,5 +342,20 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 				);
 			}.bind(this)
 		);
+	},
+	
+	/**
+	 * Raises an event so that registered layouters does
+	 * have the posiblility to layout the given shapes 
+	 * For further reading, have a look into the AbstractLayouter
+	 * class
+	 * @param {Object} shapes
+	 */
+	doLayout: function(shapes){
+		// Raises a do layout event
+		this.facade.raiseEvent({
+			type		: ORYX.CONFIG.EVENT_LAYOUT,
+			shapes		: shapes
+		});
 	}
 });
