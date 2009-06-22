@@ -2,6 +2,7 @@ package de.hpi.bpmn.serialization;
 
 import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.Association;
+import de.hpi.bpmn.CollapsedSubprocess;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.EndCancelEvent;
@@ -66,6 +67,7 @@ public interface BPMNSerialization {
 	 */
 	public StringBuilder getSerializationForDiagramObject(Task task);
 	public StringBuilder getSerializationForDiagramObject(SubProcess subProcess);
+	public StringBuilder getSerializationForDiagramObject(CollapsedSubprocess collabsedSubprocess);
 	public StringBuilder getSerializationForDiagramObject(Lane lane);
 	public StringBuilder getSerializationForDiagramObject(Pool pool);
 	public StringBuilder getSerializationForDiagramObject(MessageFlow messageFlow);

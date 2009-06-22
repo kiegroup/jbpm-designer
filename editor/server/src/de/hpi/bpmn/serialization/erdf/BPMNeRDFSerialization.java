@@ -6,6 +6,7 @@ import java.util.Date;
 import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
+import de.hpi.bpmn.CollapsedSubprocess;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.DataObject;
 import de.hpi.bpmn.EndCancelEvent;
@@ -48,6 +49,7 @@ import de.hpi.bpmn.XOREventBasedGateway;
 import de.hpi.bpmn.serialization.BPMNSerialization;
 import de.hpi.bpmn.serialization.erdf.templates.ANDGatewayTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.AssociationTemplate;
+import de.hpi.bpmn.serialization.erdf.templates.CollapsedSubprocessTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.ComplexGatewayTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.DataObjectTemplate;
 import de.hpi.bpmn.serialization.erdf.templates.EndCancelEventTemplate;
@@ -301,6 +303,10 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 		return SubProcessTemplate.getInstance().getCompletedTemplate(subProcess, this.context);
 	}
 
+	public StringBuilder getSerializationForDiagramObject(CollapsedSubprocess collapsedSubprocess) {
+		return CollapsedSubprocessTemplate.getInstance().getCompletedTemplate(collapsedSubprocess, this.context);
+	}
+	
 	public StringBuilder getSerializationForDiagramObject(
 			TextAnnotation textAnnotation) {
 		return TextAnnotationTemplate.getInstance().getCompletedTemplate(textAnnotation, this.context);

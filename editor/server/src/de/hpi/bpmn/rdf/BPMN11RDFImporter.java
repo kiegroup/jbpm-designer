@@ -17,6 +17,7 @@ import de.hpi.bpmn.Activity;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
+import de.hpi.bpmn.CollapsedSubprocess;
 import de.hpi.bpmn.ComplexGateway;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.Edge;
@@ -160,7 +161,7 @@ public class BPMN11RDFImporter {
 				} else if (type.equals("Subprocess")) {
 					addSubProcess(node, c);
 				} else if (type.equals("CollapsedSubprocess")) {
-					addSubProcess(node, c);
+					addCollapsedSubprocess(node, c);
 
 				} else if (type.equals("StartEvent")) {
 					addStartPlainEvent(node, c);
@@ -608,6 +609,83 @@ public class BPMN11RDFImporter {
 		if (sp.getId() == null)
 			sp.setId(sp.getResourceId());
 	}
+	
+	protected void addCollapsedSubprocess(Node node, ImportContext c) {
+		CollapsedSubprocess sp = factory.createCollapsedSubprocess();
+		sp.setResourceId(getResourceId(node));
+		sp.setParent(c.diagram);
+		c.objects.put(sp.getResourceId(), sp);
+
+		if (node.hasChildNodes()) {
+			Node n = node.getFirstChild();
+			while ((n = n.getNextSibling()) != null) {
+				if (n instanceof Text)
+					continue;
+				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
+
+				// TODO: add further attributes...
+				if (attribute.equals("bgcolor")){
+					sp.setColor(getContent(n));
+					
+					/* Set subProcess reference attribute */
+				} else if (attribute.equals("entry")) {
+					sp.setSubprocessRef(getContent(n));
+					
+					/* Set input message type attribute */
+				} else if (attribute.equals("inmessagetype")) {
+					sp.setInMessageType(getContent(n));
+					
+					/* Set input message type attribute */
+				} else if (attribute.equals("outmessagetype")) {
+					sp.setOutMessageType(getContent(n));	
+
+					/* Set web method parameters values for properties property */
+				} else if (attribute.equals("inputsets")) {
+					JSONObject params = null;
+					try {
+						String content = getContent(n);
+						if(content != null) {
+							JSONObject jsonAttribute = new JSONObject(getContent(n));
+							params = jsonAttribute.getJSONArray("items").getJSONObject(0);
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					sp.setInputSets(params);
+				}
+
+				/* Set namespace attribute */
+				else if (attribute.equals("namespace")) {
+					sp.setNamespace(getContent(n));
+				} 
+
+				/* Set servicename attribute */
+				else if (attribute.equals("servicename")) {
+					sp.setServiceName(getContent(n));
+				}
+
+				/* Set operation attribute */
+				else if (attribute.equals("operation")) {
+					sp.setOperation(getContent(n));
+				}
+
+				/* Set port type attribute */
+				else if (attribute.equals("porttype")) {
+					sp.setPortType(getContent(n));
+				}
+				else {
+					handleStandardAttributes(attribute, n, sp, c, "name");
+				}
+
+
+			}
+		}
+		
+		handleStandardActivityAttributes(node, c, sp);
+		
+		if (sp.getId() == null)
+			sp.setId(sp.getResourceId());	}
 
 	protected void addStartPlainEvent(Node node, ImportContext c) {
 		StartPlainEvent event = factory.createStartPlainEvent();

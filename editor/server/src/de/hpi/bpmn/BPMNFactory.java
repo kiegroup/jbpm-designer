@@ -25,6 +25,9 @@ public class BPMNFactory {
 		return new SubProcess();
 	}
 
+	public CollapsedSubprocess createCollapsedSubprocess() {
+		return new CollapsedSubprocess();
+	}
 
 	public StartPlainEvent createStartPlainEvent() {
 		return new StartPlainEvent();
