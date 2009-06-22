@@ -267,6 +267,17 @@ ORYX.Core.StencilSet.Rules = {
 			// init layouting rules
 			var layoutRules = this._layoutRules;
 			if (jsonRules.layoutRules) {
+				
+				var getDirections = function(o){
+					return {
+							"edgeRole":o.edgeRole||undefined,
+							"t": o["t"]||1,
+							"r": o["r"]||1,
+							"b": o["b"]||1,
+							"l": o["l"]||1
+						}
+				}
+				
 				jsonRules.layoutRules.each(function(rules){
 					var layoutKey;
 					if (this._isRoleOfOtherNamespace(rules.role)) {
@@ -279,20 +290,16 @@ ORYX.Core.StencilSet.Rules = {
 						layoutRules[layoutKey] = {};
 					}
 					if (rules["in"]){
-						layoutRules[layoutKey]["in"] = {
-							"t": rules["in"]["t"]||1,
-							"r": rules["in"]["r"]||1,
-							"b": rules["in"]["b"]||1,
-							"l": rules["in"]["l"]||1,
-						};
+						layoutRules[layoutKey]["in"] = getDirections(rules["in"]);
 					}
-					if (rules["out"]){
-						layoutRules[layoutKey]["out"] = {
-							"t": rules["out"]["t"]||1,
-							"r": rules["out"]["r"]||1,
-							"b": rules["out"]["b"]||1,
-							"l": rules["out"]["l"]||1,
-						};
+					if (rules["ins"]){
+						layoutRules[layoutKey]["ins"] = (rules["ins"]||[]).map(function(e){ return getDirections(e) })
+					}
+					if (rules["out"]) {
+						layoutRules[layoutKey]["out"] = getDirections(rules["out"]);
+					}
+					if (rules["outs"]){
+						layoutRules[layoutKey]["outs"] = (rules["outs"]||[]).map(function(e){ return getDirections(e) })
 					}
 				}.bind(this));
 			}			
@@ -1050,9 +1057,10 @@ ORYX.Core.StencilSet.Rules = {
 	/**
 	 * Returns a set on "in" and "out" layouting rules for a given shape
 	 * @param {Object} shape
+	 * @param {Object} edgeShape (Optional)
 	 * @return {Object} "in" and "out" with a default value of {"t":1, "r":1, "b":1, "r":1} if not specified in the json
 	 */
-	getLayoutingRules : function(shape){
+	getLayoutingRules : function(shape, edgeShape){
 		
 		if (!shape||!(shape instanceof ORYX.Core.Shape)){ return }
 		
@@ -1064,7 +1072,17 @@ ORYX.Core.StencilSet.Rules = {
 					layout[v][d]=Math.max(o[v][d],layout[v][d]||0);
 				});
 			}
-		}
+			if (o && o[v+"s"] instanceof Array){
+				["t","r","b","l"].each(function(d){
+					var defaultRule = o[v+"s"].find(function(e){ return !e.edgeRole });
+					var edgeRule;
+					if (edgeShape instanceof ORYX.Core.Edge) {
+						edgeRule = o[v + "s"].find(function(e){return this._hasRole(edgeShape, e.edgeRole) }.bind(this));
+					}
+					layout[v][d]=Math.max(edgeRule?edgeRule[d]:defaultRule[d],layout[v][d]||0);
+				}.bind(this));
+			}
+		}.bind(this)
 		
 		// For each role
 		shape.getStencil().roles().each(function(role) {
@@ -1090,6 +1108,18 @@ ORYX.Core.StencilSet.Rules = {
 	/** End layouting rules' methods */
 	
 	/** Helper methods */
+
+	/**
+	 * Checks wether a shape contains the given role or the role is equal the stencil id 
+	 * @param {ORYX.Core.Shape} shape
+	 * @param {String} role
+	 */
+	_hasRole: function(shape, role){
+		if (!(shape instanceof ORYX.Core.Shape)||!role){ return }
+		var isRole = shape.getStencil().roles().any(function(r){ return r == role});
+		
+		return isRole || shape.getStencil().id() == (shape.getStencil().namespace()+role);
+	},
 
 	/**
 	 * 

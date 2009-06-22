@@ -11477,12 +11477,31 @@
 		"layoutRules" : [
 			{
 				"role": "ActivitiesMorph",
-				"out": {"t":1, "r":2, "b":1, "l":2},
-				"in": {"t":0, "r":2, "b":0, "l":2}
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":0, "r":2, "b":0, "l":2}],
 			},{
 				"role": "GatewaysMorph",
-				"out": {"t":2, "r":0, "b":2, "l":0},
-				"h": {"t":1, "r":1, "b":1, "l":1}
+				"outs": [{"t":2, "r":0, "b":2, "l":0}]
+			},{
+				"role": "StartEventsMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":0, "r":2, "b":0, "l":2}],
+			},{
+				"role": "IntermediateEventsMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":0, "r":2, "b":0, "l":2}],
+			},{
+				"role": "EndEventsMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":0, "r":2, "b":0, "l":2}],
 			}
 		]
 	}

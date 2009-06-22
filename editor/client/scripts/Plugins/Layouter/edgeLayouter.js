@@ -62,7 +62,7 @@ new function(){
 			// Return if one is null
 			if (!from || !to) { return }
 			
-			var positions = this.getPositions(from, to);
+			var positions = this.getPositions(from, to, edge);
 		
 			if (positions.length > 0){
 				this.setDockers(edge, positions[0].a, positions[0].b);
@@ -75,8 +75,9 @@ new function(){
 		 * in the bounds in from or to.
 		 * @param {Object} from Shape where the edge is come from
 		 * @param {Object} to Shape where the edge is leading to
+		 * @param {Object} edge Edge between from and to
 		 */
-		getPositions : function(from, to){
+		getPositions : function(from, to, edge){
 			
 			// Get absolute bounds
 			var ab = from.absoluteBounds();
@@ -118,7 +119,7 @@ new function(){
 			if (!ab.isIncluded(b.x, a.y)&&!bb.isIncluded(b.x, a.y)) {
 				positions.push({
 					a : {x:b.x,y:a.y},
-					z : this.getWeight(from, a.x < b.x ? "r" : "l", to, a.y < b.y ? "t" : "b")
+					z : this.getWeight(from, a.x < b.x ? "r" : "l", to, a.y < b.y ? "t" : "b", edge)
 				});
 			}
 						
@@ -127,7 +128,7 @@ new function(){
 			if (!ab.isIncluded(a.x, b.y)&&!bb.isIncluded(a.x, b.y)) {
 				positions.push({
 					a : {x:a.x,y:b.y},
-					z : this.getWeight(from, a.y < b.y ? "b" : "t", to, a.x < b.x ? "l" : "r")
+					z : this.getWeight(from, a.y < b.y ? "b" : "t", to, a.x < b.x ? "l" : "r", edge)
 				});
 			}
 						
@@ -138,7 +139,7 @@ new function(){
 				positions.push({
 					a : {x:m.x,y:a.y},
 					b : {x:m.x,y:b.y},
-					z : this.getWeight(from, "r", to, "l", a.x > b.x)
+					z : this.getWeight(from, "r", to, "l", edge, a.x > b.x)
 				});
 			}
 			
@@ -150,7 +151,7 @@ new function(){
 				positions.push({
 					a : {x:a.x,y:m.y},
 					b : {x:b.x,y:m.y},
-					z : this.getWeight(from, "b", to, "t", a.y > b.y)
+					z : this.getWeight(from, "b", to, "t", edge, a.y > b.y)
 				});
 			}	
 			
@@ -165,9 +166,10 @@ new function(){
 		 * @param {String} d1 Direction where is goes
 		 * @param {Object} to Shape which goes to
 		 * @param {String} d2 Direction where it comes to
+		 * @param {Object} edge Edge between from and to
 		 * @param {Boolean} reverse Reverse the direction (e.g. "r" -> "l")
 		 */
-		getWeight: function(from, d1, to, d2, reverse){
+		getWeight: function(from, d1, to, d2, edge, reverse){
 			
 			d1 = (d1||"").toLowerCase();
 			d2 = (d2||"").toLowerCase();
@@ -185,11 +187,51 @@ new function(){
 					
 			var weight = 0;
 			// Get rules for from "out" and to "in"
-			var dr1 = this.facade.getRules().getLayoutingRules(from)["out"];
-			var dr2 = this.facade.getRules().getLayoutingRules(to)["in"];
+			var dr1 = this.facade.getRules().getLayoutingRules(from, edge)["out"];
+			var dr2 = this.facade.getRules().getLayoutingRules(to, edge)["in"];
 
+			var fromWeight = dr1[d1];
+			var toWeight = dr2[d2];
+
+
+			/**
+			 * Return a true if the center 1 is in the same direction than center 2
+			 * @param {Object} direction
+			 * @param {Object} center1
+			 * @param {Object} center2
+			 */
+			var sameDirection = function(direction, center1, center2){
+				switch(direction){
+					case "t": return center1.x == center2.x && center1.y < center2.y
+					case "r": return center1.x > center2.x && center1.y == center2.y
+					case "b": return center1.x == center2.x && center1.y > center2.y
+					case "l": return center1.x < center2.x && center1.y == center2.y
+					default: return false;
+				}
+			}
+
+			// Check if there are same incoming edges from 'from'
+			var sameIncomingFrom = from
+								.getIncomingShapes()
+								.findAll(function(a){ return a instanceof ORYX.Core.Edge})
+								.any(function(e){ 
+									return sameDirection(d1, e.dockers[e.dockers.length-2].bounds.center(), from.bounds.center());
+								});
+
+			// Check if there are same outgoing edges from 'to'
+			var sameOutgoingTo = to
+								.getOutgoingShapes()
+								.findAll(function(a){ return a instanceof ORYX.Core.Edge})
+								.any(function(e){ 
+									return sameDirection(d2, e.dockers[1].bounds.center(), to.bounds.center());
+								});
+			
+			// If there are equivalent edges, set 0
+			fromWeight = sameIncomingFrom ? 0 : fromWeight;
+			toWeight = sameOutgoingTo ? 0 : toWeight;
+									
 			// Get the sum of "out" and the direction plus "in" and the direction 						
-			return dr1[d1]+dr2[d2];
+			return fromWeight+toWeight;
 		},
 		
 		/**
