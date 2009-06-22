@@ -1544,7 +1544,6 @@
 				},				
 				{
 					"id":"entry",
-					"prefix":"raziel",
 					"type":"Url",
 					"title":"SubProcessRef",
 					"title_de":"SubprozessRef",
@@ -2261,7 +2260,6 @@
 				},				
 				{
 					"id":"entry",
-					"prefix":"raziel",
 					"type":"Url",
 					"title":"SubProcessRef",
 					"title_de":"SubprozessRef",
