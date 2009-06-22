@@ -264,7 +264,8 @@ new function(){
 			})
 			
 			// Update edge
-			edge.refresh();
+			//edge.refresh();
+			edge._update(true);
 			
 		}
 	});
