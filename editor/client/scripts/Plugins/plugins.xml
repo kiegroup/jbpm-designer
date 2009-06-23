@@ -209,7 +209,15 @@
 		<plugin source="bpmn2dtrp-xmi.js" name="ORYX.Plugins.BPMN2DTRPXMI">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
-				
+		<!-- Added by Ahmed Awad on behalf of Steffen Ryll -->
+		<!-- Plugin for BPMN-Q querying support -->
+		<plugin source="queryevaluator.js" name="ORYX.Plugins.QueryEvaluator">
+			<requires namespace="http://b3mn.org/stencilset/bpmnq#"/>
+		</plugin>
+		<plugin source="queryResultHighlighter.js" name="ORYX.Plugins.QueryResultHighlighter">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+		</plugin>	
+		<!-- End of Added by Ahmed Awad -->	
 		<!-- Resource Perspective -->
 		<plugin source="bpmnResourcesSoDAdd.js" name="ORYX.Plugins.ResourcesSoDAdd">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	

@@ -203,7 +203,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 
 			this.facade.raiseEvent({
 	            type: ORYX.CONFIG.EVENT_LOADING_ENABLE,
-				text: "Waiting for server"  //ORYX.I18N.Save.saving
+				text: "Processing query"  //ORYX.I18N.Save.saving
 	        });
 			// Send the request to the server.
 			new Ajax.Request(ORYX.CONFIG.QUERYEVAL_URL, {

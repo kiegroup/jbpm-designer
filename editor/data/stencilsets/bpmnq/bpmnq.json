@@ -4324,6 +4324,93 @@
 					"length":""
 				}
 			]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Behavioral",
+			"title":"Association Behavioral",
+			"description":"",
+			"groups":["Connecting Objects"],
+			"view":"connection.association.behavioral.svg",
+			"icon":"new_association_behavioral.png",
+			"roles": [
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"String",
+					"title":"Documentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"source",
+					"type":"String",
+					"title":"Source",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"Target",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"direction",
+					"type":"String",
+					"title":"Direction",
+					"value":"To",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				}
+			]
 		}
 		
 	],
@@ -4373,6 +4460,15 @@
 						"from":"from_task_event",
 						"to":["DataObject"]
 					},
+					{
+						"from":"DataObject",
+						"to":["to_task_event"]
+					}
+				]
+			},
+			{
+				"role":"Association_Behavioral",
+				"connects": [
 					{
 						"from":"DataObject",
 						"to":["to_task_event"]

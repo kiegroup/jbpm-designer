@@ -146,6 +146,21 @@
 			org.oryxeditor.server.SyntaxCheckerServlet
 		</servlet-class>
 	</servlet>
+	<!-- Added by Ahmed Awad -->
+	<servlet>
+		<display-name>
+			Oryx query evaluator servlet
+		</display-name>
+		<servlet-name>QueryEvaluator</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.QueryEvalServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QueryEvaluator</servlet-name>
+		<url-pattern>/query</url-pattern>
+	</servlet-mapping>
+	<!-- End of Added by Ahmed Awad -->
 	
 	<servlet>
 		<display-name>

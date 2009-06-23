@@ -15,6 +15,7 @@ if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 ORYX.I18N.Oryx.title	= "Oryx";
 ORYX.I18N.Oryx.pleaseWait = "Please wait while loading...";
 ORYX.I18N.Oryx.notLoggedOn = "Not logged on";
+ORYX.I18N.Oryx.editorOpenTimeout = "The editor does not seem to be started yet. Please check, whether you have a popup blocker enabled and disable it or allow popups for this site. We will never display any commercials on this site.";
 
 if(!ORYX.I18N.AddDocker) ORYX.I18N.AddDocker = {};
 
@@ -439,6 +440,18 @@ if(!ORYX.I18N.TreeGraphSupport) ORYX.I18N.TreeGraphSupport = {};
 ORYX.I18N.TreeGraphSupport.syntaxCheckName = "Syntax Check";
 ORYX.I18N.TreeGraphSupport.group = "Tree Graph Support";
 ORYX.I18N.TreeGraphSupport.syntaxCheckDesc = "Check the syntax of an tree graph structure";
+
+if(!ORYX.I18N.QueryEvaluator) ORYX.I18N.QueryEvaluator = {};
+
+ORYX.I18N.QueryEvaluator.name = "Query Evaluator";
+ORYX.I18N.QueryEvaluator.group = "Verification";
+ORYX.I18N.QueryEvaluator.desc = "Evaluate query";
+ORYX.I18N.QueryEvaluator.noResult = "Query resulted in no match.";
+ORYX.I18N.QueryEvaluator.invalidResponse = "Invalid answer from server.";
+
+// if(!ORYX.I18N.QueryResultHighlighter) ORYX.I18N.QueryResultHighlighter = {};
+// 
+// ORYX.I18N.QueryResultHighlighter.name = "Query Result Highlighter";
 
 /** New Language Properties: 08.12.2008 */
 
