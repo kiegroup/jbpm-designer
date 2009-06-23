@@ -78,9 +78,9 @@
         {
             "title":"BPMN-Q",
             "namespace":"http://b3mn.org/stencilset/bpmnq#",
-            "description":"BPMN-Q querying shapes.",
-            "uri":"/bpmn1.1/bpmn1.1.json",
-            "icon_url":"/bpmn1.1/bpmn1.1.png",
-            "visible":false
+            "description":"BPMN-Q Queries",
+            "uri":"/bpmnq/bpmnq.json",
+            "icon_url":"/bpmnq/bpmn1.1.png",
+            "visible":true
         }
 ]
