@@ -23,7 +23,7 @@ public class CollapsedSubprocessTemplate extends NonConnectorTemplate {
 		
 		appendOryxField(s,"type",STENCIL_URI + "#CollapsedSubprocess");
 		appendNonConnectorStandardFields(t,s);
-		appendOryxField(s,"activitytype","CollapsedSubprocess");
+		appendOryxField(s,"activitytype","Sub-Process");
 		String color = t.getColor();
 		if (color != null && color.length() > 0){
 			appendOryxField(s,"bgcolor",color);
@@ -32,8 +32,6 @@ public class CollapsedSubprocessTemplate extends NonConnectorTemplate {
 		if (subprocessRef != null && subprocessRef.length() > 0){
 			appendOryxField(s, "entry", subprocessRef);
 		}
-		appendOryxField(s,"startquantity","1");
-		appendOryxField(s,"looptype",t.getLoopType().toString());
 		
 		appendResourceEndPattern(s, diagramObject, context);
 		return s;

@@ -14,6 +14,14 @@ public class Bounds implements Cloneable {
 		this.y2 = y2;
 	}
 	
+	public Bounds(String[] bounds) {
+		super();
+		this.x1 = Integer.parseInt(bounds[0]);
+		this.x2 = Integer.parseInt(bounds[1]);
+		this.y1 = Integer.parseInt(bounds[2]);
+		this.y2 = Integer.parseInt(bounds[3]);
+	}
+	
 	public Bounds(Point point1, Point point2) {
 		this(point1.x, point1.y, point2.x, point2.y);
 	}

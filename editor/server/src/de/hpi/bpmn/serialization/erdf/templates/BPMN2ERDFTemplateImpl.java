@@ -10,7 +10,7 @@ public abstract class BPMN2ERDFTemplateImpl implements BPMN2ERDFTemplate {
 		StringBuilder s = new StringBuilder();
 		
 		s.append("<div id=\"resource"+ resourceID +"\">");
-		s.append("<a href=\"http://www.apfelfabrik.de/dummyresource\" rel=\"raziel-entry\"/>");
+		//s.append("<a href=\"http://www.apfelfabrik.de/dummyresource\" rel=\"raziel-entry\"/>");
 	
 		return s;
 	}
