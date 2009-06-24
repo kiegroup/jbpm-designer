@@ -23,7 +23,7 @@ public class IntermediateConditionalEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#IntermediateConditionalEvent");
 		appendOryxField(s,"eventtype","Intermediate");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,transformationContext);
 		appendOryxField(s,"trigger","Conditional");
 		appendResourceLinkForBoundaryEvent(s, e, transformationContext);
 		appendResourceEndPattern(s, e, transformationContext);

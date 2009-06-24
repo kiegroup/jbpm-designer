@@ -16,10 +16,10 @@ public class Bounds implements Cloneable {
 	
 	public Bounds(String[] bounds) {
 		super();
-		this.x1 = Integer.parseInt(bounds[0]);
-		this.x2 = Integer.parseInt(bounds[1]);
-		this.y1 = Integer.parseInt(bounds[2]);
-		this.y2 = Integer.parseInt(bounds[3]);
+		this.x1 = Math.round(Float.parseFloat(bounds[0]));
+		this.y1 = Math.round(Float.parseFloat(bounds[1]));
+		this.x2 = Math.round(Float.parseFloat(bounds[2]));
+		this.y2 = Math.round(Float.parseFloat(bounds[3]));
 	}
 	
 	public Bounds(Point point1, Point point2) {

@@ -6,11 +6,10 @@ public abstract class BPMN2ERDFTemplateImpl implements BPMN2ERDFTemplate {
 
 	protected static final String STENCIL_URI = "http://b3mn.org/stencilset/bpmn1.1";
 	
-	protected StringBuilder getResourceStartPattern(int resourceID) {
+	protected StringBuilder getResourceStartPattern(String resourceID) {
 		StringBuilder s = new StringBuilder();
 		
 		s.append("<div id=\"resource"+ resourceID +"\">");
-		//s.append("<a href=\"http://www.apfelfabrik.de/dummyresource\" rel=\"raziel-entry\"/>");
 	
 		return s;
 	}

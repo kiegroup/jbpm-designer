@@ -23,7 +23,7 @@ public class IntermediateErrorEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#IntermediateErrorEvent");
 		appendOryxField(s,"eventtype","Intermediate");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,context);
 		appendOryxField(s,"trigger","Error");
 		appendResourceLinkForBoundaryEvent(s, e, context);
 		appendResourceEndPattern(s, e, context);

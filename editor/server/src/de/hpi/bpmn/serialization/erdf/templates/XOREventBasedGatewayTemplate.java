@@ -23,7 +23,7 @@ public class XOREventBasedGatewayTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(g));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#Exclusive_Eventbased_Gateway");
-		appendNonConnectorStandardFields(g,s);
+		appendNonConnectorStandardFields(g,s,context);
 		
 		appendResourceEndPattern(s, diagramObject, context);
 		return s;

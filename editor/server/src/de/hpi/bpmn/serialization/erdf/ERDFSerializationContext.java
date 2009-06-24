@@ -15,15 +15,12 @@ public class ERDFSerializationContext {
 	private String diagramName;
 	private String diagramId;
 	
-	private int resourceID;
-	
-	private Map<DiagramObject, Integer> resourceIDs;
+	private Map<DiagramObject, String> resourceIDs;
 	
 	public ERDFSerializationContext(BPMNDiagram bpmnDiagram) {
 		this.diagramName = bpmnDiagram.getTitle();
 		this.diagramId = bpmnDiagram.getId();
-		this.resourceID = 0;
-		this.resourceIDs = new HashMap<DiagramObject, Integer>();
+		this.resourceIDs = new HashMap<DiagramObject, String>();
 		
 		registerAllChildResources(bpmnDiagram.getChildNodes());
 		
@@ -44,15 +41,14 @@ public class ERDFSerializationContext {
 
 	
 	private void registerResource(DiagramObject d) {
-		resourceIDs.put(d, this.resourceID);
-		resourceID++;
+		resourceIDs.put(d, d.getId());
 	}
 
-	public int getResourceIDForDiagramObject(DiagramObject diagramObject) {
+	public String getResourceIDForDiagramObject(DiagramObject diagramObject) {
 		return this.resourceIDs.get(diagramObject);
 	}
 	
-	public Collection<Integer> getResourceIDs() {
+	public Collection<String> getResourceIDs() {
 		return this.resourceIDs.values();
 	}
 

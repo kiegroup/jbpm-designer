@@ -23,7 +23,7 @@ public class DataObjectTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(d));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#DataObject");
-		appendNonConnectorStandardFields(d,s);
+		appendNonConnectorStandardFields(d,s,transformationContext);
 		
 		appendResourceEndPattern(s, diagramObject, transformationContext);
 		return s;

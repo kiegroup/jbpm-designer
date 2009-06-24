@@ -23,7 +23,7 @@ public class StartLinkEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#StartLinkEvent");
 		appendOryxField(s,"eventtype","Start");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,transformationContext);
 		appendOryxField(s,"trigger","Link");
 		appendResourceEndPattern(s, e, transformationContext);
 		

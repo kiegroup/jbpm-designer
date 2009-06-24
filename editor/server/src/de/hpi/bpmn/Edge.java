@@ -1,5 +1,7 @@
 package de.hpi.bpmn;
 
+import de.hpi.util.Bounds;
+
 /**
  * Why does Edge need incoming and outgoing edges (inherited from DiagramObject)?
  * Answer: undirected associations can be attached to ControlFlow and MessageFlow 
@@ -12,6 +14,7 @@ public abstract class Edge extends DiagramObject {
 	protected DiagramObject source;
 	protected DiagramObject target;
 	protected String name;
+	protected Bounds bounds;
 	
 	public String toString() {
 		return (id != null ? id : resourceId);
@@ -51,6 +54,14 @@ public abstract class Edge extends DiagramObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public Bounds getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(Bounds bounds) {
+		this.bounds = bounds;
 	}
 	
 	/**

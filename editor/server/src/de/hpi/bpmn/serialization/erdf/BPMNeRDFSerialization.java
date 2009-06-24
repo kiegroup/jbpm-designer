@@ -113,11 +113,10 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 		sb.append("<span class=\"oryx-creationdate\">"+f.format(d)+"</span><span class=\"oryx-modificationdate\">"+f.format(d)+"</span>");
 		sb.append("<span class=\"oryx-pools\"></span><span class=\"oryx-documentation\"></span><span class=\"oryx-mode\">writable</span>");
 		sb.append("<span class=\"oryx-mode\">fullscreen</span>");
-//		sb.append("<a rel=\"oryx-stencilset\" href=\"http://oryx-editor.org:80/oryx/stencilsets/bpmn/bpmn.json\"/>");
-		sb.append("<a rel=\"oryx-stencilset\" href=\"http://localhost:8080/oryx/stencilsets/bpmn1.1/bpmn1.1.json\"/>");
+		sb.append("<a rel=\"oryx-stencilset\" href=\"/oryx/stencilsets/bpmn1.1/bpmn1.1.json\"/>");
 
 		
-		for (Integer i : this.context.getResourceIDs()){
+		for (String i : this.context.getResourceIDs()){
 			sb.append("<a rel=\"oryx-render\" href=\"#resource" + i + "\"/>");
 		}
 		sb.append("</div>");

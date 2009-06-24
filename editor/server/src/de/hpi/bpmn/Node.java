@@ -1,10 +1,7 @@
 package de.hpi.bpmn;
 
-import java.util.Iterator;
 import java.util.List;
 
-import de.hpi.bpel4chor.model.activities.Activity;
-import de.hpi.bpel4chor.model.connections.Transition;
 import de.hpi.util.Bounds;
 
 
@@ -36,7 +33,7 @@ public abstract class Node extends DiagramObject {
 		if (this.parent != parent) {
 			if (this.parent != null && this.parent != this.process)
 				this.parent.getChildNodes().remove(this);
-			if (parent != null && parent != this.process)
+			if (parent != null && parent != this.process && !parent.getChildNodes().contains(this))
 				parent.getChildNodes().add(this);
 		}
 		this.parent = parent;

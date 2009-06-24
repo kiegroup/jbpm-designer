@@ -23,7 +23,7 @@ public class IntermediateTimerEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#IntermediateTimerEvent");
 		appendOryxField(s,"eventtype","Intermediate");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,context);
 		appendOryxField(s,"trigger","Timer");
 		appendResourceLinkForBoundaryEvent(s, e, context);
 		appendResourceEndPattern(s, e, context);

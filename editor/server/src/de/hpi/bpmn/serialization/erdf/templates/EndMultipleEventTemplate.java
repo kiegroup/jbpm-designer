@@ -23,7 +23,7 @@ public class EndMultipleEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#EndMultipleEvent");
 		appendOryxField(s,"eventtype","End");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,transformationContext);
 		appendOryxField(s,"result","Multiple");
 		appendResourceEndPattern(s, e, transformationContext);
 		

@@ -22,6 +22,8 @@ public class AssociationTemplate extends ConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#Association");
 		appendStandardFields(s);
+		appendDockerInformation(s, e);
+		appendBounds(s, e);
 		appendResourceEndPattern(s, e, transformationContext);
 		
 		return s;

@@ -23,7 +23,7 @@ public class StartTimerEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#StartTimerEvent");
 		appendOryxField(s,"eventtype","Start");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,transformationContext);
 		appendOryxField(s,"trigger","Timer");
 		appendResourceEndPattern(s, e, transformationContext);
 		

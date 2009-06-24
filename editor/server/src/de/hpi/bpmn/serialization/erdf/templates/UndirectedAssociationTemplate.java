@@ -22,6 +22,8 @@ public class UndirectedAssociationTemplate extends ConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#Association_Undirected");
 		appendStandardFields(s);
+		appendDockerInformation(s, e);
+		appendBounds(s, e);
 		appendResourceEndPattern(s, e, transformationContext);
 		
 		return s;

@@ -23,7 +23,7 @@ public class ANDGatewayTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(g));
 		
 		appendOryxField(s,"type",STENCIL_URI + "#AND_Gateway");
-		appendNonConnectorStandardFields(g,s);
+		appendNonConnectorStandardFields(g,s,transformationContext);
 		
 		appendResourceEndPattern(s, diagramObject, transformationContext);
 		return s;

@@ -23,7 +23,7 @@ public class StartPlainEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(context.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#StartEvent");
 		appendOryxField(s,"eventtype","Start");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,context);
 		appendOryxField(s,"trigger","None");
 		appendResourceEndPattern(s, e, context);
 		

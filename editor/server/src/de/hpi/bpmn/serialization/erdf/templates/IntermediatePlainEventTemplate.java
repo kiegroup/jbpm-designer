@@ -23,7 +23,7 @@ public class IntermediatePlainEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#IntermediatePlainEvent");
 		appendOryxField(s,"eventtype","Intermediate");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,transformationContext);
 		appendOryxField(s,"trigger","Plain");
 		appendResourceLinkForBoundaryEvent(s, e, transformationContext);
 		appendResourceEndPattern(s, e, transformationContext);

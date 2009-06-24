@@ -36,7 +36,8 @@ public class BPMNDiagramBuilder {
 			node.setResourceId(generateUUID());
 		if(node.getId() == null)
 			node.setId(node.getResourceId());
-		container.getChildNodes().add(node);
+		if(!container.getChildNodes().contains(node))
+			container.getChildNodes().add(node);
 		return node;
 	}
 	

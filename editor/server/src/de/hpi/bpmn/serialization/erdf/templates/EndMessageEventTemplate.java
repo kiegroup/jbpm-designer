@@ -24,7 +24,7 @@ public class EndMessageEventTemplate extends NonConnectorTemplate {
 		StringBuilder s = getResourceStartPattern(transformationContext.getResourceIDForDiagramObject(e));
 		appendOryxField(s,"type",STENCIL_URI + "#EndMessageEvent");
 		appendOryxField(s,"eventtype","End");
-		appendNonConnectorStandardFields(e,s);
+		appendNonConnectorStandardFields(e,s,transformationContext);
 		appendOryxField(s,"result","Message");
 		appendResourceEndPattern(s, e, transformationContext);
 		
