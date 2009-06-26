@@ -87,6 +87,9 @@ new function(){
 			var a = ab.center();
 			var b = bb.center();
 			
+			var am = ab.midPoint();
+			var bm = bb.midPoint();
+			
 			// IF ------>
 			// or  |
 			//     V
@@ -108,17 +111,21 @@ new function(){
 								
 								
 			// Enlarge both bounds with 10
-			ab.widen(20);
-			bb.widen(20);
+			ab.widen(5); // Wide the from less than 
+			bb.widen(20);// the to because of the arrow from the edge
 								
 			var positions = [];
 
+			var off = this.getOffset.bind(this);
+			var first = Object.clone(edge.dockers.first().referencePoint);
+			var last = Object.clone(edge.dockers.last().referencePoint);
+			
 			// Checks ----+
 			//            |
 			//            V
 			if (!ab.isIncluded(b.x, a.y)&&!bb.isIncluded(b.x, a.y)) {
 				positions.push({
-					a : {x:b.x,y:a.y},
+					a : {x:b.x+off(last,bm,"x"),y:a.y+off(first,am,"y")},
 					z : this.getWeight(from, a.x < b.x ? "r" : "l", to, a.y < b.y ? "t" : "b", edge)
 				});
 			}
@@ -127,7 +134,7 @@ new function(){
 			//        +--->
 			if (!ab.isIncluded(a.x, b.y)&&!bb.isIncluded(a.x, b.y)) {
 				positions.push({
-					a : {x:a.x,y:b.y},
+					a : {x:a.x+off(first,am,"x"),y:b.y+off(last,bm,"y")},
 					z : this.getWeight(from, a.y < b.y ? "b" : "t", to, a.x < b.x ? "l" : "r", edge)
 				});
 			}
@@ -137,8 +144,8 @@ new function(){
 			//           +--->
 			if (!ab.isIncluded(m.x, a.y)&&!bb.isIncluded(m.x, b.y)) {
 				positions.push({
-					a : {x:m.x,y:a.y},
-					b : {x:m.x,y:b.y},
+					a : {x:m.x,y:a.y+off(first,am,"y")},
+					b : {x:m.x,y:b.y+off(last,bm,"y")},
 					z : this.getWeight(from, "r", to, "l", edge, a.x > b.x)
 				});
 			}
@@ -149,14 +156,25 @@ new function(){
 			//            V
 			if (!ab.isIncluded(a.x, m.y)&&!bb.isIncluded(b.x, m.y)) {
 				positions.push({
-					a : {x:a.x,y:m.y},
-					b : {x:b.x,y:m.y},
+					a : {x:a.x+off(first,am,"x"),y:m.y},
+					b : {x:b.x+off(last,bm,"x"),y:m.y},
 					z : this.getWeight(from, "b", to, "t", edge, a.y > b.y)
 				});
 			}	
 			
 			// Sort DESC of weights
 			return positions.sort(function(a,b){ return a.z < b.z});
+		},
+		
+		/**
+		 * Returns a offset for the pos to the center of the bounds
+		 * 
+		 * @param {Object} val
+		 * @param {Object} pos2
+		 * @param {String} dir Direction x|y
+		 */
+		getOffset: function(pos, pos2, dir){
+			return pos[dir] - pos2[dir];
 		},
 		
 		/**
@@ -202,10 +220,10 @@ new function(){
 			 */
 			var sameDirection = function(direction, center1, center2){
 				switch(direction){
-					case "t": return center1.x == center2.x && center1.y < center2.y
-					case "r": return center1.x > center2.x && center1.y == center2.y
-					case "b": return center1.x == center2.x && center1.y > center2.y
-					case "l": return center1.x < center2.x && center1.y == center2.y
+					case "t": return Math.abs(center1.x - center2.x) < 2 && center1.y < center2.y
+					case "r": return center1.x > center2.x && Math.abs(center1.y - center2.y) < 2
+					case "b": return Math.abs(center1.x - center2.x) < 2 && center1.y > center2.y
+					case "l": return center1.x < center2.x && Math.abs(center1.y - center2.y) < 2
 					default: return false;
 				}
 			}
@@ -215,7 +233,7 @@ new function(){
 								.getIncomingShapes()
 								.findAll(function(a){ return a instanceof ORYX.Core.Edge})
 								.any(function(e){ 
-									return sameDirection(d1, e.dockers[e.dockers.length-2].bounds.center(), from.bounds.center());
+									return sameDirection(d1, e.dockers[e.dockers.length-2].bounds.center(), e.dockers.last().bounds.center());
 								});
 
 			// Check if there are same outgoing edges from 'to'
@@ -223,15 +241,15 @@ new function(){
 								.getOutgoingShapes()
 								.findAll(function(a){ return a instanceof ORYX.Core.Edge})
 								.any(function(e){ 
-									return sameDirection(d2, e.dockers[1].bounds.center(), to.bounds.center());
+									return sameDirection(d2, e.dockers[1].bounds.center(), e.dockers.first().bounds.center());
 								});
 			
 			// If there are equivalent edges, set 0
-			fromWeight = sameIncomingFrom ? 0 : fromWeight;
-			toWeight = sameOutgoingTo ? 0 : toWeight;
-									
+			//fromWeight = sameIncomingFrom ? 0 : fromWeight;
+			//toWeight = sameOutgoingTo ? 0 : toWeight;
+			
 			// Get the sum of "out" and the direction plus "in" and the direction 						
-			return fromWeight+toWeight;
+			return (sameIncomingFrom||sameOutgoingTo?0:fromWeight+toWeight);
 		},
 		
 		/**
