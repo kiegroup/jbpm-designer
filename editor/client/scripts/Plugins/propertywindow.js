@@ -213,15 +213,17 @@ ORYX.Plugins.PropertyWindow = {
 						shape.setProperty(this.key, this.newValue);
 					}
 				}.bind(this));
-				this.facade.getCanvas().update();
 				this.facade.setSelection(this.selectedElements);
+				this.facade.getCanvas().update();
+				this.facade.updateSelection();
 			},
 			rollback: function(){
 				this.selectedElements.each(function(shape){
 					shape.setProperty(this.key, this.oldValues[shape.getId()]);
 				}.bind(this));
-				this.facade.getCanvas().update();
 				this.facade.setSelection(this.selectedElements);
+				this.facade.getCanvas().update();
+				this.facade.updateSelection();
 			}
 		})		
 		// Instanciated the class

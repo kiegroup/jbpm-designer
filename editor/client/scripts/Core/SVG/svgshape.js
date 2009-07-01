@@ -508,6 +508,10 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 			elem = this.element;
 		}
 
+		if (!elem) {
+			return true;
+		}
+		
 		if ( elem.ownerSVGElement ) {
 			if (ORYX.Editor.checkClassType(elem, SVGGElement)) {
 				if (elem.className && elem.className.baseVal == "me") 
