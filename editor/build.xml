@@ -358,6 +358,7 @@
             <metainf file="${editor-build-root}/LICENSE"/>
             <metainf file="${editor-build-root}/LIBRARIES"/>
             <metainf file="${editor-build-root}/VERSION"/>
+            <metainf file="${editor-src-root}/etc/context.xml"/>
             
             <fileset file="favicon.ico"/>
         </war>

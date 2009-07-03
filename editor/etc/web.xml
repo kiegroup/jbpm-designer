@@ -437,6 +437,7 @@
 	</servlet-mapping>
 	
 	<!-- Exported XForms are rendered by Orbeon (see below: filter mappings) -->
+    <!-- crossContext="true" is required for using Orbeon. Configure this in editor/etc/context.xml -->
 <!--	
 	<servlet-mapping>
 		<servlet-name>XFormsExportOrbeonServlet</servlet-name>
