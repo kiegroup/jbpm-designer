@@ -7,6 +7,20 @@
 	<display-name>Oryx Editor</display-name>
 
 	
+	<servlet>
+		<display-name>Default Servlet for Directory Listings</display-name>
+		<servlet-name>DirectoryListingServlet</servlet-name>
+		<servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>0</param-value>
+		</init-param>
+		<init-param>
+			<param-name>listings</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<!--<servlet>
 		<display-name>Oryx Process Repository</display-name>
@@ -243,6 +257,7 @@
 			org.oryxeditor.server.XFormsExportOrbeonServlet
 		</servlet-class>
 	</servlet>
+-->
 	
 	<servlet>
 		<display-name>WSDL2XForms Transformation</display-name>
@@ -251,7 +266,14 @@
 			org.oryxeditor.server.WSDL2XFormsServlet
 		</servlet-class>
 	</servlet> 
--->
+
+    <servlet>
+        <display-name>BPMN2XForms Servlet</display-name>
+        <servlet-name>BPMN2XFormsServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.BPMN2XFormsServlet
+        </servlet-class>
+    </servlet>
 	
 	<servlet>
 		<display-name>XForms Import</display-name>
@@ -310,6 +332,7 @@
 
 
 
+    <!-- Servlet Mappings -->
 <!--	
 	<servlet-mapping>
 		<servlet-name>Repository</servlet-name>
@@ -443,10 +466,23 @@
 		<servlet-name>XFormsExportOrbeonServlet</servlet-name>
 		<url-pattern>/xformsexport-orbeon</url-pattern>
 	</servlet-mapping>
+-->
 	
 	<servlet-mapping>
 		<servlet-name>WSDL2XFormsServlet</servlet-name>
 		<url-pattern>/wsdl2xforms</url-pattern>
+	</servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>BPMN2XFormsServlet</servlet-name>
+        <url-pattern>/bpmn2xforms</url-pattern>
+    </servlet-mapping>
+
+<!--
+	<!-- Generated XForms are rendered by Orbeon (see below: filter mappings) -->
+	<servlet-mapping>
+        <servlet-name>BPMN2XFormsServlet</servlet-name>
+		<url-pattern>/bpmn2xforms-orbeon</url-pattern>
 	</servlet-mapping>
 -->
 	
@@ -491,6 +527,11 @@
             <servlet-name>BPMN2BPELServlet</servlet-name>
             <url-pattern>/bpmn2bpel</url-pattern>
     </servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>DirectoryListingServlet</servlet-name>
+		<url-pattern>/generated-uis/</url-pattern>
+	</servlet-mapping>
 
 
 	<jsp-config>
@@ -550,6 +591,17 @@
 	<filter-mapping>
 		<filter-name>orbeon-xforms-filter</filter-name>
 		<url-pattern>/xformsexport-orbeon</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+-->
+	<!--
+		Any web resource under /bpmn2xforms-orbeon is processed by the Orbeon XForms engine
+	-->
+<!--
+	<filter-mapping>
+		<filter-name>orbeon-xforms-filter</filter-name>
+		<url-pattern>/bpmn2xforms-orbeon</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>

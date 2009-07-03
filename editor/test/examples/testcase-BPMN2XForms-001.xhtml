@@ -1,0 +1,1739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xhtml:html
+  PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+<xhtml:html xmlns:events="http://www.w3.org/2001/xml-events"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+            xmlns:oryx="http://oryx-editor.org/"
+            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+            xmlns:raziel="http://raziel.org/"
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+            xmlns:xhtml="http://www.w3.org/1999/xhtml"
+            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+            xmlns:xforms="http://www.w3.org/2002/xforms">
+   <xhtml:head>
+      <xhtml:title>Aggregated User Interface</xhtml:title>
+      <xhtml:style type="text/css">
+        @namespace xf url("http://www.w3.org/2002/xforms");
+        @namespace url("http://www.w3.org/1999/xhtml");
+
+        body {
+            font-size: 75%;
+            font-family: sans-serif;
+        }
+
+        div {
+            padding: 5px 0px 5px 0px;
+            vertical-align: top;
+        }
+
+        xf|input, 
+        xf|secret, 
+        xf|textarea, 
+        xf|output, 
+        xf|trigger, 
+        xf|submit,
+        xf|select,
+        xf|select1 {
+            display: table-cell;
+            vertical-align: bottom;
+            line-height: 1em;
+            padding: 0px 5px 0px 5px;
+        }
+
+        xf|input &gt; xf|label, 
+        xf|secret &gt; xf|label, 
+        xf|textarea &gt; xf|label, 
+        xf|output &gt; xf|label, 
+        xf|trigger &gt; xf|label, 
+        xf|submit &gt; xf|label,
+        xf|select &gt; xf|label,
+        xf|select1 &gt; xf|label {
+            display: table-caption;
+            white-space: nowrap; /* avoids word wrapping of labels */
+            text-align: left;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        xf|group {
+            display: table-cell;
+            line-height: 1em;
+            vertical-align: top;
+            margin: 5px; /* doesn't work; I guess, because of display: table-cell; */
+            padding: 5px;
+            border-collapse: collapse;
+            border: 1px dashed grey;
+        }
+
+        xf|group &gt; xf|label {
+            display: table-caption;
+            font-weight: bold;
+            text-align: center;
+            background-color: #cccccc;
+            margin-bottom: 7px;
+            padding: 3px 0px 3px 0px;
+            width: 100%;
+        }
+         
+        *:required {
+            background-color: yellow;
+        }
+         
+        *:invalid  {
+            background-color: pink;
+        }
+      </xhtml:style>
+      <xforms:model id="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_">
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.input">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+               <SOAP-ENV:Header/>
+               <SOAP-ENV:Body>
+                  <ns5:checkCompanyName xmlns:ns5="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit">
+                     <companyName/>
+                  </ns5:checkCompanyName>
+               </SOAP-ENV:Body>
+            </SOAP-ENV:Envelope>
+         </xforms:instance>
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.output">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+         </xforms:instance>
+         <xforms:instance xmlns:chiba="http://chiba.sourceforge.net/xforms"
+                          xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id="temp">
+            <temp>
+               <relevant xsi:type="boolean">true</relevant>
+            </temp>
+         </xforms:instance>
+         <xforms:bind xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                      nodeset="instance('.ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.input')/SOAP-ENV:Body/tns:checkCompanyName">
+            <xforms:bind nodeset="companyName">
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="@xsi:nil"
+                            relevant="false()"/>
+            </xforms:bind>
+         </xforms:bind>
+         <xforms:submission xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                            id=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.submission"
+                            action="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                            mediatype="text/xml"
+                            ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.input')"
+                            method="post"
+                            replace="instance"
+                            instance=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.output">
+            <xforms:action events:event="xforms-submit">
+               <xforms:setvalue ref="instance('temp')/relevant" value="false()"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-done">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+               <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.response"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-error">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+            </xforms:action>
+            <xforms:message level="modal" events:event="xforms-submit-error">Please ensure that all field have valid contents.</xforms:message>
+         </xforms:submission>
+         <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                    class="form_row">
+            <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.request"
+                           events:event="xforms-ready"
+                           if="not(boolean(instance('.ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.output')/SOAP-ENV:Body))"/>
+            <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.response"
+                           events:event="xforms-ready"
+                           if="boolean(instance('.ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.output')/SOAP-ENV:Body)"/>
+         </xhtml:div>
+      </xforms:model>
+      <xforms:model id="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_">
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                          id=".DirectorsRegisterService1236791708888PortType.findDirectors.input">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+               <SOAP-ENV:Header/>
+               <SOAP-ENV:Body>
+                  <ns5:findDirectors xmlns:ns5="http://localhost/services/soap.php/DirectorsRegisterService1236791708888">
+                     <SNAME/>
+                  </ns5:findDirectors>
+               </SOAP-ENV:Body>
+            </SOAP-ENV:Envelope>
+         </xforms:instance>
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                          id=".DirectorsRegisterService1236791708888PortType.findDirectors.output">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+         </xforms:instance>
+         <xforms:instance xmlns:chiba="http://chiba.sourceforge.net/xforms"
+                          xmlns:tns="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                          id="temp">
+            <temp>
+               <relevant xsi:type="boolean">true</relevant>
+            </temp>
+         </xforms:instance>
+         <xforms:bind xmlns:tns="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                      nodeset="instance('.DirectorsRegisterService1236791708888PortType.findDirectors.input')/SOAP-ENV:Body/tns:findDirectors">
+            <xforms:bind nodeset="SNAME">
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="@xsi:nil"
+                            relevant="false()"/>
+            </xforms:bind>
+         </xforms:bind>
+         <xforms:submission xmlns:tns="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                            id=".DirectorsRegisterService1236791708888PortType.findDirectors.submission"
+                            action="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                            mediatype="text/xml"
+                            ref="instance('.DirectorsRegisterService1236791708888PortType.findDirectors.input')"
+                            method="post"
+                            replace="instance"
+                            instance=".DirectorsRegisterService1236791708888PortType.findDirectors.output">
+            <xforms:action events:event="xforms-submit">
+               <xforms:setvalue ref="instance('temp')/relevant" value="false()"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-done">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+               <xforms:toggle case=".DirectorsRegisterService1236791708888PortType.findDirectors.response"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-error">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+            </xforms:action>
+            <xforms:message level="modal" events:event="xforms-submit-error">Please ensure that all field have valid contents.</xforms:message>
+         </xforms:submission>
+         <xhtml:div xmlns:tns="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                    class="form_row">
+            <xforms:toggle case=".DirectorsRegisterService1236791708888PortType.findDirectors.request"
+                           events:event="xforms-ready"
+                           if="not(boolean(instance('.DirectorsRegisterService1236791708888PortType.findDirectors.output')/SOAP-ENV:Body))"/>
+            <xforms:toggle case=".DirectorsRegisterService1236791708888PortType.findDirectors.response"
+                           events:event="xforms-ready"
+                           if="boolean(instance('.DirectorsRegisterService1236791708888PortType.findDirectors.output')/SOAP-ENV:Body)"/>
+         </xhtml:div>
+      </xforms:model>
+      <xforms:model id="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_">
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                          id=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.input">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+               <SOAP-ENV:Header/>
+               <SOAP-ENV:Body>
+                  <ns5:checkCompanyNameIn xmlns:ns5="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit">
+                     <parameters xsi:nil="false">
+                        <companyName xsi:nil="true" xsi:type="xsd:string"/>
+                     </parameters>
+                  </ns5:checkCompanyNameIn>
+               </SOAP-ENV:Body>
+            </SOAP-ENV:Envelope>
+         </xforms:instance>
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                          id=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.output">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+         </xforms:instance>
+         <xforms:instance xmlns:chiba="http://chiba.sourceforge.net/xforms"
+                          xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                          id="temp">
+            <temp>
+               <relevant xsi:type="boolean">true</relevant>
+            </temp>
+         </xforms:instance>
+         <xforms:bind xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                      nodeset="instance('.ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.input')/SOAP-ENV:Body/tns:checkCompanyNameIn">
+            <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="parameters">
+               <xforms:bind nodeset="companyName" xforms:type="xsd:string">
+                  <xforms:bind nodeset="@xsi:nil" relevant="false()"/>
+               </xforms:bind>
+               <xforms:bind nodeset="@xsi:nil" relevant="false()"/>
+            </xforms:bind>
+         </xforms:bind>
+         <xforms:submission xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                            id=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.submission"
+                            action="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                            mediatype="text/xml"
+                            ref="instance('.ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.input')"
+                            method="post"
+                            replace="instance"
+                            instance=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.output">
+            <xforms:action events:event="xforms-submit">
+               <xforms:setvalue ref="instance('temp')/relevant" value="false()"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-done">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+               <xforms:toggle case=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.response"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-error">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+            </xforms:action>
+            <xforms:message level="modal" events:event="xforms-submit-error">Please ensure that all field have valid contents.</xforms:message>
+         </xforms:submission>
+         <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                    class="form_row">
+            <xforms:toggle case=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.request"
+                           events:event="xforms-ready"
+                           if="not(boolean(instance('.ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.output')/SOAP-ENV:Body))"/>
+            <xforms:toggle case=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.response"
+                           events:event="xforms-ready"
+                           if="boolean(instance('.ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.output')/SOAP-ENV:Body)"/>
+         </xhtml:div>
+      </xforms:model>
+      <xforms:model id="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_">
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.input">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+               <SOAP-ENV:Header/>
+               <SOAP-ENV:Body>
+                  <ns5:fileForm10 xmlns:ns5="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit">
+                     <form10 xsi:nil="false">
+                        <companyName xsi:nil="true" xsi:type="xsd:string"/>
+                        <officeAddress xsi:nil="false" xsi:type="tns:ukAddress">
+                           <street xsi:nil="true" xsi:type="xsd:string"/>
+                           <city xsi:nil="true" xsi:type="xsd:string"/>
+                           <county xsi:nil="true" xsi:type="xsd:string"/>
+                           <postcode xsi:nil="true" xsi:type="xsd:string"/>
+                        </officeAddress>
+                        <memorandumDeliveredByAgent xsi:nil="true" xsi:type="xsd:boolean">false</memorandumDeliveredByAgent>
+                        <agentName xsi:nil="true" xsi:type="xsd:string"/>
+                        <agentAddress xsi:nil="false" xsi:type="tns:ukAddress">
+                           <street xsi:nil="true" xsi:type="xsd:string"/>
+                           <city xsi:nil="true" xsi:type="xsd:string"/>
+                           <county xsi:nil="true" xsi:type="xsd:string"/>
+                           <postcode xsi:nil="true" xsi:type="xsd:string"/>
+                        </agentAddress>
+                        <contactInformation xsi:nil="false" xsi:type="tns:ukContactInformation">
+                           <address xsi:nil="false" xsi:type="tns:ukAddress">
+                              <street xsi:nil="true" xsi:type="xsd:string"/>
+                              <city xsi:nil="true" xsi:type="xsd:string"/>
+                              <county xsi:nil="true" xsi:type="xsd:string"/>
+                              <postcode xsi:nil="true" xsi:type="xsd:string"/>
+                           </address>
+                           <phone xsi:nil="true" xsi:type="xsd:string"/>
+                           <dxNumber xsi:nil="true" xsi:type="xsd:int"/>
+                           <dxExchange xsi:nil="true" xsi:type="xsd:string"/>
+                        </contactInformation>
+                        <companySecretary xsi:nil="false" xsi:type="tns:ukCompanySecretary">
+                           <companyName xsi:nil="true" xsi:type="xsd:string"/>
+                           <name xsi:nil="false" xsi:type="tns:ukName">
+                              <title xsi:nil="true" xsi:type="xsd:string"/>
+                              <honours xsi:nil="true" xsi:type="xsd:string"/>
+                              <forenames xsi:nil="true" xsi:type="xsd:string"/>
+                              <surname xsi:nil="true" xsi:type="xsd:string"/>
+                              <previousForenames xsi:nil="true" xsi:type="xsd:string"/>
+                              <previousSurnames xsi:nil="true" xsi:type="xsd:string"/>
+                           </name>
+                           <address xsi:nil="false" xsi:type="tns:ukAddress">
+                              <street xsi:nil="true" xsi:type="xsd:string"/>
+                              <city xsi:nil="true" xsi:type="xsd:string"/>
+                              <county xsi:nil="true" xsi:type="xsd:string"/>
+                              <postcode xsi:nil="true" xsi:type="xsd:string"/>
+                           </address>
+                           <isServiceAddress xsi:nil="true" xsi:type="xsd:boolean">false</isServiceAddress>
+                           <signature xsi:nil="false" xsi:type="tns:ukSignature">
+                              <signature xsi:nil="true" xsi:type="xsd:string"/>
+                              <date xsi:nil="true" xsi:type="xsd:string"/>
+                           </signature>
+                        </companySecretary>
+                        <directors xsi:nil="false" xsi:type="tns:ArrayOfukDirector">
+                           <insert-trigger-d4e64/>
+                           <delete-trigger-d4e64/>
+                           <ukDirector xsi:nil="false" xsi:type="tns:ukDirector">
+                              <name xsi:nil="false" xsi:type="tns:ukName">
+                                 <title xsi:nil="true" xsi:type="xsd:string"/>
+                                 <honours xsi:nil="true" xsi:type="xsd:string"/>
+                                 <forenames xsi:nil="true" xsi:type="xsd:string"/>
+                                 <surname xsi:nil="true" xsi:type="xsd:string"/>
+                                 <previousForenames xsi:nil="true" xsi:type="xsd:string"/>
+                                 <previousSurnames xsi:nil="true" xsi:type="xsd:string"/>
+                              </name>
+                              <address xsi:nil="false" xsi:type="tns:ukAddress">
+                                 <street xsi:nil="true" xsi:type="xsd:string"/>
+                                 <city xsi:nil="true" xsi:type="xsd:string"/>
+                                 <county xsi:nil="true" xsi:type="xsd:string"/>
+                                 <postcode xsi:nil="true" xsi:type="xsd:string"/>
+                              </address>
+                              <isServiceAddress xsi:nil="true" xsi:type="xsd:boolean">false</isServiceAddress>
+                              <dateOfBirth xsi:nil="true" xsi:type="xsd:string"/>
+                              <nationality xsi:nil="true" xsi:type="xsd:string"/>
+                              <businessOccupation xsi:nil="true" xsi:type="xsd:string"/>
+                              <otherDirectorships xsi:nil="true" xsi:type="xsd:string"/>
+                              <signature xsi:nil="false" xsi:type="tns:ukSignature">
+                                 <signature xsi:nil="true" xsi:type="xsd:string"/>
+                                 <date xsi:nil="true" xsi:type="xsd:string"/>
+                              </signature>
+                           </ukDirector>
+                        </directors>
+                        <signatures xsi:nil="false" xsi:type="tns:ArrayOfukSignature">
+                           <insert-trigger-d4e68/>
+                           <delete-trigger-d4e68/>
+                           <ukSignature xsi:nil="false" xsi:type="tns:ukSignature">
+                              <signature xsi:nil="true" xsi:type="xsd:string"/>
+                              <date xsi:nil="true" xsi:type="xsd:string"/>
+                           </ukSignature>
+                        </signatures>
+                     </form10>
+                  </ns5:fileForm10>
+               </SOAP-ENV:Body>
+            </SOAP-ENV:Envelope>
+         </xforms:instance>
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.output">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+         </xforms:instance>
+         <xforms:instance xmlns:chiba="http://chiba.sourceforge.net/xforms"
+                          xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id="temp">
+            <temp>
+               <relevant xsi:type="boolean">true</relevant>
+            </temp>
+         </xforms:instance>
+         <xforms:bind xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                      nodeset="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.input')/SOAP-ENV:Body/tns:fileForm10">
+            <xforms:bind nodeset="form10">
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="companyName"
+                            xforms:type="xsd:string"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="officeAddress"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="street" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="city" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="county" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="postcode" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms"
+                            nodeset="memorandumDeliveredByAgent"
+                            xforms:type="xsd:boolean"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="agentName"
+                            xforms:type="xsd:string"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="agentAddress"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="street" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="city" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="county" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="postcode" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="contactInformation"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="address"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                     <xforms:bind nodeset="street" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="city" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="county" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="postcode" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  </xforms:bind>
+                  <xforms:bind nodeset="phone" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="dxNumber" xforms:type="xsd:int"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="dxExchange" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="companySecretary"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="companyName" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="name"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                     <xforms:bind nodeset="title" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="honours" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="forenames" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="surname" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="previousForenames" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="previousSurnames" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  </xforms:bind>
+                  <xforms:bind nodeset="address"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                     <xforms:bind nodeset="street" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="city" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="county" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="postcode" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  </xforms:bind>
+                  <xforms:bind nodeset="isServiceAddress" xforms:type="xsd:boolean"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="signature"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                     <xforms:bind nodeset="signature" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="date" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  </xforms:bind>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="directors"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="ukDirector">
+                     <xforms:bind nodeset="name"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                        <xforms:bind nodeset="title" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="honours" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="forenames" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="surname" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="previousForenames" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="previousSurnames" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     </xforms:bind>
+                     <xforms:bind nodeset="address"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                        <xforms:bind nodeset="street" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="city" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="county" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="postcode" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     </xforms:bind>
+                     <xforms:bind nodeset="isServiceAddress" xforms:type="xsd:boolean"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="dateOfBirth" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="nationality" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="businessOccupation" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="otherDirectorships" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="signature"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                        <xforms:bind nodeset="signature" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                        <xforms:bind nodeset="date" xforms:type="xsd:string"
+                                     relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     </xforms:bind>
+                  </xforms:bind>
+                  <xforms:bind nodeset="insert-trigger-d4e64"
+                               relevant="((count(../ukDirector) - 1) &lt; 1000) and boolean-from-string(instance('temp')/relevant)"/>
+                  <xforms:bind nodeset="delete-trigger-d4e64"
+                               relevant="((count(../ukDirector) - 1) &gt; 0) and boolean-from-string(instance('temp')/relevant)"/>
+                  <xforms:bind nodeset="ukDirector[count(../ukDirector)]" relevant="false()"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="signatures"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="ukSignature">
+                     <xforms:bind nodeset="signature" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="date" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  </xforms:bind>
+                  <xforms:bind nodeset="insert-trigger-d4e68"
+                               relevant="((count(../ukSignature) - 1) &lt; 1000) and boolean-from-string(instance('temp')/relevant)"/>
+                  <xforms:bind nodeset="delete-trigger-d4e68"
+                               relevant="((count(../ukSignature) - 1) &gt; 0) and boolean-from-string(instance('temp')/relevant)"/>
+                  <xforms:bind nodeset="ukSignature[count(../ukSignature)]" relevant="false()"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="@xsi:nil"
+                            relevant="false()"/>
+            </xforms:bind>
+         </xforms:bind>
+         <xforms:submission xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                            id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.submission"
+                            action="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                            mediatype="text/xml"
+                            ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.input')"
+                            method="post"
+                            replace="instance"
+                            instance=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.output">
+            <xforms:action events:event="xforms-submit">
+               <xforms:setvalue ref="instance('temp')/relevant" value="false()"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-done">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+               <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.response"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-error">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+            </xforms:action>
+            <xforms:message level="modal" events:event="xforms-submit-error">Please ensure that all field have valid contents.</xforms:message>
+         </xforms:submission>
+         <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                    class="form_row">
+            <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.request"
+                           events:event="xforms-ready"
+                           if="not(boolean(instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.output')/SOAP-ENV:Body))"/>
+            <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.response"
+                           events:event="xforms-ready"
+                           if="boolean(instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.output')/SOAP-ENV:Body)"/>
+         </xhtml:div>
+      </xforms:model>
+      <xforms:model id="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_">
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.input">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+               <SOAP-ENV:Header/>
+               <SOAP-ENV:Body>
+                  <ns5:fileForm12 xmlns:ns5="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit">
+                     <form12 xsi:nil="false">
+                        <companyName xsi:nil="true" xsi:type="xsd:string"/>
+                        <declarantName xsi:nil="true" xsi:type="xsd:string"/>
+                        <of xsi:nil="true" xsi:type="xsd:string"/>
+                        <declarantSignature xsi:nil="false" xsi:type="tns:ukSignature">
+                           <signature xsi:nil="true" xsi:type="xsd:string"/>
+                           <date xsi:nil="true" xsi:type="xsd:string"/>
+                        </declarantSignature>
+                        <declaredAt xsi:nil="true" xsi:type="xsd:string"/>
+                        <beforeMe xsi:nil="true" xsi:type="xsd:string"/>
+                        <signature xsi:nil="false" xsi:type="tns:ukSignature">
+                           <signature xsi:nil="true" xsi:type="xsd:string"/>
+                           <date xsi:nil="true" xsi:type="xsd:string"/>
+                        </signature>
+                        <contactInformation xsi:nil="false" xsi:type="tns:ukContactInformation">
+                           <address xsi:nil="false" xsi:type="tns:ukAddress">
+                              <street xsi:nil="true" xsi:type="xsd:string"/>
+                              <city xsi:nil="true" xsi:type="xsd:string"/>
+                              <county xsi:nil="true" xsi:type="xsd:string"/>
+                              <postcode xsi:nil="true" xsi:type="xsd:string"/>
+                           </address>
+                           <phone xsi:nil="true" xsi:type="xsd:string"/>
+                           <dxNumber xsi:nil="true" xsi:type="xsd:int"/>
+                           <dxExchange xsi:nil="true" xsi:type="xsd:string"/>
+                        </contactInformation>
+                     </form12>
+                  </ns5:fileForm12>
+               </SOAP-ENV:Body>
+            </SOAP-ENV:Envelope>
+         </xforms:instance>
+         <xforms:instance xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.output">
+            <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+         </xforms:instance>
+         <xforms:instance xmlns:chiba="http://chiba.sourceforge.net/xforms"
+                          xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                          id="temp">
+            <temp>
+               <relevant xsi:type="boolean">true</relevant>
+            </temp>
+         </xforms:instance>
+         <xforms:bind xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                      nodeset="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.input')/SOAP-ENV:Body/tns:fileForm12">
+            <xforms:bind nodeset="form12">
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="companyName"
+                            xforms:type="xsd:string"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="declarantName"
+                            xforms:type="xsd:string"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="of"
+                            xforms:type="xsd:string"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="declarantSignature"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="signature" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="date" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="declaredAt"
+                            xforms:type="xsd:string"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="beforeMe"
+                            xforms:type="xsd:string"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="signature"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="signature" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="date" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="contactInformation"
+                            relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                  <xforms:bind nodeset="address"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))">
+                     <xforms:bind nodeset="street" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="city" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="county" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                     <xforms:bind nodeset="postcode" xforms:type="xsd:string"
+                                  relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  </xforms:bind>
+                  <xforms:bind nodeset="phone" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="dxNumber" xforms:type="xsd:int"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+                  <xforms:bind nodeset="dxExchange" xforms:type="xsd:string"
+                               relevant="(. != '' or boolean-from-string(instance('temp')/relevant))"/>
+               </xforms:bind>
+               <xforms:bind xmlns:chiba="http://chiba.sourceforge.net/xforms" nodeset="@xsi:nil"
+                            relevant="false()"/>
+            </xforms:bind>
+         </xforms:bind>
+         <xforms:submission xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                            id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.submission"
+                            action="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                            mediatype="text/xml"
+                            ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.input')"
+                            method="post"
+                            replace="instance"
+                            instance=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.output">
+            <xforms:action events:event="xforms-submit">
+               <xforms:setvalue ref="instance('temp')/relevant" value="false()"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-done">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+               <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.response"/>
+            </xforms:action>
+            <xforms:action events:event="xforms-submit-error">
+               <xforms:setvalue ref="instance('temp')/relevant" value="true()"/>
+            </xforms:action>
+            <xforms:message level="modal" events:event="xforms-submit-error">Please ensure that all field have valid contents.</xforms:message>
+         </xforms:submission>
+         <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                    class="form_row">
+            <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.request"
+                           events:event="xforms-ready"
+                           if="not(boolean(instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.output')/SOAP-ENV:Body))"/>
+            <xforms:toggle case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.response"
+                           events:event="xforms-ready"
+                           if="boolean(instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.output')/SOAP-ENV:Body)"/>
+         </xhtml:div>
+      </xforms:model>
+   </xhtml:head>
+   <xhtml:body>
+      <xhtml:h1>Generated Model</xhtml:h1>
+      <xforms:switch>
+         <xforms:case id="process_model_hidden" selected="true">
+            <xforms:trigger>
+               <xforms:label>Show Process Model</xforms:label>
+               <xforms:toggle events:event="DOMActivate" case="process_model_shown"/>
+            </xforms:trigger>
+         </xforms:case>
+         <xforms:case id="process_model_shown" selected="true">
+            <xforms:trigger>
+               <xforms:label>Hide Process Model</xforms:label>
+               <xforms:toggle events:event="DOMActivate" case="process_model_hidden"/>
+            </xforms:trigger>
+            <xhtml:img src="http://localhost:8180/backend/poem/model/237/png"/>
+         </xforms:case>
+      </xforms:switch>
+      <xforms:switch>
+         <xforms:case id="no_gateway" selected="true"/>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_0BE6EC7F-03A0-4B2D-A111-815F7EC79241"
+                      selected="false">
+            <xforms:trigger>
+               <xforms:label>check Company Name</xforms:label>
+               <xforms:toggle events:event="DOMActivate"
+                              case="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A"/>
+            </xforms:trigger>
+            <xforms:trigger>
+               <xforms:label>check Disqualified Directors Register</xforms:label>
+               <xforms:toggle events:event="DOMActivate"
+                              case="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F"/>
+            </xforms:trigger>
+            <xforms:trigger>
+               <xforms:label>check Domain</xforms:label>
+               <xforms:toggle events:event="DOMActivate"
+                              case="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF"/>
+            </xforms:trigger>
+         </xforms:case>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_EA3E41DD-7516-4C82-A032-4280643BAE4A"
+                      selected="false">
+            <xforms:trigger>
+               <xforms:label>file Form 10</xforms:label>
+               <xforms:toggle events:event="DOMActivate" case="no_gateway"/>
+               <xforms:toggle events:event="DOMActivate"
+                              case="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42"/>
+            </xforms:trigger>
+         </xforms:case>
+      </xforms:switch>
+      <xforms:switch>
+         <xforms:case id="no_node" selected="false"/>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_7590298e-6f37-4134-8af3-ba8cae040a3f"
+                      selected="true">
+            <xforms:trigger>
+               <xforms:label>Next</xforms:label>
+               <xforms:toggle events:event="DOMActivate" case="no_node"/>
+               <xforms:toggle events:event="DOMActivate"
+                              case="http://localhost:8180/backend/poem/model/237/self#oryx_0BE6EC7F-03A0-4B2D-A111-815F7EC79241"/>
+            </xforms:trigger>
+         </xforms:case>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A"
+                      selected="false">
+            <xhtml:h2>check Company Name</xhtml:h2>
+            <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                       class="form_row">
+               <xforms:switch>
+                  <xforms:case id=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.request">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.input')/SOAP-ENV:Body/tns:checkCompanyName">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                            ref="companyName">
+                                 <xforms:label>companyName</xforms:label>
+                              </xforms:input>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:group class="actions">
+                        <xhtml:div class="form_row">
+                           <xforms:submit model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                          submission=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.submission">
+                              <xforms:label>Submit</xforms:label>
+                           </xforms:submit>
+                        </xhtml:div>
+                     </xforms:group>
+                  </xforms:case>
+                  <xforms:case id=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.response">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.output')/SOAP-ENV:Body/tns:checkCompanyNameResponse">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                            ref="return">
+                                 <xforms:label>return</xforms:label>
+                                 <xhtml:div class="form_row">
+                                    <xforms:repeat nodeset="tns:ukCompanyInfo" id="repeat-d4e11">
+                                       <xhtml:div class="form_row">
+                                          <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                                         ref="tns:number">
+                                             <xforms:label>Number</xforms:label>
+                                          </xforms:output>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                                         ref="tns:name">
+                                             <xforms:label>Name</xforms:label>
+                                          </xforms:output>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                                         ref="tns:status">
+                                             <xforms:label>Status</xforms:label>
+                                          </xforms:output>
+                                       </xhtml:div>
+                                    </xforms:repeat>
+                                 </xhtml:div>
+                              </xforms:group>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.output')/SOAP-ENV:Body/SOAP-ENV:Fault"
+                                      class="fault">
+                           <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_606560F1-BE0B-4130-81CC-F77202E2F27A_model_"
+                                          ref="faultstring"/>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group class="actions">
+                           <xhtml:div class="form_row">
+                              <xforms:trigger>
+                                 <xforms:label>Back</xforms:label>
+                                 <xforms:toggle events:event="DOMActivate"
+                                                case=".ukCompaniesHouseEmulatorRpcLitPortType.checkCompanyName.request"/>
+                              </xforms:trigger>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:trigger>
+                        <xforms:label>Next</xforms:label>
+                        <xforms:toggle events:event="DOMActivate" case="no_node"/>
+                        <xforms:toggle events:event="DOMActivate"
+                                       case="http://localhost:8180/backend/poem/model/237/self#oryx_EA3E41DD-7516-4C82-A032-4280643BAE4A"/>
+                     </xforms:trigger>
+                  </xforms:case>
+               </xforms:switch>
+            </xhtml:div>
+         </xforms:case>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F"
+                      selected="false">
+            <xhtml:h2>check Disqualified Directors Register</xhtml:h2>
+            <xhtml:div xmlns:tns="http://localhost/services/soap.php/DirectorsRegisterService1236791708888"
+                       class="form_row">
+               <xforms:switch>
+                  <xforms:case id=".DirectorsRegisterService1236791708888PortType.findDirectors.request">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                      ref="instance('.DirectorsRegisterService1236791708888PortType.findDirectors.input')/SOAP-ENV:Body/tns:findDirectors">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                            ref="SNAME">
+                                 <xforms:label>SNAME</xforms:label>
+                              </xforms:input>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:group class="actions">
+                        <xhtml:div class="form_row">
+                           <xforms:submit model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                          submission=".DirectorsRegisterService1236791708888PortType.findDirectors.submission">
+                              <xforms:label>Submit</xforms:label>
+                           </xforms:submit>
+                        </xhtml:div>
+                     </xforms:group>
+                  </xforms:case>
+                  <xforms:case id=".DirectorsRegisterService1236791708888PortType.findDirectors.response">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                      ref="instance('.DirectorsRegisterService1236791708888PortType.findDirectors.output')/SOAP-ENV:Body/tns:findDirectorsResponse">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                            ref="return">
+                                 <xforms:label>return</xforms:label>
+                                 <xhtml:div class="form_row">
+                                    <xforms:repeat nodeset="tns:DirectorsRegisterService1236791708888Result" id="repeat-d4e11">
+                                       <xhtml:div class="form_row">
+                                          <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                                         ref="tns:name">
+                                             <xforms:label>Name</xforms:label>
+                                          </xforms:output>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                                         ref="tns:postTown">
+                                             <xforms:label>Post Town</xforms:label>
+                                          </xforms:output>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                                         ref="tns:regionCode">
+                                             <xforms:label>Region Code</xforms:label>
+                                          </xforms:output>
+                                       </xhtml:div>
+                                    </xforms:repeat>
+                                 </xhtml:div>
+                              </xforms:group>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                      ref="instance('.DirectorsRegisterService1236791708888PortType.findDirectors.output')/SOAP-ENV:Body/SOAP-ENV:Fault"
+                                      class="fault">
+                           <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_E6E357E0-6407-4221-9C4F-E4CE9F5FE42F_model_"
+                                          ref="faultstring"/>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group class="actions">
+                           <xhtml:div class="form_row">
+                              <xforms:trigger>
+                                 <xforms:label>Back</xforms:label>
+                                 <xforms:toggle events:event="DOMActivate"
+                                                case=".DirectorsRegisterService1236791708888PortType.findDirectors.request"/>
+                              </xforms:trigger>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:trigger>
+                        <xforms:label>Next</xforms:label>
+                        <xforms:toggle events:event="DOMActivate" case="no_node"/>
+                        <xforms:toggle events:event="DOMActivate"
+                                       case="http://localhost:8180/backend/poem/model/237/self#oryx_EA3E41DD-7516-4C82-A032-4280643BAE4A"/>
+                     </xforms:trigger>
+                  </xforms:case>
+               </xforms:switch>
+            </xhtml:div>
+         </xforms:case>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF"
+                      selected="false">
+            <xhtml:h2>check Domain</xhtml:h2>
+            <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorDocLit"
+                       class="form_row">
+               <xforms:switch>
+                  <xforms:case id=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.request">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.input')/SOAP-ENV:Body/tns:checkCompanyNameIn">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                            ref="parameters">
+                                 <xforms:label>Check Company Name</xforms:label>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                                  ref="companyName">
+                                       <xforms:label>Company Name</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                              </xforms:group>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:group class="actions">
+                        <xhtml:div class="form_row">
+                           <xforms:submit model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                          submission=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.submission">
+                              <xforms:label>Submit</xforms:label>
+                           </xforms:submit>
+                        </xhtml:div>
+                     </xforms:group>
+                  </xforms:case>
+                  <xforms:case id=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.response">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.output')/SOAP-ENV:Body/tns:checkCompanyNameOut">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                            ref="tns:parameters">
+                                 <xforms:label>Check Company Name Response</xforms:label>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                                  ref="tns:checkCompanyNameResult">
+                                       <xforms:label>Check Company Name Result</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:repeat nodeset="tns:ukCompanyInfo" id="repeat-d4e19">
+                                             <xhtml:div class="form_row">
+                                                <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                                               ref="tns:number">
+                                                   <xforms:label>Number</xforms:label>
+                                                </xforms:output>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                                               ref="tns:name">
+                                                   <xforms:label>Name</xforms:label>
+                                                </xforms:output>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                                               ref="tns:status">
+                                                   <xforms:label>Status</xforms:label>
+                                                </xforms:output>
+                                             </xhtml:div>
+                                          </xforms:repeat>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                              </xforms:group>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.output')/SOAP-ENV:Body/SOAP-ENV:Fault"
+                                      class="fault">
+                           <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_1A426703-F199-4123-BE6B-452A2900ADDF_model_"
+                                          ref="faultstring"/>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group class="actions">
+                           <xhtml:div class="form_row">
+                              <xforms:trigger>
+                                 <xforms:label>Back</xforms:label>
+                                 <xforms:toggle events:event="DOMActivate"
+                                                case=".ukCompaniesHouseEmulatorDocLitPortType.checkCompanyName.request"/>
+                              </xforms:trigger>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:trigger>
+                        <xforms:label>Next</xforms:label>
+                        <xforms:toggle events:event="DOMActivate" case="no_node"/>
+                        <xforms:toggle events:event="DOMActivate"
+                                       case="http://localhost:8180/backend/poem/model/237/self#oryx_EA3E41DD-7516-4C82-A032-4280643BAE4A"/>
+                     </xforms:trigger>
+                  </xforms:case>
+               </xforms:switch>
+            </xhtml:div>
+         </xforms:case>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42"
+                      selected="false">
+            <xhtml:h2>file Form 10</xhtml:h2>
+            <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                       class="form_row">
+               <xforms:switch>
+                  <xforms:case id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.request">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.input')/SOAP-ENV:Body/tns:fileForm10">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                            ref="form10">
+                                 <xforms:label>form10</xforms:label>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="companyName">
+                                       <xforms:label>Company Name</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="officeAddress">
+                                       <xforms:label>Office Address</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="street">
+                                             <xforms:label>Street</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="city">
+                                             <xforms:label>City</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="county">
+                                             <xforms:label>County</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="postcode">
+                                             <xforms:label>Postcode</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="memorandumDeliveredByAgent">
+                                       <xforms:label>Memorandum Delivered By Agent</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="agentName">
+                                       <xforms:label>Agent Name</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="agentAddress">
+                                       <xforms:label>Agent Address</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="street">
+                                             <xforms:label>Street</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="city">
+                                             <xforms:label>City</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="county">
+                                             <xforms:label>County</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="postcode">
+                                             <xforms:label>Postcode</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="contactInformation">
+                                       <xforms:label>Contact Information</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="address">
+                                             <xforms:label>Address</xforms:label>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="street">
+                                                   <xforms:label>Street</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="city">
+                                                   <xforms:label>City</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="county">
+                                                   <xforms:label>County</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="postcode">
+                                                   <xforms:label>Postcode</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                          </xforms:group>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="phone">
+                                             <xforms:label>Phone</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="dxNumber">
+                                             <xforms:label>Dx Number</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="dxExchange">
+                                             <xforms:label>Dx Exchange</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="companySecretary">
+                                       <xforms:label>Company Secretary</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="companyName">
+                                             <xforms:label>Company Name</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="name">
+                                             <xforms:label>Name</xforms:label>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="title">
+                                                   <xforms:label>Title</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="honours">
+                                                   <xforms:label>Honours</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="forenames">
+                                                   <xforms:label>Forenames</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="surname">
+                                                   <xforms:label>Surname</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="previousForenames">
+                                                   <xforms:label>Previous Forenames</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="previousSurnames">
+                                                   <xforms:label>Previous Surnames</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                          </xforms:group>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="address">
+                                             <xforms:label>Address</xforms:label>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="street">
+                                                   <xforms:label>Street</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="city">
+                                                   <xforms:label>City</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="county">
+                                                   <xforms:label>County</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="postcode">
+                                                   <xforms:label>Postcode</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                          </xforms:group>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="isServiceAddress">
+                                             <xforms:label>Is Service Address</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                        ref="signature">
+                                             <xforms:label>Signature</xforms:label>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="signature">
+                                                   <xforms:label>Signature</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="date">
+                                                   <xforms:label>Date</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                          </xforms:group>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="directors">
+                                       <xforms:label>Directors</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:repeat nodeset="ukDirector" id="repeat-d4e64">
+                                             <xhtml:div class="form_row">
+                                                <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="name">
+                                                   <xforms:label>Name</xforms:label>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="title">
+                                                         <xforms:label>Title</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="honours">
+                                                         <xforms:label>Honours</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="forenames">
+                                                         <xforms:label>Forenames</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="surname">
+                                                         <xforms:label>Surname</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="previousForenames">
+                                                         <xforms:label>Previous Forenames</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="previousSurnames">
+                                                         <xforms:label>Previous Surnames</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                </xforms:group>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="address">
+                                                   <xforms:label>Address</xforms:label>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="street">
+                                                         <xforms:label>Street</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="city">
+                                                         <xforms:label>City</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="county">
+                                                         <xforms:label>County</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="postcode">
+                                                         <xforms:label>Postcode</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                </xforms:group>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="isServiceAddress">
+                                                   <xforms:label>Is Service Address</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="dateOfBirth">
+                                                   <xforms:label>Date Of Birth</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="nationality">
+                                                   <xforms:label>Nationality</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="businessOccupation">
+                                                   <xforms:label>Business Occupation</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="otherDirectorships">
+                                                   <xforms:label>Other Directorships</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="signature">
+                                                   <xforms:label>Signature</xforms:label>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="signature">
+                                                         <xforms:label>Signature</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                   <xhtml:div class="form_row">
+                                                      <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                                    ref="date">
+                                                         <xforms:label>Date</xforms:label>
+                                                      </xforms:input>
+                                                   </xhtml:div>
+                                                </xforms:group>
+                                             </xhtml:div>
+                                          </xforms:repeat>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:trigger model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                          ref="insert-trigger-d4e64">
+                                             <xforms:label>Insert</xforms:label>
+                                             <xforms:insert events:event="DOMActivate" nodeset="../ukDirector" at="last()"
+                                                            position="before"/>
+                                          </xforms:trigger>
+                                          <xforms:trigger model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                          ref="delete-trigger-d4e64">
+                                             <xforms:label>Delete</xforms:label>
+                                             <xforms:delete events:event="DOMActivate" nodeset="../ukDirector" at="index('repeat-d4e64')"/>
+                                             <xforms:setindex events:event="DOMActivate" repeat="repeat-d4e64"
+                                                              index="if(index('repeat-d4e64') = count(../ukDirector), index('repeat-d4e64') - 1, index('repeat-d4e64'))"/>
+                                          </xforms:trigger>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                  ref="signatures">
+                                       <xforms:label>Signatures</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:repeat nodeset="ukSignature" id="repeat-d4e68">
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="signature">
+                                                   <xforms:label>Signature</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                              ref="date">
+                                                   <xforms:label>Date</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                          </xforms:repeat>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:trigger model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                          ref="insert-trigger-d4e68">
+                                             <xforms:label>Insert</xforms:label>
+                                             <xforms:insert events:event="DOMActivate" nodeset="../ukSignature" at="last()"
+                                                            position="before"/>
+                                          </xforms:trigger>
+                                          <xforms:trigger model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                                          ref="delete-trigger-d4e68">
+                                             <xforms:label>Delete</xforms:label>
+                                             <xforms:delete events:event="DOMActivate" nodeset="../ukSignature" at="index('repeat-d4e68')"/>
+                                             <xforms:setindex events:event="DOMActivate" repeat="repeat-d4e68"
+                                                              index="if(index('repeat-d4e68') = count(../ukSignature), index('repeat-d4e68') - 1, index('repeat-d4e68'))"/>
+                                          </xforms:trigger>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                              </xforms:group>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:group class="actions">
+                        <xhtml:div class="form_row">
+                           <xforms:submit model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                          submission=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.submission">
+                              <xforms:label>Submit</xforms:label>
+                           </xforms:submit>
+                        </xhtml:div>
+                     </xforms:group>
+                  </xforms:case>
+                  <xforms:case id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.response">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.output')/SOAP-ENV:Body/tns:fileForm10Response">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                             ref="tns:return">
+                                 <xforms:label>return</xforms:label>
+                              </xforms:output>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.output')/SOAP-ENV:Body/SOAP-ENV:Fault"
+                                      class="fault">
+                           <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_249FD0F7-EEFF-4A08-ACB5-D3F23F1E0A42_model_"
+                                          ref="faultstring"/>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group class="actions">
+                           <xhtml:div class="form_row">
+                              <xforms:trigger>
+                                 <xforms:label>Back</xforms:label>
+                                 <xforms:toggle events:event="DOMActivate"
+                                                case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm10.request"/>
+                              </xforms:trigger>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:trigger>
+                        <xforms:label>file Form 12</xforms:label>
+                        <xforms:toggle events:event="DOMActivate"
+                                       case="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096"/>
+                     </xforms:trigger>
+                  </xforms:case>
+               </xforms:switch>
+            </xhtml:div>
+         </xforms:case>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096"
+                      selected="false">
+            <xhtml:h2>file Form 12</xhtml:h2>
+            <xhtml:div xmlns:tns="http://localhost/services/soap.php/ukCompaniesHouseEmulatorRpcLit"
+                       class="form_row">
+               <xforms:switch>
+                  <xforms:case id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.request">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.input')/SOAP-ENV:Body/tns:fileForm12">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                            ref="form12">
+                                 <xforms:label>form12</xforms:label>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="companyName">
+                                       <xforms:label>Company Name</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="declarantName">
+                                       <xforms:label>Declarant Name</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="of">
+                                       <xforms:label>Of</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="declarantSignature">
+                                       <xforms:label>Declarant Signature</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="signature">
+                                             <xforms:label>Signature</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="date">
+                                             <xforms:label>Date</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="declaredAt">
+                                       <xforms:label>Declared At</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="beforeMe">
+                                       <xforms:label>Before Me</xforms:label>
+                                    </xforms:input>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="signature">
+                                       <xforms:label>Signature</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="signature">
+                                             <xforms:label>Signature</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="date">
+                                             <xforms:label>Date</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                                 <xhtml:div class="form_row">
+                                    <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                  ref="contactInformation">
+                                       <xforms:label>Contact Information</xforms:label>
+                                       <xhtml:div class="form_row">
+                                          <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="address">
+                                             <xforms:label>Address</xforms:label>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                              ref="street">
+                                                   <xforms:label>Street</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                              ref="city">
+                                                   <xforms:label>City</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                              ref="county">
+                                                   <xforms:label>County</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                             <xhtml:div class="form_row">
+                                                <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                              ref="postcode">
+                                                   <xforms:label>Postcode</xforms:label>
+                                                </xforms:input>
+                                             </xhtml:div>
+                                          </xforms:group>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="phone">
+                                             <xforms:label>Phone</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="dxNumber">
+                                             <xforms:label>Dx Number</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                       <xhtml:div class="form_row">
+                                          <xforms:input model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                                        ref="dxExchange">
+                                             <xforms:label>Dx Exchange</xforms:label>
+                                          </xforms:input>
+                                       </xhtml:div>
+                                    </xforms:group>
+                                 </xhtml:div>
+                              </xforms:group>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:group class="actions">
+                        <xhtml:div class="form_row">
+                           <xforms:submit model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                          submission=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.submission">
+                              <xforms:label>Submit</xforms:label>
+                           </xforms:submit>
+                        </xhtml:div>
+                     </xforms:group>
+                  </xforms:case>
+                  <xforms:case id=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.response">
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.output')/SOAP-ENV:Body/tns:fileForm12Response">
+                           <xhtml:div xmlns:chiba="http://chiba.sourceforge.net/xforms" class="form_row">
+                              <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                             ref="tns:return">
+                                 <xforms:label>return</xforms:label>
+                              </xforms:output>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                      ref="instance('.ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.output')/SOAP-ENV:Body/SOAP-ENV:Fault"
+                                      class="fault">
+                           <xforms:output model="http://localhost:8180/backend/poem/model/237/self#oryx_24055331-44F5-483D-A612-6ABB2E609096_model_"
+                                          ref="faultstring"/>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xhtml:div class="form_row">
+                        <xforms:group class="actions">
+                           <xhtml:div class="form_row">
+                              <xforms:trigger>
+                                 <xforms:label>Back</xforms:label>
+                                 <xforms:toggle events:event="DOMActivate"
+                                                case=".ukCompaniesHouseEmulatorRpcLitPortType.fileForm12.request"/>
+                              </xforms:trigger>
+                           </xhtml:div>
+                        </xforms:group>
+                     </xhtml:div>
+                     <xforms:trigger>
+                        <xforms:label>Finish</xforms:label>
+                        <xforms:toggle events:event="DOMActivate"
+                                       case="http://localhost:8180/backend/poem/model/237/self#oryx_C9FEB574-E7B0-4F0C-AD8C-8C5120768A28"/>
+                     </xforms:trigger>
+                  </xforms:case>
+               </xforms:switch>
+            </xhtml:div>
+         </xforms:case>
+         <xforms:case id="http://localhost:8180/backend/poem/model/237/self#oryx_C9FEB574-E7B0-4F0C-AD8C-8C5120768A28"
+                      selected="false">The process is finished.<xhtml:br/>
+            <xforms:trigger>
+               <xforms:label>Restart the Process</xforms:label>
+               <xforms:toggle events:event="DOMActivate"
+                              case="http://localhost:8180/backend/poem/model/237/self#oryx_7590298e-6f37-4134-8af3-ba8cae040a3f"/>
+            </xforms:trigger>
+         </xforms:case>
+      </xforms:switch>
+   </xhtml:body>
+</xhtml:html>

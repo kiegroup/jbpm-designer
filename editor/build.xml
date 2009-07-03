@@ -189,6 +189,10 @@
                 </fileset>
             </classpath>
         </javac>
+
+        <!-- directory for user interfaces aggregated by the BPMN2XFormsServlet -->
+        <mkdir dir="${editor-build-root}/generated-uis"/>
+
     </target>
     
     <target name="build-editor-core">

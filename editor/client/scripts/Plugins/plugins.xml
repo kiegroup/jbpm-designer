@@ -28,6 +28,11 @@
 		<plugin source="jpdlSupport.js" name="ORYX.Plugins.JPDLSupport">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>	
+
+		<!-- User Interface Aggregation -->
+		<plugin source="bpmn2xforms.js" name="ORYX.Plugins.BPMN2XForms">
+			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
+		</plugin>
 		
 		<plugin source="bpmn2bpel.js" name="ORYX.Plugins.BPMN2BPEL">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	

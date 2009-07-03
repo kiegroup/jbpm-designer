@@ -112,8 +112,9 @@ public class ServiceComposerServlet extends HttpServlet {
 				+ dateFormat.format(creationDate);
 
 		ArrayList<String> stencilSetExtensionUrls = new ArrayList<String>();
-		// stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#");
-		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset#");
+		// not specific enough:  stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#");
+		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset#"); // required for BPEL generation and user interface aggregation
+		stencilSetExtensionUrls.add("http://oryx-editor.org/stencilsets/extensions/bpmn-xforms-user-interfaces#"); // required for user interface aggregation
 		stencilSetExtensionUrls.add(generateStencilSetExtension(sessionName,
 				services));
 		
@@ -195,6 +196,10 @@ public class ServiceComposerServlet extends HttpServlet {
 					Operation operation = operationIterator.next();
 					Matcher matcher = pattern.matcher(operation.name);
 					String taskName = matcher.replaceAll("$1 $2");
+					String xform = "";
+					if (!operation.uiUrls.isEmpty()) {
+						xform = operation.uiUrls.get(0);
+					}
 					stencilsForOperations.append("{" + "\"type\": \"node\"," + "\"id\":\""
 									+ createJsonId(portType.name + "-"
 											+ operation.name)
@@ -217,6 +222,9 @@ public class ServiceComposerServlet extends HttpServlet {
 									+ "\"properties\": [ "
 									+ "{\"id\":\"name\",\"value\":\""
 									+ taskName + "\" }, "
+									+ "{\"id\":\"xform\",\"value\":\""
+									// TODO: list of values from which the user can choose
+									+ xform + "\" }, "
 									+ "{\"id\":\"bgColor\",\"value\":\""
 									+ color + "\"}" + "  ]},\n");
 				}
