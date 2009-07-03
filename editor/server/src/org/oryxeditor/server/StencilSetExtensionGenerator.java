@@ -58,7 +58,7 @@ public class StencilSetExtensionGenerator {
 	public static final String DEFAULT_BASE_STENCIL
 			= "Task";
 	private static final String STENCILSET_EXTENSIONS_PATH
-			= System.getProperty("catalina.home") + "/webapps/oryx/stencilsets/extensions/";
+			= Repository.getOryxPath() + "stencilsets/extensions/";
 
 	public static String generateStencilSetExtension(
 			String extensionName,

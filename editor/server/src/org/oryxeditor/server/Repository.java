@@ -69,6 +69,13 @@ public class Repository {
 	}
 	
 	/**
+	 * Constructor
+	 */
+	public Repository(HttpServletRequest request) {
+		this.baseUrl = getBaseUrl(request);
+	}
+	
+	/**
 	 * Obtains the base URL from a HttpServletRequest
 	 * 
 	 * @param req HTTP request containing a request URL
@@ -85,6 +92,15 @@ public class Repository {
 	
 	public static String getOryxUrl(HttpServletRequest req) {
 		return getBaseUrl(req) + "oryx/";
+	}
+	
+	public String getOryxUrl() {
+		return baseUrl + "oryx/";
+	}
+	
+	public static String getOryxPath() {
+		// TODO: make this more platform independant
+		return System.getProperty("catalina.home") + "/webapps/oryx/";
 	}
 	
 	public String getModel(String path) {
