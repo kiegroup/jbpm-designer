@@ -48,7 +48,6 @@ ORYX.Plugins.XForms =
 	 */
 	construct: function(facade) {
 		this.facade = facade;
-
 		this.facade.registerOnEvent('layout.xforms.label', this.handleLayoutLabel.bind(this));
 		this.facade.registerOnEvent('layout.xforms.label.button', this.handleLayoutLabelButton.bind(this));
 		this.facade.registerOnEvent('layout.xforms.label.item', this.handleLayoutLabelItem.bind(this));
@@ -83,7 +82,7 @@ ORYX.Plugins.XForms =
 			}
 	},
 	
-	handleLayoutButtonLabelButton : function(event) {
+	handleLayoutLabelButton : function(event) {
 		var shape = event.shape;
 		
 		var labels = shape.getChildNodes(false).findAll(function(node) {

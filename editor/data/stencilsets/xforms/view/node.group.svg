@@ -9,8 +9,6 @@
    version="1.0">
   <defs></defs>
    <g oryx:minimumSize="40 34">
-    <rect oryx:anchor="top" oryx:resize="vertical horizontal" x="0" y="0" width="160" height="68" stroke="#777777" stroke-width="1" fill="none" />
-    <rect oryx:anchor="top" oryx:resize="vertical horizontal" x="0" y="0" width="160" height="3" stroke="#777777" stroke-width="1" fill="#777777" />
-   
+    <rect id="g" oryx:resize="vertical horizontal" x="0" y="0" width="160" height="68" stroke="#777777" stroke-width="1" fill="#f2f4fd" />
   </g>
 </svg>

@@ -196,7 +196,8 @@ public class RdfJsonTransformation {
 				stencilsetUrl = hostUrl + stencilsetUrl;
 			
 			//hack for reverse proxies:
-			stencilsetUrl = stencilsetUrl.substring(stencilsetUrl.lastIndexOf("http://"));
+			if(stencilsetUrl.lastIndexOf("http://")>0)
+				stencilsetUrl = stencilsetUrl.substring(stencilsetUrl.lastIndexOf("http://"));
 			
 			stencilset.put("url", stencilsetUrl);
 

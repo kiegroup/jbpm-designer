@@ -130,6 +130,7 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 			var serializedJSON = this.parseToSerializeObjects(doc);
 			
 			serializedJSON.each(function(element) {
+				console.log(element);
 				if(element.shape && element.shape instanceof ORYX.Core.Canvas)
 					return;
 	
@@ -147,9 +148,10 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 				}
 				
 			}.bind(this));
-			
+			console.log("ok1");
+			console.log(serializedJSON);
 			this.facade.importJSON( serializedJSON );
-			
+			console.log("ok2");
 			if(success)
 				success();
 		
@@ -229,7 +231,10 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 								ORYX.CONFIG.XFORMS_IMPORT_URL, 
 								params, 
 								function(request) {
-									this.loadERDF(request.responseText, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
+									this.facade.importJSON(request.responseText);
+									loadMask.hide();
+									dialog.hide();
+									//this.loadERDF(request.responseText, function(){loadMask.hide();dialog.hide()}.bind(this), function(){loadMask.hide();}.bind(this))
 								}.bind(this) );
 														
 							
@@ -264,84 +269,6 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 				form.items.items[2].setValue( text );
 			}, true)
 
-	},
-	
-	/**
-	 * METHOD TAKEN FROM main.js
-	 * Parses one process model to the serialized form
-	 * returns {type, id, serialize} for one specific object
-	 * 
-	 * @param {Object} oneProcessData
-	 */
-	parseToSerializeObjects: function( oneProcessData){
-
-		// Get a specific div from a given class name
-		var getElementsByClassNameFromDiv 	= function(doc, id){ return $A(doc.getElementsByTagName('div')).findAll(function(el){ return $A(el.attributes).any(function(attr){ return attr.nodeName == 'class' && attr.nodeValue == id }) })	}
-		// Get a specific div from a given class name		
-		var getElementByIdFromDiv 			= function(doc, id){ return $A(doc.getElementsByTagName('div')).find(function(el){return el.getAttribute("id")== id}) }
-		// Get a specific div from a given class name		
-		var getAsByHref						= function(doc, id){ return $A(doc.getElementsByTagName('a')).findAll(function(el){return el.getAttribute("href")== "#" + id}) }
-		
-		// Get the oryx-editor div
-		var editorNode 	= getElementsByClassNameFromDiv( oneProcessData, '-oryx-canvas')[0];
-
-		// If no canvas node there --> return
-		if( !editorNode ){
-			ORYX.Log.warn("Import ERDF: No canvas node was found!")
-			return false
-		}
-
-		// Get all ids from the canvas node for rendering
-		var renderNodes = $A(editorNode.childNodes).collect(function(el){ return el.nodeName.toLowerCase() == "a" && el.getAttribute('rel') == 'oryx-render' ? el.getAttribute('href').slice(1) : null}).compact()
-				
-		// Collect all nodes from the ids
-		renderNodes = renderNodes.collect(function(el){return getElementByIdFromDiv( oneProcessData, el)}.bind(this));
-		
-		// Add the canvas node to the render nodes
-		renderNodes.push(editorNode);
-	
-		// Function for extract all eRDF-Attributes and give them back as an Object
-		var parseAttribute = function(node){
-	    
-			var res = {type: undefined, id: undefined ,serialize: [] }
-			
-			// Set the resource id
-			if(node.getAttribute("id")){
-				res.id = node.getAttribute("id");
-			}
-
-			// If the node is the canvas simply
-			// set already the canvas as shape 
-			if(node.getAttribute("class") == "-oryx-canvas"){
-				res['shape'] = this.facade.getCanvas();
-			}
-					
-			// Set all attributes
-		    $A(node.childNodes).each( function(node){ 
-				if( node.nodeName.toLowerCase() == "span" && node.getAttribute('class')){
-		            var name 	= node.getAttribute('class').split("-");
-					var value 	= node.firstChild ? node.firstChild.textContent : '';
-					
-					res.serialize.push({name: name[1], prefix:  name[0], value: value})
-
-					if( name[0]=="oryx" && name[1]=="type" ){
-						res.type = value;
-					}
-
-				} else if( node.nodeName.toLowerCase() == "a" && node.getAttribute('rel')){
-		            var name 	= node.getAttribute('rel').split("-");
-					var value 	= node.getAttribute('href');
-					
-					res.serialize.push({name: name[1], prefix:  name[0], value: value})
-		        }
-		    })
-		
-		    return res.type ? res : null ;
-		}.bind(this)		
-
-		// Collect all Attributes out of the Nodes
-		return renderNodes.collect(function(el){return parseAttribute(el)}.bind(this)).compact();
-		
 	}
 	
 });

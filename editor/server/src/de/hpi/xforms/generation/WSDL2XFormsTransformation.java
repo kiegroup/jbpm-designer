@@ -49,11 +49,18 @@ public class WSDL2XFormsTransformation {
 			//transformer.setParameter("outdir", tmpDirPath);
 	        transformer.transform(new DOMSource(node), new DOMResult(outNode));
 	        
+	        List<String> returnDocsInstanceIds = new ArrayList<String>();
 	        if(outNode.hasChildNodes()) {
 	        	for(Node child = outNode.getFirstChild();
 	        			child!=null; child = child.getNextSibling()) {
 	        		
-	        		if(!getInstanceId(child).equals(".instance")) { // filter out junk output
+	        		// filter out junk output
+	        		String instanceId = getInstanceId(child);
+	        		if(!instanceId.equals(".instance")
+	        			&& !getSubmissionAction(child).equals("")
+	        			&& !returnDocsInstanceIds.contains(instanceId)
+	        				) { 
+	        			returnDocsInstanceIds.add(instanceId); // remove duplicate documents
 	        			
 	        			Document formDoc = builder.newDocument();
 	        			Node formNode = formDoc.importNode(child, true);
@@ -82,11 +89,19 @@ public class WSDL2XFormsTransformation {
 	}
 	
 	private static String getInstanceId(Node n) {
-		//System.out.println(getChild(n, "xhtml:head"))
 		
 		Node instanceNode = getChild(getChild(getChild(n, "xhtml:head"), "xforms:model"), "xforms:instance");
 		if(instanceNode!=null) {
 			return getAttributeValue(instanceNode, "id");
+		}
+		return null;
+	}
+	
+	private static String getSubmissionAction(Node n) {
+		
+		Node instanceNode = getChild(getChild(getChild(n, "xhtml:head"), "xforms:model"), "xforms:submission");
+		if(instanceNode!=null) {
+			return getAttributeValue(instanceNode, "action");
 		}
 		return null;
 	}

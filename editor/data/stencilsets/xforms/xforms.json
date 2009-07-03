@@ -2843,7 +2843,11 @@
 					shape.bounds.set(upl.x, upl.y, upl.x + maxWidth, upl.y + shapeHeight + 20);
 				}
  			},*/
- 			"layout":[{"type":"layout.xforms.case"}],
+ 			"layout": [
+ 				{ 
+ 					"type": 'layout.xforms.case'
+ 				}
+ 			],
 			"properties": [
 				{
 					"id":"xf_id",
