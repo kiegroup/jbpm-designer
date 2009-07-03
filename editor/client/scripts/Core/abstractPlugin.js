@@ -380,7 +380,7 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 			// Get the new absolute center
 			var center = node.absoluteXY();
 			
-			var ulo = {x: center.x + offset.x, y:center.y + offset.y}			
+			var ulo = {x: center.x - offset.x, y:center.y - offset.y}			
 			
 			center.x += node.bounds.width()/2;
 			center.y += node.bounds.height()/2;
@@ -404,9 +404,9 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 				var xdif = bounds.center().x-bounds2.center().x;
 				var ydif = bounds.center().y-bounds2.center().y;
 				if (Math.abs(xdif) < 3){
-					bounds.moveBy({x:(offset.xs?(((offset.xs*(bounds.center().x-ulo.x))-(bounds.center().x-ulo.x))+offset.x):offset.x)-xdif, y:0});		
+					bounds.moveBy({x:(offset.xs?(((offset.xs*(bounds.center().x-ulo.x))+offset.x+ulo.x)-bounds.center().x):offset.x)-xdif, y:0});		
 				} else if (Math.abs(ydif) < 3){
-					bounds.moveBy({x:0, y:(offset.ys?(((offset.ys*(bounds.center().y-ulo.y))-(bounds.center().y-ulo.y))+offset.y):offset.y)-ydif});		
+					bounds.moveBy({x:0, y:(offset.ys?(((offset.ys*(bounds.center().y-ulo.y))+offset.y+ulo.y)-bounds.center().y):offset.y)-ydif});		
 				}
 			};
 									
