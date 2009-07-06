@@ -478,8 +478,9 @@
         <url-pattern>/bpmn2xforms</url-pattern>
     </servlet-mapping>
 
-<!--
+
 	<!-- Generated XForms are rendered by Orbeon (see below: filter mappings) -->
+<!--
 	<servlet-mapping>
         <servlet-name>BPMN2XFormsServlet</servlet-name>
 		<url-pattern>/bpmn2xforms-orbeon</url-pattern>
