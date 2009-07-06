@@ -33,17 +33,35 @@ package org.oryxeditor.server;
  * @author Jan-Felix Schwarz 
  **/
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public class Repository {
 
@@ -315,12 +333,10 @@ public class Repository {
 
 	public String saveNewModel(String newModel, String name, String summary, String type, String stencilset, String svg){
 		String result = "";
-		
 		String url = baseUrl + "backend/poem/repository/new?stencilset=" + stencilset;
 		try {
 		    HttpClient client = new HttpClient();
 		    PostMethod method = new PostMethod(url);
-
 			// configure the form parameters
 			method.addParameter("data", newModel);
 			method.addParameter("title", name);
@@ -332,7 +348,6 @@ public class Repository {
 			if(statusCode != -1) {
 				Header header = method.getResponseHeader("location");
 				result = header.getValue();
-
 				// hack for reverse proxies:
 				result = result.substring(result.lastIndexOf("http://"));
 
@@ -343,9 +358,30 @@ public class Repository {
 				// TODO handle error
 			}
 		} catch( Exception e ) {
-			// TODO handle exception
+			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public String saveNewModelErdf(String newModel, String name, ServletContext context){
+		return saveNewModel(erdfToJson(newModel, context), name, "", DEFAULT_TYPE, DEFAULT_STENCILSET, NEW_MODEL_SVG_STRING);
+	}
+
+	public String saveNewModelErdf(String newModel, String name, String summary, ServletContext context){
+		return saveNewModel(erdfToJson(newModel, context), name, summary, DEFAULT_TYPE, DEFAULT_STENCILSET, NEW_MODEL_SVG_STRING);
+	}
+
+	public String saveNewModelErdf(String newModel, String name, String summary, String type, ServletContext context){
+		return saveNewModel(erdfToJson(newModel, context), name, summary, type, DEFAULT_STENCILSET, NEW_MODEL_SVG_STRING);
+	}
+
+	public String saveNewModelErdf(String newModel, String name, String summary, String type, String stencilset, ServletContext context){
+		return saveNewModel(erdfToJson(newModel, context), name, summary, type, stencilset,
+				NEW_MODEL_SVG_STRING);
+	}
+
+	public String saveNewModelErdf(String newModel, String name, String summary, String type, String stencilset, String svg, ServletContext context){
+		return saveNewModel(erdfToJson(newModel, context), name, summary, type, stencilset, svg);
 	}
 	
 	public void addTag(String modelUrl, String tagName) {
@@ -376,5 +412,46 @@ public class Repository {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	protected String erdfToJson(String erdf, ServletContext context) {
+		try {
+			String rdf = erdfToRdf(erdf, context);
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document rdfDoc = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
+			return RdfJsonTransformation.toJson(rdfDoc, "").toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	protected String erdfToRdf(String erdf, ServletContext context) throws TransformerException{
+		String serializedDOM = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+		"<html xmlns=\"http://www.w3.org/1999/xhtml\" " +
+		"xmlns:b3mn=\"http://b3mn.org/2007/b3mn\" " +
+		"xmlns:ext=\"http://b3mn.org/2007/ext\" " +
+		"xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" "  +
+		"xmlns:atom=\"http://b3mn.org/2007/atom+xhtml\">" +
+		"<head profile=\"http://purl.org/NET/erdf/profile\">" +
+		"<link rel=\"schema.dc\" href=\"http://purl.org/dc/elements/1.1/\" />" +
+		"<link rel=\"schema.dcTerms\" href=\"http://purl.org/dc/terms/ \" />" +
+		"<link rel=\"schema.b3mn\" href=\"http://b3mn.org\" />" +
+		"<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />" +
+		"<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />" +
+		"</head><body>" + erdf + "</body></html>";
+        
+		InputStream xsltStream = context.getResourceAsStream("/WEB-INF/lib/extract-rdf.xsl");
+        Source xsltSource = new StreamSource(xsltStream);
+        Source erdfSource = new StreamSource(new StringReader(serializedDOM));
+
+        TransformerFactory transFact =
+                TransformerFactory.newInstance();
+        Transformer trans = transFact.newTransformer(xsltSource);
+        StringWriter output = new StringWriter();
+        trans.transform(erdfSource, new StreamResult(output));
+		return output.toString();
 	}
 }

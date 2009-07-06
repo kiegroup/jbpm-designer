@@ -311,6 +311,16 @@ public class Representation {
 		
 	}
 	
+	public String getErdf(javax.servlet.ServletContext context) throws TransformerException {
+		String content = this.getPureContent();
+		if(isJson(content)){
+			return jsonToErdf(content);
+		} else {
+			return content;
+		}
+		
+	}
+	
 	protected static String erdfToRdf(String erdf) throws TransformerException{
 		String serializedDOM = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
 		"<html xmlns=\"http://www.w3.org/1999/xhtml\" " +

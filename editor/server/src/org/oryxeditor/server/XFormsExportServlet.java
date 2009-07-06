@@ -37,7 +37,7 @@ public class XFormsExportServlet extends HttpServlet {
 		
 		String rdf = req.getParameter("data");
 		String cssUrl = req.getParameter("css");
-		
+		System.out.println(rdf);		
 		if (cssUrl == null) {
 			cssUrl = req.getContextPath() + "/css/xforms_default.css";
 		}

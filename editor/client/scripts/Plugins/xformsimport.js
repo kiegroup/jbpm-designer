@@ -96,67 +96,6 @@ ORYX.Plugins.XFormsImport = Clazz.extend({
 							
 	},
 
-	/**
-	 * This function loads the given ERDF adjusting the shape bounds to stencil's default width and height
-	 * 
-	 * @param {String} erdfString
-	 * @param {function} success
-	 * @param {function} failed
-	 */
-	loadERDF: function( erdfString, success, failed ){
-		
-		var s 	= erdfString;
-		s 		= s.startsWith('<?xml') ? s : '<?xml version="1.0" encoding="utf-8"?>'+s+'';	
-						
-		var parser	= new DOMParser();			
-		var doc 	=  parser.parseFromString( s ,"text/xml");
-		
-		doc.normalize();
-							
-		if( doc.firstChild.tagName == "parsererror" ){
-
-			Ext.MessageBox.show({
-					title: 		ORYX.I18N.ERDFSupport.error,
- 					msg: 		ORYX.I18N.ERDFSupport.impFailed2 + doc.firstChild.textContent.escapeHTML(),
-					buttons: 	Ext.MessageBox.OK,
-					icon: 		Ext.MessageBox.ERROR
-				});
-																
-			if(failed)
-				failed();
-				
-		} else {
-			
-			var serializedJSON = this.parseToSerializeObjects(doc);
-			
-			serializedJSON.each(function(element) {
-				console.log(element);
-				if(element.shape && element.shape instanceof ORYX.Core.Canvas)
-					return;
-	
-				var type = element.serialize.find(function(ser) { return ser.name=="type" });
-				var bounds = element.serialize.find(function(ser) { return ser.name=="bounds" });
-				
-				if(bounds) {
-					// create dummy shape of same stencil (has default width and height)
-					var stencil = ORYX.Core.StencilSet.stencil(type.value);
-					var dummyShape = new ORYX.Core.Node({}, stencil);
-					
-					// adjust values in JSON accordingly
-					boundsArr = bounds.value.split(",");
-					bounds.value = boundsArr[0] + "," + boundsArr[1] + "," + (parseInt(boundsArr[0]) + dummyShape.bounds.width()) + "," + (parseInt(boundsArr[1]) + dummyShape.bounds.height());
-				}
-				
-			}.bind(this));
-			console.log("ok1");
-			console.log(serializedJSON);
-			this.facade.importJSON( serializedJSON );
-			console.log("ok2");
-			if(success)
-				success();
-		
-		}
-	},
 	
 	throwWarning: function( text ){
 		Ext.MessageBox.show({

@@ -274,7 +274,6 @@ public class XFormsERDFExporter {
 		String submissionId = element.getAttributes().get("submission");
 		if(submissionId!=null) {
 			Submission submission = getSubmissionById(submissionId);
-			System.out.println("Submission action: " + submission.getAttributes().get("action"));
 			if(submission!=null) {
 				for(String field : submission.getAttributes().keySet()) {
 					if(!field.equals("id"))

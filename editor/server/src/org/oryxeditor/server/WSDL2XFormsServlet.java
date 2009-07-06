@@ -107,10 +107,11 @@ public class WSDL2XFormsServlet extends HttpServlet {
 			Repository repo = new Repository(baseUrl);
 
 			String modelUrl = baseUrl
-					+ repo.saveNewModel(erdfWriter.toString(), xformsDocName,
+					+ repo.saveNewModelErdf(erdfWriter.toString(), xformsDocName,
 							xformsDocName,
 							"http://b3mn.org/stencilset/xforms#",
-							"/stencilsets/xforms/xforms.json");
+							"/stencilsets/xforms/xforms.json",
+							getServletContext());
 			addResponseParams(xformsDoc.getDocumentElement(), modelUrl
 					.substring(modelUrl.lastIndexOf("http://")));
 		}
