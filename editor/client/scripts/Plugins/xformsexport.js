@@ -25,8 +25,6 @@ if(!ORYX.Plugins)
 	ORYX.Plugins = new Object();
 
 ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
-	
-	CSS_URL: "/oryx/css/xforms_default.css",
 
 	facade: undefined,
 
@@ -35,7 +33,7 @@ ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
 
 		this.facade.offer({
 			'name':ORYX.I18N.XFormsSerialization.exportXForms,
-			'functionality': this.exportIt.bind(this),
+			'functionality': this.exportXForms.bind(this),
 			'group': ORYX.I18N.XFormsSerialization.group,
 			'icon': ORYX.PATH + "images/xforms_export.png",
 			'description': ORYX.I18N.XFormsSerialization.exportXFormsDesc,
@@ -43,8 +41,12 @@ ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
 			'minShape': 0,
 			'maxShape': 0});
 	},
+	
+	exportXForms: function(){
+		this._showCssDialog();
+	},
 
-	exportIt: function(){
+	exportIt: function(cssUrl){
 
 		// raise loading enable event
         this.facade.raiseEvent({
@@ -57,7 +59,7 @@ ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
         window.setTimeout((function(){
 			
 			// ... save synchronously
-            this.exportSynchronously();
+            this.exportSynchronously(cssUrl);
 			
 			// raise loading disable event.
             this.facade.raiseEvent({
@@ -69,7 +71,7 @@ ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
 		return true;
     },
 
-    exportSynchronously: function() {
+    exportSynchronously: function(cssUrl) {
 		 var resource = location.href;
 		try {
 			var serialized_rdf 	= this.getRDFFromDOM();
@@ -82,7 +84,7 @@ ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
 				parameters: {
 					resource: resource,
 					data: serialized_rdf,
-					css: this.CSS_URL
+					css: cssUrl
 				},
 				onSuccess: function(request){
 					
@@ -124,6 +126,74 @@ ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
         	win.show();
 			
 		}
+	},
+	
+	/**
+	 * Opens dialog
+	 * 
+	 */
+	_showCssDialog: function( successCallback ){
+	
+	    var form = new Ext.form.FormPanel({
+			baseCls: 		'x-plain',
+	        labelWidth: 	50,
+	        defaultType: 	'textfield',
+	        items: [{
+	            text : 		ORYX.I18N.XFormsSerialization.selectCss, 
+				style : 	'font-size:12px;margin-bottom:10px;display:block;',
+	            anchor:		'100%',
+				xtype : 	'label' 
+	        },{
+	            xtype: 'textarea',
+	            hideLabel: true,
+	            name: 'msg',
+	            anchor: '100% -30' 
+	        }]
+	    });
+
+
+
+		// Create the panel
+		var dialog = new Ext.Window({ 
+			autoCreate: true, 
+			layout: 	'fit',
+			plain:		true,
+			bodyStyle: 	'padding:5px;',
+			title: 		ORYX.I18N.XFormsSerialization.expTitle, 
+			height: 	150, 
+			width:		500,
+			modal:		true,
+			fixedcenter:true, 
+			shadow:		true, 
+			proxyDrag: 	true,
+			resizable:	true,
+			items: 		[form],
+			buttons:[
+				{
+					text:ORYX.I18N.XFormsSerialization.ok,
+					handler:function(){		
+						this.exportIt(form.items.items[1].getValue());
+						dialog.hide();
+					}.bind(this)
+				},{
+					text:ORYX.I18N.XFormsSerialization.close,
+					handler:function(){
+						dialog.hide();
+					}.bind(this)
+				}
+			]
+		});
+		
+		// Destroy the panel when hiding
+		dialog.on('hide', function(){
+			dialog.destroy(true);
+			delete dialog;
+		});
+
+
+		// Show the panel
+		dialog.show();
+
 	}
 
 });

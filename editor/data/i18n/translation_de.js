@@ -425,9 +425,11 @@ ORYX.I18N.XFormsSerialization.noClientXFormsSupport = "Keine XForms Unterstützu
 ORYX.I18N.XFormsSerialization.noClientXFormsSupportDesc = "<h2>Ihr Browser unterstützt XForms nicht. Bitte installieren Sie das <a href=\"https://addons.mozilla.org/firefox/addon/824\" target=\"_blank\">Mozilla XForms Add-on</a> für Firefox.</h2>";
 ORYX.I18N.XFormsSerialization.ok = "Ok";
 ORYX.I18N.XFormsSerialization.selectFile = "Wählen sie eine XHTML Datei (.xhtml) aus oder geben Sie das XForms+XHTML Markup im Textfeld ein.";
+ORYX.I18N.XFormsSerialization.selectCss = "Optional: Geben sie die URL der gewünschten css Datei an.";
 ORYX.I18N.XFormsSerialization.file = "Datei";
 ORYX.I18N.XFormsSerialization.impFailed = "Anfrage für den Import des Dokuments ist fehlgeschlagen.";
 ORYX.I18N.XFormsSerialization.impTitle = "XForms+XHTML Dokument importieren";
+ORYX.I18N.XFormsSerialization.expTitle = "XForms+XHTML Dokument exportieren";
 ORYX.I18N.XFormsSerialization.impButton = "Importieren";
 ORYX.I18N.XFormsSerialization.impProgress = "Importiere...";
 ORYX.I18N.XFormsSerialization.close = "Schließen";
