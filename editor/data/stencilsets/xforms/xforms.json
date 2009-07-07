@@ -98,7 +98,8 @@
 			"view":"node.input.svg",
 			"icon":"new_input.png",
 			"roles": [
-				"core_form_controls"
+				"core_form_controls",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {
 				var labels = shape.getChildNodes(false).findAll(function(node) {
@@ -335,7 +336,8 @@
 			"view":"node.secret.svg",
 			"icon":"new_secret.png",
 			"roles": [
-				"core_form_controls"
+				"core_form_controls",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
@@ -548,7 +550,8 @@
 			"view":"node.textarea.svg",
 			"icon":"new_textarea.png",
 			"roles": [
-				"core_form_controls"
+				"core_form_controls",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
@@ -773,7 +776,8 @@
 			"view":"node.output.svg",
 			"icon":"new_output.png",
 			"roles": [
-				"core_form_controls"
+				"core_form_controls",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
@@ -950,7 +954,8 @@
 			"view":"node.upload.svg",
 			"icon":"new_upload.png",
 			"roles": [
-				"core_form_controls"
+				"core_form_controls",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
@@ -1163,7 +1168,8 @@
 			"view":"node.range.svg",
 			"icon":"new_range.png",
 			"roles": [
-				"core_form_controls"
+				"core_form_controls",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {	
 				var labels = shape.getChildNodes(false).findAll(function(node) {
@@ -1999,7 +2005,8 @@
 			"icon":"new_select.png",
 			"roles": [
 				"core_form_controls",
-				"list_ui_common_container"
+				"list_ui_common_container",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {	
 		
@@ -2266,7 +2273,8 @@
 			"icon":"new_select1.png",
 			"roles": [
 				"core_form_controls",
-				"list_ui_common_container"
+				"list_ui_common_container",
+				"controls_morph"
 			],
 			/*"layout":function(shape) {	
 		
@@ -3126,7 +3134,8 @@
 			"view":"node.help.svg",
 			"icon":"new_help.png",
 			"roles": [
-				"ui_common"
+				"ui_common",
+				"support_morph"
 			],
 			"properties": [
 				{
@@ -3260,7 +3269,8 @@
 			"view":"node.hint.svg",
 			"icon":"new_hint.png",
 			"roles": [
-				"ui_common"
+				"ui_common",
+				"support_morph"
 			],
 			"properties": [
 				{
@@ -3394,7 +3404,8 @@
 			"view":"node.alert.svg",
 			"icon":"new_alert.png",
 			"roles": [
-				"ui_common"
+				"ui_common",
+				"support_morph"
 			],
 			"properties": [
 				{
@@ -3871,7 +3882,8 @@
 			"icon":"new_action_container.png",
 			"roles": [
 				"actions_container",
-				"action"
+				"action",
+				"actions_morph"
 			],
 			/*"layout":function(shape) {		
 				var actions = shape.getChildNodes(false);
@@ -3960,7 +3972,8 @@
 			"view":"node.setvalue.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4046,7 +4059,8 @@
 			"view":"node.insert.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4181,7 +4195,8 @@
 			"view":"node.delete.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4279,7 +4294,8 @@
 			"view":"node.setindex.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4365,7 +4381,8 @@
 			"view":"node.toggle.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4439,7 +4456,8 @@
 			"view":"node.setfocus.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4513,7 +4531,8 @@
 			"view":"node.dispatch.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4633,7 +4652,8 @@
 			"view":"node.rebuild.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4707,7 +4727,8 @@
 			"view":"node.recalculate.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4781,7 +4802,8 @@
 			"view":"node.revalidate.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4855,7 +4877,8 @@
 			"view":"node.refresh.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -4929,7 +4952,8 @@
 			"view":"node.reset.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -5003,7 +5027,8 @@
 			"view":"node.load.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -5114,7 +5139,8 @@
 			"view":"node.send.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -5188,7 +5214,8 @@
 			"view":"node.message.svg",
 			"icon":"new_action.png",
 			"roles": [
-				"action"
+				"action",
+				"actions_morph"
 			],
 			"properties": [
 				{
@@ -5344,6 +5371,20 @@
 					"case"
 				]
 			}
-		]
+		],
+		"morphingRules": [
+		         			{
+		         				"role":"controls_morph",
+		         				"baseMorphs": ["Input"]
+		         			},
+		         			{
+		         				"role":"actions_morph",
+		         				"baseMorphs": ["Action"]
+		         			},
+		         			{
+		         				"role":"support_morph",
+		         				"baseMorphs": ["Hint"]
+		         			}
+		         		]
 	}
 }
