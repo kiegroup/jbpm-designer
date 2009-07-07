@@ -225,7 +225,7 @@
                 <file name='scripts/Core/uiobject.js'/>
                 <file name='scripts/Core/abstractshape.js'/>
                 <file name='scripts/Core/canvas.js'/>
-                <file name='scripts/Core/apiHandler.js'/>
+                <!--<file name='scripts/Core/apiHandler.js'/>-->
                 <file name='scripts/Core/main.js'/>
                 <file name='scripts/Core/svgDrag.js'/>
                 <file name='scripts/Core/shape.js'/>
@@ -288,9 +288,8 @@
         
         <tempfile property="compress.temp" suffix=".js" prefix="compressed" destDir="${editor-build-root}"/>
         
-        <java dir="${editor-build-root}" jar="${editor-src-root}/lib/custom_rhino.jar" fork="true"
+        <java dir="${editor-build-root}" jar="${editor-src-root}/lib/yuicompressor-2.4.2.jar" fork="true"
          failonerror="true" output='${compress.temp}'>
-            <arg value="-c"/>
             <arg file='${editor-build-root}/oryx.debug.js'/>
         </java>
         <echo>
