@@ -32,7 +32,7 @@ public class TaskTemplate extends NonConnectorTemplate {
 		}
 		appendOryxField(s,"startquantity","1");
 		appendOryxField(s,"looptype",t.getLoopType().toString());
-		
+		appendOryxField(s,"script", t.getForm());
 		appendResourceEndPattern(s, diagramObject, context);
 		return s;
 	}

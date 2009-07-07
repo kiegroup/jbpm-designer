@@ -530,7 +530,11 @@ public class BPMN11RDFImporter {
 				/* Set namespace attribute */
 				else if (attribute.equals("namespace")) {
 					task.setNamespace(getContent(n));
-
+				} 
+				
+				/* Set form attribute */
+				else if (attribute.equals("script")) {
+					task.setForm(getContent(n));
 				} 
 
 				/* Set servicename attribute */
