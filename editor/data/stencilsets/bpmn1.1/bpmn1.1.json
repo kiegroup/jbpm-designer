@@ -1635,6 +1635,7 @@
 				"canContainArtifacts",
 				"ActivitiesMorph"
 			],
+ 			"layout" : [{"type" : "layout.bpmn11.subprocess"}],
 			"properties": [
 				{
 					"id":"id",
