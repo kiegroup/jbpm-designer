@@ -334,7 +334,7 @@ Explicitly supported cases are:
                     <!-- TODO shadow processing if a service has been defined -->
                     <xhtml:p>No user interface has been specified for this activity.</xhtml:p>
                     <xsl:call-template name="trigger">
-                        <xsl:with-param name="nextNodes" select="$nextNodes"/>
+                        <xsl:with-param name="nextNodes" select="$nextNodes/rdf:Description"/>
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
