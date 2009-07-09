@@ -173,7 +173,7 @@ public class WSDL2XFormsServlet extends HttpServlet {
 		String representation = req.getParameter("representation");
 		try {
 			Writer resWriter = res.getWriter();
-			if (representation.equals("xhtml")) {
+			if (representation != null && representation.equals("xhtml")) {
 				// TODO: examination of the HTTP Accept header (see
 				// http://www.w3.org/TR/xhtml-media-types/#media-types)
 				res.setContentType("application/xhtml+xml");
@@ -231,7 +231,7 @@ public class WSDL2XFormsServlet extends HttpServlet {
 					}
 				}
 				resWriter.write("</body></html>");
-			} else if (representation.equals("json")) {
+			} else if (representation != null && representation.equals("json")) {
 				res.setContentType("application/json");
 				JSONObject response = new JSONObject();
 				try {
