@@ -1544,7 +1544,7 @@
 				},				
 				{
 					"id":"entry",
-					"type":"Url",
+					"type":"DiagramLink",
 					"title":"SubProcessRef",
 					"title_de":"SubprozessRef",
 					"value":"",
@@ -2261,7 +2261,7 @@
 				},				
 				{
 					"id":"entry",
-					"type":"Url",
+					"type":"DiagramLink",
 					"title":"SubProcessRef",
 					"title_de":"SubprozessRef",
 					"value":"",
