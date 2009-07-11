@@ -1,9 +1,7 @@
 package de.hpi.petrinet;
 
-import de.hpi.petrinet.verification.PetriNetInterpreter;
-
 /**
- * Copyright (c) 2008 Gero Decker
+ * Copyright (c) 2009 Matthias Weidlich
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +21,10 @@ import de.hpi.petrinet.verification.PetriNetInterpreter;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PetriNetFactory {
+public interface LabeledPlace extends Place {
 
-	public static PetriNetFactory eINSTANCE = new PetriNetFactory();
-
-	public FlowRelationship createFlowRelationship() {
-		return new FlowRelationship();
-	}
-
-	public Place createPlace() {
-		return new PlaceImpl();
-	}
-
-	public LabeledPlace createLabeledPlace() {
-		return new LabeledPlaceImpl();
-	}
+	public String getLabel();
 	
-	public LabeledTransition createLabeledTransition() {
-		return new LabeledTransitionImpl();
-	}
-
-	public SilentTransition createSilentTransition() {
-		return new SilentTransitionImpl();
-	}
-
-	public PetriNetInterpreter createInterpreter() {
-		return null;
-	}
-
-	public Marking createMarking(PetriNet net) {
-		return null;
-	}
-
-	public PetriNet createPetriNet() {
-		return new PetriNet();
-	}
+	public void setLabel(String label);
 
 }

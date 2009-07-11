@@ -1,9 +1,5 @@
-package de.hpi.petrinet;
-
-import de.hpi.petrinet.verification.PetriNetInterpreter;
-
 /**
- * Copyright (c) 2008 Gero Decker
+ * Copyright (c) 2009 Matthias Weidlich
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +19,35 @@ import de.hpi.petrinet.verification.PetriNetInterpreter;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class PetriNetFactory {
+package de.hpi.petrinet;
 
-	public static PetriNetFactory eINSTANCE = new PetriNetFactory();
+public class LabeledPlaceImpl extends PlaceImpl implements LabeledPlace {
 
-	public FlowRelationship createFlowRelationship() {
-		return new FlowRelationship();
+	protected String label;
+
+	public String getLabel() {
+		return label;
 	}
 
-	public Place createPlace() {
-		return new PlaceImpl();
-	}
-
-	public LabeledPlace createLabeledPlace() {
-		return new LabeledPlaceImpl();
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
-	public LabeledTransition createLabeledTransition() {
-		return new LabeledTransitionImpl();
+	public String toString() {
+		return getId()+"("+getLabel()+")";
+	}
+	
+	/**
+	 * Returns a copy of the place
+	 * @throws CloneNotSupportedException 
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		LabeledPlace clone = (LabeledPlaceImpl) super.clone();
+		if (this.getLabel() != null)
+			clone.setLabel(new String(this.getLabel()));
+		return clone;
 	}
 
-	public SilentTransition createSilentTransition() {
-		return new SilentTransitionImpl();
-	}
-
-	public PetriNetInterpreter createInterpreter() {
-		return null;
-	}
-
-	public Marking createMarking(PetriNet net) {
-		return null;
-	}
-
-	public PetriNet createPetriNet() {
-		return new PetriNet();
-	}
 
 }
