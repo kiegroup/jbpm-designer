@@ -38,6 +38,14 @@ public class BehaviouralProfile {
 	
 	protected CharacteristicRelationType[][] matrix;
 
+	public CharacteristicRelationType[][] getMatrix() {
+		return matrix;
+	}
+
+	public void setMatrix(CharacteristicRelationType[][] matrix) {
+		this.matrix = matrix;
+	}
+
 	protected TrueConcurrencyRelation trueConcurrency;
 	
 	public BehaviouralProfile(PTNet pn) {
