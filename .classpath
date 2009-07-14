@@ -105,7 +105,6 @@
 	<classpathentry kind="lib" path="editor/lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="editor/lib/commons-lang-2.3.jar"/>
 	<classpathentry kind="lib" path="editor/lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="editor/lib/custom_rhino.jar"/>
 	<classpathentry kind="lib" path="editor/lib/dom3-xml-apis.jar"/>
 	<classpathentry kind="lib" path="editor/lib/fop.jar"/>
 	<classpathentry kind="lib" path="editor/lib/jbpt.jar"/>
