@@ -640,3 +640,7 @@ ORYX.I18N.Validator.errorDesc = 'Es tut uns leid, aber die Valdierung konnte nic
 
 ORYX.I18N.Validator.epcIsSound = "<p><b>The EPC is sound, no problems found!</b></p>";
 ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";
+
+/** New Language Properties: 15.07.2009*/
+if(!ORYX.I18N.Layouting) ORYX.I18N.Layouting ={};
+ORYX.I18N.Layouting.doing = "Layouten...";

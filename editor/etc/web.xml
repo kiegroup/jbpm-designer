@@ -331,6 +331,14 @@
     </servlet>
 
 
+	<servlet>
+		<display-name>BPMN Layouter</display-name>
+		<servlet-name>BPMNLayouterServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.BPMNLayouterServlet
+		</servlet-class>
+	</servlet>
+	
 
     <!-- Servlet Mappings -->
 <!--	
@@ -533,8 +541,13 @@
 		<servlet-name>DirectoryListingServlet</servlet-name>
 		<url-pattern>/generated-uis/</url-pattern>
 	</servlet-mapping>
-
-
+	
+	<servlet-mapping>
+		<servlet-name>BPMNLayouterServlet</servlet-name>
+		<url-pattern>/bpmnlayouter</url-pattern>
+	</servlet-mapping>
+	
+	
 	<jsp-config>
 		<taglib>
 			<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>

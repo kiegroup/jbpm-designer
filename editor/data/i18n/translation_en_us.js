@@ -671,3 +671,7 @@ ORYX.I18N.RESIZE.N = "Top";
 ORYX.I18N.RESIZE.W = "Left";
 ORYX.I18N.RESIZE.S ="Down";
 ORYX.I18N.RESIZE.E ="Right";
+
+/** New Language Properties: 15.07.2009*/
+if(!ORYX.I18N.Layouting) ORYX.I18N.Layouting ={};
+ORYX.I18N.Layouting.doing = "Layouting...";
