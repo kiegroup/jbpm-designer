@@ -69,8 +69,7 @@
      pointer-events="fill"
      id="g6">
     <g
-       id="g2380"
-       transform="translate(2,2)">
+       id="g2380">
       <circle
          style="fill:#9b9b9b;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
          r="14"

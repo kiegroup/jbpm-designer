@@ -753,8 +753,8 @@
 			"title":"Start event",
 			"groups":["Startevents"],
 			"description":"An event without incoming edges.",
-			"view":"../../extensions/ibpmn-FH/view/startevent/node.event.start.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_startevent.png",		
+			"view":"startevent/node.event.start.svg",
+			"icon":"new_startevent.png",		
 			"roles": [
 				"sequence_start",
 				"to_task_event",
@@ -861,8 +861,8 @@
 			"title":"Start interaction",
 			"groups":["Startevents"],
 			"description":"An interaction that starts a conversation.",
-			"view":"../../extensions/ibpmn-FH/view/startevent/node.event.interaction.start.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_messageevent.png",
+			"view":"startevent/node.event.interaction.start.svg",
+			"icon":"new_messageevent.png",
 			"roles": [
 				"sequence_start",
 				"interaction",
@@ -957,7 +957,7 @@
 			"groups":["Startevents"],
 			"description":"A non-interrupting interaction that starts a conversation.",
 			"view":"../../extensions/ibpmn-FH/view/extension/startevent/node.event.ni.interaction.start.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_messageevent.png",
+			"icon":"new_messageevent.png",
 			"roles":[
 				"NIStartevent",
 				"interaction",
@@ -1052,8 +1052,8 @@
 			"title":"Start timer event",
 			"groups":["Startevents"],
 			"description":"A timer event without incoming edges.",
-			"view":"../../extensions/ibpmn-FH/view/startevent/node.event.timer.start.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_timerevent.png",
+			"view":"startevent/node.event.timer.start.svg",
+			"icon":"new_timerevent.png",
 			"roles": [
 				"sequence_start",
 				"to_task_event",
@@ -1138,7 +1138,7 @@
 			"groups":["Startevents"],
 			"description":"A non-interrupting start timer event without incoming edges.",
 			"view":"../../extensions/ibpmn-FH/view/extension/startevent/node.event.ni.timer.start.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_timerevent.png",
+			"icon":"new_timerevent.png",
 			"roles":[
 				"NIStartevent",
 				"to_task_event",
@@ -1653,8 +1653,8 @@
 			"title":"Intermediate interaction",
 			"groups":["Intermediateevents"],
 			"description":"An intermediate interaction with incoming and outgoing edges.",
-			"view":"../../extensions/ibpmn-FH/view/intermediateevent/node.event.interaction.intermediate.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_messageevent.png",
+			"view":"intermediateevent/node.event.interaction.intermediate.svg",
+			"icon":"new_messageevent.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -1750,7 +1750,7 @@
 			"groups":["Intermediateevents"],
 			"description":"A non-interrupting intermediate interaction with incoming and outgoing edges.",
 			"view":"../../extensions/ibpmn-FH/view/extension/intermediateevent/node.event.ni.interaction.intermediate.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_messageevent.png",
+			"icon":"new_messageevent.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -1846,8 +1846,8 @@
 			"title":"Intermediate timer event",
 			"groups":["Intermediateevents"],
 			"description":"An intermediate timer event with incoming and outgoing edges.",
-			"view":"../../extensions/ibpmn-FH/view/intermediateevent/node.event.timer.intermediate.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_timerevent.png",
+			"view":"intermediateevent/node.event.timer.intermediate.svg",
+			"icon":"new_timerevent.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -1933,7 +1933,7 @@
 			"groups":["Intermediateevents"],
 			"description":"A non-interrupting intermediate timer event with outgoing edges.",
 			"view":"../../extensions/ibpmn-FH/view/extension/intermediateevent/node.event.ni.timer.intermediate.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_timerevent.png",
+			"icon":"new_timerevent.png",
 			"roles":[
 				"sequence_start",
 				"sequence_end",
@@ -2842,8 +2842,8 @@
 			"title":"End event",
 			"groups":["Endevents"],
 			"description":"An event without outgoing edges.",
-			"view":"../../extensions/ibpmn-FH/view/endevent/node.event.end.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_event_end.png",
+			"view":"endevent/node.event.end.svg",
+			"icon":"new_event_end.png",
 			"roles":[
 				"sequence_end",
 				"to_task_event",
@@ -2974,7 +2974,7 @@
 			"groups":["Endevents"],
 			"description":"An end interaction without outgoing edges.",
 			"view":"../../extensions/ibpmn-FH/view/extension/endevent/node.event.interaction.end.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_messageevent.png",
+			"icon":"new_messageevent.png",
 			"roles":[
 				"sequence_end",
 				"interaction",
@@ -3070,7 +3070,7 @@
 			"groups":["Endevents"],
 			"description":"A non-interrupting end interaction without outgoing edges.",
 			"view":"../../extensions/ibpmn-FH/view/extension/endevent/node.event.ni.interaction.end.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_messageevent.png",
+			"icon":"new_messageevent.png",
 			"roles":[
 				"sequence_end",
 				"interaction",
@@ -3166,7 +3166,7 @@
 			"groups":["Endevents"],
 			"description":"An end timer event without outgoing edges.",
 			"view":"../../extensions/ibpmn-FH/view/extension/endevent/node.event.timer.end.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_timerevent.png",
+			"icon":"new_timerevent.png",
 			"roles":[
 				"sequence_end",
 				"interaction",
@@ -3253,7 +3253,7 @@
 			"groups":["Endevents"],
 			"description":"A non-interrupting end timer event without outgoing edges.",
 			"view":"../../extensions/ibpmn-FH/view/extension/endevent/node.event.ni.timer.end.svg",
-			"icon":"../../extensions/ibpmn-FH/icon/new_timerevent.png",
+			"icon":"new_timerevent.png",
 			"roles":[
 				"sequence_end",
 				"interaction",
