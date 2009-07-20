@@ -409,6 +409,17 @@
 					"refToView":"",
 					"length":"128",
 					"wrapLines":true
+				},			
+				{
+					"id":"entry",
+					"type":"Url",
+					"title":"Process Reference",
+					"title_de":"Prozessreferenz",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"u"
 				},
 				{
 					"id":"description",

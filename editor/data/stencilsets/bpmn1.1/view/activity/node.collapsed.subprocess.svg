@@ -32,8 +32,8 @@
 	 	<g id="b" 
 			oryx:anchors="bottom">
 			
-		 	<rect oryx:anchors="bottom" x="46" y="65" width="10" height="10" fill="none" stroke="black" stroke-width="1" />
-			<path oryx:anchors="bottom" fill="none" stroke="black" d="M51 65 v10 M 46 70 h10" stroke-width="1"/>
+		 	<rect oryx:anchors="bottom" x="46" y="68" width="10" height="10" fill="none" stroke="black" stroke-width="1" />
+			<path oryx:anchors="bottom" fill="none" stroke="black" d="M51 68 v10 M 46 73 h10" stroke-width="1"/>
 		
 		</g>
 	</a>
