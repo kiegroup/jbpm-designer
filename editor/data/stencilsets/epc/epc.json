@@ -412,7 +412,7 @@
 				},			
 				{
 					"id":"entry",
-					"type":"Url",
+					"type":"DiagramLink",
 					"title":"Process Reference",
 					"title_de":"Prozessreferenz",
 					"value":"",
