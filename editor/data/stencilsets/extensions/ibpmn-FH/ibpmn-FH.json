@@ -85,7 +85,7 @@
 				{
 					"id":"role",
 					"type":"String",
-					"title":"Role",
+					"title":"Controlling Role",
 					"value":"",
 					"description":"Owning Role",
 					"readonly":false,
@@ -525,6 +525,18 @@
 					"refToView":""
 				},
 				{
+					"id":"role",
+					"type":"String",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
 					"id":"properties",
 					"type":"Complex",
 					"title":"Properties",
@@ -787,6 +799,18 @@
 					"length":"30"
 				},
 				{
+					"id":"role",
+					"type":"String",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
 					"id":"bgColor",
 					"type":"Color",
 					"title":"BackgroundColor",
@@ -839,6 +863,18 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"role",
+					"type":"String",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"bgColor",
@@ -1085,15 +1121,16 @@
 					"length":"30"
 				},
 				{
-					"id":"owningRoles",
+					"id":"role",
 					"type":"String",
-					"title":"OwningRoles",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"timeDate",
@@ -1171,15 +1208,16 @@
 					"length":"30"
 				},
 				{
-					"id":"owningRoles",
+					"id":"role",
 					"type":"String",
-					"title":"OwningRoles",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"refToView":"text",
-					"length":"30"
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"timeDate",
@@ -1271,14 +1309,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -1438,14 +1478,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -1569,14 +1611,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -1880,15 +1924,16 @@
 					"length":"30"
 				},
 				{
-					"id":"owningRoles",
+					"id":"role",
 					"type":"String",
-					"title":"OwningRoles",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"timeDate",
@@ -1967,15 +2012,16 @@
 					"length":"30"
 				},
 				{
-					"id":"owningRoles",
+					"id":"role",
 					"type":"String",
-					"title":"OwningRoles",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"refToView":"text",
-					"length":"30"
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"timeDate",
@@ -2067,14 +2113,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -2234,14 +2282,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -2365,14 +2415,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -2496,14 +2548,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -2627,14 +2681,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -2758,14 +2814,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -2876,6 +2934,18 @@
 					"length":"30"
 				},
 				{
+					"id":"role",
+					"type":"String",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
 					"id":"result",
 					"type":"String",
 					"title":"Result",
@@ -2940,6 +3010,18 @@
 					"optional":true,
 					"refToView":"",
 					"length":"30"
+				},
+				{
+					"id":"role",
+					"type":"String",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"result",
@@ -3018,6 +3100,7 @@
 					"refToView":"text_name",
 					"length":""
 				},
+				
 				{
 					"id":"implementation",
 					"type":"Choice",
@@ -3200,15 +3283,16 @@
 					"length":"30"
 				},
 				{
-					"id":"owningRoles",
+					"id":"role",
 					"type":"String",
-					"title":"OwningRoles",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"timeDate",
@@ -3287,15 +3371,16 @@
 					"length":"30"
 				},
 				{
-					"id":"owningRoles",
+					"id":"role",
 					"type":"String",
-					"title":"OwningRoles",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"refToView":"text",
-					"length":"30"
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"timeDate",
@@ -3386,14 +3471,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -3516,14 +3603,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",
@@ -3646,14 +3735,16 @@
 					"length":"30"
 				},
 				{
-					"id":"pool",
+					"id":"role",
 					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"title":"Controlling Role",
+					"value":"test",
+					"description":"Owning Role",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":true,
+					"refToView":"text_roles",
+					"length":"50",
+					"wrapLines":true
 				},
 				{
 					"id":"lanes",

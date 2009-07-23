@@ -11,5 +11,19 @@
   </oryx:magnets>
   <g pointer-events="fill">
     <circle id="frame" cx="16" cy="16" r="14" stroke="black" fill="white" stroke-width="3"/>
+<text
+       font-size="11"
+       id="text_name"
+       x="16"
+       y="33"
+       oryx:align="top left"
+       stroke="black" />
+    <text
+       font-size="11"
+       id="text_roles"
+       x="8"
+       y="33"
+       oryx:align="top right"
+       stroke="black" />
   </g>
 </svg>

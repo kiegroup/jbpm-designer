@@ -44,7 +44,7 @@
      inkscape:cx="-4.2238267"
      inkscape:cy="20"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="26"
      inkscape:current-layer="g6" />
   <defs
      id="defs4">
@@ -69,7 +69,8 @@
      pointer-events="fill"
      id="g6">
     <g
-       id="g2389">
+       id="g2389"
+       transform="translate(2,2)">
       <g
          id="g2383">
         <circle
@@ -106,6 +107,20 @@
            d="M 16,6 L 16,9 M 21,7 L 19.5,10 M 25,11 L 22,12.5 M 26,16 L 23,16 M 25,21 L 22,19.5 M 21,25 L 19.5,22 M 16,26 L 16,23 M 11,25 L 12.5,22 M 7,21 L 10,19.5 M 6,16 L 9,16 M 7,11 L 10,12.5 M 11,7 L 12.5,10 M 18,9 L 16,16 L 20,16"
            id="path13"
            style="fill:none;stroke:#000000" />
+      <text
+       font-size="11"
+       id="text_name"
+       x="16"
+       y="33"
+       oryx:align="top left"
+       stroke="black" />
+    <text
+       font-size="11"
+       id="text_roles"
+       x="8"
+       y="33"
+       oryx:align="top right"
+       stroke="black" />
       </g>
     </g>
   </g>

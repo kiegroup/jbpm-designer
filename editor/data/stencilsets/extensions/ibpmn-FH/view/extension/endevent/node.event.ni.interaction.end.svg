@@ -42,7 +42,7 @@
      showgrid="false"
      inkscape:zoom="13.85"
      inkscape:cx="12.497253"
-     inkscape:cy="21.516245"
+     inkscape:cy="20"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:current-layer="g6" />
@@ -67,7 +67,7 @@
      id="g6">
     <g
        id="g2385"
-       transform="translate(0.7942238,0.866426)">
+       transform="translate(2,2)">
       <circle
          style="fill:#9b9b9b;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
          r="15"

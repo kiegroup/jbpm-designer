@@ -26,5 +26,19 @@
     		M 7 11 L 10 12.5
     		M 11 7 L 12.5 10
     		M 18 9 L 16 16 L 20 16" fill="none" stroke="black" />
+<text
+       font-size="11"
+       id="text_name"
+       x="16"
+       y="33"
+       oryx:align="top left"
+       stroke="black" />
+    <text
+       font-size="11"
+       id="text_roles"
+       x="8"
+       y="33"
+       oryx:align="top right"
+       stroke="black" />
   </g>
 </svg>

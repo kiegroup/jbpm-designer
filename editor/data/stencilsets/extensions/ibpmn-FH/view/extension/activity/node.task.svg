@@ -29,7 +29,7 @@
   </metadata>
   <sodipodi:namedview
      inkscape:window-height="773"
-     inkscape:window-width="640"
+     inkscape:window-width="1014"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      guidetolerance="10.0"
@@ -45,7 +45,7 @@
      inkscape:cy="41"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:current-layer="g6" />
+     inkscape:current-layer="svg2" />
   <defs
      id="defs4">
     <inkscape:perspective
@@ -105,5 +105,13 @@
        stroke="black" />
     <g
        id="none" />
+    <text
+       id="text_roles"
+       font-size="11"
+       style="font-size:11px;stroke:#000000"
+       oryx:align="top left"
+       oryx:fittoelem="taskrect"
+       x="100"
+       y="80" />
   </g>
 </svg>
