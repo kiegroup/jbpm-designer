@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="editor/server/src"/>
-	<classpathentry kind="src" path="poem-jvm/test/selenium"/>
 	<classpathentry kind="src" path="editor/test/server"/>
-	<classpathentry kind="src" path="poem-jvm/test/java"/>
 	<classpathentry kind="src" path="poem-jvm/src/java"/>
+	<classpathentry kind="src" path="poem-jvm/test/selenium"/>
+	<classpathentry kind="src" path="poem-jvm/test/java"/>
 	<classpathentry kind="src" path="buildApps/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
@@ -164,5 +164,6 @@
 	<classpathentry kind="lib" path="editor/lib/activation.jar"/>
 	<classpathentry kind="lib" path="editor/lib/mail.jar"/>
 	<classpathentry kind="lib" path="editor/lib/SuperCSV-1.52.jar"/>
+	<classpathentry kind="lib" path="editor/lib/bpmnq-1.0.3-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
