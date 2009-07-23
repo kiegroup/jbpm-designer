@@ -467,6 +467,8 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 					var p2 = edge.dockers.last().bounds.center();
 					// Find all horizontal/vertical edges
 					if (Math.abs(p1.x - p2.x) < 2 || Math.abs(p1.y - p2.y) < 2){
+						edge.dockers.first().update();
+						edge.dockers.last().update();
 						this.doLayout(edge);
 					}
 				}
