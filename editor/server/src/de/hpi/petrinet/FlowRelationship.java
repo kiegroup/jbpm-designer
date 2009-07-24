@@ -93,6 +93,9 @@ public class FlowRelationship implements Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		FlowRelationship clone = (FlowRelationship) super.clone();
 		
+		clone.setSource(null);
+		clone.setTarget(null);
+		
 		if (this.getId() != null)
 			clone.setId(new String(this.getId()));
 		if (this.getResourceId() != null)

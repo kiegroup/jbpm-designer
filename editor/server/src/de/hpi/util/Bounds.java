@@ -61,10 +61,10 @@ public class Bounds implements Cloneable {
 	
 	public Object clone() throws CloneNotSupportedException {
 		Bounds b = (Bounds) super.clone();
-		b.setX1(this.getX1());
-		b.setY1(this.getY1());
-		b.setX2(this.getX2());
-		b.setY2(this.getY2());
+		b.setX1(new Integer(this.getX1()));
+		b.setY1(new Integer(this.getY1()));
+		b.setX2(new Integer(this.getX2()));
+		b.setY2(new Integer(this.getY2()));
 		return b;
 	}
 

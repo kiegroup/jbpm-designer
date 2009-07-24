@@ -2,10 +2,13 @@ package de.hpi.PTnet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hpi.PTnet.verification.BoundednessChecker;
 import de.hpi.PTnet.verification.PTNetInterpreter;
+import de.hpi.petrinet.Node;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.Place;
 
@@ -68,7 +71,15 @@ public class PTNet extends PetriNet {
 	public Object clone() throws CloneNotSupportedException {
 		PTNet clone = (PTNet) super.clone();
 		Marking cloneMarking = new Marking(clone);
+
+		// copy places once again, in order to introduce a MyPlaceList
+		MyPlaceList myPlaceList = new MyPlaceList(clone);
+		for(Place p : clone.getPlaces()) {
+			myPlaceList.add(p);
+		}
+		clone.setPlaces(myPlaceList);		
 		
+		// set the marking for the clone
 		for (Place p : clone.getPlaces()) {
 			for (Place p2 : this.getPlaces()) {
 				if (p.getId().equals(p2.getId())) 

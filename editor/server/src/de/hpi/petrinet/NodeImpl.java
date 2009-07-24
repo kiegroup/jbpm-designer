@@ -29,8 +29,8 @@ import de.hpi.util.Bounds;
 public class NodeImpl implements Node {
 
 	protected String id;
-	private List<FlowRelationship> incomingFlowRelationships;
-	private List<FlowRelationship> outgoingFlowRelationships;
+	private List<? extends FlowRelationship> incomingFlowRelationships;
+	private List<? extends FlowRelationship> outgoingFlowRelationships;
 	private Bounds bounds;
 	protected String resourceId;
 
@@ -53,13 +53,13 @@ public class NodeImpl implements Node {
 
 	public List<? extends FlowRelationship> getIncomingFlowRelationships() {
 		if (incomingFlowRelationships == null)
-			incomingFlowRelationships = new ArrayList();
+			incomingFlowRelationships = new ArrayList<FlowRelationship>();
 		return incomingFlowRelationships;
 	}
 
 	public List<? extends FlowRelationship> getOutgoingFlowRelationships() {
 		if (outgoingFlowRelationships == null)
-			outgoingFlowRelationships = new ArrayList();
+			outgoingFlowRelationships = new ArrayList<FlowRelationship>();
 		return outgoingFlowRelationships;
 	}
 
@@ -87,11 +87,14 @@ public class NodeImpl implements Node {
 	public Object clone() throws CloneNotSupportedException {
 		Node n = (Node) super.clone();
 		
+		n.setIncomingFlowRelationships(new ArrayList<FlowRelationship>());
+		n.setOutgoingFlowRelationships(new ArrayList<FlowRelationship>());
+		
 		if (this.getId() != null)
-			n.setId(this.id);
+			n.setId(new String(this.id));
 		
 		if (this.getResourceId() != null)
-			n.setResourceId(this.resourceId);
+			n.setResourceId(new String(this.resourceId));
 		
 		if (this.getBounds() != null)
 			n.setBounds((Bounds) this.getBounds().clone());
@@ -112,6 +115,16 @@ public class NodeImpl implements Node {
 			nodes.add(f.getTarget());
 		}
 		return nodes;
+	}
+
+	public void setIncomingFlowRelationships(
+			List<? extends FlowRelationship> incomingFlowRelationships) {
+		this.incomingFlowRelationships = incomingFlowRelationships;
+	}
+
+	public void setOutgoingFlowRelationships(
+			List<? extends FlowRelationship> outgoingFlowRelationships) {
+		this.outgoingFlowRelationships = outgoingFlowRelationships;
 	}
 
 

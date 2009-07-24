@@ -39,6 +39,10 @@ public interface Node extends Cloneable {
 
 	public List<? extends FlowRelationship> getOutgoingFlowRelationships();
 
+	public void setIncomingFlowRelationships(List<? extends FlowRelationship> incomingFlowRelationships);
+
+	public void setOutgoingFlowRelationships(List<? extends FlowRelationship> flowRelationships);
+	
 	public String toString();
 	
 	public Bounds getBounds();

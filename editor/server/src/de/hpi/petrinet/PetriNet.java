@@ -107,7 +107,7 @@ public class PetriNet implements Cloneable {
 			nodeCopies.put(t, t2);
 		}
 
-		clone.setFlowRelationships(new ArrayList<FlowRelationship>());
+		clone.setFlowRelationships(new MyFlowRelationshipList());
 		for(FlowRelationship f : this.getFlowRelationships()) {
 			FlowRelationship newF = (FlowRelationship) f.clone();
 			newF.setSource(nodeCopies.get(f.getSource()));
