@@ -34,10 +34,6 @@ public class PetriNetFactory {
 	public Place createPlace() {
 		return new PlaceImpl();
 	}
-
-	public LabeledPlace createLabeledPlace() {
-		return new LabeledPlaceImpl();
-	}
 	
 	public LabeledTransition createLabeledTransition() {
 		return new LabeledTransitionImpl();

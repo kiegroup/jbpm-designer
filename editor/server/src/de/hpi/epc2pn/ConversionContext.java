@@ -73,7 +73,15 @@ public class ConversionContext {
 	}
 	
 	public void setAllConversionMaps(IFlowObject object, Node node) {
+		this.addToConversionMapIn(object, node);
+		this.addToConversionMapOut(object, node);
+	}
+	
+	public void addToConversionMapIn(IFlowObject object, Node node) {
 		this.conversionMapIn.put(object, node);
+	}
+
+	public void addToConversionMapOut(IFlowObject object, Node node) {
 		this.conversionMapOut.put(object, node);
 	}
 	
