@@ -99,7 +99,9 @@ public class BPELParser {
 	
 		
 	public Document parseBPELFile(InputStream bpelStream) {
-		
+	
+       // System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
+
        // Get Document Builder Factory
        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
               
@@ -118,7 +120,10 @@ public class BPELParser {
             doc = builder.parse(bpelStream);
             
             if (doc != null) {
-	            // Validate
+            	
+            	//System.setProperty("javax.xml.validation.SchemaFactory:http://www.w3.org/2001/XMLSchema","org.apache.xerces.jaxp.validation.XMLSchemaFactory");
+	            
+            	// Validate
 	            SchemaFactory constraintFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
                 DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
                 DOMImplementationLS domImplementationLS = (DOMImplementationLS)registry.getDOMImplementation("LS");
