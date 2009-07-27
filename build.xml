@@ -10,7 +10,7 @@
     <!--<import file="editor/test.xml"/>-->
     <import file="poem-jvm/build.xml"/>
     <import file="stick/build.xml"/>
-	<import file="MashUp/build.xml"/>
+	<import file="mashup/build.xml"/>
     
     
     <!-- (RE)BUILD EDITOR AND BACKEND -->
