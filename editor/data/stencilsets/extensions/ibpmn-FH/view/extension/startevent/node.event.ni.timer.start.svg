@@ -41,7 +41,7 @@
      id="base"
      showgrid="false"
      inkscape:zoom="13.85"
-     inkscape:cx="-5.4873646"
+     inkscape:cx="8.0424973"
      inkscape:cy="20"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -70,12 +70,11 @@
        cx="16"
        cy="16"
        r="15"
-       style="fill:#9b9b9b;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       style="fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:8, 4;stroke-dashoffset:0"
        sodipodi:cx="16"
        sodipodi:cy="16"
        sodipodi:rx="15"
-       sodipodi:ry="15"
-       transform="translate(2,2)" />
+       sodipodi:ry="15" />
     <circle
        cx="16"
        cy="16"
@@ -85,25 +84,24 @@
        sodipodi:cy="16"
        sodipodi:rx="10"
        sodipodi:ry="10"
-       transform="translate(2,2)"
        style="fill:none;stroke:#000000;stroke-width:1" />
     <path
-       d="M 18,8 L 18,11 M 23,9 L 21.5,12 M 27,13 L 24,14.5 M 28,18 L 25,18 M 27,23 L 24,21.5 M 23,27 L 21.5,24 M 18,28 L 18,25 M 13,27 L 14.5,24 M 9,23 L 12,21.5 M 8,18 L 11,18 M 9,13 L 12,14.5 M 13,9 L 14.5,12 M 20,11 L 18,18 L 22,18"
+       d="M 16,6 L 16,9 M 21,7 L 19.5,10 M 25,11 L 22,12.5 M 26,16 L 23,16 M 25,21 L 22,19.5 M 21,25 L 19.5,22 M 16,26 L 16,23 M 11,25 L 12.5,22 M 7,21 L 10,19.5 M 6,16 L 9,16 M 7,11 L 10,12.5 M 11,7 L 12.5,10 M 18,9 L 16,16 L 20,16"
        id="path11"
        style="fill:none;stroke:#000000" />
-<text
+    <text
        font-size="11"
        id="text_name"
-       x="16"
-       y="33"
+       x="14"
+       y="31"
        oryx:align="top left"
-       stroke="black" />
+       style="font-size:11px;stroke:#000000" />
     <text
        font-size="11"
        id="text_roles"
-       x="8"
-       y="33"
+       x="6"
+       y="31"
        oryx:align="top right"
-       stroke="black" />
+       style="font-size:11px;stroke:#000000" />
   </g>
 </svg>
