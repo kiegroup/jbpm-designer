@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="MashUp" default="war" basedir="..">
+	
+	<property name="oryx.project" value="oryx"/>
+	<property name="deployment.dir" value="C:\Programme\Apache Software Foundation\Tomcat 6.0\webapps"/>
+	<property name="build.dir" value="MashUp\build"/>
+	<property name="conf.dir" value="MashUp\etc"/>
+	<property name="web.content" value="MashUp\web"/>
+	<property name="dist.dir" value="MashUp\dist"/>
+    
+	<!-- empties "build" and "dist" directory -->
+	<target name="clean">
+		<echo>Cleaning directory build</echo>
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+	
+	<!-- creates directories -->
+	<target name="init" depends="clean">
+		<echo>Creating required directories</echo>
+		<mkdir dir="${build.dir}\WEB-INF" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<!-- copying from folders "web" and "etc" to "build" -->
+	<target name="copy" depends="init">
+		<copy todir="${build.dir}\WEB-INF">
+			<fileset dir="${conf.dir}"/>			
+		</copy>		
+		<copy todir="${build.dir}">
+			<fileset dir="${web.content}"/>
+		</copy>
+
+	</target>		
+
+	<!-- creates war-file -->
+	<target name="war" depends="copy">
+		<echo>Building the war file</echo>
+		<war destfile="${dist.dir}\ROOT.war" webxml="${build.dir}\WEB-INF\web.xml">
+			<fileset dir="${build.dir}"/>
+		</war>
+	</target>
+	
+	<!-- copies war-file to tomcat webapplication folder -->
+    <target name="move" depends="war">
+    	<echo> Moving to Tomcat </echo>
+        <copy todir="${deployment.dir}" overwrite="true">
+            <fileset dir="${dist.dir}">
+                <include name="*.war"/>
+            </fileset>
+        </copy>
+    </target>
+    
+</project>

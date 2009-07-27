@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="Test Tool">
+        <Require feature="opensocial-0.8"></Require>
+        <Require feature="dynamic-height"></Require>
+		<Require feature="settitle"></Require>
+        <Require feature="rpc"></Require>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+		
+		<script type="text/javascript">
+	        var externs = ['http://www.prototypejs.org/assets/2009/6/16/prototype.js',
+						'http://localhost:8080/gadgets/files/gadgets/tools/toolRpc.js',
+						'http://localhost:8080/gadgets/files/gadgets/tools/tool.js'];
+	
+	        for (var i = 0; i < externs.length; i++)
+	                document.write(unescape("%3Cscript src='" + externs[i] + "'type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		
+		<br>
+		<input type="text" id="msg" value="http://oryx-editor.org/backend/poem/model/" size="45"></input><br>
+		<a href="#" onclick= "mark(document.getElementById('msg').value, {} ); return false;"> mark </a><br>
+		<a href="#" onclick="undoMark();">undo mark</a><br>
+		<a href="#" onclick="centerShape();">center</a><br>
+		<a href="#" onclick="unregisterSelection();">unregister</a><br>
+		<a href="#" onclick="loadViewer(document.getElementById('msg').value);">load</a>
+		<div id="console"></div>
+		
+  ]]>
+    </Content>
+</Module>

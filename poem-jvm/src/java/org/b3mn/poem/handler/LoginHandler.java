@@ -115,7 +115,8 @@ public class LoginHandler extends HandlerBase {
     			User publicUser = new User(getPublicUser());
     			publicUser.login(req, res);
     		}
-    		res.sendRedirect(REPOSITORY_REDIRECT);
+    		String rPage = req.getParameter("redirect");
+    		res.sendRedirect( rPage != null ? rPage : REPOSITORY_REDIRECT);
     		return;
     	}
     	if ("true".equals(req.getParameter("is_return"))) {

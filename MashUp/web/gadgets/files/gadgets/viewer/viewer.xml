@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="Viewer">
+        <Require feature="opensocial-0.8"></Require>
+		<Require feature="dynamic-height"></Require>
+		<Require feature="settitle"></Require>
+		<Require feature="rpc"></Require>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+		
+	<style type="text/css">
+			.viewer {
+				height: 95%;
+				width: 100%;
+			}
+			
+			.navigator {
+				position: relative;
+				width: 150px;
+			}
+			
+			.zoomslider{
+				position: relative;
+			}
+	</style>
+
+	<script type="text/javascript">		
+		var externs = ['http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader.js', 
+					'http://www.prototypejs.org/assets/2009/6/16/prototype.js',
+					'http://oryx-editor.googlecode.com/svn/trunk/poem-jvm/src/javascript/movi/src/movi.js',
+					'http://localhost:8080/gadgets/files/gadgets/viewer/ViewerRpc.js',
+					'http://localhost:8080/gadgets/files/gadgets/viewer/viewer.js'];
+	
+        for (var i = 0; i < externs.length; i++)
+			document.write(unescape("%3Cscript src='" + externs[i] + "'type='text/javascript'%3E%3C/script%3E"));
+		
+	</script>
+	<body class=" yui-skin-sam">
+	
+	<div id= "center">	
+		<div id= "rpc"></div>
+		<div id= "viewer"></div>
+	</div>
+	
+	<div id= "bottom">
+		<div id= "start"> </div>
+		<table width="400px" border="0">
+			<tr>
+				<td> <div id= "navigator"></div> </td>
+				<td> <div id= "zoomslider"></div> </td>
+				<td> <div id= "toolbar"></div> </td>
+			</tr>
+		</table>
+
+	</div>
+	
+	</body>
+  ]]>
+    </Content>
+</Module>
