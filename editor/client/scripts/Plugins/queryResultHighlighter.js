@@ -53,10 +53,51 @@ ORYX.Plugins.QueryResultHighlighter = ORYX.Plugins.AbstractPlugin.extend({
 	
 	highlightMatches : function() {
 		var elements = this.deserializeMatches();
+		
 		if (!elements) {
 			return;
 		}
+		var maaatch=null;
+		var diagnosis=null;
+		var description = this.deserializeDescription();
 		
+		
+		if (description)
+		{
+			description.each(function (item) {
+				if (item.match)
+				{
+					maaatch = item.match;
+				}
+				if (item.diagnosis)
+				{
+					diagnosis = item.diagnosis;
+				}
+			})
+			
+			
+		}
+		else
+		{
+			maaatch = "pattern";
+			diagnosis = "";
+		}
+		var color = "orange";
+		var colorHex = "#FFFF00";
+        if (diagnosis === "complies"){
+        	color = "green";
+        	colorHex = "#00FF00";
+        }
+        else if (diagnosis === "violation scenario")
+        {
+        	color = "red";
+        	colorHex = "#FF0000";
+        }
+        else // either this is a does not comply or an ordinary query
+        {
+        	color = "orange";
+        	colorHex = "#FF6600";
+        }
 		try {
 			elements.each(function (item) {
 				if (item.nodeType != null && item.nodeId != null) {
@@ -68,27 +109,40 @@ ORYX.Plugins.QueryResultHighlighter = ORYX.Plugins.AbstractPlugin.extend({
 				if (!shape) return;
 				
 				//this.highlightSelectedTask(shape);
-				this.raiseOverlay(shape, "Moeep! Error when raising an overlay.");
+				// Commented by Ahmed Awad 30.07.09
+				//this.raiseOverlay(shape,color,colorHex, "Moeep! Error when raising an overlay.");
+				// Added by Ahmed Awad
+				if (shape instanceof ORYX.Core.Node)
+                {
+        	       shape.setProperty("oryx-bgcolor",colorHex);
+        	       shape.refresh();
+                }
 			}.bind(this));
 		} catch (e) {
 			Ext.MessageBox.alert(ORYX.I18N.Oryx.title, "Something went wrong while applying highlighting to shapes: " + e);
 		}
 		
 		this.isHighlighted = true;
-		Ext.MessageBox.alert(ORYX.I18N.Oryx.title, "Finished highlighting!");
+		//Ext.MessageBox.alert(ORYX.I18N.Oryx.title, "Finished highlighting!");
 	},
 
-	raiseOverlay: function(shape, errorMsg){
+	raiseOverlay: function(shape,color,colorHex, errorMsg){
         var id = "queryhighlighter." + this.raisedEventIds.length;
+        // Added by Ahmed Awad to change the color of the matched node
+        if (shape instanceof ORYX.Core.Node)
+        {
+        	shape.setProperty("oryx-bgcolor",colorHex);
+        	shape.refresh();
+        }
         
+//     
         var cross = ORYX.Editor.graft("http://www.w3.org/2000/svg", null, ['path', {
-            "title": errorMsg,
-            "stroke-width": 5.0,
-            "stroke": "red",
-            "d": "M20,-5 L5,-20 M5,-5 L20,-20",
-            "line-captions": "round"
-        }]);
-        
+            	"title": errorMsg,
+            	"stroke-width": 5.0,
+            	"stroke": color,
+            	"d": "M20,-5 L5,-20 M5,-5 L20,-20",
+            	"line-captions": "round"
+        	}]);
         this.facade.raiseEvent({
             type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
             id: id,
@@ -179,7 +233,30 @@ ORYX.Plugins.QueryResultHighlighter = ORYX.Plugins.AbstractPlugin.extend({
 		
 		return matchedElements;
 	},
-
+	// Added by Ahmed Awad
+	deserializeDescription : function() {
+		var parameters = window.location.search;
+		var PARAMKEY = "description=";
+		
+		var paramStart = parameters.indexOf(PARAMKEY) + PARAMKEY.length;
+		if (paramStart < PARAMKEY.length) {
+			return null; // no highlighting info found
+		}
+		var paramEnd = parameters.indexOf("&", paramStart); // delimiter from potential other parameters
+		
+		var paramComponents = parameters.substring(paramStart, 
+			(paramEnd > paramStart ? paramEnd : parameters.length ));
+		
+		try {
+			var descriptionJson = decodeURIComponent(paramComponents);
+			var description = Ext.decode(descriptionJson);
+		} catch (e) {
+			Ext.MessageBox.alert(ORYX.I18N.Oryx.title, "I found description information from BPMN-Q, but they could not be understood: " + e);
+			return null;
+		}
+		
+		return description;
+	},
 	getShapeById: function(resourceId) {
 		var shapes = this.facade.getCanvas().getChildShapeByResourceId(resourceId);
 /*		var task;

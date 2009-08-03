@@ -156,13 +156,14 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 						inputValue	: 'processQuery', 
 						checked: true},
 					{
-						boxLabel	: 'Test whether query matches specific model', 
+					// this is edited by Ahmed Awad on 28.07.09 to reflect compliance checking in the Oryx editor
+						boxLabel	: 'Process Compliance Query', 
 						labelSeparator: '', 
 						name		: 'command', 
-						inputValue	: 'testQueryAgainstModel', 
-						listeners	: {
-							'check': checkListener.bind(this)
-						} 
+						inputValue	: 'processComplianceQuery', 
+						//listeners	: {
+						//	'check': checkListener.bind(this)
+						//} 
 					},
                     {
 						boxLabel	: 'Run query against specific model', 
@@ -173,11 +174,20 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 							'check': checkListener.bind(this)
 						}
 					},
-                    {
-						boxLabel	: 'Process MultiQuery', 
-						labelSeparator: '', 
-						name		: 'command', 
-						inputValue	: 'processMultiQuery'},
+					{
+						boxLabel	: 'Run compliance query against specific model', 
+						labelSeparator: '',
+						name		: 'command',
+						inputValue	: 'runComplianceQueryAgainstModel',
+						listeners	: {
+							'check': checkListener.bind(this)
+						}
+					},
+ //                   {
+//						boxLabel	: 'Process MultiQuery', 
+//						labelSeparator: '', 
+//						name		: 'command', 
+//						inputValue	: 'processMultiQuery'},
 					{
 						xtype		: 'checkbox',
 						fieldLabel	: 'Stop after first match in a model was found',
@@ -232,10 +242,12 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 					for (nodecnt = 0; nodecnt < pchildren.length; nodecnt++) {
                         graph = pchildren.item(nodecnt);
                         var graphID = graph.getAttributeNode("modelID").nodeValue;
+                        
                         processList.push({
 							id 			: graphID,
 							elements 	: this.processResultGraph(graph),
-							metadata	: ''
+							metadata    : '',
+							description	: this.processMatchDescription(graph) //Ahmed Awad on 28.07.09
 						});
                         
                     }
@@ -286,7 +298,27 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
         }
 		return graphElements;
     },
-	
+	// Added by Ahmed Awad on 28.07.09 to extract the diagnosis and the match meta data
+	processMatchDescription: function(xmlNode){
+        var metadata = new Array();
+		
+		for (var k = 0; k < xmlNode.childNodes.length; k++) {
+            var node = xmlNode.childNodes.item(k);
+            if ((node.nodeName === "diagnosis")) {
+                
+					metadata.push({
+						diagnosis : node.textContent
+					});
+					
+				} else if ((node.nodeName === "match")) { // it is an edge
+					metadata.push({
+						match : node.textContent
+					});
+				}
+            
+        }
+		return metadata;
+    },
 	/**
 	 * 
 	 * @param {Array} processList; 
@@ -316,7 +348,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 				}
 			}.bind(this));
 */			
-			data.push( [ pair.id, pair.metadata.thumbnailUri + "?" + Math.random(), unescape(pair.metadata.title), pair.metadata.type, pair.metadata.author, pair.elements ] )
+			data.push( [ pair.id, pair.metadata.thumbnailUri + "?" + Math.random(), unescape(pair.metadata.title), pair.metadata.type, pair.metadata.author, pair.elements, pair.description ] )  // Modified by Ahmed
 		}.bind(this));
 
 		
@@ -328,6 +360,8 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
             closable	: true,
             plain       : true,
 			modal		: true,
+			autoScroll  : true, // Added by Ahmed Awad on 30.07.2009
+			title       : 'Query Result',
 			id			: 'procResPopup',
 			
 			buttons: [{
@@ -347,12 +381,14 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 				{name: 'type'}, //, mapping: 'metadata.type'},
 				{name: 'author'}, //, mapping: 'metadata.author'},
 				{name: 'elements'}, //, type: 'array', mapping: 'elements'},
+				{name: 'description'}, // Added by Ahmed Awad
 			],
 			data : data
 		});
 		
 		var iconPanel = new Ext.Panel({
 			border	: false,
+			autoScroll : true, // Added by Ahmed Awad
 	        items	: new this.dataGridPanel({
 				store       : tableModel, 
 				listeners   :{
@@ -393,16 +429,18 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 		// Get uri and matched element data from the clicked model
 		var modelId 	= dataGrid.getRecord( node ).data.id;
 		var matchedElements = dataGrid.getRecord( node ).data.elements;
-		
+		var description = dataGrid.getRecord( node ).data.description; // Added by Ahmed Awad on 30.07.09
 		// convert object to JSOn representation
 		var elementsAsJson = Ext.encode(matchedElements);
+		var descriptionAsJson = Ext.encode(description); // Added by Ahmed Awad on 30.07.09
 		// escape JSON string to become URI-compliant
 		var encodedJson = encodeURIComponent(elementsAsJson);
+		var encodedDescription = encodeURIComponent(descriptionAsJson);
 		
 		// remove the last URI segment, append editor's 'self' and json of model elements
 		var slashPos = modelId.lastIndexOf("/");
-		var uri	= modelId.substr(0, slashPos) + "/self" + "?matches=" + encodedJson;
-
+		//var uri	= modelId.substr(0, slashPos) + "/self" + "?matches=" + encodedJson;
+ 	    var uri	= modelId.substr(0, slashPos) + "/self" + "?matches=" + encodedJson+"&description="+encodedDescription;
 		// Open the model in Editor
 		var editor = window.open( uri );
 		window.setTimeout(

@@ -45,7 +45,10 @@ import com.bpmnq.ProcessGraph;
 import com.bpmnq.QueryGraph;
 import com.bpmnq.QueryGraphBuilderRDF;
 import com.bpmnq.Utilities;
+import com.bpmnq.AbstractQueryProcessor.ProcessorCommand;
 import com.bpmnq.QueryGraphBuilderRDF.RdfSyntax;
+import com.bpmnq.compliancechecker.ModelChecker;
+import com.bpmnq.compliancechecker.TemporalQueryGraph;
 
 public class QueryEvalServlet extends HttpServlet {
     private static final long serialVersionUID = -7946509291423453168L;
@@ -81,7 +84,12 @@ public class QueryEvalServlet extends HttpServlet {
         try {
             query = gBuilder.buildGraph();
             // Added for Debugging
+            System.out.print("####### Servlet path");
+            System.out.println((String) this.getServletContext().getRealPath("."));
+            
             System.out.println("########################################## QUERY #################################");
+            log.info("########################################## QUERY #################################");
+            log.info(query.toString());
             query.print(System.out);
             System.out.println("########################################## QUERY #################################");
         } catch (FileFormatException e) {
@@ -94,12 +102,12 @@ public class QueryEvalServlet extends HttpServlet {
         PrintWriter respWriter = resp.getWriter();
         
         AbstractQueryProcessor qProcessor;
-        if (useDataBaseConnection) {
-            qProcessor = new MemoryQueryProcessor(respWriter);
-        } else {
+//        if (useDataBaseConnection) {
+//            qProcessor = new MemoryQueryProcessor(respWriter);
+//        } else {
             qProcessor = new OryxMemoryQueryProcessor(respWriter);  
                     //"http://localhost:8080/backend/poem");
-        }
+//        }
         
         String stopOption = req.getParameter("stopAtFirstMatch");
         if (stopOption != null && stopOption.toLowerCase().matches("on|true")) {
@@ -110,11 +118,129 @@ public class QueryEvalServlet extends HttpServlet {
         String command = req.getParameter("command");
         String modelID = req.getParameter("modelID");
         try {
-            if ("testQueryAgainstModel".equalsIgnoreCase(command)) {
-                ProcessGraph match = null;
-                boolean doesMatch = qProcessor.testQueryAgainstModel(query, modelID, match);
+        	if ("processComplianceQuery".equalsIgnoreCase(command))
+        	{
+//        		respWriter.println("<ServletPath>"+(String) this.getServletContext().getRealPath(".")+"</ServletPath>");
+//        		respWriter.println("<UserDirectory>"+System.getProperty("user.dir")+"</UserDirectory>");
+        		System.out.println("########################################## PROCESS COMPLIANCE QUERY #################################");
+        		TemporalQueryGraph tqry = query.getTemporalQueryGraph();
+        		ModelChecker mc = new ModelChecker(tqry,respWriter);
+        		mc.queryProc = new OryxMemoryQueryProcessor(respWriter);
+        		List<String> mdls =null;
+        		try{
+        		   mdls = qProcessor.findRelevantProcessModels(query);
+        		}
+        		catch(IOException sle)
+        		{
+        		    log.error("Could not determine process models relevant to this query.", sle);
+        		}
+        		mc.queryProc.procCmd = ProcessorCommand.ComplianceQuery;
+        		respWriter.println("<query-result>");
+//        		System.out.println("<query-result>");
+        		
+        		for (int i = 0; i < mdls.size();i++)
+        		{
+        			boolean generateAntiPattern = false;
+        			try
+        			{
+        				System.out.println("############# Checking model "+mdls.get(i));
+        				int result = mc.checkModelWithoutReduction(mdls.get(i));
+        				System.out.println("############# Model Checker Result is "+result );
+        				if (result == ModelChecker.RET_NO_NET_MATCHES)
+        				{
+        					generateAntiPattern = true;
+        					System.out.println("Query didnt find a match -> Does not comply :( ...");
+
+        				}
+        				else if (result == ModelChecker.RET_NET_DOESNT_COMPLY)
+        				{
+        					generateAntiPattern = true;
+        					System.out.println("Does not Comply :( ...");
+
+        				}
+        				if (generateAntiPattern)
+        				{
+        					List<QueryGraph> antiPatterns = tqry.generateAntiPatternQueries();
+        					ProcessGraph matchAntiPattern=null;
+        					for (QueryGraph q : antiPatterns)
+        					{
+        						System.out.println("########################################## ANTI PATTERN QUERY #################################");
+        						q.print(System.out);
+        						System.out.println("########################################## ANTI PATTERN QUERY #################################");
+
+        						matchAntiPattern = qProcessor.runQueryAgainstModel(q, mdls.get(i));
+        						if(matchAntiPattern.nodes.size() > 0)
+        						{
+
+        							matchAntiPattern.modelURI = mdls.get(i);
+        							matchAntiPattern.exportXML(respWriter,"<match>antipattern</match>\n<diagnosis>violation scenario</diagnosis>");
+        							matchAntiPattern.print(System.out);
+        							System.out.println("<match>antipattern</match>\n<diagnosis>violation scenario</diagnosis>");
+        						}
+        						else
+        						{
+        							System.out.println("Anti Pattern Query didnt find a match");
+        						}
+        					}
+
+        				}
+        			}
+        			catch(Exception e)
+        			{
+        				respWriter.println("<Exception>"+e.getMessage()+"</Exception>");
+        			}
+
+        		}
+        		
+        		respWriter.println("</query-result>");
+        		System.out.println("########################################## PROCESS COMPLIANCE QUERY #################################");
+        	}
+        	else if ("runComplianceQueryAgainstModel".equalsIgnoreCase(command)) {
+//                ProcessGraph match = null;
+//                boolean doesMatch = qProcessor.testQueryAgainstModel(query, modelID, match);
+                
+                
+                TemporalQueryGraph tqry = query.getTemporalQueryGraph();
+            	ModelChecker mc = new ModelChecker(tqry,respWriter);
+            	mc.queryProc = new OryxMemoryQueryProcessor(respWriter);
+            	
+            	mc.queryProc.procCmd = ProcessorCommand.ComplianceCheckWithViolationExplanation;
+            	respWriter.println("<query-result>");
+            	boolean generateAntiPattern = false;
+            	int result = mc.checkModelWithoutReduction(modelID);
+            	if (result == ModelChecker.RET_NO_NET_MATCHES)
+            	{
+            	    generateAntiPattern = true;
+            	    System.out.println("Query didnt find a match -> Does not comply :( ...");
+//            	    this.qProcessor.printMessage("Model " + modelId +" is not compliant");
+            	}
+            	else if (result == ModelChecker.RET_NET_DOESNT_COMPLY)
+            	{
+            	    generateAntiPattern = true;
+            	    
+//            	    this.qProcessor.printMessage("Model " + modelId +" is not compliant");
+            	}
+            	if (generateAntiPattern)
+            	{
+            		List<QueryGraph> antiPatterns = tqry.generateAntiPatternQueries();
+            		ProcessGraph matchAntiPattern=null;
+            		for (QueryGraph q : antiPatterns)
+            		{
+            			matchAntiPattern = qProcessor.runQueryAgainstModel(q, modelID);
+            			if(matchAntiPattern.nodes.size() > 0)
+            			{
+            				System.out.println("############ Anti Pattern Query found a match");
+            				matchAntiPattern.modelURI = modelID;
+            				matchAntiPattern.exportXML(respWriter,"<match>antipattern</match>\n<diagnosis>violation scenario</diagnosis>");
+            			}
+            		}
+
+            	}
+            	respWriter.println("</query-result>");
+
             } else if ("runQueryAgainstModel".equalsIgnoreCase(command)) {
-                ProcessGraph match = qProcessor.runQueryAgainstModel(query, modelID);
+                ProcessGraph match=null;
+                qProcessor.testQueryAgainstModel(query, modelID,match);
             } else if ("processMultiQuery".equalsIgnoreCase(command)) {
                 List<Match> matches = qProcessor.processMultiQuery(query);
             } else { // default case, if no (or unknown) command was specified
