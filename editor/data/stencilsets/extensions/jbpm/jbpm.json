@@ -12,7 +12,7 @@
 		"groups_de":["Aktivitäten"],
 		"description":"A process execution will execute the method of the class that is configured in this activity.",
 		"description_de":"Die Ausführungsengine führt die Methode der Klasse aus, die in dieser Aktivität definiert wird.",
-		"view":"../../extensions/jbpm/view/node.java.svg",
+		"view":"../../extensions/jbpm/view/node.empty.svg",
 		"icon":"../../extensions/jbpm/icon/java.png",
 		"roles": [
 			"sequence_start",
@@ -388,7 +388,7 @@
 		"groups_de":["Aktivitäten"],
 		"description":"With the hql activity, a HQL query can be performed on the database and the result is stored in a process variable",
 		"description_de":"Über eine HQL-Aktivität kann eine HQL-Anfrage an die Datenbank durchgeführt und das Ergebnis in einer Prozessvariablen gespeichert werden",
-		"view":"../../extensions/jbpm/view/node.hql.svg",
+		"view":"../../extensions/jbpm/view/node.empty.svg",
 		"icon":"../../extensions/jbpm/icon/hql.png",
 		"roles": [
 			"sequence_start",
@@ -505,7 +505,7 @@
 		"groups_de":["Aktivitäten"],
 		"description":"With the sql activity, a SQL query can be performed on the database and the result is stored in a process variable",
 		"description_de":"Über eine SQL-Aktivität kann eine SQL-Anfrage an die Datenbank durchgeführt und das Ergebnis in einer Prozessvariablen gespeichert werden",
-		"view":"../../extensions/jbpm/view/node.sql.svg",
+		"view":"../../extensions/jbpm/view/node.empty.svg",
 		"icon":"../../extensions/jbpm/icon/sql.png",
 		"roles": [
 			"sequence_start",
@@ -622,7 +622,7 @@
 		"groups_de":["Aktivitäten"],
 		"description":"Process execution will wait until an external trigger is provided through the API.",
 		"description_de":"Die Prozessausführung wird angehalten, bis eine Vortsetzung über die API getriggert wird.",
-		"view":"../../extensions/jbpm/view/node.wait.svg",
+		"view":"../../extensions/jbpm/view/node.empty.svg",
 		"icon":"../../extensions/jbpm/icon/wait.png",
 		"roles": [
 			"sequence_start",
