@@ -23,7 +23,8 @@
 			"from_task_event",
 			"tc",
 			"fromtoall",
-			"FromEventbasedGateway"
+			"FromEventbasedGateway",
+			"ActivitiesMorph"
 		],
 		"properties": [
 			{
@@ -183,7 +184,8 @@
 			"from_task_event",
 			"tc",
 			"fromtoall",
-			"FromEventbasedGateway"
+			"FromEventbasedGateway",
+			"ActivitiesMorph"
 		],
 		"properties": [
 			{
@@ -277,7 +279,8 @@
 			"from_task_event",
 			"tc",
 			"fromtoall",
-			"FromEventbasedGateway"
+			"FromEventbasedGateway",
+			"ActivitiesMorph"
 		],
 		"properties": [
 			{
@@ -399,7 +402,8 @@
 			"from_task_event",
 			"tc",
 			"fromtoall",
-			"FromEventbasedGateway"
+			"FromEventbasedGateway",
+			"ActivitiesMorph"
 		],
 		"properties": [
 			{
@@ -516,7 +520,8 @@
 			"from_task_event",
 			"tc",
 			"fromtoall",
-			"FromEventbasedGateway"
+			"FromEventbasedGateway",
+			"ActivitiesMorph"
 		],
 		"properties": [
 			{
@@ -633,7 +638,8 @@
 			"from_task_event",
 			"tc",
 			"fromtoall",
-			"FromEventbasedGateway"
+			"FromEventbasedGateway",
+			"ActivitiesMorph"
 		],
 		"properties": [
 			{
@@ -787,6 +793,7 @@
 		"connectionRules": [],
         "cardinalityRules": [],
 		"containmentRules": [],
+		"morphingRules": []
 	},
 	"removestencils": [
 		"CollapsedSubprocess",
