@@ -407,19 +407,20 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         // init and check consistency.
         this.__handleStencilset(response);
 		
-		//var pps = new Hash();
+		var pps = new Hash();
 		
 		// init property packages
-		/*$A(this._jsonObject.propertyPackages).each((function(pp) {
-			pps[pp.id] = pp.properties;
-		}).bind(this));*/
-        
+		if(this._jsonObject.propertyPackages) {
+			$A(this._jsonObject.propertyPackages).each((function(pp) {
+				pps[pp.name] = pp.properties;
+			}).bind(this));
+		}
+		
         // init each stencil
         $A(this._jsonObject.stencils).each((function(stencil){
         
             // instantiate normally.
-            //var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, pps);
-            var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this);            
+            var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, pps);      
 			this._stencils[oStencil.id()] = oStencil;
 			this._availableStencils[oStencil.id()] = oStencil;
             

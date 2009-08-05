@@ -54,7 +54,7 @@ ORYX.Core.StencilSet.Stencil = {
 		this._jsonStencil = jsonStencil;
 		this._stencilSet = stencilSet;
 		this._namespace = namespace;
-		//this._propertyPackages = propertyPackages;
+		this._propertyPackages = propertyPackages;
 		
 		this._view;
 		this._properties = new Hash();
@@ -181,6 +181,20 @@ ORYX.Core.StencilSet.Stencil = {
 		} else {
 			this._jsonStencil.icon = "";
 		}
+	
+		// init property packages
+		if(this._jsonStencil.propertyPackages && this._jsonStencil.propertyPackages instanceof Array) {
+			this._jsonStencil.propertyPackages.each((function(ppId) {
+				var pp = this._propertyPackages[ppId];
+				
+				if(pp) {
+					pp.each((function(prop){
+						var oProp = new ORYX.Core.StencilSet.Property(prop, this._namespace, this);
+						this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
+					}).bind(this));
+				}
+			}).bind(this));
+		}
 		
 		// init properties
 		if(this._jsonStencil.properties && this._jsonStencil.properties instanceof Array) {
@@ -190,17 +204,7 @@ ORYX.Core.StencilSet.Stencil = {
 			}).bind(this));
 		}
 		
-		// init property packages
-		/*if(this._jsonStencil.propertyPackages && this._jsonStencil.propertyPackages instanceof Array) {
-			this._jsonStencil.propertyPackages.each((function(ppId) {
-				var pp = this._propertyPackages[ppId];
-				
-				pp.each((function(prop){
-					var oProp = new ORYX.Core.StencilSet.Property(prop, this._namespace, this);
-					this._properties[oProp.prefix() + "-" + oProp.id()] = oProp;
-				}).bind(this));
-			}).bind(this));
-		}*/
+
 	},
 
 	/**
