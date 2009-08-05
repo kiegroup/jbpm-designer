@@ -45,11 +45,21 @@ MOVI.namespace("stencilset");
 			MOVI.log("Stencilset contains no stencil definitions", "warning", "stencilset.js" );
 		}
 		
+		var pps = {};
+		
+		// init property packages
+		if(jsonObj.propertyPackages) {
+			for(var i = 0; i < jsonObj.propertyPackages.length; i++) {
+				var pp = jsonObj.propertyPackages[i];
+				pps[pp.name] = pp.properties;
+			}
+		}
+		
 		for(key in jsonObj.stencils) {
 			if(!YAHOO.lang.hasOwnProperty(jsonObj.stencils, key)) continue;
 			
 			var stencil = jsonObj.stencils[key];
-			this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil);
+			this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil, pps);
 		}
 
 	};

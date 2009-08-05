@@ -34,10 +34,38 @@ MOVI.namespace("stencilset");
      * @param {Object} jsonObj The JSON object from which the new stencil
      * is created.
      */
-	MOVI.stencilset.Stencil = function(jsonObject) {
+	MOVI.stencilset.Stencil = function(jsonObject, propertyPackages) {
 		
 		// TODO: Doc for stencil attributes from JSON
 		YAHOO.lang.augmentObject(this, jsonObject, true);
+		
+		if(this.propertyPackages) {
+			var props = {};
+			for(propIndex in this.properties) {
+				var prop = this.properties[propIndex];
+				props[prop.id] = prop;
+			}
+			
+			for(var i = 0; i < this.propertyPackages.length; i++) {
+				var propPackName = this.propertyPackages[i];
+				var propPack = propertyPackages[propPackName];
+				if(propPack) {
+					for(var j = 0; j < propPack.length; j++) {
+						var prop = propPack[j];
+						props[prop.id] = prop;
+					}
+				}
+			}
+			
+			this.properties = [];
+			
+			for(propKey in props) {
+				if(!(props[propKey] instanceof Function)) {
+					this.properties.push(props[propKey]);
+				}
+			}
+		}
+		
 	}
 	
 	// TODO: Add convenience methods
