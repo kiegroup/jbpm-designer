@@ -37,7 +37,8 @@ public class Test {
 //		File file = new File(path + "bpel_calculator_test.xml");
 //		File file = new File(path + "bpel_calculator2_test.xml");
 //		File file = new File(path + "bpel_calculator_with_dataobject_test.xml");
-		File file = new File(path + "bpel_uplink_signal_test.xml");
+//		File file = new File(path + "bpel_uplink_signal_test.xml");
+		File file = new File(path + "odeTestBPEL.xml");
 		
 		
 		try {
@@ -65,6 +66,9 @@ public class Test {
 				}
 				if(result.getType().equals(TransformationResult.Type.DEPLOYMENT_DESCRIPTOR)) {
 					appendResult("deploy", result.getDocument());
+				}
+				if(result.getType().equals(TransformationResult.Type.PROCESS_WSDL)) {
+					appendResult("process_wsdl", result.getDocument());
 				}
 			}
 			

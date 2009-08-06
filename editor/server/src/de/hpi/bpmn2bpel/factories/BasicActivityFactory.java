@@ -860,9 +860,9 @@ public class BasicActivityFactory {
 		}
 		
 		/* Copy token and reporting service url */
-		for (Copy metaCopy : createCopyForMetaParameters(task.getId())) {
-			assign.appendChild(createCopyElement(metaCopy));
-		}
+//		for (Copy metaCopy : createCopyForMetaParameters(task.getId())) {
+//			assign.appendChild(createCopyElement(metaCopy));
+//		}
 		
 		/* Set header information for proxy usage */
 		copy = createCopyObjectForHeader(task.getId(), task.getColor(), 

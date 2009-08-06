@@ -27,7 +27,6 @@
 		"containmentRules": []
 	},
 	"removestencils": [
-		"Task",
 		"CollapsedSubprocess",
 		"Subprocess",
 		"Exclusive_Eventbased_Gateway",

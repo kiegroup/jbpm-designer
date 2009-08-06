@@ -31,6 +31,8 @@ public class Task extends Activity {
 	private String operation;
 	/* The related port type */
 	private String portType;
+	/* The WSDL-URL of the related web service */
+	private String wsdlUrl;
 	
 	
 	/**
@@ -161,6 +163,14 @@ public class Task extends Activity {
 
 	public void setForm(String form) {
 		this.form = form;
+	}
+
+	public void setWsdlUrl(String wsdlUrl) {
+		this.wsdlUrl = wsdlUrl;
+	}
+
+	public String getWsdlUrl() {
+		return wsdlUrl;
 	}
 
 	@Override

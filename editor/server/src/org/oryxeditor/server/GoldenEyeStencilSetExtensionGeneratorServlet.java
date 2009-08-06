@@ -353,6 +353,7 @@ public class GoldenEyeStencilSetExtensionGeneratorServlet extends ServiceCompose
 				"\"from_task_event\"," +
 				"\"tc\"," +
 				"\"fromtoall\"," +
+				"\"ActivitiesMorph\"," +
 				"\"FromEventbasedGateway\"]\""));
 		
 		/* Set stencil's properties */
@@ -365,7 +366,17 @@ public class GoldenEyeStencilSetExtensionGeneratorServlet extends ServiceCompose
 		name.put("type", "String");
 		name.put("value", operation.name + " Task");
 		name.put("refToView","acttext");
+		name.put("readonly", true);
 		jsonProperties.put(name);
+		
+		/* Create wsdl-url property */
+		JSONObject wsdlUrl = new JSONObject();
+		wsdlUrl.put("id", "wsdlurl");
+		wsdlUrl.put("title", "wsdlUrl");
+		wsdlUrl.put("type", "String");
+		wsdlUrl.put("value", service.wsdlUrl);
+		wsdlUrl.put("readonly", true);
+		jsonProperties.put(wsdlUrl);
 		
 		/* Create namespace property */
 		JSONObject serviceNamespace = new JSONObject();

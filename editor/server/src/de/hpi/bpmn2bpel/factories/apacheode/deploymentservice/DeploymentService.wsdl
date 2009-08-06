@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://www.apache.org/ode/deployapi" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:axis2wrapped="http://www.apache.org/ode/pmapi" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.apache.org/ode/deployapi">
+   <wsdl:types>
+      <xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.apache.org/ode/deployapi">
+         <xsd:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="DeploymentService_xmlmime.xsd"/>
+         <xsd:complexType name="package">
+            <xsd:all>
+               <xsd:element name="zip" type="xmime:base64Binary" xmime:expectedContentType="application/zip"/>
+            </xsd:all>
+         </xsd:complexType>
+         <xsd:complexType name="packageNames">
+            <xsd:sequence>
+               <xsd:element maxOccurs="unbounded" minOccurs="0" name="name" type="xsd:string"/>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="processIds">
+            <xsd:sequence>
+               <xsd:element maxOccurs="unbounded" minOccurs="0" name="id" type="xsd:QName"/>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="deployUnit">
+            <xsd:sequence>
+               <xsd:element name="name" type="xsd:string"/>
+               <xsd:element maxOccurs="unbounded" name="id" type="xsd:QName"/>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:schema>
+      <xsd:schema xmlns:ns29="http://www.apache.org/ode/deployapi" xmlns:ns27="http://www.apache.org/ode/deployapi" xmlns:ns28="http://www.apache.org/ode/deployapi" xmlns:ns30="http://www.apache.org/ode/deployapi" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.apache.org/ode/pmapi">
+         <xsd:import namespace="http://www.apache.org/ode/deployapi"/>
+         <xsd:import namespace="http://www.apache.org/ode/deployapi"/>
+         <xsd:import namespace="http://www.apache.org/ode/deployapi"/>
+         <xsd:import namespace="http://www.apache.org/ode/deployapi"/>
+         <xsd:element name="undeploy">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="packageName" type="xsd:QName"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="getProcessPackage">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="processName" type="xsd:QName"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="deploy">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="name" type="xsd:string"/>
+                  <xsd:element form="unqualified" name="package" type="ns30:package"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="listProcesses">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="packageName" type="xsd:string"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="listDeployedPackages">
+            <xsd:complexType>
+               <xsd:sequence/>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="undeployResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="response" type="xsd:boolean"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="getProcessPackageResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="packageName" type="xsd:string"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="deployResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="response" type="ns30:deployUnit"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="listProcessesResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="processIds" type="ns30:processIds"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="listDeployedPackagesResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element form="unqualified" name="deployedPackages" type="ns30:packageNames"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="listProcessesInput">
+      <wsdl:part name="parameters" element="axis2wrapped:listProcesses"/>
+   </wsdl:message>
+   <wsdl:message name="listProcessesOutput">
+      <wsdl:part name="parameters" element="axis2wrapped:listProcessesResponse"/>
+   </wsdl:message>
+   <wsdl:message name="deployInput">
+      <wsdl:part name="parameters" element="axis2wrapped:deploy"/>
+   </wsdl:message>
+   <wsdl:message name="deployOutput">
+      <wsdl:part name="parameters" element="axis2wrapped:deployResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getProcessPackageInput">
+      <wsdl:part name="parameters" element="axis2wrapped:getProcessPackage"/>
+   </wsdl:message>
+   <wsdl:message name="getProcessPackageOutput">
+      <wsdl:part name="parameters" element="axis2wrapped:getProcessPackageResponse"/>
+   </wsdl:message>
+   <wsdl:message name="undeployInput">
+      <wsdl:part name="parameters" element="axis2wrapped:undeploy"/>
+   </wsdl:message>
+   <wsdl:message name="undeployOutput">
+      <wsdl:part name="parameters" element="axis2wrapped:undeployResponse"/>
+   </wsdl:message>
+   <wsdl:message name="listDeployedPackagesInput">
+      <wsdl:part name="parameters" element="axis2wrapped:listDeployedPackages"/>
+   </wsdl:message>
+   <wsdl:message name="listDeployedPackagesOutput">
+      <wsdl:part name="parameters" element="axis2wrapped:listDeployedPackagesResponse"/>
+   </wsdl:message>
+   <wsdl:portType name="DeploymentServicePortType">
+      <wsdl:operation name="listProcesses">
+         <wsdl:input message="tns:listProcessesInput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/listProcessesRequest"/>
+         <wsdl:output message="tns:listProcessesOutput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/listProcessesResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="deploy">
+         <wsdl:input message="tns:deployInput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/deployRequest"/>
+         <wsdl:output message="tns:deployOutput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/deployResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getProcessPackage">
+         <wsdl:input message="tns:getProcessPackageInput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/getProcessPackageRequest"/>
+         <wsdl:output message="tns:getProcessPackageOutput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/getProcessPackageResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="undeploy">
+         <wsdl:input message="tns:undeployInput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/undeployRequest"/>
+         <wsdl:output message="tns:undeployOutput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/undeployResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="listDeployedPackages">
+         <wsdl:input message="tns:listDeployedPackagesInput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/listDeployedPackagesRequest"/>
+         <wsdl:output message="tns:listDeployedPackagesOutput" wsaw:Action="http://www.apache.org/ode/deployapi/DeploymentPortType/listDeployedPackagesResponse"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="DeploymentBinding" type="tns:DeploymentServicePortType">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+      <wsdl:operation name="listProcesses">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="deploy">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getProcessPackage">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="undeploy">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="listDeployedPackages">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="DeploymentService">
+      <wsdl:port name="DeploymentPort" binding="tns:DeploymentBinding">
+         <soap:address location="http://localhost:8080/ode/processes/DeploymentService"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

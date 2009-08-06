@@ -366,9 +366,14 @@ public class ProcessFactory {
 	 * {@link ParserConfigurationException} occurred.
 	 */
 	public Document transformProcess(Pool pool, Output output) {
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setNamespaceAware(true);
+		documentBuilderFactory.setValidating(false);
+		
 		DocumentBuilder builder;
 		try {
-			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			builder = documentBuilderFactory.newDocumentBuilder();
+			
 			Document process = builder.newDocument();
 			
 			Element processElement = createProcessElement(process, pool, output);

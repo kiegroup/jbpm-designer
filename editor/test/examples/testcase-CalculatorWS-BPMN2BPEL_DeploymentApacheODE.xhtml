@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events">
+<head>
+    <title>Example Data for BPMN2BPEL - Deployment on Apache ODE</title>
+    
+</head>
+<body style="font-family: sans-serif; font-size: 75%;">
+    <form action="http://localhost:8080/oryx/goldeneye" method="post" enctype="application/x-www-form-urlencoded">
+    	<input type="hidden" name="type" value="goldeneye" />
+		
+		<input type="hidden" name="svc2" value="http://localhost:9093/CalculatorApp/CalculatorWSService?wsdl" />
+		<input type="hidden" name="svc2_name" value="CalculatorWSService" />
+		<input type="hidden" name="svc2_ns" value="http://calculator.me.org/" />
+		<input type="hidden" name="svc2_pt0" value="CalculatorWS" />
+		<input type="hidden" name="svc2_pt0_op0" value="add" />
+		<input type="hidden" name="svc2_pt0_op0_inmsg" value="add" />
+		<input type="hidden" name="svc2_pt0_op0_outmsg" value="addResponse" />
+		<input type="hidden" name="svc2_pt0_op0_in0_name" value="i" />
+		<input type="hidden" name="svc2_pt0_op0_in0_type" value="http://www.w3.org/2001/XMLSchema^int" />
+		<input type="hidden" name="svc2_pt0_op0_in1_name" value="j" />
+		<input type="hidden" name="svc2_pt0_op0_in1_type" value="http://www.w3.org/2001/XMLSchema^int" />
+		<input type="hidden" name="svc2_pt0_op0_in2_name" value="token" />
+		<input type="hidden" name="svc2_pt0_op0_in2_type" value="http://www.w3.org/2001/XMLSchema^int" />
+		<input type="hidden" name="svc2_pt0_op0_in3_name" value="reportingService" />
+		<input type="hidden" name="svc2_pt0_op0_in3_type" value="http://www.w3.org/2001/XMLSchema^int" />
+		<input type="hidden" name="svc2_pt0_op0_out0_name" value="return" />
+		<input type="hidden" name="svc2_pt0_op0_out0_type" value="http://www.w3.org/2001/XMLSchema^int" />
+		
+		<input type="submit" />
+    </form>
+	<p>
+        The Form in this page contains example data for the Service Composer.<br />
+        Just hit the button below to start modeling a service composition with a bunch of services.<br />
+		To deploy the business process on the BPEL-Engine ApacheODE, all involved webservices have to be available.
+	
+    </p>
+</body>
+</html>

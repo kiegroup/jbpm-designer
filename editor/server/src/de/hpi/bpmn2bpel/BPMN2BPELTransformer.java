@@ -4,8 +4,10 @@
 package de.hpi.bpmn2bpel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 
@@ -13,9 +15,12 @@ import org.w3c.dom.Document;
 import de.hpi.bpel4chor.util.Output;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
+import de.hpi.bpmn.Node;
+import de.hpi.bpmn.Task;
 import de.hpi.bpmn2bpel.TransformationResult.Type;
 import de.hpi.bpmn2bpel.factories.DeploymentDescriptorFactory;
 import de.hpi.bpmn2bpel.factories.ProcessFactory;
+import de.hpi.bpmn2bpel.factories.apacheode.DeployProcessFactory;
 
 /**
  * Copyright (c) 2009 Falko Menge
@@ -42,11 +47,22 @@ import de.hpi.bpmn2bpel.factories.ProcessFactory;
  *
  */
 public class BPMN2BPELTransformer {
-
+	
+	/**
+	 * Transforms a BPMN diagram into an executable BPEL process for Apache ODE.
+	 * 
+	 * @param diagram
+	 * 		The BPMN diagram
+	 * @return
+	 * 		All necessary elements of an Apache ODE Deployment unit. The BPEL 
+	 * 		process, service's WSDLs, process's WSDL and deployment descriptor. 
+	 */
 	public List<TransformationResult> transform(BPMNDiagram diagram) {
+		Set<String> wsdlUrls = this.getSetOfWsdlUrls(diagram);
 		Document process = null;
 		List<TransformationResult> results = new ArrayList<TransformationResult>();
 		ProcessFactory factory = new ProcessFactory(diagram);
+		
 		// use only the first pool
 		// TODO rewrite to work without pools 
 		Iterator<de.hpi.bpmn.Pool> it = diagram.getPools().iterator();
@@ -58,10 +74,35 @@ public class BPMN2BPELTransformer {
 		
 		/* Create deployment descriptor for Apache ODE */ 
 		
-		DeploymentDescriptorFactory deploymentFactory = new DeploymentDescriptorFactory(diagram);
-		results.add(new TransformationResult(Type.DEPLOYMENT_DESCRIPTOR, 
-				deploymentFactory.generateDeploymentDescriptor()));
+		DeployProcessFactory deploymentFactory = DeployProcessFactory.getNewDeployProcessFactory();
+		List<TransformationResult> deploymentElements = 
+			deploymentFactory.buildDeployProcessData(results.get(0), wsdlUrls);
+		
+			deploymentFactory.deployProcessOnApacheOde();
+		
+		/* Append Apache ODE Deployment Descriptor and Process WSDL */
+		results.addAll(deploymentElements);
 		
 		return results;
+	}
+	
+	/**
+	 * Retrieves the set of used WSDL URLs in the BPMN diagram.
+	 * 
+	 * @param diagram
+	 * 		The BPMN diagram
+	 * @return
+	 * 		The set of WSDL URLs
+	 */
+	private Set<String> getSetOfWsdlUrls(BPMNDiagram diagram) {
+		HashSet<String> wsdlUrls = new HashSet<String>();
+		
+		for(Node node : diagram.getChildNodes()) {
+			if(node instanceof Task) {
+				wsdlUrls.add(((Task) node).getWsdlUrl());
+			}
+		}
+		
+		return wsdlUrls;
 	}
 }
