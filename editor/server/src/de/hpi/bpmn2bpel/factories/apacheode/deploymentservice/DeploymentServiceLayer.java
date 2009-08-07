@@ -33,6 +33,7 @@ public class DeploymentServiceLayer {
 	
 	private DeploymentServicePortType deploymentService = null;
 	private String serviceUrl = null;
+	private String odeUrl = null;
 	
 	private static final QName SERVICE_NAME = new QName("http://www.apache.org/ode/deployapi", "DeploymentService");
 	
@@ -40,6 +41,10 @@ public class DeploymentServiceLayer {
 	 * System-Configuration 
 	 */
 	private DatabaseConfiguration config;
+	
+	public DeploymentServiceLayer(String odeUrl) {
+		this.odeUrl = odeUrl;
+	}
 	
 	/**
 	 * Deploy a test case. 
@@ -193,7 +198,7 @@ public class DeploymentServiceLayer {
 //				SystemConfiguration.ODE_DEPLOYMENTSERVICE_WSDL_URL_PROPERTY);
 		
 		/* Test url*/
-		String url = "http://localhost:8080/ode/processes/DeploymentService?wsdl";
+		String url = this.odeUrl + "/processes/DeploymentService?wsdl";
 		
 		/* Check whether the configuration changed since the last call */
 		if (deploymentService == null || !url.equals(this.serviceUrl)) {

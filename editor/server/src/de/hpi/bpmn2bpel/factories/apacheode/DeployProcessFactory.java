@@ -57,7 +57,7 @@ public class DeployProcessFactory {
 	private static Logger logger = Logger.getLogger(DeployProcessFactory.class);
 	
 	private final static String partnerLinkNamespaceTag = "plnk";
-	private final static String ODE_URL = "http://localhost:8080/ode/";
+	private String ODE_URL = "http://localhost:8080/ode/";
 	
 	private Document		bpelDocument;	
 	private Document		processWsdlDocument;
@@ -66,10 +66,12 @@ public class DeployProcessFactory {
 	private Element			deploy;
 	private Set<String>		wsdlUrls;
 	private HashMap<String, String> wsdls;
+	private List<TransformationResult> deployProcessData;
 	
-	public static DeployProcessFactory getNewDeployProcessFactory() {
+	public static DeployProcessFactory getNewDeployProcessFactory(String apacheOdeUrl) {
 		DeployProcessFactory deployProcessFactory = new DeployProcessFactory();
 		deployProcessFactory.wsdls = new HashMap<String, String>();
+		deployProcessFactory.ODE_URL = apacheOdeUrl;
 		return deployProcessFactory;
 	}
 	
@@ -81,8 +83,7 @@ public class DeployProcessFactory {
 			TransformationResult bpelProcess,
 			Set<String> wsdlUrls) {
 		
-		List<TransformationResult> deployProcessData = 
-			new ArrayList<TransformationResult>();
+		this.deployProcessData = new ArrayList<TransformationResult>();
 		
 		/* retrieve BPEL Document */
 		this.bpelDocument = createDocumentFromString(createStringFromDocument(bpelProcess.getDocument()));
@@ -104,7 +105,7 @@ public class DeployProcessFactory {
 		processWsdlDocument.appendChild(processWsdl);
 		
 		/* Append process WSDL to process's deployment data */
-		deployProcessData.add(
+		this.deployProcessData.add(
 				new TransformationResult(Type.PROCESS_WSDL, processWsdlDocument));
 		
 		
@@ -118,10 +119,10 @@ public class DeployProcessFactory {
 		deployDocument.appendChild(deploymentDescriptorDocument);
 		
 		/* Append deployment descriptor to process's deployment data */
-		deployProcessData.add(
+		this.deployProcessData.add(
 				new TransformationResult(Type.DEPLOYMENT_DESCRIPTOR, deployDocument));
 		
-		return deployProcessData;
+		return this.deployProcessData;
 	}
 	
 	/**
@@ -360,7 +361,7 @@ public class DeployProcessFactory {
 		service.appendChild(port);
 		
 		Element soapAddress = processWsdlDocument.createElement("soap:address");
-		soapAddress.setAttribute("location",  ODE_URL + "processes/" + serviceName);
+		soapAddress.setAttribute("location",  ODE_URL + "/processes/" + serviceName);
 		port.appendChild(soapAddress);
 		
 		return service;
@@ -379,6 +380,8 @@ public class DeployProcessFactory {
 			}
 		}
 		
+		
+		this.deployProcessData.add(new TransformationResult(Type.SERVICE_NAME, serviceName));
 		return serviceName;
 	}
 
@@ -734,8 +737,8 @@ public class DeployProcessFactory {
 	}
 	
 	public void deployProcessOnApacheOde() {
-		DeploymentServiceLayer deploymentServiceLayer = new DeploymentServiceLayer();
-		
+		DeploymentServiceLayer deploymentServiceLayer = 
+			new DeploymentServiceLayer(this.ODE_URL);
 		
 		DeployUnit du = deploymentServiceLayer.deploy(
 				"myProcess", 

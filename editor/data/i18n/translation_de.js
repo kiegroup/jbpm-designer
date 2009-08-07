@@ -284,8 +284,10 @@ if(!ORYX.I18N.Bpmn2Bpel) ORYX.I18N.Bpmn2Bpel = {};
 ORYX.I18N.Bpmn2Bpel.group = "ExecBPMN";
 ORYX.I18N.Bpmn2Bpel.show = "Transformiertes BPEL anzeigen";
 ORYX.I18N.Bpmn2Bpel.download = "Transformiertes BPEL herunterladen";
+ORYX.I18N.Bpmn2Bpel.deploy = "Transformiertes BPEL bereitstellen";
 ORYX.I18N.Bpmn2Bpel.showDesc = "Transformiert BPMN in BPEL und zeigt das Ergebnis an.";
 ORYX.I18N.Bpmn2Bpel.downloadDesc = "Transformiert BPMN in BPEL und bietet das Ergebnis zum Download an.";
+ORYX.I18N.Bpmn2Bpel.deployDesc = "Transformiert BPMN in BPEL und stellt den Prozess auf der BPEL-Engine Apache ODE bereit.";
 ORYX.I18N.Bpmn2Bpel.transfFailed = "Die Anfrage zur Transformation in BPEL ist fehlgeschlagen.";
 
 if(!ORYX.I18N.Save) ORYX.I18N.Save = {};

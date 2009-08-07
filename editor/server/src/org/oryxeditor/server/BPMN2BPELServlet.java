@@ -48,13 +48,15 @@ public class BPMN2BPELServlet extends HttpServlet {
 			res.setContentType("application/xhtml");
 
 			String rdf = req.getParameter("data");
+			String optionsParam = req.getParameter("options");
+			JSONObject options = new JSONObject(optionsParam);
 
 			DocumentBuilder builder;
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
 			
-			processDocument(document, res.getWriter());
+			processDocument(document, options, res.getWriter());
 			
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -62,10 +64,24 @@ public class BPMN2BPELServlet extends HttpServlet {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	protected void processDocument(Document document, PrintWriter writer) {
+	/**
+	 * Starts the transformation BPMN to BPEL according to the options parameter.
+	 * It also writes the HTTP-response
+	 * 
+	 * @param document
+	 * 		The diagram from the Oryx-Editor in RDF-format.
+	 * @param options
+	 * 		The configuration of the transformation e.g. deployment or only transformation.
+	 * @param writer
+	 * 		The writer of the response.
+	 */
+	protected void processDocument(Document document, JSONObject options, PrintWriter writer) {
 		response = new JSONObject();
 		
 		String type = new StencilSetUtil().getStencilSet(document);
@@ -79,17 +95,42 @@ public class BPMN2BPELServlet extends HttpServlet {
  		BPMNSESENormalizer normalizer = new BPMNSESENormalizer(diagram);
 		normalizer.normalize();
 		
-		/* Transform to BPEL */
-		BPMN2BPELTransformer transformer = new BPMN2BPELTransformer();
-		List<TransformationResult> results = transformer.transform(diagram);
 		
-		for(TransformationResult result : results) {
-			if(result.getType().equals(TransformationResult.Type.PROCESS)) {
-				appendResult("process", result.getDocument());
+		List<TransformationResult> results = null;
+		try {
+			BPMN2BPELTransformer transformer = new BPMN2BPELTransformer();
+			
+			/* Transform to BPEL */
+			if (options.getString("action").equals("transform")) {
+				results = transformer.transform(diagram);
 			}
+			
+			/* Deployment on Apache ODE */
+			else if (options.getString("action").equals("deploy")){
+				results = transformer.transformAndDeployProcessOnOde(
+						diagram,
+						options.getString("apacheOdeUrl"));
+			}
+			
+			for(TransformationResult result : results) {
+				if(result.getType().equals(TransformationResult.Type.PROCESS)) {
+					appendResult("process", result.getDocument());
+				}
+				if(result.getType().equals(TransformationResult.Type.SERVICE_NAME)) {
+					response.put(
+							"serviceName", 
+							options.getString("apacheOdeUrl") +
+							"/processes/" +
+							(String) result.getObject() +
+							"?wsdl");
+				}
 //			if(result.getType().equals(TransformationResult.Type.DEPLOYMENT_DESCRIPTOR)) {
 //				appendResult("deploy", result.getDocument());
 //			}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		writer.write(response.toString());

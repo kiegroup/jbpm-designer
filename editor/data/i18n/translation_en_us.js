@@ -286,9 +286,15 @@ if(!ORYX.I18N.Bpmn2Bpel) ORYX.I18N.Bpmn2Bpel = {};
 ORYX.I18N.Bpmn2Bpel.group = "ExecBPMN";
 ORYX.I18N.Bpmn2Bpel.show = "Show transformed BPEL";
 ORYX.I18N.Bpmn2Bpel.download = "Download transformed BPEL";
+ORYX.I18N.Bpmn2Bpel.deploy = "Deploy transformed BPEL";
 ORYX.I18N.Bpmn2Bpel.showDesc = "Transforms BPMN to BPEL and shows the result in a new window.";
 ORYX.I18N.Bpmn2Bpel.downloadDesc = "Transforms BPMN to BPEL and offers to download the result.";
+ORYX.I18N.Bpmn2Bpel.deployDesc = "Transforms BPMN to BPEL and deploys the business process on the BPEL-Engine Apache ODE";
 ORYX.I18N.Bpmn2Bpel.transfFailed = "Request for transformation to BPEL failed.";
+ORYX.I18N.Bpmn2Bpel.ApacheOdeUrlInputTitle = "Apache ODE URL";
+ORYX.I18N.Bpmn2Bpel.ApacheOdeUrlInputLabelDeploy = "Deploy Process";
+ORYX.I18N.Bpmn2Bpel.ApacheOdeUrlInputLabelCancel = "Cancel";
+ORYX.I18N.Bpmn2Bpel.ApacheOdeUrlInputPanelText = "Please type-in the URL to the Apache ODE BPEL-Engine. E.g.: http://myserver:8080/ode";
 
 
 if(!ORYX.I18N.Save) ORYX.I18N.Save = {};

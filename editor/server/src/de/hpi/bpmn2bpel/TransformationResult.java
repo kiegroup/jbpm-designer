@@ -5,10 +5,16 @@ import org.w3c.dom.Node;
 
 public class TransformationResult {
 	
-	public enum Type { DEPLOYMENT_DESCRIPTOR, PROCESS, PROCESS_WSDL };
+	public enum Type { 
+		DEPLOYMENT_DESCRIPTOR, 
+		PROCESS, 
+		PROCESS_WSDL,
+		SERVICE_NAME
+	};
 
 	private Type type;
 	private Document document;
+	private Object object;
 	private String processName;
 	
 	private static int processCount = 0;
@@ -57,6 +63,19 @@ public class TransformationResult {
 		storeProcessName(type, document);
 	}
 	
+	public TransformationResult(Type type, Object object) {
+		this.type = type;
+		this.object = object;
+	}
+	
+	public void setObject(Object object) {
+		this.object = object;
+	}
+
+	public Object getObject() {
+		return object;
+	}
+
 	public boolean isSuccess() {
 		return (document != null);
 	}

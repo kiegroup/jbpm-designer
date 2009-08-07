@@ -58,7 +58,6 @@ public class BPMN2BPELTransformer {
 	 * 		process, service's WSDLs, process's WSDL and deployment descriptor. 
 	 */
 	public List<TransformationResult> transform(BPMNDiagram diagram) {
-		Set<String> wsdlUrls = this.getSetOfWsdlUrls(diagram);
 		Document process = null;
 		List<TransformationResult> results = new ArrayList<TransformationResult>();
 		ProcessFactory factory = new ProcessFactory(diagram);
@@ -72,16 +71,40 @@ public class BPMN2BPELTransformer {
 			results.add(new TransformationResult(Type.PROCESS, process));
 		}
 		
-		/* Create deployment descriptor for Apache ODE */ 
 		
-		DeployProcessFactory deploymentFactory = DeployProcessFactory.getNewDeployProcessFactory();
+		return results;
+	}
+	
+	/**
+	 * Transforms the processes contained by die BPMN-Diagram and deploys the 
+	 * business process on Apache ODE BPEL-Engine.
+	 * 
+	 * @param diagram
+	 * 		The {@link BPMNDiagram}
+	 * @param apacheOdeUrl
+	 * 		The URL to Apache ODE root
+	 * @return
+	 * 		The result elements of the transformation
+	 */
+	public List<TransformationResult> transformAndDeployProcessOnOde(
+			BPMNDiagram diagram,
+			String apacheOdeUrl) {
+		Set<String> wsdlUrls = this.getSetOfWsdlUrls(diagram);
+		
+		/* Transform BPMN to BPEL */
+		List<TransformationResult> results = this.transform(diagram);
+		
+		/* Create deployment descriptor for Apache ODE */ 
+		DeployProcessFactory deploymentFactory = 
+			DeployProcessFactory.getNewDeployProcessFactory(apacheOdeUrl);
 		List<TransformationResult> deploymentElements = 
 			deploymentFactory.buildDeployProcessData(results.get(0), wsdlUrls);
 		
-			deploymentFactory.deployProcessOnApacheOde();
+		deploymentFactory.deployProcessOnApacheOde();
 		
 		/* Append Apache ODE Deployment Descriptor and Process WSDL */
 		results.addAll(deploymentElements);
+		
 		
 		return results;
 	}
