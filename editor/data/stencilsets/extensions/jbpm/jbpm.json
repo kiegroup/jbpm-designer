@@ -260,7 +260,7 @@
 			},
 		],
 	},
-	{
+/*	{
 		"type":"node",
 		"id":"esb",
 		"title":"ESB",
@@ -382,7 +382,7 @@
 				"stroke":false
 			},
 		],
-	},
+	}, */
 	{
 		"type":"node",
 		"id":"hql",
