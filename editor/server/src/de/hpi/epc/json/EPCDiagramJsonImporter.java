@@ -28,10 +28,10 @@ public class EPCDiagramJsonImporter {
 		this.jsonObj = jsonObj;
 	}
 	
-	public Diagram loadEPCDiagram() throws JSONException {
+	public void loadEpcIntoDiagram(Diagram diagram) throws JSONException {
 		
 		ImportContext c = new ImportContext();
-		c.diagram = new Diagram();
+		c.diagram = diagram;
 		c.nodes = new HashMap<String, DiagramNode>(); // key = resource id, value = node
 		c.connections = new HashMap<String, DiagramNode>(); // key = to resource id, value = from
 		
@@ -56,7 +56,7 @@ public class EPCDiagramJsonImporter {
 			String type = edge.getJSONObject("stencil").getString("id");
 			addDiagramEdge(type, edge, c);
 		}
-		return c.diagram;
+		return;
 	}
 	
 	protected void addDiagramNode(String type, JSONObject obj, ImportContext c) throws JSONException{
