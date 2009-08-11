@@ -89,12 +89,19 @@ new function(){
 			
 			var am = ab.midPoint();
 			var bm = bb.midPoint();
+		
+			// Get first and last reference point
+			var first = Object.clone(edge.dockers.first().referencePoint);
+			var last = Object.clone(edge.dockers.last().referencePoint);
+			// Get the absolute one
+			var aFirst = edge.dockers.first().getAbsoluteReferencePoint();
+			var aLast = edge.dockers.last().getAbsoluteReferencePoint(); 
 			
 			// IF ------>
 			// or  |
 			//     V
 			// Do nothing
-			if (a.x === b.x || a.y === b.y) {
+			if (Math.abs(aFirst.x-aLast.x) < 1 || Math.abs(aFirst.y-aLast.y) < 1) {
 				return []
 			}
 			
@@ -115,10 +122,7 @@ new function(){
 			bb.widen(20);// the to because of the arrow from the edge
 								
 			var positions = [];
-
 			var off = this.getOffset.bind(this);
-			var first = Object.clone(edge.dockers.first().referencePoint);
-			var last = Object.clone(edge.dockers.last().referencePoint);
 			
 			// Checks ----+
 			//            |
