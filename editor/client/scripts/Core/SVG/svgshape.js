@@ -502,17 +502,23 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 		}
 	},
 
+	/**
+	 * Returns true if the element is visible
+	 * @param {SVGElement} elem
+	 * @return boolean
+	 */
 	isVisible: function(elem) {
 			
 		if (!elem) {
 			elem = this.element;
 		}
 
-		if (!elem) {
-			return true;
-		}
+		var hasOwnerSVG = false;
+		try { 
+			hasOwnerSVG = !!elem.ownerSVGElement;
+		} catch(e){}
 		
-		if ( elem.ownerSVGElement ) {
+		if ( hasOwnerSVG ) {
 			if (ORYX.Editor.checkClassType(elem, SVGGElement)) {
 				if (elem.className && elem.className.baseVal == "me") 
 					return true;
