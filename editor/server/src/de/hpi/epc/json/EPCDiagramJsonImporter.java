@@ -87,7 +87,7 @@ public class EPCDiagramJsonImporter {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void addPropertyMap(DiagramObject o, JSONObject jsonProperties) throws JSONException {
+	protected void addPropertyMap(DiagramObject o, JSONObject jsonProperties) throws JSONException {
 		Iterator<String> keys = (Iterator<String>)jsonProperties.keys();
 		Map<String, String> propertiesMap = new HashMap<String, String>();
 		while (keys.hasNext()) {
@@ -114,9 +114,9 @@ public class EPCDiagramJsonImporter {
 //	}
 	
 	protected class ImportContext {
-		Diagram diagram;
-		Map<String, DiagramNode> nodes; // key = resource id, value = node
-		Map<String, DiagramNode> connections; // key = to resource, value = from
+		public Diagram diagram;
+		public Map<String, DiagramNode> nodes; // key = resource id, value = node
+		public Map<String, DiagramNode> connections; // key = to resource, value = from
 	}
 
 }
