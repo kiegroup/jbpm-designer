@@ -102,7 +102,7 @@ public class BPMNeRDFSerialization implements BPMNSerialization {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<div id=\"oryx-canvas123\" class=\"-oryx-canvas\">");
 		sb.append("<span class=\"oryx-type\">http://b3mn.org/stencilset/bpmn1.1#BPMNDiagram</span>");
-		sb.append("<span class=\"oryx-id\">" + this.context.getDiagramId() + "</span>");
+		sb.append("<span class=\"oryx-id\">" + (this.context.getDiagramId() == null ? "" : this.context.getDiagramId()) + "</span>");
 		sb.append("<span class=\"oryx-name\">" + this.context.getDiagramName() + "</span>");
 		sb.append("<span class=\"oryx-version\"></span><span class=\"oryx-author\"></span><span class=\"oryx-language\">English</span>");
 		sb.append("<span class=\"oryx-expressionlanguage\"></span><span class=\"oryx-querylanguage\"></span>");

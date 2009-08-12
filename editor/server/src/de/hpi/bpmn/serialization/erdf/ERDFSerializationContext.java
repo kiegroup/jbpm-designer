@@ -9,6 +9,7 @@ import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.Edge;
 import de.hpi.bpmn.Node;
 import de.hpi.bpmn.SubProcess;
+import de.hpi.diagram.OryxUUID;
 
 public class ERDFSerializationContext {
 	
@@ -41,7 +42,12 @@ public class ERDFSerializationContext {
 
 	
 	private void registerResource(DiagramObject d) {
-		resourceIDs.put(d, d.getId());
+		String id = d.getResourceId();
+		if (id == null || "".equals(id)) {
+			id = OryxUUID.generate();
+			d.setResourceId(id);
+		}
+		resourceIDs.put(d, id);
 	}
 
 	public String getResourceIDForDiagramObject(DiagramObject diagramObject) {

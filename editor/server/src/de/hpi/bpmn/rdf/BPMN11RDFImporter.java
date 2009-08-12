@@ -337,6 +337,8 @@ public class BPMN11RDFImporter {
 				// TODO: add further attributes...
 				if (attribute.equals("title")) {
 					c.diagram.setTitle(getContent(n));
+				} else if (attribute.equals("name")) {
+					c.diagram.setTitle(getContent(n));
 				} else if (attribute.equals("id")) {
 					c.diagram.setId(getContent(n));
 					// } else {
