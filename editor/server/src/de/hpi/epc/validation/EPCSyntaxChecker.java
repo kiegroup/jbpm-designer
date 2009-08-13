@@ -53,12 +53,14 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	 */
 	public boolean checkFunctionFollowsFunction;
 	public boolean checkExactlyOneStartEvent;
+	public boolean checkMustEndOnEvent;
 	
 	public EPCSyntaxChecker(Diagram diagram) {
 		this.diagram = diagram;
 		errors = new HashMap<String,String>();
 		checkFunctionFollowsFunction = true;
 		checkExactlyOneStartEvent = true;
+		checkMustEndOnEvent = true;
 	}
 
 	public boolean checkSyntax() {
@@ -82,7 +84,6 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	
 	protected void checkNodes() {
 		List<DiagramNode> startEvents = new ArrayList<DiagramNode>();
-		List<DiagramNode> endEvents = new ArrayList<DiagramNode>();
 		for (DiagramNode node: diagram.getNodes()) {
 			int inAll = node.getIncomingEdges().size();
 			int outAll = node.getOutgoingEdges().size();
@@ -93,27 +94,29 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 			int in = numberOfControlFlows(node.getIncomingEdges());
 			int out =  numberOfControlFlows(node.getOutgoingEdges());
 			if ("Event".equals(node.getType())){
-				if (in == 1 && out == 0) endEvents.add(node);
-				else if (in == 0 && out == 1) startEvents.add(node);
+				//if (in == 1 && out == 0) endEvents.add(node);
+				if (in == 0 && out == 1) startEvents.add(node);
 				else if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
 				for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
 					if ("Event".equals(next.getType())) addError(next, EVENT_AFTER_EVENT);
 				}
 			}
 			else if ("Function".equals(node.getType())){
-				if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
-				else if (in == 0 || out == 0) addError(node, NOT_CONNECTED_2);
+				if (in == 1 && out == 0){
+					if (checkMustEndOnEvent) addError(node, NOT_CONNECTED_2);
+				}
+				else if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
+				else if (in == 0 && out == 1) addError(node, NOT_CONNECTED_2);
 				for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
 					if (checkFunctionFollowsFunction && "Function".equals(next.getType())) addError(next, FUNCTION_AFTER_FUNCTION);
-					if ("ProcessInterface".equals(next.getType())) addError(next, PI_AFTER_FUNCTION);
+					if (checkFunctionFollowsFunction && "ProcessInterface".equals(next.getType())) addError(next, PI_AFTER_FUNCTION);
 				}
 			}
 			else if ("ProcessInterface".equals(node.getType())){
 				if (in > 1 || out > 1) addError(node, TOO_MANY_EDGES);
 				else if (in == 0 && out == 0) addError(node, NOT_CONNECTED_2);
 				for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
-					if ("Function".equals(next.getType())) addError(next, FUNCTION_AFTER_PI);
-					// PI after PI is allowed at the moment..
+					if (checkFunctionFollowsFunction && "Function".equals(next.getType())) addError(next, FUNCTION_AFTER_PI);
 				}
 				
 			}
