@@ -26,23 +26,19 @@ if(!ORYX.Plugins)
 	
 ORYX.Plugins.BPEL4ChorSupport = ORYX.Plugins.AbstractPlugin.extend({
 
-	facade: undefined,
-	
-	dialogSupport: undefined,
-
 	/**
 	 * Offers the plugin functionality:
 	 */
-	construct: function(facade) {
-		
-		this.facade = facade;
+    construct: function(){
+        // Call super class constructor
+        arguments.callee.$.construct.apply(this, arguments);
 
 		this.dialogSupport = new ORYX.Plugins.TransformationDownloadDialog();
 		
 	    this.facade.offer({
 			'name':ORYX.I18N.BPEL4ChorSupport.exp,
 			'functionality': this.exportProcess.bind(this),
-			'group': ORYX.I18N.BPEL4ChorSupport.group,
+			'group': ORYX.I18N.JSONSupport.exp.group,
 			'icon':  ORYX.PATH + "images/bpel4chor_export_icon.png",
 			'description': ORYX.I18N.BPEL4ChorSupport.expDesc,
 			'index': 0,
@@ -53,7 +49,7 @@ ORYX.Plugins.BPEL4ChorSupport = ORYX.Plugins.AbstractPlugin.extend({
         this.facade.offer({
 			'name':ORYX.I18N.BPEL4ChorSupport.imp,
 			'functionality': this.importProcess.bind(this),
-			'group': ORYX.I18N.BPEL4ChorSupport.group,
+			'group': ORYX.I18N.JSONSupport.imp.group,
 			'icon':  ORYX.PATH + "images/bpel4chor_import_icon.png",
 			'description': ORYX.I18N.BPEL4ChorSupport.impDesc,
 			'index': 1,
