@@ -58,9 +58,9 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	public EPCSyntaxChecker(Diagram diagram) {
 		this.diagram = diagram;
 		errors = new HashMap<String,String>();
-		checkFunctionFollowsFunction = true;
-		checkExactlyOneStartEvent = true;
-		checkMustEndOnEvent = true;
+		checkFunctionFollowsFunction = false;
+		checkExactlyOneStartEvent = false;
+		checkMustEndOnEvent = false;
 	}
 
 	public boolean checkSyntax() {
