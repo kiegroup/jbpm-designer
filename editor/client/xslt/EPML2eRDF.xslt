@@ -30,7 +30,7 @@
 	<xsl:template match="event">
 		<xsl:call-template name="add-standard-node-properties">
 			<xsl:with-param name="type">http://b3mn.org/stencilset/epc#Event</xsl:with-param>
-			<xsl:with-param name="additional-property-name">oryx-commonness</xsl:with-param>
+			<xsl:with-param name="additional-property-name">oryx-frequency</xsl:with-param>
 			<xsl:with-param name="additional-property-value">
 				<xsl:value-of select="./attribute[@typeRef='AT_FRQ_DAY']/attribute::value" />
 			</xsl:with-param>			

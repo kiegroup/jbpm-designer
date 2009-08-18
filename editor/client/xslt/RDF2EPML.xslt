@@ -65,11 +65,11 @@
 				<name><xsl:value-of select="$title" /></name>
 				<description><xsl:value-of select="./oryx:description" /></description>
 				<xsl:call-template name="node-position" />
-				<xsl:variable name="commonness" select="./oryx:commonness" />
+				<xsl:variable name="frequency" select="./oryx:frequency" />
 				
-				<xsl:if test="$commonness!=''">
+				<xsl:if test="$frequency!=''">
 					<attribute typeRef="AT_FRQ_DAY"><xsl:attribute name="value">
-						<xsl:value-of select="$commonness" />
+						<xsl:value-of select="$frequency" />
 					</xsl:attribute></attribute>
 				</xsl:if>
 			</event>
