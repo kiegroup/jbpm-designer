@@ -63,26 +63,61 @@ ORYX.Plugins.BpmnLayouter = ORYX.Plugins.AbstractPlugin.extend({
 			onSuccess: function(request){
 
 				/*Ext.Msg.alert("Oryx", "New Layout arrived:!\n" + request.responseText);*/
+				
+				var setLayoutCommandClass = ORYX.Core.Command.extend({
+					construct: function(layoutArray, plugin){
+						this.layoutArray = layoutArray;
+						this.plugin = plugin;
+						this.oldLayoutArray = [];
+					},
+					execute: function(){
+						this.layoutArray.each(function(elem){
+							/* get shape */
+							var shape = this.plugin.facade.getCanvas().getChildShapeByResourceId(elem.id);
+							
+							/* save old layout for undo*/
+							var oldLayout = {
+								id : elem.id,
+								bounds : shape.bounds.clone()
+							};
+							this.oldLayoutArray.push(oldLayout);
+							
+							/* set new bounds */
+							var bound = elem.bounds.split(" ");
+							shape.bounds.set(bound[0],bound[1],bound[2],bound[3]);
+							
+							/* set new dockers */
+							if(elem.dockers != null){
+								this.plugin.setDockersBad(shape,elem.dockers);
+							}
+							
+							shape.update();
+						}.bind(this));
+						
+						this.plugin.facade.getCanvas().update();
+						this.plugin.facade.updateSelection();					
+						
+					},
+					rollback: function(){
+						this.oldLayoutArray.each(function(elem){
+							var shape = this.plugin.facade.getCanvas().getChildShapeByResourceId(elem.id);
+							shape.bounds.set(elem.bounds);
+							shape.update();
+						}.bind(this));
+						
+						this.plugin.facade.getCanvas().update();
+						this.plugin.facade.updateSelection();	
+					}
+				});
+				
+				
 				var resp = request.responseText.evalJSON();
-
-				if(resp instanceof Array && resp.size() > 0){
-					resp.each(function(elem){
-						var shape = this.facade.getCanvas().getChildShapeByResourceId(elem.id);
-						var bound = elem.bounds.split(" ");
-						shape.bounds.set(bound[0],bound[1],bound[2],bound[3]);
-						
-						if(elem.dockers != null){
-							this.setDockersBad(shape,elem.dockers);
-						}
-						
-						shape.update();
-					}.bind(this));
-					
-					this.facade.getCanvas().update();
-					this.facade.updateSelection();					
+				if (resp instanceof Array && resp.size() > 0) {
+					/* create command */
+					var command = new setLayoutCommandClass(resp, this);
+					/* execute command */
+					this.facade.executeCommands([command]);
 				}
-				
-				
             	this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_LOADING_DISABLE});
 			}.bind(this)
 		})
