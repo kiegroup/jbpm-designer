@@ -121,7 +121,7 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 				
 			}
 			else if ("XorConnector".equals(node.getType()) || "OrConnector".equals(node.getType())){
-				if (in == 1 && out == 2){
+				if (in == 1 && out >= 2){
 					for (DiagramNode next : getNextEventsOrFunctions(node.getOutgoingEdges())){
 						if ("Function".equals(next.getType())){
 							addError(node, FUNCTION_AFTER_OR);
@@ -131,14 +131,14 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 							break;
 						}
 					}
-				} else if (in == 2 && out == 1){
+				} else if (in >= 2 && out == 1){
 					// nothing todo
 				} else {
 					addError(node, NO_CORRECT_CONNECTOR);
 				}
 			}
 			else if ("AndConnector".equals(node.getType())){
-				if ( ! ( (in == 2 && out == 1) || (in == 1 && out == 2) ) ){
+				if ( ! ( (in >= 2 && out == 1) || (in == 1 && out >= 2) ) ){
 					addError(node, NO_CORRECT_CONNECTOR);
 				}
 			}
