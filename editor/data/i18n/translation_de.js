@@ -646,3 +646,6 @@ ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";
 /** New Language Properties: 15.07.2009*/
 if(!ORYX.I18N.Layouting) ORYX.I18N.Layouting ={};
 ORYX.I18N.Layouting.doing = "Layouten...";
+
+/** New Language Properties: 18.08.2009*/
+ORYX.I18N.SyntaxChecker.MULT_ERRORS = "Mehrere Fehler";

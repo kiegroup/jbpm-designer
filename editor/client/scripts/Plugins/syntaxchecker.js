@@ -205,7 +205,19 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
 		});
     },
     parseCodeToMsg: function(code){
-		
+    	var msg = code.replace(/: /g, "<br />").replace(/, /g, "<br />");
+    	var codes = msg.split("<br />");
+    	for (var i=0; i < codes.length; i++) {
+    		var singleCode = codes[i];
+    		var replacement = this.parseSingleCodeToMsg(singleCode);
+    		if (singleCode != replacement) {
+    			msg = msg.replace(singleCode, replacement);
+    		}
+    	}
+		return msg;
+	},
+	
+	parseSingleCodeToMsg: function(code){
 		return ORYX.I18N.SyntaxChecker[code]||code;
 	},
     /**

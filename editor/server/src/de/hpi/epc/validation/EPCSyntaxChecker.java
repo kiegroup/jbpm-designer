@@ -158,7 +158,7 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 	protected void addError(DiagramObject obj, String errorCode) {
 		String key = obj.getResourceId();
 		String oldErrorCode = errors.get(key);
-		if (oldErrorCode != null && oldErrorCode.startsWith("Multiple Errors: ")){
+		if (oldErrorCode != null && oldErrorCode.startsWith("MULT_ERRORS: ")){
 			errors.put(obj.getResourceId(), oldErrorCode+", "+errorCode);
 		} else if (oldErrorCode != null){
 			errors.put(obj.getResourceId(), "Multiple Errors: "+oldErrorCode+", "+errorCode);

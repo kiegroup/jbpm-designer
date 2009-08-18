@@ -681,3 +681,6 @@ ORYX.I18N.RESIZE.E ="Right";
 /** New Language Properties: 15.07.2009*/
 if(!ORYX.I18N.Layouting) ORYX.I18N.Layouting ={};
 ORYX.I18N.Layouting.doing = "Layouting...";
+
+/** New Language Properties: 18.08.2009*/
+ORYX.I18N.SyntaxChecker.MULT_ERRORS = "Multiple Errors";
