@@ -60,7 +60,7 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 		errors = new HashMap<String,String>();
 		checkFunctionFollowsFunction = false;
 		checkExactlyOneStartEvent = false;
-		checkMustEndOnEvent = false;
+		checkMustEndOnEvent = true;
 	}
 
 	public boolean checkSyntax() {
