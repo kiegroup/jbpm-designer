@@ -34,6 +34,18 @@ if(!ORYX.Core.SVG) {ORYX.Core.SVG = {};}
  */
 ORYX.Core.SVG.Label = Clazz.extend({
 	
+	_verySmallCharacters:"fijl ",
+	_smallCharacters: "rt.,:;\"()IJ",
+	_largeCharacters: "ABCDEFGHKLNOPQRSTUVXYZÖÄÜ",
+	_veryLargeCharacters: "mwMW",
+	
+	_verySmallCharacterWidth:3.25,
+	_smallCharacterWidth: 6.5,
+	_defaultCharacterWidth: 8.5,
+	_largeCharacterWidth: 10.5,
+	_veryLargeCharacterWidth: 13.5,
+	
+	
 	/**
 	 * Constructor
 	 * @param options {Object} :
@@ -268,7 +280,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			var tspans = $A(this.node.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan'));
 			
 			//only do this in firefox 3. all other browsers do not support word wrapping!!!!!
-			if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent) && new Number(RegExp.$1)>=3) {
+			//if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent) && new Number(RegExp.$1)>=3) {
 				var newtspans = [];
 				
 				var refNode = this.node.ownerDocument.getElementById(this.fitToElemId);
@@ -280,7 +292,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 					for (var j = 0; j < tspans.length; j++) {
 						var tspan = tspans[j];
 						
-						var textLength = tspan.getComputedTextLength();
+						var textLength = this._getRenderedTextLength(tspan);
 						
 						if (textLength > refbb.width) {
 						
@@ -289,7 +301,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 							
 							var numOfChars = this.getTrimmedTextLength(tspan.textContent);
 							for (var i = 0; i < numOfChars; i++) {
-								var sslength = tspan.getSubStringLength(startIndex, i - startIndex);
+								var sslength = this._getRenderedTextLength(tspan, startIndex, i-startIndex);
 								
 								if (sslength > refbb.width - 2) {
 									var newtspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
@@ -338,7 +350,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 						this.node.appendChild(newtspans.shift());
 					}
 				}
-			}
+			//}
 		} catch (e) {
 			//console.log(e);
 		}
@@ -406,6 +418,62 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		if(this.isVisible) {
 			this.node.setAttributeNS(null, 'visibility', 'inherit');
 		}				
+	},
+	
+	/**
+	 * Returns the text length of the text content of an SVG tspan element.
+	 * For all browsers but Firefox 3 the values are estimated.
+	 * @param {TSpanSVGElement} tspan
+	 * @param {int} startIndex Optional, for sub strings
+	 * @param {int} endIndex Optional, for sub strings
+	 */
+	_getRenderedTextLength: function(tspan, startIndex, endIndex) {
+		if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent) && new Number(RegExp.$1) >= 3) {
+			if(startIndex === undefined) {
+				return tspan.getComputedTextLength();
+			} else {
+				return tspan.getSubStringLength(startIndex, endIndex);
+			}
+		} else {
+			if(startIndex === undefined) {
+				return this._estimateTextWidth(tspan.textContent);
+			} else {
+				return this._estimateTextWidth(tspan.textContent.substr(startIndex, endIndex).trim());
+			}
+		}
+	},
+	
+	/**
+	 * Estimates the text width for a string.
+	 * Used for word wrapping in all browser but FF3.
+	 * @param {Object} text
+	 */
+	_estimateTextWidth: function(text) {
+		var sum = 0.0;
+		for(var i = 0; i < text.length; i++) {
+			sum += this._estimateCharacterWidth(text.charAt(i));
+		}
+		
+		return sum;
+	},
+	
+	/**
+	 * Estimates the width of a single character.
+	 * Used for word wrapping in all browser but FF3.
+	 * @param {Object} character
+	 */
+	_estimateCharacterWidth: function(character) {
+		if(this._verySmallCharacters.indexOf(character) >= 0) {
+			return this._verySmallCharacterWidth;
+		} else if(this._smallCharacters.indexOf(character) >= 0) {
+			return this._smallCharacterWidth;
+		} else if(this._largeCharacters.indexOf(character) >= 0) {
+			return this._largeCharacterWidth; 
+		} else if(this._veryLargeCharacters.indexOf(character) >= 0) {
+			return this._veryLargeCharacterWidth;
+		} else {
+			return this._defaultCharacterWidth;
+		}
 	},
 	
 	/**
