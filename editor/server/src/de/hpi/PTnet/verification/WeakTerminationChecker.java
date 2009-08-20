@@ -99,7 +99,7 @@ public class WeakTerminationChecker {
 		if (stateCount > MaxStatesExceededException.MAX_NUM_STATES)
 			throw new MaxStatesExceededException();
 		
-		boolean leadsToGoodMarking = leadsToGoodMarking(markingStr);
+		boolean leadsToGoodMarking = leadsToGoodMarking(marking);
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
 		List<Transition> badTransitions = new ArrayList<Transition>();
 		if (transitions.size() > 0) {
@@ -138,8 +138,8 @@ public class WeakTerminationChecker {
 		return leadsToGoodMarking;
 	}
 
-	protected boolean leadsToGoodMarking(String markingStr) {
-		return finalMarkings.contains(markingStr);
+	protected boolean leadsToGoodMarking(Marking marking) {
+		return finalMarkings.contains(marking.toString());
 	}
 
 	protected void addDeadlockingTransitions(Marking marking) {

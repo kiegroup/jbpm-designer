@@ -87,9 +87,11 @@ public class EPCSyntaxChecker extends AbstractSyntaxChecker {
 		for (DiagramNode node: diagram.getNodes()) {
 			int inAll = node.getIncomingEdges().size();
 			int outAll = node.getOutgoingEdges().size();
-			if (inAll == 0 && outAll == 0){
-				addError(node, NOT_CONNECTED);
-				continue;
+			if ( !"TextNote".equals(node.getType()) ){
+				if (inAll == 0 && outAll == 0){
+					addError(node, NOT_CONNECTED);
+					continue;
+				}
 			}
 			int in = numberOfControlFlows(node.getIncomingEdges());
 			int out =  numberOfControlFlows(node.getOutgoingEdges());
