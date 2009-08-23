@@ -60,6 +60,7 @@ import de.unihannover.se.infocup2008.bpmn.model.BPMNType;
 public class LeftToRightGridLayouter implements Layouter {
 
 	private static final int COLLAPSED_POOL_HEIGHT = 70;
+	private static final int COLLAPSED_POOL_MIN_WIDTH = 300;
 	private static final int CELL_MARGIN = 30; // calc biggest elements in row /
 	// column
 	private static final int CELL_HEIGHT = 0;
@@ -192,7 +193,7 @@ public class LeftToRightGridLayouter implements Layouter {
 			for (BPMNElement collapsedPool : collapsedPools) {
 				collapsedPool
 						.setGeometry(new BPMNBoundsImpl(0, collapsedPool
-								.getGeometry().getY(), poolWidth,
+								.getGeometry().getY(), Math.max(poolWidth,COLLAPSED_POOL_MIN_WIDTH),
 								COLLAPSED_POOL_HEIGHT));
 				collapsedPool.updateDataModel();
 			}
