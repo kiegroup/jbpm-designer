@@ -60,8 +60,6 @@ public class BPEL4ChorExporter extends HttpServlet {
 	
 	private static final long serialVersionUID = 3551528829474652693L;
 	
-	private BPELExporter bpelExporter = new BPELExporter();
-	
 	// use a hash map to record some node informations - with type "participantSet",
 	// "associationEdge", "sendOrReceiveActivity", "messageLink" or "process", so that
 	// we can easily get all necessary informations about a node
@@ -107,7 +105,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 
     	transformGrounding (rdfString, out, contextPath);
     	
-    	transformProcesses (rdfString, out);
+    	transformProcesses (rdfString, out, contextPath);
 
     	out.print("]}");
 
@@ -742,9 +740,9 @@ public class BPEL4ChorExporter extends HttpServlet {
    }
 
     /****************************  processes  *******************************/
-	private void transformProcesses (String rdfString, PrintWriter out){
+	private void transformProcesses (String rdfString, PrintWriter out, String contextPath){
 	   
-    	bpelExporter.transformProcesses (rdfString, out);
+    	BPELExporter.transformProcesses (rdfString, out, contextPath);
    }
     
 /***************************** print methods ********************************/
