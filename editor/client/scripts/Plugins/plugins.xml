@@ -156,6 +156,12 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
 		
+		<plugin source="transformationDownloadDialog.js" name="ORYX.Plugins.TransformationDownloadDialog">
+			<requires namespace="http://b3mn.org/stencilset/bpmnplus#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	
+			<requires namespace="http://b3mn.org/stencilset/bpel4chor#"/>
+		</plugin>
+		
 		<!-- plugin for BPMN+ to BPEL4Chor transformation -->
 		<plugin source="bpmnplus2bpel4chor.js" name="ORYX.Plugins.Bpel4ChorTransformation">
 			<requires namespace="http://b3mn.org/stencilset/bpmnplus#"/>	
