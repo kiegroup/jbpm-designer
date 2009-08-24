@@ -7,6 +7,7 @@ import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.PTNet;
 import de.hpi.PTnet.verification.MaxStatesExceededException;
 import de.hpi.PTnet.verification.WeakTerminationChecker;
+import de.hpi.PTnet.verification.WeakTerminationChecker.UnboundedNetException;
 import de.hpi.interactionnet.InteractionNet;
 import de.hpi.petrinet.Transition;
 
@@ -32,6 +33,10 @@ public class DesynchronizabilityChecker {
 			conflictingTransitions = checker.getConflictTransitions();
 			return isOk;
 		} catch (MaxStatesExceededException e) {
+			// mark all transitions TODO provide a nicer visualization
+			conflictingTransitions.addAll(net.getTransitions());
+			return false;
+		} catch (UnboundedNetException e) {
 			// mark all transitions TODO provide a nicer visualization
 			conflictingTransitions.addAll(net.getTransitions());
 			return false;

@@ -8,6 +8,7 @@ import java.util.Map;
 import de.hpi.PTnet.Marking;
 import de.hpi.PTnet.verification.MaxStatesExceededException;
 import de.hpi.PTnet.verification.WeakTerminationChecker;
+import de.hpi.PTnet.verification.WeakTerminationChecker.UnboundedNetException;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.DiagramObject;
 import de.hpi.bpmn.EndEvent;
@@ -65,6 +66,8 @@ public class BPMNValidator {
 			leadsToEnd = checker.check();
 			deadlockTransitions.addAll(checker.getDeadlockingTransitions());
 		} catch (MaxStatesExceededException e) {
+			leadsToEnd = false;
+		} catch (UnboundedNetException e) {
 			leadsToEnd = false;
 		}
 		

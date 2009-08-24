@@ -2,6 +2,7 @@ package de.hpi.PTnet.verification;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -47,6 +48,8 @@ public class WeakTerminationChecker {
 	protected Transition unsafeTransition;
 	protected int stateCount;
 	protected int unsafeTransitionSearchDepth;
+	protected List<int[]> markings_stack;
+	
 	
 	public WeakTerminationChecker(PTNet net, List<Marking> finalMarkings) {
 		this.net = net;
@@ -61,14 +64,16 @@ public class WeakTerminationChecker {
 		this.conflictTransitions = new ArrayList<Transition>();
 		this.deadlockingTransitions = new ArrayList<Transition>();
 //		this.unsafeTransitions = new ArrayList<Transition>();
+		this.markings_stack = new ArrayList<int[]>();
 	}
 	
 	/**
 	 * precondition: the net is bounded
 	 * @param conflictingTransitions
 	 * @return
+	 * @throws UnboundedNetException 
 	 */
-	public boolean check() throws MaxStatesExceededException {
+	public boolean check() throws MaxStatesExceededException, UnboundedNetException {
 		conflictTransitions.clear();
 		deadlockingTransitions.clear();
 //		unsafeTransitions.clear();
@@ -76,10 +81,11 @@ public class WeakTerminationChecker {
 		unsafeTransitionSearchDepth = -1;
 		
 		stateCount = 0;
+		
 		return doCheck(net.getInitialMarking(), false, 0);
 	}
 	
-	protected boolean doCheck(Marking marking, boolean returnFalseIfVisited, int searchDepth) throws MaxStatesExceededException {
+	protected boolean doCheck(Marking marking, boolean returnFalseIfVisited, int searchDepth) throws MaxStatesExceededException, UnboundedNetException {
 		String markingStr = marking.toString();
 //		System.out.println("Checking marking "+markingStr);
 		
@@ -102,7 +108,17 @@ public class WeakTerminationChecker {
 		boolean leadsToGoodMarking = leadsToGoodMarking(marking);
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
 		List<Transition> badTransitions = new ArrayList<Transition>();
+		
+		int[] m_b = getMarking(marking);
+		if (hasSeveralTokenOnOnePlace(m_b) && hasFoundInferiorMarking(m_b)){
+			throw new UnboundedNetException();
+		}
+		
+		
 		if (transitions.size() > 0) {
+			
+			markings_stack.add(m_b);
+			
 			for (Transition t: transitions) {
 				Marking newmarking = interpreter.fireTransition(net, marking, t);
 				
@@ -115,11 +131,21 @@ public class WeakTerminationChecker {
 					}
 				}
 				
-				boolean cresult = doCheck(newmarking, alreadyVisited, searchDepth+1);
+				boolean cresult;
+				try {
+					cresult= doCheck(newmarking, alreadyVisited, searchDepth+1);
+				} catch (UnboundedNetException e) {
+					e.setCause(t);
+					throw e;
+				}
 				leadsToGoodMarking |= cresult;
-				if (!cresult)
+				if (!cresult) {
 					badTransitions.add(t);
+				}
 			}
+	
+			markings_stack.remove(markings_stack.size() - 1);
+			
 		} else {
 			// is deadlock?
 			if (!leadsToGoodMarking) {
@@ -136,6 +162,15 @@ public class WeakTerminationChecker {
 		}
 		
 		return leadsToGoodMarking;
+	}
+
+	private boolean hasSeveralTokenOnOnePlace(int[] mB) {
+		for (int i : mB) {
+			if (i > 1) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected boolean leadsToGoodMarking(Marking marking) {
@@ -175,7 +210,48 @@ public class WeakTerminationChecker {
 	public Transition getUnsafeTransition() {
 		return unsafeTransition;
 	}
+	
+	protected int[] getMarking(Marking marking) {
+		int[] mb = new int[net.getPlaces().size()];
+		int i=0;
+		for (Iterator<Place> it=net.getPlaces().iterator(); it.hasNext(); i++) {
+			Place p = it.next();
+			mb[i] = marking.getNumTokens(p);
+		}
+		return mb;
+	}
 
+	protected boolean hasFoundInferiorMarking(int[] mb) {
+		for (Iterator<int[]> it=markings_stack.iterator(); it.hasNext(); ) {
+			int[] mb2 = it.next();
+			boolean found = true;
+			for (int i=0; i<mb.length; i++) {
+				if (mb2[i] > mb[i]) {
+					found = false;
+					break;
+				}
+			}
+			if (found)
+				return true;
+		}
+		return false;
+	}
+
+	public static class UnboundedNetException extends Exception {
+
+		private static final long serialVersionUID = -8014065307835455L;
+		
+		String causeId;
+
+		public String getCauseId() {
+			return causeId!=null ? causeId : "";
+		}
+
+		public void setCause(Transition t) {
+			this.causeId = t.getId();
+		}	
+		
+	}
 }
 
 

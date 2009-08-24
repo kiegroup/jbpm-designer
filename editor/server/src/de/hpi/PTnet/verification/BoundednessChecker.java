@@ -36,14 +36,14 @@ public class BoundednessChecker {
 	
 	protected PTNet net;
 	protected PTNetInterpreter interpreter;
-	protected Set<String> markings;
-	protected List<int[]> markings_b;
+	protected Set<String> markings_strings;
+	protected List<int[]> markings_stack;
 	
 	public BoundednessChecker(PTNetInterpreter interpreter, PTNet net) {
 		this.net = net;
 		this.interpreter = interpreter;
-		this.markings = new HashSet<String>();
-		this.markings_b = new ArrayList<int[]>();
+		this.markings_strings = new HashSet<String>();
+		this.markings_stack = new ArrayList<int[]>();
 	}
 	
 	public boolean checkBoundedness() {
@@ -55,14 +55,14 @@ public class BoundednessChecker {
 //		System.out.println("Checking marking "+markingStr);
 		
 		// check if this marking was already processed
-		if (markings.contains(markingStr))
+		if (markings_strings.contains(markingStr))
 			return true;
-		markings.add(markingStr);
+		markings_strings.add(markingStr);
 		
 		int[] m_b = getMarking(marking);
 		if (hasFoundInferiorMarking(m_b))
 			return false;
-		markings_b.add(m_b);
+		markings_stack.add(m_b);
 
 		List<Transition> transitions = interpreter.getEnabledTransitions(net, marking);
 		for (Transition t: transitions) {
@@ -70,6 +70,7 @@ public class BoundednessChecker {
 			if (!doCheck(newmarking))
 				return false;
 		}
+		markings_stack.remove(markings_stack.size()-1);
 		return true;
 	}
 
@@ -84,7 +85,7 @@ public class BoundednessChecker {
 	}
 
 	protected boolean hasFoundInferiorMarking(int[] mb) {
-		for (Iterator<int[]> it=markings_b.iterator(); it.hasNext(); ) {
+		for (Iterator<int[]> it=markings_stack.iterator(); it.hasNext(); ) {
 			int[] mb2 = it.next();
 			boolean found = true;
 			for (int i=0; i<mb.length; i++) {

@@ -28,6 +28,7 @@ public class EPCDiagramJsonImporter {
 		this.jsonObj = jsonObj;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void loadEpcIntoDiagram(Diagram diagram) throws JSONException {
 		
 		ImportContext c = new ImportContext();
@@ -56,6 +57,15 @@ public class EPCDiagramJsonImporter {
 			String type = edge.getJSONObject("stencil").getString("id");
 			addDiagramEdge(type, edge, c);
 		}
+		JSONObject jsonProperties =  this.jsonObj.getJSONObject("properties");
+		Iterator<String> keys = (Iterator<String>)jsonProperties.keys();
+		Map<String, String> propertiesMap = new HashMap<String, String>();
+		while (keys.hasNext()) {
+			String key = keys.next();
+			propertiesMap.put(key, jsonProperties.getString(key));
+		}
+		diagram.setProperties(propertiesMap);
+		
 		return;
 	}
 	
