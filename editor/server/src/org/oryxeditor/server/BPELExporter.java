@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -93,8 +94,16 @@ public class BPELExporter extends HttpServlet {
 	   rdfSource = new StreamSource(rdf);
 
 	   	// RDF2BPEL XSLT source
-	    final String xsltFilename = getServletContext().getRealPath("/xslt/RDF2BPEL.xslt");
-//   		final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/RDF2BPEL.xslt";
+	   String xsltFilename;
+		try {
+			ServletContext context = getServletContext();
+			final String contextPath = context.getRealPath("");
+			xsltFilename = contextPath + "/xslt/RDF2BPEL.xslt";
+		} catch (Exception e) {
+			handleException(out, e);
+			return;
+		}
+	   
    		final File xsltFile = new File(xsltFilename);
    		final Source xsltSource = new StreamSource(xsltFile);	
    	
