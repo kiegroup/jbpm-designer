@@ -400,6 +400,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			}).bind(this));
 			
 		} catch(e) {
+			//console.log(e);
 			this._isChanged = true;
 		}
 		
@@ -463,6 +464,21 @@ ORYX.Core.SVG.Label = Clazz.extend({
  		}	
 		return 9;
  	},
+	
+	getReferencedElementWidth: function() {
+		var refNode = this.node.ownerDocument.getElementById(this.fitToElemId);
+				
+		if (refNode) {
+			var refbb = refNode.getBBox();
+			if(refbb) {
+				return refbb.width;
+			} else {
+				return undefined;
+			}
+		} else {
+			return undefined;
+		}
+	},
 	
 	/**
 	 * If no parameter is provided, this method returns the current text.
@@ -607,6 +623,9 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				fontSize = ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT;
 			}
 		}
+		
+		if(fontSize)
+			this.node.setAttribute("oryx:fontSize", fontSize);
 		
 		return fontSize;
 	},
