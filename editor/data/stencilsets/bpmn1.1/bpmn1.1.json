@@ -11387,13 +11387,7 @@
 						
 					}
 				],
-				incomingEdges: [
-					{
-						role:"SequenceFlow",
-						maximum:1
-						
-					}
-				]
+				incomingEdges: []
 			}
 		],
 		"containmentRules": [
