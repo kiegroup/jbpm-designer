@@ -524,13 +524,19 @@ ORYX.Core.SVG.SVGShape = Clazz.extend({
 					return true;
 			}
 
+			var fill = elem.getAttributeNS(null, "fill");
+			var stroke = elem.getAttributeNS(null, "stroke");
+			if (fill && fill == "none" && stroke && stroke == "none") {
+				return false;
+			}
 			var attr = elem.getAttributeNS(null, "display");
 			if(!attr)
 				return this.isVisible(elem.parentNode);
 			else if (attr == "none") 
 				return false;
-			else 
+			else {
 				return true;
+			}
 		}
 
 		return true;
