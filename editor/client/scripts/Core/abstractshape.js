@@ -58,6 +58,11 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 		//Hash map for all properties. Only stores the values of the properties.
 		this.properties = new Hash();
 		this.propertiesChanged = new Hash();
+
+		// List of properties which are not included in the stencilset, 
+		// but which gets (de)serialized
+		this.hiddenProperties = new Hash();
+		
 		
 		//Initialization of property map and initial value.
 		this._stencil.properties().each((function(property) {
@@ -77,7 +82,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 
 				// Raise an event, to show that the property has changed
 				// required for plugins like processLink.js
-				window.setTimeout( function(){
+				//window.setTimeout( function(){
 
 					this._delegateEvent({
 							type	: ORYX.CONFIG.EVENT_PROPERTY_CHANGED, 
@@ -86,7 +91,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 							oldValue: oldValue
 						});
 
-				}.bind(this), 10)
+				//}.bind(this), 10)
 
 			}).bind(this));
 		}
@@ -260,27 +265,48 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 	 * @param key {String} Must be 'prefix-id' of property
 	 * @param value {Object} Can be of type String or Number according to property type.
 	 */
-	setProperty: function(key, value) {
+	setProperty: function(key, value, force) {
 		var oldValue = this.properties[key];
-		if(oldValue !== value) {
+		if(oldValue !== value || force === true) {
 			this.properties[key] = value;
 			this.propertiesChanged[key] = true;
 			this._changed();
 			
 			// Raise an event, to show that the property has changed
-			window.setTimeout( function(){
+			//window.setTimeout( function(){
 
+			if (!this._isInSetProperty) {
+				this._isInSetProperty = true;
+				
 				this._delegateEvent({
 						type	: ORYX.CONFIG.EVENT_PROPERTY_CHANGED, 
 						name	: key, 
 						value	: value,
 						oldValue: oldValue
 					});
-								
-			}.bind(this), 10)
+				
+				delete this._isInSetProperty;
+			}
+			//}.bind(this), 10)
 		}
 	},
-	
+
+	/**
+	 * 
+	 * @param {String} Must be 'prefix-id' of property
+	 * @param {Object} Can be of type String or Number according to property type.
+	 */
+	setHiddenProperty: function(key, value) {
+		// IF undefined, Delete
+		if (value === undefined) {
+			delete this.hiddenProperties[key];
+			return;
+		}
+		var oldValue = this.hiddenProperties[key];
+		if(oldValue !== value) {
+			this.hiddenProperties[key] = value;
+		}
+	},
 	/**
 	 * Calculate if the point is inside the Shape
 	 * @param {Point}
@@ -303,7 +329,12 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 		
 		// Add the type
 		serializedObject.push({name: 'type', prefix:'oryx', value: this.getStencil().id(), type: 'literal'});	
-				
+	
+		// Add hidden properties
+		this.hiddenProperties.each(function(prop){
+			serializedObject.push({name: prop.key.replace("oryx-", ""), prefix: "oryx", value: Ext.encode(prop.value), type: 'literal'});
+		}.bind(this));
+		
 		// Add all properties
 		this.getStencil().properties().each((function(property){
 			
@@ -319,10 +350,14 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 	},
 		
 		
-	deserialize: function(serialze){
+	deserialize: function(serialize){
 		// Search in Serialize
 		var initializedDocker = 0;
-		serialze.each((function(obj){
+		
+		// Sort properties so that the hidden properties are first in the list
+		serialize = serialize.sort(function(a,b){ return Number(this.properties.keys().member(a.prefix+"-"+a.name)) > Number(this.properties.keys().member(b.prefix+"-"+b.name))}.bind(this));
+		
+		serialize.each((function(obj){
 			
 			var name 	= obj.name;
 			var prefix 	= obj.prefix;
@@ -347,6 +382,8 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 							// Set property
 							if(this.properties.keys().member(prefix+"-"+name)) {
 								this.setProperty(prefix+"-"+name, unescape(value));
+							} else if(!(name === "bounds"||name === "parent"||name === "target"||name === "dockers"||name === "docker")) {
+								this.setHiddenProperty(prefix+"-"+name, value);
 							}
 					
 			}
@@ -362,7 +399,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
      toJSON: function(){
         var json = {
             resourceId: this.resourceId,
-            properties: this.properties.inject({}, function(props, prop){
+            properties: Ext.apply({}, this.hiddenProperties, this.properties).inject({}, function(props, prop){
               var key = prop[0];
               var value = prop[1];
                 
