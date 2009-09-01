@@ -83,6 +83,10 @@ public class EdgeLayouter {
 
 	public EdgeLayouter(Map<BPMNElement, Grid<BPMNElement>> grids,
 			BPMNElement edge) {
+		// if one end is not connected do nothing
+		if(edge.getIncomingLinks().isEmpty() || edge.getOutgoingLinks().isEmpty()){
+			return;
+		}
 		this.edge = edge;
 		this.grids = grids;
 		calculateGlobals();

@@ -238,7 +238,16 @@ public class LeftToRightGridLayouter implements Layouter {
 		// aChild.getParent())
 		if (aChild != null) {
 			getContextByElement(aChild);
+		}else{
+			//create empty grid for empty lanes
+			// to prevent nullpointer-exception
+			GridContext result = new GridContext();
+			result.grid = new Grid<BPMNElement>();
+			result.startCell = result.grid.getFirstRow().getFirstCell();
+			superGrid.add(result.grid);
+			parent2Context.put(lane, result);
 		}
+		
 		lane2LaneChilds.put(lane, childs);
 	}
 
