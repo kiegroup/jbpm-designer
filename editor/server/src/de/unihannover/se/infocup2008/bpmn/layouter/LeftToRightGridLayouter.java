@@ -144,7 +144,6 @@ public class LeftToRightGridLayouter implements Layouter {
 		parent2Context.clear();
 		lane2LaneChilds.clear();
 		maxLaneDepth = 0;
-
 		if (parent == null) {
 			for (BPMNElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
 				prepareLanes(pool, 1);
@@ -174,6 +173,9 @@ public class LeftToRightGridLayouter implements Layouter {
 			calcGeometry(superGrid);
 
 			// place Lanes
+			
+			poolWidth = Math.max(poolWidth,COLLAPSED_POOL_MIN_WIDTH);
+			
 			for (BPMNElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
 				Grid<BPMNElement> firstGrid = findFirstGridOfPool(pool);
 				int firstGridFirstRowIndex = superGrid.findRow(firstGrid
@@ -188,12 +190,12 @@ public class LeftToRightGridLayouter implements Layouter {
 
 			writeGeometry(superGrid);
 
-			// set pools to start at x = 0 & correct size
+			// set pools to start at x = CELL_MARGIN & correct size
 
 			for (BPMNElement collapsedPool : collapsedPools) {
 				collapsedPool
-						.setGeometry(new BPMNBoundsImpl(0, collapsedPool
-								.getGeometry().getY(), Math.max(poolWidth,COLLAPSED_POOL_MIN_WIDTH),
+						.setGeometry(new BPMNBoundsImpl(CELL_MARGIN, collapsedPool
+								.getGeometry().getY(), poolWidth,
 								COLLAPSED_POOL_HEIGHT));
 				collapsedPool.updateDataModel();
 			}
@@ -272,8 +274,11 @@ public class LeftToRightGridLayouter implements Layouter {
 		for (int i = firstRow; i <= lastRow; i++) {
 			height += heightOfRow[i];
 		}
-
+		
 		double minHeight = lane.getGeometry().getHeight();
+		if(level == 0){
+			minHeight +=  CELL_MARGIN / 2;
+		}
 		double diff = minHeight - height;
 		if (diff > 1.0) {
 			firstRow = superGrid.findRow(findFirstGridOfPool(lane)
@@ -285,8 +290,13 @@ public class LeftToRightGridLayouter implements Layouter {
 			// Redo placement
 			return placeLane(lane, relY, level);
 		}
-
-		lane.setGeometry(new BPMNBoundsImpl(0, relY, width, height));
+		if(level == 0){
+			//pool with magin
+			lane.setGeometry(new BPMNBoundsImpl(CELL_MARGIN, relY + (CELL_MARGIN / 4), width, height - (CELL_MARGIN / 2)));
+		}else{
+			//lane without margin
+			lane.setGeometry(new BPMNBoundsImpl(CELL_MARGIN, relY, width, height));
+		}
 		lane.updateDataModel();
 		return height;
 	}
