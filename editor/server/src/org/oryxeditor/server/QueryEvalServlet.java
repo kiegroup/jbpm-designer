@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -47,25 +49,27 @@ import com.bpmnq.QueryGraphBuilderRDF;
 import com.bpmnq.Utilities;
 import com.bpmnq.AbstractQueryProcessor.ProcessorCommand;
 import com.bpmnq.QueryGraphBuilderRDF.RdfSyntax;
+import com.bpmnq.compliancechecker.ComplianceViolationExplanator;
 import com.bpmnq.compliancechecker.ModelChecker;
 import com.bpmnq.compliancechecker.TemporalQueryGraph;
 
 public class QueryEvalServlet extends HttpServlet {
     private static final long serialVersionUID = -7946509291423453168L;
-    private static final boolean useDataBaseConnection = false;
+    private static final boolean useDataBaseConnection = true;
     private Logger log = Logger.getLogger(this.getClass());
-
+    private Map<QueryGraph,String> queryMatches = new HashMap<QueryGraph,String>(); 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
+        long startTime,endTime;
+        startTime = System.currentTimeMillis();
         String rdf = req.getParameter("data");
         InputStream rdfStream = new ByteArrayInputStream(rdf.getBytes("UTF-8"));
-        log.debug("reading in rdfStream as UTF-8.");
-        log.trace("read following RDF: " + rdf);
+//        log.debug("reading in rdfStream as UTF-8.");
+//        log.trace("read following RDF: " + rdf);
         
         // initialize BPMNQ processor
         try {
@@ -84,14 +88,14 @@ public class QueryEvalServlet extends HttpServlet {
         try {
             query = gBuilder.buildGraph();
             // Added for Debugging
-            System.out.print("####### Servlet path");
-            System.out.println((String) this.getServletContext().getRealPath("."));
+//            System.out.print("####### Servlet path");
+//            System.out.println((String) this.getServletContext().getRealPath("."));
             
-            System.out.println("########################################## QUERY #################################");
-            log.info("########################################## QUERY #################################");
-            log.info(query.toString());
-            query.print(System.out);
-            System.out.println("########################################## QUERY #################################");
+//            System.out.println("########################################## QUERY #################################");
+//            log.info("########################################## QUERY #################################");
+//            log.info(query.toString());
+//            query.print(System.out);
+//            System.out.println("########################################## QUERY #################################");
         } catch (FileFormatException e) {
             e.printStackTrace();
             throw new ServletException(e);
@@ -120,6 +124,7 @@ public class QueryEvalServlet extends HttpServlet {
         try {
         	if ("processComplianceQuery".equalsIgnoreCase(command))
         	{
+        		qProcessor.includeEnclosingAndSplits= true;
 //        		respWriter.println("<ServletPath>"+(String) this.getServletContext().getRealPath(".")+"</ServletPath>");
 //        		respWriter.println("<UserDirectory>"+System.getProperty("user.dir")+"</UserDirectory>");
         		System.out.println("########################################## PROCESS COMPLIANCE QUERY #################################");
@@ -160,26 +165,61 @@ public class QueryEvalServlet extends HttpServlet {
         				}
         				if (generateAntiPattern)
         				{
-        					List<QueryGraph> antiPatterns = tqry.generateAntiPatternQueries();
-        					ProcessGraph matchAntiPattern=null;
+        					ComplianceViolationExplanator cve = new ComplianceViolationExplanator(mdls.get(i));
+        					
+        					List<QueryGraph> antiPatterns =  cve.explainViolation(tqry);// tqry.generateAntiPatternQueries();
+        					
         					for (QueryGraph q : antiPatterns)
         					{
         						System.out.println("########################################## ANTI PATTERN QUERY #################################");
         						q.print(System.out);
         						System.out.println("########################################## ANTI PATTERN QUERY #################################");
-
-        						matchAntiPattern = qProcessor.runQueryAgainstModel(q, mdls.get(i));
-        						if(matchAntiPattern.nodes.size() > 0)
+        						// this has to be changed
+        						List<String> mdls2 = qProcessor.findRelevantProcessModels(q);
+        						
+        						for (String s : mdls2)
         						{
-
-        							matchAntiPattern.modelURI = mdls.get(i);
-        							matchAntiPattern.exportXML(respWriter,"<match>antipattern</match>\n<diagnosis>violation scenario</diagnosis>");
-        							matchAntiPattern.print(System.out);
-        							System.out.println("<match>antipattern</match>\n<diagnosis>violation scenario</diagnosis>");
-        						}
-        						else
-        						{
-        							System.out.println("Anti Pattern Query didnt find a match");
+        							boolean insert = false;
+        							ProcessGraph matchAntiPattern=null;
+        							QueryGraph cln = (QueryGraph) q.clone();
+        							matchAntiPattern = qProcessor.runQueryAgainstModel(cln, s);
+        							if(matchAntiPattern.nodes.size() > 0)
+        							{
+        								
+        								boolean qFound= false;
+        								for (QueryGraph qq : queryMatches.keySet())
+        								{
+        									if (qq.getSignature().containsAll(q.getSignature()))
+        									{
+        										qFound = true;
+        										String mdlls = queryMatches.get(qq);
+        										if (!mdlls.contains(s))
+        										{
+        											mdlls +=","+s;
+        											queryMatches.put(qq, mdlls);
+        											insert = true;
+        										}
+        									}
+        								}
+        								if (!qFound)
+        								{
+        									insert = true;
+        									queryMatches.put(q, s);
+        								}
+        								System.out.println("############################### Insert value is "+insert);
+        								if (insert)
+        								{
+        									matchAntiPattern.modelURI = s;
+        									matchAntiPattern.exportXML(respWriter,"<match>antipattern</match>\n<diagnosis>violation scenario</diagnosis>");
+        									matchAntiPattern.print(System.out);
+        									System.out.println("<match>antipattern</match>\n<diagnosis>violation scenario</diagnosis>");
+        								}
+        								
+        							}
+        							else
+        							{
+        								System.out.println("Anti Pattern Query didnt find a match");
+        							}
         						}
         					}
 
@@ -198,7 +238,7 @@ public class QueryEvalServlet extends HttpServlet {
         	else if ("runComplianceQueryAgainstModel".equalsIgnoreCase(command)) {
 //                ProcessGraph match = null;
 //                boolean doesMatch = qProcessor.testQueryAgainstModel(query, modelID, match);
-                
+        		qProcessor.includeEnclosingAndSplits= true;
                 
                 TemporalQueryGraph tqry = query.getTemporalQueryGraph();
             	ModelChecker mc = new ModelChecker(tqry,respWriter);
@@ -222,7 +262,9 @@ public class QueryEvalServlet extends HttpServlet {
             	}
             	if (generateAntiPattern)
             	{
-            		List<QueryGraph> antiPatterns = tqry.generateAntiPatternQueries();
+            		ComplianceViolationExplanator cve = new ComplianceViolationExplanator(modelID);
+					
+					List<QueryGraph> antiPatterns =  cve.explainViolation(tqry);// tqry.generateAntiPatternQueries();
             		ProcessGraph matchAntiPattern=null;
             		for (QueryGraph q : antiPatterns)
             		{
@@ -240,16 +282,18 @@ public class QueryEvalServlet extends HttpServlet {
 
             } else if ("runQueryAgainstModel".equalsIgnoreCase(command)) {
                 ProcessGraph match=null;
+                qProcessor.includeEnclosingAndSplits= false;
                 qProcessor.testQueryAgainstModel(query, modelID,match);
             } else if ("processMultiQuery".equalsIgnoreCase(command)) {
+            	qProcessor.includeEnclosingAndSplits= false;
                 List<Match> matches = qProcessor.processMultiQuery(query);
             } else { // default case, if no (or unknown) command was specified
-                
+            	qProcessor.includeEnclosingAndSplits= false;
                 List<String> matchedModels = qProcessor.processQuery(query);
             }
         } catch (Exception e) {
             try {
-                resp.sendError(500, "Query processing failed with an internal error");
+                resp.sendError(500, "Query processing failed with an internal error: "+e.getMessage());
             } catch (IllegalStateException e1) { // ok, it was already too late, headers were sent out
             }
 
@@ -262,6 +306,8 @@ public class QueryEvalServlet extends HttpServlet {
         } catch (SQLException e) {
             log("Closing DB connection failed " + e.getMessage(), e);
         }
+        endTime = System.currentTimeMillis();
+        log.info("Total processing time "+ (endTime - startTime) + " ms");
     }
 
     private GraphBuilder getGraphBuilderFor(InputStream graph, String format,
