@@ -39,22 +39,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hpi.layouting.grid.Grid;
+import de.hpi.layouting.model.LayoutingBounds;
+import de.hpi.layouting.model.LayoutingBoundsImpl;
+import de.hpi.layouting.model.LayoutingElement;
+import de.hpi.layouting.model.LayoutingDockers.Point;
 import de.unihannover.se.infocup2008.bpmn.JsonErdfTransformation;
 import de.unihannover.se.infocup2008.bpmn.dao.ERDFDiagramDao;
 import de.unihannover.se.infocup2008.bpmn.dao.JSONDiagramDao;
 import de.unihannover.se.infocup2008.bpmn.layouter.CatchingIntermediateEventLayouter;
 import de.unihannover.se.infocup2008.bpmn.layouter.EdgeLayouter;
 import de.unihannover.se.infocup2008.bpmn.layouter.LeftToRightGridLayouter;
-import de.unihannover.se.infocup2008.bpmn.layouter.grid.Grid;
-import de.unihannover.se.infocup2008.bpmn.layouter.topologicalsort.TopologicalSorter;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBounds;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBoundsImpl;
+import de.unihannover.se.infocup2008.bpmn.layouter.topologicalsort.TopologicalSorterBPMN;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagramERDF;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNElementERDF;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNType;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNDockers.Point;
 
 public class BPMNLayouterServlet extends HttpServlet {
 
@@ -119,11 +120,11 @@ public class BPMNLayouterServlet extends HttpServlet {
 	
 			try {
 				for (String id : this.diagram.getElements().keySet()) {
-					BPMNElement element = this.diagram.getElement(id);
+					BPMNElement element = (BPMNElement) this.diagram.getElement(id);
 					JSONObject obj = new JSONObject();
 					obj.put("id", id);
 	
-					BPMNBounds bounds = element.getGeometry();
+					LayoutingBounds bounds = element.getGeometry();
 					String boundsString = bounds.getX() + " " + bounds.getY() + " "
 							+ bounds.getX2() + " " + bounds.getY2();
 					obj.put("bounds", boundsString);
@@ -192,7 +193,7 @@ public class BPMNLayouterServlet extends HttpServlet {
 			// set bounds
 			double subprocessWidth = lToRGridLayouter.getWidthOfDiagramm();
 			double subprocessHeight = lToRGridLayouter.getHeightOfDiagramm();
-			subProcess.setGeometry(new BPMNBoundsImpl(0, 0, subprocessWidth,
+			subProcess.setGeometry(new LayoutingBoundsImpl(0, 0, subprocessWidth,
 					subprocessHeight));
 			grids.putAll(lToRGridLayouter.getGridParentMap());
 		}
@@ -206,21 +207,21 @@ public class BPMNLayouterServlet extends HttpServlet {
 				.setCatchingIntermediateEvents(diagram);
 
 		// Setting edges
-		List<BPMNElement> flows = diagram.getConnectingElements();
-		for (BPMNElement flow : flows) {
-			new EdgeLayouter(this.grids, flow);
+		List<LayoutingElement> flows = diagram.getConnectingElements();
+		for (LayoutingElement flow : flows) {
+			new EdgeLayouter(this.grids, (BPMNElement)flow);
 		}
 	}
 
 	private LeftToRightGridLayouter layoutProcess(BPMNElement parent) {
 		// Sorting elements topologicaly
-		Queue<BPMNElement> sortedElements = new TopologicalSorter(diagram,
+		Queue<LayoutingElement> sortedElements = new TopologicalSorterBPMN(diagram,
 				parent).getSortedElements();
 
 		// Sorted
 		int count = 0;
 		List<String> sortedIds = new LinkedList<String>();
-		for (BPMNElement element : sortedElements) {
+		for (LayoutingElement element : sortedElements) {
 			sortedIds.add(element.getId());
 			count++;
 		}
@@ -249,7 +250,8 @@ public class BPMNLayouterServlet extends HttpServlet {
 	 *            the element to process the childs from
 	 */
 	private void processChilds(BPMNElement parent) {
-		for (BPMNElement child : this.diagram.getChildElementsOf(parent)) {
+		for (LayoutingElement c : this.diagram.getChildElementsOf(parent)) {
+			BPMNElement child = (BPMNElement) c;			
 			String childType = child.getType();
 			if (childType.equals(BPMNType.Subprocess)) {
 				subprocessOrder.add(child);
@@ -261,11 +263,11 @@ public class BPMNLayouterServlet extends HttpServlet {
 	private void preprocessHeuristics() {
 		// turn direction of associations to text annotations towards them
 		// so that they are right of the elements
-		for (BPMNElement textAnnotation : this.diagram
+		for (LayoutingElement textAnnotation : this.diagram
 				.getElementsOfType(BPMNType.TextAnnotation)) {
 			for (BPMNElement edge : textAnnotation.getOutgoingLinks().toArray(
 					new BPMNElement[0])) {
-				BPMNElement target = edge.getOutgoingLinks().get(0);
+				BPMNElement target = (BPMNElement) edge.getOutgoingLinks().get(0);
 				// remove old connection
 				textAnnotation.removeOutgoingLink(edge);
 				// edge.removeIncomingLink(textAnnotation);

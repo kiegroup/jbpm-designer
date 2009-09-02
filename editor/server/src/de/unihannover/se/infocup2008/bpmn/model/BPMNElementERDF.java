@@ -24,7 +24,7 @@ package de.unihannover.se.infocup2008.bpmn.model;
 
 import org.w3c.dom.Node;
 
-import de.unihannover.se.infocup2008.bpmn.model.BPMNDockers.Point;
+import de.hpi.layouting.model.LayoutingDockers.Point;
 
 /**
  * Implements the <code>BPMNElement</code> Interface.

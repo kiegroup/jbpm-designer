@@ -20,7 +20,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package de.unihannover.se.infocup2008.bpmn.model;
+package de.hpi.layouting.model;
 
 /**
  * Represents the geometry of an element. Needed for the decorators
@@ -28,7 +28,7 @@ package de.unihannover.se.infocup2008.bpmn.model;
  * @author Team Royal Fawn
  * 
  */
-public interface BPMNBounds {
+public interface LayoutingBounds {
 	/**
 	 * @return the x
 	 */

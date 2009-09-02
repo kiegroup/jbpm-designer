@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2009
- * Ingo Kitzmann, Christoph Koenig
+ * Ingo Kitzmann, Christoph Koenig, Matthias Weidlich
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,35 +20,31 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package de.unihannover.se.infocup2008.bpmn.layouter;
+package de.hpi.epc.layouting;
 
-import java.util.Map;
 import java.util.Random;
 
+import de.hpi.epc.layouting.model.EPCType;
 import de.hpi.layouting.grid.Grid;
 import de.hpi.layouting.grid.Grid.Cell;
 import de.hpi.layouting.model.LayoutingBounds;
 import de.hpi.layouting.model.LayoutingBoundsImpl;
 import de.hpi.layouting.model.LayoutingDockers;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNType;
+import de.hpi.layouting.model.LayoutingElement;
 
 /**
- * This class layouts the edges. All work is done in the constructor.
- * <code>calculateGlobals()</code> calculates some global variables, which are
- * needed in many functions. <code>pickLayout*()</code> decides which type of
- * edge to use. <code>set*()</code> actually calculate one specific edge.
+ * Simple layouting of edges based on the edge layouter of team Royal Fawn.
  * 
- * @author Team Royal Fawn
+ * @author matthias.weidlich
  * 
  */
-public class EdgeLayouter {
+public class EPCEdgeLayouter {
 
-	private Map<BPMNElement, Grid<BPMNElement>> grids;
-	private BPMNElement edge;
+	private Grid<LayoutingElement> grid;
+	private LayoutingElement edge;
 
-	private BPMNElement source;
-	private BPMNElement target;
+	private LayoutingElement source;
+	private LayoutingElement target;
 	private LayoutingBounds sourceGeometry;
 	private LayoutingBounds targetGeometry;
 
@@ -77,27 +73,22 @@ public class EdgeLayouter {
 	private boolean targetJoin;
 	private boolean backwards;
 
-	public EdgeLayouter(BPMNElement edge) {
+	public EPCEdgeLayouter(LayoutingElement edge) {
 		this(null, edge);
 	}
 
-	public EdgeLayouter(Map<BPMNElement, Grid<BPMNElement>> grids,
-			BPMNElement edge) {
-		// if one end is not connected do nothing
-		if(edge.getIncomingLinks().isEmpty() || edge.getOutgoingLinks().isEmpty()){
-			return;
-		}
+	public EPCEdgeLayouter(Grid<LayoutingElement> grid,
+			LayoutingElement edge) {
 		this.edge = edge;
-		this.grids = grids;
+		this.grid = grid;
 		calculateGlobals();
 		pickLayoutForEdge();
-		this.edge.updateDataModel();
 	}
 
 	private void calculateGlobals() {
 		// should both be only one !
-		this.source = (BPMNElement) edge.getIncomingLinks().get(0);
-		this.target = (BPMNElement) edge.getOutgoingLinks().get(0);
+		this.source = (LayoutingElement) edge.getIncomingLinks().get(0);
+		this.target = (LayoutingElement) edge.getOutgoingLinks().get(0);
 
 		this.sourceGeometry = source.getGeometry();
 		this.targetGeometry = target.getGeometry();
@@ -111,26 +102,20 @@ public class EdgeLayouter {
 		// get parent adjustments
 		double sourceParentAdjustmentX = 0;
 		double sourceParentAdjustmentY = 0;
-		BPMNElement parent = (BPMNElement) this.source.getParent();
+		LayoutingElement parent = (LayoutingElement) this.source.getParent();
 		while (parent != null) {
-			if (parent.getType().equals(BPMNType.Lane)) {
-				sourceParentAdjustmentX += LeftToRightGridLayouter.LANE_HEAD_WIDTH;
-			}
 			sourceParentAdjustmentX += parent.getGeometry().getX();
 			sourceParentAdjustmentY += parent.getGeometry().getY();
-			parent = (BPMNElement) parent.getParent();
+			parent = (LayoutingElement) parent.getParent();
 		}
 
 		double targetParentAdjustmentX = 0;
 		double targetParentAdjustmentY = 0;
-		parent = (BPMNElement) this.target.getParent();
+		parent = (LayoutingElement) this.target.getParent();
 		while (parent != null) {
-			if (parent.getType().equals(BPMNType.Lane)) {
-				targetParentAdjustmentX += LeftToRightGridLayouter.LANE_HEAD_WIDTH;
-			}
 			targetParentAdjustmentX += parent.getGeometry().getX();
 			targetParentAdjustmentY += parent.getGeometry().getY();
-			parent = (BPMNElement) parent.getParent();
+			parent = (LayoutingElement) parent.getParent();
 		}
 
 		// get absolute coordinates
@@ -169,7 +154,7 @@ public class EdgeLayouter {
 	}
 
 	private void pickLayoutForEdge() {
-		if (BPMNType.SequenceFlow.equals(this.edge.getType())) {
+		if (EPCType.ControlFlow.equals(this.edge.getType())) {
 			pickLayoutForSequenceFlow();
 		} else {
 			// is a message flow or association
@@ -178,35 +163,10 @@ public class EdgeLayouter {
 	}
 
 	private void pickLayoutForOtherConnection() {
-		// should go out an in diagonal at the corners to not interference with
-		// the sequence flows
-
-		if (source.getType().equals(BPMNType.CollapsedPool)
-				|| target.getType().equals(BPMNType.CollapsedPool)) {
-			setEdgeDirectVertical();
-			return;
-		}
-
-		if (BPMNType.isASwimlane(source.getType())
-				|| BPMNType.isASwimlane(target.getType())) {
-			setEdgeDirectCenter();
-			return;
-		}
-
 		setEdgeDirectCenter();
-
 	}
 
 	private void pickLayoutForSequenceFlow() {
-		if (source.isADockedIntermediateEvent()) {
-			if (backwards) {
-				setEdgeAroundTheCorner(true);
-			} else {
-				setEdge90DegreeRightUnderAntiClockwise();
-			}
-			return;
-		}
-
 		// if on the same x or y and nothing between -> make direct connection
 		// something between -> up corner
 		if (sourceAbsoluteCenterX == targetAbsoluteCenterX) {
@@ -228,24 +188,24 @@ public class EdgeLayouter {
 				setEdgeStepRight();
 				return;
 			} else if (sourceSplit) {
-				setEdge90DegreeRightUnderAntiClockwise();
+				setEdge90DegreeRightUnderClockwise();
 				return;
 			} else if (targetJoin) {
-				setEdge90DegreeRightUnderClockwise();
+				setEdge90DegreeRightUnderAntiClockwise();
 				return;
 			}
 
-		} else if (sourceAbsoluteCenterX <= targetAbsoluteCenterX
-				&& sourceAbsoluteCenterY > targetAbsoluteCenterY) {
-			// target is right above
+		} else if (sourceAbsoluteCenterX > targetAbsoluteCenterX
+				&& sourceAbsoluteCenterY <= targetAbsoluteCenterY) {
+			// target is left under
 			if (sourceJoin && sourceSplit) {
 				setEdgeStepRight();
 				return;
 			} else if (sourceSplit) {
-				setEdge90DegreeRightAboveClockwise();
+				setEdge90DegreeRightAboveAntiClockwise();
 				return;
 			} else if (targetJoin) {
-				setEdge90DegreeRightAboveAntiClockwise();
+				setEdge90DegreeRightAboveClockwise();
 				return;
 			}
 		}
@@ -264,14 +224,12 @@ public class EdgeLayouter {
 	}
 
 	private boolean areCellsHorizontalFree() {
-		if (this.grids == null || source.getParent() != target.getParent()) {
+		if (this.grid == null || source.getParent() != target.getParent()) {
 			return (Math.abs(sourceAbsoluteCenterX - targetAbsoluteCenterX) < 210);
 		}
 
-		Grid<BPMNElement> grid = this.grids.get(source.getParent());
-
-		Cell<BPMNElement> fromCell;
-		Cell<BPMNElement> toCell;
+		Cell<LayoutingElement> fromCell;
+		Cell<LayoutingElement> toCell;
 
 		if (sourceAbsoluteCenterX < targetAbsoluteCenterX) {
 			fromCell = grid.getCellOfItem(source);
@@ -311,66 +269,20 @@ public class EdgeLayouter {
 		// set dockers - direct connection
 		LayoutingDockers dockers = edge.getDockers();
 
-		if (source.getType().equals(BPMNType.TextAnnotation)) {
+		if (source.getType().equals(EPCType.TextNote)) {
 			// TextAnnotation has its docker at the left
 			dockers.setPoints(0, sourceRelativCenterY);
 		} else {
 			dockers.setPoints(sourceRelativCenterX, sourceRelativCenterY);
 		}
 		
-		if (target.getType().equals(BPMNType.TextAnnotation)) {
+		if (target.getType().equals(EPCType.TextNote)) {
 			// TextAnnotation has its docker at the left
 			dockers.addPoint(0, targetRelativCenterY);
 		} else {
 			dockers.addPoint(targetRelativCenterX, targetRelativCenterY);
 		}
 
-	}
-
-	private void setEdgeDirectVertical() {
-		// make bounding box
-		double boundsX = 0;
-		double boundsMinY = Math
-				.min(this.sourceAbsoluteY, this.targetAbsoluteY);
-		double boundsMaxY = Math.max(this.sourceAbsoluteY2,
-				this.targetAbsoluteY2);
-
-		LayoutingDockers dockers = edge.getDockers();
-		if (source.getType().equals(BPMNType.CollapsedPool)) {
-			double displacement = 30;// + (Math.abs(targetAbsoluteCenterY -
-			// sourceAbsoluteCenterY) *
-			// displacementFactor);
-			// take middle of target
-			double startPoint = (targetAbsoluteCenterX - displacement);
-			dockers.setPoints(startPoint, 70); // pools
-			// start at
-			// x=0
-			boundsX = startPoint;
-		} else {
-			double displacement = 10;
-			// take source middle
-			boundsX = (sourceAbsoluteCenterX + displacement);
-			dockers.setPoints(boundsX, sourceRelativCenterY);
-		}
-
-		if (target.getType().equals(BPMNType.CollapsedPool)) {
-			double displacement = 30;// + (Math.abs(targetAbsoluteCenterY -
-			// sourceAbsoluteCenterY) *
-			// displacementFactor);
-			// take middle of source
-			dockers.addPoint(sourceAbsoluteCenterX + displacement, 70);// pools
-			// start at
-			// x=0
-		} else {
-			double displacement = 10;
-			// take target middle
-			dockers.addPoint(targetRelativCenterX - displacement,
-					targetRelativCenterY);
-		}
-
-		// set bounds
-		edge.setGeometry(new LayoutingBoundsImpl(boundsX, boundsMinY, 0, boundsMaxY
-				- boundsMinY));
 	}
 
 	private void setEdge90DegreeRightAboveAntiClockwise() {
@@ -505,8 +417,7 @@ public class EdgeLayouter {
 		double halfBoundsX = sourceAbsoluteX2 + 15;
 
 		edge.getDockers().setPoints(sourceRelativCenterX, sourceRelativCenterY,
-				halfBoundsX, sourceAbsoluteCenterY, halfBoundsX,
-				targetAbsoluteCenterY, targetRelativCenterX,
+				 targetRelativCenterX,
 				targetRelativCenterY);
 
 	}

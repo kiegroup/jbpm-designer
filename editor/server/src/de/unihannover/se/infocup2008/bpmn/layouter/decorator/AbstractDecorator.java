@@ -22,7 +22,7 @@
  **/
 package de.unihannover.se.infocup2008.bpmn.layouter.decorator;
 
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBounds;
+import de.hpi.layouting.model.LayoutingBounds;
 
 /**
  * AbstractDecorator implements just delegation for all methods.
@@ -30,22 +30,22 @@ import de.unihannover.se.infocup2008.bpmn.model.BPMNBounds;
  * @author Team Royal Fawn 
  * 
  */
-public abstract class AbstractDecorator implements BPMNBounds {
+public abstract class AbstractDecorator implements LayoutingBounds {
 
 	
-	private BPMNBounds target;
+	private LayoutingBounds target;
 	
 	/**
 	 * @param target
 	 */
-	protected AbstractDecorator(BPMNBounds target) {
+	protected AbstractDecorator(LayoutingBounds target) {
 		super();
 		this.target = target;
 	}
 	
 	/**
 	 * @return
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNBounds#getHeight()
+	 * @see de.hpi.layouting.model.LayoutingBounds#getHeight()
 	 */
 	public double getHeight() {
 		return target.getHeight();
@@ -55,7 +55,7 @@ public abstract class AbstractDecorator implements BPMNBounds {
 
 	/**
 	 * @return
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNBounds#getWidth()
+	 * @see de.hpi.layouting.model.LayoutingBounds#getWidth()
 	 */
 	public double getWidth() {
 		return target.getWidth();
@@ -65,7 +65,7 @@ public abstract class AbstractDecorator implements BPMNBounds {
 
 	/**
 	 * @return
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNBounds#getX()
+	 * @see de.hpi.layouting.model.LayoutingBounds#getX()
 	 */
 	public double getX() {
 		return target.getX();
@@ -75,7 +75,7 @@ public abstract class AbstractDecorator implements BPMNBounds {
 
 	/**
 	 * @return
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNBounds#getX2()
+	 * @see de.hpi.layouting.model.LayoutingBounds#getX2()
 	 */
 	public double getX2() {
 		return getX() + getWidth();
@@ -85,7 +85,7 @@ public abstract class AbstractDecorator implements BPMNBounds {
 
 	/**
 	 * @return
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNBounds#getY()
+	 * @see de.hpi.layouting.model.LayoutingBounds#getY()
 	 */
 	public double getY() {
 		return target.getY();
@@ -95,7 +95,7 @@ public abstract class AbstractDecorator implements BPMNBounds {
 
 	/**
 	 * @return
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNBounds#getY2()
+	 * @see de.hpi.layouting.model.LayoutingBounds#getY2()
 	 */
 	public double getY2() {
 		return getY() + getHeight();

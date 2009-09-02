@@ -130,7 +130,6 @@
 		</servlet-class>
 	</servlet>
 	
-<!--
 	<servlet>
 		<display-name>
 			BPEL 2 BPMN Transformation
@@ -140,7 +139,7 @@
 			org.oryxeditor.server.BPEL2BPMNServlet
 		</servlet-class>
 	</servlet>
--->
+
 	<servlet>
 		<display-name>
 			Oryx IBPMN 2 BPMN Converter
@@ -339,6 +338,13 @@
 		</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<display-name>EPC Layouter</display-name>
+		<servlet-name>EPCLayouterServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.EPCLayoutServlet
+		</servlet-class>
+	</servlet>
 
     <!-- Servlet Mappings -->
 <!--	
@@ -405,11 +411,11 @@
         <url-pattern>/rdf2json</url-pattern>
     </servlet-mapping>
 
-<!--	<servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>BPEL2BPMNServlet</servlet-name>
 		<url-pattern>/bpel2bpmn</url-pattern>
 	</servlet-mapping>
--->
+
 	<servlet-mapping>
 		<servlet-name>IBPMN2BPMNServlet</servlet-name>
 		<url-pattern>/ibpmn2bpmn</url-pattern>
@@ -547,6 +553,10 @@
 		<url-pattern>/bpmnlayouter</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+		<servlet-name>EPCLayouterServlet</servlet-name>
+		<url-pattern>/epclayouter</url-pattern>
+	</servlet-mapping>
 	
 	<jsp-config>
 		<taglib>

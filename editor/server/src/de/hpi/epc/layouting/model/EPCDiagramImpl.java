@@ -1,4 +1,4 @@
-package de.unihannover.se.infocup2008.bpmn.model;
+package de.hpi.epc.layouting.model;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,31 +6,31 @@ import java.util.List;
 import de.hpi.layouting.model.LayoutingAbstractDiagram;
 import de.hpi.layouting.model.LayoutingElement;
 
-public abstract class BPMNAbstractDiagram extends LayoutingAbstractDiagram<LayoutingElement> implements BPMNDiagram {
+public class EPCDiagramImpl extends LayoutingAbstractDiagram<LayoutingElement> implements EPCDiagram {
 
-	/* (non-Javadoc)
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram#getStartEvents()
-	 */
+	@Override
+	protected EPCElement newElement() {
+		return new EPCElementJSON();
+	}
+	
 	public List<LayoutingElement> getStartEvents() {
 		List<LayoutingElement> resultList = new LinkedList<LayoutingElement>();
 
 		for (LayoutingElement element : getElements().values()) {
-			if (BPMNType.isAStartEvent(element.getType())) {
+			if (!EPCType.isAnEvent(element.getType()))
+				continue;
+			if (element.getIncomingLinks().size() == 0)
 				resultList.add((LayoutingElement)element);
-			}
 		}
 
 		return resultList;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram#getConnectingElements()
-	 */
 	public List<LayoutingElement> getConnectingElements() {
 		List<LayoutingElement> resultList = new LinkedList<LayoutingElement>();
 
 		for (LayoutingElement element : getElements().values()) {
-			if (BPMNType.isAConnectingElement(element.getType())) {
+			if (EPCType.isAConnectingElement(element.getType())) {
 				resultList.add((LayoutingElement)element);
 			}
 		}
@@ -38,19 +38,17 @@ public abstract class BPMNAbstractDiagram extends LayoutingAbstractDiagram<Layou
 		return resultList;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram#getGateways()
-	 */
 	public List<LayoutingElement> getGateways() {
 		List<LayoutingElement> resultList = new LinkedList<LayoutingElement>();
 
 		for (LayoutingElement element : getElements().values()) {
-			if (BPMNType.isAGateWay(element.getType())) {
+			if (EPCType.isAConnector(element.getType())) {
 				resultList.add((LayoutingElement)element);
 			}
 		}
 
 		return resultList;
 	}
+
 
 }

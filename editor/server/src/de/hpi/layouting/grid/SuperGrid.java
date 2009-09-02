@@ -20,7 +20,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package de.unihannover.se.infocup2008.bpmn.layouter.grid;
+package de.hpi.layouting.grid;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -28,8 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import de.unihannover.se.infocup2008.bpmn.layouter.grid.Grid.Cell;
-import de.unihannover.se.infocup2008.bpmn.layouter.grid.Grid.Row;
+import de.hpi.layouting.grid.Grid.Cell;
+import de.hpi.layouting.grid.Grid.Row;
 
 /**
  * A set of verticaly adjacent <tt>Grid</tt>'s. The

@@ -38,14 +38,15 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-import de.unihannover.se.infocup2008.bpmn.layouter.grid.Grid;
-import de.unihannover.se.infocup2008.bpmn.layouter.grid.SuperGrid;
-import de.unihannover.se.infocup2008.bpmn.layouter.grid.Grid.Cell;
-import de.unihannover.se.infocup2008.bpmn.layouter.grid.Grid.Row;
+import de.hpi.layouting.grid.Grid;
+import de.hpi.layouting.grid.SuperGrid;
+import de.hpi.layouting.grid.Grid.Cell;
+import de.hpi.layouting.grid.Grid.Row;
+import de.hpi.layouting.model.LayoutingBounds;
+import de.hpi.layouting.model.LayoutingBoundsImpl;
+import de.hpi.layouting.model.LayoutingElement;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBounds;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBoundsImpl;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNType;
 
 /**
@@ -122,7 +123,7 @@ public class LeftToRightGridLayouter implements Layouter {
 	private GridContext getContextByElement(BPMNElement el) {
 		BPMNElement elParent = null;
 		if (el != null) {
-			elParent = el.getParent();
+			elParent = (BPMNElement) el.getParent();
 		}
 		GridContext result = parent2Context.get(elParent);
 		if (result == null) {
@@ -144,9 +145,10 @@ public class LeftToRightGridLayouter implements Layouter {
 		parent2Context.clear();
 		lane2LaneChilds.clear();
 		maxLaneDepth = 0;
+
 		if (parent == null) {
-			for (BPMNElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
-				prepareLanes(pool, 1);
+			for (LayoutingElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
+				prepareLanes((BPMNElement)pool, 1);
 			}
 		}
 
@@ -154,30 +156,29 @@ public class LeftToRightGridLayouter implements Layouter {
 
 		if (parent == null) {
 			// set collapsed pools
-			List<BPMNElement> collapsedPools = this.diagram
+			List<LayoutingElement> collapsedPools = this.diagram
 					.getElementsOfType(BPMNType.CollapsedPool);
 			Grid<BPMNElement> cpGrid = new Grid<BPMNElement>();
 			superGrid.add(0, cpGrid);
-			for (BPMNElement collapsedPool : collapsedPools) {
+			for (LayoutingElement collapsedPool : collapsedPools) {
 				// make them small to not disturb finding the biggest ones in
 				// each row / column
 
-				collapsedPool.setGeometry(new BPMNBoundsImpl(0, 0, 0,
+				collapsedPool.setGeometry(new LayoutingBoundsImpl(0, 0, 0,
 						COLLAPSED_POOL_HEIGHT));
 				for (Cell<BPMNElement> insertCell : cpGrid.addLastRow()) {
-					insertCell.setValue(collapsedPool);
+					insertCell.setValue((BPMNElement)collapsedPool);
 				}
 
 			}
 
 			calcGeometry(superGrid);
-
-			// place Lanes
 			
 			poolWidth = Math.max(poolWidth,COLLAPSED_POOL_MIN_WIDTH);
-			
-			for (BPMNElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
-				Grid<BPMNElement> firstGrid = findFirstGridOfPool(pool);
+	
+			// place Lanes
+			for (LayoutingElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
+				Grid<BPMNElement> firstGrid = findFirstGridOfPool((BPMNElement)pool);
 				int firstGridFirstRowIndex = superGrid.findRow(firstGrid
 						.getFirstRow());
 
@@ -185,25 +186,25 @@ public class LeftToRightGridLayouter implements Layouter {
 				for (int i = 0; i < firstGridFirstRowIndex; i++) {
 					poolY += heightOfRow[i];
 				}
-				placeLane(pool, poolY, 0);
+				placeLane((BPMNElement)pool, poolY, 0);
 			}
 
 			writeGeometry(superGrid);
 
 			// set pools to start at x = CELL_MARGIN & correct size
 
-			for (BPMNElement collapsedPool : collapsedPools) {
+			for (LayoutingElement collapsedPool : collapsedPools) {
 				collapsedPool
-						.setGeometry(new BPMNBoundsImpl(CELL_MARGIN, collapsedPool
+						.setGeometry(new LayoutingBoundsImpl(CELL_MARGIN, collapsedPool
 								.getGeometry().getY(), poolWidth,
 								COLLAPSED_POOL_HEIGHT));
-				collapsedPool.updateDataModel();
+				((BPMNElement)collapsedPool).updateDataModel();
 			}
 
 			// convert Coordinates of Elements in Lanes from absolut to
 			// realitive
-			for (BPMNElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
-				correctLaneElements(pool, pool.getGeometry().getY(), 0);
+			for (LayoutingElement pool : diagram.getElementsOfType(BPMNType.Pool)) {
+				correctLaneElements((BPMNElement)pool, pool.getGeometry().getY(), 0);
 			}
 
 		} else {
@@ -229,7 +230,8 @@ public class LeftToRightGridLayouter implements Layouter {
 		maxLaneDepth = Math.max(maxLaneDepth, level);
 		List<BPMNElement> childs = new ArrayList<BPMNElement>();
 		BPMNElement aChild = null;
-		for (BPMNElement child : diagram.getChildElementsOf(lane)) {
+		for (LayoutingElement c : diagram.getChildElementsOf(lane)) {
+			BPMNElement child = (BPMNElement) c;
 			if (BPMNType.isASwimlane(child.getType())) {
 				prepareLanes(child, level + 1);
 				childs.add(child);
@@ -240,7 +242,8 @@ public class LeftToRightGridLayouter implements Layouter {
 		// aChild.getParent())
 		if (aChild != null) {
 			getContextByElement(aChild);
-		}else{
+		}
+		else {
 			//create empty grid for empty lanes
 			// to prevent nullpointer-exception
 			GridContext result = new GridContext();
@@ -249,7 +252,6 @@ public class LeftToRightGridLayouter implements Layouter {
 			superGrid.add(result.grid);
 			parent2Context.put(lane, result);
 		}
-		
 		lane2LaneChilds.put(lane, childs);
 	}
 
@@ -274,7 +276,7 @@ public class LeftToRightGridLayouter implements Layouter {
 		for (int i = firstRow; i <= lastRow; i++) {
 			height += heightOfRow[i];
 		}
-		
+
 		double minHeight = lane.getGeometry().getHeight();
 		if(level == 0){
 			minHeight +=  CELL_MARGIN / 2;
@@ -292,10 +294,10 @@ public class LeftToRightGridLayouter implements Layouter {
 		}
 		if(level == 0){
 			//pool with magin
-			lane.setGeometry(new BPMNBoundsImpl(CELL_MARGIN, relY + (CELL_MARGIN / 4), width, height - (CELL_MARGIN / 2)));
+			lane.setGeometry(new LayoutingBoundsImpl(CELL_MARGIN, relY + (CELL_MARGIN / 4), width, height - (CELL_MARGIN / 2)));
 		}else{
 			//lane without margin
-			lane.setGeometry(new BPMNBoundsImpl(CELL_MARGIN, relY, width, height));
+			lane.setGeometry(new LayoutingBoundsImpl(CELL_MARGIN, relY, width, height));
 		}
 		lane.updateDataModel();
 		return height;
@@ -315,12 +317,12 @@ public class LeftToRightGridLayouter implements Layouter {
 		}
 
 		int xTrans = level * -LANE_HEAD_WIDTH;
-		for (BPMNElement content : diagram.getChildElementsOf(lane)) {
+		for (LayoutingElement content : diagram.getChildElementsOf(lane)) {
 			if (!BPMNType.isASwimlane(content.getType())) {
-				BPMNBounds geom = content.getGeometry();
-				content.setGeometry(new BPMNBoundsImpl(geom.getX() + xTrans,
+				LayoutingBounds geom = content.getGeometry();
+				content.setGeometry(new LayoutingBoundsImpl(geom.getX() + xTrans,
 						geom.getY() - absY, geom.getWidth(), geom.getHeight()));
-				content.updateDataModel();
+				((BPMNElement)content).updateDataModel();
 			}
 		}
 	}
@@ -330,8 +332,8 @@ public class LeftToRightGridLayouter implements Layouter {
 
 		for (String id : this.orderedIds) {
 			//System.out.println(id);
-			BPMNElement currentElement = this.diagram.getElement(id);
-			List<BPMNElement> precedingElements = currentElement
+			BPMNElement currentElement = (BPMNElement) this.diagram.getElement(id);
+			List<LayoutingElement> precedingElements = currentElement
 					.getPrecedingElements();
 			GridContext context = getContextByElement(currentElement);
 			Cell<BPMNElement> cellOfElement = null;
@@ -353,9 +355,9 @@ public class LeftToRightGridLayouter implements Layouter {
 
 			if (BPMNType.isAActivity(currentElement.getType())) {
 				// search for attached events
-				for (BPMNElement e : currentElement.getOutgoingLinks()) {
+				for (LayoutingElement e : currentElement.getOutgoingLinks()) {
 					if (BPMNType.isACatchingIntermediateEvent(e.getType())) {
-						context.grid.setCellOfItem(e, cellOfElement);
+						context.grid.setCellOfItem((BPMNElement)e, cellOfElement);
 					}
 				}
 			}
@@ -372,16 +374,17 @@ public class LeftToRightGridLayouter implements Layouter {
 		// preLayout following Elements
 		Cell<BPMNElement> baseCell = cellOfElement.after();
 		Cell<BPMNElement> topCell = baseCell;
-		List<BPMNElement> followingElements = currentElement
+		List<LayoutingElement> followingElements = currentElement
 				.getFollowingElements();
 
 		if (BPMNType.isAActivity(currentElement.getType())) {
 			// special case for docked events
 			List<BPMNElement> dockedEventFollowers = new LinkedList<BPMNElement>();
-			for (BPMNElement element : currentElement.getOutgoingLinks()) {
+			for (LayoutingElement el : currentElement.getOutgoingLinks()) {
+				BPMNElement element = (BPMNElement)el;
 				if (element.isADockedIntermediateEvent()) {
-					for (BPMNElement follower : element.getFollowingElements()) {
-						dockedEventFollowers.add(follower);
+					for (LayoutingElement follower : element.getFollowingElements()) {
+						dockedEventFollowers.add((BPMNElement)follower);
 					}
 				}
 			}
@@ -413,7 +416,8 @@ public class LeftToRightGridLayouter implements Layouter {
 		// heuristic for text- & data-objects: put them to the top
 		List<BPMNElement> textAnnotations = new LinkedList<BPMNElement>();
 		List<BPMNElement> dataObjects = new LinkedList<BPMNElement>();
-		for (BPMNElement e : followingElements) {
+		for (LayoutingElement el : followingElements) {
+			BPMNElement e = (BPMNElement) el;
 			if (e.getType().equals(BPMNType.TextAnnotation)) {
 				textAnnotations.add(e);
 			} else if (e.getType().equals(BPMNType.DataObject)) {
@@ -428,9 +432,9 @@ public class LeftToRightGridLayouter implements Layouter {
 
 		// heuristic for direct connection to join
 		BPMNElement directJoin = null;
-		for (BPMNElement possibleJoin : followingElements) {
+		for (LayoutingElement possibleJoin : followingElements) {
 			if (possibleJoin.isJoin()) {
-				directJoin = possibleJoin;
+				directJoin = (BPMNElement) possibleJoin;
 			}
 		}
 		if (directJoin != null) {
@@ -442,7 +446,7 @@ public class LeftToRightGridLayouter implements Layouter {
 
 		// normal preLayout following Elements
 		int follow = 0;
-		for (BPMNElement newElem : followingElements) {
+		for (LayoutingElement newElem : followingElements) {
 			if (newElem.getParent() == currentElement.getParent()) {
 				follow++;
 			}
@@ -453,11 +457,11 @@ public class LeftToRightGridLayouter implements Layouter {
 			topCell = topCell.above();
 		}
 
-		for (BPMNElement newElem : followingElements) {
+		for (LayoutingElement newElem : followingElements) {
 			if (newElem.getParent() != currentElement.getParent()) {
 				continue;
 			}
-			context.grid.setCellOfItem(newElem, topCell); // prelayout
+			context.grid.setCellOfItem((BPMNElement)newElem, topCell); // prelayout
 			topCell = topCell.beneath();
 			if (topCell == baseCell && follow % 2 == 0) {
 				// skip baseCell if an even amount of elements is
@@ -474,7 +478,7 @@ public class LeftToRightGridLayouter implements Layouter {
 	 * @return cellOfElement
 	 */
 	private Cell<BPMNElement> placeElement(BPMNElement currentElement,
-			List<BPMNElement> precedingElements, GridContext context) {
+			List<LayoutingElement> precedingElements, GridContext context) {
 		Cell<BPMNElement> newCell;
 		if (precedingElements.isEmpty()) {
 			// StartEvents
@@ -491,7 +495,7 @@ public class LeftToRightGridLayouter implements Layouter {
 
 				Point tmp;
 				boolean splitFound = false;
-				BPMNElement split = currentElement.prevSplit();
+				BPMNElement split = (BPMNElement) currentElement.prevSplit();
 				if (split != null) {
 					// get all close splits
 					Queue<BPMNElement> splits = new PriorityQueue<BPMNElement>(
@@ -500,8 +504,8 @@ public class LeftToRightGridLayouter implements Layouter {
 							// thumb
 							new BackwardDistanceComperator(currentElement));
 					splits.add(split);
-					for (BPMNElement elem : precedingElements) {
-						split = elem.prevSplit();
+					for (LayoutingElement elem : precedingElements) {
+						split = (BPMNElement) elem.prevSplit();
 						if (split != null && !splits.contains(split)) {
 							splits.add(split);
 						}
@@ -519,7 +523,7 @@ public class LeftToRightGridLayouter implements Layouter {
 							continue;
 						}
 						int curCon = 0;
-						for (BPMNElement elem : precedingElements) {
+						for (LayoutingElement elem : precedingElements) {
 							if (elem.backwardDistanceTo(target) < Integer.MAX_VALUE) {
 								curCon++;
 							}
@@ -535,8 +539,8 @@ public class LeftToRightGridLayouter implements Layouter {
 				int x = 0;
 				int yAcc = 0;
 				int yCnt = 0;
-				for (BPMNElement elem : precedingElements) {
-
+				for (LayoutingElement el : precedingElements) {
+					BPMNElement elem = (BPMNElement)el;
 					tmp = context.grid.find(context.grid.getCellOfItem(elem));
 					if (tmp == null) {
 						Grid<BPMNElement> preGrid = getContextByElement(elem).grid;
@@ -573,7 +577,8 @@ public class LeftToRightGridLayouter implements Layouter {
 				newCell = leftCell.after();
 
 				// set all incoming pathes unpackable
-				for (BPMNElement el : precedingElements) {
+				for (LayoutingElement e : precedingElements) {
+					BPMNElement el = (BPMNElement)e;
 					Cell<BPMNElement> target = context.grid.getCellOfItem(el);
 					if (target == null) {
 						// don't set unpackable in other grids (other edge
@@ -589,7 +594,7 @@ public class LeftToRightGridLayouter implements Layouter {
 
 				// if not prelayouted
 			} else if (newCell == null) {
-				BPMNElement preElem = precedingElements.get(0);
+				BPMNElement preElem = (BPMNElement) precedingElements.get(0);
 				leftCell = context.grid.getCellOfItem(preElem);
 				if (leftCell == null) {
 					Grid<BPMNElement> preGrid = getContextByElement(preElem).grid;
@@ -638,7 +643,7 @@ public class LeftToRightGridLayouter implements Layouter {
 			for (Cell<BPMNElement> c : r) {
 				if (c.isFilled()) {
 					BPMNElement elem = c.getValue();
-					BPMNBounds geom = elem.getGeometry();
+					LayoutingBounds geom = elem.getGeometry();
 					widthOfColumn[column] = Math.max(widthOfColumn[column],
 							geom.getWidth() + CELL_MARGIN);
 					heightOfRow[row] = Math.max(heightOfRow[row], geom
@@ -680,14 +685,14 @@ public class LeftToRightGridLayouter implements Layouter {
 				double cellWidth = widthOfColumn[column];
 				if (c.isFilled()) {
 					BPMNElement elem = c.getValue();
-					BPMNBounds geom = elem.getGeometry();
+					LayoutingBounds geom = elem.getGeometry();
 					double newX = x + (cellWidth / 2.0)
 							- (geom.getWidth() / 2.0) + maxLaneDepth
 							* LANE_HEAD_WIDTH;
 					double newY = y + (cellHeight / 2.0)
 							- (geom.getHeight() / 2.0);
 
-					elem.setGeometry(new BPMNBoundsImpl(newX, newY, geom
+					elem.setGeometry(new LayoutingBoundsImpl(newX, newY, geom
 							.getWidth(), geom.getHeight()));
 					elem.updateDataModel();
 				}

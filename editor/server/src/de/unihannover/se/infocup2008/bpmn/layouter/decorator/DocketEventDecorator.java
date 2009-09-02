@@ -22,7 +22,7 @@
  **/
 package de.unihannover.se.infocup2008.bpmn.layouter.decorator;
 
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBounds;
+import de.hpi.layouting.model.LayoutingBounds;
 
 /**
  * This decorator describes, how an attached event is positioned relative to the
@@ -33,11 +33,11 @@ import de.unihannover.se.infocup2008.bpmn.model.BPMNBounds;
  */
 public class DocketEventDecorator extends AbstractDecorator {
 
-	private BPMNBounds relative;
+	private LayoutingBounds relative;
 
 	private int positionFromLeft;
 
-	public DocketEventDecorator(BPMNBounds target, BPMNBounds relative,
+	public DocketEventDecorator(LayoutingBounds target, LayoutingBounds relative,
 			int positionFromLeft) {
 		super(target);
 		this.relative = relative;

@@ -20,9 +20,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package de.unihannover.se.infocup2008.bpmn.layouter.topologicalsort;
+package de.hpi.layouting.topologicalsort;
 
-import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
+import de.hpi.layouting.model.LayoutingElement;
+
 
 /**
  * This class represents a found backwards edge in the
@@ -35,18 +36,18 @@ public class BackwardsEdge {
 
 	private String source;
 	private String target;
-	private BPMNElement edge = null;
+	private LayoutingElement edge = null;
 
 	public BackwardsEdge(String source, String target) {
 		this.source = source;
 		this.target = target;
 	}
 
-	public BPMNElement getEdge() {
+	public LayoutingElement getEdge() {
 		return edge;
 	}
 
-	public void setEdge(BPMNElement edge) {
+	public void setEdge(LayoutingElement edge) {
 		this.edge = edge;
 	}
 

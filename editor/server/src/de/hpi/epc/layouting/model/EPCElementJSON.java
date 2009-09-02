@@ -1,4 +1,4 @@
-package de.unihannover.se.infocup2008.bpmn.model;
+package de.hpi.epc.layouting.model;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import de.hpi.layouting.model.LayoutingDockers.Point;
 
-public class BPMNElementJSON extends BPMNAbstractElement implements BPMNElement {
+public class EPCElementJSON extends EPCElementImpl implements EPCElement {
 
 	private JSONObject elementJSON;
 	private JSONObject boundsJSON;

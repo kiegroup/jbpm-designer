@@ -1,6 +1,7 @@
 package de.unihannover.se.infocup2008.bpmn.model;
 
-public class BPMNDiagramJSON extends BPMNAbstractDiagram<BPMNElementJSON> {
+
+public class BPMNDiagramJSON extends BPMNAbstractDiagram implements BPMNDiagram {
 
 	@Override
 	protected BPMNElementJSON newElement() {

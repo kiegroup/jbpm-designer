@@ -20,44 +20,45 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package de.unihannover.se.infocup2008.bpmn.layouter.topologicalsort;
+package de.hpi.layouting.topologicalsort;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
+import de.hpi.layouting.model.LayoutingElement;
+
 
 /**
- * A simplified view on a <tt>BPMNElement</tt>, suitable for topological sorting.
+ * A simplified view on a <tt>LayoutingElement</tt>, suitable for topological sorting.
  * @author Team Royal Fawn
  *
  */
-public class SortableBPMNElement {
+public class SortableLayoutingElement {
 
-	private BPMNElement element;
+	private LayoutingElement element;
 	private SortedSet<String> outgoingLinks;
 	private SortedSet<String> incomingLinks;
 	private boolean join;
 	private int oldInCount;
 
-	public SortableBPMNElement(BPMNElement element) {
+	public SortableLayoutingElement(LayoutingElement element) {
 		this.element = element;
 		this.incomingLinks = new TreeSet<String>();
 		this.outgoingLinks = new TreeSet<String>();
-		for (BPMNElement pre : element.getPrecedingElements()) {
+		for (LayoutingElement pre : element.getPrecedingElements()) {
 			// String type = pre.getType();
 			// if(!BPMNType.isASwimlane(type)){
 			incomingLinks.add(pre.getId());
 			// }
 		}
-		for (BPMNElement post : element.getFollowingElements()) {
+		for (LayoutingElement post : element.getFollowingElements()) {
 			outgoingLinks.add(post.getId());
 		}
 		this.join = element.isJoin();
 		this.oldInCount = incomingLinks.size();
 	}
 
-	public BPMNElement getBPMNElement() {
+	public LayoutingElement getLayoutingElement() {
 		return this.element;
 	}
 

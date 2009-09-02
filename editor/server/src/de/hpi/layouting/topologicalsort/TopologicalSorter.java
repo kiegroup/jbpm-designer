@@ -20,57 +20,52 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package de.unihannover.se.infocup2008.bpmn.layouter.topologicalsort;
+package de.hpi.layouting.topologicalsort;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNElementERDF;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNType;
+import de.hpi.layouting.model.LayoutingDiagram;
+import de.hpi.layouting.model.LayoutingElement;
+import de.hpi.layouting.model.LayoutingElementImpl;
 
-/**
- * This class does a slight modified topological sort
- * 
- * @author Team Royal Fawn
- * 
- */
-public class TopologicalSorter {
+public abstract class TopologicalSorter {
+	
+	protected LinkedList<LayoutingElement> sortetElements;
+	protected Map<String, SortableLayoutingElement> elementsToSort;
+	protected LayoutingDiagram diagram;
+	protected List<BackwardsEdge> backwardsEdges;
 
-	private LinkedList<BPMNElement> sortetElements;
-	private Map<String, SortableBPMNElement> elementsToSort;
-	private BPMNDiagram diagram;
-	private List<BackwardsEdge> backwardsEdges;
-
-	public TopologicalSorter(BPMNDiagram diagram, BPMNElement parent) {
+	public TopologicalSorter(LayoutingDiagram diagram, LayoutingElement parent) {
 		this.diagram = diagram;
 		// First step to find loops and backpatch backwards edges
 		prepareDataAndSort(parent, true);
 		// Second step to get the real sorting
 		prepareDataAndSort(parent, false);
-		//System.out.print("Backwards Edges: ");
-		//System.out.println(backwardsEdges);
 	}
 
-	private void prepareDataAndSort(BPMNElement parent, boolean shouldBackpatch) {
-		sortetElements = new LinkedList<BPMNElement>();
-		elementsToSort = new HashMap<String, SortableBPMNElement>();
+	protected void prepareDataAndSort(LayoutingElement parent, boolean shouldBackpatch) {
+		sortetElements = new LinkedList<LayoutingElement>();
+		elementsToSort = new HashMap<String, SortableLayoutingElement>();
 		backwardsEdges = new LinkedList<BackwardsEdge>();
 
 		// create global start
-		BPMNElement globalStartDummyElement = new BPMNElementERDF();
+		LayoutingElement globalStartDummyElement = new LayoutingElementImpl();
 		globalStartDummyElement.setId("#####Global-Start#####");
-		globalStartDummyElement.setType(BPMNType.StartEvent);
-		for (BPMNElement startElement : this.diagram.getStartEvents()) {
+		
+		// cache start events
+		List<LayoutingElement> startEvents = new ArrayList<LayoutingElement>();
+		for (LayoutingElement startElement : this.diagram.getStartEvents()) {
 			globalStartDummyElement.addOutgoingLink(startElement);
 			startElement.addIncomingLink(globalStartDummyElement);
+			startEvents.add(startElement);
 		}
 		elementsToSort.put(globalStartDummyElement.getId(),
-				new SortableBPMNElement(globalStartDummyElement));
+				new SortableLayoutingElement(globalStartDummyElement));
 
 		addAllChilds(parent);
 
@@ -82,49 +77,39 @@ public class TopologicalSorter {
 		// write backwards edges in diagram
 		reverseBackwardsEdges();
 		// remove global start
-		for (BPMNElement startElement : this.diagram.getStartEvents()) {
+		for (LayoutingElement startElement : startEvents) {
 			globalStartDummyElement.removeOutgoingLink(startElement);
 			startElement.removeIncomingLink(globalStartDummyElement);
 		}
 		this.sortetElements.remove(globalStartDummyElement);
 	}
 
-	/**
-	 * @param parent
-	 */
-	private void addAllChilds(BPMNElement parent) {
-		for (BPMNElement element : diagram.getChildElementsOf(parent)) {
-			// BPMNElement element = diagram.getElement(id);
-			if (!BPMNType.isAConnectingElement(element.getType())
-					&& !element.isADockedIntermediateEvent()
-					&& !BPMNType.isASwimlane(element.getType())) {
-				elementsToSort.put(element.getId(), new SortableBPMNElement(
+	protected void addAllChilds(LayoutingElement parent) {
+		for (LayoutingElement element : diagram.getChildElementsOf(parent)) {
+			elementsToSort.put(element.getId(), new SortableLayoutingElement(
 						element));
-			} else if (BPMNType.isASwimlane(element.getType())) {
-				addAllChilds(element);
-			}
 		}
 	}
 
-	public Queue<BPMNElement> getSortedElements() {
+	public Queue<LayoutingElement> getSortedElements() {
 		return this.sortetElements;
 	}
 
-	private void topologicalSort() {
+	protected void topologicalSort() {
 		while (!elementsToSort.isEmpty()) {
-			List<SortableBPMNElement> freeElements = getFreeElements();
+			List<SortableLayoutingElement> freeElements = getFreeElements();
 			if (freeElements.size() > 0) {
-				for (SortableBPMNElement freeElement : freeElements) {
-					sortetElements.add(freeElement.getBPMNElement());
+				for (SortableLayoutingElement freeElement : freeElements) {
+					sortetElements.add((LayoutingElement)freeElement.getLayoutingElement());
 					freeElementsFrom(freeElement);
 					elementsToSort.remove(freeElement.getId());
 				}
 			} else { // loops
-				SortableBPMNElement entry = getLoopEntryPoint();
+				SortableLayoutingElement entry = getLoopEntryPoint();
 				for (String backId : entry.getIncomingLinks().toArray(
 						new String[0])) {
 					entry.reverseIncomingLinkFrom(backId);
-					SortableBPMNElement e = elementsToSort.get(backId);
+					SortableLayoutingElement e = elementsToSort.get(backId);
 					e.reverseOutgoingLinkTo(entry.getId());
 					backwardsEdges
 							.add(new BackwardsEdge(backId, entry.getId()));
@@ -133,25 +118,25 @@ public class TopologicalSorter {
 		}
 	}
 
-	private SortableBPMNElement getLoopEntryPoint()
+	protected SortableLayoutingElement getLoopEntryPoint()
 			throws IllegalStateException {
-		for (SortableBPMNElement candidate : elementsToSort.values()) {
+		for (SortableLayoutingElement candidate : elementsToSort.values()) {
 			if (candidate.isJoin()
 					&& candidate.getOldInCount() > candidate.getIncomingLinks()
 							.size()) {
 				return candidate;
 			}
 		}
-		/*for (BPMNElement e : this.sortetElements) {
+		/*for (LayoutingElement e : this.sortetElements) {
 			System.out.println(e.getId());
 		}*/
 		throw new IllegalStateException(
 				"Could not find a valid loop entry point");
 	}
 
-	private void freeElementsFrom(SortableBPMNElement freeElement) {
+	protected void freeElementsFrom(SortableLayoutingElement freeElement) {
 		for (String id : freeElement.getOutgoingLinks()) {
-			SortableBPMNElement element = elementsToSort.get(id);
+			SortableLayoutingElement element = elementsToSort.get(id);
 			if (element != null) {
 				element.removeIncomingLinkFrom(freeElement.getId());
 			}
@@ -159,44 +144,28 @@ public class TopologicalSorter {
 
 	}
 
-	private List<SortableBPMNElement> getFreeElements() {
-		List<SortableBPMNElement> freeElements = new LinkedList<SortableBPMNElement>();
+	protected List<SortableLayoutingElement> getFreeElements() {
+		List<SortableLayoutingElement> freeElements = new LinkedList<SortableLayoutingElement>();
 
 		for (String id : elementsToSort.keySet()) {
-			SortableBPMNElement sortableBPMNElement = elementsToSort.get(id);
-			if (sortableBPMNElement.isFree()) {
-				freeElements.add(sortableBPMNElement);
+			SortableLayoutingElement sortableLayoutingElement = elementsToSort.get(id);
+			if (sortableLayoutingElement.isFree()) {
+				freeElements.add(sortableLayoutingElement);
 			}
 		}
 
 		return freeElements;
 	}
 
-	private void reverseBackwardsEdges() {
-		List<BPMNElement> edges = this.diagram.getConnectingElements();
+	protected void reverseBackwardsEdges() {
+		List<LayoutingElement> edges = this.diagram.getConnectingElements();
 		for (BackwardsEdge backwardsEdge : this.backwardsEdges) {
 			String sourceId = backwardsEdge.getSource();
 			String targetId = backwardsEdge.getTarget();
-			BPMNElement sourceElement = this.diagram.getElement(sourceId);
-			BPMNElement targetElement = this.diagram.getElement(targetId);
+			LayoutingElement sourceElement = (LayoutingElement) this.diagram.getElement(sourceId);
+			LayoutingElement targetElement = (LayoutingElement) this.diagram.getElement(targetId);
 
-			BPMNElement edge = getEdge(edges, sourceElement, targetElement);
-
-			boolean elementSkipped = (edge == null);
-			if (elementSkipped) {
-				// catching intermediate events skipped
-				for (BPMNElement outgoingLink : sourceElement
-						.getOutgoingLinks()) {
-					if (outgoingLink.isADockedIntermediateEvent()) {
-						edge = getEdge(edges, outgoingLink, targetElement);
-						if (edge != null) {
-							System.err.println("found");
-							break;
-						}
-					}
-				}
-
-			}
+			LayoutingElement edge = getEdge(edges, sourceElement, targetElement);
 
 			backwardsEdge.setEdge(edge);
 
@@ -211,7 +180,7 @@ public class TopologicalSorter {
 
 	}
 
-	private void backpatchBackwardsEdges() {
+	protected void backpatchBackwardsEdges() {
 		List<BackwardsEdge> newBackwardsEdges = new LinkedList<BackwardsEdge>();
 		newBackwardsEdges.addAll(this.backwardsEdges);
 
@@ -219,11 +188,11 @@ public class TopologicalSorter {
 			String sourceId = edge.getSource();
 			String targetId = edge.getTarget();
 
-			BPMNElement sourceElement = this.diagram.getElement(sourceId);
+			LayoutingElement sourceElement = this.diagram.getElement(sourceId);
 			while (!(sourceElement.isJoin() || sourceElement.isSplit())) {
 				// should be not null and should be only one, because its
 				// a path back
-				BPMNElement newSourceElement = sourceElement
+				LayoutingElement newSourceElement = (LayoutingElement) sourceElement
 						.getPrecedingElements().get(0);
 				targetId = newSourceElement.getId();
 				newBackwardsEdges.add(new BackwardsEdge(targetId, sourceId));
@@ -237,9 +206,9 @@ public class TopologicalSorter {
 
 	}
 
-	private static BPMNElement getEdge(List<BPMNElement> edges,
-			BPMNElement sourceElement, BPMNElement targetElement) {
-		for (BPMNElement edge : edges) {
+	protected static LayoutingElement getEdge(List<LayoutingElement> edges,
+			LayoutingElement sourceElement, LayoutingElement targetElement) {
+		for (LayoutingElement edge : edges) {
 			if (edge.getIncomingLinks().contains(sourceElement)
 					&& edge.getOutgoingLinks().contains(targetElement)) {
 				return edge;
@@ -247,5 +216,6 @@ public class TopologicalSorter {
 		}
 		return null;
 	}
+
 
 }

@@ -22,9 +22,7 @@
  **/
 package de.unihannover.se.infocup2008.bpmn.model;
 
-import java.util.List;
-
-import org.w3c.dom.Node;
+import de.hpi.layouting.model.LayoutingElement;
 
 /**
  * Represents an element of the bpmn diagram. Each task, sequenceflow, etc. is
@@ -34,103 +32,12 @@ import org.w3c.dom.Node;
  * 
  * FIXME make a Class of it (BPMNElementImpl)
  */
-public interface BPMNElement {
-
-	public abstract String getId();
-
-	public abstract void setId(String id);
-		
-	
-	public abstract String getType();
-
-	public abstract void setType(String type);
-
-	public abstract List<BPMNElement> getOutgoingLinks();
-
-	public abstract void setOutgoingLinks(List<BPMNElement> outgoingLinks);
-
-	public abstract void addOutgoingLink(BPMNElement element);
-
-	public abstract void removeOutgoingLink(BPMNElement element);
-
-	public abstract List<BPMNElement> getIncomingLinks();
-
-	public abstract void setIncomingLinks(List<BPMNElement> incomingLinks);
-
-	public abstract void addIncomingLink(BPMNElement element);
-
-	public abstract void removeIncomingLink(BPMNElement element);
-
-	public abstract List<BPMNElement> getFollowingElements();
-
-	public abstract List<BPMNElement> getPrecedingElements();
-
-	/**
-	 * Indicates if the element has a parent other than the canvas e.g. a lane
-	 * 
-	 * @return <code>true</code> if the element has a parent other than the
-	 *         canvas e.g. a lane
-	 */
-	public abstract boolean hasParent();
-
-	public abstract void setParent(BPMNElement element);
-
-	public abstract BPMNElement getParent();
-
-	public abstract String toString();
-
-	public abstract BPMNBounds getGeometry();
-
-	public abstract void setGeometry(BPMNBounds geometry);
-	
-	public abstract BPMNDockers getDockers();
-	
-	public abstract void setDockers(BPMNDockers dockers);
+public interface BPMNElement extends LayoutingElement {
 
 	/**
 	 * Updates the underlying DataModel e.g. JSONObject or XMLNode
 	 */
 	public abstract void updateDataModel();
-
-	/**
-	 * @return true if Element joins more then one path
-	 */
-	public abstract boolean isJoin();
-
-	/**
-	 * @return true if Element has more then one following Element
-	 */
-	public abstract boolean isSplit();
-
-	/**
-	 * Searches <code>other</code> in forward direction
-	 * 
-	 * @param other
-	 *            BPMNElement to search for
-	 * @return number of elements between <code>other</code> and
-	 *         <code>this</code> or <code>Integer.MAX_VALUE</code> if the
-	 *         elements are not connected in forward direction
-	 */
-	public abstract int forwardDistanceTo(BPMNElement other);
-
-	/**
-	 * Searches <code>other</code> in backward direction
-	 * 
-	 * @param other
-	 *            BPMNElement to search for
-	 * @return number of elements between <code>this</code> and
-	 *         <code>other</code> or <code>Integer.MAX_VALUE</code> if the
-	 *         elements are not connected in backward direction
-	 */
-	public abstract int backwardDistanceTo(BPMNElement other);
-
-	/**
-	 * 
-	 * @return the closest split with the same parent before <code>this</code>.
-	 *         Is never <code>this</code> on cycle-free diagramms but maybe
-	 *         <code>null</code>
-	 */
-	public abstract BPMNElement prevSplit();
 
 	public abstract boolean isADockedIntermediateEvent();
 }

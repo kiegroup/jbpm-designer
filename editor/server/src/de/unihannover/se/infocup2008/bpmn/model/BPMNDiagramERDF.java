@@ -1,5 +1,6 @@
 package de.unihannover.se.infocup2008.bpmn.model;
 
+
 /**
  * Copyright (c) 2009
  * Ingo Kitzmann, Christoph Koenig
@@ -23,7 +24,7 @@ package de.unihannover.se.infocup2008.bpmn.model;
  * DEALINGS IN THE SOFTWARE.
  **/
 
-public class BPMNDiagramERDF extends BPMNAbstractDiagram<BPMNElementERDF> {
+public class BPMNDiagramERDF extends BPMNAbstractDiagram implements BPMNDiagram {
 
 	@Override
 	protected BPMNElementERDF newElement() {

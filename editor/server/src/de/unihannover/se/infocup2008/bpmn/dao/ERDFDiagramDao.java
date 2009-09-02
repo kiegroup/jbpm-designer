@@ -49,12 +49,12 @@ import org.w3c.dom.traversal.TreeWalker;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import de.hpi.layouting.model.LayoutingBoundsImpl;
+import de.hpi.layouting.model.LayoutingDockers;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagramERDF;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNDockers;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNElementERDF;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBoundsImpl;
 
 /**
  * This class gets eRDF from a file or a oryxid and parses it
@@ -198,7 +198,7 @@ public class ERDFDiagramDao {
 		String id = currentNode.getAttributes().getNamedItem("id")
 				.getNodeValue().trim();
 
-		BPMNElementERDF element = diagram.getElement(id);
+		BPMNElementERDF element = (BPMNElementERDF) diagram.getElement(id);
 
 		// walk children
 		for (Node n = walker.firstChild(); n != null; n = walker.nextSibling()) {
@@ -209,7 +209,7 @@ public class ERDFDiagramDao {
 					String refId = n.getAttributes().getNamedItem("href")
 							.getNodeValue().trim().substring(1);
 					// get target Element
-					BPMNElement followElement = diagram.getElement(refId);
+					BPMNElement followElement = (BPMNElement) diagram.getElement(refId);
 					// connect
 					element.addOutgoingLink(followElement);
 					followElement.addIncomingLink(element);
@@ -222,7 +222,7 @@ public class ERDFDiagramDao {
 					// do not save parent if it is the canvas
 					if (!refId.startsWith("oryx-canvas")) {
 						// get target Element
-						BPMNElement parentElement = diagram.getElement(refId);
+						BPMNElement parentElement = (BPMNElement) diagram.getElement(refId);
 						// set parent
 						element.setParent(parentElement);
 					}
@@ -247,7 +247,7 @@ public class ERDFDiagramDao {
 
 					double x = Double.valueOf(values[0]);
 					double y = Double.valueOf(values[1]);
-					element.setGeometry(new BPMNBoundsImpl(x, y, Double
+					element.setGeometry(new LayoutingBoundsImpl(x, y, Double
 							.valueOf(values[2])
 							- x, Double.valueOf(values[3]) - y));
 
@@ -255,7 +255,7 @@ public class ERDFDiagramDao {
 						|| nodeClass.equals("oryx-docker")) {
 					// remember dockers-node
 					element.setDockersNode(n.getFirstChild());
-					BPMNDockers dockers = element.getDockers();
+					LayoutingDockers dockers = element.getDockers();
 
 					dockers.getPoints().clear();
 					String[] values = n.getFirstChild().getNodeValue().split(

@@ -22,14 +22,13 @@
  **/
 package de.unihannover.se.infocup2008.bpmn.layouter;
 
-import org.w3c.dom.Node;
-
+import de.hpi.layouting.model.LayoutingBounds;
+import de.hpi.layouting.model.LayoutingDockers;
+import de.hpi.layouting.model.LayoutingElement;
 import de.unihannover.se.infocup2008.bpmn.layouter.decorator.DocketEventDecorator;
 import de.unihannover.se.infocup2008.bpmn.layouter.decorator.LayoutConstants;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNDockers;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBounds;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNType;
 
 /**
@@ -43,20 +42,20 @@ public class CatchingIntermediateEventLayouter {
 
 	public static void setCatchingIntermediateEvents(BPMNDiagram diagram) {
 		for (String id : diagram.getElements().keySet()) {
-			BPMNElement element = diagram.getElement(id);
+			BPMNElement element = (BPMNElement) diagram.getElement(id);
 			if (BPMNType.isAActivity(element.getType())) {
 				int count = 0;
-				for (BPMNElement connectedElement : element.getOutgoingLinks()) {
+				for (LayoutingElement connectedElement : element.getOutgoingLinks()) {
 					if (BPMNType.isACatchingIntermediateEvent(connectedElement
 							.getType())) {
-						BPMNBounds relativeGeometry = element.getGeometry();
-						BPMNBounds newGeometry = new DocketEventDecorator(
+						LayoutingBounds relativeGeometry = element.getGeometry();
+						LayoutingBounds newGeometry = new DocketEventDecorator(
 								connectedElement.getGeometry(),
 								relativeGeometry, count);
 
 						connectedElement.setGeometry(newGeometry);
 						
-						BPMNDockers dockers = connectedElement.getDockers();
+						LayoutingDockers dockers = connectedElement.getDockers();
 						if (dockers != null) {
 							double dockerX = newGeometry.getX()
 									- relativeGeometry.getX()

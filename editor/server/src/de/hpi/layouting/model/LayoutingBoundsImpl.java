@@ -20,7 +20,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package de.unihannover.se.infocup2008.bpmn.model;
+package de.hpi.layouting.model;
 
 /**
  * Implements the basic geometry of an element
@@ -28,7 +28,7 @@ package de.unihannover.se.infocup2008.bpmn.model;
  * @author Team Royal Fawn
  * 
  */
-public class BPMNBoundsImpl implements BPMNBounds {
+public class LayoutingBoundsImpl implements LayoutingBounds {
 
 	/**
 	 * @param x
@@ -36,7 +36,7 @@ public class BPMNBoundsImpl implements BPMNBounds {
 	 * @param width
 	 * @param height
 	 */
-	public BPMNBoundsImpl(double x, double y, double width, double height) {
+	public LayoutingBoundsImpl(double x, double y, double width, double height) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -44,7 +44,7 @@ public class BPMNBoundsImpl implements BPMNBounds {
 		this.height = height;
 	}
 
-	public BPMNBoundsImpl() {
+	public LayoutingBoundsImpl() {
 		this(0, 0, 0, 0);
 	}
 

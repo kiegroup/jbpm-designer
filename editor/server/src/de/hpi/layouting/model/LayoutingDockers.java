@@ -1,9 +1,9 @@
-package de.unihannover.se.infocup2008.bpmn.model;
+package de.hpi.layouting.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BPMNDockers {
+public class LayoutingDockers {
 	public static class Point {
 		public double x;
 		public double y;

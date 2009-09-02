@@ -156,6 +156,10 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
 		
+		<plugin source="epcLayouter.js" name="ORYX.Plugins.EPCLayouter">
+			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
+		</plugin>
+		
 		<plugin source="transformationDownloadDialog.js" name="ORYX.Plugins.TransformationDownloadDialog">
 			<requires namespace="http://b3mn.org/stencilset/bpmnplus#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpel#"/>	

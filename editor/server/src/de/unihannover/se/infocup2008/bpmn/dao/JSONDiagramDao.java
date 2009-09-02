@@ -26,7 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.unihannover.se.infocup2008.bpmn.model.BPMNBoundsImpl;
+import de.hpi.layouting.model.LayoutingBoundsImpl;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagram;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNDiagramJSON;
 import de.unihannover.se.infocup2008.bpmn.model.BPMNElement;
@@ -55,7 +55,7 @@ public class JSONDiagramDao {
 
 	private void walkShape(JSONObject node, BPMNDiagramJSON dia, BPMNElement parent)
 			throws JSONException {
-		BPMNElementJSON elem = dia.getElement(node.getString("resourceId"));
+		BPMNElementJSON elem = (BPMNElementJSON) dia.getElement(node.getString("resourceId"));
 		elem.setElementJSON(node);
 		JSONObject stencil = node.getJSONObject("stencil");
 		elem.setType(BPMNType.PREFIX + stencil.getString("id"));
@@ -64,7 +64,7 @@ public class JSONDiagramDao {
 		JSONArray outLinks = node.getJSONArray("outgoing");
 		for (int i = 0; i < outLinks.length(); i++) {
 			JSONObject link = outLinks.getJSONObject(i);
-			BPMNElementJSON target = dia.getElement(link.getString("resourceId"));
+			BPMNElementJSON target = (BPMNElementJSON) dia.getElement(link.getString("resourceId"));
 			elem.addOutgoingLink(target);
 			target.addIncomingLink(elem);
 		}
@@ -73,7 +73,7 @@ public class JSONDiagramDao {
 		double y = bounds.getJSONObject("upperLeft").getDouble("y");
 		double x2 = bounds.getJSONObject("lowerRight").getDouble("x");
 		double y2 = bounds.getJSONObject("lowerRight").getDouble("y");
-		elem.setGeometry(new BPMNBoundsImpl(x, y, x2 - x, y2 - y));
+		elem.setGeometry(new LayoutingBoundsImpl(x, y, x2 - x, y2 - y));
 		elem.setBoundsJSON(bounds);
 		
 		JSONArray dockers = node.getJSONArray("dockers");
