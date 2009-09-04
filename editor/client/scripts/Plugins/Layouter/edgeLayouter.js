@@ -169,7 +169,7 @@ new function(){
 			}	
 			
 			// Sort DESC of weights
-			return positions.sort(function(a,b){ return a.z < b.z});
+			return positions.sort(function(a,b){ return a.z < b.z ? 1 : (a.z == b.z ? -1 : -1)});
 		},
 		
 		/**
