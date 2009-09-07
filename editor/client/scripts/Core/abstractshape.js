@@ -382,7 +382,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 							// Set property
 							if(this.properties.keys().member(prefix+"-"+name)) {
 								this.setProperty(prefix+"-"+name, unescape(value));
-							} else if(!(name === "bounds"||name === "parent"||name === "target"||name === "dockers"||name === "docker")) {
+							} else if(!(name === "bounds"||name === "parent"||name === "target"||name === "dockers"||name === "docker"||name === "outgoing"||name === "incoming")) {
 								this.setHiddenProperty(prefix+"-"+name, value);
 							}
 					
