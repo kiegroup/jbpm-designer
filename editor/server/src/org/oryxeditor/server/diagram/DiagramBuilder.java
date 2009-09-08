@@ -116,15 +116,17 @@ public class DiagramBuilder {
 		// get stencil type
 		if (modelJSON.has("stencilset")) {
 			JSONObject object = modelJSON.getJSONObject("stencilset");
-			if (object.has("url")) {
-				String url = object.getString("url");
-				if (object.has("namespace"))
-					current.setStencilset(new StencilSet(url, object
-							.getString("namespace")));
-				else
-					current.setStencilset(new StencilSet(url));
+			String url = null;
+			String namespace = null;
+			
+			if (object.has("url"))
+				url = object.getString("url");
 
-			}
+			if (object.has("namespace"))
+				namespace = object.getString("namespace");				
+			
+			current.setStencilset(new StencilSet(url, namespace));
+
 		}
 	}
 
@@ -136,26 +138,28 @@ public class DiagramBuilder {
 	@SuppressWarnings("unchecked")
 	private static void parseProperties(JSONObject modelJSON, Shape current)
 			throws JSONException {
-		JSONObject propsObject = modelJSON.getJSONObject("properties");
-		Iterator<String> keys = propsObject.keys();
-		Pattern pattern = Pattern.compile(jsonPattern);
-
-		while (keys.hasNext()) {
-			StringBuilder result = new StringBuilder();
-			int lastIndex = 0;
-			String key = keys.next();
-			String value=propsObject.getString(key);
-			Matcher matcher = pattern.matcher(value);
-			while(matcher.find()) {
-				String id = matcher.group(1);
-				current.addGlossaryIds(id);
-				String text = matcher.group(2);
-				result.append(text);
-				lastIndex = matcher.end();
+		if (modelJSON.has("properties")) {
+			JSONObject propsObject = modelJSON.getJSONObject("properties");
+			Iterator<String> keys = propsObject.keys();
+			Pattern pattern = Pattern.compile(jsonPattern);
+	
+			while (keys.hasNext()) {
+				StringBuilder result = new StringBuilder();
+				int lastIndex = 0;
+				String key = keys.next();
+				String value=propsObject.getString(key);
+				Matcher matcher = pattern.matcher(value);
+				while(matcher.find()) {
+					String id = matcher.group(1);
+					current.addGlossaryIds(id);
+					String text = matcher.group(2);
+					result.append(text);
+					lastIndex = matcher.end();
+				}
+				result.append(value.substring(lastIndex));
+				value=result.toString();
+				current.putProperty(key, value);
 			}
-			result.append(value.substring(lastIndex));
-			value=result.toString();
-			current.putProperty(key, value);
 		}
 	}
 
