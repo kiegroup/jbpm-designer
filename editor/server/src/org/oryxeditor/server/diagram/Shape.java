@@ -10,16 +10,17 @@ import java.util.HashMap;
  * stencilset independent
  */
 public class Shape implements Stencil, Bounded{
-	String resourceId;
-	HashMap<String,String> properties;
-	StencilType stencil;
-	ArrayList<Shape> childShapes;
-	ArrayList<Shape> outgoings;
-	ArrayList<Point> dockers;
-	ArrayList<String> glossaryIds;
-	Bounds bounds;
-	Shape target;
-	Shape parent;
+	private String resourceId;
+	private HashMap<String,String> properties;
+	private StencilType stencil;
+	private ArrayList<Shape> childShapes;
+	private ArrayList<Shape> outgoings;
+	private ArrayList<Point> dockers;
+	private ArrayList<String> glossaryIds;
+	private Bounds bounds;
+	private Shape target;
+	private Shape parent;
+	private ArrayList<Shape> incoming;
 
 	/**
 	 * @return the parent
@@ -262,6 +263,18 @@ public class Shape implements Stencil, Bounded{
 	}
 	public boolean addGlossaryIds(String id) {
 		return this.getGlossaryIds().add(id);
+	}
+	public boolean addIncoming(Shape current) {
+		return this.getIncomings().add(current);
+		
+	}
+	public ArrayList<Shape> getIncomings() {
+		if(this.incoming==null)
+			this.incoming=new ArrayList<Shape>();
+		return this.incoming;
+	}
+	public void setIncomings(ArrayList<Shape> cur){
+		this.incoming=cur;
 	}
 
 }

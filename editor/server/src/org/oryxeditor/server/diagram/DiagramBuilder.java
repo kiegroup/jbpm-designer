@@ -191,8 +191,10 @@ public class DiagramBuilder {
 			ArrayList<Shape> outgoings = new ArrayList<Shape>();
 			JSONArray outgoingObject = modelJSON.getJSONArray("outgoing");
 			for (int i = 0; i < outgoingObject.length(); i++) {
-				outgoings.add(getShapeWithId(outgoingObject.getJSONObject(i)
-						.getString("resourceId"), shapes));
+				Shape out=getShapeWithId(outgoingObject.getJSONObject(i)
+						.getString("resourceId"), shapes);
+				outgoings.add(out);
+				out.addIncoming(current);
 			}
 			if (outgoings.size() > 0)
 				current.setOutgoings(outgoings);
