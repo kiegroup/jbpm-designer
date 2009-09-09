@@ -165,5 +165,10 @@
 	<classpathentry kind="lib" path="editor/lib/mail.jar"/>
 	<classpathentry kind="lib" path="editor/lib/SuperCSV-1.52.jar"/>
 	<classpathentry kind="lib" path="editor/lib/bpmnq-1.0.3-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="editor/lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="editor/lib/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="editor/lib/jaxb-xjc.jar"/>
+	<classpathentry kind="lib" path="editor/lib/jaxb1-impl.jar"/>
+	<classpathentry kind="lib" path="editor/lib/jsr173_1.0_api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

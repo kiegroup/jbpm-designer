@@ -1,0 +1,4788 @@
+{
+	"title":"BPMN 2.0",
+	"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
+	"description":"This is the BPMN 2.0 stencil set specification.",
+ 	"propertyPackages": [
+ 		{
+ 			"name":"baseAttributes",
+ 			"properties": [
+ 				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This attribute is used to uniquely identify BPMN elements.",
+					"description_de":"Definiert eine eindeutig Nummer, um einzelne BPMN-Elemente unterscheiden zu können.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"The descriptive name of the BPMN element.",
+					"description_de":"Bezeichnung des BPMN-Elementes.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name"	
+				},
+				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular" : true
+				},
+				{
+					"id":"auditing",
+					"type":"Text",
+					"title":"Auditing",
+					"title_de":"Prüfung",
+					"value":"",
+					"description":"A hook for specifying audit related properties. Auditing can only be defined for a Process.",
+					"description_de":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"monitoring",
+					"type":"Text",
+					"title":"Monitoring",
+					"title_de":"Überwachung",
+					"value":"",
+					"description":"A hook for specifying monitoring related properties. Monitoring can only be defined for a Process.",
+					"description_de":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+ 			]
+ 		},
+		{
+			"name" : "bgColor",
+			"properties" : [
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "bg_frame",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+ 		{
+ 			"name":"catchEventAttributes",
+ 			"properties":[
+ 				{
+					"id":"eventDefinitionRef",
+					"type":"String",
+					"title":"EventDefinitionRef",
+					"title_de":"EreignisDefinitionsRef",
+					"value":"",
+					"description":"EventDefinitionRefs (EventDefinition) is an attribute that defines the type of reusable triggers expected for a catch Event.",
+					"description_de":"Das Attribut EreignisDefinitionsRef (EreignisDefinition) definiert einen wiederverwendbaren Auslösertyp für ein eintretendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"eventDefinitions",
+					"type":"String",
+					"title":"EventDefinitions",
+					"title_de":"EreignisDefinitionen",
+					"value":"",
+					"description":"EventDefinitions (EventDefinition) is an attribute that defines the type of contained triggers expected for a catch Event.",
+					"description_de":"Das Attribut EreignisDefinitions (EreignisDefinition) definiert die beinhaltenten Auslöser für ein eintretendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"dataOutputAssociations",
+					"type":"String",
+					"title":"DataOutputAssociations",
+					"title_de":"DatenAusgangAssoziation",
+					"value":"",
+					"description":"The Data Associations of the catch Event.",
+					"description_de":"Die Daten-Assoziation für ein eintretendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"dataOutput",
+					"type":"String",
+					"title":"DataOutput",
+					"title_de":"DatenAusgang",
+					"value":"",
+					"description":"The Data Associations of the catch Event.",
+					"description_de":"Die Daten-Assoziation für ein eintretendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"outputSet",
+					"type":"String",
+					"title":"OutputSet",
+					"title_de":"AusgabeSätze",
+					"value":"",
+					"description":"The OutputSet for the catch Event.",
+					"description_de":"Die Ausgabe-Sätze für ein eintretendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+ 			]
+ 		},
+ 		{
+ 			"name":"throwEventAttributes",
+ 			"properties":[
+ 				{
+					"id":"eventDefinitionRef",
+					"type":"String",
+					"title":"EventDefinitionRef",
+					"title_de":"EreignisDefinitionsRef",
+					"value":"",
+					"description":"EventDefinitionRefs (EventDefinition) is an attribute that defines the type of reusable triggers expected for a catch Event.",
+					"description_de":"Das Attribut EreignisDefinitionsRef (EreignisDefinition) definiert einen wiederverwendbaren Auslösertyp für ein eintretendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"eventDefinitions",
+					"type":"String",
+					"title":"EventDefinitions",
+					"title_de":"EreignisDefinitionen",
+					"value":"",
+					"description":"EventDefinitions (EventDefinition) is an attribute that defines the type of contained triggers expected for a catch Event.",
+					"description_de":"Das Attribut EreignisDefinitions (EreignisDefinition) definiert die beinhaltenten Auslöser für ein eintretendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"dataInputAssociations",
+					"type":"String",
+					"title":"DataInputAssociations",
+					"title_de":"DatenAusgangAssoziation",
+					"value":"",
+					"description":"The Data Associations of the throw Event.",
+					"description_de":"Die Daten-Assoziation für ein auslösendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"dataInput",
+					"type":"String",
+					"title":"DataInput",
+					"title_de":"DatenAusgang",
+					"value":"",
+					"description":"The Data Associations of the throw Event.",
+					"description_de":"Die Daten-Assoziation für ein auslösendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"inputSet",
+					"type":"String",
+					"title":"InputSet",
+					"title_de":"AusgabeSätze",
+					"value":"",
+					"description":"The InputSet for the throw Event.",
+					"description_de":"Die Ausgabe-Sätze für ein auslösendes Ereignis.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+ 			]
+ 		},
+ 		{
+ 			"name":"interrupting",
+ 			"properties":[
+ 				{
+					"id":"isInterrupting",
+					"type":"Boolean",
+					"title":"IsInterrupting",
+					"title_de":"Blockierend",
+					"value":true,
+					"description":"This attribute denotes whether the Sub-Process encompassing the Event Sub-Process should be cancelled or not.",
+					"description_de":"Dieses Attribut gibt an, ob der umfassende Subprozess abgebrochen werden soll.",
+					"inverseBoolean":false,
+					"readonly":false,
+					"optional":true,
+					"refToView": [
+						"frame",
+						"frame2"
+					]
+				}
+ 			]
+ 		},
+		{
+			"name" : "diagram",
+			"properties" : [
+				{
+					"id":"version",
+					"type":"String",
+					"title":"Version",
+					"value":"",
+					"description":"This defines the Version number of the Diagram.",
+					"description_de":"Setzt die Versionsnummer des Diagramms.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"author",
+					"type":"String",
+					"title":"Author",
+					"title_de":"Autor",
+					"value":"",
+					"description":"This holds the name of the author of the Diagram.",
+					"description_de": "Name des Autors des Diagramms.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"language",
+					"type":"String",
+					"title":"Language",
+					"title_de":"Sprache",
+					"value":"English",
+					"value_de":"Deutsch",
+					"description":"This holds the name of the language in which text is written.",
+					"description_de":"Sprache, in welcher der Text geschrieben ist.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"expressionLanguage",
+					"type":"String",
+					"title":"ExpressionLanguage",
+					"title_de":"AusdrucksSprache",
+					"value":"",
+					"description":"A Language may be provided so that the syntax of expressions used in the Diagram can be understood.",
+					"description_de":"Sprache, mit welcher im Diagramm verwendete Ausdrücke beschrieben sind.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"queryLanguage",
+					"type":"String",
+					"title":"QueryLanguage",
+					"title_de":"AbfrageSprache",
+					"value":"",
+					"description":"A Language may be provided so that the syntax of queries used in the Diagram can be understood.",
+					"description_de":"Sprache, mit welcher im Diagramm verwendete Abfragen beschrieben sind.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"creationDate",
+					"type":"Date",
+					"title":"CreationDate",
+					"title_de":"Erstellt am",
+					"value":"",
+					"description":"This defines the date on which the Diagram was created.",
+					"description_de":"Datum an dem das Diagramm erstellt wurde.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				},
+				{
+					"id":"modificationDate",
+					"type":"Date",
+					"title":"ModificationDate",
+					"title_de":"Geändert am",
+					"value":"",
+					"description":"This defines the date on which the Diagram was last modified.",
+					"description_de":"Datum der letzten Änderung.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				},
+				{
+					"id":"pools",
+					"type":"String",
+					"title":"Pools",
+					"value":"",
+					"description":"A Business Process Diagram shall contain one or more Pools.",
+					"readonly":false,
+					"optional":false,
+					"length":"50",
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"name": "flowElement",
+			"properties" : [
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"title_de":"Kategorien",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"name" : "itemAwareElement",
+			"properties" : [
+				{
+					"id" : "itemSubjectRef",
+					"type" : "String",
+					"title" : "ItemSubjectRef",
+					"title_de" : "ItemSubjectRef",
+					"description" : "Specification of the items that are stored or conveyed by the ItemAwareElement",
+					"description_de" : "",
+					"readonly" : false,
+					"optional" : true,
+					"length" : 50,
+					"wrapLines" : true
+				},
+				{
+					"id" : "dataState",
+					"type" : "String",
+					"title" : "DataState",
+					"title_de" : "DatenZustand",
+					"description" : "A reference to the DataState, which defines certain states for the data contained in the item.",
+					"description_de" : "",
+					"readonly" : false,
+					"optional" : true,
+					"length" : 50,
+					"wrapLines" : true
+				}
+			]
+		},
+		{
+			"name" : "activity",
+			"properties": [
+				{
+					"id":"startQuantity",
+					"type":"Integer",
+					"title":"StartQuantity",
+					"title_de":"Startanzahl",
+					"value":1,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"min":"1"
+				},
+				{
+					"id":"completionQuantity",
+					"type":"Integer",
+					"title":"CompletionQuantity",
+					"title_de":"Fertigstellungsanzahl",
+					"value":1,
+					"description":"Defines the number of tokens that must be generated from the activity",
+					"description_de":"Legt die Anzahl der Token fest, die von der Aktivität generiert werden müssen.",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"min":"1"
+				},
+				{	
+					"id":"status",
+					"type":"Choice",
+					"title":"Status",
+					"value":"None",
+					"description":"The Status of an activity is determined when the activity is being executed by a process engine.",
+					"description_de":"Der Status einer Aktivität wird bestimmt, wenn die Aktivität von einer Prozessengine ausgeführt wird.",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"c2",
+							"title":"Ready",
+							"value":"Ready"
+						},
+						{
+							"id":"c3",
+							"title":"Active",
+							"value":"Active"
+						},
+						{
+							"id":"c4",
+							"title":"Cancelled",
+							"value":"Cancelled"
+						},
+						{
+							"id":"c5",
+							"title":"Aborting",
+							"value":"Aborting"
+						},
+						{
+							"id":"c6",
+							"title":"Aborted",
+							"value":"Aborted"
+						},
+						{
+							"id":"c7",
+							"title":"Completing",
+							"value":"Completing"
+						},
+						{
+							"id":"c8",
+							"title":"Completed",
+							"value":"Completed"
+						}
+					]
+				},
+				{
+					"id":"performers",
+					"type":"String",
+					"title":"Performers",
+					"title_de":"Ausführende",
+					"value":"",
+					"description":"The Performer attribute defines the resource that will perform or will be responsible for the activity.",
+					"description_de":"Das Ausführende Attribut setzt die Ressource, welche die Aktivität ausführen wird oder für sie verantwortlich ist.",
+					"readonly": 	false,
+					"optional": 	true,
+					"length":"",
+					"warpLines" : true
+				},
+				{
+					"id":"properties",
+					"type":"Complex",
+					"title":"Properties",
+					"title_de":"Eigenschaften",
+					"value":"",
+					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
+					"description_de":"Lokale Eigenschaften können der Aktivität hinzugefügt werden. Diese werden ausschließlich während der Abarbeitung der Aktivität angewendet.",
+					"readonly": 	false,
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"type",
+							"name":"Type",
+							"name_de":"Typ",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+						{
+							"id":"value",
+							"name":"Value",
+							"name_de":"Wert",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+						{
+							"id":"correlation",
+							"name":"Correlation",
+							"name_de":"Korrelation",
+							"type":"Boolean",
+							"value":"false",
+							"width":100,
+							"optional":true
+						}
+					]
+				},
+				{
+					"id":"inputSets",
+					"type":"String",
+					"title":"InputSets",
+					"title_de":"Eingabesätze",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"inputs",
+					"type":"String",
+					"title":"Inputs",
+					"title_de":"Eingaben",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"outputSets",
+					"type":"String",
+					"title":"OutputSets",
+					"title_de":"Ausgabesätze",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"outputs",
+					"type":"String",
+					"title":"Outputs",
+					"title_de":"Ausgaben",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"ioRules",
+					"type":"String",
+					"title":"IORules",
+					"title_de":"EA Regeln",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"testTime",
+					"type":"Choice",
+					"title":"TestTime",
+					"title_de":"Testzeit",
+					"value":"After",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"Before",
+							"value":"Before",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"After",
+							"value":"After",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"MI_Condition",
+					"type":"String",
+					"title":"MI_Condition",
+					"title_de":"MI_Bedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"MI_Ordering",
+					"type":"Choice",
+					"title":"MI_Ordering",
+					"title_de":"MI_Anordnung",
+					"value":"Sequential",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"Parallel",
+							"value":"Parallel",
+							"icon" : "/activity/list/mi.parallel.png",
+							"refToView":"parallel"
+						},
+						{
+							"id":"c2",
+							"title":"Sequential",
+							"value":"Sequential",
+							"icon" : "/activity/list/mi.sequential.png",
+							"refToView":"sequential"
+						}						
+					]
+				},
+				{
+					"id":"MI_FlowCondition",
+					"type":"Choice",
+					"title":"MI_FlowCondition",
+					"title_de":"MI_Flussbedingung",
+					"value":"All",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"One",
+							"value":"One",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"All",
+							"value":"All",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"Complex",
+							"value":"Complex",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"isCompensation",
+					"type":"Boolean",
+					"title":"is Compensation",
+					"title_de":"ist Kompensation",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"compensation"
+				},
+				{
+					"id":"assignments",
+					"type":"Complex",
+					"title":"Assignments",
+					"title_de":"Zuweisungen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"name_de":"Auf",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"name_de":"Aus",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"name_de":"Zuweisungszeit",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"Start",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"End",
+									"value":"End",
+									"refToView":""
+								}
+							]
+						}
+					]
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"loopType",
+					"type":"Choice",
+					"title":"LoopType",
+					"title_de":"Schleifentyp",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None",
+							"refToView":"none"
+						},
+						{
+							"id":"c2",
+							"title":"Standard",
+							"value":"Standard",
+							"icon" : "/activity/list/looptype.standard.png",
+							"refToView":"loop"
+						},
+						{
+							"id":"c3",
+							"title":"MultiInstance",
+							"value":"MultiInstance",
+							"refToView":"mi"
+						}
+					]
+				},
+				{
+					"id":"loopCondition",
+					"type":"String",
+					"title":"LoopCondition",
+					"title_de":"Schleifenbedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"loopCounter",
+					"type":"Integer",
+					"title":"LoopCounter",
+					"title_de":"Schleifenzähler",
+					"value":1,
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"min":"0"
+				},
+				{
+					"id":"loopMaximum",
+					"type":"Integer",
+					"title":"LoopMaximum",
+					"title_de":"Schleifenmaximum",
+					"value":1,
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"min":"0"
+				},
+				{
+					"id":"callAcitivity",
+					"type":"Boolean",
+					"title":"is a Call Activity",
+					"title_de":"ist eine Call Activity",
+					"value":0,
+					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"readonly":false,
+					"optional":"true",
+					"refToView":"callActivity"
+				}
+			]
+		},
+		{
+			"name" : "task",
+			"properties" : [
+				{
+					"id":"activityType",
+					"type":"String",
+					"title":"ActivityType",
+					"title_de":"Aktivitätstyp",
+					"value":"Task",
+					"description":"The Type of Activity.",
+					"description":"Typ der Aktivität",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"TaskType",
+					"type":"Choice",
+					"title":"TaskType",
+					"title_de":"Tasktyp",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items":[
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None",
+							"refToView":"none"
+						},
+						{
+							"id":"c2",
+							"title":"Send",
+							"value":"Send",
+							"icon" : "/activity/list/type.send.png",
+							"refToView":"sendTask"
+						},
+						{
+							"id":"c3",
+							"title":"Receive",
+							"value":"Receive",
+							"icon" : "/activity/list/type.receive.png",
+							"refToView":"receiveTask"
+						},
+						{
+							"id":"c4",
+							"title":"User",
+							"value":"User",
+							"icon" : "/activity/list/type.user.png",
+							"refToView":"userTask"
+						},
+						{
+							"id":"c5",
+							"title":"Manual",
+							"value":"Manual",
+							"icon" : "/activity/list/type.manual.png",
+							"refToView":"manualTask"	
+						},
+						{
+							"id":"c6",
+							"title":"Service",
+							"value":"Service",
+							"icon" : "/activity/list/type.service.png",
+							"refToView":"serviceTask"
+						},
+						{
+							"id":"c7",
+							"title":"Business Rule",
+							"value":"Business Rule",
+							"icon" : "/activity/list/type.business.rule.png",
+							"refToView":"businessRuleTask"
+						},
+						{
+							"id":"c8",
+							"title":"Script",
+							"value":"Script",
+							"icon" : "/activity/list/type.script.png",
+							"refToView":"scriptTask"
+						}
+					]
+				},
+				{
+					"id":"InMessage",
+					"type":"String",
+					"title":"InMessage",
+					"title_de":"Eingangsnachricht",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"OutMessage",
+					"type":"String",
+					"title":"OutMessage",
+					"title_de":"Ausgangsnachricht",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"Implementation",
+					"type":"Choice",
+					"title":"Implementation",
+					"title_de":"Implementierung",
+					"value":"Webservice",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"Webservice",
+							"value":"Webservice",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"Other",
+							"value":"Other",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"Unspecified",
+							"value":"Unspecified",
+							"refToView":""
+						}
+					]
+				},
+				{				
+					"id":"ComplexMI_Condition",
+					"type":"String",
+					"title":"ComplexMI_Condition",
+					"title_de":"KomplexeMI Bedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"MessageRef",
+					"type":"String",
+					"title":"MessageRef",
+					"title_de":"NachrichtRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"OperationRef",
+					"type":"String",
+					"title":"OperationRef",
+					"title_de":"OperationsRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"TaskRef",
+					"type":"String",
+					"title":"TaskRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},	
+				{
+					"id":"Instantiate",
+					"type":"Boolean",
+					"title":"Instantiate",
+					"title_de":"Instanziieren",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				},
+				
+				{
+					"id":"Script",
+					"type":"String",
+					"title":"Script",
+					"title_de":"Skript",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffcc",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"bg_frame",
+					"fill":true,
+					"stroke":false
+				}		
+			]
+		},
+		{
+			"name" : "subprocess",
+			"properties" : [
+				{
+					"id": "subProcessType",
+					"type": "Choice",
+					"title": "subProcessType",
+					"title_de":"Subprozesstyp",
+					"value": "Embedded",
+					"description": "SubProcessType is an attribute that defines whether the Sub-Process details are embedded within the higher level Process or refers to another, re-usable Process. The default is Embedded.",
+					"description_de":"Der Subprozesstyp gibt an, ob die Subprozessdetails in einen übergeordneten Prozess eingebettet sind oder auf einen anderen wiederverwendbaren Prozess verweisen.",
+					"optional": false,
+					"refToView": "",
+					"items": [
+						{
+							"id": "choice1",
+							"title":"Embedded",
+							"value":"Embedded"
+						},
+						{
+							"id": "choice2",
+							"title": "Independent",
+							"value": "Independent"
+						},
+						{
+							"id": "choice3",
+							"title": "Reference",
+							"value": "Reference"
+						}
+					]
+				},
+				{
+					"id":"isATransaction",
+					"type":"Boolean",
+					"title":"is a Transaction",
+					"title_de":"ist eine Transaktion",
+					"value":false,
+					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
+					"readonly":false,
+					"optional":false,
+					"refToView":"border"
+				},
+				{
+					"id":"transaction",
+					"type":"String",
+					"title":"TransactionRef",
+					"title_de":"TransaktionsRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"isadhoc",
+					"type":"Boolean",
+					"title":"isAdHoc",
+					"title_de":"ist Ad-hoc",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"adhoc"
+				},
+				{
+					"id":"AdHocOrdering",
+					"type":"Choice",
+					"title":"AdHocOrdering",
+					"title_de":"Ad-hoc Anordnung",
+					"value":"Sequential",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"Sequential",
+							"value":"Sequential"
+						},
+						{
+							"id":"c2",
+							"title":"Parallel",
+							"value":"Parallel"
+						}
+					]
+				},
+				{
+					"id":"AdHocCompletionCondition",
+					"type":"String",
+					"title":"AdHocCompletionCondition",
+					"title_de":"Ad-hoc Fertigstellungsbedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"entry",
+					"type":"DiagramLink",
+					"title":"SubProcessRef",
+					"title_de":"SubprozessRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"u"
+				},
+				{
+					"id":"diagramRef",
+					"type":"String",
+					"title":"DiagramRef",
+					"title_de":"DiagrammRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"processRef",
+					"type":"String",
+					"title":"ProcessRef",
+					"title_de":"ProzessRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"inputMaps",
+					"type":"String",
+					"title":"InputMaps",
+					"title_de":"Eingabeabbildung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"outputMaps",
+					"type":"String",
+					"title":"OutputMaps",
+					"title_de":"Ausgabeabbildung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				}
+			]
+		},
+		{
+			"name" : "gateway",
+			"properties" : [
+				{
+					"id":"assignments",
+					"type":"Complex",
+					"title":"Assignments",
+					"title_de":"Zuweisungen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"name_de":"Auf",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"name_de":"Aus",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+						{
+							"id":"assigntime",
+							"name":"AssignTime",
+							"name_de":"Zuweisungszeit",
+							"type":"Choice",
+							"value":"Start",
+							"width":100,
+							"optional":true,
+							"items": [
+								{
+									"id":"c1",
+									"title":"Start",
+									"value":"Start",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"End",
+									"value":"End",
+									"value_de":"Ende",
+									"refToView":""
+								}
+							]
+						}
+					]
+				},
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"gates",
+					"type":"String",
+					"title":"Gates",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gates_outgoingSequenceFlow",
+					"type":"String",
+					"title":"[Gates] OutgoingSequenceFlow",
+					"title_de":"[Gates] Ausgehender Steuerfluss",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gates_Assignments",
+					"type":"String",
+					"title":"[Gates] Assignments",
+					"title_de":"[Gates] Zuweisungen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"name" : "artifact",
+			"properties" : [
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}
+			]
+		},
+		{
+			"name" : "pool",
+			"properties" : [
+				{
+					"id":"participantRef",
+					"type":"String",
+					"title":"ParticipantRef",
+					"title_de":"TeilnehmerRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"boundaryVisible",
+					"type":"Boolean",
+					"title":"BoundaryVisible",
+					"title_de":"Umrandung sichtbar",
+					"value":true,
+					"description":"Defines if the rectangular boundary for the Pool is visible.",
+					"description_de":"Gibt an, ob die rechteckige Umrandung des Pools sichtbar ist.",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["border", "c", "caption", "captionDisableAntialiasing"]
+				},
+				{
+					"id":"mainPool",
+					"type":"Boolean",
+					"title":"MainPool",
+					"title_de":"Hauptpool",
+					"value":false,
+					"description":"Defines if the current Pool is the main Pool of the diagram.",
+					"description_de":"Gibt an, ob der Pool Hauptpool des Diagramms ist.",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"processRef",
+					"type":"String",
+					"title":"ProcessRef",
+					"title_de":"ProzessRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"30"
+				},
+				{
+					"id":"processName",
+					"type":"String",
+					"title":"ProcessName",
+					"title_de":"Prozessname",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"processType",
+					"type":"Choice",
+					"title":"ProcessType",
+					"title_de":"Prozesstyp",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"popular" : true,
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"c2",
+							"title":"Private",
+							"value":"Private"
+						},
+						{
+							"id":"c3",
+							"title":"Abstract",
+							"value":"Abstract"
+						},
+						{
+							"id":"c4",
+							"title":"Collaboration",
+							"value":"Collaboration"
+						}
+					]
+				},
+				{
+					"id":"status",
+					"type":"Choice",
+					"title":"Status",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"popular" : true,
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"c2",
+							"title":"Ready",
+							"value":"Ready"
+						},
+						{
+							"id":"c3",
+							"title":"Active",
+							"value":"Active"
+						},
+						{
+							"id":"c4",
+							"title":"Cancelled",
+							"value":"Cancelled"
+						},
+						{
+							"id":"c5",
+							"title":"Aborting",
+							"value":"Aborting"
+						},
+						{
+							"id":"c6",
+							"title":"Aborted",
+							"value":"Aborted"
+						},
+						{
+							"id":"c7",
+							"title":"Completing",
+							"value":"Completing"
+						},
+						{
+							"id":"c8",
+							"title":"Completed",
+							"value":"Completed"
+						}
+					]
+				},
+				{
+					"id":"adHoc",
+					"type":"Boolean",
+					"title":"AdHoc",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"adHocOrdering",
+					"type":"Choice",
+					"title":"AdHocOrdering",
+					"title_de":"Ad-Hoc Anordnung",
+					"value":"Parallel",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"Sequential",
+							"value":"Sequential",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"Parallel",
+							"value":"Parallel",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"adHocCompletionCondition",
+					"type":"String",
+					"title":"AdHocCompletionCondition",
+					"title_de":"Ad-hoc Fertigstellungsbedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"suppressJoinFailure",
+					"type":"Boolean",
+					"title":"SuppressJoinFailure",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"enableInstanceCompensation",
+					"type":"Boolean",
+					"title":"EnableBooleanCompensation",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"processCategories",
+					"type":"String",
+					"title":"ProcessCategories",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"processDocumentation",
+					"type":"String",
+					"title":"ProcessDocumentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"wrapLines":true
+				}
+			]
+		}
+	],
+	"stencils" : [
+ 		{
+			"type":				"node",
+			"id":				"BPMNDiagram",
+			"title":			"BPMN-Diagram",
+			"title_de":			"BPMN-Diagramm",
+			"groups":			["Diagram"],
+			"description":		"A BPMN Diagram.",
+			"view":				"diagram.svg",
+			"icon":				"diagram.png",
+			"mayBeRoot":		true,
+			"hide":				true,
+			"propertyPackages" : ["baseAttributes","diagram"],
+			"roles":			["canContainArtifacts"]
+		},
+		
+		// Acitvities
+		
+		{
+			"type" : 			"node",
+			"id": 				"Task",
+			"title" : 			"Task",
+			"title_de" : 		"Task",
+			"groups" : 			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" : 	"",
+			"description_de" : 	"",
+			"view" : 			"activity/task.svg",
+			"icon" : 			"activity/task.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"activity",
+				"task"
+			],
+			"roles" : 			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"from_task_event",
+				"to_task_event",
+				"messageflow_start",
+				"messageflow_end",
+				"fromtoall",
+				"ActivitiesMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"CollapsedSubprocess",
+			"title" : 			"Collapsed Subprocess",
+			"title_de" :		"Zugeklappter Unterprozess",
+			"groups" :			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" :		"A Subprocess is a decomposable activity. It can be collapsed to hide the details.",
+			"description_de" :	"Ein Unterprozess ist eine zerlegbare Aktivität. Er kann zugeklappt sein, um Details zu verbergen.",
+			"view" :			"activity/subprocess.collapsed.svg",
+			"icon" :			"activity/subprocess.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"activity",
+				"subprocess",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id":"activityType",
+					"type":"String",
+					"title":"ActivityType",
+					"title_de":"Aktivitätstyp",
+					"value":"Sub-Process",
+					"value_de":"Unterprozess",
+					"description":"The Type of Activity.",
+					"description":"Typ der Aktivität",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffcc",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"bg_frame",
+					"fill":true,
+					"stroke":false
+				}	
+			],
+			"roles": 			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"messageflow_start",
+				"messageflow_end",
+				"to_task_event",
+				"fromtoall",
+				"ActivitiesMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"Subprocess",
+			"title" :			"Expanded Subprocess",
+			"title_de" :		"Aufgeklappter Unterprozess",
+			"groups" :			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" :		"A Subprocess is a decomposable activity. An Expanded Subprocess contains a valid BPMN diagram.",
+			"description_de" :	"Ein Unterprozess ist eine zerlegbare Aktivität. Ein Aufgeklappter Unterprozess enthält ein BPMN Diagramm.",
+			"view" :			"activity/subprocess.expanded.svg",
+			"icon" :			"activity/expanded.subprocess.png",
+ 			"layout" : 			[{"type" : "layout.bpmn2_0.subprocess"}],
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"activity",
+				"subprocess",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id":"activityType",
+					"type":"String",
+					"title":"ActivityType",
+					"title_de":"Aktivitätstyp",
+					"value":"Sub-Process",
+					"value_de":"Unterprozess",
+					"description":"The Type of Activity.",
+					"description":"Typ der Aktivität",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				}
+			],
+			"roles"	:			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"messageflow_start",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"canContainArtifacts",
+				"ActivitiesMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"CollapsedEventSubprocess",
+			"title" : 			"Collapsed Event-Subprocess",
+			"title_de" :		"Zugeklappter Ereignis-Unterprozess",
+			"groups" :			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" :		"An Event-Subprocess is placed into another Subprocess. It becomes active when its start event gets triggered and can interrupt the Subprocess context or run in parallel (non-interrupting).",
+			"description_de" :	"Ein Ereignis-Unterprozess wird in einem anderen Unterprozess platziert. Er wird aktiv, wenn sein Startereignis ausgelöst wird und kann den Unterprozesskontext unterbrehcen oder parallel laufen (nicht-unterbrechend).",
+			"view" :			"activity/event.subprocess.collapsed.svg",
+			"icon" :			"activity/event.subprocess.collapsed.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"activity",
+				"subprocess",
+				"bgColor",
+				"interrupting"
+			],
+			"properties" :		[
+				{
+					"id":"activityType",
+					"type":"String",
+					"title":"ActivityType",
+					"title_de":"Aktivitätstyp",
+					"value":"Event-Sub-Process",
+					"value_de":"Ereignis-Unterprozess",
+					"description":"The Type of Activity.",
+					"description":"Typ der Aktivität",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"startEvent",
+					"type":"Choice",
+					"title":"Start-Event",
+					"title_de":"Start-Ereignis",
+					"value":"Message",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"items":[
+						{
+							"id":"c1",
+							"title":"Message",
+							"title_de" : "Nachricht",
+							"value":"Message",
+							"icon" : "/activity/list/event.message.png",
+							"refToView":"message"
+						},
+						{
+							"id":"c2",
+							"title":"Timer",
+							"title_de" : "Stoppuhr",
+							"value":"Timer",
+							"icon" : "/activity/list/event.timer.png",
+							"refToView":"timer"
+						},
+						{
+							"id":"c3",
+							"title":"Escalation",
+							"title_de" : "Eskalation",
+							"value":"Escalation",
+							"icon" : "/activity/list/event.escalation.png",
+							"refToView":"escalation"
+						},
+						{
+							"id":"c4",
+							"title":"Conditional",
+							"title_de" : "Bedingung",
+							"value":"Conditional",
+							"icon" : "/activity/list/event.conditional.png",
+							"refToView":"conditional"
+						},
+						{
+							"id":"c5",
+							"title":"Error",
+							"title_de" : "Fehler",
+							"value":"Error",
+							"icon" : "/activity/list/event.error.png",
+							"refToView":"error"	
+						},
+						{
+							"id":"c6",
+							"title":"Compensation",
+							"title_de" : "Kompensation",
+							"value": "Compensation",
+							"icon" : "/activity/list/event.compensation.png",
+							"refToView":"compensationStart"
+						},
+						{
+							"id":"c7",
+							"title":"Signal",
+							"title_de" : "Signal",
+							"value":"Signal",
+							"icon" : "/activity/list/event.signal.png",
+							"refToView":"signal"
+						},
+						{
+							"id":"c8",
+							"title":"Multiple",
+							"title_de" : "Vielzahl",
+							"value":"Multiple",
+							"icon" : "/activity/list/event.multiple.png",
+							"refToView":"multiple"
+						},
+						{
+							"id":"c9",
+							"title":"Multiple (Parallel)",
+							"title_de" : "Vielzahl (Parallel)",
+							"value":"MultipleParallel",
+							"icon" : "/activity/list/event.multiple.parallel.png",
+							"refToView":"multipleParallel"
+						}
+					]
+				}
+			],
+			"roles": 			[
+				"all",
+				"fromtoall",
+				"canContainArtifacts",
+				"EventActivitiesMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"EventSubprocess",
+			"title" :			"Event-Subprocess",
+			"title_de" :		"Ereignis-Unterprozess",
+			"groups" :			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" :		"An Event-Subprocess is placed into another Subprocess. It becomes active when its start event gets triggered and can interrupt the Subprocess context or run in parallel (non-interrupting).",
+			"description_de" :	"Ein Ereignis-Unterprozess wird in einem anderen Unterprozess platziert. Er wird aktiv, wenn sein Startereignis ausgelöst wird und kann den Unterprozesskontext unterbrehcen oder parallel laufen (nicht-unterbrechend).",
+			"view" :			"activity/event.subprocess.svg",
+			"icon" :			"activity/event.subprocess.png",
+ 			"layout" : 			[{"type" : "layout.bpmn2_0.subprocess"}],
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"activity",
+				"subprocess",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id":"activityType",
+					"type":"String",
+					"title":"ActivityType",
+					"title_de":"Aktivitätstyp",
+					"value":"Event-Sub-Process",
+					"value_de":"Ereignis-Unterprozess",
+					"description":"The Type of Activity.",
+					"description":"Typ der Aktivität",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"isATransaction",
+					"type":"Boolean",
+					"title":"is a Transaction",
+					"title_de":"ist eine Transaktion",
+					"value":false,
+					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
+					"readonly":true,
+					"optional":false
+				},
+				{
+					"id":"callAcitivity",
+					"type":"Boolean",
+					"title":"is a Call Activity",
+					"title_de":"ist eine Call Activity",
+					"value":false,
+					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"readonly":true,
+					"optional":"true"
+				}
+			],
+			"roles"	:			[
+				"all",
+				"fromtoall",
+				"canContainArtifacts",
+				"EventActivitiesMorph"
+			]
+		},
+		
+		// Gateways
+		
+		{
+			"type" : 			"node",
+			"id" :				"Exclusive_Databased_Gateway",
+			"title" :			"Data-based Exclusive (XOR) Gateway",
+			"title_de" : 		"Daten-basiertes exklusives Gateway",
+			"description" :		"When splitting, it routes the sequence flow to exactly one of the outgoing branches based on conditions. When merging, it awaits one incoming branch to complete before triggering the outgoing flow.",
+			"description_de" :	"Bei einer Verzweigung wird der Steuerfluss abhÃ¤ngig von Verzweigungsbedingungen zu genau einer ausgehenden Kante geleitet. Bei einer Zusammenführung wird auf eine der eingehenden Kante gewartet, um den ausgehenden Steuerfluss zu aktivieren.",
+			"groups" : 			["Gateways"],
+			"view" : 			"gateway/exclusive.databased.svg",
+			"icon" : 			"gateway/exclusive.databased.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"gateway",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id":"gatewayType",
+					"type":"String",
+					"title":"GatewayType",
+					"title":"GatewayTyp",
+					"value":"XOR",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"xorType",
+					"type":"String",
+					"title":"XORType",
+					"title_de":"XORTyp",
+					"value":"Data",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"markerVisible",
+					"type":"Boolean",
+					"title":"MarkerVisible",
+					"title_de":"Markierung sichtbar",
+					"value":"true",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"cross"
+				},		
+				{
+					"id":"defaultGate",
+					"type":"String",
+					"title":"DefaultGate",
+					"title_de":"Standardgate",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gate_outgoingSequenceFlow",
+					"type":"String",
+					"title":"[Gate] OutgoingSequenceFlow",
+					"title_de":"[Gate] Ausgehender Steuerfluss",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"gate_Assignments",
+					"type":"String",
+					"title":"[Gate] Assignments",
+					"title_de":"[Gates] Zuweisungen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				}	
+			],
+			"roles": 			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"fromtoall",
+				"GatewaysMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" : 				"EventbasedGateway",
+			"title" :			"Event-based Gateway",
+			"title_de" :		"Ereignis-basiertes Gateway",
+			"groups" :			["Gateways"],
+			"description" :		"Each event results in the creation of a new process instance.",
+			"description_de" :	"Jedes Ereignis endet mit der Erzeugung einer neuen Prozessinstanz.",
+			"view" :			"gateway/eventbased.svg",
+			"icon" :			"gateway/eventbased.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"gateway",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id":"eventType",
+					"type":"Choice",
+					"title":"Type",
+					"title_de":"Typ",
+					"value":"default",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items":[
+						{
+							"id":"c1",
+							"title":"Default",
+							"title_de" : "Standard",
+							"value":"default",
+							"refToView":"default"
+						},
+						{
+							"id":"c2",
+							"title":"Parallel",
+							"title_de" : "Parallel",
+							"value":"instantiate_parallel",
+							"refToView":"parallel"
+						}
+					]
+				},
+				{
+					"id":"instantiate",
+					"type":"Boolean",
+					"title":"Instantiate",
+					"title_de":"Instanzieren",
+					"value": false,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"length":"",
+					"refToView" : "instantiate"
+				}
+			],
+			"roles":			[
+				"all",
+				"sequence_end",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"fromtoall",
+				"GatewaysMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"ParallelGateway",
+			"title" :			"Parallel Gateway",
+			"title_de" :		"Paralleles Gateway",
+			"groups" :			["Gateways"],
+			"description" :		"When used to split the sequence flow, all outgoing branches are activated simultaneously. When merging parallel branches it waits for all incoming branches to complete before triggering the outgoing flow.",
+			"description_de" :	"Wenn der Steuerfluss verzweigt wird, werden alle ausgehenden Kanten simultan aktiviert. Bei der Zusammenführung wird auf alle eingehenden Kanten gewartet, bevor der ausgehende Steuerfluss aktiviert wird.",
+			"view" :			"gateway/parallel.svg",
+			"icon" :			"gateway/parallel.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"gateway",
+				"bgColor"
+			],
+			"properties" : [
+				{
+					"id":"gatewayType",
+					"type":"String",
+					"title":"GatewayType",
+					"title_de":"Gatewaytyp",
+					"value":"AND",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				}
+			],
+			"roles": 			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"fromtoall",
+				"GatewaysMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"InclusiveGateway",
+			"title" :			"Inclusive Gateway",
+			"title_de" :		"Inklusives Gateway",
+			"groups" :			["Gateways"],
+			"description" :		"When splitting, one or more branches are activated based on branching conditions. When merging, it awaits all active incoming branches to complete.",
+			"description_de" :	"Bei einer Verzweigung werden eine oder mehrere Kanten abhÃ¤ngig von Verzweigungsbedingungen aktiviert. Bei einer Vereinigung wird auf alle eingehenden aktiven Kanten gewartet.",
+			"view" :			"gateway/inclusive.svg",
+			"icon" :			"gateway/inclusive.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"gateway",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id":"gatewayType",
+					"type":"String",
+					"title":"GatewayType",
+					"title_de":"Gatewaytyp",
+					"value":"OR",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"defaultGate",
+					"type":"String",
+					"title":"DefaultGate",
+					"title_de":"Standardgate",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"gate_outgoingSequenceFlow",
+					"type":"String",
+					"title":"[Gate] OutgoingSequenceFlow",
+					"title_de":"[Gate] Ausgehender Steuerfluss",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"gate_Assignments",
+					"type":"String",
+					"title":"[Gate] Assignments",
+					"title":"[Gates] Zuweisungen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				}
+			],
+			"roles": 			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"fromtoall",
+				"GatewaysMorph"
+			]
+		},
+		{
+			"type": "node",
+			"id":"ComplexGateway",
+			"title":"Complex Gateway",
+			"title_de":"Komplexes Gateway",
+			"groups":["Gateways"],
+			"description":"It triggers one or more branches based on complex conditions or verbal descriptions. Use it sparingly as the semantics might not be clear.",
+			"description_de":"Eine oder mehrere Kanten werden abhängig von komplexen Bedingungen oder verbalen Beschreibungen aktiviert. Es sollte nur benutzt werden, wenn sich das Verhalten nicht durch andere Gateways ausdrücken lässt.",
+			"view":"gateway/complex.svg",
+			"icon":"gateway/complex.png",
+			"propertyPackages" : [
+				"baseAttributes",
+				"flowElement",
+				"gateway",
+				"bgColor"
+			],
+			"properties" : [
+				{
+					"id":"gatewayType",
+					"type":"String",
+					"title":"GatewayType",
+					"title_de":"Gatewaytyp",
+					"value":"Complex",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"incomingCondition",
+					"type":"String",
+					"title":"IncomingCondition",
+					"title_de":"Eingangsbedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"outgoingCondition",
+					"type":"String",
+					"title":"OutgoingCondition",
+					"title_de":"Ausgehendebedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				}
+			],
+			"roles": [
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"fromtoall",
+				"GatewaysMorph"
+			],
+		},
+		
+		// Swimlanes
+		
+		{
+			"type" : 			"node",
+			"id" :				"Pool",
+			"title" :			"Pool",
+			"groups" :			["Swimlanes"],
+			"groups_de" :		["Rollen"],
+			"description" :		"Pools and Lanes represent responsibilities for activities in a process. A pool or a lane can be an organization, a role, or a system.",
+			"description_de" :	"Pools und Lanes repräsentieren Rollen. Ein Pool repräsentiert eine Organisation.",
+			"view" :			"swimlane/pool.svg",
+			"icon" :			"swimlane/pool.png",
+			"propertyPackages": [
+				"baseAttributes",
+				"pool"
+			],
+			"roles" : 			[
+				"all",
+				"messageflow_start",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"canContainArtifacts"				
+			],
+			"layout" : [{"type" : "layout.bpmn2_0.pool"}],
+		},
+		{
+			"type" : 			"node",
+			"id" :				"CollapsedPool",
+			"title" :			"Collapsed Pool",
+			"title_de" :		"Zugeklappter Pool",
+			"groups" :			["Swimlanes"],
+			"groups_de" :		["Rollen"],
+			"description" :		"Collapsed Pools hide all internals of the contained processes.",
+			"description_de" :	"Zugeklappte Pools verbergen alle Details der enthaltenen Prozesse.",
+			"view" :			"swimlane/collapsed.pool.svg",
+			"icon" :			"swimlane/lane.png",
+			"propertyPackages": [
+				"baseAttributes",
+				"pool",
+				"bgColor"
+			],
+			"properties" : 		[
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"c",
+					"fill":true,
+					"stroke":false
+				}
+			],
+			"roles" :		 	[
+				"all",
+				"messageflow_start",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall"				
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"Lane",
+			"title" :			"Lane",
+			"groups" :			["Swimlanes"],
+			"groups_de" :		["Rollen"],
+			"description" :		"Pools and Lanes represent responsibilities for activities in a process. A pool or a lane can be an organization, a role, or a system. Lanes sub-divide pools or other lanes hierarchically.",
+			"description_de" :	"Pools und Lanes repräsentieren Rollen. Lanes repräsentieren Verantwortlichkeiten, wie etwa Organisationseinheiten, Stellen oder ITSysteme. Lanes können hierarchisch untergliedert sein.",
+			"view" :			"swimlane/lane.svg",
+			"icon" :			"swimlane/lane.png",
+			"propertyPackages": [
+				"baseAttributes"
+			],
+			"properties" : 		[
+				{
+					"id":"parentPool",
+					"type":"String",
+					"title":"ParentPool",
+					"title_de":"Elternpool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"parentLane",
+					"type":"String",
+					"title":"ParentLane",
+					"title_de":"Elternlane",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"showCaption",
+					"type":"Boolean",
+					"title":"ShowCaption",
+					"title_de":"Zeige Beschriftung",
+					"value":"true",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView": ["caption", "captionDisableAntialiasing", "text_v"],
+					"fill":true,
+					"stroke":false
+				}
+			],
+			"roles": 			[
+				"messageflow_start",
+				"messageflow_end",
+				"PoolChild",
+				"fromtoall",
+				"canContainArtifacts"				
+			],
+			"layout" : [{"type" : "layout.bpmn11.lane"}],
+		},
+		
+		// Artifacts
+		
+		{
+			"type" : 			"node",
+			"id" : 				"Group",
+			"title" :			"Group",
+			"title_de" :		"Gruppe",
+			"groups" :			["Artifacts"],
+			"groups_de" :		["Artefakte"],
+			"description" :		"An arbitrary set of objects can be defined as a Group to show that they logically belong together.",
+			"description_de" :	"Mehrere Objekte, die logisch in Verbindung stehen, können in einer Gruppe zusammengefasst werden.",
+			"view" :			"artifact/group.svg",
+			"icon":				"artifact/group.png",
+			"propertyPackages" : [
+				"baseAttributes",
+				"flowElement",
+				"artifact"
+			],
+			"properties" : [
+				{
+					"id":"artifactType",
+					"type":"String",
+					"title":"ArtifactType",
+					"title_de":"Artefakttyp",
+					"value":"Group",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				}
+			],
+			"roles": [
+				"all",
+				"fromtoall",
+				"canContainArtifacts"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" : 				"TextAnnotation",
+			"title" :			"Text Annotation",
+			"title_de" :		"Text-Anmerkung",
+			"groups" :			["Artifacts"],
+			"groups_de" :		["Artefakte"],
+			"description" :		"Any object can be associated with a Text Annotation to provide additional documentation.",
+			"description_de" :	"Jedes Objekt kann durch eine Text-Anmerkung kommentiert werden.",
+			"view" :			"artifact/text.annotation.svg",
+			"icon" :			"artifact/text.annotation.png",
+			"defaultAlign" :	"northeast",
+			"propertyPackages": [
+				"baseAttributes",
+				"flowElement",
+				"artifact"
+			],
+			"properties" : 		[
+				{
+					"id":"text",
+					"type":"String",
+					"title":"Text",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"artifactType",
+					"type":"String",
+					"title":"ArtifactType",
+					"title_de":"Artefakttyp",
+					"value":"Annotation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				}
+			],
+			"roles": [
+				"all",
+				"from_artifact",
+				"to_artifact",
+				"TextAnnotationMorph"
+			]
+		},
+		
+		// Data Objects
+		
+		{
+			"type" : 			"node",
+			"id" :				"DataObject",
+			"title" :			"Data Object",
+			"title_de" :		"Datenobjekt",
+			"description" :		"A Data Object represents information flowing through the process, such as business documents, e-mails or letters.",
+			"description_de" :	"Ein Datenobjekt repräsentiert Informationen, die durch den Prozess fließen, wie z.B. Dokumente, Emails oder Briefe.",
+			"groups" :			["Data Objects"],
+			"groups_de" :		["Daten Objekte"],
+			"view" :			"dataobject/data.object.svg",
+			"icon" :			"dataobject/data.object.png",
+			"defaultAlign" :	"southeast",
+			"propertyPackages":	[
+				"baseAttributes",
+				"flowElement",
+				"itemAwareElement",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id":"state",
+					"type":"String",
+					"title":"State",
+					"title_de":"Zustand",
+					"value":"",
+					"description":"",
+					"refToView":"text_state",
+					"readonly":false,
+					"optional":true,
+					"directlyEditable":false
+				},
+				{
+					"id":"properties",
+					"type":"Complex",
+					"title":"Properties",
+					"title_de":"Eigenschaften",
+					"value":"",
+					"description":"Modeler-defined Properties may be added to a Data Object",
+					"description_de":"Der Modellierer kann weitere Eigenschaften einem Datenobjekt zuweisen.",
+					"readonly": 	false,
+					"optional": 	false,
+					"complexItems": [
+					{
+						"id":"name",
+						"name":"Name",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false 
+					},
+					{
+						"id":"type",
+						"name":"Type",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false
+					},
+					{
+						"id":"value",
+						"name":"Value",
+						"type":"String",
+						"value":"",
+						"width":100,
+						"optional":false
+					},
+					{
+						"id":"correlation",
+						"name":"Correlation",
+						"type":"Boolean",
+						"value":"false",
+						"width":100,
+						"optional":true
+					}
+					]
+				},
+				{
+					"id":"input_output",
+					"type":"Choice",
+					"title":"Input/Output",
+					"title_de":"Eingang/Ausgang",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items":[
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None",						
+							"refToView":"none"
+						},
+						{
+							"id":"c2",
+							"title":"Input",
+							"value":"Input",
+							"icon" : "/dataobject/list/input.png",
+							"refToView":"input"
+						},
+						{
+							"id":"c3",
+							"title":"Output",
+							"value":"Output",
+							"icon" : "/dataobject/list/output.png",
+							"refToView":"output"
+						}
+					]
+				},
+				{
+					"id":"requiredForStart",
+					"type":"Boolean",
+					"title":"Required for start",
+					"title_de":"Erforderlich für Start",
+					"value":true,
+					"description":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"producedAtCompletion",
+					"type":"Boolean",
+					"title":"Produced at completion",
+					"title_de":"Produziert bei Fertigstellung",
+					"value":true,
+					"description":"",
+					"readonly":false,
+					"optional":false
+				},		
+				{
+					"id" : "isCollection",
+					"type" : "Boolean",
+					"title" : "is Collection",
+					"title_de" : "ist Collection",
+					"value" : false,
+					"description" : "A Collection Data Object represents a collection of information, e.g. a list of order items",
+					"readonly" : false,
+					"optional" : true,
+					"refToView" : "collection"
+				}
+			],
+			"roles" : 			[
+				"all",
+				"from_task_event",
+				"to_task_event",
+				"fromtoall",
+				"DataObjectMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"DataStore",
+			"title" :			"Data Store",
+			"title_de" :		"Datenlager",
+			"groups" : 			["Data Objects"],
+			"groups_de" :		["Daten Objekte"],
+			"description" :		"A Data Store is a place where the process can read or wirte date, e.g. a database or a filling cabinet. It persists beyond the lifetime of the process instance.",
+			"description_de" :	"Ein Datenlager ist ein Platz an dem ein Prozess Daten lesen oder schreiben kann, zum Beispiel eine Datenbank. Es existiert auch über die Lebenszeit der Prozessinstanz hinweg.",
+			"view" :			"dataobject/data.store.svg",
+			"icon" :			"dataobject/data.store.png",
+			"propertyPackages": [
+				"baseAttributes",
+				"flowElement",
+				"itemAwareElement",
+				"bgColor"
+			],
+			"properties" :		[
+				{
+					"id" : "capacity",
+					"type" : "Integer",
+					"title" : "Capacity",
+					"title_de" : "Kapazität",
+					"description" : "",
+					"readonly" : false,
+					"optional" : true,
+					"length" : ""
+				},
+				{
+					"id" : "isUnlimited",
+					"type" : "Boolean",
+					"title" : "is Unlimited",
+					"title_de" : "nicht begrenzt",
+					"value" : false,
+					"description" : "",
+					"readonly" : false,
+					"optional" : true
+				},
+				{
+					"id" : "dataStoreRef",
+					"type" : "String",
+					"title" : "DataStoreRef",
+					"title_de" : "DataStoreRef",
+					"description" : "",
+					"readonly" : false,
+					"optional" : true,
+					"length": 50,
+					"wrapLines" : true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"white",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":["bg_frame","bg_frame2"],
+					"fill":true,
+					"stroke":false
+				}
+			],
+			"roles" :			[
+				"all",
+				"fromtoall",
+				"to_task_event",
+				"from_task_event",
+				"DataObjectMorph"
+			]
+		},
+		{
+			"type" :			"node",
+			"id" :				"Message",
+			"title" :			"Message",
+			"title_de" : 		"Nachricht",
+			"groups" :			["Data Objects"],
+			"groups_de" :		["Daten Objekte"],
+			"description" :		"A Message is used to depict the contents of a communication between two Participants.",
+			"description_de" :	"Eine Nachricht schildert die Kommunikation zwischen zwei Teilnehmern.",
+			"view" :			"dataobject/message.svg",
+			"icon" :			"dataobject/message.png",
+			"propertyPackages":	[
+				"baseAttributes",
+				"flowElement",
+				"itemAwareElement"
+			],
+			"properties" :		[
+				{
+					"id" : "structureref",
+					"type" : "String",
+					"title" : "StructureRef",
+					"title_de" : "StrukturRef",
+					"description" : "",
+					"readonly" : false,
+					"optional" : true,
+					"length" : 50,
+					"wrapLines" : true
+				},
+				{
+					"id" : "initiating",
+					"type" : "Boolean",
+					"title" : "Initiating",
+					"title_de" : "Initiierend",
+					"description" : "",
+					"value" : true,
+					"inverseBoolean":true,
+					"refToView" : ["nonInitiating", "nonInitiating2"],
+					"readonly" : false,
+					"optional" : true
+				},
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"white",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":["bg_frame","bg_frame2"],
+					"fill":true,
+					"stroke":false
+				}
+			],
+			"roles" :			[
+				"all",
+				"fromtoall",
+				"DataObjectMorph"
+			]
+		},
+		
+		// Start Events
+		
+		{
+			"type" : 			"node",
+			"id": 				"StartNoneEvent",
+			"title": 			"Start Event",
+			"title_de" : 		"Start-Ereignis",
+			"groups" : 			["Start Events"],
+			"groups_de" : 		["Start-Ereignisse"],
+			"description" : 	"Untyped events, typically starts or ends.",
+			"description_de" : 	"Untypisierte Ereignisse, i. d. R. am Start oder Ende eines Prozesses.",
+			"view" : 			"startevent/none.svg",
+			"icon" : 			"startevent/none.png",
+			"propertyPackages":	[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles" : [
+				"all",
+				"Startevents_all",
+				"sequence_start",
+				"choreography_sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"None",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type" :		 	"node",
+			"id" :				"StartMessageEvent",
+			"title" : 			"Start Message Event",
+			"title_de" :		"Start-Nachricht-Ereignis",
+			"groups" :			["Start Events"],
+			"groups_de" : 		["Start-Ereignisse"],
+			"description" :		"Receiving messages.",
+			"description_de" :	"Empfang von Nachrichten.",
+			"view" :			"startevent/message.svg",
+			"icon" :			"startevent/message.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"sequence_start",
+				"Startevents_all",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Message",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type" :			"node",
+			"id" :				"StartTimerEvent",
+			"title" :			"Start Timer Event",
+			"title_de" :		"Start-Zeit-Ereignis",
+			"groups" :			["Start Events"],
+			"groups_de" : 		["Start-Ereignisse"],
+			"description" :		"Cyclic timer events, points in time, time spans or timeouts.",
+			"description_de" :	"Periodische zeitliche Ereignisse, Zeitpunkte, Zeitspannen oder Zeitüberschreitungen.",
+			"view" :			"startevent/timer.svg",
+			"icon" :			"startevent/timer.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles" : 			[
+				"all",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Startevents_all",
+				"choreography_sequence_start",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Timer",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"StartEscalationEvent",
+			"title":"Start Escalation Event",
+			"title_de":"Start-Eskalation-Ereignis",
+			"groups":["Start Events"],
+			"groups_de":["Start-Ereignisse"],
+			"description":"",
+			"description_de":"",
+			"view":"startevent/escalation.svg",
+			"icon":"startevent/escalation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles" : 			[
+				"eventSubprocessElement",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Startevents_all",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Escalation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"StartConditionalEvent",
+			"title" :			"Start Conditional Event",
+			"title_de" :		"Start-Bedingungs-Ereignis",
+			"groups" :			["Start Events"],
+			"groups_de" :		["Start-Ereignisse"],
+			"description" :		"Reacting to changed business conditions or integrating business rules.",
+			"description_de" :	"Reaktion auf veränderte Bedingungen oder Regeln.",
+			"view" :			"startevent/conditional.svg",
+			"icon" 	:			"startevent/conditional.png",
+			"propertyPackages": [
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles" : 			[
+				"all",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Startevents_all",
+				"choreography_sequence_start",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Conditional",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"StartErrorEvent",
+			"title":"Start Error Event",
+			"title_de":"Start-Fehler-Ereignis",
+			"groups":["Start Events"],
+			"groups_de":["Start-Ereignisse"],
+			"description":"Catching named errors.",
+			"description_de":"Behandeln von benannten Fehlern.",
+			"view":"startevent/error.svg",
+			"icon":"startevent/error.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Startevents_all",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Error",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"StartCompensationEvent",
+			"title":"Start Compensation Event",
+			"title_de":"Start-Kompensierung-Ereignis",
+			"groups":["Start Events"],
+			"groups_de":["Start-Ereignisse"],
+			"description":"Compensation handling.",
+			"description_de":"Behandeln von Kompensierung.",
+			"view":"startevent/compensation.svg",
+			"icon":"startevent/compensation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Startevents_all",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Compensation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"StartSignalEvent",
+			"title" :			"Start Signal Event",
+			"title_de" :		"Start-Signal-Ereignis",
+			"groups" :			["Start Events"],
+			"groups_de" :		["Start-Ereignisse"],
+			"description" :		"Signalling across different processes. One signal thrown can be caught multiple times.",
+			"description_de" :	"Signalgebung über mehrere Prozesse. Auf ein Signal kann mehrfach reagiert werden.",
+			"view" :			"startevent/signal.svg",
+			"icon" :			"startevent/signal.png",
+			"propertyPackages": [
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles" : 			[
+				"all",
+				"sequence_start",
+				"Startevents_all",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_start",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Signal",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type" :		 	"node",
+			"id" :				"StartMultipleEvent",
+			"title" :			"Start Multiple Event",
+			"title_de" :		"Start-Mehrfach-Ereignis",
+			"groups" :			["Start Events"],
+			"groups_de" :		["Start-Ereignisse"],
+			"description" :		"Catching one out of a set of events.",
+			"description_de" :	"Eintreten eines von mehreren Ereignissen.",
+			"view" :			"startevent/multiple.svg",
+			"icon" :			"startevent/multiple.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles" : 			[
+				"all",
+				"messageflow_end",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Startevents_all",
+				"choreography_sequence_start",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"StartParallelMultipleEvent",
+			"title":"Start Parallel Multiple Event",
+			"title_de":"Start-Parallel-Mehrfach-Ereignis",
+			"groups":["Start Events"],
+			"groups_de":["Start-Ereignisse"],
+			"description":"Multiple triggers are required before Catching one out of a set of events.",
+			"description_de":"Eintreten eines von mehreren Ereignissen.",
+			"view":"startevent/multiple.parallel.svg",
+			"icon":"startevent/multiple.parallel.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles" :			[
+				"all",
+				"messageflow_end",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Startevents_all",
+				"choreography_sequence_start",
+				"StartEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Parallel Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		
+		// Intermediate Events Catching
+		
+		{
+			"type": "node",
+			"id":"IntermediateMessageEventCatching",
+			"title":"Intermediate Message Event",
+			"title_de":"Zwischen-Nachrichten-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Receiving messages.",
+			"description_de":"Empfang von Nachrichten.",
+			"view":"intermediateevent/message.catching.svg",
+			"icon":"catching/message.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"messageflow_end",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"EventOnChoreographyActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Message",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateTimerEvent",
+			"title":"Intermediate Timer Event",
+			"title_de":"Zwischen-Zeit-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Cyclic timer events, points in time, time spans or timeouts.",
+			"description_de":"Periodische zeitliche Ereignisse, Zeitpunkte, Zeitspannen oder Zeitüberschreitungen",
+			"view":"intermediateevent/timer.svg",
+			"icon":"catching/timer.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"EventOnChoreographyActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Timer",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateEscalationEvent",
+			"title":"Intermediate Escalation Event",
+			"title_de":"Zwischen-Eskalations-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"",
+			"description_de":"",
+			"view":"intermediateevent/escalation.catching.svg",
+			"icon":"catching/escalation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles":[
+				"eventSubprocesElement",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Escalation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateConditionalEvent",
+			"title":"Intermediate Conditional Event",
+			"title_de":"Zwischen-Bedingung-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Reacting to changed business conditions or integrating business rules.",
+			"description_de":"Reaktion auf veränderte Bedingungen oder Regeln.",
+			"view":"intermediateevent/conditional.svg",
+			"icon":"catching/conditional.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"interrupting",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"EventOnChoreographyActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Rule",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateLinkEventCatching",
+			"title":"Intermediate Link Event",
+			"title_de":"Zwischen-Link-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Off-page connectors. Two corresponding link events equal a sequence flow.",
+			"description_de":"Auslösendes und eintretendes Link-Ereignis mit gleichem Namen entspricht Steuerfluss.",
+			"view":"intermediateevent/link.catching.svg",
+			"icon":"catching/link.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_start",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Link",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateErrorEvent",
+			"title":"Intermediate Error Event",
+			"title_de":"Zwischen-Fehler-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Catching named errors.",
+			"description_de":"Behandeln von benannten Fehlern.",
+			"view":"intermediateevent/error.svg",
+			"icon":"catching/error.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Error",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateCancelEvent",
+			"title":"Intermediate Cancel Event",
+			"title_de":"Zwischen-Abbruch-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Reacting to cancelled transactions.",
+			"description_de":"Reaktion auf abgebrochene Transaktionen.",
+			"view":"intermediateevent/cancel.svg",
+			"icon":"catching/cancel.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventOnSubprocessBoundary",
+				"EventOnChoreographyActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Cancel",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateCompensationEventCatching",
+			"title":"Intermediate Compensation Event",
+			"title_de":"Zwischen-Kompensierung-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Compensation handling.",
+			"description_de":"Behandeln von Kompensierung.",
+			"view":"intermediateevent/compensation.catching.svg",
+			"icon":"catching/compensation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"from_task_event",
+				"fromtoall",
+				"EventOnChoreographyActivityBoundary",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Compensation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateSignalEventCatching",
+			"title":"Intermediate Signal Event",
+			"title_de":"Zwischen-Signal-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Signalling across different processes. One signal thrown can be caught multiple times.",
+			"description_de":"Signalgebung über mehrere Prozesse. Auf ein Signal kann mehrfach reagiert werden.",
+			"view":"intermediateevent/signal.catching.svg",
+			"icon":"catching/signal.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Signal",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateMultipleEventCatching",
+			"title":"Intermediate Multiple Event",
+			"title_de":"Zwischen-Mehrfach-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"Catching one out of a set of events.",
+			"description_de":"Eintreten eines von mehreren Ereignissen.",
+			"view":"intermediateevent/multiple.catching.svg",
+			"icon":"catching/multiple.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"messageflow_end",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateParallelMultipleEventCatching",
+			"title":"Intermediate Parallel Multiple Event",
+			"title_de":"Zwischen-Parallel-Mehrfach-Ereignis",
+			"groups":["Catching Intermediate Events"],
+			"groups_de":["Eintretende-Zwischen-Ereignisse"],
+			"description":"",
+			"description_de":"",
+			"view":"intermediateevent/multiple.parallel.svg",
+			"icon":"catching/multiple.parallel.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"interrupting",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"messageflow_end",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		
+		// Intermediate Events Throwing
+		
+		{
+			"type": "node",
+			"id":"IntermediateEvent",
+			"title":"Intermediate Event",
+			"title_de":"Zwischen-Ereignis",
+			"groups":["Throwing Intermediate Events"],
+			"groups_de":["Auslösende-Zwischen-Ereignisse"],
+			"description":"Untyped events, typically showing where the process starts or ends.",
+			"description_de":"Untypisierte Ereignisse, i. d. R. am Start oder Ende eines Prozesses.",
+			"view":"intermediateevent/none.svg",
+			"icon":"throwing/none.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_end",
+				"choreography_sequence_start",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"None",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateMessageEventThrowing",
+			"title":"Intermediate Message Event",
+			"title_de":"Zwischen-Nachrichten-Ereignis",
+			"groups":["Throwing Intermediate Events"],
+			"groups_de":["Auslösende-Zwischen-Ereignisse"],
+			"description":"Sending Messages",
+			"description_de":"Senden von Nachrichten.",
+			"view":"intermediateevent/message.throwing.svg",
+			"icon":"throwing/message.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"messageflow_start",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Message",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateEscalationEventThrowing",
+			"title":"Intermediate Escalation Event",
+			"title_de":"Zwischen-Eskalation-Ereignis",
+			"groups":["Throwing Intermediate Events"],
+			"groups_de":["Auslösende-Zwischen-Ereignisse"],
+			"description":"",
+			"description_de":"",
+			"view":"intermediateevent/escalation.throwing.svg",
+			"icon":"throwing/escalation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"eventSubprocessElement",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Escalation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateLinkEventThrowing",
+			"title":"Intermediate Link Event",
+			"title_de":"Zwischen-Link-Ereignis",
+			"groups":["Throwing Intermediate Events"],
+			"groups_de":["Auslösende-Zwischen-Ereignisse"],
+			"description":"Off-page connectors. Two corresponding link events equal a sequence flow.",
+			"description_de":"Auslösendes und eintretendes Link-Ereignis mit gleichem Namen entspricht Steuerfluss.",
+			"view":"intermediateevent/link.throwing.svg",
+			"icon":"throwing/link.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_end",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Link",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateCompensationEventThrowing",
+			"title":"Intermediate Compensation Event",
+			"title_de":"Zwischen-Kompensierung-Ereignis",
+			"groups":["Throwing Intermediate Events"],
+			"groups_de":["Auslösende-Zwischen-Ereignisse"],
+			"description":"Triggering compensation.",
+			"description_de":"Auslösen von Kompensierung.",
+			"view":"intermediateevent/compensation.throwing.svg",
+			"icon":"throwing/compensation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Compensation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateSignalEventThrowing",
+			"title":"Intermediate Signal Event",
+			"title_de":"Zwischen-Signal-Ereignis",
+			"groups":["Throwing Intermediate Events"],
+			"groups_de":["Auslösende-Zwischen-Ereignisse"],
+			"description":"Signalling across different processes. One signal thrown can be caught multiple times.",
+			"description_de":"Signalgebung über mehrere Prozesse. Auf ein Signal kann mehrfach reagiert werden.",
+			"view":"intermediateevent/signal.throwing.svg",
+			"icon":"throwing/signal.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Signal",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"IntermediateMultipleEventThrowing",
+			"title":"Intermediate Multiple Event",
+			"title_de":"Zwischen-Mehrfach-Ereignis",
+			"groups":["Throwing Intermediate Events"],
+			"groups_de":["Auslösende-Zwischen-Ereignisse"],
+			"description":"Throwing one out of a set of events.",
+			"description_de":"Auslösen eines von mehreren Ereignissen.",
+			"view":"intermediateevent/multiple.throwing.svg",
+			"icon":"throwing/multiple.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"messageflow_start",
+				"sequence_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		
+		// End Events
+		
+		{
+			"type" : "node",
+			"id": "EndNoneEvent",
+			"title": "End Event",
+			"title_de" : "Ende-Ereignis",
+			"groups" : ["End Events"],
+			"groups_de" : ["Ende-Ereignisse"],
+			"description" : "Untyped events, typically starts or ends.",
+			"description_de" : "Untypisierte Ereignisse, i. d. R. am Start oder Ende eines Prozesses.",
+			"view" : "endevent/none.svg",
+			"icon" : "endevent/none.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles" : [
+				"all",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_end",
+				"Endevents_all",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"None",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndMessageEvent",
+			"title":"End Message Event",
+			"title_de":"Ende-Nachricht-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"Sending messages.",
+			"description_de":"Senden von Nachrichten.",
+			"view":"endevent/message.svg",
+			"icon":"endevent/message.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwingEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"messageflow_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Endevents_all",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Message",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndEscalationEvent",
+			"title":"End Escalation Event",
+			"title_de":"Ende-Eskalation-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"",
+			"description_de":"",
+			"view":"endevent/escalation.svg",
+			"icon":"endevent/escalation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwingEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"eventSubprocessElement",
+				"EndEventsMorph",
+				"Endevents_all",
+				"sequence_end"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Escalation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndErrorEvent",
+			"title":"End Error Event",
+			"title_de":"Ende-Fehler-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"Throwing named errors.",
+			"description_de":"Auslösen von benannten Fehlern.",
+			"view":"endevent/error.svg",
+			"icon":"endevent/error.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Endevents_all",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Error",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndCancelEvent",
+			"title":"Cancel End Event",
+			"title_de":"Abbruch-Ende-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"Triggering cancellation.",
+			"description_de":"Auslösen von Abbrüchen.",
+			"view":"endevent/cancel.svg",
+			"icon":"endevent/cancel.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Endevents_all",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Cancel",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndCompensationEvent",
+			"title":"End Compensation Event",
+			"title_de":"Ende-Kompensierung-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"Compensation handling.",
+			"description_de":"Auslösen von Kompensierung.",
+			"view":"endevent/compensation.svg",
+			"icon":"endevent/compensation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwingEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Endevents_all",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Compensation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndSignalEvent",
+			"title":"End Signal Event",
+			"title_de":"Ende-Signal-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"Signalling across different processes. One signal thrown can be caught multiple times.",
+			"description_de":"Signalgebung über mehrere Prozesse. Auf ein Signal kann mehrfach reagiert werden.",
+			"view":"endevent/signal.svg",
+			"icon":"endevent/signal.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Endevents_all",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Signal",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndMultipleEvent",
+			"title":"End Multiple Event",
+			"title_de":"Ende-Mehrfach-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"Throwing one out of a set of events.",
+			"description_de":"Auslösen eines von mehreren Ereignissen.",
+			"view":"endevent/multiple.svg",
+			"icon":"endevent/multiple.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"messageflow_start",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"Endevents_all",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Multiple",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		{
+			"type": "node",
+			"id":"EndTerminateEvent",
+			"title":"Terminate End Event",
+			"title_de":"Terminierung-Ende-Ereignis",
+			"groups":["End Events"],
+			"groups_de":["Ende-Ereignisse"],
+			"description":"Triggering the immediate termination of a process.",
+			"description_de":"Löst die sofortige Beendigung eines Prozesses aus.",
+			"view":"endevent/terminate.svg",
+			"icon":"endevent/terminate.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"throwEventAttributes",
+				"bgColor"
+			],
+			"roles": [
+				"all",
+				"sequence_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"choreography_sequence_end",
+				"EndEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"trigger",
+					"type":"String",
+					"title":"Trigger",
+					"title_de":"Auslöser",
+					"value":"Terminate",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+				}
+			]
+		},
+		
+		// Edges
+		
+		{
+			"type": "edge",
+			"id":"SequenceFlow",
+			"title":"Sequence Flow",
+			"title_de":"Steuerfluss",
+			"description":"Sequence Flow defines the execution order of activities.",
+			"description_de":"Ein Steuerfluss definiert die Reihenfolge der Ausführung von Aktivitäten.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"connector/sequenceflow.svg",
+			"icon":"connector/sequenceflow.png",
+			"propertyPackages":[
+				"baseAttributes"
+			],
+			"roles": [
+				"all",
+				"ConnectingObjectsMorph"
+			],
+			"properties":[
+				{
+					"id":"ConditionType",
+					"type":"Choice",
+					"title":"ConditionType",
+					"title_de":"Bedingungstyp",
+					"value":"None",
+					"description":"Determine the typ of the flow object.",
+					"description_de":"Legt den Typ des Flussobjekts fest.",
+					"readonly":false,
+					"optional":false,
+					"items": [
+						{
+							"id":"none",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"expression",
+							"title":"Expression",
+							"value":"Expression",
+							"icon" : "/connector/list/type.expression.png",
+							"refToView":""
+						},
+						{
+							"id":"default",
+							"title":"Default",
+							"value":"Default",
+							"icon" : "/connector/list/type.default.png",
+							"refToView":"default"
+						}
+					]
+				},
+				{
+					"id":"ConditionExpression",
+					"type":"String",
+					"title":"ConditionExpression",
+					"title_de":"Bedingungsausdruck",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"refToView":"condition"
+				},
+				{
+					"id":"showdiamondmarker",
+					"type":"Boolean",
+					"title":"ShowDiamontMarker",
+					"title_de":"Zeige-Diamanten",
+					"value":false,
+					"description":"System intern variable to set the Diamond invisible, if sourceShape is a gateway and ConditionType is set to Expression",
+					"readonly":false,
+					"optional":false,
+					"refToView":"conditional"
+				}
+			],
+		},
+		{
+			"type": "edge",
+			"id":"MessageFlow",
+			"title":"Message Flow",
+			"title_de":"Nachrichtenfluss",
+			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
+			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Steuerfluss kombiniert werden.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"connector/messageflow.svg",
+			"icon":"connector/messageflow.png",
+			"propertyPackages":[
+				"baseAttributes"
+			],
+			"roles": [
+				"ConnectingObjectsMorph",
+				"MessageContainer"
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Undirected",
+			"title":"Association Undirected",
+			"title_de":"Ungerichtete Assoziation",
+			"description":"Attaching a data object with an Undirected Association to a sequence flow indicates hand-over of information between the activities involved.",
+			"description_de":"Die Zuordnung eines Datenobjekts zu einem Steuerfluss über eine ungerichtete Assoziation weist auf eine Informationsübergabe zwischen den Aktivitäten hin.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"connector/association.undirected.svg",
+			"icon":"connector/association.undirected.png",
+			"roles": [
+				"all",
+				"ConnectingObjectsMorph"
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Unidirectional",
+			"title":"Association Unidirectional",
+			"title_de":"Gerichtete Assoziation",
+			"description":"A Directed Association indicates information flow. A data object can be read at the start of an activity or written upon completion.",
+			"description_de":"Eine gerichtete Assoziation zeigt den Informationsfluss. Ausgehende Kanten zeigen Schreiben, eingehende zeigen Lesen an.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"connector/association.unidirectional.svg",
+			"icon":"connector/association.unidirectional.png",
+			"roles": [
+				"all",
+				"ConnectingObjectsMorph"
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Bidirectional",
+			"title":"Association Bidirectional",
+			"title_de":"Beidseitige Assoziation",
+			"description":"A Bidirected Association indicates that the data object is modified, i.e. read and written during the execution of an actvity.",
+			"description_de":"Eine beidseitig gericEhtete Assoziation zeigt, dass das Datenobjekt während der Ausführung einer Aktivität verändert, d.h. gelesen und geschrieben wird.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"connector/association.bidirectional.svg",
+			"icon":"connector/association.bidirectional.png",
+			"roles": [
+				"all",
+				"ConnectingObjectsMorph"
+			]
+		}	
+	],
+	
+	"rules" : {
+		"cardinalityRules": [
+			{
+				"role":"Startevents_all",
+				"maximumOccurrence": undefined,
+				"incomingEdges": [
+					{
+						"role":"SequenceFlow",
+						"maximum":0
+						
+					}
+				]
+			},
+			{
+				"role":"Endevents_all",
+				"maximumOccurrence":undefined,
+				"outgoingEdges": [
+					{
+						"role":"SequenceFlow",
+						"maximum":0
+						
+					}
+				]
+			}
+		],
+		"connectionRules": [
+			{
+				"role":"SequenceFlow",
+				"connects": [
+					{
+						"from":"sequence_start",
+						"to":["sequence_end"]
+					},
+					{
+						"from":"choreography_sequence_start",
+						"to":["choreography_sequence_end"]
+					},
+					{
+						"from":"Exclusive_Eventbased_Gateway",
+						"to":["FromEventbasedGateway"]
+					}
+				]
+			},
+			{
+				"role":"MessageFlow",
+				"connects": [
+					{
+						"from":"messageflow_start",
+						"to":["messageflow_end"]
+					}
+				]
+			},
+			{
+				"role":"ChoreographyMessageFlowStart",
+				"connects": [
+					{
+						"from":"messageflow_start",
+						"to":["choreography_messageflow_end"]
+					}
+				]
+			},
+			{
+				"role":"ChoreographyMessageFlowEnd",
+				"connects": [
+					{
+						"from":"choreography_messageflow_start",
+						"to":["messageflow_end"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateEventOnActivityBoundary",
+				"connects": [
+					{
+						"from":"Task",
+						"to":["IntermediateEventOnActivityBoundary"]
+					}
+				]
+			},
+			{
+				"role":"IntermediateEventOnSubprocessBoundary",
+				"connects": [
+					{
+						"from":"CollapsedSubprocess",
+						"to":["IntermediateEventOnSubprocessBoundary"]
+					},
+					{
+						"from":"Subprocess",
+						"to":["IntermediateEventOnSubprocessBoundary"]
+					}
+				]
+			},
+			{
+				"role":"EventOnChoreographyActivityBoundary",
+				"connects": [
+					{
+						"from":"ChoreographyMorph",
+						"to":["EventOnChoreographyActivityBoundary"]
+					}
+				]
+			},
+			{
+				"role" : "Association_Unidirectional",
+				"connects" : [
+					{
+						"from" : "from_task_event",
+						"to" : ["DataObject"]
+					},
+					{
+						"from" : "from_task_event",
+						"to" : ["DataStore"]
+					},
+					{
+						"from" : "DataObject",
+						"to" : ["to_task_event"]
+					},
+					{
+						"from" : "DataStore",
+						"to" : ["to_task_event"]
+					},
+					{
+						"from" : "IntermediateCompensationEventCatching",
+						"to" : ["to_task_event"]
+					}
+				]
+			},
+			{
+				"role" : "Association_Undirected",
+				"connects" : [
+					{
+						"from" : "SequenceFlow",
+						"to" : ["DataObject"]
+					},
+					{
+						"from" : "DataObject",
+						"to" : ["SequenceFlow"]
+					},
+					{
+						"from" : "fromtoall",
+						"to" : ["TextAnnotation"]
+					},
+					{
+						"from" : "TextAnnotation",
+						"to" : "fromtoall"
+					},
+					{
+						"from" : "Message",
+						"to" : ["MessageFlow"]
+					},
+					{
+						"from" : "MessageFlow",
+						"to" : ["Message"]
+					},
+					{
+						"from" : "Message",
+						"to" : ["ChoreographyElement"]
+					},
+					{
+						"from" : "ChoreographyElement",
+						"to" : ["Message"]
+					}
+				]
+			}
+		],
+		"containmentRules" : [
+			{
+				"role" : "BPMNDiagram",
+				"contains" : ["all"]
+			},
+			{
+				"role" : "EventSubprocess",
+				"contains" : [
+					"eventSubprocessElement",
+					"sequence_start",
+					"sequence_end"
+				]
+			},
+			{
+				"role" : "Pool",
+				"contains" : [
+					"Lane"
+				]
+			},
+			{
+				"role" : "Lane",
+				"contains" : [
+					"Lane",
+					"sequence_start",
+					"sequence_end"
+				]
+			},
+			{
+				"role" : "Subprocess",
+				"contains" : [
+					"sequence_start",
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"EventSubprocess",
+					"CollapsedEventSubprocess"			
+				]
+			},
+			{
+				"role" : "MessageContainer",
+				"contains" : ["Message"]
+			},
+			{
+				"role" : "ChoreographyElement",
+				"contains" : ["ChoreographyParticipant"]
+			},
+			{
+				"role" : "ChoreographySubprocessExpanded",
+				"contains":	[
+								"ChoreographyElement",
+								"choreography_sequence_start",
+								"choreography_sequence_end",
+								"Message"
+																
+							]
+			}
+		],
+		"morphingRules": [
+			{
+				"role": "ActivitiesMorph",
+				"baseMorphs": ["Task"]
+			},
+			{
+				"role": "EventActivitiesMorph",
+				"baseMorphs": ["CollapsedEventSubprocess"]
+			},
+			{
+				"role": "GatewaysMorph",
+				"baseMorphs": ["Exclusive_Databased_Gateway"]
+			},
+			{
+				"role": "StartEventsMorph",
+				"baseMorphs": ["StartNoneEvent"],
+				"showInShapeMenu":false
+			},
+			{
+				"role": "IntermediateEventsMorph",
+				"baseMorphs": ["IntermediateEvent"]
+			},
+			{
+				"role": "EndEventsMorph",
+				"baseMorphs": ["EndNoneEvent"]
+			},
+			{
+				"role": "TextAnnotationMorph",
+				"baseMorphs": ["TextAnnotation"]
+			},
+			{
+				"role": "DataObjectMorph",
+				"baseMorphs": ["DataObject"]
+			},
+			{
+				"role": "ConnectingObjectsMorph",
+				"baseMorphs": ["SequenceFlow"]
+			},
+			{
+				"role": "ChoreographyMorph",
+				"baseMorphs": ["ChoreographyTask"]
+			}
+		],
+		"layoutRules" : [
+			{
+				"role": "ActivitiesMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1, "r":2, "b":1, "l":2}]
+			},
+			{
+				"role": "EventActivitiesMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1, "r":2, "b":1, "l":2}]
+			},
+			{
+				"role": "ChoreographyMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1, "r":2, "b":1, "l":2}]
+			},
+			{
+				"role": "GatewaysMorph",
+				"outs": [{"t":2, "r":1, "b":2, "l":1}]
+			},
+			{
+				"role": "StartEventsMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1, "r":2, "b":1, "l":2}]
+			},
+			{
+				"role": "IntermediateEventsMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1, "r":2, "b":1, "l":2}]
+			},
+			{
+				"role": "EndEventsMorph",
+				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1,"r":2,"b":1,"l":2}],
+				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+						{"t":1, "r":2, "b":1, "l":2}]
+			}
+		]
+	}
+}

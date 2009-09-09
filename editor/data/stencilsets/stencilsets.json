@@ -15,6 +15,22 @@
             "icon_url":"/bpmn1.1/bpmn1.1.png",
             "visible":true
         },
+		{
+            "title":"BPMN 2.0",
+            "namespace":"http://b3mn.org/stencilset/bpmn2.0#",
+            "description":"BPMN 2.0 stencil set specification for processes.",
+            "uri":"/bpmn2.0/bpmn2.0.json",
+            "icon_url":"/bpmn2.0/bpmn2.0.png",
+            "visible":true
+        },
+		{
+            "title":"BPMN 2.0 Conversation",
+            "namespace":"http://b3mn.org/stencilset/bpmn2.0conversation#",
+            "description":"BPMN 2.0 Conversation stencil set specification for processes.",
+            "uri":"/bpmn2.0/bpmn2.0conversation.json",
+            "icon_url":"/bpmn2.0/bpmn2.0.png",
+            "visible":true
+        },
         {
             "title":"EPC",
             "namespace":"http://b3mn.org/stencilset/epc#",

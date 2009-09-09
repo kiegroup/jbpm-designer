@@ -10849,7 +10849,7 @@
 					"type":"Boolean",
 					"title":"ShowDiamontMarker",
 					"title_de":"Zeige-Diamanten",
-					"value":"false",
+					"value":false,
 					"description":"System intern variable to set the Diamond invisible, if sourceShape is a gateway and ConditionType is set to Expression",
 					"readonly":true,
 					"optional":false,

@@ -97,6 +97,10 @@ ORYX.Core.StencilSet.PropertyItem = Clazz.extend({
 	refToView: function() {
 		return this._jsonItem.refToView;
 	},
+	
+	icon: function() {
+		return (this._jsonItem.icon) ? this.property().stencil()._source + "icons/" + this._jsonItem.icon : "";
+	},
 
 	toString: function() { return "PropertyItem " + this.property() + " (" + this.value() + ")"; }
 });

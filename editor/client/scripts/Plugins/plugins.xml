@@ -156,6 +156,21 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
 		
+		<!-- BPMN2.0 specific plugins -->
+		<plugin source="bpmn2.0/bpmn2.0.js" name="ORYX.Plugins.BPMN2_0">
+			<requires namepsace="http://b3mn.org/stencilset/bpmn2.0#" />
+		</plugin>
+		
+		<plugin source="bpmn2.0/bpmn2conversation.js" name="ORYX.Plugins.BPMN2CONVERSATION">
+			<requires namepsace="http://b3mn.org/stencilset/bpmn2.0conversation#" />
+		</plugin>
+		
+		<plugin source="bpmn2.0/bpmn2.0choreography.js" name="ORYX.Plugins.Bpmn2_0Choreography">
+			<requires namepsace="http://b3mn.org/stencilset/bpmn2.0#" />
+		</plugin>
+		
+		<plugin source="Layouter/edgeLayouter.js" name="ORYX.Plugins.Layouter.EdgeLayouter"/>
+
 		<plugin source="epcLayouter.js" name="ORYX.Plugins.EPCLayouter">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
 		</plugin>

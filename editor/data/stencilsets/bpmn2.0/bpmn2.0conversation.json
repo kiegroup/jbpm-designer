@@ -1,0 +1,456 @@
+{
+	"title":"BPMN 2.0 Conversation",
+	"namespace":"http://b3mn.org/stencilset/bpmn2.0conversation#",
+	"description":"This is the BPMN 2.0 Conversation stencil set specification.",
+	"propertyPackages" : [
+		{
+ 			"name":"baseAttributes",
+ 			"properties": [
+ 				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This attribute is used to uniquely identify BPMN elements.",
+					"description_de":"Definiert eine eindeutig Nummer, um einzelne BPMN-Elemente unterscheiden zu können.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"The descriptive name of the BPMN element.",
+					"description_de":"Bezeichnung des BPMN-Elementes.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name"	
+				},
+				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"auditing",
+					"type":"Text",
+					"title":"Auditing",
+					"title_de":"Prüfung",
+					"value":"",
+					"description":"A hook for specifying audit related properties. Auditing can only be defined for a Process.",
+					"description_de":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"monitoring",
+					"type":"Text",
+					"title":"Monitoring",
+					"title_de":"Überwachung",
+					"value":"",
+					"description":"A hook for specifying monitoring related properties. Monitoring can only be defined for a Process.",
+					"description_de":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "bg_frame",
+					"fill":true,
+					"stroke":false
+				}
+ 			]
+ 		},
+		{
+			"name" : "diagram",
+			"properties" : [
+				{
+					"id":"version",
+					"type":"String",
+					"title":"Version",
+					"value":"",
+					"description":"This defines the Version number of the Diagram.",
+					"description_de":"Setzt die Versionsnummer des Diagramms.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"author",
+					"type":"String",
+					"title":"Author",
+					"title_de":"Autor",
+					"value":"",
+					"description":"This holds the name of the author of the Diagram.",
+					"description_de": "Name des Autors des Diagramms.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"language",
+					"type":"String",
+					"title":"Language",
+					"title_de":"Sprache",
+					"value":"English",
+					"value_de":"Deutsch",
+					"description":"This holds the name of the language in which text is written.",
+					"description_de":"Sprache, in welcher der Text geschrieben ist.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"expressionLanguage",
+					"type":"String",
+					"title":"ExpressionLanguage",
+					"title_de":"AusdrucksSprache",
+					"value":"",
+					"description":"A Language may be provided so that the syntax of expressions used in the Diagram can be understood.",
+					"description_de":"Sprache, mit welcher im Diagramm verwendete Ausdrücke beschrieben sind.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"queryLanguage",
+					"type":"String",
+					"title":"QueryLanguage",
+					"title_de":"AbfrageSprache",
+					"value":"",
+					"description":"A Language may be provided so that the syntax of queries used in the Diagram can be understood.",
+					"description_de":"Sprache, mit welcher im Diagramm verwendete Abfragen beschrieben sind.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"creationDate",
+					"type":"Date",
+					"title":"CreationDate",
+					"title_de":"Erstellt am",
+					"value":"",
+					"description":"This defines the date on which the Diagram was created.",
+					"description_de":"Datum an dem das Diagramm erstellt wurde.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				},
+				{
+					"id":"modificationDate",
+					"type":"Date",
+					"title":"ModificationDate",
+					"title_de":"Geändert am",
+					"value":"",
+					"description":"This defines the date on which the Diagram was last modified.",
+					"description_de":"Datum der letzten Änderung.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				},
+				{
+					"id":"pools",
+					"type":"String",
+					"title":"Pools",
+					"value":"",
+					"description":"A Business Process Diagram shall contain one or more Pools.",
+					"readonly":false,
+					"optional":false,
+					"length":"50",
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"name" : "conversationNode",
+			"properties" : [
+				{
+					"id" : "participantRefs",
+					"type" : "String",
+					"title" : "ParticipantRefs",
+					"title_de" : "TeilnehmerRefs",
+					"description" : "",
+					"value" : "",
+					"readonly" : false,
+					"optional" : true,
+					"length" : 50,
+					"wrapLines" : true
+				}
+			]
+		}
+	],
+	"stencils" : [
+		{
+			"type":				"node",
+			"id":				"BPMNDiagram",
+			"title":			"BPMN-Diagram",
+			"title_de":			"BPMN-Diagramm",
+			"groups":			["Diagram"],
+			"description":		"A BPMN Diagram.",
+			"view":				"diagram.svg",
+			"icon":				"diagram.png",
+			"mayBeRoot":		true,
+			"hide":				true,
+			"propertyPackages" : ["baseAttributes","diagram"],
+			"roles":			["canContainArtifacts"]
+		},
+		{
+			"type" : 			"node",
+			"id" : 				"Communication",
+			"title" : 			"Communication",
+			"title_de" : 		"Kommunikation",
+			"groups" : 			["Conversation"],
+			"groups_de" : 		["Konversation"],
+			"description" : 	"A Communication is an atomic element for a Conversation diagram. It represents a set of Message Flow grouped together based on a single CorrelationKey",
+			"description_de" : 	"",
+			"view" : 			"conversations/communication.svg",
+			"icon" : 			"conversations/communication.png",
+			"propertyPackages": ["baseAttributes","conversationNode"],
+			"properties" : 		[
+				{
+					"id" : "correlationKeyRef",
+					"type" : "String",
+					"title" : "CorrelationKeyRef",
+					"title_de" : "KorrelationsSchlüsselRef",
+					"description" : "",
+					"value" : "",
+					"readonly" : false,
+					"optional" : true
+				},
+				{
+					"id" : "messageFlowRefs",
+					"type" : "String",
+					"title" : "MessageFlowRefs",
+					"title_de" : "NachrichtenflussRefs",
+					"description" : "",
+					"value" : "",
+					"readonly" : false,
+					"optional" : true,
+					"wrapLines" : true
+				},
+				{
+					"id" : "isCallConversation",
+					"type" : "Boolean",
+					"title" : "is Call Conversation",
+					"title_de" : "ist Call Konversation",
+					"description" : "",
+					"value" : false,
+					"readonly" : false,
+					"optional" : true,
+					"refToView" : "call_conversation"
+				}
+			],
+			"roles" : 			[
+				"all",
+				"CommunicationMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" : 				"SubConversation",
+			"title" : 			"Sub-Conversation",
+			"title_de" : 		"Sub-Konversation",
+			"groups" : 			["Conversation"],
+			"groups_de" : 		["Konversation"],
+			"description" : 	"A Sub-Conversation is a graphical object within a Conversation, but it also can be \"opened up\" to show the lower-level Conversation, which consist of Message Flow, Communications, and/or other Sub-Conversations.",
+			"description_de" : 	"",
+			"view" : 			"conversations/subconversation.svg",
+			"icon" : 			"conversations/subconversation.png",
+			"propertyPackages": ["baseAttributes","conversationNode"],
+			"properties" : 		[
+				{
+					"id":"entry",
+					"type":"DiagramLink",
+					"title":"SubConversationRef",
+					"title_de":"SubkonversationRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"u"
+				},
+				{
+					"id" : "correlationKeyRef",
+					"type" : "String",
+					"title" : "CorrelationKeyRef",
+					"title_de" : "KorrelationsSchlüsselRef",
+					"description" : "",
+					"value" : "",
+					"readonly" : false,
+					"optional" : true
+				},
+				{
+					"id" : "isCallConversation",
+					"type" : "Boolean",
+					"title" : "is Call Conversation",
+					"title_de" : "ist Call Konversation",
+					"description" : "",
+					"value" : false,
+					"readonly" : false,
+					"optional" : true,
+					"refToView" : ["call_conversation", "b_call"]
+				}
+			],
+			"roles" : 			[
+				"all",
+				"CommunicationMorph"
+			]
+		},
+		{
+			"type": 			"node",
+			"id" : 				"Participant",
+			"title" : 			"Participant (Pool)",
+			"title_de" : 		"Teilnehmer (Pool)",
+			"groups" : 			["Conversation"],
+			"groups_de" : 		["Konversation"],
+			"description" : 	"",
+			"description_de" : 	"",
+			"view" : 			"conversations/participant.svg",
+			"icon" : 			"conversations/participant.png",
+			"propertyPackages": ["baseAttributes", "conversationNode"],
+			"properties" : 		[
+				{
+					"id" : "multiInstance",
+					"type" : "Boolean",
+					"title" : "Multi Instance",
+					"title_de" : "Multi Instanz",
+					"description" : "",
+					"value" : false,
+					"readonly" : false,
+					"optional" : true,
+					"refToView" : "mi"
+				}
+			],
+			"roles" : 			[
+				"all",
+				"messageflow_start",
+				"messageflow_end",
+				"Participant"
+			]
+		},
+		{
+			"type" : 			"edge",
+			"id" :				"ConversationLink",
+			"title" :			"Conversation Link",
+			"title_de" :		"Konversationslink",
+			"description" :		"A Connection between a Participant and a Conversation Node.",
+			"description_de" : 	"Eine Verbdinung zwischen einem Teilnehmer und einem Konversationsknoten.",
+			"groups" :			["Connecting Objects"],
+			"groups_de" :		["Konnektoren"],
+			"view" :			"conversations/connector/conversationlink.svg",
+			"icon" :			"conversations/connector/conversationlink.png",
+			"properties" :		[
+				{
+					"id" : "showforkstart",
+					"type" : "Boolean",
+					"title" : "Fork on Start",
+					"description" : "Internal attribute to show the correct markers for multi instance participants.",
+					"value" : false,
+					"readonly" : false,
+					"optional" : false,
+					"refToView" : "forkStart"
+				},
+				{
+					"id" : "showforkend",
+					"type" : "Boolean",
+					"title" : "Fork on End",
+					"description" : "Internal attribute to show the correct markers for multi instance participants.",
+					"value" : false,
+					"readonly" : false,
+					"optional" : false,
+					"refToView" : "forkEnd"
+				}
+			],
+			"roles": 			[
+				"all",
+				"ConnectingObjectsMorph"
+			]
+		},
+		{
+			"type" : 			"edge",
+			"id" :				"MessageFlow",
+			"title" :			"Message Flow",
+			"title_de" :		"Nachrichtenfluss",
+			"description" :		"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
+			"description_de" :	"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Steuerfluss kombiniert werden.",
+			"groups" :			["Connecting Objects"],
+			"groups_de" :		["Konnektoren"],
+			"view" :			"connector/messageflow.svg",
+			"icon" :			"connector/messageflow.png",
+			"propertyPackages": ["baseAttributes"],
+			"roles" : 			[
+				"all",
+				"ConnectingObjectsMorph"
+			]
+		},
+	],
+	"rules": {
+		"containmentRules": [
+			{
+				"role": "BPMNDiagram",
+				"contains": ["all"]
+			}
+		],
+		"connectionRules" : [
+			{
+				"role" : "ConversationLink",
+				"connects" : [
+					{
+						"from" : "Participant",
+						"to" : ["CommunicationMorph"]
+					},
+					{
+						"from" : "CommunicationMorph",
+						"to" : ["Participant"]
+					}
+				]
+			},
+			{
+				"role":"MessageFlow",
+				"connects": [
+					{
+						"from" : "messageflow_start",
+						"to" : ["messageflow_end"]
+					}
+				]
+			}
+		],
+		"morphingRules" : [
+			{
+				"role" : "CommunicationMorph",
+				"baseMorphs" : ["Communication"]
+			},
+			{
+				"role" : "Participant",
+				"baseMorphs" : ["Participant"]
+			},
+			{
+				"role" : "ConnectingObjectsMorph",
+				"baseMorphs" : ["ConversationLink"]
+			}
+		]
+	}
+}

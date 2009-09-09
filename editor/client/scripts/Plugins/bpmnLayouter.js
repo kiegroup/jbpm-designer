@@ -168,7 +168,7 @@ ORYX.Plugins.BpmnLayouter = ORYX.Plugins.AbstractPlugin.extend({
 			/* add new dockers except of the first and last */
 			var dockersToAdd = elem.dockers.slice(1,-1);
 			dockersToAdd.each(function(dockerPoint){
-				var newDocker = shape.createDocker();
+				var newDocker = shape.createDocker(undefined, dockerPoint);
 				newDocker.parent = shape;
 				newDocker.bounds.centerMoveTo(dockerPoint.x, dockerPoint.y);
 				/*newDocker.setReferencePoint(dockerPoint);*/

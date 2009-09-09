@@ -842,7 +842,9 @@ ORYX.Core.StencilSet.Rules = {
 			args.containingStencil = args.containingShape.getStencil();
 		}
 		
-		if(args.containingStencil.type() == 'edge' || args.containedStencil.type() == 'edge')
+		//if(args.containingStencil.type() == 'edge' || args.containedStencil.type() == 'edge')
+		//	return false;
+		if(args.containedStencil.type() == 'edge') 
 			return false;
 		
 		var childValues;
@@ -902,12 +904,12 @@ ORYX.Core.StencilSet.Rules = {
 			args.containingStencil = args.containingShape.getStencil();
 		}
 		
-		if(args.containingShape) {
-			if(args.containingShape instanceof ORYX.Core.Edge) {
-				// edges cannot contain other shapes
-				return false;
-			}
-		}
+//		if(args.containingShape) {
+//			if(args.containingShape instanceof ORYX.Core.Edge) {
+//				// edges cannot contain other shapes
+//				return false;
+//			}
+//		}
 
 		
 		var result;

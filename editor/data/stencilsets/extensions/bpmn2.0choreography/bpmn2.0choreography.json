@@ -1,0 +1,495 @@
+{
+	"title":"Choreography",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn2.0choreography#",
+	"description":"Adds support for Choreography-Diagrams to BPMN 2.0",
+	"extends":"http://b3mn.org/stencilset/bpmn2.0#",
+	"propertyPackages" : [
+	],
+	"stencils":[
+		{
+			"type" : "node",
+			"id" : "ChoreographyTask",
+			"title" : "Choreography Task",
+			"title_de" : "Choreographie Aufgabe",
+			"groups" : ["Choreography"],
+			"groups_de" : ["Choreographie"],
+			"description" : "A Choreography Task represents an Interaction, which is a coherent set (1 or more) of Message exchanges between two Participants.",
+			"description_de" : "",
+			"view" : "../../extensions/bpmn2.0choreography/view/choreography.task.svg",
+			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.task.png",
+			"layout":[{"type":"layout.bpmn2_0.choreography.task"}],
+			"properties" : [
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"The descriptive name of the choreography task.",
+					"description_de":"Bezeichnung des Choreography-Tasks.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name"	
+				},
+				{
+					"id":"loopType",
+					"type":"Choice",
+					"title":"LoopType",
+					"title_de":"Schleifentyp",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"c2",
+							"title":"Standard",
+							"value":"Standard",
+							"icon" : "/activity/list/looptype.standard.png",
+							"refToView":"loop"
+						},
+						{
+							"id":"c3",
+							"title":"MultiInstance",
+							"value":"MultiInstance",
+							"refToView":"mi"
+						}
+					]
+				},
+				{
+					"id":"callAcitivity",
+					"type":"Boolean",
+					"title":"is a Call Activity",
+					"title_de":"ist eine Call Activity",
+					"value":0,
+					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"readonly":false,
+					"optional":"true",
+					"refToView":"callActivity"
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "bg_frame",
+					"fill":true,
+					"stroke":false
+				},
+				{
+					"id" : "messageFlow",
+					"type" : "String",
+					"title" : "Message Flow",
+					"title_de" : "Nachrichtenfluss",
+					"value" : "",
+					"description" : "",
+					"readonly" : false,
+					"optional" : false
+				}
+			],
+			"roles" : [
+				"all",
+				"ChoreographyMorph",
+				"ChoreographyElement",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"choreography_messageflow_start",
+				"choreography_messageflow_end"
+			]
+		},
+		{
+			"type" : "node",
+			"id" : "ChoreographySubprocessCollapsed",
+			"title" : "Choreography Subprocess Collapsed",
+			"title_de" : "Choreographie Sub-Process zugeklappt",
+			"groups" : ["Choreography"],
+			"groups_de" : ["Choreographie"],
+			"description" : "A Choreography Task represents an Interaction, which is a coherent set (1 or more) of Message exchanges between two Participants.",
+			"description_de" : "",
+			"view" : "../../extensions/bpmn2.0choreography/view/choreography.subprocess.collapsed.svg",
+			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.subprocess.collapsed.png",
+			"layout":[
+				{"type":"layout.bpmn2_0.choreography.task"},
+				{"type":"layout.bpmn2_0.choreography.subprocess.collapsed"}],
+			"properties" : [
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"The descriptive name of the choreography task.",
+					"description_de":"Bezeichnung des Choreography-Tasks.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name"	
+				},
+				{
+					"id":"loopType",
+					"type":"Choice",
+					"title":"LoopType",
+					"title_de":"Schleifentyp",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"c2",
+							"title":"Standard",
+							"value":"Standard",
+							"refToView":"loop"
+						},
+						{
+							"id":"c3",
+							"title":"MultiInstance",
+							"value":"MultiInstance",
+							"refToView":"mi"
+						}
+					]
+				},
+				{
+					"id":"callAcitivity",
+					"type":"Boolean",
+					"title":"is a Call Activity",
+					"title_de":"ist eine Call Activity",
+					"value":0,
+					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"readonly":false,
+					"optional":"true",
+					"refToView":"callActivity"
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "bg_frame",
+					"fill":true,
+					"stroke":false
+				},
+				{
+					"id" : "messageFlow",
+					"type" : "String",
+					"title" : "Message Flow",
+					"title_de" : "Nachrichtenfluss",
+					"value" : "",
+					"description" : "",
+					"readonly" : false,
+					"optional" : false
+				}
+			],
+			"roles" : [
+				"all",
+				"ChoreographyMorph",
+				"ChoreographyElement",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"choreography_messageflow_start",
+				"choreography_messageflow_end"
+			]
+		},
+		{
+			"type" : "node",
+			"id" : "ChoreographySubprocessExpanded",
+			"title" : "Choreography Subprocess Expanded",
+			"title_de" : "Choreographie Subprocess Erweitert",
+			"groups" : ["Choreography"],
+			"groups_de" : ["Choreographie"],
+			"description" : "A Choreography Task represents an Interaction, which is a coherent set (1 or more) of Message exchanges between two Participants.",
+			"description_de" : "",
+			"view" : "../../extensions/bpmn2.0choreography/view/choreography.subprocess.expanded.svg",
+			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.subprocess.expanded.png",
+			"layout":[
+				{"type":"layout.bpmn2_0.choreography.task"},
+				{"type":"layout.bpmn2_0.choreography.subprocess.expanded"},
+				{"type" : "layout.bpmn2_0.subprocess"}],
+			"properties" : [
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"The descriptive name of the choreography task.",
+					"description_de":"Bezeichnung des Choreography-Tasks.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name"	
+				},
+				{
+					"id":"loopType",
+					"type":"Choice",
+					"title":"LoopType",
+					"title_de":"Schleifentyp",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"c2",
+							"title":"Standard",
+							"value":"Standard",
+							"refToView":"loop"
+						},
+						{
+							"id":"c3",
+							"title":"MultiInstance",
+							"value":"MultiInstance",
+							"refToView":"mi"
+						}
+					]
+				},
+				{
+					"id":"callAcitivity",
+					"type":"Boolean",
+					"title":"is a Call Activity",
+					"title_de":"ist eine Call Activity",
+					"value":0,
+					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"readonly":false,
+					"optional":"true",
+					"refToView":"callActivity"
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "bg_frame",
+					"fill":true,
+					"stroke":false
+				},
+				{
+					"id" : "messageFlow",
+					"type" : "String",
+					"title" : "Message Flow",
+					"title_de" : "Nachrichtenfluss",
+					"value" : "",
+					"description" : "",
+					"readonly" : false,
+					"optional" : false
+				}
+			],
+			"roles" : [
+				"all",
+				"ChoreographyMorph",
+				"ChoreographyElement",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
+				"choreography_messageflow_start",
+				"choreography_messageflow_end"
+			]
+		},
+		{
+			"type" : "node",
+			"id" : "ChoreographyParticipant",
+			"title" : "Participant",
+			"title_de" : "Teilnehmer",
+			"groups" : ["Choreography"],
+			"groups_de" : ["Choreographie"],
+			"description" : "",
+			"description_de" : "",
+			"view" : "../../extensions/bpmn2.0choreography/view/choreography.participant.svg",
+			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.participant.png",
+			"properties" : [
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"The descriptive name of the BPMN element.",
+					"description_de":"Bezeichnung des BPMN-Elementes.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : false,
+					"refToView":"text_name"	
+				},
+				{
+					"id" : "initiating",
+					"type" : "Boolean",
+					"title" : "Initiating",
+					"title_de" : "Initiierend",
+					"description" : "",
+					"value" : false,
+					"readonly" : false,
+					"optional" : true
+				},
+				{
+					"id":"multiple_instance",
+					"type":"Boolean",
+					"title":"Multiple Instance",
+					"title_de":"Mehrere Instanzen",
+					"value":false,
+					"description":"",
+					"readonly":false,
+					"optional":"true",
+					"refToView":"mi"
+				},
+				{
+					"id":"corners",
+					"type":"Choice",
+					"title":"Corners",
+					"value":"None",
+					"description":"Defines which corners of the participant rectangle should be rounded. For internal use only.",
+					"description_de":"",
+					"visible":false,
+					"readonly":false,
+					"optional":false,
+					"items": [
+						{
+							"id":"c1",
+							"title":"Top",
+							"value":"Top",
+							"refToView":"roundedOnTop"
+						},
+						{
+							"id":"c2",
+							"title":"Bottom",
+							"value":"Bottom",
+							"refToView":"roundedOnBottom"
+						},
+						{
+							"id":"c3",
+							"title":"None",
+							"value":"None",
+							"refToView": [
+								"roundedOnBottom",
+								"roundedOnTop"
+							]
+						}
+					]	
+				},
+				{
+					"id":"color",
+					"type":"Color",
+					"title":"ParticipantColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#c6c6c6",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"visible":false,
+					"refToView": [
+						"roundedOnBottom",
+						"roundedOnTop",
+						"roundedBgRect"
+					],
+					"fill":true,
+					"stroke":false
+				}		
+			],
+			"roles" : [
+				"ChoreographyElement"
+			]
+		},
+		{
+			"type": "edge",
+			"id":"ChoreographyMessageFlowStart",
+			"title":"Message Flow Source",
+			"title_de":"Nachrichtenfluss Quelle",
+			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
+			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Steuerfluss kombiniert werden.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"../../extensions/bpmn2.0choreography/view/choreography.messageflow.start.svg",
+			"icon":"../../extensions/bpmn2.0choreography/icons/choreography.messageflow.start.png",
+			"roles": [
+				"ConnectingObjectsMorph",
+				"MessageContainer"
+			]
+		},
+		{
+			"type": "edge",
+			"id":"ChoreographyMessageFlowEnd",
+			"title":"Message Flow Target",
+			"title_de":"Nachrichtenfluss Ziel",
+			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
+			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Steuerfluss kombiniert werden.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"../../extensions/bpmn2.0choreography/view/choreography.messageflow.end.svg",
+			"icon":"../../extensions/bpmn2.0choreography/icons/choreography.messageflow.end.png",
+			"roles": [
+				"ConnectingObjectsMorph",
+				"MessageContainer"
+			]
+		},
+	],
+	"properties":[],
+	"rules": {
+		"connectionRules": [],
+        "cardinalityRules": [],
+		"containmentRules": []
+	},
+	"removestencils": [
+		"Task",
+		"CollapsedSubprocess",
+		"Subprocess",
+		"CollapsedEventSubprocess",
+		"EventSubprocess",
+		"Pool",
+		"Lane",
+		"CollapsedPool",
+		"StartEscalationEvent",
+		"StartCompensationEvent",
+		"MessageFlow",
+		"Association_Unidirectional",
+		"Association_Bidirectional",
+		"IntermediateSignalEventThrowing",
+		"IntermediateMultipleEventThrowing",
+		"IntermediateCompensationEventThrowing",
+		"IntermediateMessageEventThrowing",
+		"ChoreographyMessageFlowEnd",
+		"ChoreographyMessageFlowStart",
+		
+		
+		"DataStore",
+		"DataObject",
+		"StartMessageEvent",
+		"StartErrorEvent",
+		"EndMessageEvent",
+		"EndErrorEvent",
+		"EndEscalationEvent",
+		"EndCancelEvent",
+		"EndCompensationEvent",
+		"EndSignalEvent",
+		"EndMultipleEvent"
+	],
+	"removeproperties": []
+}

@@ -477,3 +477,8 @@ Ext.MessageBox.buttonText.ok = "Ок";
 //ORYX.I18N.RDFExport.group = "Export";
 //ORYX.I18N.RDFExport.rdfExport = "Export to RDF";
 //ORYX.I18N.RDFExport.rdfExportDescription = "Exports current model to the XML serialization defined for the Resource Description Framework (RDF)";
+
+/** New Language Properties: 08.09.2009 */
+//if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
+//ORYX.I18N.PropertyWindow.oftenUsed = "Often used";
+//ORYX.I18N.PropertyWindow.moreProps = "More Properties";

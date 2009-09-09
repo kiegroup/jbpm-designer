@@ -684,3 +684,8 @@ ORYX.I18N.Layouting.doing = "Layouting...";
 
 /** New Language Properties: 18.08.2009*/
 ORYX.I18N.SyntaxChecker.MULT_ERRORS = "Multiple Errors";
+
+/** New Language Properties: 08.09.2009*/
+if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
+ORYX.I18N.PropertyWindow.oftenUsed = "Often used";
+ORYX.I18N.PropertyWindow.moreProps = "More Properties";

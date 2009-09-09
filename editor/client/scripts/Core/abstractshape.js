@@ -280,6 +280,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 				
 				this._delegateEvent({
 						type	: ORYX.CONFIG.EVENT_PROPERTY_CHANGED, 
+						elements : [this],
 						name	: key, 
 						value	: value,
 						oldValue: oldValue
