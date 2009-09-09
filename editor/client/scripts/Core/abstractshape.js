@@ -396,7 +396,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
      * Converts the shape to a JSON representation.
      * @return {Object} A JSON object with included ORYX.Core.AbstractShape.JSONHelper and getShape() method.
      */
-     toJSON: function(){
+    toJSON: function(){
         var json = {
             resourceId: this.resourceId,
             properties: Ext.apply({}, this.hiddenProperties, this.properties).inject({}, function(props, prop){
