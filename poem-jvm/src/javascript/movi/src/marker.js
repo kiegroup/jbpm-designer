@@ -296,7 +296,7 @@ MOVI.namespace("util");
 						left = Math.round(bounds.upperLeft.x*zoomFactor + ((bounds.lowerRight.x-bounds.upperLeft.x)*zoomFactor - width)/2);
 						top = bounds.upperLeft.y*zoomFactor - height;
 						margin = -_ICON_MARGIN + "px 0 0 0";
-					} else if(orientation=="west") {
+					} else if(orientation=="east") {
 						left = bounds.lowerRight.x*zoomFactor;
 						top = Math.round(bounds.upperLeft.y*zoomFactor + ((bounds.lowerRight.y-bounds.upperLeft.y)*zoomFactor - height)/2);
 						margin = "0 0 0 " + _ICON_MARGIN + "px";
@@ -304,23 +304,23 @@ MOVI.namespace("util");
 						left = Math.round(bounds.upperLeft.x*zoomFactor + ((bounds.lowerRight.x-bounds.upperLeft.x)*zoomFactor - width)/2);
 						top = bounds.lowerRight.y*zoomFactor;
 						margin = _ICON_MARGIN + "px 0 0 0";
-					} else if(orientation=="east") {
+					} else if(orientation=="west") {
 						left = bounds.upperLeft.x*zoomFactor - width;
 						top = Math.round(bounds.upperLeft.y*zoomFactor + ((bounds.lowerRight.y-bounds.upperLeft.y)*zoomFactor - height)/2);
 						margin = "0 0 0 " + -_ICON_MARGIN + "px";
-					} else if(orientation=="northwest") {
+					} else if(orientation=="northeast") {
 						left = bounds.lowerRight.x*zoomFactor;
 						top = bounds.upperLeft.y*zoomFactor - height;
 						margin = -_ICON_MARGIN + "px 0 0 " + _ICON_MARGIN + "px";
-					} else if(orientation=="southwest") {
+					} else if(orientation=="southeast") {
 						left = bounds.lowerRight.x*zoomFactor;
 						top = bounds.lowerRight.y*zoomFactor;
 						margin = _ICON_MARGIN + "px 0 0 " + _ICON_MARGIN + "px";
-					} else if(orientation=="northeast") {
+					} else if(orientation=="northwest") {
 						left = bounds.upperLeft.x*zoomFactor - width;
 						top = bounds.upperLeft.y*zoomFactor - height;
 						margin = -_ICON_MARGIN + "px 0 0 " + -_ICON_MARGIN + "px";
-					} else if(orientation=="southeast") {
+					} else if(orientation=="southwest") {
 						left = bounds.upperLeft.x*zoomFactor - width;
 						top = bounds.lowerRight.y*zoomFactor;
 						margin = _ICON_MARGIN + "px 0 0 " + -_ICON_MARGIN + "px";
