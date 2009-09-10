@@ -333,7 +333,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 	
 		// Add hidden properties
 		this.hiddenProperties.each(function(prop){
-			serializedObject.push({name: prop.key.replace("oryx-", ""), prefix: "oryx", value: Ext.encode(prop.value), type: 'literal'});
+			serializedObject.push({name: prop.key.replace("oryx-", ""), prefix: "oryx", value: prop.value, type: 'literal'});
 		}.bind(this));
 		
 		// Add all properties
@@ -382,7 +382,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 				default:
 							// Set property
 							if(this.properties.keys().member(prefix+"-"+name)) {
-								this.setProperty(prefix+"-"+name, unescape(value));
+								this.setProperty(prefix+"-"+name, value);
 							} else if(!(name === "bounds"||name === "parent"||name === "target"||name === "dockers"||name === "docker"||name === "outgoing"||name === "incoming")) {
 								this.setHiddenProperty(prefix+"-"+name, value);
 							}
