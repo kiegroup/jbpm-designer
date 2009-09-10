@@ -674,6 +674,9 @@ ORYX.Plugins.PropertyWindow = {
 	},
 	
 	hideMoreAttrs: function(panel) {
+		// TODO: Implement the case that the canvas has no attributes
+		if (this.properties.length <= 0){ return }
+		
 		// collapse the "more attr" group
 		this.grid.view.toggleGroup(this.grid.view.getGroupId(this.properties[0][0]), false);
 		
