@@ -35,7 +35,6 @@ MOVI.namespace("util");
 	 * by overlaying rectangles
      * @namespace MOVI.util
      * @class MOVI.util.Marker
-     * @extends YAHOO.util.Element
      * @constructor
 	 * @param {Shape|Shapes[]} shapes The shapes to mark
 	 * @param {Object} style (optional) A key map of CSS style properties to be attached
