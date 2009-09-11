@@ -123,7 +123,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 	 * @param {Oryx.Core.StencilSet.Stencil} rootStencil If rootStencil is defined, it only returns stencils
 	 * 			that could be (in)direct child of that stencil.
 	 */
-    stencils: function(rootStencil, rules){
+    stencils: function(rootStencil, rules, sortByGroup){
 		if(rootStencil && rules) {
 			var stencils = this._availableStencils.values();
 			var containers = [rootStencil];
@@ -148,14 +148,28 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 				}
 				result = result.concat(children).uniq();
 			}
+			
+			if(sortByGroup) {
+				result = result.sortBy(function(stencil) {
+					return stencil.groups().first();
+				});
+			}
+			
 			var edges = stencils.findAll(function(stencil) {
 				return stencil.type() == "edge";
 			});
 			result = result.concat(edges);
-
+			
 			return result;
+			
 		} else {
-        	return this._availableStencils.values();
+        	if(sortByGroup) {
+				return this._availableStencils.values().sortBy(function(stencil) {
+					return stencil.groups().first();
+				});
+			} else {
+				return this._availableStencils.values();
+			}
 		}
     },
     
