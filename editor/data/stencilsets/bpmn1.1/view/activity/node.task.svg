@@ -10,10 +10,10 @@
    version="1.0">
   <defs></defs>
   <oryx:magnets>
-  	<oryx:magnet oryx:cx="0" oryx:cy="40" oryx:anchors="left" />
-  	<oryx:magnet oryx:cx="50" oryx:cy="80" oryx:anchors="bottom" />
-  	<oryx:magnet oryx:cx="100" oryx:cy="40" oryx:anchors="right" />
-  	<oryx:magnet oryx:cx="50" oryx:cy="0" oryx:anchors="top" />
+  	<oryx:magnet oryx:cx="1" oryx:cy="40" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="50" oryx:cy="79" oryx:anchors="bottom" />
+  	<oryx:magnet oryx:cx="99" oryx:cy="40" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="50" oryx:cy="1" oryx:anchors="top" />
   	<oryx:magnet oryx:cx="50" oryx:cy="40" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="fill" oryx:minimumSize="50 40" oryx:maximumSize="200 160" >
