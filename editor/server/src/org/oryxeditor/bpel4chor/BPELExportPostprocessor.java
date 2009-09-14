@@ -1,4 +1,4 @@
-package org.oryxeditor.server;
+package org.oryxeditor.bpel4chor;
 
 import java.util.ArrayList;
 import java.util.HashMap;

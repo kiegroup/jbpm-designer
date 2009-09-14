@@ -24,6 +24,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.oryxeditor.bpel4chor.BPELExportPostprocessor;
 import org.w3c.dom.Document;
 
 /**
