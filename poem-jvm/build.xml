@@ -1,5 +1,7 @@
 <project name="Oryx Repository" basedir="../">
 	
+	<property file="build.properties" />
+	
 	<!-- Server (poem-jvm) properties *************************************************** -->
 	<property name="server-root-dir" value="poem-jvm" />
 	
