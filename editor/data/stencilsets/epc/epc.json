@@ -898,15 +898,15 @@
 			},
 			{
 				"role": "ProcessInterfaceMorph",
-				"baseMorphs": ["ProcessInterface"],
+				"baseMorphs": ["ProcessInterface"]
 			},
 			{
 				"role": "OrganisationMorph",
-				"baseMorphs": ["Organization"],
+				"baseMorphs": ["Organization"]
 			},
 			{
 				"role": "DataMorph",
-				"baseMorphs": ["Data"],
+				"baseMorphs": ["Data"]
 			},
 			{
 				"role": "ConnectingObjectsMorph",
