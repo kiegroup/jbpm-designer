@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="Oryx Editor">
+<project name="Oryx Editor" basedir="../">
     <!-- Load additional properties -->
     <property file="build.properties" />
-    
+	<property name="build-dir" value="build" />
+	<property name="target-dir" value="dist" />
+	
     <import file="../buildApps/build.xml" />
+	
+	
     
     <!-- Editor properties *************************************************** -->
     <property name="editor-src-root" value="editor" />
@@ -25,7 +29,7 @@
         <jsdoctoolkit jsdochome="jsdoc-toolkit/" template="jsdoc" outputdir="doc/editor/client" inputdir="editor/client/scripts" depth="2">
         </jsdoctoolkit>
     </target>
-    
+	
     <!-- Oryx JavaDoc -->
     <target name="javadoc-editor">
       <mkdir dir="doc/editor/server" />
@@ -76,6 +80,24 @@
     
     <target name="build-with-script-files-flag">
         <property name="build-with-script-files-flag" value="scripts/**" />
+    </target>
+	
+	
+    <target name="deploy-editor">
+        <copy file="${target-dir}/oryx.war" todir="${deploymentdir}"/>
+    </target>
+    
+    <target name="undeploy-editor">
+        <delete file="${deploymentdir}/oryx.war"/>
+    </target>
+    
+    <target name="deploy-stencilsets">
+        <copy todir='${deploymentdir}/oryx/stencilsets'>
+            <fileset dir="${editor-src-root}/data/stencilsets"/>
+        </copy>
+        <echo>
+            Copied stencilsets into deployment destination
+        </echo>
     </target>
     
     <target name="clean-editor">

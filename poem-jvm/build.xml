@@ -1,18 +1,32 @@
-<project name="Oryx Repository">
+<project name="Oryx Repository" basedir="../">
 	
 	<!-- Server (poem-jvm) properties *************************************************** -->
 	<property name="server-root-dir" value="poem-jvm" />
+	
+	<property name="build-dir" value="build" />
+	<property name="target-dir" value="dist" />
+	
 	<property name="java-dir" value="${server-root-dir}/src/java" />
 	<property name="poem-build-dir" value="${build-dir}/poem-jvm" />
 	<property name="bin-dir" value="${poem-build-dir}/bin" />
 	<property name="lib-dir" value="${server-root-dir}/lib" />
 	<property name="data-dir" value="${server-root-dir}/data" />
+	
 	<!--<property name="repository-dir" value="${server-root-dir}/src/javascript/repository" />-->
 	<property name="repository2-dir" value="${server-root-dir}/src/javascript/repository2" />
 	<property name="config-dir" value="${server-root-dir}/etc" />
 	
 	
 	<!-- Server targets (backend.war) ****************************************************** -->
+	
+    <target name="deploy-backend">
+        <copy file="${target-dir}/backend.war" tofile="${deploymentdir}/backend.war"/>
+    </target>
+    
+    <target name="undeploy-backend">
+        <delete file="${deploymentdir}/backend.war"/>
+    </target>
+	
 	<target name="clean-backend">
 		<delete dir="${poem-build-dir}" />
 		<delete file="${target-dir}/backend.war" />

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="Oryx Main Build Script">
+<project name="Oryx Main Build Script" basedir="./">
+	
     <!-- Load additional properties -->
     <property file="build.properties"/>
 	<property name="build-dir" value="build" />
@@ -9,15 +10,12 @@
     <import file="editor/build.xml"/>
     <!--<import file="editor/test.xml"/>-->
     <import file="poem-jvm/build.xml"/>
-    <import file="stick/build.xml"/>
+    <!--<import file="stick/build.xml"/>-->
 	<import file="mashup/build.xml"/>
-    
     
     <!-- (RE)BUILD EDITOR AND BACKEND -->
     <target name="build-all" depends="build-editor, build-backend, generate-build-dependcy-graph" />
-    
     <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" />
-    
     
     <!-- CLEAN EDITOR AND BACKEND -->
     <target name="clean-all" depends="clean-editor, clean-backend">
@@ -31,38 +29,9 @@
     
     <!-- (UN)DEPLOY EDITOR AND BACKEND -->
     <target name="deploy-all" depends="deploy-editor, deploy-backend"/>
-    
     <target name="undeploy-all" depends="undeploy-editor, undeploy-backend"/>
-    
-    
-    <!-- (UN)DEPLOY EDITOR -->
-    <target name="deploy-editor">
-        <copy file="${target-dir}/oryx.war" todir="${deploymentdir}"/>
-    </target>
-    
-    <target name="undeploy-editor">
-        <delete file="${deploymentdir}/oryx.war"/>
-    </target>
-    
-    <target name="deploy-stencilsets">
-        <copy todir='${deploymentdir}/oryx/stencilsets'>
-            <fileset dir="${editor-src-root}/data/stencilsets"/>
-        </copy>
-        <echo>
-            Copied stencilsets into deployment destination
-        </echo>
-    </target>
-    
-    
-    <!-- (UN)DEPLOY REPOSITORY -->
-    <target name="deploy-backend">
-        <copy file="${target-dir}/backend.war" tofile="${deploymentdir}/backend.war"/>
-    </target>
-    
-    <target name="undeploy-backend">
-        <delete file="${deploymentdir}/backend.war"/>
-    </target>
 
+	
     <!-- Generate dependency graph of Ant tasks using Grand
          http://www.ggtools.net/grand/
          Grand is distributed under the terms of the BSD License. -->
@@ -109,7 +78,7 @@
             <srcfiles file="editor/build.xml" />
             <srcfiles file="poem-jvm/build.xml" />
             <srcfiles file="stick/build.xml" />
-			<srcfiles file="MashUp/build.xml" />
+			<srcfiles file="mashup/build.xml" />
         </uptodate>
     </target>
 </project>
