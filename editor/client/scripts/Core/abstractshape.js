@@ -400,7 +400,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
     toJSON: function(){
         var json = {
             resourceId: this.resourceId,
-            properties: Ext.apply({}, this.hiddenProperties, this.properties).inject({}, function(props, prop){
+            properties: Ext.apply({}, this.properties, this.hiddenProperties).inject({}, function(props, prop){
               var key = prop[0];
               var value = prop[1];
                 
