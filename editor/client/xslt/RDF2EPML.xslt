@@ -377,10 +377,10 @@
 			</xsl:for-each>
 	</xsl:template>
 
-	<!-- Returns the ID without leading #resource -->
+	<!-- Returns the ID without leading # -->
 	<xsl:template name="get-id-string">
 		<xsl:param name="id_" />
-		<xsl:value-of select="substring-after($id_, '#oryx')" />
+		<xsl:value-of select="substring-after($id_, '#')" />
 	</xsl:template>
 
 	<!-- Blocking Template -->

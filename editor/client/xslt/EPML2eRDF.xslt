@@ -134,10 +134,10 @@
 			</span>
 			<!-- outgoing -->
 			<a rel="raziel-outgoing">
-				<xsl:attribute name="href"><xsl:value-of select="concat('#resource', ./flow/@target)" /></xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="concat('#', ./flow/@target)" /></xsl:attribute>
 			</a>
 			<a rel="raziel-target">
-				<xsl:attribute name="href"><xsl:value-of select="concat('#resource', ./flow/@target)" /></xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="concat('#', ./flow/@target)" /></xsl:attribute>
 			</a>
 			<!-- dockers -->
 			<span class="oryx-dockers">
@@ -180,7 +180,7 @@
 			</span>
 			<!-- outgoing -->
 			<a rel="raziel-outgoing">
-				<xsl:attribute name="href"><xsl:value-of select="concat('#resource', @to)" /></xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="concat('#', @to)" /></xsl:attribute>
 			</a>
 			<!-- dockers -->
 			<span class="oryx-dockers">
@@ -206,37 +206,37 @@
 	<!-- Adds renderer informations --> 
 	<xsl:template name="add-render">
 		<xsl:for-each select="./directory/epc/event">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/function">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/and">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/xor">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/or">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/processInterface">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/application">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/participant">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/dataField">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/arc">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 		<xsl:for-each select="./directory/epc/relation">
-			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute></a>
+			<a rel="oryx-render"><xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute></a>
 		</xsl:for-each>
 	</xsl:template>
 
@@ -295,12 +295,12 @@
 			<!-- outgoing -->
 			<xsl:for-each select="//directory/epc/arc/flow[@source=$id]">
 				<a rel="raziel-outgoing">
-					<xsl:attribute name="href"><xsl:value-of select="concat('#resource', parent::arc/attribute::id)" /></xsl:attribute>
+					<xsl:attribute name="href"><xsl:value-of select="concat('#', parent::arc/attribute::id)" /></xsl:attribute>
 				</a>
 			</xsl:for-each>
 			<xsl:for-each select="//directory/epc/relation[@from=$id]">
 				<a rel="raziel-outgoing">
-					<xsl:attribute name="href"><xsl:value-of select="concat('#resource', @id)" /></xsl:attribute>
+					<xsl:attribute name="href"><xsl:value-of select="concat('#', @id)" /></xsl:attribute>
 				</a>
 			</xsl:for-each>
 		</div>
@@ -332,7 +332,7 @@
 			<!-- outgoing -->
 			<xsl:for-each select="//directory/epc/arc/flow[@source=$id]">
 				<a rel="raziel-outgoing">
-					<xsl:attribute name="href"><xsl:value-of select="concat('#resource', parent::arc/attribute::id)" /></xsl:attribute>
+					<xsl:attribute name="href"><xsl:value-of select="concat('#', parent::arc/attribute::id)" /></xsl:attribute>
 				</a>
 			</xsl:for-each>
 		</div>
