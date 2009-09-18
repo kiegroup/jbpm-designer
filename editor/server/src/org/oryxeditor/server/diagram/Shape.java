@@ -51,14 +51,12 @@ public class Shape implements Stencil, Bounded{
 	/* Overwritten hash code method, based on resourceId
 	 * @see java.lang.Object#hashCode()
 	 */
-	@Override
 	public int hashCode() {
 		return resourceId.hashCode();
 	}
 	/* Overwritten equals method, based on resourceId
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -78,7 +76,6 @@ public class Shape implements Stencil, Bounded{
 	 * @see org.oryxeditor.server.diagram.Stencil#getStencilId()
 	 * @return String stencilId or null if stencil undefined
 	 */
-	@Override
 	public String getStencilId() {
 		if(this.stencil!=null){
 			return this.stencil.getId();
@@ -232,7 +229,6 @@ public class Shape implements Stencil, Bounded{
 	/* (non-Javadoc)
 	 * @see org.oryxeditor.server.diagram.Bounded#getUpperLeft()
 	 */
-	@Override
 	public Point getUpperLeft() {
 		if(this.bounds!=null)
 			 return this.bounds.getUpperLeft();
@@ -241,7 +237,6 @@ public class Shape implements Stencil, Bounded{
 	/* (non-Javadoc)
 	 * @see org.oryxeditor.server.diagram.Bounded#lowerRight()
 	 */
-	@Override
 	public Point lowerRight() {
 		if(this.bounds!=null)
 			 return this.bounds.getLowerRight();
