@@ -544,7 +544,7 @@ ORYX.Plugins.PropertyWindow = {
 								this.editDirectly(key, input.getValue());
 							}.bind(this));
 							
-							editorGrid = new Ext.Editor();
+							editorGrid = new Ext.Editor(numberField);
 							break;
 						case ORYX.CONFIG.TYPE_COLOR:
 							// Set as a ColorPicker
