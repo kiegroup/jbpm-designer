@@ -65,7 +65,7 @@
 			(function() {
 				
 			    modelviewer = new MOVI.widget.ModelViewer("modelviewer");
-			    modelviewer.loadModel("http://oryx-editor.org/backend/poem/model/2321", 
+			    modelviewer.loadModel("http://localhost:8081/backend/poem/model/119", 
 			    	{ onSuccess: init }
 			    );
 			
@@ -102,7 +102,7 @@
 			}
 			
 			function doStuffWithModel() {
-				
+			    
 				// set a marker
 				var marker = new MOVI.util.Marker(
 					modelviewer.canvas.getShape("oryx_0FE6099D-21DF-4225-A24D-DB50049FDAF7"),

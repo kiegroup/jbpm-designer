@@ -33,7 +33,12 @@ MOVI.namespace("util");
 		_BUBBLE_LR_CLASS_NAME 			= "movi-bubble-lr",
 		_BUBBLE_BORDERTOP_CLASS_NAME 	= "movi-bubble-bt",
 		_BUBBLE_BORDERBOTTOM_CLASS_NAME	= "movi-bubble-bb",
-		_BUBBLE_ARROW_CLASS_NAME 		= "movi-bubble-ar",
+		_BUBBLE_BORDERLEFT_CLASS_NAME   = "movi-bubble-bl",
+		_BUBBLE_BORDERRIGHT_CLASS_NAME  = "movi-bubble-br",
+		_BUBBLE_ARROW_LEFT_CLASS_NAME 	= "movi-bubble-al",
+		_BUBBLE_ARROW_RIGHT_CLASS_NAME 	= "movi-bubble-ar",
+		_BUBBLE_ARROW_TOP_CLASS_NAME 	= "movi-bubble-at",
+		_BUBBLE_ARROW_BOTTOM_CLASS_NAME	= "movi-bubble-ab",
 		_BUBBLE_CONTENT_CLASS_NAME	 	= "movi-bubble-bc",
 		_BUBBLE_CLOSEBUTTON_CLASS_NAME 	= "movi-bubble-closebutton"
 		
@@ -174,7 +179,7 @@ MOVI.namespace("util");
 			
 			var bounds = this._marker.getAbsBounds();
 			var left = Math.round(bounds.lowerRight.x * zoomFactor);
-			var top = Math.round((bounds.upperLeft.y + (bounds.lowerRight.y-bounds.upperLeft.y)*0.6) * zoomFactor);
+			var top = Math.round((bounds.upperLeft.y + (bounds.lowerRight.y-bounds.upperLeft.y)*0.7) * zoomFactor);
 			this.setStyle("left", left + "px");
 			this.setStyle("top", top + "px");
 		},
@@ -202,10 +207,19 @@ MOVI.namespace("util");
 	     * @method toggle
 	     */
 		toggle: function() {
-			if(this.hasClass(_BUBBLE_VISIBLE_CLASS_NAME))
+			if(this.isVisible())
 				this.hide();
 			else 
 				this.show();
+		},
+		
+		/**
+		 * Returns true if the annotation is visible
+		 * @method isVisible
+		 * @returns {Boolean} 
+		 */
+		isVisible: function() {
+		    return this.hasClass(_BUBBLE_VISIBLE_CLASS_NAME);
 		},
 		
 		/**
@@ -276,14 +290,17 @@ MOVI.namespace("util");
 						"<div class=\"" + _BUBBLE_UL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_UR_CLASS_NAME + "\">" +
 					   	"<div class=\"" + _BUBBLE_LL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_LR_CLASS_NAME + "\">" + 
 					    	"<div class=\"" + _BUBBLE_BORDERTOP_CLASS_NAME + "\"></div>" +
-					   		"<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
-								"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\"></div>" +
-					        	content +
-					        "</div>" +
+					    	"<div class=\"" + _BUBBLE_BORDERLEFT_CLASS_NAME + "\">" +
+					    	"<div class=\"" + _BUBBLE_BORDERRIGHT_CLASS_NAME + "\">" +
+					   		    "<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
+							    	"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\"></div>" +
+					            	content +
+					            "</div>" +
+					        "</div></div>" +
 					        "<div class=\"" + _BUBBLE_BORDERBOTTOM_CLASS_NAME + "\"></div>" +
 					   	"</div></div>" +
 					   	"</div></div>" +
-					    "<div class=\"" + _BUBBLE_ARROW_CLASS_NAME + "\"/>");
+					    "<div class=\"" + _BUBBLE_ARROW_LEFT_CLASS_NAME + "\"/>");
 	}
 	
 })();

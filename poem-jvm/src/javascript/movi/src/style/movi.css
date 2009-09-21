@@ -4,6 +4,7 @@
 	overflow: auto;
 	height: 100%;
 	position: relative;
+	cursor: move;
 }
 
 .movi-modelimg {
@@ -51,64 +52,71 @@
 	display:block;
 	position:absolute;
 	min-width: 100px;
-	margin-top: 29px; margin-left: -17px;
-	filter: alpha(opacity:90);
-	KHTMLOpacity: 0.90;
-	MozOpacity: 0.90;
-	opacity: 0.90;
+	margin-top: -46px; margin-left: 13px;
+	filter: alpha(opacity:95);
+	KHTMLOpacity: 0.95;
+	MozOpacity: 0.95;
+	opacity: 0.95;
 	z-index: 6;
 }
 
 .movi-bubble-ul {
-	background: url('../img/bubble-ul.gif') no-repeat 0 0;
+	background: url('../img/bubble-ul.png') no-repeat 0 0;
 }
 
 .movi-bubble-ur {
-	background: url('../img/bubble-ur.gif') no-repeat 100% 0;
+	background: url('../img/bubble-ur.png') no-repeat 100% 0;
 }
 
 .movi-bubble-ll {
-	background: url('../img/bubble-ll.gif') no-repeat 0 100%;
+	background: url('../img/bubble-ll.png') no-repeat 0 100%;
 	
 }
 
 .movi-bubble-lr {
-	background: url('../img/bubble-lr.gif') no-repeat 100% 100%;
+	background: url('../img/bubble-lr.png') no-repeat 100% 100%;
 }
 
 .movi-bubble-bt {
-	margin-left: 6px; margin-right: 6px;
-	height: 4px;
-	background-color: #D6D6D6; 
-	border-top: 2px solid #777777;
+	margin-left: 16px; margin-right: 16px;
+	height: 16px;
+	background: url('../img/bubble-bt.png') repeat-x; 
 }
 
 .movi-bubble-bb {
-	margin-left: 6px; margin-right: 6px;
-	height: 4px;
-	background-color: #D6D6D6; 
-	border-bottom: 2px solid #777777;
+	margin-left: 16px; margin-right: 16px;
+	height: 16px;
+	background: url('../img/bubble-bb.png') repeat-x; 
 }
 
-.movi-bubble-ar {
+.movi-bubble-bl {
+	background: url('../img/bubble-bl.png') repeat-y 0 0; 
+}
+
+.movi-bubble-br {
+	background: url('../img/bubble-br.png') repeat-y 100% 0; 
+}
+
+.movi-bubble-al {
 	position: absolute;
-	left: 20px; top: -29px;
-	width: 45px; height: 31px;
-	background: url('../img/bubble-arrow.gif') no-repeat 0 0;
+	left: -16px; top: 20px;
+	width: 26px; height: 46px;
+	background: url('../img/bubble-al.png') no-repeat 0 0;
 }
 
 .movi-bubble-bc {
-	padding: 8px 8px 4px 8px;
-	background-color: #D6D6D6; 
-	border-left: 2px solid #777777;
-	border-right: 2px solid #777777;	
+	margin: 0px 8px 0 8px;
+	padding: 3px 8px;
+	background-color: #FFFFFF; 
+	min-height: 100px;
+	min-width: 100px;
 }
 
 .movi-bubble-closebutton {
 	position: absolute;
-	right: 4px; top: 5px;
+	right: 12px; top: 12px;
 	width: 10px; height: 10px;
-	background: url('../img/bubble-closebutton.gif') no-repeat 0 0;
+	background: url('../img/bubble-closebutton.png') no-repeat 0 0;
 	cursor: pointer;
 }
 
@@ -186,17 +194,30 @@
 
 /* MOVI Zoom Slider styles */
 
-.movi-zoomslider {
-    background: transparent url('../img/slider-track.gif') no-repeat scroll 7px 12px;
+.movi-zoomslider-horizontal {
+    background: transparent url('../img/slider-track-horz.gif') no-repeat scroll 7px 12px;
     height:28px;
     position:relative;
     width:114px;
 }
 
-.movi-zoomslider-thumb {
+.movi-zoomslider-horizontal .movi-zoomslider-thumb {
     position: absolute;
     width: 17px; height: 21px;
-    background: transparent url('../img/slider-thumb.gif') no-repeat 0 0;
+    background: transparent url('../img/slider-thumb-horz.gif') no-repeat 0 0;
+}
+
+.movi-zoomslider-vertical {
+    background: transparent url('../img/slider-track-vert.gif') no-repeat scroll 7px 7px;
+    height:114px;
+    position:relative;
+    width:28px;
+}
+
+.movi-zoomslider-vertical .movi-zoomslider-thumb {
+    position: absolute;
+    width: 21px; height: 17px;
+    background: transparent url('../img/slider-thumb-vert.gif') no-repeat 0 0;
 }
 
 

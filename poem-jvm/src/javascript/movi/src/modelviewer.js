@@ -75,6 +75,10 @@ MOVI.namespace("widget");
 		
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
 		
+		// callbacks for model dragging
+		this._scrollbox.addListener("mousedown", this._onMouseDown, this, this, true);
+		YAHOO.util.Event.addListener(document, "mouseup", this._onMouseUp, this, this, true);
+		
 		this._loadOptions = {};
     };
 
@@ -672,6 +676,48 @@ MOVI.namespace("widget");
 			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
 			if(scale>1)	scale = 1;
 			this.setZoomLevel(scale*100);
+		},
+		
+		/**
+		 * @method _onMouseDown
+		 * @private
+		 */
+		_onMouseDown: function(ev) {
+			/*YAHOO.util.Event.preventDefault(ev);
+			this._absXY = YAHOO.util.Dom.getXY(this);
+			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+			var modelviewerRectAbsXY = YAHOO.util.Dom.getXY(this);
+			this._mouseOffset.x = mouseAbsXY[0] - modelviewerRectAbsXY[0];
+			this._mouseOffset.y = mouseAbsXY[1] - modelviewerRectAbsXY[1];*/
+			YAHOO.util.Event.preventDefault(ev);
+			YAHOO.util.Event.stopPropagation(ev);
+			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+			this._mouseCoords = { x: mouseAbsXY[0], y: mouseAbsXY[1] };
+			this.addListener("mousemove", this._onModelDrag, this, this, true);
+		},
+		
+		/**
+		 * @method _onMouseUp
+		 * @private
+		 */
+		_onMouseUp: function(ev) {
+			YAHOO.util.Event.preventDefault(ev);
+			this.removeListener("mousemove", this._onModelDrag);
+		},
+		
+		/**
+		 * Callback method that is executed when the model is dragged
+		 * @method _onModelDrag
+		 * @private
+		 */
+		_onModelDrag: function(ev) {
+			YAHOO.util.Event.preventDefault(ev);
+			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+			var sl = this._scrollbox.get("scrollLeft"); 
+			var st = this._scrollbox.get("scrollTop");
+			this._scrollbox.set("scrollLeft", sl - (mouseAbsXY[0] - this._mouseCoords.x));
+			this._scrollbox.set("scrollTop", st - (mouseAbsXY[1] - this._mouseCoords.y));
+			this._mouseCoords.x = mouseAbsXY[0]; this._mouseCoords.y = mouseAbsXY[1];
 		}
 		
 		

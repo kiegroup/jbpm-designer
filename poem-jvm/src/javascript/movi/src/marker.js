@@ -294,7 +294,7 @@ MOVI.namespace("util");
 
 					if(orientation=="north") {
 						left = Math.round(bounds.upperLeft.x*zoomFactor + ((bounds.lowerRight.x-bounds.upperLeft.x)*zoomFactor - width)/2);
-						top = bounds.upperLeft.y*zoomFactor - height;
+						top = Math.round(bounds.upperLeft.y*zoomFactor - height);
 						margin = -_ICON_MARGIN + "px 0 0 0";
 					} else if(orientation=="east") {
 						left = bounds.lowerRight.x*zoomFactor;
@@ -325,7 +325,6 @@ MOVI.namespace("util");
 						top = bounds.lowerRight.y*zoomFactor;
 						margin = _ICON_MARGIN + "px 0 0 " + -_ICON_MARGIN + "px";
 					}
-					
 					icon.setStyle("left", left + "px");
 					icon.setStyle("top", top + "px");
 					icon.setStyle("margin", margin);

@@ -98,8 +98,8 @@
 				toolbar.showGroupCaptions();
 				
 				// create zoom slider
-				zoomslider = new MOVI.widget.ZoomSlider("zoomslider", modelviewer)
-				
+				zoomslider = new MOVI.widget.ZoomSlider("zoomslider", modelviewer, {orientation: "vertical"});
+			/*	
 				// enable resizing
 				var resize = new YAHOO.util.Resize("modelviewer", {
 		            handles: ['b'],
@@ -109,7 +109,7 @@
 				    modelnavigator.update.call(modelnavigator);
 				    zoomslider.onChange.call(zoomslider);
 				}, this, true);
-				resize.reset();
+				resize.reset();*/
 			}
 			
 			function doStuffWithModel() {
