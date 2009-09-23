@@ -184,12 +184,11 @@ MOVI.namespace("widget");
 		update: function() {
 			var minZoomLevel = _getMinZoomLevel(this.modelviewer);
 			var maxZoomLevel = 100;
-			
 			var zoomStep = (maxZoomLevel-minZoomLevel) / this.trackLength;
 			if(this.reverse) 
-			    this.slider.setValue(this.trackLength - (this.modelviewer.getZoomLevel() - minZoomLevel) / zoomStep);
+			    this.slider.setValue(this.trackLength - (this.modelviewer.getZoomLevel() - minZoomLevel) / zoomStep, false, true, true);
 			else
-			    this.slider.setValue((this.modelviewer.getZoomLevel() - minZoomLevel) / zoomStep);
+			    this.slider.setValue((this.modelviewer.getZoomLevel() - minZoomLevel) / zoomStep, false, true, true);
 		}
 		
 	});
