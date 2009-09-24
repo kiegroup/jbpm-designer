@@ -333,7 +333,6 @@ public class Dispatcher extends HttpServlet {
 			String openId =  (String) request.getSession().getAttribute("openid"); 
 			
 			User user = (User) request.getAttribute("user");
-			System.out.println(openId + " " + user.toString());
 			
 			String requestMethod = request.getMethod();
 			

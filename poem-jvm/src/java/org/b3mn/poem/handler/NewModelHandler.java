@@ -23,7 +23,9 @@
 
 package org.b3mn.poem.handler;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,31 +35,52 @@ import org.b3mn.poem.util.HandlerWithoutModelContext;
 
 @HandlerWithoutModelContext(uri="/new")
 public class NewModelHandler extends HandlerBase {
-
+	Properties props=null;
+	String configPreFix="profile.stencilset.mapping.";
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws IOException {
 		String stencilset = "/stencilsets/bpmn/bpmn.json";
 		if (request.getParameter("stencilset") != null) {
 			stencilset = request.getParameter("stencilset");
 		}
+		if(props==null){
+			try {
+				FileInputStream in = new FileInputStream(this.getBackendRootDirectory() + "/WEB-INF/backend.properties");
+				props = new Properties();
+				props.load(in);
+				in.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+			}
+		}
+		String profile=null;
+		if(props!=null){
+			profile=(String) props.getProperty(configPreFix+stencilset);
+		}
+		if(profile==null){
+		response.sendRedirect("/oryx/editor#new?stencilset="+stencilset);}
+		else{
+			response.sendRedirect("/oryx/editor;"+profile+"#new?stencilset="+stencilset);
 
-		String content = 
-	        "<script type='text/javascript'>" +
-              "function onOryxResourcesLoaded(){" +
-                "new ORYX.Editor({"+
-                  "id: 'oryx-canvas123',"+
-                  "stencilset: {"+
-                  	"url: '/oryx"+stencilset + "'" +
-                  "}" +
-          		"});" +
-          	  "}" +
-          	"</script>";
-
-		response.getWriter().print(this.getOryxModel("New Process Model", content,
-				this.getLanguageCode(request), this.getCountryCode(request)));
-
-		response.setStatus(200);
-		response.setContentType("application/xhtml+xml");
+		}
+//		String content = 
+//	        "<script type='text/javascript'>" +
+//              "function onOryxResourcesLoaded(){" +
+//                "new ORYX.Editor({"+
+//                  "id: 'oryx-canvas123',"+
+//                  "stencilset: {"+
+//                  	"url: '/oryx"+stencilset + "'" +
+//                  "}" +
+//          		"});" +
+//          	  "}" +
+//          	"</script>";
+//
+//		response.getWriter().print(this.getOryxModel("New Process Model", content,
+//				this.getLanguageCode(request), this.getCountryCode(request)));
+//
+//		response.setStatus(200);
+//		response.setContentType("application/xhtml+xml");
+		
 	}
 	
 	@Override

@@ -170,5 +170,6 @@
 	<classpathentry kind="lib" path="editor/lib/jaxb-xjc.jar"/>
 	<classpathentry kind="lib" path="editor/lib/jaxb1-impl.jar"/>
 	<classpathentry kind="lib" path="editor/lib/jsr173_1.0_api.jar"/>
+	<classpathentry kind="lib" path="buildApps/lib/yuicompressor-2.4.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

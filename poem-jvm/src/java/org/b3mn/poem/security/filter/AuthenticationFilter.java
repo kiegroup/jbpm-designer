@@ -77,10 +77,10 @@ public class AuthenticationFilter implements Filter {
 			// If you want to disable OpenID login, hard code the openId here.
 			// You can use any name without spaces as openId
 			// For example:
-			// String openId = "OryxUser";
+//			String openId = "OryxUser";
 			String openId = 
 				(String) request.getSession().getAttribute("openid"); // Retrieve open id from session
-
+			
 			User user = null;
 
 			// if the user isn't logged in, check if an authentication token is

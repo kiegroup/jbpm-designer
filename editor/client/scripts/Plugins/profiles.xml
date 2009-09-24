@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<profiles>
+	<!-- name default is reserved for the standard profile -->
+	<profile name="default" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
+		<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
+		<plugin name="ORYX.Plugins.ShapeRepository"/>
+		<plugin name="ORYX.Plugins.PropertyWindow"/>
+		<plugin name="ORYX.Plugins.CanvasResize"/>
+		<plugin name="ORYX.Plugins.PluginLoader"/>
+		<plugin name="ORYX.Plugins.View"/>
+		<plugin name="ORYX.Plugins.DragDropResize"/>
+		<plugin name="ORYX.Plugins.RenameShapes" />
+		<plugin name="ORYX.Plugins.ERDFSupport" />
+		<plugin name="ORYX.Plugins.JSONSupport"/>
+		<plugin name="ORYX.Plugins.RDFExport" />
+		<plugin name="ORYX.Plugins.FeedbackPlugin" />
+		<plugin name="ORYX.Plugins.Undo" />		
+		<plugin name="ORYX.Plugins.Arrangement"/>	
+		<plugin name="ORYX.Plugins.Save"/>	
+		<plugin name="ORYX.Plugins.Grouping"/>	
+		<plugin name="ORYX.Plugins.HighlightingSelectedShapes"/>	
+		<plugin name="ORYX.Plugins.DragDocker"/>	
+		<plugin name="ORYX.Plugins.AddDocker"/>	
+		<plugin name="ORYX.Plugins.SSExtensionLoader"/>	
+		<plugin name="ORYX.Plugins.SelectionFrame"/>	
+		<plugin name="ORYX.Plugins.ShapeHighlighting"/>	
+		<plugin name="ORYX.Plugins.Overlay"/>	
+		<plugin name="ORYX.Plugins.Edit"/>	
+		<plugin name="ORYX.Plugins.KeysMove"/>	
+		<plugin name="ORYX.Plugins.RowLayouting"/>	
+		<plugin name="ORYX.Plugins.AutoLayout"/>	
+		<plugin name="ORYX.Plugins.PluginLoader"/>	
+		
+	</profile>
+	<profile name="save" depends="default">
+		<plugin name="ORYX.Plugins.File"/>
+		<plugin source="view.js" name="ORYX.Plugins.View">
+			<property zoomLevel="4"/>
+		</plugin>
+		<plugin name="ORYX.Plugins.Save"/>
+	</profile>
+	<profile name="bpmnValidating" depends="default">
+		<plugin name="ORYX.Plugins.SyntaxChecker"/>
+		<plugin name="ORYX.Plugins.BPMNValidator"/>
+		<plugin name="ORYX.Plugins.EPCValidator"/>
+		<plugin source="view.js" name="ORYX.Plugins.View">
+			<property zoomLevel="0.5" maxFitToScreenLevel="2,3" />
+		</plugin>
+	</profile>
+</profiles>

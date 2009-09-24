@@ -148,6 +148,16 @@
 		<servlet-class>
 			org.oryxeditor.server.IBPMN2BPMNServlet
 		</servlet-class>
+//TODO
+	</servlet>
+		<servlet>
+		<display-name>
+			Oryx Editor Handler
+		</display-name>
+		<servlet-name>EditorHandler</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.EditorHandler
+		</servlet-class>
 	</servlet>
 	
 	<servlet>
@@ -532,7 +542,10 @@
             <url-pattern>/goldeneye</url-pattern>
     </servlet-mapping>
 -->
-
+	 <servlet-mapping>
+            <servlet-name>EditorHandler</servlet-name>
+            <url-pattern>/editor</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
             <servlet-name>FeedbackServlet</servlet-name>
             <url-pattern>/feedback</url-pattern>

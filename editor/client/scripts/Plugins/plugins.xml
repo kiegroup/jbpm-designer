@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-
 	<plugins>
 		
 		<!-- following plugins require Ext -->		
-		<plugin source="toolbar.js" name="ORYX.Plugins.Toolbar" />
 		
-		<plugin source="shapemenu.js" name="ORYX.Plugins.ShapeMenuPlugin" />
-		<plugin source="selectssperspective.js" name="ORYX.Plugins.SelectStencilSetPerspective" />
+		<plugin source="toolbar.js" name="ORYX.Plugins.Toolbar" core="true" />
+		<!-- <plugin source="toolbar2.js" name="ORYX.Plugins.Toolbar2" />-->
+		
+		<plugin source="shapemenu.js" name="ORYX.Plugins.ShapeMenuPlugin" core="true" />
+		<plugin source="selectssperspective.js" name="ORYX.Plugins.SelectStencilSetPerspective"/>
 		<plugin source="shaperepository.js" name="ORYX.Plugins.ShapeRepository" />
 		<plugin source="propertywindow.js" name="ORYX.Plugins.PropertyWindow" />
-		<plugin source="loading.js" name="ORYX.Plugins.Loading" />
+		<plugin source="loading.js" name="ORYX.Plugins.Loading" core="true" />
 		<plugin source="canvasResize.js" name="ORYX.Plugins.CanvasResize">
 			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
 		</plugin>
 		<plugin source="renameShapes.js" name="ORYX.Plugins.RenameShapes" />
 		<plugin source="erdfSupport.js" name="ORYX.Plugins.ERDFSupport" />
-		<plugin source="jsonSupport.js" name="ORYX.Plugins.JSONSupport" />
+		<plugin source="jsonSupport.js" name="ORYX.Plugins.JSONSupport">
+			<property name="color" value="red"/>
+				
+		</plugin>
 		<plugin source="rdfExport.js" name="ORYX.Plugins.RDFExport" />
 		<plugin source="general/feedbackPlugin.js" name="ORYX.Plugins.FeedbackPlugin" />
 		<plugin source="undo.js" name="ORYX.Plugins.Undo" />
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
-			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
+			<requires namespace="http://b3mn.org/stencilset/epc#"/>	 
 		</plugin>	
 		
 		<plugin source="jpdlSupport.js" name="ORYX.Plugins.JPDLSupport">
@@ -36,7 +40,7 @@
 		
 		<plugin source="bpmn2bpel.js" name="ORYX.Plugins.BPMN2BPEL">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
-		</plugin>	
+		</plugin>
 			
 		<plugin source="processLink.js" name="ORYX.Plugins.ProcessLink">
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>	
@@ -52,7 +56,8 @@
 		<plugin source="arrangement.js" name="ORYX.Plugins.Arrangement">
 			<notUsesIn namespace="http://b3mn.org/stencilset/xforms#"/>
 		</plugin>
-		<plugin source="file.js" name="ORYX.Plugins.File" />
+		<plugin source="file.js" name="ORYX.Plugins.File" >
+		</plugin>
 		<plugin source="file.js" name="ORYX.Plugins.Save"/>
 		
 		<plugin source="view.js" name="ORYX.Plugins.View">
@@ -274,13 +279,12 @@
 		
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
 		
-		<!--		
 		<plugin source="epc2bpmn.js" name="ORYX.Plugins.EPC2BPMN">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>	
 		</plugin>
 		<plugin source="autoLayout.js" name="ORYX.Plugins.AutoLayout" />
 		<plugin source="overlayexample.js" name="ORYX.Plugins.OverlayExample" />
-		-->
+		<plugin source="pluginLoader.js" name="ORYX.Plugins.PluginLoader" />
 
 	</plugins>
 	

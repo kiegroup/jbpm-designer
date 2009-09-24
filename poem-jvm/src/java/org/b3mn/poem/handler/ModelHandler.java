@@ -39,23 +39,24 @@ public class ModelHandler extends  HandlerBase {
 
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws IOException {
+		response.sendRedirect("/oryx/editor#"+object.getUri());
 
-		Representation representation = object.read();
-		
-		String content = 
-	        "<script type='text/javascript'>" +
-              "function onOryxResourcesLoaded(){" +
-                "ORYX.Editor.createByUrl('" + getRelativeServerPath(request) + object.getUri() + "/json', {"+
-                  "id: 'oryx-canvas123'" +
-          		"});" +
-          	  "}" +
-          	"</script>";
-		response.setContentType("application/xhtml+xml");
-		
-		response.getWriter().println(this.getOryxModel(representation.getTitle(), 
-				content, this.getLanguageCode(request), 
-				this.getCountryCode(request)));
-		response.setStatus(200);
+//		Representation representation = object.read();
+//		
+//		String content = 
+//	        "<script type='text/javascript'>" +
+//              "function onOryxResourcesLoaded(){" +
+//                "ORYX.Editor.createByUrl('" + getRelativeServerPath(request) + object.getUri() + "/json', {"+
+//                  "id: 'oryx-canvas123'" +
+//          		"});" +
+//          	  "}" +
+//          	"</script>";
+//		response.setContentType("application/xhtml+xml");
+//		
+//		response.getWriter().println(this.getOryxModel(representation.getTitle(), 
+//				content, this.getLanguageCode(request), 
+//				this.getCountryCode(request)));
+//		response.setStatus(200);
 	}
 	
 	@Override

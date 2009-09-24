@@ -133,7 +133,9 @@
     </target>
     
     <target name="build-plugins">
-        
+        <copy todir='${editor-build-root}/plugins/scripts'>
+             <fileset dir="${editor-src-client}/scripts/Plugins/"/>
+        </copy>
         <copy todir='${editor-build-root}' file="${editor-src-client}/scripts/Plugins/plugins.xml">
             
         </copy>
@@ -148,6 +150,96 @@
         </echo>
         
     </target>
+	 <target name="build-profiles" depends='compile-buildApps'>
+	 	 <copy todir='${editor-build-root}' file="${editor-src-client}/scripts/Plugins/profiles.xml">
+         </copy>
+        <echo>
+            Copied profiles.xml into build destination
+        </echo>
+		<mkdir dir="${editor-build-root}/tempProfiles"/>
+		<mkdir dir="${editor-build-root}/profiles"/>
+     	<java dir="${editor-build-root}" classpath="build/buildApps/bin" classname="org.oryxeditor.buildapps.ProfileCreator" fork="true"
+         failonerror="true">
+            <classpath>
+                <fileset dir="build/buildApps/lib"/>
+            </classpath>
+            <arg file="${editor-src-client}/scripts/Plugins/"/>
+			<arg file="${editor-build-root}/tempProfiles/"/>
+        </java>
+		 <echo>
+            Created profile js-Files
+        </echo>
+		<concat destfile='${editor-build-root}/tempProfiles/oryx.core.uncompressed.js'>
+            <filelist id="coresourcefiles" dir="${editor-src-client}">
+                <file name='scripts/utils.js'/>
+                <file name='scripts/kickstart.js'/>
+				<file name='scripts/erdfparser.js'/>
+				<file name='scripts/datamanager.js'/>
+                <file name='scripts/clazz.js'/>
+				<file name='scripts/config.js'/>
+				<file name='scripts/oryx.js'/>
+                <file name='scripts/Core/SVG/editpathhandler.js'/>
+                <file name='scripts/Core/SVG/minmaxpathhandler.js'/>
+                <file name='scripts/Core/SVG/pointspathhandler.js'/>
+                <file name='scripts/Core/SVG/svgmarker.js'/>
+                <file name='scripts/Core/SVG/svgshape.js'/>
+                <file name='scripts/Core/SVG/label.js'/>
+                <file name='scripts/Core/Math/math.js'/>
+                <file name='scripts/Core/StencilSet/stencil.js'/>
+                <file name='scripts/Core/StencilSet/property.js'/>
+                <file name='scripts/Core/StencilSet/propertyitem.js'/>
+                <file name='scripts/Core/StencilSet/complexpropertyitem.js'/>
+                <file name='scripts/Core/StencilSet/rules.js'/>
+                <file name='scripts/Core/StencilSet/stencilset.js'/>
+                <file name='scripts/Core/StencilSet/stencilsets.js'/>
+                <file name='scripts/Core/bounds.js'/>
+                <file name='scripts/Core/uiobject.js'/>
+                <file name='scripts/Core/abstractshape.js'/>
+                <file name='scripts/Core/canvas.js'/>
+                <!--<file name='scripts/Core/apiHandler.js'/>-->
+                <file name='scripts/Core/main.js'/>
+                <file name='scripts/Core/svgDrag.js'/>
+                <file name='scripts/Core/shape.js'/>
+                <file name='scripts/Core/Controls/control.js'/>
+                <file name='scripts/Core/Controls/docker.js'/>
+                <file name='scripts/Core/Controls/magnet.js'/>
+                <file name='scripts/Core/node.js'/>
+                <file name='scripts/Core/edge.js'/>
+                <file name='scripts/Core/command.js'/>
+            	<file name='scripts/Core/abstractPlugin.js'/>
+            	<file name='scripts/Core/abstractLayouter.js'/>
+            </filelist>
+			</concat>
+	        <java dir="${editor-build-root}/tempProfiles/" jar="${editor-src-root}/lib/yuicompressor-2.4.2.jar" fork="true"
+	         failonerror="true" output='${editor-build-root}/tempProfiles/oryx.core.js' logError="true">
+	            <arg file='${editor-build-root}/tempProfiles/oryx.core.uncompressed.js'/>
+	        </java>
+			<move todir='${editor-build-root}/profiles'>
+				<fileset dir='${editor-build-root}/tempProfiles/'>
+	                    <include name="*.xml" />
+						<include name="*.conf" />
+	            </fileset>
+			</move>
+			<!--TODO shrink
+			<java dir="${editor-build-root}" jar="${editor-src-root}/lib/yuicompressor-2.4.2.jar" fork="true"
+ 					failonerror="true" output='${editor-build-root}/profiles/'>
+    				<arg file='${editor-build-root}/tempProfiles/'/>
+			</java>-->
+			<move todir='${editor-build-root}/profiles'>
+				<fileset dir='${editor-build-root}/tempProfiles/'>
+	                    <include name="*.js" />
+	            </fileset>
+			</move>
+			
+			<delete dir='${editor-build-root}/tempProfiles/' includeemptydirs='true'/>
+     </target>
+	 <target name="compress-file">
+	 	<property name="file"/>
+		<java dir="${editor-build-root}" jar="${editor-src-root}/lib/yuicompressor-2.4.2.jar" fork="true"
+ 			failonerror="true" output='${editor-build-root}/profiles'>
+    		<arg file='${editor-build-root}/tempProfiles/${file}'/>
+		</java>
+	 </target>
     
     <target name="build-stencilsets" depends='compile-buildApps'>
         
@@ -216,7 +308,9 @@
         <mkdir dir="${editor-build-root}/generated-uis"/>
 
     </target>
-    
+
+
+	
     <target name="build-editor-core">
         
         <!--<copy todir='${editor-build-root}' file='${editor-src-client}/scripts/Core/config.js'/>-->
@@ -304,14 +398,14 @@
         </exec>
     </target>
         
-    <target name="build" depends="copy-license, build-plugins, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file-editor" />
+    <target name="build" depends="copy-license, build-plugins,build-profiles, build-stencilsets, build-execution, build-server, build-editor-core, generate-version-file-editor" />
     
     <target name='compress'>
         
         <tempfile property="compress.temp" suffix=".js" prefix="compressed" destDir="${editor-build-root}"/>
         
         <java dir="${editor-build-root}" jar="${editor-src-root}/lib/yuicompressor-2.4.2.jar" fork="true"
-         failonerror="true" output='${compress.temp}'>
+         failonerror="true" output='${compress.temp}' logError="true">
             <arg file='${editor-build-root}/oryx.debug.js'/>
         </java>
         <echo>
