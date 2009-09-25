@@ -83,6 +83,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
             this._jsonProp.refToView = [];
         }
         
+        if (jsonProp.complexAttributeToView === undefined) {
+            jsonProp.complexAttributeToView = "";
+        }
+        
         if (jsonProp.min === undefined || jsonProp.min === null) {
             jsonProp.min = Number.MIN_VALUE;
         }
@@ -364,6 +368,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
     
     complexItem: function(id){
         return this._complexItems[id];
-    }
+    },
+    
+    complexAttributeToView: function(){
+        return this._jsonProp.complexAttributeToView;
+    },
     // extended by Kerstin (end)
 });
