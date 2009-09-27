@@ -258,14 +258,13 @@ public class PetriNet implements Cloneable {
 		if (!isWF)
 			return isWF;
 		
-		int in = this.getNodes().indexOf(this.getInitialPlace());
-		int out = this.getNodes().indexOf(this.getFinalPlace());
+		Node in = this.getInitialPlace();
+		Node out = this.getFinalPlace();
 		for (Node n : this.getNodes()) {
-			int j = this.getNodes().indexOf(n);
-			if (j == in || j == out)
+			if (n.equals(in) || n.equals(out))
 				continue;
-			isWF &= this.getTransitiveClosure().isPath(in, j);
-			isWF &= this.getTransitiveClosure().isPath(j, out);
+			isWF &= this.getTransitiveClosure().isPath(in, n);
+			isWF &= this.getTransitiveClosure().isPath(n, out);
 		}
 		return isWF;
 	}
