@@ -264,8 +264,8 @@ public class PetriNet implements Cloneable {
 			int j = this.getNodes().indexOf(n);
 			if (j == in || j == out)
 				continue;
-			isWF &= this.transitiveClosure.isPath(in, j);
-			isWF &= this.transitiveClosure.isPath(j, out);
+			isWF &= this.getTransitiveClosure().isPath(in, j);
+			isWF &= this.getTransitiveClosure().isPath(j, out);
 		}
 		return isWF;
 	}
