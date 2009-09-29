@@ -65,6 +65,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				}
 			]
@@ -97,6 +98,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular": true,
 					"refToView":"text",
 					"wrapLines":true
 				},
@@ -126,6 +128,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},				
 				{
@@ -200,6 +203,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},
 				{
@@ -214,6 +218,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"128",
+					"popular" : true,
 					"wrapLines":true
 				},				
 				{
@@ -360,7 +365,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
+					"refToView":"text_name",
 					"length":"8"
 				},
 			]
@@ -408,6 +413,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"128",
+					"popular" : true,
 					"wrapLines":true
 				},			
 				{
@@ -432,6 +438,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},				
 				{
@@ -491,6 +498,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},			
 				{
@@ -549,6 +557,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},				
 				{
@@ -609,6 +618,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},				
 				{
@@ -667,6 +677,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},				
 				{
@@ -721,6 +732,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},					
 				{
@@ -765,6 +777,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				},		
 				{
@@ -898,15 +911,15 @@
 			},
 			{
 				"role": "ProcessInterfaceMorph",
-				"baseMorphs": ["ProcessInterface"]
+				"baseMorphs": ["ProcessInterface"],
 			},
 			{
 				"role": "OrganisationMorph",
-				"baseMorphs": ["Organization"]
+				"baseMorphs": ["Organization"],
 			},
 			{
 				"role": "DataMorph",
-				"baseMorphs": ["Data"]
+				"baseMorphs": ["Data"],
 			},
 			{
 				"role": "ConnectingObjectsMorph",
