@@ -356,7 +356,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 		var initializedDocker = 0;
 		
 		// Sort properties so that the hidden properties are first in the list
-		serialize = serialize.sort(function(a,b){ return Number(this.properties.keys().member(a.prefix+"-"+a.name)) > Number(this.properties.keys().member(b.prefix+"-"+b.name))}.bind(this));
+		serialize = serialize.sort(function(a,b){ return Number(this.properties.keys().member(a.prefix+"-"+a.name)) > Number(this.properties.keys().member(b.prefix+"-"+b.name)) ? -1 : 0 }.bind(this));
 		
 		serialize.each((function(obj){
 			
