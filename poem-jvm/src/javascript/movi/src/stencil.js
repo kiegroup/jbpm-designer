@@ -33,8 +33,9 @@ MOVI.namespace("stencilset");
      * @constructor
      * @param {Object} jsonObj The JSON object from which the new stencil
      * is created.
+     * @param {String} namespace The namespace of the stencil set that defines this stencil
      */
-	MOVI.stencilset.Stencil = function(jsonObject, propertyPackages) {
+	MOVI.stencilset.Stencil = function(jsonObject, propertyPackages, namespace) {
 		
 		// TODO: Doc for stencil attributes from JSON
 		YAHOO.lang.augmentObject(this, jsonObject, true);
@@ -65,6 +66,8 @@ MOVI.namespace("stencilset");
 				}
 			}
 		}
+		
+		this.stencilSetNamespace = namespace;
 		
 	}
 	

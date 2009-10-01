@@ -104,7 +104,7 @@ MOVI.namespace("model");
 	     */
 		_update: function() {
 			var zoomFactor = this._modelviewer.getZoomLevel() / 100;
-			var minX, minY;
+			var minX, minY, maxX, maxY;
 			for(i in this.childShapes) {
 				if(!YAHOO.lang.hasOwnProperty(this.childShapes, i)) continue;
 				
@@ -112,6 +112,11 @@ MOVI.namespace("model");
 				else minX = Math.min(minX, this.childShapes[i].getAbsBounds().upperLeft.x);
 				if(minY==undefined) minY = this.childShapes[i].getAbsBounds().upperLeft.y;
 				else minY = Math.min(minY, this.childShapes[i].getAbsBounds().upperLeft.y);
+				
+				if(maxX==undefined) maxX = this.childShapes[i].getAbsBounds().upperLeft.x;
+				else maxX = Math.max(maxX, this.childShapes[i].getAbsBounds().upperLeft.x);
+				if(maxY==undefined) maxY = this.childShapes[i].getAbsBounds().upperLeft.y;
+				else maxY = Math.max(maxY, this.childShapes[i].getAbsBounds().upperLeft.y);
 			}
 			for(i in this.childShapes) {
 				if(!YAHOO.lang.hasOwnProperty(this.childShapes, i)) continue;
@@ -122,6 +127,9 @@ MOVI.namespace("model");
 				this.childShapes[i].bounds.lowerRight.y -= minY;
 				this.childShapes[i].update();
 			}
+			if(!this.bounds || !this.bounds.upperLeft || !this.bounds.lowerRight)
+			    this.bounds = { upperLeft: {x: 0, y: 0}, lowerRight: {x: maxX-minX, y: maxY-minY}};
+			    
 			var left = (MOVI.config.MODEL_MARGIN / 2)*zoomFactor + "px";
 			var top = (MOVI.config.MODEL_MARGIN / 2)*zoomFactor + "px";
 			var width = (this._modelviewer.getImgWidth() - MOVI.config.MODEL_MARGIN)*zoomFactor + "px";

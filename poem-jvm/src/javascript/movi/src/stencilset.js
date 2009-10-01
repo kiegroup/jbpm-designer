@@ -59,7 +59,7 @@ MOVI.namespace("stencilset");
 			if(!YAHOO.lang.hasOwnProperty(jsonObj.stencils, key)) continue;
 			
 			var stencil = jsonObj.stencils[key];
-			this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil, this.propertyPackages);
+			this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil, this.propertyPackages, jsonObj.namespace);
 		}
 
 	};
@@ -103,7 +103,7 @@ MOVI.namespace("stencilset");
 		    if(jsonObj.stencils) {
 		        for(var i=0; i<jsonObj.stencils.length; i++) {
 		            var stencil = jsonObj.stencils[i];
-		            this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil, this.propertyPackages);
+		            this.stencils[stencil.id] = new MOVI.stencilset.Stencil(stencil, this.propertyPackages, jsonObj.namespace);
 		        }
 		    }
 		    
