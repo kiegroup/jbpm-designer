@@ -71,7 +71,7 @@ MOVI.namespace("widget");
 		
 		this._scrollbox.set("id", _SCROLLBOX_CLASS_NAME + this._index);
 		this._scrollbox.set("innerHTML", "<img id=\"" + _MODELIMG_CLASS_NAME + this._index + 
-							"\" alt=\"oryx model\" class=\"" + _MODELIMG_CLASS_NAME + "\" />");
+							"\" class=\"" + _MODELIMG_CLASS_NAME + "\" />");
 		
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
 		
@@ -416,17 +416,15 @@ MOVI.namespace("widget");
 			if(YAHOO.lang.isFunction(this._loadOptions.urlModificationFunction))
 			    imgUrl = this._loadOptions.urlModificationFunction.call(this._loadOptions.scope || this, imgUrl, this, "png");
 			
-			this._image.set("src", imgUrl);
-			
-			// get image size when available
-			var img = new Image();
 			var self = this;
-			img.onload = function() {
-				self._imageWidth = parseInt(self._image.getStyle("width"), 10);
-				self._imageHeight = parseInt(self._image.getStyle("height"), 10);
+			this._image.get("element").onload = function() {
+				self._imageWidth = parseInt(self._image.getStyle("width"), 10) || self._image.get("element").offsetWidth;
+				self._imageHeight = parseInt(self._image.getStyle("height"), 10) || self._image.get("element").offsetHeight;
 				self._syncLoadingReady("image"); // notify successful loading of image
 			};
-			img.src = imgUrl;
+			
+			this._image.set("src", imgUrl);
+			
 		},
 		
 		/**
@@ -535,7 +533,7 @@ MOVI.namespace("widget");
 		 * @return {Integer} The image width
 		 */
 		getImgWidth: function() {
-			return this._imageWidth;
+			return this._imageWidth || this.getScrollboxEl().get("element").offsetWidth;
 		},
 		
 		/**
@@ -544,7 +542,7 @@ MOVI.namespace("widget");
 		 * @return {Integer} The image height
 		 */
 		getImgHeight: function() {
-			return this._imageHeight;
+			return this._imageHeight || this.getScrollboxEl().get("element").offsetHeight;
 		},
 		
 		/**
@@ -671,8 +669,8 @@ MOVI.namespace("widget");
 		 * @method fitModelToViewer
 		 */
 		fitModelToViewer: function() {
-			var scaleHorizontal = (parseInt(this.getScrollboxEl().getStyle("width"), 10)-5) / this.getImgWidth();
-			var scaleVertical = (parseInt(this.getScrollboxEl().getStyle("height"), 10)-5) / this.getImgHeight();
+			var scaleHorizontal = (this.getScrollboxEl().get("offsetWidth")-5) / this.getImgWidth();
+			var scaleVertical = (this.getScrollboxEl().get("offsetHeight")-5) / this.getImgHeight();
 			var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
 			if(scale>1)	scale = 1;
 			this.setZoomLevel(scale*100);

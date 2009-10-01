@@ -15,6 +15,8 @@ MOVI.namespace("util");
 		}
 	}
 	
+	var zLevel = 50;
+	
     MOVI.util.XTooltipAnnotation = function(marker, size, onclose, scope) {
 		if (!marker) {
 			throw new TypeError("No marker given", marker);
@@ -37,7 +39,6 @@ MOVI.namespace("util");
 		var first_shape = marker.getShapes()[0];
 		var first_rect = null;
 		for(key in marker.shapeRects) {
-			if(!YAHOO.lang.hasOwnProperty(marker.shapeRects, key)) continue;
 			first_rect = marker.shapeRects[key];
 			break;
 		}
@@ -67,13 +68,13 @@ MOVI.namespace("util");
 		var marker_bounds = first_shape.getAbsBounds();
 		var tooltip_pos = {}
 
-		if (marker_bounds.upperLeft.x + size.width > canvas_bounds.lowerRight.x) {
+		if (marker_bounds.upperLeft.x + size.width > canvas_bounds.lowerRight.x && size.width < canvas_bounds.lowerRight.x) {
 			tooltip_pos.right = shape_bounds.lowerRight.x - shape_bounds.upperLeft.x - 60;
 		} else {
 			tooltip_pos.left = shape_bounds.lowerRight.x - shape_bounds.upperLeft.x - 60;
 		}
 		
-		if (marker_bounds.upperLeft.y + size.height > canvas_bounds.lowerRight.y) {
+		if (marker_bounds.upperLeft.y + size.height > canvas_bounds.lowerRight.y && size.height < canvas_bounds.lowerRight.y ) {
 			tooltip_pos.bottom = shape_bounds.lowerRight.y - shape_bounds.upperLeft.y - 20;
 		} else {
 			tooltip_pos.top = shape_bounds.lowerRight.y - shape_bounds.upperLeft.y - 20;
@@ -84,19 +85,67 @@ MOVI.namespace("util");
 		
 		first_rect.appendChild(this);
 		
+		this._marker = marker;
 		
 	}
 
 	MOVI.extend(MOVI.util.XTooltipAnnotation, YAHOO.util.Element, {
 		
 		show: function() {
+			if (this.isShown()){ return; }
+			
 			this.setStyle("display", "block");
+			this.fadeIn();
+			this.bringToFront();
 		},
 		
 		hide: function() {
-			this.setStyle("display", "none");
+			this.isHiding = true;
+			var me = this;
+			this.fadeOut(function(){
+				me.setStyle("display", "none");
+				delete me.isHiding;
+				var shapes = me._marker.getShapes()
+				if (shapes.length <= 0) {return}
+				for(key in shapes) {
+					if (shapes[key] instanceof Function || !shapes[key]){continue}
+					shapes[key].get("element").style.zIndex  = 10;
+				}
+			
+			});
+		},
+
+		toggle: function() {
+			this.isShown() ? this.hide() : this.show();
 		},
 		
+		isShown: function(){
+			return !this.isHiding && this.getStyle("display") == "block";
+		},
+		
+		fadeIn: function(){
+			
+			if(YAHOO.env.ua.ie){ return }
+			
+			this.setStyle("opacity", 0);	
+			var anim = new YAHOO.util.ColorAnim(this, { opacity: { to: 1 } }, 0.4, YAHOO.util.Easing.easeOut);
+			anim.animate();			
+		},
+		
+		fadeOut: function(fn){
+			
+			if(YAHOO.env.ua.ie){ 
+				if (fn instanceof Function) { fn() }
+				return 
+			}
+			
+			var anim = new YAHOO.util.ColorAnim(this, { opacity: { to: 0 } }, 0.4, YAHOO.util.Easing.easeOut);
+			anim.animate();
+			if (fn instanceof Function){
+				anim.onComplete.subscribe(fn) 
+			}
+		},
+				
 		update: function(html) {
 			this._content.set("innerHTML", "");
 			
@@ -105,20 +154,19 @@ MOVI.namespace("util");
 				return this;
 			}
 
-			if (html instanceof HTMLElement) { 
-				this._content.appendChild(html);
+			if ("string" == typeof(html)) { 
+				this._content.set("innerHTML", html);
 				return this;
 			};
 
-			this._content.set("innerHTML", html);
+			this._content.appendChild(html);
 			return this;
 		},
 		
 		close: function() {
 			
-			if (this._onclose) {
-				
-				this._onclose.fn(); 
+			if (this._onclose && this._onclose.fn() === false) {
+				return
 			}
 			
 			this.hide();
@@ -126,11 +174,32 @@ MOVI.namespace("util");
 			return null;
 		},
 		
+		bringToFront: function() {
+			
+			var shapes = this._marker.getShapes()
+			
+			if (shapes.length <= 0) {return}
+			var elements = this._marker.canvas.getElementsByClassName("movi-node");
+			for(key in elements) {
+				if (elements[key] instanceof Function || !elements[key]){continue}
+				elements[key].style.zIndex  = 20;
+			}
+			// set the z-index of parent marker to maximum+1
+			for(key in shapes) {
+				if (shapes[key] instanceof Function || !shapes[key]){continue}
+				var node = shapes[key].get("element");
+				while(node && node !== this._marker.canvas.get("element")){
+					node.style.zIndex  = 100;
+					node = node.parentNode;
+				}
+			} 
+		},
+		
 		_draw: function(pos, size) {
 			
-			var sprite = MOVI.util.XTooltipAnnotation.sprite || "../api/img/x-tooltip-sprite.png";
+			var sprite = MOVI.util.XTooltipAnnotation.sprite || "/talkabout/lib/movi/src/img/x-tooltip-sprite.png";
 			var margin = 20+20;     // margin, corner radius
-			var vspace = 30;     // additional height through arrow
+			var vspace = 0;     // additional height through arrow
 			var vsize = 50+20;      // vertical size of arrow
 			var hsize = 60;      // horizontal size of arrow
 			var maxsize = 1000+2*20;  // maxsize, w/o arrow
@@ -143,6 +212,9 @@ MOVI.namespace("util");
 			else { arrowpos += "s" }
 			if (undefined != pos.left) { arrowpos += "e"}
 			else { arrowpos += "w" }
+
+			// Cache the value
+			this.arrowpos = arrowpos;
 
 			// basic styling and ensure that size is within bounds
 			var bstyle = {
@@ -183,7 +255,7 @@ MOVI.namespace("util");
 						top: topspace,
 						left: ("ne" == arrowpos ? hsize : 0) + margin,
 						height: margin,
-						right: ("nw" == arrowpos ? hsize : 0) + margin,
+						right: ("nw" == arrowpos ? hsize : 0) + margin
 					},
 					img: {
 						top: 0,
@@ -273,7 +345,7 @@ MOVI.namespace("util");
 						left: 0,
 						width: margin,
 						top: topspace + margin,
-						bottom: bottomspace + margin,
+						bottom: bottomspace + margin
 					},
 
 					img: {
@@ -305,7 +377,7 @@ MOVI.namespace("util");
 				case "ne": 
 					sprite_map.arrow = {
 						div: {
-							top: 0,
+							top: -30,
 							left: margin, 
 							height: vsize,
 							width: hsize
@@ -321,7 +393,7 @@ MOVI.namespace("util");
 				case "nw": 
 					sprite_map.arrow = {
 						div: {
-							top: 0,
+							top: -30,
 							right: margin, 
 							height: vsize,
 							width: hsize
@@ -337,7 +409,7 @@ MOVI.namespace("util");
 				case "sw": 
 					sprite_map.arrow = {
 						div: {
-							bottom: 0,
+							bottom: -30,
 							right: margin, 
 							height: vsize,
 							width: hsize
@@ -353,7 +425,7 @@ MOVI.namespace("util");
 				case "se": 
 					sprite_map.arrow = {
 						div: {
-							bottom: 0,
+							bottom: -30,
 							left: margin, 
 							height: vsize,
 							width: hsize
@@ -384,7 +456,7 @@ MOVI.namespace("util");
 				div.setStyle("position", "absolute");
 				div.setStyle("overflow", "hidden");
 				for (var p in item.div) {
-					div.setStyle(p, item.div[p]+"px");
+					div.setStyle(p, typeof item.div[p] == "number" ? item.div[p]+"px" : item.div[p]);
 				};
 
 				if (i == "c") {
@@ -398,7 +470,7 @@ MOVI.namespace("util");
 				for (var p in item.img) {
 					// don't set width and height
 					if (["width", "height"].indexOf(p) == -1) {
-						img.setStyle(p, item.img[p]+"px");
+						img.setStyle(p,  typeof item.img[p] == "number" ? item.img[p]+"px" : item.img[p]);
 					}
 					
 				}
@@ -419,6 +491,7 @@ MOVI.namespace("util");
 				"cursor": "pointer"
 			})
 			
+			btn.addClass("x-tool-close")
 			btn.addListener("click", function(event, annotation) {
 				annotation.close();
 				event.stopPropagation();
@@ -437,6 +510,8 @@ MOVI.namespace("util");
 			
 			this.appendChild(this._content);
 			this.appendChild(btn);
+			
+			this.addClass("arrowpos-"+arrowpos);
 		}
 		
 	});

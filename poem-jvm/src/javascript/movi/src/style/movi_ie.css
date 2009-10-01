@@ -1,3 +1,13 @@
+
+html, body {
+	overflow:hidden;
+}
+
 .movi-scollbox {
 	overflow: scroll;
+}
+
+.movi-node {
+	background: white;
+	filter:alpha(opacity:0);
 }
