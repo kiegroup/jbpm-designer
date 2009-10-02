@@ -3,6 +3,7 @@
 .movi-scrollbox {
 	overflow: auto;
 	height: 100%;
+	width: 100%;
 	position: relative;
 	cursor: move;
 }
@@ -53,7 +54,6 @@
 	position:absolute;
 	min-width: 100px;
 	margin-top: -46px; margin-left: 13px;
-	filter: alpha(opacity:95);
 	KHTMLOpacity: 0.95;
 	MozOpacity: 0.95;
 	opacity: 0.95;

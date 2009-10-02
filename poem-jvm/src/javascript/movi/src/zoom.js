@@ -52,6 +52,7 @@ MOVI.namespace("widget");
 	 * @method _getMinZoomLevel
 	 * @private
 	 */
+
 	var _getMinZoomLevel = function(modelviewer) {		
 		var scaleHorizontal = (modelviewer.getScrollboxEl().get("offsetWidth")-5) / modelviewer.getImgWidth();
 		var scaleVertical = (modelviewer.getScrollboxEl().get("offsetHeight")-5) / modelviewer.getImgHeight();
@@ -168,7 +169,6 @@ MOVI.namespace("widget");
 		onChange: function() {
 			var minZoomLevel = _getMinZoomLevel(this.modelviewer);
 			var maxZoomLevel = 100;
-			
 			var zoomStep = (maxZoomLevel-minZoomLevel) / this.trackLength;
 			if(this.reverse)
 			    this.modelviewer.setZoomLevel(minZoomLevel + (this.trackLength - this.slider.getValue()) * zoomStep, false);

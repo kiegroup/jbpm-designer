@@ -76,7 +76,7 @@ MOVI.namespace("widget");
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
 		
 		// callbacks for model dragging
-		this.addListener("mousedown", this._onMouseDown, this, this, true);
+		this._scrollbox.addListener("mousedown", this._onMouseDown, this, this, true);
 		YAHOO.util.Event.addListener(document, "mouseup", this._onMouseUp, this, this, true);
 		
 		this._loadOptions = {};
@@ -638,11 +638,8 @@ MOVI.namespace("widget");
 				throw new TypeError("The parameter passed to have to setZoomLevel has to be of type Number.", 
 									"modelviewer.js");
 			}
-			if(percent<=0) {
-				throw new RangeError("The zoom level must be greater than 0.", "modelviewer.js");
-			} else if(percent>100) {
-				throw new RangeError("The zoom level must not be greater than 100.", "modelviewer.js");
-			}
+			if(percent<=0) percent=0;
+			else if(percent>100) percent=100;
 			
 			this._zoomLevel = percent;
 			
@@ -681,20 +678,11 @@ MOVI.namespace("widget");
 		 * @private
 		 */
 		_onMouseDown: function(ev) {
-			/*YAHOO.util.Event.preventDefault(ev);
-			this._absXY = YAHOO.util.Dom.getXY(this);
-			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
-			var modelviewerRectAbsXY = YAHOO.util.Dom.getXY(this);
-			this._mouseOffset.x = mouseAbsXY[0] - modelviewerRectAbsXY[0];
-			this._mouseOffset.y = mouseAbsXY[1] - modelviewerRectAbsXY[1];*/
-
-			if (ev.target == this._scrollbox.get("element")) { return }
-			
 			YAHOO.util.Event.preventDefault(ev);
 			YAHOO.util.Event.stopPropagation(ev);
 			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
 			this._mouseCoords = { x: mouseAbsXY[0], y: mouseAbsXY[1] };
-			this.addListener("mousemove", this._onModelDrag, this, this, true);
+			this._scrollbox.addListener("mousemove", this._onModelDrag, this, this, true);
 		},
 		
 		/**
@@ -703,7 +691,7 @@ MOVI.namespace("widget");
 		 */
 		_onMouseUp: function(ev) {
 			YAHOO.util.Event.preventDefault(ev);
-			this.removeListener("mousemove", this._onModelDrag);
+			this._scrollbox.removeListener("mousemove", this._onModelDrag);
 		},
 		
 		/**
