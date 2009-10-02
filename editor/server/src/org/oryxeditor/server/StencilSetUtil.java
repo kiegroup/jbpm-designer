@@ -15,14 +15,19 @@ public class StencilSetUtil {
 		
 		node = node.getFirstChild();
 		while (node != null) {
-			 String about = getAttributeValue(node, "rdf:about");
-			 if (about != null && about.contains("canvas")) break;
-			 node = node.getNextSibling();
+			Node typeChild = getChild(node, "rdf:type");
+			if (typeChild != null) {
+				String resource = getAttributeValue(typeChild, "rdf:resource");
+				if (resource != null && resource.equals("http://oryx-editor.org/canvas")) break;
+			}
+			node = node.getNextSibling();
 		}
-		String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
-		if (type != null)
-			return type.substring(type.lastIndexOf('/')+1);
-		
+		if (node != null) {
+			String type = getAttributeValue(getChild(node, "stencilset"), "rdf:resource");
+			if (type != null) {
+				return type.substring(type.lastIndexOf('/')+1);
+			}
+		}
 		return null;
 	}
 
