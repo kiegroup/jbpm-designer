@@ -52,9 +52,9 @@ MOVI.namespace("widget");
 	 * @method _getMinZoomLevel
 	 * @private
 	 */
-	var _getMinZoomLevel = function(modelviewer) {
-		var scaleHorizontal = (modelviewer.getScrollboxEl().get("offsetWidth")) / modelviewer.getImgWidth();
-		var scaleVertical = (modelviewer.getScrollboxEl().get("offsetHeight")) / modelviewer.getImgHeight();
+	var _getMinZoomLevel = function(modelviewer) {		
+		var scaleHorizontal = (modelviewer.getScrollboxEl().get("offsetWidth")-5) / modelviewer.getImgWidth();
+		var scaleVertical = (modelviewer.getScrollboxEl().get("offsetHeight")-5) / modelviewer.getImgHeight();
 		var scale = (scaleHorizontal < scaleVertical) ? scaleHorizontal : scaleVertical;
 		if(scale>1)	scale = 1;
 		return scale*100;

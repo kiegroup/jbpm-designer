@@ -76,7 +76,7 @@ MOVI.namespace("widget");
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
 		
 		// callbacks for model dragging
-		this._scrollbox.addListener("mousedown", this._onMouseDown, this, this, true);
+		this.addListener("mousedown", this._onMouseDown, this, this, true);
 		YAHOO.util.Event.addListener(document, "mouseup", this._onMouseUp, this, this, true);
 		
 		this._loadOptions = {};
@@ -687,6 +687,9 @@ MOVI.namespace("widget");
 			var modelviewerRectAbsXY = YAHOO.util.Dom.getXY(this);
 			this._mouseOffset.x = mouseAbsXY[0] - modelviewerRectAbsXY[0];
 			this._mouseOffset.y = mouseAbsXY[1] - modelviewerRectAbsXY[1];*/
+
+			if (ev.target == this._scrollbox.get("element")) { return }
+			
 			YAHOO.util.Event.preventDefault(ev);
 			YAHOO.util.Event.stopPropagation(ev);
 			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
