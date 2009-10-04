@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:b3mn="http://b3mn.org/2007/b3mn" xmlns:ext="http://b3mn.org/2007/ext" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:atom="http://b3mn.org/2007/atom+xhtml">
     <head profile="http://purl.org/NET/erdf/profile">
         <title>Oryx</title>
-        <!-- libraries --><script src="lib/prototype-1.5.1.js" type="text/javascript" />
+        <!-- libraries -->
+        <script src="lib/prototype-1.5.1.js" type="text/javascript" />
 		<script src="lib/path_parser.js" type="text/javascript" />
 		<script src="lib/ext-2.0.2/adapter/ext/ext-base.js" type="text/javascript" />
 		<script src="lib/ext-2.0.2/ext-all-debug.js" type="text/javascript" />
@@ -14,86 +15,95 @@
         <!-- oryx editor -->
 		<script src="i18n/translation_en_us.js" type="text/javascript"/>
 		
-		<script src="../../editor/client/scripts/clazz.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/kickstart.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/erdfparser.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/datamanager.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/config.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/oryx.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/SVG/editpathhandler.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/SVG/minmaxpathhandler.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/SVG/pointspathhandler.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/SVG/svgmarker.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/SVG/svgshape.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/SVG/label.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/Math/math.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/StencilSet/stencil.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/StencilSet/property.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/StencilSet/propertyitem.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/StencilSet/complexpropertyitem.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/StencilSet/rules.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/StencilSet/stencilset.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/StencilSet/stencilsets.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/bounds.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/uiobject.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/abstractshape.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/canvas.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/main.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/svgDrag.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/shape.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/Controls/control.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/Controls/docker.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/Controls/magnet.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/node.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Core/edge.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Core/command.js" type="text/javascript" />
-		
-	 	<script src="../../editor/client/scripts/Plugins/abstractPlugin.js" type="text/javascript" />
-        <script src="../../editor/client/scripts/Plugins/addDocker.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/addssextension.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/addstencilset.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/adHocCC.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/amlSupport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/arrangement.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/autoLayout.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/bpel2bpmn.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/bpel4chorSupport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/bpelLayout.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/bpelSupport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/bpmn1.1DiamondSwitch.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/canvasResize.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/desynchronizabilityOverlay.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/dragDocker.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/dragdropresize.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/edit.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/epc2bpmn.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/epcSupport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/erdfSupport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/file.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/grouping.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/loading.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/overlay.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/overlayexample.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/pnmlexport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/propertywindow.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/queryevaluator.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/renameShapes.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/rowlayouting.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/selectionframe.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/shapeHighlighting.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/shapemenu.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/shaperepository.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/simplepnmlexport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/stepThroughPlugin.js" type="text/javascript" />
- 		<script src="../../editor/client/scripts/Plugins/toolbar.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/transformationDownloadDialog.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/treeGraphSupport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/undo.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/view.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/xformsexport.js" type="text/javascript" />
-		<script src="../../editor/client/scripts/Plugins/xformsimport.js" type="text/javascript" />
+		<script src="scripts/clazz.js" type="text/javascript" />
+		<script src="scripts/kickstart.js" type="text/javascript" />
+		<script src="scripts/erdfparser.js" type="text/javascript" />
+		<script src="scripts/datamanager.js" type="text/javascript" />
+		<script src="scripts/config.js" type="text/javascript" />
+		<script src="scripts/oryx.js" type="text/javascript" />
+		<script src="scripts/debug.js" type="text/javascript" />
+        <script src="scripts/Core/SVG/editpathhandler.js" type="text/javascript" />
+        <script src="scripts/Core/SVG/minmaxpathhandler.js" type="text/javascript" />
+        <script src="scripts/Core/SVG/pointspathhandler.js" type="text/javascript" />
+        <script src="scripts/Core/SVG/svgmarker.js" type="text/javascript" />
+        <script src="scripts/Core/SVG/svgshape.js" type="text/javascript" />
+        <script src="scripts/Core/SVG/label.js" type="text/javascript" />
+        <script src="scripts/Core/Math/math.js" type="text/javascript" />
+        <script src="scripts/Core/StencilSet/stencil.js" type="text/javascript" />
+        <script src="scripts/Core/StencilSet/property.js" type="text/javascript" />
+        <script src="scripts/Core/StencilSet/propertyitem.js" type="text/javascript" />
+        <script src="scripts/Core/StencilSet/complexpropertyitem.js" type="text/javascript" />
+        <script src="scripts/Core/StencilSet/rules.js" type="text/javascript" />
+        <script src="scripts/Core/StencilSet/stencilset.js" type="text/javascript" />
+        <script src="scripts/Core/StencilSet/stencilsets.js" type="text/javascript" />
+        <script src="scripts/Core/bounds.js" type="text/javascript" />
+        <script src="scripts/Core/uiobject.js" type="text/javascript" />
+        <script src="scripts/Core/abstractshape.js" type="text/javascript" />
+        <script src="scripts/Core/canvas.js" type="text/javascript" />
+        <script src="scripts/Core/main.js" type="text/javascript" />
+        <script src="scripts/Core/svgDrag.js" type="text/javascript" />
+        <script src="scripts/Core/shape.js" type="text/javascript" />
+        <script src="scripts/Core/Controls/control.js" type="text/javascript" />
+        <script src="scripts/Core/Controls/docker.js" type="text/javascript" />
+        <script src="scripts/Core/Controls/magnet.js" type="text/javascript" />
+        <script src="scripts/Core/node.js" type="text/javascript" />
+        <script src="scripts/Core/edge.js" type="text/javascript" />
+		<script src="scripts/Core/command.js" type="text/javascript" />		
+	 	<script src="scripts/Core/abstractPlugin.js" type="text/javascript" />
+	 	
+        <script src="scripts/Plugins/addDocker.js" type="text/javascript" />
+		<script src="scripts/Plugins/addssextension.js" type="text/javascript" />
+		<script src="scripts/Plugins/addstencilset.js" type="text/javascript" />
+		<script src="scripts/Plugins/adHocCC.js" type="text/javascript" />
+		<script src="scripts/Plugins/amlSupport.js" type="text/javascript" />
+		<script src="scripts/Plugins/arrangement.js" type="text/javascript" />
+		<script src="scripts/Plugins/autoLayout.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpel2bpmn.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpel4chorSupport.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpelLayout.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpelSupport.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpmn11.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpmn2bpel.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpmnplus2bpel4chor.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpmnplusLayout.js" type="text/javascript" />
+		<script src="scripts/Plugins/bpmnplusSerialization.js" type="text/javascript" />
+		<script src="scripts/Plugins/canvasResize.js" type="text/javascript" />
+		<script src="scripts/Plugins/desynchronizabilityOverlay.js" type="text/javascript" />
+		<script src="scripts/Plugins/dragDocker.js" type="text/javascript" />
+		<script src="scripts/Plugins/dragdropresize.js" type="text/javascript" />
+		<script src="scripts/Plugins/edit.js" type="text/javascript" />
+		<script src="scripts/Plugins/epc2bpmn.js" type="text/javascript" />
+		<script src="scripts/Plugins/epcSupport.js" type="text/javascript" />
+		<script src="scripts/Plugins/erdfSupport.js" type="text/javascript" />
+		<script src="scripts/Plugins/file.js" type="text/javascript" />
+		<script src="scripts/Plugins/grouping.js" type="text/javascript" />
+		<script src="scripts/Plugins/ibpmn2bpmn.js" type="text/javascript" />
+		<script src="scripts/Plugins/jsonSupport.js" type="text/javascript" />
+		<script src="scripts/Plugins/keysMove.js" type="text/javascript" />
+		<script src="scripts/Plugins/loading.js" type="text/javascript" />
+		<script src="scripts/Plugins/overlay.js" type="text/javascript" />
+		<script src="scripts/Plugins/overlayexample.js" type="text/javascript" />
+		<script src="scripts/Plugins/pnmlexport.js" type="text/javascript" />
+		<script src="scripts/Plugins/propertywindow.js" type="text/javascript" />
+		<script src="scripts/Plugins/queryevaluator.js" type="text/javascript" />
+		<script src="scripts/Plugins/renameShapes.js" type="text/javascript" />
+		<script src="scripts/Plugins/rowlayouting.js" type="text/javascript" />
+		<script src="scripts/Plugins/selectionframe.js" type="text/javascript" />
+		<script src="scripts/Plugins/shapeHighlighting.js" type="text/javascript" />
+		<script src="scripts/Plugins/shapemenu.js" type="text/javascript" />
+		<script src="scripts/Plugins/shaperepository.js" type="text/javascript" />
+		<script src="scripts/Plugins/simplepnmlexport.js" type="text/javascript" />
+		<script src="scripts/Plugins/stepThroughPlugin.js" type="text/javascript" />
+ 		<script src="scripts/Plugins/toolbar.js" type="text/javascript" />
+		<script src="scripts/Plugins/transformationDownloadDialog.js" type="text/javascript" />
+		<script src="scripts/Plugins/treeGraphSupport.js" type="text/javascript" />
+		<script src="scripts/Plugins/undo.js" type="text/javascript" />
+		<script src="scripts/Plugins/view.js" type="text/javascript" />
+		<script src="scripts/Plugins/xformsexport.js" type="text/javascript" />
+		<script src="scripts/Plugins/xformsimport.js" type="text/javascript" />
 
         <link rel="Stylesheet" media="screen" href="css/theme_norm.css" type="text/css" />
+        
         <!-- erdf schemas -->
         <link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
         <link rel="schema.dcTerms" href="http://purl.org/dc/terms/ " />
@@ -101,7 +111,9 @@
         <link rel="schema.oryx" href="http://oryx-editor.org/" />
         <link rel="schema.raziel" href="http://raziel.org/" />
     </head>
+    
     <body style="display: block; overflow: hidden;">
+      <!-- The URL field restricts editor_debug.xhtml to a tomcat environment. Access via "file://" is not possible -->
       <script type='text/javascript'>
           function onOryxResourcesLoaded(){
             new ORYX.Editor({
