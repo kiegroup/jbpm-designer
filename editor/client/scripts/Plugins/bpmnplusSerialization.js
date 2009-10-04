@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2008-2009
- * Oliver Kopp, Sven Wagner-Boysen
+ * Kerstin Pfitzner, Oliver Kopp, Sven Wagner-Boysen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -88,7 +88,7 @@ ORYX.Plugins.BPMNPlusSerialization = {
 	 * The handler to serialize a bpmnplus variable
 	 * 
 	 * @param {Object} event
-	 * 		The serilization event to handle
+	 * 		The serialization event to handle
 	 */
 	handleSerializeVariable: function(event) {
 		var shape = event.shape;
@@ -173,7 +173,7 @@ ORYX.Plugins.BPMNPlusSerialization = {
 	 * The handle to serialize any kind of data object
 	 * 
 	 * @param {Object} event
-	 * 		The serilization event
+	 * 		The serialization event
 	 */
 	handleSerializeDataObject : function(event) {
 		var shape = event.shape;

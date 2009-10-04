@@ -154,7 +154,7 @@ ORYX.I18N.BPEL4ChorSupport.impFailed = "Während des Importierens ist ein Fehler
 
 if(!ORYX.I18N.Bpel4ChorTransformation) ORYX.I18N.Bpel4ChorTransformation = {};
 
-ORYX.I18N.Bpel4ChorTransformation.group = "BPEL4Chor";
+ORYX.I18N.Bpel4ChorTransformation.group = "Export";
 ORYX.I18N.Bpel4ChorTransformation.exportBPEL = "BPEL4Chor Export";
 ORYX.I18N.Bpel4ChorTransformation.exportBPELDesc = "Exportieren nach BPEL4Chor";
 ORYX.I18N.Bpel4ChorTransformation.exportXPDL = "XPDL4Chor Export";
