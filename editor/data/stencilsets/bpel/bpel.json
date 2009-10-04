@@ -3,7 +3,7 @@
    	"title_de":"WS-BPEL-Prozess",
 	"namespace":"http://b3mn.org/stencilset/bpel#",
 	"description":"The stencil set for a WS-BPEL 2.0 Process",
- 	"description_de":"Schablonen für WS-BPEL-2.0-Prozesse",
+ 	"description_de":"Schablonen für einen WS-BPEL-2.0-Prozess",
 	"stencils" : [
  		{
 			"type":"node",

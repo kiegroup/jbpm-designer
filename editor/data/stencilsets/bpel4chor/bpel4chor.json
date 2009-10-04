@@ -2,8 +2,8 @@
 	"title":"BPEL4Chor",
    	"title_de":"BPEL4Chor",
 	"namespace":"http://b3mn.org/stencilset/bpel4chor#",
-	"description":"The stencil set for a Bpel4Chor Process",
- 	"description_de":"Schablonen für Bpel4Chor-Prozesse",
+	"description":"The stencil set for a BPEL4Chor Choreography",
+ 	"description_de":"Schablonen für eine BPEL4Chor-Choreographiebeschreibung",
 	"stencils" : [
  		{
 			"type":"node",
