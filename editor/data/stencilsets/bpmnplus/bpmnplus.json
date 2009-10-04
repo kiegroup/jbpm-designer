@@ -142,59 +142,8 @@
 			"roles": [
 				"fromtoall"				
 			],
-			/*"layout":function(shape) {	
-				var lanes = shape.getChildNodes(false).findAll(function(node) {
-					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmnplus#Lane");
-				});
-				
-				if(lanes.length > 0) {
-					lanes = lanes.sortBy(function(lane) {
-						return lane.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var shapeHeight = 0;
-					lanes.each(function(lane) {
-						var ul = lane.bounds.upperLeft();
-						var lr = lane.bounds.lowerRight();
-						ul.y = shapeHeight;
-						lr.y = ul.y + lane.bounds.height();
-						shapeHeight += lane.bounds.height();
-						ul.x = 30;
-						lr.x = shapeWidth;
-						lane.bounds.set(ul, lr);
-					});
-					
-					var upl = shape.bounds.upperLeft();
-					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight);
-					
-					// set label at the middle
-					shape.getLabels().each(function(label) {
-						label.y = shapeHeight / 2;
-						label.x = 12;
-					});
-				}
- 			},*/
  			"layout": [{'type': 'layout.bpmnplus.pool'}],
  			"serialize": {'type':'serialize.bpmnplus.pool'},
- 			/*"serialize":function(shape, data) {
- 				var poolId = shape.resourceId;
-				
-				var processId = shape.properties["oryx-processid"];
-				if (processId == "") {
-					processId = poolId + "_process";
-					var processRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "processid") {
-							processRec = data[i];
-							break;
-						}
-					}
-					processRec.value=processId;
-				}
-				
-				return data;	
-			},*/
 			"properties": [
 
 				{
@@ -707,73 +656,8 @@
 			"roles": [
 				"fromtoall"				
 			],
-			/*"layout":function(shape) {		
-				var lanes = shape.getChildNodes(false).findAll(function(node) {
-					return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmnplus#Lane");
-				});
-				
-				if(lanes.length > 0) {
-				
-					lanes = lanes.sortBy(function(lane) {
-						return lane.bounds.upperLeft().y;
-					});
-					
-					var shapeWidth = shape.bounds.width();
-					var laneWidth = shapeWidth * 500 / 515;
-					
-					// calculate height based on the contained lanes
-					var oldShapeHeight = 0;
-					lanes.each(function(lane) {
-						oldShapeHeight += lane.bounds.height();
-					});
-					
-					// calculate new height based on the pool set shade
-					var newShapeHeight = oldShapeHeight * 315 / 300;					
-					var diff = newShapeHeight - oldShapeHeight;
-					
-					// calculate lane bounds
-					var shapeHeight = diff;
-					lanes.each(function(lane) {
-						var ul = lane.bounds.upperLeft();
-						var lr = lane.bounds.lowerRight();
-						ul.y = shapeHeight;
-						lr.y = ul.y + lane.bounds.height();
-						shapeHeight += lane.bounds.height();
-						ul.x = 30;
-						lr.x = laneWidth;
-						lane.bounds.set(ul, lr);
-					});
-					
-					// calculate shape bounds
-					var upl = shape.bounds.upperLeft();
-					shape.bounds.set(upl.x, upl.y, shape.bounds.lowerRight().x, upl.y + shapeHeight);
-					
-					// set labels at the middle
-					shape.getLabels().each(function(label) {
-						label.y = shapeHeight / 2;
-						label.x = 12;
-					});
-				}
- 			},
- 			"serialize":function(shape, data) {
-				var poolId = shape.resourceId;
-				
-				var processId = shape.properties["oryx-processid"];
-				if (processId == "") {
-					processId = poolId + "_process";
-					var processRec;
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].name == "processid") {
-							processRec = data[i];
-							break;
-						}
-					}
-					processRec.value=processId;
-				}
-				return data;	
-			},*/
 			"layout": [{"type":"layout.bpmnplus.poolset"}],
-			"serialize" : {"type": "seriliaze.bpmnplus.pool"},
+			"serialize" : {"type": "serialize.bpmnplus.pool"},
 			"properties": [
 
 				{
@@ -8267,83 +8151,6 @@
 			"roles": [
 				"fromtoall"
 			],
-			/*"serialize":function(shape, data) {
-
-				
-				// serialize pool, poolSet, process and subProcess
-				var parent = shape.getParentShape();
-				var subProcess = false;
-				while(parent.getParentShape != undefined) {
-					if ((parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Scope") || 
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#FaultHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#CompensationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TerminationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
-						// determine oryx-subprocess
-						var id = parent.resourceId;
-						if (id == "") {
-							id = parent.resourceId;
-							if (id == undefined) {
-								id = "";
-							}
-						}
-						if (!subProcess) {
-							data.push({
-								name:"subprocess",
-							 	prefix:"oryx",				 
-							 	value:id,
-								type:"literal"
-							});										
-							subProcess = true;
-						}
-						parent = parent.getParentShape();					
-					} else if (	(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") ||
-								(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#PoolSet")) {
-						// generate pool and process
-						var name;
-						if (parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") {
-							name = "pool";
-						} else {
-							name = "poolset";
-						}
-						
-						var poolId = parent.resourceId;
-						if (poolId == "") {
-							poolId = parent.resourceId;
-							if (poolId == undefined) {
-								poolId = "";
-							}
-						}
-						
-						data.push({
-							name:name,
-						 	prefix:"oryx",				 
-						 	value:poolId,
-							type:"literal"
-						});
-								
-						if (!subProcess) {
-							var processId = parent.properties["oryx-processid"];
-							if (processId == "") {
-								processId = poolId + "_process";
-							}
-							data.push({
-								name:"process",
-							 	prefix:"oryx",				 
-							 	value:processId,
-								type:"literal"
-							});
-						}
-												
-						break;
-					} else {
-						parent = parent.getParentShape();
-					}
-				}
-				
-				return data;
-			},*/
 			"serialize" : {"type":"serialize.bpmnplus.variable"},
 			"properties": [
 
@@ -8748,84 +8555,6 @@
 				"tc"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.variable"},
-			/*"serialize":function(shape, data) {
-			
-
-				
-				// serialize pool, poolSet, process and subProcess
-				var parent = shape.getParentShape();
-				var subProcess = false;
-				while(parent.getParentShape != undefined) {
-					if ((parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Scope") || 
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#FaultHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#CompensationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TerminationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
-						// determine oryx-subprocess
-						var id = parent.resourceId;
-						if (id == "") {
-							id = parent.resourceId;
-							if (id == undefined) {
-								id = "";
-							}
-						}
-						if (!subProcess) {
-							data.push({
-								name:"subprocess",
-							 	prefix:"oryx",				 
-							 	value:id,
-								type:"literal"
-							});										
-							subProcess = true;
-						}
-						parent = parent.getParentShape();					
-					} else if (	(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") ||
-								(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#PoolSet")) {
-						// generate pool and process
-						var name;
-						if (parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") {
-							name = "pool";
-						} else {
-							name = "poolset";
-						}
-						
-						var poolId = parent.resourceId;
-						if (poolId == "") {
-							poolId = parent.resourceId;
-							if (poolId == undefined) {
-								poolId = "";
-							}
-						}
-						
-						data.push({
-							name:name,
-						 	prefix:"oryx",				 
-						 	value:poolId,
-							type:"literal"
-						});
-								
-						if (!subProcess) {
-							var processId = parent.properties["oryx-processid"];
-							if (processId == "") {
-								processId = poolId + "_process";
-							}
-							data.push({
-								name:"process",
-							 	prefix:"oryx",				 
-							 	value:processId,
-								type:"literal"
-							});
-						}
-												
-						break;
-					} else {
-						parent = parent.getParentShape();
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -9023,83 +8752,6 @@
 				"tc"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.variable"},
-			/*"serialize":function(shape, data) {
-
-				
-				// serialize pool, poolSet, process and subProcess
-				var parent = shape.getParentShape();
-				var subProcess = false;
-				while(parent.getParentShape != undefined) {
-					if ((parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Scope") || 
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#FaultHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#CompensationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TerminationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
-						// determine oryx-subprocess
-						var id = parent.resourceId;
-						if (id == "") {
-							id = parent.resourceId;
-							if (id == undefined) {
-								id = "";
-							}
-						}
-						if (!subProcess) {
-							data.push({
-								name:"subprocess",
-							 	prefix:"oryx",				 
-							 	value:id,
-								type:"literal"
-							});										
-							subProcess = true;
-						}
-						parent = parent.getParentShape();					
-					} else if (	(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") ||
-								(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#PoolSet")) {
-						// generate pool and process
-						var name;
-						if (parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") {
-							name = "pool";
-						} else {
-							name = "poolset";
-						}
-						
-						var poolId = parent.resourceId;
-						if (poolId == "") {
-							poolId = parent.resourceId;
-							if (poolId == undefined) {
-								poolId = "";
-							}
-						}
-						
-						data.push({
-							name:name,
-						 	prefix:"oryx",				 
-						 	value:poolId,
-							type:"literal"
-						});
-								
-						if (!subProcess) {
-							var processId = parent.properties["oryx-processid"];
-							if (processId == "") {
-								processId = poolId + "_process";
-							}
-							data.push({
-								name:"process",
-							 	prefix:"oryx",				 
-							 	value:processId,
-								type:"literal"
-							});
-						}
-												
-						break;
-					} else {
-						parent = parent.getParentShape();
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -9296,84 +8948,6 @@
 				"fromtoall"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.variable"},
-			/*"serialize":function(shape, data) {
-
-				
-				// serialize pool, poolSet, process and subProcess
-				var parent = shape.getParentShape();
-				var subProcess = false;
-				while(parent.getParentShape != undefined) {
-					if ((parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Scope") || 
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#FaultHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#CompensationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TerminationHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#MessageHandler") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#TimerHandler")) {
-						// determine oryx-subprocess
-						var id = parent.resourceId;
-						if (id == "") {
-							id = parent.resourceId;
-							if (id == undefined) {
-								id = "";
-							}
-						}
-						
-						if (!subProcess) {
-							data.push({
-								name:"subprocess",
-							 	prefix:"oryx",				 
-							 	value:id,
-								type:"literal"
-							});										
-							subProcess = true;
-						}
-						parent = parent.getParentShape();					
-					} else if (	(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") ||
-								(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#PoolSet")) {
-						// generate pool and process
-						var name;
-						if (parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") {
-							name = "pool";
-						} else {
-							name = "poolset";
-						}
-						
-						var poolId = parent.resourceId;
-						if (poolId == "") {
-							poolId = parent.resourceId;
-							if (poolId == undefined) {
-								poolId = "";
-							}
-						}
-						
-						data.push({
-							name:name,
-						 	prefix:"oryx",				 
-						 	value:poolId,
-							type:"literal"
-						});
-								
-						if (!subProcess) {
-							var processId = parent.properties["oryx-processid"];
-							if (processId == "") {
-								processId = poolId + "_process";
-							}
-							data.push({
-								name:"process",
-							 	prefix:"oryx",				 
-							 	value:processId,
-								type:"literal"
-							});
-						}
-												
-						break;
-					} else {
-						parent = parent.getParentShape();
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -9533,45 +9107,6 @@
 				"tc"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.dataobject"},
-			/*"serialize":function(shape, data) {
-
-				
-				// serialize pool or poolSet
-				var parent = shape.getParentShape();		
-				while(parent.getParentShape != undefined) {
-					if ((parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#PoolSet")) {
-						// generate pool and process
-						var name;
-						if (parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") {
-							name = "pool";
-						} else {
-							name = "poolset";
-						}
-						
-						var poolId = parent.resourceId;
-						if (poolId == "") {
-							poolId = parent.resourceId;
-							if (poolId == undefined) {
-								poolId = "";
-							}
-						}
-						
-						data.push({
-							name:name,
-						 	prefix:"oryx",				 
-						 	value:poolId,
-							type:"literal"
-						});													
-												
-						break;
-					} else {
-						parent = parent.getParentShape();
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -9768,45 +9303,6 @@
 				"tc"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.dataobject"},
-			/*"serialize":function(shape, data) {
-
-				
-				// serialize pool or poolSet
-				var parent = shape.getParentShape();				
-				while(parent.getParentShape != undefined) {
-					if ((parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") ||
-						(parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#PoolSet")) {
-						// generate pool and process
-						var name;
-						if (parent.getStencil().id() == "http://b3mn.org/stencilset/bpmnplus#Pool") {
-							name = "pool";
-						} else {
-							name = "poolset";
-						}
-						
-						var poolId = parent.resourceId;
-						if (poolId == "") {
-							poolId = parent.resourceId;
-							if (poolId == undefined) {
-								poolId = "";
-							}
-						}
-						
-						data.push({
-							name:name,
-						 	prefix:"oryx",				 
-						 	value:poolId,
-							type:"literal"
-						});													
-												
-						break;
-					} else {
-						parent = parent.getParentShape();
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -11024,38 +10520,6 @@
 				"fromtoall"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.attachedevent"},
-			/*"serialize":function(shape, data) {
-
-				
-				var attached;
-				var incomingShapes = shape.getIncomingShapes();
-				incomingShapes.each(function(next) { 
-					var roles = next.getStencil().roles();						
-					for (var i = 0; i < roles.length; i++) {
-						if (roles[i] == next.getStencil().namespace() + "attachmentAllowed") {
-							attached = next;
-							break;
-						}
-					}
-				});
-
-				if (attached != undefined) {
-					var attachedId = attached.resourceId;
-					if (attachedId == "") {
-						attachedId = attached.resourceId;
-					}
-					if (attachedId != undefined) {
-						data.push({
-							name:"target",
-						 	prefix:"oryx",				 
-						 	value:attachedId,
-					 		type:"literal"
-						});
-					}
-			 	}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -11210,38 +10674,6 @@
 				"tc"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.attachedevent"},
-			/*"serialize":function(shape, data) {
-
-				
-				var attached;
-				var incomingShapes = shape.getIncomingShapes();
-				incomingShapes.each(function(next) { 
-					var roles = next.getStencil().roles();						
-					for (var i = 0; i < roles.length; i++) {
-						if (roles[i] == next.getStencil().namespace() + "attachmentAllowed") {
-							attached = next;
-							break;
-						}
-					}
-				});
-
-				if (attached != undefined) {
-					var attachedId = attached.resourceId;
-					if (attachedId == "") {
-						attachedId = attached.resourceId;
-					}
-					if (attachedId != undefined) {
-						data.push({
-							name:"target",
-						 	prefix:"oryx",				 
-						 	value:attachedId,
-					 		type:"literal"
-						});
-					}
-			 	}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -11398,38 +10830,6 @@
 				"fromtoall"
 			],
 			"serialize" : {"type":"serialize.bpmnplus.attachedevent"},
-			/*"serialize":function(shape, data) {
-
-				
-				var attached;
-				var incomingShapes = shape.getIncomingShapes();
-				incomingShapes.each(function(next) { 
-					var roles = next.getStencil().roles();						
-					for (var i = 0; i < roles.length; i++) {
-						if (roles[i] == next.getStencil().namespace() + "attachmentAllowed") {
-							attached = next;
-							break;
-						}
-					}
-				});
-
-				if (attached != undefined) {
-					var attachedId = attached.resourceId;
-					if (attachedId == "") {
-						attachedId = attached.resourceId;
-					}
-					if (attachedId != undefined) {
-						data.push({
-							name:"target",
-						 	prefix:"oryx",				 
-						 	value:attachedId,
-					 		type:"literal"
-						});
-					}
-			 	}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -11938,67 +11338,6 @@
 			"roles": [
 			],
 			"serialize" : {"type":"serialize.bpmnplus.unidirectedassociation"},
-			/*"serialize":function(shape, data) {
-				var sources = shape.getIncomingShapes();
-				var switched = false;
-				if (sources.length > 0) {
-					var source = sources[0];
-					// determine oryx-source
-					var type = source.getStencil().id();
-					var id = source.resourceId;
-					var name;
-					if (type == "http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#MessageVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#CounterVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#ParticipantReferenceDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#ParticipantSetDataObject") {
-						name = "target";
-						switched = true;
-					} else {
-						name = "source";
-					}
-					data.push({
-							name:"direction",
-						 	prefix:"oryx",
-						 	value:"None",
-						 	type:"literal",
-						});
-					
-					if (id != undefined) {
-						data.push({
-								name:name,
-							 	prefix:"oryx",
-							 	value:id,
-							 	type:"literal"
-						});
-					}
-				}
-
-				// determine oryx-target
-				var targets = shape.getOutgoingShapes();
-				if (targets.length > 0) {
-					var target = targets[0];
-					var id = target.resourceId;
-					var name;
-					if (switched) {
-						name = "source";
-					} else {
-						name = "target";
-					}
-
-					if (id != undefined) {
-						data.push({
-							name:name,
-						 	prefix:"oryx",
-						 	value:id,
-						 	type:"literal"
-						});
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -12048,76 +11387,6 @@
 			"roles": [
 			],
 			"serialize" : {"type":"serialize.bpmnplus.directedassociation"},
-			/*"serialize":function(shape, data) {
-
-				
-				var sources = shape.getIncomingShapes();
-				var switched = false;
-				if (sources.length > 0) {
-					var source = sources[0];
-					// determine oryx-direction and oryx-source
-					var type= source.getStencil().id();
-					var id = source.resourceId;
-					var name;
-					if (type == "http://b3mn.org/stencilset/bpmnplus#StandardVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#FaultVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#MessageVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#CounterVariableDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#ParticipantReferenceDataObject" ||
-						type == "http://b3mn.org/stencilset/bpmnplus#ParticipantSetDataObject") {
-						data.push({
-							name:"direction",
-						 	prefix:"oryx",
-						 	value:"To",
-						 	type:"literal"
-						});
-						name = "target";
-						switched = true;
-					} else {
-						data.push({
-							name:"direction",
-						 	prefix:"oryx",
-						 	value:"From",
-						 	type:"literal"
-						});
-						name="source";
-					}
-					if (id != undefined) {
-						data.push({
-								name:name,
-							 	prefix:"oryx",
-							 	value:id,
-							 	type:"literal"
-						});
-					}
-				}											
-				
-				// determine oryx-target
-				var targets = shape.getOutgoingShapes();
-				if (targets.length > 0) {
-					var target = targets[0];
-					var id = target.resourceId;
-					if (id == "") {
-						id = target.resourceId;
-					}
-					var name;
-					if (switched) {
-						name = "source";
-					} else {
-						name = "target";
-					}
-					if (id != undefined) {
-						data.push({
-							name:name,
-						 	prefix:"oryx",
-						 	value:id,
-						 	type:"literal"
-						});
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
@@ -12167,38 +11436,6 @@
 			"roles": [
 			],
 			"serialize" : {"type":"serialize.bpmnplus.messageflow"},
-			/*"serialize":function(shape, data) {
-
-				var sources = shape.getIncomingShapes();
-				if (sources.length > 0) {
-					var source = sources[0];
-					var id = source.resourceId;
-					if (id != undefined) {
-						data.push({
-							name:"source",
-						 	prefix:"oryx",
-						 	value:id,
-						 	type:"literal"
-						});
-					}
-				}
-				
-				var targets = shape.getOutgoingShapes();
-				if (targets.length > 0) {
-					var target = targets[0];
-					var id = target.resourceId;
-					if (id != undefined) {
-						data.push({
-							name:"target",
-						 	prefix:"oryx",
-						 	value:id,
-						 	type:"literal"
-						});
-					}
-				}
-				
-				return data;
-			},*/
 			"properties": [
 
 				{
