@@ -43,7 +43,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -212,7 +212,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -959,7 +959,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -1676,7 +1676,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -2385,7 +2385,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -2648,7 +2648,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -2874,7 +2874,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -3078,7 +3078,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -3320,7 +3320,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -4365,7 +4365,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -4469,7 +4469,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -4569,7 +4569,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -4671,7 +4671,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -4862,7 +4862,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -5044,7 +5044,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -5268,7 +5268,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -5472,7 +5472,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -5665,7 +5665,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -5869,7 +5869,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -6066,7 +6066,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -6263,7 +6263,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -6500,7 +6500,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -6739,7 +6739,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -6956,7 +6956,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -7161,7 +7161,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -7353,7 +7353,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -7558,7 +7558,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -7766,7 +7766,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -7974,7 +7974,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -8192,7 +8192,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -8412,7 +8412,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -8619,7 +8619,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -8824,7 +8824,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -9039,7 +9039,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -9255,7 +9255,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -9435,7 +9435,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -9657,7 +9657,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -9846,7 +9846,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -10025,7 +10025,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -10216,7 +10216,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -10406,7 +10406,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -10585,7 +10585,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -10757,7 +10757,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -10910,7 +10910,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -11010,7 +11010,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -11108,7 +11108,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
@@ -11206,7 +11206,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"String",
+					"type":"Text",
 					"title":"Documentation",
 					"title_de":"Dokumentation",
 					"value":"",
