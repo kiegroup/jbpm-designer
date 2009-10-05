@@ -628,7 +628,7 @@
 		},
 		{
 			"type": "node",
-			"id":"IT System",
+			"id":"System",
 			"title":"IT System",
 			"title_de":"IT-System",
 			"groups":[],
