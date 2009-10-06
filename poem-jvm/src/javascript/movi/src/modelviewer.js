@@ -78,7 +78,7 @@ MOVI.namespace("widget");
 		// callbacks for model dragging
 		this._scrollbox.addListener("mousedown", this._onMouseDown, this, this, true);
 		YAHOO.util.Event.addListener(document, "mouseup", this._onMouseUp, this, this, true);
-		
+
 		this._loadOptions = {};
     };
 
@@ -680,6 +680,7 @@ MOVI.namespace("widget");
 		_onMouseDown: function(ev) {
 			YAHOO.util.Event.preventDefault(ev);
 			YAHOO.util.Event.stopPropagation(ev);
+			this._scrollbox.removeListener("mousemove", this._onModelDrag);
 			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
 			this._mouseCoords = { x: mouseAbsXY[0], y: mouseAbsXY[1] };
 			this._scrollbox.addListener("mousemove", this._onModelDrag, this, this, true);
