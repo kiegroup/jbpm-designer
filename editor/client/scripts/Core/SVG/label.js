@@ -259,6 +259,15 @@ ORYX.Core.SVG.Label = Clazz.extend({
 						tspan.setAttributeNS(null, 'x', this.invisibleRenderPoint);
 						tspan.setAttributeNS(null, 'y', this.invisibleRenderPoint);
 						
+						/*
+						 * Chrome's getBBox() method fails, if a text node contains an empty tspan element.
+						 * So, we add a whitespace to such a tspan element.
+						 */
+						if(tspan.textContent === "") {
+							console.log("adding space");
+							tspan.textContent = " ";
+						}
+						
 						//append tspan to text node
 						this.node.appendChild(tspan);
 					}).bind(this));
