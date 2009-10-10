@@ -1,0 +1,125 @@
+{
+	"title":"Extended Petrinet Extension",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/extendedpetrinets#",
+	"description":"Extended Petrinets contain Reset and Inhibitor Arcs",
+	"definition":"extendedpetrinets/extendedpetrinets.json",
+	"extends":"http://b3mn.org/stencilset/petrinet#",
+	"stencils":[	
+		{
+			"type": "edge",
+			"id":"InhibitorArc",
+			"title":"Inhibitor Arc",
+			"description":"Inhibits the firing of the target sequence, if a token is present in the source place.",
+			"groups":[],
+			"view":"connection.inhibitor.svg",
+			"icon":"connection.inhibitor.png",
+			"roles": [
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},					
+				{
+					"id":"label",
+					"type":"String",
+					"title":"Label",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":""
+				},
+				{
+					"id":"transformation",
+					"type":"String",
+					"title":"Transformation href",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"ResetArc",
+			"title":"Reset Arc",
+			"description":"A reset Arc",
+			"groups":[],
+			"view":"connection.reset.svg",
+			"icon":"connection.reset.png",
+			"roles": [
+				"fromtoall"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"This is a unique Id that distinguishes the Diagram from other Diagrams.",
+					"readonly":false,
+					"optional":false,
+					"length":"50"
+				},					
+				{
+					"id":"label",
+					"type":"String",
+					"title":"Label",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":""
+				},
+				{
+					"id":"transformation",
+					"type":"String",
+					"title":"Transformation href",
+					"value":"",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}				
+			]
+		}
+	],	
+	"rules": {
+		"connectionRules": [
+			{
+				"role":"Inhibitor-Arc",
+				"connects": [
+					{
+						"from":"place",
+						"to":["transition"]
+					}
+				]
+			},
+			{
+				"role":"Reset-Arc",
+				"connects": [
+					{
+						"from":"place",
+						"to":["transition"]
+					}
+				]
+			}	
+		]
+	}
+}
