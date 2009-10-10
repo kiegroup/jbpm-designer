@@ -5,8 +5,9 @@
 	oryx:edge="edge" >
 	<defs>
 
-	  	<marker id="end" refX="15" refY="5" markerUnits="userSpaceOnUse" markerWidth="15" markerHeight="10" orient="auto">
-	  		<path d="M 0 0 L 15 5 L 0 10 L 0 0" fill="black" stroke="black" />
+	  	<marker id="end" refX="20" refY="5" markerUnits="userSpaceOnUse" markerWidth="20" markerHeight="10" orient="auto">
+			<path d="M 0 0  L 10 5 L 0 10  L 0 0"  fill="black" stroke="black" />
+			<path d="M 10 0 L 20 5 L 10 10 L 10 0"  fill="black" stroke="black" />
 	  	</marker>
 	</defs>
 	<g>

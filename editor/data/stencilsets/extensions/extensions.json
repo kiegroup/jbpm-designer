@@ -1,6 +1,13 @@
 {
 	"extensions": [
 		{
+			"title":"Extended Petrinet Extension",
+			"namespace":"http://oryx-editor.org/stencilsets/extensions/extendedpetrinets#",
+			"description":"Extended Petrinets contain Reset and Inhibitor Arcs",
+			"definition":"extendedpetrinets/extendedpetrinets.json",
+			"extends":"http://b3mn.org/stencilset/petrinet#"
+		},
+		{
 			"title":"BPMN Cost Extension",
 			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmncosts#",
 			"description":"BPMN 1.1 extension for adding a cost attribute to activities",

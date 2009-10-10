@@ -5,8 +5,8 @@
 	oryx:edge="edge" >
 	<defs>
 
-	  	<marker id="end" refX="4" refY="4" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto">
-	  		<circle cx="4" cy="4" r="4" stroke="black" fill="white" stroke-width="1"/> 
+	  	<marker id="end" refX="10" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+	  		<circle cx="5" cy="5" r="5" stroke="black" fill="white" stroke-width="1"/> 
 	  	</marker>
 	</defs>
 	<g>

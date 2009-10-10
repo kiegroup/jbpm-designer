@@ -10,13 +10,13 @@
   <defs></defs>
   <oryx:magnets>
   	<oryx:magnet oryx:cx="1" oryx:cy="20" oryx:anchors="left" />
-  	<oryx:magnet oryx:cx="40" oryx:cy="39" oryx:anchors="bottom" />
-  	<oryx:magnet oryx:cx="79" oryx:cy="20" oryx:anchors="right" />
-  	<oryx:magnet oryx:cx="40" oryx:cy="1" oryx:anchors="top" />
-	<oryx:magnet oryx:cx="40" oryx:cy="20" oryx:default="yes" />
+  	<oryx:magnet oryx:cx="20" oryx:cy="39" oryx:anchors="bottom" />
+  	<oryx:magnet oryx:cx="39" oryx:cy="20" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="20" oryx:cy="1" oryx:anchors="top" />
+	<oryx:magnet oryx:cx="20" oryx:cy="20" oryx:default="yes" />
   </oryx:magnets>
-  <g pointer-events="fill" oryx:minimumSize="40 10" oryx:maximumSize="200 160" >
-    <rect id="taskrect" oryx:resize="vertical horizontal" x="0" y="0" width="80" height="40" stroke="black" stroke-width="1" fill="white" />
-    	<text font-size="12" id="text" x="40" y="18" oryx:align="middle center" stroke="black" oryx:fittoelem="taskrect"></text>
+  <g pointer-events="fill" oryx:minimumSize="10 10" oryx:maximumSize="160 160" >
+    <rect id="taskrect" oryx:resize="vertical horizontal" x="0" y="0" width="40" height="40" stroke="black" stroke-width="1" fill="white" />
+    	<text font-size="12" id="text" x="20" y="18" oryx:align="middle center" stroke="black" oryx:fittoelem="taskrect"></text>
   </g>
 </svg>

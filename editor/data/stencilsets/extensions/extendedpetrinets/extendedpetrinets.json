@@ -4,17 +4,29 @@
 	"description":"Extended Petrinets contain Reset and Inhibitor Arcs",
 	"definition":"extendedpetrinets/extendedpetrinets.json",
 	"extends":"http://b3mn.org/stencilset/petrinet#",
-	"stencils":[	
+	"stencils":[
+		// {
+		// 	"type": "edge",
+		// 	"id":"Arc",
+		// 	"roles": [
+		// 		"FlowMorph"
+		// 	]	
+		// },
+		// {
+		// 	"id":"Transition",
+		// 	"view":"../../extensions/extendedpetrinets/view/node.transition.svg"
+		// },
 		{
 			"type": "edge",
 			"id":"InhibitorArc",
 			"title":"Inhibitor Arc",
 			"description":"Inhibits the firing of the target sequence, if a token is present in the source place.",
 			"groups":[],
-			"view":"connection.inhibitor.svg",
-			"icon":"connection.inhibitor.png",
+			"view":"../../extensions/extendedpetrinets/view/connection.inhibitor.svg",
+			"icon":"../../extensions/extendedpetrinets/icons/connection.inhibitor.png",
 			"roles": [
 				"fromtoall"
+				, "FlowMorph"
 			],
 			"properties": [
 				{
@@ -58,10 +70,11 @@
 			"title":"Reset Arc",
 			"description":"A reset Arc",
 			"groups":[],
-			"view":"connection.reset.svg",
-			"icon":"connection.reset.png",
+			"view":"../../extensions/extendedpetrinets/view/connection.reset.svg",
+			"icon":"../../extensions/extendedpetrinets/icons/connection.reset.png",
 			"roles": [
 				"fromtoall"
+				, "FlowMorph"
 			],
 			"properties": [
 				{
@@ -103,7 +116,7 @@
 	"rules": {
 		"connectionRules": [
 			{
-				"role":"Inhibitor-Arc",
+				"role":"InhibitorArc",
 				"connects": [
 					{
 						"from":"place",
@@ -112,7 +125,7 @@
 				]
 			},
 			{
-				"role":"Reset-Arc",
+				"role":"ResetArc",
 				"connects": [
 					{
 						"from":"place",
@@ -121,5 +134,21 @@
 				]
 			}	
 		]
+		// ,
+		// 		"morphingRules": [
+		// 			{
+		// 				"role": "FlowMorph",
+		// 				"baseMorphs": ["Arc"]
+		// 			}
+		// 		],
+		// 		"layoutRules" : [
+		// 			{
+		// 				"role": "FlowMorph",
+		// 				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+		// 						{"t":1,"r":2,"b":1,"l":2}],
+		// 				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
+		// 						{"t":1, "r":2, "b":1, "l":2}]
+		// 			}
+		// 		]
 	}
 }
