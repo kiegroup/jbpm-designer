@@ -678,8 +678,11 @@ MOVI.namespace("widget");
 		 * @private
 		 */
 		_onMouseDown: function(ev) {
-			YAHOO.util.Event.preventDefault(ev);
-			YAHOO.util.Event.stopPropagation(ev);
+			if(ev.target==this._scrollbox.get("element") || ev.target==this._image.get("element")
+					|| ev.target==this.canvas.get("element")) {
+				YAHOO.util.Event.preventDefault(ev);
+				YAHOO.util.Event.stopPropagation(ev);
+			}
 			this._scrollbox.removeListener("mousemove", this._onModelDrag);
 			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
 			this._mouseCoords = { x: mouseAbsXY[0], y: mouseAbsXY[1] };
