@@ -132,6 +132,8 @@ MOVI.namespace("widget");
 		this.slider.subscribe('change', this.onChange, this, true);
 		this.slider.subscribe('slideStart', this._onSlideStart, this, true);
 		this.slider.subscribe('slideEnd', this._onSlideEnd, this, true);
+		
+		this.modelviewer.onModelLoadEnd.subscribe(this.update, this, true);
 	};
 	
 	MOVI.extend(MOVI.widget.ZoomSlider, YAHOO.util.Element, {

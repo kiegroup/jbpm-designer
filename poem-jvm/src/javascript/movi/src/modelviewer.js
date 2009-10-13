@@ -57,6 +57,9 @@ MOVI.namespace("widget");
 		this.onZoomLevelChange = new YAHOO.util.CustomEvent("movi-zoomLevelChange", this); 
 		this.onZoomLevelChangeStart = new YAHOO.util.CustomEvent("movi-zoomLevelChangeStart", this); 
 		this.onZoomLevelChangeEnd = new YAHOO.util.CustomEvent("movi-zoomLevelChangeEnd", this); 
+		
+		this.onModelLoadStart = new YAHOO.util.CustomEvent("movi-modelLoadStart", this); 
+		this.onModelLoadEnd = new YAHOO.util.CustomEvent("movi-modelLoadEnd", this); 
 
 		var existingScrollboxArr = this.getElementsByClassName(_SCROLLBOX_CLASS_NAME);
 		if(existingScrollboxArr.length==1) {
@@ -198,6 +201,20 @@ MOVI.namespace("widget");
 		onZoomLevelChangeEnd: null,
 		
 		/**
+		 * The event that is triggered when the model loading starts
+		 * @property onModelLoadStart
+		 * @type YAHOO.util.CustomEvent
+		 */
+		onModelLoadStart: null,
+		
+		/**
+		 * The event that is triggered when the model loading is finished
+		 * @property onModelLoadEnd
+		 * @type YAHOO.util.CustomEvent
+		 */
+		onModelLoadEnd: null,
+		
+		/**
 	     * Callback that is executed when the model is finished
 		 * loading.
 	     * @method _onSuccess
@@ -208,6 +225,8 @@ MOVI.namespace("widget");
 			var scope = this._loadOptions.scope || window;
 			if(this._loadOptions.onSuccess)
 				this._loadOptions.onSuccess.call(scope, this);
+			this.onModelLoadEnd.fire(this._modelUri);
+			this.onZoomLevelChangeEnd.fire(this.getZoomLevel());
 		},
 		
 		/**
@@ -382,6 +401,9 @@ MOVI.namespace("widget");
 			this._syncResources = new Array();
 			this._syncResources.push("data"); // include model data in synchronization
 			
+			this.onModelLoadStart.fire(this._modelUri);
+			this.onZoomLevelChangeStart.fire(this.getZoomLevel());
+			
 			var jsonp = encodeURIComponent(
 				"MOVI.widget.ModelViewer.getInstance(" + 
 				this._index + ").loadModelCallback");
@@ -416,6 +438,9 @@ MOVI.namespace("widget");
 			if(YAHOO.lang.isFunction(this._loadOptions.urlModificationFunction))
 			    imgUrl = this._loadOptions.urlModificationFunction.call(this._loadOptions.scope || this, imgUrl, this, "png");
 			
+			this._image.setStyle("width", "");
+			this._image.setStyle("height", "");
+			
 			var self = this;
 			this._image.get("element").onload = function() {
 				self._imageWidth = parseInt(self._image.getStyle("width"), 10) || self._image.get("element").offsetWidth;
@@ -424,7 +449,6 @@ MOVI.namespace("widget");
 			};
 			
 			this._image.set("src", imgUrl);
-			
 		},
 		
 		/**
