@@ -494,7 +494,7 @@ ORYX.I18N.BPMN2XPDL.xpdlExport = "Export to XPDL";
 /** Resource Perspective Additions: 24 March 2009 */
 if(!ORYX.I18N.ResourcesSoDAdd) ORYX.I18N.ResourcesSoDAdd = {};
 
-ORYX.I18N.ResourcesSoDAdd.name = "Define Separation of Duties Contraint";
+ORYX.I18N.ResourcesSoDAdd.name = "Define Separation of Duties Constraint";
 ORYX.I18N.ResourcesSoDAdd.group = "Resource Perspective";
 ORYX.I18N.ResourcesSoDAdd.desc = "Define a Separation of Duties constraint for the selected tasks";
 

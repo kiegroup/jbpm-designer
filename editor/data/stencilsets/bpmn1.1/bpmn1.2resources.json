@@ -1,8 +1,8 @@
 {
-	"title":"BPMN 1.2",
-	"namespace":"http://b3mn.org/stencilset/bpmn1.1#",
-	"description":"Business Process Diagrams according to the BPMN 1.2 standard (Business Process Modeling Notation).",
-	"description_de":"Prozessdiagramme nach dem Standard der Business Process Modeling Notation 1.2 der OMG.",
+	"title":"BPMN 1.2 Resources",
+	"namespace":"http://b3mn.org/stencilset/bpmn1.2resources#",
+	"description":"Business Process Diagrams extended with resource management functionality based on the BPMN 1.2 standard (Business Process Modeling Notation).",
+	"description_de":"Prozessdiagramme erweitert um Ressourcemanagement-Funktionalitäten basierend auf dem Standard der Business Process Modeling Notation 1.2 der OMG.",
  	"stencils" : [
  		{
 			"type":				"node",
@@ -380,6 +380,128 @@
 					"readonly": 	false,
 					"optional": 	true,
 					"length":""
+				},
+				{
+					"id":"separationOfDuties",
+					"type":"Complex",
+					"title":"SeparationOfDuties",
+					"title_de":"TeilungVonPflichten",
+					"value":"",
+					"description":"The separation of duties attribute defines the tasks which are not to be executed by the same resource.",
+					"description_de":"Das Teilung von Pflichten Attribut beschreibt die Tasks, welche nicht von der selben Resource ausgeführt werden dürfen.",
+					"readonly": 	false,
+					"optional": 	true,
+					"popular":		true,
+					"complexItems": [
+						{
+							"id":"sodId",
+							"name":"Id",
+							"name_de":"sodId",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"SeparatedTasks",
+							"name":"Separated Tasks",
+							"name_de":"Getrennte Tasks",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+					]
+				},
+				{
+					"id":"bindingsOfDuties",
+					"type":"Complex",
+					"title":"BindingsOfDuties",
+					"title_de":"ZusammenfassenVonPflichten",
+					"value":"",
+					"description":"The binding of duties attribute defines the tasks which are to be executed by the same resource.",
+					"description_de":"Das Zusammenfassung von Pflichten Attribut beschreibt die Tasks, welche von der selben Resource ausgeführt werden müssen.",
+					"readonly": 	false,
+					"optional": 	true,
+					"popular":		true,
+					"complexItems": [
+						{
+							"id":"bodId",
+							"name":"Id",
+							"name_de":"bodId",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"BoundTasks",
+							"name":"Bound Tasks",
+							"name_de":"Zusammengefasste Tasks",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+					]
+				},
+				{
+					"id":"resourceAssignments",
+					"type":"Complex",
+					"title":"ResourceAssignments",
+					"title_de":"Resourcenzuordnung",
+					"value":"",
+					"description":"The resource assignments attribute specifies the resources which are entitled to execute this task.",
+					"description_de":"Das Ressourcenzuordnung Attribut legt die Ressourcen fest, welche diese Task ausführen/ abarbeiten dürfen.",
+					"readonly": false,
+					"optional": true,
+					"popular":		true,
+					"complexItems": [
+						{
+							"id":"assignmentType",
+							"name":"Assignment Type",
+							"name_de":"Zuweisungsart",
+							"type":"Choice",
+							"value":"",
+							"width":100,
+							"optional":false, 
+							"items": [
+								{
+									"id":"directAllocation",
+									"title":"directAllocation",
+									"value":"Single User",
+									"refToView":"None"
+								},
+								{
+									"id":"rolebasedAllocation",
+									"title":"rolebasedAllocation",
+									"value":"Functional Role",
+									"refToView":"Functional Role"
+								},
+								{
+									"id":"organisationalAllocation",
+									"title":"organisationalAllocation",
+									"value":"Organisational Role",
+									"refToView":"Organisational Role"
+								},
+								{
+									"id":"automaticExecution",
+									"title":"automaticExecution",
+									"value":"Automatic Execution",
+									"refToView":"Automatic Execution"
+								}
+							]
+						},
+						{
+							"id":"assignmentName",
+							"name":"Name",
+							"name_de":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true
+						}
+					]
 				},
 				{
 					"id":"properties",
