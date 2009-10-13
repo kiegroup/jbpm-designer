@@ -124,7 +124,7 @@ ORYX.Plugins.ResourceAssignment = Clazz.extend({
 	getResourceData: function(allocationType) { //Ajax request to get resource/ role information from servlet
 		var resp;
 		//get Resource List
-		new Ajax.Request('/oryx/resourceList', {
+		new Ajax.Request(ORYX.CONFIG.ROOT_PATH + 'resourceList', {
 			method: 'POST',
 			asynchronous: false,
 			parameters: {
@@ -202,7 +202,7 @@ ORYX.Plugins.ResourceAssignment = Clazz.extend({
 		var returnValue = [];
 		var resourceData;
 		//get possible new assignments for current task
-		var promptResult = prompt("Select type of allocation for task " + taskId + ".\n1: Direct Allocation, \n2: Functional-Role-based Allocation, \n3: Organisational-Role-based Allocation, \n4: Automatic Execution");
+		var promptResult = prompt("for task " + taskId + "\n1: direct, \n2: role, \n3: org, \n4: auto");
 		if(promptResult != "1" && promptResult != "2" && promptResult != "3" && promptResult != "4" && promptResult != null) {
 			alert("wrong entry, please try again");
 			returnValue = this.handleAllocationTypeData(taskId);
