@@ -149,6 +149,140 @@ MOVI.namespace("model");
 				e = e.parentShape;
 			return e;
 		},
+
+		/**
+		 * Returns a set on all incoming shapes
+		 * @method getIncomingShapes
+		 * @return {Array}
+		 */
+		getIncomingShapes: function(){
+			
+			if (!this._incomingShapes){
+							
+				var incoming = [];
+				var canvas = this.getCanvas();
+	
+				if (canvas) {
+					var nodes = canvas.getNodes();
+					for (var i=0, len = nodes.length; i < len; ++i){
+						if ((nodes[i].outgoing||[]).length > 0) {
+							var isOutgoing = false;
+								for (var j=0, oLen = nodes.length; j < oLen; ++j){
+									if (nodes[i].outgoing[j].resourceId == this.resourceId){
+										incoming.push(nodes[i]);
+										break;
+									}
+								}
+						}
+					}
+				}
+				this._incomingShapes = incoming;
+			}
+
+			return this._incomingShapes;				
+		},
+				
+		/**
+		 * Returns a set on all outgoing shapes
+		 * @method getOutgoingShapes
+		 * @return {Array}
+		 */
+		getOutgoingShapes: function(){
+			
+			if (!this._outgoingShapes){
+				
+				var outgoings = [];
+				var canvas = this.getCanvas();
+		
+				if (canvas) {
+					var og = this.outgoing || [];
+					for (var i=0, len=og.length; i<len; ++i){
+						var shape = canvas.getShape(og[i].resourceId);
+						if (shape) {
+							outgoings.push(shape);	
+						}
+					}
+				}
+				
+				this._outgoingShapes = outgoings;
+			}
+
+			return this._outgoingShapes;				
+		},
+		
+		/**
+		 * Returns the bounds of a shape
+		 * 
+		 */
+		getBounds: function(){
+			
+			if (!this.bounds) {
+				
+				// ERROR HANDLING if there is no bounds set
+				if (this.dockers) {
+					var min, max;
+					
+					for (var i = 0, len = this.dockers.length; i < len; ++i) {
+						
+						var pos = {x:this.dockers[i].x, y:this.dockers[i].y}
+						
+						// Add the bounds of the docked incoming shape
+						if (i==0){
+							var nodes = this.getIncomingShapes();
+							if (nodes.length > 0){
+								var bounds = nodes[0].getAbsBounds();
+								pos.x += bounds.upperLeft.x;
+								pos.y += bounds.upperLeft.y;
+							}
+						}
+						
+						// Add the bounds of the docked outgoing shape
+						if (i == len-1&&(this.outgoing||[]).length > 0) {
+							var nodes = this.getOutgoingShapes();
+							if (nodes.length > 0){
+								var bounds = nodes[0].getAbsBounds();
+								pos.x += bounds.upperLeft.x;
+								pos.y += bounds.upperLeft.y;
+							}
+						}
+						
+						if (!min) min = {x: pos.x, y: pos.y}
+						if (!max) max = {x: pos.x, y: pos.y }
+						
+						
+						min.x = Math.min(min.x, pos.x);
+						min.y = Math.min(min.y, pos.y);
+						max.x = Math.max(max.x, pos.x);
+						max.y = Math.max(max.y, pos.y);
+					}
+					
+					if (min && max) {
+						this.bounds = {
+							upperLeft: min,
+							lowerRight: max
+						}
+					}
+				}
+				
+				if (!this.bounds){
+					this.bounds =  { 
+						upperLeft: { x: 0, y: 0 }, 
+						lowerRight: { x: 0, y: 0 } 
+					}
+				}
+			}
+			
+			return { upperLeft: { 
+				x: this.bounds.upperLeft.x, 
+				y: this.bounds.upperLeft.y
+			  }, 
+			  lowerRight: { 
+				x: this.bounds.lowerRight.x,
+				y: this.bounds.lowerRight.y
+			  } 
+			}
+
+		},
 		
 		/**
 	     * Returns the shape's absolute bounds coordinates. 'Absolute' means
@@ -158,22 +292,15 @@ MOVI.namespace("model");
 		 * { upperLeft: {x:Number,y:Number}, lowerRight: {x:Number,y:Number} }
 	     */
 		getAbsBounds: function() {
-			var absBounds =	{ upperLeft: { 
-								x: this.bounds.upperLeft.x, 
-								y: this.bounds.upperLeft.y
-							  }, 
-							  lowerRight: { 
-								x: this.bounds.lowerRight.x,
-								y: this.bounds.lowerRight.y
-							  } 
-							};	
+			var absBounds =	this.getBounds();	
 			var e = this;
 			while(e.parentShape!=null && e.parentShape.parentShape!=null) {
 				e = e.parentShape;
-				absBounds.upperLeft.x += e.bounds.upperLeft.x;
-				absBounds.upperLeft.y += e.bounds.upperLeft.y;
-				absBounds.lowerRight.x += e.bounds.upperLeft.x;
-				absBounds.lowerRight.y += e.bounds.upperLeft.y;
+				var b = e.getBounds();
+				absBounds.upperLeft.x +=b.upperLeft.x;
+				absBounds.upperLeft.y += b.upperLeft.y;
+				absBounds.lowerRight.x += b.upperLeft.x;
+				absBounds.lowerRight.y += b.upperLeft.y;
 			}
 			return absBounds;
 		},
