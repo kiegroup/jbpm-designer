@@ -164,10 +164,12 @@ MOVI.namespace("model");
 	
 				if (canvas) {
 					var nodes = canvas.getNodes();
-					for (var i=0, len = nodes.length; i < len; ++i){
+					for (var i in nodes){
+						if(!YAHOO.lang.hasOwnProperty(nodes, i)) continue;
+				
 						if ((nodes[i].outgoing||[]).length > 0) {
 							var isOutgoing = false;
-								for (var j=0, oLen = nodes.length; j < oLen; ++j){
+								for (var j=0, oLen = nodes[i].outgoing.length; j < oLen; ++j){
 									if (nodes[i].outgoing[j].resourceId == this.resourceId){
 										incoming.push(nodes[i]);
 										break;
