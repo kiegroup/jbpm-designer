@@ -1,5 +1,5 @@
 {
-	"title":"Extended",
+	"title":"Extended Petrinet Extension",
 	"namespace":"http://oryx-editor.org/stencilsets/extensions/extendedpetrinets#",
 	"description":"Extended Petrinets contain Reset and Inhibitor Arcs",
 	"definition":"extendedpetrinets/extendedpetrinets.json",
