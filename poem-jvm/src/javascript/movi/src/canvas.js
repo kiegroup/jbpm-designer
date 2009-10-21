@@ -126,6 +126,14 @@ MOVI.namespace("model");
 				this.childShapes[i].bounds.lowerRight.x -= minX;
 				this.childShapes[i].bounds.lowerRight.y -= minY;
 				this.childShapes[i].update();
+				
+				// for edges also adjust the absolute coordinates of the dockers
+				if(this.childShapes[i].isEdge() && this.childShapes[i].dockers && this.childShapes[i].dockers.length>2) {
+					for(var j=1; j<this.childShapes[i].dockers.length-1; j++) {
+						this.childShapes[i].dockers[j].x -= minX;
+						this.childShapes[i].dockers[j].y -= minY;
+					}
+				}
 			}
 			if(!this.bounds || !this.bounds.upperLeft || !this.bounds.lowerRight)
 			    this.bounds = { upperLeft: {x: 0, y: 0}, lowerRight: {x: maxX-minX, y: maxY-minY}};

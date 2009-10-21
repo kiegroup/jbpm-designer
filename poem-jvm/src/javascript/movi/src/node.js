@@ -72,6 +72,13 @@ MOVI.namespace("model");
 			this.setStyle("top", top + "px");
 			this.setStyle("width", width + "px");
 			this.setStyle("height", height + "px");
+		},
+		
+		/**
+	     * Overrides the method of the abstract super class
+	     */
+		isNode: function() {
+			return true;
 		}
 		
 	});

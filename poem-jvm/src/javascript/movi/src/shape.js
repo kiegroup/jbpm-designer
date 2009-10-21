@@ -327,6 +327,24 @@ MOVI.namespace("model");
 		 */
 		getStencil: function() {
 			return this.stencil;
+		},
+		
+		/**
+		 * Returns true if the shape is a node
+		 * @method isNode
+		 * @return {Boolean} true if shape is a node
+		 */
+		isNode: function() {
+			return false;
+		},
+		
+		/**
+		 * Returns true if the shape is an edge
+		 * @method isEdge
+		 * @return {Boolean} true if shape is an edge
+		 */
+		isEdge: function() {
+			return false;
 		}
 		
 		// TODO: Doc for shape attributes from JSON

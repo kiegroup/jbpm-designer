@@ -75,6 +75,12 @@ MOVI.namespace("widget");
 		this._scrollbox.set("id", _SCROLLBOX_CLASS_NAME + this._index);
 		this._scrollbox.set("innerHTML", "<img id=\"" + _MODELIMG_CLASS_NAME + this._index + 
 							"\" class=\"" + _MODELIMG_CLASS_NAME + "\" />");
+							
+		// prevent marking
+		this.setStyle("-moz-user-select", "none");    // Gecko-based, Mozilla
+		this.setStyle("-webkit-user-select", "none"); // Webkit
+		if (YAHOO.env.ua.ie > 0)
+			this.set("unselectable", "on");           // IE
 		
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
 		

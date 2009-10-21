@@ -29,6 +29,138 @@ MOVI.namespace("util");
 	var _MARKER_RECT_CLASS_NAME = "movi-marker",
 		_ICON_CLASS_NAME = "movi-marker-icon",
 		_ICON_MARGIN = -10; 
+		
+	/**
+	 * A model overlay polygone.
+	 * @namespace MOVI.util
+	 * @class MOVI.util.Overlay
+	 * @constructor
+	 * @param {ModelViewer} modelviewer The parent model viewer
+	 * @param {Object[]} coords The coordinates of the polygone
+	 * @param {Object} style (optional) A key map of style options. Available keys:
+	 * <dl>
+     * <dt>color</dt>
+     * <dd># HEX color code</dd>
+     * <dt>width</dt>
+     * <dd>line width unit</dd>
+	 * <dt>opacity</dt>
+	 * <dd>the opacity value (between 0.0 - not visible and 1.0 - completely opaque)</dd>
+	 * </dl>
+	 */	
+	MOVI.util.Overlay = function(modelviewer, coords, style) {
+		
+		if(coords.length==0) throw new Error("No coordinates specified for the Overlay!");
+		if(!style) style = {};
+		
+		this.style = {};
+		this.style.color = style.color || "#FF0000";
+		this.style.width = style.width || 10.0;
+		this.style.opacity = style.opacity || 0.4;
+		
+		this.modelviewer = modelviewer;
+		this.coords = coords;
+				
+		var canvasEl = document.createElement("canvas");
+		if(canvasEl.getContext){
+			// client's browser supports canvas
+			
+			var ctx = canvasEl.getContext("2d");
+			MOVI.util.Overlay.superclass.constructor.call(this, canvasEl, {});
+			this.set("width", this.modelviewer.getImgWidth());
+			this.set("height", this.modelviewer.getImgHeight());
+			
+			
+
+			ctx.beginPath();
+			ctx.lineJoin = "round";
+			ctx.lineCap = "round";
+			ctx.moveTo(coords[0].x, coords[0].y);
+			for(var i=1; i<coords.length; i++) {
+				ctx.lineTo(coords[i].x, coords[i].y);
+			}
+			ctx.moveTo(500,800);
+			ctx.lineTo(500,1000);
+			ctx.strokeStyle = 
+				"rgba("+
+				parseInt(this.style.color.substring(1,3), 16)+ ","+
+				parseInt(this.style.color.substring(3,5), 16)+ ","+
+				parseInt(this.style.color.substring(5,7), 16)+ ","+
+				this.style.opacity+
+				")";
+			ctx.lineWidth = this.style.width;
+			ctx.stroke();
+			
+		} else {
+			// IE fallback: use VML
+			
+			// create xmlns
+			if(!document.namespaces['vml']) {
+		    	document.namespaces.add('vml', 'urn:schemas-microsoft-com:vml', '#default#VML');
+		    }
+			
+			var shapeEl = document.createElement("vml:shape");
+			MOVI.util.Overlay.superclass.constructor.call(this, shapeEl, {});
+			
+			var innerHTML = 
+				"<vml:shape strokecolor='" + this.style.color + "' strokeweight='" + this.style.width +"' opacity='" + this.style.opacity + "'"+
+				"coordorigin='0 0' coordsize='" + this.modelviewer.getImgWidth() + " " +  this.modelviewer.getImgHeight() + "'>"+
+				"<vml:path v='m "+ coords[0].x+","+coords[0].y +" l";
+			for(var i=1; i<coords.length; i++) {
+				innerHTML += " " + coords[i].x+","+coords[i].y;
+			}
+			innerHTML += 
+				"'/>"+
+				"</vml:shape>";
+			this.set("innerHTML", innerHTML);
+			
+			
+			
+		}
+		
+		this.setStyle("position", "absolute");
+		this.setStyle("left", "0px");
+		this.setStyle("top", "0px");
+		this.modelviewer.canvas.appendChild(this);
+		
+		this.update();
+	};
+	
+	MOVI.extend(MOVI.util.Overlay, YAHOO.util.Element, {
+		
+		/**
+		 * Update the overlay according to the current zoom level
+		 * @method update
+		 */
+		update: function() {
+			this.setStyle("width", Math.round(this.modelviewer.getImgWidth()*this.modelviewer.getZoomLevel()/100)+"px");
+			this.setStyle("height", Math.round(this.modelviewer.getImgHeight()*this.modelviewer.getZoomLevel()/100)+"px");
+		},
+		
+		/**
+		 * Remove the overlay from the DOM
+		 * @method remove
+		 */
+		remove: function() {
+			this.modelviewer.canvas.removeChild(this);
+		},
+		
+		/**
+		 * Show the overlay
+		 * @method show
+		 */
+		show: function() {
+			this.setStyle("display", "block");
+		},
+		
+		/**
+		 * Hide the overlay
+		 * @method hide
+		 */
+		hide: function() {
+			this.setStyle("display", "none");
+		}
+		
+	});
 	
 	/**
      * Attach Marker objects to the model to highlight a shape or a set of shapes
@@ -37,10 +169,20 @@ MOVI.namespace("util");
      * @class MOVI.util.Marker
      * @constructor
 	 * @param {Shape|Shapes[]} shapes The shapes to mark
-	 * @param {Object} style (optional) A key map of CSS style properties to be attached
-	 * to the shape marking rectangles.
+	 * @param {Object} nodeStyle (optional) A key map of CSS style properties to be attached
+	 * to the node marking rectangles.
+	 * @param {Object} edgeStyle (optional) A key map of style properties for all edge markings.
+	 * Available properties:
+	 * <dl>
+     * <dt>color</dt>
+     * <dd># HEX color code</dd>
+     * <dt>width</dt>
+     * <dd>line width unit</dd>
+	 * <dt>opacity</dt>
+	 * <dd>the opacity value (between 0.0 - not visible and 1.0 - completely opaque)</dd>
+	 * </dl>
      */
-    MOVI.util.Marker = function(shapes, style) {
+    MOVI.util.Marker = function(shapes, nodeStyle, edgeStyle) {
 		
 		if(!shapes) shapes = [];
 		if(!YAHOO.lang.isArray(shapes)) shapes = [shapes];
@@ -56,17 +198,22 @@ MOVI.namespace("util");
 			southeast: null
 		};
 		
-		this._style = style || {};
-		this.shapeRects = {};
+		this._nodeStyle = nodeStyle || {};
+		this._edgeStyle = edgeStyle || {};
+		this.overlays = {};
 
 		this._shapes = {};
 		// create shape rect elements
 		for(var i = 0; i < shapes.length; i++) {
 			var s = shapes[i];
 			this._shapes[s.resourceId] = s;
-			this.shapeRects[s.resourceId] = new YAHOO.util.Element(document.createElement('div'));
-			this.shapeRects[s.resourceId].setStyle("position", "absolute");
-			s.appendChild(this.shapeRects[s.resourceId]);
+			if(s.isNode()) {
+				this.overlays[s.resourceId] = new YAHOO.util.Element(document.createElement('div'));
+				this.overlays[s.resourceId].setStyle("position", "absolute");
+				s.appendChild(this.overlays[s.resourceId]);
+			} else {
+				this.overlays[s.resourceId] = new MOVI.util.Overlay(s.getCanvas().getModelViewer(), s.getCoordinates(), this._edgeStyle);
+			}
 		}
 		
 		this.markerRect = new YAHOO.util.Element(document.createElement('div'));
@@ -88,12 +235,21 @@ MOVI.namespace("util");
 		
 		/**
 		 * A key map containing the CSS style property definitions that are applied 
-		 * to each shape marking rectangle.
-		 * @property style
+		 * to each node marking rectangle.
+		 * @property _nodeStyle
 		 * @type Object
 		 * @private
 		 */
-		_style: null,
+		_nodeStyle: null,
+		
+		/**
+		 * A key map containing the style property definitions that are applied 
+		 * to each edge marking.
+		 * @property _edgeStyle
+		 * @type Object
+		 * @private
+		 */
+		_edgeStyle: null,
 		
 		/**
 		 * The class name that is specified for each shape marking rectangle.
@@ -136,12 +292,12 @@ MOVI.namespace("util");
 		_icons: null,
 		
 		/**
-		 * A key map containing all shape rectangle elements of the marker with the
+		 * A key map containing all shape overlay elements of the marker with the
 		 * associated shape resource IDs as keys
-		 * @property shapeRects
+		 * @property overlays
 		 * @type { Integer : Element }
 		 */
-		shapeRects: null,
+		overlays: null,
 		
 		/**
 		 * The marker's outer rectangle element
@@ -173,24 +329,32 @@ MOVI.namespace("util");
 				if(!YAHOO.lang.hasOwnProperty(this._shapes, i)) continue;
 				
 				var shape = this._shapes[i];
-				var rect = this.shapeRects[i];
+				
+				var overlay = this.overlays[i];
 				
 				if(canvas==null) canvas = shape.getCanvas();
 				var zoomFactor = canvas.getModelViewer().getZoomLevel() / 100;
 				
+				if(shape.isEdge()) {
+					overlay.update();
+					continue;
+				}
+				
+				/* following code is only executed for node overlays */
+				
 				// apply styles
-				for(prop in this._style) {
-					if(!YAHOO.lang.hasOwnProperty(this._style, prop)) continue;
-					rect.setStyle(prop, this._style[prop]);
+				for(prop in this._nodeStyle) {
+					if(!YAHOO.lang.hasOwnProperty(this._nodeStyle, prop)) continue;
+					overlay.setStyle(prop, this._nodeStyle[prop]);
 				}
 				
 				/* adjust position */
 				
 				// get border widths
-				var bTWidth = parseInt(rect.getStyle("border-top-width") || 0),
-					bRWidth = parseInt(rect.getStyle("border-right-width") || 0),
-					bBWidth = parseInt(rect.getStyle("border-bottom-width") || 0),
-					bLWidth = parseInt(rect.getStyle("border-left-width") || 0);
+				var bTWidth = parseInt(overlay.getStyle("border-top-width") || 0),
+					bRWidth = parseInt(overlay.getStyle("border-right-width") || 0),
+					bBWidth = parseInt(overlay.getStyle("border-bottom-width") || 0),
+					bLWidth = parseInt(overlay.getStyle("border-left-width") || 0);
 							
 				bTWidth	= isNaN(bTWidth) ? 0 : bTWidth;
 				bRWidth	= isNaN(bRWidth) ? 0 : bRWidth;
@@ -206,12 +370,12 @@ MOVI.namespace("util");
 							 - shape.bounds.upperLeft.y)*zoomFactor) + 2*MOVI.util.Marker.PADDING
 						 	 - bTWidth - bBWidth;				
 			
-				rect.setStyle("left", left + "px");
-				rect.setStyle("top", top + "px");
-				rect.setStyle("width", width + "px");
-				rect.setStyle("height", height + "px");
+				overlay.setStyle("left", left + "px");
+				overlay.setStyle("top", top + "px");
+				overlay.setStyle("width", width + "px");
+				overlay.setStyle("height", height + "px");
 				
-				rect.set("className", this._className);
+				overlay.set("className", this._className);
 			}
 			
 			/* update outer marking rectangle element */
@@ -371,44 +535,124 @@ MOVI.namespace("util");
 		},
 		
 		/**
-	     * Wrapper for setting style properties of all shape marking rectangle elements
-	     * @method setRectStyle
+	     * Wrapper for setting style properties of all node marking rectangle elements
+	     * @method setNodeStyle
 		 * @param {String} property The property
 		 * @param {String} value The value
 	     */
-		setRectStyle: function(property, value) {
-			this._style[property] = value;
+		setNodeStyle: function(property, value) {
+			this._nodeStyle[property] = value;
 			this._update();
 		},
 		
 		/**
 	     * Returns the value for the specified style property that is applied to each 
-		 * shape marking rectangle element
-	     * @method getRectStyle
+		 * node marking rectangle element
+	     * @method getNodeStyle
 		 * @param {String} property The property
-		 * @returns {Object} A key map storing the style properties
+		 * @returns {String} The value of the property
 	     */
-		getRectStyle: function(property) {
-			return this._style[property];
+		getNodeStyle: function(property) {
+			return this._nodeStyle[property];
 		},
 		
 		/**
-	     * Wrapper for setting the class name for all shape marking rectangle elements
-	     * @method setRectClassName
+	     * Wrapper for setting the class name for all node marking rectangle elements
+	     * @method setNodeClassName
 		 * @param {String} className The class name value
 	     */
-		setRectClassName: function(className) {
+		setNodeClassName: function(className) {
 			this._className = className;
 			this._update();
 		},
 		
 		/**
-	     * Return the class name applied for all shape marking rectangle elements
-	     * @method getRectClassName
+	     * Return the class name applied for all node marking rectangle elements
+	     * @method getNodeClassName
 		 * @returns {String} The applied class name
 	     */
-		getRectClassName: function() {
+		getNodeClassName: function() {
 			return this._className;
+		},
+		
+		/**
+	     * Deprecated alias for setNodeClassName
+	     * @method setRectStyle
+	     */
+		setRectStyle: function(property, value) {
+			this.setNodeStyle(property, value);
+		},
+		
+		/**
+	     * Deprecated alias for setNodeClassName
+	     * @method getRectStyle
+	     */
+		getRectStyle: function(property) {
+			return this.getNodeStyle(property);
+		},
+		
+		/**
+	     * Deprecated alias for setNodeClassName
+	     * @method setRectClassName
+	     */
+		setRectClassName: function(className) {
+			this.setNodeClassName(className);
+		},
+		
+		/**
+	     * Deprecated alias for getNodeClassName
+	     * @method getRectClassName
+	     */
+		getRectClassName: function() {
+			return this.getNodeClassName();
+		},
+		
+		/**
+	     * Wrapper for setting style properties of all edge markings
+	     * @method setEdgeStyle
+		 * @param {String} property The property
+		 * Available properties:
+		 * <dl>
+	     * <dt>color</dt>
+	     * <dd># HEX color code</dd>
+	     * <dt>width</dt>
+	     * <dd>line width unit</dd>
+		 * <dt>opacity</dt>
+		 * <dd>the opacity value (between 0.0 - not visible and 1.0 - completely opaque)</dd>
+		 * </dl>
+		 * @param {String} value The value
+	     */		
+		setEdgeStyle: function(property) {
+			this._edgeStyle[property] = value;
+			for(key in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, key)) continue;
+				
+				this.overlays[key].remove();
+				var coords = this.overlays[key].coords;
+				var modelviewer = this.overlays[key].modelviewer;
+				delete this.overlays[key];
+				this.overlays[key] = new MOVI.util.Overlay(modelviewer, coords, this._edgeStyle);
+			}
+		},
+		
+		/**
+	     * Returns the value for the specified style property that is applied to each 
+		 * edge marking 
+	     * @method getEdgeStyle
+		 * @param {String} property The property
+		 * Available properties:
+		 * <dl>
+	     * <dt>color</dt>
+	     * <dd># HEX color code</dd>
+	     * <dt>width</dt>
+	     * <dd>line width unit</dd>
+		 * <dt>opacity</dt>
+		 * <dd>the opacity value (between 0.0 - not visible and 1.0 - completely opaque)</dd>
+		 * </dl>
+		 * @returns {String} The value of the property
+	     */
+		getEdgeStyle: function(property) {
+			return this._edgeStyle[property];
 		},
 		
 		/**
@@ -421,11 +665,17 @@ MOVI.namespace("util");
 				return;
 			
 			this._shapes[shape.resourceId] = shape;
-			var rect = new YAHOO.util.Element(document.createElement('div'));
-			rect.set("className", this.getRectClassName());
-			rect.setStyle("position", "absolute");
-			shape.appendChild(rect);
-			this.shapeRects[shape.resourceId] = rect;
+			
+			if(shape.isNode()) {
+				var rect = new YAHOO.util.Element(document.createElement('div'));
+				rect.set("className", this.getRectClassName());
+				rect.setStyle("position", "absolute");
+				shape.appendChild(rect);
+				this.overlays[shape.resourceId] = rect;
+			} else {
+				this.overlays[s.resourceId] = new MOVI.util.Overlay(shape.getCanvas().getModelViewer(), shape.getCoordinates());
+			}
+			
 			this._update();
 			this._onChanged();
 		},
@@ -436,8 +686,11 @@ MOVI.namespace("util");
 		 * @param {Shape} shape The shape object to be removed
 	     */
 		removeShape: function(shape) {
-			shape.removeChild(this.shapeRects[shape.resourceId]);
-			delete this.shapeRects[shape.resourceId];
+			if(shape.isNode())
+				shape.removeChild(this.overlays[shape.resourceId]);
+			else
+				this.overlays[shape.resourceId].remove();
+			delete this.overlays[shape.resourceId];
 			delete this._shapes[shape.resourceId];
 			this._update();
 			this._onChanged()
@@ -451,8 +704,12 @@ MOVI.namespace("util");
 			for(key in this._shapes) {
 				if(!YAHOO.lang.hasOwnProperty(this._shapes, key)) continue;
 				
-				this._shapes[key].removeChild(this.shapeRects[key]);
-				delete this.shapeRects[key];
+				if(this._shapes[key].isNode())
+					this._shapes[key].removeChild(this.overlays[key]);
+				else
+					this.overlays[key].remove();
+				
+				delete this.overlays[key];
 				delete this._shapes[key];
 			}
 			this._update();
@@ -460,7 +717,7 @@ MOVI.namespace("util");
 		},
 		
 		/**
-	     * Return the marked shapes
+	     * Return all marked shapes
 	     * @method getShapes
 		 * @param {[Shape]} An array of the marked Shape objects
 	     */
@@ -481,6 +738,10 @@ MOVI.namespace("util");
 		show: function() {
 			this.markerRect.setStyle("display", "block");
 			this.setRectStyle("display", "block");
+			for(key in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, key)) continue;
+				if(this._shapes[key].isEdge()) this.overlays[key].show();
+			}
 			for(orientation in this._icons) {
 				if(!YAHOO.lang.hasOwnProperty(this._icons, orientation)) continue;
 				if(this._icons[orientation]) 
@@ -495,6 +756,10 @@ MOVI.namespace("util");
 		hide: function() {
 			this.markerRect.setStyle("display", "none");
 			this.setRectStyle("display", "none");
+			for(key in this._shapes) {
+				if(!YAHOO.lang.hasOwnProperty(this._shapes, key)) continue;
+				if(this._shapes[key].isEdge()) this.overlays[key].hide();
+			}
 			for(orientation in this._icons) {
 				if(!YAHOO.lang.hasOwnProperty(this._icons, orientation)) continue;
 				if(this._icons[orientation]) 
@@ -505,17 +770,14 @@ MOVI.namespace("util");
 		/**
 		 * Fade in the rec
 		 */		
-		fadeIn: function(){
-			
+		fadeIn: function() {
 			if(YAHOO.env.ua.ie){ return }
-			
-			for( key in this.shapeRects ){
+			for( key in this.overlays ){
 				if (typeof key != "string") {return}
-				this.shapeRects[key].setStyle("opacity", 0);	
-				var anim = new YAHOO.util.ColorAnim(this.shapeRects[key], { opacity: { to: 1 } }, 0.4, YAHOO.util.Easing.easeOut);
+				this.overlays[key].setStyle("opacity", 0);	
+				var anim = new YAHOO.util.ColorAnim(this.overlays[key], { opacity: { to: 1 } }, 0.4, YAHOO.util.Easing.easeOut);
 				anim.animate();	
 			}
-		
 		},
 		
 		
@@ -524,20 +786,16 @@ MOVI.namespace("util");
 		 * @param {Object} fn
 		 */
 		fadeOut: function(fn){
-			
 			if(YAHOO.env.ua.ie){ 
 				if (fn instanceof Function) { fn() }
 				return 
 			}
-			
 			var anim;
-			for( key in this.shapeRects ){
+			for( key in this.overlays ){
 				if (typeof key != "string") {return}
-				anim = new YAHOO.util.ColorAnim(this.shapeRects[key], { opacity: { to: 0 } }, 0.4, YAHOO.util.Easing.easeOut);
+				anim = new YAHOO.util.ColorAnim(this.overlays[key], { opacity: { to: 0 } }, 0.4, YAHOO.util.Easing.easeOut);
 				anim.animate();	
 			}
-			
-			
 			if (anim && fn instanceof Function){
 				anim.onComplete.subscribe(fn) 
 			}
@@ -555,18 +813,11 @@ MOVI.namespace("util");
 		},
 		
 		/**
-	     * Remove the marker elements from the DOM
+	     * Remove all marker elements from the DOM
 	     * @method remove
 	     */
 		remove: function() {
-			for(i in this._shapes) {
-				if(!YAHOO.lang.hasOwnProperty(this._shapes, i)) continue;
-				
-				var rect = this.shapeRects[i];
-				rect.get("element").parentNode.removeChild(rect.get("element"));
-				delete this._shapes[i];
-				delete this.shapeRects[i];
-			}
+			this.removeAllShapes();
 			this.markerRect.get("element").parentNode.removeChild(this.markerRect.get("element"));
 			delete this.markerRect;
 		},
