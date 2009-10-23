@@ -258,6 +258,9 @@ ORYX.Core.StencilSet.Rules = {
 					if (!morphr[morphrKey]) {
 						morphr[morphrKey] = [];
 					}
+					if(!rules.preserveBounds) {
+						rules.preserveBounds = false;
+					}
 					rules.baseMorphs.each((function(baseMorphStencilId){
 						morphr[morphrKey].push(this._getStencilById(namespace + baseMorphStencilId));
 					}).bind(this));
@@ -1049,6 +1052,15 @@ ORYX.Core.StencilSet.Rules = {
 										&& r.showInShapeMenu !== false;
 							})
 				});
+	},
+	
+	preserveBounds: function(stencil) {
+		return this._stencilSets.any(function(ss) {
+			return ss.jsonRules().morphingRules.any(function(r) {
+				return stencil.roles().include(ss.namespace() + r.role) 
+					&& r.preserveBounds !== false;
+			})
+		})
 	},
 	
 	/** End morphing rules' methods */
