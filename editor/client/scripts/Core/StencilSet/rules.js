@@ -1058,7 +1058,7 @@ ORYX.Core.StencilSet.Rules = {
 		return this._stencilSets.any(function(ss) {
 			return ss.jsonRules().morphingRules.any(function(r) {
 				return stencil.roles().include(ss.namespace() + r.role) 
-					&& r.preserveBounds !== false;
+					&& r.preserveBounds && r.preserveBounds !== false;
 			})
 		})
 	},
