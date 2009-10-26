@@ -48,7 +48,7 @@ MOVI.namespace("util");
 	 * </dl>
 	 */	
 	MOVI.util.Overlay = function(modelviewer, coords, style) {
-		
+	
 		if(coords.length==0) throw new Error("No coordinates specified for the Overlay!");
 		if(!style) style = {};
 		

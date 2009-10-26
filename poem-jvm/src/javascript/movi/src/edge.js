@@ -69,12 +69,13 @@ MOVI.namespace("model");
 		 * @private
 		 */
 		_getIntersectionPoint: function(bounds, p1, p2) {
+			
 			var linearEquation = function(x) {
 				return p1.y + (p2.y-p1.y)/(p2.x-p1.x) * (x-p1.x);
 			};
 			
 			var inverseLinearEquation = function(x) {
-				return (x-p1.y)*(p1.x-p2.x)/(p2.y-p1.y) + p1.x;
+				return p1.x + (p2.x-p1.x)/(p2.y-p1.y) * (x-p1.y);
 			};
 			
 			// intersection points of the straight line through p1,p2 and the bounds rectangle
@@ -83,9 +84,9 @@ MOVI.namespace("model");
 				s[1] = {x: bounds.lowerRight.x, y: linearEquation(bounds.lowerRight.x)},
 				s[2] = {x: inverseLinearEquation(bounds.lowerRight.y), y: bounds.lowerRight.y},
 				s[3] = {x: bounds.upperLeft.x, y: linearEquation(bounds.upperLeft.x)};
-				
+			
 			for(var i=0; i<=3; i++) {
-				
+	
 				if(s[i].x==Infinity || s[i].y==Infinity) continue; // there is no intersection
 				
 				if(isNaN(s[i].x)) {
@@ -141,17 +142,14 @@ MOVI.namespace("model");
 				var pos = {x:this.dockers[i].x, y:this.dockers[i].y}
 				
 				// Add the bounds of the docked incoming shape
-				if (i==0){
-					
-					if (incoming.length > 0){
-						var bounds = incoming[0].getAbsBounds();
-						pos.x += bounds.upperLeft.x;
-						pos.y += bounds.upperLeft.y;
-					}
+				if(i==0 && incoming.length>0){
+					var bounds = incoming[0].getAbsBounds();
+					pos.x += bounds.upperLeft.x;
+					pos.y += bounds.upperLeft.y;
 				}
 				
 				// Add the bounds of the docked outgoing shape
-				if (i == len-1&&(outgoing).length > 0) {
+				if(i==(len-1) && outgoing.length>0) {
 					var bounds = outgoing[0].getAbsBounds();
 					pos.x += bounds.upperLeft.x;
 					pos.y += bounds.upperLeft.y;
@@ -159,12 +157,12 @@ MOVI.namespace("model");
 				
 				coords.push(pos);
 			}
-			
+				
 			if(incoming.length>0)
 				coords[0] = this._getIntersectionPoint(incoming[0].getAbsBounds(), coords[0], coords[1]);
 			if(outgoing.length>0)
 				coords[len-1] = this._getIntersectionPoint(outgoing[0].getAbsBounds(), coords[len-1], coords[len-2]);
-			
+		
 			return coords;
 		},
 		

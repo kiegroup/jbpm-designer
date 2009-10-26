@@ -163,7 +163,7 @@ MOVI.namespace("model");
 				var canvas = this.getCanvas();
 	
 				if (canvas) {
-					var nodes = canvas.getNodes();
+					var nodes = canvas.shapes;
 					for (var i in nodes){
 						if(!YAHOO.lang.hasOwnProperty(nodes, i)) continue;
 				
