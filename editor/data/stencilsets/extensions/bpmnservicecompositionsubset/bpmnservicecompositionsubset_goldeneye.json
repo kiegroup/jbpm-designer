@@ -19,7 +19,85 @@
 					"optional":true
 				}
 			]
+		},
+		{
+			"roles": [
+				"Task"
+			],
+			"properties": [
+				{
+					"id":"name",
+					"title" : "Name",
+					"type":"String",
+					"value": "Default Task",
+					"refToView": "acttext"
+				},
+				{
+					"id":"wsdlurl",
+					"title" : "wsdlUrl",
+					"type":"String",
+					"value": "http://test.bpel?wsdl"
+				},
+				{
+					"id":"namespace",
+					"title" : "Namespace",
+					"type":"String",
+					"value": "http://oryx.ns"
+				},
+				{
+					"id":"servicename",
+					"title" : "Service Name",
+					"type":"String",
+					"value": "TestService"
+				},
+				{
+					"id":"operation",
+					"title" : "Service Operation",
+					"type":"String",
+					"value": "TestServiceOperation"
+				},
+				{
+					"id":"inmessagetype",
+					"title" : "InMessageType",
+					"type":"String",
+					"value": "int"
+				},
+				{
+					"id":"outmessagetype",
+					"title" : "OutMessageType",
+					"type":"String",
+					"value": "int"
+				},
+				{
+					"id":"portType",
+					"title" : "PortType",
+					"type":"String",
+					"value": "TestPortType"
+				},
+				{
+					"id":"inputsets",
+					"title" : "InputSets",
+					"type":"Complex",
+					"value": '{"totalCount": 1, "items": [{"token": "sdf", "reportingServiceUrl": "sadf"}]}',
+					"complexItems" :[
+						{
+							"id":"token",
+							"name":"Token",
+							"type":"String",
+							"value":"123456" 
+						},
+						{
+							"id":"reportingServiceUrl",
+							"name":"Reporting Service Url",
+							"type":"String",
+							"value":"http://report.service" 
+						}
+					
+					]
+				}
+			]
 		}
+		
 	],
 	"rules": {
 		"connectionRules": [],
@@ -29,7 +107,9 @@
 	"removestencils": [
 		"CollapsedSubprocess",
 		"Subprocess",
+		"AND_Gateway",
 		"Exclusive_Eventbased_Gateway",
+		"Exclusive_Databased_Gateway",
 		"OR_Gateway",
 		"Complex_Gateway",
 		"Pool",
@@ -37,6 +117,7 @@
 		"Lane",
 		"Group",
 		"TextAnnotation",
+		"StartEvent",
 		"StartTimerEvent",
 		"StartConditionalEvent",
 		"StartSignalEvent",

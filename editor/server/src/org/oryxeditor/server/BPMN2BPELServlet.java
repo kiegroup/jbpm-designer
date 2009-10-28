@@ -33,6 +33,7 @@ import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2bpel.BPMN2BPELTransformer;
 import de.hpi.bpmn2bpel.TransformationResult;
+import de.hpi.diagram.OryxUUID;
 
 public class BPMN2BPELServlet extends HttpServlet {
 
@@ -92,6 +93,8 @@ public class BPMN2BPELServlet extends HttpServlet {
 			diagram = new BPMN11RDFImporter(document).loadBPMN();
 
 		/* Normalize diagram */
+		if(diagram.getId() == null) 
+			diagram.setId(OryxUUID.generate());
  		BPMNSESENormalizer normalizer = new BPMNSESENormalizer(diagram);
 		normalizer.normalize();
 		
