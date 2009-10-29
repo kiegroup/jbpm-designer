@@ -192,7 +192,7 @@ ORYX.Plugins.BPMNValidator = Ext.extend(ORYX.Plugins.Validator, {
     		});
         	//Ext.Msg.alert(ORYX.I18N.Validator.result, ORYX.I18N.Validator.noErrors);
         } else if(!leadsToEnd && conflictingNodes.size() === 0 && !unsafeNode){
-        	Ext.Msg.alert(ORYX.I18N.Validator.syntaxErrorsTitle, ORYX.I18N.Validator.syntaxErrorsMsg);
+        	Ext.Msg.alert(ORYX.I18N.Validator.bpmnLeadsToNoEndTitle, ORYX.I18N.Validator.bpmnLeadsToNoEnd);
         } else {
         	this.enableDeactivationHandler(button);
         	//show a status message with a hint to the error messages in the tooltip

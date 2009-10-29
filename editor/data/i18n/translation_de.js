@@ -633,6 +633,9 @@ ORYX.I18N.Validator.bpmnDeadlockTitle = "Deadlock";
 ORYX.I18N.Validator.bpmnDeadlock = "Dieses Element verursacht einen Deadlock, d.h. in manchen Situationen können nicht alle eingehenden Kanten und Nachrichtenflüsse aktiviert werden.";
 ORYX.I18N.Validator.bpmnUnsafeTitle = "Fehlende Synchronisation";
 ORYX.I18N.Validator.bpmnUnsafe = "Es findet eine mehrfache Aktivierung statt. Dadurch ist Synchronisierung nicht gewährleistet.";
+ORYX.I18N.Validator.bpmnLeadsToNoEndTitle = "Validierungsergebnis";
+ORYX.I18N.Validator.bpmnLeadsToNoEnd = "Dieser Prozess wird niemals einen Endzustand erreichen.";
+
 
 ORYX.I18N.Validator.syntaxErrorsTitle = "Syntaxfehler";
 ORYX.I18N.Validator.syntaxErrorsMsg = "Das Modell kann nicht validiert werden, weil es Syntaxfehler enthält.";

@@ -660,6 +660,8 @@ ORYX.I18N.Validator.bpmnDeadlockTitle = "Deadlock";
 ORYX.I18N.Validator.bpmnDeadlock = "This node results in a deadlock. There are situations where not all incoming branches are activated.";
 ORYX.I18N.Validator.bpmnUnsafeTitle = "Lack of synchronization";
 ORYX.I18N.Validator.bpmnUnsafe = "This model suffers from lack of synchronization. The marked element is activated from multiple incoming branches.";
+ORYX.I18N.Validator.bpmnLeadsToNoEndTitle = "Validation Result";
+ORYX.I18N.Validator.bpmnLeadsToNoEnd = "The process will never reach a final state.";
 
 ORYX.I18N.Validator.syntaxErrorsTitle = "Syntax Error";
 ORYX.I18N.Validator.syntaxErrorsMsg = "The process cannot be validated because it contains syntax errors.";
