@@ -85,9 +85,9 @@ MOVI.namespace("widget");
 		this._image = new YAHOO.util.Element(_MODELIMG_CLASS_NAME + this._index);
 		
 		// callbacks for model dragging
-		this._scrollbox.addListener("mousedown", this._onMouseDown, this, this, true);
+		this.addListener("mousedown", this._onMouseDown, this, this, true);
 		YAHOO.util.Event.addListener(document, "mouseup", this._onMouseUp, this, this, true);
-
+			
 		this._loadOptions = {};
     };
 
@@ -708,15 +708,38 @@ MOVI.namespace("widget");
 		 * @private
 		 */
 		_onMouseDown: function(ev) {
+			// don't start drag scrolling when the mouse down event occurs on a scrollbar
+			var SCROLLBAR_WIDTH = 20;
+			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+			var ul = YAHOO.util.Dom.getXY(this._scrollbox);
+			var lrX = ul[0]+this.getScrollboxEl().get("offsetWidth"),
+				lrY = ul[1]+this.getScrollboxEl().get("offsetHeight");
+			if(this.getScrollboxEl().get("offsetWidth")/this.getImgWidth()<1) {
+				// horizontal scrollbar shown
+				if( (mouseAbsXY[1]>=lrY-20) && (mouseAbsXY[1]<=lrY) ) {
+					// mouse down on scrollbar
+					return;
+				}
+			}
+			if(this.getScrollboxEl().get("offsetHeight")/this.getImgHeight()<1) {
+				// vertical scrollbar shown
+				if( (mouseAbsXY[0]>=lrX-20) && (mouseAbsXY[0]<=lrX) ) {
+					// mouse down on scrollbar
+					return;
+				}
+			}
+			
+		
 			if(ev.target==this._scrollbox.get("element") || ev.target==this._image.get("element")
 					|| ev.target==this.canvas.get("element")) {
 				YAHOO.util.Event.preventDefault(ev);
 				YAHOO.util.Event.stopPropagation(ev);
 			}
 			this._scrollbox.removeListener("mousemove", this._onModelDrag);
-			var mouseAbsXY = YAHOO.util.Event.getXY(ev);
+
 			this._mouseCoords = { x: mouseAbsXY[0], y: mouseAbsXY[1] };
 			this._scrollbox.addListener("mousemove", this._onModelDrag, this, this, true);
+			this._isDragging = true;
 		},
 		
 		/**
@@ -726,6 +749,7 @@ MOVI.namespace("widget");
 		_onMouseUp: function(ev) {
 			YAHOO.util.Event.preventDefault(ev);
 			this._scrollbox.removeListener("mousemove", this._onModelDrag);
+			this._isDragging = false;
 		},
 		
 		/**
