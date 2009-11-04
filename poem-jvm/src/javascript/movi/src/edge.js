@@ -80,9 +80,9 @@ MOVI.namespace("model");
 			
 			// intersection points of the straight line through p1,p2 and the bounds rectangle
 			var s = []; 
-				s[0] = {x: inverseLinearEquation(bounds.upperLeft.y), y: bounds.upperLeft.y},
-				s[1] = {x: bounds.lowerRight.x, y: linearEquation(bounds.lowerRight.x)},
-				s[2] = {x: inverseLinearEquation(bounds.lowerRight.y), y: bounds.lowerRight.y},
+				s[0] = {x: inverseLinearEquation(bounds.upperLeft.y), y: bounds.upperLeft.y};
+				s[1] = {x: bounds.lowerRight.x, y: linearEquation(bounds.lowerRight.x)};
+				s[2] = {x: inverseLinearEquation(bounds.lowerRight.y), y: bounds.lowerRight.y};
 				s[3] = {x: bounds.upperLeft.x, y: linearEquation(bounds.upperLeft.x)};
 			
 			for(var i=0; i<=3; i++) {

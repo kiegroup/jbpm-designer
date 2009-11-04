@@ -285,21 +285,35 @@ MOVI.namespace("util");
 	 * @private
      */
 	var _createBubble = function(content) {
+		
+		var isIE6 = YAHOO.env.ua.ie === 6;
+		
 		this.set("className", _BUBBLE_HIDDEN_CLASS_NAME);
 		this.set("innerHTML", 	
-						"<div class=\"" + _BUBBLE_UL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_UR_CLASS_NAME + "\">" +
-					   	"<div class=\"" + _BUBBLE_LL_CLASS_NAME + "\"><div class=\"" + _BUBBLE_LR_CLASS_NAME + "\">" + 
-					    	"<div class=\"" + _BUBBLE_BORDERTOP_CLASS_NAME + "\"></div>" +
-					    	"<div class=\"" + _BUBBLE_BORDERLEFT_CLASS_NAME + "\">" +
-					    	"<div class=\"" + _BUBBLE_BORDERRIGHT_CLASS_NAME + "\">" +
-					   		    "<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
-							    	"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\"></div>" +
-					            	content +
-					            "</div>" +
-					        "</div></div>" +
-					        "<div class=\"" + _BUBBLE_BORDERBOTTOM_CLASS_NAME + "\"></div>" +
-					   	"</div></div>" +
-					   	"</div></div>" +
+						"<div class=\"" + _BUBBLE_UL_CLASS_NAME + "\">"+
+							(isIE6 ? "<img class=\""+ _BUBBLE_UL_CLASS_NAME +"\">":"")+
+							"<div class=\"" + _BUBBLE_UR_CLASS_NAME + "\">" +
+								(isIE6 ? "<img class=\""+ _BUBBLE_UR_CLASS_NAME +"\">":"")+
+					   			"<div class=\"" + _BUBBLE_LL_CLASS_NAME + "\">"+
+									(isIE6 ? "<img class=\""+ _BUBBLE_LL_CLASS_NAME +"\">":"")+
+									"<div class=\"" + _BUBBLE_LR_CLASS_NAME + "\">" + 
+										(isIE6 ? "<img class=\""+ _BUBBLE_LR_CLASS_NAME +"\">":"")+
+								    	"<div class=\"" + _BUBBLE_BORDERTOP_CLASS_NAME + "\"></div>" +
+								    	"<div class=\"" + _BUBBLE_BORDERLEFT_CLASS_NAME + "\">" +
+											(isIE6 ? "<img class=\""+ _BUBBLE_BORDERLEFT_CLASS_NAME +"\">":"")+
+								    		"<div class=\"" + _BUBBLE_BORDERRIGHT_CLASS_NAME + "\">" +
+												(isIE6 ? "<img class=\""+ _BUBBLE_BORDERRIGHT_CLASS_NAME +"\">":"")+
+								   		   		"<div class=\"" + _BUBBLE_CONTENT_CLASS_NAME + "\">" +
+										    		"<div class=\"" + _BUBBLE_CLOSEBUTTON_CLASS_NAME + "\"></div>" +
+								            			content +
+								         			"</div>" +
+								        		"</div>"+
+											"</div>" +
+								        "<div class=\"" + _BUBBLE_BORDERBOTTOM_CLASS_NAME + "\"></div>" +
+					   				"</div>"+
+								"</div>" +
+					   		"</div>"+
+						"</div>" +
 					    "<div class=\"" + _BUBBLE_ARROW_LEFT_CLASS_NAME + "\"/>");
 	}
 	
