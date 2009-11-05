@@ -248,7 +248,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				
 				var textLines = this._text.split("\n");
 				while (textLines.last() == "") 
-					textLines.remove(textLines.last());
+					textLines.pop();
 				
 				this.node.textContent = "";
 				
@@ -264,7 +264,6 @@ ORYX.Core.SVG.Label = Clazz.extend({
 						 * So, we add a whitespace to such a tspan element.
 						 */
 						if(tspan.textContent === "") {
-							console.log("adding space");
 							tspan.textContent = " ";
 						}
 						
@@ -383,30 +382,40 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			
 			var fontSize = this.getFontSize(this.node); 
 			
+			var invalidTSpans = [];
+			
 			$A(tspans).each((function(tspan, index){
 				
-				//set vertical position
-				var dy = 0;
-				switch (this._verticalAlign) {
-					case 'bottom':
-						dy = -(tspans.length - index - 1) * (fontSize);
-						break;
-					case 'middle':
-						dy = -(tspans.length / 2.0 - index - 1) * (fontSize);
-						dy -= ORYX.CONFIG.LABEL_LINE_DISTANCE / 2;
-						break;
-					case 'top':
-						dy = index * (fontSize);
-						dy += fontSize;
-						break;
+				if(tspan.textContent.trim() === "") {
+					invalidTSpans.push(tspan);
+				} else {
+					//set vertical position
+					var dy = 0;
+					switch (this._verticalAlign) {
+						case 'bottom':
+							dy = -(tspans.length - index - 1) * (fontSize);
+							break;
+						case 'middle':
+							dy = -(tspans.length / 2.0 - index - 1) * (fontSize);
+							dy -= ORYX.CONFIG.LABEL_LINE_DISTANCE / 2;
+							break;
+						case 'top':
+							dy = index * (fontSize);
+							dy += fontSize;
+							break;
+					}
+					
+					tspan.setAttributeNS(null, 'dy', dy);
+					
+					tspan.setAttributeNS(null, 'x', this.x);
+					tspan.setAttributeNS(null, 'y', this.y);
 				}
 				
-				tspan.setAttributeNS(null, 'dy', dy);
-				
-				tspan.setAttributeNS(null, 'x', this.x);
-				tspan.setAttributeNS(null, 'y', this.y);
-				
 			}).bind(this));
+			
+			invalidTSpans.each(function(tspan) {
+				this.node.removeChild(tspan)
+			}.bind(this));
 			
 		} catch(e) {
 			//console.log(e);
