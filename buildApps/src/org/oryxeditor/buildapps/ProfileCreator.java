@@ -26,6 +26,9 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 import org.springframework.util.FileCopyUtils;
@@ -51,9 +54,10 @@ public class ProfileCreator {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
+	 * @throws JSONException 
 	 */
 	public static void main(String[] args) throws IOException,
-	ParserConfigurationException, SAXException {
+	ParserConfigurationException, SAXException, JSONException {
 		if (args.length != 2) {
 			System.err.println("Wrong Number of Arguments!");
 			System.err.println(usage());
@@ -140,11 +144,12 @@ public class ProfileCreator {
 	 *            all plugins for this profile
 	 * @throws IOException
 	 * @throws FileNotFoundException
+	 * @throws JSONException 
 	 */
 	private static void writeProfileXML(String pluginXMLPath,
 			String profileXMLPath, String outputPath, String ProfileName,
 			ArrayList<String> pluginNames) throws IOException,
-			FileNotFoundException {
+			FileNotFoundException, JSONException {
 
 		FileCopyUtils.copy(new FileInputStream(pluginXMLPath),
 				new FileOutputStream(outputPath + File.separator + ProfileName + ".xml"));
@@ -169,14 +174,32 @@ public class ProfileCreator {
 						"profile not defined in profile xml");
 
 			NamedNodeMap attr = profileNode.getAttributes();
-			StringBuilder bld= new StringBuilder();
+			JSONObject config=new JSONObject();
 			for(int i=0;i<attr.getLength();i++){
-				bld.append(attr.item(i).getNodeName());
-				bld.append("::");
-				bld.append(attr.item(i).getNodeValue());
-				bld.append("##");
+				config.put(attr.item(i).getNodeName(), attr.item(i).getNodeValue());
 			}
-			FileCopyUtils.copy(bld.toString(), new FileWriter(outputPath + File.separator+ProfileName+".conf"));
+			for (int profilePluginNodeIndex = 0; profilePluginNodeIndex < profileNode
+			.getChildNodes().getLength(); profilePluginNodeIndex++) {
+				Node tmpNode = profileNode.getChildNodes().item(profilePluginNodeIndex);
+				
+				if("plugin".equals(tmpNode.getNodeName()) || tmpNode==null)
+						continue;
+				JSONObject nodeObject = new JSONObject();
+				NamedNodeMap attr1 = tmpNode.getAttributes();
+				if(attr1==null)
+					continue;
+				for(int i=0;i<attr1.getLength();i++){
+					nodeObject.put(attr1.item(i).getNodeName(), attr1.item(i).getNodeValue());
+				}
+				
+				if(config.has(tmpNode.getNodeName())){
+					config.getJSONArray(tmpNode.getNodeName()).put(nodeObject);
+				}else{
+					config.put(tmpNode.getNodeName(), new JSONArray().put(nodeObject));
+				}
+				
+			}
+			FileCopyUtils.copy(config.toString(), new FileWriter(outputPath + File.separator+ProfileName+".conf"));
 			// for each plugin in the copied plugin.xml
 			for (int i = 0; i < pluginNodeList.getLength(); i++) {
 				Node pluginNode = pluginNodeList.item(i);

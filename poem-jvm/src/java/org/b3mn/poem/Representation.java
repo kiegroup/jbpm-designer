@@ -24,10 +24,12 @@
 package org.b3mn.poem;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -46,7 +48,11 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.b3mn.poem.util.JsonErdfTransformation;
 import org.b3mn.poem.util.RdfJsonTransformation;
+import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.springframework.util.FileCopyUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -63,7 +69,7 @@ public class Representation {
     private String summary;
     private Date created;
     private Date updated;
-
+    
     // The following 5 methods access the "content" table instead of "representation". 
     // This isn't nice style but it was necessary to separate meta and content data, in order 
     // to provide adequate performance. 
@@ -118,6 +124,12 @@ public class Representation {
      * @return
      */
     public String getJson(String serverUrl){
+//    	try {
+//			test(serverUrl);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
     	String content = getPureContent();
     	if(isJson(content)){
     		return content;
@@ -371,5 +383,40 @@ public class Representation {
 	protected static String jsonToErdf(String json){
 		return new JsonErdfTransformation(json).toString();
 	}
-	
+	public static void test(String serverUrl) throws IOException {
+    	ScrollableResults contents = Persistance.getSession().createSQLQuery("SELECT content.erdf FROM content")
+        .setCacheMode(CacheMode.IGNORE)
+        .scroll(ScrollMode.FORWARD_ONLY);
+
+    	int count=0;
+    	while ( contents.next() ) {
+    	    String content = (String) contents.get(0);
+    	    Writer writer=new FileWriter("C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/json/"+count+".json");
+
+        	if(isJson(content)){
+        		//content;
+        	} else {  		
+        		content=erdfToJson(content, serverUrl);
+
+        	}
+    	    if(content==null || content.indexOf("BPMNDiagram")==-1)
+    	    	continue;
+    	    String[] labels=new String[]{"name", "documentation", "title", "description", "pooldocumentation", "conditionexpression", "text", "state"};
+    	    for(String prop:labels)
+    	    	content=content.replaceAll("\""+prop+"\":\"([\\w\\W^\"]*?)\"", "\""+prop+"\":\"\"");
+
+    	    
+    	    FileCopyUtils.copy(content,writer);
+        	writer.close();
+        	
+    	    if ( ++count % 10 == 0 ) {
+    	        //flush a batch of updates and release memory:
+    	    	Persistance.getSession().flush();
+    	    	Persistance.getSession().clear();
+    	    }
+    	    System.gc();
+    	}
+    	Persistance.commit();
+
+	}
 }

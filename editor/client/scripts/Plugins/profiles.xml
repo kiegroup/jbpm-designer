@@ -34,6 +34,7 @@
 		
 	</profile>
 	<profile name="save" depends="default">
+		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>
 		<plugin name="ORYX.Plugins.File"/>
 		<plugin source="view.js" name="ORYX.Plugins.View">
 			<property zoomLevel="4"/>

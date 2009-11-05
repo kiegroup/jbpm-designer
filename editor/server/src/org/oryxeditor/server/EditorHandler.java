@@ -24,7 +24,6 @@
 package org.oryxeditor.server;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -36,6 +35,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.util.FileCopyUtils;
 
 public class EditorHandler extends HttpServlet {
@@ -51,6 +53,8 @@ public class EditorHandler extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		availableProfiles=getAvailableProfileNames();
+//		if(availableProfiles.size()==0)
+//			 defaultHandlerBehaviour();
 		String[] urlSplitted=request.getRequestURI().split(";");
 		ArrayList<String> profiles= new ArrayList<String>();
 		if (urlSplitted.length>1){
@@ -68,22 +72,31 @@ public class EditorHandler extends HttpServlet {
 			return;
 		}
 		String sset=null;
+		JSONObject conf= new JSONObject();
 		try {
-			sset=getNamedConf("stencilset", profiles.get(0));
-		} catch (Exception e) {
+			conf = new JSONObject(FileCopyUtils.copyToString(new FileReader(this.getServletContext().
+					getRealPath("/profiles") + File.separator + profiles.get(0)
+					+ ".conf")));
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(sset==null)
+		sset=conf.optString("stencilset");
+		if(sset==null || "".equals(sset))
 			sset=defaultSS;
+		String extString="";
+		JSONArray exts= conf.optJSONArray("stencilsetextension");
+		if(exts==null)
+			exts=new JSONArray();
+		extString=exts.toString();
 		String content = 
 	        "<script type='text/javascript'>" +
 	        "if(!ORYX) var ORYX = {};" +
 	        "if(!ORYX.CONFIG) ORYX.CONFIG = {};" +
 	        "ORYX.CONFIG.PLUGINS_CONFIG  =			ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".xml';" +
-//	        "function getStencilSetFromHash(){" +
-//	        "var para=location.hash.split('=')[1];" +
-//	        "return para};" +
+	        "ORYX.CONFIG.SSEXTS="+
+	        extString+
+	        ";"+
 
 	        "function onOryxResourcesLoaded(){" +
                 "if (location.hash.slice(1).length == 0 || location.hash.slice(1).indexOf('new')!=-1){" +
@@ -196,9 +209,17 @@ public class EditorHandler extends HttpServlet {
 		return "/backend/poem"; //+ req.getServletPath();
 	}
 	public Collection<String> getAvailableProfileNames() {
-		File handlerDir = new File(this.getServletContext().
-				getRealPath("/profiles"));
 		Collection<String> profilNames = new ArrayList<String>();
+
+		File handlerDir=null;
+		try {
+			handlerDir = new File(this.getServletContext().
+					getRealPath("/profiles"));
+		} catch (NullPointerException e) {
+			return profilNames;
+		}
+		if(handlerDir==null)
+			return profilNames;
 		
 		for (File source : handlerDir.listFiles()) {
 			if (source.getName().endsWith(".js")) {
@@ -206,17 +227,5 @@ public class EditorHandler extends HttpServlet {
 			}
 		}
 		return profilNames;
-	}
-	public String getNamedConf(String name, String profilename) throws FileNotFoundException, IOException {
-		String conf=FileCopyUtils.copyToString(new FileReader(this.getServletContext().
-				getRealPath("/profiles") + File.separator + profilename
-				+ ".conf"));
-		String[] confs=conf.split("##");
-		for(String attr:confs){
-			String[] pair=attr.split("::");
-			if(pair[0].equals(name))
-				return pair[1];
-		}
-		return null;
 	}
 }
