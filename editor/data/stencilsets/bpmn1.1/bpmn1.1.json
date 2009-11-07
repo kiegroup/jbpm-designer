@@ -10878,7 +10878,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"condition"
+					"refToView":"condition",
+					"wrapLines":true
 				},
 				{
 					"id":"quantity",
@@ -10940,7 +10941,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"name"
+					"refToView":"name",
+					"wrapLines":true
 				},
 				{
 					"id":"categories",
@@ -11041,7 +11043,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"name"
+					"refToView":"name",
+					"wrapLines":true
 				},
 				{
 					"id":"categories",
@@ -11140,7 +11143,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"name"
+					"refToView":"name",
+					"wrapLines":true
 				},
 				{
 					"id":"categories",
@@ -11239,7 +11243,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"name"
+					"refToView":"name",
+					"wrapLines":true
 				},
 				{
 					"id":"categories",
