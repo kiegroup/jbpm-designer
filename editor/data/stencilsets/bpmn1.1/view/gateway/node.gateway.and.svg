@@ -24,7 +24,7 @@
        id="path9"
        style="fill:#ffffff;stroke:#000000;stroke-width:3" />
        
-	<text id="text_name" x="16" y="36" oryx:align="center top"/>
+	<text id="text_name" x="26" y="26" oryx:align="left top"/>
 	
   </g>
 </svg>
