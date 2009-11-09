@@ -110,6 +110,7 @@
 	background-color: #FFFFFF; 
 	min-height: 100px;
 	min-width: 100px;
+	cursor: default;
 }
 
 .movi-bubble-closebutton {

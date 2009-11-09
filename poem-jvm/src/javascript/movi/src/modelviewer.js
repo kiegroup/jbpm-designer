@@ -77,8 +77,9 @@ MOVI.namespace("widget");
 							"\" class=\"" + _MODELIMG_CLASS_NAME + "\" />");
 							
 		// prevent marking
-		this.setStyle("-moz-user-select", "none");    // Gecko-based, Mozilla
-		this.setStyle("-webkit-user-select", "none"); // Webkit
+		this.setStyle("-moz-user-select", "-moz-none");    // Gecko-based, Mozilla
+		this.setStyle("-webkit-user-select", "none"); // Safari 3.0
+		this.setStyle("-khtml-user-select", "none");  // Safari 2.0
 		if (YAHOO.env.ua.ie > 0)
 			this.set("unselectable", "on");           // IE
 		

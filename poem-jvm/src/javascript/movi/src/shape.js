@@ -220,7 +220,7 @@ MOVI.namespace("model");
 			
 			if (!this.bounds) {
 				
-				// ERROR HANDLING if there is no bounds set
+				// ERROR HANDLING if bounds are not set
 				if (this.dockers) {
 					var min, max;
 					

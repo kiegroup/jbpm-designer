@@ -87,6 +87,14 @@ MOVI.namespace("util");
 		this.addListener("mouseover", function(ev) { Event.stopPropagation(ev) });
 		this.addListener("mouseout", function(ev) { Event.stopPropagation(ev) });
 		this.addListener("click", function(ev) { Event.stopPropagation(ev) });
+		this.addListener("mousedown", function(ev) { Event.stopPropagation(ev) });
+		
+		// allow user to select text 
+		this.setStyle("-moz-user-select", "text");    // Gecko-based, Mozilla
+		this.setStyle("-webkit-user-select", "text"); // Safari 3.0
+		this.setStyle("-khtml-user-select", "text");  // Safari 2.0
+		if (YAHOO.env.ua.ie > 0)
+			this.set("unselectable", "off");           // IE
 		
 		this._update();
 	}
