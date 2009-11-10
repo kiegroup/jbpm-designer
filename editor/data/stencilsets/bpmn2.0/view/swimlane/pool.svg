@@ -43,5 +43,9 @@
 	/>
 	
     <text x="10" y="125" font-size="14" id="text_name" oryx:align="middle center" oryx:anchors="left" oryx:rotate="270" fill="black" stroke="black"></text>
+	
+	<g id="multiInstance">
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M296 240 v8 M300 240 v8 M304 240 v8" stroke-width="2" />
+	</g>
   </g>
 </svg>

@@ -13,5 +13,15 @@ public interface Bounded {
 	/**
 	 * @return Point Object of the lower right
 	 */
-	public Point lowerRight();
+	public Point getLowerRight();
+	
+	/**
+	 * @return The width of the spanned area
+	 */
+	public double getWidth();
+	
+	/**
+	 * @return The height of the spanned area
+	 */
+	public double getHeight();
 }

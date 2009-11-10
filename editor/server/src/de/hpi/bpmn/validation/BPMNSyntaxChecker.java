@@ -70,7 +70,7 @@ public class BPMNSyntaxChecker extends AbstractSyntaxChecker {
 //	protected static final String INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW = "BPMN_INTERMEDIATEEVENT_WITHOUT_INCOMING_CONTROL_FLOW";
 	protected static final String STARTEVENT_WITH_INCOMING_CONTROL_FLOW = "BPMN_STARTEVENT_WITH_INCOMING_CONTROL_FLOW";
 	protected static final String ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW = "BPMN_ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW";
-	protected static final String ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "BPMN_ATTACHEDINTERMEDIATEEVENT_WITH_INCOMING_CONTROL_FLOW";
+	protected static final String ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW = "BPMN_ATTACHEDINTERMEDIATEEVENT_WITHOUT_OUTGOING_CONTROL_FLOW";
 	protected static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "BPMN_ENDEVENT_WITH_OUTGOING_CONTROL_FLOW";
 	protected static final String EVENTBASEDGATEWAY_BADCONTINUATION = "BPMN_EVENTBASEDGATEWAY_BADCONTINUATION";
 	protected static final String NODE_NOT_ALLOWED = "BPMN_NODE_NOT_ALLOWED";
@@ -227,7 +227,7 @@ public class BPMNSyntaxChecker extends AbstractSyntaxChecker {
 		
 		boolean containedInClasses = false;
 		String nodeClassName = node.getClass().getSimpleName();
-		
+	
 		for(String clazz : classes){
 			//TODO this doesn't checks for superclasses!!!
 			// better would be "node instanceof Class.forName(clazz)" 

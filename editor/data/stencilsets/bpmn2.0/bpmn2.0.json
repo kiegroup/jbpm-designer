@@ -76,7 +76,7 @@
 			"name" : "bgColor",
 			"properties" : [
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
@@ -94,7 +94,7 @@
  			"name":"catchEventAttributes",
  			"properties":[
  				{
-					"id":"eventDefinitionRef",
+					"id":"eventdefinitionref",
 					"type":"String",
 					"title":"EventDefinitionRef",
 					"title_de":"EreignisDefinitionsRef",
@@ -107,7 +107,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"eventDefinitions",
+					"id":"eventdefinitions",
 					"type":"String",
 					"title":"EventDefinitions",
 					"title_de":"EreignisDefinitionen",
@@ -120,7 +120,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"dataOutputAssociations",
+					"id":"dataoutputassociations",
 					"type":"String",
 					"title":"DataOutputAssociations",
 					"title_de":"DatenAusgangAssoziation",
@@ -133,7 +133,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"dataOutput",
+					"id":"dataoutput",
 					"type":"String",
 					"title":"DataOutput",
 					"title_de":"DatenAusgang",
@@ -146,7 +146,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"outputSet",
+					"id":"outputset",
 					"type":"String",
 					"title":"OutputSet",
 					"title_de":"AusgabeSätze",
@@ -164,7 +164,7 @@
  			"name":"throwEventAttributes",
  			"properties":[
  				{
-					"id":"eventDefinitionRef",
+					"id":"eventdefinitionref",
 					"type":"String",
 					"title":"EventDefinitionRef",
 					"title_de":"EreignisDefinitionsRef",
@@ -177,7 +177,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"eventDefinitions",
+					"id":"eventdefinitions",
 					"type":"String",
 					"title":"EventDefinitions",
 					"title_de":"EreignisDefinitionen",
@@ -190,7 +190,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"dataInputAssociations",
+					"id":"datainputassociations",
 					"type":"String",
 					"title":"DataInputAssociations",
 					"title_de":"DatenAusgangAssoziation",
@@ -203,10 +203,10 @@
 					"wrapLines":true
 				},
 				{
-					"id":"dataInput",
+					"id":"datainput",
 					"type":"String",
-					"title":"DataInput",
-					"title_de":"DatenAusgang",
+					"title":"Data Input",
+					"title_de":"Daten Eingang",
 					"value":"",
 					"description":"The Data Associations of the throw Event.",
 					"description_de":"Die Daten-Assoziation für ein auslösendes Ereignis.",
@@ -216,7 +216,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"inputSet",
+					"id":"inputset",
 					"type":"String",
 					"title":"InputSet",
 					"title_de":"AusgabeSätze",
@@ -231,13 +231,47 @@
  			]
  		},
  		{
+ 			"name" : "compensationThrowing",
+ 			"properties" : [
+ 				{
+ 					"id":"waitforcompletion",
+					"type":"Boolean",
+					"title":"Wait for completion",
+					"title_de":"Auf Fertigstellung warten",
+					"value":true,
+					"popular":true,
+					"description":"Determine whether a throw compensation is performed synchronously or asynchronously.",
+					"description_de":"Gibt an, ob die erzeugt Kompensierung synchron oder asynchron aufgerufen wird.",
+					"readonly":false,
+					"optional":true
+ 				}
+ 			]
+ 		},
+ 		{
+ 			"name" : "compensation",
+ 			"properties" : [
+ 				{
+ 					"id":"activityref",
+					"type":"String",
+					"title":"Activity reference",
+					"title_de":"Aktivitätsreferenz",
+					"value":"",
+					"popular":true,
+					"description":"The activity related to the compensation event",
+					"description_de":"Die Kompensierung betreffende Aktivität",
+					"readonly":false,
+					"optional":true
+ 				}
+ 			]
+ 		},
+ 		{
  			"name":"interrupting",
  			"properties":[
  				{
-					"id":"isInterrupting",
+					"id":"isinterrupting",
 					"type":"Boolean",
-					"title":"IsInterrupting",
-					"title_de":"Blockierend",
+					"title":"Is Interrupting",
+					"title_de":"Ist unterbrechend",
 					"value":true,
 					"description":"This attribute denotes whether the Sub-Process encompassing the Event Sub-Process should be cancelled or not.",
 					"description_de":"Dieses Attribut gibt an, ob der umfassende Subprozess abgebrochen werden soll.",
@@ -291,7 +325,19 @@
 					"length":"50"
 				},
 				{
-					"id":"expressionLanguage",
+					"id":"targetnamespace",
+					"type":"String",
+					"title":"TargetNamespace",
+					"title_de":"Zielnamesraum",
+					"value":"http://www.omg.org/bpmn20",
+					"description":"Defines the namespace of the elements inside the document.",
+					"description_de":"Definiert den Namensraum, der für die Elemente im Dokument verwendet wird.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"expressionlanguage",
 					"type":"String",
 					"title":"ExpressionLanguage",
 					"title_de":"AusdrucksSprache",
@@ -303,7 +349,7 @@
 					"length":"50"
 				},
 				{
-					"id":"queryLanguage",
+					"id":"querylanguage",
 					"type":"String",
 					"title":"QueryLanguage",
 					"title_de":"AbfrageSprache",
@@ -315,7 +361,7 @@
 					"length":"50"
 				},
 				{
-					"id":"creationDate",
+					"id":"creationdate",
 					"type":"Date",
 					"title":"CreationDate",
 					"title_de":"Erstellt am",
@@ -327,7 +373,7 @@
 					"dateFormat":"j/m/y"
 				},
 				{
-					"id":"modificationDate",
+					"id":"modificationdate",
 					"type":"Date",
 					"title":"ModificationDate",
 					"title_de":"Geändert am",
@@ -402,7 +448,7 @@
 			"name" : "activity",
 			"properties": [
 				{
-					"id":"startQuantity",
+					"id":"startquantity",
 					"type":"Integer",
 					"title":"StartQuantity",
 					"title_de":"Startanzahl",
@@ -414,7 +460,7 @@
 					"min":"1"
 				},
 				{
-					"id":"completionQuantity",
+					"id":"completionquantity",
 					"type":"Integer",
 					"title":"CompletionQuantity",
 					"title_de":"Fertigstellungsanzahl",
@@ -541,7 +587,7 @@
 					]
 				},
 				{
-					"id":"inputSets",
+					"id":"inputsets",
 					"type":"String",
 					"title":"InputSets",
 					"title_de":"Eingabesätze",
@@ -567,7 +613,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"outputSets",
+					"id":"outputsets",
 					"type":"String",
 					"title":"OutputSets",
 					"title_de":"Ausgabesätze",
@@ -593,7 +639,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"ioRules",
+					"id":"iorules",
 					"type":"String",
 					"title":"IORules",
 					"title_de":"EA Regeln",
@@ -606,7 +652,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"testTime",
+					"id":"testtime",
 					"type":"Choice",
 					"title":"TestTime",
 					"title_de":"Testzeit",
@@ -631,7 +677,7 @@
 					]
 				},
 				{
-					"id":"MI_Condition",
+					"id":"mi_condition",
 					"type":"String",
 					"title":"MI_Condition",
 					"title_de":"MI_Bedingung",
@@ -643,34 +689,7 @@
 					"length":"50"
 				},
 				{
-					"id":"MI_Ordering",
-					"type":"Choice",
-					"title":"MI_Ordering",
-					"title_de":"MI_Anordnung",
-					"value":"Sequential",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"Parallel",
-							"value":"Parallel",
-							"icon" : "/activity/list/mi.parallel.png",
-							"refToView":"parallel"
-						},
-						{
-							"id":"c2",
-							"title":"Sequential",
-							"value":"Sequential",
-							"icon" : "/activity/list/mi.sequential.png",
-							"refToView":"sequential"
-						}						
-					]
-				},
-				{
-					"id":"MI_FlowCondition",
+					"id":"mi_flowcondition",
 					"type":"Choice",
 					"title":"MI_FlowCondition",
 					"title_de":"MI_Flussbedingung",
@@ -707,14 +726,15 @@
 					]
 				},
 				{
-					"id":"isCompensation",
+					"id":"isforcompensation",
 					"type":"Boolean",
-					"title":"is Compensation",
-					"title_de":"ist Kompensation",
+					"title":"Is for Compensation",
+					"title_de":"Ist für Kompensation",
 					"value":false,
-					"description":"",
+					"description":"A flag that identifies whether this activity is intended for the purposes of compensation.",
+					"description_de":"Ein Flag, das angibt, ob diese Aktivität für Kompensierungszwecke vorgesehen ist.",
 					"readonly":false,
-					"optional":false,
+					"optional":true,
 					"refToView":"compensation"
 				},
 				{
@@ -791,7 +811,7 @@
 					"length":""
 				},
 				{
-					"id":"loopType",
+					"id":"looptype",
 					"type":"Choice",
 					"title":"LoopType",
 					"title_de":"Schleifentyp",
@@ -811,19 +831,27 @@
 							"id":"c2",
 							"title":"Standard",
 							"value":"Standard",
-							"icon" : "/activity/list/looptype.standard.png",
+							"icon" : "activity/list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
 							"id":"c3",
-							"title":"MultiInstance",
-							"value":"MultiInstance",
-							"refToView":"mi"
-						}
+							"title":"MI Parallel",
+							"value":"Parallel",
+							"icon" : "activity/list/mi.parallel.png",
+							"refToView":"parallel"
+						},
+						{
+							"id":"c4",
+							"title":"MI Sequential",
+							"value":"Sequential",
+							"icon" : "activity/list/mi.sequential.png",
+							"refToView":"sequential"
+						}	
 					]
 				},
 				{
-					"id":"loopCondition",
+					"id":"loopcondition",
 					"type":"String",
 					"title":"LoopCondition",
 					"title_de":"Schleifenbedingung",
@@ -835,7 +863,7 @@
 					"length":"50"
 				},
 				{
-					"id":"loopCounter",
+					"id":"loopcounter",
 					"type":"Integer",
 					"title":"LoopCounter",
 					"title_de":"Schleifenzähler",
@@ -847,7 +875,7 @@
 					"min":"0"
 				},
 				{
-					"id":"loopMaximum",
+					"id":"loopmaximum",
 					"type":"Integer",
 					"title":"LoopMaximum",
 					"title_de":"Schleifenmaximum",
@@ -859,7 +887,7 @@
 					"min":"0"
 				},
 				{
-					"id":"callAcitivity",
+					"id":"callacitivity",
 					"type":"Boolean",
 					"title":"is a Call Activity",
 					"title_de":"ist eine Call Activity",
@@ -875,7 +903,7 @@
 			"name" : "task",
 			"properties" : [
 				{
-					"id":"activityType",
+					"id":"activitytype",
 					"type":"String",
 					"title":"ActivityType",
 					"title_de":"Aktivitätstyp",
@@ -887,7 +915,7 @@
 					"length":""
 				},
 				{
-					"id":"TaskType",
+					"id":"tasktype",
 					"type":"Choice",
 					"title":"TaskType",
 					"title_de":"Tasktyp",
@@ -907,55 +935,55 @@
 							"id":"c2",
 							"title":"Send",
 							"value":"Send",
-							"icon" : "/activity/list/type.send.png",
+							"icon" : "activity/list/type.send.png",
 							"refToView":"sendTask"
 						},
 						{
 							"id":"c3",
 							"title":"Receive",
 							"value":"Receive",
-							"icon" : "/activity/list/type.receive.png",
+							"icon" : "activity/list/type.receive.png",
 							"refToView":"receiveTask"
 						},
 						{
 							"id":"c4",
 							"title":"User",
 							"value":"User",
-							"icon" : "/activity/list/type.user.png",
+							"icon" : "activity/list/type.user.png",
 							"refToView":"userTask"
 						},
 						{
 							"id":"c5",
 							"title":"Manual",
 							"value":"Manual",
-							"icon" : "/activity/list/type.manual.png",
+							"icon" : "activity/list/type.manual.png",
 							"refToView":"manualTask"	
 						},
 						{
 							"id":"c6",
 							"title":"Service",
 							"value":"Service",
-							"icon" : "/activity/list/type.service.png",
+							"icon" : "activity/list/type.service.png",
 							"refToView":"serviceTask"
 						},
 						{
 							"id":"c7",
 							"title":"Business Rule",
 							"value":"Business Rule",
-							"icon" : "/activity/list/type.business.rule.png",
+							"icon" : "activity/list/type.business.rule.png",
 							"refToView":"businessRuleTask"
 						},
 						{
 							"id":"c8",
 							"title":"Script",
 							"value":"Script",
-							"icon" : "/activity/list/type.script.png",
+							"icon" : "activity/list/type.script.png",
 							"refToView":"scriptTask"
 						}
 					]
 				},
 				{
-					"id":"InMessage",
+					"id":"inmessage",
 					"type":"String",
 					"title":"InMessage",
 					"title_de":"Eingangsnachricht",
@@ -967,7 +995,7 @@
 					"length":"50"
 				},
 				{
-					"id":"OutMessage",
+					"id":"outmessage",
 					"type":"String",
 					"title":"OutMessage",
 					"title_de":"Ausgangsnachricht",
@@ -979,7 +1007,7 @@
 					"length":"50"
 				},
 				{
-					"id":"Implementation",
+					"id":"implementation",
 					"type":"Choice",
 					"title":"Implementation",
 					"title_de":"Implementierung",
@@ -1010,7 +1038,7 @@
 					]
 				},
 				{				
-					"id":"ComplexMI_Condition",
+					"id":"complexmi_condition",
 					"type":"String",
 					"title":"ComplexMI_Condition",
 					"title_de":"KomplexeMI Bedingung",
@@ -1022,7 +1050,7 @@
 					"length":"50"
 				},
 				{
-					"id":"MessageRef",
+					"id":"messageref",
 					"type":"String",
 					"title":"MessageRef",
 					"title_de":"NachrichtRef",
@@ -1034,7 +1062,7 @@
 					"length":"50"
 				},
 				{
-					"id":"OperationRef",
+					"id":"operationref",
 					"type":"String",
 					"title":"OperationRef",
 					"title_de":"OperationsRef",
@@ -1046,7 +1074,7 @@
 					"length":"50"
 				},
 				{
-					"id":"TaskRef",
+					"id":"taskref",
 					"type":"String",
 					"title":"TaskRef",
 					"value":"",
@@ -1057,7 +1085,7 @@
 					"length":"50"
 				},	
 				{
-					"id":"Instantiate",
+					"id":"instantiate",
 					"type":"Boolean",
 					"title":"Instantiate",
 					"title_de":"Instanziieren",
@@ -1069,7 +1097,7 @@
 				},
 				
 				{
-					"id":"Script",
+					"id":"script",
 					"type":"String",
 					"title":"Script",
 					"title_de":"Skript",
@@ -1081,7 +1109,7 @@
 					"length":"50"
 				},
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
@@ -1099,7 +1127,7 @@
 			"name" : "subprocess",
 			"properties" : [
 				{
-					"id": "subProcessType",
+					"id": "subprocesstype",
 					"type": "Choice",
 					"title": "subProcessType",
 					"title_de":"Subprozesstyp",
@@ -1127,7 +1155,7 @@
 					]
 				},
 				{
-					"id":"isATransaction",
+					"id":"isatransaction",
 					"type":"Boolean",
 					"title":"is a Transaction",
 					"title_de":"ist eine Transaktion",
@@ -1150,6 +1178,33 @@
 					"length":"50"
 				},
 				{
+					"id":"transactionmethod",
+					"type":"Choice",
+					"title":"TransactionMethod",
+					"title_de":"Transaction Methode",
+					"value":"compensate",
+					"description":"The technique that will be used to undo a transaction that has been cancelled.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id":"c1",
+							"title":"Compensate",
+							"value":"compensate"
+						},
+						{
+							"id":"c2",
+							"title":"Store",
+							"value":"store"
+						},
+						{
+							"id":"c3",
+							"title":"Image",
+							"value":"image"
+						}
+					]
+				},
+				{
 					"id":"isadhoc",
 					"type":"Boolean",
 					"title":"isAdHoc",
@@ -1161,7 +1216,7 @@
 					"refToView":"adhoc"
 				},
 				{
-					"id":"AdHocOrdering",
+					"id":"adhocordering",
 					"type":"Choice",
 					"title":"AdHocOrdering",
 					"title_de":"Ad-hoc Anordnung",
@@ -1174,26 +1229,35 @@
 						{
 							"id":"c1",
 							"title":"Sequential",
-							"value":"Sequential"
+							"value":"sequential"
 						},
 						{
 							"id":"c2",
 							"title":"Parallel",
-							"value":"Parallel"
+							"value":"parallel"
 						}
 					]
 				},
 				{
-					"id":"AdHocCompletionCondition",
+					"id":"adhoccompletioncondition",
 					"type":"String",
 					"title":"AdHocCompletionCondition",
 					"title_de":"Ad-hoc Fertigstellungsbedingung",
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50"
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"adhoccancelremaininginstances",
+					"type":"Boolean",
+					"title":"AdhocCancelRemainingInstances",
+					"title_de":"Ad-hoc Abbruch laufender Instanzen",
+					"value":true,
+					"description":"This attribute is used only if ordering is parallel. It determines whether running instances are cancelled when the completionCondition becomes true.",
+					"readonly":false,
+					"optional":true
 				},
 				{
 					"id":"entry",
@@ -1207,7 +1271,7 @@
 					"refToView":"u"
 				},
 				{
-					"id":"diagramRef",
+					"id":"diagramref",
 					"type":"String",
 					"title":"DiagramRef",
 					"title_de":"DiagrammRef",
@@ -1218,7 +1282,7 @@
 					"refToView":""
 				},
 				{
-					"id":"processRef",
+					"id":"processref",
 					"type":"String",
 					"title":"ProcessRef",
 					"title_de":"ProzessRef",
@@ -1229,7 +1293,7 @@
 					"refToView":""
 				},
 				{
-					"id":"inputMaps",
+					"id":"inputmaps",
 					"type":"String",
 					"title":"InputMaps",
 					"title_de":"Eingabeabbildung",
@@ -1240,7 +1304,7 @@
 					"refToView":""
 				},
 				{
-					"id":"outputMaps",
+					"id":"outputmaps",
 					"type":"String",
 					"title":"OutputMaps",
 					"title_de":"Ausgabeabbildung",
@@ -1342,7 +1406,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_outgoingSequenceFlow",
+					"id":"gates_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gates] OutgoingSequenceFlow",
 					"title_de":"[Gates] Ausgehender Steuerfluss",
@@ -1355,7 +1419,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gates_Assignments",
+					"id":"gates_assignments",
 					"type":"String",
 					"title":"[Gates] Assignments",
 					"title_de":"[Gates] Zuweisungen",
@@ -1398,7 +1462,18 @@
 			"name" : "pool",
 			"properties" : [
 				{
-					"id":"participantRef",
+					"id" : "multiinstance",
+					"type" : "Boolean",
+					"title" : "Multi Instance Participant",
+					"title_de" : "Multi Instance Teilnehmer",
+					"value" : false,
+					"description" : "",
+					"readonly" : false,
+					"optional" : true,
+					"refToView" : "multiInstance"
+				},
+				{
+					"id":"participantref",
 					"type":"String",
 					"title":"ParticipantRef",
 					"title_de":"TeilnehmerRef",
@@ -1421,7 +1496,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"boundaryVisible",
+					"id":"boundaryvisible",
 					"type":"Boolean",
 					"title":"BoundaryVisible",
 					"title_de":"Umrandung sichtbar",
@@ -1433,7 +1508,7 @@
 					"refToView": ["border", "c", "caption", "captionDisableAntialiasing"]
 				},
 				{
-					"id":"mainPool",
+					"id":"mainpool",
 					"type":"Boolean",
 					"title":"MainPool",
 					"title_de":"Hauptpool",
@@ -1444,7 +1519,7 @@
 					"optional":false
 				},
 				{
-					"id":"processRef",
+					"id":"processref",
 					"type":"String",
 					"title":"ProcessRef",
 					"title_de":"ProzessRef",
@@ -1455,7 +1530,7 @@
 					"length":"30"
 				},
 				{
-					"id":"processName",
+					"id":"processname",
 					"type":"String",
 					"title":"ProcessName",
 					"title_de":"Prozessname",
@@ -1467,7 +1542,7 @@
 					"length":"30"
 				},
 				{
-					"id":"processType",
+					"id":"processtype",
 					"type":"Choice",
 					"title":"ProcessType",
 					"title_de":"Prozesstyp",
@@ -1552,7 +1627,7 @@
 					]
 				},
 				{
-					"id":"adHoc",
+					"id":"adhoc",
 					"type":"Boolean",
 					"title":"AdHoc",
 					"value":false,
@@ -1561,7 +1636,7 @@
 					"optional":false
 				},
 				{
-					"id":"adHocOrdering",
+					"id":"adhocordering",
 					"type":"Choice",
 					"title":"AdHocOrdering",
 					"title_de":"Ad-Hoc Anordnung",
@@ -1586,7 +1661,7 @@
 					]
 				},
 				{
-					"id":"adHocCompletionCondition",
+					"id":"adhoccompletioncondition",
 					"type":"String",
 					"title":"AdHocCompletionCondition",
 					"title_de":"Ad-hoc Fertigstellungsbedingung",
@@ -1598,7 +1673,7 @@
 					"length":"50"
 				},
 				{
-					"id":"suppressJoinFailure",
+					"id":"suppressjoinfailure",
 					"type":"Boolean",
 					"title":"SuppressJoinFailure",
 					"value":false,
@@ -1607,7 +1682,7 @@
 					"optional":false
 				},
 				{
-					"id":"enableInstanceCompensation",
+					"id":"enableinstancecompensation",
 					"type":"Boolean",
 					"title":"EnableBooleanCompensation",
 					"value":false,
@@ -1616,7 +1691,7 @@
 					"optional":false
 				},
 				{
-					"id":"processCategories",
+					"id":"processcategories",
 					"type":"String",
 					"title":"ProcessCategories",
 					"value":"",
@@ -1628,7 +1703,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"processDocumentation",
+					"id":"processdocumentation",
 					"type":"String",
 					"title":"ProcessDocumentation",
 					"value":"",
@@ -1683,6 +1758,7 @@
 				"sequence_end",
 				"from_task_event",
 				"to_task_event",
+				"FromEventbasedGateway",
 				"messageflow_start",
 				"messageflow_end",
 				"fromtoall",
@@ -1709,7 +1785,7 @@
 			],
 			"properties" :		[
 				{
-					"id":"activityType",
+					"id":"activitytype",
 					"type":"String",
 					"title":"ActivityType",
 					"title_de":"Aktivitätstyp",
@@ -1722,7 +1798,7 @@
 					"length":""
 				},
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
@@ -1757,7 +1833,19 @@
 			"description_de" :	"Ein Unterprozess ist eine zerlegbare Aktivität. Ein Aufgeklappter Unterprozess enthält ein BPMN Diagramm.",
 			"view" :			"activity/subprocess.expanded.svg",
 			"icon" :			"activity/expanded.subprocess.png",
- 			"layout" : 			[{"type" : "layout.bpmn2_0.subprocess"}],
+ 			"layout" : 			[
+ 									{"type" : "layout.container.dockers"},
+ 									{
+ 										"type" : "layout.container.minBounds",
+ 										"options" : {
+ 											"fixedX" : true,
+ 											"ignoreChildsWithId" : [
+ 												"http://b3mn.org/stencilset/bpmn2.0#Lane",
+ 												"http://b3mn.org/stencilset/bpmn2.0#StartNoneEvent"
+ 											]
+ 										}
+ 									}
+ 								],
 			"propertyPackages" :[
 				"baseAttributes",
 				"flowElement",
@@ -1767,7 +1855,7 @@
 			],
 			"properties" :		[
 				{
-					"id":"activityType",
+					"id":"activitytype",
 					"type":"String",
 					"title":"ActivityType",
 					"title_de":"Aktivitätstyp",
@@ -1814,7 +1902,7 @@
 			],
 			"properties" :		[
 				{
-					"id":"activityType",
+					"id":"activitytype",
 					"type":"String",
 					"title":"ActivityType",
 					"title_de":"Aktivitätstyp",
@@ -1827,7 +1915,7 @@
 					"length":""
 				},
 				{
-					"id":"startEvent",
+					"id":"startevent",
 					"type":"Choice",
 					"title":"Start-Event",
 					"title_de":"Start-Ereignis",
@@ -1841,7 +1929,7 @@
 							"title":"Message",
 							"title_de" : "Nachricht",
 							"value":"Message",
-							"icon" : "/activity/list/event.message.png",
+							"icon" : "activity/list/event.message.png",
 							"refToView":"message"
 						},
 						{
@@ -1849,7 +1937,7 @@
 							"title":"Timer",
 							"title_de" : "Stoppuhr",
 							"value":"Timer",
-							"icon" : "/activity/list/event.timer.png",
+							"icon" : "activity/list/event.timer.png",
 							"refToView":"timer"
 						},
 						{
@@ -1857,7 +1945,7 @@
 							"title":"Escalation",
 							"title_de" : "Eskalation",
 							"value":"Escalation",
-							"icon" : "/activity/list/event.escalation.png",
+							"icon" : "activity/list/event.escalation.png",
 							"refToView":"escalation"
 						},
 						{
@@ -1865,7 +1953,7 @@
 							"title":"Conditional",
 							"title_de" : "Bedingung",
 							"value":"Conditional",
-							"icon" : "/activity/list/event.conditional.png",
+							"icon" : "activity/list/event.conditional.png",
 							"refToView":"conditional"
 						},
 						{
@@ -1873,7 +1961,7 @@
 							"title":"Error",
 							"title_de" : "Fehler",
 							"value":"Error",
-							"icon" : "/activity/list/event.error.png",
+							"icon" : "activity/list/event.error.png",
 							"refToView":"error"	
 						},
 						{
@@ -1881,7 +1969,7 @@
 							"title":"Compensation",
 							"title_de" : "Kompensation",
 							"value": "Compensation",
-							"icon" : "/activity/list/event.compensation.png",
+							"icon" : "activity/list/event.compensation.png",
 							"refToView":"compensationStart"
 						},
 						{
@@ -1889,7 +1977,7 @@
 							"title":"Signal",
 							"title_de" : "Signal",
 							"value":"Signal",
-							"icon" : "/activity/list/event.signal.png",
+							"icon" : "activity/list/event.signal.png",
 							"refToView":"signal"
 						},
 						{
@@ -1897,7 +1985,7 @@
 							"title":"Multiple",
 							"title_de" : "Vielzahl",
 							"value":"Multiple",
-							"icon" : "/activity/list/event.multiple.png",
+							"icon" : "activity/list/event.multiple.png",
 							"refToView":"multiple"
 						},
 						{
@@ -1905,7 +1993,7 @@
 							"title":"Multiple (Parallel)",
 							"title_de" : "Vielzahl (Parallel)",
 							"value":"MultipleParallel",
-							"icon" : "/activity/list/event.multiple.parallel.png",
+							"icon" : "activity/list/event.multiple.parallel.png",
 							"refToView":"multipleParallel"
 						}
 					]
@@ -1939,7 +2027,7 @@
 			],
 			"properties" :		[
 				{
-					"id":"activityType",
+					"id":"activitytype",
 					"type":"String",
 					"title":"ActivityType",
 					"title_de":"Aktivitätstyp",
@@ -1952,7 +2040,7 @@
 					"length":""
 				},
 				{
-					"id":"isATransaction",
+					"id":"isatransaction",
 					"type":"Boolean",
 					"title":"is a Transaction",
 					"title_de":"ist eine Transaktion",
@@ -1962,7 +2050,7 @@
 					"optional":false
 				},
 				{
-					"id":"callAcitivity",
+					"id":"callacitivity",
 					"type":"Boolean",
 					"title":"is a Call Activity",
 					"title_de":"ist eine Call Activity",
@@ -2000,7 +2088,7 @@
 			],
 			"properties" :		[
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"title":"GatewayTyp",
@@ -2011,7 +2099,7 @@
 					"length":""
 				},
 				{
-					"id":"xorType",
+					"id":"xortype",
 					"type":"String",
 					"title":"XORType",
 					"title_de":"XORTyp",
@@ -2022,7 +2110,7 @@
 					"length":""
 				},
 				{
-					"id":"markerVisible",
+					"id":"markervisible",
 					"type":"Boolean",
 					"title":"MarkerVisible",
 					"title_de":"Markierung sichtbar",
@@ -2033,7 +2121,7 @@
 					"refToView":"cross"
 				},		
 				{
-					"id":"defaultGate",
+					"id":"defaultgate",
 					"type":"String",
 					"title":"DefaultGate",
 					"title_de":"Standardgate",
@@ -2046,7 +2134,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gate_outgoingSequenceFlow",
+					"id":"gate_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gate] OutgoingSequenceFlow",
 					"title_de":"[Gate] Ausgehender Steuerfluss",
@@ -2058,7 +2146,7 @@
 					"length":"50"
 				},
 				{
-					"id":"gate_Assignments",
+					"id":"gate_assignments",
 					"type":"String",
 					"title":"[Gate] Assignments",
 					"title_de":"[Gates] Zuweisungen",
@@ -2099,7 +2187,7 @@
 			],
 			"properties" :		[
 				{
-					"id":"eventType",
+					"id":"eventtype",
 					"type":"Choice",
 					"title":"Type",
 					"title_de":"Typ",
@@ -2111,9 +2199,10 @@
 					"items":[
 						{
 							"id":"c1",
-							"title":"Default",
-							"title_de" : "Standard",
-							"value":"default",
+							"title":"Exclsuive",
+							"title_de" : "Exklusiv",
+							"value":"exclusive",
+							"icon" : "gateway/list/eventbased.exclusive.png",
 							"refToView":"default"
 						},
 						{
@@ -2121,6 +2210,7 @@
 							"title":"Parallel",
 							"title_de" : "Parallel",
 							"value":"instantiate_parallel",
+							"icon" : "gateway/list/eventbased.parallel.png",
 							"refToView":"parallel"
 						}
 					]
@@ -2144,7 +2234,8 @@
 				"choreography_sequence_start",
 				"choreography_sequence_end",
 				"fromtoall",
-				"GatewaysMorph"
+				"GatewaysMorph",
+				"EventbasedGateway"
 			]
 		},
 		{
@@ -2165,7 +2256,7 @@
 			],
 			"properties" : [
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"title_de":"Gatewaytyp",
@@ -2204,7 +2295,7 @@
 			],
 			"properties" :		[
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"title_de":"Gatewaytyp",
@@ -2215,7 +2306,7 @@
 					"length":""
 				},
 				{
-					"id":"defaultGate",
+					"id":"defaultgate",
 					"type":"String",
 					"title":"DefaultGate",
 					"title_de":"Standardgate",
@@ -2228,7 +2319,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"gate_outgoingSequenceFlow",
+					"id":"gate_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gate] OutgoingSequenceFlow",
 					"title_de":"[Gate] Ausgehender Steuerfluss",
@@ -2240,7 +2331,7 @@
 					"length":"50"
 				},
 				{
-					"id":"gate_Assignments",
+					"id":"gate_assignments",
 					"type":"String",
 					"title":"[Gate] Assignments",
 					"title":"[Gates] Zuweisungen",
@@ -2281,7 +2372,7 @@
 			],
 			"properties" : [
 				{
-					"id":"gatewayType",
+					"id":"gatewaytype",
 					"type":"String",
 					"title":"GatewayType",
 					"title_de":"Gatewaytyp",
@@ -2292,7 +2383,18 @@
 					"length":""
 				},
 				{
-					"id":"incomingCondition",
+					"id":"activationcondition",
+					"type":"String",
+					"title":"ActivationCondition",
+					"title_de":"Aktivierungbedingung",
+					"value":"",
+					"popular":true,
+					"description":"Determines which combination of incoming tokens will be synchronized for activation of the Gateway.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"incomingcondition",
 					"type":"String",
 					"title":"IncomingCondition",
 					"title_de":"Eingangsbedingung",
@@ -2304,7 +2406,7 @@
 					"length":"50"
 				},
 				{
-					"id":"outgoingCondition",
+					"id":"outgoingcondition",
 					"type":"String",
 					"title":"OutgoingCondition",
 					"title_de":"Ausgehendebedingung",
@@ -2324,7 +2426,7 @@
 				"choreography_sequence_end",
 				"fromtoall",
 				"GatewaysMorph"
-			],
+			]
 		},
 		
 		// Swimlanes
@@ -2352,7 +2454,7 @@
 				"fromtoall",
 				"canContainArtifacts"				
 			],
-			"layout" : [{"type" : "layout.bpmn2_0.pool"}],
+			"layout" : [{"type" : "layout.bpmn2_0.pool"}]
 		},
 		{
 			"type" : 			"node",
@@ -2372,7 +2474,7 @@
 			],
 			"properties" : 		[
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
@@ -2409,7 +2511,7 @@
 			],
 			"properties" : 		[
 				{
-					"id":"parentPool",
+					"id":"parentpool",
 					"type":"String",
 					"title":"ParentPool",
 					"title_de":"Elternpool",
@@ -2421,7 +2523,7 @@
 					"length":"30"
 				},
 				{
-					"id":"parentLane",
+					"id":"parentlane",
 					"type":"String",
 					"title":"ParentLane",
 					"title_de":"Elternlane",
@@ -2433,7 +2535,7 @@
 					"length":"30"
 				},
 				{
-					"id":"showCaption",
+					"id":"showcaption",
 					"type":"Boolean",
 					"title":"ShowCaption",
 					"title_de":"Zeige Beschriftung",
@@ -2453,7 +2555,17 @@
 				"fromtoall",
 				"canContainArtifacts"				
 			],
-			"layout" : [{"type" : "layout.bpmn11.lane"}],
+			"layout" : [
+						{"type" : "layout.bpmn11.lane"},
+						{
+							"type" : "layout.container.minBounds",
+							"options" : {
+								"ignoreChildsWithId" : [
+									"http://b3mn.org/stencilset/bpmn2.0#Lane"
+								]
+							}
+						}
+			]
 		},
 		
 		// Artifacts
@@ -2476,7 +2588,7 @@
 			],
 			"properties" : [
 				{
-					"id":"artifactType",
+					"id":"artifacttype",
 					"type":"String",
 					"title":"ArtifactType",
 					"title_de":"Artefakttyp",
@@ -2524,7 +2636,7 @@
 					"wrapLines":true
 				},
 				{
-					"id":"artifactType",
+					"id":"artifacttype",
 					"type":"String",
 					"title":"ArtifactType",
 					"title_de":"Artefakttyp",
@@ -2642,20 +2754,20 @@
 							"id":"c2",
 							"title":"Input",
 							"value":"Input",
-							"icon" : "/dataobject/list/input.png",
+							"icon" : "dataobject/list/input.png",
 							"refToView":"input"
 						},
 						{
 							"id":"c3",
 							"title":"Output",
 							"value":"Output",
-							"icon" : "/dataobject/list/output.png",
+							"icon" : "dataobject/list/output.png",
 							"refToView":"output"
 						}
 					]
 				},
 				{
-					"id":"requiredForStart",
+					"id":"requiredforstart",
 					"type":"Boolean",
 					"title":"Required for start",
 					"title_de":"Erforderlich für Start",
@@ -2665,7 +2777,7 @@
 					"optional":false
 				},
 				{
-					"id":"producedAtCompletion",
+					"id":"producedatcompletion",
 					"type":"Boolean",
 					"title":"Produced at completion",
 					"title_de":"Produziert bei Fertigstellung",
@@ -2692,6 +2804,26 @@
 				"to_task_event",
 				"fromtoall",
 				"DataObjectMorph"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" :				"ITSystem",
+			"title" :			"IT-System",
+			"groups" :			["Data Objects"],
+			"description" : 	"",
+			"view" :			"dataobject/it.system.svg",
+			"icon" : 			"dataobject/it.system.png",
+			"propertyPackages" : [
+				"baseAttributes",
+				"flowElement"				
+			],
+			"roles" :			[
+			    "all",
+			    "from_task_event",
+			    "to_task_event",
+			    "fromtoall",
+			    "DataObjectMorph"
 			]
 		},
 		{
@@ -2744,7 +2876,7 @@
 					"wrapLines" : true
 				},
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
@@ -2863,7 +2995,7 @@
 					"value":"None",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -2903,7 +3035,7 @@
 					"value":"Message",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -2943,7 +3075,7 @@
 					"value":"Timer",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -2982,7 +3114,7 @@
 					"value":"Escalation",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3022,7 +3154,7 @@
 					"value":"Conditional",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3060,7 +3192,7 @@
 					"value":"Error",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3078,7 +3210,8 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
-				"bgColor"
+				"bgColor",
+				"compensation"
 			],
 			"roles": [
 				"all",
@@ -3098,7 +3231,7 @@
 					"value":"Compensation",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3138,7 +3271,7 @@
 					"value":"Signal",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3179,7 +3312,7 @@
 					"value":"Multiple",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3220,7 +3353,7 @@
 					"value":"Parallel Multiple",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3251,6 +3384,7 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
+				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
 				"IntermediateEventOnActivityBoundary",
 				"EventOnChoreographyActivityBoundary",
@@ -3296,6 +3430,7 @@
 				"fromtoall",
 				"choreography_sequence_start",
 				"choreography_sequence_end",
+				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
 				"IntermediateEventOnActivityBoundary",
 				"EventOnChoreographyActivityBoundary",
@@ -3384,6 +3519,7 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
+				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
 				"IntermediateEventOnActivityBoundary",
 				"EventOnChoreographyActivityBoundary",
@@ -3541,7 +3677,8 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
-				"bgColor"
+				"bgColor",
+				"compensation"
 			],
 			"roles":[
 				"all",
@@ -3593,6 +3730,7 @@
 				"fromtoall",
 				"choreography_sequence_start",
 				"choreography_sequence_end",
+				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventsMorph"
@@ -3639,6 +3777,7 @@
 				"messageflow_end",
 				"choreography_sequence_start",
 				"choreography_sequence_end",
+				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
 				"IntermediateEventOnActivityBoundary",
 				"IntermediateEventsMorph"
@@ -3784,7 +3923,7 @@
 					"value":"Message",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3822,7 +3961,7 @@
 					"value":"Escalation",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3860,7 +3999,7 @@
 					"value":"Link",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3878,7 +4017,9 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"throwEventAttributes",
-				"bgColor"
+				"bgColor",
+				"compensationThrowing",
+				"compensation"
 			],
 			"roles":[
 				"all",
@@ -3898,7 +4039,7 @@
 					"value":"Compensation",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3936,7 +4077,7 @@
 					"value":"Signal",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -3975,7 +4116,7 @@
 					"value":"Multiple",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4017,7 +4158,7 @@
 					"value":"None",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4056,7 +4197,7 @@
 					"value":"Message",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4091,7 +4232,7 @@
 					"value":"Escalation",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4129,7 +4270,7 @@
 					"value":"Error",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4167,7 +4308,7 @@
 					"value":"Cancel",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4185,7 +4326,9 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"throwingEventAttributes",
-				"bgColor"
+				"bgColor",
+				"compensationThrowing",
+				"compensation"
 			],
 			"roles": [
 				"all",
@@ -4205,7 +4348,7 @@
 					"value":"Compensation",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4243,7 +4386,7 @@
 					"value":"Signal",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4282,7 +4425,7 @@
 					"value":"Multiple",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4320,7 +4463,7 @@
 					"value":"Terminate",
 					"description":"",
 					"readonly":true,
-					"optional":false,
+					"optional":false
 				}
 			]
 		},
@@ -4366,20 +4509,20 @@
 							"id":"expression",
 							"title":"Expression",
 							"value":"Expression",
-							"icon" : "/connector/list/type.expression.png",
+							"icon" : "connector/list/type.expression.png",
 							"refToView":""
 						},
 						{
 							"id":"default",
 							"title":"Default",
 							"value":"Default",
-							"icon" : "/connector/list/type.default.png",
+							"icon" : "connector/list/type.default.png",
 							"refToView":"default"
 						}
 					]
 				},
 				{
-					"id":"ConditionExpression",
+					"id":"conditionexpression",
 					"type":"String",
 					"title":"ConditionExpression",
 					"title_de":"Bedingungsausdruck",
@@ -4397,11 +4540,12 @@
 					"title_de":"Zeige-Diamanten",
 					"value":false,
 					"description":"System intern variable to set the Diamond invisible, if sourceShape is a gateway and ConditionType is set to Expression",
-					"readonly":false,
+					"readonly":true,
 					"optional":false,
+					"visible":false,
 					"refToView":"conditional"
 				}
-			],
+			]
 		},
 		{
 			"type": "edge",
@@ -4512,6 +4656,9 @@
 					{
 						"from":"Exclusive_Eventbased_Gateway",
 						"to":["FromEventbasedGateway"]
+					},{
+						"from" : "EventbasedGateway",
+						"to" : ["FromEventbasedGateway"]
 					}
 				]
 			},
@@ -4660,7 +4807,8 @@
 				"contains" : [
 					"Lane",
 					"sequence_start",
-					"sequence_end"
+					"sequence_end",
+					"DataObjectMorph"
 				]
 			},
 			{
@@ -4696,7 +4844,8 @@
 		"morphingRules": [
 			{
 				"role": "ActivitiesMorph",
-				"baseMorphs": ["Task"]
+				"baseMorphs": ["Task"],
+				"preserveBounds" : true
 			},
 			{
 				"role": "EventActivitiesMorph",

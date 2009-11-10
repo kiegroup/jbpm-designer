@@ -235,13 +235,14 @@ public class Shape implements Stencil, Bounded{
 		return null;
 	}
 	/* (non-Javadoc)
-	 * @see org.oryxeditor.server.diagram.Bounded#lowerRight()
+	 * @see org.oryxeditor.server.diagram.Bounded#getLowerRight()
 	 */
-	public Point lowerRight() {
+	public Point getLowerRight() {
 		if(this.bounds!=null)
 			 return this.bounds.getLowerRight();
 		return null;
 	}
+	
 	/**
 	 * @return the glossaryIds
 	 */
@@ -259,6 +260,7 @@ public class Shape implements Stencil, Bounded{
 	public boolean addGlossaryIds(String id) {
 		return this.getGlossaryIds().add(id);
 	}
+	
 	public boolean addIncoming(Shape current) {
 		return this.getIncomings().add(current);
 		
@@ -270,6 +272,22 @@ public class Shape implements Stencil, Bounded{
 	}
 	public void setIncomings(ArrayList<Shape> cur){
 		this.incoming=cur;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.oryxeditor.server.diagram.Bounded#height()
+	 */
+	@Override
+	public double getHeight() {
+		return this.getLowerRight().getY() - this.getUpperLeft().getY();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.oryxeditor.server.diagram.Bounded#width()
+	 */
+	@Override
+	public double getWidth() {
+		return this.getLowerRight().getX() - this.getUpperLeft().getX();
 	}
 
 }

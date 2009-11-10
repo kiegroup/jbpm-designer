@@ -124,7 +124,7 @@
 					"length":"50"
 				},
 				{
-					"id":"expressionLanguage",
+					"id":"expressionlanguage",
 					"type":"String",
 					"title":"ExpressionLanguage",
 					"title_de":"AusdrucksSprache",
@@ -136,7 +136,7 @@
 					"length":"50"
 				},
 				{
-					"id":"queryLanguage",
+					"id":"querylanguage",
 					"type":"String",
 					"title":"QueryLanguage",
 					"title_de":"AbfrageSprache",
@@ -148,7 +148,7 @@
 					"length":"50"
 				},
 				{
-					"id":"creationDate",
+					"id":"creationdate",
 					"type":"Date",
 					"title":"CreationDate",
 					"title_de":"Erstellt am",
@@ -160,7 +160,7 @@
 					"dateFormat":"j/m/y"
 				},
 				{
-					"id":"modificationDate",
+					"id":"modificationdate",
 					"type":"Date",
 					"title":"ModificationDate",
 					"title_de":"Geändert am",
@@ -188,7 +188,7 @@
 			"name" : "conversationNode",
 			"properties" : [
 				{
-					"id" : "participantRefs",
+					"id" : "participantrefs",
 					"type" : "String",
 					"title" : "ParticipantRefs",
 					"title_de" : "TeilnehmerRefs",
@@ -231,7 +231,7 @@
 			"propertyPackages": ["baseAttributes","conversationNode"],
 			"properties" : 		[
 				{
-					"id" : "correlationKeyRef",
+					"id" : "correlationdeyref",
 					"type" : "String",
 					"title" : "CorrelationKeyRef",
 					"title_de" : "KorrelationsSchlüsselRef",
@@ -241,7 +241,7 @@
 					"optional" : true
 				},
 				{
-					"id" : "messageFlowRefs",
+					"id" : "messageflowrefs",
 					"type" : "String",
 					"title" : "MessageFlowRefs",
 					"title_de" : "NachrichtenflussRefs",
@@ -252,7 +252,7 @@
 					"wrapLines" : true
 				},
 				{
-					"id" : "isCallConversation",
+					"id" : "iscallconversation",
 					"type" : "Boolean",
 					"title" : "is Call Conversation",
 					"title_de" : "ist Call Konversation",
@@ -293,7 +293,7 @@
 					"refToView":"u"
 				},
 				{
-					"id" : "correlationKeyRef",
+					"id" : "correlationdeyref",
 					"type" : "String",
 					"title" : "CorrelationKeyRef",
 					"title_de" : "KorrelationsSchlüsselRef",
@@ -303,7 +303,7 @@
 					"optional" : true
 				},
 				{
-					"id" : "isCallConversation",
+					"id" : "iscallconversation",
 					"type" : "Boolean",
 					"title" : "is Call Conversation",
 					"title_de" : "ist Call Konversation",
@@ -333,7 +333,7 @@
 			"propertyPackages": ["baseAttributes", "conversationNode"],
 			"properties" : 		[
 				{
-					"id" : "multiInstance",
+					"id" : "multiinstance",
 					"type" : "Boolean",
 					"title" : "Multi Instance",
 					"title_de" : "Multi Instanz",
@@ -405,7 +405,7 @@
 				"all",
 				"ConnectingObjectsMorph"
 			]
-		},
+		}
 	],
 	"rules": {
 		"containmentRules": [

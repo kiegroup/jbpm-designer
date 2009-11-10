@@ -51,14 +51,14 @@
 			/>
 	</g>
 	
-	<g id="mi">
-		<g id="parallel">
-			<path oryx:anchors="bottom" fill="none" stroke="black" d="M97 145 v10 M101 145 v10 M105 145 v10" stroke-width="2" />
-		</g>
-		<g id="sequential">
-			<path oryx:anchors="bottom" fill="none" stroke="#000000" stroke-width="2" d="M96,154h10 M96,150h10 M96,146h10"/>
-		</g>
+	
+	<g id="parallel">
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M97 145 v10 M101 145 v10 M105 145 v10" stroke-width="2" />
 	</g>
+	<g id="sequential">
+		<path oryx:anchors="bottom" fill="none" stroke="#000000" stroke-width="2" d="M96,154h10 M96,150h10 M96,146h10"/>
+	</g>
+	
 	
 	<g id="adhoc">
 		<text 
@@ -66,7 +66,6 @@
 			x="101"
 			y="157"
 			font-size="20"
-			font-weight="bold"
 			transform="translate(8,0)"
 		>~</text>
 	</g>

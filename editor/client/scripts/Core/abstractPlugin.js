@@ -149,7 +149,7 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
             var newData 		= xsltProcessor.transformToFragment(parsedData, document);
             var serializedData 	= (new XMLSerializer()).serializeToString(newData);
             
-            // Firefox 2 to 3 problem?!
+           	/* Firefox 2 to 3 problem?! */
             serializedData = !serializedData.startsWith("<?xml") ? "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serializedData : serializedData;
             
             return serializedData;

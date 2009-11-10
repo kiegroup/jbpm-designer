@@ -115,14 +115,14 @@
          />
     </g>
 	
-	<g id="mi">
-		<g id="parallel">
-			<path oryx:anchors="bottom" fill="none" stroke="black" d="M46 70 v8 M50 70 v8 M54 70 v8" stroke-width="2" />
-		</g>
-		<g id="sequential">
-			<path oryx:anchors="bottom" fill="none" stroke="#000000" stroke-width="2" d="M46,78h8 M46,74h8 M46,70h8"/>
-		</g>
+	
+	<g id="parallel">
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M46 70 v8 M50 70 v8 M54 70 v8" stroke-width="2" />
 	</g>
+	<g id="sequential">
+		<path oryx:anchors="bottom" fill="none" stroke="#000000" stroke-width="2" d="M46,76h10M46,72h10 M46,68h10"/>
+	</g>
+	
 
 	<g id="compensation">
 		<path oryx:anchors="bottom" fill="none" stroke="black" d="M 62 74 L 66 70 L 66 78 L 62 74 L 62 70 L 58 74 L 62 78 L 62 74" stroke-width="1" />

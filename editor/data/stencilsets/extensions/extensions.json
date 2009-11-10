@@ -35,6 +35,13 @@
 			"definition":"bpmn1.1basicsubset/bpmn1.1basicsubset.json",
 			"extends":"http://b3mn.org/stencilset/bpmn1.1#"
 		},
+		{
+			"title" : "BPMN 2.0 Basic Subset",
+			"namespace" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#",
+			"description":"A basic subset of BPMN 2.0 containing only task, sequence flow, start event, end event, parallel gateway and data-based XOR.",
+			"definition":"bpmn2.0basicsubset/bpmn2.0basicsubset.json",
+			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
+		},
         {
             "title":"BPMN Subset for Service Composition",
             "namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset#",
@@ -114,6 +121,22 @@
 			"stencilset":"http://b3mn.org/stencilset/bpmn1.1#",
 			"extensions": [
 				"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#"
+			]
+		},
+		{
+			"title":"Academic BPMN 2.0",
+			"namespace":"http://oryx-editor.org/stencilsets/perspectives/academicbpmn2#",
+			"description":"Academic perspective on BPMN 2.0. Features the complete standard.",
+			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
+			"extensions": []
+		},
+		{
+			"title" : "Beginner BPMN 2.0",
+			"namespace" : "http://oryx-editor.org/stencilsets/perspectives/beginnerbpmn2#",
+			"description" : "BPMN 2.0 for beginners. Features a basic subset of the standard.",
+			"stencilset" : "http://b3mn.org/stencilset/bpmn2.0#",
+			"extensions" : [
+				"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#"
 			]
 		}
 	]

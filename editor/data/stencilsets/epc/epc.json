@@ -65,6 +65,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular" : true,
 					"wrapLines":true
 				}
 			]
@@ -97,6 +98,7 @@
 					"tooltip":"",
 					"readonly":false,
 					"optional":true,
+					"popular": true,
 					"refToView":"text",
 					"wrapLines":true
 				},
@@ -125,6 +127,7 @@
 					"description_de":"Erweiterte Beschreibung des Ereignisses.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},				
@@ -199,6 +202,7 @@
 					"description_de":"Erweiterte Beschreibung der Funktion.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},
@@ -431,6 +435,7 @@
 					"description_de":"Erweiterte Beschreibung der Prozessschnittstelle.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},				
@@ -490,6 +495,7 @@
 					"description_de":"Erweiterte Beschreibung der Organisationseinheit.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},			
@@ -548,6 +554,7 @@
 					"description_de":"Erweiterte Beschreibung des Elements.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},				
@@ -608,6 +615,7 @@
 					"description_de":"Erweiterte Beschreibung des Dokuments.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},				
@@ -640,7 +648,7 @@
 			"roles": [
 				"InRelWithF",
 				"all",
-				"OrganisationMorph"
+				"System"
 			],
 			"properties": [
 				{
@@ -667,6 +675,7 @@
 					"description_de":"Erweiterte Beschreibung des IT-Systems.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},				
@@ -721,6 +730,7 @@
 					"description_de":"Erweiterte Beschreibung der Notiz.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},					
@@ -765,6 +775,7 @@
 					"description_de":"Erweiterte Beschreibung der Kante.",
 					"tooltip":"",
 					"readonly":false,
+					"popular" : true,
 					"optional":true,
 					"wrapLines":true
 				},		
@@ -810,7 +821,7 @@
 					},
 					{
 						"from":"function",
-						"to":["event", "connector", "function"]
+						"to":["event", "connector", "function", "interface"]
 					},
 					{
 						"from":"connector",
@@ -904,6 +915,10 @@
 			{
 				"role": "OrganisationMorph",
 				"baseMorphs": ["Organization"]
+			},
+			{
+				"role" : "System",
+				"baseMorphs" : ["System"]
 			},
 			{
 				"role": "DataMorph",

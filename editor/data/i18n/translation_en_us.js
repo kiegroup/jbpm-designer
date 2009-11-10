@@ -703,3 +703,48 @@ ORYX.I18N.SyntaxChecker.MULT_ERRORS = "Multiple Errors";
 if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
 ORYX.I18N.PropertyWindow.oftenUsed = "Often used";
 ORYX.I18N.PropertyWindow.moreProps = "More Properties";
+
+/** New Language Properties: 17.09.2009*/
+if(!ORYX.I18N.Bpmn2_0Serialization) ORYX.I18N.Bpmn2_0Serialization = {};
+ORYX.I18N.Bpmn2_0Serialization.show = "Show BPMN 2.0 XML";
+ORYX.I18N.Bpmn2_0Serialization.showDesc = "Show BPMN 2.0 XML of the current BPMN 2.0 model";
+ORYX.I18N.Bpmn2_0Serialization.download = "Download BPMN 2.0 XML";
+ORYX.I18N.Bpmn2_0Serialization.downloadDesc = "Download BPMN 2.0 XML of the current BPMN 2.0 model";
+ORYX.I18N.Bpmn2_0Serialization.serialFailed = "BPMN 2.0 Serialization failed for reason: <br />";
+ORYX.I18N.Bpmn2_0Serialization.group = "BPMN 2.0";
+
+/** New Language Properties 01.10.2009 */
+if(!ORYX.I18N.SyntaxChecker.BPMN2) ORYX.I18N.SyntaxChecker.BPMN2 = {};
+
+ORYX.I18N.SyntaxChecker.BPMN2_DATA_INPUT_WITH_INCOMING_DATA_ASSOCIATION = "A Data Input must not have any incoming Data Associations.";
+ORYX.I18N.SyntaxChecker.BPMN2_DATA_OUTPUT_WITH_OUTGOING_DATA_ASSOCIATION = "A Data Output must not have any outgoing Data Associations.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_TARGET_WITH_TOO_MANY_INCOMING_SEQUENCE_FLOWS = "Targets of Eventbased Gateways may only have one incoming Sequence Flow.";
+
+/** New Language Properties 02.10.2009 */
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_OUTGOING_SEQUENCE_FLOWS = "An Event Gateway must have two or more outgoing Sequence Flows.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_EVENT_TARGET_CONTRADICTION = "If Message Intermediate Events are used in the configuration, then Receive Tasks must not be used and vice versa.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_TRIGGER = "Only the following Intermediate Event triggers are valid: Message, Signal, Timer, Conditional and Multiple.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_CONDITION_EXPRESSION = "The outgoing Sequence Flows of the Event Gateway must not have a condition Expression.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_NOT_INSTANTIATING = "The Gateway does not meet the conditions to instantiate the Process. Please referr to the manual.";
+
+/** New Language Properties 05.10.2009 */
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_MIXED_FAILURE = "The Gateway must have both multiple incoming and outgoing Sequence Flows.";
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_CONVERGING_FAILURE = "The Gateway must have multiple incoming but most NOT have multiple outgoing Sequence Flows.";
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_DIVERGING_FAILURE = "The Gateway must NOT have multiple incoming but must have multiple outgoing Sequence Flows.";
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAY_WITH_NO_OUTGOING_SEQUENCE_FLOW = "A Gateway must have a minimum of one outgoing Sequence Flow.";
+ORYX.I18N.SyntaxChecker.BPMN2_RECEIVE_TASK_WITH_ATTACHED_EVENT = "Receive Tasks used in Event Gateway configurations must not have any attached Intermediate Events.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_SUBPROCESS_BAD_CONNECTION = "An Event Sub-Process must not have any incoming or outgoing Sequence Flow.";
+
+/** New Language Properties 13.10.2009 */
+ORYX.I18N.SyntaxChecker.BPMN_MESSAGE_FLOW_NOT_CONNECTED = "At least on side of the Message Flow has to be connected.";
+
+/** New Language Properties 19.10.2009 */
+ORYX.I18N.Bpmn2_0Serialization['import'] = "Import from BPMN 2.0 XML";
+ORYX.I18N.Bpmn2_0Serialization.importDesc = "Import a BPMN 2.0 model from a file or XML String";
+ORYX.I18N.Bpmn2_0Serialization.selectFile = "Select a (*.bpmn) file or type in BPMN 2.0 XML to import it!";
+ORYX.I18N.Bpmn2_0Serialization.file = "File:";
+ORYX.I18N.Bpmn2_0Serialization.name = "Import from BPMN 2.0 XML";
+ORYX.I18N.Bpmn2_0Serialization.btnImp = "Import";
+ORYX.I18N.Bpmn2_0Serialization.progress = "Importing BPMN 2.0 XML ...";
+ORYX.I18N.Bpmn2_0Serialization.btnClose = "Close";
+ORYX.I18N.Bpmn2_0Serialization.error = "An error occurred while importing BPMN 2.0 XML";

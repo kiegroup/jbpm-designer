@@ -41,6 +41,15 @@ table-layout:fixed;
 	padding-left:60px;
 }
 
+.icon-large {
+	width:18px !important;
+}
+
+.prop-background-color {
+	border:1px solid #ACA899;
+	height:10px;
+	width:10px;
+}
 
 #oryx_editor_header {
        background-image: url('../images/header_bg.small.gif');

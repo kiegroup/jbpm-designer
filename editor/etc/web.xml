@@ -148,9 +148,9 @@
 		<servlet-class>
 			org.oryxeditor.server.IBPMN2BPMNServlet
 		</servlet-class>
-//TODO
 	</servlet>
-		<servlet>
+	
+	<servlet>
 		<display-name>
 			Oryx Editor Handler
 		</display-name>
@@ -353,6 +353,31 @@
 		<servlet-name>EPCLayouterServlet</servlet-name>
 		<servlet-class>
 			org.oryxeditor.server.EPCLayoutServlet
+		</servlet-class>
+	</servlet>
+	
+	
+	<servlet>
+		<display-name>BPMN 2 Exporter</display-name>
+		<servlet-name>Bpmn2_0Servlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.Bpmn2_0Servlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<display-name>BPMN 2 Importer</display-name>
+		<servlet-name>Bpmn2_0Importer</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.BPMN2_0Importer
+		</servlet-class>
+	</servlet>
+
+	<servlet>
+		<display-name>BPMN 1.1 to BPMN 2.0 Migration</display-name>
+		<servlet-name>BPMN2MigrationServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.BPMN2MigrationServlet
 		</servlet-class>
 	</servlet>
 
@@ -569,6 +594,22 @@
 	<servlet-mapping>
 		<servlet-name>EPCLayouterServlet</servlet-name>
 		<url-pattern>/epclayouter</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet-mapping>
+		<servlet-name>Bpmn2_0Servlet</servlet-name>
+		<url-pattern>/bpmn2_0serialization</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Bpmn2_0Importer</servlet-name>
+		<url-pattern>/bpmn2_0deserialization</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>BPMN2MigrationServlet</servlet-name>
+		<url-pattern>/bpmn2migration</url-pattern>
 	</servlet-mapping>
 	
 	<jsp-config>

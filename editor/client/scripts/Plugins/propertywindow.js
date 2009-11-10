@@ -97,6 +97,7 @@ ORYX.Plugins.PropertyWindow = {
 				{name: 'popular'},
 				{name: 'name'},
 				{name: 'value'},
+				{name: 'icons'},
 				{name: 'gridProperties'}
 			]),
 			sortInfo: {field: 'popular', direction: "ASC"},
@@ -161,6 +162,7 @@ ORYX.Plugins.PropertyWindow = {
 
 	},
 	
+	// Select the Canvas when the editor is ready
 	selectDiagram: function() {
 		this.shapeSelection.shapes = [this.facade.getCanvas()];
 		
@@ -195,6 +197,18 @@ ORYX.Plugins.PropertyWindow = {
 			value = String(value).gsub(">", "&gt;");
 			value = String(value).gsub("%", "&#37;");
 			value = String(value).gsub("&", "&amp;");
+
+			if(record.data.gridProperties.type == ORYX.CONFIG.TYPE_COLOR) {
+				value = "<div class='prop-background-color' style='background-color:" + value + "' />";
+			}			
+
+			record.data.icons.each(function(each) {
+				if(each.name == value) {
+					if(each.icon) {
+						value = "<img src='" + each.icon + "' /> " + value;
+					}
+				}
+			});
 		}
 
 		return value;
@@ -479,6 +493,7 @@ ORYX.Plugins.PropertyWindow = {
 				
 				// Get the property pair
 				var name		= pair.title();
+				var icons		= [];
 				var attribute	= this.shapeSelection.commonPropertiesValues[key];
 				
 				var editorGrid = undefined;
@@ -549,12 +564,15 @@ ORYX.Plugins.PropertyWindow = {
 						case ORYX.CONFIG.TYPE_COLOR:
 							// Set as a ColorPicker
 							// Ext1.0 editorGrid = new gEdit(new form.ColorField({ allowBlank: pair.optional(),  msgTarget:'title' }));
-							var editorPicker = new Ext.ux.ColorField({ allowBlank: pair.optional(),  msgTarget:'title' });
-							editorPicker.on('select', function(picker) {
-								this.editDirectly(key, picker.getValue());
+
+							var editorPicker = new Ext.ux.ColorField({ allowBlank: pair.optional(),  msgTarget:'title', facade: this.facade });
+							
+							this.facade.registerOnEvent(ORYX.CONFIG.EVENT_COLOR_CHANGE, function(option) {
+								this.editDirectly(key, option.value);
 							}.bind(this));
 							
 							editorGrid = new Ext.Editor(editorPicker);
+
 							break;
 						case ORYX.CONFIG.TYPE_CHOICE:
 							var items = pair.items();
@@ -566,8 +584,13 @@ ORYX.Plugins.PropertyWindow = {
 									
 								if(value.refToView()[0])
 									refToViewFlag = true;
-									
-								options.push([value.icon() || "", value.title(), value.value()]);
+																
+								options.push([value.icon(), value.title(), value.value()]);
+															
+								icons.push({
+									name: value.title(),
+									icon: value.icon()
+								});
 							});
 							
 							var store = new Ext.data.SimpleStore({
@@ -578,10 +601,12 @@ ORYX.Plugins.PropertyWindow = {
 						    });
 							
 							// Set the grid Editor
+
 						    var editorCombo = new Ext.form.ComboBox({
 								tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
 						        store: store,
 						        displayField:'title',
+								valueField: 'value',
 						        typeAhead: true,
 						        mode: 'local',
 						        triggerAction: 'all',
@@ -593,6 +618,7 @@ ORYX.Plugins.PropertyWindow = {
 							}.bind(this))
 							
 							editorGrid = new Ext.Editor(editorCombo);
+
 							break;
 						case ORYX.CONFIG.TYPE_DATE:
 							var currFormat = ORYX.I18N.PropertyWindow.dateFormat
@@ -651,7 +677,7 @@ ORYX.Plugins.PropertyWindow = {
 					} 
 					
 					if(pair.popular()) {
-						this.popularProperties.push([pair.popular(), name, attribute, {
+						this.popularProperties.push([pair.popular(), name, attribute, icons, {
 							editor: editorGrid,
 							propId: key,
 							type: pair.type(),
@@ -660,7 +686,7 @@ ORYX.Plugins.PropertyWindow = {
 						}]);
 					}
 					else {					
-						this.properties.push([pair.popular(), name, attribute, {
+						this.properties.push([pair.popular(), name, attribute, icons, {
 							editor: editorGrid,
 							propId: key,
 							type: pair.type(),
@@ -669,6 +695,7 @@ ORYX.Plugins.PropertyWindow = {
 						}]);
 					}
 				}
+
 			}).bind(this));
 		}
 

@@ -82,6 +82,7 @@
 		<plugin source="overlay.js" name="ORYX.Plugins.Overlay" />		
 		<plugin source="edit.js" name="ORYX.Plugins.Edit" />
 		<plugin source="keysMove.js" name="ORYX.Plugins.KeysMove" />
+		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
 
 		<!-- plugin for PNML export and deployment -->
 		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport">
@@ -106,6 +107,7 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
+			<requires namespace="http://b3mn.org/stencilset/bpmn2.0#"/>
 			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 			<requires namespace="http://b3mn.org/stencilset/epc#"/>
@@ -161,7 +163,7 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
 		
-		<!-- BPMN2.0 specific plugins -->
+		<!-- Begin: BPMN2.0 specific plugins -->
 		<plugin source="bpmn2.0/bpmn2.0.js" name="ORYX.Plugins.BPMN2_0">
 			<requires namepsace="http://b3mn.org/stencilset/bpmn2.0#" />
 		</plugin>
@@ -173,6 +175,13 @@
 		<plugin source="bpmn2.0/bpmn2.0choreography.js" name="ORYX.Plugins.Bpmn2_0Choreography">
 			<requires namepsace="http://b3mn.org/stencilset/bpmn2.0#" />
 		</plugin>
+		
+		<plugin source="bpmn2.0/bpmn2.0serialization.js" name="ORYX.Plugins.BPMN2_0Serialization">
+			<requires namepsace="http://b3mn.org/stencilset/bpmn2.0#" />
+			<requires namepsace="http://b3mn.org/stencilset/bpmn2.0conversation#" />
+		</plugin>
+		
+		<!-- End: BPMN2.0 specific plugins -->
 		
 		<plugin source="Layouter/edgeLayouter.js" name="ORYX.Plugins.Layouter.EdgeLayouter"/>
 
@@ -276,7 +285,7 @@
 		<plugin source="bpmnClearSodBodHighlights.js" name="ORYX.Plugins.ClearSodBodHighlights">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.2resources#"/>	
 		</plugin>
-		
+				
 		<!-- Following Plugins are examples to demonstrate certain functionality -->
 		
 		<plugin source="epc2bpmn.js" name="ORYX.Plugins.EPC2BPMN">

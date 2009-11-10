@@ -30,6 +30,10 @@
 		fill="black" 
 		stroke="black">
 	</text>
-
+	
+	<g id="multiInstance">
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M246 50 v8 M250 50 v8 M254 50 v8" stroke-width="2" />
+	</g>
+	
   </g>
 </svg>

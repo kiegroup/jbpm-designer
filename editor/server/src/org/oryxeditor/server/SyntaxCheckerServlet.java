@@ -14,6 +14,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.xpath.XPathAPI;
+import org.json.JSONException;
+import org.oryxeditor.server.diagram.Diagram;
+import org.oryxeditor.server.diagram.DiagramBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
@@ -21,8 +24,10 @@ import org.xml.sax.SAXException;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
+import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
+import de.hpi.bpmn2_0.model.Definitions;
+import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
 import de.hpi.bpmn2pn.BPMN2PNSyntaxChecker;
-import de.hpi.diagram.Diagram;
 import de.hpi.diagram.verification.SyntaxChecker;
 import de.hpi.epc.rdf.EPCDiagramRDFImporter;
 import de.hpi.epc.validation.EPCSyntaxChecker;
@@ -68,20 +73,35 @@ public class SyntaxCheckerServlet extends HttpServlet {
 
 		try {
 			res.setContentType("text/json");
-
-			String rdf = req.getParameter("data");
-			context = req.getParameter("context");
-
-			DocumentBuilder builder;
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
 			
-			processDocument(document, res.getWriter());
+			String isJson = req.getParameter("isJson");
+			
+			if(isJson.equals("true")) {
+				String json = req.getParameter("data");
+				
+				processDocument(json, res.getWriter());
+			} else {
+				String rdf = req.getParameter("data");
+				
+				context = req.getParameter("context");
+				
+				DocumentBuilder builder;
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				builder = factory.newDocumentBuilder();
+				Document document = builder.parse(new ByteArrayInputStream(rdf.getBytes("UTF-8")));
+				
+				processDocument(document, res.getWriter());			
+			}
 			
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BpmnConverterException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -122,6 +142,24 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		}
 	}
 	
+	protected void processDocument(String jsonDocument, PrintWriter writer) throws JSONException, BpmnConverterException {
+		Diagram diagram = DiagramBuilder.parseJson(jsonDocument);
+		
+		String type = diagram.getStencilset().getNamespace();
+		SyntaxChecker checker = null;
+		
+		if(type != null && type.equals("http://b3mn.org/stencilset/bpmn2.0#")) {
+			checker = getCheckerBPMN2(diagram);
+		}
+		
+		if (checker == null) {
+			writer.print("{}");
+		} else {
+			checker.checkSyntax();
+			writer.print(checker.getErrorsAsJson().toString());
+		}
+	}
+	
 	protected SyntaxChecker getCheckerBPMN(Document document) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
 		BPMNDiagram diagram = importer.loadBPMN();
@@ -136,6 +174,13 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		} else {
 			return diagram.getSyntaxChecker();
 		}
+	}
+	
+	protected SyntaxChecker getCheckerBPMN2(Diagram diagram) throws BpmnConverterException {
+		Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram);
+		
+		Definitions defs = converter.getDefinitionsFromDiagram();
+		return defs.getSyntaxChecker();
 	}
 
 	protected SyntaxChecker getCheckerIBPMN(Document document) {
@@ -152,8 +197,7 @@ public class SyntaxCheckerServlet extends HttpServlet {
 	
 	protected SyntaxChecker getCheckerEPC(Document document) {
 		EPCDiagramRDFImporter importer = new EPCDiagramRDFImporter(document);
-		Diagram diagram = importer.loadEPCDiagram();
-		return new EPCSyntaxChecker(diagram);
+		return new EPCSyntaxChecker(importer.loadEPCDiagram());
 	}
 	
 	protected SyntaxChecker getCheckerPetriNet(Document document) {

@@ -139,8 +139,8 @@
 	 	<g id="b" 
 			oryx:anchors="bottom">
 			
-		 	<rect oryx:anchors="bottom" x="44" y="64" width="14" height="14" fill="none" stroke="black" stroke-width="1" />
-			<path oryx:anchors="bottom" fill="none" stroke="black" d="M51 66 v10 M 46 71 h10" stroke-width="1"/>
+		 	<rect oryx:anchors="bottom" x="44" y="66" width="14" height="14" fill="none" stroke="black" stroke-width="1" />
+			<path oryx:anchors="bottom" fill="none" stroke="black" d="M51 68 v10 M 46 73 h10" stroke-width="1"/>
 		
 		</g>
 	</a>
@@ -155,20 +155,18 @@
 	         />
 	</g>
 	
-	<g id="mi">
-		<g id="parallel">
-			<path oryx:anchors="bottom" fill="none" stroke="black" d="M47 65 v10 M51 65 v10 M55 65 v10" stroke-width="2" transform="translate(-14 0)" />
-		</g>
+	<g id="parallel">
+		<path oryx:anchors="bottom" fill="none" stroke="black" d="M47 65 v10 M51 65 v10 M55 65 v10" stroke-width="2" transform="translate(-14 0)" />
 	</g>
+	
 	
 	<g id="adhoc">
 		<text 
 			oryx:anchors="bottom"
-			x="51"
+			x="61"
 			y="77"
 			font-size="20"
-			font-weight="bold"
-			transform="translate(8,0)"
+			transform="translate(14,0)"
 		>~</text>
 	</g>
 	<g id="compensation">

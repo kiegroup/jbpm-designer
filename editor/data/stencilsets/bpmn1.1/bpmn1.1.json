@@ -52,7 +52,7 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -222,7 +222,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -970,7 +970,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -1688,7 +1688,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -2398,7 +2398,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -2662,7 +2662,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -2889,7 +2889,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -3094,7 +3094,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -3337,7 +3337,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -3928,6 +3928,7 @@
 					"id":"processDocumentation",
 					"type":"String",
 					"title":"ProcessDocumentation",
+					"title_de":"Prozessdokumentation",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -4259,7 +4260,7 @@
 					"id":"processDocumentation",
 					"type":"String",
 					"title":"ProcessDocumentation",
-					"title_de":"Prozessdocumentation",
+					"title_de":"Prozessdokumentation",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -4387,7 +4388,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -4492,7 +4493,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -4593,7 +4594,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -4696,7 +4697,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -4888,7 +4889,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -5071,7 +5072,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -5296,7 +5297,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -5501,7 +5502,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -5695,7 +5696,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -5900,7 +5901,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -6098,7 +6099,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -6296,7 +6297,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -6534,7 +6535,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -6774,7 +6775,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -6992,7 +6993,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -7198,7 +7199,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -7391,7 +7392,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -7597,7 +7598,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -7806,7 +7807,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -8015,7 +8016,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -8234,7 +8235,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -8455,7 +8456,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -8663,7 +8664,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -8869,7 +8870,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -9085,7 +9086,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -9302,7 +9303,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -9483,7 +9484,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -9706,7 +9707,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -9896,7 +9897,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -10076,7 +10077,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -10268,7 +10269,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -10459,7 +10460,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -10639,7 +10640,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -10812,7 +10813,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -10968,7 +10969,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -11070,7 +11071,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -11170,7 +11171,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
@@ -11270,7 +11271,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":"",
-					"popular" : true,
+					"popular": true,
 					"wrapLines":true
 				},
 				{
