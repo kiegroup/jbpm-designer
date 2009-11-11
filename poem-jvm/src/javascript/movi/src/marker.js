@@ -66,11 +66,9 @@ MOVI.namespace("util");
 			
 			var ctx = canvasEl.getContext("2d");
 			MOVI.util.Overlay.superclass.constructor.call(this, canvasEl, {});
-			this.set("width", this.modelviewer.getImgWidth());
-			this.set("height", this.modelviewer.getImgHeight());
+			this.set("width", parseInt(this.modelviewer.canvas.getStyle("width")));
+			this.set("height", parseInt(this.modelviewer.canvas.getStyle("height")));
 			
-			
-
 			ctx.beginPath();
 			ctx.lineJoin = "round";
 			ctx.lineCap = "round";
@@ -94,26 +92,27 @@ MOVI.namespace("util");
 			// IE fallback: use VML
 			
 			// create xmlns
-			if(!document.namespaces['vml']) {
-		    	document.namespaces.add('vml', 'urn:schemas-microsoft-com:vml', '#default#VML');
-		    }
+			if(!document.namespaces["vml"]) { 
+				var stl = document.createStyleSheet(); 
+				stl.addRule("vml\\:*", "behavior: url(#default#VML);"); 
+				document.namespaces.add("vml", "urn:schemas-microsoft-com:vml"); 
+			 }
 			
 			var shapeEl = document.createElement("vml:shape");
+			shapeEl.setAttribute("coordsize", parseInt(this.modelviewer.canvas.getStyle("width")) + ", " +  parseInt(this.modelviewer.canvas.getStyle("height")));
 			MOVI.util.Overlay.superclass.constructor.call(this, shapeEl, {});
-			
+
 			var innerHTML = 
-				"<vml:shape strokecolor='" + this.style.color + "' strokeweight='" + this.style.width +"' opacity='" + this.style.opacity + "'"+
-				"coordorigin='0 0' coordsize='" + this.modelviewer.getImgWidth() + " " +  this.modelviewer.getImgHeight() + "'>"+
-				"<vml:path v='m "+ coords[0].x+","+coords[0].y +" l";
+				"<vml:stroke opacity='" + this.style.opacity + "' color='" + this.style.color + "' weight='" + this.style.width +"' joinstyle='round' endcap='round'></vml:stroke>"+
+				"<vml:fill opacity='0'></vml:fill>"+
+				"<vml:path v='M "+ Math.round(coords[0].x)+","+Math.round(coords[0].y) +" L";
 			for(var i=1; i<coords.length; i++) {
-				innerHTML += " " + coords[i].x+","+coords[i].y;
+				innerHTML += " " + Math.round(coords[i].x)+","+Math.round(coords[i].y);
+				if(i!=coords.length-1) innerHTML += ",";
 			}
 			innerHTML += 
-				"'/>"+
-				"</vml:shape>";
+				"'/>";
 			this.set("innerHTML", innerHTML);
-			
-			
 			
 		}
 		
@@ -132,8 +131,8 @@ MOVI.namespace("util");
 		 * @method update
 		 */
 		update: function() {
-			this.setStyle("width", Math.round(this.modelviewer.getImgWidth()*this.modelviewer.getZoomLevel()/100)+"px");
-			this.setStyle("height", Math.round(this.modelviewer.getImgHeight()*this.modelviewer.getZoomLevel()/100)+"px");
+			this.setStyle("width", Math.round(parseInt(this.modelviewer.canvas.getStyle("width"))*this.modelviewer.getZoomLevel()/100)+"px");
+			this.setStyle("height", Math.round(parseInt(this.modelviewer.canvas.getStyle("height"))*this.modelviewer.getZoomLevel()/100)+"px");
 		},
 		
 		/**
