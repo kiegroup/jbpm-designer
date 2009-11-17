@@ -51,116 +51,118 @@ public class SSCompressor {
 			JSONObject ssObj = jsonObj.getJSONObject(i);
 			
 			//get stencil set location
-			String ssUri = ssObj.getString("uri");
-			
-			File ssFile = new File(ssDirString + ssUri);
-			
-			if(!ssFile.exists())
-				throw new Exception("Stencil set " + ssDirString + ssUri + " that is referenced in stencil set configuration file does not exist.");
-			
-			String ssDir = ssFile.getParent();
-			
-			//read stencil set file
-			StringBuffer ssString = readFile(ssFile);
-			
-			// store copy of original stencilset file (w/o SVG includes) with postfix '-nosvg'
-			int pIdx = ssUri.lastIndexOf('.');
-			File ssNoSvgFile = new File(ssDirString + ssUri.substring(0, pIdx) + "-nosvg" + ssUri.substring(pIdx));
-			writeFile(ssNoSvgFile, ssString.toString());
-			
-			//***include svg files***
-			
-			//get view property
-			Pattern pattern = Pattern.compile("[\"\']view[\"\']\\s*:\\s*[\"\']\\S+[\"\']");
-			
-			Matcher matcher = pattern.matcher(ssString);
-			
-			StringBuffer tempSS = new StringBuffer();
-			
-			int lastIndex = 0;
-			
-			//iterate all view properties
-			while(matcher.find()) {
-				tempSS.append(ssString.substring(lastIndex, matcher.start()));
+			if(ssObj.has("uri")) {
+				String ssUri = ssObj.getString("uri");
 				
-				lastIndex = matcher.end();
+				File ssFile = new File(ssDirString + ssUri);
 				
-				//get svg file name
-				String filename = matcher.group().replaceFirst("[\"\']view[\"\']\\s*:\\s*[\"\']", "");
-				filename = filename.substring(0, filename.length()-1);
+				if(!ssFile.exists())
+					throw new Exception("Stencil set " + ssDirString + ssUri + " that is referenced in stencil set configuration file does not exist.");
 				
-				//get svg file
-				File svgFile = new File(ssDir + "/view/" + filename);
+				String ssDir = ssFile.getParent();
 				
-				if(!svgFile.exists())
-					throw new Exception("SVG File " + svgFile.getPath() + " does not exists!. Compressing stencil sets aborted!");
+				//read stencil set file
+				StringBuffer ssString = readFile(ssFile);
 				
-				StringBuffer svgString = readFile(svgFile);
+				// store copy of original stencilset file (w/o SVG includes) with postfix '-nosvg'
+				int pIdx = ssUri.lastIndexOf('.');
+				File ssNoSvgFile = new File(ssDirString + ssUri.substring(0, pIdx) + "-nosvg" + ssUri.substring(pIdx));
+				writeFile(ssNoSvgFile, ssString.toString());
 				
-				//check, if svgString is a valid xml file
-				/*try {
-					DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
-					DocumentBuilder document = builder.newDocumentBuilder();
-					document.parse(svgString.toString());
-				} catch(Exception e) {
-					throw new Exception("File " + svgFile.getCanonicalPath() + " is not a valid XML file: " + e.getMessage());
-				}*/
+				//***include svg files***
 				
+				//get view property
+				Pattern pattern = Pattern.compile("[\"\']view[\"\']\\s*:\\s*[\"\']\\S+[\"\']");
 				
-				//append file content to output json file (replacing existing json file)
-				tempSS.append("\"view\":\"");
-				tempSS.append(svgString.toString().replaceAll("[\\t\\n\\x0B\\f\\r]", " ").replaceAll("\"", "\\\\\""));
-				//newSS.append(filename);
-				tempSS.append("\"");
+				Matcher matcher = pattern.matcher(ssString);
+				
+				StringBuffer tempSS = new StringBuffer();
+				
+				int lastIndex = 0;
+				
+				//iterate all view properties
+				while(matcher.find()) {
+					tempSS.append(ssString.substring(lastIndex, matcher.start()));
+					
+					lastIndex = matcher.end();
+					
+					//get svg file name
+					String filename = matcher.group().replaceFirst("[\"\']view[\"\']\\s*:\\s*[\"\']", "");
+					filename = filename.substring(0, filename.length()-1);
+					
+					//get svg file
+					File svgFile = new File(ssDir + "/view/" + filename);
+					
+					if(!svgFile.exists())
+						throw new Exception("SVG File " + svgFile.getPath() + " does not exists!. Compressing stencil sets aborted!");
+					
+					StringBuffer svgString = readFile(svgFile);
+					
+					//check, if svgString is a valid xml file
+					/*try {
+						DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+						DocumentBuilder document = builder.newDocumentBuilder();
+						document.parse(svgString.toString());
+					} catch(Exception e) {
+						throw new Exception("File " + svgFile.getCanonicalPath() + " is not a valid XML file: " + e.getMessage());
+					}*/
+					
+					
+					//append file content to output json file (replacing existing json file)
+					tempSS.append("\"view\":\"");
+					tempSS.append(svgString.toString().replaceAll("[\\t\\n\\x0B\\f\\r]", " ").replaceAll("\"", "\\\\\""));
+					//newSS.append(filename);
+					tempSS.append("\"");
+				}
+				
+				tempSS.append(ssString.substring(lastIndex));
+				//***end include svg files***
+				
+				/*
+				 * BAD IDEA, BECAUSE IT INCREASES THROUGHPUT
+				
+				//***include png files
+				//get icon property
+				pattern = Pattern.compile("[\"\']icon[\"\']\\s*:\\s*[\"\']\\S+[\"\']");
+				
+				matcher = pattern.matcher(tempSS);
+				
+				StringBuffer finalSS = new StringBuffer();
+				
+				lastIndex = 0;
+				
+				//iterate all icon properties
+				while(matcher.find()) {
+					finalSS.append(tempSS.substring(lastIndex, matcher.start()));
+					
+					lastIndex = matcher.end();
+					
+					//get icon file name
+					String filename = matcher.group().replaceFirst("[\"\']icon[\"\']\\s*:\\s*[\"\']", "");
+					filename = filename.substring(0, filename.length()-1);
+					
+					//get icon file
+					File pngFile = new File(ssDir + "/icons/" + filename);
+					
+					if(!pngFile.exists())
+						throw new Exception("SVG File " + pngFile.getPath() + " does not exists!. Compressing stencil sets aborted!");
+					
+					StringBuffer pngString = readFile(pngFile);
+					
+					//append file content to output json file (replacing existing json file)
+					finalSS.append("\"icon\":\"javascript:");
+					finalSS.append(encodeBase64(pngString.toString()));
+					finalSS.append("\"");
+				}
+				
+				finalSS.append(tempSS.substring(lastIndex));
+				//***end include png files
+				*/
+				//write compressed stencil set file
+				writeFile(ssFile, tempSS.toString());
+				
+				System.out.println("Compressed stencil set file " + ssFile.getCanonicalPath());
 			}
-			
-			tempSS.append(ssString.substring(lastIndex));
-			//***end include svg files***
-			
-			/*
-			 * BAD IDEA, BECAUSE IT INCREASES THROUGHPUT
-			
-			//***include png files
-			//get icon property
-			pattern = Pattern.compile("[\"\']icon[\"\']\\s*:\\s*[\"\']\\S+[\"\']");
-			
-			matcher = pattern.matcher(tempSS);
-			
-			StringBuffer finalSS = new StringBuffer();
-			
-			lastIndex = 0;
-			
-			//iterate all icon properties
-			while(matcher.find()) {
-				finalSS.append(tempSS.substring(lastIndex, matcher.start()));
-				
-				lastIndex = matcher.end();
-				
-				//get icon file name
-				String filename = matcher.group().replaceFirst("[\"\']icon[\"\']\\s*:\\s*[\"\']", "");
-				filename = filename.substring(0, filename.length()-1);
-				
-				//get icon file
-				File pngFile = new File(ssDir + "/icons/" + filename);
-				
-				if(!pngFile.exists())
-					throw new Exception("SVG File " + pngFile.getPath() + " does not exists!. Compressing stencil sets aborted!");
-				
-				StringBuffer pngString = readFile(pngFile);
-				
-				//append file content to output json file (replacing existing json file)
-				finalSS.append("\"icon\":\"javascript:");
-				finalSS.append(encodeBase64(pngString.toString()));
-				finalSS.append("\"");
-			}
-			
-			finalSS.append(tempSS.substring(lastIndex));
-			//***end include png files
-			*/
-			//write compressed stencil set file
-			writeFile(ssFile, tempSS.toString());
-			
-			System.out.println("Compressed stencil set file " + ssFile.getCanonicalPath());
 		}
 	}
 
