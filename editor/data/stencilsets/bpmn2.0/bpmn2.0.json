@@ -4531,7 +4531,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"condition"
+					"refToView":"condition",
+					"wrapLines":true
 				},
 				{
 					"id":"showdiamondmarker",
