@@ -125,7 +125,7 @@ public class Representation {
      */
     public String getJson(String serverUrl){
 //    	try {
-//			test(serverUrl);
+//			extractJsonFromDatabase(serverUrl);
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -383,7 +383,7 @@ public class Representation {
 	protected static String jsonToErdf(String json){
 		return new JsonErdfTransformation(json).toString();
 	}
-	public static void test(String serverUrl) throws IOException {
+	public static void extractJsonFromDatabase(String serverUrl) throws IOException {
     	ScrollableResults contents = Persistance.getSession().createSQLQuery("SELECT content.erdf FROM content")
         .setCacheMode(CacheMode.IGNORE)
         .scroll(ScrollMode.FORWARD_ONLY);
@@ -403,7 +403,7 @@ public class Representation {
     	    	continue;
     	    String[] labels=new String[]{"name", "documentation", "title", "description", "pooldocumentation", "conditionexpression", "text", "state"};
     	    for(String prop:labels)
-    	    	content=content.replaceAll("\""+prop+"\":\"([\\w\\W^\"]*?)\"", "\""+prop+"\":\"\"");
+    	    	content=content.replaceAll("\""+prop+"\":\"([\\w\\W^\"]*?(\\\\\")?[\\w\\W^\"]*?)*?\"", "\""+prop+"\":\"\"");
 
     	    
     	    FileCopyUtils.copy(content,writer);
