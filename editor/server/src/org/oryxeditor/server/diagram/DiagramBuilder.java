@@ -18,6 +18,10 @@ public class DiagramBuilder {
 	
 	private final static String jsonPattern = "glossary://(.*?)/([\\w\\W]*?)(;;)";
 	
+	public static Diagram parseJson(String json) throws JSONException {
+		return parseJson(json, false);
+	}
+	
 	/**
 	 * Parse the json string to the diagram model,
 	 * assumes that the json is hierarchical ordered
@@ -25,11 +29,15 @@ public class DiagramBuilder {
 	 * @return	Model with all shapes defined in JSON
 	 * @throws JSONException
 	 */
-	public static Diagram parseJson(String json) throws JSONException {
+	public static Diagram parseJson(String json, Boolean keepGlossaryLink) throws JSONException {
 		JSONObject modelJSON = new JSONObject(json);
-		return parseJson(modelJSON);
-	}
+		return parseJson(modelJSON, keepGlossaryLink);
+	}	
 
+	public static Diagram parseJson(JSONObject json) throws JSONException {
+		return parseJson(json, false);
+	}
+	
 	/**do the parsing on an JSONObject,
 	 * assumes that the json is hierarchical ordered,
 	 * so all shapes are reachable over child relations
@@ -37,11 +45,11 @@ public class DiagramBuilder {
 	 * @return	Model with all shapes defined in JSON
 	 * @throws JSONException
 	 */
-	public static Diagram parseJson(JSONObject json) throws JSONException {
+	public static Diagram parseJson(JSONObject json, Boolean keepGlossaryLink) throws JSONException {
 		ArrayList<Shape> shapes = new ArrayList<Shape>();
 		HashMap<String, JSONObject> flatJSON = flatRessources(json);
 		for (String resourceId : flatJSON.keySet()) {
-			parseRessource(shapes, flatJSON, resourceId);
+			parseRessource(shapes, flatJSON, resourceId, keepGlossaryLink);
 			
 		}
 		String id="canvas";
@@ -58,7 +66,7 @@ public class DiagramBuilder {
 		parseStencilSet(json, diagram);
 		parseSsextensions(json,diagram);
 		parseStencil(json, diagram);
-		parseProperties(json, diagram);
+		parseProperties(json, diagram, keepGlossaryLink);
 		parseChildShapes(shapes, json, diagram);
 		parseBounds(json, diagram);
 		diagram.setShapes(shapes);
@@ -72,14 +80,15 @@ public class DiagramBuilder {
 	 * @throws JSONException
 	 */
 	private static void parseRessource(ArrayList<Shape> shapes,
-			HashMap<String, JSONObject> flatJSON, String resourceId)
+			HashMap<String, JSONObject> flatJSON, String resourceId,
+			Boolean keepGlossaryLink)
 			throws JSONException {
 		JSONObject modelJSON = flatJSON.get(resourceId);
 		Shape current = getShapeWithId(modelJSON.getString("resourceId"), shapes);
 		
 		parseStencil(modelJSON, current);
 
-		parseProperties(modelJSON, current);
+		parseProperties(modelJSON, current, keepGlossaryLink);
 		parseOutgoings(shapes, modelJSON, current);
 		parseChildShapes(shapes, modelJSON, current);
 		parseDockers(modelJSON, current);
@@ -136,7 +145,7 @@ public class DiagramBuilder {
 	 * @throws JSONException
 	 */
 	@SuppressWarnings("unchecked")
-	private static void parseProperties(JSONObject modelJSON, Shape current)
+	private static void parseProperties(JSONObject modelJSON, Shape current, Boolean keepGlossaryLink)
 			throws JSONException {
 		if (modelJSON.has("properties")) {
 			JSONObject propsObject = modelJSON.getJSONObject("properties");
@@ -148,16 +157,23 @@ public class DiagramBuilder {
 				int lastIndex = 0;
 				String key = keys.next();
 				String value=propsObject.getString(key);
-				Matcher matcher = pattern.matcher(value);
-				while(matcher.find()) {
-					String id = matcher.group(1);
-					current.addGlossaryIds(id);
-					String text = matcher.group(2);
-					result.append(text);
-					lastIndex = matcher.end();
+				
+				System.out.println(value);
+				System.out.println(keepGlossaryLink);
+				
+				if(!keepGlossaryLink) {
+					Matcher matcher = pattern.matcher(value);
+					while(matcher.find()) {
+						String id = matcher.group(1);
+						current.addGlossaryIds(id);
+						String text = matcher.group(2);
+						result.append(text);
+						lastIndex = matcher.end();
+					}
+					result.append(value.substring(lastIndex));
+					value=result.toString();
 				}
-				result.append(value.substring(lastIndex));
-				value=result.toString();
+				
 				current.putProperty(key, value);
 			}
 		}

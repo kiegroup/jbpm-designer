@@ -61,7 +61,7 @@ public class BPMN2Migrator {
 	public BPMN2Migrator(String json) throws BpmnMigrationException {
 		try {
 			
-			diagram = DiagramBuilder.parseJson(json);
+			diagram = DiagramBuilder.parseJson(json, true);
 			stencilSetExtensions = diagram.getSsextensions();
 			
 			initializeShapes(diagram.getChildShapes());

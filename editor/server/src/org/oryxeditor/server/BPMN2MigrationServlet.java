@@ -44,6 +44,8 @@ public class BPMN2MigrationServlet extends HttpServlet {
 		
 		try {
 			response.setContentType("text/json");
+			response.setCharacterEncoding("UTF-8");
+			
 			
 			String json = request.getParameter("data");
 			String path = request.getParameter("path");
