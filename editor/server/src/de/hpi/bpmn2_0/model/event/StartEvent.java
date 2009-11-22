@@ -51,7 +51,7 @@ import org.oryxeditor.server.diagram.StencilType;
  * 
  * 
  */
-@XmlRootElement(name = "startEvent", namespace = "http://www.omg.org/bpmn20")
+@XmlRootElement(name = "startEvent")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tStartEvent")
 public class StartEvent

@@ -82,7 +82,7 @@ import de.hpi.bpmn2_0.model.Expression;
  * 
  * 
  */
-@XmlRootElement(name = "sequenceFlow", namespace = "http://www.omg.org/bpmn20")
+@XmlRootElement(name = "sequenceFlow")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tSequenceFlow", propOrder = {
     "conditionExpression"

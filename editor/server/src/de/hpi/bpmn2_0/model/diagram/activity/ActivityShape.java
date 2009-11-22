@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.FlowElement;
 import de.hpi.bpmn2_0.model.activity.Activity;
@@ -56,7 +55,6 @@ import de.hpi.bpmn2_0.model.diagram.BpmnNode;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "activityShapeType_1", namespace = "http://bpmndi.org")
 @XmlSeeAlso({
 //    SubprocessShape.class,
 //    CalledSubprocessShapeType.class

@@ -34,7 +34,7 @@ import org.oryxeditor.server.diagram.StencilType;
  * 
  * 
  */
-@XmlRootElement(name = "endEvent", namespace = "http://www.omg.org/bpmn20")
+@XmlRootElement(name = "endEvent")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tEndEvent")
 public class EndEvent extends ThrowEvent {

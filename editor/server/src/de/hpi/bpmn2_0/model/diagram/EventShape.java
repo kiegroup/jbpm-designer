@@ -52,7 +52,7 @@ import de.hpi.bpmn2_0.model.event.Event;
  * 
  * 
  */
-@XmlRootElement(namespace = "http://bpmndi.org", name = "eventShape")
+@XmlRootElement(name = "eventShape")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "http://bpmndi.org", name = "eventShapeType")
 public class EventShape

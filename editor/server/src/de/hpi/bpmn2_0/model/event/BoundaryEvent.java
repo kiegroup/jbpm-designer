@@ -52,7 +52,7 @@ import de.hpi.bpmn2_0.model.activity.Activity;
  * 
  * 
  */
-@XmlRootElement(name = "boundaryEvent", namespace = "http://www.omg.org/bpmn20")
+@XmlRootElement(name = "boundaryEvent")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tBoundaryEvent")
 public class BoundaryEvent

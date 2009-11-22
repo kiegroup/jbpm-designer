@@ -85,7 +85,7 @@ import de.hpi.bpmn2_0.validation.BPMN2SyntaxChecker;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(namespace="http://www.omg.org/bpmn20", name = "definitions")
+@XmlRootElement(name = "definitions")
 @XmlType(name = "tDefinitions", propOrder = {
 //    "_import",
 //    "extension",
