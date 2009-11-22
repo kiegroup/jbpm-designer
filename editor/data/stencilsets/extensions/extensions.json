@@ -104,6 +104,13 @@
 			"description":"Adds support for Choreography-Diagrams to BPMN 2.0.",
 			"definition":"bpmn2.0choreography/bpmn2.0choreography.json",
 			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
+		},
+		{
+			"title":"BPMN 2.0 Basic Subset for Choreographies",
+			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset/choreography#",
+			"description":"Adds support for a basic subset of Choreography-Diagrams to BPMN 2.0.",
+			"definition":"bpmn2.0basicsubset/bpmn2.0basicsubset.choreography.json",
+			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
 		}
 	],
 	"perspectives": [
@@ -112,14 +119,16 @@
 			"namespace":"http://oryx-editor.org/stencilsets/perspectives/academicbpmn#",
 			"description":"Academic perspective on BPMN. Features the complete standard.",
 			"stencilset":"http://b3mn.org/stencilset/bpmn1.1#",
-			"extensions": []
+			"removeExtensions":[
+				"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#"
+			]
 		},
 		{
 			"title":"Beginner BPMN",
 			"namespace":"http://oryx-editor.org/stencilsets/perspectives/beginnerbpmn#",
 			"description":"BPMN for beginners. Features a basic subset of the standard.",
 			"stencilset":"http://b3mn.org/stencilset/bpmn1.1#",
-			"extensions": [
+			"addExtensions": [
 				"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#"
 			]
 		},
@@ -128,15 +137,24 @@
 			"namespace":"http://oryx-editor.org/stencilsets/perspectives/academicbpmn2#",
 			"description":"Academic perspective on BPMN 2.0. Features the complete standard.",
 			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
-			"extensions": []
+			"removeExtensions" : [
+				"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#",
+				"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset/choreography#"
+			],
+			"addExtensions" : []
 		},
 		{
 			"title" : "Beginner BPMN 2.0",
 			"namespace" : "http://oryx-editor.org/stencilsets/perspectives/beginnerbpmn2#",
 			"description" : "BPMN 2.0 for beginners. Features a basic subset of the standard.",
 			"stencilset" : "http://b3mn.org/stencilset/bpmn2.0#",
-			"extensions" : [
-				"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#"
+			"removeExtensions" : [],
+			"addExtensions" : [
+				{
+					"ifIsLoaded" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0choreography#",
+					"add" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset/choreography#",
+					"default" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#"
+				}
 			]
 		}
 	]
