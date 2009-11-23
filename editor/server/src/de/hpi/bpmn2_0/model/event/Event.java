@@ -65,8 +65,16 @@ public abstract class Event
     extends FlowNode
 {
 	@XmlElementRefs({
+		@XmlElementRef(type = MessageEventDefinition.class),
 		@XmlElementRef(type = TimerEventDefinition.class),
-		@XmlElementRef(type = CompensateEventDefinition.class)
+		@XmlElementRef(type = CancelEventDefinition.class),
+		@XmlElementRef(type = CompensateEventDefinition.class),
+		@XmlElementRef(type = ConditionalEventDefinition.class),
+		@XmlElementRef(type = ErrorEventDefinition.class),
+		@XmlElementRef(type = EscalationEventDefinition.class),
+		@XmlElementRef(type = LinkEventDefinition.class),
+		@XmlElementRef(type = SignalEventDefinition.class),
+		@XmlElementRef(type = TerminateEventDefinition.class)
 	})
 	List<EventDefinition> eventDefinition;
 	

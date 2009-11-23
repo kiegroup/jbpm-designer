@@ -25,19 +25,24 @@ package de.hpi.bpmn2_0.model.event;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
+
+import de.hpi.bpmn2_0.model.RootElement;
 
 
 /**
- * <p>Java class for tCancelEventDefinition complex type.
+ * <p>Java class for tEscalation complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tCancelEventDefinition">
+ * &lt;complexType name="tEscalation">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tEventDefinition">
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tRootElement">
+ *       &lt;attribute name="structureRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -47,10 +52,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tCancelEventDefinition")
-public class CancelEventDefinition
-    extends EventDefinition
+@XmlType(name = "tEscalation")
+public class Escalation
+    extends RootElement
 {
 
+    @XmlAttribute
+    protected QName structureRef;
+
+    /**
+     * Gets the value of the structureRef property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link QName }
+     *     
+     */
+    public QName getStructureRef() {
+        return structureRef;
+    }
+
+    /**
+     * Sets the value of the structureRef property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link QName }
+     *     
+     */
+    public void setStructureRef(QName value) {
+        this.structureRef = value;
+    }
 
 }

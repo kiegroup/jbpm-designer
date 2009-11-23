@@ -112,7 +112,7 @@ ORYX.Plugins.BPMN2_0Serialization = {
 				}.bind(this),
 				function(transport) { 
 					loadMask.hide();
-					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed + transport.responseText);
+					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed);
 					ORYX.log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);
 				}.bind(this)
 			);
@@ -184,7 +184,7 @@ ORYX.Plugins.BPMN2_0Serialization = {
 								}.bind(this),
 								function(transport) { 
 									loadMask.hide();
-									this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed + transport.responseText);
+									this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed);
 									ORYX.log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);
 								}.bind(this)
 							); 

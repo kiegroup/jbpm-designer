@@ -451,6 +451,17 @@ public class Diagram2BpmnConverter {
 			}
 		}
 
+		if (this.conversation != null && this.conversationDiagram != null) {
+			for (BPMNElement element : this.diagramChilds) {
+				if (element.getNode() instanceof MessageFlow) {
+					this.getConversation().getMessageFlow().add(
+							(MessageFlow) element.getNode());
+					this.getConversationDiagram().getConnector().add(
+							(BpmnConnector) element.getShape());
+				}
+			}
+		}
+
 		if (this.conversationDiagram != null)
 			this.getConversationDiagram().setConversation(
 					this.getConversation());

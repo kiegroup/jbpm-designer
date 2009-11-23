@@ -30,12 +30,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for tCancelEventDefinition complex type.
+ * <p>Java class for tTerminateEventDefinition complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tCancelEventDefinition">
+ * &lt;complexType name="tTerminateEventDefinition">
  *   &lt;complexContent>
  *     &lt;extension base="{http://www.omg.org/bpmn20}tEventDefinition">
  *     &lt;/extension>
@@ -47,8 +47,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tCancelEventDefinition")
-public class CancelEventDefinition
+@XmlType(name = "tTerminateEventDefinition")
+public class TerminateEventDefinition
     extends EventDefinition
 {
 

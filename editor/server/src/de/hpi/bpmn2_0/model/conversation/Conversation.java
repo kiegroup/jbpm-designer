@@ -95,7 +95,10 @@ public class Conversation
     
     @XmlElementRef()
     protected List<Artifact> artifact;
+    
+    @XmlElementRef(type = MessageFlow.class)
     protected List<MessageFlow> messageFlow;
+    
     protected List<QName> messageFlowRef;
     protected List<CorrelationKey> correlationKey;
 

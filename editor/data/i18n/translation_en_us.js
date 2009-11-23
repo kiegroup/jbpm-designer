@@ -710,7 +710,7 @@ ORYX.I18N.Bpmn2_0Serialization.show = "Show BPMN 2.0 XML";
 ORYX.I18N.Bpmn2_0Serialization.showDesc = "Show BPMN 2.0 XML of the current BPMN 2.0 model";
 ORYX.I18N.Bpmn2_0Serialization.download = "Download BPMN 2.0 XML";
 ORYX.I18N.Bpmn2_0Serialization.downloadDesc = "Download BPMN 2.0 XML of the current BPMN 2.0 model";
-ORYX.I18N.Bpmn2_0Serialization.serialFailed = "BPMN 2.0 Serialization failed for reason: <br />";
+ORYX.I18N.Bpmn2_0Serialization.serialFailed = "An error occurred while generating the BPMN 2.0 XML Serialization.";
 ORYX.I18N.Bpmn2_0Serialization.group = "BPMN 2.0";
 
 /** New Language Properties 01.10.2009 */

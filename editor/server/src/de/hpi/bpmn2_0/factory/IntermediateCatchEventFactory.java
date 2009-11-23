@@ -31,10 +31,16 @@ import de.hpi.bpmn2_0.model.BaseElement;
 import de.hpi.bpmn2_0.model.activity.Activity;
 import de.hpi.bpmn2_0.model.diagram.EventShape;
 import de.hpi.bpmn2_0.model.event.BoundaryEvent;
+import de.hpi.bpmn2_0.model.event.CancelEventDefinition;
 import de.hpi.bpmn2_0.model.event.CompensateEventDefinition;
+import de.hpi.bpmn2_0.model.event.ConditionalEventDefinition;
+import de.hpi.bpmn2_0.model.event.ErrorEventDefinition;
+import de.hpi.bpmn2_0.model.event.EscalationEventDefinition;
 import de.hpi.bpmn2_0.model.event.Event;
 import de.hpi.bpmn2_0.model.event.IntermediateCatchEvent;
+import de.hpi.bpmn2_0.model.event.LinkEventDefinition;
 import de.hpi.bpmn2_0.model.event.MessageEventDefinition;
+import de.hpi.bpmn2_0.model.event.SignalEventDefinition;
 import de.hpi.bpmn2_0.model.event.TimerEventDefinition;
 
 /**
@@ -105,6 +111,8 @@ public class IntermediateCatchEventFactory extends AbstractBpmnFactory {
 		
 	}
 	
+	/* Creator methods for different event definitions */
+	
 	@StencilId("IntermediateCompensationEventCatching")
 	protected IntermediateCatchEvent createCompensateEvent(Shape shape) {
 		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
@@ -117,11 +125,7 @@ public class IntermediateCatchEventFactory extends AbstractBpmnFactory {
 	protected IntermediateCatchEvent createTimerEvent(Shape shape) {
 		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
 		
-		icEvent.setId(shape.getResourceId());
-		icEvent.setName(shape.getProperty("name"));
-		
 		TimerEventDefinition timerEvDef = new TimerEventDefinition();
-		
 		icEvent.getEventDefinition().add(timerEvDef);
 		
 		return icEvent;
@@ -131,12 +135,84 @@ public class IntermediateCatchEventFactory extends AbstractBpmnFactory {
 	protected IntermediateCatchEvent createMessageEvent(Shape shape) {
 		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
 		
-		icEvent.setId(shape.getResourceId());
-		icEvent.setName(shape.getProperty("name"));
-		
 		MessageEventDefinition messageEvDef = new MessageEventDefinition();
-		
 		icEvent.getEventDefinition().add(messageEvDef);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateEscalationEvent")
+	protected IntermediateCatchEvent createEscalationEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		
+		EscalationEventDefinition escalDef = new EscalationEventDefinition();
+		icEvent.getEventDefinition().add(escalDef);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateConditionalEvent")
+	protected IntermediateCatchEvent createConditionalEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		
+		ConditionalEventDefinition conDef = new ConditionalEventDefinition();
+		icEvent.getEventDefinition().add(conDef);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateLinkEventCatching")
+	protected IntermediateCatchEvent createLinkEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		
+		LinkEventDefinition linkDef = new LinkEventDefinition();
+		icEvent.getEventDefinition().add(linkDef);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateErrorEvent")
+	protected IntermediateCatchEvent createErrorEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		
+		ErrorEventDefinition errorDef = new ErrorEventDefinition();
+		icEvent.getEventDefinition().add(errorDef);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateCancelEvent")
+	protected IntermediateCatchEvent createCancelEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		
+		CancelEventDefinition cancelDef = new CancelEventDefinition();
+		icEvent.getEventDefinition().add(cancelDef);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateSignalEventCatching")
+	protected IntermediateCatchEvent createSignalEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		
+		SignalEventDefinition signalDef = new SignalEventDefinition();
+		icEvent.getEventDefinition().add(signalDef);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateMultipleEventCatching")
+	protected IntermediateCatchEvent createMultipleEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		icEvent.setParallelMultiple(false);
+		
+		return icEvent;
+	}
+	
+	@StencilId("IntermediateParallelMultipleEventCatching")
+	protected IntermediateCatchEvent createParallelMultipleEvent(Shape shape) {
+		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
+		icEvent.setParallelMultiple(true);
 		
 		return icEvent;
 	}

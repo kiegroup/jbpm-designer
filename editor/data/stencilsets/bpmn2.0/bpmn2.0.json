@@ -329,7 +329,7 @@
 					"type":"String",
 					"title":"TargetNamespace",
 					"title_de":"Zielnamesraum",
-					"value":"http://www.omg.org/bpmn20",
+					"value":"http://schema.omg.org/spec/BPMN/2.0",
 					"description":"Defines the namespace of the elements inside the document.",
 					"description_de":"Definiert den Namensraum, der für die Elemente im Dokument verwendet wird.",
 					"readonly":false,

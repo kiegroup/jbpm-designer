@@ -28,6 +28,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -49,13 +50,29 @@ public class ChoreographyActivityShape extends ActivityShape {
 	@XmlElement(type = ChoreographyParticipantShape.class)
 	protected List<ChoreographyParticipantShape> participantShape;
 	
+	@XmlElementRef
+	protected List<BpmnNode> bpmnShape;
+	
 	public void addChild(BpmnNode child) {
-		if(child instanceof ChoreographyParticipantShape)
+		if(child instanceof ChoreographyParticipantShape) {
 			this.getParticipantShapes().add((ChoreographyParticipantShape) child);
+		} else if(child instanceof BpmnNode) {
+			this.getBpmnShape().add(child);
+		}
 	}
 	
 	
 	/* Getter & Setter */
+	
+	/**
+	 * @return the List of all a choreography subprocess containing shapes.
+	 */
+	public List<BpmnNode> getBpmnShape() {
+		if(this.bpmnShape == null) {
+			this.bpmnShape = new ArrayList<BpmnNode>();
+		}
+		return this.bpmnShape;
+	}
 	
 	/**
 	 * @return the list of participant shapes of this choreography activity.

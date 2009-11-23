@@ -31,10 +31,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import de.hpi.bpmn2_0.model.BaseElement;
 import de.hpi.bpmn2_0.model.FlowElement;
 import de.hpi.bpmn2_0.model.artifacts.Artifact;
+import de.hpi.bpmn2_0.model.participant.Participant;
 
 
 /**
@@ -57,6 +60,7 @@ import de.hpi.bpmn2_0.model.artifacts.Artifact;
  * 
  * 
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tChoreographySubProcess", propOrder = {
     "flowElement",
@@ -73,7 +77,23 @@ public class ChoreographySubProcess
     
     @XmlElement
     protected List<Artifact> artifact;
-
+    
+    public void addChild(BaseElement child) {
+    	if(child instanceof Participant) {
+    		this.getParticipants().add((Participant) child);
+    		if(((Participant) child).isInitiating()) {
+    			this.setInitiatingParticipantRef((Participant) child);
+    		}
+    	} else if(child instanceof Artifact) {
+    		this.getArtifact().add((Artifact) child);
+    	} else if(child instanceof FlowElement) {
+    		this.getFlowElement().add((FlowElement) child);
+    	}
+    }
+    
+    
+    /* Getter & Setter */
+    
     /**
      * Gets the value of the flowElement property.
      * 

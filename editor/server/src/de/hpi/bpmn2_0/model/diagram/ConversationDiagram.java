@@ -48,6 +48,7 @@ public class ConversationDiagram extends BpmnDiagram {
 	@XmlElementRefs({
 		/* Conversation nodes */
 		@XmlElementRef(type = CommunicationShape.class),
+		@XmlElementRef(type = SubConversationShape.class),
 		@XmlElementRef(type = ConversationParticipantShape.class),
 		@XmlElementRef(type = CallConversationShape.class)
 	})

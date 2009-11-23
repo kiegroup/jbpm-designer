@@ -25,19 +25,23 @@ package de.hpi.bpmn2_0.model.event;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for tCancelEventDefinition complex type.
+ * <p>Java class for tEscalationEventDefinition complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tCancelEventDefinition">
+ * &lt;complexType name="tEscalationEventDefinition">
  *   &lt;complexContent>
  *     &lt;extension base="{http://www.omg.org/bpmn20}tEventDefinition">
+ *       &lt;attribute name="escalationCode" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="escalationRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -47,10 +51,63 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tCancelEventDefinition")
-public class CancelEventDefinition
+@XmlType(name = "tEscalationEventDefinition")
+public class EscalationEventDefinition
     extends EventDefinition
 {
 
+    @XmlAttribute
+    protected String escalationCode;
+    
+    @XmlElementRef(type = Escalation.class)
+    protected Escalation escalationRef;
+
+    /**
+     * Gets the value of the escalationCode property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEscalationCode() {
+        return escalationCode;
+    }
+
+    /**
+     * Sets the value of the escalationCode property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEscalationCode(String value) {
+        this.escalationCode = value;
+    }
+
+    /**
+     * Gets the value of the escalationRef property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Escalation }
+     *     
+     */
+    public Escalation getEscalationRef() {
+        return escalationRef;
+    }
+
+    /**
+     * Sets the value of the escalationRef property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Escalation }
+     *     
+     */
+    public void setEscalationRef(Escalation value) {
+        this.escalationRef = value;
+    }
 
 }
