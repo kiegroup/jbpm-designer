@@ -1,5 +1,6 @@
 {
-	"title":"BPMN 2.0 Basic Subset",
+	"title" : "Core Elements",
+	"title_de":"Kernelemente",
 	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#",
 	"description":"A basic subset of BPMN 2.0 containing only task, sequence flow, start event, end event, parallel gateway and data-based XOR.",
 	"extends":"http://b3mn.org/stencilset/bpmn2.0#",
