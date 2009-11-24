@@ -52,6 +52,16 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_STENCIL_SET_LOADED, 
 										this.handleStencilSetLoaded.bind(this));
 		
+		/**
+		 * FF 3.0 Bugfixing: Check if all events are loaded
+		 */
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, function(){
+			if (!this._eventsRegistered) {
+				this.handleStencilSetLoaded({});
+				this.afterLoad();
+			}
+		}.bind(this));
+		
 		this.participantSize = 20;
 		this.extensionSizeForMarker = 10;
 		this.choreographyTasksMeta = new Hash();
@@ -67,6 +77,7 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 	 * appropriated events.
 	 */
 	handleStencilSetLoaded : function(event) {
+		
 		/* Enable layout callback */
 		if(event.lazyLoaded) {
 			this._isLayoutEnabled = true;
@@ -83,12 +94,14 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 	 * Register this plugin on the events.
 	 */
 	registerPluginOnEvents: function() {
+		this._eventsRegistered = true;
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, this.handlePropertyChanged.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPEADDED, this.addParticipantsOnCreation.bind(this));
 		this.facade.registerOnEvent('layout.bpmn2_0.choreography.task', this.handleLayoutChoreographyTask.bind(this));
 		this.facade.registerOnEvent('layout.bpmn2_0.choreography.subprocess.expanded', this.handleLayoutChoreographySubprocessExpanded.bind(this));
 		this.facade.registerOnEvent('layout.bpmn2_0.choreography.subprocess.collapsed', this.handleLayoutChoreographySubprocessCollapsed.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.afterLoad.bind(this));
+
 //		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPERTY_CHANGED, this.handlePropertyChanged.bind(this));
 	},
 	
@@ -112,8 +125,8 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 	 * 		The event object
 	 */
 	afterLoad : function(event) {
-		//if(this._isLayoutEnabled) {return;}
 		
+		//if(this._isLayoutEnabled) {return;}
 		/* Enable the layout callback for choreography activities */
 		this._isLayoutEnabled = true;
 		
