@@ -690,3 +690,6 @@ ORYX.I18N.RESIZE.N = "Oben";
 ORYX.I18N.RESIZE.W = "Links";
 ORYX.I18N.RESIZE.S ="Unten";
 ORYX.I18N.RESIZE.E ="Rechts";
+
+/** New Language Properties 24.11.2009 */
+ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_MESSAGES = "Eine Choreographie Aktivität darf nur eine initiierende Nachricht besitzen.";

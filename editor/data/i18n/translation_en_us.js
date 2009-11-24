@@ -748,3 +748,6 @@ ORYX.I18N.Bpmn2_0Serialization.btnImp = "Import";
 ORYX.I18N.Bpmn2_0Serialization.progress = "Importing BPMN 2.0 XML ...";
 ORYX.I18N.Bpmn2_0Serialization.btnClose = "Close";
 ORYX.I18N.Bpmn2_0Serialization.error = "An error occurred while importing BPMN 2.0 XML";
+
+/** New Language Properties 24.11.2009 */
+ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_MESSAGES = "A Choreography Acitivty may only have one initiating Message.";

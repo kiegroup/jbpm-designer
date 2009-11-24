@@ -516,3 +516,6 @@ Ext.MessageBox.buttonText.ok = "Ок";
 //ORYX.I18N.RESIZE.W = "Left";
 //ORYX.I18N.RESIZE.S ="Down";
 //ORYX.I18N.RESIZE.E ="Right";
+
+/** New Language Properties 24.11.2009 */
+//ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_MESSAGES = "A Choreography Acitivty may only have one initiating Message.";
