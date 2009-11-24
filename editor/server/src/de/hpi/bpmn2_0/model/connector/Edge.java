@@ -55,6 +55,10 @@ public class Edge extends FlowElement {
 	 * Returns true if source and target node are of same pool
 	 */
 	public boolean sourceAndTargetContainedInSamePool(){
+		/* Ensure that both source and target are connected */
+		if(this.getSourceRef() == null || this.getTargetRef() == null) 
+			return false;
+		
 	    return !(this.getSourceRef() instanceof FlowNode && 
 	    		this.getTargetRef() instanceof FlowNode && 
 	    		((FlowNode)this.getTargetRef()).getPool() != ((FlowNode)this.getSourceRef()).getPool());
