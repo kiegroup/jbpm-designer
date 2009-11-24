@@ -150,7 +150,7 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
 				isJson: includesJson
             },
             onSuccess: function(request){
-                var resp = request.responseText.evalJSON();
+                var resp = (request.responseText||"").evalJSON();
                 
                 Ext.Msg.hide();
                 
