@@ -11,11 +11,13 @@ import de.hpi.bpmn2_0.model.RootElement;
 import de.hpi.bpmn2_0.model.activity.Activity;
 import de.hpi.bpmn2_0.model.activity.ReceiveTask;
 import de.hpi.bpmn2_0.model.activity.SubProcess;
+import de.hpi.bpmn2_0.model.choreography.Choreography;
 import de.hpi.bpmn2_0.model.connector.DataInputAssociation;
 import de.hpi.bpmn2_0.model.connector.DataOutputAssociation;
 import de.hpi.bpmn2_0.model.connector.Edge;
 import de.hpi.bpmn2_0.model.connector.MessageFlow;
 import de.hpi.bpmn2_0.model.connector.SequenceFlow;
+import de.hpi.bpmn2_0.model.conversation.Conversation;
 import de.hpi.bpmn2_0.model.data_object.DataInput;
 import de.hpi.bpmn2_0.model.data_object.DataOutput;
 import de.hpi.bpmn2_0.model.event.BoundaryEvent;
@@ -146,6 +148,9 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 	
 		for(RootElement rootElement : this.defs.getRootElement()) {
 			
+			/*
+			 * Checking of Regular BPMN2.0 Diagrams
+			 */
 			if(rootElement instanceof Process) {
 				
 				for(FlowElement flowElement : ((Process) rootElement).getFlowElement()) {			
@@ -155,6 +160,22 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 						this.checkNode(flowElement);	
 					}
 				}
+			/*
+			 * Checking of Choroegraphy Diagrams
+			 */
+			} else if(rootElement instanceof Choreography) {
+				
+				for(FlowElement flowElement : ((Choreography) rootElement).getFlowElement()) {
+					
+					if(!(flowElement instanceof Edge)) {
+						
+						this.checkNode(flowElement);
+					}
+					
+				}
+				
+			} else if(rootElement instanceof Conversation) {
+				//TODO: IMPLEMENT!
 			}
 		}
 	}
@@ -163,7 +184,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 				
 //		this.checkForAllowedAndForbiddenNodes(node);
 		
-		if((node instanceof Activity || node instanceof Event || node instanceof Gateway) && node.getProcessRef() == null) {			
+		if((node instanceof Activity || node instanceof Event || node instanceof Gateway) && node.getProcess() == null) {			
 			this.addError(node, FLOWOBJECT_NOT_CONTAINED_IN_PROCESS);			
 		}
 		
@@ -185,6 +206,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 				
 		// Gateways
 		if(node instanceof Gateway) {
+			System.out.println("checking Gateway");
 			this.checkGateway((Gateway) node);
 		}
 				
@@ -235,7 +257,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 
 	private void checkCommomGateway(Gateway node) {
 		GatewayDirection direction = node.getGatewayDirection();
-				
+		
 		/*
 		 * must have both multiple incoming and 
 		 * outgoing sequence flows
