@@ -347,7 +347,7 @@ public class Diagram2BpmnConverter {
 					edgeElement.setSourceRef(poolShape.getParticipantRef());
 					edgeShape.setSourceRef(poolShape);
 				} else {
-					FlowNode sourceNode = (FlowNode) source.getNode();
+					FlowElement sourceNode = (FlowElement) source.getNode();
 					sourceNode.getOutgoing()
 							.add((Edge) bpmnConnector.getNode());
 
@@ -368,7 +368,7 @@ public class Diagram2BpmnConverter {
 					edgeElement.setTargetRef(poolShape.getParticipantRef());
 					edgeShape.setTargetRef(poolShape);
 				} else {
-					FlowNode targetNode = (FlowNode) target.getNode();
+					FlowElement targetNode = (FlowElement) target.getNode();
 					targetNode.getIncoming()
 							.add((Edge) bpmnConnector.getNode());
 

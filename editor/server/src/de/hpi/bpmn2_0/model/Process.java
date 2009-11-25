@@ -125,6 +125,8 @@ public class Process
 		/* Events */
 		@XmlElementRef(type = StartEvent.class),
 		@XmlElementRef(type = EndEvent.class),
+		@XmlElementRef(type = IntermediateThrowEvent.class),
+		@XmlElementRef(type = IntermediateCatchEvent.class),
 		
 		/* Activities */
 		@XmlElementRef(type = Task.class),
