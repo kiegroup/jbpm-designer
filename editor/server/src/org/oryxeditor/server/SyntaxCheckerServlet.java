@@ -149,6 +149,7 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		SyntaxChecker checker = null;
 		
 		if(type != null && (type.equals("http://b3mn.org/stencilset/bpmn2.0#") ||
+				type.equals("http://b3mn.org/stencilset/bpmn2.0choreography#") ||
 				type.equals("http://b3mn.org/stencilset/bpmn2.0conversation#"))) {
 			checker = getCheckerBPMN2(diagram);
 		}
