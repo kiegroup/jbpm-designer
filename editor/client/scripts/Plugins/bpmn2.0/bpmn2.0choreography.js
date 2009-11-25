@@ -150,8 +150,9 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 			
 			/* Sort participants from up to bottom */
 			participants = participants.sort(function(a,b) {
-				return (a.absoluteBounds().upperLeft().y >
-										b.absoluteBounds().upperLeft().y);
+				var ay = Math.round(a.absoluteBounds().upperLeft().y);
+				var by = Math.round(b.absoluteBounds().upperLeft().y);
+				return  ay < by ? -1 : (ay > by ? 1 : 0);
 			});
 			
 			/* Determine participants on top and bottom side */
@@ -560,8 +561,6 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 		
 		choreographyTaskMeta.oldHeight = bounds.height();
 		choreographyTaskMeta.oldBounds = bounds.clone();
-		
-		
 	},
 	
 	/**
@@ -784,8 +783,10 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 		
 		var participants = participantsTop.concat(participantsBottom);
 		
-		participants = participants.sort(function(a,b) {return (a.absoluteBounds().upperLeft().y >
-													b.absoluteBounds().upperLeft().y);
+		participants = participants.sort(function(a,b) {
+			var ay = Math.round(a.absoluteBounds().upperLeft().y);
+			var by = Math.round(b.absoluteBounds().upperLeft().y);
+			return  ay < by ? -1 : (ay > by ? 1 : 0);
 		});
 		
 		return participants;
