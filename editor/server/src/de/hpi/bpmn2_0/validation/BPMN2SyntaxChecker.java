@@ -141,8 +141,6 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 			
 			if(edge instanceof MessageFlow) {
 				
-				System.out.println(edge.getSourceRef().getPool());
-				
 				if(!(edge.getSourceRef() == null || edge.getTargetRef() == null)) 
 					this.addError(edge, MESSAGE_FLOW_NOT_CONNECTED);
 								
