@@ -41,7 +41,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"wrapLines":true
+					"wrapLines":true,
+					"popular":true
 				},
 				{
 					"id":"auditing",

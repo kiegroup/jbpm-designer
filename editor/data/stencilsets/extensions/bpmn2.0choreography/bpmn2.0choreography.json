@@ -34,6 +34,20 @@
 					"refToView":"text_name"	
 				},
 				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular":true
+				},
+				{
 					"id":"loopType",
 					"type":"Choice",
 					"title":"LoopType",
@@ -136,6 +150,20 @@
 					"length":"",
 					"wrapLines" : true,
 					"refToView":"text_name"	
+				},
+				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular":true
 				},
 				{
 					"id":"loopType",
@@ -242,6 +270,20 @@
 					"refToView":"text_name"	
 				},
 				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular":true
+				},
+				{
 					"id":"loopType",
 					"type":"Choice",
 					"title":"LoopType",
@@ -340,6 +382,20 @@
 					"length":"",
 					"wrapLines" : false,
 					"refToView":"text_name"	
+				},
+				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular":true
 				},
 				{
 					"id" : "initiating",
