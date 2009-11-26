@@ -641,7 +641,7 @@ ORYX.I18N.Validator.syntaxErrorsTitle = "Syntaxfehler";
 ORYX.I18N.Validator.syntaxErrorsMsg = "Das Modell kann nicht validiert werden, weil es Syntaxfehler enthält.";
 	
 ORYX.I18N.Validator.error = "Validierung fehlgeschlagen";
-ORYX.I18N.Validator.errorDesc = 'Es tut uns leid, aber die Valdierung konnte nicht durchgeführt werden. Wenn Sie uns über die Supportanfrage-Funktion Ihr Modell zuschicken, hilft es uns, den Fehler zu identifizieren und zu beheben.';
+ORYX.I18N.Validator.errorDesc = 'Es tut uns leid, aber die Validierung konnte nicht durchgeführt werden. Wenn Sie uns über die Supportanfrage-Funktion Ihr Modell zuschicken, hilft es uns, den Fehler zu identifizieren und zu beheben.';
 
 ORYX.I18N.Validator.epcIsSound = "<p><b>The EPC is sound, no problems found!</b></p>";
 ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";
@@ -667,16 +667,16 @@ ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_TARGET_WITH_TOO_MANY_INCOMING_SEQUENCE
 
 /** New Language Properties 02.10.2009 */
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_OUTGOING_SEQUENCE_FLOWS = "Ein Ereignis-basiertes Gateway muss 2 oder mehr ausgehende Steuerflüsse besitzen.";
-ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_EVENT_TARGET_CONTRADICTION = "Wenn Zwischen-Nachrichten-Ereignisse in der Konfiguration benutzt werden, dann dürfen Receive Tasks das nicht und vice versa.";
-ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_TRIGGER = "Nur die folgenden Zwischen-Ereignis-Auslöser sind zulässig: Nachticht, Signal, Stoppuhr, Bedingung und Vielzahl.";
-ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_CONDITION_EXPRESSION = "Die ausgehende Steuerflüsse eines Ereignis-Gateways dürfen keinen Bedinungsausdruck besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_EVENT_TARGET_CONTRADICTION = "Wenn Zwischen-Nachrichten-Ereignisse in der Konfiguration benutzt werden, dann dürfen Receive-Tasks das nicht und umgekehrt.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_TRIGGER = "Nur die folgenden Zwischen-Ereignis-Auslöser sind zulässig: Nachricht, Signal, Stoppuhr, Bedingung und Vielzahl.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_CONDITION_EXPRESSION = "Die ausgehenden Steuerflüsse eines Ereignis-Gateways dürfen keinen Bedingungsausdruck besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_NOT_INSTANTIATING = "Das Gateway erfüllt nicht die Voraussetzungen, um den Prozess zu instantiieren.";
 
 /** New Language Properties 05.10.2009 */
-ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_MIXED_FAILURE = "Das Gateway muss mehrfache eingehende und ausgehende Steuerflüsse besitzen.";
-ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_CONVERGING_FAILURE = "Das Gateway muss mehrfachen eingehenden aber darf keine mehrfache ausgehende Steuerflüsse besitzen.";
-ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_DIVERGING_FAILURE = "Das Gateway darf keine mehrfachen eingehenden aber muss mehrfache ausgehende Steuerflüsse besitzen.";
-ORYX.I18N.SyntaxChecker.BPMN2_GATEWAY_WITH_NO_OUTGOING_SEQUENCE_FLOW = "Ein Gateway muss mindestens einen ausgehenden Steuerlfuss besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_MIXED_FAILURE = "Das Gateway muss mehrfach eingehende und ausgehende Steuerflüsse besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_CONVERGING_FAILURE = "Das Gateway muss mehrfach eingehende Steuerflüsse, aber darf keine mehrfach ausgehende Steuerflüsse besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAYDIRECTION_DIVERGING_FAILURE = "Das Gateway darf keine mehrfach eingehende Steuerflüsse, aber muss mehrfach ausgehende Steuerflüsse besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_GATEWAY_WITH_NO_OUTGOING_SEQUENCE_FLOW = "Ein Gateway muss mindestens einen ausgehenden Steuerfluss besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN2_RECEIVE_TASK_WITH_ATTACHED_EVENT = "Empfänger-Tasks, die in Eregnis-Gateway-Konfigurationen benutzt werden, dürfen keine angehängten Zwischen-Ereignisse besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_SUBPROCESS_BAD_CONNECTION = "Ein Ereignis Sub-Prozess darf keinen eingehenden oder ausgehenden Steuerfluss besitzen.";
 
@@ -692,4 +692,4 @@ ORYX.I18N.RESIZE.S ="Unten";
 ORYX.I18N.RESIZE.E ="Rechts";
 
 /** New Language Properties 24.11.2009 */
-ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_MESSAGES = "Eine Choreographie Aktivität darf nur eine initiierende Nachricht besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_MESSAGES = "Eine Choreographie-Aktivität darf nur eine initiierende Nachricht besitzen.";

@@ -23,5 +23,8 @@
        d="M 6.75,16 L 25.75,16 M 16,6.75 L 16,25.75"
        id="path9"
        style="fill:#ffffff;stroke:#000000;stroke-width:3" />
+    
+	<text id="text_name" x="26" y="26" oryx:align="left top"/>
+	
   </g>
 </svg>
