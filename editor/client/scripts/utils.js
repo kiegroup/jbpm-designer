@@ -22,5 +22,9 @@ ORYX.Utils = {
         else {
             return results[1];
         }
-    }
+    },
+	
+	adjustGradient: function(gradient, color){
+		// TODO: Implement
+	}
 }
