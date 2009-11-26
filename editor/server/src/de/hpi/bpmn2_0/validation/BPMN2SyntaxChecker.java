@@ -39,6 +39,7 @@ import de.hpi.bpmn2_0.model.event.TimerEventDefinition;
 import de.hpi.bpmn2_0.model.gateway.EventBasedGateway;
 import de.hpi.bpmn2_0.model.gateway.Gateway;
 import de.hpi.bpmn2_0.model.gateway.GatewayDirection;
+import de.hpi.bpmn2_0.model.participant.Lane;
 import de.hpi.bpmn2_0.model.participant.Participant;
 import de.hpi.diagram.verification.AbstractSyntaxChecker;
 
@@ -81,6 +82,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 	protected static final String ENDEVENT_WITH_OUTGOING_CONTROL_FLOW = "BPMN_ENDEVENT_WITH_OUTGOING_CONTROL_FLOW";
 	protected static final String EVENTBASEDGATEWAY_BADCONTINUATION = "BPMN_EVENTBASEDGATEWAY_BADCONTINUATION";
 	protected static final String NODE_NOT_ALLOWED = "BPMN_NODE_NOT_ALLOWED";
+	protected static final String MESSAGE_FLOW_NOT_ALLOWED = "BPMN_MESSAGE_FLOW_NOT_ALLOWED";	
 	
 	// BPMN 2.0 Specific
 	protected static final String DATA_INPUT_WITH_INCOMING_DATA_ASSOCIATION = "BPMN2_DATA_INPUT_WITH_INCOMING_DATA_ASSOCIATION";
@@ -138,6 +140,13 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 				if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool())	
 					this.addError(edge, SAME_PROCESS);
 				
+				if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool() &&
+						edge.getSourceRef().getLane() != edge.getTargetRef().getLane()) 
+					this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);
+				
+				if(edge.getSourceRef() instanceof Lane || edge.getTargetRef() instanceof Lane)
+					this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);					
+				
 			} else {
 				
 				if(edge.getSourceRef() == null) {
@@ -157,8 +166,6 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 	private void checkNodes() {		
 	
 		for(RootElement rootElement : this.defs.getRootElement()) {
-			
-			System.out.println(rootElement);
 			
 			/*
 			 * Checking of Regular BPMN2.0 Diagrams

@@ -478,3 +478,4 @@ Ext.MessageBox.buttonText.ok = "Ok";
 
 /** New Language Properties 24.11.2009 */
 //ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_MESSAGES = "A Choreography Acitivty may only have one initiating Message.";
+//ORYX.I18N.SyntaxChecker.BPMN_MESSAGE_FLOW_NOT_ALLOWED = "A Message Flow is not allowed here.";
