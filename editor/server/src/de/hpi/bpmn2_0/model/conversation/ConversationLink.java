@@ -45,8 +45,8 @@ public class ConversationLink extends Edge {
 	 * returns it.
 	 */
 	public FlowElement getTargetRef() {
-		if(!(super.getTargetRef() instanceof ConversationElement))
-			return null;
+//		if(!(super.getTargetRef() instanceof ConversationElement))
+//			return null;
 		return super.getTargetRef();
 	}
 	
@@ -61,8 +61,8 @@ public class ConversationLink extends Edge {
 	 * returns it.
 	 */
 	public FlowElement getSourceRef() {
-		if(!(super.getSourceRef() instanceof ConversationElement))
-			return null;
+//		if(!(super.getSourceRef() instanceof ConversationElement))
+//			return null;
 		return super.getSourceRef();
 	}
 	
