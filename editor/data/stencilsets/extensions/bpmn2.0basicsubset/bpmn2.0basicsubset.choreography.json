@@ -13,7 +13,6 @@
 	},
 	"removestencils": [
 		"ITSystem",
-		"ChoreographySubprocessExpanded",
 		"CollapsedEventSubprocess",
 		"EventSubprocess",
 		"CollapsedSubprocess",
