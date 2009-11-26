@@ -1834,6 +1834,7 @@
 			"view" :			"activity/subprocess.expanded.svg",
 			"icon" :			"activity/expanded.subprocess.png",
  			"layout" : 			[
+ 									{"type" : "layout.bpmn2_0.subprocess"},
  									{"type" : "layout.container.dockers"},
  									{
  										"type" : "layout.container.minBounds",
