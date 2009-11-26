@@ -120,7 +120,7 @@ public class Diagram2BpmnConverter {
 
 	/* Define data related objects ids */
 	private final static String[] dataObjectIdsArray = { "DataObject",
-			"DataStore", "Message" };
+			"DataStore", "Message", "ITSystem" };
 
 	public final static HashSet<String> dataObjectIds = new HashSet<String>(
 			Arrays.asList(dataObjectIdsArray));

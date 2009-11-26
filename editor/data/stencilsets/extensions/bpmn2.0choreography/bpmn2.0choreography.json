@@ -185,6 +185,7 @@
 							"id":"c2",
 							"title":"Standard",
 							"value":"Standard",
+							"icon" : "list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
@@ -218,6 +219,16 @@
 					"refToView": "bg_frame",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"entry",
+					"type":"DiagramLink",
+					"title":"SubProcessRef",
+					"title_de":"SubprozessRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
 				},
 				{
 					"id" : "messageFlow",
@@ -303,12 +314,14 @@
 							"id":"c2",
 							"title":"Standard",
 							"value":"Standard",
+							"icon" : "list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
 							"id":"c3",
 							"title":"MultiInstance",
 							"value":"MultiInstance",
+							"icon" : "list/mi.parallel.png",
 							"refToView":"mi"
 						}
 					]

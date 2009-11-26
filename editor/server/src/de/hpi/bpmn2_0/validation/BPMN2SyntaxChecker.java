@@ -132,7 +132,16 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 	private void checkEdges() {	
 		for(Edge edge : this.defs.getEdges()) {	
 			
+			if(edge.getSourceRef() == null) {
+				this.addError(edge, NO_SOURCE);
+				
+			} else if(edge.getTargetRef() == null) {
+				this.addError(edge, NO_TARGET);
+			}
+			
 			if(edge instanceof MessageFlow) {
+				
+				System.out.println(edge.getSourceRef().getPool());
 				
 				if(!(edge.getSourceRef() == null || edge.getTargetRef() == null)) 
 					this.addError(edge, MESSAGE_FLOW_NOT_CONNECTED);
@@ -149,14 +158,8 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 				
 			} else {
 				
-				if(edge.getSourceRef() == null) {
-					this.addError(edge, NO_SOURCE);
-					
-				} else if(edge.getTargetRef() == null) {
-					this.addError(edge, NO_TARGET);
-					
-				} else if(edge instanceof SequenceFlow) {
-					if(edge.getSourceRef().getProcessRef() != edge.getTargetRef().getProcessRef()) 
+				if(edge instanceof SequenceFlow) {
+					if(edge.getSourceRef().getProcess() != edge.getTargetRef().getProcess()) 
 						this.addError(edge, DIFFERENT_PROCESS);						
 				}
 			}
@@ -485,7 +488,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 	private boolean checkInstatiateCondition(Gateway node) {
 		boolean hasStartEvent = false;
 		
-		for(FlowElement flowElement : node.getProcessRef().getFlowElement()) {
+		for(FlowElement flowElement : node.getProcess().getFlowElement()) {
 			if(flowElement instanceof StartEvent)
 				hasStartEvent = true;
 		}
