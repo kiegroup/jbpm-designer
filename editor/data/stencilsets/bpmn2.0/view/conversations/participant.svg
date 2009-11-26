@@ -16,7 +16,14 @@
 		<oryx:magnet oryx:cx="75" oryx:cy="50" oryx:default="yes" />
 	</oryx:magnets>
 	<g pointer-events="fill" oryx:minimumSize="80 60">
-		<rect id="bg_frame" oryx:resie="horizonatal vertical" oryx:anchors="top bottom left right" x="0" y="0" fill="#FFFFFF" stroke="#000000" width="150" height="100"/>
+		<defs>
+			<radialGradient id="background" cx="30%" cy="30%" r="50%" fx="0%" fy="0%">
+				<stop offset="10%" stop-color="#ffffff" stop-opacity="1"></stop>
+				<stop offset="100%" stop-color="#ffffff" stop-opacity="1" id="fill_el"></stop>
+			</radialGradient>
+		</defs>
+		
+		<rect id="bg_frame" oryx:resie="horizonatal vertical" oryx:anchors="top bottom left right" x="0" y="0" fill="url(#background) #FFFFFF" stroke="#000000" width="150" height="100"/>
 		<text 
 			font-size="12"
 			id="text_name" 

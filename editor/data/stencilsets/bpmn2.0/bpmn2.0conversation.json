@@ -343,6 +343,19 @@
 					"readonly" : false,
 					"optional" : true,
 					"refToView" : "mi"
+				},
+				{
+					"id":"bgColor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "fill_el",
+					"fill":true,
+					"stroke":false
 				}
 			],
 			"roles" : 			[
