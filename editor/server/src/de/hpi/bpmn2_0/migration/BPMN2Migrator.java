@@ -451,6 +451,14 @@ public class BPMN2Migrator {
 					}
 				}
 				
+				/* Map isCompensation to isforcompensation */			
+				if(props.containsKey("iscompensation")) {
+					/* replace */
+					props.put("isforcompensation", activity.getProperty("iscompensation"));
+					props.remove("iscompensation");
+				}
+				
+				
 				if(id.equals("Task")) {
 					String taskType = activity.getProperty("tasktype");
 					
