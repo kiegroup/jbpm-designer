@@ -2586,8 +2586,6 @@
 				}
 			],
 			"roles": 			[
-				"messageflow_start",
-				"messageflow_end",
 				"PoolChild",
 				"fromtoall",
 				"canContainArtifacts"				
