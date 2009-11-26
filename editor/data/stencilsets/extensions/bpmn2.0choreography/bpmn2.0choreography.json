@@ -231,6 +231,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
+					"refToView" : "u"
 				},
 				{
 					"id" : "messageFlow",
