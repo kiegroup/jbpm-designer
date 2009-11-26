@@ -1947,7 +1947,7 @@
 						{
 							"id":"c2",
 							"title":"Timer",
-							"title_de" : "Stoppuhr",
+							"title_de" : "Timer",
 							"value":"Timer",
 							"icon" : "activity/list/event.timer.png",
 							"refToView":"timer"

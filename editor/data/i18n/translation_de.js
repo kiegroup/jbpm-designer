@@ -668,7 +668,7 @@ ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_TARGET_WITH_TOO_MANY_INCOMING_SEQUENCE
 /** New Language Properties 02.10.2009 */
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_OUTGOING_SEQUENCE_FLOWS = "Ein Ereignis-basiertes Gateway muss 2 oder mehr ausgehende Steuerflüsse besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_EVENT_TARGET_CONTRADICTION = "Wenn Zwischen-Nachrichten-Ereignisse in der Konfiguration benutzt werden, dann dürfen Receive-Tasks das nicht und umgekehrt.";
-ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_TRIGGER = "Nur die folgenden Zwischen-Ereignis-Auslöser sind zulässig: Nachricht, Signal, Stoppuhr, Bedingung und Vielzahl.";
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_TRIGGER = "Nur die folgenden Zwischen-Ereignis-Auslöser sind zulässig: Nachricht, Signal, Timer, Bedingung und Vielzahl.";
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WRONG_CONDITION_EXPRESSION = "Die ausgehenden Steuerflüsse eines Ereignis-Gateways dürfen keinen Bedingungsausdruck besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_NOT_INSTANTIATING = "Das Gateway erfüllt nicht die Voraussetzungen, um den Prozess zu instantiieren.";
 
