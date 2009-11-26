@@ -133,28 +133,31 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 				
 			} else if(edge.getTargetRef() == null) {
 				this.addError(edge, NO_TARGET);
-			}
-			
-			if(edge instanceof MessageFlow) {
-				
-				if(!(edge.getSourceRef() == null || edge.getTargetRef() == null)) 
-					this.addError(edge, MESSAGE_FLOW_NOT_CONNECTED);
-								
-				if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool())	
-					this.addError(edge, SAME_PROCESS);
-				
-				if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool() &&
-						edge.getSourceRef().getLane() != edge.getTargetRef().getLane()) 
-					this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);
-				
-				if(edge.getSourceRef() instanceof Lane || edge.getTargetRef() instanceof Lane)
-					this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);					
-				
 			} else {
+			
+				if(edge instanceof MessageFlow) {
+			
 				
-				if(edge instanceof SequenceFlow) {
-					if(edge.getSourceRef().getProcess() != edge.getTargetRef().getProcess()) 
-						this.addError(edge, DIFFERENT_PROCESS);						
+					if(!(edge.getSourceRef() == null || edge.getTargetRef() == null)) 
+						this.addError(edge, MESSAGE_FLOW_NOT_CONNECTED);
+									
+					if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool())	
+						this.addError(edge, SAME_PROCESS);
+					
+					if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool() &&
+							edge.getSourceRef().getLane() != edge.getTargetRef().getLane()) 
+						this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);
+					
+					if(edge.getSourceRef() instanceof Lane || edge.getTargetRef() instanceof Lane)
+						this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);					
+					
+				} else {
+					
+					if(edge instanceof SequenceFlow) {
+						
+						if(edge.getSourceRef().getProcess() != edge.getTargetRef().getProcess()) 
+							this.addError(edge, DIFFERENT_PROCESS);						
+					}
 				}
 			}
 		}
@@ -357,7 +360,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 		 */
 		} else if (direction.equals(GatewayDirection.CONVERGING)) {
 			
-			if(!(node.getIncomingSequenceFlows().size() > 2 
+			if(!(node.getIncomingSequenceFlows().size() > 1 
 					&& node.getOutgoingSequenceFlows().size() == 1)) {
 				
 				this.addError(node, GATEWAYDIRECTION_CONVERGING_FAILURE);
@@ -370,7 +373,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 		} else if(direction.equals(GatewayDirection.DIVERGING)) {
 			
 			if(!(node.getIncomingSequenceFlows().size() == 1
-					&& node.getOutgoingSequenceFlows().size() > 2)) {
+					&& node.getOutgoingSequenceFlows().size() > 1)) {
 				
 				this.addError(node, GATEWAYDIRECTION_DIVERGING_FAILURE);
 			}
