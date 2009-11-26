@@ -548,6 +548,13 @@ public class Diagram2BpmnConverter {
 		}
 
 		this.addSequenceFlowsToProcess();
+		
+		/* Set processRefs */
+		for(Process p : this.processes) {
+			for(FlowElement el : p.getFlowElement()) {
+				el.setProcess(p);
+			}
+		}
 	}
 
 	/**
