@@ -2228,7 +2228,7 @@
 					"type":"Choice",
 					"title":"Type",
 					"title_de":"Typ",
-					"value":"default",
+					"value":"exclusive",
 					"description":"",
 					"readonly":false,
 					"optional":true,
@@ -2236,7 +2236,7 @@
 					"items":[
 						{
 							"id":"c1",
-							"title":"Exclsuive",
+							"title":"Exclusive",
 							"title_de" : "Exklusiv",
 							"value":"exclusive",
 							"icon" : "gateway/list/eventbased.exclusive.png",
@@ -2244,25 +2244,21 @@
 						},
 						{
 							"id":"c2",
-							"title":"Parallel",
-							"title_de" : "Parallel",
+							"title":"Exclusive Instantiation",
+							"title_de" : "Exklusive Instantiierung",
+							"value":"instantiate_exclusive",
+							"icon" : "gateway/list/eventbased.exclusive.png",
+							"refToView":["default","instantiate"]
+						},
+						{
+							"id":"c3",
+							"title":"Parallel Instantiation",
+							"title_de" : "Parallele Instantiierung",
 							"value":"instantiate_parallel",
 							"icon" : "gateway/list/eventbased.parallel.png",
-							"refToView":"parallel"
+							"refToView":["parallel","instantiate"]
 						}
 					]
-				},
-				{
-					"id":"instantiate",
-					"type":"Boolean",
-					"title":"Instantiate",
-					"title_de":"Instanzieren",
-					"value": false,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"length":"",
-					"refToView" : "instantiate"
 				}
 			],
 			"roles":			[
@@ -2866,11 +2862,11 @@
 			"type" : 			"node",
 			"id" :				"DataStore",
 			"title" :			"Data Store",
-			"title_de" :		"Datenlager",
+			"title_de" :		"Datenspeicher",
 			"groups" : 			["Data Objects"],
 			"groups_de" :		["Datenobjekte"],
 			"description" :		"A Data Store is a place where the process can read or wirte date, e.g. a database or a filling cabinet. It persists beyond the lifetime of the process instance.",
-			"description_de" :	"Ein Datenlager ist ein Platz an dem ein Prozess Daten lesen oder schreiben kann, zum Beispiel eine Datenbank. Es existiert auch über die Lebenszeit der Prozessinstanz hinweg.",
+			"description_de" :	"Ein Datenspeicher ist ein Platz an dem ein Prozess Daten lesen oder schreiben kann, zum Beispiel eine Datenbank. Es existiert auch über die Lebenszeit der Prozessinstanz hinweg.",
 			"view" :			"dataobject/data.store.svg",
 			"icon" :			"dataobject/data.store.png",
 			"propertyPackages": [
@@ -4567,7 +4563,8 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"condition"
+					"refToView":"condition",
+					"wrapLines":true
 				},
 				{
 					"id":"showdiamondmarker",
@@ -4768,11 +4765,19 @@
 						"to" : ["DataStore"]
 					},
 					{
+						"from" : "from_task_event",
+						"to" : ["ITSystem"]
+					},
+					{
 						"from" : "DataObject",
 						"to" : ["to_task_event"]
 					},
 					{
 						"from" : "DataStore",
+						"to" : ["to_task_event"]
+					},
+					{
+						"from" : "ITSystem",
 						"to" : ["to_task_event"]
 					},
 					{

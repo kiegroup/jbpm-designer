@@ -75,7 +75,7 @@ public class Gateway
      *     
      */
     public GatewayDirection getGatewayDirection() {
-        if (gatewayDirection == null) {
+    	if (gatewayDirection == null) {
             return GatewayDirection.UNSPECIFIED;
         } else {
             return gatewayDirection;

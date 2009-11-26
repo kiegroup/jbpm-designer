@@ -132,19 +132,32 @@ public class GatewayFactory extends AbstractBpmnFactory {
 		gateway.setId(shape.getResourceId());
 		gateway.setName(shape.getProperty("name"));
 		
-		String instantiate = shape.getProperty("instantiate");
+//		String instantiate = shape.getProperty("instantiate");
+//		
+//		if(instantiate != null && instantiate.equals("true"))
+//			gateway.setInstantiate(true);
+//		else
+//			gateway.setInstantiate(false);
 		
-		if(instantiate != null && instantiate.equals("true"))
-			gateway.setInstantiate(true);
-		else
-			gateway.setInstantiate(false);
+		/* Set gateway type and instantiation */
+		gateway.setEventGatewayType(EventBasedGatewayType.EXCLUSIVE);
+		gateway.setInstantiate(false);
 		
-		/* Set gateway type */
 		String type = shape.getProperty("eventtype");
-		if(type != null && type.equalsIgnoreCase("instantiate_parallel")) 
-			gateway.setEventGatewayType(EventBasedGatewayType.PARALLEL);
-		else 
-			gateway.setEventGatewayType(EventBasedGatewayType.EXCLUSIVE);
+		if(type != null) {
+			if(type.equalsIgnoreCase("instantiate_parallel")) {
+				gateway.setEventGatewayType(EventBasedGatewayType.PARALLEL);
+				gateway.setInstantiate(true);
+			} else if(type.equalsIgnoreCase("instantiate_exclusive")) {
+				gateway.setEventGatewayType(EventBasedGatewayType.EXCLUSIVE);
+				gateway.setInstantiate(true);
+			}
+		}
+		
+//		if(type != null && type.equalsIgnoreCase("instantiate_parallel")) 
+//			gateway.setEventGatewayType(EventBasedGatewayType.PARALLEL);
+//		else 
+//			gateway.setEventGatewayType(EventBasedGatewayType.EXCLUSIVE);
 		
 		return gateway;
 	}
