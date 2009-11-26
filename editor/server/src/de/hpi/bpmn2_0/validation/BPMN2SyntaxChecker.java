@@ -3,8 +3,6 @@ package de.hpi.bpmn2_0.validation;
 import java.util.HashMap;
 import java.util.List;
 
-import com.sun.tools.javac.comp.Flow;
-
 import de.hpi.bpmn2_0.model.Definitions;
 import de.hpi.bpmn2_0.model.FlowElement;
 import de.hpi.bpmn2_0.model.FlowNode;
@@ -22,7 +20,6 @@ import de.hpi.bpmn2_0.model.connector.MessageFlow;
 import de.hpi.bpmn2_0.model.connector.SequenceFlow;
 import de.hpi.bpmn2_0.model.conversation.Conversation;
 import de.hpi.bpmn2_0.model.conversation.ConversationLink;
-import de.hpi.bpmn2_0.model.conversation.ConversationNode;
 import de.hpi.bpmn2_0.model.data_object.DataInput;
 import de.hpi.bpmn2_0.model.data_object.DataOutput;
 import de.hpi.bpmn2_0.model.data_object.Message;
@@ -40,7 +37,6 @@ import de.hpi.bpmn2_0.model.gateway.EventBasedGateway;
 import de.hpi.bpmn2_0.model.gateway.Gateway;
 import de.hpi.bpmn2_0.model.gateway.GatewayDirection;
 import de.hpi.bpmn2_0.model.participant.Lane;
-import de.hpi.bpmn2_0.model.participant.Participant;
 import de.hpi.diagram.verification.AbstractSyntaxChecker;
 
 /**

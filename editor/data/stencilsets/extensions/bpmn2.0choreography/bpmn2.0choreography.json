@@ -74,6 +74,7 @@
 							"id":"c3",
 							"title":"MultiInstance",
 							"value":"MultiInstance",
+							"icon" : "/activity/list/mi.parallel.png",
 							"refToView":"mi"
 						}
 					]
@@ -98,7 +99,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": "bg_frame",
+					"refToView": "fill_el",
 					"fill":true,
 					"stroke":false
 				},
@@ -185,13 +186,14 @@
 							"id":"c2",
 							"title":"Standard",
 							"value":"Standard",
-							"icon" : "list/looptype.standard.png",
+							"icon" : "/activity/list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
 							"id":"c3",
 							"title":"MultiInstance",
 							"value":"MultiInstance",
+							"icon" : "/activity/list/mi.parallel.png",
 							"refToView":"mi"
 						}
 					]
@@ -216,7 +218,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": "bg_frame",
+					"refToView": "fill_el",
 					"fill":true,
 					"stroke":false
 				},
@@ -314,14 +316,14 @@
 							"id":"c2",
 							"title":"Standard",
 							"value":"Standard",
-							"icon" : "list/looptype.standard.png",
+							"icon" : "/activity/list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
 							"id":"c3",
 							"title":"MultiInstance",
 							"value":"MultiInstance",
-							"icon" : "list/mi.parallel.png",
+							"icon" : "/activity/list/mi.parallel.png",
 							"refToView":"mi"
 						}
 					]
@@ -346,7 +348,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": "bg_frame",
+					"refToView": "fill_el",
 					"fill":true,
 					"stroke":false
 				},
@@ -477,9 +479,9 @@
 					"optional":false,
 					"visible":false,
 					"refToView": [
+						"roundedBgRect",
 						"roundedOnBottom",
-						"roundedOnTop",
-						"roundedBgRect"
+						"roundedOnTop"
 					],
 					"fill":true,
 					"stroke":false
