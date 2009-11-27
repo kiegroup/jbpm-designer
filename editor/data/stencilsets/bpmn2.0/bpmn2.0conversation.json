@@ -69,9 +69,14 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				},
+				}
+ 			]
+ 		},
+		{
+			"name" : "bgColor",
+			"properties" : [
 				{
-					"id":"bgColor",
+					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
@@ -83,8 +88,8 @@
 					"fill":true,
 					"stroke":false
 				}
- 			]
- 		},
+			]
+		},
 		{
 			"name" : "diagram",
 			"properties" : [
@@ -201,6 +206,49 @@
 					"wrapLines" : true
 				}
 			]
+		},
+		{
+			"name": "flowElement",
+			"properties" : [
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"title_de":"Kategorien",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				}
+			]
+		},
+		{
+			"name" : "artifact",
+			"properties" : [
+				{
+					"id":"pool",
+					"type":"String",
+					"title":"Pool",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				}
+			]
 		}
 	],
 	"stencils" : [
@@ -229,7 +277,7 @@
 			"description_de" : 	"",
 			"view" : 			"conversations/communication.svg",
 			"icon" : 			"conversations/communication.png",
-			"propertyPackages": ["baseAttributes","conversationNode"],
+			"propertyPackages": ["baseAttributes","bgColor","conversationNode"],
 			"properties" : 		[
 				{
 					"id" : "correlationdeyref",
@@ -266,7 +314,8 @@
 			],
 			"roles" : 			[
 				"all",
-				"CommunicationMorph"
+				"CommunicationMorph",
+				"fromtoall"
 			]
 		},
 		{
@@ -280,7 +329,7 @@
 			"description_de" : 	"",
 			"view" : 			"conversations/subconversation.svg",
 			"icon" : 			"conversations/subconversation.png",
-			"propertyPackages": ["baseAttributes","conversationNode"],
+			"propertyPackages": ["baseAttributes","bgColor","conversationNode"],
 			"properties" : 		[
 				{
 					"id":"entry",
@@ -317,7 +366,8 @@
 			],
 			"roles" : 			[
 				"all",
-				"CommunicationMorph"
+				"CommunicationMorph",
+				"fromtoall"
 			]
 		},
 		{
@@ -331,7 +381,7 @@
 			"description_de" : 	"",
 			"view" : 			"conversations/participant.svg",
 			"icon" : 			"conversations/participant.png",
-			"propertyPackages": ["baseAttributes", "conversationNode"],
+			"propertyPackages": ["baseAttributes","bgColor", "conversationNode"],
 			"properties" : 		[
 				{
 					"id" : "multiinstance",
@@ -362,7 +412,95 @@
 				"all",
 				"messageflow_start",
 				"messageflow_end",
-				"Participant"
+				"Participant",
+				"fromtoall"
+			]
+		},
+		
+		// Artifacts
+		
+		{
+			"type" : 			"node",
+			"id" : 				"Group",
+			"title" :			"Group",
+			"title_de" :		"Gruppe",
+			"groups" :			["Artifacts"],
+			"groups_de" :		["Artefakte"],
+			"description" :		"An arbitrary set of objects can be defined as a Group to show that they logically belong together.",
+			"description_de" :	"Mehrere Objekte, die logisch in Verbindung stehen, können in einer Gruppe zusammengefasst werden.",
+			"view" :			"artifact/group.svg",
+			"icon":				"artifact/group.png",
+			"propertyPackages" : [
+				"baseAttributes",
+				"flowElement",
+				"artifact"
+			],
+			"properties" : [
+				{
+					"id":"artifacttype",
+					"type":"String",
+					"title":"ArtifactType",
+					"title_de":"Artefakttyp",
+					"value":"Group",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				}
+			],
+			"roles": [
+				"all",
+				"fromtoall",
+				"canContainArtifacts"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id" : 				"TextAnnotation",
+			"title" :			"Text Annotation",
+			"title_de" :		"Text-Anmerkung",
+			"groups" :			["Artifacts"],
+			"groups_de" :		["Artefakte"],
+			"description" :		"Any object can be associated with a Text Annotation to provide additional documentation.",
+			"description_de" :	"Jedes Objekt kann durch eine Text-Anmerkung kommentiert werden.",
+			"view" :			"artifact/text.annotation.svg",
+			"icon" :			"artifact/text.annotation.png",
+			"defaultAlign" :	"northeast",
+			"propertyPackages": [
+				"baseAttributes",
+				"flowElement",
+				"artifact"
+			],
+			"properties" : 		[
+				{
+					"id":"text",
+					"type":"String",
+					"title":"Text",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"text",
+					"length":"",
+					"wrapLines":true
+				},
+				{
+					"id":"artifacttype",
+					"type":"String",
+					"title":"ArtifactType",
+					"title_de":"Artefakttyp",
+					"value":"Annotation",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				}
+			],
+			"roles": [
+				"all",
+				"from_artifact",
+				"to_artifact",
+				"TextAnnotationMorph"
 			]
 		},
 		{
@@ -400,7 +538,8 @@
 			],
 			"roles": 			[
 				"all",
-				"ConnectingObjectsMorph"
+				"ConnectingObjectsMorph",
+				"fromtoall"
 			]
 		},
 		{
@@ -416,6 +555,23 @@
 			"icon" :			"connector/messageflow.png",
 			"propertyPackages": ["baseAttributes"],
 			"roles" : 			[
+				"all",
+				"ConnectingObjectsMorph",
+				"fromtoall"
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Undirected",
+			"title":"Association Undirected",
+			"title_de":"Ungerichtete Assoziation",
+			"description":"Attaching a data object with an Undirected Association to a sequence flow indicates hand-over of information between the activities involved.",
+			"description_de":"Die Zuordnung eines Datenobjekts zu einem Steuerfluss über eine ungerichtete Assoziation weist auf eine Informationsübergabe zwischen den Aktivitäten hin.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"connector/association.undirected.svg",
+			"icon":"connector/association.undirected.png",
+			"roles": [
 				"all",
 				"ConnectingObjectsMorph"
 			]
@@ -450,6 +606,19 @@
 						"to" : ["messageflow_end"]
 					}
 				]
+			},
+			{
+				"role" : "Association_Undirected",
+				"connects" : [
+					{
+						"from" : "fromtoall",
+						"to" : ["TextAnnotation"]
+					},
+					{
+						"from" : "TextAnnotation",
+						"to" : "fromtoall"
+					}
+				]
 			}
 		],
 		"morphingRules" : [
@@ -464,6 +633,10 @@
 			{
 				"role" : "ConnectingObjectsMorph",
 				"baseMorphs" : ["ConversationLink"]
+			},
+			{
+				"role": "TextAnnotationMorph",
+				"baseMorphs": ["TextAnnotation"]
 			}
 		]
 	}
