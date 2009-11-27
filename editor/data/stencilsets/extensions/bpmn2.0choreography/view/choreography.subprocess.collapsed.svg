@@ -5,25 +5,25 @@
    xmlns:oryx="http://www.b3mn.org/oryx"
    xmlns:xlink="http://www.w3.org/1999/xlink"
 
-   width="102"
-   height="82"
+   width="152"
+   height="102"
    version="1.0">
   <defs></defs>
   <oryx:magnets>
-  	<oryx:magnet oryx:cx="1" oryx:cy="25" oryx:anchors="left" />
-  	<oryx:magnet oryx:cx="1" oryx:cy="40" oryx:anchors="left" />
-  	<oryx:magnet oryx:cx="1" oryx:cy="55" oryx:anchors="left" />
-  	<oryx:magnet oryx:cx="25" oryx:cy="40" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="1" oryx:cy="35" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="1" oryx:cy="50" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="1" oryx:cy="65" oryx:anchors="left" />
+  	<oryx:magnet oryx:cx="25" oryx:cy="50" oryx:anchors="left" />
   	
-  	<oryx:magnet oryx:cx="75" oryx:cy="40" oryx:default="yes" />
+  	<oryx:magnet oryx:cx="75" oryx:cy="50" oryx:default="yes" />
   	
-  	<oryx:magnet oryx:cx="125" oryx:cy="40" oryx:anchors="right" />
-  	<oryx:magnet oryx:cx="149" oryx:cy="25" oryx:anchors="right" />
-  	<oryx:magnet oryx:cx="149" oryx:cy="40" oryx:anchors="right" />
-  	<oryx:magnet oryx:cx="149" oryx:cy="55" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="125" oryx:cy="50" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="149" oryx:cy="35" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="149" oryx:cy="50" oryx:anchors="right" />
+  	<oryx:magnet oryx:cx="149" oryx:cy="65" oryx:anchors="right" />
   	
   	<oryx:magnet oryx:cx="75" oryx:cy="1" oryx:anchors="top" />
-  	<oryx:magnet oryx:cx="75" oryx:cy="79" oryx:anchors="bottom" />
+  	<oryx:magnet oryx:cx="75" oryx:cy="99" oryx:anchors="bottom" />
   </oryx:magnets>
   <g pointer-events="fill" oryx:minimumSize="50 40">
   	<defs>
@@ -33,13 +33,14 @@
 		</radialGradient>
 	</defs>
 	
-    <rect id="callActivity" oryx:resize="vertical horizontal" oryx:anchors="bottom top right left" x="0" y="0" width="150" height="80" rx="10" ry="10" stroke="black" stroke-width="4" fill="none" />
-	<rect id="bg_frame" oryx:resize="vertical horizontal" x="0" y="0" width="150" height="80" rx="10" ry="10" stroke="black" stroke-width="1" fill="url(#background) white" />
+    <rect id="callActivity" oryx:resize="vertical horizontal" oryx:anchors="bottom top right left" x="0" y="0" width="150" height="100" rx="10" ry="10" stroke="black" stroke-width="4" fill="none" />
+	<rect id="bg_frame" oryx:resize="vertical horizontal" x="0" y="0" width="150" height="100" rx="10" ry="10" stroke="black" stroke-width="1" fill="url(#background) white" />
+
 	<text 
 		font-size="12" 
 		id="text_name" 
 		x="75" 
-		y="40" 
+		y="50" 
 		oryx:align="middle center"
 		oryx:fittoelem="bg_frame"
 		stroke="black">
@@ -49,8 +50,8 @@
 	 	<g id="b" 
 			oryx:anchors="bottom">
 			
-		 	<rect id="plus_marker_border" oryx:anchors="bottom" x="68" y="66" width="14" height="14" fill="none" stroke="black" stroke-width="1" />
-			<path id="plus_marker" oryx:anchors="bottom" fill="none" stroke="black" d="M75 68 v10 M 70 73 h10" stroke-width="1"/>
+		 	<rect id="plus_marker_border" oryx:anchors="bottom" x="68" y="86" width="14" height="14" fill="none" stroke="black" stroke-width="1" />
+			<path id="plus_marker" oryx:anchors="bottom" fill="none" stroke="black" d="M75 83 v10 M 70 88 h10" stroke-width="1"/>
 		
 		</g>
 	</a>
@@ -60,7 +61,7 @@
       <path
          style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2.0999999;stroke-dasharray:none;stroke-opacity:1"
          id="loop_path"
-         d="M 72.908384,75.188343 L 72.908384,78.188343 L 69.908384,78.188343 M 72.908384,78.188343 A 4.875,4.875 0 1 1 76.939336,78.189378"
+         d="M 72.908384,75.188343 L 72.908384,98.188343 L 69.908384,98.188343 M 72.908384,98.188343 A 4.875,4.875 0 1 1 76.939336,98.189378"
          transform="translate(-14.5,0)"
          oryx:anchors="bottom" 
          />
@@ -68,7 +69,7 @@
 	
 	<g id="mi">
 		<g id="parallel">
-			<path id="mi_path" fill="none" stroke="black" d="M71 70 v8 M75 70 v8 M79 70 v8" transform="translate(-15,0)" stroke-width="2" 
+			<path id="mi_path" fill="none" stroke="black" d="M71 90 v8 M75 90 v8 M79 90 v8" transform="translate(-15,0)" stroke-width="2" 
 			oryx:anchors="bottom" />
 		</g>
 	</g>
