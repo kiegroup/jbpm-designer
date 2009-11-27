@@ -699,3 +699,8 @@ ORYX.I18N.SyntaxChecker.BPMN_MESSAGE_FLOW_NOT_ALLOWED = "Ein Nachrichtenfluss is
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS = "Ein Ereignisbasiertes Gateway, dass nicht instatiierend ist, muss mindestens einen eingehenden Kontrollfluss besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN2_TOO_FEW_INITIATING_PARTICIPANTS = "Eine Choreographie Aktivität musst genau einen initiierenden Teilnehmer besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS = "Eine Choreographie Aktivität darf nicht mehr als einen initiierenden Teilnehmer besitzen."
+
+ORYX.I18N.SyntaxChecker.COMMUNICATION_AT_LEAST_TWO_PARTICIPANTS = "Die Kommunikation oder Sub-Konversation muss zu mindestens zwei Teilnehmern verbunden sein.";
+ORYX.I18N.SyntaxChecker.MESSAGEFLOW_START_MUST_BE_PARTICIPANT = "Die Nachrichtenflussquelle muss ein Teilnehmer sein.";
+ORYX.I18N.SyntaxChecker.MESSAGEFLOW_END_MUST_BE_PARTICIPANT = "Das Nachrichtenflussziel muss ein Teilnehmer sein.";
+ORYX.I18N.SyntaxChecker.CONV_LINK_CANNOT_CONNECT_CONV_NODES = "Der Konversationslink muss eine Kommunikation oder Sub-Konversation mit einem Teilnehmer verbinden.";
