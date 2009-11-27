@@ -464,6 +464,8 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 			if(i == 0) {
 				participant.setProperty('oryx-corners', "Top");
 			}
+			
+			this.adjustTopBackground(participant);
 		}.bind(this));
 		
 		/* Resize choreography task to top side */
@@ -547,6 +549,9 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 			if(i == participants.length - 1) {
 				participant.setProperty('oryx-corners', "Bottom");
 			}
+			
+			this.adjustTopBackground(participant);
+			
 		}.bind(this));
 		
 		/* Resize choreography task to top bottom side */
@@ -854,6 +859,19 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 		return participantsParent.getId() === shape.getId();
 	},
 	
+	adjustTopBackground: function(shape){
+		var pos = shape.properties["oryx-corners"];
+		var bg = $(shape.getId()+"roundedBgRect");
+		if (!bg){ return }
+		
+		if(pos==="Top") {
+			bg.setAttributeNS(null, "fill", "url(#"+shape.getId()+"background_top) white");
+		} else {
+			var bgColor = shape.properties["oryx-color"];
+			bg.setAttributeNS(null, "fill", bgColor);
+		}	
+	},
+	
 	/**
 	 * PropertyWindow.PropertyChanged Handler
 	 * 
@@ -870,21 +888,19 @@ ORYX.Plugins.Bpmn2_0Choreography = {
 		
 		var changed = false;
 		shapes.each(function(shape) {
-			if( shape.getStencil().id() === 
-					"http://b3mn.org/stencilset/bpmn2.0#ChoreographyParticipant" &&
-				propertyKey === "oryx-initiating") {
-				
-				/* Set appropriate color */
-				
-				if(!propertyValue) {
-					shape.setProperty("oryx-color", "#c6c6c6");
-				} else {
+			if (shape.getStencil().id() === "http://b3mn.org/stencilset/bpmn2.0#ChoreographyParticipant" &&
+			propertyKey === "oryx-initiating") {
+			
+				if (!propertyValue) {
+					shape.setProperty("oryx-color", "#acacac");
+				}
+				else {
 					shape.setProperty("oryx-color", "#ffffff");
-				}	
+				}
 				
-				changed = true;	
+				changed = true;
 			}
-		});
+		})
 		
 		/* Update visualisation if necessary */
 		if(changed) {

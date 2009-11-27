@@ -16,7 +16,14 @@
   	<oryx:magnet oryx:cx="299" oryx:cy="124" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="painted" >
-  	
+
+    <defs>
+		<radialGradient id="background" cx="0%" cy="10%" r="100%" fx="20%" fy="10%">
+			<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+			<stop id="fill_el" offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+		</radialGradient>
+	</defs>
+	  	
   	<rect id="border" class="stripable-element-force" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" fill="none" stroke-width="9" stroke="white" visibility="hidden"/>
     <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" fill="none" />
     
@@ -41,7 +48,7 @@
 		height="250"
 		stroke="black"
 		stroke-width="1"
-		fill="white"
+		fill="url(#background) white"
 	/>
 	
     <text x="10" y="125" font-size="14" id="text_name" oryx:align="middle center" oryx:anchors="left" oryx:rotate="270" fill="black" stroke="black"></text>

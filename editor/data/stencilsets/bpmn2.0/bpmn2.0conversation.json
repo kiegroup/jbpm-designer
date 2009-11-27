@@ -84,7 +84,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": "bg_frame",
+					"refToView": "fill_el",
 					"fill":true,
 					"stroke":false
 				}

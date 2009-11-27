@@ -84,7 +84,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": "bg_frame",
+					"refToView": "fill_el",
 					"fill":true,
 					"stroke":false
 				}
@@ -2505,7 +2505,8 @@
 			"icon" :			"swimlane/pool.png",
 			"propertyPackages": [
 				"baseAttributes",
-				"pool"
+				"pool",
+				"bgColor"
 			],
 			"roles" : 			[
 				"all",
@@ -2544,7 +2545,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"c",
+					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
 				}
@@ -2569,7 +2570,8 @@
 			"view" :			"swimlane/lane.svg",
 			"icon" :			"swimlane/lane.png",
 			"propertyPackages": [
-				"baseAttributes"
+				"baseAttributes",
+				"bgColor"
 			],
 			"properties" : 		[
 				{
@@ -3027,7 +3029,8 @@
 					"optional":false,
 					"refToView":["bg_frame","bg_frame2"],
 					"fill":true,
-					"stroke":false
+					"stroke":false,
+					"hidden":true
 				}
 			],
 			"roles" :			[

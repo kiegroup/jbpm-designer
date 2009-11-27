@@ -16,11 +16,18 @@
 	<oryx:magnet oryx:cx="44" oryx:cy="48.5" oryx:default="yes"/>
   </oryx:magnets>
 	<g pointer-events="fill">
+	    <defs>
+			<radialGradient id="background" cx="10%" cy="10%" r="100%" fx="10%" fy="10%">
+				<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+				<stop id="fill_el" offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+			</radialGradient>
+		</defs>
+		
 		<polyline oryx:resize="vertical horizontal" oryx:anchors="left right" id="frame" stroke="black" fill="#ffffff" stroke-width="1" points="78,97 0,97 0,0 78,0"/>
 		
 		<polyline oryx:anchors="right top bottom" id="celem2" stroke="black" fill="#ffffff" stroke-width="1" points="78,97 88,97 88,10 78,10"/>
 		
-		<polyline oryx:anchors="right top" id="celem3" stroke="black" fill="#ffffff" stroke-width="1" points="88,10 78,0 78,10 88,10"/>
+		<polyline oryx:anchors="right top" id="celem3" stroke="black" fill="url(#background) white" stroke-width="1" points="88,10 78,0 78,10 88,10"/>
 		
 		<rect id="unvisibleBorder" x="0" y="0" height="97" width="88" stroke="none" fill="none" oryx:resize="horizontal vertical"/>
 		

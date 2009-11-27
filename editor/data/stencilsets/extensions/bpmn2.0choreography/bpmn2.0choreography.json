@@ -493,9 +493,9 @@
 					"optional":false,
 					"visible":false,
 					"refToView": [
-						"roundedBgRect",
-						"roundedOnBottom",
-						"roundedOnTop"
+						"roundedOnTop",
+						"fill_el",
+						"fill_el_top"
 					],
 					"fill":true,
 					"stroke":false

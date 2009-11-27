@@ -17,9 +17,19 @@
   </oryx:magnets>
  
   <g pointer-events="fill">
-    <rect id="roundedBgRect" x="0" y="0" rx="10" ry="10" width="100" height="20" stroke="black" stroke-width="1" fill="white" 
+     <defs>
+		<radialGradient id="background" cx="10%" cy="10%" r="100%" fx="10%" fy="10%">
+			<stop offset="0%" stop-color="#dedede" stop-opacity="1"/>
+			<stop id="fill_el" offset="100%" stop-color="#acacac" stop-opacity="1"/>
+		</radialGradient>
+		<radialGradient id="background_top" cx="10%" cy="10%" r="100%" fx="10%" fy="10%">
+			<stop offset="0%" stop-color="#dedede" stop-opacity="1"/>
+			<stop id="fill_el_top" offset="0.27" stop-color="#acacac" stop-opacity="1"/>
+		</radialGradient>
+	</defs>
+    <rect id="roundedBgRect" x="0" y="0" rx="10" ry="10" width="100" height="20" stroke="black" stroke-width="1" fill="url(#background_top) white" 
     	  	oryx:anchors="top bottom right left" />
-    <path id="roundedOnBottom" stroke="black" stroke-width="1" fill="white" d="M0 10 L0 0 L100 0 L100 10" 
+    <path id="roundedOnBottom" stroke="black" stroke-width="1" fill="url(#background) white" d="M0 10 L0 0 L100 0 L100 10" 
    			oryx:anchors="top right left"
     	  />
     <path id="roundedOnTop" stroke="black" stroke-width="1" fill="white" d="M0 10 L0 20 L100 20 L100 10" 

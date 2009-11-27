@@ -11,13 +11,21 @@
   </oryx:magnets>
   <oryx:docker oryx:cx="16" oryx:cy="16" />
   <g pointer-events="fill">
+
+    <defs>
+		<radialGradient id="background" cx="10%" cy="10%" r="100%" fx="10%" fy="10%">
+			<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+			<stop id="fill_el" offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+		</radialGradient>
+	</defs>
+	
     <circle 
     	id="bg_frame" 
     	cx="16" 
     	cy="16" 
     	r="15" 
     	stroke="black" 
-    	fill="white" 
+    	fill="url(#background) white" 
     	stroke-width="1"
     	style="stroke-dasharray: 5.5, 3" />
     	
@@ -34,7 +42,7 @@
     <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
     <circle id="frame2" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
 
-    <rect x="8" y="8" width="16" height="16" stroke="black" stroke-width="1" fill="white" />
+    <rect x="8" y="8" width="16" height="16" stroke="black" stroke-width="1" fill="none" />
     <path d="	M 10 10 L 22 10
     		M 10 14 L 22 14
     		M 10 18 L 22 18
