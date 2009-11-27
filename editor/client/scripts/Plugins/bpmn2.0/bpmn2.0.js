@@ -246,8 +246,16 @@ ORYX.Plugins.BPMN2_0 = {
 		if (lanes.length === 1 && this.getLanes(lanes.first()).length <= 0) {
 			// TRUE if there is a caption
 			lanes.first().setProperty("oryx-showcaption", lanes.first().properties["oryx-name"].trim().length > 0);
+			var rect = lanes.first().node.getElementsByTagName("rect");
+			rect[0].setAttributeNS(null, "display", "none");
+			rect[1].setAttributeNS(null, "display", "none");
 		} else {
 			lanes.invoke("setProperty", "oryx-showcaption", true);
+			lanes.each(function(lane){
+				var rect = lane.node.getElementsByTagName("rect");
+				rect[0].removeAttributeNS(null, "display");
+				rect[1].removeAttributeNS(null, "display");
+			})
 		}
 		
 		

@@ -16,6 +16,8 @@
   	<oryx:magnet oryx:cx="299" oryx:cy="124" oryx:default="yes" />
   </oryx:magnets>
   <g pointer-events="painted" >
+  	
+  	<rect id="border" class="stripable-element-force" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" fill="none" stroke-width="9" stroke="white" visibility="hidden"/>
     <rect id="c" oryx:resize="vertical horizontal" x="0" y="0" width="600" height="250" stroke="black" fill="none" />
     
 	<rect 
