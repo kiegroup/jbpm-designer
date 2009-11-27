@@ -11,11 +11,11 @@
 			"type" : "node",
 			"id" : "ChoreographyTask",
 			"title" : "Choreography Task",
-			"title_de" : "Choreographie Aufgabe",
+			"title_de" : "Choreographie-Aufgabe",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
-			"description" : "A Choreography Task represents an Interaction, which is a coherent set (1 or more) of Message exchanges between two Participants.",
-			"description_de" : "",
+			"description" : "A Choreography Task represents an interaction, which is a coherent set (1 or more) of message exchanges between two or more participants. The white participant initiates the interaction.",
+			"description_de" : "Eine Choreographie-Aufgabe repräsentiert eine Interaktion (Nachrichtenaustausch) zwischen zwei oder mehr Beteiligten. Der weiß gekennzeichnete Beteiligte initiiert die Interaktion.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.task.svg",
 			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.task.png",
 			"layout":[{"type":"layout.bpmn2_0.choreography.task"}],
@@ -26,7 +26,7 @@
 					"title":"Name",
 					"value":"",
 					"description":"The descriptive name of the choreography task.",
-					"description_de":"Bezeichnung des Choreography-Tasks.",
+					"description_de":"Bezeichnung des Choreographie-Tasks.",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -61,18 +61,21 @@
 						{
 							"id":"c1",
 							"title":"None",
+							"title_de":"Keine Schleife",
 							"value":"None"
 						},
 						{
 							"id":"c2",
 							"title":"Standard",
+							"title_de":"Standard",
 							"value":"Standard",
 							"icon" : "/activity/list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
 							"id":"c3",
-							"title":"MultiInstance",
+							"title":"MI Parallel",
+							"title_de":"MI parallel",
 							"value":"MultiInstance",
 							"icon" : "/activity/list/mi.parallel.png",
 							"refToView":"mi"
@@ -82,10 +85,11 @@
 				{
 					"id":"callAcitivity",
 					"type":"Boolean",
-					"title":"is a Call Activity",
-					"title_de":"ist eine Call Activity",
+					"title":"is a Call-Activity",
+					"title_de":"ist eine Aufruf-Aktivität",
 					"value":0,
-					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"description":"A Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"description_de":"Eine Aufruf-Aktivität repräsentiert einen global definierten Teilprozess oder eine global definierte Aufgabe, der bzw. die im aktuellen Prozess verwendet wird.",
 					"readonly":false,
 					"optional":"true",
 					"refToView":"callActivity"
@@ -127,12 +131,12 @@
 		{
 			"type" : "node",
 			"id" : "ChoreographySubprocessCollapsed",
-			"title" : "Choreography Subprocess Collapsed",
-			"title_de" : "Choreographie Sub-Process zugeklappt",
+			"title" : "Choreography Subprocess (collapsed)",
+			"title_de" : "Choreographie-Unterprozess (zugeklappt)",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
-			"description" : "A Choreography Task represents an Interaction, which is a coherent set (1 or more) of Message exchanges between two Participants.",
-			"description_de" : "",
+			"description" : "A Choreography Subprocess contains a refined choreography with several interactions. Another diagram can be linked via the + symbol. The white participant initiates the interaction.",
+			"description_de" : "Ein Choreographie-Unterprozess enthält eine verfeinerte Choreographie mit mehreren Interaktionen zwischen Kommunikationspartnern. Ein weiteres Diagramm kann hinter dem + Symbol verknüpft werden. Der weiß gekennzeichnete Beteiligte initiiert die Interaktion.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.subprocess.collapsed.svg",
 			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.subprocess.collapsed.png",
 			"layout":[
@@ -145,7 +149,7 @@
 					"title":"Name",
 					"value":"",
 					"description":"The descriptive name of the choreography task.",
-					"description_de":"Bezeichnung des Choreography-Tasks.",
+					"description_de":"Bezeichnung der Choreographie-Aktivität.",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -180,18 +184,21 @@
 						{
 							"id":"c1",
 							"title":"None",
+							"title_de":"Keine Schleife",
 							"value":"None"
 						},
 						{
 							"id":"c2",
 							"title":"Standard",
+							"title_de":"Standard",
 							"value":"Standard",
 							"icon" : "/activity/list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
 							"id":"c3",
-							"title":"MultiInstance",
+							"title":"MI Parallel",
+							"title_de":"MI parallel",
 							"value":"MultiInstance",
 							"icon" : "/activity/list/mi.parallel.png",
 							"refToView":"mi"
@@ -201,10 +208,11 @@
 				{
 					"id":"callAcitivity",
 					"type":"Boolean",
-					"title":"is a Call Activity",
-					"title_de":"ist eine Call Activity",
+					"title":"is a Call-Activity",
+					"title_de":"ist eine Aufruf-Aktivität",
 					"value":0,
-					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"description":"A Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"description_de":"Eine Aufruf-Aktivität repräsentiert einen global definierten Teilprozess oder eine global definierte Aufgabe, der bzw. die im aktuellen Prozess verwendet wird.",
 					"readonly":false,
 					"optional":"true",
 					"refToView":"callActivity"
@@ -226,7 +234,7 @@
 					"id":"entry",
 					"type":"DiagramLink",
 					"title":"SubProcessRef",
-					"title_de":"SubprozessRef",
+					"title_de":"Subprozess-Referenz",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -257,12 +265,12 @@
 		{
 			"type" : "node",
 			"id" : "ChoreographySubprocessExpanded",
-			"title" : "Choreography Subprocess Expanded",
-			"title_de" : "Choreographie Subprocess Erweitert",
+			"title" : "Choreography Subprocess (expanded)",
+			"title_de" : "Choreographie-Unterprozess (aufgeklappt)",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
-			"description" : "A Choreography Task represents an Interaction, which is a coherent set (1 or more) of Message exchanges between two Participants.",
-			"description_de" : "",
+			"description" : "A Choreography Subprocess contains a refined choreography with several interactions. An expanded subprocess contains a valid BPMN diagram. The white participant initiates the interaction.",
+			"description_de" : "Ein Choreographie-Unterprozess enthält eine verfeinerte Choreographie mit mehreren Interaktionen zwischen Kommunikationspartnern. Ein aufgeklappter Unterprozess enthält in sich ein eigenes BPMN-Diagramm, welches direkt innerhalb modelliert wird. Der weiß gekennzeichnete Beteiligte initiiert die Interaktion.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.subprocess.expanded.svg",
 			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.subprocess.expanded.png",
 			"layout":[
@@ -276,7 +284,7 @@
 					"title":"Name",
 					"value":"",
 					"description":"The descriptive name of the choreography task.",
-					"description_de":"Bezeichnung des Choreography-Tasks.",
+					"description_de":"Bezeichnung der Choreographie-Aktivität.",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -311,18 +319,21 @@
 						{
 							"id":"c1",
 							"title":"None",
+							"title_de":"Keine Schleife",
 							"value":"None"
 						},
 						{
 							"id":"c2",
 							"title":"Standard",
+							"title_de":"Standard",
 							"value":"Standard",
 							"icon" : "/activity/list/looptype.standard.png",
 							"refToView":"loop"
 						},
 						{
 							"id":"c3",
-							"title":"MultiInstance",
+							"title":"MI Parallel",
+							"title_de":"MI parallel",
 							"value":"MultiInstance",
 							"icon" : "/activity/list/mi.parallel.png",
 							"refToView":"mi"
@@ -332,10 +343,11 @@
 				{
 					"id":"callAcitivity",
 					"type":"Boolean",
-					"title":"is a Call Activity",
-					"title_de":"ist eine Call Activity",
+					"title":"is a Call-Activity",
+					"title_de":"ist eine Aufruf-Aktivität",
 					"value":0,
-					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"description":"A Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"description_de":"Eine Aufruf-Aktivität repräsentiert einen global definierten Teilprozess oder eine global definierte Aufgabe, der bzw. die im aktuellen Prozess verwendet wird.",
 					"readonly":false,
 					"optional":"true",
 					"refToView":"callActivity"
@@ -381,8 +393,8 @@
 			"title_de" : "Teilnehmer",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
-			"description" : "",
-			"description_de" : "",
+			"description" : "A Choreography Activity represents interactions between multiple participants. An interaction can take place between many participants. This modeling element can be embedded into other Choreography Activities.",
+			"description_de" : "Eine Choreographie-Aktivität beschreibt die Interaktionen zwischen mehreren Teilnehmer. Die Interaktion kann zwischen beliebig vielen Teilnehmern erfolgen. Dieses Element kann in bestehende Choreographie-Aktivitäten eingebettet werden.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.participant.svg",
 			"icon" : "../../extensions/bpmn2.0choreography/icons/choreography.participant.png",
 			"properties" : [
@@ -427,10 +439,11 @@
 				{
 					"id":"multiple_instance",
 					"type":"Boolean",
-					"title":"Multiple Instance",
-					"title_de":"Mehrere Instanzen",
+					"title":"is Multiple Participants",
+					"title_de":"ist Mehrfach-Beteiligter",
 					"value":false,
-					"description":"",
+					"description":"The Multiple Participants Marker denotes a set of participants of the same kind.",
+					"description_de":"Eine Mehrfach-Beteiligter Markierung beschreibt eine Reihe von Beteiligten derselben Sorte.",
 					"readonly":false,
 					"optional":"true",
 					"refToView":"mi"
