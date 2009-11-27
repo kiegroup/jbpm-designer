@@ -697,3 +697,5 @@ ORYX.I18N.SyntaxChecker.BPMN_MESSAGE_FLOW_NOT_ALLOWED = "Ein Nachrichtenfluss is
 
 /** New Language Properties 27.11.2009 */
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS = "Ein Ereignisbasiertes Gateway, dass nicht instatiierend ist, muss mindestens einen eingehenden Kontrollfluss besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_TOO_FEW_INITIATING_PARTICIPANTS = "Eine Choreographie Aktivität musst genau einen initiierenden Teilnehmer besitzen.";
+ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS = "Eine Choreographie Aktivität darf nicht mehr als einen initiierenden Teilnehmer besitzen."

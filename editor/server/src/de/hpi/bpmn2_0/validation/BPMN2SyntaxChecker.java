@@ -37,6 +37,7 @@ import de.hpi.bpmn2_0.model.gateway.EventBasedGateway;
 import de.hpi.bpmn2_0.model.gateway.Gateway;
 import de.hpi.bpmn2_0.model.gateway.GatewayDirection;
 import de.hpi.bpmn2_0.model.participant.Lane;
+import de.hpi.bpmn2_0.model.participant.Participant;
 import de.hpi.diagram.verification.AbstractSyntaxChecker;
 
 /**
@@ -101,6 +102,8 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 	
 	// CHOREOGRAPHY
 	protected static final String TOO_MANY_INITIATING_MESSAGES = "BPMN2_TOO_MANY_INITIATING_MESSAGES";
+	protected static final String TOO_MANY_INITIATING_PARTICIPANTS = "BPMN2_TOO_MANY_INITIATING_PARTICIPANTS";
+	protected static final String TOO_FEW_INITIATING_PARTICIPANTS = "BPMN2_TOO_FEW_INITIATING_PARTICIPANTS";
 	
 	private Definitions defs;
 		
@@ -207,6 +210,20 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 		
 		if(flowElement instanceof ChoreographyActivity) {
 			this.checkForInitiatingMessages(flowElement);
+			
+			Integer instatiatingCounter = 0;
+						
+			for(Participant participant : ((ChoreographyActivity) flowElement).getParticipants()) {
+				if(participant.isInitiating()) {
+					instatiatingCounter++;
+					
+					if(instatiatingCounter > 1) 
+						this.addError(participant, TOO_MANY_INITIATING_PARTICIPANTS);
+				}
+			}
+			
+			if(instatiatingCounter == 0) 
+				this.addError(flowElement, TOO_FEW_INITIATING_PARTICIPANTS);
 		}
 		
 	}
