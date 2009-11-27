@@ -195,22 +195,9 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 				
 			} else if(rootElement instanceof Conversation) {
 				
-				//TODO: If the Fork is somehow accessible then check it!
+				(new BPMN2ConversationChecker(this)).checkConversation((Conversation)rootElement);
 				
-				for(ConversationLink conversationLink : ((Conversation) rootElement).getConversationLink()) {
-					this.checkConversationLink(conversationLink);
-				}
 			}
-		}
-	}
-	
-	private void checkConversationLink(ConversationLink conversationLink) {
-		if(conversationLink.getSourceRef() == null) {
-			this.addError(conversationLink, NO_SOURCE);
-		}
-		
-		if(conversationLink.getTargetRef() == null) {
-			this.addError(conversationLink, NO_TARGET);
 		}
 	}
 
