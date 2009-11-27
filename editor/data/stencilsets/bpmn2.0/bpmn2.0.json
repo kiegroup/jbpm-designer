@@ -2882,6 +2882,21 @@
 				"baseAttributes",
 				"flowElement"				
 			],
+			"properties" : [
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#e1e1e1",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"fill_el",
+					"fill":true,
+					"stroke":false
+				}
+			],
 			"roles" :			[
 			    "all",
 			    "from_task_event",
@@ -2948,7 +2963,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":["bg_frame","bg_frame2"],
+					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
 				}

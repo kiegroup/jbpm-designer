@@ -6,15 +6,24 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink" 
 	xmlns:oryx="http://www.b3mn.org/oryx"
 	 
-	width="101.75px" 
-	height="92.25px">
+	width="63.875px" 
+	height="57.946px">
 
-	<g pointer-events="fill" oryx:minimumSize="70 64" oryx:maximumSize="200 181">
-		<rect x="29.25" y="18" fill="#FFFFFF" oryx:anchors="left right top bottom" stroke="#000000" width="41.5" height="67.5"/>
-		<rect x="6.75" y="0.5" fill="#FFFFFF" oryx:anchors="left right top" oryx:resize="horizontal vertical" stroke="#000000" width="86.75" height="64.25"/>
-		<rect id="monitor" x="13" y="7.5" fill="#FFFFFF" oryx:resize="horizontal vertical" stroke="#000000" width="74" height="49.25"/>
-		<path fill="#FFFFFF" oryx:anchors="left right" oryx:resize="vertical horizontal" stroke="#000000" d="M101.25,91.75H0.5V68.5h100.75V91.75z M11.75,84.5 M62.94,75h32.237"/>
-		<text font-size="12" id="text_name" x="50" y="32.125" oryx:align="middle center" oryx:fittoelem="monitor" stroke="black" />
+	<g oryx:minimumSize="63.875 57.946">
+		<defs>
+			<radialGradient id="background" cx="30%" cy="30%" r="50%" fx="0%" fy="0%">
+				<stop offset="10%" stop-color="#ffffff" stop-opacity="1"></stop>
+				<stop offset="100%" stop-color="#e1e1e1" stop-opacity="1" id="fill_el"></stop>
+			</radialGradient>
+		</defs>
+		
+		<rect x="18.442" y="11.421" ill="#FFFFFF" stroke="#000000" width="25.899" height="42.125" />	
+		<rect x="4.4" y="0.5" fill="#FFFFFF" stroke="#000000" width="54.138" height="40.097" />	
+		<rect id="monitor" x="8.301" y="4.869" fill="url(#background) #FFFFFF" stroke="#000000" width="46.182" height="30.735" />
+		<path fill="#FFFFFF" stroke="#000000" d="M63.375,57.446H0.5v-14.51
+			h62.875V57.446z M39.467,46.993h20.118"/>
+		
+		<text font-size="12" id="text_name" x="32" y="75" oryx:align="middle center" stroke="black" />
 	</g>
 		
 </svg>
