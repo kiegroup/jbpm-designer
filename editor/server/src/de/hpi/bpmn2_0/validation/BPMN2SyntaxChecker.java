@@ -19,7 +19,6 @@ import de.hpi.bpmn2_0.model.connector.Edge;
 import de.hpi.bpmn2_0.model.connector.MessageFlow;
 import de.hpi.bpmn2_0.model.connector.SequenceFlow;
 import de.hpi.bpmn2_0.model.conversation.Conversation;
-import de.hpi.bpmn2_0.model.conversation.ConversationLink;
 import de.hpi.bpmn2_0.model.data_object.DataInput;
 import de.hpi.bpmn2_0.model.data_object.DataOutput;
 import de.hpi.bpmn2_0.model.data_object.Message;
@@ -137,10 +136,10 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 				
 			} else if(edge.getTargetRef() == null) {
 				this.addError(edge, NO_TARGET);
+			
 			} else {
 			
-				if(edge instanceof MessageFlow) {
-			
+				if(edge instanceof MessageFlow) {			
 				
 					if(!(edge.getSourceRef() == null || edge.getTargetRef() == null)) 
 						this.addError(edge, MESSAGE_FLOW_NOT_CONNECTED);
@@ -209,64 +208,45 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 		this.checkNode(flowElement);
 		
 		if(flowElement instanceof ChoreographyActivity) {
-			this.checkForInitiatingMessages(flowElement);
-			
-			Integer instatiatingCounter = 0;
+			Integer instantiationMessageCounter = this.checkForInitiatingMessages((ChoreographyActivity) flowElement);			
+			Integer instantiatingCounter = 0;
 						
 			for(Participant participant : ((ChoreographyActivity) flowElement).getParticipants()) {
 				if(participant.isInitiating()) {
-					instatiatingCounter++;
+					instantiatingCounter++;
 					
-					if(instatiatingCounter > 1) 
+					if(instantiatingCounter > 1) 
 						this.addError(participant, TOO_MANY_INITIATING_PARTICIPANTS);
 				}
+				
+				instantiationMessageCounter += this.checkForInitiatingMessages(participant);
 			}
 			
-			if(instatiatingCounter == 0) 
+			if(instantiatingCounter == 0) 
 				this.addError(flowElement, TOO_FEW_INITIATING_PARTICIPANTS);
+			
+			if(instantiationMessageCounter > 1) 
+				this.addError(flowElement, TOO_MANY_INITIATING_MESSAGES);
 		}
 		
 	}
 
-	private void checkForInitiatingMessages(FlowElement flowElement) {
+	private Integer checkForInitiatingMessages(FlowElement flowElement) {
 		Integer initiatingCounter = 0;
 		
 		// Check outgoing edges
-		for(Edge outgoing : ((ChoreographyActivity) flowElement).getOutgoing()) {
-			
-			if(outgoing.getTargetRef() instanceof Message) {
-				
-				if(((Message) outgoing.getTargetRef()).isInitiating()) {
-					initiatingCounter++;
-					
-					if(initiatingCounter > 1) {
-						this.addError(outgoing.getTargetRef(), TOO_MANY_INITIATING_MESSAGES);
-					}
-				}
-				
-			}
-			
-		}
+		for(Edge outgoing : flowElement.getOutgoing())			
+			if(outgoing.getTargetRef() instanceof Message) 				
+				if(((Message) outgoing.getTargetRef()).isInitiating()) 
+					initiatingCounter++;				
 		
 		// Check incoming edges
-		for(Edge incoming : ((ChoreographyActivity) flowElement).getIncoming()) {
-			
-			if(incoming.getSourceRef() instanceof Message) {
-				
-				if(((Message) incoming.getSourceRef()).isInitiating()) {
+		for(Edge incoming : flowElement.getIncoming()) 			
+			if(incoming.getSourceRef() instanceof Message) 				
+				if(((Message) incoming.getSourceRef()).isInitiating())
 					initiatingCounter++;
-					
-					if(initiatingCounter > 1) {
-						this.addError(incoming.getSourceRef(), TOO_MANY_INITIATING_MESSAGES);
-					}
-				}
-				
-			}
-			
-		}
-		
-		// TODO: checkEdges of Participants
-		
+							
+		return initiatingCounter;
 		
 	}
 
