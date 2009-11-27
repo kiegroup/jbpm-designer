@@ -20,12 +20,12 @@
 	<g>
 		<defs>
 			<radialGradient id="background" cx="30%" cy="30%" r="50%" fx="0%" fy="0%">
-				<stop offset="10%" stop-color="#ffffff" stop-opacity="1"></stop>
+				<stop offset="0%" stop-color="#ffffff" stop-opacity="1"></stop>
 				<stop offset="100%" stop-color="#ffffff" stop-opacity="1" id="fill_el"></stop>
 			</radialGradient>
 		</defs>
 		
-		<path fill="url(#background) #FFFFFF" stroke="#000000" d="M31.634,0.662c20.013,0,31.292,3.05,31.292,5.729c0,2.678,0,45.096,0,48.244
+		<path fill="url(#background) #ffffff" stroke="#000000" d="M31.634,0.662c20.013,0,31.292,3.05,31.292,5.729c0,2.678,0,45.096,0,48.244
 			c0,3.148-16.42,6.2-31.388,6.2c-14.968,0-30.613-2.955-30.613-6.298c0-3.342,0-45.728,0-48.05
 			C0.925,4.165,11.622,0.662,31.634,0.662z"/>
 		<path id="bg_frame2" fill="none" stroke="#000000" d="
@@ -33,7 +33,7 @@
 			c0,1.769,3.088,6.455,30.734,6.455c27.647,0,31.267-4.565,31.267-6.551 M0.925,6.487c0,2.35,3.088,6.455,30.734,6.455
 			c27.647,0,31.267-3.912,31.267-6.552 M62.926,6.391v4.844 M0.949,6.391v4.844 M62.926,11.041v4.844 M0.949,11.041v4.844"/>
 			 	
-		<text font-size="12" id="text_name" x="31" y="76" oryx:align="middle center" stroke="black" />
+		<text font-size="12" id="text_name" x="31" y="66" oryx:align="center top" stroke="black" />
 			 
 	</g>
 </svg>

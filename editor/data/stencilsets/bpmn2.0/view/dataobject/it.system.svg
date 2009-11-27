@@ -20,10 +20,10 @@
 		<rect x="18.442" y="11.421" ill="#FFFFFF" stroke="#000000" width="25.899" height="42.125" />	
 		<rect x="4.4" y="0.5" fill="#FFFFFF" stroke="#000000" width="54.138" height="40.097" />	
 		<rect id="monitor" x="8.301" y="4.869" fill="url(#background) #FFFFFF" stroke="#000000" width="46.182" height="30.735" />
-		<path fill="#FFFFFF" stroke="#000000" d="M63.375,57.446H0.5v-14.51
+		<path fill="#ffffff" stroke="#000000" d="M63.375,57.446H0.5v-14.51
 			h62.875V57.446z M39.467,46.993h20.118"/>
 		
-		<text font-size="12" id="text_name" x="32" y="75" oryx:align="middle center" stroke="black" />
+		<text font-size="12" id="text_name" x="32" y="62" oryx:align="center top" stroke="black" />
 	</g>
 		
 </svg>
