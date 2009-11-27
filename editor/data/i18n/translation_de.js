@@ -694,3 +694,6 @@ ORYX.I18N.RESIZE.E ="Rechts";
 /** New Language Properties 24.11.2009 */
 ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_MESSAGES = "Eine Choreographie Aktivität darf nur eine initiierende Nachricht besitzen.";
 ORYX.I18N.SyntaxChecker.BPMN_MESSAGE_FLOW_NOT_ALLOWED = "Ein Nachrichtenfluss ist an dieser Stelle nicht erlaubt.";
+
+/** New Language Properties 27.11.2009 */
+ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS = "Ein Ereignisbasiertes Gateway, dass nicht instatiierend ist, muss mindestens einen eingehenden Kontrollfluss besitzen.";

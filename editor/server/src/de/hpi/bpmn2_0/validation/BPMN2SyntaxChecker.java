@@ -89,6 +89,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 	protected static final String EVENT_BASED_WRONG_TRIGGER = "BPMN2_EVENT_BASED_WRONG_TRIGGER";
 	protected static final String EVENT_BASED_WRONG_CONDITION_EXPRESSION = "BPMN2_EVENT_BASED_WRONG_CONDITION_EXPRESSION";
 	protected static final String EVENT_BASED_NOT_INSTANTIATING = "BPMN2_EVENT_BASED_NOT_INSTANTIATING";
+	protected static final String EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS = "BPMN2_EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS";
 	protected static final String RECEIVE_TASK_WITH_ATTACHED_EVENT = "BPMN2_RECEIVE_TASK_WITH_ATTACHED_EVENT";
 	
 	protected static final String GATEWAYDIRECTION_MIXED_FAILURE = "BPMN2_GATEWAYDIRECTION_MIXED_FAILURE";
@@ -389,6 +390,9 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 			// SPEC: P. 309
 			this.addError(node, EVENT_BASED_NOT_INSTANTIATING);				
 		
+		if(!node.isInstantiate() && node.getIncomingSequenceFlows().size() == 0)
+			this.addError(node, EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS);
+		
 		for(SequenceFlow edge : outEdges) {
 			
 			/*
@@ -469,9 +473,11 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 //		return containedInClasses == allowed;
 //	}
 	
-	private boolean checkInstatiateCondition(Gateway node) {
-		boolean hasStartEvent = false;
+	private boolean checkInstatiateCondition(EventBasedGateway node) {
 		
+		boolean hasStartEvent = false;
+					
+			
 		for(FlowElement flowElement : node.getProcess().getFlowElement()) {
 			if(flowElement instanceof StartEvent)
 				hasStartEvent = true;
@@ -492,8 +498,9 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 		 */
 		if(node.getIncomingSequenceFlows().size() == 1) {
 			for(SequenceFlow sf : node.getIncomingSequenceFlows()) {
-				if(!(sf.getSourceRef() instanceof StartEvent))
+				if(sf.getSourceRef() instanceof StartEvent) {
 					return true;
+				}
 			}
 		}
 			
