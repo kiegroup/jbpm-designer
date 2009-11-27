@@ -4820,6 +4820,14 @@
 					{
 						"from" : "ChoreographyElement",
 						"to" : ["Message"]
+					},
+					{
+						"from" : "ChoreographyElement",
+						"to" : ["TextAnnotation"]
+					},
+					{
+						"from" : "TextAnnotation",
+						"to" : "ChoreographyElement"
 					}
 				]
 			}
