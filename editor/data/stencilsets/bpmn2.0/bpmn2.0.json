@@ -2609,7 +2609,8 @@
 					"optional":false,
 					"refToView": ["caption", "captionDisableAntialiasing", "text_v"],
 					"fill":true,
-					"stroke":false
+					"stroke":false,
+					"hidden":true
 				}
 			],
 			"roles": 			[
