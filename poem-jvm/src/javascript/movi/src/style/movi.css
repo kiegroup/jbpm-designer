@@ -2,8 +2,8 @@
 
 .movi-scrollbox {
 	overflow: auto;
-	height: 100%;
-	width: 100%;
+	height: inherit;
+	width: inherit;
 	position: relative;
 	cursor: move;
 }
