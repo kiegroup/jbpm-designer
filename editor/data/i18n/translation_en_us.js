@@ -584,7 +584,32 @@ ORYX.I18N.Feedback.sending = "Sending message ...";
 ORYX.I18N.Feedback.success = "Success";
 ORYX.I18N.Feedback.successMsg = "Thank you for your feedback!";
 ORYX.I18N.Feedback.failure = "Failure";
-ORYX.I18N.Feedback.failureMsg = "The message could not be sent!";
+ORYX.I18N.Feedback.failureMsg = "Unfortunately, the message could not be sent. This is our fault! Please try again or contact someone at http://code.google.com/p/oryx-editor/";
+
+ORYX.I18N.Feedback.emailDesc = "Your e-mail address?";
+ORYX.I18N.Feedback.titleDesc = "Summarize your message with a short title";
+ORYX.I18N.Feedback.info = "General Info"; // general info will be shown, if no subject specific info is given
+// list subjects in reverse order of appearance!
+ORYX.I18N.Feedback.subjects = [
+    {
+    	id: "question",   // ansi-compatible name
+    	name: "Question", // natural name
+    	description: "Ask your question here! \nPlease give us as much information as possible, so we don't have to bother you with more questions, before we can give an answer.", // default text for the description text input field
+    	info: "Question Info", // optional field to give more info
+    },
+    {
+    	id: "problem",   // ansi-compatible name
+    	name: "Problem", // natural name
+    	description: "We're sorry for the inconvenience. Give us feedback on the problem, and we'll try to solve it for you. Describe it as detailed as possible, please.", // default text for the description text input field
+    	info: "", // optional field to give more info
+    },
+    {
+    	id: "idea",   // ansi-compatible name
+    	name: "Idea", // natural name
+    	description: "Share your ideas and thoughts here!", // default text for the description text input field
+    	info: "Idea Info", // optional field to give more info
+    }
+];
 
 /** New Language Properties: 11.05.2009 */
 if(!ORYX.I18N.BPMN2DTRPXMI) ORYX.I18N.BPMN2DTRPXMI = {};

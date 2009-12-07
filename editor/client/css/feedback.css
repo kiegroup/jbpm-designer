@@ -1,0 +1,113 @@
+#feedback {
+	bottom: 0;
+	font-family: Arial,Verdana;
+	font-size: 13px;
+	left: 10px;
+	position: absolute;
+	width: 600px;
+}
+#feedback .tab {
+	background-image: url(../images/header_bg.small.gif);
+	background-position: center -5px;
+	background-repeat: repeat-x;
+	border-color: black black transparent;
+	border-style: solid;
+	border-width: 1px;
+	cursor: pointer;
+	font-weight: bold;
+	height: 19px;
+	line-height: 150%;
+	position: absolute;
+	text-align: center;
+	top: -20px;
+	width: 80px;
+	z-index: 2;
+}
+
+#feedback .head {
+	position: relative;
+	width: 100%;
+	height: 5px;
+	background-image: url(../images/header_bg.small.gif);
+	background-position: center -25px;
+	background-repeat: repeat-x;
+}
+
+#feedback .dialog {
+	background-color: #EEEEEE;
+	background-image: url(../images/feedback/gradient.png);
+	background-repeat: repeat-x;
+	border-color: #000000;
+	border-style: solid;
+	border-width: 1px 1px 0;
+	height: 350px;
+	position: relative;
+	width: 100%;
+}
+
+#feedback .info {
+	float: left;	
+	margin-left: 10px;
+	width: 35%;
+	padding: 40px 5px 0px;
+}
+
+#feedback form {
+	margin-left: 40%;
+	margin-right: 10px;
+}
+
+#feedback form ul {
+	list-style-type: none;
+	margin: 5px;
+}
+
+#feedback form ul li {
+	color: #666666;
+	cursor: pointer;
+	float: right;
+	font-size: 120%;
+	font-weight: bold;
+	padding: 10px 0;
+	text-align: center;
+}
+
+#feedback form ul li.active {
+	color:mediumblue;
+	background-image:url(/oryx/images/feedback/pointer.png);
+	background-repeat:no-repeat;
+	background-position:center bottom;
+}
+
+
+#feedback form .fieldset {
+	background-color: #EEEEEE;
+	clear: right;
+	padding: 5px;
+}
+#feedback form .fieldset input, #feedback form .fieldset textarea {
+	background-color: #FFFFFF;
+	border: 1px solid #666666;
+	display: block;
+	font-family: Verdana,Arial;
+	font-size: 12px;
+	margin: 5px auto;
+	padding: 2px;
+	width: 95%;
+}
+
+#feedback form .fieldset input.low, 
+#feedback form .fieldset textarea.low {
+	color: #888;
+}
+
+#feedback form .fieldset textarea {
+	height: 200px;
+}
+
+#feedback form .fieldset .submit {
+    width: 40%;
+    margin-left: 6px;
+    font-weight: bold;
+    background-color: #aaa;
+}

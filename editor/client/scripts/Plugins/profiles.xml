@@ -3,7 +3,7 @@
 <profiles>
 	<!-- name default is reserved for the standard profile -->
 	<profile name="default" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
-		<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
+		<!--<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>-->
 		<plugin name="ORYX.Plugins.ShapeRepository"/>
 		<plugin name="ORYX.Plugins.PropertyWindow"/>
 		<plugin name="ORYX.Plugins.CanvasResize"/>
@@ -32,6 +32,9 @@
 		<plugin name="ORYX.Plugins.AutoLayout"/>	
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
 		
+		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
+		<plugin source="Layouter/edgeLayouter.js" name="ORYX.Plugins.Layouter.EdgeLayouter"/>
+		
 	</profile>
 	<profile name="save" depends="default">
 		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>
@@ -48,5 +51,13 @@
 		<plugin source="view.js" name="ORYX.Plugins.View">
 			<property zoomLevel="0.5" maxFitToScreenLevel="2,3" />
 		</plugin>
+	</profile>
+	
+	<profile name="epn" depends="default" stencilset="stencilsets/petrinets/petrinet.json">
+	</profile>
+	
+	<profile name="feedback">
+		<plugin name="ORYX.Plugins.PluginLoader"/>	
+		<plugin source="feedback.js" name="ORYX.Plugins.Feedback"/>
 	</profile>
 </profiles>
