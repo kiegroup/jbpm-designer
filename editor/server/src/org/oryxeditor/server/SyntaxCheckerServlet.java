@@ -3,6 +3,7 @@ package org.oryxeditor.server;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +18,7 @@ import org.apache.xpath.XPathAPI;
 import org.json.JSONException;
 import org.oryxeditor.server.diagram.Diagram;
 import org.oryxeditor.server.diagram.DiagramBuilder;
+import org.oryxeditor.server.diagram.Shape;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
@@ -25,6 +27,7 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
+import de.hpi.bpmn2_0.factory.BPMNElement;
 import de.hpi.bpmn2_0.model.Definitions;
 import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
 import de.hpi.bpmn2pn.BPMN2PNSyntaxChecker;
@@ -145,6 +148,9 @@ public class SyntaxCheckerServlet extends HttpServlet {
 	protected void processDocument(String jsonDocument, PrintWriter writer) throws JSONException, BpmnConverterException {
 		Diagram diagram = DiagramBuilder.parseJson(jsonDocument);
 		
+		//TODO: validate edges that are not in the java object model
+		ArrayList<Shape> edges = this.getEdgesFromDiagram(diagram.getChildShapes());
+		
 		String type = diagram.getStencilset().getNamespace();
 		SyntaxChecker checker = null;
 		
@@ -162,6 +168,27 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		}
 	}
 	
+	private ArrayList<Shape> getEdgesFromDiagram(ArrayList<Shape> shapes) {
+		ArrayList<Shape> edges = new ArrayList<Shape>();
+		
+		for(Shape shape : shapes) {
+			String sid = shape.getStencilId();
+			
+			if(sid.equals("SequenceFlow")
+					|| sid.equals("MessageFlow")
+					|| sid.equals("Association_Undirected")
+					|| sid.equals("Association_Unidirectional")
+					|| sid.equals("Association_Bidirectional")) {
+				edges.add(shape);
+			} else if(shape.getChildShapes().size() > 0) {
+				edges.addAll(this.getEdgesFromDiagram(shape.getChildShapes()));
+			}
+			
+		}
+		
+		return edges;
+	}
+
 	protected SyntaxChecker getCheckerBPMN(Document document) {
 		BPMNRDFImporter importer = new BPMNRDFImporter(document);
 		BPMNDiagram diagram = importer.loadBPMN();

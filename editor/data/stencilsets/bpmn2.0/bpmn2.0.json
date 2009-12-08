@@ -4911,7 +4911,8 @@
 					"Lane",
 					"sequence_start",
 					"sequence_end",
-					"DataObjectMorph"
+					"DataObjectMorph",
+					"TextAnnotationMorph"
 				]
 			},
 			{
