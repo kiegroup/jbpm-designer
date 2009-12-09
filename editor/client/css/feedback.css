@@ -73,7 +73,7 @@
 }
 
 #feedback form ul li.active {
-	color:mediumblue;
+	color: #1A1C1F;
 	background-image:url(/oryx/images/feedback/pointer.png);
 	background-repeat:no-repeat;
 	background-position:center bottom;
