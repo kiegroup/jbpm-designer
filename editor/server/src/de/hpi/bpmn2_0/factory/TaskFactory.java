@@ -132,6 +132,16 @@ public class TaskFactory extends AbstractBpmnFactory {
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
 		
+		String scriptLanguage = shape.getProperty("script_language");
+		if(scriptLanguage != null) {
+			task.setScriptLanguage(scriptLanguage);
+		}
+		
+		String script = shape.getProperty("script");
+		if(script != null) {
+			task.setScript(script);
+		}
+		
 		return task;
 	}
 	

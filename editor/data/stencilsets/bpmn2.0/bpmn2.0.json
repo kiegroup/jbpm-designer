@@ -1114,18 +1114,25 @@
 					"optional":false,
 					"refToView":""
 				},
-				
 				{
 					"id":"script",
-					"type":"String",
+					"type":"Text",
 					"title":"Script",
 					"title_de":"Skript",
 					"value":"",
-					"description":"",
+					"description":"Script that can be run when the Task is performed. Related to the Script TaskType, if a script is not included, then the Task will act equivalent to a TaskType of None.",
 					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
+					"optional":true
+				},
+				{
+					"id":"script_language",
+					"type":"String",
+					"title":"ScriptLanguage",
+					"title_de":"Skript Sprache",
+					"value":"",
+					"description":"Defines the script language. The script language MUST be provided if a script is provided.",
+					"readonly":false,
+					"optional":true
 				},
 				{
 					"id":"bgcolor",

@@ -26,6 +26,7 @@ package de.hpi.bpmn2_0.model.activity;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
@@ -59,9 +60,11 @@ import javax.xml.bind.annotation.XmlType;
 public class ScriptTask
     extends Task
 {
-
-    protected Script script;
-    @XmlAttribute
+	
+	@XmlElement
+    protected String script;
+    
+	@XmlAttribute
     @XmlSchemaType(name = "anyURI")
     protected String scriptLanguage;
 
@@ -70,10 +73,10 @@ public class ScriptTask
      * 
      * @return
      *     possible object is
-     *     {@link Script }
+     *     {@link String }
      *     
      */
-    public Script getScript() {
+    public String getScript() {
         return script;
     }
 
@@ -82,10 +85,10 @@ public class ScriptTask
      * 
      * @param value
      *     allowed object is
-     *     {@link Script }
+     *     {@link String }
      *     
      */
-    public void setScript(Script value) {
+    public void setScript(String value) {
         this.script = value;
     }
 
