@@ -552,12 +552,43 @@ ORYX.I18N.Feedback.pAttach = "Ihr Model der Nachricht anfügen";
 ORYX.I18N.Feedback.pAttachDesc = "Ihr Modell kann uns bei der Fehlersuche helfen. Der Inhalt des Modells wird vertraulich behandelt. Wenn Sie nicht möchten, daß das Modell an uns geschickt wird, entfernen Sie bitte das Häckchen.";
 ORYX.I18N.Feedback.pBrowser = "Browser- und Systeminformationen";
 ORYX.I18N.Feedback.pBrowserDesc = "Diese Informationen wurde automatisch von Ihrem Browser ermittelt und können uns helfen, den Fehler zu finden.";
-ORYX.I18N.Feedback.submit = "Nachricht senden";
+ORYX.I18N.Feedback.submit = "Feedback senden";
 ORYX.I18N.Feedback.sending = "Sende Nachricht ...";
 ORYX.I18N.Feedback.success = "Nachricht gesendet";
 ORYX.I18N.Feedback.successMsg = "Vielen Dank. Ihr Feedback wurde an uns übermittelt.";
 ORYX.I18N.Feedback.failure = "Fehler";
 ORYX.I18N.Feedback.failureMsg = "Beim Senden der Nachricht ist ein Fehler aufgetreten.";
+
+
+ORYX.I18N.Feedback.name = "Feedback";
+ORYX.I18N.Feedback.failure = "Fehler";
+ORYX.I18N.Feedback.failureMsg = "Leider konnte das Feedback nciht versandt werden. Das ist unsere Schuld! Bitte versuchen Sie es erneut, oder kontaktieren Sie einen Entwickler auf http://code.google.com/p/oryx-editor/";
+
+ORYX.I18N.Feedback.emailDesc = "Ihre E-Mailadresse";
+ORYX.I18N.Feedback.titleDesc = "Betreff Ihres Feedbacks";
+ORYX.I18N.Feedback.descriptionDesc = "Schreiben Sie usn über Ideen, Fragen, oder Probleme."
+ORYX.I18N.Feedback.info = '<p>Oryx ist eine wissenschaftliche Modellierungsplattform, die darauf abzielt, Forschung im Bereich Business Process Management und darüber hinaus zu unterstützen.</p><p><a href="http://bpt.hpi.uni-potsdam.de/Oryx/DeveloperNetwork" target="_blank">Wir</a> sind stolz darauf, Ihnen <a href="http://bpt.hpi.uni-potsdam.de/Oryx/ReleaseNotes" target="_blank">neueste Methoden und Technologien</a> zur Verfügung zu stellen und bemühen uns, die Plattform stets zuverlässig zu betreiben.</p><p>Wenn Sie Ideen haben, wie man Oryx verbessern kann, Fragen oder Probleme auftreten, <strong>lassen Sie uns davon wissen!</strong></p>';// general info will be shown, if no subject specific info is given
+// list subjects in reverse order of appearance!
+ORYX.I18N.Feedback.subjects = [
+    {
+    	id: "question",   // ansi-compatible name
+    	name: "Frage", // natural name
+    	description: "Stellen Sie Ihre Frage!\nBitte schildern Sie die Umstände genau, damit wir Ihnen eine möglichst präzise Antwort geben können.", // default text for the description text input field
+    	info: "", // optional field to give more info
+    },
+    {
+    	id: "problem",   // ansi-compatible name
+    	name: "Problem", // natural name
+    	description: "Bitte entschuldigen Sie die Unannehmlichkeiten. Beschreiben Sie das Problem bitte so genau wie möglich, damit wir es nachvollziehen und schnell beheben können.", // default text for the description text input field
+    	info: "", // optional field to give more info
+    },
+    {
+    	id: "idea",   // ansi-compatible name
+    	name: "Idee", // natural name
+    	description: "Teilen Sie uns Ihre Ideen und Gedanken zu Oryx mit.", // default text for the description text input field
+    	info: "", // optional field to give more info
+    }
+];
 
 /** New Language Properties: 11.05.2009 */
 if(!ORYX.I18N.BPMN2DTRPXMI) ORYX.I18N.BPMN2DTRPXMI = {};

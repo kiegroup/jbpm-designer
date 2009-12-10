@@ -445,6 +445,41 @@ Ext.MessageBox.buttonText.ok = "Ок";
 //ORYX.I18N.JSONImport.title = "JSON Import";
 //ORYX.I18N.JSONImport.wrongSS = "The stencil set of the imported file ({0}) does not match to the loaded stencil set ({1})."
 //
+
+if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
+ORYX.I18N.Feedback.name = "Отзыв";
+ORYX.I18N.Feedback.failure = "Ошибка";
+ORYX.I18N.Feedback.failureMsg = "К сожалению сообщение не может быть отправлено. Произошла ошибка приложения. Пожалуйста, повторите попытку отправки сообщения или свяжитесь с нами через http://code.google.com/p/oryx-editor/";
+ORYX.I18N.Feedback.submit = "Отправить";
+
+ORYX.I18N.Feedback.emailDesc = "Ваш адрес электронной почты";
+ORYX.I18N.Feedback.titleDesc = "Резюмируйте ваше сообщение коротким заголовком";
+ORYX.I18N.Feedback.descriptionDesc = "Опишите ваше предложение, вопрос или проблему."
+ORYX.I18N.Feedback.info = '<p>Oryx является исследовательской платформой, предназначенной для поддержки исследователей в области управления бизнес-процессами, посредством предоставления им расширяемой платформы для экспериментальной проверки результатов. </p><p><a href="http://bpt.hpi.uni-potsdam.de/Oryx/DeveloperNetwork" target="_blank">Мы</a> ведем напряженную работу для того, чтобы предоставить вам надежную систему и рады предоставить вам <a href="http://bpt.hpi.uni-potsdam.de/Oryx/ReleaseNotes" target="_blank">новейшие разработки</a> нашей платформы.</p><p>Если у вас есть идея как улучшить Oryx, или вопрос о работе платформы, или вы хотите сообщить о проблеме<strong> Пожалуйста, сделайте это здесь.</strong></p>'; // general info will be shown, if no subject specific info is given
+// list subjects in reverse order of appearance!
+ORYX.I18N.Feedback.subjects = [
+   {
+       id: "question",   // ansi-compatible name
+       name: "Вопрос", // natural name
+       description: "Задайте свой вопрос! \nПожалуйста, предоставьте нам как можно больше информации, чтобы мы могли быстрее дать вам точный ответ.", // default text for the description text input field
+       info: "", // optional field to give more info
+   },
+   {
+       id: "problem",   // ansi-compatible name
+       name: "Проблема", // natural name
+       description: "Извините за неудобство. Предоставьте нам отзыв о проблеме и мы попытаемся решить ее. Пожалуйста, опишите проблему как можно подробнее.", // default text for the description text input field
+       info: "", // optional field to give more info
+   },
+   {
+       id: "idea",   // ansi-compatible name
+       name: "Предложение", // natural name
+       description: "Поделитесь своими предложениями и идеями!", // default text for the description text input field
+       info: "", // optional field to give more info
+   }
+];
+
+
+
 //if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
 //
 //ORYX.I18N.Feedback.name = "Feedback";

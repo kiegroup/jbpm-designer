@@ -48,8 +48,20 @@
 #feedback .info {
 	float: left;	
 	margin-left: 10px;
-	width: 35%;
+	width: 36%;
 	padding: 40px 5px 0px;
+}
+
+#feedback .info strong {
+	font-weight:bold;
+}
+
+#feedback .info p {
+	margin: 0 0 0.5em 0;
+}
+
+#feedback .info, #feedback .info a  {
+    color: #1a1c1f;
 }
 
 #feedback form {

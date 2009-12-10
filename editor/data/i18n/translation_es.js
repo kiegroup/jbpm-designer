@@ -404,7 +404,42 @@ Ext.MessageBox.buttonText.ok = "Ok";
 //ORYX.I18N.JSONImport.title = "JSON Import";
 //ORYX.I18N.JSONImport.wrongSS = "The stencil set of the imported file ({0}) does not match to the loaded stencil set ({1})."
 //
-//if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
+
+if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
+ORYX.I18N.Feedback.name = "Feedback";
+ORYX.I18N.Feedback.failure = "Error";
+ORYX.I18N.Feedback.failureMsg = "Desgraciadamente, no se ha podido enviar el mensaje. Es culpa nuestra! Por favor, inténtelo de nuevo o contacte con alguien en http://code.google.com/p/oryx-editor/";
+ORYX.I18N.Feedback.submit = "Enviar Mensaje";
+
+ORYX.I18N.Feedback.emailDesc = "Su dirección de correo electrónico?";
+ORYX.I18N.Feedback.titleDesc = "Resuma su mensaje con un pequeño título";
+ORYX.I18N.Feedback.descriptionDesc = "Describa su idea, pregunta, o problema."
+ORYX.I18N.Feedback.info = '<p>Oryx es una plataforma de investigación destinada a dar soporte a los científicos en el  ámbito de la gestión de procesos de negocio y más allá, con una plataforma flexible y extensible para validar tesis y realizar experimentos.</p><p>Estamos encantados de ofrecerle la <a href="http://bpt.hpi.uni-potsdam.de/Oryx/ReleaseNotes" target="_blank"> última tecnología y avances </a> de nuestra plataforma. <a href="http://bpt.hpi.uni-potsdam.de/Oryx/DeveloperNetwork" target="_blank">Nosotros</a> trabajamos duro para ofrecelrle un sistema seguro, aunque de vez en cuando experimentamos pequeños problemillas.</p><p>Si usted tiene ideas sobre cómo mejorar Oryx, tiene alguna pregunta relacionada con la plataforma, o quiere informar de algún problema: <strong>Por favor, háganoslo saber. Aquí.</strong></p>'; //  general info will be shown, if no subject specific info is given
+// list subjects in reverse order of appearance!
+ORYX.I18N.Feedback.subjects = [
+   {
+   	id: "question",   // ansi-compatible name
+   	name: "Pregunta", // natural name
+   	description: "Formule su pregunta aquí! \nPor favor, dénos la máxima información posible, para que no tengamos que molestarlo con más preguntas, antes de darle una respuesta.", // default text for the description text input field
+   	info: "", // optional field to give more info
+   },
+   {
+   	id: "problem",   // ansi-compatible name
+   	name: "Problema", // natural name
+   	description: "Disculpe las molestias. Dénos información sobre el problema, e intentaremos resolvérselo.Descríbalo lo más detallado posible, por favor.", // default text for the description text input field
+   	info: "", // optional field to give more info
+   },
+   {
+   	id: "idea",   // ansi-compatible name
+   	name: "Idea", // natural name
+   	description: "Comparta sus ideas y opiniones aquí!", // default text for the description text input field
+   	info: "", // optional field to give more info
+   }
+];
+
+
+
+
 //
 //ORYX.I18N.Feedback.name = "Feedback";
 //ORYX.I18N.Feedback.desc = "Contact us for any kind of feedback!";

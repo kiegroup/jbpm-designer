@@ -204,7 +204,7 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 			f_subject.style.display = "none";
 		
 		var description = document.createElement("textarea");
-			description._defaultText = ORYX.I18N.Feedback.ideaDesc;
+			description._defaultText = ORYX.I18N.Feedback.descriptionDesc;
 		    description.name = "description";
 		Event.observe(description, "focus", fieldOnFocus.bindAsEventListener());
 		Event.observe(description, "blur", fieldOnBlur.bindAsEventListener());
@@ -286,7 +286,7 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 							description._defaultText = subject.description;
 							
 							// set info pane if appropriate
-							if (subject.info) {
+							if (subject.info && (""+subject.info).strip().length > 0) {
 								this.elements.info.innerHTML = subject.info;
 							}
 							else {

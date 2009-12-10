@@ -94,10 +94,10 @@ public class EditorHandler extends HttpServlet {
 	        "  if(!ORYX) var ORYX = {};\n" +
 	        "  if(!ORYX.CONFIG) ORYX.CONFIG = {};\n" +
 	        "  ORYX.CONFIG.PLUGINS_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".xml';\n" +
-	        "  ORYX.CONFIG.SSET='"+sset+"';\n"+
+	        "  ORYX.CONFIG.SSET='"+sset+"';\n"+ // sets the defualt stencil set depending on profile
 	        "  ORYX.CONFIG.SSEXTS="+extString+";\n"+
 
-	        "  if ('function' != typeof(onOryxResourcesLoaded)) {function onOryxResourcesLoaded(){throw 'Not Implemented: onOryxResourcesLoaded';}}" +
+	        "  if ('function' != typeof(onOryxResourcesLoaded)) {ORYX.Log.warn('Not Implemented: onOryxResourcesLoaded OR body-script loaded before plugins');}" +
           	"</script>";
 		response.setContentType("application/xhtml+xml");
 		
@@ -170,10 +170,13 @@ public class EditorHandler extends HttpServlet {
       	  	+ "<link rel=\"schema.b3mn\" href=\"http://b3mn.org\" />\n"
       	  	+ "<link rel=\"schema.oryx\" href=\"http://oryx-editor.org/\" />\n"
       	  	+ "<link rel=\"schema.raziel\" href=\"http://raziel.org/\" />\n"
+      	  	
+      	    + content
+      	  	
       	  	+ "</head>\n"
       	  	
       	  	+ "<body style=\"overflow:hidden;\"><div class='processdata' style='display:none'>\n"
-      	  	+ content
+      	  	
       	  	+ "\n"
       	  	+ "</div>\n"
       	  	+ "</body>\n"
