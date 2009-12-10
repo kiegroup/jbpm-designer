@@ -21,28 +21,29 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.resource;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import de.hpi.bpmn2_0.model.BaseElement;
+
 
 /**
- * <p>Java class for tReceiveTask complex type.
+ * <p>Java class for tResourceParameter complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tReceiveTask">
+ * &lt;complexType name="tResourceParameter">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tTask">
- *       &lt;attribute name="instantiate" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
- *       &lt;attribute name="messageRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
- *       &lt;attribute name="operationRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tBaseElement">
+ *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}QName" />
+ *       &lt;attribute name="isRequired" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -50,94 +51,89 @@ import javax.xml.namespace.QName;
  * 
  * 
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tReceiveTask")
-public class ReceiveTask
-    extends Task
+@XmlType(name = "tResourceParameter")
+public class ResourceParameter
+    extends BaseElement
 {
 
     @XmlAttribute
-    protected Boolean instantiate;
+    protected String name;
     @XmlAttribute
-    protected QName messageRef;
+    protected QName type;
     @XmlAttribute
-    protected QName operationRef;
+    protected Boolean isRequired;
 
     /**
-     * Gets the value of the instantiate property.
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
+
+    /**
+     * Gets the value of the type property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link QName }
+     *     
+     */
+    public QName getType() {
+        return type;
+    }
+
+    /**
+     * Sets the value of the type property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link QName }
+     *     
+     */
+    public void setType(QName value) {
+        this.type = value;
+    }
+
+    /**
+     * Gets the value of the isRequired property.
      * 
      * @return
      *     possible object is
      *     {@link Boolean }
      *     
      */
-    public boolean isInstantiate() {
-        if (instantiate == null) {
-            return false;
-        } else {
-            return instantiate;
-        }
+    public Boolean isIsRequired() {
+        return isRequired;
     }
 
     /**
-     * Sets the value of the instantiate property.
+     * Sets the value of the isRequired property.
      * 
      * @param value
      *     allowed object is
      *     {@link Boolean }
      *     
      */
-    public void setInstantiate(Boolean value) {
-        this.instantiate = value;
-    }
-
-    /**
-     * Gets the value of the messageRef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getMessageRef() {
-        return messageRef;
-    }
-
-    /**
-     * Sets the value of the messageRef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setMessageRef(QName value) {
-        this.messageRef = value;
-    }
-
-    /**
-     * Gets the value of the operationRef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getOperationRef() {
-        return operationRef;
-    }
-
-    /**
-     * Sets the value of the operationRef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setOperationRef(QName value) {
-        this.operationRef = value;
+    public void setIsRequired(Boolean value) {
+        this.isRequired = value;
     }
 
 }

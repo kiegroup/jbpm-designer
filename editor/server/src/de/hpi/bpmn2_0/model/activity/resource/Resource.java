@@ -21,30 +21,31 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.resource;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
+import de.hpi.bpmn2_0.model.RootElement;
 
 
 /**
- * <p>Java class for tScriptTask complex type.
+ * <p>Java class for tResource complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tScriptTask">
+ * &lt;complexType name="tResource">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tTask">
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tRootElement">
  *       &lt;sequence>
- *         &lt;element ref="{http://www.omg.org/bpmn20}script" minOccurs="0"/>
+ *         &lt;element ref="{http://www.omg.org/bpmn20}resourceParameter" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="scriptLanguage" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -52,68 +53,69 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tScriptTask", propOrder = {
-    "script"
+@XmlType(name = "tResource", propOrder = {
+    "resourceParameter"
 })
-public class ScriptTask
-    extends Task
+public class Resource
+    extends RootElement
 {
-	
-	@XmlElement
-    protected String script;
-    
-	@XmlAttribute
-    @XmlSchemaType(name = "anyURI")
-    protected String scriptLanguage;
+
+    protected List<ResourceParameter> resourceParameter;
+    @XmlAttribute(required = true)
+    protected String name;
 
     /**
-     * Gets the value of the script property.
+     * Gets the value of the resourceParameter property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the resourceParameter property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getResourceParameter().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link TResourceParameter }
+     * 
+     * 
+     */
+    public List<ResourceParameter> getResourceParameter() {
+        if (resourceParameter == null) {
+            resourceParameter = new ArrayList<ResourceParameter>();
+        }
+        return this.resourceParameter;
+    }
+
+    /**
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getScript() {
-        return script;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the script property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setScript(String value) {
-        this.script = value;
-    }
-
-    /**
-     * Gets the value of the scriptLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getScriptLanguage() {
-        return scriptLanguage;
-    }
-
-    /**
-     * Sets the value of the scriptLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setScriptLanguage(String value) {
-        this.scriptLanguage = value;
+    public void setName(String value) {
+        this.name = value;
     }
 
 }

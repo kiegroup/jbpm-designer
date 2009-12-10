@@ -38,6 +38,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.annotations.ChildElements;
 import de.hpi.bpmn2_0.model.FlowElement;
+import de.hpi.bpmn2_0.model.activity.type.BusinessRuleTask;
+import de.hpi.bpmn2_0.model.activity.type.ManualTask;
+import de.hpi.bpmn2_0.model.activity.type.ReceiveTask;
+import de.hpi.bpmn2_0.model.activity.type.ScriptTask;
+import de.hpi.bpmn2_0.model.activity.type.SendTask;
+import de.hpi.bpmn2_0.model.activity.type.ServiceTask;
+import de.hpi.bpmn2_0.model.activity.type.UserTask;
 import de.hpi.bpmn2_0.model.artifacts.Artifact;
 
 

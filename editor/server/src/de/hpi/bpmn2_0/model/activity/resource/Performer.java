@@ -21,24 +21,23 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.resource;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
-
-import de.hpi.bpmn2_0.model.BaseElement;
 
 
 /**
- * <p>Java class for tRendering complex type.
+ * <p>Java class for tPerformer complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tRendering">
+ * &lt;complexType name="tPerformer">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tBaseElement">
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tActivityResource">
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -47,9 +46,12 @@ import de.hpi.bpmn2_0.model.BaseElement;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tRendering")
-public class Rendering
-    extends BaseElement
+@XmlType(name = "tPerformer")
+@XmlSeeAlso({
+    HumanPerformer.class
+})
+public class Performer
+    extends ActivityResource
 {
 
 

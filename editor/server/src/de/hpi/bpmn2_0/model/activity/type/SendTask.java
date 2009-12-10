@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.type;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,14 +30,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import de.hpi.bpmn2_0.model.activity.Task;
+
 
 /**
- * <p>Java class for tServiceTask complex type.
+ * <p>Java class for tSendTask complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tServiceTask">
+ * &lt;complexType name="tSendTask">
  *   &lt;complexContent>
  *     &lt;extension base="{http://www.omg.org/bpmn20}tTask">
  *       &lt;attribute name="messageRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
@@ -51,8 +53,8 @@ import javax.xml.namespace.QName;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tServiceTask")
-public class ServiceTask
+@XmlType(name = "tSendTask")
+public class SendTask
     extends Task
 {
 

@@ -21,27 +21,32 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.resource;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import de.hpi.bpmn2_0.model.BaseElement;
+
 
 /**
- * <p>Java class for tSendTask complex type.
+ * <p>Java class for tResourceParameterBinding complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tSendTask">
+ * &lt;complexType name="tResourceParameterBinding">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tTask">
- *       &lt;attribute name="messageRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
- *       &lt;attribute name="operationRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tBaseElement">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.omg.org/bpmn20}expression"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="parameterRef" use="required" type="{http://www.w3.org/2001/XMLSchema}QName" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -49,64 +54,67 @@ import javax.xml.namespace.QName;
  * 
  * 
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tSendTask")
-public class SendTask
-    extends Task
+@XmlType(name = "tResourceParameterBinding", propOrder = {
+    "expression"
+})
+public class ResourceParameterBinding
+    extends BaseElement
 {
 
-    @XmlAttribute
-    protected QName messageRef;
-    @XmlAttribute
-    protected QName operationRef;
+    @XmlElementRef(name = "expression", namespace = "http://www.omg.org/bpmn20", type = JAXBElement.class)
+    protected JAXBElement<?> expression;
+    @XmlAttribute(required = true)
+    protected QName parameterRef;
 
     /**
-     * Gets the value of the messageRef property.
+     * Gets the value of the expression property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link TFormalExpression }{@code >}
+     *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
+     *     
+     */
+    public JAXBElement<?> getExpression() {
+        return expression;
+    }
+
+    /**
+     * Sets the value of the expression property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link TFormalExpression }{@code >}
+     *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
+     *     
+     */
+    public void setExpression(JAXBElement<?> value) {
+        this.expression = ((JAXBElement<?> ) value);
+    }
+
+    /**
+     * Gets the value of the parameterRef property.
      * 
      * @return
      *     possible object is
      *     {@link QName }
      *     
      */
-    public QName getMessageRef() {
-        return messageRef;
+    public QName getParameterRef() {
+        return parameterRef;
     }
 
     /**
-     * Sets the value of the messageRef property.
+     * Sets the value of the parameterRef property.
      * 
      * @param value
      *     allowed object is
      *     {@link QName }
      *     
      */
-    public void setMessageRef(QName value) {
-        this.messageRef = value;
-    }
-
-    /**
-     * Gets the value of the operationRef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getOperationRef() {
-        return operationRef;
-    }
-
-    /**
-     * Sets the value of the operationRef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setOperationRef(QName value) {
-        this.operationRef = value;
+    public void setParameterRef(QName value) {
+        this.parameterRef = value;
     }
 
 }

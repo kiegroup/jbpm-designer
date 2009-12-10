@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import de.hpi.bpmn2_0.model.activity.Task;
+import de.hpi.bpmn2_0.model.activity.UserTaskImplementation;
+import de.hpi.bpmn2_0.model.activity.resource.Rendering;
 
 
 /**

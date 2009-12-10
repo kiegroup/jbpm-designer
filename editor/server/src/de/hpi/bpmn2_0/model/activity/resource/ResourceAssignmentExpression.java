@@ -21,22 +21,29 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.resource;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
+
+import de.hpi.bpmn2_0.model.BaseElement;
 
 
 /**
- * <p>Java class for tBusinessRuleTask complex type.
+ * <p>Java class for tResourceAssignmentExpression complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tBusinessRuleTask">
+ * &lt;complexType name="tResourceAssignmentExpression">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tTask">
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tBaseElement">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.omg.org/bpmn20}expression"/>
+ *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -45,10 +52,40 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tBusinessRuleTask")
-public class BusinessRuleTask
-    extends Task
+@XmlType(name = "tResourceAssignmentExpression", propOrder = {
+    "expression"
+})
+public class ResourceAssignmentExpression
+    extends BaseElement
 {
 
+    @XmlElementRef(name = "expression", namespace = "http://www.omg.org/bpmn20", type = JAXBElement.class)
+    protected JAXBElement<?> expression;
+
+    /**
+     * Gets the value of the expression property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link TFormalExpression }{@code >}
+     *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
+     *     
+     */
+    public JAXBElement<?> getExpression() {
+        return expression;
+    }
+
+    /**
+     * Sets the value of the expression property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link TFormalExpression }{@code >}
+     *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
+     *     
+     */
+    public void setExpression(JAXBElement<?> value) {
+        this.expression = ((JAXBElement<?> ) value);
+    }
 
 }

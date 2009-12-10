@@ -21,23 +21,24 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.activity;
+package de.hpi.bpmn2_0.model.activity.resource;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import de.hpi.bpmn2_0.model.BaseElement;
 
 
 /**
- * <p>Java class for tManualTask complex type.
+ * <p>Java class for tRendering complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tManualTask">
+ * &lt;complexType name="tRendering">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tTask">
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tBaseElement">
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -45,11 +46,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tManualTask")
-public class ManualTask
-    extends Task
+@XmlType(name = "tRendering")
+public class Rendering
+    extends BaseElement
 {
 
 

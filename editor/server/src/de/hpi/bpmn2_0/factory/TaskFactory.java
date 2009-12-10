@@ -28,14 +28,14 @@ import org.oryxeditor.server.diagram.Shape;
 import de.hpi.bpmn2_0.annotations.Property;
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
-import de.hpi.bpmn2_0.model.activity.BusinessRuleTask;
-import de.hpi.bpmn2_0.model.activity.ManualTask;
-import de.hpi.bpmn2_0.model.activity.ReceiveTask;
-import de.hpi.bpmn2_0.model.activity.ScriptTask;
-import de.hpi.bpmn2_0.model.activity.SendTask;
-import de.hpi.bpmn2_0.model.activity.ServiceTask;
 import de.hpi.bpmn2_0.model.activity.Task;
-import de.hpi.bpmn2_0.model.activity.UserTask;
+import de.hpi.bpmn2_0.model.activity.type.BusinessRuleTask;
+import de.hpi.bpmn2_0.model.activity.type.ManualTask;
+import de.hpi.bpmn2_0.model.activity.type.ReceiveTask;
+import de.hpi.bpmn2_0.model.activity.type.ScriptTask;
+import de.hpi.bpmn2_0.model.activity.type.SendTask;
+import de.hpi.bpmn2_0.model.activity.type.ServiceTask;
+import de.hpi.bpmn2_0.model.activity.type.UserTask;
 import de.hpi.bpmn2_0.model.diagram.activity.ActivityShape;
 
 /**
