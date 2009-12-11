@@ -26,7 +26,6 @@ package de.hpi.bpmn2_0.model.activity.resource;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.BaseElement;
@@ -59,8 +58,7 @@ public class ResourceAssignmentExpression
     extends BaseElement
 {
 
-    @XmlElementRef(name = "expression", namespace = "http://www.omg.org/bpmn20", type = JAXBElement.class)
-    protected JAXBElement<?> expression;
+    protected String expression;
 
     /**
      * Gets the value of the expression property.
@@ -71,7 +69,7 @@ public class ResourceAssignmentExpression
      *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
      *     
      */
-    public JAXBElement<?> getExpression() {
+    public String getExpression() {
         return expression;
     }
 
@@ -84,8 +82,8 @@ public class ResourceAssignmentExpression
      *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
      *     
      */
-    public void setExpression(JAXBElement<?> value) {
-        this.expression = ((JAXBElement<?> ) value);
+    public void setExpression(String value) {
+        this.expression = value;
     }
 
 }

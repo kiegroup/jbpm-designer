@@ -1030,7 +1030,7 @@
 					"type":"Choice",
 					"title":"Implementation",
 					"title_de":"Implementierung",
-					"value":"Webservice",
+					"value":"webService",
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -1038,21 +1038,80 @@
 					"items": [
 						{
 							"id":"c1",
-							"title":"Webservice",
-							"value":"Webservice",
+							"title":"HumanTaskWebService",
+							"value":"humanTaskWebService",
+							"refToView":""
+						},
+						{
+							"id":"c1",
+							"title":"WebService",
+							"value":"webService",
 							"refToView":""
 						},
 						{
 							"id":"c2",
 							"title":"Other",
-							"value":"Other",
+							"value":"other",
 							"refToView":""
 						},
 						{
 							"id":"c2",
 							"title":"Unspecified",
-							"value":"Unspecified",
+							"value":"unspecified",
 							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"resources",
+					"type":"Complex",
+					"title":"Resources",
+					"title_de":"Ressourcen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"resource_type",
+							"name":"Type",
+							"name_de":"Typ",
+							"type":"Choice",
+							"value":"",
+							"width":100,
+							"optional":false,
+							"items": [
+								{
+									"id":"c1",
+									"title":"Performer",
+									"title_de":"Performer",
+									"value":"performer",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"HumanPerformer",
+									"title_de":"HumanPerformer",
+									"value":"humanPerformer",
+									"refToView":""
+								},
+								{
+									"id":"c3",
+									"title":"PotentialOwner",
+									"title_de":"PotentialOwner",
+									"value":"potentialOwner",
+									"refToView":""
+								}
+							]
+						},
+						{
+							"id":"resource",
+							"name":"Resource",
+							"name_de":"Ressource",
+							"type":"String",
+							"value":"",
+							"width":200,
+							"optional":true
 						}
 					]
 				},

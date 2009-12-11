@@ -62,8 +62,7 @@ public class ResourceParameterBinding
     extends BaseElement
 {
 
-    @XmlElementRef(name = "expression", namespace = "http://www.omg.org/bpmn20", type = JAXBElement.class)
-    protected JAXBElement<?> expression;
+    protected String expression;
     @XmlAttribute(required = true)
     protected QName parameterRef;
 
@@ -76,7 +75,7 @@ public class ResourceParameterBinding
      *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
      *     
      */
-    public JAXBElement<?> getExpression() {
+    public String getExpression() {
         return expression;
     }
 
@@ -89,8 +88,8 @@ public class ResourceParameterBinding
      *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
      *     
      */
-    public void setExpression(JAXBElement<?> value) {
-        this.expression = ((JAXBElement<?> ) value);
+    public void setExpression(String value) {
+        this.expression = value;
     }
 
     /**

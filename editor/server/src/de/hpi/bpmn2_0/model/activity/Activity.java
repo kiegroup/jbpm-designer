@@ -31,12 +31,18 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.FlowNode;
+import de.hpi.bpmn2_0.model.activity.resource.ActivityResource;
+import de.hpi.bpmn2_0.model.activity.resource.HumanPerformer;
+import de.hpi.bpmn2_0.model.activity.resource.Performer;
+import de.hpi.bpmn2_0.model.activity.resource.PotentialOwner;
 import de.hpi.bpmn2_0.model.connector.DataInputAssociation;
 import de.hpi.bpmn2_0.model.connector.DataOutputAssociation;
 import de.hpi.bpmn2_0.model.event.BoundaryEvent;
@@ -101,10 +107,14 @@ public abstract class Activity
 	@XmlElement(name = "dataOutputAssociation", type = DataOutputAssociation.class)
     protected List<DataOutputAssociation> dataOutputAssociation;
 	
-//    @XmlElementRef(name = "activityResource", namespace = "http://www.omg.org/bpmn20", type = JAXBElement.class)
-//    protected List<JAXBElement<? extends TActivityResource>> activityResource;
-//    @XmlElementRef(name = "loopCharacteristics", namespace = "http://www.omg.org/bpmn20", type = JAXBElement.class)
-//    protected JAXBElement<? extends TLoopCharacteristics> loopCharacteristics;
+    @XmlElementRefs({
+    	@XmlElementRef(type = ActivityResource.class),
+    	@XmlElementRef(type = Performer.class),
+    	@XmlElementRef(type = HumanPerformer.class),
+    	@XmlElementRef(type = PotentialOwner.class)
+    })
+	protected List<ActivityResource> activityResource;
+//    protected LoopCharacteristics loopCharacteristics;
     
 	@XmlIDREF
 	@XmlElement(name = "boundaryEventRef", type = BoundaryEvent.class)
@@ -263,19 +273,19 @@ public abstract class Activity
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link THumanPerformer }{@code >}
-     * {@link JAXBElement }{@code <}{@link TPerformer }{@code >}
-     * {@link JAXBElement }{@code <}{@link TPotentialOwner }{@code >}
-     * {@link JAXBElement }{@code <}{@link TActivityResource }{@code >}
+     * {@code <}{@link HumanPerformer }{@code >}
+     * {@code <}{@link Performer }{@code >}
+     * {@code <}{@link PotentialOwner }{@code >}
+     * {@code <}{@link ActivityResource }{@code >}
      * 
      * 
      */
-//    public List<JAXBElement<? extends TActivityResource>> getActivityResource() {
-//        if (activityResource == null) {
-//            activityResource = new ArrayList<JAXBElement<? extends TActivityResource>>();
-//        }
-//        return this.activityResource;
-//    }
+    public List<ActivityResource> getActivityResource() {
+        if (activityResource == null) {
+            activityResource = new ArrayList<ActivityResource>();
+        }
+        return this.activityResource;
+    }
 
     /**
      * Gets the value of the loopCharacteristics property.

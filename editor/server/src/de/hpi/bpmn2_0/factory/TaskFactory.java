@@ -23,12 +23,20 @@ package de.hpi.bpmn2_0.factory;
  * SOFTWARE.
  */
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Shape;
 
 import de.hpi.bpmn2_0.annotations.Property;
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.model.activity.Task;
+import de.hpi.bpmn2_0.model.activity.UserTaskImplementation;
+import de.hpi.bpmn2_0.model.activity.resource.ActivityResource;
+import de.hpi.bpmn2_0.model.activity.resource.HumanPerformer;
+import de.hpi.bpmn2_0.model.activity.resource.Performer;
+import de.hpi.bpmn2_0.model.activity.resource.PotentialOwner;
 import de.hpi.bpmn2_0.model.activity.type.BusinessRuleTask;
 import de.hpi.bpmn2_0.model.activity.type.ManualTask;
 import de.hpi.bpmn2_0.model.activity.type.ReceiveTask;
@@ -102,6 +110,18 @@ public class TaskFactory extends AbstractBpmnFactory {
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
 		
+		/* Set implementation property */
+		String implementation = shape.getProperty("implementation");
+		if(implementation != null) {
+			task.setImplementation(UserTaskImplementation.fromValue(implementation));
+		}
+		
+		/* Set ActivityResources */
+		String resourcesProperty = shape.getProperty("resources");
+		if(resourcesProperty != null) {
+			this.setActivityResources(task, resourcesProperty);
+		}
+		
 		return task;
 	}
 	
@@ -173,5 +193,43 @@ public class TaskFactory extends AbstractBpmnFactory {
 		task.setName(shape.getProperty("name"));
 		
 		return task;
+	}
+	
+	/**
+	 * Retrieves the values from the complex type property 'resources' and builds ups 
+	 * the resources objects.
+	 * 
+	 * @param task
+	 * 		The {@link Task} object
+	 * @param resourcesProperty
+	 * 		The resources property String.
+	 */
+	private void setActivityResources(Task task, String resourcesProperty) {
+		try {
+			JSONObject resources = new JSONObject(resourcesProperty);
+			JSONArray items = resources.getJSONArray("items");
+			for(int i = 0; i < items.length(); i++) {
+				JSONObject resource = items.getJSONObject(i);
+				String type = resource.getString("resource_type");
+				ActivityResource actResource = null;
+				if(type.equalsIgnoreCase("performer")) {
+					actResource = new Performer();
+					
+				} else if(type.equalsIgnoreCase("humanperformer")) {
+					actResource = new HumanPerformer();
+				} else if(type.equalsIgnoreCase("potentialowner")) {
+					actResource = new PotentialOwner();
+				}
+				
+				if(actResource != null) {
+					actResource.setResourceRef(resource.getString("resource"));
+					task.getActivityResource().add(actResource);
+				}
+				
+			}
+			resources.get("");
+		} catch (JSONException e) {
+			// ignore resources property
+		}
 	}
 }
