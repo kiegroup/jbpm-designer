@@ -8,13 +8,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PipedWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Scanner;
 
-import javax.sound.midi.SysexMessage;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,8 +26,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mozilla.javascript.ErrorReporter;
-import org.mozilla.javascript.EvaluatorException;
 import org.springframework.util.FileCopyUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -41,7 +36,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
-import com.yahoo.platform.yui.compressor.YUICompressor;
 
 /**
  * @author Philipp Berger

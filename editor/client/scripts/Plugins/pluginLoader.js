@@ -27,6 +27,7 @@ ORYX.Plugins.PluginLoader = Clazz.extend({
 	//(var plugins=this.facade.getAvailablePlugins();
 	var plugins=[];
 	var loadedStencilSetsNamespaces = this.facade.getStencilSets().keys();
+	//get all plugins which could be acivated
 	this.facade.getAvailablePlugins().each(function(match) {
 	if ((!match.requires 	|| !match.requires.namespaces 	
 			|| match.requires.namespaces.any(function(req){ return loadedStencilSetsNamespaces.indexOf(req) >= 0 }) )

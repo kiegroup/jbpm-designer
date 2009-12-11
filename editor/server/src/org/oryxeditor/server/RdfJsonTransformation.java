@@ -153,6 +153,10 @@ public class RdfJsonTransformation {
 				}
 			}
 		}
+//		if((!object.has("target")||"{}".equals(object.getString("target"))||"".equals(object.getString("target")))&& object.has("outgoing")){
+//			if(object.getJSONArray("outgoing").length()>0)
+//				object.put("target", object.getJSONArray("outgoing").get(0));
+//		}
 	}
 	
 	private static void handleReservedNodeName(Node n, JSONObject object) throws JSONException {

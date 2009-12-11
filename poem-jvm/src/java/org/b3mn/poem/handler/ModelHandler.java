@@ -39,8 +39,12 @@ public class ModelHandler extends  HandlerBase {
 
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws IOException {
+		
+		Representation representation = object.read();
+		String stencilSet=representation.getType();
+		
+		
 		response.sendRedirect("/oryx/editor#"+object.getUri());
-
 //		Representation representation = object.read();
 //		
 //		String content = 

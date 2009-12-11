@@ -366,7 +366,7 @@ public class Representation {
 		DocumentBuilder builder;
 		try {
 			builder = factory.newDocumentBuilder();
-			Document rdfDoc = builder.parse(new ByteArrayInputStream(erdfToRdf(erdf).getBytes()));
+			Document rdfDoc = builder.parse(new ByteArrayInputStream(erdfToRdf(erdf).getBytes(("UTF-8"))));
 			return RdfJsonTransformation.toJson(rdfDoc, serverUrl).toString();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -394,7 +394,7 @@ public class Representation {
     	    Writer writer=new FileWriter("C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/json/"+count+".json");
 
         	if(isJson(content)){
-        		//content;
+        		
         	} else {  		
         		content=erdfToJson(content, serverUrl);
 

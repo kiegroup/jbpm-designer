@@ -7,7 +7,6 @@
 		<plugin name="ORYX.Plugins.ShapeRepository"/>
 		<plugin name="ORYX.Plugins.PropertyWindow"/>
 		<plugin name="ORYX.Plugins.CanvasResize"/>
-		<plugin name="ORYX.Plugins.PluginLoader"/>
 		<plugin name="ORYX.Plugins.View"/>
 		<plugin name="ORYX.Plugins.DragDropResize"/>
 		<plugin name="ORYX.Plugins.RenameShapes" />
@@ -29,7 +28,6 @@
 		<plugin name="ORYX.Plugins.Edit"/>	
 		<plugin name="ORYX.Plugins.KeysMove"/>	
 		<plugin name="ORYX.Plugins.RowLayouting"/>	
-		<plugin name="ORYX.Plugins.AutoLayout"/>	
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
 		
 		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
@@ -51,6 +49,11 @@
 		<plugin source="view.js" name="ORYX.Plugins.View">
 			<property zoomLevel="0.5" maxFitToScreenLevel="2,3" />
 		</plugin>
+	</profile>
+	<profile name="bpmn2.0" depends="default">
+		<plugin name="ORYX.Plugins.BPMN2_0"/>
+		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
+		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
 	</profile>
 	
 	<profile name="epn" depends="default" stencilset="stencilsets/petrinets/petrinet.json">
