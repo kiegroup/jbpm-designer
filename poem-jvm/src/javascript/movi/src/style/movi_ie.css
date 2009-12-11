@@ -4,6 +4,10 @@ html, body {
 
 .movi-scollbox {
 	overflow: scroll;
+	width: inherit !important;
+	width: 200px;
+	height: inherit !important;
+	height: 200px;
 }
 
 .movi-node {
