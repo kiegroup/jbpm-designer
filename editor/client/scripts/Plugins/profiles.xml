@@ -16,7 +16,6 @@
 		<plugin name="ORYX.Plugins.FeedbackPlugin" />
 		<plugin name="ORYX.Plugins.Undo" />		
 		<plugin name="ORYX.Plugins.Arrangement"/>	
-		<plugin name="ORYX.Plugins.Save"/>	
 		<plugin name="ORYX.Plugins.Grouping"/>	
 		<plugin name="ORYX.Plugins.HighlightingSelectedShapes"/>	
 		<plugin name="ORYX.Plugins.DragDocker"/>	
@@ -35,30 +34,55 @@
 		
 	</profile>
 	<profile name="save" depends="default">
-		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>
 		<plugin name="ORYX.Plugins.File"/>
-		<plugin source="view.js" name="ORYX.Plugins.View">
-			<property zoomLevel="4"/>
-		</plugin>
 		<plugin name="ORYX.Plugins.Save"/>
+		<plugin name="ORYX.Plugins.PluginLoader"/>	
 	</profile>
-	<profile name="bpmnValidating" depends="default">
+	<profile name="bpmn" depends="save" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
+		<plugin name="ORYX.Plugins.JPDLSupport"/>
+		<plugin name="ORYX.Plugins.BPMN2XForms"/>
+		<plugin name="ORYX.Plugins.BPMN2BPEL"/>
+		<plugin name="ORYX.Plugins.ProcessLink"/>
+		<plugin name="ORYX.Plugins.SimplePnmlexport"/>
+		<plugin name="ORYX.Plugins.IBPMN2BPMN"/>
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.BPMNValidator"/>
-		<plugin name="ORYX.Plugins.EPCValidator"/>
-		<plugin source="view.js" name="ORYX.Plugins.View">
-			<property zoomLevel="0.5" maxFitToScreenLevel="2,3" />
-		</plugin>
+		<plugin name="ORYX.Plugins.StepThroughPlugin"/>
+		<plugin name="ORYX.Plugins.BPMN11"/>
+		<plugin name="ORYX.Plugins.BpmnLayouter"/>
+		<plugin name="ORYX.Plugins.PNExport"/>
+		<plugin name="ORYX.Plugins.BPEL2BPMN"/>
+		<plugin name="ORYX.Plugins.BPMN2XPDL"/>
+		<plugin name="ORYX.Plugins.BPMN2DTRPXMI"/>
+		<plugin name="ORYX.Plugins.QueryResultHighlighter"/>
 	</profile>
-	<profile name="bpmn2.0" depends="default">
+	<profile name="bpmn2.0" depends="save" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
+		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.BPMN2_0"/>
 		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
 		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
+		<plugin name="ORYX.Plugins.BPMN2CONVERSATION"/>
 	</profile>
 	
-	<profile name="epn" depends="default" stencilset="stencilsets/petrinets/petrinet.json">
+	<profile name="epc" depends="save" stencilset="stencilsets/epc/epc.json">
+		<plugin name="ORYX.Plugins.EPCSupport"/>
+		<plugin name="ORYX.Plugins.EPCValidator"/>
+		<plugin name="ORYX.Plugins.SyntaxChecker"/>
+		<plugin name="ORYX.Plugins.StepThroughPlugin"/>
 	</profile>
-	
+	<profile name="petrinet" depends="save" stencilset="stencilsets/petrinets/petrinet.json">
+		<plugin name="ORYX.Plugins.SyntaxChecker"/>
+		<plugin name="ORYX.Plugins.PetriNetSoundnessChecker"/>
+		<plugin name="ORYX.Plugins.BPMNImport"/>
+		<plugin name="ORYX.Plugins.PetriNetStepThroughPlugin"/>
+		<plugin name="ORYX.Plugins.PetrinetSyntaxChecker"/>
+	</profile>
+	<profile name="xforms" depends="save" stencilset="stencilsets/xforms/xforms.json">
+		<plugin name="ORYX.Plugins.XFormsExportOrbeon"/>
+		<plugin name="ORYX.Plugins.XFormsImport"/>
+		<plugin name="ORYX.Plugins.RowLayouting"/>
+		<plugin name="ORYX.Plugins.XForms"/>
+	</profile>
 	<profile name="feedback">
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
 		<plugin source="feedback.js" name="ORYX.Plugins.Feedback"/>

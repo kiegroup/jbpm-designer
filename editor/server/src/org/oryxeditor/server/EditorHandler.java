@@ -24,7 +24,6 @@
 package org.oryxeditor.server;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -94,10 +93,25 @@ public class EditorHandler extends HttpServlet {
 	        "  if(!ORYX) var ORYX = {};\n" +
 	        "  if(!ORYX.CONFIG) ORYX.CONFIG = {};\n" +
 	        "  ORYX.CONFIG.PLUGINS_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".xml';\n" +
-	        "  ORYX.CONFIG.SSET='"+sset+"';\n"+ // sets the defualt stencil set depending on profile
+	        "  ORYX.CONFIG.PROFILE_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".conf';\n" +
+	        "  ORYX.CONFIG.PROFILE_NAME = '"+profiles.get(0)+"';\n" +
+	        "  ORYX.CONFIG.SSET='"+sset+"';\n"+ // sets the default stencil set depending on profile
 	        "  ORYX.CONFIG.SSEXTS="+extString+";\n"+
-
-	        "  if ('function' != typeof(onOryxResourcesLoaded)) {ORYX.Log.warn('Not Implemented: onOryxResourcesLoaded OR body-script loaded before plugins');}" +
+	        "  if ('function' != typeof(onOryxResourcesLoaded)) {\n" +
+	        "		window.onOryxResourcesLoaded = function() {" +
+	        "			if (!(location.hash.slice(1).length == 0 || location.hash.slice(1).indexOf('new')!=-1)) {" +
+	        "				Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.Oryx.noBackendDefined);\n" +
+	        "			}" +
+	        "			var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;" +
+	        "			new ORYX.Editor({" +
+	        "				id: 'oryx-canvas123'," +
+	        "				stencilset: {" +
+	        "					url: \"/oryx/\" + stencilset" +
+	        "				}" +
+	        "			});" +
+	        "  };\n" +
+	        "  ORYX.Log.warn('Not Implemented: onOryxResourcesLoaded OR body-script loaded before plugins');\n" +
+	        "  }" +
           	"</script>";
 		response.setContentType("application/xhtml+xml");
 		
@@ -157,7 +171,7 @@ public class EditorHandler extends HttpServlet {
       	  	+ "<!-- language files -->\n"
       	  	+ "<script src=\"" + oryx_path + "i18n/translation_en_us.js\" type=\"text/javascript\" />\n"      	  	
       	  	+ languageFiles
-//TODO Handle different profiles
+      	  	//TODO Handle different profiles
       	  	+ "<script src=\"" + oryx_path + "profiles/oryx.core.js\" type=\"text/javascript\" />\n"
       	  	+ profileFiles
       	  	+ headExtentions

@@ -23,7 +23,12 @@
 
 package org.b3mn.poem.handler;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,15 +41,43 @@ import org.b3mn.poem.util.RestrictAccess;
 
 @HandlerWithModelContext(uri="/self", filterBrowser=true)
 public class ModelHandler extends  HandlerBase {
+	private Properties props;
 
 	@Override
+	public void init() {
+		//Load properties
+		FileInputStream in;
+		
+		//initialize properties from backend.properties
+		try {
+			
+			in = new FileInputStream(this.getBackendRootDirectory() + "/WEB-INF/backend.properties");
+			props = new Properties();
+			props.load(in);
+			in.close();
+		}catch (Exception e) {
+		}
+	}
+	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws IOException {
+		String profileName=null;
+		try {
+			Representation representation = object.read();
+			String stencilSet=representation.getType();
+			Pattern p = Pattern.compile("/([^/]+)#");
+			Matcher matcher = p.matcher(stencilSet);
+			if(matcher.find()){
+				profileName=props.getProperty("org.b3mn.poem.handler.ModelHandler.profileFor."+matcher.group(1));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		if(profileName==null)
+			profileName="default";
 		
-		Representation representation = object.read();
-		String stencilSet=representation.getType();
 		
 		
-		response.sendRedirect("/oryx/editor#"+object.getUri());
+		response.sendRedirect("/oryx/editor;"+profileName+"#"+object.getUri());
 //		Representation representation = object.read();
 //		
 //		String content = 

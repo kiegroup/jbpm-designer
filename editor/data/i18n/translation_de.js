@@ -14,6 +14,7 @@ if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 
 ORYX.I18N.Oryx.pleaseWait = "Editor wird geladen. Bitte warten...";
 ORYX.I18N.Oryx.notLoggedOn = "Nicht angemeldet";
+ORYX.I18N.Oryx.noBackendDefined	= "Achtung! \n Es wurde kein Repository definiert.\n Ihr Model kann nicht geladen werden. Bitte nutzen sie eine Editor Konfiguration mit einem Speicher Plugin.";
 
 if(!ORYX.I18N.AddDocker) ORYX.I18N.AddDocker = {};
 

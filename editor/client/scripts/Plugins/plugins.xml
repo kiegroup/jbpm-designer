@@ -294,7 +294,7 @@
 		
 		<plugin source="overlayexample.js" name="ORYX.Plugins.OverlayExample" />
 		
-		<!-- Diable pluginLoader to avoid user-driven plugin loading -->
+		<!-- Disable pluginLoader to avoid user-driven plugin loading -->
 		<plugin source="pluginLoader.js" name="ORYX.Plugins.PluginLoader" />
 		
 		<plugin source="feedback.js" name="ORYX.Plugins.Feedback">
