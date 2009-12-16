@@ -103,7 +103,12 @@ public class LoginHandler extends HandlerBase {
 	
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res, Identity subject, Identity object) throws Exception {
-        // If logout is true remove session attribute and redirect to the repository
+        
+    	if ("true".equals( req.getParameter("mashUp") )){
+    		res.getWriter().print(subject.getUri());
+    		return;
+    	}    	
+    	// If logout is true remove session attribute and redirect to the repository
     	// which will force a new login as public user
     	if ("true".equals(req.getParameter("logout"))) {
     		//req.getSession().removeAttribute("openid");
@@ -121,7 +126,8 @@ public class LoginHandler extends HandlerBase {
     	}
     	if ("true".equals(req.getParameter("is_return"))) {
             processReturn(req, res);
-        } else {
+        }     	
+    	else {
      	   // Convert OpenID identifier to lower case in order to prevent creating 	   
      	   // different accounts for the same OpenID
             String identifier = req.getParameter("openid_identifier").toLowerCase();
