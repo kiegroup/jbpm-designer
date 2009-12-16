@@ -326,10 +326,18 @@ Repository.Core.Repository = {
 			this._viewChangedHandler.invoke( displArray )
 		},
 		
-		createNewModel : function(stencilsetUrl) {
+		createNewModel : function(stencilsetUrl, profileName) {
 			
 			var callback = function() {
-				var url = './new' + '?stencilset=' + stencilsetUrl;
+				
+				var url = './new';
+				if(stencilsetUrl && profileName)
+					url+= '?stencilset=' + stencilsetUrl +"&profile="+profileName;
+				if(!stencilsetUrl && profileName)
+					url+= '?profile=' + profileName;
+				if(stencilsetUrl && !profileName)
+					url+= '?stencilset=' + stencilsetUrl;
+				
 				var editor = window.open(url);
 				
 				window.setTimeout(function(){

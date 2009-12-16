@@ -3,7 +3,7 @@ if(!Repository) var Repository = {};
  
 Repository.Templates = {
 		login :  new Ext.XTemplate(		'<div id="oryx_repository_header" onmouseover="this.className = \'mouseover\'" onmouseout="this.className = \'\'">'+
-					        '<a href="http://oryx-editor.org" target="_blank">'+
+					        '<a href="http://oryx-project.org" target="_blank">'+
 						    '<img src="/backend/images/style/oryx.small.gif" id="oryx_repository_logo" alt="ORYX Logo" title="ORYX"/>'+
 					    '</a>'+
 					

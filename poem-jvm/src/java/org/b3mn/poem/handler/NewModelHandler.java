@@ -43,8 +43,18 @@ public class NewModelHandler extends HandlerBase {
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws IOException {
 		String stencilset = "/stencilsets/bpmn/bpmn.json";
+		boolean stencilSetSpefified=false;
 		if (request.getParameter("stencilset") != null) {
 			stencilset = request.getParameter("stencilset");
+			stencilSetSpefified=true;
+		}
+		if(request.getParameter("profile")!=null){
+			if(stencilSetSpefified)
+				response.sendRedirect("/oryx/editor;"+request.getParameter("profile")+"#new?stencilset="+stencilset);
+			else
+				response.sendRedirect("/oryx/editor;"+request.getParameter("profile")+"#new");
+			return;
+
 		}
 		if(props==null){
 			try {

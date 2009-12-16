@@ -2,6 +2,7 @@
 
 <profiles>
 	<!-- name default is reserved for the standard profile -->
+	<profile name="none" stencilset="stencilsets/bpmn1.1/bpmn1.1.json"/>
 	<profile name="default" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
 		<!--<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>-->
 		<plugin name="ORYX.Plugins.ShapeRepository"/>
@@ -39,9 +40,7 @@
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
 	</profile>
 	<profile name="bpmn" depends="save" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
-		<plugin name="ORYX.Plugins.JPDLSupport"/>
 		<plugin name="ORYX.Plugins.BPMN2XForms"/>
-		<plugin name="ORYX.Plugins.BPMN2BPEL"/>
 		<plugin name="ORYX.Plugins.ProcessLink"/>
 		<plugin name="ORYX.Plugins.SimplePnmlexport"/>
 		<plugin name="ORYX.Plugins.IBPMN2BPMN"/>
@@ -51,16 +50,26 @@
 		<plugin name="ORYX.Plugins.BPMN11"/>
 		<plugin name="ORYX.Plugins.BpmnLayouter"/>
 		<plugin name="ORYX.Plugins.PNExport"/>
-		<plugin name="ORYX.Plugins.BPEL2BPMN"/>
 		<plugin name="ORYX.Plugins.BPMN2XPDL"/>
 		<plugin name="ORYX.Plugins.BPMN2DTRPXMI"/>
-		<plugin name="ORYX.Plugins.QueryResultHighlighter"/>
 	</profile>
 	<profile name="bpmn2.0" depends="save" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.BPMN2_0"/>
 		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
 		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
+	</profile>
+	<profile name="bpmn2.0Choreography" depends="save" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
+		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmn2.0choreography#"/>
+		<plugin name="ORYX.Plugins.SyntaxChecker"/>
+		<plugin name="ORYX.Plugins.BPMN2_0"/>
+		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
+		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
+	</profile>
+	<profile name="bpmn2.0Conversation" depends="save" stencilset="stencilsets/bpmn2.0/bpmn2.0conversation.json">
+		<plugin name="ORYX.Plugins.SyntaxChecker"/>
+		<plugin name="ORYX.Plugins.BPMN2_0"/>
+		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
 		<plugin name="ORYX.Plugins.BPMN2CONVERSATION"/>
 	</profile>
 	
@@ -82,6 +91,9 @@
 		<plugin name="ORYX.Plugins.XFormsImport"/>
 		<plugin name="ORYX.Plugins.RowLayouting"/>
 		<plugin name="ORYX.Plugins.XForms"/>
+	</profile>
+	<profile name="bpmnQ" depends="save" stencilset="stencilsets/bpmnq/bpmnq.json">
+		<plugin name="ORYX.Plugins.QueryEvaluator"/>
 	</profile>
 	<profile name="feedback">
 		<plugin name="ORYX.Plugins.PluginLoader"/>	

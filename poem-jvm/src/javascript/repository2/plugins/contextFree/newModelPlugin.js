@@ -58,7 +58,23 @@ Repository.Plugins.NewModel = {
 					this.facade.createNewModel(type.url)
 				}.bind(this)				
 			});
+			
+			if(type.title=="BPMN 2.0 Conversations"){
+				this.toolbarButtons.push({
+					text 		: "BPMN 2.0 Choreographies",
+					menu 		: Repository.I18N.NewModel.name,
+					menuIcon 	: "/backend/images/silk/shape_square_add.png",
+					tooltipText : Repository.I18N.NewModel.tooltipText,
+					icon 		: "/oryx/stencilsets/bpmn2.0/bpmn2.0.png",
+					handler		: function(){
+						this.facade.createNewModel(null,"bpmn2.0Choreography")
+					}.bind(this)				
+				});
+				
+			}
 		}.bind(this));
+		
+
 		arguments.callee.$.construct.apply(this, arguments); //call Plugin super class
 	}
 };

@@ -7,16 +7,8 @@
             "icon_url":"/bpmn/bpmn.png",
             "visible":false
         },
-        {
-            "title":"BPMN 1.2",
-            "namespace":"http://b3mn.org/stencilset/bpmn1.1#",
-            "description":"BPMN 1.2 stencil set specification.",
-            "uri":"/bpmn1.1/bpmn1.1.json",
-            "icon_url":"/bpmn1.1/bpmn1.1.png",
-            "visible":true
-        },
 		{
-            "title":"BPMN 2.0",
+            "title":"BPMN 2.0 Processes",
             "namespace":"http://b3mn.org/stencilset/bpmn2.0#",
             "description":"BPMN 2.0 stencil set specification for processes.",
             "uri":"/bpmn2.0/bpmn2.0.json",
@@ -24,14 +16,39 @@
             "visible":true
         },
 		{
-            "title":"BPMN 2.0 Conversation",
+            "title":"BPMN 2.0 Conversations",
             "namespace":"http://b3mn.org/stencilset/bpmn2.0conversation#",
             "description":"BPMN 2.0 Conversation stencil set specification for processes.",
             "uri":"/bpmn2.0/bpmn2.0conversation.json",
             "icon_url":"/bpmn2.0/bpmn2.0.png",
             "visible":true
         },
+		{
+            "title":"BPMN 1.2",
+            "namespace":"http://b3mn.org/stencilset/bpmn1.1#",
+            "description":"BPMN 1.2 stencil set specification.",
+            "uri":"/bpmn1.1/bpmn1.1.json",
+            "icon_url":"/bpmn1.1/bpmn1.1.png",
+            "visible":true
+        },
         {
+            "title":"BPMN+",
+            "namespace":"http://b3mn.org/stencilset/bpmnplus#",
+            "description":"BPMN+ stencil set specification.",
+            "uri":"/bpmnplus/bpmnplus.json",
+            "icon_url":"/bpmn1.1/bpmn1.1.png",
+            "visible":false
+        },
+
+        {
+            "title":"BPMN-Q",
+            "namespace":"http://b3mn.org/stencilset/bpmnq#",
+            "description":"BPMN-Q Queries",
+            "uri":"/bpmnq/bpmnq.json",
+            "icon_url":"/bpmnq/bpmn1.1.png",
+            "visible":true
+        },
+		{
             "title":"EPC",
             "namespace":"http://b3mn.org/stencilset/epc#",
             "description":"Event-driven Process Chain specification.",
@@ -63,40 +80,13 @@
             "icon_url":"/fmcblockdiagram/fmcblockdiagram.png",
             "visible":true
         },
-/*
-        {
-            "title":"Interaction Diagram",
-            "namespace":"http://b3mn.org/stencilset/interactiondiagram#",
-            "description":"An Interaction Diagrams describe interactions between an interviewed person and other people or systems.",
-            "uri":"/interactiondiagram/interactiondiagram.json",
-            "icon_url":"/interactiondiagram/interactiondiagram.png",
-            "visible":true
-        },
-*/
-        {
+		{
             "title":"XForms",
             "namespace":"http://b3mn.org/stencilset/xforms#",
             "description":"This is the XForms stencil set specification.",
             "uri":"/xforms/xforms.json",
             "icon_url":"/xforms/xforms.png",
             "visible":true
-        },
-/*
-        {
-            "title":"BPMN+",
-            "namespace":"http://b3mn.org/stencilset/bpmnplus#",
-            "description":"BPMN+ stencil set specification.",
-            "uri":"/bpmnplus/bpmnplus.json",
-            "icon_url":"/bpmn1.1/bpmn1.1.png",
-            "visible":true
-        },
-*/
-        {
-            "title":"BPMN-Q",
-            "namespace":"http://b3mn.org/stencilset/bpmnq#",
-            "description":"BPMN-Q Queries",
-            "uri":"/bpmnq/bpmnq.json",
-            "icon_url":"/bpmnq/bpmn1.1.png",
-            "visible":true
         }
+		
 ]
