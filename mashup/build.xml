@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="mashup" default="war" basedir=".">
+<project name="MashUp" default="war" basedir="..">
 	
 	<property name="oryx.project" value="oryx"/>
-	<!--<property name="deployment.dir" value="C:\Programme\Apache Software Foundation\Tomcat 6.0\webapps"/>-->
-	<property file="../build.properties" />
-	<property name="build.dir" value="../build/mashup"/>
-	<property name="conf.dir" value="etc"/>
-	<property name="web.content" value="web"/>
-	<property name="dist.dir" value="../dist"/>
+	<property name="deployment.dir" value="C:\Programme\Apache Software Foundation\apache-tomcat-6.0.20\webapps"/>
+	<property name="build.dir" value="MashUp\build"/>
+	<property name="conf.dir" value="MashUp\etc"/>
+	<property name="web.content" value="MashUp\web"/>
+	<property name="dist.dir" value="MashUp\dist"/>
     
 	<!-- empties "build" and "dist" directory -->
 	<target name="clean">
@@ -20,15 +19,13 @@
 	<!-- creates directories -->
 	<target name="init" depends="clean">
 		<echo>Creating required directories</echo>
-		<mkdir dir="${build.dir}/WEB-INF" />
+		<mkdir dir="${build.dir}\WEB-INF" />
 		<mkdir dir="${dist.dir}" />
 	</target>
 
 	<!-- copying from folders "web" and "etc" to "build" -->
 	<target name="copy" depends="init">
-		<mkdir dir="${build.dir}" />
-		
-		<copy todir="${build.dir}/WEB-INF">
+		<copy todir="${build.dir}\WEB-INF">
 			<fileset dir="${conf.dir}"/>			
 		</copy>		
 		<copy todir="${build.dir}">
@@ -39,22 +36,25 @@
 
 	<!-- creates war-file -->
 	<target name="war" depends="copy">
-		<mkdir dir="${dist.dir}" />
-		
 		<echo>Building the war file</echo>
-		<war destfile="${dist.dir}/ROOT.war" webxml="${build.dir}/WEB-INF/web.xml">
+		<war destfile="${dist.dir}\ROOT.war" webxml="${build.dir}\WEB-INF\web.xml">
 			<fileset dir="${build.dir}"/>
 		</war>
 	</target>
 	
 	<!-- copies war-file to tomcat webapplication folder -->
-    <target name="deploy" depends="war">
+    <target name="move" depends="war">
     	<echo> Moving to Tomcat </echo>
-        <copy todir="${deploymentdir}" overwrite="true">
+        <copy todir="${deployment.dir}" overwrite="true">
             <fileset dir="${dist.dir}">
                 <include name="*.war"/>
             </fileset>
         </copy>
     </target>
+	
+	<!-- deletes ROOT directory in webapps" -->
+	<target name="delete_webapps/ROOT" depends="move">
+		<delete dir="${deployment.dir}\ROOT"/>
+	</target>
     
 </project>
