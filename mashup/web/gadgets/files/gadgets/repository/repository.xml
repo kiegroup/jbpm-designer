@@ -11,16 +11,73 @@
 		
 		<script type="text/javascript">
 	        var externs = ['http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader.js',
-						'http://localhost:8080/gadgets/files/gadgets/repository/repository.js'];
+						'/oryx/lib/prototype-1.5.1.js',
+						'/gadgets/files/gadgets/repository/core.js'];
 	
 	        for (var i = 0; i < externs.length; i++)
 	                document.write(unescape("%3Cscript src='" + externs[i] + "'type='text/javascript'%3E%3C/script%3E"));
 		</script>
 		
+		<style type="text/css">
+			/** 
+			*
+			* Style the yui-dt-expandablerow-trigger column 
+			*
+			**/
+			.yui-dt-expandablerow-trigger{
+			    width:18px;
+			    height:22px;
+			    cursor:pointer;
+			}
+			.yui-dt-expanded .yui-dt-expandablerow-trigger.spinner{
+			    background:url(spinner.gif) 1px 4px no-repeat;
+			}
+			
+			/** 
+			*
+			* Style the expansion row
+			*
+			**/
+			.yui-dt-expansion .yui-dt-liner{
+			    padding:0;
+			    border:solid 0 #bbb;
+			    border-width: 0 0 2px 0;
+			}
+			.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table{
+			    border:none;
+			    background-color:#fff;
+			}
+			.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table th{
+			    background-image:none;
+			    background-color:#eee;
+			}
+			.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td{
+			    border:solid 0 #eee;
+			    border-width: 0 0 1px 1px;
+			}
+			.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td div{
+			    padding:3px;
+			    overflow:hidden;
+			    width:100px;
+			}
+			.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td.big div{
+			    width:300px;
+			}
+			.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td ul{ padding:0;margin:0; }
+
+		</style>
+
+		
 		<body class=" yui-skin-sam">
 		
-		<div id ="top"></div>
-		<div id ="center"> <div id="table"> </div></div>
+		<div id ="top">
+		<div style = "margin:3px;">
+		<fieldset id="button_group"></fieldset>
+		</div>
+		</div>
+		<div id ="center"> <div id="table"> </div>
+		
+		</div>
 		
 		</body>
 		

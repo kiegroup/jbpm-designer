@@ -25,13 +25,13 @@
 if (! Container)
 	var Container = {};
 
-Container.menubar = function () {
+Container.loadMenubar = function () {
 
 	// adding a widget, url taken from input dialog
 	var handleSubmit = function(){
 	
 		// TODO validierung
-		Container.addGadget(panel.getData().url, {});
+		Container.addGadget(null, null, { url : panel.getData().url, options: {} } );
 		panel.cancel();
 		return true;
 	};
@@ -41,10 +41,28 @@ Container.menubar = function () {
 		return true;
 	};
 	
+	//create menubar items 	for available gadgets 
+	//using information from Container.gedgetData (extracted from configShindig.xml)
+	var getGadgetMenu = function(){
+    	
+    	var gadgetItems = [];
+    	
+    	for (var i = 0; i < Container.gadgetData.length; i++){
+    		
+    		var splittedUrl = Container.gadgetData[i].url.split("/");
+    		
+    		gadgetItems[i] = { 
+    				text: splittedUrl[splittedUrl.length - 2], 
+    				onclick: { fn: Container.addGadget, obj: Container.gadgetData[i] }
+    		}
+    	}
+    	return gadgetItems;
+    };
+	
 	// panel content
 	var content = '<form method="post">'+
 						'<br><label for="url" > enter URL: </label>' +
-						'<input type="text" id="input-url" name = "url" size = 45 value = "http://localhost:8080/gadgets/files/gadgets/tools/tool.xml">'+ 
+						'<input type="text" id="input-url" name = "url" size = 45 value = "/gadgets/files/gadgets/tools/tool.xml">'+ 
 						'</input> <br><br>'+
 					'</form>';
 	
@@ -70,12 +88,8 @@ Container.menubar = function () {
             submenu: {  
                 id: "widgetmenu", 
                 itemdata: [
-                    [
-	                    { text: "Viewer", onclick: { fn: Container.addViewer }},
-	                    { text: "Repository", onclick: { fn: Container.addRepository } },
-	                    { text: "Connector", onclick: { fn: Container.addConnector } }
-	                ],
-	                [ {text: "Own Widget", onclick: { fn: showUpload } }]
+                           getGadgetMenu(),
+                           [ {text: "Own Widget", onclick: { fn: showUpload } }]
                ] 
         	}
         }
@@ -102,6 +116,7 @@ Container.menubar = function () {
     };
     
     menuBar.subscribe("show", onSubmenuShow);
+  
 
 };
 

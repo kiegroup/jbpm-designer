@@ -21,44 +21,46 @@
  * DEALINGS IN THE SOFTWARE.
  **/
 
-if(!connector)
-	var connector = {};
-
-(function() {
+// parent directory for all local gadgets
+GADGET_DIR = "/gadgets/files/gadgets/core/"
+// subdirectory for specific viewer gadget
+VIEWER_DIR = "/gadgets/files/gadgets/viewer/"
+var viewer = null;
 	
-	connector.model = function(title, shapes){
-		this.title = (title ? title : '');
-		this.shapes = (shapes ? shapes: '');
-	};
+// load MOVI files
+MOVI.init(
+				
+	function(){
+		
+	    new YAHOO.util.YUILoader({ 
+			base: "http://yui.yahooapis.com/2.7.0/build/", 
+	        require: ["yahoo", "fonts","grids","layout","reset","resize"],
+	        loadOptional: false, 
+	        combine: true, 
+	        filter: "MIN", 
+	        allowRollup: true, 
+	        onSuccess: function(){ getScripts();}
+	    }).insert(); 
 
-	connector.connection = function(){
-		
-		this.modelA = new model();
-		this.modelB = new model();
-		this.comment = '';
-	};
+	},
+	"http://oryx-editor.googlecode.com/svn/trunk/poem-jvm/src/javascript/movi/src",
+	undefined,
+	["resize"]
+);
+
+/*
+ * load relevant scripts from gadget directory and the viewer subdirectory
+ * 
+ */
+getScripts = function(){
 	
-	connector.connection.prototype = {
-			
-		setModelA: function(model){
-			this.modelA = model;
-		},
-		
-		setModelB: function(model){
-			this.modelB = model;
-		},
-		
-		setTitle: function(title){
-			this.title = title;
-		},
-		
-		getShapesA: function(){
-			return this.modelA.shapes;
-		},
-		
-		getShapesA: function(){
-			return this.modelB.shapes;
-		}
-	};
-})();
+	YAHOO.util.Get.script([  GADGET_DIR + "abstractGadget.js", VIEWER_DIR + "viewer.js", VIEWER_DIR + "ViewerRpc.js" ],
+			{
+		 		// instantiate viewer gadget
+				onSuccess : function(){ viewer = new Viewer(); } ,
+				onFailure : function(){ alert("Error loading scripts!"); }
+			}
+	);
+	
+}
 

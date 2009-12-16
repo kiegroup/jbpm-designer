@@ -24,6 +24,8 @@
 if (! Container)
 	var Container = {};
 
+SERVER_BASE = "http://localhost:8080"
+
 Container.LayoutManager = function() {
 
 	gadgets.LayoutManager.call(this);
@@ -45,25 +47,23 @@ Container.LayoutManager.prototype.getGadgetChrome = function(gadget) {
 
 gadgets.container.layoutManager = new Container.LayoutManager();
 
-// adds a new panel to the dashboard 
-// gadget_url specifies the widget to be rendered inside the panel
-Container.addGadget = function(gadget_url, options) {
+/**
+ * adds a new panel to the dashboard 
+ * gadget_url specifies the widget to be rendered inside the panel
+ * arguments determined by eventhandler, last argument "args" customizable
+ * 
+ */
+Container.addGadget = function(p_sType, p_aArgs, args) {
+
+	gadget_url = SERVER_BASE + args.url;
+	options = 	args.options;
+
 	
 	var gadget = gadgets.container.createGadget({ specUrl: gadget_url });
 	gadget.setServerBase( Container.ShindigBase + 'gadgets/');
 	
 	var widget = dashboard.addGadget(gadget_url, options);
 	widget.__gadget = gadget;
-	
-	/*			
-	widget.onResize = function(args) {
-	console.log("*");			
-	console.log("*", widget.__gadget);			
-	
-		widget.__gadget.style.width = args.width + "px"
-		widget.__gadget.style.height = args.height + "px"
-	}
-	*/	
 	
 	gadget.getTitleBarContent = function(continuation){
 		continuation("");
@@ -83,52 +83,18 @@ Container.addGadget = function(gadget_url, options) {
 	
 };
 
-// adds a viewer widget to the dashboard
-Container.addViewer = function() {
+/*
+ * adds initial gadget to the dashboard allowing others to be added
+ */
+Container.loadGadgetRepository = function(){
 	
-	var options = {};
-	
-	options.minHeight	= 300;
-	options.minWidth 	= 450;
-	options.top 		= 50;
-	options.left 		= 500;
-	options.height 		= 500;
-	options.width 		= 450;
-	
-	return Container.addGadget( Container.viewerUrl, options );
-	
-};
-
-// adds a repository widget (overview of the users processes) to the dashboard
-Container.addRepository = function() {
-	
-	var options = {};
-
-	options.top 		= 50;
-	options.left 		= 200;
-	options.height 		= 300;
-	options.width 		= 450;
-	
-	Container.addGadget(Container.repositoryUrl, options);
-};
-
-// adds a connector widget to the dashboard to create associations between different models 
-Container.addConnector = function() {
-	
-	var options = {};
-
-	options.top 		= 50;
-	options.left 		= 200;
-	options.height 		= 300;
-	options.width 		= 450;
-	
-	Container.addGadget(Container.connectorUrl, options);
-};
-
-// just to test RPC functionality
-Container.addTestTool = function() {
-
-	Container.addGadget( Container.toolUrl, {} );
-	
-};
-
+	for (var i = 0; i < Container.gadgetData.length; i++) {
+		
+		if ( Container.gadgetData[i].title == "gadgetRepository" ){
+			Container.addGadget( null, null, 
+					{ url: Container.gadgetData[i].url, options: Container.gadgetData[i].options } );
+			return;
+		}
+		
+	}
+}

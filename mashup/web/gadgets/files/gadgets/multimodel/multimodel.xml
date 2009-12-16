@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="Test Tool">
+        <Require feature="opensocial-0.8"></Require>
+        <Require feature="dynamic-height"></Require>
+		<Require feature="settitle"></Require>
+        <Require feature="rpc"></Require>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+		
+		<script type="text/javascript">
+	        var externs = ['http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader.js',
+						'/oryx/lib/prototype-1.5.1.js',
+						'/gadgets/files/gadgets/multimodel/core.js',];
+	
+	        for (var i = 0; i < externs.length; i++)
+	                document.write(unescape("%3Cscript src='" + externs[i] + "'type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		
+		
+		<style type="text/css">
+			
+			
+			.checkbox { 
+			    display:block;
+			   	width:15%;
+				float:left;
+			    clear:left;
+			}
+			
+			label {
+				float:left;
+			}
+			
+			.clear {
+			    clear:both;
+				height:10px;
+			}
+			
+			#connections {
+				list-style: none;
+				margin: 15px;
+				cursor: pointer;
+			}
+			
+			.connection-item {
+				background-color: white;
+				color: #808080;
+				border: 1px #808080 solid;
+				-moz-border-radius: 15px; 
+				float: left;
+				width: 75%;
+				height: 20px;
+				padding-left: 15px;
+				margin-right: 15px;		
+			}
+			
+			div.connection-item:hover, .connection-item-active {
+				background-color: #A0A0A0;
+				color: white;
+				border-color: white;
+			}	
+			/*
+			.connection-item-active{
+				background-color: #A0A0A0;
+				color: white;
+				border-color: white;
+			}	
+			*/				
+			
+		</style>
+
+		<body class=" yui-skin-sam" id="connector">
+					
+		<div id ="top">
+			<div style = "margin:3px;">
+				<fieldset id="button_group"></fieldset>
+			</div>
+		</div>
+		<div id="center"> 
+			<ul id="connections"></ul>
+		</div>
+		</body>
+		
+  ]]>
+    </Content>
+</Module>

@@ -10,7 +10,7 @@
         <![CDATA[
 		
 		<script type="text/javascript">
-	        var externs = ['http://www.prototypejs.org/assets/2009/6/16/prototype.js',
+	        var externs = ['http://localhost:8080/oryx/lib/prototype-1.5.1.js',
 						'http://localhost:8080/gadgets/files/gadgets/tools/toolRpc.js',
 						'http://localhost:8080/gadgets/files/gadgets/tools/tool.js'];
 	
@@ -22,9 +22,13 @@
 		<input type="text" id="msg" value="http://oryx-editor.org/backend/poem/model/" size="45"></input><br>
 		<a href="#" onclick= "mark(document.getElementById('msg').value, {} ); return false;"> mark </a><br>
 		<a href="#" onclick="undoMark();">undo mark</a><br>
+		<a href="#" onclick="greyModel(document.getElementById('msg').value);">grey</a><br>
+		<a href="#" onclick="undoGrey(document.getElementById('msg').value);">undo grey</a><br>
 		<a href="#" onclick="centerShape();">center</a><br>
 		<a href="#" onclick="unregisterSelection();">unregister</a><br>
-		<a href="#" onclick="loadViewer(document.getElementById('msg').value);">load</a>
+		<a href="#" onclick="loadViewer(document.getElementById('msg').value);">load</a><br>
+		<a href="#" onclick="getGadgets();">gadgets</a><br>
+		<a href="#" onclick="getRPCs();">RPCs</a>
 		<div id="console"></div>
 		
   ]]>

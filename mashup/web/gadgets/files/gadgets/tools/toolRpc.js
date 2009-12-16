@@ -44,6 +44,20 @@ tool.rpcHandler = (function(){
 				"handleSelection", 
 				this._handleSelection
 			);
+			
+			var rpc = {
+				name : 			"handleSelection",
+				params :		"",
+				returnValue : 	""
+			};
+			
+			gadgets.rpc.call(
+				"..",
+				"dispatcher.registerRPC",
+				function (reply){return;},
+				Object.toJSON(rpc)
+			);
+			
 		},
 		
 		_handleSelection: function(args) {
@@ -90,8 +104,7 @@ tool.rpcHandler = (function(){
 				null, 
 				"dispatcher.countViewer", 
 				function(reply){
-					reply = reply.split('.');
-					reply.pop();
+					reply = reply.evalJSON();
 					validViewers = reply;
 				}, 
 				""

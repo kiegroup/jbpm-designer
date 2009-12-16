@@ -30,6 +30,9 @@ gadgets.util.registerOnLoadHandler(init);
 var rpcHandler;
 
 function init(){
+	
+	gadgets.rpc.call("..", "dispatcher.register", function(reply){return;}, "tool");
+	
 	gadgets.window.setTitle('Test Tool');
 	
 	tool.rpcHandler.init(true);
@@ -54,6 +57,26 @@ function init(){
 	
 };
 
+function getRPCs(){
+	
+	gadgets.rpc.call(
+		null,
+		'dispatcher.getRPCs',
+		function (reply){alert(reply);},
+		"all"
+	);
+	
+};
+
+function getGadgets(){
+	gadgets.rpc.call(
+			null,
+			'dispatcher.getAvailableGadgets',
+			function (reply){alert(reply);},
+			""
+		);
+}
+
 // adds a new viewer with the specified url
 function loadViewer(url){
 	
@@ -72,7 +95,7 @@ function centerShape(){
 		null, 
 		"dispatcher.countViewer", 
 		function(reply){
-			var validViewers = reply.split(".");
+			var validViewers = reply.evalJSON();
 			
 			//request for shapes from all viewers
 			for (var i = 0; i < validViewers.length; i++){
@@ -83,14 +106,10 @@ function centerShape(){
 						channel, 
 						function(reply2){
 							var shapes = reply2.split(";");
-							var index = shapes.shift().toString();
-							var output = 'viewer ' + index + ' centers:';
-							var channel = "dispatcher." + index + ".centerShape";
-							var nodes = shapes[0].evalJSON(true);
-
-							var toCenter = nodes[Math.floor(Math.random() * nodes.length)];
-							gadgets.rpc.call(null, channel, function(){return;}, toCenter.ressourceId);
-							document.getElementById("console").innerHTML = output + toCenter.name;
+							var channel = "dispatcher." + shapes.shift().toString() + ".centerShape";
+							var _nodes = shapes[0].evalJSON();
+							var toCenter = _nodes[Math.floor(Math.random() * _nodes.length)].ressourceId;
+							gadgets.rpc.call(null, channel, function(){return;}, toCenter);
 					}, 
 					"");
 						
@@ -139,7 +158,7 @@ function mark(msg) {
 		null, 
 		"dispatcher.countViewer", 
 		function(reply){
-			var validViewers = reply.split(".");
+			var validViewers = reply.evalJSON();
 			
 			//request for shapes from all viewers
 			for (var i = 0; i < validViewers.length; i++){
@@ -156,20 +175,20 @@ function selectShapes(reply){
 
 	var shapes = reply.split(";");
 	var channel = "dispatcher." + shapes.shift().toString() + ".mark";
-	var _nodes = shapes[0].evalJSON(true);
+	var _nodes = shapes[0].evalJSON();
 	
 	var output = 'mark nodes: <br>';	
-	var toMark = "";
+	var toMark = [];
 	
 	for (var i = 0; i < _nodes.length; i++){
 		if ( i % 5 == 0){
 			output += _nodes[i].name + '<br>';
-			toMark += _nodes[i].ressourceId + '.';
+			toMark.push(_nodes[i].resourceId);
 		}
 	}
 	
-	gadgets.rpc.call(null, channel, function(){return;}, toMark);
-	document.getElementById("console").innerHTML = output;
+	gadgets.rpc.call(null, channel, function(){return;}, Object.toJSON({toMark : toMark}));
+	$("console").innerHTML = output;
 	gadgets.window.adjustHeight();
 	
 };
@@ -181,7 +200,7 @@ function undoMark(){
 		null, 
 		"dispatcher.countViewer", 
 		function(viewers){
-			var validViewers = viewers.split(".");
+			var validViewers = viewers.evalJSON();
 			
 			//remove markers from all viewers
 			for (var i = 0; i < validViewers.length; i++){
@@ -195,9 +214,46 @@ function undoMark(){
 	);	
 };
 
+function greyModel(viewerIndex){
+	
+	var channel = "dispatcher." + viewerIndex + ".greyModel";
+	
+	gadgets.rpc.call(
+		null,
+		channel,
+		function(){return;},
+		""
+	);
+};
+
+function undoGrey(viewerIndex){
+	var channel = "dispatcher." + viewerIndex + ".sendShapes";
+	gadgets.rpc.call(null, channel, removeShadows, "");
+};
+
+function removeShadows(reply){
+	var shapes = reply.split(";");
+	var channel = "dispatcher." + shapes.shift().toString() + ".undoGrey";
+	var _nodes = shapes[0].evalJSON();
+	
+	var output = 'show nodes: <br>';	
+	var toShow = [];
+	
+	for (var i = 0; i < _nodes.length; i++){
+		if ( i % 5 == 0){
+			output += _nodes[i].name + '<br>';
+			toShow.push(_nodes[i].resourceId);
+		}
+	}
+	
+	gadgets.rpc.call(null, channel, function(){return;}, Object.toJSON(toShow));
+	$("console").innerHTML = output;
+	gadgets.window.adjustHeight();
+}
+
 // nothing useful
 function test(){
-	document.getElementById("console").innerHTML = "unregistered eventListener for selectionChanged";
+	$("console").innerHTML = "unregistered eventListener for selectionChanged";
 };
 
 // unregister eventlistener for selectionChanged

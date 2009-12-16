@@ -34,6 +34,10 @@ var dashboard = (function(){
 	return {
 		init: function() {
 		
+			YAHOO.util.Get.script("/oryx/lib/prototype-1.5.1.js",
+				{onSuccess : function(){ Container.login.init(); } }
+			);
+		
 			// replace the dummy method
 			this.addGadget = this._addGadget;
 			
@@ -99,7 +103,6 @@ var dashboard = (function(){
 				constraintoviewport:true,
 				context: ["showbtn", "tl", "bl"]
 			});
-			
 			
 			YAHOO.util.Event.addListener(panel, "hideEvent", function(){alert("h");}, true)
 			
@@ -168,9 +171,16 @@ var dashboard = (function(){
 			panel.hideEvent.subscribe(function() {
 				gadget.destroy()
 			}); 
+			
+			panel.dragEvent.subscribe(function(){ 
+				panel.bringToTop();
+			});
+			
 			panel.render();
+			panel.bringToTop();
 			
 			gadgets.push(gadget);
+			
 			return gadget;
 		},
 		
@@ -179,10 +189,10 @@ var dashboard = (function(){
 				if (gadgets[i] == gadget) {
 					
 					if (gadgets[i].__gadget)
-						dispatcher.deleteViewer(gadgets[i].__gadget);
+						dispatcher.deleteGadget(gadgets[i].__gadget);
 					
 					window.setTimeout(function() {
-						delete(gadgets[i]);
+						(gadgets[i]);
 					}, 100);
 					
 					return true;
@@ -211,7 +221,7 @@ new YAHOO.util.YUILoader({
 	filter: "RAW",
 	onSuccess: function() {
 		dashboard.init();
-		Container.menubar();
+		//Container.loadMenubar();
 	},
 	onFailure: function() {
 		alert("Failed loading required YUI components");

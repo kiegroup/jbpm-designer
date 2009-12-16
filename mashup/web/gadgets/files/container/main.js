@@ -26,21 +26,13 @@ var Container = {};
 
 Container.init = function(){
 	
-	// extract paths from config xml
-	var xml = Container._loadConfig();
-
-	Container.ShindigBase 	= xml.getElementsByTagName("ShindigBase")[0].textContent;
-	Container.relayUrl 		= xml.getElementsByTagName("ShindigBase")[1].textContent;
-	Container.viewerUrl 	= xml.getElementsByTagName("Gadget")[0].textContent;
-	Container.repositoryUrl	= xml.getElementsByTagName("Gadget")[1].textContent;
-	Container.connectorUrl	= xml.getElementsByTagName("Gadget")[2].textContent;
-	Container.toolUrl 		= xml.getElementsByTagName("Gadget")[3].textContent;
-
+	Container.extractGadgeatData();
+	
 	document.write(unescape("%3Clink href='" + Container.ShindigBase + 'gadgets/files/container/gadgets.css' + "'rel='stylesheet'%3E%3C/link%3E"));
 	
 	// java script files from shindig
 	var shindigFiles = ['gadgets/js/rpc.js?c=1&debug=1', 
-				'/gadgets/files/container/cookies.js',
+				'gadgets/files/container/cookies.js',
 				'gadgets/files/container/util.js',
 				'gadgets/files/container/gadgets.js',
 				'gadgets/files/container/cookiebaseduserprefstore.js'];
@@ -59,7 +51,7 @@ Container._loadConfig = function() {
 
 	if (window.XMLHttpRequest){
 		xmlDoc = new window.XMLHttpRequest();
-		xmlDoc.open("GET",'configShindig.xml',false);
+		xmlDoc.open("GET",'gadgets.xml',false);
 		xmlDoc.send("");
 		return xmlDoc.responseXML;
 	}
@@ -68,11 +60,64 @@ Container._loadConfig = function() {
 	else if (ActiveXObject("Microsoft.XMLDOM")){
 		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
 		xmlDoc.async = false;
-		xmlDoc.load('configShindig.xml');
+		xmlDoc.load('gadgets.xml');
 		return xmlDoc;
 	}
-	alert("Error loading document");
+	alert("Error loading document gadgets.xml");
 	return null;
+	
+};
+
+Container.extractGadgeatData = function(){
+	
+	Container.gadgetData = new Array();
+	
+	// extract paths from config xml
+	var xml = Container._loadConfig();
+
+	Container.ShindigBase 	= xml.getElementsByTagName("ShindigBase")[0].textContent;
+	Container.relayUrl 		= xml.getElementsByTagName("ShindigBase")[1].textContent;
+	
+	var gadgets 			= xml.getElementsByTagName("Gadget");
+	
+	//extrat options, position and bounds
+	for (var i = 0; i < gadgets.length; i++){
+		
+		var options = {};
+		
+		if ( gadgets[i].getElementsByTagName("options")[0] ){
+			
+			var optionsTmp = gadgets[i].getElementsByTagName("options")[0];
+			
+			if ( optionsTmp.getElementsByTagName("minHeight")[0] )
+				options.minHeight = optionsTmp.getElementsByTagName("minHeight")[0].textContent;
+			
+			if ( optionsTmp.getElementsByTagName("minWidth")[0] )
+				options.minWidth = optionsTmp.getElementsByTagName("minWidth")[0].textContent;
+			
+			if ( optionsTmp.getElementsByTagName("top")[0] )
+				options.top = optionsTmp.getElementsByTagName("top")[0].textContent;
+			
+			if ( optionsTmp.getElementsByTagName("left")[0] )
+				options.left = optionsTmp.getElementsByTagName("left")[0].textContent;
+			
+			if ( optionsTmp.getElementsByTagName("height")[0] )
+				options.height = optionsTmp.getElementsByTagName("height")[0].textContent;
+			
+			if ( optionsTmp.getElementsByTagName("width")[0] )
+				options.width = optionsTmp.getElementsByTagName("width")[0].textContent;
+			
+		}
+		
+		var url = gadgets[i].getElementsByTagName("url")[0].textContent;
+		
+		Container.gadgetData[i] = {
+				url : 		url,
+				options : 	options,
+				icon : 		optionsTmp.getElementsByTagName("icon")[0] ? optionsTmp.getElementsByTagName("icon")[0].textContent : null,
+				title : 	url.split("/")[ url.split("/").length - 2 ]
+		};	
+	}
 	
 };
 

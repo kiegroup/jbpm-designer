@@ -24,9 +24,9 @@
 
 var dispatcher = (function(){
 
-	var _viewers = [null];
 	var waiting = 0;
 	var modelsToLoad = [null];
+	var _gadgets = [null];
 	
 	// eventlisteners (selectionChanged) for all current and future viewers
 	var _general_registered = [null];
@@ -35,33 +35,176 @@ var dispatcher = (function(){
 	gadgets.rpc.register(
 		"dispatcher.register", 
 		function(args){	
-			// scope: this = rpc
-			var index = _viewers.length;
-			_viewers.push({
-				id: index,
-				gadget: this.f,
-				info: args,
-				listeners: [null]
-			});
-			for (var i = 1; i < _general_registered.length; i++){
-				if (_general_registered[i])
-					_viewers[index].listeners.push(_general_registered[i]);
+			//scope: this = rpc
+			
+			var index = _gadgets.length;
+			var gadget = {
+					id : 		index,
+					gadget : 	this.f,
+					type : 		args,
+					listeners : [null],
+					rpcs : 		[]
+			};
+			
+			if (args == "viewer"){
+				for (var i = 1; i < _general_registered.length; i++){
+					if (_general_registered[i])
+						gadget.listeners.push(_general_registered[i]);
+				}	
 			}
+			
+			_gadgets.push(gadget);
+			
 			return index;
 		}
 	);
 		
 	// register a service for gadgets to unregister from receiving
 	gadgets.rpc.register(
-		"dispatcher.unregisterViewer", 
+		"dispatcher.unregister", 
 		function(args) {
 			var gadget = this.f;
-			for (var i = 0; i < _viewers.length; i++) {
-				if (_viewers[i] && _viewers[i].gadget == gadget) {
-					_viewers[i] = null;
+			for (var i = 0; i < _gadgets.length; i++) {
+				if (_gadgets[i] && _gadgets[i].gadget == gadget) {
+					_gadgets[i] = null;
 				}
 			}
 			return "";
+		}
+	);
+	
+	// gadgets can enter their RPC in the RPC catalog belonging to the gadget
+	gadgets.rpc.register(
+		"dispatcher.registerRPC",
+		function(args) {
+			
+			var gadget = this.f;
+			var rpc = args.evalJSON(true);
+			
+			// find gadget
+			for (var i = 0; i < _gadgets.length; i++) {
+				
+				// add rpc to catalogue of registered rpcs of this gadget
+				if ( _gadgets[i] && _gadgets[i].gadget == gadget ){
+					_gadgets[i].rpcs.push( rpc );
+				}
+			}	
+		}
+	);
+	
+	// remove rpc from catalog belonging to the gadget
+	gadgets.rpc.register(
+		"dispatcher.unregisterRPC",
+		function(args) {
+			
+			var gadget = this.f;			
+			// find gadget
+			for (var i = 0; i < _gadgets.length; i++) {
+				
+				// remove rpc from catalogue of registered rpcs of this gadget
+				if ( _gadgets[i] && _gadgets[i].gadget == gadget ){
+					for ( var j = 0; j < _gadgets[i].rpcs.length; j++){
+						if ( _gadgets[i].rpcs[j] && _gadgets[i].rpcs[j].name == args )
+							 _gadgets[i].rpcs[j] = null;
+					}
+				}
+			}	
+		}
+	);
+	
+	// returns a collection of objects containing information about 
+	// each gadget currently on the dashboard and its RPCs
+	gadgets.rpc.register(
+		"dispatcher.getRPCs",
+		function(args) {
+			
+			// collection of Objects containing the gadget and its RPCs
+			var rpcs = [];
+			
+			// all gadgets on the dashboard
+			if (args == "all"){
+				
+				for (var i = 0; i < _gadgets.length; i++){
+					if( _gadgets[i] && _gadgets[i].gadget )
+						rpcs.push({
+							type : 		_gadgets[i].type,
+							id : 		_gadgets[i].id,
+							gadget : 	_gadgets[i].gadget,
+							rpcs : 		_gadgets[i].rpcs,
+						});
+				}
+			}
+			
+			// one specific gadget, specified by its id
+			else if ( args.match(/\d+/) ){
+				if (_gadgets[i] && _gadgets[i].gadget) 
+					rpcs.push({
+						type : 		_gadgets[i].type,
+						id : 		_gadgets[i].id,
+						gadget : 	_gadgets[i].gadget,
+						rpcs : 		_gadgets[i].rpcs,
+					});
+			}
+			
+			// gadgets of a specific type
+			else {
+				for (var i = 0; i < _gadgets.length; i++){
+					if( _gadgets[i] && _gadgets[i].gadget && _gadgets[i].type == args )
+						rpcs.push({
+							type : 		_gadgets[i].type,
+							id : 		_gadgets[i].id,
+							gadget : 	_gadgets[i].gadget,
+							rpcs : 		_gadgets[i].rpcs,
+						});
+				}	
+			}
+				
+			return Object.toJSON(rpcs);	
+			
+		}
+	
+	);
+	
+	// returns a list of pairs of url and icon of all gadgets that can be added to the dashboard
+	gadgets.rpc.register(
+		"dispatcher.getAvailableGadgets",
+		function(args){
+			var gadgetUrls = [];
+			for (var i = 0; i < Container.gadgetData.length; i++){
+				gadgetUrls.push({ 
+					url : 		Container.gadgetData[i].url, 
+					icon : 		Container.gadgetData[i].icon, 
+					title : 	Container.gadgetData[i].title });
+			}
+			return Object.toJSON(gadgetUrls);
+
+		}	
+	);
+	
+	// adds an gadget specified by its url to the dashboard
+	gadgets.rpc.register(
+		"dispatcher.loadGadget",
+		function(args){
+			for (var i in Container.gadgetData){
+				if (Container.gadgetData[i].url == args)
+					Container.addGadget( null, null, 
+							{ url : args, options : Container.gadgetData[i].options });
+			}
+		}
+	);
+	
+	//expects a collection of gadget indices 
+	// returns all gadgets that are still on the dashboard
+	gadgets.rpc.register(
+		"dispatcher.gadgetsAvailable",
+		function(args){	
+			var requestedGadgets = args.evalJSON();
+			var availableGadgets = [];
+			for (var i = 0; i < requestedGadgets.length; i++){
+				if (_gadgets[ requestedGadgets[i] ].gadget )
+					availableGadgets.push( requestedGadgets[i] );
+			}
+			return Object.toJSON(availableGadgets);
 		}
 	);
 	
@@ -85,20 +228,22 @@ var dispatcher = (function(){
 		function(args) {
 			var gadget = this.f;
 			if (args == "all"){
-				for (var i = 0; i < _viewers.length; i++) {
-					// adds tool to list of gadgets that will be eventlisteners of all new viewers
-					_general_registered.push(gadget);
+				
+				// adds tool to list of gadgets that will be eventlisteners of all new viewers
+				_general_registered.push(gadget);
+				
+				for (var i = 0; i < _gadgets.length; i++) {
 					
 					// adds the tool to all already existing viewers
-					if (_viewers[i] && _viewers[i].gadget) 
-						_viewers[i].listeners.push(gadget);
+					if (_gadgets[i] && _gadgets[i].gadget && _gadgets[i].type == "viewer") 
+						_gadgets[i].listeners.push(gadget);
 				}
 			} else {
-				//certain viewers are chosen
+				// certain viewers are chosen
 				var viewers = args.split(".");
 				for (var i = 0; i < viewers.length; i++){
 					if (! (viewers[i] == ""))
-						_viewers[parseInt(viewers[i])].listeners.push(gadget);
+						_gadgets[ parseInt(viewers[i]) ].listeners.push(gadget);
 				}
 			}
 			return "";
@@ -119,10 +264,15 @@ var dispatcher = (function(){
 			}
 			
 			// remove gadget from the list of specific eventlisteners of each viewer
-			for (var i = 1; i < _viewers.length; i++){
-				for (var j = 1; j < _viewers[i].listeners.length; j++){
-					if (_viewers[i].listeners[j] == gadget)
-						_viewers[i].listeners[j] = null;
+			for (var i = 1; i < _gadgets.length; i++){
+				
+				// if gadget is viewer remove registered gadget
+				if (_gadgets[i] && _gadgets[i].type == "viewer"){
+				
+					for (var j = 1; j < _gadgets[i].listeners.length; j++){
+						if (_gadgets[i].listeners[j] == gadget)
+							_gadgets[i].listeners[j] = null;
+					}
 				}
 			}
 			return "";
@@ -134,9 +284,11 @@ var dispatcher = (function(){
 		function(args) {
 			var gadget = this.f;
 			var currentViewer; //element from _viewers
-			for (var i = 0; i < _viewers.length; i++) {
-				if (_viewers[i] && _viewers[i].gadget == gadget) {
-					currentViewer = _viewers[i];
+			
+			// find out viewer that has thrown the event
+			for (var i = 0; i < _gadgets.length; i++) {
+				if (_gadgets[i] && _gadgets[i].gadget == gadget) {
+					currentViewer = _gadgets[i];
 					break;
 				}
 			}
@@ -170,13 +322,13 @@ var dispatcher = (function(){
 	gadgets.rpc.register(
 		"dispatcher.countViewer", 
 		function(args) {
-			var validViewers = "";
-			for (var i = 0; i < _viewers.length; i++) {
-				if (_viewers[i] && _viewers[i].gadget) {
-					validViewers += (i.toString() + ".");
+			var validViewers = [];
+			for (var i = 0; i < _gadgets.length; i++) {
+				if (_gadgets[i] && _gadgets[i].gadget && _gadgets[i].type == "viewer") {
+					validViewers.push(i);
 				}
 			}
-			return validViewers;
+			return Object.toJSON(validViewers);
 	});
 	
 	gadgets.rpc.register(
@@ -184,14 +336,22 @@ var dispatcher = (function(){
 		"dispatcher.displayModel", 
 		function(args){
 			
-			var gadget = Container.addViewer();
+			// args: url.title
+			for (var i = 0; i < Container.gadgetData.length; i++){
 			
+				if ( Container.gadgetData[i].url.match(/viewer/) ){
+					Container.addGadget(null, null, Container.gadgetData[i] );
+					break;
+				}		
+			}
 			modelsToLoad.push(args);
 			waiting += 1;
 
 		}		
 	);
 	
+	//called by an viewer when it has rendered so far that it can display a model
+	//asks for one of the queued models
 	gadgets.rpc.register(
 		
 		"dispatcher.loadWaiting",
@@ -206,7 +366,7 @@ var dispatcher = (function(){
 							gadget, 
 							"loadModel",   
 							function (reply) { return;},
-							modelsToLoad[i]);
+							modelsToLoad[i]);	//modelsToLoad[i]: url.title
 						
 						modelsToLoad[i] = null;
 						waiting -= 1;
@@ -230,13 +390,13 @@ var dispatcher = (function(){
 		var response = "response";
 		
 		
-		for (var i = 1; i < _viewers.length; i++) {
+		for (var i = 1; i < _gadgets.length; i++) {
 		
 			// 0 indicates a broadcast to all available viewers
 			// otherwise just the selected viewer will be called
-			if (_viewers[i].gadget && (parseInt(m[1]) == 0 || parseInt(m[1]) == i) ){
+			if (_gadgets[i].gadget && (parseInt(m[1]) == 0 || parseInt(m[1]) == i) ){
 			
-				var gadget = _viewers[i].gadget;
+				var gadget = _gadgets[i].gadget;
 				
 				console.info("incoming rpc", {
 					"target": gadget,
@@ -270,20 +430,20 @@ var dispatcher = (function(){
 	
 	return {
 	
-		getViewers: function() {
+		getGadgets: function() {
 			var copy = [];
-			for (var i = 0; i < _viewers.length; i++) {
-				if (_viewers[i] && _viewers[i].gadget) {
-					copy.push(_viewers[i]);
+			for (var i = 0; i < _gadgets.length; i++) {
+				if (_gadgets[i] && _gadgets[i].gadget) {
+					copy.push(_gadgets[i]);
 				}
 			}
 			return copy;
 		},
 		
-		deleteViewer: function(gadget) {
-			for (var i = 1; i < _viewers.length; i++){
-				if (_viewers[i] && (_viewers[i].gadget == ("remote_iframe_" + gadget.id)) )
-					_viewers[i].gadget = null;
+		deleteGadget: function(gadget) {
+			for (var i = 1; i < _gadgets.length; i++){
+				if (_gadgets[i] && (_gadgets[i].gadget == ("remote_iframe_" + gadget.id)) )
+					_gadgets[i].gadget = null;
 
 			}
 		}

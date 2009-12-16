@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="Viewer">
+        <Require feature="opensocial-0.8"></Require>
+		<Require feature="dynamic-height"></Require>
+		<Require feature="settitle"></Require>
+		<Require feature="rpc"></Require>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+		
+	<style type="text/css">
+		#spotlight {
+	        border: 1px solid #ccc;
+	        height: 250px;
+	        margin: 10px auto;
+	        padding: 2px;
+	        text-align: center;
+	        width: 240px;
+			cursor: pointer;
+	    }
+	
+	    #carousel {
+	        margin: 0;
+	    }
+	
+	    #container {
+			margin: 0 auto;
+			margin-top: 5px;
+	    }
+		
+	    /* Always be sure to give your carousel items a width and a height */
+	    .yui-carousel-element li {
+	        height: 100px;
+	        width: 100px;
+	    }
+		
+		.item  { 
+	    	font: 55% Arial, sans-serif; 
+	    	position: relative; 
+	    	text-transform: uppercase; 
+	    	z-index: 2; 
+		}
+		
+
+
+	</style>
+
+	<script type="text/javascript">		
+		var externs = ['http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader.js',
+					'/oryx/lib/prototype-1.5.1.js',
+					'/gadgets/files/gadgets/gadgetRepository/core.js'];
+	
+        for (var i = 0; i < externs.length; i++)
+			document.write(unescape("%3Cscript src='" + externs[i] + "'type='text/javascript'%3E%3C/script%3E"));
+		
+	</script>
+	<body class=" yui-skin-sam">
+		
+		<div id="container"> 
+			<ol id="carousel"></ol> 
+		</div> 
+		<!-- The spotlight container --> 
+		<div id="spotlight"></div> 
+	
+	</body>
+  ]]>
+    </Content>
+</Module>

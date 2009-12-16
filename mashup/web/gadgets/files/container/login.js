@@ -21,41 +21,38 @@
  * DEALINGS IN THE SOFTWARE.
  **/
 
-
-/*
- * Login works so far (user is registered in the oryx repository as well),
- * but login dialog is always displayed.
- * 
- */
-
-
-
-var currentUser;
-
 if (! Container)
 	var Container = {};
 
 Container.login = (function(){
 	
 	return {
-	
-		// variable currentUser has to be initialized when the page is loaded
-		// extracting the openId from the cookie.
-		// Not yet implemented!
-		// Login dialog is never exchanged by the logout dialog.
-		// To try the logout functionality though return false in the method below.
-		isPublicUser: function(){
-			if (!currentUser)
-				return true;
-			
-			return currentUser == 'public';
-		},
 		
-		init: function() {
-			if (this.isPublicUser())
-				Container.login.showLogin();
-			else
-				Container.login.showLogout();
+		currentUser : "public",
+		
+		init : function() {
+			
+			new Ajax.Request("/backend/poem/login", 
+				 {
+					method			: "post",
+					asynchronous 	: false,
+					onSuccess		: function(response){
+						Container.login.currentUser = response.responseText;
+						
+						if ( response.responseText.match(/public/) ) {
+							Container.login.showLogin();
+						}
+						else {
+							Container.login.showLogout();
+						}
+						
+					},
+					onFailure		: function(){
+						alert('Server communication failed!');
+					},
+					parameters 		: { mashUp : "true" }
+				});
+		
 		},
 		
 		showLogin: function(){
@@ -68,8 +65,8 @@ Container.login = (function(){
 							'<img src="/backend/images/repository/getopenid.png" onclick="Container.login.changeOpenId(\'http://getopenid.com/username\', 21, 8)"/>'+
 						'</span>'+
 					'<input type="text" name="openid_identifier" id="openid_login_openid" class="text gray"'+
-						'value="getopenid.com/helenk"/>'+
-					'<input type="submit" value="login"/>'+
+						'value="getopenid.com/helen88"/>'+
+					'<input id="ext-gen436" type="submit" value="login"/>'+
 				'</form></div>';
 			
 		},
@@ -79,8 +76,8 @@ Container.login = (function(){
 				'<form action="http://localhost:8080/backend/poem/login?logout=true&redirect=/gadgets/files/container/home.html"'+ 
 						'method="post" id="openid_login">'+
 				'<div>'+
-					'[user]'+
-					'<input type="submit" class="button" value="logout" />'+
+				'<div style="display:inline;" class="login_name">Hi, '+ Container.login.currentUser +'</div>' +
+					'<input id="ext-gen436" type="submit" class="button" value="logout" />'+
 				'</div>'+
 			'</form>';
 		},
@@ -140,4 +137,6 @@ Container.login = (function(){
 		}
 	}
 })();
+
+
 			

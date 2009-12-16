@@ -11,7 +11,7 @@
 		
 	<style type="text/css">
 			.viewer {
-				height: 95%;
+				height: 98%;
 				width: 100%;
 			}
 			
@@ -23,14 +23,18 @@
 			.zoomslider{
 				position: relative;
 			}
+			
+			.grey-node{
+				background-color: #707070;
+				opacity: 0.25;
+			}
 	</style>
 
 	<script type="text/javascript">		
 		var externs = ['http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader.js', 
-					'http://www.prototypejs.org/assets/2009/6/16/prototype.js',
+					'/oryx/lib/prototype-1.5.1.js',
 					'http://oryx-editor.googlecode.com/svn/trunk/poem-jvm/src/javascript/movi/src/movi.js',
-					'http://localhost:8080/gadgets/files/gadgets/viewer/ViewerRpc.js',
-					'http://localhost:8080/gadgets/files/gadgets/viewer/viewer.js'];
+					'/gadgets/files/gadgets/viewer/core.js'];
 	
         for (var i = 0; i < externs.length; i++)
 			document.write(unescape("%3Cscript src='" + externs[i] + "'type='text/javascript'%3E%3C/script%3E"));
@@ -38,8 +42,7 @@
 	</script>
 	<body class=" yui-skin-sam">
 	
-	<div id= "center">	
-		<div id= "rpc"></div>
+	<div id= "center">
 		<div id= "viewer"></div>
 	</div>
 	

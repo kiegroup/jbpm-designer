@@ -21,285 +21,261 @@
  * DEALINGS IN THE SOFTWARE.
  **/
 
-if (! viewer)
-	var viewer ={};
+Viewer = function(){
+	
+	Viewer.superclass.constructor.call(this, "viewer");
+	this.init();
+	// TODO call rpc container serves icon url from gadgets.xml
+};
 
-viewer = (function(){
 
-	return {
+YAHOO.extend( Viewer, AbstractGadget, {
 		
-		rpcHandler:  null,
+	modelViewer: null,
+	
+	/*
+	 * initializes movi-api
+	 * loads needed yui files
+	 * 
+	 */
+	init: function(){
+		
+		this.rpcHandler = new rpcHandler(this);
+	
+		// register on public dispatcher (container)
+		this.registerRPCs();
+				
+		// inner layout
+		this.layout = new YAHOO.widget.Layout({ 
+			units: [ 
+	            { position: 'bottom', header: 'Viewer - Menu', height: 120, resize: false, body: 'bottom', gutter: '5px', collapse: true }, 
+	            { position: 'center', body: 'center'} 
+	            ] 
+	     }); 
 		
 		/*
-		 * initializes movi-api
-		 * loads needed yui files
-		 * 
+		 * informs the container that a new viewer-widget was added
+		 * if the conatiner has some models left to display 
+		 * one can be loaded into this viewer
+		 *
 		 */
-		init: function(){
-			
-			viewer.rpcHandler = new rpcHandler();
-			
-			// gadgets.window.setTitle('Viewer');
-			MOVI.init(
-					
-				function(){
-					
-				    new YAHOO.util.YUILoader({ 
-						base: "http://yui.yahooapis.com/2.7.0/build/", 
-				        require: ["fonts","grids","layout","reset","resize"],
-				        loadOptional: false, 
-				        combine: true, 
-				        filter: "MIN", 
-				        allowRollup: true, 
-				        onSuccess: function(){ viewer._init();}
-				    }).insert(); 
-		
-				},
-				"http://oryx-editor.googlecode.com/svn/trunk/poem-jvm/src/javascript/movi/src",
-				undefined,
-				["resize"]
-			);
-			
-		},
-		
-		/*
-		 * mainly registers RPCs
-		 * displays model upload dialog in the toolbar (footer) 
-		 */
-		_init: function(){
-		
-			// register on public dispatcher (container)
-			gadgets.rpc.call("..", "dispatcher.register", function(reply){
+		gadgets.rpc.call(null, "dispatcher.loadWaiting", function(reply){
 				
-				viewer.rpcHandler.setIndex(reply);
-				document.getElementById('rpc').innerHTML = "registered as " + reply;
+			// first dialog to enter a url
+			if (reply == "noneWaiting"){
+				html = new Array();
+		
+				html.push('<p>Select a Model to be displayed!<br>');
+				html.push('<input id="model" type="text" size="45" value="/backend/poem/model/"></input>');
+				html.push('<a href="#" onclick= "viewer.load(); return false;">browse</a> </p>');
+	
+				$('start').innerHTML =html.join('');
+			}
+	
+		}, "");
+	
+		this.layout.render(); 
+		//gadgets.window.adjustHeight(); 		
+		
+	},
+	
+	registerRPCs: function(){
+		
+		// fills viewer with model from specified url
+		this.registerRPC("loadModel", "modelUrl", "", this.rpcHandler.loadModel, this.rpcHandler );
+		
+		// sends meta data
+		//TODO
+		this.registerRPC("sendInfo", "", "metaDataModel", this.rpcHandler.sendInfo, this.rpcHandler);
+		
+		//send ressourceIDs and labels of all nodes
+		// TODO nodes rename (attributes)
+		this.registerRPC("sendShapes", "", "allNodes", this.rpcHandler.sendShapes, this.rpcHandler);
+		
+		//send ressourceIDs and labels of all selected nodes		
+		this.registerRPC("sendSelection", "", "shapeResourceIds", this.rpcHandler.sendSelection, this.rpcHandler);
+		
+		// remove selection
+		this.registerRPC("resetSelection", "", "", this.rpcHandler.resetSelection, this.rpcHandler);
+		
+		// set selection mode (multi or single)
+		this.registerRPC("setSelectionMode", "mode", "", this.rpcHandler.setSelectionMode, this.rpcHandler);
+		
+		// TODO (all)highlight specified shapes (ressourceID) or all
+		this.registerRPC("mark", "shapeResourceIds", "", this.rpcHandler.markShapes, this.rpcHandler);
+		
+		// TODO (all) remove markers from one or more shapes
+		this.registerRPC("undoMark", "","", this.rpcHandler.undoMarking, this.rpcHandler);
+		
+		// center a shape specified by ressourceId
+		this.registerRPC("centerShape", "shapeResourceId", "", this.rpcHandler.centerShapes, this.rpcHandler);
+		
+		// cover all shapes with a grey shadow
+		this.registerRPC("greyModel", "", "", this.rpcHandler.greyModel, this.rpcHandler);
+		
+		// remove shadow from shapes (from all or just a subset)
+		this.registerRPC("undoGrey", "", "", this.rpcHandler.undoGrey, this.rpcHandler);
+	
+	},
+	
+	// loads the model the user has defined via url into the viewer
+	load: function() {
+		
+		// load metaData
+		var requestUrl = $('model').value + "/meta";
+		new Ajax.Request(requestUrl, {
+			method			: "get",
+			asynchronous 	: false,
+			onSuccess		: function(response){
+				var metaData = response.responseText.evalJSON();
+				this.setTitle(metaData.title);
+				this.rpcHandler.setUrl(this.SERVER_BASE + $('model').value);
+				this.rpcHandler.setTitle(metaData.title);
+				this.addViewer(this.SERVER_BASE + $('model').value);
+				return false;
+			}.bind(this),
+
+			onFailure		: function(){
+				alert('Oryx','Server communication failed!');
+			}
+		});
+	
+	},
+	
+	// initializes modelViewer (movi-api)
+	addViewer: function(url) {
+		
+		// removes start dialog
+		$('start').removeChild($('start').firstChild);
+	
+		this.modelViewer = new MOVI.widget.ModelViewer("viewer");
+		$('viewer').className = "viewer";
+		
+		this.modelViewer.loadModel(url ,  { 	
+		
+			onSuccess: function(){ 
+				this.rpcHandler.setViewer();
+				this.addNavigator(); 
+			}.bind(this),	
+			
+			onFailure: function(){				
+				var url = 
+					prompt("The specified direction does not lead to a valid model!");
+				this.addViewer(url);
+			}.bind(this)
+		} );
+	},
+	
+	// navigator for modelviewer in toolbar
+	addNavigator: function(){
+		
+		var	navigator = new MOVI.widget.ModelNavigator("navigator", this.modelViewer);
+		$('navigator').className = "navigator";
+		
+		this.addToolbar(navigator);
+		this.enableMultiselect();
+		
+	},
+	
+	// toolbar below modelviewer (footer)
+	addToolbar: function(navigator){
+		
+		// toolbar below navigator
+		var toolbar = new MOVI.widget.Toolbar("toolbar", this.modelViewer);
+	
+		// button for fullscreen
+		var fullscreenViewer = new MOVI.widget.FullscreenViewer(this.modelViewer);
+		
+		var viewerHome = this.GADGET_BASE + "viewer";
+		
+		// TODO
+		toolbar.addButton({
+		    icon: viewerHome + "/icons/arrow_switch.png",
+		    tooltip: "change between multi und single select",
+		    group: "Selection Modus",
+		    callback: this.changeSelectModus.bind(this)
+		});
+		
+		toolbar.addButton({
+		    icon: viewerHome + "/icons/delete.png",
+		    tooltip: "reset selection",
+		    group: "Selection Modus",
+		    callback: function(){ this.rpcHandler.selection.reset(); }.bind(this)
+		});
+		
+		//toolbar.showGroupCaptions();
+		
+		toolbar.addButton({
+			icon: viewerHome + "/icons/arrow_out.png",
+			caption: 'fullscreen',
+			tooltip: 'View the model in fullscreen mode',
+			group: 'View options',
+			callback: fullscreenViewer.open,
+			scope: fullscreenViewer
+		});
+		
+		//zoom slider for viewer
+		zoomslider = new MOVI.widget.ZoomSlider("zoomslider", this.modelViewer)
+		
+		var resize = new YAHOO.util.Resize(this.modelViewer, {
+	        handles		: ['b', 'r'],
+	        minHeight	: 200,
+	        minWidth	: 200,
+	    });
+		
+		// viewer is fitted to the bounds of the outer panel
+		resize.on("startResize", function() 
+				{ this.modelViewer.onZoomLevelChangeStart.fire(this.modelViewer.getZoomLevel()); }.bind(this));
+		
+		resize.on("resize", function() {
+				navigator.update();
+				zoomslider.onChange();
 				
-			}, "info");
-			
-			gadgets.rpc.register(
-				"loadModel", 
-				function(args){ return viewer.rpcHandler.loadModel(args); }
-			);
-			
-			gadgets.rpc.register(
-				"sendInfo", 
-				function(args) { return viewer.rpcHandler.sendInfo(args); }
-			);
-			
-			//send ressourceIDs and labels of all nodes
-			gadgets.rpc.register(
-				"sendShapes", 
-				function(args) { return viewer.rpcHandler.sendShapes(args); }
-			);
-			
-			//send ressourceIDs and labels of all selected nodes
-			gadgets.rpc.register(
-				"sendSelection", 
-				function(args) { return viewer.rpcHandler.sendSelection(args); }
-			);
-			
-			//highlight specified shapes (ressourceID)
-			gadgets.rpc.register(
-				"mark", 
-				function(args){ return viewer.rpcHandler.markShapes(args); }
-			);
-			
-			// remove markers from one or more shapes
-			gadgets.rpc.register(
-				"undoMark", 
-				function(args){ return viewer.rpcHandler.undoMarking(args); }
-			);	
-			
-			// centers a shape specified by ressourceId
-			gadgets.rpc.register(
-				"centerShape", 
-				function(args){ return viewer.rpcHandler.centerShapes(args); }
-			);	
-		
-			// inner layout
-			viewer.layout = new YAHOO.widget.Layout({ 
-				units: [ 
-		            { position: 'bottom', header: 'Viewer - Menu', height: 120, resize: false, body: 'bottom', gutter: '5px', collapse: true }, 
-		            { position: 'center', body: 'center'} 
-		            ] 
-		     }); 
-			
-			
-			/*
-			 * informs the container that a new viewer-widget was added
-			 * if the conatiner has some models left to display 
-			 * one can be loaded into this viewer
-			 *
-			 */
-			gadgets.rpc.call(null, "dispatcher.loadWaiting", function(reply){
+		}, this, true);
 				
-				// first dialog to enter a url
-				if (reply == "noneWaiting"){
-					html = new Array();
-			
-					html.push('<p>Select a Model to be displayed!<br>');
-					html.push('<input id="model" type="text" size="45" value="http://oryx-editor.org/backend/poem/model/"></input>');
-					html.push('<a href="#" onclick= "viewer.load(); return false;">browse</a> </p>');
-		
-					document.getElementById('start').innerHTML =html.join('');
-				}
-		
-			}, "");
-		
-			viewer.layout.render(); 
-			//gadgets.window.adjustHeight(); 		
-			
-		},
-		
-		// loads the model the user has defined via url into the viewer
-		load: function() {
-			
-			// load the model from the specified url
-			var url	= document.getElementById('model').value;
-			
-			// panel title changes to model url
-			gadgets.rpc.call("..", "dispatcher.setTitle", function(reply){return;}, url);
-			
-			viewer.rpcHandler.setUrl(url);
-			viewer.addViewer(url);
-			return false;
-		
-		},
-		
-		// initializes modelViewer (movi-api)
-		addViewer: function(url) {
-			
-			// removes start dialog
-			document.getElementById('start').removeChild(document.getElementById('start').firstChild);
-		
-			var modelViewer = new MOVI.widget.ModelViewer("viewer");
-			document.getElementById('viewer').className = "viewer";
-			
-			modelViewer.loadModel(url ,  { 	
-			
-				onSuccess: function(){ 
-					viewer.rpcHandler.setViewer(modelViewer);
-					viewer.addNavigator(modelViewer); 
-				},	
+		resize.on("endResize", function(){
+				this.modelViewer.onZoomLevelChangeEnd.fire(this.modelViewer.getZoomLevel());
 				
-				onFailure: function(){
-					viewer.url = 
-						prompt("The specified direction does not lead to a valid model!");
-					viewer.addViewer(modelViewer);
-				}
-			} );
-		},
+				console.info("end resize", {"unit": viewer.layout.getUnitByPosition('bottom')});
+	
+				this.layout.getUnitByPosition('bottom').body.offsetHeight = $('viewer').offsetHeight + 20 ;
+				this.layout.getUnitByPosition('bottom').body.offsetWidth = $('viewer').offsetWidth + 20 ;
+				this.layout.getUnitByPosition('bottom').resize();
+		}.bind(this));
+	
 		
-		// navigator for modelviewer in toolbar
-		addNavigator: function(modelViewer){
-			
-			var	navigator = new MOVI.widget.ModelNavigator("navigator", modelViewer);
-			document.getElementById('navigator').className = "navigator";
-			
-			viewer.addToolbar(navigator, modelViewer);
-			viewer.enableMultiselect(modelViewer);
-			
-		},
+		resize.reset();
+		//gadgets.window.adjustHeight();
 		
-		// toolbar below modelviewer (footer)
-		addToolbar: function(navigator, modelViewer){
-			
-			// toolbar below navigator
-			var toolbar = new MOVI.widget.Toolbar("toolbar", modelViewer);
 		
-			// button for fullscreen
-			var fullscreenViewer = new MOVI.widget.FullscreenViewer(modelViewer);
-			
-			// TODO
-			toolbar.addButton({
-			    icon: "http://localhost:8080/gadgets/files/gadgets/viewer/icons/arrow_switch.png",
-			    tooltip: "change between multi und single select",
-			    group: "Selection Modus",
-			    callback: viewer.changeSelectModus
-			});
-			
-			toolbar.addButton({
-			    icon: "http://localhost:8080/gadgets/files/gadgets/viewer/icons/delete.png",
-			    tooltip: "reset selection",
-			    group: "Selection Modus",
-			    callback: function(){ viewer.rpcHandler.selection.reset(); }
-			});
-			
-			//toolbar.showGroupCaptions();
-			
-			toolbar.addButton({
-				icon: "http://localhost:8080/gadgets/files/gadgets/viewer//icons/arrow_out.png",
-				caption: 'fullscreen',
-				tooltip: 'View the model in fullscreen mode',
-				group: 'View options',
-				callback: fullscreenViewer.open,
-				scope: fullscreenViewer
-			});
-			
-			//zoom slider for viewer
-			zoomslider = new MOVI.widget.ZoomSlider("zoomslider", modelViewer)
-			
-			var resize = new YAHOO.util.Resize(modelViewer, {
-		        handles		: ['b', 'r'],
-		        minHeight	: 200,
-		        minWidth	: 200,
-		    });
-			
-			// viewer is fitted to the bounds of the outer panel
-			resize.on("startResize", function() 
-					{ modelViewer.onZoomLevelChangeStart.fire(modelViewer.getZoomLevel()); });
-			
-			resize.on("resize", function() {
-					navigator.update();
-					zoomslider.onChange();
-					
-			}, this, true);
-					
-			resize.on("endResize", function(){
-					modelViewer.onZoomLevelChangeEnd.fire(modelViewer.getZoomLevel());
-					
-					console.info("end resize", {"unit": viewer.layout.getUnitByPosition('bottom')});
+		// TODO not yet implemented, possibly redundant
+		var	viewport = gadgets.window.getViewportDimensions();
+		var dimensions = viewport.height.toString() + '.' + viewport.width.toString();
+		gadgets.rpc.call("..", "dispatcher.resize", function(reply){return;}, dimensions);
 		
-					viewer.layout.getUnitByPosition('bottom').body.offsetHeight = document.getElementById('viewer').offsetHeight + 20 ;
-					viewer.layout.getUnitByPosition('bottom').body.offsetWidth = document.getElementById('viewer').offsetWidth + 20 ;
-					viewer.layout.getUnitByPosition('bottom').resize();
-					//gadgets.window.adjustHeight();
-			});
+	},
+	
+	// initially multiselect-mode in activated
+	enableMultiselect: function(){
 		
-			
-			resize.reset();
-			//gadgets.window.adjustHeight();
-			
-			
-			// not yet implemented, possibly redundant
-			var	viewport = gadgets.window.getViewportDimensions();
-			var dimensions = viewport.height.toString() + '.' + viewport.width.toString();
-			gadgets.rpc.call("..", "dispatcher.resize", function(reply){return;}, dimensions);
-			
-		},
+		var selection = new MOVI.util.ShapeSelect(this.modelViewer, true);
+		selection.onSelectionChanged( function(){ this.rpcHandler.throwSelectionChanged() }.bind(this) );
 		
-		// initially multiselect-mode in activated
-		enableMultiselect: function(modelViewer){
-			
-			var selection = new MOVI.util.ShapeSelect(modelViewer, true);
-			selection.onSelectionChanged( function(){ viewer.rpcHandler.throwSelectionChanged() } );
-			
-			viewer.rpcHandler.setSelection(selection);
-			
-			return selection;
-			
-		},
+		this.rpcHandler.setSelection(selection);
 		
-		// selection mode changes between single- and multi-select
-		changeSelectModus: function(){
-			viewer.rpcHandler.selection.reset();
-			if (viewer.rpcHandler.selection._allowMultiselect)
-				viewer.rpcHandler.selection._allowMultiselect = false;
-			else 
-				viewer.rpcHandler.selection._allowMultiselect = true;
-			
-		}
+		return selection;
+		
+	},
+	
+	// selection mode changes between single- and multi-select
+	changeSelectModus: function(){
+		viewer.rpcHandler.selection.reset();
+		if (this.rpcHandler.selection._allowMultiselect)
+			this.rpcHandler.selection._allowMultiselect = false;
+		else 
+			this.rpcHandler.selection._allowMultiselect = true;
+		
 	}
-})();
 
-gadgets.util.registerOnLoadHandler(viewer.init);
+});
+
