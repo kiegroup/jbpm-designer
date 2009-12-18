@@ -11495,7 +11495,8 @@
 		"morphingRules": [
 			{
 				"role": "ActivitiesMorph",
-				"baseMorphs": ["Task"]
+				"baseMorphs": ["Task"],
+				"preserveBounds": true
 			},
 			{
 				"role": "GatewaysMorph",
