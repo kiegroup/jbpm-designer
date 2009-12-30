@@ -158,6 +158,9 @@ public class RdfJsonTransformation {
 					handleReservedNodeName(child, object);
 				}
 			}
+			if(object.has("target") && !object.getJSONObject("target").has("resourceId") && object.has("outgoing")){
+				object.put("target", object.getJSONArray("outgoing").get(0));
+			}
 		}
 	}
 	
