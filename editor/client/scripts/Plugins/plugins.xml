@@ -296,6 +296,8 @@
 		
 		<!-- Disable pluginLoader to avoid user-driven plugin loading -->
 		<plugin source="pluginLoader.js" name="ORYX.Plugins.PluginLoader" />
+		<plugin source="bpmn.js" name="ORYX.Plugins.BPMN" />
+		
 		
 		<plugin source="feedback.js" name="ORYX.Plugins.Feedback">
 			<property name="cssfile" value="/oryx/css/feedback.css" />

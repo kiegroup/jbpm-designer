@@ -29,17 +29,13 @@
 		<plugin name="ORYX.Plugins.KeysMove"/>	
 		<plugin name="ORYX.Plugins.RowLayouting"/>	
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
-		
+		<plugin name="ORYX.Plugins.File"/>
+		<plugin name="ORYX.Plugins.Save"/>
 		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
 		<plugin source="Layouter/edgeLayouter.js" name="ORYX.Plugins.Layouter.EdgeLayouter"/>
 		
 	</profile>
-	<profile name="save" depends="default">
-		<plugin name="ORYX.Plugins.File"/>
-		<plugin name="ORYX.Plugins.Save"/>
-		<plugin name="ORYX.Plugins.PluginLoader"/>	
-	</profile>
-	<profile name="bpmn" depends="save" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
+	<profile name="bpmn" depends="default" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
 		<plugin name="ORYX.Plugins.BPMN2XForms"/>
 		<plugin name="ORYX.Plugins.ProcessLink"/>
 		<plugin name="ORYX.Plugins.SimplePnmlexport"/>
@@ -48,51 +44,54 @@
 		<plugin name="ORYX.Plugins.BPMNValidator"/>
 		<plugin name="ORYX.Plugins.StepThroughPlugin"/>
 		<plugin name="ORYX.Plugins.BPMN11"/>
+		<plugin name="ORYX.Plugins.BPMN"/>
+		
+		
 		<plugin name="ORYX.Plugins.BpmnLayouter"/>
 		<plugin name="ORYX.Plugins.PNExport"/>
 		<plugin name="ORYX.Plugins.BPMN2XPDL"/>
 		<plugin name="ORYX.Plugins.BPMN2DTRPXMI"/>
 	</profile>
-	<profile name="bpmn2.0" depends="save" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
+	<profile name="bpmn2.0" depends="default" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.BPMN2_0"/>
 		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
 		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
 	</profile>
-	<profile name="bpmn2.0Choreography" depends="save" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
+	<profile name="bpmn2.0Choreography" depends="default" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
 		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmn2.0choreography#"/>
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.BPMN2_0"/>
 		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
 		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
 	</profile>
-	<profile name="bpmn2.0Conversation" depends="save" stencilset="stencilsets/bpmn2.0/bpmn2.0conversation.json">
+	<profile name="bpmn2.0Conversation" depends="default" stencilset="stencilsets/bpmn2.0/bpmn2.0conversation.json">
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.BPMN2_0"/>
 		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
 		<plugin name="ORYX.Plugins.BPMN2CONVERSATION"/>
 	</profile>
 	
-	<profile name="epc" depends="save" stencilset="stencilsets/epc/epc.json">
+	<profile name="epc" depends="default" stencilset="stencilsets/epc/epc.json">
 		<plugin name="ORYX.Plugins.EPCSupport"/>
 		<plugin name="ORYX.Plugins.EPCValidator"/>
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.StepThroughPlugin"/>
 	</profile>
-	<profile name="petrinet" depends="save" stencilset="stencilsets/petrinets/petrinet.json">
+	<profile name="petrinet" depends="default" stencilset="stencilsets/petrinets/petrinet.json">
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.PetriNetSoundnessChecker"/>
 		<plugin name="ORYX.Plugins.BPMNImport"/>
 		<plugin name="ORYX.Plugins.PetriNetStepThroughPlugin"/>
 		<plugin name="ORYX.Plugins.PetrinetSyntaxChecker"/>
 	</profile>
-	<profile name="xforms" depends="save" stencilset="stencilsets/xforms/xforms.json">
+	<profile name="xforms" depends="default" stencilset="stencilsets/xforms/xforms.json">
 		<plugin name="ORYX.Plugins.XFormsExportOrbeon"/>
 		<plugin name="ORYX.Plugins.XFormsImport"/>
 		<plugin name="ORYX.Plugins.RowLayouting"/>
 		<plugin name="ORYX.Plugins.XForms"/>
 	</profile>
-	<profile name="bpmnQ" depends="save" stencilset="stencilsets/bpmnq/bpmnq.json">
+	<profile name="bpmnQ" depends="default" stencilset="stencilsets/bpmnq/bpmnq.json">
 		<plugin name="ORYX.Plugins.QueryEvaluator"/>
 	</profile>
 	<profile name="feedback">

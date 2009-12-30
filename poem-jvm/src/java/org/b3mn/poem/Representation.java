@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URLDecoder;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -132,9 +133,9 @@ public class Representation {
 //		}
     	String content = getPureContent();
     	if(isJson(content)){
-    		return content;
+    		return checkForWrongUri(content);
     	} else {  			
-    		return erdfToJson(content, serverUrl);
+    		return checkForWrongUri(erdfToJson(content, serverUrl));
     	}
     }
     
@@ -380,6 +381,11 @@ public class Representation {
 		return null;
 	}
 	
+	private static String checkForWrongUri(String json) {
+		//replace old bpmn uris
+		return json.replaceAll("http://[^/^\"]*/oryx/stencilsets/", "/oryx/stencilsets/");
+	}
+
 	protected static String jsonToErdf(String json){
 		return new JsonErdfTransformation(json).toString();
 	}
