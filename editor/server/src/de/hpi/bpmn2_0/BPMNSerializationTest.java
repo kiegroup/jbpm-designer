@@ -24,7 +24,7 @@ import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
 
 public class BPMNSerializationTest {
 
-	final static String path = "C:\\Dokumente und Einstellungen\\Sven\\workspace\\oryx_bpmn2.0_2\\editor\\server\\src\\de\\hpi\\bpmn2_0\\";
+	final static String path = "C:\\Users\\Sven Wagner-Boysen\\workspace\\oryx\\editor\\server\\src\\de\\hpi\\bpmn2_0\\";
 	/**
 	 * @param args
 	 * @throws Exception 

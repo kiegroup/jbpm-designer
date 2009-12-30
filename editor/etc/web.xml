@@ -366,6 +366,14 @@
 	</servlet>
 	
 	<servlet>
+		<display-name>BPMN 2 XPDL Exporter</display-name>
+		<servlet-name>Bpmn2_0ToXpdlServlet</servlet-name>
+		<servlet-class>
+			org.oryxeditor.server.Bpmn2_0ToXpdlServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
 		<display-name>BPMN 2 Importer</display-name>
 		<servlet-name>Bpmn2_0Importer</servlet-name>
 		<servlet-class>
@@ -600,6 +608,11 @@
 	<servlet-mapping>
 		<servlet-name>Bpmn2_0Servlet</servlet-name>
 		<url-pattern>/bpmn2_0serialization</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Bpmn2_0ToXpdlServlet</servlet-name>
+		<url-pattern>/bpmn2xpdlserialization</url-pattern>
 	</servlet-mapping>
 	
 	<servlet-mapping>
