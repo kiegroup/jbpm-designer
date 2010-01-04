@@ -131,11 +131,15 @@ public class User extends BusinessObject {
 		// Save data in the session and cookie
 		request.getSession().setAttribute("languagecode", languagecode);
 		request.getSession().setAttribute("countrycode", countrycode);
-		response.addCookie(new Cookie("languagecode", languagecode));
-		response.addCookie(new Cookie("countrycode", countrycode));
-		response.addCookie(new Cookie("identifier", this.getOpenId()));
+		response.addCookie(newCookie("languagecode", languagecode));
+		response.addCookie(newCookie("countrycode", countrycode));
+		response.addCookie(newCookie("identifier", this.getOpenId()));
 	}
-	
+	private Cookie newCookie(String name, String value){
+		Cookie c=new Cookie(name, value);
+		c.setPath("/");
+		return c;
+	}
 	public String getLanguageCode(HttpServletRequest request) {
 		return this.getLanguageOrCountryCode(request, true);
 	}
@@ -192,8 +196,8 @@ public class User extends BusinessObject {
 			request.getSession().setAttribute("countrycode", countrycode);
 		}
 		if (response != null) {
-			response.addCookie(new Cookie("languagecode", languagecode));
-			response.addCookie(new Cookie("countrycode", countrycode));
+			response.addCookie(newCookie("languagecode", languagecode));
+			response.addCookie(newCookie("countrycode", countrycode));
 		}
 	}
 	
