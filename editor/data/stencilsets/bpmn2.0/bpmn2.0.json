@@ -1819,7 +1819,8 @@
 			"title":			"BPMN-Diagram",
 			"title_de":			"BPMN-Diagramm",
 			"groups":			["Diagram"],
-			"description":		"A BPMN Diagram.",
+			"description":		"A BPMN 2.0 Diagram.",
+			"description_de":	"Ein BPMN 2.0 Diagramm",
 			"view":				"diagram.svg",
 			"icon":				"diagram.png",
 			"mayBeRoot":		true,
@@ -4748,7 +4749,8 @@
 			"icon":"connector/association.unidirectional.png",
 			"roles": [
 				"all",
-				"ConnectingObjectsMorph"
+				"ConnectingObjectsMorph",
+				"Directed_Association"
 			]
 		},
 		{
@@ -4764,7 +4766,8 @@
 			"icon":"connector/association.bidirectional.png",
 			"roles": [
 				"all",
-				"ConnectingObjectsMorph"
+				"ConnectingObjectsMorph",
+				"Directed_Association"
 			]
 		}	
 	],
@@ -4874,7 +4877,7 @@
 				]
 			},
 			{
-				"role" : "Association_Unidirectional",
+				"role" : "Directed_Association",
 				"connects" : [
 					{
 						"from" : "from_task_event",
@@ -5053,6 +5056,10 @@
 			{
 				"role": "ChoreographyMorph",
 				"baseMorphs": ["ChoreographyTask"]
+			},
+			{
+				"role": "AssociationMorph",
+				"baseMorphs": [""]
 			}
 		],
 		"layoutRules" : [

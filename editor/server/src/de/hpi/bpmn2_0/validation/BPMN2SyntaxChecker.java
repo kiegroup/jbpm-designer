@@ -486,7 +486,7 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 		
 		/*
 		 * the gateway has an incoming sequence flow but its
-		 * source is no start event
+		 * source is a none start event
 		 */
 		if(node.getIncomingSequenceFlows().size() == 1) {
 			for(SequenceFlow sf : node.getIncomingSequenceFlows()) {
