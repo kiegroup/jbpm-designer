@@ -152,6 +152,9 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 			
 			var failure = function() {
 				Ext.Msg.alert(ORYX.I18N.Feedback.failure, ORYX.I18N.Feedback.failureMsg);
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_LOADING_DISABLE
+                });
 				// show dialog again with old information
 				this.toggleDialog();
 			}
@@ -160,7 +163,10 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 				if (transport.status < 200 || transport.status >= 400) {
 					return failure(transport);
 				}
-				
+				this.facade.raiseEvent({
+					type:ORYX.CONFIG.EVENT_LOADING_STATUS,
+					text:ORYX.I18N.Feedback.success
+				});
 				resetForm();
 			}
 			
@@ -172,9 +178,12 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 				$A(this.elements.form.elements).each(function(element){
 					params[element.name] = element.value;
 				});
-				
+				params["name"]= ORYX.Editor.Cookie.getParams().identifier;
 				params["subject"] = ("[" + params["subject"] + "] " + params["title"]);
-				
+				this.facade.raiseEvent({
+					type:ORYX.CONFIG.EVENT_LOADING_STATUS,
+					text:ORYX.I18N.Feedback.sending
+				});
 				new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "feedback", {
 					method: "POST",
 					parameters: params,
@@ -312,7 +321,7 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 				
 			} // if something goes wrong, we wont give up, just ignore it
 			catch (e) {
-				ORYX.Log.warn("Incomplete L10N for ORYX.I18N.Feedback.subjects", subject, ORYX.I18N.Feedback.subjects)
+				ORYX.Log.warn("Incomplete I10N for ORYX.I18N.Feedback.subjects", subject, ORYX.I18N.Feedback.subjects)
 			}
 		}.bind(this));
 	
