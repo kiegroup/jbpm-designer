@@ -4,9 +4,9 @@ html, body {
 
 .movi-scollbox {
 	overflow: scroll;
-	width: inherit !important;
+	width: 100% !important;
 	width: 200px;
-	height: inherit !important;
+	height: 100% !important;
 	height: 200px;
 }
 
