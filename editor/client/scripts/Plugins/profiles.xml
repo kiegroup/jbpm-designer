@@ -87,6 +87,7 @@
 	</profile>
 	<profile name="xforms" depends="default" stencilset="stencilsets/xforms/xforms.json">
 		<plugin name="ORYX.Plugins.XFormsExportOrbeon"/>
+		<plugin name="ORYX.Plugins.XFormsExport"/>
 		<plugin name="ORYX.Plugins.XFormsImport"/>
 		<plugin name="ORYX.Plugins.RowLayouting"/>
 		<plugin name="ORYX.Plugins.XForms"/>
