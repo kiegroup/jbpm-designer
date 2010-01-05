@@ -146,31 +146,33 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 
     	// create form and submit logic (ajax)
 		this.elements.form = document.createElement("form");
-		this.elements.form.action="#";
-		this.elements.form.method="POST";
+		this.elements.form.action = ORYX.CONFIG.ROOT_PATH + "feedback";
+		this.elements.form.method = "POST";
 		this.elements.form.onsubmit = function(){
 			
-			var failure = function() {
-				Ext.Msg.alert(ORYX.I18N.Feedback.failure, ORYX.I18N.Feedback.failureMsg);
-                this.facade.raiseEvent({
-                    type: ORYX.CONFIG.EVENT_LOADING_DISABLE
-                });
-				// show dialog again with old information
-				this.toggleDialog();
-			}
-			
-			var success = function(transport) {
-				if (transport.status < 200 || transport.status >= 400) {
-					return failure(transport);
-				}
-				this.facade.raiseEvent({
-					type:ORYX.CONFIG.EVENT_LOADING_STATUS,
-					text:ORYX.I18N.Feedback.success
-				});
-				resetForm();
-			}
-			
 			try {
+				
+				var failure = function() {
+					Ext.Msg.alert(ORYX.I18N.Feedback.failure, ORYX.I18N.Feedback.failureMsg);
+	                this.facade.raiseEvent({
+	                    type: ORYX.CONFIG.EVENT_LOADING_DISABLE
+	                });
+					// show dialog again with old information
+					this.toggleDialog();
+				}
+				
+				var success = function(transport) {
+					if (transport.status < 200 || transport.status >= 400) {
+						return failure(transport);
+					}
+					this.facade.raiseEvent({
+						type:ORYX.CONFIG.EVENT_LOADING_STATUS,
+						text:ORYX.I18N.Feedback.success
+					});
+					resetForm();
+				}
+				
+			
 				this.elements.form.model.value = this.facade.getSerializedJSON();
 				this.elements.form.environment.value = this.getEnv();
 			
