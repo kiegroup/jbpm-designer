@@ -118,6 +118,12 @@ public class Repository2Handler extends  HandlerBase {
     	out.println("<title>ORYX - Repository 2.0 (BETA)</title>");
     	out.println("</head>");
     	out.println("<body>");
+    	
+    	String analytics = getServletContext().getInitParameter("ANALYTICS_SNIPPET");
+    	if (null != analytics) {
+    		out.println(analytics);
+    	}
+    	
     	out.println("</body>");
     	out.println("</html>");
 	}

@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -146,6 +147,14 @@ public class EditorHandler extends HttpServlet {
       	  	profileFiles=profileFiles+ "<script src=\"" + oryx_path+"profiles/" + profile+".js\" type=\"text/javascript\" />\n";
 
     	}
+    	
+    	String analytics = getServletContext().getInitParameter("ANALYTICS_SNIPPET");
+    	if (null == analytics) {
+    		analytics = "";
+    	}
+    	
+    	
+    	
       	return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
       	    + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
       	  	+ "<html xmlns=\"http://www.w3.org/1999/xhtml\"\n"
@@ -171,7 +180,7 @@ public class EditorHandler extends HttpServlet {
       	  	+ "<!-- language files -->\n"
       	  	+ "<script src=\"" + oryx_path + "i18n/translation_en_us.js\" type=\"text/javascript\" />\n"      	  	
       	  	+ languageFiles
-      	  	//TODO Handle different profiles
+      	  	// Handle different profiles
       	  	+ "<script src=\"" + oryx_path + "profiles/oryx.core.js\" type=\"text/javascript\" />\n"
       	  	+ profileFiles
       	  	+ headExtentions
@@ -193,6 +202,9 @@ public class EditorHandler extends HttpServlet {
       	  	
       	  	+ "\n"
       	  	+ "</div>\n"
+      	  	
+      	  	+ analytics
+
       	  	+ "</body>\n"
       	  	+ "</html>";
     }

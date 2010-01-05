@@ -746,4 +746,13 @@
         <description>Recipient for feedback servlet</description>
         <param-name>FEEDBACK_RECIPIENT_EMAIL</param-name><param-value>mymail@googlemail.com</param-value>
     </context-param>
+   <!--  
+    <context-param>
+    	<description>Analytics Snippet</description>
+    	<param-name>ANALYTICS_SNIPPET</param-name>
+    	<param-value><![CDATA[
+		  ... 	
+    	]]></param-value>
+    </context-param>
+    -->
 </web-app>

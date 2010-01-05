@@ -105,4 +105,14 @@
 	    <mime-type>image/x-icon</mime-type>
 	</mime-mapping>
 
+	<!--  
+    <context-param>
+    	<description>Analytics Snippet</description>
+    	<param-name>ANALYTICS_SNIPPET</param-name>
+    	<param-value><![CDATA[
+		  ... 	
+    	]]></param-value>
+    </context-param>
+    -->
+
 </web-app>
