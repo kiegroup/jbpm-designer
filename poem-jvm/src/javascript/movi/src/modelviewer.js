@@ -73,8 +73,10 @@ MOVI.namespace("widget");
 		}
 		
 		this._scrollbox.set("id", _SCROLLBOX_CLASS_NAME + this._index);
-		this._scrollbox.set("innerHTML", "<img id=\"" + _MODELIMG_CLASS_NAME + this._index + 
-							"\" class=\"" + _MODELIMG_CLASS_NAME + "\" />");
+		var imgEl = new YAHOO.util.Element(document.createElement("img"));
+		imgEl.set("id", _MODELIMG_CLASS_NAME + this._index);
+		imgEl.addClass(_MODELIMG_CLASS_NAME);
+		this._scrollbox.appendChild(imgEl);
 							
 		// prevent marking
 		this.setStyle("-moz-user-select", "-moz-none");    // Gecko-based, Mozilla
