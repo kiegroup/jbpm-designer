@@ -14,7 +14,7 @@
 		<plugin name="ORYX.Plugins.ERDFSupport" />
 		<plugin name="ORYX.Plugins.JSONSupport"/>
 		<plugin name="ORYX.Plugins.RDFExport" />
-		<plugin name="ORYX.Plugins.FeedbackPlugin" />
+		<plugin name="ORYX.Plugins.Feedback" />
 		<plugin name="ORYX.Plugins.Undo" />		
 		<plugin name="ORYX.Plugins.Arrangement"/>	
 		<plugin name="ORYX.Plugins.Grouping"/>	
@@ -33,7 +33,7 @@
 		<plugin name="ORYX.Plugins.Save"/>
 		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
 		<plugin source="Layouter/edgeLayouter.js" name="ORYX.Plugins.Layouter.EdgeLayouter"/>
-		
+				
 	</profile>
 	<profile name="bpmn" depends="default" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
 		<plugin name="ORYX.Plugins.BPMN2XForms"/>
@@ -94,8 +94,5 @@
 	<profile name="bpmnQ" depends="default" stencilset="stencilsets/bpmnq/bpmnq.json">
 		<plugin name="ORYX.Plugins.QueryEvaluator"/>
 	</profile>
-	<profile name="feedback">
-		<plugin name="ORYX.Plugins.PluginLoader"/>	
-		<plugin source="feedback.js" name="ORYX.Plugins.Feedback"/>
-	</profile>
+
 </profiles>
