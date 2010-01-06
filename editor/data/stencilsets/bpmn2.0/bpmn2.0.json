@@ -3298,7 +3298,8 @@
 				"interrupting",
 				"bgColor"
 			],
-			"roles" : 			[
+			"roles" : [
+			    "all",
 				"eventSubprocessElement",
 				"sequence_start",
 				"to_task_event",
@@ -3671,6 +3672,7 @@
 				"bgColor"
 			],
 			"roles":[
+			    "all",
 				"eventSubprocesElement",
 				"sequence_start",
 				"to_task_event",
@@ -4146,6 +4148,7 @@
 				"bgColor"
 			],
 			"roles":[
+			    "all",
 				"eventSubprocessElement",
 				"sequence_start",
 				"sequence_end",
@@ -4420,6 +4423,7 @@
 				"bgColor"
 			],
 			"roles": [
+			    "all",
 				"eventSubprocessElement",
 				"EndEventsMorph",
 				"Endevents_all",
