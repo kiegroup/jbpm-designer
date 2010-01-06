@@ -23,12 +23,15 @@
 
 package de.hpi.bpmn2_0.model.activity.resource;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.BaseElement;
+import de.hpi.bpmn2_0.model.Expression;
+import de.hpi.bpmn2_0.model.FormalExpression;
 
 
 /**
@@ -57,19 +60,23 @@ import de.hpi.bpmn2_0.model.BaseElement;
 public class ResourceAssignmentExpression
     extends BaseElement
 {
-
-    protected String expression;
+	
+	@XmlElementRefs({
+		@XmlElementRef(type = FormalExpression.class),
+		@XmlElementRef(type = Expression.class)
+	})
+    protected Expression expression;
 
     /**
      * Gets the value of the expression property.
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link TFormalExpression }{@code >}
-     *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
+     *     {@link FormalExpression }
+     *     {@link Expression }
      *     
      */
-    public String getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
@@ -78,11 +85,11 @@ public class ResourceAssignmentExpression
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link TFormalExpression }{@code >}
-     *     {@link JAXBElement }{@code <}{@link TExpression }{@code >}
+     *     {@link FormalExpression }
+     *     {@link Expression }
      *     
      */
-    public void setExpression(String value) {
+    public void setExpression(Expression value) {
         this.expression = value;
     }
 

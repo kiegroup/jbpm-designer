@@ -24,7 +24,7 @@ import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
 
 public class BPMNSerializationTest {
 
-	final static String path = "C:\\Users\\Sven Wagner-Boysen\\workspace\\oryx\\editor\\server\\src\\de\\hpi\\bpmn2_0\\";
+	final static String path = "C:\\Users\\Sven Wagner-Boysen\\workspace\\oryx3\\editor\\server\\src\\de\\hpi\\bpmn2_0\\";
 	/**
 	 * @param args
 	 * @throws Exception 
@@ -48,6 +48,8 @@ public class BPMNSerializationTest {
 		Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram);
 		Definitions def = converter.getDefinitionsFromDiagram();
 		
+//		def.getOtherAttributes().put(new QName("xmlns:local"), "nurlokal");
+		
 //		final XMLStreamWriter xmlStreamWriter = XMLOutputFactory
 //		.newInstance().createXMLStreamWriter(System.out);
 //		
@@ -55,6 +57,7 @@ public class BPMNSerializationTest {
 		
 		JAXBContext context = JAXBContext.newInstance(Definitions.class);
 		Marshaller m = context.createMarshaller();
+//		m.setListener(new ListenerTest());
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		NamespacePrefixMapper nsp = new BPMNPrefixMapper();
 		m.setProperty("com.sun.xml.bind.namespacePrefixMapper", nsp);

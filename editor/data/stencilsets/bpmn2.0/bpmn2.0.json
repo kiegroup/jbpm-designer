@@ -324,6 +324,34 @@
 					"optional":true,
 					"length":"50"
 				},
+				{	
+					"id":"namespaces",
+					"type":"Complex",
+					"title":"Namespaces",
+					"value":"",
+					"description":"Additional namespaces and theire prefixes used in the diagram., ",
+					"description_de":"Optionale Namespaces, die im Diagramm genutzt werden.",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"prefix",
+							"name":"Prefix",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"url",
+							"name":"URL",
+							"type":"String",
+							"value":"",
+							"width":200,
+							"optional":false 
+						}
+					]
+				},
 				{
 					"id":"targetnamespace",
 					"type":"String",
@@ -1085,21 +1113,21 @@
 									"id":"c1",
 									"title":"Performer",
 									"title_de":"Performer",
-									"value":"performer",
+									"value":"Performer",
 									"refToView":""
 								},
 								{
 									"id":"c2",
 									"title":"HumanPerformer",
 									"title_de":"HumanPerformer",
-									"value":"humanPerformer",
+									"value":"HumanPerformer",
 									"refToView":""
 								},
 								{
 									"id":"c3",
 									"title":"PotentialOwner",
 									"title_de":"PotentialOwner",
-									"value":"potentialOwner",
+									"value":"PotentialOwner",
 									"refToView":""
 								}
 							]
@@ -1108,6 +1136,30 @@
 							"id":"resource",
 							"name":"Resource",
 							"name_de":"Ressource",
+							"type":"String",
+							"value":"",
+							"width":200,
+							"optional":true
+						},
+						{
+							"id":"resourceassignmentexpr",
+							"name":"ResourceAssignmentExpression",
+							"type":"String",
+							"value":"",
+							"width":200,
+							"optional":true
+						},
+						{
+							"id":"language",
+							"name":"Language",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true
+						},
+						{
+							"id":"evaluatestotype",
+							"name":"EvaluatesToType",
 							"type":"String",
 							"value":"",
 							"width":200,

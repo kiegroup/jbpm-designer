@@ -29,6 +29,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
@@ -70,12 +71,13 @@ import de.hpi.bpmn2_0.model.BaseElement;
 public class ActivityResource
     extends BaseElement
 {
-
+	
     protected ResourceAssignmentExpression resourceAssignmentExpression;
     protected List<ResourceParameterBinding> resourceParameterBinding;
     
     @XmlAttribute(required = true)
-    protected String resourceRef;
+    @XmlIDREF
+    protected Resource resourceRef;
 
     /**
      * Gets the value of the resourceAssignmentExpression property.
@@ -138,7 +140,7 @@ public class ActivityResource
      *     {@link QName }
      *     
      */
-    public String getResourceRef() {
+    public Resource getResourceRef() {
         return resourceRef;
     }
 
@@ -150,7 +152,7 @@ public class ActivityResource
      *     {@link QName }
      *     
      */
-    public void setResourceRef(String value) {
+    public void setResourceRef(Resource value) {
         this.resourceRef = value;
     }
 

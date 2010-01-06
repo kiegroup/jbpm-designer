@@ -47,7 +47,7 @@ import de.hpi.diagram.OryxUUID;
  * 
  * 
  */
-@XmlRootElement(name = "conditionExpression")
+@XmlRootElement(/*name = "conditionExpression"*/)
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tExpression")
 public class Expression

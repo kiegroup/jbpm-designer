@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Diagram;
 import org.oryxeditor.server.diagram.Shape;
 
@@ -339,11 +342,12 @@ public class Diagram2BpmnConverter {
 			if (source != null) {
 				Edge edgeElement = (Edge) bpmnConnector.getNode();
 				BpmnConnector edgeShape = (BpmnConnector) bpmnConnector
-					.getShape();
-				
+						.getShape();
+
 				/* Correct the source reference if it is an expanded pool */
 				if (source.getNode() instanceof LaneSet) {
-					PoolCompartment poolShape = (PoolCompartment) source.getShape();
+					PoolCompartment poolShape = (PoolCompartment) source
+							.getShape();
 					edgeElement.setSourceRef(poolShape.getParticipantRef());
 					edgeShape.setSourceRef(poolShape);
 				} else {
@@ -364,7 +368,8 @@ public class Diagram2BpmnConverter {
 						.getShape();
 				/* Correct the target reference if it is an expanded pool. */
 				if (target.getNode() instanceof LaneSet) {
-					PoolCompartment poolShape = (PoolCompartment) target.getShape();
+					PoolCompartment poolShape = (PoolCompartment) target
+							.getShape();
 					edgeElement.setTargetRef(poolShape.getParticipantRef());
 					edgeShape.setTargetRef(poolShape);
 				} else {
@@ -548,10 +553,10 @@ public class Diagram2BpmnConverter {
 		}
 
 		this.addSequenceFlowsToProcess();
-		
+
 		/* Set processRefs */
-		for(Process p : this.processes) {
-			for(FlowElement el : p.getFlowElement()) {
+		for (Process p : this.processes) {
+			for (FlowElement el : p.getFlowElement()) {
 				el.setProcess(p);
 			}
 		}
@@ -908,7 +913,7 @@ public class Diagram2BpmnConverter {
 			this.definitions.getRootElement().add(this.getCollaboration());
 		}
 	}
-	
+
 	/**
 	 * Based on the passed pool, it searches for the appropriate process
 	 * diagram, to retrieve the related process object.
@@ -994,6 +999,30 @@ public class Diagram2BpmnConverter {
 	}
 
 	/**
+	 * Sets attributes of the {@link Definitions} element.
+	 */
+	private void setDefinitionsAttributes() {
+		this.definitions.setTargetNamespace(diagram
+				.getProperty("targetnamespace"));
+
+		/* Additional namespace definitions */
+		try {
+			String namespacesProperty = this.diagram.getProperty("namespaces");
+			JSONObject namespaces = new JSONObject(namespacesProperty);
+			JSONArray namespaceItems = namespaces.getJSONArray("items");
+			
+			/* Retrieve namespace declarations and put them to 
+			 * namespaces attribute. */
+			for(int i = 0; i < namespaceItems.length(); i++) {
+				JSONObject namespace = namespaceItems.getJSONObject(i);
+				this.definitions.getNamespaces().put(namespace.getString("prefix"), namespace.getString("url"));
+			}
+		} catch (JSONException e) {
+			// ignore namespace property
+		}
+	}
+
+	/**
 	 * Retrieves a BPMN 2.0 diagram and transforms it into the BPMN 2.0 model.
 	 * 
 	 * @param diagram
@@ -1005,8 +1034,7 @@ public class Diagram2BpmnConverter {
 			throws BpmnConverterException {
 
 		/* Build-up the definitions as root element of the document */
-		this.definitions.setTargetNamespace(diagram
-				.getProperty("targetnamespace"));
+		this.setDefinitionsAttributes();
 
 		/* Convert shapes to BPMN 2.0 elements */
 

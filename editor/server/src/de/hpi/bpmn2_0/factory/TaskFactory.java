@@ -31,12 +31,15 @@ import org.oryxeditor.server.diagram.Shape;
 import de.hpi.bpmn2_0.annotations.Property;
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
+import de.hpi.bpmn2_0.model.FormalExpression;
 import de.hpi.bpmn2_0.model.activity.Task;
 import de.hpi.bpmn2_0.model.activity.UserTaskImplementation;
 import de.hpi.bpmn2_0.model.activity.resource.ActivityResource;
 import de.hpi.bpmn2_0.model.activity.resource.HumanPerformer;
 import de.hpi.bpmn2_0.model.activity.resource.Performer;
 import de.hpi.bpmn2_0.model.activity.resource.PotentialOwner;
+import de.hpi.bpmn2_0.model.activity.resource.Resource;
+import de.hpi.bpmn2_0.model.activity.resource.ResourceAssignmentExpression;
 import de.hpi.bpmn2_0.model.activity.type.BusinessRuleTask;
 import de.hpi.bpmn2_0.model.activity.type.ManualTask;
 import de.hpi.bpmn2_0.model.activity.type.ReceiveTask;
@@ -47,187 +50,217 @@ import de.hpi.bpmn2_0.model.activity.type.UserTask;
 import de.hpi.bpmn2_0.model.diagram.activity.ActivityShape;
 
 /**
- * Concrete class to create any kind of task objects from a {@link Shape} with 
+ * Concrete class to create any kind of task objects from a {@link Shape} with
  * the stencil id "http://b3mn.org/stencilset/bpmn2.0#Task"
  * 
  * @author Philipp Giese
  * @author Sven Wagner-Boysen
- *
+ * 
  */
 @StencilId("Task")
 public class TaskFactory extends AbstractBpmnFactory {
 
-	/* (non-Javadoc)
-	 * @see de.hpi.bpmn2_0.factory.AbstractBpmnFactory#createDiagramElement(org.oryxeditor.server.diagram.Shape)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @seede.hpi.bpmn2_0.factory.AbstractBpmnFactory#createDiagramElement(org.
+	 * oryxeditor.server.diagram.Shape)
 	 */
 	@Override
 	protected ActivityShape createDiagramElement(Shape shape) {
 		ActivityShape actShape = new ActivityShape();
 		this.setVisualAttributes(actShape, shape);
-		
-		return actShape;		
+
+		return actShape;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.hpi.bpmn2_0.factory.AbstractBpmnFactory#createProcessElement(org.oryxeditor.server.diagram.Shape)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @seede.hpi.bpmn2_0.factory.AbstractBpmnFactory#createProcessElement(org.
+	 * oryxeditor.server.diagram.Shape)
 	 */
 	@Override
-	protected Task createProcessElement(Shape shape) throws BpmnConverterException {
+	protected Task createProcessElement(Shape shape)
+			throws BpmnConverterException {
 		try {
 			Task task = (Task) this.invokeCreatorMethodAfterProperty(shape);
 			return task;
 		} catch (Exception e) {
 			throw new BpmnConverterException(
-					"Error while creating the process element of " 
-					+ shape.getStencilId(), e);
+					"Error while creating the process element of "
+							+ shape.getStencilId(), e);
 		}
 	}
 
 	@Override
-	public BPMNElement createBpmnElement(Shape shape, BPMNElement parent) throws BpmnConverterException {
+	public BPMNElement createBpmnElement(Shape shape, BPMNElement parent)
+			throws BpmnConverterException {
 		Task task = this.createProcessElement(shape);
 		ActivityShape activity = this.createDiagramElement(shape);
-		
+
 		activity.setActivityRef(task);
-		
+
 		return new BPMNElement(activity, task, shape.getResourceId());
 	}
 
-	@Property(name = "tasktype", value = "None") 
+	@Property(name = "tasktype", value = "None")
 	protected Task createTask(Shape shape) {
 		Task task = new Task();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		return task;
 	}
-	
+
 	@Property(name = "tasktype", value = "User")
 	protected UserTask createUserTask(Shape shape) {
 		UserTask task = new UserTask();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		/* Set implementation property */
 		String implementation = shape.getProperty("implementation");
-		if(implementation != null) {
-			task.setImplementation(UserTaskImplementation.fromValue(implementation));
+		if (implementation != null) {
+			task.setImplementation(UserTaskImplementation
+					.fromValue(implementation));
 		}
-		
+
 		/* Set ActivityResources */
 		String resourcesProperty = shape.getProperty("resources");
-		if(resourcesProperty != null) {
+		if (resourcesProperty != null) {
 			this.setActivityResources(task, resourcesProperty);
 		}
-		
+
 		return task;
 	}
-	
+
 	@Property(name = "tasktype", value = "Receive")
 	protected ReceiveTask createReceiveTask(Shape shape) {
 		ReceiveTask task = new ReceiveTask();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		return task;
 	}
-	
+
 	@Property(name = "tasktype", value = "Send")
 	protected SendTask createSendTask(Shape shape) {
 		SendTask task = new SendTask();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		return task;
 	}
-	
+
 	@Property(name = "tasktype", value = "Script")
 	protected ScriptTask createScriptTask(Shape shape) {
 		ScriptTask task = new ScriptTask();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		String scriptLanguage = shape.getProperty("script_language");
-		if(scriptLanguage != null) {
+		if (scriptLanguage != null) {
 			task.setScriptLanguage(scriptLanguage);
 		}
-		
+
 		String script = shape.getProperty("script");
-		if(script != null) {
+		if (script != null) {
 			task.setScript(script);
 		}
-		
+
 		return task;
 	}
-	
+
 	@Property(name = "tasktype", value = "Business Rule")
 	protected BusinessRuleTask createBusinessRuleTask(Shape shape) {
 		BusinessRuleTask task = new BusinessRuleTask();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		return task;
 	}
-	
+
 	@Property(name = "tasktype", value = "Service")
 	protected ServiceTask createServiceTask(Shape shape) {
 		ServiceTask task = new ServiceTask();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		return task;
 	}
-	
+
 	@Property(name = "tasktype", value = "Manual")
 	protected ManualTask createManualTask(Shape shape) {
 		ManualTask task = new ManualTask();
-		
+
 		task.setId(shape.getResourceId());
 		task.setName(shape.getProperty("name"));
-		
+
 		return task;
 	}
-	
+
 	/**
-	 * Retrieves the values from the complex type property 'resources' and builds ups 
-	 * the resources objects.
+	 * Retrieves the values from the complex type property 'resources' and
+	 * builds ups the resources objects.
 	 * 
 	 * @param task
-	 * 		The {@link Task} object
+	 *            The {@link Task} object
 	 * @param resourcesProperty
-	 * 		The resources property String.
+	 *            The resources property String.
 	 */
 	private void setActivityResources(Task task, String resourcesProperty) {
 		try {
 			JSONObject resources = new JSONObject(resourcesProperty);
 			JSONArray items = resources.getJSONArray("items");
-			for(int i = 0; i < items.length(); i++) {
+			for (int i = 0; i < items.length(); i++) {
 				JSONObject resource = items.getJSONObject(i);
 				String type = resource.getString("resource_type");
 				ActivityResource actResource = null;
-				if(type.equalsIgnoreCase("performer")) {
+				if (type.equalsIgnoreCase("performer")) {
 					actResource = new Performer();
-					
-				} else if(type.equalsIgnoreCase("humanperformer")) {
+
+				} else if (type.equalsIgnoreCase("humanperformer")) {
 					actResource = new HumanPerformer();
-				} else if(type.equalsIgnoreCase("potentialowner")) {
+				} else if (type.equalsIgnoreCase("potentialowner")) {
 					actResource = new PotentialOwner();
 				}
-				
-				if(actResource != null) {
-					actResource.setResourceRef(resource.getString("resource"));
+
+				if (actResource != null) {
+					/* Set ResourceRef */
+					Resource resourceRef = new Resource(resource
+							.getString("resource"));
+					actResource.setResourceRef(resourceRef);
+
+					/* Set Resource Assignment Expression */
+					ResourceAssignmentExpression resAsgExpr = new ResourceAssignmentExpression();
+					FormalExpression fExpr = new FormalExpression(resource.getString("resourceassignmentexpr"));
+					
+					String language = resource.getString("language");
+					if(language != null && !language.isEmpty()) {
+						fExpr.setLanguage(language);
+					}
+					
+					String evaluationType = resource.getString("evaluatestotype");
+					if(evaluationType != null && !evaluationType.isEmpty()) {
+						fExpr.setEvaluatesToTypeRef(evaluationType);
+					}
+					
+					resAsgExpr.setExpression(fExpr);
+					actResource.setResourceAssignmentExpression(resAsgExpr);
+					
+					/* Assign ActivityResource */
 					task.getActivityResource().add(actResource);
 				}
-				
+
 			}
-			resources.get("");
 		} catch (JSONException e) {
 			// ignore resources property
 		}

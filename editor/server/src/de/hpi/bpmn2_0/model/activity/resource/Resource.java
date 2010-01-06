@@ -28,7 +28,10 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import de.hpi.bpmn2_0.model.RootElement;
 
@@ -60,8 +63,18 @@ import de.hpi.bpmn2_0.model.RootElement;
 public class Resource
     extends RootElement
 {
-
+	public Resource() {
+		
+	}
+	
+	public Resource(String name) {
+		this.name = name;
+	}
+	
     protected List<ResourceParameter> resourceParameter;
+    
+    @XmlID
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlAttribute(required = true)
     protected String name;
 
