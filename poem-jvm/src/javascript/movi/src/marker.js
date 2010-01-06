@@ -101,8 +101,30 @@ MOVI.namespace("util");
 			var shapeEl = document.createElement("vml:shape");
 			shapeEl.setAttribute("coordsize", parseInt(this.modelviewer.canvas.getStyle("width")) + ", " +  parseInt(this.modelviewer.canvas.getStyle("height")));
 			MOVI.util.Overlay.superclass.constructor.call(this, shapeEl, {});
+			
+			var strokeEl = new YAHOO.util.Element(document.createElement("vml:stroke"));
+			strokeEl.set("opacity", this.style.opacity);
+			strokeEl.set("color", this.style.color);
+			strokeEl.set("weight", this.style.width);
+			strokeEl.set("joinstyle", "round");
+			strokeEl.set("endcap", "round");
+			
+			var fillEl = new YAHOO.util.Element(document.createElement("vml:fill"));
+			fillEl.set("opacity", "0");
+			
+			var pathEl = new YAHOO.util.Element(document.createElement("vml:path"));
+			var v = "M "+ Math.round(coords[0].x)+","+Math.round(coords[0].y) +" L";
+			for(var i=1; i<coords.length; i++) {
+				v += " " + Math.round(coords[i].x)+","+Math.round(coords[i].y);
+				if(i!=coords.length-1) v += ",";
+			}
+			pathEl.set("v", v);
+			
+			this.appendChild(strokeEl);
+			this.appendChild(fillEl);
+			this.appendChild(pathEl);
 
-			var innerHTML = 
+		/*	var innerHTML = 
 				"<vml:stroke opacity='" + this.style.opacity + "' color='" + this.style.color + "' weight='" + this.style.width +"' joinstyle='round' endcap='round'></vml:stroke>"+
 				"<vml:fill opacity='0'></vml:fill>"+
 				"<vml:path v='M "+ Math.round(coords[0].x)+","+Math.round(coords[0].y) +" L";
@@ -112,7 +134,7 @@ MOVI.namespace("util");
 			}
 			innerHTML += 
 				"'/>";
-			this.set("innerHTML", innerHTML);
+			this.set("innerHTML", innerHTML);*/
 			
 		}
 		

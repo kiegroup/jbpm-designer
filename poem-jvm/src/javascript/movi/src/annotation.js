@@ -297,6 +297,7 @@ MOVI.namespace("util");
 		var isIE6 = YAHOO.env.ua.ie === 6;
 		
 		this.set("className", _BUBBLE_HIDDEN_CLASS_NAME);
+		
 		this.set("innerHTML", 	
 						"<div class=\"" + _BUBBLE_UL_CLASS_NAME + "\">"+
 							(isIE6 ? "<img class=\""+ _BUBBLE_UL_CLASS_NAME +"\">":"")+

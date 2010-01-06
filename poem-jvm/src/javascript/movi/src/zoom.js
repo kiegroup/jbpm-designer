@@ -41,10 +41,19 @@ MOVI.namespace("widget");
      * @private
      */
 	var _setUpHostElementZoomSlider = function() {
-		this.set("innerHTML",
-				"<div id=\"" + _SLIDER_CLASS_NAME_PREFIX + this.modelviewer.getIndex() + "\" class=\"" + _SLIDER_CLASS_NAME_PREFIX  + "-" + this.orientation + "\" title=\"Zoom Slider\">" +
-					"<div id=\"" + _SLIDER_THUMB_CLASS_NAME + this.modelviewer.getIndex() + "\" class=\"" + _SLIDER_THUMB_CLASS_NAME + "\"></div>" +
-				"</div>");
+		
+		var div1 = new YAHOO.util.Element(document.createElement("div"));
+		div1.set("id", _SLIDER_CLASS_NAME_PREFIX + this.modelviewer.getIndex());
+		div1.addClass(_SLIDER_CLASS_NAME_PREFIX  + "-" + this.orientation);
+		div1.set("title", "Zoom Slider");
+		
+		var div2 = new YAHOO.util.Element(document.createElement("div"));
+		div2.set("id", _SLIDER_THUMB_CLASS_NAME + this.modelviewer.getIndex());
+		div2.addClass(_SLIDER_THUMB_CLASS_NAME);
+		
+		div1.appendChild(div2);
+		this.appendChild(div1);
+		
 	};
 	
 	/**
