@@ -10909,108 +10909,6 @@
 		},
 		{
 			"type": "edge",
-			"id":"MessageFlow",
-			"title":"Message Flow",
-			"title_de":"Nachrichtenfluss",
-			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
-			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Sequenzfluss kombiniert werden.",
-			"groups":["Connecting Objects"],
-			"groups_de":["Verbinder"],
-			"view":"connection/connection.messageflow.svg",
-			"icon":"new_messageflow.png",
-			"roles": [
-				"ConnectingObjectsMorph"
-			],
-			"properties": [
-				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"name",
-					"type":"String",
-					"title":"Name",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"refToView":"name",
-					"wrapLines":true
-				},
-				{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"title_de":"Kategorien",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"documentation",
-					"type":"Text",
-					"title":"Documentation",
-					"title_de":"Dokumentation",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"",
-					"popular": true,
-					"wrapLines":true
-				},
-				{
-					"id":"source",
-					"type":"String",
-					"title":"SourceRef",
-					"title_de":"QuellRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"target",
-					"type":"String",
-					"title":"TargetRef",
-					"title_de":"ZielRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"message",
-					"type":"String",
-					"title":"MessageRef",
-					"title_de":"NachrichtRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"20",
-					"wrapLines":true
-				}
-			]
-		},
-		{
-			"type": "edge",
 			"id":"Association_Undirected",
 			"title":"Association (undirected)",
 			"title_de":"Ungerichtete Assoziation",
@@ -11300,11 +11198,114 @@
 					"id":"direction",
 					"type":"String",
 					"title":"Direction",
+					"title_de":"Richtung",
 					"value":"Both",
 					"description":"",
 					"readonly":true,
 					"optional":false,
 					"length":""
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"MessageFlow",
+			"title":"Message Flow",
+			"title_de":"Nachrichtenfluss",
+			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
+			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Sequenzfluss kombiniert werden.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Verbinder"],
+			"view":"connection/connection.messageflow.svg",
+			"icon":"new_messageflow.png",
+			"roles": [
+				"ConnectingObjectsMorph"
+			],
+			"properties": [
+				{
+					"id":"id",
+					"type":"String",
+					"title":"Id",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":"30"
+				},
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"refToView":"name",
+					"wrapLines":true
+				},
+				{
+					"id":"categories",
+					"type":"String",
+					"title":"Categories",
+					"title_de":"Kategorien",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50",
+					"wrapLines":true
+				},
+				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"",
+					"popular": true,
+					"wrapLines":true
+				},
+				{
+					"id":"source",
+					"type":"String",
+					"title":"SourceRef",
+					"title_de":"QuellRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"target",
+					"type":"String",
+					"title":"TargetRef",
+					"title_de":"ZielRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":""
+				},
+				{
+					"id":"message",
+					"type":"String",
+					"title":"MessageRef",
+					"title_de":"NachrichtRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"20",
+					"wrapLines":true
 				}
 			]
 		}

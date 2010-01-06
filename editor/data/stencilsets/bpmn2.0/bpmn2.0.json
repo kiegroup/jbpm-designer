@@ -4759,25 +4759,6 @@
 		},
 		{
 			"type": "edge",
-			"id":"MessageFlow",
-			"title":"Message Flow",
-			"title_de":"Nachrichtenfluss",
-			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
-			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Sequenzfluss kombiniert werden.",
-			"groups":["Connecting Objects"],
-			"groups_de":["Konnektoren"],
-			"view":"connector/messageflow.svg",
-			"icon":"connector/messageflow.png",
-			"propertyPackages":[
-				"baseAttributes"
-			],
-			"roles": [
-				"ConnectingObjectsMorph",
-				"MessageContainer"
-			]
-		},
-		{
-			"type": "edge",
 			"id":"Association_Undirected",
 			"title":"Association (undirected)",
 			"title_de":"Ungerichtete Assoziation",
@@ -4825,7 +4806,26 @@
 				"ConnectingObjectsMorph",
 				"Directed_Association"
 			]
-		}	
+		},
+		{
+			"type": "edge",
+			"id":"MessageFlow",
+			"title":"Message Flow",
+			"title_de":"Nachrichtenfluss",
+			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
+			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Sequenzfluss kombiniert werden.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"connector/messageflow.svg",
+			"icon":"connector/messageflow.png",
+			"propertyPackages":[
+				"baseAttributes"
+			],
+			"roles": [
+				"ConnectingObjectsMorph",
+				"MessageContainer"
+			]
+		}
 	],
 	
 	"rules" : {
@@ -5048,7 +5048,8 @@
 					"from_task_event",
 					"to_task_event",
 					"EventSubprocess",
-					"CollapsedEventSubprocess"			
+					"CollapsedEventSubprocess",
+					"TextAnnotation"
 				]
 			},
 			{
@@ -5065,7 +5066,8 @@
 								"ChoreographyElement",
 								"choreography_sequence_start",
 								"choreography_sequence_end",
-								"Message"
+								"Message",
+								"TextAnnotation"
 																
 							]
 			}
