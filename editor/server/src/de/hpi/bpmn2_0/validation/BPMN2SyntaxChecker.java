@@ -144,9 +144,9 @@ public class BPMN2SyntaxChecker extends AbstractSyntaxChecker {
 					if(edge.getSourceRef().getProcess() == edge.getTargetRef().getProcess())	
 						this.addError(edge, SAME_PROCESS);
 										
-					if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool() &&
-							edge.getSourceRef().getLane() != edge.getTargetRef().getLane()) 
-						this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);
+//					if(edge.getSourceRef().getPool() == edge.getTargetRef().getPool() &&
+//							edge.getSourceRef().getLane() != edge.getTargetRef().getLane()) 
+//						this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);
 					
 					if(edge.getSourceRef() instanceof Lane || edge.getTargetRef() instanceof Lane)
 						this.addError(edge, MESSAGE_FLOW_NOT_ALLOWED);					
