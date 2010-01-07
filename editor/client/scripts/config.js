@@ -21,6 +21,10 @@ ORYX.CONFIG.MODE_READONLY =				"readonly";
 ORYX.CONFIG.MODE_FULLSCREEN =			"fullscreen";
 	
 		
+	/* Show grid line while dragging */
+ORYX.CONFIG.SHOW_GRIDLINE = true;
+ORYX.CONFIG.DISABLE_GRADIENT = true;
+
 	/* Plugins */
 ORYX.CONFIG.PLUGINS_ENABLED =			true;
 ORYX.CONFIG.PLUGINS_CONFIG =			ORYX.CONFIG.ROOT_PATH + "plugins.xml";
