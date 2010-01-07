@@ -28,6 +28,7 @@ import org.oryxeditor.server.diagram.Shape;
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.model.BaseElement;
+import de.hpi.bpmn2_0.model.FormalExpression;
 import de.hpi.bpmn2_0.model.activity.Activity;
 import de.hpi.bpmn2_0.model.diagram.EventShape;
 import de.hpi.bpmn2_0.model.event.BoundaryEvent;
@@ -156,6 +157,12 @@ public class IntermediateCatchEventFactory extends AbstractBpmnFactory {
 		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
 		
 		ConditionalEventDefinition conDef = new ConditionalEventDefinition();
+		
+		/* Set condition attribute as FormalExpression */
+		String condition = shape.getProperty("condition");
+		if(condition != null && !condition.isEmpty())
+			conDef.setCondition(new FormalExpression(condition));
+		
 		icEvent.getEventDefinition().add(conDef);
 		
 		return icEvent;
@@ -166,6 +173,12 @@ public class IntermediateCatchEventFactory extends AbstractBpmnFactory {
 		IntermediateCatchEvent icEvent = new IntermediateCatchEvent();
 		
 		LinkEventDefinition linkDef = new LinkEventDefinition();
+		
+		/* Set required name attribute */
+		String name = shape.getProperty("name");
+		if(name != null && !name.isEmpty())
+			linkDef.setName(name);
+		
 		icEvent.getEventDefinition().add(linkDef);
 		
 		return icEvent;

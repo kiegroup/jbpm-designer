@@ -129,6 +129,12 @@ public class IntermediateThrowEventFactory extends AbstractBpmnFactory {
 		IntermediateThrowEvent itEvent = new IntermediateThrowEvent();
 
 		LinkEventDefinition linkDef = new LinkEventDefinition();
+		
+		/* Set required name attribute */
+		String name = shape.getProperty("name");
+		if(name != null && !name.isEmpty())
+			linkDef.setName(name);
+		
 		itEvent.getEventDefinition().add(linkDef);
 		
 		return itEvent;

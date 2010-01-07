@@ -27,6 +27,7 @@ import org.oryxeditor.server.diagram.Shape;
 
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
+import de.hpi.bpmn2_0.model.FormalExpression;
 import de.hpi.bpmn2_0.model.diagram.EventShape;
 import de.hpi.bpmn2_0.model.event.CompensateEventDefinition;
 import de.hpi.bpmn2_0.model.event.ConditionalEventDefinition;
@@ -140,6 +141,12 @@ public class StartEventFactory extends AbstractBpmnFactory {
 	protected StartEvent createStartConditionalEvent(Shape shape) {
 		StartEvent event = new StartEvent();
 		ConditionalEventDefinition evDef = new ConditionalEventDefinition();
+		
+		/* Set condition attribute as FormalExpression */
+		String condition = shape.getProperty("condition");
+		if(condition != null && !condition.isEmpty())
+			evDef.setCondition(new FormalExpression(condition));
+		
 		event.getEventDefinition().add(evDef);
 		
 		return event;

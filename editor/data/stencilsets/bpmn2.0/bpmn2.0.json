@@ -90,6 +90,22 @@
 				}
 			]
 		},
+		{
+			"name" : "condition",
+			"properties" : [
+				{
+					"id":"condition",
+					"type":"String",
+					"title":"Condition",
+					"title_de":"Bedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"popular":true
+				}
+			]
+		},
  		{
  			"name":"catchEventAttributes",
  			"properties":[
@@ -3325,6 +3341,7 @@
 				"baseAttributes",
 				"catchEventAttributes",
 				"interrupting",
+				"condition",
 				"bgColor"
 			],
 			"roles" : 			[
@@ -3700,15 +3717,16 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"interrupting",
+				"condition",
 				"bgColor"
 			],
 			"roles":[
 				"all",
 				"sequence_start",
 				"sequence_end",
+				"choreography_sequence_start",
+				"choreography_sequence_end",
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
