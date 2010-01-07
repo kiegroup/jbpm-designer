@@ -303,6 +303,8 @@
 			<property name="cssfile" value="/oryx/css/feedback.css" />
 			<!-- configure subjects and info in localization: /editor/data/I18N#ORYX.I18N.Feedback.subjects  -->
 		</plugin>
+		
+		<plugin source="stencilsetmanipulator.js" name="ORYX.Plugins.StencilSetManipulator" />
 
 	</plugins>
 	
