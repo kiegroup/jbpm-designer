@@ -1093,6 +1093,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 		
 			// Basic Dialog
 			this.dialog = new Ext.Window({ 
+				autoScroll: true,
 				autoCreate: true, 
 				title: ORYX.I18N.PropertyWindow.complex, 
 				height: 350, 
