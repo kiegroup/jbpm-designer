@@ -192,7 +192,7 @@
                 <file name='scripts/Core/StencilSet/rules.js'/>
                 <file name='scripts/Core/StencilSet/stencilset.js'/>
                 <file name='scripts/Core/StencilSet/stencilsets.js'/>
-                <file name='scripts/Core/command.js'/>
+                <file name='scripts/Core/command.js'/> 
                 <file name='scripts/Core/bounds.js'/>
                 <file name='scripts/Core/uiobject.js'/>
                 <file name='scripts/Core/abstractshape.js'/>
