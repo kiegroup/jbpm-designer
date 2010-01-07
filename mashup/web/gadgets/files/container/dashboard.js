@@ -35,8 +35,14 @@ var dashboard = (function(){
 		init: function() {
 		
 			YAHOO.util.Get.script("/oryx/lib/prototype-1.5.1.js",
-				{onSuccess : function(){ Container.login.init(); } }
-			);
+				{onSuccess : function(){ 
+					Container.login.init(); 
+					$$(".gadget-column").forEach(function(col){
+						colWidth = document.body.clientWidth / $$(".gadget-column").length - 10;
+						col.setStyle({width: colWidth + "px"});
+					});
+				} 
+			});
 		
 			// replace the dummy method
 			this.addGadget = this._addGadget;
@@ -84,10 +90,10 @@ var dashboard = (function(){
 				
 			var body_el = document.createElement("div");
 				body_el.className = "bd";
-			
-			var foot_el = document.createElement("div");
-			    foot_el.clasSName = "ft";
-			
+		
+//			var foot_el = document.createElement("div");
+//			    foot_el.clasSName = "ft";
+		
 			document.body.appendChild(chrome_el);
 			chrome_el.appendChild(title_el);
 			chrome_el.appendChild(body_el);
@@ -99,7 +105,7 @@ var dashboard = (function(){
 				width: options.width + "px",
 				height: options.height + "px",
 				underlay: "shadow",
-				autofillheight: "body", // default value, specified here to highlight its use in the example
+				autofillheight: "body",
 				constraintoviewport:true,
 				context: ["showbtn", "tl", "bl"]
 			});

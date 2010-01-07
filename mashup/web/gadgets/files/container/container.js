@@ -27,9 +27,7 @@ if (! Container)
 SERVER_BASE = "http://localhost:8080"
 
 Container.LayoutManager = function() {
-
 	gadgets.LayoutManager.call(this);
-
 };
 
 Container.LayoutManager.inherits(gadgets.LayoutManager);
@@ -38,8 +36,8 @@ Container.LayoutManager.prototype.getGadgetChrome = function(gadget) {
 	
 	var widgets = dashboard.getGadgets();
 	for (var i in widgets) {
-		if (widgets[i].__gadget && widgets[i].__gadget == gadget) {
-			return widgets[i].body;
+		if (widgets[i].gadget && widgets[i].gadget == gadget) {
+			return widgets[i].chromeEl;
 		}
 	}
 	throw "No dashboard widget found";
@@ -55,16 +53,20 @@ gadgets.container.layoutManager = new Container.LayoutManager();
  */
 Container.addGadget = function(p_sType, p_aArgs, args) {
 
-	gadget_url = SERVER_BASE + args.url;
-	options = 	args.options;
-
+	gadget_url 	= SERVER_BASE + args.url;
+	options 	= args.options;
+	width 		= dashboard.columnWidth - 10;
 	
-	var gadget = gadgets.container.createGadget({ specUrl: gadget_url });
+	var gadget = gadgets.container.createGadget({ 
+		specUrl: 	gadget_url,
+		width: 		width,
+		height: 	options.height || "500px"
+	});
 	gadget.setServerBase( Container.ShindigBase + 'gadgets/');
 	
-	var widget = dashboard.addGadget(gadget_url, options);
-	widget.__gadget = gadget;
+	var widget = dashboard.addGadget(args.title || "", gadget, options);
 	
+	// remove gadget title bar
 	gadget.getTitleBarContent = function(continuation){
 		continuation("");
 	}
@@ -92,7 +94,7 @@ Container.loadGadgetRepository = function(){
 		
 		if ( Container.gadgetData[i].title == "gadgetRepository" ){
 			Container.addGadget( null, null, 
-					{ url: Container.gadgetData[i].url, options: Container.gadgetData[i].options } );
+					{ title: "gadget repository", url: Container.gadgetData[i].url, options: Container.gadgetData[i].options } );
 			return;
 		}
 		

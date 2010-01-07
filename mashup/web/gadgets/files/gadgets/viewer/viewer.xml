@@ -10,8 +10,27 @@
         <![CDATA[
 		
 	<style type="text/css">
+			
+			#container {
+				background: transparent;
+			}
+			
+			div.yui-layout-bd {
+				background-color: transparent !important;
+				border-color: #D0D0D0 !important;
+			}
+			
+			.yui-layout-hd {
+				background: #A0A0A0 !important;
+				border-style: none !important;
+			}
+			
+			div.yui-layout-hd h2{
+				color: #FFFFFF !important;
+			}
+			
 			.viewer {
-				height: 98%;
+				height: 100%;
 				width: 100%;
 			}
 			
@@ -40,21 +59,23 @@
 			document.write(unescape("%3Cscript src='" + externs[i] + "'type='text/javascript'%3E%3C/script%3E"));
 		
 	</script>
-	<body class=" yui-skin-sam">
+	<body id="container" class=" yui-skin-sam">
 	
 	<div id= "center">
 		<div id= "viewer"></div>
 	</div>
 	
 	<div id= "bottom">
-		<div id= "start"> </div>
-		<table width="400px" border="0">
+		<div id= "start"> </div>	
+
+		<table width="380px" border="0">
 			<tr>
 				<td> <div id= "navigator"></div> </td>
 				<td> <div id= "zoomslider"></div> </td>
 				<td> <div id= "toolbar"></div> </td>
 			</tr>
 		</table>
+
 
 	</div>
 	

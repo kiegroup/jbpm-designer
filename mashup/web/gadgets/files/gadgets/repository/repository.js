@@ -228,9 +228,9 @@ YAHOO.lang.extend( Repository, AbstractGadget, {
         
         var columnDefs = [
             {key:"farm", label:"", formatter: expansionFormatter}, 
-            {key:"title", label:"Title", width:100, resizeable:true, sortable:true},
+            {key:"title", label:"Title", width:90, resizeable:true, sortable:true},
 			{key:"last_modified", label:"last modiefied", width:150, resizeable:true, sortable:true},
-            {key:"url", label:"URL", width:70, resizeable:true, sortable:true, formatter: formatUrl, 
+            {key:"url", label:"URL", width:60, resizeable:true, sortable:true, formatter: formatUrl, 
                     sortOptions:{sortFunction:sortTitles}}
         ];
         

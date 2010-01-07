@@ -187,8 +187,11 @@ var dispatcher = (function(){
 		function(args){
 			for (var i in Container.gadgetData){
 				if (Container.gadgetData[i].url == args)
-					Container.addGadget( null, null, 
-							{ url : args, options : Container.gadgetData[i].options });
+					Container.addGadget( null, null, { 
+							url: 		args, 
+							options: 	Container.gadgetData[i].options, 
+							title: 		Container.gadgetData[i].title 
+					});
 			}
 		}
 	);

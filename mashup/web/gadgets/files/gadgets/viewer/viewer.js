@@ -136,7 +136,7 @@ YAHOO.extend( Viewer, AbstractGadget, {
 			}.bind(this),
 
 			onFailure		: function(){
-				alert('Oryx','Server communication failed!');
+				alert('Oryx: Server communication failed!');
 			}
 		});
 	
@@ -192,15 +192,21 @@ YAHOO.extend( Viewer, AbstractGadget, {
 		toolbar.addButton({
 		    icon: viewerHome + "/icons/arrow_switch.png",
 		    tooltip: "change between multi und single select",
-		    group: "Selection Modus",
+		    //group: "Selection Modus",
 		    callback: this.changeSelectModus.bind(this)
 		});
 		
+		var clearModel = function(){
+			this.rpcHandler.selection.reset();
+			this.rpcHandler.undoGrey("all");
+			this.rpcHandler.undoMarking("all");
+		};
+		
 		toolbar.addButton({
 		    icon: viewerHome + "/icons/delete.png",
-		    tooltip: "reset selection",
-		    group: "Selection Modus",
-		    callback: function(){ this.rpcHandler.selection.reset(); }.bind(this)
+		    tooltip: "reset selection, shadows and markers",
+		    //group: "Selection Modus",
+		    callback: clearModel.bind(this)
 		});
 		
 		//toolbar.showGroupCaptions();
@@ -209,7 +215,7 @@ YAHOO.extend( Viewer, AbstractGadget, {
 			icon: viewerHome + "/icons/arrow_out.png",
 			caption: 'fullscreen',
 			tooltip: 'View the model in fullscreen mode',
-			group: 'View options',
+			//group: 'View options',
 			callback: fullscreenViewer.open,
 			scope: fullscreenViewer
 		});

@@ -21,6 +21,23 @@
 		
 		<style type="text/css">
 			
+			#connector {
+				background: transparent;
+			}
+			
+			div.yui-layout-bd {
+				background-color: transparent !important;
+				border-color: #D0D0D0 !important;
+			}
+			
+			.yui-layout-hd {
+				background: #A0A0A0 !important;
+				border-style: none !important;
+			}
+			
+			div.yui-layout-hd h2{
+				color: #FFFFFF !important;
+			}
 			
 			.checkbox { 
 			    display:block;
@@ -51,7 +68,8 @@
 				-moz-border-radius: 15px; 
 				float: left;
 				width: 75%;
-				height: 20px;
+				height: auto;
+				min-height: 20px;
 				padding-left: 15px;
 				margin-right: 15px;		
 			}
@@ -60,14 +78,7 @@
 				background-color: #A0A0A0;
 				color: white;
 				border-color: white;
-			}	
-			/*
-			.connection-item-active{
-				background-color: #A0A0A0;
-				color: white;
-				border-color: white;
-			}	
-			*/				
+			}			
 			
 		</style>
 

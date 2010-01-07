@@ -56,7 +56,7 @@ Container.login = (function(){
 		},
 		
 		showLogin: function(){
-			document.getElementById("login").innerHTML = 
+			$("login").innerHTML = 
 				'<div><form action="http://localhost:8080/backend/poem/login?redirect=/gadgets/files/container/home.html"'+ 
 						'method="post" id="openid_login" >'+
 						'<span>'+
@@ -72,7 +72,7 @@ Container.login = (function(){
 		},
 		
 		showLogout: function(){
-			document.getElementById("login").innerHTML = 
+			$("login").innerHTML = 
 				'<form action="http://localhost:8080/backend/poem/login?logout=true&redirect=/gadgets/files/container/home.html"'+ 
 						'method="post" id="openid_login">'+
 				'<div>'+
@@ -84,7 +84,7 @@ Container.login = (function(){
 		
 		// not yet in use
 		login: function(){
-			currentUser = document.getElementById("openid_login_openid").value;
+			currentUser = $("openid_login_openid").value;
 			Container.login.showLogout();
 			return true;
 		},
@@ -116,7 +116,7 @@ Container.login = (function(){
 		},
 		
 		changeOpenId: function(url, start, size){
-			var o = document.getElementById('openid_login_openid');
+			var o = $('openid_login_openid');
 			o.value = url;
 			o.focus();
 			

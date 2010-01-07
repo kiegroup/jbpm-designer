@@ -53,13 +53,15 @@ Discovery.prototype = {
 	 */
 	showConnections: function(reply){
 		
-		var oldViewer = this.currentViewer;
-		var oldShape = this.currentShape;
-		
 		var selectedShapes = reply.split(";");
-		this.currentViewer = selectedShapes.shift();	
+		var viewer = selectedShapes.shift();
 		
-		if (selectedShapes[0].evalJSON(true).length > 0){
+		// those events caused by reseting the selection of the previously selected shape must be filtered out
+		if (selectedShapes[0].evalJSON(true).length > 0){ 	
+			var oldViewer = this.currentViewer;
+			var oldShape = this.currentShape;
+	
+			this.currentViewer = viewer
 			this.currentShape = selectedShapes[0].evalJSON(true)[0];
 			
 			// deselct previously selected shape

@@ -56,6 +56,7 @@ YAHOO.lang.extend( MultiModel, AbstractGadget, {
 		});
 		connectButton.on("click", this.createConnection.bind(this));
 		connectButton.setStyle("background", "url('" + this.GADGET_BASE + "multimodel/icons/cart_add.png') no-repeat center");
+		connectButton.className ="button";
 		
 		var discoverButton = new YAHOO.widget.Button({
 			id :		"discoverButton", 
@@ -64,6 +65,7 @@ YAHOO.lang.extend( MultiModel, AbstractGadget, {
 		});
 		discoverButton.on("click", this.enterDiscoveryMode.bind(this));
 		discoverButton.setStyle("background", "url('" + this.GADGET_BASE + "multimodel/icons/magnifier.png') no-repeat center");
+		discoverButton.className ="button";
 		
 		//reset connections
 		var deleteButton = new YAHOO.widget.Button({
@@ -73,6 +75,7 @@ YAHOO.lang.extend( MultiModel, AbstractGadget, {
 		});
 		deleteButton.on("click", this.resetConnections.bind(this));
 		deleteButton.setStyle("background", "url('" + this.GADGET_BASE + "multimodel/icons/cancel.png') no-repeat center");
+		deleteButton.className ="button";
 		
 		//save connections permanently
 		var saveButton = new YAHOO.widget.Button({ 
@@ -82,6 +85,7 @@ YAHOO.lang.extend( MultiModel, AbstractGadget, {
 		});
 		saveButton.on("click", this.saveConnections.bind(this));
 		saveButton.setStyle("background", "url('" + this.GADGET_BASE + "multimodel/icons/disk.png') no-repeat center");
+		saveButton.className ="button";
 		
 		//this.initTable();
 	},

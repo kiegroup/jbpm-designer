@@ -39,7 +39,7 @@ Connection.prototype = {
 	},
 	
 	/*
-	 * add connection in multimodel gadget
+	 * add connection button in multimodel gadget
 	 */
 	display : function(){
 		
@@ -59,12 +59,11 @@ Connection.prototype = {
 		elDelete.src = this.gadget.GADGET_BASE + "multimodel/icons/delete.png";
 		elDelete.onclick = this.remove.bind(this);
 		el.appendChild(elDelete);
-		
+	
 		var elClear = document.createElement("div");
 		elClear.className = "clear";
 		el.appendChild(elClear);
-		
-		
+
 		$("connections").appendChild(el);
 		
 		this.connectionEl = elContainer;

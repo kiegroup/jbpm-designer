@@ -19,6 +19,24 @@
 		</script>
 		
 		<style type="text/css">
+			#repository {
+				background: transparent;
+			}
+			
+			div.yui-layout-bd {
+				background-color: transparent !important;
+				border-color: #D0D0D0 !important;
+			}
+			
+			.yui-layout-hd {
+				background: #A0A0A0 !important;
+				border-style: none !important;
+			}
+			
+			div.yui-layout-hd h2{
+				color: #FFFFFF !important;
+			}		
+		
 			/** 
 			*
 			* Style the yui-dt-expandablerow-trigger column 
@@ -68,7 +86,7 @@
 		</style>
 
 		
-		<body class=" yui-skin-sam">
+		<body id="repository" class=" yui-skin-sam">
 		
 		<div id ="top">
 		<div style = "margin:3px;">
