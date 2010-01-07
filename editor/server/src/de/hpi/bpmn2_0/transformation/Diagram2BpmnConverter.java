@@ -1020,6 +1020,16 @@ public class Diagram2BpmnConverter {
 		} catch (JSONException e) {
 			// ignore namespace property
 		}
+		
+		/* Expression Language */
+		String exprLanguage = diagram.getProperty("expressionlanguage");
+		if(exprLanguage != null && !exprLanguage.isEmpty())
+			this.definitions.setExpressionLanguage(exprLanguage);
+		
+		/* Type Language */
+		String typeLanguage = diagram.getProperty("typelanguage");
+		if(typeLanguage != null && !typeLanguage.isEmpty())
+			this.definitions.setTypeLanguage(typeLanguage);
 	}
 
 	/**

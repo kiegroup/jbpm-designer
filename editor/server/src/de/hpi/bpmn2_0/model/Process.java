@@ -136,6 +136,7 @@ public class Process
 		@XmlElementRef(type = SendTask.class),
 		@XmlElementRef(type = ServiceTask.class),
 		@XmlElementRef(type = UserTask.class),
+		@XmlElementRef(type = BusinessRuleTask.class),
 		@XmlElementRef(type = SubProcess.class),
 		
 		/* Gateways */

@@ -369,7 +369,7 @@
 					"type":"String",
 					"title":"ExpressionLanguage",
 					"title_de":"Ausdruckssprache",
-					"value":"",
+					"value":"http://www.w3.org/1999/XPath",
 					"description":"A Language may be provided so that the syntax of expressions used in the Diagram can be understood.",
 					"description_de":"Sprache, mit welcher im Diagramm verwendete Ausdrücke beschrieben sind.",
 					"readonly":false,
@@ -377,13 +377,13 @@
 					"length":"50"
 				},
 				{
-					"id":"querylanguage",
+					"id":"typelanguage",
 					"type":"String",
-					"title":"QueryLanguage",
-					"title_de":"Abfrage-Sprache",
-					"value":"",
-					"description":"A Language may be provided so that the syntax of queries used in the Diagram can be understood.",
-					"description_de":"Sprache, mit welcher im Diagramm verwendete Abfragen beschrieben sind.",
+					"title":"TypeLanguage",
+					"title_de":"Typsprache",
+					"value":"http://www.w3.org/2001/XMLSchema",
+					"description":"This attribute identifies the type system used by the elements of this Definition.",
+					"description_de":"Definiert das Typsystem der Elemente dieses Diagramms.",
 					"readonly":false,
 					"optional":true,
 					"length":"50"
@@ -411,17 +411,6 @@
 					"readonly":false,
 					"optional":true,
 					"dateFormat":"j/m/y"
-				},
-				{
-					"id":"pools",
-					"type":"String",
-					"title":"Pools",
-					"value":"",
-					"description":"A Business Process Diagram shall contain one or more Pools.",
-					"readonly":false,
-					"optional":false,
-					"length":"50",
-					"wrapLines":true
 				}
 			]
 		},
@@ -4742,6 +4731,16 @@
 					"length":"",
 					"refToView":"condition",
 					"wrapLines":true
+				},
+				{
+					"id":"isimmediate",
+					"type":"Boolean",
+					"title":"isImmediate",
+					"title_de":"Sofortige Ausführung",
+					"value":"",
+					"description":"An optional Boolean value specifying whether Activities or Choreography Activities not in the model containing the Sequence Flow can occur between the elements connected by the Sequence Flow. If the value is true, they MAY NOT occur. If the value is false, they MAY occur. Also see the isClosed attribute on Process, Choreography, and Collaboration.",
+					"readonly":false,
+					"optional":false
 				},
 				{
 					"id":"showdiamondmarker",

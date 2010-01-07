@@ -49,7 +49,7 @@ package de.hpi.bpmn2_0.model.connector;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -91,7 +91,7 @@ public class SequenceFlow
     extends Edge
 {
 	
-	@XmlElementRef(name = "conditionExpression")
+	@XmlElement(name = "conditionExpression")
     protected Expression conditionExpression;
     @XmlAttribute
     protected Boolean isImmediate;

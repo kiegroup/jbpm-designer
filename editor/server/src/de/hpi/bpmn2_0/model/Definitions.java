@@ -93,27 +93,31 @@ import de.hpi.bpmn2_0.validation.BPMN2SyntaxChecker;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "definitions")
 @XmlType(name = "tDefinitions", propOrder = {
-// "_import",
-		// "extension",
-		"rootElement", "diagram" // ,
-		// "relationship"
+		"targetNamespace",
+		"expressionLanguage",
+		"typeLanguage",
+		"rootElement", 
+		"diagram"
 })
 public class Definitions {
 
 	// @XmlElement(name = "import")
 	// protected List<TImport> _import;
 	// protected List<TExtension> extension;
+	
 	@XmlElementRefs( { @XmlElementRef(type = Process.class),
 			@XmlElementRef(type = Choreography.class),
 			@XmlElementRef(type = Collaboration.class),
 			@XmlElementRef(type = Conversation.class) })
 	protected List<RootElement> rootElement;
+	
 	@XmlElementRefs( { @XmlElementRef(type = ProcessDiagram.class),
 			@XmlElementRef(type = CollaborationDiagram.class),
 			@XmlElementRef(type = ChoreographyDiagram.class),
 			@XmlElementRef(type = ConversationDiagram.class) })
 	protected List<BpmnDiagram> diagram;
 	// protected List<TRelationship> relationship;
+	
 	@XmlAttribute
 	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
 	@XmlID
@@ -127,6 +131,7 @@ public class Definitions {
 	@XmlAttribute
 	@XmlSchemaType(name = "anyURI")
 	protected String expressionLanguage;
+	
 	@XmlAttribute
 	@XmlSchemaType(name = "anyURI")
 	protected String typeLanguage;

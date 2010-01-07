@@ -25,6 +25,7 @@ package de.hpi.bpmn2_0.model.activity.type;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.activity.Task;
@@ -46,6 +47,7 @@ import de.hpi.bpmn2_0.model.activity.Task;
  * 
  * 
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tBusinessRuleTask")
 public class BusinessRuleTask

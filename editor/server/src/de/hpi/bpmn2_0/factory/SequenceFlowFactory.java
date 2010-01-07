@@ -27,7 +27,7 @@ import org.oryxeditor.server.diagram.Shape;
 
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.model.BaseElement;
-import de.hpi.bpmn2_0.model.Expression;
+import de.hpi.bpmn2_0.model.FormalExpression;
 import de.hpi.bpmn2_0.model.connector.SequenceFlow;
 import de.hpi.bpmn2_0.model.diagram.SequenceFlowConnector;
 
@@ -90,15 +90,24 @@ public class SequenceFlowFactory extends AbstractEdgesFactory {
 
 		String conditionType = shape.getProperty("conditiontype");
 		String conditionExpression = shape.getProperty("conditionexpression");
-		
+
 		if (!(conditionType == null || conditionType.equals("Default"))
 				&& !(conditionExpression == null || conditionExpression
-						.equals(""))) {
-			seqFlow.setConditionExpression(new Expression(conditionExpression));
+						.isEmpty())) {
+			seqFlow.setConditionExpression(new FormalExpression(conditionExpression));
 		}
 
 		if (conditionType != null && conditionType.equals("Default")) {
 			seqFlow.setDefaultSequenceFlow(true);
+		}
+		
+		/* IsImmediate Property */
+		String isImmediate = shape.getProperty("isimmediate");
+		if(isImmediate != null) {
+			if(isImmediate.equalsIgnoreCase("false"))
+				seqFlow.setIsImmediate(false);
+			else if(isImmediate.equalsIgnoreCase("true"))
+				seqFlow.setIsImmediate(true);
 		}
 
 		return seqFlow;

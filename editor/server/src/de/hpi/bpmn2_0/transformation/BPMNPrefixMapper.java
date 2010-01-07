@@ -41,6 +41,8 @@ public class BPMNPrefixMapper extends NamespacePrefixMapper {
 	public String getPreferredPrefix(String namespace, String suggestion, boolean isRequired) {
 		if(namespace.equals("http://bpmndi.org"))
 			return "bpmndi";
+		else if(namespace.equals("http://www.w3.org/2001/XMLSchema-instance"))
+			return "xsi";
 		return null;
 	}
 
