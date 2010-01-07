@@ -87,6 +87,7 @@ public class LaneCompartment
     	
     	@XmlElementRef(type = GatewayShape.class),
     	@XmlElementRef(type = DataObjectShape.class),
+    	@XmlElementRef(type = DataStoreShape.class),
     	@XmlElementRef(type = TextAnnotationShape.class)
     })
     protected List<BpmnNode> bpmnShape;
