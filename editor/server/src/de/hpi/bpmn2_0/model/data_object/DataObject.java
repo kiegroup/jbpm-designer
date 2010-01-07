@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import de.hpi.bpmn2_0.model.FlowNode;
@@ -55,14 +56,14 @@ import de.hpi.bpmn2_0.model.FlowNode;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-//@XmlType(name = "tDataObject", propOrder = {
-//    "dataState"
-//})
+@XmlType(name = "tDataObject", propOrder = {
+    "dataState"
+})
 public class DataObject
     extends FlowNode
 {
 
-//    protected TDataState dataState;
+    protected DataState dataState;
     @XmlAttribute
     protected QName itemSubjectRef;
     @XmlAttribute
@@ -73,24 +74,24 @@ public class DataObject
      * 
      * @return
      *     possible object is
-     *     {@link TDataState }
+     *     {@link DataState }
      *     
      */
-//    public TDataState getDataState() {
-//        return dataState;
-//    }
+    public DataState getDataState() {
+        return dataState;
+    }
 
     /**
      * Sets the value of the dataState property.
      * 
      * @param value
      *     allowed object is
-     *     {@link TDataState }
+     *     {@link DataState }
      *     
      */
-//    public void setDataState(TDataState value) {
-//        this.dataState = value;
-//    }
+    public void setDataState(DataState value) {
+        this.dataState = value;
+    }
 
     /**
      * Gets the value of the itemSubjectRef property.

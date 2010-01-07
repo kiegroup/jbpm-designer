@@ -2974,7 +2974,7 @@
 					"optional":false
 				},		
 				{
-					"id" : "isCollection",
+					"id" : "iscollection",
 					"type" : "Boolean",
 					"title" : "is Collection",
 					"title_de" : "ist Listen-Datenobjekt",

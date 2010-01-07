@@ -125,8 +125,9 @@ ORYX.Plugins.BPMN2_0Serialization = {
 		//var options = JSON.stringify({action : 'transform'});
 		this.generateBpmnXml(
 			function ( xml ) {
-				this.openDownloadWindow("Oryx-BPMN 2.0", xml);
-			}.bind(this));
+				this.openDownloadWindow("model.bpmn", xml);
+			}.bind(this),
+			this.bpmnSerializationHandlerUrl);
 	},
 	
 	/**
@@ -146,7 +147,7 @@ ORYX.Plugins.BPMN2_0Serialization = {
 	downloadXpdl: function() {
 		this.generateBpmnXml(
 			function ( xml ) {
-				this.openDownloadWindow("Oryx-BPMN 2.0", xml);
+				this.openDownloadWindow("model.xpdl", xml);
 			}.bind(this),
 			this.bpmn2XpdlSerializationHandlerUrl);
 	},

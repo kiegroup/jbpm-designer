@@ -30,6 +30,7 @@ import de.hpi.bpmn2_0.model.BaseElement;
 import de.hpi.bpmn2_0.model.data_object.DataInput;
 import de.hpi.bpmn2_0.model.data_object.DataObject;
 import de.hpi.bpmn2_0.model.data_object.DataOutput;
+import de.hpi.bpmn2_0.model.data_object.DataState;
 import de.hpi.bpmn2_0.model.diagram.BpmnNode;
 import de.hpi.bpmn2_0.model.diagram.DataInputShape;
 import de.hpi.bpmn2_0.model.diagram.DataObjectShape;
@@ -99,22 +100,44 @@ public class DataObjectFactory extends AbstractBpmnFactory {
 		
 		String prop = shape.getProperty("input_output");
 		
-		BaseElement dataObjectShape = null;
+		BaseElement dataObject = null;
 		
 		if(prop.equals("None")) {
-			dataObjectShape = new DataObject();
-			((DataObject) dataObjectShape).setName(shape.getProperty("name"));
+			dataObject = new DataObject();
+			this.setDataObjectAttributes((DataObject) dataObject, shape);
+			
 		} else if(prop.equals("Input")) {
-			dataObjectShape = new DataInput();
-			((DataInput) dataObjectShape).setName(shape.getProperty("name"));
+			dataObject = new DataInput();
+			((DataInput) dataObject).setName(shape.getProperty("name"));
 		} else if(prop.equals("Output")) {
-			dataObjectShape = new DataOutput();
-			((DataOutput) dataObjectShape).setName(shape.getProperty("name"));
+			dataObject = new DataOutput();
+			((DataOutput) dataObject).setName(shape.getProperty("name"));
 		}
 		
-		dataObjectShape.setId(shape.getResourceId());		
+		if(dataObject == null)
+			throw new BpmnConverterException("Error while creating DataObject: null value");
 		
-		return dataObjectShape;
+		dataObject.setId(shape.getResourceId());		
+		
+		return dataObject;
+	}
+	
+	private void setDataObjectAttributes(DataObject dataObject, Shape shape) {
+		dataObject.setName(shape.getProperty("name"));
+		
+		/* Set isCollection attribute */
+		String isCollection = shape.getProperty("iscollection");
+		if(isCollection != null && isCollection.equalsIgnoreCase("true"))
+			dataObject.setIsCollection(true);
+		else
+			dataObject.setIsCollection(false);
+		
+		/* Define DataState element */
+		String dataStateName = shape.getProperty("state");
+		if(dataStateName != null && !dataStateName.isEmpty()) {
+			DataState dataState = new DataState(dataStateName);
+			dataObject.setDataState(dataState);
+		}
 	}
 
 }
