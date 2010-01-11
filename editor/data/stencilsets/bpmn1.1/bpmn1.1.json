@@ -4670,7 +4670,6 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"text_name",
-					"length":undefined,
 					"wrapLines":true
 				},
 				{
@@ -11420,7 +11419,6 @@
 		"cardinalityRules": [
 			{
 				"role":"Startevents_all",
-				maximumOccurrence:undefined,
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
@@ -11438,7 +11436,6 @@
 			},
 			{
 				"role":"Endevents_all",
-				maximumOccurrence:undefined,
 				outgoingEdges: [
 					{
 						role:"SequenceFlow",
