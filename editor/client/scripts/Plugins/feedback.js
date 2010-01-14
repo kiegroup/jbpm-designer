@@ -235,8 +235,9 @@ ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({
 		Event.observe(mail, "blur", fieldOnBlur.bindAsEventListener());
 		
 		var submit = document.createElement("input");
-			submit.type = "submit";
+			submit.type = "button";
 			submit.className = "submit";
+			submit.onclick=this.elements.form.onsubmit;
 			if (ORYX.I18N.Feedback.submit) {
 				submit.value = ORYX.I18N.Feedback.submit;
 			}
