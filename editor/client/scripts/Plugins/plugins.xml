@@ -91,6 +91,7 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>	
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
+			<requires namespace="http://b3mn.org/stencilset/petrinet#"/>
 		</plugin>	
 
 		<plugin source="desynchronizabilityOverlay.js" name="ORYX.Plugins.DesynchronizabilityOverlay">

@@ -18,6 +18,8 @@ import org.xml.sax.SAXException;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
+import de.hpi.PTnet.PTNet;
+import de.hpi.PTnet.serialization.PTNetRDFImporter;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
@@ -98,6 +100,8 @@ public class SimplePNMLExporter extends HttpServlet {
 			processBPMN11(document, pnmlDoc);
 		else if (type.equals("interactionpetrinets.json"))
 			processIPN(document, pnmlDoc);
+		else if (type.equals("petrinet.json"))
+			processPN(document, pnmlDoc);
 	}
 	
 	protected void processBPMN(Document document, Document pnmlDoc) {
@@ -137,6 +141,14 @@ public class SimplePNMLExporter extends HttpServlet {
 		InteractionNet net = (InteractionNet) importer.loadInteractionNet();
 		
 		InteractionNetPNMLExporter exp = new InteractionNetPNMLExporter();
+		exp.savePetriNet(pnmlDoc, net);
+	}
+	
+	protected void processPN(Document document, Document pnmlDoc) {
+		PTNetRDFImporter importer = new PTNetRDFImporter(document);
+		PTNet net = (PTNet) importer.loadPTNet();
+		
+		PetriNetPNMLExporter exp = new PetriNetPNMLExporter();
 		exp.savePetriNet(pnmlDoc, net);
 	}
 

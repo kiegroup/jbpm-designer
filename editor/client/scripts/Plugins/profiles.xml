@@ -82,6 +82,7 @@
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.PetriNetSoundnessChecker"/>
 		<plugin name="ORYX.Plugins.BPMNImport"/>
+		<plugin name="ORYX.Plugins.SimplePnmlexport" />
 		<plugin name="ORYX.Plugins.PetriNetStepThroughPlugin"/>
 		<plugin name="ORYX.Plugins.PetrinetSyntaxChecker"/>
 	</profile>
