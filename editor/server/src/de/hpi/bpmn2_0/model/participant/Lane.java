@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.oryxeditor.server.diagram.Shape;
@@ -75,7 +76,7 @@ import de.hpi.diagram.OryxUUID;
 @XmlType(name = "tLane", propOrder = {
     "partitionElement",
     "flowElementRef",
-    "laneSet",
+//    "laneSet",
     "childLaneSet"
 })
 public class Lane
@@ -113,10 +114,11 @@ public class Lane
 	@XmlElement(type = LaneSet.class)
 	protected LaneSet childLaneSet;
 	
-	@XmlIDREF
-	@XmlAttribute
-	@XmlSchemaType(name = "IDREF")
+//	@XmlIDREF
+//	@XmlAttribute
+//	@XmlSchemaType(name = "IDREF")
 //	@XmlElementRef(type = LaneSet.class)
+	@XmlTransient
 	protected LaneSet laneSet;
     
     @XmlAttribute
