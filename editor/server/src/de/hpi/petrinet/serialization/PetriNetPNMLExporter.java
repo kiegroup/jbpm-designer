@@ -105,9 +105,9 @@ public class PetriNetPNMLExporter {
 		String label = place.getLabel();
 		if (null != label && !label.isEmpty()) {
 			Node n1node = pnode.appendChild(doc.createElement("name"));
-			if(targetTool != Tool.YASPER){
-				addContentElement(doc, n1node, "value", label);
-			}
+//			if(targetTool != Tool.YASPER){
+//				addContentElement(doc, n1node, "value", label);
+//			}
 			addContentElement(doc, n1node, "text", label);
 		}
 		
@@ -119,9 +119,9 @@ public class PetriNetPNMLExporter {
 		tnode.setAttribute("id", transition.getId());
 		if (transition instanceof LabeledTransition) {
 			Node n1node = tnode.appendChild(doc.createElement("name"));
-			if(targetTool != Tool.YASPER){
-				addContentElement(doc, n1node, "value", ((LabeledTransition)transition).getLabel());
-			}
+//			if(targetTool != Tool.YASPER){
+//				addContentElement(doc, n1node, "value", ((LabeledTransition)transition).getLabel());
+//			}
 			addContentElement(doc, n1node, "text", ((LabeledTransition)transition).getLabel());
 		}
 		return tnode;
@@ -148,23 +148,25 @@ public class PetriNetPNMLExporter {
 			}
 		}
 		
-		Node insnode = fnode.appendChild(doc.createElement("inscription"));
+		
 		
 		String label = rel.getLabel();
 		if (null != label && !label.isEmpty()) {
-			if (targetTool != Tool.YASPER){
-				addContentElement(doc, insnode, "value", label);
-			}
+			Node insnode = fnode.appendChild(doc.createElement("inscription"));
+//			if (targetTool != Tool.YASPER){
+//				addContentElement(doc, insnode, "value", label);
+//			}
 			addContentElement(doc, insnode, "text", label);
 		}
 		// TODO this was the default behavior independent of a set label
 		// why is this required
-		else {
-			if (targetTool != Tool.YASPER){
-				addContentElement(doc, insnode, "value", "1");
-			}
-			addContentElement(doc, insnode, "text", "1");
-		}
+//		else {
+//			Node insnode = fnode.appendChild(doc.createElement("inscription"));
+//			if (targetTool != Tool.YASPER){
+//				addContentElement(doc, insnode, "value", "1");
+//			}
+//			addContentElement(doc, insnode, "text", "1");
+//		}
 		
 		return fnode;
 	}
