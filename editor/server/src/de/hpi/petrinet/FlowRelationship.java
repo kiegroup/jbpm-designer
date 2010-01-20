@@ -31,6 +31,15 @@ public class FlowRelationship implements Cloneable {
 	protected Node target;
 	protected String id;
 	protected String resourceId;
+	protected String label = null;
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
 	
 	public Node getSource() {
 		return source;

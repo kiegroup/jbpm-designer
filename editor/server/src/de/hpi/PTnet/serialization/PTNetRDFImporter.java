@@ -90,6 +90,8 @@ public class PTNetRDFImporter {
 				String id = getContent(n);
 				if (id != null)
 					p.setId(id);
+			} else if (attribute.equals("title")) {
+				p.setLabel(getContent(n));
 			} else if (attribute.equals("marked")) {
 				if ("true".equals(getContent(n)))
 					c.net.getInitialMarking().addToken(p);
@@ -146,6 +148,15 @@ public class PTNetRDFImporter {
 		FlowRelationship arc = factory.createFlowRelationship();
 		c.net.getFlowRelationships().add(arc);
 		setConnections(arc, node, c);
+		
+		for (Node n=node.getFirstChild(); n != null; n=n.getNextSibling()) {
+			if (n instanceof Text) continue;
+			String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':')+1);
+
+			if (attribute.equals("label")) {
+				arc.setLabel(getContent(n));
+			}
+		}
 	}
 
 	protected void setConnections(FlowRelationship arc, Node node, ImportContext c) {

@@ -35,4 +35,8 @@ public interface Place extends Node, Cloneable {
 
 	Object clone() throws CloneNotSupportedException;
 	
+	
+	public String getLabel();
+	
+	public void setLabel(String label);
 }

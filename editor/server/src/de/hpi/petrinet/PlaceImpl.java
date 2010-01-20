@@ -24,6 +24,16 @@ package de.hpi.petrinet;
  */
 public class PlaceImpl extends NodeImpl implements Place, Cloneable {
 
+	protected String label = null;
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
 	/**
 	 * Returns true if place has no outgoing arcs.
 	 */
