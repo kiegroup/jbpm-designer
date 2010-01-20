@@ -29,8 +29,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 
-import de.hpi.bpmn2_0.model.FlowNode;
-
 
 /**
  * <p>Java class for tDataStore complex type.
@@ -58,7 +56,7 @@ import de.hpi.bpmn2_0.model.FlowNode;
 //    "dataState"
 //})
 public class DataStore
-    extends FlowNode
+    extends AbstractDataObject
 {
 
 //    protected TDataState dataState;

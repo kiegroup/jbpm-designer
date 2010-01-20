@@ -21,30 +21,33 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.data_object;
+package de.hpi.bpmn2_0.model.misc;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.namespace.QName;
+import javax.xml.bind.annotation.XmlValue;
+
+import de.hpi.bpmn2_0.model.BaseElement;
 
 
 /**
- * <p>Java class for tDataObject complex type.
+ * <p>Java class for tAssignment complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tDataObject">
+ * &lt;complexType name="tAssignment">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tFlowElement">
+ *     &lt;extension base="{http://www.omg.org/bpmn20}tBaseElement">
  *       &lt;sequence>
- *         &lt;element ref="{http://www.omg.org/bpmn20}dataState" minOccurs="0"/>
+ *         &lt;element name="from" type="{http://www.omg.org/bpmn20}tBaseElementWithMixedContent"/>
+ *         &lt;element name="to" type="{http://www.omg.org/bpmn20}tBaseElementWithMixedContent"/>
  *       &lt;/sequence>
- *       &lt;attribute name="itemSubjectRef" type="{http://www.w3.org/2001/XMLSchema}QName" />
- *       &lt;attribute name="isCollection" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
+ *       &lt;attribute name="language" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -52,95 +55,97 @@ import javax.xml.namespace.QName;
  * 
  * 
  */
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tDataObject", propOrder = {
-    "dataState"
+@XmlType(name = "tAssignment", propOrder = {
+    "from",
+    "to"
 })
-public class DataObject
-    extends AbstractDataObject
+public class Assignment
+    extends BaseElement
 {
 
-    protected DataState dataState;
+    @XmlElement(required = true)
+    @XmlValue
+    protected String from;
+    
+    @XmlValue
+    @XmlElement(required = true)
+    protected String to;
+    
     @XmlAttribute
-    protected QName itemSubjectRef;
-    @XmlAttribute
-    protected Boolean isCollection;
+    @XmlSchemaType(name = "anyURI")
+    protected String language;
 
     /**
-     * Gets the value of the dataState property.
+     * Gets the value of the from property.
      * 
      * @return
      *     possible object is
-     *     {@link DataState }
+     *     {@link TBaseElementWithMixedContent }
      *     
      */
-    public DataState getDataState() {
-        return dataState;
+    public String getFrom() {
+        return from;
     }
 
     /**
-     * Sets the value of the dataState property.
+     * Sets the value of the from property.
      * 
      * @param value
      *     allowed object is
-     *     {@link DataState }
+     *     {@link TBaseElementWithMixedContent }
      *     
      */
-    public void setDataState(DataState value) {
-        this.dataState = value;
+    public void setFrom(String value) {
+        this.from = value;
     }
 
     /**
-     * Gets the value of the itemSubjectRef property.
+     * Gets the value of the to property.
      * 
      * @return
      *     possible object is
-     *     {@link QName }
+     *     {@link TBaseElementWithMixedContent }
      *     
      */
-    public QName getItemSubjectRef() {
-        return itemSubjectRef;
+    public String getTo() {
+        return to;
     }
 
     /**
-     * Sets the value of the itemSubjectRef property.
+     * Sets the value of the to property.
      * 
      * @param value
      *     allowed object is
-     *     {@link QName }
+     *     {@link TBaseElementWithMixedContent }
      *     
      */
-    public void setItemSubjectRef(QName value) {
-        this.itemSubjectRef = value;
+    public void setTo(String value) {
+        this.to = value;
     }
 
     /**
-     * Gets the value of the isCollection property.
+     * Gets the value of the language property.
      * 
      * @return
      *     possible object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public boolean isIsCollection() {
-        if (isCollection == null) {
-            return false;
-        } else {
-            return isCollection;
-        }
+    public String getLanguage() {
+        return language;
     }
 
     /**
-     * Sets the value of the isCollection property.
+     * Sets the value of the language property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public void setIsCollection(Boolean value) {
-        this.isCollection = value;
+    public void setLanguage(String value) {
+        this.language = value;
     }
 
 }

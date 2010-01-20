@@ -61,6 +61,7 @@ import de.hpi.bpmn2_0.model.connector.SequenceFlow;
 import de.hpi.bpmn2_0.model.conversation.Conversation;
 import de.hpi.bpmn2_0.model.conversation.ConversationLink;
 import de.hpi.bpmn2_0.model.conversation.ConversationNode;
+import de.hpi.bpmn2_0.model.data_object.AbstractDataObject;
 import de.hpi.bpmn2_0.model.diagram.AssociationConnector;
 import de.hpi.bpmn2_0.model.diagram.BpmnConnector;
 import de.hpi.bpmn2_0.model.diagram.BpmnDiagram;
@@ -509,6 +510,58 @@ public class Diagram2BpmnConverter {
 		}
 
 		this.processes.add(process);
+	}
+
+	/**
+	 * Assigns the DataObjectes to the appropriate {@link Process}.
+	 */
+	private void handleDataObjects() {
+		ArrayList<AbstractDataObject> dataObjects = new ArrayList<AbstractDataObject>();
+		this.getAllDataObjects(this.diagramChilds, dataObjects);
+		
+		for(AbstractDataObject dataObject : dataObjects) {
+			if(dataObject.getProcess() != null)
+				continue;
+			dataObject.findRelatedProcess();
+			
+			/* If no related process was found, add assign to the default process. */
+			if(dataObject.getProcess() == null && this.processes.size() > 0) {
+				dataObject.setProcess(this.processes.get(this.processes.size() - 1));
+				this.processes.get(this.processes.size() - 1).addChild(dataObject);
+			}
+			else if(dataObject.getProcess() == null) {
+				Process process = new Process();
+				this.processes.add(process);
+				process.setId(OryxUUID.generate());
+				process.addChild(dataObject);
+				dataObject.setProcess(process);
+			}
+				
+		}
+	}
+
+	/**
+	 * Retrieves all data related elements.
+	 * 
+	 * @param elements
+	 *            The list of {@link BPMNElement}.
+	 * 
+	 * @param dataObjects
+	 *            The resulting list of {@link AbstractDataObject}
+	 */
+	private void getAllDataObjects(List<BPMNElement> elements,
+			List<AbstractDataObject> dataObjects) {
+		for (BPMNElement element : elements) {
+			if (element.getNode() instanceof Lane
+					|| element.getNode() instanceof SubProcess) {
+				getAllDataObjects(this.getChildElements(element), dataObjects);
+				continue;
+			}
+
+			if (element.getNode() instanceof AbstractDataObject) {
+				dataObjects.add((AbstractDataObject) element.getNode());
+			}
+		}
 	}
 
 	/**
@@ -1010,25 +1063,29 @@ public class Diagram2BpmnConverter {
 			String namespacesProperty = this.diagram.getProperty("namespaces");
 			JSONObject namespaces = new JSONObject(namespacesProperty);
 			JSONArray namespaceItems = namespaces.getJSONArray("items");
-			
-			/* Retrieve namespace declarations and put them to 
-			 * namespaces attribute. */
-			for(int i = 0; i < namespaceItems.length(); i++) {
+
+			/*
+			 * Retrieve namespace declarations and put them to namespaces
+			 * attribute.
+			 */
+			for (int i = 0; i < namespaceItems.length(); i++) {
 				JSONObject namespace = namespaceItems.getJSONObject(i);
-				this.definitions.getNamespaces().put(namespace.getString("prefix"), namespace.getString("url"));
+				this.definitions.getNamespaces().put(
+						namespace.getString("prefix"),
+						namespace.getString("url"));
 			}
 		} catch (JSONException e) {
 			// ignore namespace property
 		}
-		
+
 		/* Expression Language */
 		String exprLanguage = diagram.getProperty("expressionlanguage");
-		if(exprLanguage != null && !exprLanguage.isEmpty())
+		if (exprLanguage != null && !exprLanguage.isEmpty())
 			this.definitions.setExpressionLanguage(exprLanguage);
-		
+
 		/* Type Language */
 		String typeLanguage = diagram.getProperty("typelanguage");
-		if(typeLanguage != null && !typeLanguage.isEmpty())
+		if (typeLanguage != null && !typeLanguage.isEmpty())
 			this.definitions.setTypeLanguage(typeLanguage);
 	}
 
@@ -1068,6 +1125,8 @@ public class Diagram2BpmnConverter {
 
 		this.insertChoreographyProcessesIntoDefinitions();
 		this.insertConversationIntoDefinitions();
+		
+		this.handleDataObjects();
 
 		this.insertProcessesIntoDefinitions();
 		this.insertCollaborationElements();

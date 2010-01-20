@@ -30,8 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import de.hpi.bpmn2_0.model.FlowNode;
-
 
 /**
  * <p>Java class for tDataOutput complex type.
@@ -61,7 +59,7 @@ import de.hpi.bpmn2_0.model.FlowNode;
     "dataState"
 })
 public class DataOutput
-    extends FlowNode
+    extends AbstractDataObject
 {
 
 //    protected TDataState dataState;

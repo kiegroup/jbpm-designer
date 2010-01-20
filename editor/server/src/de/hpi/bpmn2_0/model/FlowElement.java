@@ -29,8 +29,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -71,7 +69,7 @@ import de.hpi.bpmn2_0.model.participant.Lane;
 	"categoryValue",
 //	"incoming",
 //	"outgoing",
-	"process"
+//	"process"
 })
 @XmlSeeAlso({
 //    SequenceFlow.class,
@@ -104,9 +102,10 @@ public abstract class FlowElement
     protected List<Edge> outgoing;
 	
 	/* The process the element belongs to */
-	@XmlIDREF
-	@XmlAttribute
-	@XmlSchemaType(name = "IDREF")
+//	@XmlIDREF
+//	@XmlAttribute
+//	@XmlSchemaType(name = "IDREF")
+    @XmlTransient
 	protected Process process;
 	
 	/**
