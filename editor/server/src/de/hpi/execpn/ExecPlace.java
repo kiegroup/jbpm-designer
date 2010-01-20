@@ -9,6 +9,20 @@ public class ExecPlace extends ExecNode implements Place {
 		data, context, flow
 	}
 	
+	/*
+	 * label for places, added from de.hpi.petrinet.Place
+	 */
+	protected String label = null;
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	
 	// Constructors
 	public ExecPlace(){
 		this.type = Type.flow;
