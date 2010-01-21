@@ -66,7 +66,7 @@ import de.hpi.bpmn2_0.model.participant.Lane;
 @XmlType(name = "tFlowElement", propOrder = {
 //    "auditing",
 //    "monitoring",
-	"categoryValue",
+	"categoryValue"
 //	"incoming",
 //	"outgoing",
 //	"process"
