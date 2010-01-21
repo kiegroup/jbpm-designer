@@ -88,8 +88,8 @@ public class PetriNetPNMLExporter {
 	}
 
 	protected void handlePetriNetAttributes(Document doc, Element node, PetriNet net) {
-		node.setAttribute("id", "Net-One");
-		node.setAttribute("type", "Petri net");
+		node.setAttribute("id", "petrinet");
+		node.setAttribute("type", "PTNet"); // make this validating against: http://www2.informatik.hu-berlin.de/top/pnml/
 	}
 	
 	protected Element appendPlace(Document doc, Node netnode, PetriNet net, Place place) {
