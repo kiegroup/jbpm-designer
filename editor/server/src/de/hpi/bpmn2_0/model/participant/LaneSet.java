@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.annotations.ChildElements;
@@ -76,8 +77,9 @@ public class LaneSet
 	@XmlAttribute
 	protected Lane parentLane;
 	
-	@XmlIDREF
-	@XmlAttribute
+//	@XmlIDREF
+//	@XmlAttribute
+	@XmlTransient
 	protected Process process;
 	
 	public void addChild(BaseElement child) {
