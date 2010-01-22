@@ -24,7 +24,9 @@ package org.oryxeditor.server;
  * SOFTWARE.
  */
 
+import java.io.File;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,12 +34,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
+import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Diagram;
 import org.oryxeditor.server.diagram.DiagramBuilder;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
+import de.hpi.bpmn2_0.ExportValidationEventCollector;
 import de.hpi.bpmn2_0.model.Definitions;
 import de.hpi.bpmn2_0.transformation.BPMNPrefixMapper;
 import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
@@ -93,6 +100,7 @@ public class Bpmn2_0Servlet extends HttpServlet {
 	 */
 	protected StringWriter performTransformationToDi(String json) throws Exception {
 		StringWriter writer = new StringWriter();
+		JSONObject result = new JSONObject();
 		
 		/* Retrieve diagram model from JSON */
 	
@@ -110,8 +118,46 @@ public class Bpmn2_0Servlet extends HttpServlet {
 		NamespacePrefixMapper nsp = new BPMNPrefixMapper();
 		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", nsp);
 		
+		/* Set Schema validation properties */
+		SchemaFactory sf = SchemaFactory
+				.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		
+		String xsdPath = this.getServletContext().getRealPath("/WEB-INF/lib/bpmn20/BPMN20.xsd");
+		
+		Schema schema = sf.newSchema(new File(xsdPath));
+		marshaller.setSchema(schema);
+		
+		ExportValidationEventCollector vec = new ExportValidationEventCollector();
+		marshaller.setEventHandler(vec);
+		
+		/* Marshal BPMN 2.0 XML */
 		marshaller.marshal(bpmnDefinitions, writer);
-
+		result.put("xml", writer.toString());
+		
+		/* Append XML Schema validation results */
+		if(vec.hasEvents()) {
+			ValidationEvent[] events = vec.getEvents();
+			StringBuilder builder = new StringBuilder();
+			builder.append("Validation Errors: <br /><br />");
+			
+			for(ValidationEvent event : Arrays.asList(events)) {
+				
+				builder.append("Line: ");
+				builder.append(event.getLocator().getLineNumber());
+				builder.append(" Column: ");
+				builder.append(event.getLocator().getColumnNumber());
+				
+				builder.append("<br />Error: ");
+				builder.append(event.getMessage());
+				builder.append("<br /><br />");
+			}
+			result.put("validationEvents", builder.toString());
+		}
+		
+		/* Prepare output */
+		writer = new StringWriter();
+		writer.write(result.toString());
+		
 		return writer;		
 	}
 

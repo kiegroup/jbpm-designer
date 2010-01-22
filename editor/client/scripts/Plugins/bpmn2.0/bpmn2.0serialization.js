@@ -115,8 +115,10 @@ ORYX.Plugins.BPMN2_0Serialization = {
 	showBpmnXml: function() {	
 		//var options = JSON.stringify({action : 'transform'});
 		
-		this.generateBpmnXml( function( xml ) {
-			this.openXMLWindow(xml);
+		this.generateBpmnXml( function( response ) {
+			var json = response.evalJSON();
+			this.showSchemaValidationEvent(json.validationEvents);
+			this.openXMLWindow(json.xml);
 		}.bind(this),
 		this.bpmnSerializationHandlerUrl);
 	},
@@ -124,10 +126,22 @@ ORYX.Plugins.BPMN2_0Serialization = {
 	downloadBpmnXml: function() {	
 		//var options = JSON.stringify({action : 'transform'});
 		this.generateBpmnXml(
-			function ( xml ) {
-				this.openDownloadWindow("model.bpmn", xml);
+			function ( response ) {
+				var json = response.evalJSON();
+				this.showSchemaValidationEvent(json.validationEvents);
+				this.openDownloadWindow("model.bpmn", json.xml);
 			}.bind(this),
 			this.bpmnSerializationHandlerUrl);
+	},
+	
+	/**
+	 * Show the results of the schema validation in a message box, if it is
+	 * enabled in the configuration.
+	 */
+	showSchemaValidationEvent : function(validationEvents) {
+		if(validationEvents && ORYX.CONFIG.BPMN20_SCHEMA_VALIDATION_ON) {
+			this._showErrorMessageBox("Validation", validationEvents);
+		}
 	},
 	
 	/**
@@ -161,8 +175,8 @@ ORYX.Plugins.BPMN2_0Serialization = {
 				handlerUrl,
 				'POST',
 				{ 'data' : jsonString },
-				function( bpmnXml ) { 
-					bpmnHandleFunction( bpmnXml );  
+				function( response ) { 
+					bpmnHandleFunction( response );  
 					loadMask.hide();
 				}.bind(this),
 				function(transport) { 

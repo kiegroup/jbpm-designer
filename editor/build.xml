@@ -456,7 +456,7 @@
             </lib>
             
 			<lib dir="${editor-src-root}/lib/xsd">
-            	<include name="*.xsd"/>
+            	<include name="**/*.xsd"/>
             </lib>
 			
             <fileset dir="${editor-src-root}/client">           
