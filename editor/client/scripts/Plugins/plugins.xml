@@ -98,6 +98,11 @@
 			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>	
 			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
 		</plugin>
+		
+		<plugin source="enforceabilityOverlay.js" name="ORYX.Plugins.EnforceabilityOverlay">
+			<requires namespace="http://b3mn.org/stencilset/ibpmn#"/>	
+			<requires namespace="http://b3mn.org/stencilset/interactionpetrinets#"/>
+		</plugin>
 		<plugin source="ibpmn2bpmn.js" name="ORYX.Plugins.IBPMN2BPMN">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>

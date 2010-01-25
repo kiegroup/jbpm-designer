@@ -96,5 +96,12 @@
 	<profile name="bpmnQ" depends="default" stencilset="stencilsets/bpmnq/bpmnq.json">
 		<plugin name="ORYX.Plugins.QueryEvaluator"/>
 	</profile>
+	<profile name="interactionpetrinets" depends="default" stencilset="stencilsets/interactionpetrinets/interactionpetrinets.json">
+		<plugin name="ORYX.Plugins.SimplePnmlexport"/>
+		<plugin name="ORYX.Plugins.DesynchronizabilityOverlay"/>
+		<plugin name="ORYX.Plugins.EnforceabilityOverlay"/>
+		
+		<plugin name="ORYX.Plugins.SyntaxChecker"/>
+	</profile>
 
 </profiles>
