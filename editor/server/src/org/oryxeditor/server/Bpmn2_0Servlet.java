@@ -64,10 +64,11 @@ public class Bpmn2_0Servlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
 		String json = req.getParameter("data");
+		boolean asXML = req.getParameter("xml") != null;
 		
 		/* Transform and return from DI */
 		try {
-			StringWriter output = this.performTransformationToDi(json);
+			StringWriter output = this.performTransformationToDi(json, asXML);
 			res.setContentType("application/xml");
 			res.setStatus(200);
 			res.getWriter().print(output.toString());
@@ -98,7 +99,7 @@ public class Bpmn2_0Servlet extends HttpServlet {
 	 * @throws Exception
 	 * 		Exception occurred while processing
 	 */
-	protected StringWriter performTransformationToDi(String json) throws Exception {
+	protected StringWriter performTransformationToDi(String json, boolean asXML) throws Exception {
 		StringWriter writer = new StringWriter();
 		JSONObject result = new JSONObject();
 		
@@ -132,6 +133,11 @@ public class Bpmn2_0Servlet extends HttpServlet {
 		
 		/* Marshal BPMN 2.0 XML */
 		marshaller.marshal(bpmnDefinitions, writer);
+		
+		if(asXML) {
+			return writer;
+		}
+		
 		result.put("xml", writer.toString());
 		
 		/* Append XML Schema validation results */
