@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.diagram;
+package de.hpi.bpmn2_0.model.data_object;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,66 +31,83 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
-import de.hpi.bpmn2_0.model.FlowElement;
-import de.hpi.bpmn2_0.model.data_object.DataStoreReference;
-
+import de.hpi.bpmn2_0.model.Process;
 
 /**
- * <p>Java class for anonymous complex type.
+ * A DataStoreReference provides a reference to a globally defined {@link DataObject}.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;extension base="{http://bpmndi.org}bpmnNodeType">
- *       &lt;attribute name="dataStoreRef" type="{http://www.w3.org/2001/XMLSchema}IDREF" />
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * @author Sven Wagner-Boysen
+ *
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
-public class DataStoreShape
-    extends BpmnNode
-{
-
-    @XmlAttribute
+@XmlType(name = "tDataStoreReference", propOrder = {
+  "dataState"
+})
+public class DataStoreReference extends AbstractDataObject {
+	
+	protected DataState dataState;
+	
+	@XmlAttribute
     @XmlIDREF
     @XmlSchemaType(name = "IDREF")
-    protected DataStoreReference dataStoreRef;
-
-    /**
+	protected DataStore dataStoreRef;
+	
+	public void setProcess(Process process) {
+		super.setProcess(process);
+		if(this.dataStoreRef != null)
+			this.dataStoreRef.setProcessRef(process);
+		
+	}
+	
+	/* Getter & Setter */
+	
+	/**
      * Gets the value of the dataStoreRef property.
      * 
      * @return
      *     possible object is
-     *     {@link DataStoreReference }
+     *     {@link DataStore }
      *     
      */
-    public DataStoreReference getDataStoreRef() {
-        return dataStoreRef;
+	public DataStore getDataStoreRef() {
+		return dataStoreRef;
+	}
+
+	/**
+     * Sets the value of the dataStoreRef property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DataStore }
+     *     
+     */
+	public void setDataStoreRef(DataStore dataStoreRef) {
+		this.dataStoreRef = dataStoreRef;
+	}
+
+	/**
+     * Gets the value of the dataState property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DataState }
+     *     
+     */
+    public DataState getDataState() {
+        return dataState;
     }
 
     /**
-     * Sets the value of the dataStoreRef property.
+     * Sets the value of the dataState property.
      * 
      * @param value
      *     allowed object is
-     *     {@link DataStoreReference }
+     *     {@link DataState }
      *     
      */
-    public void setDataStoreRef(DataStoreReference value) {
-        this.dataStoreRef = value;
+    public void setDataState(DataState value) {
+        this.dataState = value;
     }
-
-	@Override
-	protected FlowElement getFlowElement() {
-		return this.getDataStoreRef();
-	}
-
+	
 }

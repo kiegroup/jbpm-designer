@@ -62,6 +62,7 @@ import de.hpi.bpmn2_0.model.conversation.Conversation;
 import de.hpi.bpmn2_0.model.conversation.ConversationLink;
 import de.hpi.bpmn2_0.model.conversation.ConversationNode;
 import de.hpi.bpmn2_0.model.data_object.AbstractDataObject;
+import de.hpi.bpmn2_0.model.data_object.DataStoreReference;
 import de.hpi.bpmn2_0.model.diagram.AssociationConnector;
 import de.hpi.bpmn2_0.model.diagram.BpmnConnector;
 import de.hpi.bpmn2_0.model.diagram.BpmnDiagram;
@@ -518,25 +519,36 @@ public class Diagram2BpmnConverter {
 	private void handleDataObjects() {
 		ArrayList<AbstractDataObject> dataObjects = new ArrayList<AbstractDataObject>();
 		this.getAllDataObjects(this.diagramChilds, dataObjects);
-		
-		for(AbstractDataObject dataObject : dataObjects) {
-			if(dataObject.getProcess() != null)
+
+		for (AbstractDataObject dataObject : dataObjects) {
+			if (dataObject.getProcess() != null)
 				continue;
 			dataObject.findRelatedProcess();
-			
-			/* If no related process was found, add assign to the default process. */
-			if(dataObject.getProcess() == null && this.processes.size() > 0) {
-				dataObject.setProcess(this.processes.get(this.processes.size() - 1));
-				this.processes.get(this.processes.size() - 1).addChild(dataObject);
+
+			/* Add a DataStore as a global element */
+			if (dataObject instanceof DataStoreReference
+					&& ((DataStoreReference) dataObject).getDataStoreRef() != null) {
+				this.definitions.getRootElement().add(
+						((DataStoreReference) dataObject).getDataStoreRef());
 			}
-			else if(dataObject.getProcess() == null) {
+
+			/*
+			 * If no related process was found, add assign to the default
+			 * process.
+			 */
+			if (dataObject.getProcess() == null && this.processes.size() > 0) {
+				dataObject.setProcess(this.processes
+						.get(this.processes.size() - 1));
+				this.processes.get(this.processes.size() - 1).addChild(
+						dataObject);
+			} else if (dataObject.getProcess() == null) {
 				Process process = new Process();
 				this.processes.add(process);
 				process.setId(OryxUUID.generate());
 				process.addChild(dataObject);
 				dataObject.setProcess(process);
 			}
-				
+
 		}
 	}
 
@@ -1076,6 +1088,8 @@ public class Diagram2BpmnConverter {
 			}
 		} catch (JSONException e) {
 			// ignore namespace property
+		} catch (NullPointerException np) {
+			
 		}
 
 		/* Expression Language */
@@ -1125,7 +1139,7 @@ public class Diagram2BpmnConverter {
 
 		this.insertChoreographyProcessesIntoDefinitions();
 		this.insertConversationIntoDefinitions();
-		
+
 		this.handleDataObjects();
 
 		this.insertProcessesIntoDefinitions();

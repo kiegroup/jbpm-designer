@@ -452,7 +452,7 @@
 			"name" : "itemAwareElement",
 			"properties" : [
 				{
-					"id" : "itemSubjectRef",
+					"id" : "itemsubjectref",
 					"type" : "String",
 					"title" : "ItemSubjectRef",
 					"title_de" : "ItemSubjectRef",
@@ -464,7 +464,7 @@
 					"wrapLines" : true
 				},
 				{
-					"id" : "dataState",
+					"id" : "datastate",
 					"type" : "String",
 					"title" : "DataState",
 					"title_de" : "Daten-Zustand",
@@ -2859,7 +2859,6 @@
 			"propertyPackages":	[
 				"baseAttributes",
 				"flowElement",
-				"itemAwareElement",
 				"bgColor"
 			],
 			"properties" :		[

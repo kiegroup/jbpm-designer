@@ -24,11 +24,14 @@ package de.hpi.bpmn2_0.factory;
 
 import org.oryxeditor.server.diagram.Shape;
 
-import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.annotations.StencilId;
+import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.model.BaseElement;
+import de.hpi.bpmn2_0.model.data_object.DataState;
 import de.hpi.bpmn2_0.model.data_object.DataStore;
+import de.hpi.bpmn2_0.model.data_object.DataStoreReference;
 import de.hpi.bpmn2_0.model.diagram.DataStoreShape;
+import de.hpi.diagram.OryxUUID;
 
 /**
  * Factory for DataStores 
@@ -48,11 +51,11 @@ public class DataStoreFactory extends AbstractBpmnFactory {
 			throws BpmnConverterException {
 		
 		DataStoreShape dataShape = (DataStoreShape) this.createDiagramElement(shape);
-		DataStore dataStore = (DataStore) this.createProcessElement(shape);
+		DataStoreReference dataStoreRef = (DataStoreReference) this.createProcessElement(shape);
 		
-		dataShape.setDataStoreRef(dataStore);
+		dataShape.setDataStoreRef(dataStoreRef);
 		
-		return new BPMNElement(dataShape, dataStore, shape.getResourceId());
+		return new BPMNElement(dataShape, dataStoreRef, shape.getResourceId());
 	}
 
 	/* (non-Javadoc)
@@ -73,12 +76,54 @@ public class DataStoreFactory extends AbstractBpmnFactory {
 	@Override
 	protected BaseElement createProcessElement(Shape shape)
 			throws BpmnConverterException {
-		DataStore dataStore = new DataStore();
+		DataStoreReference dataStoreRef = new DataStoreReference();
+		dataStoreRef.setDataStoreRef(new DataStore());
+		this.setDataStoreRefAttributes(dataStoreRef, shape);
 		
-		dataStore.setId(shape.getResourceId());
-		dataStore.setName(shape.getProperty("name"));
+		return dataStoreRef;
+	}
+	
+	/**
+	 * Sets the attributes related to a data store element.
+	 * 
+	 * @param dataStoreRef
+	 * 		The @link {@link DataStoreReference}.
+	 * @param shape
+	 * 		The data store {@link Shape}
+	 */
+	private void setDataStoreRefAttributes(DataStoreReference dataStoreRef, Shape shape) {
+		DataStore dataStore = dataStoreRef.getDataStoreRef();
+		String dataStateName = shape.getProperty("state");
+		/* Set attributes of the global data store */
+		if(dataStore != null) {
+			dataStore.setId(OryxUUID.generate());
+			dataStore.setName(shape.getProperty("name"));
+			if(shape.getProperty("capacity") != null && !shape.getProperty("capacity").isEmpty())
+				dataStore.setCapacity(Integer.valueOf(shape.getProperty("capacity")).intValue());
+			
+			/* Set isUnlimited attribute */
+			String isUnlimited = shape.getProperty("isunlimited");
+			if(isUnlimited != null && isUnlimited.equalsIgnoreCase("true")) 
+				dataStore.setUnlimited(true);
+			else
+				dataStore.setUnlimited(false);
+			
+			/* Define DataState element */
+			if(dataStateName != null && !dataStateName.isEmpty()) {
+				DataState dataState = new DataState(dataStateName);
+				dataStore.setDataState(dataState);
+			}
+		}
 		
-		return dataStore;
+		/* Set attributes of the data store reference */
+		dataStoreRef.setName(shape.getProperty("name"));
+		dataStoreRef.setId(shape.getResourceId());
+		
+		/* Define DataState element */
+		if(dataStateName != null && !dataStateName.isEmpty()) {
+			DataState dataState = new DataState(dataStateName);
+			dataStoreRef.setDataState(dataState);
+		}
 	}
 
 }

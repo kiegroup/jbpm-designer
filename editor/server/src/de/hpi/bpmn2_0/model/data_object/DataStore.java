@@ -27,7 +27,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import de.hpi.bpmn2_0.model.RootElement;
 
 
 /**
@@ -52,15 +55,52 @@ import javax.xml.namespace.QName;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-//@XmlType(name = "tDataStore", propOrder = {
-//    "dataState"
-//})
+@XmlType(name = "tDataStore", propOrder = {
+	"dataState",
+	"name",
+	"capacity",
+	"isUnlimited"
+})
 public class DataStore
-    extends AbstractDataObject
+    extends RootElement
 {
 
-//    protected TDataState dataState;
+    protected DataState dataState;
+    
     @XmlAttribute
+    protected String name;
+    @XmlAttribute
+    protected int capacity;
+    @XmlAttribute
+    protected boolean isUnlimited;
+    
+    /* Getter & Setter */
+    
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+
+	public boolean isUnlimited() {
+		return isUnlimited;
+	}
+
+	public void setUnlimited(boolean isUnlimited) {
+		this.isUnlimited = isUnlimited;
+	}
+
+	@XmlAttribute
     protected QName itemSubjectRef;
 
     /**
@@ -68,24 +108,24 @@ public class DataStore
      * 
      * @return
      *     possible object is
-     *     {@link TDataState }
+     *     {@link DataState }
      *     
      */
-//    public TDataState getDataState() {
-//        return dataState;
-//    }
+    public DataState getDataState() {
+        return dataState;
+    }
 
     /**
      * Sets the value of the dataState property.
      * 
      * @param value
      *     allowed object is
-     *     {@link TDataState }
+     *     {@link DataState }
      *     
      */
-//    public void setDataState(TDataState value) {
-//        this.dataState = value;
-//    }
+    public void setDataState(DataState value) {
+        this.dataState = value;
+    }
 
     /**
      * Gets the value of the itemSubjectRef property.
