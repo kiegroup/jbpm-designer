@@ -111,7 +111,7 @@ public class QueryEvalServlet extends HttpServlet {
 //        if (useDataBaseConnection) {
 //            qProcessor = new MemoryQueryProcessor(respWriter);
 //        } else {
-            qProcessor = new OryxMemoryQueryProcessor(respWriter,"http://oryx-project:8080/backend/poem");
+            qProcessor = new OryxMemoryQueryProcessor(respWriter,"http://oryx-project.org:8080/backend/poem");
 //        }
         
         String stopOption = req.getParameter("stopAtFirstMatch");
