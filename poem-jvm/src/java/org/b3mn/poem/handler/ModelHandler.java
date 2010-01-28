@@ -25,7 +25,6 @@ package org.b3mn.poem.handler;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,8 +40,7 @@ import org.b3mn.poem.util.RestrictAccess;
 
 @HandlerWithModelContext(uri="/self", filterBrowser=true)
 public class ModelHandler extends  HandlerBase {
-	private Properties props;
-
+	Properties props=null;
 	@Override
 	public void init() {
 		//Load properties
@@ -75,25 +73,15 @@ public class ModelHandler extends  HandlerBase {
 		if(profileName==null)
 			profileName="default";
 		
-		
-		
-		response.sendRedirect("/oryx/editor;"+profileName+"#"+object.getUri());
-//		Representation representation = object.read();
-//		
-//		String content = 
-//	        "<script type='text/javascript'>" +
-//              "function onOryxResourcesLoaded(){" +
-//                "ORYX.Editor.createByUrl('" + getRelativeServerPath(request) + object.getUri() + "/json', {"+
-//                  "id: 'oryx-canvas123'" +
-//          		"});" +
-//          	  "}" +
-//          	"</script>";
-//		response.setContentType("application/xhtml+xml");
-//		
-//		response.getWriter().println(this.getOryxModel(representation.getTitle(), 
-//				content, this.getLanguageCode(request), 
-//				this.getCountryCode(request)));
-//		response.setStatus(200);
+	    String queryString = request.getQueryString();   // d=789
+	    if (queryString != null) {
+			response.sendRedirect("/oryx/editor;"+profileName+"?"+queryString+"#"+object.getUri());
+
+	        }
+	    else{
+			response.sendRedirect("/oryx/editor;"+profileName+"#"+object.getUri());
+
+	    }
 	}
 	
 	@Override
