@@ -33,41 +33,65 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.b3mn.poem.Identity;
-import org.b3mn.poem.Representation;
 import org.b3mn.poem.util.HandlerWithoutModelContext;
 
 @HandlerWithoutModelContext(uri="/new")
 public class NewModelHandler extends HandlerBase {
 	Properties props=null;
-	String configPreFix="profile.stencilset.mapping.";
+	final static String configPreFix="profile.stencilset.mapping.";
+	final static String defaultSS= "/stencilsets/bpmn/bpmn.json";
+	@Override
+	public void init() {
+		//Load properties
+		FileInputStream in;
+		
+		//initialize properties from backend.properties
+		try {
+			
+			in = new FileInputStream(this.getBackendRootDirectory() + "/WEB-INF/backend.properties");
+			props = new Properties();
+			props.load(in);
+			in.close();
+		}catch (Exception e) {
+		}
+	}
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response, Identity subject, Identity object) throws IOException {
-		String stencilset = "/stencilsets/bpmn/bpmn.json";
-		boolean stencilSetSpefified=false;
-		if (request.getParameter("stencilset") != null) {
-			stencilset = request.getParameter("stencilset");
-			stencilSetSpefified=true;
-		}
+	    String queryString = request.getQueryString();   // d=789
+	    if (queryString != null) {
+			queryString="?"+queryString;
+
+	        }
+	    else{
+			queryString="";
+
+	    }
 		if(request.getParameter("profile")!=null){
-			if(stencilSetSpefified)
-				response.sendRedirect("/oryx/editor;"+request.getParameter("profile")+"#new?stencilset="+stencilset);
-			else
-				response.sendRedirect("/oryx/editor;"+request.getParameter("profile")+"#new");
+			response.sendRedirect("/oryx/editor;"+request.getParameter("profile")+queryString+queryString);
 			return;
 
 		}
-		if(props==null){
-			try {
-				FileInputStream in = new FileInputStream(this.getBackendRootDirectory() + "/WEB-INF/backend.properties");
-				props = new Properties();
-				props.load(in);
-				in.close();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-			}
-		}
 		
+		redirectToDefaultProfileForStencilSet(request, response, queryString);
+
+		
+	}
+
+	/**Redirects to the default Profile for the given StencilSet (definition in property file)
+	 * If not stencilset given, use the defaultSS of the handler
+	 * @param request
+	 * @param response
+	 * @param queryString
+	 * @throws IOException
+	 */
+	private void redirectToDefaultProfileForStencilSet(
+			HttpServletRequest request, HttpServletResponse response,
+			String queryString) throws IOException {
 		String profileName=null;
+		String stencilset =defaultSS;
+		if (request.getParameter("stencilset") != null) {
+			stencilset = request.getParameter("stencilset");
+		}
 		try {
 			Pattern p = Pattern.compile("/([^/]+).json");
 			Matcher matcher = p.matcher(stencilset);
@@ -80,26 +104,7 @@ public class NewModelHandler extends HandlerBase {
 		if(profileName==null)
 			profileName="default";
 		
-		response.sendRedirect("/oryx/editor;"+profileName+"#new?stencilset="+stencilset);
-
-//		String content = 
-//	        "<script type='text/javascript'>" +
-//              "function onOryxResourcesLoaded(){" +
-//                "new ORYX.Editor({"+
-//                  "id: 'oryx-canvas123',"+
-//                  "stencilset: {"+
-//                  	"url: '/oryx"+stencilset + "'" +
-//                  "}" +
-//          		"});" +
-//          	  "}" +
-//          	"</script>";
-//
-//		response.getWriter().print(this.getOryxModel("New Process Model", content,
-//				this.getLanguageCode(request), this.getCountryCode(request)));
-//
-//		response.setStatus(200);
-//		response.setContentType("application/xhtml+xml");
-		
+		response.sendRedirect("/oryx/editor;"+profileName+queryString);
 	}
 	
 	@Override

@@ -45,8 +45,7 @@
 		<plugin name="ORYX.Plugins.StepThroughPlugin"/>
 		<plugin name="ORYX.Plugins.BPMN11"/>
 		<plugin name="ORYX.Plugins.BPMN"/>
-		
-		
+		<plugin name="ORYX.Plugins.QueryResultHighlighter"/>
 		<plugin name="ORYX.Plugins.BpmnLayouter"/>
 		<plugin name="ORYX.Plugins.PNExport"/>
 		<plugin name="ORYX.Plugins.BPMN2XPDL"/>
