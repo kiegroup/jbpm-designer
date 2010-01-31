@@ -9,20 +9,20 @@ define "oryx" do
   project.version = VERSION_NUMBER
   project.group = "com.intalio.bpms.web" 
   
-  file(_('dist/oryx.war')).enhance do
-    system('ant rebuild-all') or fail "Error in the ant packaging script"
-  end
+  
   oryx = artifact("#{project.group}:oryx:war:#{project.version}").from(_('dist/oryx.war').to_s)
   backend = artifact("#{project.group}:backend:war:#{project.version}").from(_('dist/backend.war').to_s)
   
-  upload.enhance [oryx, backend]
+  build do 
+    system('ant rebuild-all') or fail "Error in the ant packaging script"
+  end
   
   upload do
     oryx.upload
     backend.upload
   end
   
-  clean.enhance do
-    rm_rf 'dist/*'
+  clean do
+    rm_rf _('dist')
   end
 end
