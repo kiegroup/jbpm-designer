@@ -2727,8 +2727,9 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"refToView": ["caption", "captionDisableAntialiasing", "text_v"],
+					"refToView": ["caption", "captionDisableAntialiasing"],
 					"fill":true,
+					"visible":false,
 					"stroke":false,
 					"hidden":true
 				}
