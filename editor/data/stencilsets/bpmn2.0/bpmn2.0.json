@@ -2636,8 +2636,6 @@
 				"all",
 				"messageflow_start",
 				"messageflow_end",
-				"to_task_event",
-				"from_task_event",
 				"fromtoall",
 				"canContainArtifacts"				
 			],
@@ -2678,8 +2676,6 @@
 				"all",
 				"messageflow_start",
 				"messageflow_end",
-				"to_task_event",
-				"from_task_event",
 				"fromtoall"				
 			]
 		},
