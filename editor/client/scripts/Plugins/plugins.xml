@@ -239,6 +239,10 @@
             <requires namespace="http://b3mn.org/stencilset/petrinet#"/>
         </plugin>
         
+         <plugin source="petrinet.js" name="ORYX.Plugins.PetriNet">
+            <requires namespace="http://b3mn.org/stencilset/petrinet#"/>
+        </plugin>
+        
         <plugin source="bpmn2pn.js" name="ORYX.Plugins.PNExport">
             <requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/> 
             <requires namespace="http://b3mn.org/stencilset/bpmn#"/>
