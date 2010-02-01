@@ -3962,19 +3962,19 @@
 					"items": [
 						{
 							"id":"none",
-							"title":"c1",
+							"title":"None",
 							"value":"None",
 							"refToView":"tempnone"
 						},
 						{
 							"id":"precedes",
-							"title":"c2",
+							"title":"Precedes",
 							"value":"Precedes",
 							"refToView":"tempprecedes"
 						},
 						{
 							"id":"leadsto",
-							"title":"c3",
+							"title":"Leads to",
 							"value":"Leads to",
 							"refToView":"templeadsto"
 						}
