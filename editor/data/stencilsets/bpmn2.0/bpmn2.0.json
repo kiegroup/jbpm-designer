@@ -2679,6 +2679,31 @@
 				"fromtoall"				
 			]
 		},
+        {
+            "type" :            "node",
+            "id" :              "processparticipant",
+            "title" :           "Additional Participant",
+            "title_de" :        "Zusätzlicher Beteiligter",
+            "groups" :          ["Swimlanes"],
+            "groups_de" :       ["Rollen"],
+            "description" :     "",
+            "description_de" :  "",
+            "view" :            "swimlane/process.participant.svg",
+            "icon" :            "swimlane/process.participant.png",
+            "defaultAlign" :    "northeast",
+            "propertyPackages": [
+                "baseAttributes",
+                "flowElement",
+                "artifact",
+                "bgColor"
+            ],
+            "roles": [
+                "all",
+                "from_participant",
+                "to_participant",
+                "eventSubprocessElement"
+            ]
+        },
 		{
 			"type" : 			"node",
 			"id" :				"Lane",
@@ -2838,30 +2863,6 @@
 				"TextAnnotationMorph"
 			]
 		},
-		{
-            "type" :            "node",
-            "id" :              "processparticipant",
-            "title" :           "Process Participant",
-            "title_de" :        "Prozessbeteiligter",
-            "groups" :          ["Artifacts"],
-            "groups_de" :       ["Artefakte"],
-            "description" :     "",
-            "description_de" :  "",
-            "view" :            "artifact/process.participant.svg",
-            "icon" :            "artifact/process.participant.png",
-            "defaultAlign" :    "northeast",
-            "propertyPackages": [
-                "baseAttributes",
-                "flowElement",
-                "artifact",
-				"bgColor"
-            ],
-            "roles": [
-                "all",
-                "from_participant",
-                "to_participant"
-            ]
-        },
 		
 		// Data Objects
 		
@@ -5099,7 +5100,8 @@
 					"sequence_start",
 					"sequence_end",
 					"DataObjectMorph",
-					"TextAnnotationMorph"
+					"TextAnnotationMorph",
+					"from_participant"
 				]
 			},
 			{
@@ -5111,7 +5113,8 @@
 					"to_task_event",
 					"EventSubprocess",
 					"CollapsedEventSubprocess",
-					"TextAnnotation"
+					"TextAnnotation",
+					"from_participant"
 				]
 			},
 			{
