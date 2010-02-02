@@ -2838,6 +2838,30 @@
 				"TextAnnotationMorph"
 			]
 		},
+		{
+            "type" :            "node",
+            "id" :              "processparticipant",
+            "title" :           "Process Participant",
+            "title_de" :        "Prozessbeteiligter",
+            "groups" :          ["Artifacts"],
+            "groups_de" :       ["Artefakte"],
+            "description" :     "",
+            "description_de" :  "",
+            "view" :            "artifact/process.participant.svg",
+            "icon" :            "artifact/process.participant.png",
+            "defaultAlign" :    "northeast",
+            "propertyPackages": [
+                "baseAttributes",
+                "flowElement",
+                "artifact",
+				"bgColor"
+            ],
+            "roles": [
+                "all",
+                "from_participant",
+                "to_participant"
+            ]
+        },
 		
 		// Data Objects
 		
@@ -3773,7 +3797,16 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				
+				{
+                    "id":"entry",
+                    "type":"DiagramLink",
+                    "title":"Diagram Link",
+                    "title_de":"Diagram Link",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":false
+                },
 				{
 					"id":"trigger",
 					"type":"String",
@@ -4199,6 +4232,16 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
+			     {
+                    "id":"entry",
+                    "type":"DiagramLink",
+                    "title":"Diagram Link",
+                    "title_de":"Diagram Link",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":false
+                },
 				{
 					"id":"trigger",
 					"type":"String",
@@ -5018,6 +5061,14 @@
 					{
 						"from" : "TextAnnotation",
 						"to" : "ChoreographyElement"
+					},
+					{
+					   "from" : "from_task_event",
+					   "to" : ["to_participant"]
+					},
+					{
+					   "from" : "from_participant",
+					   "to" : ["to_task_event"]
 					}
 				]
 			}
