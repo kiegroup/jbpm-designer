@@ -717,7 +717,8 @@ ORYX.I18N.SyntaxChecker.BPMN_MESSAGE_FLOW_NOT_CONNECTED = "Mindestens ein Ende d
 
 /** New Language Properties 05.11.2009 */
 if(!ORYX.I18N.RESIZE) ORYX.I18N.RESIZE = {};
-ORYX.I18N.RESIZE.tip = "Zeichenfläche vergrößern:";
+ORYX.I18N.RESIZE.tipGrow = "Zeichenfläche vergrößern:";
+ORYX.I18N.RESIZE.tipShrink = "Zeichenfläche verkleinern:";
 ORYX.I18N.RESIZE.N = "Nach oben";
 ORYX.I18N.RESIZE.W = "Nach links";
 ORYX.I18N.RESIZE.S ="Nach unten";

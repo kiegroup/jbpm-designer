@@ -546,7 +546,8 @@ ORYX.I18N.Feedback.subjects = [
 
 /** New Language Properties 05.11.2009 */
 //if(!ORYX.I18N.RESIZE) ORYX.I18N.RESIZE = {};
-//ORYX.I18N.RESIZE.tip = "Increase canvas size:";
+//ORYX.I18N.RESIZE.tipGrow = "Increase canvas size:";
+//ORYX.I18N.RESIZE.tipShrink = "Decrease canvas size:";
 //ORYX.I18N.RESIZE.N = "Top";
 //ORYX.I18N.RESIZE.W = "Left";
 //ORYX.I18N.RESIZE.S ="Down";

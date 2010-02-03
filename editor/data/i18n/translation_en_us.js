@@ -707,7 +707,8 @@ ORYX.I18N.Validator.epcNotSound = "<p><b>The EPC is <i>NOT</i> sound!</b></p>";
 
 /** New Language Properties: 05.06.2009*/
 if(!ORYX.I18N.RESIZE) ORYX.I18N.RESIZE = {};
-ORYX.I18N.RESIZE.tip = "Increase canvas size:";
+ORYX.I18N.RESIZE.tipGrow = "Increase canvas size:";
+ORYX.I18N.RESIZE.tipShrink = "Decrease canvas size:";
 ORYX.I18N.RESIZE.N = "Top";
 ORYX.I18N.RESIZE.W = "Left";
 ORYX.I18N.RESIZE.S ="Down";
