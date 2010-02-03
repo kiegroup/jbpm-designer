@@ -14,6 +14,7 @@
 			"title_de" : "Choreographie-Aufgabe",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
+            "position" : -4,
 			"description" : "A Choreography Task represents an interaction, which is a coherent set (1 or more) of message exchanges between two or more participants. The white participant initiates the interaction.",
 			"description_de" : "Eine Choreographie-Aufgabe repräsentiert eine Interaktion (Nachrichtenaustausch) zwischen zwei oder mehr Beteiligten. Der weiß gekennzeichnete Beteiligte initiiert die Interaktion.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.task.svg",
@@ -135,6 +136,7 @@
 			"title_de" : "Choreographie-Unterprozess (zugeklappt)",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
+            "position" : -3,
 			"description" : "A Choreography Subprocess contains a refined choreography with several interactions. Another diagram can be linked via the + symbol. The white participant initiates the interaction.",
 			"description_de" : "Ein Choreographie-Unterprozess enthält eine verfeinerte Choreographie mit mehreren Interaktionen zwischen Kommunikationspartnern. Ein weiteres Diagramm kann hinter dem + Symbol verknüpft werden. Der weiß gekennzeichnete Beteiligte initiiert die Interaktion.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.subprocess.collapsed.svg",
@@ -269,6 +271,7 @@
 			"title_de" : "Choreographie-Unterprozess (aufgeklappt)",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
+            "position" : -2,
 			"description" : "A Choreography Subprocess contains a refined choreography with several interactions. An expanded subprocess contains a valid BPMN diagram. The white participant initiates the interaction.",
 			"description_de" : "Ein Choreographie-Unterprozess enthält eine verfeinerte Choreographie mit mehreren Interaktionen zwischen Kommunikationspartnern. Ein aufgeklappter Unterprozess enthält in sich ein eigenes BPMN-Diagramm, welches direkt innerhalb modelliert wird. Der weiß gekennzeichnete Beteiligte initiiert die Interaktion.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.subprocess.expanded.svg",
@@ -393,6 +396,7 @@
 			"title_de" : "Teilnehmer",
 			"groups" : ["Choreography"],
 			"groups_de" : ["Choreographie"],
+            "position" : -1,
 			"description" : "A Choreography Activity represents interactions between multiple participants. An interaction can take place between many participants. This modeling element can be embedded into other Choreography Activities.",
 			"description_de" : "Eine Choreographie-Aktivität beschreibt die Interaktionen zwischen mehreren Teilnehmer. Die Interaktion kann zwischen beliebig vielen Teilnehmern erfolgen. Dieses Element kann in bestehende Choreographie-Aktivitäten eingebettet werden.",
 			"view" : "../../extensions/bpmn2.0choreography/view/choreography.participant.svg",
@@ -504,38 +508,6 @@
 			"roles" : [
 				"ChoreographyElement"
 			]
-		},
-		{
-			"type": "edge",
-			"id":"ChoreographyMessageFlowStart",
-			"title":"Message Flow Source",
-			"title_de":"Nachrichtenfluss Quelle",
-			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
-			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Steuerfluss kombiniert werden.",
-			"groups":["Connecting Objects"],
-			"groups_de":["Konnektoren"],
-			"view":"../../extensions/bpmn2.0choreography/view/choreography.messageflow.start.svg",
-			"icon":"../../extensions/bpmn2.0choreography/icons/choreography.messageflow.start.png",
-			"roles": [
-				"ConnectingObjectsMorph",
-				"MessageContainer"
-			]
-		},
-		{
-			"type": "edge",
-			"id":"ChoreographyMessageFlowEnd",
-			"title":"Message Flow Target",
-			"title_de":"Nachrichtenfluss Ziel",
-			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
-			"description_de":"Nachrichtenflüsse symbolisieren Informationen, die über organisatorische Grenzen hinweg fließen. Nachrichtenflüsse können an Pools, Aktivitäten oder Nachrichten-Ereignissen angeheftet sein. Die Abfolge von Nachrichtenaustauschen kann spezifiziert werden, indem Nachrichtenfluss und Steuerfluss kombiniert werden.",
-			"groups":["Connecting Objects"],
-			"groups_de":["Konnektoren"],
-			"view":"../../extensions/bpmn2.0choreography/view/choreography.messageflow.end.svg",
-			"icon":"../../extensions/bpmn2.0choreography/icons/choreography.messageflow.end.png",
-			"roles": [
-				"ConnectingObjectsMorph",
-				"MessageContainer"
-			]
 		}
 	],
 	"properties":[],
@@ -562,10 +534,6 @@
 		"IntermediateMultipleEventThrowing",
 		"IntermediateCompensationEventThrowing",
 		"IntermediateMessageEventThrowing",
-		"ChoreographyMessageFlowEnd",
-		"ChoreographyMessageFlowStart",
-		
-		
 		"DataStore",
 		"DataObject",
 		"StartMessageEvent",

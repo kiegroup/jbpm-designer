@@ -241,11 +241,13 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 					
 			if(jsonExtension["extends"] == this.namespace()) {
 				this._extensions[jsonExtension.namespace] = jsonExtension;
-		
+				
+				var defaultPosition = this._stencils.keys().size();
 				//load new stencils
 				if(jsonExtension.stencils) {
 					$A(jsonExtension.stencils).each(function(stencil) {
-						var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this);            
+						defaultPosition++;
+						var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, undefined, defaultPosition);            
 						this._stencils[oStencil.id()] = oStencil;
 						this._availableStencils[oStencil.id()] = oStencil;
 					}.bind(this));
@@ -430,11 +432,14 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 			}).bind(this));
 		}
 		
+		var defaultPosition = 0;
+		
         // init each stencil
         $A(this._jsonObject.stencils).each((function(stencil){
-        
+        	defaultPosition++;
+        	
             // instantiate normally.
-            var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, pps);      
+            var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, pps, defaultPosition);      
 			this._stencils[oStencil.id()] = oStencil;
 			this._availableStencils[oStencil.id()] = oStencil;
             
