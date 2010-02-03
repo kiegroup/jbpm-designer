@@ -1,0 +1,17 @@
+<topology name="topologySA" targetNamespace="example" xmlns:buyer="example:buyer" xmlns:seller="example:seller">
+  <participantTypes>
+    <participantType name="Buyer" participantBehaviorDescription="buyer:buyer" />
+    <participantType name="Seller" participantBehaviorDescription="seller:seller" />
+  </participantTypes>
+  <participants>
+    <participant name="buyerref" type="Buyer" selects="sellerref" />
+    <participant name="sellerref" type="Seller" scope="seller:innerscope" />
+    <participantSet name="sellers" type="Seller" forEach="buyer:forEach1 buyer:RequestPriceFE" scope="buyer:scope1" />
+  </participants>
+  <messageLinks>
+    <messageLink name="ProductInformation" senders="sellers" sendActivity="SendPI" receiver="buyerref" receiveActivity="ReceivePI" bindSenderTo="sellerref" messageName="ProductInformation" />
+    <messageLink name="PurchaseOrder" sender="buyerref" sendActivity="SendPO" receiver="sellerref" receiveActivity="ReceivePO" messageName="PurchaseOrder" />
+    <messageLink name="POConfirmation" sender="sellerref" sendActivity="SendConf" receiver="buyerref" receiveActivity="ReceiveConf" messageName="POConfirmation" />
+  </messageLinks>
+</topology>
+
