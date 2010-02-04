@@ -2679,31 +2679,6 @@
 				"fromtoall"				
 			]
 		},
-        {
-            "type" :            "node",
-            "id" :              "processparticipant",
-            "title" :           "Additional Participant",
-            "title_de" :        "Zusätzlicher Beteiligter",
-            "groups" :          ["Swimlanes"],
-            "groups_de" :       ["Rollen"],
-            "description" :     "",
-            "description_de" :  "",
-            "view" :            "swimlane/process.participant.svg",
-            "icon" :            "swimlane/process.participant.png",
-            "defaultAlign" :    "northeast",
-            "propertyPackages": [
-                "baseAttributes",
-                "flowElement",
-                "artifact",
-                "bgColor"
-            ],
-            "roles": [
-                "all",
-                "from_participant",
-                "to_participant",
-                "eventSubprocessElement"
-            ]
-        },
 		{
 			"type" : 			"node",
 			"id" :				"Lane",
@@ -2776,6 +2751,32 @@
 						}
 			]
 		},
+        {
+            "type" :            "node",
+            "id" :              "processparticipant",
+            "title" :           "Additional Participant",
+            "title_de" :        "Zusätzlicher Beteiligter",
+            "groups" :          ["Swimlanes"],
+            "groups_de" :       ["Rollen"],
+            "description" :     "he additional participant can be connected to a task or sub process. It is used to visualize additional associations of roles or individuals to the respective activity (e.g. responsibility, informed persons, etc.).",
+            "description_de" :  "Ein zusätzlicher Beteiligter kann an einen Task oder Unterprozess angeheftet werden. Mit ihm können zusätzliche Beziehungen einer Rolle oder Person zu der jeweiligen Aufgabe abgebildet werden (z.B. fachliche Verantwortung, Benachrichtigte Personen, etc.).",
+            "view" :            "swimlane/process.participant.svg",
+            "icon" :            "swimlane/process.participant.png",
+            "defaultAlign" :    "northeast",
+            "propertyPackages": [
+                "baseAttributes",
+                "flowElement",
+                "artifact",
+                "bgColor"
+            ],
+            "roles": [
+                "all",
+                "from_participant",
+                "to_participant",
+                "fromtoall",
+                "eventSubprocessElement"
+            ]
+        },
 		
 		// Artifacts
 		
@@ -4828,6 +4829,21 @@
 			"roles": [
 				"all",
 				"ConnectingObjectsMorph"
+			],
+			"properties" : [
+                {
+                    "id":"name",
+                    "type":"String",
+                    "title":"Name",
+                    "title_de":"Name",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "length":"",
+                    "refToView":"text",
+                    "wrapLines":true
+                }
 			]
 		},
 		{
@@ -5064,12 +5080,12 @@
 						"to" : "ChoreographyElement"
 					},
 					{
-					   "from" : "from_task_event",
+					   "from" : "ActivitiesMorph",
 					   "to" : ["to_participant"]
 					},
 					{
-					   "from" : "from_participant",
-					   "to" : ["to_task_event"]
+					   "from" : "to_participant",
+					   "to" : ["ActivitiesMorph"]
 					}
 				]
 			}
