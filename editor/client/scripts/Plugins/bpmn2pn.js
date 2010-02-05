@@ -58,14 +58,19 @@ ORYX.Plugins.BPMNImport = Clazz.extend({
      */
     bpmnToPn: function(bpmnRdf){
         Ext.Msg.updateProgress(0.66, ORYX.I18N.BPMN2PNConverter.progress.convertingModel);
-        Ext.Ajax.request({
+        
+       Ext.Ajax.request({
             url: this.converterUrl,
             method: 'POST',
             success: function(request){
-                var parser = new DOMParser();
-                Ext.Msg.updateProgress(1.0, ORYX.I18N.BPMN2PNConverter.progress.renderingModel);
-                var doc = parser.parseFromString(request.responseText, "text/xml");
-                this.facade.importERDF(doc);
+    	   		try{
+	                var parser = new DOMParser();
+	                Ext.Msg.updateProgress(1.0, ORYX.I18N.BPMN2PNConverter.progress.renderingModel);
+	                var doc = parser.parseFromString(request.responseText, "text/xml");
+	                this.facade.importERDF(doc);
+    	   		}catch(e){
+    	   			Ext.Msg.alert("Rendering Failed :\n"+e);
+    	   		}
                 Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
@@ -75,6 +80,7 @@ ORYX.Plugins.BPMNImport = Clazz.extend({
                 rdf: bpmnRdf
             }
         });
+        
     },
     
     /**
