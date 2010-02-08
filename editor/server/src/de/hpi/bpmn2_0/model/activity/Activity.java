@@ -99,11 +99,9 @@ public abstract class Activity
 //    protected TInputOutputSpecification ioSpecification;
 //    protected List<TProperty> property;
 	
-	@XmlIDREF
 	@XmlElement(name = "dataInputAssociation", type = DataInputAssociation.class)
     protected List<DataInputAssociation> dataInputAssociation;
 	
-	@XmlIDREF
 	@XmlElement(name = "dataOutputAssociation", type = DataOutputAssociation.class)
     protected List<DataOutputAssociation> dataOutputAssociation;
 	

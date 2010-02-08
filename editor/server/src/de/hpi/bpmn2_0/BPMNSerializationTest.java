@@ -30,18 +30,36 @@ public class BPMNSerializationTest {
 
 	final static String path = "C:\\Users\\Sven Wagner-Boysen\\workspace\\oryx3\\editor\\server\\src\\de\\hpi\\bpmn2_0\\";
 	final static String schemaFilePath = "C:\\Users\\Sven Wagner-Boysen\\workspace\\oryx3\\editor\\lib\\xsd\\bpmn20\\Bpmn20.xsd";
+	
+	final static String batchPath = "C:\\Users\\Sven Wagner-Boysen\\Documents\\oryx\\BPMN2.0\\TestProcesses";
+	final static boolean doBatchTest = true;
 	/**
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
+		
 		toBpmn2_0();
 		// fromXml();
 
 	}
-
+	
 	public static void toBpmn2_0() throws Exception {
-		File json = new File(path + "trivial_bpmn2.0_process.json");
+		if(!doBatchTest) {
+			File json = new File(path + "trivial_bpmn2.0_process.json");
+			toBpmn2_0(json);
+		} else {
+			File dir = new File(batchPath);
+			for(File model : Arrays.asList(dir.listFiles())) {
+				System.out.println("Transform File: " + model.getName() + "\n \n");
+				toBpmn2_0(model);
+				System.out.println("------------ \n \n");
+			}
+		}
+	}
+
+	public static void toBpmn2_0(File json) throws Exception {
+		
 		BufferedReader br = new BufferedReader(new FileReader(json));
 		String bpmnJson = "";
 		String line;
@@ -85,10 +103,10 @@ public class BPMNSerializationTest {
 		
 		for(ValidationEvent event : Arrays.asList(events)) {
 			
-			builder.append("Line: ");
-			builder.append(event.getLocator().getLineNumber());
-			builder.append(" Column: ");
-			builder.append(event.getLocator().getColumnNumber());
+//			builder.append("Line: ");
+//			builder.append(event.getLocator().getLineNumber());
+//			builder.append(" Column: ");
+//			builder.append(event.getLocator().getColumnNumber());
 			
 			builder.append("\nError: ");
 			builder.append(event.getMessage());

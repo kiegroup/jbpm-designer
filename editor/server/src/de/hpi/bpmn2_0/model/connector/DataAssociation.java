@@ -23,10 +23,19 @@
 
 package de.hpi.bpmn2_0.model.connector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+
+import de.hpi.bpmn2_0.model.FlowElement;
+import de.hpi.bpmn2_0.model.FormalExpression;
+import de.hpi.bpmn2_0.model.misc.Assignment;
 
 
 /**
@@ -51,20 +60,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tDataAssociation", propOrder = {
-//    "transformation",
-//    "assignment"
+    "transformation",
+    "assignment",
+    "sourceRef",
+    "targetRef"
 })
 @XmlSeeAlso({
     DataInputAssociation.class,
     DataOutputAssociation.class
 })
-public class DataAssociation
-    extends Edge
+public class DataAssociation extends Edge
 {
-
-//    protected TFormalExpression transformation;
-//    protected List<TAssignment> assignment;
-
+	@XmlIDREF
+	@XmlElement
+	protected FlowElement sourceRef;
+	
+	@XmlIDREF
+	@XmlElement
+	protected FlowElement targetRef;
+	
+	
+	@XmlElement
+    protected FormalExpression transformation;
+    @XmlElement
+	protected List<Assignment> assignment;
+    
+    /* Getter & Setter */
+    
+    /**
+	 * @return the sourceRef
+	 */
+	public FlowElement getSourceRef() {
+		return this.sourceRef;
+	}
+	
+	/**
+	 * @return the targetRef
+	 */
+	public FlowElement getTargetRef() {
+		return this.targetRef;
+	}
+    
+    /**
+	 * @param sourceRef the sourceRef to set
+	 */
+	public void setSourceRef(FlowElement sourceRef) {
+		this.sourceRef = sourceRef;
+	}
+	/**
+	 * @param targetRef the targetRef to set
+	 */
+	public void setTargetRef(FlowElement targetRef) {
+		this.targetRef = targetRef;
+	}
+    
     /**
      * Gets the value of the transformation property.
      * 
@@ -73,21 +122,21 @@ public class DataAssociation
      *     {@link TFormalExpression }
      *     
      */
-//    public TFormalExpression getTransformation() {
-//        return transformation;
-//    }
+    public FormalExpression getTransformation() {
+        return transformation;
+    }
 
     /**
      * Sets the value of the transformation property.
      * 
      * @param value
      *     allowed object is
-     *     {@link TFormalExpression }
+     *     {@link FormalExpression }
      *     
      */
-//    public void setTransformation(TFormalExpression value) {
-//        this.transformation = value;
-//    }
+    public void setTransformation(FormalExpression value) {
+        this.transformation = value;
+    }
 
     /**
      * Gets the value of the assignment property.
@@ -111,11 +160,11 @@ public class DataAssociation
      * 
      * 
      */
-//    public List<TAssignment> getAssignment() {
-//        if (assignment == null) {
-//            assignment = new ArrayList<TAssignment>();
-//        }
-//        return this.assignment;
-//    }
+    public List<Assignment> getAssignment() {
+        if (assignment == null) {
+            assignment = new ArrayList<Assignment>();
+        }
+        return this.assignment;
+    }
 
 }

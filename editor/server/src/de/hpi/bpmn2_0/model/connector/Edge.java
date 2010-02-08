@@ -44,12 +44,12 @@ public class Edge extends FlowElement {
 	@XmlAttribute(required = true)
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	private FlowElement sourceRef;
+	protected FlowElement sourceRef;
 	
 	@XmlAttribute(required = true)
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	private FlowElement targetRef;
+	protected FlowElement targetRef;
 	
 	/**
 	 * Returns true if source and target node are of same pool

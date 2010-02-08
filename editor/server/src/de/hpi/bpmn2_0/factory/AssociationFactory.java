@@ -25,10 +25,13 @@ package de.hpi.bpmn2_0.factory;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Shape;
 
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
+import de.hpi.bpmn2_0.model.FormalExpression;
 import de.hpi.bpmn2_0.model.connector.Association;
 import de.hpi.bpmn2_0.model.connector.AssociationDirection;
 import de.hpi.bpmn2_0.model.connector.DataAssociation;
@@ -37,6 +40,8 @@ import de.hpi.bpmn2_0.model.connector.DataOutputAssociation;
 import de.hpi.bpmn2_0.model.connector.Edge;
 import de.hpi.bpmn2_0.model.diagram.AssociationConnector;
 import de.hpi.bpmn2_0.model.diagram.DataAssociationConnector;
+import de.hpi.bpmn2_0.model.misc.Assignment;
+import de.hpi.diagram.OryxUUID;
 
 /**
  * Factory that creates association elements
@@ -45,11 +50,8 @@ import de.hpi.bpmn2_0.model.diagram.DataAssociationConnector;
  * @author Sven Wagner-Boysen
  * 
  */
-@StencilId({ 
-	"Association_Undirected", 
-	"Association_Unidirectional",
-	"Association_Bidirectional" 
-})
+@StencilId( { "Association_Undirected", "Association_Unidirectional",
+		"Association_Bidirectional" })
 public class AssociationFactory extends AbstractBpmnFactory {
 
 	private enum AssociationType {
@@ -126,20 +128,23 @@ public class AssociationFactory extends AbstractBpmnFactory {
 					.getAssociationDirectionFromShape(shape));
 			return association;
 		}
-		
+
 		/* Handle data associations */
 		DataAssociation dataAssociation = null;
-		if(associationType.equals(AssociationType.DATA_INPUT))
+		if (associationType.equals(AssociationType.DATA_INPUT))
 			dataAssociation = new DataInputAssociation();
-		else if(associationType.equals(AssociationType.DATA_OUTPUT))
+		else if (associationType.equals(AssociationType.DATA_OUTPUT))
 			dataAssociation = new DataOutputAssociation();
-		else 
+		else
 			dataAssociation = new DataAssociation();
-		
+
 		/* Set common attributes */
 		dataAssociation.setId(shape.getResourceId());
 		dataAssociation.setName(shape.getProperty("name"));
-		
+
+		/* Set data association specific attributes */
+		this.setDataAssociationAttributes(dataAssociation, shape);
+
 		return dataAssociation;
 	}
 
@@ -200,8 +205,56 @@ public class AssociationFactory extends AbstractBpmnFactory {
 				&& (sourceIds.contains("DataObject") || sourceIds
 						.contains("DataStore")))
 			return AssociationType.DATA_INPUT;
+		else if (stencilId.equals("Association_Undirectional")
+				&& ((sourceIds.contains("DataObject") || sourceIds
+						.contains("DataStore")) && targetId
+						.equals("SequenceFlow"))
+				|| (sourceIds.contains("SequenceFlow") && (targetId
+						.equals("DataStore") || targetId.equals("DataObject"))))
+			return AssociationType.DATA;
 		else
 			return AssociationType.ASSOCIATION;
+	}
+
+	/**
+	 * Processes the data association attributes transformation and assignments.
+	 * 
+	 * @param dataAssociation
+	 * @param shape
+	 */
+	private void setDataAssociationAttributes(DataAssociation dataAssociation,
+			Shape shape) {
+		/* Handle assignment property */
+		String assignment = shape.getProperty("assignments");
+		if (assignment != null && !assignment.isEmpty()) {
+			try {
+				JSONObject assignmentJson = new JSONObject(assignment);
+				JSONArray items = assignmentJson.getJSONArray("items");
+
+				/* Handle each assignment expression */
+				for (int i = 0; i < items.length(); i++) {
+					JSONObject assignmentObject = items.getJSONObject(i);
+
+					Assignment dataAssignment = new Assignment();
+					dataAssignment.setId(OryxUUID.generate());
+					dataAssignment.setTo(assignmentObject.getString("to"));
+					dataAssignment.setFrom(assignmentObject.getString("from"));
+					dataAssignment.setLanguage(assignmentObject
+							.getString("language"));
+
+					dataAssociation.getAssignment().add(dataAssignment);
+				}
+
+			} catch (Exception e) {
+				/* In case of an error, ignore the assignment attribute. */
+			}
+		}
+
+		/* Handle transformation property */
+		String transformation = shape.getProperty("transformation");
+		if (transformation != null && !transformation.isEmpty())
+			dataAssociation.setTransformation(new FormalExpression(
+					transformation));
 	}
 
 }

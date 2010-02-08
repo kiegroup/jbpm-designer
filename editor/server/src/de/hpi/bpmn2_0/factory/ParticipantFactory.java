@@ -70,7 +70,13 @@ public class ParticipantFactory extends AbstractBpmnFactory {
 		Participant p = new Participant();
 		p.setId(shape.getResourceId());
 		p.setName(shape.getProperty("name"));
-		p.setInitiating(shape.getProperty("initiating").equalsIgnoreCase("true"));
+		
+		/* Handle initiating property */
+		String initiating = shape.getProperty("initiating");
+		if(initiating != null)
+			p.setInitiating(initiating.equalsIgnoreCase("true"));
+		else 
+			p.setInitiating(false);
 		return p;
 	}
 

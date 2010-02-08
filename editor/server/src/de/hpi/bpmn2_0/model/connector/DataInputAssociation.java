@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import de.hpi.diagram.OryxUUID;
+
 
 /**
  * <p>Java class for tDataInputAssociation complex type.
@@ -55,5 +57,22 @@ import javax.xml.bind.annotation.XmlType;
 public class DataInputAssociation
     extends DataAssociation
 {
-
+	/**
+	 * Default constructor
+	 */
+	public DataInputAssociation() {
+		
+	}
+	
+	/**
+	 * Constructor creates an data input association base on a data association.
+	 * @param dataAssociation
+	 */
+	public DataInputAssociation(DataAssociation dataAssociation) {
+		this.id = OryxUUID.generate();
+		this.assignment = dataAssociation.getAssignment();
+		this.documentation = dataAssociation.getDocumentation();
+		this.transformation = dataAssociation.getTransformation();
+		this.process = dataAssociation.getProcess();
+	}
 }

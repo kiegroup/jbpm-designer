@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
 
 import de.hpi.bpmn2_0.model.BaseElement;
 
@@ -65,10 +64,8 @@ public class Assignment
 {
 
     @XmlElement(required = true)
-    @XmlValue
     protected String from;
     
-    @XmlValue
     @XmlElement(required = true)
     protected String to;
     
