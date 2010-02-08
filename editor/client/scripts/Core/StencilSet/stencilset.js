@@ -149,6 +149,12 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 				result = result.concat(children).uniq();
 			}
 			
+			// Sort the result to the origin order
+			result = result.sortBy(function(stencil) {
+				return stencils.indexOf(stencil);
+			});
+			
+			
 			if(sortByGroup) {
 				result = result.sortBy(function(stencil) {
 					return stencil.groups().first();
