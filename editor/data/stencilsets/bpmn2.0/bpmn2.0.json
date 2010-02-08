@@ -2649,8 +2649,7 @@
 			"view" :			"swimlane/lane.svg",
 			"icon" :			"swimlane/lane.png",
 			"propertyPackages": [
-				"baseAttributes",
-				"bgColor"
+				"baseAttributes"
 			],
 			"properties" : 		[
 				{
@@ -2717,8 +2716,8 @@
             "title_de" :        "Zusätzlicher Beteiligter",
             "groups" :          ["Swimlanes"],
             "groups_de" :       ["Rollen"],
-            "description" :     "he additional participant can be connected to a task or sub process. It is used to visualize additional associations of roles or individuals to the respective activity (e.g. responsibility, informed persons, etc.).",
-            "description_de" :  "Ein zusätzlicher Beteiligter kann an einen Task oder Unterprozess angeheftet werden. Mit ihm können zusätzliche Beziehungen einer Rolle oder Person zu der jeweiligen Aufgabe abgebildet werden (z.B. fachliche Verantwortung, Benachrichtigte Personen, etc.).",
+            "description" :     "The additional participant can be connected to a task or sub process. It is used to visualize additional associations of roles or individuals to the respective activity (e.g. responsibility, informed persons, etc.).",
+            "description_de" :  "Ein zusätzlicher Beteiligter kann an einen Task oder Unterprozess angeheftet werden. Mit ihm können zusätzliche Beziehungen einer Rolle oder Person zu der jeweiligen Aufgabe abgebildet werden (z.B. fachliche Verantwortung, benachrichtigte Personen, etc.).",
             "view" :            "swimlane/process.participant.svg",
             "icon" :            "swimlane/process.participant.png",
             "defaultAlign" :    "northeast",
@@ -4777,16 +4776,16 @@
 			],
 			"properties" : [
                 {
-                    "id":"name",
+                    "id":"text",
                     "type":"String",
-                    "title":"Name",
-                    "title_de":"Name",
+                    "title":"text",
+                    "title_de":"text",
                     "value":"",
                     "description":"",
                     "readonly":false,
                     "optional":true,
                     "length":"",
-                    "refToView":"text",
+                    "refToView":"name",
                     "wrapLines":true
                 }
 			]
@@ -4806,6 +4805,21 @@
 				"all",
 				"ConnectingObjectsMorph",
 				"Directed_Association"
+			],
+			"properties" : [
+                {
+                    "id":"text",
+                    "type":"String",
+                    "title":"text",
+                    "title_de":"text",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "length":"",
+                    "refToView":"name",
+                    "wrapLines":true
+                }
 			]
 		},
 		{
@@ -4823,6 +4837,21 @@
 				"all",
 				"ConnectingObjectsMorph",
 				"Directed_Association"
+			],
+			"properties" : [
+                {
+                    "id":"text",
+                    "type":"String",
+                    "title":"Text",
+                    "title_de":"Text",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "length":"",
+                    "refToView":"name",
+                    "wrapLines":true
+                }
 			]
 		},
 		{

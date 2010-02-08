@@ -13,6 +13,7 @@
 	},
 	"removestencils": [
 		"ITSystem",
+		"processparticipant",
 		"CollapsedEventSubprocess",
 		"EventSubprocess",
 		"CollapsedSubprocess",
