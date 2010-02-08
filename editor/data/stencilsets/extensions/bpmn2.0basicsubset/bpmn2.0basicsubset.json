@@ -13,7 +13,6 @@
 	},
 	"removestencils": [
 		"ITSystem",
-		"processparticipant",
 		"EventSubprocess",
 		"CollapsedEventSubprocess",
 		"CollapsedSubprocess",
@@ -32,6 +31,7 @@
 		"InclusiveGateway",
 		"ComplexGateway",
 		"CollapsedPool",
+		"processparticipant",
 		"Group",
 		"TextAnnotation",
 		"DataObject",

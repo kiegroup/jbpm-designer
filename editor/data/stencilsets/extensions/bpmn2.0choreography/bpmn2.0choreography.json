@@ -525,6 +525,7 @@
 		"Pool",
 		"Lane",
 		"CollapsedPool",
+		"processparticipant",
 		"StartEscalationEvent",
 		"StartCompensationEvent",
 		"MessageFlow",
