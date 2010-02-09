@@ -19,7 +19,6 @@
 				
 		</plugin>
 		<plugin source="rdfExport.js" name="ORYX.Plugins.RDFExport" />
-		<plugin source="general/feedbackPlugin.js" name="ORYX.Plugins.FeedbackPlugin" />
 		<plugin source="undo.js" name="ORYX.Plugins.Undo" />
 		
 		<plugin source="epcSupport.js" name="ORYX.Plugins.EPCSupport">
