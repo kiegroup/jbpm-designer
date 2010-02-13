@@ -17,6 +17,11 @@ define "oryx" do
     system('ant rebuild-all') or fail "Error in the ant packaging script"
   end
   
+  install do
+    oryx.install
+    backend.install
+  end
+  
   upload do
     oryx.upload
     backend.upload

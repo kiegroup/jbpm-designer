@@ -52,12 +52,12 @@ table-layout:fixed;
 }
 
 #oryx_editor_header {
-       background-image: url('../images/header_bg.small.gif');
+       /*background-image: url('../images/header_bg.small.gif');
        background-position: top center;
-       background-repeat: repeat-x;
+       background-repeat: repeat-x;*/
        position: absolute;
        width: 100%;
-	   height: 30px;
+	   height: 0px;
 }
 
 .x-panel-editor-north .x-panel-body .x-panel-body,
