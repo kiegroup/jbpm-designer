@@ -10,13 +10,19 @@
 	<servlet>
 		<display-name>Default Servlet for Directory Listings</display-name>
 		<servlet-name>DirectoryListingServlet</servlet-name>
+		<servlet-class>org.mortbay.jetty.servlet.DefaultServlet</servlet-class>
+		<!-- For Tomcat
 		<servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+		-->
 		<init-param>
 			<param-name>debug</param-name>
 			<param-value>0</param-value>
 		</init-param>
 		<init-param>
+			<param-name>dirAllowed</param-name>
+			<!-- for Tomcat
 			<param-name>listings</param-name>
+			-->
 			<param-value>true</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
