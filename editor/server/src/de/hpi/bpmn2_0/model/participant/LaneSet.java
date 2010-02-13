@@ -28,9 +28,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -63,8 +61,8 @@ import de.hpi.bpmn2_0.model.Process;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tLaneSet", propOrder = {
-    "lanes",
-    "parentLane"
+    "lanes"//,
+    //"parentLane"
 })
 public class LaneSet
     extends BaseElement
@@ -73,8 +71,9 @@ public class LaneSet
 	@XmlElementRef(type = Lane.class)
     protected List<Lane> lanes;
 	
-	@XmlIDREF
-	@XmlAttribute
+//	@XmlIDREF
+//	@XmlAttribute
+	@XmlTransient
 	protected Lane parentLane;
 	
 //	@XmlIDREF

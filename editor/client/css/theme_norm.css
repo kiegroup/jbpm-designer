@@ -261,25 +261,53 @@ table-layout:fixed;
 	opacity		: 1.0;
 }
 
-.canvas_resize_indicator.S{
+.canvas_resize_indicator_grow.S{
 	left		: 50%;	
 	bottom		: 30px;
+	margin-right: 15px;
 	background 	: url(../images/arrow-bottom.png) no-repeat center center;
 }
-.canvas_resize_indicator.W{
+.canvas_resize_indicator_shrink.S{
+	left		: 50%;	
+	margin-left : 15px;
+	bottom		: 30px;
+	background 	: url(../images/arrow-top.png) no-repeat center center;
+}
+.canvas_resize_indicator_grow.W{
 	left		: 10px;	
 	top			: 50%;
+	margin-bottom: 15px;
 	background 	: url(../images/arrow-left.png) no-repeat center center;
 }
-.canvas_resize_indicator.E{
-	right		: 30px;	
+.canvas_resize_indicator_shrink.W{
+	left		: 10px;	
 	top			: 50%;
+	margin-top: 15px;
 	background 	: url(../images/arrow-right.png) no-repeat center center;
 }
-.canvas_resize_indicator.N{
+.canvas_resize_indicator_grow.E{
+	right		: 30px;	
+	top			: 50%;
+	margin-bottom: 15px;
+	background 	: url(../images/arrow-right.png) no-repeat center center;
+}
+.canvas_resize_indicator_shrink.E{
+	right		: 30px;	
+	top			: 50%;
+	margin-top: 15px;
+	background 	: url(../images/arrow-left.png) no-repeat center center;
+}
+.canvas_resize_indicator_grow.N{
 	left		: 50%;	
 	top			: 10px;
+	margin-right: 15px;
 	background 	: url(../images/arrow-top.png) no-repeat center center;
+}
+.canvas_resize_indicator_shrink.N{
+	left		: 50%;	
+	top			: 10px;
+	margin-left : 15px;
+	background 	: url(../images/arrow-bottom.png) no-repeat center center;
 }
 /** End Resizer **/
 

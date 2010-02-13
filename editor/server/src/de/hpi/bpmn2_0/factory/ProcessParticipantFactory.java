@@ -20,24 +20,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package de.hpi.bpmn2_0.factory;
 
 import org.oryxeditor.server.diagram.Shape;
 
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
-import de.hpi.bpmn2_0.model.diagram.ChoreographyParticipantShape;
-import de.hpi.bpmn2_0.model.participant.Participant;
+import de.hpi.bpmn2_0.model.BaseElement;
+import de.hpi.bpmn2_0.model.artifacts.ProcessParticipant;
+import de.hpi.bpmn2_0.model.diagram.ProcessParticipantShape;
 
 /**
- * Factory to create participants
- * 
+ * @author Philipp Giese
  * @author Sven Wagner-Boysen
  *
  */
-@StencilId("ChoreographyParticipant")
-public class ParticipantFactory extends AbstractBpmnFactory {
+@StencilId("processparticipant")
+public class ProcessParticipantFactory extends AbstractBpmnFactory {
 
 	/* (non-Javadoc)
 	 * @see de.hpi.bpmn2_0.factory.AbstractBpmnFactory#createBpmnElement(org.oryxeditor.server.diagram.Shape, de.hpi.bpmn2_0.factory.BPMNElement)
@@ -45,39 +44,38 @@ public class ParticipantFactory extends AbstractBpmnFactory {
 	@Override
 	public BPMNElement createBpmnElement(Shape shape, BPMNElement parent)
 			throws BpmnConverterException {
-		ChoreographyParticipantShape cps = this.createDiagramElement(shape);
-		Participant p = this.createProcessElement(shape);
-		cps.setParticipant(p);
-		return new BPMNElement(cps, p, shape.getResourceId());
+		ProcessParticipantShape processParticipantShape = (ProcessParticipantShape) this.createDiagramElement(shape);
+		ProcessParticipant processParticipant = (ProcessParticipant) this.createProcessElement(shape);
+		
+		processParticipantShape.setProcessParticipantRef(processParticipant);
+		
+		return new BPMNElement(processParticipantShape, processParticipant, shape.getResourceId());
 	}
 
 	/* (non-Javadoc)
 	 * @see de.hpi.bpmn2_0.factory.AbstractBpmnFactory#createDiagramElement(org.oryxeditor.server.diagram.Shape)
 	 */
 	@Override
-	protected ChoreographyParticipantShape createDiagramElement(Shape shape) {
-		ChoreographyParticipantShape cps = new ChoreographyParticipantShape();
-		this.setVisualAttributes(cps, shape);
-		return cps;
+	protected Object createDiagramElement(Shape shape) {
+		ProcessParticipantShape processParticipantShape = new ProcessParticipantShape();
+		
+		this.setVisualAttributes(processParticipantShape, shape);
+		
+		return processParticipantShape;
 	}
 
 	/* (non-Javadoc)
 	 * @see de.hpi.bpmn2_0.factory.AbstractBpmnFactory#createProcessElement(org.oryxeditor.server.diagram.Shape)
 	 */
 	@Override
-	protected Participant createProcessElement(Shape shape)
+	protected BaseElement createProcessElement(Shape shape)
 			throws BpmnConverterException {
-		Participant p = new Participant();
-		p.setId(shape.getResourceId());
-		p.setName(shape.getProperty("name"));
+		ProcessParticipant system = new ProcessParticipant();
 		
-		/* Handle initiating property */
-		String initiating = shape.getProperty("initiating");
-		if(initiating != null)
-			p.setInitiating(initiating.equalsIgnoreCase("true"));
-		else 
-			p.setInitiating(false);
-		return p;
+		system.setName(shape.getProperty("name"));
+		system.setId(shape.getResourceId());
+		
+		return system;
 	}
 
 }

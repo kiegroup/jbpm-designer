@@ -53,6 +53,7 @@ public class NewModelHandler extends HandlerBase {
 			props.load(in);
 			in.close();
 		}catch (Exception e) {
+			props = new Properties();
 		}
 	}
 	@Override

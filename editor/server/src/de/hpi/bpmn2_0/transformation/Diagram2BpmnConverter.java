@@ -388,13 +388,31 @@ public class Diagram2BpmnConverter {
 	}
 
 	/**
+	 * An undirected association that connects a sequence flow and a data object
+	 * is split up into a data input and output association.
+	 */
+	private void updateUndirectedDataAssociationsRefs() {
+		for (Shape shape : this.diagram.getShapes()) {
+			if (!shape.getStencilId().equalsIgnoreCase("sequenceflow"))
+				continue;
+
+			/* Retrieve sequence flow connector element */
+			BPMNElement seqFlowEle = this.bpmnElements.get(shape
+					.getResourceId());
+			if (seqFlowEle.getNode() instanceof SequenceFlow)
+				((SequenceFlow) seqFlowEle.getNode())
+						.processUndirectedDataAssociations();
+		}
+	}
+
+	/**
 	 * A {@link DataAssociation} is a child element of an {@link Activity}. This
 	 * method updates the references between activities and their data
 	 * associations.
 	 */
 	private void updateDataAssociationsRefs() {
 		/* Define edge ids */
-		String[] associationIdsArray = { "Association_Undirected",
+		String[] associationIdsArray = { /*"Association_Undirected",*/
 				"Association_Unidirectional", "Association_Bidirectional" };
 
 		HashSet<String> associationIds = new HashSet<String>(Arrays
@@ -429,6 +447,9 @@ public class Diagram2BpmnConverter {
 							(DataOutputAssociation) dataAssociation);
 			}
 		}
+		
+		/* Update undirected data associations references */
+		this.updateUndirectedDataAssociationsRefs();
 	}
 
 	/**
@@ -498,7 +519,7 @@ public class Diagram2BpmnConverter {
 	 */
 	private void handleSubProcess(SubProcess subProcess) {
 		Process process = new Process();
-		process.setId(OryxUUID.generate());
+		process.setId(subProcess.getId());
 		process.setSubprocessRef(subProcess);
 
 		List<BPMNElement> childs = this.getChildElements(this.bpmnElements
@@ -1067,8 +1088,11 @@ public class Diagram2BpmnConverter {
 	 * Sets attributes of the {@link Definitions} element.
 	 */
 	private void setDefinitionsAttributes() {
-		this.definitions.setTargetNamespace(diagram
-				.getProperty("targetnamespace"));
+		/* Set targetnamespace */
+		String targetnamespace = diagram.getProperty("targetnamespace");
+		if (targetnamespace == null)
+			targetnamespace = "http://www.omg.org/bpmn20";
+		this.definitions.setTargetNamespace(targetnamespace);
 
 		/* Additional namespace definitions */
 		try {
@@ -1089,7 +1113,7 @@ public class Diagram2BpmnConverter {
 		} catch (JSONException e) {
 			// ignore namespace property
 		} catch (NullPointerException np) {
-			
+
 		}
 
 		/* Expression Language */

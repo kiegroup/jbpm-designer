@@ -31,6 +31,7 @@
 		"ComplexGateway",
 		"Pool",
 		"CollapsedPool",
+		"processparticipant",
 		"Lane",
 		"Group",
 		"TextAnnotation",

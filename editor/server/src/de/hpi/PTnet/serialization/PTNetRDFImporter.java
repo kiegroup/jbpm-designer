@@ -35,6 +35,7 @@ public class PTNetRDFImporter {
 		this.doc = doc;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public PTNet loadPTNet() {
 		Node root = getRootNode(doc);
 		if (root == null) return null;
@@ -96,10 +97,13 @@ public class PTNetRDFImporter {
 				if ("true".equals(getContent(n)))
 					c.net.getInitialMarking().addToken(p);
 			} else if (attribute.equals("numberoftokens")) {
-				int number_of_tokens = Integer.valueOf(getContent(n)).intValue();
-				for (int i=0; i < number_of_tokens; i++) {
-					c.net.getInitialMarking().addToken(p);
-				}
+				//FIX for empty nodes
+				String nbr=getContent(n);
+				if(nbr!=null){
+					int number_of_tokens = Integer.parseInt(nbr);
+					for (int i=0; i < number_of_tokens; i++) {
+						c.net.getInitialMarking().addToken(p);
+					}}
 			} else if (attribute.equals("outgoing")) {
 				c.connections.put(getResourceId(getAttributeValue(n, "rdf:resource")), p);
 			}

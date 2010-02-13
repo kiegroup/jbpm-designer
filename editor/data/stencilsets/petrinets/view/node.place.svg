@@ -2,25 +2,41 @@
 <svg    
     xmlns="http://www.w3.org/2000/svg"    
     xmlns:oryx="http://www.b3mn.org/oryx"
-    width="40"
-    height="40"
+    width="30"
+    height="30"
     version="1.1">
-  <g pointer-events="fill" oryx:minimumSize="32 32">
-    <circle oryx:resize="vertical horizontal" cx="16" cy="16" r="15" stroke="black" fill="white" stroke-width="1"/> 
-    <text font-size="12" id="text" x="28" y="4" stroke="black"></text>
+  <g pointer-events="fill" oryx:minimumSize="30 30">
+    <circle oryx:resize="vertical horizontal" cx="15" cy="15" r="15" stroke="black" fill="white" stroke-width="1"/> 
+    <text font-size="12" id="text" x="27" y="3" stroke="black"></text>
     
     <g id="numTokens0"></g>
     <g id="numTokens1">
-        <circle cx="16" cy="16" r="6" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="15" cy="15" r="6" stroke="black" stroke-width="2" fill="black"/>
     </g>
     <g id="numTokens2">
-        <circle cx="16" cy="10" r="4" stroke="black" stroke-width="2" fill="black"/>
-        <circle cx="16" cy="22" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="15" cy="9" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="15" cy="21" r="4" stroke="black" stroke-width="2" fill="black"/>
     </g>
     <g id="numTokens3">
-        <circle cx="16" cy="9" r="4" stroke="black" stroke-width="2" fill="black"/>
-        <circle cx="10" cy="20" r="4" stroke="black" stroke-width="2" fill="black"/>
-        <circle cx="22" cy="20" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="15" cy="8" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="9" cy="19" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="21" cy="19" r="4" stroke="black" stroke-width="2" fill="black"/>
     </g>
+    <g id="numTokens4">
+        <circle cx="9" cy="9" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="21" cy="9" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="9" cy="20" r="4" stroke="black" stroke-width="2" fill="black"/>
+        <circle cx="21" cy="20" r="4" stroke="black" stroke-width="2" fill="black"/>
+    </g>
+    
+    <text 
+    	font-size="16" 
+    	id="numTokensText" 
+    	x="15" 
+    	y="15" 
+    	stroke="black" 
+    	oryx:align="middle center">
+    </text>
+    
   </g>
 </svg>

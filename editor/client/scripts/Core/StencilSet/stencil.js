@@ -40,7 +40,7 @@ ORYX.Core.StencilSet.Stencil = {
 	/**
 	 * Constructor
 	 */
-	construct: function(jsonStencil, namespace, source, stencilSet, propertyPackages) {
+	construct: function(jsonStencil, namespace, source, stencilSet, propertyPackages, defaultPosition) {
 		arguments.callee.$.construct.apply(this, arguments); // super();
 		
 		// check arguments and set defaults.
@@ -55,6 +55,9 @@ ORYX.Core.StencilSet.Stencil = {
 		this._stencilSet = stencilSet;
 		this._namespace = namespace;
 		this._propertyPackages = propertyPackages;
+		
+		if(defaultPosition && !this._jsonStencil.position) 
+			this._jsonStencil.position = defaultPosition;
 		
 		this._view;
 		this._properties = new Hash();
@@ -245,6 +248,10 @@ ORYX.Core.StencilSet.Stencil = {
 	
 	groups: function() {
 		return ORYX.Core.StencilSet.getTranslation(this._jsonStencil, "groups");
+	},
+	
+	position: function() {
+		return (isNaN(this._jsonStencil.position) ? 0 : this._jsonStencil.position);
 	},
 
 	view: function() {

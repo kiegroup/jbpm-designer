@@ -349,15 +349,40 @@
 					"refToView":"text",
 					"length":""
 				},
-                {
+				{
                     "id":"numberOfTokens",
+                    "type":"Integer",
+                    "title":"# Tokens",
+                    "title_de":"# Tokens",
+                    "value":0,
+                    "min":0,
+                    "popular":true,
+                    "description":"",
+                    "readonly":false,
+                    "optional":false
+				},
+				{
+                    "id":"numberoftokens_text",
+                    "type":"String",
+                    "title":"# Tokens",
+                    "title_de":"# Tokens",
+                    "value":"",
+                    "description":"",
+                    "readonly":true,
+                    "visible":false,
+                    "optional":false,
+                    "refToView":"numTokensText"
+				},
+                {
+                    "id":"numberoftokens_drawing",
                     "type":"Choice",
                     "title":"# Tokens",
                     "title_de":"# Tokens",
                     "value":"0",
                     "description":"",
-                    "readonly":false,
+                    "readonly":true,
                     "optional":false,
+                    "visible":false,
                     "refToView":"",
                     "items": [
                         {
@@ -383,6 +408,12 @@
                             "title":"3",
                             "value":"3",
                             "refToView":"numTokens3"
+                        },
+                        {
+                            "id":"4",
+                            "title":"4",
+                            "value":"4",
+                            "refToView":"numTokens4"
                         }
                     ]
                 },

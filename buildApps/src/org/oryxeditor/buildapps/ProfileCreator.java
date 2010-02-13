@@ -113,19 +113,31 @@ public class ProfileCreator {
 			writer.append(FileCopyUtils.copyToString(reader));
 		}
 		writer.close();
+
 		File compressOut=new File(outputPath + File.separator + profileName +".js");
 		FileReader reader = new FileReader(profileFile);
 		FileWriter writer2 = new FileWriter(compressOut);
 		try{
 			com.yahoo.platform.yui.compressor.JavaScriptCompressor x= new JavaScriptCompressor(reader, null);
 			x.compress(writer2, 1, true, false, false, false);
-		}catch (Exception e) {
-			System.err.println("Profile Compression failed! profile: "+compressOut.getAbsolutePath()+ " uncompressed version is used, please ensure javascript correctness");
-			e.printStackTrace();
-			FileCopyUtils.copy(reader, writer2);
-
-		}finally{
 			writer2.close();
+			reader.close();
+
+		}catch (Exception e) {
+			/*
+			 * Fallback if yui compression fails
+			 */
+			System.err.println("Profile Compression failed! profile: "+compressOut.getAbsolutePath()+ " uncompressed version is used, please ensure javascript correctness and compatibility of YUI compressor with your system");
+			e.printStackTrace();
+			writer2.close();
+			reader.close();
+			
+			FileWriter writer3 = new FileWriter(new File(outputPath + File.separator + profileName +".js"));
+			FileReader reader1 = new FileReader(profileFile);
+			FileCopyUtils.copy(reader1, writer3);
+			reader1.close();
+			writer3.close();
+
 		}
 	}
 
@@ -165,7 +177,7 @@ public class ProfileCreator {
 
 			if (profileNode == null)
 				throw new IllegalArgumentException(
-						"profile not defined in profile xml");
+				"profile not defined in profile xml");
 
 			NamedNodeMap attr = profileNode.getAttributes();
 			JSONObject config=new JSONObject();
@@ -175,9 +187,9 @@ public class ProfileCreator {
 			for (int profilePluginNodeIndex = 0; profilePluginNodeIndex < profileNode
 			.getChildNodes().getLength(); profilePluginNodeIndex++) {
 				Node tmpNode = profileNode.getChildNodes().item(profilePluginNodeIndex);
-				
+
 				if("plugin".equals(tmpNode.getNodeName()) || tmpNode==null)
-						continue;
+					continue;
 				JSONObject nodeObject = new JSONObject();
 				NamedNodeMap attr1 = tmpNode.getAttributes();
 				if(attr1==null)
@@ -185,13 +197,13 @@ public class ProfileCreator {
 				for(int i=0;i<attr1.getLength();i++){
 					nodeObject.put(attr1.item(i).getNodeName(), attr1.item(i).getNodeValue());
 				}
-				
+
 				if(config.has(tmpNode.getNodeName())){
 					config.getJSONArray(tmpNode.getNodeName()).put(nodeObject);
 				}else{
 					config.put(tmpNode.getNodeName(), new JSONArray().put(nodeObject));
 				}
-				
+
 			}
 			FileCopyUtils.copy(config.toString(), new FileWriter(outputPath + File.separator+ProfileName+".conf"));
 			// for each plugin in the copied plugin.xml
@@ -219,13 +231,10 @@ public class ProfileCreator {
 			writeXMLToFile(outProfileXMLdocument, outputPath + File.separator
 					+ ProfileName + ".xml");
 		} catch (DOMException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -278,13 +287,10 @@ public class ProfileCreator {
 			StreamResult result = new StreamResult(os);
 			transformer.transform(source, result);
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TransformerFactoryConfigurationError e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

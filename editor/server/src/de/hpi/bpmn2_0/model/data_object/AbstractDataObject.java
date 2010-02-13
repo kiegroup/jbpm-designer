@@ -23,6 +23,11 @@
 
 package de.hpi.bpmn2_0.model.data_object;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlTransient;
+
 import de.hpi.bpmn2_0.model.FlowElement;
 import de.hpi.bpmn2_0.model.FlowNode;
 import de.hpi.bpmn2_0.model.Process;
@@ -37,6 +42,12 @@ import de.hpi.bpmn2_0.model.connector.Edge;
 public abstract class AbstractDataObject extends FlowNode {
 	
 	/**
+	 * List of elements already traversed in the graph.
+	 */
+	@XmlTransient
+	private List<FlowElement> processedElements;
+	
+	/**
 	 * Find an appropriate {@link Process} container for the data object.
 	 * 
 	 * The algorithm checks the source and target neighborhood nodes of the 
@@ -45,6 +56,7 @@ public abstract class AbstractDataObject extends FlowNode {
 	 * Navigates into both directions.
 	 */
 	public void findRelatedProcess() {
+		this.processedElements = new ArrayList<FlowElement>();
 		Process process = this.findRelatedProcessRecursivly(this);
 		if(process != null) {
 			this.setProcess(process);
@@ -59,31 +71,45 @@ public abstract class AbstractDataObject extends FlowNode {
 	 * 		The {@link FlowElement} to investigate.
 	 */
 	private Process findRelatedProcessRecursivly(FlowElement flowElement) {
+		if(flowElement == null)
+			return null;
+		
+		/* Check if element is processed already */
+		if(this.processedElements.contains(flowElement))
+			return null;
+		
+		this.processedElements.add(flowElement);
 		
 		/* Check if one of the neighbors is assigned to a Process, 
 		 * otherwise continue with the after next. */
 		
-		for(Edge edge : this.getIncoming()) {
-			Process process = edge.getSourceRef().getProcess();
+		for(Edge edge : flowElement.getIncoming()) {
+			FlowElement sourceRef = edge.getSourceRef();
+			if(sourceRef == null)
+				continue;
+			Process process = sourceRef.getProcess();
 			if(process != null)
 				return process;
 		}
 		
-		for(Edge edge : this.getOutgoing()) {
-			Process process = edge.getTargetRef().getProcess();
+		for(Edge edge : flowElement.getOutgoing()) {
+			FlowElement targetRef = edge.getTargetRef();
+			if(targetRef == null)
+				continue;
+			Process process = targetRef.getProcess();
 			if(process != null)
 				return process;
 		}
 		
 		/* Continue with the after next nodes */
 		
-		for(Edge edge : this.getIncoming()) {
+		for(Edge edge : flowElement.getIncoming()) {
 			Process process = this.findRelatedProcessRecursivly(edge.getSourceRef());
 			if(process != null)
 				return process;
 		}
 		
-		for(Edge edge : this.getOutgoing()) {
+		for(Edge edge : flowElement.getOutgoing()) {
 			Process process = this.findRelatedProcessRecursivly(edge.getTargetRef());
 			if(process != null)
 				return process;

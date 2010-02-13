@@ -21,29 +21,30 @@
  * SOFTWARE.
  */
 
-package de.hpi.bpmn2_0.model.connector;
+package de.hpi.bpmn2_0.model.diagram;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
-import de.hpi.diagram.OryxUUID;
+import de.hpi.bpmn2_0.model.FlowElement;
+import de.hpi.bpmn2_0.model.artifacts.ProcessParticipant;
 
 
 /**
- * <p>Java class for tDataInputAssociation complex type.
+ * <p>Java class for anonymous complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="tDataInputAssociation">
+ * &lt;complexType>
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.omg.org/bpmn20}tDataAssociation">
- *       &lt;sequence>
- *         &lt;element name="sourceRef" type="{http://www.w3.org/2001/XMLSchema}IDREF" maxOccurs="unbounded"/>
- *         &lt;element name="targetRef" type="{http://www.w3.org/2001/XMLSchema}IDREF"/>
- *       &lt;/sequence>
+ *     &lt;extension base="{http://bpmndi.org}bpmnNodeType">
+ *       &lt;attribute name="dataStoreRef" type="{http://www.w3.org/2001/XMLSchema}IDREF" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -53,26 +54,43 @@ import de.hpi.diagram.OryxUUID;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tDataInputAssociation")
-public class DataInputAssociation
-    extends DataAssociation
+@XmlType(name = "")
+public class ProcessParticipantShape
+    extends BpmnNode
 {
-	/**
-	 * Default constructor
-	 */
-	public DataInputAssociation() {
-		
+
+    @XmlAttribute
+    @XmlIDREF
+    @XmlSchemaType(name = "IDREF")
+    protected ProcessParticipant processParticipantRef;
+
+    /**
+     * Gets the value of the dataStoreRef property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Object }
+     *     
+     */
+    public ProcessParticipant getProcessParticipantRef() {
+        return processParticipantRef;
+    }
+
+    /**
+     * Sets the value of the dataStoreRef property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Object }
+     *     
+     */
+    public void setProcessParticipantRef(ProcessParticipant value) {
+        this.processParticipantRef = value;
+    }
+
+	@Override
+	protected FlowElement getFlowElement() {
+		return this.getProcessParticipantRef();
 	}
-	
-	/**
-	 * Constructor creates an data input association base on a data association.
-	 * @param dataAssociation
-	 */
-	public DataInputAssociation(DataAssociation dataAssociation) {
-		this.id = OryxUUID.generate();
-		this.assignment = dataAssociation.getAssignment();
-		this.documentation = dataAssociation.getDocumentation();
-		this.transformation = dataAssociation.getTransformation();
-		this.process = dataAssociation.getProcess();
-	}
+
 }

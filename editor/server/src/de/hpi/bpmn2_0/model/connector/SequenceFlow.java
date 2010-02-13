@@ -46,6 +46,9 @@ package de.hpi.bpmn2_0.model.connector;
  * SOFTWARE.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -58,12 +61,16 @@ import org.oryxeditor.server.diagram.Shape;
 import org.oryxeditor.server.diagram.StencilType;
 
 import de.hpi.bpmn2_0.model.Expression;
-
+import de.hpi.bpmn2_0.model.activity.Activity;
+import de.hpi.bpmn2_0.model.data_object.AbstractDataObject;
 
 /**
- * <p>Java class for tSequenceFlow complex type.
+ * <p>
+ * Java class for tSequenceFlow complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="tSequenceFlow">
@@ -84,84 +91,144 @@ import de.hpi.bpmn2_0.model.Expression;
  */
 @XmlRootElement(name = "sequenceFlow")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tSequenceFlow", propOrder = {
-    "conditionExpression"
-})
-public class SequenceFlow
-    extends Edge
-{
-	
+@XmlType(name = "tSequenceFlow", propOrder = { "conditionExpression" })
+public class SequenceFlow extends Edge {
+
 	@XmlElement(name = "conditionExpression")
-    protected Expression conditionExpression;
-    @XmlAttribute
-    protected Boolean isImmediate;
-    
-    @XmlTransient
-    private boolean isDefaultSequenceFlow;
-    
-    /**
-     * Transforming a sequence flow to a JSON-based shape.
-     */
-    public void toShape(Shape shape) {
-    	super.toShape(shape);
-    	
-    	shape.setStencil(new StencilType("SequenceFlow"));
-    }
-    
-    /* Getter & Setter */
-    
-    /**
-     * Gets the value of the conditionExpression property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Expression }
-     *     
-     */
-    public Expression getConditionExpression() {
-    	return conditionExpression;
-    }
+	protected Expression conditionExpression;
+	@XmlAttribute
+	protected Boolean isImmediate;
 
-    /**
-     * Sets the value of the conditionExpression property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Expression }
-     *     
-     */
-    public void setConditionExpression(Expression value) {
-        this.conditionExpression = value;
-    }
+	@XmlTransient
+	private boolean isDefaultSequenceFlow;
 
+	/**
+	 * Transform undirected data associations into input and output
+	 * associations.
+	 */
+	public void processUndirectedDataAssociations() {
+		List<DataAssociation> dataAssociations = this
+				.getUndirectedDataAssociations();
 
-    /**
-     * Gets the value of the isImmediate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public boolean isIsImmediate() {
-        if (isImmediate == null) {
-            return true;
-        } else {
-            return isImmediate;
-        }
-    }
+		for (DataAssociation dataAssociation : dataAssociations) {
+			AbstractDataObject dataObject = null;
+			if (dataAssociation.getSourceRef() instanceof AbstractDataObject) {
+				dataObject = (AbstractDataObject) dataAssociation
+						.getSourceRef();
+			} else if (dataAssociation.getTargetRef() instanceof AbstractDataObject) {
+				dataObject = (AbstractDataObject) dataAssociation
+						.getTargetRef();
+			} else
+				continue;
 
-    /**
-     * Sets the value of the isImmediate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsImmediate(Boolean value) {
-        this.isImmediate = value;
-    }
+			/* Prepare data input association */
+			DataInputAssociation dataInputAssociation = new DataInputAssociation(
+					dataAssociation);
+			dataInputAssociation.setSourceRef(dataObject);
+			if (this.getTargetRef() != null
+					&& this.getTargetRef() instanceof Activity) {
+				dataInputAssociation.setTargetRef(this.getTargetRef());
+				((Activity) this.getTargetRef()).getDataInputAssociation().add(
+						dataInputAssociation);
+			}
+
+			/* Prepare data output association */
+			DataOutputAssociation dataOutputAssociation = new DataOutputAssociation(
+					dataAssociation);
+			dataOutputAssociation.setTargetRef(dataObject);
+			if (this.getSourceRef() != null
+					&& this.getSourceRef() instanceof Activity) {
+				dataOutputAssociation.setSourceRef(this.getSourceRef());
+				((Activity) this.getSourceRef()).getDataOutputAssociation().add(
+						dataOutputAssociation);
+			}
+		}
+	}
+
+	/**
+	 * Retrieves the undirected data associations connected to the sequence
+	 * flow.
+	 * 
+	 * @return List of {@link DataAssociation}
+	 */
+	private List<DataAssociation> getUndirectedDataAssociations() {
+		ArrayList<DataAssociation> dataAssociations = new ArrayList<DataAssociation>();
+
+		/* Handle outgoing associations */
+		for (Edge edge : this.getOutgoing()) {
+			if (edge instanceof DataAssociation
+					&& !(edge instanceof DataInputAssociation)
+					&& !(edge instanceof DataOutputAssociation))
+				dataAssociations.add((DataAssociation) edge);
+		}
+
+		/* Handle incoming associations */
+		for (Edge edge : this.getIncoming()) {
+			if (edge instanceof DataAssociation
+					&& !(edge instanceof DataInputAssociation)
+					&& !(edge instanceof DataOutputAssociation))
+				dataAssociations.add((DataAssociation) edge);
+		}
+
+		return dataAssociations;
+	}
+
+	/**
+	 * Transforming a sequence flow to a JSON-based shape.
+	 */
+	public void toShape(Shape shape) {
+		super.toShape(shape);
+
+		shape.setStencil(new StencilType("SequenceFlow"));
+	}
+
+	/* Getter & Setter */
+
+	/**
+	 * Gets the value of the conditionExpression property.
+	 * 
+	 * @return possible object is {@link Expression }
+	 * 
+	 */
+	public Expression getConditionExpression() {
+		return conditionExpression;
+	}
+
+	/**
+	 * Sets the value of the conditionExpression property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Expression }
+	 * 
+	 */
+	public void setConditionExpression(Expression value) {
+		this.conditionExpression = value;
+	}
+
+	/**
+	 * Gets the value of the isImmediate property.
+	 * 
+	 * @return possible object is {@link Boolean }
+	 * 
+	 */
+	public boolean isIsImmediate() {
+		if (isImmediate == null) {
+			return true;
+		} else {
+			return isImmediate;
+		}
+	}
+
+	/**
+	 * Sets the value of the isImmediate property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Boolean }
+	 * 
+	 */
+	public void setIsImmediate(Boolean value) {
+		this.isImmediate = value;
+	}
 
 	/**
 	 * @return the isDefaultSequenceFlow
@@ -171,7 +238,8 @@ public class SequenceFlow
 	}
 
 	/**
-	 * @param isDefaultSequenceFlow the isDefaultSequenceFlow to set
+	 * @param isDefaultSequenceFlow
+	 *            the isDefaultSequenceFlow to set
 	 */
 	public void setDefaultSequenceFlow(boolean isDefaultSequenceFlow) {
 		this.isDefaultSequenceFlow = isDefaultSequenceFlow;

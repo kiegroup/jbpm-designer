@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grounding topology="top:bookingtopology" xmlns:buyerPTs="example:buyer:portTypes" xmlns:sellerPTs="example:seller:portTypes">
+  <messageLinks>
+    <messageLink name="ProductInformation" portType="buyerPTs:buyerPT" operation="getPI" />
+    <messageLink name="PurchaseOrder" portType="sellerPTs:sellerPT" operation="getPO" />
+    <messageLink name="POConfirmation" portType="buyerPTs:buyerPT" operation="getConf" />
+  </messageLinks>
+  <properties>
+    <property name="buyerref" WSDLproperty="prop:travelerProp" />
+    <property name="InstanceID" WSDLproperty="prop:InstanceID" />
+    <property name="ProcessID" WSDLproperty="prop:ProcessID" />
+  </properties>
+</grounding>
