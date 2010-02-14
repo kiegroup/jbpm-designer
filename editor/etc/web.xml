@@ -10,7 +10,7 @@
 	<servlet>
 		<display-name>Default Servlet for Directory Listings</display-name>
 		<servlet-name>DirectoryListingServlet</servlet-name>
-		<servlet-class>org.mortbay.jetty.servlet.DefaultServlet</servlet-class>
+		<servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
 		<!-- For Tomcat
 		<servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
 		-->
