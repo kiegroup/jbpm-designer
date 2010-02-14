@@ -9,13 +9,15 @@
     <!-- Import ANT build scripts of sub projects -->
     <import file="editor/build.xml"/>
     <!--<import file="editor/test.xml"/>-->
-    <!--import file="poem-jvm/build.xml"/-->
+    <import file="poem-jvm/build.xml"/>
     <!--<import file="stick/build.xml"/>-->
-	<!--import file="mashup/build.xml"/-->
+	<import file="mashup/build.xml"/>
     
     <!-- (RE)BUILD EDITOR AND BACKEND -->
-    <target name="build-all" depends="build-editor, build-backend, generate-build-dependcy-graph" />
-    <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" />
+<!--    <target name="build-all" depends="build-editor, build-backend, generate-build-dependcy-graph" /> -->
+	<target name="build-all" depends="build-editor,generate-build-dependcy-graph" />
+<!-- <target name="rebuild-all" depends="clean-editor, build-editor, clean-backend, build-backend" /> -->
+    <target name="rebuild-all" depends="clean-editor, build-editor" />
     
     <!-- CLEAN EDITOR AND BACKEND -->
     <target name="clean-all" depends="clean-editor, clean-backend">
