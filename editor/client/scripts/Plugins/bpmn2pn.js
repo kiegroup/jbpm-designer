@@ -58,19 +58,14 @@ ORYX.Plugins.BPMNImport = Clazz.extend({
      */
     bpmnToPn: function(bpmnRdf){
         Ext.Msg.updateProgress(0.66, ORYX.I18N.BPMN2PNConverter.progress.convertingModel);
-        
-       Ext.Ajax.request({
+        Ext.Ajax.request({
             url: this.converterUrl,
             method: 'POST',
             success: function(request){
-    	   		try{
-	                var parser = new DOMParser();
-	                Ext.Msg.updateProgress(1.0, ORYX.I18N.BPMN2PNConverter.progress.renderingModel);
-	                var doc = parser.parseFromString(request.responseText, "text/xml");
-	                this.facade.importERDF(doc);
-    	   		}catch(e){
-    	   			Ext.Msg.alert("Rendering Failed :\n"+e);
-    	   		}
+                var parser = new DOMParser();
+                Ext.Msg.updateProgress(1.0, ORYX.I18N.BPMN2PNConverter.progress.renderingModel);
+                var doc = parser.parseFromString(request.responseText, "text/xml");
+                this.facade.importERDF(doc);
                 Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
@@ -80,7 +75,6 @@ ORYX.Plugins.BPMNImport = Clazz.extend({
                 rdf: bpmnRdf
             }
         });
-        
     },
     
     /**
@@ -141,21 +135,17 @@ ORYX.Plugins.PNExport = Clazz.extend({
     
     exportIt: function(){
         //Throw error if model hasn't been saved before
-    	var reqURI='';
-		if(!location.hash.slice(1)){
+        if(location.href.include( ORYX.CONFIG.ORYX_NEW_URL )){
             Ext.Msg.alert(ORYX.I18N.BPMN2PNConverter.error, ORYX.I18N.BPMN2PNConverter.errors.notSaved);
             return;
-		}
-		else{
-			reqURI = '/backend/poem/'+(location.hash.slice(1).replace(/^\/?/,"").replace(/\/?$/,""))+"/rdf";
-		}
+        }
         
         this.facade.raiseEvent({type: ORYX.Plugins.SyntaxChecker.RESET_ERRORS_EVENT});
         this.facade.raiseEvent({
             type: ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT,
             context: "bpmn2pn",
             onNoErrors: function(){
-                this.openPetriNetEditor(reqURI);
+                this.openPetriNetEditor();
             }.bind(this)
         });
     },
@@ -164,7 +154,7 @@ ORYX.Plugins.PNExport = Clazz.extend({
      * Opens petri net editor with bpmn model import
      * @methodOf: ORYX.Plugins.BPMNImport.prototype
      */
-    openPetriNetEditor: function(importUrl){
-        window.open("/backend/poem/new?stencilset=/stencilsets/petrinets/petrinet.json&importBPMN=" + importUrl);
+    openPetriNetEditor: function(){
+        window.open("/backend/poem/new?stencilset=/stencilsets/petrinets/petrinet.json&importBPMN=" + location.href);
     }
 });

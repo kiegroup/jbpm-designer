@@ -87,14 +87,8 @@ ORYX.Plugins.SimplePnmlexport = ORYX.Plugins.AbstractPlugin.extend({
 					data: serialized_rdf
 				},
 				onSuccess: function(request){
-					this.openDownloadWindow(window.document.title+".xml",request.responseText);
-					/* 
-					 * Data URIs do not work properly in chrome
-					 * this.openXMLWindow(request.responseText);
-					 * TODO Check for an better solution for download windows, without remaining open window
-					 * @author Philipp Berger
-					 */
-				}.bind(this)
+						var win = window.open('data:text/xml,' +request.responseText, '_blank', "resizable=yes,width=640,height=480,toolbar=0,scrollbars=yes");
+				}
 			});
 			
 		} catch (error){

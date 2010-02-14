@@ -39,14 +39,11 @@ if(!ORYX.Plugins)
 ORYX.Plugins.BPMN2_0Serialization = {
 	bpmnSerializationHandlerUrl: ORYX.CONFIG.ROOT_PATH + "bpmn2_0serialization",
 	bpmnDeserializationHandlerUrl : ORYX.CONFIG.ROOT_PATH + "bpmn2_0deserialization",
-	bpmn2XpdlSerializationHandlerUrl : ORYX.CONFIG.ROOT_PATH + "bpmn2xpdlserialization",
 	
 	construct: function(facade) {
 	
 		this.facade = facade;
 	
-		/* BPMN 2.0 XML */
-		
 		this.facade.offer({
 			'name'				: ORYX.I18N.Bpmn2_0Serialization.show,
 			'functionality'		: this.showBpmnXml.bind(this),
@@ -71,34 +68,6 @@ ORYX.Plugins.BPMN2_0Serialization = {
 			'maxShape'			: 0
 		});
 		
-		/* XPDL 2.2 */
-		
-		this.facade.offer({
-			'name'				: ORYX.I18N.Bpmn2_0Serialization.xpdlShow,
-			'functionality'		: this.showXpdl.bind(this),
-			'group'				: 'Export',
-            dropDownGroupIcon : ORYX.PATH + "images/export2.png",
-			'icon' 				: ORYX.PATH + "images/source.png",
-			'description'		: ORYX.I18N.Bpmn2_0Serialization.xpdlShowDesc,
-			'index'				: 0,
-			'minShape'			: 0,
-			'maxShape'			: 0
-		});
-		
-		this.facade.offer({
-			'name'				: ORYX.I18N.Bpmn2_0Serialization.download,
-			'functionality'		: this.downloadXpdl.bind(this),
-			'group'				: 'Export',
-            dropDownGroupIcon : ORYX.PATH + "images/export2.png",
-			'icon' 				: ORYX.PATH + "images/source.png",
-			'description'		: ORYX.I18N.Bpmn2_0Serialization.xpdlDownloadDesc,
-			'index'				: 0,
-			'minShape'			: 0,
-			'maxShape'			: 0
-		});
-		
-		/* Import BPMN 2.0 XML */
-		
 		this.facade.offer({
 			'name'				: ORYX.I18N.Bpmn2_0Serialization['import'],
 			'functionality'		: this.showImportDialog.bind(this),
@@ -115,73 +84,35 @@ ORYX.Plugins.BPMN2_0Serialization = {
 	showBpmnXml: function() {	
 		//var options = JSON.stringify({action : 'transform'});
 		
-		this.generateBpmnXml( function( response ) {
-			var json = response.evalJSON();
-			this.showSchemaValidationEvent(json.validationEvents);
-			this.openXMLWindow(json.xml);
-		}.bind(this),
-		this.bpmnSerializationHandlerUrl);
+		this.generateBpmnXml( function( xml ) {
+			this.openXMLWindow(xml);
+		}.bind(this));
 	},
 	
 	downloadBpmnXml: function() {	
 		//var options = JSON.stringify({action : 'transform'});
 		this.generateBpmnXml(
-			function ( response ) {
-				var json = response.evalJSON();
-				this.showSchemaValidationEvent(json.validationEvents);
-				this.openDownloadWindow("model.bpmn", json.xml);
-			}.bind(this),
-			this.bpmnSerializationHandlerUrl);
-	},
-	
-	/**
-	 * Show the results of the schema validation in a message box, if it is
-	 * enabled in the configuration.
-	 */
-	showSchemaValidationEvent : function(validationEvents) {
-		if(validationEvents && ORYX.CONFIG.BPMN20_SCHEMA_VALIDATION_ON) {
-			this._showErrorMessageBox("Validation", validationEvents);
-		}
-	},
-	
-	/**
-	 * Calls the serialization to XPDL 2.2 and shows the result in a XML-Window.
-	 */
-	showXpdl: function() {
-		this.generateBpmnXml( function( xml ) {
-			this.openXMLWindow(xml);
-		}.bind(this),
-		this.bpmn2XpdlSerializationHandlerUrl);
-	},
-	
-	/**
-	 * Calls the serialization to XPDL 2.2 and offers the result as a file
-	 * download.
-	 */
-	downloadXpdl: function() {
-		this.generateBpmnXml(
 			function ( xml ) {
-				this.openDownloadWindow("model.xpdl", xml);
-			}.bind(this),
-			this.bpmn2XpdlSerializationHandlerUrl);
+				this.openDownloadWindow("Oryx-BPMN 2.0", xml);
+			}.bind(this));
 	},
 	
-	generateBpmnXml: function( bpmnHandleFunction, handlerUrl ) {
+	generateBpmnXml: function( bpmnHandleFunction ) {
 		var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Serialization of BPMN 2.0 model"});
 		loadMask.show();
 		
 		var jsonString = this.facade.getSerializedJSON();
 		this._sendRequest(
-				handlerUrl,
+				this.bpmnSerializationHandlerUrl,
 				'POST',
 				{ 'data' : jsonString },
-				function( response ) { 
-					bpmnHandleFunction( response );  
+				function( bpmnXml ) { 
+					bpmnHandleFunction( bpmnXml );  
 					loadMask.hide();
 				}.bind(this),
 				function(transport) { 
 					loadMask.hide();
-					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed);
+					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed + transport.responseText);
 					ORYX.log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);
 				}.bind(this)
 			);
@@ -253,7 +184,7 @@ ORYX.Plugins.BPMN2_0Serialization = {
 								}.bind(this),
 								function(transport) { 
 									loadMask.hide();
-									this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed);
+									this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed + transport.responseText);
 									ORYX.log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);
 								}.bind(this)
 							); 

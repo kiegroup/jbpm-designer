@@ -2,111 +2,51 @@
 
 <profiles>
 	<!-- name default is reserved for the standard profile -->
-	<profile name="none" stencilset="stencilsets/bpmn1.1/bpmn1.1.json"/>
 	<profile name="default" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
-		<plugin name="ORYX.Plugins.SyntaxChecker"/>
-		<plugin name="ORYX.Plugins.BPMN2_0"/>
-		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
-		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
 		<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
 		<plugin name="ORYX.Plugins.ShapeRepository"/>
 		<plugin name="ORYX.Plugins.PropertyWindow"/>
 		<plugin name="ORYX.Plugins.CanvasResize"/>
+		<plugin name="ORYX.Plugins.PluginLoader"/>
 		<plugin name="ORYX.Plugins.View"/>
 		<plugin name="ORYX.Plugins.DragDropResize"/>
 		<plugin name="ORYX.Plugins.RenameShapes" />
 		<plugin name="ORYX.Plugins.ERDFSupport" />
 		<plugin name="ORYX.Plugins.JSONSupport"/>
 		<plugin name="ORYX.Plugins.RDFExport" />
-		<!-- <plugin name="ORYX.Plugins.Feedback" /> -->
+		<plugin name="ORYX.Plugins.FeedbackPlugin" />
 		<plugin name="ORYX.Plugins.Undo" />		
 		<plugin name="ORYX.Plugins.Arrangement"/>	
+		<plugin name="ORYX.Plugins.Save"/>	
 		<plugin name="ORYX.Plugins.Grouping"/>	
-		<plugin name="ORYX.Plugins.HighlightingSelectedShapes"/>
+		<plugin name="ORYX.Plugins.HighlightingSelectedShapes"/>	
 		<plugin name="ORYX.Plugins.DragDocker"/>	
-		<plugin name="ORYX.Plugins.AddDocker"/>
-		<plugin name="ORYX.Plugins.SSExtensionLoader"/>
-		<plugin name="ORYX.Plugins.SelectionFrame"/>
-		<plugin name="ORYX.Plugins.AutoLayout"/>
-		<plugin name="ORYX.Plugins.ShapeHighlighting"/>
+		<plugin name="ORYX.Plugins.AddDocker"/>	
+		<plugin name="ORYX.Plugins.SSExtensionLoader"/>	
+		<plugin name="ORYX.Plugins.SelectionFrame"/>	
+		<plugin name="ORYX.Plugins.ShapeHighlighting"/>	
 		<plugin name="ORYX.Plugins.Overlay"/>	
 		<plugin name="ORYX.Plugins.Edit"/>	
-		<plugin name="ORYX.Plugins.KeysMove"/>
+		<plugin name="ORYX.Plugins.KeysMove"/>	
 		<plugin name="ORYX.Plugins.RowLayouting"/>	
+		<plugin name="ORYX.Plugins.AutoLayout"/>	
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
-		<plugin name="ORYX.Plugins.File"/>
-		<plugin name="ORYX.Plugins.Save"/>
-		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
-		<plugin source="Layouter/edgeLayouter.js" name="ORYX.Plugins.Layouter.EdgeLayouter"/>
 		
-				
 	</profile>
-	<profile name="bpmn" depends="default" stencilset="stencilsets/bpmn1.1/bpmn1.1.json">
-		<plugin name="ORYX.Plugins.BPMN2XForms"/>
-		<plugin name="ORYX.Plugins.ProcessLink"/>
-		<plugin name="ORYX.Plugins.SimplePnmlexport"/>
-		<plugin name="ORYX.Plugins.IBPMN2BPMN"/>
+	<profile name="save" depends="default">
+		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>
+		<plugin name="ORYX.Plugins.File"/>
+		<plugin source="view.js" name="ORYX.Plugins.View">
+			<property zoomLevel="4"/>
+		</plugin>
+		<plugin name="ORYX.Plugins.Save"/>
+	</profile>
+	<profile name="bpmnValidating" depends="default">
 		<plugin name="ORYX.Plugins.SyntaxChecker"/>
 		<plugin name="ORYX.Plugins.BPMNValidator"/>
-		<plugin name="ORYX.Plugins.StepThroughPlugin"/>
-		<plugin name="ORYX.Plugins.BPMN11"/>
-		<plugin name="ORYX.Plugins.BPMN"/>
-		<plugin name="ORYX.Plugins.QueryResultHighlighter"/>
-		<plugin name="ORYX.Plugins.BpmnLayouter"/>
-		<plugin name="ORYX.Plugins.PNExport"/>
-		<plugin name="ORYX.Plugins.BPMN2XPDL"/>
-		<plugin name="ORYX.Plugins.BPMN2DTRPXMI"/>
-	</profile>
-	<profile name="bpmn2.0" depends="default" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
-		<plugin name="ORYX.Plugins.SyntaxChecker"/>
-		<plugin name="ORYX.Plugins.BPMN2_0"/>
-		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
-		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
-	</profile>
-	<profile name="bpmn2.0Choreography" depends="default" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
-		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmn2.0choreography#"/>
-		<plugin name="ORYX.Plugins.SyntaxChecker"/>
-		<plugin name="ORYX.Plugins.BPMN2_0"/>
-		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
-		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
-	</profile>
-	<profile name="bpmn2.0Conversation" depends="default" stencilset="stencilsets/bpmn2.0/bpmn2.0conversation.json">
-		<plugin name="ORYX.Plugins.SyntaxChecker"/>
-		<plugin name="ORYX.Plugins.BPMN2_0"/>
-		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
-		<plugin name="ORYX.Plugins.BPMN2CONVERSATION"/>
-	</profile>
-	
-	<profile name="epc" depends="default" stencilset="stencilsets/epc/epc.json">
-		<plugin name="ORYX.Plugins.EPCSupport"/>
 		<plugin name="ORYX.Plugins.EPCValidator"/>
-		<plugin name="ORYX.Plugins.SyntaxChecker"/>
-		<plugin name="ORYX.Plugins.StepThroughPlugin"/>
+		<plugin source="view.js" name="ORYX.Plugins.View">
+			<property zoomLevel="0.5" maxFitToScreenLevel="2,3" />
+		</plugin>
 	</profile>
-	<profile name="petrinet" depends="default" stencilset="stencilsets/petrinets/petrinet.json">
-		<plugin name="ORYX.Plugins.SyntaxChecker"/>
-		<plugin name="ORYX.Plugins.PetriNetSoundnessChecker"/>
-		<plugin name="ORYX.Plugins.BPMNImport"/>
-		<plugin name="ORYX.Plugins.SimplePnmlexport" />
-		<plugin name="ORYX.Plugins.PetriNetStepThroughPlugin"/>
-		<plugin name="ORYX.Plugins.PetrinetSyntaxChecker"/>
-	</profile>
-	<profile name="xforms" depends="default" stencilset="stencilsets/xforms/xforms.json">
-		<plugin name="ORYX.Plugins.XFormsExportOrbeon"/>
-		<plugin name="ORYX.Plugins.XFormsExport"/>
-		<plugin name="ORYX.Plugins.XFormsImport"/>
-		<plugin name="ORYX.Plugins.RowLayouting"/>
-		<plugin name="ORYX.Plugins.XForms"/>
-	</profile>
-	<profile name="bpmnQ" depends="default" stencilset="stencilsets/bpmnq/bpmnq.json">
-		<plugin name="ORYX.Plugins.QueryEvaluator"/>
-	</profile>
-	<profile name="interactionpetrinets" depends="default" stencilset="stencilsets/interactionpetrinets/interactionpetrinets.json">
-		<plugin name="ORYX.Plugins.SimplePnmlexport"/>
-		<plugin name="ORYX.Plugins.DesynchronizabilityOverlay"/>
-		<plugin name="ORYX.Plugins.EnforceabilityOverlay"/>
-		
-		<plugin name="ORYX.Plugins.SyntaxChecker"/>
-	</profile>
-
 </profiles>

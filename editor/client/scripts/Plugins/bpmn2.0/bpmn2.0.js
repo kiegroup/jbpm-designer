@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2009
- * Sven Wagner-Boysen, Willi Tscheschner
+ * Sven Wagner-Boysen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -127,7 +127,6 @@ ORYX.Plugins.BPMN2_0 = {
 			// Flatten the dockers lists
 			.flatten()
 			.each(function(docker){
-				if (docker.isChanged){ return }
 				docker.bounds.moveBy(offset);
 			})
 	},
@@ -246,14 +245,8 @@ ORYX.Plugins.BPMN2_0 = {
 		if (lanes.length === 1 && this.getLanes(lanes.first()).length <= 0) {
 			// TRUE if there is a caption
 			lanes.first().setProperty("oryx-showcaption", lanes.first().properties["oryx-name"].trim().length > 0);
-			var rect = lanes.first().node.getElementsByTagName("rect");
-			rect[0].setAttributeNS(null, "display", "none");
 		} else {
 			lanes.invoke("setProperty", "oryx-showcaption", true);
-			lanes.each(function(lane){
-				var rect = lane.node.getElementsByTagName("rect");
-				rect[0].removeAttributeNS(null, "display");
-			})
 		}
 		
 		
@@ -585,7 +578,7 @@ ORYX.Plugins.BPMN2_0 = {
 						
 						docker = edges[k].dockers[l];
 						
-						if (docker.getDockedShape()||docker.isChanged){
+						if (docker.getDockedShape()){
 							continue;
 						}
 					
@@ -649,28 +642,12 @@ ORYX.Plugins.BPMN2_0 = {
 		return this.currentPool && this.hashedBounds[this.currentPool.resourceId][shape.resourceId] ? this.hashedBounds[this.currentPool.resourceId][shape.resourceId] : shape.bounds.clone();
 	},
 	
-	/**
-	 * Returns a set on all child lanes for the given Shape. If recursive is TRUE, also indirect children will be returned (default is FALSE)
-	 * The set is sorted with first child the lowest y-coordinate and the last one the highest.
-	 * @param {ORYX.Core.Shape} shape
-	 * @param {boolean} recursive
-	 */
 	getLanes: function(shape, recursive){
 		var lanes = shape.getChildNodes(recursive||false).findAll(function(node) { return (node.getStencil().id() === "http://b3mn.org/stencilset/bpmn2.0#Lane"); });
-		lanes = lanes.sort(function(a, b){
-					// Get y coordinate
-					var ay = Math.round(a.bounds.upperLeft().y);
-					var by = Math.round(b.bounds.upperLeft().y);
-					
-					// If equal, than use the old one
-					if (ay == by) {
-						ay = Math.round(this.getHashedBounds(a).upperLeft().y);
-						by = Math.round(this.getHashedBounds(b).upperLeft().y);
-					}
-					return  ay < by ? -1 : (ay > by ? 1 : 0)
-				}.bind(this))
+		lanes = lanes.sort(function(a,b) { return (a.bounds.upperLeft().y - b.bounds.upperLeft().y) || (this.getHashedBounds(a).upperLeft().y -this.getHashedBounds(b).upperLeft().y) }.bind(this));
+
 		return lanes;
-	}
+	},
 	
 };
 	
