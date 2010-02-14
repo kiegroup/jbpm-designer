@@ -194,20 +194,18 @@ public class Dispatcher extends HttpServlet {
 	}
 	
 	// Returns an initialized instance of the requested handler  
-	protected HandlerBase getHandler(String uri) {
-		try {
-			// Is the handler instance already initalized?
-			if (this.knownHandlers.get(uri).getHandlerInstance() != null) {
-				return this.knownHandlers.get(uri).getHandlerInstance();
-			} else {
-				Constructor<? extends HandlerBase> constructor = this.knownHandlers.get(uri).getHandlerClass().getConstructor((Class[])null);
-				HandlerBase handler = (HandlerBase)  constructor.newInstance();
-				handler.setServletContext(this.getServletContext()); // Initialize handler with ServletContext
-				handler.init(); // Initialize the handler
-				this.knownHandlers.get(uri).setHandlerInstance(handler); // Store the handler instance in ModelInfo
-				return handler;
-			}
-		} catch (Exception e) { return null; }	
+	protected HandlerBase getHandler(String uri) throws Exception {
+	    // Is the handler instance already initalized?
+	    if (this.knownHandlers.get(uri).getHandlerInstance() != null) {
+	        return this.knownHandlers.get(uri).getHandlerInstance();
+	    } else {
+	        Constructor<? extends HandlerBase> constructor = this.knownHandlers.get(uri).getHandlerClass().getConstructor((Class[])null);
+	        HandlerBase handler = (HandlerBase)  constructor.newInstance();
+	        handler.setServletContext(this.getServletContext()); // Initialize handler with ServletContext
+	        handler.init(); // Initialize the handler
+	        this.knownHandlers.get(uri).setHandlerInstance(handler); // Store the handler instance in ModelInfo
+	        return handler;
+	    }
 	}
 
 	protected boolean checkAccess(HandlerInfo handlerInfo, Identity subject, Model model, String requestMethod) {
