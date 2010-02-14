@@ -11,7 +11,7 @@ define "oryx" do
   
   
   oryx = artifact("#{project.group}:oryx:war:#{project.version}").from(_('dist/oryx.war').to_s)
-  backend = artifact("#{project.group}:backend:war:#{project.version}").from(_('dist/backend.war').to_s)
+  #backend = artifact("#{project.group}:backend:war:#{project.version}").from(_('dist/backend.war').to_s)
   
   build do 
     system('ant rebuild-all') or fail "Error in the ant packaging script"
@@ -19,12 +19,12 @@ define "oryx" do
   
   install do
     oryx.install
-    backend.install
+    #backend.install
   end
   
   upload do
     oryx.upload
-    backend.upload
+    #backend.upload
   end
   
   clean do
