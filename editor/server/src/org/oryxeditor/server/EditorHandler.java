@@ -45,7 +45,7 @@ public class EditorHandler extends HttpServlet {
 	/**
 	 * 
 	 */
-	private static final String oryx_path = "/oryx/";
+	private static final String oryx_path = "/designer/";
 	private static final String defaultSS="stencilsets/bpmn1.1/bpmn1.1.json";
 	private static final long serialVersionUID = 1L;
 	private Collection<String> availableProfiles;
@@ -107,7 +107,7 @@ public class EditorHandler extends HttpServlet {
 	        "			new ORYX.Editor({" +
 	        "				id: 'oryx-canvas123'," +
 	        "				stencilset: {" +
-	        "					url: \"/oryx/\" + stencilset" +
+	        "					url: \"" + oryx_path + "\" + stencilset" +
 	        "				}" +
 	        "			});" +
 	        "  };\n" +
@@ -116,7 +116,7 @@ public class EditorHandler extends HttpServlet {
           	"</script>";
 		response.setContentType("application/xhtml+xml");
 		
-		response.getWriter().println(this.getOryxModel("Oryx-Editor", 
+		response.getWriter().println(this.getOryxModel("Intalio|Process Designer", 
 				content, this.getLanguageCode(request), 
 				this.getCountryCode(request), profiles));
 		response.setStatus(200);
@@ -133,12 +133,12 @@ public class EditorHandler extends HttpServlet {
     	String languageFiles = "";
     	String profileFiles="";
     	
-    	if (new File(this.getOryxRootDirectory() + "/oryx/i18n/translation_"+languageCode+".js").exists()) {
+    	if (new File(this.getOryxRootDirectory() + oryx_path + "i18n/translation_"+languageCode+".js").exists()) {
     		languageFiles += "<script src=\"" + oryx_path 
     		+ "i18n/translation_"+languageCode+".js\" type=\"text/javascript\" />\n";
     	}
     	
-    	if (new File(this.getOryxRootDirectory() + "/oryx/i18n/translation_" + languageCode+"_" + countryCode + ".js").exists()) {
+    	if (new File(this.getOryxRootDirectory() + oryx_path + "i18n/translation_" + languageCode+"_" + countryCode + ".js").exists()) {
     		languageFiles += "<script src=\"" + oryx_path 
     		+ "i18n/translation_" + languageCode+"_" + countryCode 
     		+ ".js\" type=\"text/javascript\" />\n";
@@ -163,7 +163,7 @@ public class EditorHandler extends HttpServlet {
       	  	+ "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"
       	  	+ "xmlns:atom=\"http://b3mn.org/2007/atom+xhtml\">\n"
       	  	+ "<head profile=\"http://purl.org/NET/erdf/profile\">\n"
-      	  	+ "<title>" + title + " - Oryx</title>\n"
+      	  	+ "<title>" + title + "</title>\n"
       	  	+ "<!-- libraries -->\n"
       	  	+ "<script src=\"" + oryx_path + "lib/prototype-1.5.1.js\" type=\"text/javascript\" />\n"
       	  	+ "<script src=\"" + oryx_path + "lib/path_parser.js\" type=\"text/javascript\" />\n"
@@ -219,9 +219,6 @@ public class EditorHandler extends HttpServlet {
     protected String getLanguageCode(HttpServletRequest req) {
     	return (String) req.getSession().getAttribute("languagecode");
     }
-	protected String getRelativeServerPath(HttpServletRequest req){
-		return "/backend/poem"; //+ req.getServletPath();
-	}
 	public Collection<String> getAvailableProfileNames() {
 		Collection<String> profilNames = new ArrayList<String>();
 
