@@ -205,7 +205,7 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 			submitForm.method = "POST";
 			win.document.write("</body></html>");
 			win.document.close();
-			submitForm.action= ORYX.PATH + "/download";
+			submitForm.action= ORYX.PATH + "download";
 			submitForm.submit();
 		}		
 	},

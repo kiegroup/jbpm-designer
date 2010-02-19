@@ -46,7 +46,7 @@ public class EditorHandler extends HttpServlet {
 	 * 
 	 */
 	private static final String oryx_path = "/designer/";
-	private static final String defaultSS="stencilsets/bpmn1.1/bpmn1.1.json";
+	private static final String defaultSS="stencilsets/bpmn2.0/bpmn2.0.json";
 	private static final long serialVersionUID = 1L;
 	private Collection<String> availableProfiles;
 
@@ -55,6 +55,7 @@ public class EditorHandler extends HttpServlet {
 		availableProfiles=getAvailableProfileNames();
 //		if(availableProfiles.size()==0)
 //			 defaultHandlerBehaviour();
+		String uuid = request.getParameter("uuid");
 		String[] urlSplitted=request.getRequestURI().split(";");
 		ArrayList<String> profiles= new ArrayList<String>();
 		if (urlSplitted.length>1){
@@ -104,12 +105,18 @@ public class EditorHandler extends HttpServlet {
 	        "				Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.Oryx.noBackendDefined);\n" +
 	        "			}" +
 	        "			var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;" +
-	        "			new ORYX.Editor({" +
-	        "				id: 'oryx-canvas123'," +
-	        "				stencilset: {" +
-	        "					url: \"" + oryx_path + "\" + stencilset" +
-	        "				}" +
-	        "			});" +
+	        "           var uuid =  ORYX.Utils.getParamFromUrl('uuid');" + 
+	        "           var params = {" +
+            "               id: 'oryx-canvas123'," +
+            "               stencilset: {" +
+            "                   url: \"" + oryx_path + "\" + stencilset" +
+            "               }" +
+            "           };" +
+            "           if (uuid) {" +
+            "               params.uuid = uuid;" +
+            "           };" +
+	        "			var editor = new ORYX.Editor(params);" +
+	        "           ORYX.EDITOR= editor;" +
 	        "  };\n" +
 	        "  ORYX.Log.warn('Not Implemented: onOryxResourcesLoaded OR body-script loaded before plugins');\n" +
 	        "  }" +
