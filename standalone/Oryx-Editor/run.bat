@@ -1,1 +1,0 @@
-"C:\Users\Philipp\Downloads\xulrunner\xulrunner.exe" application.ini -jsconsole
