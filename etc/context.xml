@@ -1,5 +1,0 @@
-<!-- crossContext="true" required for using Orbeon -->
-<!--
-<Context crossContext="true"/>
--->
-<Context/>
