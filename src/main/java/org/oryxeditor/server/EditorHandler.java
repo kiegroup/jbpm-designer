@@ -23,13 +23,15 @@
 
 package org.oryxeditor.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,10 +40,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.util.FileCopyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EditorHandler extends HttpServlet {
 
+    private static final Logger _logger = LoggerFactory.getLogger(EditorHandler.class);
 	/**
 	 * 
 	 */
@@ -74,13 +78,22 @@ public class EditorHandler extends HttpServlet {
 		}
 		String sset=null;
 		JSONObject conf= new JSONObject();
+		InputStream fileStream = null;
 		try {
-			conf = new JSONObject(FileCopyUtils.copyToString(new FileReader(this.getServletContext().
-					getRealPath("/profiles") + File.separator + profiles.get(0)
-					+ ".conf")));
+		    ByteArrayOutputStream output = new ByteArrayOutputStream();
+		    fileStream = new FileInputStream(this.getServletContext().
+                    getRealPath("/profiles") + File.separator + profiles.get(0)
+                    + ".conf");
+            byte[] buffer = new byte[4096];
+            int read;
+            while ((read = fileStream.read(buffer)) != -1) {
+                output.write(buffer, 0, read);
+            }
+			conf = new JSONObject(output.toString());
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_logger.error(e.getMessage(), e);
+		} finally {
+		    if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
 		}
 		sset=conf.optString("stencilset");
 		if(sset==null || "".equals(sset))
