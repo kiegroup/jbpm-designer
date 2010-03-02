@@ -1120,10 +1120,6 @@ ORYX.Editor = {
 	            method: 'post',
 	            onSuccess: function(transport) {
 					response = transport.responseText;
-					console.log("INCOMING RESPONSE STUFF");
-					console.log(transport);
-					console.log(response);
-					console.log("END OF INCOMING STUFF");
 					model = response.evalJSON();
 				},
 	            onFailure: function(transport) {

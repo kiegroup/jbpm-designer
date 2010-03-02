@@ -41,6 +41,8 @@ import javax.xml.validation.SchemaFactory;
 import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Diagram;
 import org.oryxeditor.server.diagram.DiagramBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
@@ -59,6 +61,7 @@ public class Bpmn2_0Servlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4308758083419724953L;
 	
+	private static Logger logger = LoggerFactory.getLogger(Bpmn2_0Servlet.class);
 	/**
 	 * The post request
 	 */
@@ -73,19 +76,9 @@ public class Bpmn2_0Servlet extends HttpServlet {
 			res.setStatus(200);
 			res.getWriter().print(output.toString());
 		} catch (Exception e) {
-			try {
-				e.printStackTrace();
-				res.setStatus(500);
-				res.setContentType("text/plain");
-				res.getWriter().write(e.getCause().getMessage());
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+		    logger.error(e.getMessage(), e);
+		    throw new ServletException(e.getMessage(), e);
 		}
-		
-		
-		
-		
 	}
 	
 	/**
@@ -100,6 +93,9 @@ public class Bpmn2_0Servlet extends HttpServlet {
 	 * 		Exception occurred while processing
 	 */
 	protected StringWriter performTransformationToDi(String json, boolean asXML) throws Exception {
+	    if (json == null) {
+	        throw new IllegalArgumentException("json should not be null");
+	    }
 		StringWriter writer = new StringWriter();
 		JSONObject result = new JSONObject();
 		

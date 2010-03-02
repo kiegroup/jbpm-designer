@@ -14,10 +14,8 @@
 		<plugin name="ORYX.Plugins.ERDFSupport" />
 		<plugin name="ORYX.Plugins.JSONSupport"/>
 		<plugin name="ORYX.Plugins.RDFExport" />
-		<plugin name="ORYX.Plugins.FeedbackPlugin" />
 		<plugin name="ORYX.Plugins.Undo" />		
-		<plugin name="ORYX.Plugins.Arrangement"/>	
-		<plugin name="ORYX.Plugins.Save"/>	
+		<plugin name="ORYX.Plugins.Arrangement"/>
 		<plugin name="ORYX.Plugins.Grouping"/>	
 		<plugin name="ORYX.Plugins.HighlightingSelectedShapes"/>	
 		<plugin name="ORYX.Plugins.DragDocker"/>	
@@ -31,7 +29,11 @@
 		<plugin name="ORYX.Plugins.RowLayouting"/>	
 		<plugin name="ORYX.Plugins.AutoLayout"/>	
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
-		
+		<plugin name="ORYX.Plugins.BPMN2_0"/>
+		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
+		<plugin name="ORYX.Plugins.BPMN2CONVERSATION"/>
+		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
+		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>
 	</profile>
 	<profile name="save" depends="default">
 		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>

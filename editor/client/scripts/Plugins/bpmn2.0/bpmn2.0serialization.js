@@ -102,6 +102,8 @@ ORYX.Plugins.BPMN2_0Serialization = {
 		loadMask.show();
 		
 		var jsonString = this.facade.getSerializedJSON();
+		ORYX.Log.debug("About to serialize BPMN 2");
+		ORYX.Log.debug("Using servlet located at " + this.bpmnSerializationHandlerUrl);
 		this._sendRequest(
 				this.bpmnSerializationHandlerUrl,
 				'POST',
@@ -113,7 +115,7 @@ ORYX.Plugins.BPMN2_0Serialization = {
 				function(transport) { 
 					loadMask.hide();
 					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2_0Serialization.serialFailed + transport.responseText);
-					ORYX.log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);
+					ORYX.Log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);
 				}.bind(this)
 			);
 	},
@@ -226,7 +228,8 @@ ORYX.Plugins.BPMN2_0Serialization = {
            asynchronous	: false,
            parameters		: params,
 		   onSuccess		: function(transport) {
-				
+				ORYX.Log.debug('Sucess calling the BPMN2.0 Serializer servlet');
+				ORYX.Log.debug(transport);
 				suc = true;
 				
 				if(successcallback){
@@ -236,13 +239,14 @@ ORYX.Plugins.BPMN2_0Serialization = {
 			}.bind(this),
 			
 			onFailure : function(transport) {
-
+				ORYX.Log.debug('Failure calling the BPMN2.0 Serializer servlet');
+				ORYX.Log.debug(transport);
 				if(failedcallback){
 					failedcallback(transport);
 					
 				} else {
 					Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.Bpmn2Bpel.transfFailed);
-					ORYX.log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);	
+					ORYX.Log.warn("Serialization of BPMN 2.0 model failed: " + transport.responseText);	
 				}
 				
 			}.bind(this)		
