@@ -201,7 +201,7 @@ public class EditorHandler extends HttpServlet {
       	  	+ "<script src=\"" + oryx_path + "i18n/translation_en_us.js\" type=\"text/javascript\" />\n"      	  	
       	  	+ languageFiles
       	  	// Handle different profiles
-      	  	+ "<script src=\"" + oryx_path + "profiles/oryx.core.js\" type=\"text/javascript\" />\n"
+      	  	+ "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
       	  	+ profileFiles
       	  	+ headExtentions
       	  	
@@ -249,8 +249,9 @@ public class EditorHandler extends HttpServlet {
 		} catch (NullPointerException e) {
 			return profilNames;
 		}
-		if(handlerDir==null)
+		if(handlerDir == null || handlerDir.listFiles() == null) {
 			return profilNames;
+		}
 		
 		for (File source : handlerDir.listFiles()) {
 			if (source.getName().endsWith(".js")) {

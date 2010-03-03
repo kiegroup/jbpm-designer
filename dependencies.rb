@@ -1,4 +1,5 @@
 
+YUICOMPRESSOR = "com.yahoo.platform.yui:yuicompressor:jar:2.3.6"
 JSON = "org.json:json:jar:20090211"
 SERVLET = "javax.servlet:servlet-api:jar:2.5" 
 JBPT = "jbpt:jbpt:jar:0.1.0"
