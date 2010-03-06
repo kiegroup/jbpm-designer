@@ -1115,7 +1115,7 @@ ORYX.Editor = {
 			
 			//load the model from the repository from its uuid
 			//use the guvnorAPI for that:
-			new Ajax.Request("/drools-guvnor/org.drools.guvnor.Guvnor/guvnorAPI?action=load&uuid=" + model.uuid, {
+			new Ajax.Request("/enterprise-repository/org.drools.guvnor.Guvnor/guvnorAPI?action=load&uuid=" + model.uuid, {
 	            asynchronous: false,
 	            method: 'post',
 	            onSuccess: function(transport) {
