@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	id="oryx" version="2.4">
 
-	<display-name>Oryx Editor</display-name>
+	<display-name>Process Designer</display-name>
 
 	
 	<servlet>

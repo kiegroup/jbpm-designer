@@ -112,7 +112,7 @@ public class Bpmn2_0Servlet extends HttpServlet {
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		
-		NamespacePrefixMapper nsp = new BPMNPrefixMapper();
+		BPMNPrefixMapper nsp = new BPMNPrefixMapper();
 		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", nsp);
 		
 		/* Set Schema validation properties */

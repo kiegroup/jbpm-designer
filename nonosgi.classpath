@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn/|**/CVS/" kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/js"/>
+	<classpathentry kind="src" path="src/main/webapp"/>
+	<classpathentry kind="var" path="M2_REPO/org/json/json/20090211/json-20090211.jar" sourcepath="M2_REPO/org/json/json/20090211/json-20090211-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar" sourcepath="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/jbpt/jbpt/0.1.0/jbpt-0.1.0.jar" sourcepath="M2_REPO/jbpt/jbpt/0.1.0/jbpt-0.1.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-httpclient/commons-httpclient/3.1/commons-httpclient-3.1.jar" sourcepath="M2_REPO/commons-httpclient/commons-httpclient/3.1/commons-httpclient-3.1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/jdom/jdom/1.1/jdom-1.1.jar" sourcepath="M2_REPO/org/jdom/jdom/1.1/jdom-1.1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.15/log4j-1.2.15.jar" sourcepath="M2_REPO/log4j/log4j/1.2.15/log4j-1.2.15-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-configuration/commons-configuration/1.6/commons-configuration-1.6.jar" sourcepath="M2_REPO/commons-configuration/commons-configuration/1.6/commons-configuration-1.6-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-fileupload/commons-fileupload/1.2.1/commons-fileupload-1.2.1.jar" sourcepath="M2_REPO/commons-fileupload/commons-fileupload/1.2.1/commons-fileupload-1.2.1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/rhino/js/1.7R2/js-1.7R2.jar" sourcepath="M2_REPO/rhino/js/1.7R2/js-1.7R2-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/mail/mail/1.4.1/mail-1.4.1.jar" sourcepath="M2_REPO/javax/mail/mail/1.4.1/mail-1.4.1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/bpmnq/bpmnq/1.0.3-SNAPSHOT/bpmnq-1.0.3-SNAPSHOT.jar" sourcepath="M2_REPO/bpmnq/bpmnq/1.0.3-SNAPSHOT/bpmnq-1.0.3-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/velocity/velocity/1.5/velocity-1.5.jar" sourcepath="M2_REPO/velocity/velocity/1.5/velocity-1.5-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xalan/xalan/2.7.1/xalan-2.7.1.jar" sourcepath="M2_REPO/xalan/xalan/2.7.1/xalan-2.7.1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/supercsv/supercsv/1.52/supercsv-1.52.jar" sourcepath="M2_REPO/supercsv/supercsv/1.52/supercsv-1.52-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.5/commons-lang-2.5.jar" sourcepath="M2_REPO/commons-lang/commons-lang/2.5/commons-lang-2.5-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-transcoder/1.6/batik-transcoder-1.6.jar" sourcepath="M2_REPO/batik/batik-transcoder/1.6/batik-transcoder-1.6-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar" sourcepath="M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/fop/fop/0.93/fop-0.93-jdk15.jar" sourcepath="M2_REPO/fop/fop/0.93/fop-0.93-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/sun-jaxb/jaxb-api/2.2/jaxb-api-2.2.jar" sourcepath="M2_REPO/sun-jaxb/jaxb-api/2.2/jaxb-api-2.2-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/sun-jaxb/jaxb-impl/2.2/jaxb-impl-2.2.jar" sourcepath="M2_REPO/sun-jaxb/jaxb-impl/2.2/jaxb-impl-2.2-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/oryx/atlas/0.1/atlas-0.1.jar" sourcepath="M2_REPO/oryx/atlas/0.1/atlas-0.1-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

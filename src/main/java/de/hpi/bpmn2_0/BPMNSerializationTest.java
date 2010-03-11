@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
