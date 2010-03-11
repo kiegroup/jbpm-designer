@@ -7,7 +7,8 @@ Bundle-Name: cloud.designer
 Bundle-Version: 4.0.0.qualifier
 Web-ContextPath: /crm
 Jetty-WarFolderPath: src/main/webapps/crm
-Import-Package: com.sun.xml.bind.marshaller,
+Import-Package: com.bpmnq,
+ com.sun.xml.bind.marshaller,
  de.hpi.bpt.epc,
  de.hpi.bpt.epc.aml.util,
  de.hpi.bpt.graph.abs,
