@@ -6,8 +6,9 @@ Bundle-SymbolicName: cloud.designer;singleton:=true
 Bundle-Name: cloud.designer
 Bundle-Version: 4.0.0.qualifier
 Web-ContextPath: /crm
-Jetty-WarFolderPath: src/main/webapps/crm
+Jetty-WarFolderPath: src/main/webapp
 Import-Package: com.bpmnq,
+ com.bpmnq.compliancechecker,
  com.sun.xml.bind.marshaller,
  de.hpi.bpt.epc,
  de.hpi.bpt.epc.aml.util,
@@ -16,10 +17,10 @@ Import-Package: com.bpmnq,
  de.hpi.bpt.hypergraph.abs,
  de.hpi.bpt.process.epc,
  de.hpi.bpt.process.epc.util,
- javax.mail,
- javax.mail.internet,
- javax.servlet,
- javax.servlet.http,
+ javax.mail;version="1.4.0",
+ javax.mail.internet;version="1.4.0",
+ javax.servlet;version="2.5.0",
+ javax.servlet.http;version="2.5.0",
  org.apache.batik.transcoder,
  org.apache.commons.collections,
  org.apache.commons.configuration,

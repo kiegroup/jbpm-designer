@@ -17,7 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import org.apache.xml.serialize.XMLSerializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
