@@ -38,13 +38,10 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Diagram;
 import org.oryxeditor.server.diagram.DiagramBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
 import de.hpi.bpmn2_0.ExportValidationEventCollector;
 import de.hpi.bpmn2_0.model.Definitions;
@@ -61,7 +58,7 @@ public class Bpmn2_0Servlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4308758083419724953L;
 	
-	private static Logger logger = LoggerFactory.getLogger(Bpmn2_0Servlet.class);
+	private static Logger logger = Logger.getLogger(Bpmn2_0Servlet.class);
 	/**
 	 * The post request
 	 */

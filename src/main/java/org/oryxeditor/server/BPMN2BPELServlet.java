@@ -21,8 +21,8 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import org.apache.xml.serializer.DOMSerializer;
-import org.apache.xml.serializer.Method;
+import org.apache.xml.serialize.DOMSerializer;
+import org.apache.xml.serialize.Method;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 

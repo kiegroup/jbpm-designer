@@ -40,12 +40,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 public class EditorHandler extends HttpServlet {
 
-    private static final Logger _logger = LoggerFactory.getLogger(EditorHandler.class);
+    private static final Logger _logger = Logger.getLogger(EditorHandler.class);
 	/**
 	 * 
 	 */
