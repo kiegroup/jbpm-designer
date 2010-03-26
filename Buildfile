@@ -1,3 +1,6 @@
+
+require "buildr4osgi"
+
 require "repositories.rb"
 require "dependencies.rb"
 
@@ -27,16 +30,13 @@ define "designer" do
   project.version = VERSION_NUMBER
   project.group = "com.intalio.bpms.web" 
   
-  compile.with JSON, SERVLET, JBPT, COMMONS, JDOM, LOG4J, BPMNQ,
-  RHINO, MAIL, VELOCITY, XALAN, CSV, BATIK, FOP, JAXB, ATLAS
-  package(:war).include( _("src/main/webapp"), :as => ".")
-  package(:war).libs = [JSON, SERVLET, JBPT, COMMONS, JDOM, LOG4J, BPMNQ,
-  RHINO, MAIL, VELOCITY, XALAN, CSV, BATIK, FOP, JAXB, ATLAS]
-  # TODO compress js.
+  compile.with ORBIT_SOURCES, ORBIT_BINARIES
+  compile.options.source = "1.5"
+  compile.options.target = "1.5"
   
-  package(:war).include(_("src/main/js/Plugins/profiles.xml"), :path => '.')
+  package(:bundle).include(_("src/main/js/Plugins/profiles.xml"), :path => '.')
   
-  package(:war).enhance do |package_war|
+  package(:bundle).enhance do |package_war|
     #concatenate those files:
     files = %w{ utils.js kickstart.js erdfparser.js datamanager.js clazz.js 
       config.js oryx.js Core/SVG/editpathhandler.js Core/SVG/minmaxpathhandler.js 
