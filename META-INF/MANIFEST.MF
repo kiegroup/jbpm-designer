@@ -5,7 +5,7 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: cloud.designer;singleton:=true
 Bundle-Name: cloud.designer
 Bundle-Version: 4.0.0.qualifier
-Web-ContextPath: /crm
+Web-ContextPath: /designer
 Jetty-WarFolderPath: src/main/webapp
 Import-Package: com.bpmnq,
  com.bpmnq.compliancechecker,
