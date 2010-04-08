@@ -35,6 +35,11 @@ define "designer" do
   compile.options.target = "1.5"
   
   package(:bundle).include(_("src/main/js/Plugins/profiles.xml"), :path => '.')
+
+  WebContent="WebContent"
+  read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
+  read_m["Jetty-WarFolderPath"]="WebContent"
+  package(:bundle).with(:manifest=>read_m)
   
   package(:bundle).enhance do |package_war|
     #concatenate those files:
@@ -53,14 +58,14 @@ define "designer" do
     files.collect! {|f| _("src/main/js/#{f}")}
       
     compress(files, _('target/oryx.uncompressed.js'), _('target/oryx.js'))
-    package_war.include(_('target/oryx.uncompressed.js'), :path => '.')
-    package_war.include(_('target/oryx.js'), :path => '.')
+    package_war.include(_('target/oryx.uncompressed.js'), :path => WebContent)
+    package_war.include(_('target/oryx.js'), :path => WebContent)
     
     default = File.read(_("src/main/webapp/profiles/default.xml"))
     files = default.scan(/source=\"(.*)\"/).to_a.flatten
     files.collect! {|f| _("src/main/js/Plugins/#{f}")}
     compress(files, _("target/default.uncompressed.js"), _("target/default.js"))
-    package_war.include(_('target/default.js'), :path => 'profiles')
+    package_war.include(_('target/default.js'), :path => "#{WebContent}/profiles")    
   end
   
   
