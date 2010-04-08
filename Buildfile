@@ -34,9 +34,11 @@ define "designer" do
   compile.options.source = "1.5"
   compile.options.target = "1.5"
   
-  package(:bundle).include(_("src/main/js/Plugins/profiles.xml"), :path => '.')
-
   WebContent="WebContent"
+
+  package(:bundle).include(_("src/main/js/Plugins/profiles.xml"), :path => ".")
+  package(:bundle).include(_("src/main/webapp"), :as => WebContent)
+
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
   read_m["Jetty-WarFolderPath"]="WebContent"
   package(:bundle).with(:manifest=>read_m)

@@ -175,7 +175,9 @@
 			org.oryxeditor.server.SyntaxCheckerServlet
 		</servlet-class>
 	</servlet>
-	<!-- Added by Ahmed Awad -->
+	<!-- Added by Ahmed Awad
+    Removed by Antoine: we don't have the sources of
+    the dependencies for this servlet
 	<servlet>
 		<display-name>
 			Oryx query evaluator servlet
@@ -188,7 +190,7 @@
 	<servlet-mapping>
 		<servlet-name>QueryEvaluator</servlet-name>
 		<url-pattern>/query</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 	<!-- End of Added by Ahmed Awad -->
 	
 	<servlet>
