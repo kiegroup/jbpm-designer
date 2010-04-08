@@ -5,7 +5,7 @@ require "repositories.rb"
 require "dependencies.rb"
 
 # Keep this structure to allow the build system to update version numbers.
-VERSION_NUMBER = "1.0.0.005"
+VERSION_NUMBER = "1.0.0.006-SNAPSHOT"
 
 def compress(files, uncompressed, compressed)
   
