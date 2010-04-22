@@ -41,6 +41,7 @@ define "designer" do
 
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
   read_m["Jetty-WarFolderPath"] = webContent
+  read_m["Bundle-Version"] = project.version
   package(:bundle).with :manifest => read_m
   
   package(:bundle).enhance do |package_war|
