@@ -53,3 +53,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
+Eclipse-BundleShape: dir
