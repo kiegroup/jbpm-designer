@@ -1,0 +1,10 @@
+{ "_comment" : "This file contains the list of js files to be compressed and placed in oryx.js during the build. In development mode, the file is read by a placeholder that loads all the files in memory uniquely.",
+"files" : ["utils.js", "kickstart.js", "erdfparser.js", "datamanager.js", "clazz.js", "config.js", "oryx.js", "Core/SVG/editpathhandler.js", 
+"Core/SVG/minmaxpathhandler.js", "Core/SVG/pointspathhandler.js", "Core/SVG/svgmarker.js", "Core/SVG/svgshape.js", "Core/SVG/svgshape.js", 
+"Core/SVG/label.js", "Core/Math/math.js", "Core/StencilSet/stencil.js", "Core/StencilSet/property.js", "Core/StencilSet/propertyitem.js", 
+"Core/StencilSet/complexpropertyitem.js", "Core/StencilSet/rules.js", "Core/StencilSet/stencilset.js", "Core/StencilSet/stencilsets.js", 
+"Core/command.js", "Core/bounds.js", "Core/uiobject.js", "Core/abstractshape.js", "Core/canvas.js", "Core/main.js", "Core/svgDrag.js", 
+"Core/shape.js", "Core/Controls/control.js", "Core/Controls/magnet.js", "Core/Controls/docker.js", "Core/node.js", "Core/edge.js", 
+"Core/abstractPlugin.js", "Core/abstractLayouter.js"]
+
+}

@@ -4,6 +4,8 @@ require "buildr4osgi"
 require "repositories.rb"
 require "dependencies.rb"
 
+require "JSON"
+
 # Keep this structure to allow the build system to update version numbers.
 VERSION_NUMBER = "1.0.0.006-SNAPSHOT"
 
@@ -44,32 +46,21 @@ define "designer" do
   read_m["Bundle-Version"] = project.version
   package(:bundle).with :manifest => read_m
   
-  package(:bundle).enhance do |package_war|
+  task :compress do
     #concatenate those files:
-    files = %w{ utils.js kickstart.js erdfparser.js datamanager.js clazz.js 
-      config.js oryx.js Core/SVG/editpathhandler.js Core/SVG/minmaxpathhandler.js 
-      Core/SVG/pointspathhandler.js Core/SVG/svgmarker.js Core/SVG/svgshape.js 
-      Core/SVG/svgshape.js Core/SVG/label.js Core/Math/math.js 
-      Core/StencilSet/stencil.js Core/StencilSet/property.js 
-      Core/StencilSet/propertyitem.js Core/StencilSet/complexpropertyitem.js 
-      Core/StencilSet/rules.js Core/StencilSet/stencilset.js 
-      Core/StencilSet/stencilsets.js Core/command.js Core/bounds.js 
-      Core/uiobject.js Core/abstractshape.js Core/canvas.js Core/main.js 
-      Core/svgDrag.js Core/shape.js Core/Controls/control.js 
-      Core/Controls/magnet.js Core/Controls/docker.js Core/node.js Core/edge.js Core/abstractPlugin.js 
-      Core/abstractLayouter.js }
+    files = JSON.parse(File.read(_("src/main/js/js_files.json")))["files"]
     files.collect! {|f| _("src/main/js/#{f}")}
-      
     compress(files, _('target/oryx.uncompressed.js'), _('target/oryx.js'))
-    package_war.include(_('target/oryx.uncompressed.js'), :path => webContent)
-    package_war.include(_('target/oryx.js'), :path => webContent)
+  end
+  
+  package(:bundle).enhance [:compress] do |package_bundle|
+    package_bundle.include(_('target/oryx.uncompressed.js'), :path => webContent)
+    package_bundle.include(_('target/oryx.js'), :path => webContent)
     
     default = File.read(_("src/main/webapp/profiles/default.xml"))
     files = default.scan(/source=\"(.*)\"/).to_a.flatten
     files.collect! {|f| _("src/main/js/Plugins/#{f}")}
     compress(files, _("target/default.uncompressed.js"), _("target/default.js"))
-    package_war.include(_('target/default.js'), :path => "#{webContent}/profiles")    
+    package_bundle.include(_('target/default.js'), :path => "#{webContent}/profiles")    
   end
-  
-  
 end
