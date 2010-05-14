@@ -4,7 +4,7 @@ require "buildr4osgi"
 require "repositories.rb"
 require "dependencies.rb"
 
-require "JSON"
+require "json"
 
 # Keep this structure to allow the build system to update version numbers.
 VERSION_NUMBER = "1.0.0.007-SNAPSHOT"
