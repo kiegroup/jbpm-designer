@@ -40,7 +40,11 @@ define "designer" do
 
   package(:bundle).include(_("src/main/webapp/js/Plugins/profiles.xml"), :path => ".")
   package(:bundle).include(_("src/main/webapp"), :as => webContent)
-
+  package(:war).include(_("src/main/webapp/js/Plugins/profiles.xml"), :path => ".")
+  package(:war).include(_("src/main/webapp"), :as => '.')
+  
+  package(:war).libs = ORBIT_SOURCES, ORBIT_BINARIES
+   
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
   read_m["Jetty-WarFolderPath"] = webContent
   read_m["Bundle-Version"] = project.version
@@ -62,5 +66,21 @@ define "designer" do
     files.collect! {|f| _("src/main/webapp/js/Plugins/#{f}")}
     compress(files, _("target/default.uncompressed.js"), _("target/default.js"))
     package_bundle.include(_('target/default.js'), :path => "#{webContent}/profiles")    
+  end
+  
+  package(:war).enhance [:compress]
+  package(:war).enhance do |package_war|
+    #webContent is '.' then
+    webContent = '.'
+    package_war.include(_('target/oryx.uncompressed.js'), :path => webContent)
+    package_war.include(_('target/oryx.js'), :path => webContent)
+    
+    default = File.read(_("src/main/webapp/profiles/default.xml"))
+    files = default.scan(/source=\"(.*)\"/).to_a.flatten
+    files.collect! {|f| _("src/main/webapp/js/Plugins/#{f}")}
+    compress(files, _("target/default.uncompressed.js"), _("target/default.js"))
+    package_war.include(_('target/default.js'), :path => "#{webContent}/profiles")
+    
+    
   end
 end
