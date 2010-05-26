@@ -26,24 +26,35 @@ package org.oryxeditor.server;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.StreamFilter;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.apache.log4j.Logger;
 
 public class EditorHandler extends HttpServlet {
 
+	/**
+	 * A special flag to set when running in development mode to use the disassembled resources,
+	 * loaded from js_files.json
+	 */
+	private static final String DEV_MODE = "designer.dev";
+	
     private static final Logger _logger = Logger.getLogger(EditorHandler.class);
 	/**
 	 * 
@@ -58,42 +69,41 @@ public class EditorHandler extends HttpServlet {
 		availableProfiles=getAvailableProfileNames();
 //		if(availableProfiles.size()==0)
 //			 defaultHandlerBehaviour();
-		String uuid = request.getParameter("uuid");
-		String[] urlSplitted=request.getRequestURI().split(";");
-		ArrayList<String> profiles= new ArrayList<String>();
-		if (urlSplitted.length>1){
-			for(int i=1;i<urlSplitted.length;i++){
-				profiles.add(urlSplitted[i]);
-			}
-		}else{
-			profiles.add("default");
-		}
-		if(!availableProfiles.containsAll(profiles)){
-			//Some profiles not available
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Profile not found!");
-			profiles.retainAll(availableProfiles);
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
-		}
+		JSONObject conf= null;
 		String sset=null;
-		JSONObject conf= new JSONObject();
-		InputStream fileStream = null;
-		try {
-		    ByteArrayOutputStream output = new ByteArrayOutputStream();
-		    fileStream = new FileInputStream(this.getServletContext().
-                    getRealPath("/profiles") + File.separator + profiles.get(0)
-                    + ".conf");
-            byte[] buffer = new byte[4096];
-            int read;
-            while ((read = fileStream.read(buffer)) != -1) {
-                output.write(buffer, 0, read);
-            }
-			conf = new JSONObject(output.toString());
-		} catch (JSONException e) {
-			_logger.error(e.getMessage(), e);
-		} finally {
-		    if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
+		List<String> profiles= new ArrayList<String>();
+		String dev_flag = "";
+		if (System.getProperty(DEV_MODE) != null) {
+			dev_flag = "ORYX.CONFIG.DEV = true;\nvar ORYX_LOGLEVEL = 3;\n";
+			profiles.add("default"); // will be ignored.
+			conf = new JSONObject(); // we can do a better job at configuring the conf object later on.
+		} else {
+			String[] urlSplitted=request.getRequestURI().split(";");
+			
+			if (urlSplitted.length>1){
+				for(int i=1;i<urlSplitted.length;i++){
+					profiles.add(urlSplitted[i]);
+				}
+			}else{
+				profiles.add("default");
+			}
+			if(!availableProfiles.containsAll(profiles)){
+				//Some profiles not available
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Profile not found!");
+				profiles.retainAll(availableProfiles);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
+			
+			try {
+				conf = readJSONObjectFromFile(this.getServletContext().
+						getRealPath("/profiles") + File.separator + profiles.get(0)
+						+ ".conf");
+			} catch (JSONException e) {
+				_logger.error(e.getMessage(), e);
+			}
 		}
+		
 		sset=conf.optString("stencilset");
 		if(sset==null || "".equals(sset))
 			sset=defaultSS;
@@ -106,6 +116,7 @@ public class EditorHandler extends HttpServlet {
 	        "<script type='text/javascript'>" +
 	        "  if(!ORYX) var ORYX = {};\n" +
 	        "  if(!ORYX.CONFIG) ORYX.CONFIG = {};\n" +
+	        "  " + dev_flag + "\n" +
 	        "  ORYX.CONFIG.PLUGINS_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".xml';\n" +
 	        "  ORYX.CONFIG.PROFILE_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".conf';\n" +
 	        "  ORYX.CONFIG.PROFILE_NAME = '"+profiles.get(0)+"';\n" +
@@ -140,17 +151,42 @@ public class EditorHandler extends HttpServlet {
 				this.getCountryCode(request), profiles));
 		response.setStatus(200);
 	}
+	
+	/**
+	 * Reads a JSON file contents and place them into a JSONObject.
+	 * @param path the path to the file
+	 * @return the JSONOPbject parsed from the file.
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	private JSONObject readJSONObjectFromFile(String path) throws IOException, JSONException {
+		JSONObject conf = null;
+		InputStream fileStream = null;
+		try {
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			fileStream = new FileInputStream(path);
+			byte[] buffer = new byte[4096];
+			int read;
+			while ((read = fileStream.read(buffer)) != -1) {
+				output.write(buffer, 0, read);
+			}
+			conf = new JSONObject(output.toString());
+		} finally {
+			if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
+		}
+		return conf;
+	}
+	
 	protected String getOryxModel(String title, String content, 
-    		String languageCode, String countryCode, ArrayList<String> profiles) {
+    		String languageCode, String countryCode, List<String> profiles) {
     	
     	return getOryxModel(title, content, languageCode, countryCode, "", profiles);
     }
     
     protected String getOryxModel(String title, String content, 
-    		String languageCode, String countryCode, String headExtentions, ArrayList<String> profiles) {
+    		String languageCode, String countryCode, String headExtentions, List<String> profiles) {
     	
     	String languageFiles = "";
-    	String profileFiles="";
     	
     	if (new File(this.getOryxRootDirectory() + oryx_path + "i18n/translation_"+languageCode+".js").exists()) {
     		languageFiles += "<script src=\"" + oryx_path 
@@ -162,17 +198,66 @@ public class EditorHandler extends HttpServlet {
     		+ "i18n/translation_" + languageCode+"_" + countryCode 
     		+ ".js\" type=\"text/javascript\" />\n";
     	}
+    	StringBuilder profileBuilder = new StringBuilder();
     	for(String profile: profiles){
-      	  	profileFiles=profileFiles+ "<script src=\"" + oryx_path+"profiles/" + profile+".js\" type=\"text/javascript\" />\n";
-
+      	  	profileBuilder.append("<script src=\"" + oryx_path +"profiles/" + profile+".js\" type=\"text/javascript\" />\n");
     	}
+    	String profileFiles = profileBuilder.toString();
     	
     	String analytics = getServletContext().getInitParameter("ANALYTICS_SNIPPET");
     	if (null == analytics) {
     		analytics = "";
     	}
     	
-    	
+    	String bootstrapLibs = "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n";
+    	if (System.getProperty(DEV_MODE) != null) {
+    		String jsFolder = this.getServletContext().getRealPath("/") + File.separator + "js" + File.separator;
+    		// we place ourselves in dev mode, we will load the files from the file js_files.json
+    		try {
+    			// first, read the JSON files to know what core libs to include
+    			JSONObject dev = readJSONObjectFromFile(jsFolder +  "js_files.json");
+
+    			JSONArray array = dev.getJSONArray("files");
+    			StringBuilder builder = new StringBuilder();
+    			for (int i = 0 ; i < array.length() ; i++) {
+    				String filename = String.valueOf(array.get(i));
+    				builder.append("<script src=\"" + oryx_path + "js/" + filename + "\" type=\"text/javascript\" />\n");
+    			}
+    			bootstrapLibs = builder.toString();
+    			// then append the plugins, using their source attribute.
+    			InputStream fileStream = null;
+    			try {
+    				fileStream = new FileInputStream(this.getServletContext().getRealPath("/") + File.separator + "profiles" 
+    						+ File.separator + "default.xml");
+    				XMLInputFactory factory = XMLInputFactory.newInstance();
+    				XMLStreamReader reader = factory.createXMLStreamReader(fileStream);
+    				while(reader.hasNext()) {
+    					if (reader.next() == XMLStreamReader.START_ELEMENT) {
+    						if ("plugin".equals(reader.getLocalName())) {
+    							for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+    								if ("source".equals(reader.getAttributeLocalName(i))) {
+    									builder.append("<script src=\"" + oryx_path + "js/Plugins/" 
+    											+ reader.getAttributeValue(i) + "\" type=\"text/javascript\" />\n");
+    								}
+    							}
+    						}
+    					}
+    				}
+    			} catch (XMLStreamException e) {
+    				_logger.error(e.getMessage(), e);
+    				throw new IllegalArgumentException("Could not read default.xml", e);
+				} catch (FactoryConfigurationError e) {
+					_logger.error(e.getMessage(), e);
+				} finally {
+    				if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
+    			}
+				bootstrapLibs = builder.toString();
+    		} catch (JSONException e) {
+    			_logger.error(e.getMessage(), e);
+    		} catch (IOException e) {
+    			_logger.error(e.getMessage(), e);
+    		}
+    	}
     	
       	return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
       	    + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
@@ -200,7 +285,7 @@ public class EditorHandler extends HttpServlet {
       	  	+ "<script src=\"" + oryx_path + "i18n/translation_en_us.js\" type=\"text/javascript\" />\n"      	  	
       	  	+ languageFiles
       	  	// Handle different profiles
-      	  	+ "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n"
+      	  	+ bootstrapLibs
       	  	+ profileFiles
       	  	+ headExtentions
       	  	

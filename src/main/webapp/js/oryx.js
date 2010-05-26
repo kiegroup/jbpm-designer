@@ -36,7 +36,7 @@ var ORYX_LOGLEVEL_INFO = 3;
 var ORYX_LOGLEVEL_WARN = 2;
 var ORYX_LOGLEVEL_ERROR = 1;
 var ORYX_LOGLEVEL_FATAL = 0;
-var ORYX_LOGLEVEL = 0;
+if (!ORYX_LOGLEVEL) var ORYX_LOGLEVEL = 0;
 var ORYX_CONFIGURATION_DELAY = 100;
 var ORYX_CONFIGURATION_WAIT_ATTEMPTS = 10;
 
@@ -211,11 +211,11 @@ ORYX = Object.extend(ORYX, {
 		
 		// load necessary scripts.
 		ORYX.URLS.each(function(url) {
-			ORYX.Log.debug("Requireing '%0'", url);
+			ORYX.Log.debug("Requiring '%0'", url);
 			Kickstart.require(ORYX.PATH + url) });
-	*/
-		// configurate logging and load plugins.
-		ORYX.loadPlugins();
+		*/
+	        // configurate logging and load plugins.
+		    ORYX.loadPlugins();
 	},
 
 	/**
@@ -240,7 +240,7 @@ ORYX = Object.extend(ORYX, {
 
 		// load plugin configuration file.
 		var source = ORYX.CONFIG.PLUGINS_CONFIG;
-
+		console.log("BLEH" + source);
 		ORYX.Log.debug("Loading plugin configuration from '%0'.", source);
 	
 		new Ajax.Request(source, {
@@ -291,7 +291,7 @@ ORYX = Object.extend(ORYX, {
 					
 					// ensure there's a name attribute.
 					if(!pluginData['name']) {
-						ORYX.Log.error("A plugin is not providing a name. Ingnoring this plugin.");
+						ORYX.Log.error("A plugin is not providing a name. Ignoring this plugin.");
 						return;
 					}
 
@@ -362,7 +362,7 @@ ORYX = Object.extend(ORYX, {
 								
 					var url = ORYX.PATH + ORYX.CONFIG.PLUGINS_FOLDER + pluginData['source'];
 		
-					ORYX.Log.debug("Requireing '%0'", url);
+					ORYX.Log.debug("Requiring '%0'", url);
 		
 					// Add the Script-Tag to the Site
 					//Kickstart.require(url);
@@ -373,6 +373,7 @@ ORYX = Object.extend(ORYX, {
 					ORYX.availablePlugins.push(pluginData);
 		
 				});
+				
 		
 			},
 			onFailure:this._loadPluginsOnFails
