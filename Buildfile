@@ -38,7 +38,7 @@ define "designer" do
   
   webContent = "WebContent"
 
-  package(:bundle).include(_("src/main/js/Plugins/profiles.xml"), :path => ".")
+  package(:bundle).include(_("src/main/webapp/js/Plugins/profiles.xml"), :path => ".")
   package(:bundle).include(_("src/main/webapp"), :as => webContent)
 
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
@@ -48,8 +48,8 @@ define "designer" do
   
   task :compress do
     #concatenate those files:
-    files = JSON.parse(File.read(_("src/main/js/js_files.json")))["files"]
-    files.collect! {|f| _("src/main/js/#{f}")}
+    files = JSON.parse(File.read(_("src/main/webapp/js/js_files.json")))["files"]
+    files.collect! {|f| _("src/main/webapp/js/#{f}")}
     compress(files, _('target/oryx.uncompressed.js'), _('target/oryx.js'))
   end
   
@@ -59,7 +59,7 @@ define "designer" do
     
     default = File.read(_("src/main/webapp/profiles/default.xml"))
     files = default.scan(/source=\"(.*)\"/).to_a.flatten
-    files.collect! {|f| _("src/main/js/Plugins/#{f}")}
+    files.collect! {|f| _("src/main/webapp/js/Plugins/#{f}")}
     compress(files, _("target/default.uncompressed.js"), _("target/default.js"))
     package_bundle.include(_('target/default.js'), :path => "#{webContent}/profiles")    
   end
