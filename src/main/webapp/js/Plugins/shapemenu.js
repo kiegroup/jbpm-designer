@@ -119,7 +119,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		this.createdButtons = {};
 		
 		this.createMorphMenu();
-		this.createIntalioMenu();
+		//this.createIntalioMenu();
 		
 		if( !this.pluginsData ){
 			this.pluginsData = [];
@@ -219,7 +219,6 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		this.morphMenu.getEl().appendTo(button.node);
 		this.morphButton = button;
 	},
-	
 	createIntalioMenu: function() {
 		
 		this.intalioMenu = new Ext.menu.Menu({

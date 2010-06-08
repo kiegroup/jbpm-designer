@@ -146,7 +146,7 @@ public class EditorHandler extends HttpServlet {
           	"</script>";
 		response.setContentType("application/xhtml+xml");
 		
-		response.getWriter().println(this.getOryxModel("Intalio|Process Designer", 
+		response.getWriter().println(this.getOryxModel("Process Designer", 
 				content, this.getLanguageCode(request), 
 				this.getCountryCode(request), profiles));
 		response.setStatus(200);

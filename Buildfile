@@ -27,7 +27,7 @@ def compress(files, uncompressed, compressed)
   
 end
 
-desc "Intalio|Process Designer"
+desc "Process Designer"
 define "designer" do
   project.version = VERSION_NUMBER
   project.group = "com.intalio.bpms.web" 
