@@ -68,6 +68,7 @@ public class ParticipantFactory extends AbstractBpmnFactory {
 	protected Participant createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		Participant p = new Participant();
+		this.setCommonAttributes(p, shape);
 		p.setId(shape.getResourceId());
 		p.setName(shape.getProperty("name"));
 		

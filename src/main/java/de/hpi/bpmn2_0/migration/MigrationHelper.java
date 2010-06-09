@@ -231,12 +231,12 @@ public class MigrationHelper {
 			for(String propertyPackage : propertyPackages) 
 				if(this.propertiesForPackage.containsKey(propertyPackage)) 
 					for(String property : this.propertiesForPackage.get(propertyPackage)) 
-						properties.put(property, this.defaultsForProperty.get(property));
+						properties.put(property, this.defaultsForProperty.get(propertyPackage + property));
 			
 		/* find all properties that are declared at the stencil */
 		if(this.propertiesForStencil.containsKey(key)) 
 			for(String property : this.propertiesForStencil.get(key)) 
-				properties.put(property, this.defaultsForProperty.get(property));
+				properties.put(property, this.defaultsForProperty.get(key + property));
 
 		return properties;
 	}
@@ -273,7 +273,7 @@ public class MigrationHelper {
 						
 						properties.add(currentProperty.getString("id"));
 						
-						this.setDefinitionsForProperty(currentProperty);
+						this.setDefinitionsForProperty(currentStencil.getString("id"), currentProperty);
 					}
 				
 				this.propertiesForStencil.put(currentStencil.getString("id"), properties);
@@ -303,7 +303,7 @@ public class MigrationHelper {
 					
 					propertyIds.add(currentProperty.getString("id"));
 					
-					this.setDefinitionsForProperty(currentProperty);
+					this.setDefinitionsForProperty(packageName, currentProperty);
 				}
 				
 				this.propertiesForPackage.put(packageName, propertyIds);
@@ -314,10 +314,11 @@ public class MigrationHelper {
 	/**
 	 * Associates the properties with their types and initial values
 	 * 
+	 * @param prefix
 	 * @param property
 	 * @throws JSONException
 	 */
-	private void setDefinitionsForProperty(JSONObject property) throws JSONException {
+	private void setDefinitionsForProperty(String prefix, JSONObject property) throws JSONException {
 		String id   = property.getString("id");			
 		String type = property.getString("type");
 		
@@ -329,6 +330,6 @@ public class MigrationHelper {
 			value = property.optString("value");
 						
 		if(!this.defaultsForProperty.containsKey(id))
-			this.defaultsForProperty.put(id, value.toString());
+			this.defaultsForProperty.put(prefix+id, value.toString());
 	}
 }

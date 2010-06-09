@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -61,7 +62,8 @@ import de.hpi.bpmn2_0.model.Process;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tLaneSet", propOrder = {
-    "lanes"//,
+    "name",
+	"lanes"//,
     //"parentLane"
 })
 public class LaneSet
@@ -80,6 +82,14 @@ public class LaneSet
 //	@XmlAttribute
 	@XmlTransient
 	protected Process process;
+	
+	@XmlAttribute
+	protected String name;
+	
+	@XmlTransient
+	public String _processType;
+	@XmlTransient
+	public String _isClosed;
 	
 	public void addChild(BaseElement child) {
 		if(child instanceof Lane) {
@@ -166,6 +176,14 @@ public class LaneSet
         }
         return this.lanes;
     }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	/**
 	 * @return the parentLane

@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.activity.Task;
-import de.hpi.bpmn2_0.model.activity.UserTaskImplementation;
+import de.hpi.bpmn2_0.model.activity.misc.UserTaskImplementation;
 import de.hpi.bpmn2_0.model.activity.resource.Rendering;
 
 

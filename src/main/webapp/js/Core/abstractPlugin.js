@@ -168,51 +168,12 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 	 * openDownloadWindow( "my.xml", "<exampleXML />" );
 	 */
 	openXMLWindow: function(content) {
-		ORYX.Log.debug("About to show XML window!");
-		ORYX.Log.debug(content);
-		if(content.xml) {
-		  content = content.xml;
-		}
-		content = content.
-		    replace(/&/gmi, '&amp;').
-		    replace(/"/gmi, '&quot;').
-		    replace(/>/gmi, '&gt;').
-		    replace(/</gmi, '&lt;');
-		try {
-		var contentPanel = new Ext.Panel({
-			width:600, //panel's width
-			height:600, //panel's height
-			html: content, //panel's content
-			layout: 'fit'
-		});
-		// Create the panel
-        var dialog = new Ext.Window({
-            autoCreate: true,
-            layout: 'fit',
-            plain: true,
-            bodyStyle: 'padding:5px;',
-            title: "",
-            height: 600,
-            width: 600,
-            modal: true,
-            fixedcenter: true,
-            shadow: true,
-            proxyDrag: true,
-            resizable: true,
-            items: [contentPanel],
-			renderTo: Ext.getBody(),
-            buttons: [{
-                text: ORYX.I18N.Bpmn2_0Serialization.btnClose,
-                handler: function(){
-                    dialog.close();
-                }.bind(this)
-            }]
-        });
-        // Show the panel
-        dialog.show();
-	    } catch(err) {
-	      ORYX.Log.error(err);
-		} 
+		var win = window.open(
+		   'data:application/xml,' + encodeURIComponent(
+		     content
+		   ),
+		   '_blank', "resizable=yes,width=600,height=600,toolbar=0,scrollbars=yes"
+		);
 	},
 	
     /**
@@ -222,7 +183,7 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
      * @param {String} content The content to download
      */
 	openDownloadWindow: function(filename, content) {
-		var win = parent.open("");
+		var win = window.open("");
 		if (win != null) {
 			win.document.open();
 			win.document.write("<html><body>");
@@ -244,7 +205,7 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 			submitForm.method = "POST";
 			win.document.write("</body></html>");
 			win.document.close();
-			submitForm.action= ORYX.PATH + "download";
+			submitForm.action= ORYX.PATH + "/download";
 			submitForm.submit();
 		}		
 	},

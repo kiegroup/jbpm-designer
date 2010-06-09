@@ -25,6 +25,7 @@ package de.hpi.bpmn2_0.model.activity;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -36,16 +37,28 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.FlowNode;
+import de.hpi.bpmn2_0.model.activity.loop.LoopCharacteristics;
+import de.hpi.bpmn2_0.model.activity.loop.MultiInstanceLoopCharacteristics;
+import de.hpi.bpmn2_0.model.activity.loop.StandardLoopCharacteristics;
 import de.hpi.bpmn2_0.model.activity.resource.ActivityResource;
 import de.hpi.bpmn2_0.model.activity.resource.HumanPerformer;
 import de.hpi.bpmn2_0.model.activity.resource.Performer;
 import de.hpi.bpmn2_0.model.activity.resource.PotentialOwner;
 import de.hpi.bpmn2_0.model.connector.DataInputAssociation;
 import de.hpi.bpmn2_0.model.connector.DataOutputAssociation;
+import de.hpi.bpmn2_0.model.data_object.DataInput;
+import de.hpi.bpmn2_0.model.data_object.DataOutput;
+import de.hpi.bpmn2_0.model.data_object.InputOutputSpecification;
+import de.hpi.bpmn2_0.model.data_object.InputSet;
+import de.hpi.bpmn2_0.model.data_object.OutputSet;
 import de.hpi.bpmn2_0.model.event.BoundaryEvent;
+import de.hpi.bpmn2_0.model.misc.IoOption;
+import de.hpi.bpmn2_0.model.misc.Property;
+import de.hpi.diagram.OryxUUID;
 
 
 /**
@@ -78,26 +91,26 @@ import de.hpi.bpmn2_0.model.event.BoundaryEvent;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tActivity", propOrder = {
-//    "ioSpecification",
-//    "property",
-//	"boundaryEventRef",
-//    "dataInputAssociation",
-//    "dataOutputAssociation"//,
-//    "activityResource",
-//    "loopCharacteristics"
+    "ioSpecification",
+    "property",
+	"boundaryEventRefs",
+    "dataInputAssociation",
+    "dataOutputAssociation",
+    "activityResource",
+    "loopCharacteristics"
 })
 @XmlSeeAlso({
     SubProcess.class,
-//    Transaction.class,
-    Task.class//,
-//    CallActivity.class
+    Transaction.class,
+    Task.class,
+    CallActivity.class
 })
 public abstract class Activity
     extends FlowNode
 {
 
-//    protected TInputOutputSpecification ioSpecification;
-//    protected List<TProperty> property;
+    protected InputOutputSpecification ioSpecification;
+    protected List<Property> property;
 	
 	@XmlElement(name = "dataInputAssociation", type = DataInputAssociation.class)
     protected List<DataInputAssociation> dataInputAssociation;
@@ -112,7 +125,12 @@ public abstract class Activity
     	@XmlElementRef(type = PotentialOwner.class)
     })
 	protected List<ActivityResource> activityResource;
-//    protected LoopCharacteristics loopCharacteristics;
+    
+    @XmlElementRefs({
+    	@XmlElementRef(type = StandardLoopCharacteristics.class),
+    	@XmlElementRef(type = MultiInstanceLoopCharacteristics.class)
+    })
+    protected LoopCharacteristics loopCharacteristics;
     
 	@XmlIDREF
 	@XmlElement(name = "boundaryEventRef", type = BoundaryEvent.class)
@@ -132,6 +150,139 @@ public abstract class Activity
     @XmlSchemaType(name = "IDREF")
     protected Object _default;
 	
+	@XmlTransient
+	private List<HashMap<String, IoOption>> inputSetInfo;
+	
+	@XmlTransient
+	private List<HashMap<String, IoOption>> outputSetInfo;
+	
+	/**
+	 * Default constructor
+	 */
+	public Activity() {
+		
+	}
+	
+	/**
+	 * Copy constructor
+	 * 
+	 * @param act
+	 * 		The {@link Activity} to copy
+	 */
+	public Activity(Activity act) {
+		super(act);
+		
+		if(act.getProperty().size() > 0)
+			this.getProperty().addAll(act.getProperty());
+		
+		if(act.getDataInputAssociation().size() > 0)
+			this.getDataInputAssociation().addAll(act.getDataInputAssociation());
+		
+		if(act.getDataOutputAssociation().size() > 0)
+			this.getDataOutputAssociation().addAll(act.getDataOutputAssociation());
+		
+		if(act.getActivityResource().size() > 0)
+			this.getActivityResource().addAll(act.getActivityResource());
+		
+		if(act.getBoundaryEventRefs().size() > 0)
+			this.getBoundaryEventRefs().addAll(act.getBoundaryEventRefs());
+		
+		if(act.getInputSetInfo().size() > 0)
+			this.getInputSetInfo().addAll(act.getInputSetInfo());
+		
+		if(act.getOutputSetInfo().size() > 0)
+			this.getOutputSetInfo().addAll(act.getOutputSetInfo());
+		
+		this.setIoSpecification(act.getIoSpecification());
+		this.setLoopCharacteristics(act.getLoopCharacteristics());
+		this.setIsForCompensation(act.isForCompensation);
+		this.setStartQuantity(act.getStartQuantity());
+		this.setCompletionQuantity(act.getCompletionQuantity());
+		this.setDefault(act.getDefault());
+	}
+	
+	/* Transformation logic methods */
+	
+	/**
+	 * Determines and sets the {@link InputOutputSpecification} of an activity.
+	 * 
+	 * Per default there exists exactly one {@link InputSet} and one {@link OutputSet}.
+	 * All input and output data objects are associated by theses sets. Both
+	 * sets are linked towards each other to define a default IORule. 
+	 */
+	public void determineIoSpecification() {
+		
+		/* Process data inputs */
+		InputSet inputSet = new InputSet();
+		inputSet.setName("DefaultInputSet");
+		inputSet.setId(OryxUUID.generate());
+		for(DataInputAssociation dia : this.getDataInputAssociation()) {
+			
+			if(dia.getSourceRef() instanceof DataInput) {
+				DataInput input = (DataInput) dia.getSourceRef();
+				
+				for(HashMap<String, IoOption> inputSetDesc : this.getInputSetInfo()) {
+					IoOption opt = inputSetDesc.get(input.getName());
+					if(opt != null) {
+						/* Append to appropriate list of data inputs */
+						inputSet.getDataInputRefs().add(input);
+						
+						if(opt.isOptional())
+							inputSet.getOptionalInputRefs().add(input);
+						
+						if(opt.isWhileExecuting())
+							inputSet.getWhileExecutingInputRefs().add(input);
+					}
+				}
+			}
+		}
+		
+		/* Process data outputs */
+		OutputSet outputSet = new OutputSet();
+		outputSet.setName("DefaultOutputSet");
+		outputSet.setId(OryxUUID.generate());
+		for(DataOutputAssociation dia : this.getDataOutputAssociation()) {
+			
+			if(dia.getTargetRef() instanceof DataOutput) {
+				DataOutput output = (DataOutput) dia.getTargetRef();
+				
+				for(HashMap<String, IoOption> outputSetDesc : this.getOutputSetInfo()) {
+					IoOption opt = outputSetDesc.get(output.getName());
+					if(opt != null) {
+						/* Append to appropriate list of data inputs */
+						outputSet.getDataOutputRefs().add(output);
+						
+						if(opt.isOptional())
+							outputSet.getOptionalOutputRefs().add(output);
+						
+						if(opt.isWhileExecuting())
+							outputSet.getWhileExecutingOutputRefs().add(output);
+					}
+				}
+			}
+		}
+		
+		/* Link both sets against each other to specifies a default IORule and
+		 * dependency between them. */
+		
+		inputSet.getOutputSetRefs().add(outputSet);
+		outputSet.getInputSetRefs().add(inputSet);
+		
+		/* Add input set to specification */
+		if(inputSet.getDataInputRefs().size() > 0 && outputSet.getDataOutputRefs().size() > 0) {
+			InputOutputSpecification ioSpec = new InputOutputSpecification();
+			ioSpec.setId(OryxUUID.generate());
+			ioSpec.getInputSet().add(inputSet);
+			ioSpec.getOutputSet().add(outputSet);
+			ioSpec.getDataInput();
+			ioSpec.getDataOutput();
+			this.setIoSpecification(ioSpec);
+		}
+	}
+	
+	
+	/* Getter & Setter */
+	
 	/**
 	 * @return The list of boundary event references
 	 */
@@ -147,24 +298,24 @@ public abstract class Activity
      * 
      * @return
      *     possible object is
-     *     {@link TInputOutputSpecification }
+     *     {@link InputOutputSpecification }
      *     
      */
-//    public TInputOutputSpecification getIoSpecification() {
-//        return ioSpecification;
-//    }
+    public InputOutputSpecification getIoSpecification() {
+        return ioSpecification;
+    }
 
     /**
      * Sets the value of the ioSpecification property.
      * 
      * @param value
      *     allowed object is
-     *     {@link TInputOutputSpecification }
+     *     {@link InputOutputSpecification }
      *     
      */
-//    public void setIoSpecification(TInputOutputSpecification value) {
-//        this.ioSpecification = value;
-//    }
+    public void setIoSpecification(InputOutputSpecification value) {
+        this.ioSpecification = value;
+    }
 
     /**
      * Gets the value of the property property.
@@ -184,16 +335,16 @@ public abstract class Activity
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link TProperty }
+     * {@link Property }
      * 
      * 
      */
-//    public List<TProperty> getProperty() {
-//        if (property == null) {
-//            property = new ArrayList<TProperty>();
-//        }
-//        return this.property;
-//    }
+    public List<Property> getProperty() {
+        if (property == null) {
+            property = new ArrayList<Property>();
+        }
+        return this.property;
+    }
 
     /**
      * Gets the value of the dataInputAssociation property.
@@ -290,28 +441,28 @@ public abstract class Activity
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link TMultiInstanceLoopCharacteristics }{@code >}
-     *     {@link JAXBElement }{@code <}{@link TLoopCharacteristics }{@code >}
-     *     {@link JAXBElement }{@code <}{@link TStandardLoopCharacteristics }{@code >}
+     *    	{@ link MultiInstanceLoopCharacteristics }
+     *     	{@link LoopCharacteristics }
+     *     	{@link StandardLoopCharacteristics }
      *     
      */
-//    public JAXBElement<? extends TLoopCharacteristics> getLoopCharacteristics() {
-//        return loopCharacteristics;
-//    }
+    public LoopCharacteristics getLoopCharacteristics() {
+        return loopCharacteristics;
+    }
 
     /**
      * Sets the value of the loopCharacteristics property.
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link TMultiInstanceLoopCharacteristics }{@code >}
-     *     {@link JAXBElement }{@code <}{@link TLoopCharacteristics }{@code >}
-     *     {@link JAXBElement }{@code <}{@link TStandardLoopCharacteristics }{@code >}
+     *    	{@ link MultiInstanceLoopCharacteristics }
+     *     	{@link LoopCharacteristics }
+     *     	{@link StandardLoopCharacteristics }
      *     
      */
-//    public void setLoopCharacteristics(JAXBElement<? extends TLoopCharacteristics> value) {
-//        this.loopCharacteristics = ((JAXBElement<? extends TLoopCharacteristics> ) value);
-//    }
+    public void setLoopCharacteristics(LoopCharacteristics value) {
+        this.loopCharacteristics = value;
+    }
 
     /**
      * Gets the value of the isForCompensation property.
@@ -421,4 +572,23 @@ public abstract class Activity
         this._default = value;
     }
 
+
+	/**
+	 * @return the inputSetInfo
+	 */
+	public List<HashMap<String, IoOption>> getInputSetInfo() {
+		if(this.inputSetInfo == null)
+			this.inputSetInfo = new ArrayList<HashMap<String,IoOption>>();
+		return inputSetInfo; 
+	}
+
+
+	/**
+	 * @return the outputSetInfo
+	 */
+	public List<HashMap<String, IoOption>> getOutputSetInfo() {
+		if(this.outputSetInfo == null) 
+			this.outputSetInfo = new ArrayList<HashMap<String,IoOption>>();
+		return outputSetInfo;
+	}
 }

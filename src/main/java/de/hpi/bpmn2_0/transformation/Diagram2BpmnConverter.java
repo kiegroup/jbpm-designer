@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Diagram;
 import org.oryxeditor.server.diagram.Shape;
 
+import de.hpi.bpmn2_0.annotations.SSetExtension;
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.factory.AbstractBpmnFactory;
@@ -49,6 +50,7 @@ import de.hpi.bpmn2_0.model.FlowNode;
 import de.hpi.bpmn2_0.model.Process;
 import de.hpi.bpmn2_0.model.activity.Activity;
 import de.hpi.bpmn2_0.model.activity.SubProcess;
+import de.hpi.bpmn2_0.model.activity.Task;
 import de.hpi.bpmn2_0.model.choreography.Choreography;
 import de.hpi.bpmn2_0.model.choreography.ChoreographyActivity;
 import de.hpi.bpmn2_0.model.connector.Association;
@@ -83,11 +85,11 @@ import de.hpi.bpmn2_0.model.event.CompensateEventDefinition;
 import de.hpi.bpmn2_0.model.event.Event;
 import de.hpi.bpmn2_0.model.gateway.Gateway;
 import de.hpi.bpmn2_0.model.gateway.GatewayWithDefaultFlow;
+import de.hpi.bpmn2_0.model.misc.ProcessType;
 import de.hpi.bpmn2_0.model.participant.Lane;
 import de.hpi.bpmn2_0.model.participant.LaneSet;
 import de.hpi.bpmn2_0.model.participant.Participant;
 import de.hpi.diagram.OryxUUID;
-import de.hpi.util.reflection.ClassFinder;
 
 /**
  * Converter class for Diagram to BPMN 2.0 transformation.
@@ -115,6 +117,8 @@ public class Diagram2BpmnConverter {
 	private List<Choreography> choreography;
 	private ChoreographyDiagram choreographyDiagram;
 
+	private List<Class<? extends AbstractBpmnFactory>> factoryClasses;
+
 	/* Define edge ids */
 	private final static String[] edgeIdsArray = { "SequenceFlow",
 			"Association_Undirected", "Association_Unidirectional",
@@ -130,12 +134,14 @@ public class Diagram2BpmnConverter {
 	public final static HashSet<String> dataObjectIds = new HashSet<String>(
 			Arrays.asList(dataObjectIdsArray));
 
-	public Diagram2BpmnConverter(Diagram diagram) {
+	public Diagram2BpmnConverter(Diagram diagram,
+			List<Class<? extends AbstractBpmnFactory>> factoryClasses) {
 		this.factories = new HashMap<String, AbstractBpmnFactory>();
 		this.bpmnElements = new HashMap<String, BPMNElement>();
 		this.definitions = new Definitions();
 		this.definitions.setId(OryxUUID.generate());
 		this.diagram = diagram;
+		this.factoryClasses = factoryClasses;
 	}
 
 	/**
@@ -173,11 +179,9 @@ public class Diagram2BpmnConverter {
 	private AbstractBpmnFactory createFactoryForStencilId(String stencilId)
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
-		List<Class<? extends AbstractBpmnFactory>> factoryClasses = ClassFinder
-				.getClassesByPackageName(AbstractBpmnFactory.class,
-						"de.hpi.bpmn2_0.factory");
 
 		/* Find factory for stencil id */
+		Class<? extends AbstractBpmnFactory> factory = null;
 		for (Class<? extends AbstractBpmnFactory> factoryClass : factoryClasses) {
 			StencilId stencilIdA = (StencilId) factoryClass
 					.getAnnotation(StencilId.class);
@@ -187,9 +191,38 @@ public class Diagram2BpmnConverter {
 			/* Check if appropriate stencil id is contained */
 			List<String> stencilIds = Arrays.asList(stencilIdA.value());
 			if (stencilIds.contains(stencilId)) {
-				return (AbstractBpmnFactory) factoryClass.newInstance();
+				if (factory == null)
+					factory = factoryClass;
+				else {
+					/* Prefer the general factory class if the necessary stencil
+					 * set extension of the specialized factory class is not loaded
+					 * in the diagram. */
+					SSetExtension oldSSetExtension = factory.getAnnotation(SSetExtension.class);
+					if(oldSSetExtension != null) {
+						if(!this.diagram.getSsextensions().containsAll(Arrays.asList(oldSSetExtension.value()))) {
+							factory = factoryClass;
+							continue;
+						}
+					}
+					
+					/*
+					 * Check if there is a specialized factory for an loaded
+					 * extension
+					 */
+					SSetExtension ssetExtension = factoryClass
+					.getAnnotation(SSetExtension.class);
+					
+					if (ssetExtension == null)
+						continue;
+					if (this.diagram.getSsextensions().containsAll(
+							Arrays.asList(ssetExtension.value())))
+						factory = factoryClass;
+				}
 			}
 		}
+
+		if (factory != null)
+			return factory.newInstance();
 
 		throw new ClassNotFoundException("Factory for stencil id: '"
 				+ stencilId + "' not found!");
@@ -412,8 +445,8 @@ public class Diagram2BpmnConverter {
 	 */
 	private void updateDataAssociationsRefs() {
 		/* Define edge ids */
-		String[] associationIdsArray = { /*"Association_Undirected",*/
-				"Association_Unidirectional", "Association_Bidirectional" };
+		String[] associationIdsArray = { /* "Association_Undirected", */
+		"Association_Unidirectional", "Association_Bidirectional" };
 
 		HashSet<String> associationIds = new HashSet<String>(Arrays
 				.asList(associationIdsArray));
@@ -447,7 +480,7 @@ public class Diagram2BpmnConverter {
 							(DataOutputAssociation) dataAssociation);
 			}
 		}
-		
+
 		/* Update undirected data associations references */
 		this.updateUndirectedDataAssociationsRefs();
 	}
@@ -598,6 +631,32 @@ public class Diagram2BpmnConverter {
 	}
 
 	/**
+	 * @return All {@link Activity} contained in the diagram.
+	 */
+	private List<Activity> getAllActivities() {
+		ArrayList<Activity> activities = new ArrayList<Activity>();
+		for (BPMNElement element : this.bpmnElements.values()) {
+			if (element.getNode() instanceof Activity)
+				activities.add((Activity) element.getNode());
+		}
+
+		return activities;
+	}
+
+	/**
+	 * @return All {@link Task} contained in the diagram.
+	 */
+	private List<Task> getAllTasks() {
+		ArrayList<Task> activities = new ArrayList<Task>();
+		for (BPMNElement element : this.bpmnElements.values()) {
+			if (element.getNode() instanceof Task)
+				activities.add((Task) element.getNode());
+		}
+
+		return activities;
+	}
+
+	/**
 	 * Identifies sets of nodes, connected through SequenceFlows.
 	 */
 	private void identifyProcesses() {
@@ -615,10 +674,25 @@ public class Diagram2BpmnConverter {
 		/* Handle pools, current solution: only one process per pool */
 		for (BPMNElement element : this.diagramChilds) {
 			if (element.getNode() instanceof LaneSet) {
+				LaneSet laneSet = (LaneSet) element.getNode();
+
 				Process process = new Process();
 				process.setId(OryxUUID.generate());
-				process.getLaneSet().add((LaneSet) element.getNode());
-				((LaneSet) element.getNode()).setProcess(process);
+
+				/* Process attributes derived from lane set */
+				if (laneSet._isClosed != null
+						&& laneSet._isClosed.equalsIgnoreCase("true"))
+					process.setIsClosed(true);
+				else
+					process.setIsClosed(false);
+
+				if (laneSet._processType != null) {
+					process.setProcessType(ProcessType
+							.fromValue(laneSet._processType));
+				}
+
+				process.getLaneSet().add(laneSet);
+				laneSet.setProcess(process);
 
 				process.getFlowElement().addAll(
 						((LaneSet) element.getNode()).getChildFlowElements());
@@ -1128,6 +1202,15 @@ public class Diagram2BpmnConverter {
 	}
 
 	/**
+	 * Method to create input output specification based on data inputs and
+	 * outputs.
+	 */
+	private void setIOSpecification() {
+		for (Task t : this.getAllTasks())
+			t.determineIoSpecification();
+	}
+
+	/**
 	 * Retrieves a BPMN 2.0 diagram and transforms it into the BPMN 2.0 model.
 	 * 
 	 * @param diagram
@@ -1154,7 +1237,11 @@ public class Diagram2BpmnConverter {
 		this.detectBoundaryEvents();
 		this.detectConnectors();
 		this.setInitiatingParticipant();
+
+		/* Section to handle data concerning aspects */
 		this.updateDataAssociationsRefs();
+		this.setIOSpecification();
+
 		this.setDefaultSequenceFlowOfExclusiveGateway();
 		this.setCompensationEventActivityRef();
 		this.setConversationParticipants();

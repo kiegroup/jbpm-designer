@@ -1,0 +1,745 @@
+{
+	"title":"UML Class Diagram",
+	"namespace":"http://b3mn.org/stencilset/UML2.2Class#",
+	"description":"Stencil set for UML 2.2 class diagrams.",
+	"propertyPackages": [
+		{
+			"name" : "cardinalityProperties",
+			"properties" : [
+				{
+					"id" : "cardinalityStart",
+					"type" : "String",
+					"title" : "Cardinality left",
+					"title_de" : "Kardinalität links",
+					"value" : "",
+					"refToView" : "cardinalityStart"
+				},
+				{
+					"id" : "cardinalityEnd",
+					"type" : "String",
+					"title" : "Cardinality right",
+					"title_de" : "Kardinalität rechts",
+					"value" : "",
+					"refToView" : "cardinalityEnd"
+				}
+			]
+		},
+		{
+			"name" : "roleProperties",
+			"properties" : [
+				{
+					"id" : "roleStart",
+					"type" : "String",
+					"title" : "Role left",
+					"title_de" : "Rolle links",
+					"value" : "",
+					"refToView" : "roleStart"
+				},
+				{
+					"id" : "roleEnd",
+					"type" : "String",
+					"title" : "Role right",
+					"title_de" : "Rolle rechts",
+					"value" : "",
+					"refToView" : "roleEnd"
+				}
+			]
+		},
+		{
+			"name" : "directionProperty",
+			"properties" : [
+				{
+					"id" : "direction",
+					"type" : "Choice",
+					"title" : "Reading Direction",
+					"title_de" : "Leserichtung",
+					"items": [
+						{
+							"id":"c0",
+							"title":"none",
+							"title_de":"keine",
+							"value":" "
+						},
+						{
+							"id":"c1",
+							"title":"Left",
+							"title_de":"Links",
+							"value":"left"
+						},
+						{
+							"id":"c2",
+							"title":"Right",
+							"title_de":"Rechts",
+							"value":"right"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name" : "edgeProperties",
+			"properties" : [
+				{
+					"id" : "name",
+					"type" : "String",
+					"title" : "Name",
+					"value" : "",
+					"refToView" : "name"
+				},
+				{
+					"id":"hideLabels",
+					"type":"Boolean",
+					"title":"Show Labels",
+					"title_de":"Labels sichtbar",
+					"value":true,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["cardinalityStart", "cardinalityEnd", "roleStart", "roleEnd", "name"]
+				}
+			]
+		}
+	],
+	"stencils": [
+		/* Diagram */
+		{
+			"type":        "node",
+			"id":          "Diagram",
+			"title":       "Diagram",	
+			"title":       "Diagramm",
+			"groups":      ["Diagram"],
+			"description": "UML Class Diagram",
+			"description": "UML Klassendiagramm",
+			"view":        "diagram.svg",
+			"icon":        "diagram.png",
+			"roles":       [],
+			"properties" : [
+				{
+					"id" : "Name",
+					"type" : "String",
+					"title" : "Name",
+					"title_de" : "Name",
+					"value" : "",
+				},
+				{
+					"id" : "Author",
+					"type" : "String",
+					"title" : "Author",
+					"title_de" : "Autor",
+					"value" : "",
+				}
+			]
+		},
+		/* [Box] Simple Class */
+		{
+			"type":        "node",
+			"id":          "SimpleClass",
+			"title":       "Class",	
+			"title_de":    "Klasse",
+			"groups":      ["Structure"],
+			"groups_de":   ["Struktur"],
+			"description": "Class without attributes and methods",
+			"description_de": "Klasse ohne Attribute und Methoden",
+			"view":        "structure/simple_class.svg",
+			"icon":        "structure/simple_class.png",
+			"roles":       ["class", "ClassMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.class"
+				}
+			],
+			"properties" : [
+				{
+					"id" : "className",
+					"type" : "String",
+					"title" : "Name",
+					"value" : "Class",
+					"value_de" : "Klasse",
+					"refToView" : "className"
+				},
+				{
+					"id" : "abstract",
+					"type" : "Boolean",
+					"title" : "Abstract",
+					"title_de" : "Abstrakt",
+					"value" : "false"
+				}
+			]
+		},
+		/* [Box] Complex Class */
+		{
+			"type":        "node",
+			"id":          "ComplexClass",
+			"title":       "Class",	
+			"title_de":    "Klasse",
+			"groups":      ["Structure"],
+			"groups_de":   ["Struktur"],
+			"description": "Class with attributes and methods",
+			"description_de": "Klasse mit Attributen und Methoden",
+			"view":        "structure/complex_class.svg",
+			"icon":        "structure/complex_class.png",
+			"roles":       ["class", "ClassMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" 	: "layout.uml.class"
+				}
+			],
+			"properties" : [
+				{
+					"id" : "className",
+					"type" : "String",
+					"title" : "Name",
+					"value" : "Class",
+					"value_de" : "Klasse",
+					"refToView" : "className"
+				},
+				{
+					"id" : "attributes",
+					"type" : "String",
+					"title" : "Attributes",
+					"title_de" : "Attribute",
+					"value" : "",
+					"refToView" : "attributes",
+					"wrapLines" : true
+				},
+				{
+					"id" : "methods",
+					"type" : "String",
+					"title" : "Methods",
+					"title_de" : "Methoden",
+					"value" : "",
+					"refToView" : "methods",
+					"wrapLines" : true
+				},
+				{
+					"id" : "abstract",
+					"type" : "Boolean",
+					"title" : "Abstract",
+					"title_de" : "Abstrakt",
+					"value" : "false"
+				}
+			]
+		},
+		/* [Box] Annotation */
+		{
+			"type":        "node",
+			"id":          "Note",
+			"title":       "Note",
+			"title_de":    "Notiz",
+			"groups":      ["Annotation"],
+			"groups_de":   ["Kommentar"],
+			"description": "Comment regarding a diagram element",
+			"description_de": "Kommentar mit Bezug zu einem Modellelement oder Diagramm",
+			"view":        "annotations/note.svg",
+			"icon":        "annotations/note.png",
+			"roles":       ["annotation"],
+			"properties" : [
+				{
+					"id" : "text",
+					"type" : "String",
+					"title" : "Text",
+					"value" : "",
+					"refToView" : "text",
+					"wrapLines": true
+				}
+			]
+		},
+		/* [Box] Interface */
+		{
+			"type":        "node",
+			"id":          "Interface",
+			"title":       "Interface",	
+			"title_de":    "Schnittstelle",
+			"groups":      ["Structure"],
+			"groups_de":   ["Struktur"],
+			"description": "Contains a set of method signatures and attributes the implementing class must provide",
+			"description_de": "Definiert eine Menge von Signaturen für Operationen und Attribute, die von der implementierenden Klasse angeboten werden müssen",
+			"view":        "structure/interface.svg",
+			"icon":        "structure/interface.png",
+			"roles":       ["interface", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.list"
+				}
+			],
+			"properties" : [
+				{
+					"id" : "text",
+					"type" : "String",
+					"title" : "Name",
+					"value" : "",
+					"refToView" : "name"
+				},
+				{
+					"id" : "items",
+					"type" : "String",
+					"title" : "Methods",
+					"title_de" : "Methoden",
+					"value" : "",
+					"refToView" : "items",
+					"wrapLines" : true
+				}
+			]
+		},
+		/* [Box] Enumeration */
+		{
+			"type":        "node",
+			"id":          "Enumeration",
+			"title":       "Enumeration",
+			"title_de":    "Aufzählung",
+			"groups":      ["Structure"],
+			"groups_de":   ["Struktur"],
+			"description": "Enumeration of values",
+			"description_de": "Aufzählung von Werten",
+			"view":        "structure/enumeration.svg",
+			"icon":        "structure/enumeration.png",
+			"roles":       ["annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.list"
+				}
+			],
+			"properties" : [
+				{
+					"id" : "text",
+					"type" : "String",
+					"title" : "Name",
+					"value" : "",
+					"refToView" : "name"
+				},
+				{
+					"id" : "items",
+					"type" : "String",
+					"title" : "Items",
+					"title_de" : "Werte",
+					"value" : "",
+					"refToView" : "items",
+					"wrapLines" : true
+				}
+			]
+		},
+		/* [Box] n-ary Association */
+		{
+			"type":        "node",
+			"id":          "naryAssociation",
+			"title":       "n-ary Association",
+			"title_de":    "Mehrgliedrige Assoziation",
+			"groups":      ["Association"],
+			"groups_de":   ["Assoziationen"],
+			"description": "Association between more than two elements",
+			"description_de": "Assoziation an der mehr als zwei Modellelemente beteiligt sind",
+			"view":        "misc/nary.svg",
+			"icon":        "misc/nary.png",
+			"roles":       ["nary-association"],
+			"properties" : []
+		},		
+		/* [Edge] Undirected Association */
+		{
+			"type" : "edge",
+			"id" : "UndirectedAssociation",
+			"title" : "Undirected Association",
+			"title_de" : "Ungerichtete Assoziation",
+			"groups" : ["Association"],
+			"groups_de" : ["Assoziationen"],
+			"description" : "Association between classes without navigatability restrictions",
+			"description_de" : "Assoziation zwischen Klassen ohne Angabe einer Navigationsrichtung",
+			"view" : "connectors/association.svg",
+			"icon" : "connectors/association.png",
+			"roles" : ["edge", "association", "AssociationMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.association"
+				}
+			],
+			"propertyPackages" : [
+				"edgeProperties",
+				"cardinalityProperties",
+				"roleProperties",
+				"directionProperty"
+			]
+		},
+		/* [Edge] Directed Association */
+		{
+			"type" : "edge",
+			"id" : "DirectedAssociation",
+			"title" : "Directed Association",
+			"title_de" : "Gerichtete Assoziation",
+			"groups" : ["Association"],
+			"groups_de" : ["Assoziationen"],
+			"description" : "Association with a navigation direction",
+			"description_de" : "Assoziation mit Angabe einer Navigationsrichtung",
+			"view" : "connectors/directed_association.svg",
+			"icon" : "connectors/directed_association.png",
+			"roles" : ["edge", "association", "AssociationMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.association"
+				}
+			],
+			"propertyPackages" : [
+				"edgeProperties",
+				"cardinalityProperties",
+				"roleProperties",
+				"directionProperty"
+			]
+		},
+		/* [Edge] Unnavigatable Directed Association */
+		{
+			"type" : "edge",
+			"id" : "UnnavigableDirectedAssociation",
+			"title" : "Unnavigable Directed Association",
+			"title_de" : "Eingeschränkte gerichtete Assoziation",
+			"groups" : ["Association"],
+			"groups_de" : ["Assoziationen"],
+			"description" : "Directed Association between two classes restricted to one navigation direction",
+			"description_de" : "Gerichtete Assoziation mit Beschränkung auf eine Navigationsrichtung",
+			"view" : "connectors/unnavigable_directed_association.svg",
+			"icon" : "connectors/unnavigable_directed_association.png",
+			"roles" : ["edge", "association", "AssociationMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.association"
+				}
+			],
+			"propertyPackages" : [
+				"edgeProperties",
+				"cardinalityProperties",
+				"roleProperties",
+				"directionProperty"
+			]
+		},
+		/* [Edge] Qualified Association */
+		{
+			"type" : "edge",
+			"id" : "QualifiedAssociation",
+			"title" : "Qualified Association",
+			"title_de" : "Qualifizierte Assoziation",
+			"groups" : ["Association"],
+			"groups_de" : ["Assoziationen"],
+			"description" : "Association between classes with a qualifying attribute",
+			"description_de" : "Assoziation zwischen Klassen mit einem qualifizierenden Attribut",
+			"view" : "connectors/qualified_association.svg",
+			"icon" : "connectors/qualified_association.png",
+			"roles" : ["edge", "association", "AssociationMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.qualified_association"
+				},
+				{
+					"type" : "layout.uml.association"
+				}
+			],
+			"propertyPackages" : [
+				"edgeProperties",
+				"cardinalityProperties",
+				"roleProperties",
+				"directionProperty"
+			],
+			"properties" : [
+				{
+					"id" : "qualifier",
+					"type" : "String",
+					"title" : "Qualifier",
+					"title_de" : "Qualifizierer",
+					"value" : "",
+					"refToView" : "qualifier"
+				}
+			]
+		},
+		/* [Edge] Generalization */
+		{
+			"type" : "edge",
+			"id" : "Generalization",
+			"title" : "Generalization",
+			"title_de" : "Generalisierung",
+			"groups" : ["Connector"],
+			"groups_de" : ["Beziehungen"],
+			"description" : "Generalization indicates inheritance relations between elements",
+			"description_de" : "Generalisierung gibt Ableitungsbeziehungen zwischen Elementen wieder",
+			"view" : "connectors/generalization.svg",
+			"icon" : "connectors/generalization.png",
+			"roles" : ["edge", "annotatable", "generalization"],
+			"propertyPackages" : [
+				"edgeProperties"
+			],
+			"properties" : [
+				{
+					"id" : "keyword",
+					"type" : "Choice",
+					"title" : "Stereotype",
+					"title_de" : "Stereotyp",
+					"refToView" : "keyword",
+					"items": [
+						{
+							"id":"c0",
+							"title":"none",
+							"value":" "
+						},
+						{
+							"id":"c1",
+							"title":"≪derive≫",
+							"value":"≪derive≫"
+						},
+						{
+							"id":"c2",
+							"title":"≪refine≫",
+							"value":"≪refine≫"
+						},
+						{
+							"id":"c3",
+							"title":"≪trace≫",
+							"value":"≪trace≫"
+						}
+					]
+				}
+			]
+		},
+		/* [Edge] Realization */
+		{
+			"type" : "edge",
+			"id" : "Realization",
+			"title" : "Realization",
+			"title_de" : "Realisierung",
+			"groups" : ["Connector"],
+			"groups_de" : ["Beziehungen"],
+			"description" : "Realization of an interface by a class",
+			"description_de" : "Realisierung einer Schnittstelle durch eine Klasse",
+			"view" : "connectors/realization.svg",
+			"icon" : "connectors/realization.png",
+			"roles" : ["edge", "interfaceClassEdge", "interfaceInheritance", "annotatable"],
+			"propertyPackages" : [
+				"edgeProperties"
+			]
+		},
+		/* [Edge] Dependency */
+		{
+			"type" : "edge",
+			"id" : "Dependency",
+			"title" : "Dependency",
+			"title_de" : "Abhängigkeit",
+			"groups" : ["Connector"],
+			"groups_de" : ["Beziehungen"],
+			"description" : "Dependency relation between model elements (e.g classes, interfaces)",
+			"description_de" : "Abhängigkeitsbeziehung zwischen Modellelementen wie Klassen und Schnittstellen",
+			"view" : "connectors/dependency.svg",
+			"icon" : "connectors/dependency.png",
+			"roles" : ["edge", "interfaceClassEdge", "nestedDependency", "annotatable"],
+			"propertyPackages" : [
+				"edgeProperties"
+			],
+			"properties" : [
+				{
+					"id" : "keyword",
+					"type" : "Choice",
+					"title" : "Stereotype",
+					"title_de" : "Stereotyp",
+					"refToView" : "keyword",
+					"items": [
+						{
+							"id":"c0",
+							"title":"none",
+							"value":" "
+						},
+						{
+							"id":"c1",
+							"title":"≪call≫",
+							"value":"≪call≫"
+						},
+						{
+							"id":"c2",
+							"title":"≪create≫",
+							"value":"≪create≫"
+						},
+						{
+							"id":"c3",
+							"title":"≪instantiate≫",
+							"value":"≪instantiate≫"
+						},
+						{
+							"id":"c4",
+							"title":"≪realize≫",
+							"value":"≪realize≫"
+						},
+						{
+							"id":"c5",
+							"title":"≪send≫",
+							"value":"≪send≫"
+						},
+						{
+							"id":"c5",
+							"title":"≪use≫",
+							"value":"≪use≫"
+						}
+					]
+				}
+			]
+		},
+		/* [Edge] Aggregation */
+		{
+			"type" : "edge",
+			"id" : "Aggregation",
+			"title" : "Aggregation",
+			"title_de" : "Aggregation",
+			"groups" : ["Connector"],
+			"groups_de" : ["Beziehungen"],
+			"description" : "Aggregations represent a <has-a> relationship. The existance of the 'parts' does not depend on the 'whole'.",
+			"description_de" : "Eine Aggregation beschreibt eine Ganzes-Teile-Beziehung. Die Existenz eines Teils hängt nicht von der Existens des Ganzen ab.",
+			"view" : "connectors/aggregation.svg",
+			"icon" : "connectors/aggregation.png",
+			"roles" : ["edge", "aggregation", "AggregationMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.association"
+				}
+			],
+			"propertyPackages" : [
+				"edgeProperties",
+				"cardinalityProperties",
+				"roleProperties"
+			]
+		},
+		/* [Edge] Composition */
+		{
+			"type" : "edge",
+			"id" : "Composition",
+			"title" : "Composition",
+			"title_de" : "Komposition",
+			"groups" : ["Connector"],
+			"groups_de" : ["Beziehungen"],
+			"description" : "Compositions represent a <consists-of> relationship. 'Parts' can not exist without an associated 'Whole'.",
+			"description_de" : "Eine Komposition beschreibt eine existenzabhängige Ganzes-Teile-Beziehung. Die Teile können nicht ohne ein assoziiertes Ganzes existieren.",
+			"view" : "connectors/composition.svg",
+			"icon" : "connectors/composition.png",
+			"roles" : ["edge", "aggregation", "AggregationMorph", "annotatable"],
+			"layout" : [
+				{
+					"type" : "layout.uml.association"
+				}
+			],
+			"propertyPackages" : [
+				"edgeProperties",
+				"cardinalityProperties",
+				"roleProperties"
+			]
+		},
+		/* [Edge] Annotation Connector */
+		{
+			"type" : "edge",
+			"id" : "Annotation Edge",
+			"title" : "Annotation Edge",
+			"title_de" : "Kommentarkante",
+			"groups" : ["Annotation"],
+			"groups_de" : ["Kommentar"],
+			"description" : "Connects a note with a model element",
+			"description_de" : "Verbindet eine Notiz mit einem Modellelement",
+			"view" : "connectors/annotation.svg",
+			"icon" : "connectors/annotation.png",
+			"roles" : ["annotationEdge", "associationClassEdge", "annotatable"]
+		}
+	],
+	/* Rules */
+	"rules": {
+		/* Morphing Rules */
+		"morphingRules": [
+			{
+				"role" : "ClassMorph",
+				"baseMorphs" : ["SimpleClass", "ComplexClass"]
+			},
+			{
+				"role" : "AssociationMorph",
+				"baseMorphs" : ["UndirectedAssociation", "DirectedAssociation", "UnnavigableDirectedAssociation", "QualifiedAssociation"]
+			},
+			{
+				"role" : "AggregationMorph",
+				"baseMorphs" : ["Aggregation", "Composition"]
+			},
+			{
+				"role" : "interfaceClassEdge",
+				"baseMorphs" : ["Realization", "Dependency"]
+			}
+		],
+		/* Connection Rules */
+		"connectionRules": [
+			{
+				"role" : "edge",
+				"connects" : [
+					{ "from" : "class",
+					    "to" : "class" }
+				]
+			},
+			{
+				"role" : "association",
+				"connects" : [
+					{ "from" : "class",
+					    "to" : "nary-association" },
+					{ "from" : "nary-association",
+					    "to" : "class" }
+				]
+			},
+			{
+				"role" : "associationClassEdge",
+				"connects" : [
+					{ "from" : "association",
+					    "to" : "class" }
+				]
+			},
+			{
+				"role" : "interfaceClassEdge",
+				"connects" : [
+					{ "from" : "class",
+					    "to" : "interface" }
+				]
+			},
+			{
+				"role" : "aggregation",
+				"connects" : [
+					{ "from" : "class",
+					    "to" : "interface" }
+				]
+			},
+			{
+				"role" : "generalization",
+				"connects" : [
+					{ "from" : "interface",
+					    "to" : "interface" }
+				]
+			},
+			{
+				"role" : "interfaceInheritance",
+				"connects" : [
+					{ "from" : "interface",
+					    "to" : "interface"}
+					]
+			},
+			{
+				"role" : "annotationEdge",
+				"connects" : [
+					{ "from" : "annotatable",
+					    "to" : "annotation" },
+					{ "from" : "annotation",
+					    "to" : "annotatable" }
+				]
+			}
+			/*{*/
+			/*	"role" : "nestedDependency",*/
+			/*	"connects" : [*/
+			/*		{ "from" : "nestedDependency",*/
+			/*		    "to" : "nestedDependency" }*/
+			/*	]*/
+			/*}*/
+ 		],
+		/* Containment Rules */
+		"containmentRules":	[
+			{
+				"role" : "Diagram",
+				"contains" : [
+					"class",
+					"annotation",
+					"annotatable",
+					"interface",
+					"nary-association"
+				]
+			}
+		]
+	}
+}

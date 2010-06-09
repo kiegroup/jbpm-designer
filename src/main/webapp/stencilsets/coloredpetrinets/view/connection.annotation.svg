@@ -1,0 +1,9 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:oryx="http://www.b3mn.org/oryx"
+	version="1.0"
+	oryx:edge="edge" >
+	<g id="edge">
+	    <path d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" />
+	</g>
+</svg>

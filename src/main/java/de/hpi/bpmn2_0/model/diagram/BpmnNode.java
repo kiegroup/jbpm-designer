@@ -42,6 +42,7 @@ import org.oryxeditor.server.diagram.Shape;
 
 import de.hpi.bpmn2_0.model.FlowElement;
 import de.hpi.bpmn2_0.model.diagram.BpmnConnector.Bendpoint;
+import de.hpi.diagram.OryxUUID;
 
 /**
  * <p>
@@ -109,6 +110,8 @@ public abstract class BpmnNode implements BpmnShape {
 
 	public List<Shape> toShape() {
 		Shape shape = new Shape("");
+		
+		shape.setResourceId(this.getId());
 
 		/* Create bounds */
 		Point lr = new Point(this.getX() + this.getWidth(), this.getY()
@@ -158,7 +161,10 @@ public abstract class BpmnNode implements BpmnShape {
 	 * 
 	 */
 	public String getId() {
-		return id;
+		if(this.id == null) {
+			this.id = OryxUUID.generate();
+		}
+		return this.id;
 	}
 
 	/**

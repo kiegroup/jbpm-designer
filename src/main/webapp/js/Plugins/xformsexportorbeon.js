@@ -26,7 +26,7 @@ if(!ORYX.Plugins)
 
 ORYX.Plugins.XFormsExportOrbeon = ORYX.Plugins.AbstractPlugin.extend({
 	
-	CSS_URL: "/oryx/css/xforms_default.css",
+	CSS_URL: ORYX.PATH + "/css/xforms_default.css",
 
 	facade: undefined,
 

@@ -1,0 +1,18 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:oryx="http://www.b3mn.org/oryx"
+	version="1.0">
+	<defs>
+		<marker id="start" refX="1" refY="6" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="12" orient="auto">
+		  <path d="M 1 6 L 11 11 L 21 6 L 11 1 L 1 6" fill="black" stroke="black" stroke-width="1"/>
+	  </marker>
+	</defs>
+	<g id="edge">
+		<path d="M50 50 L100 50" stroke="black" fill="none" stroke-width="2" marker-start="url(#start)" stroke-dasharray="3, 4"/>
+		<text id="cardinalityStart" x="0" y="0" oryx:edgePosition="startTop"/>
+		<text id="roleStart" x="0" y="0" oryx:edgePosition="startBottom"/>
+		<text id="name" x="0" y="0" oryx:edgePosition="midTop"/>
+		<text id="cardinalityEnd" x="0" y="0" oryx:edgePosition="endTop"/>
+		<text id="roleEnd" x="0" y="0" oryx:edgePosition="endBottom"/>
+  </g>
+</svg>

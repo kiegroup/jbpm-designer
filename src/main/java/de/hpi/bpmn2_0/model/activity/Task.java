@@ -32,6 +32,14 @@ import javax.xml.bind.annotation.XmlType;
 import org.oryxeditor.server.diagram.Shape;
 import org.oryxeditor.server.diagram.StencilType;
 
+import de.hpi.bpmn2_0.model.activity.type.BusinessRuleTask;
+import de.hpi.bpmn2_0.model.activity.type.ManualTask;
+import de.hpi.bpmn2_0.model.activity.type.ReceiveTask;
+import de.hpi.bpmn2_0.model.activity.type.ScriptTask;
+import de.hpi.bpmn2_0.model.activity.type.SendTask;
+import de.hpi.bpmn2_0.model.activity.type.ServiceTask;
+import de.hpi.bpmn2_0.model.activity.type.UserTask;
+
 
 /**
  * <p>Java class for tTask complex type.
@@ -53,17 +61,35 @@ import org.oryxeditor.server.diagram.StencilType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tTask")
 @XmlSeeAlso({
-//    TManualTask.class,
-//    TServiceTask.class,
-//    TScriptTask.class,
-//    TReceiveTask.class,
-//    TBusinessRuleTask.class,
-//    TSendTask.class,
-//    TUserTask.class
+    ManualTask.class,
+    ServiceTask.class,
+    ScriptTask.class,
+    ReceiveTask.class,
+    BusinessRuleTask.class,
+    SendTask.class,
+    UserTask.class
 })
 public class Task
     extends Activity
 {
+	
+	/**
+	 * Default constructor
+	 */
+	public Task() {
+		
+	}
+	
+	/**
+	 * Copy constructor
+	 * 
+	 * @param task
+	 * 		The {@link Task} to copy
+	 */
+	public Task(Task task) {
+		super(task);
+	}
+	
 	/**
 	 * Transforming a task to its JSON-based shape representation.
 	 */

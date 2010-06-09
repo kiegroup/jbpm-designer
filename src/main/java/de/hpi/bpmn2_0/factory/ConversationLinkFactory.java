@@ -75,6 +75,7 @@ public class ConversationLinkFactory extends AbstractEdgesFactory {
 	protected ConversationLink createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		ConversationLink link = new ConversationLink();
+		this.setCommonAttributes(link, shape);
 		link.setId(shape.getResourceId());
 		link.setName(shape.getProperty("name"));
 		

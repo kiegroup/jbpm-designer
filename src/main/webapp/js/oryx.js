@@ -240,7 +240,6 @@ ORYX = Object.extend(ORYX, {
 
 		// load plugin configuration file.
 		var source = ORYX.CONFIG.PLUGINS_CONFIG;
-		console.log("BLEH" + source);
 		ORYX.Log.debug("Loading plugin configuration from '%0'.", source);
 	
 		new Ajax.Request(source, {

@@ -1,0 +1,271 @@
+{
+	"title":"BPMN Subset for mapping to YAWL",
+	"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn4yawlSubset#",
+	"description":"A subset of BPMN that can be mapped to YAWL for execution.",
+	"extends":"http://b3mn.org/stencilset/bpmn1.1#",
+	"stencils":[],
+	"properties": [
+	 	{
+			"roles": [
+				"Subprocess"
+			],
+			"properties": [
+				{
+					"id":"isadhoc",
+					"type":"Boolean",
+					"title":"isAdHoc",
+					"title_de":"ist Ad-hoc",
+					"value":false,
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"adhoc"
+				}
+			]
+		},
+		{
+			"roles": [
+				"Lane"
+			],
+			"properties": [
+				{
+					"id":"type",
+					"type":"Choice",
+					"title":"Type",
+					"title_de":"Typ",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"items": [
+								{
+									"id":"c1",
+									"title":"Role",
+									"value":"Role",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"Participant",
+									"value":"Participant",
+									"refToView":""
+								},
+								{
+									"id":"c3",
+									"title":"Position",
+									"value":"Position",
+									"refToView":""
+								}
+							]
+				}
+			]
+		},
+		{
+			"roles": [
+				"Task"
+			],
+			"properties": [
+				{
+					"id":"yawl_offeredBy",
+					"type":"Choice",
+					"title":"yawl:offeredBy",
+					"title_de":"yawl:offeredBy",
+					"value":"System",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"items": [
+								{
+									"id":"c1",
+									"title":"System",
+									"value":"System",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"User",
+									"value":"User",
+									"refToView":""
+								}
+							]
+				},
+				{
+					"id":"yawl_allocatedBy",
+					"type":"Choice",
+					"title":"yawl:allocatedBy",
+					"title_de":"yawl:allocatedBy",
+					"value":"User",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"items": [
+								{
+									"id":"c1",
+									"title":"System",
+									"value":"System",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"User",
+									"value":"User",
+									"refToView":""
+								}
+							]
+				},
+				{
+					"id":"yawl_startedBy",
+					"type":"Choice",
+					"title":"yawl:startedBy",
+					"title_de":"yawl:startedBy",
+					"value":"System",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"items": [
+								{
+									"id":"c1",
+									"title":"System",
+									"value":"System",
+									"refToView":""
+								},
+								{
+									"id":"c2",
+									"title":"User",
+									"value":"User",
+									"refToView":""
+								}
+							]
+				}
+			]
+		},
+		{
+			"roles": [
+				"DataObject"
+			],
+			"properties": [
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"Text description.",
+					"description_de":"Textbeschreibung",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"length":undefined,
+					"wrapLines":true
+				},
+				{
+					"id":"datatype",
+					"type":"String",
+					"title":"DataType",
+					"title_de":"Definiert den Datentyp des Datenobjekts",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"value",
+					"type":"String",
+					"title":"Value",
+					"title_de":"Setzt den Wert des Datenobjekts",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true
+				}
+			]
+		},
+		{
+			"roles": [
+				"BPMNDiagram"
+			],
+			"properties": [
+				{
+					"id":"expressionLanguage",
+					"type":"String",
+					"title":"ExpressionLanguage",
+					"title_de":"AusdrucksSprache",
+					"value":"XQuery",
+					"description":"A Language may be provided so that the syntax of expressions used in the Diagram can be understood.",
+					"description_de":"Sprache, mit welcher im Diagramm verwendete Ausdrücke beschrieben sind.",
+					"readonly":true,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"queryLanguage",
+					"type":"String",
+					"title":"QueryLanguage",
+					"title_de":"AbfrageSprache",
+					"value":"XQuery",
+					"description":"A Language may be provided so that the syntax of queries used in the Diagram can be understood.",
+					"description_de":"Sprache, mit welcher im Diagramm verwendete Abfragen beschrieben sind.",
+					"readonly":true,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"dataTypeDefinition",
+					"type":"String",
+					"title":"DataTypeDefinition",
+					"title_de":"Datentyp Definitionen",
+					"value":"",
+					"description":"Define your own XML datatypes that store specific information",
+					"description_de":"Definieren von eigenen XML Datentypen zur Speicherung spezieller Informationen",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+			]
+		}
+	],
+	"rules": {
+		"connectionRules": [],
+        "cardinalityRules": [],
+		"containmentRules": []
+	},
+	"removestencils": [
+		"Complex_Gateway",
+		"Group",
+		"MessageFlow",
+		"TextAnnotation",
+		"Association_Undirected",
+		"CollapsedSubprocess",
+		"StartMessageEvent",
+		"StartConditionalEvent",
+		"StartSignalEvent",
+		"StartMultipleEvent",
+		"IntermediateCancelEvent",
+		"IntermediateCompensationEventCatching",
+		"IntermediateCompensationEventThrowing",
+		"IntermediateConditionalEvent",
+		"IntermediateSignalEventCatching",
+		"IntermediateSignalEventThrowing",
+		"IntermediateMultipleEventCatching",
+		"IntermediateMultipleEventThrowing",
+		"IntermediateLinkEventCatching",
+		"IntermediateLinkEventThrowing",
+		"EndCompensationEvent",
+		"EndSignalEvent",
+		"EndMultipleEvent"
+	],
+	"removeproperties": [
+		{
+			"stencil": "Subprocess",
+			"properties": [
+				"adhocordering",
+				"adhoccompletioncondition"
+			]
+		},
+		{
+			"stencil": "DataObject",
+			"properties": [
+				"properties"
+			]
+		}
+	]
+}

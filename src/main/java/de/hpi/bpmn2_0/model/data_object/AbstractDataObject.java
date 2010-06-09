@@ -26,7 +26,12 @@ package de.hpi.bpmn2_0.model.data_object;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.oryxeditor.server.diagram.Shape;
+import org.oryxeditor.server.diagram.StencilType;
 
 import de.hpi.bpmn2_0.model.FlowElement;
 import de.hpi.bpmn2_0.model.FlowNode;
@@ -39,8 +44,127 @@ import de.hpi.bpmn2_0.model.connector.Edge;
  * 
  * @author Sven Wagner-Boysen
  */
+@XmlSeeAlso({
+	DataObject.class,
+	DataInput.class,
+	DataOutput.class,
+	ITSystem.class,
+	DataStoreReference.class
+})
 public abstract class AbstractDataObject extends FlowNode {
 	
+	/* Common attributes of data objects */
+	protected DataState dataState;
+	@XmlAttribute
+    protected Boolean isCollection;
+	
+	/**
+	 * Basic method to convert a data aware item to its shape representation.
+	 * 
+	 * @param shape
+	 * 		The resource shape object containing graphical information only.
+	 */
+    public void toShape(Shape shape) {
+    	super.toShape(shape);
+    	
+    	shape.setStencil(new StencilType("DataObject"));
+    }
+	
+//	@XmlTransient
+//	private Boolean isRequiredForStart;
+//	@XmlTransient
+//	private Boolean isRequiredForCompletion;
+	
+	/* Getter & Setter */
+	
+	/**
+     * Gets the value of the dataState property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TDataState }
+     *     
+     */
+    public DataState getDataState() {
+        return dataState;
+    }
+
+    /**
+     * Sets the value of the dataState property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DataState }
+     *     
+     */
+    public void setDataState(DataState value) {
+        this.dataState = value;
+    }
+    
+    /**
+     * Gets the value of the isCollection property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public boolean isIsCollection() {
+        if (isCollection == null) {
+            return false;
+        } else {
+            return isCollection;
+        }
+    }
+
+    /**
+     * Sets the value of the isCollection property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsCollection(Boolean value) {
+        this.isCollection = value;
+    }
+	
+//    /**
+//     * @return the isRequiredForStart
+//     */
+//    public Boolean getIsRequiredForStart() {
+//    	if(this.isRequiredForStart == null)
+//    		return false;
+//    	return isRequiredForStart;
+//    }
+//    
+//    /**
+//     * @param isRequiredForStart the isRequiredForStart to set
+//     */
+//    public void setIsRequiredForStart(Boolean isRequiredForStart) {
+//    	this.isRequiredForStart = isRequiredForStart;
+//    }
+//    
+//    /**
+//     * @return the isRequiredForCompletion
+//     */
+//    public Boolean getIsRequiredForCompletion() {
+//    	if(this.isRequiredForCompletion == null)
+//    		return false;
+//    	return isRequiredForCompletion;
+//    }
+//    
+//    /**
+//     * @param isRequiredForCompletion the isRequiredForCompletion to set
+//     */
+//    public void setIsRequiredForCompletion(Boolean isRequiredForCompletion) {
+//    	this.isRequiredForCompletion = isRequiredForCompletion;
+//    }
+    
+	
+    /* Business logic methodes */
+	
+
 	/**
 	 * List of elements already traversed in the graph.
 	 */

@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import de.hpi.bpmn2_0.model.activity.Task;
+import de.hpi.bpmn2_0.model.activity.misc.ServiceImplementation;
 
 
 /**
@@ -65,7 +66,8 @@ public class ReceiveTask
     protected QName messageRef;
     @XmlAttribute
     protected QName operationRef;
-
+    @XmlAttribute
+    protected ServiceImplementation implementation;
     /**
      * Gets the value of the instantiate property.
      * 
@@ -141,5 +143,19 @@ public class ReceiveTask
     public void setOperationRef(QName value) {
         this.operationRef = value;
     }
+
+	/**
+	 * @return the implementation
+	 */
+	public ServiceImplementation getImplementation() {
+		return implementation;
+	}
+
+	/**
+	 * @param implementation the implementation to set
+	 */
+	public void setImplementation(ServiceImplementation implementation) {
+		this.implementation = implementation;
+	}
 
 }

@@ -140,7 +140,7 @@ ORYX.Plugins.Overlay = Clazz.extend({
 					
 					var b = el.bounds;
 					var p = options.nodePosition.toUpperCase();
-					
+										
 					// Check the values of START and END
 					if( el instanceof ORYX.Core.Node && p == "START"){
 						p = "NW";
@@ -176,7 +176,8 @@ ORYX.Plugins.Overlay = Clazz.extend({
 							y = b.height() / 2;
 						} else if( p == "START" || p == "END") {
 							x = b.width() / 2; y = b.height() / 2;
-						} else {
+						}						
+						else {
 							return
 						}
 						
@@ -193,6 +194,43 @@ ORYX.Plugins.Overlay = Clazz.extend({
 					
 					b.registerCallback( _temp.callback );
 					
+				}
+				
+				// Show the ghostpoint
+				if(options.ghostPoint){
+					var point={x:0, y:0};
+					point=options.ghostPoint;
+					_temp.callback = function(){
+						
+						var x = 0; var y = 0;
+						x = point.x -7;
+						y = point.y -7;
+						_temp.svg.setAttributeNS(null, "transform", "translate(" + x + ", " + y + ")")
+						
+					}.bind(this)
+					
+					_temp.element = el;
+					_temp.callback();
+					
+					b.registerCallback( _temp.callback );
+				}
+				
+				if(options.labelPoint){
+					var point={x:0, y:0};
+					point=options.labelPoint;
+					_temp.callback = function(){
+						
+						var x = 0; var y = 0;
+						x = point.x;
+						y = point.y;
+						_temp.svg.setAttributeNS(null, "transform", "translate(" + x + ", " + y + ")")
+						
+					}.bind(this)
+					
+					_temp.element = el;
+					_temp.callback();
+					
+					b.registerCallback( _temp.callback );
 				}
 				
 				

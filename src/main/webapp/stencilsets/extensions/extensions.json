@@ -92,6 +92,13 @@
 			"extends":"http://b3mn.org/stencilset/bpel4chor#"
 		},
 		{
+            "title":"BPMN Subset for YAWL execution",
+            "namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn4yawlSubset#",
+            "description":"A subset of BPMN that can be mapped to YAWL for execution.",
+            "definition":"bpmn4yawl/bpmn4yawlSubset.json",
+            "extends":"http://b3mn.org/stencilset/bpmn1.1#"
+		},
+		{
 			"title":"iBPMN Fault Handling Extension",
 			"namespace":"http://oryx-editor.org/stencilsets/extensions/ibpmn-FH#",
 			"description":"A basic extension of iBPMN containing fault handling capabilities (i.e. silent/no actions, scopes, FCT handling, non-cancellation behavior using non-interrupting events).",

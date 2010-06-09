@@ -46,7 +46,7 @@ public class JSONBuilder {
 			
 		JSONObject json = new JSONObject();
 				
-		json.put("resourceID", 		diagram.getResourceId().toString());
+		json.put("resourceId", 		diagram.getResourceId().toString());
 		json.put("properties", 		parseProperties(diagram.getProperties()));
 		json.put("stencil", 		parseStencil(diagram.getStencilId()));
 		json.put("childShapes", 	parseChildShapesRecursive(diagram.getChildShapes()));
@@ -186,7 +186,7 @@ public class JSONBuilder {
 			for(String key : properties.keySet()) {
 				String propertyValue = properties.get(key);
 				
-				if(propertyValue.matches("true|false")) {
+				/*if(propertyValue.matches("true|false")) {
 				
 					propertiesObject.put(key, propertyValue.equals("true"));
 
@@ -195,6 +195,10 @@ public class JSONBuilder {
 					Integer value = Integer.parseInt(propertyValue);
 					propertiesObject.put(key, value);
 				
+				} else */ if (propertyValue.startsWith("{") && propertyValue.endsWith("}"))
+				{
+					propertiesObject.put(key, new JSONObject(propertyValue));
+					
 				} else {
 					propertiesObject.put(key, propertyValue.toString());
 				}

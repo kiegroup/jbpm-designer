@@ -107,6 +107,32 @@ public abstract class FlowElement
 //	@XmlSchemaType(name = "IDREF")
     @XmlTransient
 	protected Process process;
+    
+    /**
+     * Default constructor
+     */
+    public FlowElement() {
+		
+	}
+    
+    /**
+     * Copy constructor
+     */
+    public FlowElement(FlowElement flowEl) {
+    	super(flowEl);
+    	
+    	if(flowEl.getCategoryValue().size() > 0)
+    		this.getCategoryValue().addAll(flowEl.getCategoryValue());
+    	
+    	if(flowEl.getIncoming().size() > 0)
+    		this.getIncoming().addAll(flowEl.getIncoming());
+    	
+    	if(flowEl.getOutgoing().size() > 0)
+    		this.getOutgoing().addAll(flowEl.getOutgoing());
+    	
+    	this.setProcess(flowEl.getProcess());
+    	this.setName(flowEl.getName());
+    }
 	
 	/**
 	 * Basic method to set properties on the shape object. In common these 

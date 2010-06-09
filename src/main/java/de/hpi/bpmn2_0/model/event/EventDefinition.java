@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.RootElement;
+import de.hpi.diagram.OryxUUID;
 
 
 /**
@@ -51,19 +52,42 @@ import de.hpi.bpmn2_0.model.RootElement;
 @XmlType(name = "tEventDefinition")
 @XmlSeeAlso({
     TimerEventDefinition.class,
-//    TCancelEventDefinition.class,
-    MessageEventDefinition.class//,
-//    TErrorEventDefinition.class,
-//    TConditionalEventDefinition.class,
-//    TTerminateEventDefinition.class,
-//    TLinkEventDefinition.class,
-//    TEscalationEventDefinition.class,
-//    CompensateEventDefinition.class,
-//    TSignalEventDefinition.class
+    CancelEventDefinition.class,
+    MessageEventDefinition.class,
+    ErrorEventDefinition.class,
+    ConditionalEventDefinition.class,
+    TerminateEventDefinition.class,
+    LinkEventDefinition.class,
+    EscalationEventDefinition.class,
+    CompensateEventDefinition.class,
+    SignalEventDefinition.class
 })
 public abstract class EventDefinition
     extends RootElement
 {
-
-
+	public static EventDefinition createEventDefinition(String eventIdentifier){
+		if(eventIdentifier == null)
+			return null;
+		
+		EventDefinition evDef = null;
+		if(eventIdentifier.equalsIgnoreCase("Message")) 
+			evDef = new MessageEventDefinition();
+		else if(eventIdentifier.equalsIgnoreCase("Escalation"))
+			evDef = new EscalationEventDefinition();
+		else if(eventIdentifier.equalsIgnoreCase("Error"))
+			evDef = new ErrorEventDefinition();
+		else if(eventIdentifier.equalsIgnoreCase("Cancel"))
+			evDef = new CancelEventDefinition();
+		else if(eventIdentifier.equalsIgnoreCase("Compensation"))
+			evDef = new CompensateEventDefinition();
+		else if(eventIdentifier.equalsIgnoreCase("Signal"))
+			evDef = new SignalEventDefinition();
+		else if(eventIdentifier.equalsIgnoreCase("Terminate"))
+			evDef = new TerminateEventDefinition();
+		
+		if(evDef != null)
+			evDef.setId(OryxUUID.generate());
+		
+		return evDef;
+	}
 }

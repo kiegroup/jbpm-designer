@@ -137,7 +137,7 @@ public class ConversationFactory extends AbstractBpmnFactory {
 	 * @return The {@link CallConversation}
 	 */
 	@Property(name = "iscallconversation", value = "true")
-	protected CallConversation createCallConversation(Shape shape) {
+	public CallConversation createCallConversation(Shape shape) {
 		CallConversation callCon = new CallConversation();
 		callCon.setId(shape.getResourceId());
 		callCon.setName(shape.getProperty("name"));
@@ -145,7 +145,7 @@ public class ConversationFactory extends AbstractBpmnFactory {
 	}
 
 	@Property(name = "iscallconversation", value = { "false", "" })
-	protected ConversationNode createNonCallConversation(Shape shape) {
+	public ConversationNode createNonCallConversation(Shape shape) {
 		ConversationNode con = null;
 		if (shape.getStencilId().equals("Communication")) {
 			con = new Communication();

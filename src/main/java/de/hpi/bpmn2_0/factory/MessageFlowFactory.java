@@ -73,6 +73,7 @@ public class MessageFlowFactory extends AbstractEdgesFactory {
 	protected MessageFlow createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		MessageFlow msgFlow = new MessageFlow();
+		this.setCommonAttributes(msgFlow, shape);
 		msgFlow.setId(shape.getResourceId());
 		msgFlow.setName(shape.getProperty("name"));
 		

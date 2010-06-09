@@ -85,6 +85,7 @@ public class SequenceFlowFactory extends AbstractEdgesFactory {
 	@Override
 	protected BaseElement createProcessElement(Shape shape) {
 		SequenceFlow seqFlow = new SequenceFlow();
+		this.setCommonAttributes(seqFlow, shape);
 		seqFlow.setId(shape.getResourceId());
 		seqFlow.setName(shape.getProperty("name"));
 

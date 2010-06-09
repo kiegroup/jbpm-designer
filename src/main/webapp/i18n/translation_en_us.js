@@ -12,7 +12,7 @@ ORYX.I18N.Language = "en_us"; //Pattern <ISO language code>_<ISO country code> i
 
 if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 
-ORYX.I18N.Oryx.title		= "Process Designer";
+ORYX.I18N.Oryx.title		= "Oryx";
 ORYX.I18N.Oryx.noBackendDefined	= "Caution! \nNo Backend defined.\n The requested model cannot be loaded. Try to load a configuration with a save plugin.";
 ORYX.I18N.Oryx.pleaseWait 	= "Please wait while loading...";
 ORYX.I18N.Oryx.notLoggedOn = "Not logged on";
@@ -25,6 +25,12 @@ ORYX.I18N.AddDocker.add = "Add Docker";
 ORYX.I18N.AddDocker.addDesc = "Add a Docker to an edge, by clicking on it";
 ORYX.I18N.AddDocker.del = "Delete Docker";
 ORYX.I18N.AddDocker.delDesc = "Delete a Docker";
+
+if(!ORYX.I18N.ShapeConnector) ORYX.I18N.ShapeConnector = {};
+
+ORYX.I18N.ShapeConnector.group = "Connector";
+ORYX.I18N.ShapeConnector.add = "Connect Shapes";
+ORYX.I18N.ShapeConnector.addDesc = "Connect several nodes by marking them in the desired order";
 
 if(!ORYX.I18N.SSExtensionLoader) ORYX.I18N.SSExtensionLoader = {};
 
@@ -134,6 +140,12 @@ ORYX.I18N.BPELLayout.disable = "disable layout";
 ORYX.I18N.BPELLayout.disDesc = "disable auto layout plug-in";
 ORYX.I18N.BPELLayout.enable = "enable layout";
 ORYX.I18N.BPELLayout.enDesc = "enable auto layout plug-in";
+
+if(!ORYX.I18N.BPEL4Chor2BPELSupport) ORYX.I18N.BPEL4Chor2BPELSupport = {};
+
+ORYX.I18N.BPEL4Chor2BPELSupport.group = "BPEL4Chor";
+ORYX.I18N.BPEL4Chor2BPELSupport.exp = "Export to BPEL";
+ORYX.I18N.BPEL4Chor2BPELSupport.expDesc = "Export diagram to BPEL";
 
 if(!ORYX.I18N.BPEL4ChorSupport) ORYX.I18N.BPEL4ChorSupport = {};
 
@@ -262,13 +274,13 @@ ORYX.I18N.ERDFSupport.deprText = "Exporting to eRDF is not recommended anymore b
 
 if(!ORYX.I18N.jPDLSupport) ORYX.I18N.jPDLSupport = {};
 
-ORYX.I18N.jPDLSupport.group = "ExecBPMN";
+ORYX.I18N.jPDLSupport.group = "Export";
 ORYX.I18N.jPDLSupport.exp = "Export to jPDL";
 ORYX.I18N.jPDLSupport.expDesc = "Export to jPDL";
 ORYX.I18N.jPDLSupport.imp = "Import from jPDL";
 ORYX.I18N.jPDLSupport.impDesc = "Import jPDL File";
 ORYX.I18N.jPDLSupport.impFailedReq = "Request for import of jPDL failed.";
-ORYX.I18N.jPDLSupport.impFailedJson = "Transformation of jPDL failed.";
+//ORYX.I18N.jPDLSupport.impFailedJson = "Transformation of jPDL failed.";
 ORYX.I18N.jPDLSupport.impFailedJsonAbort = "Import aborted.";
 ORYX.I18N.jPDLSupport.loadSseQuestionTitle = "jBPM stencil set extension needs to be loaded"; 
 ORYX.I18N.jPDLSupport.loadSseQuestionBody = "In order to import jPDL, the stencil set extension has to be loaded. Do you want to proceed?";
@@ -491,6 +503,14 @@ Ext.MessageBox.buttonText.ok = "OK";
 if(!ORYX.I18N.BPMN2XPDL) ORYX.I18N.BPMN2XPDL = {};
 ORYX.I18N.BPMN2XPDL.group = "Export";
 ORYX.I18N.BPMN2XPDL.xpdlExport = "Export to XPDL";
+ORYX.I18N.BPMN2XPDL.xpdlImport = "Import from XPDL";
+ORYX.I18N.BPMN2XPDL.importGroup = "Import";
+ORYX.I18N.BPMN2XPDL.selectFile = "Select a XPDL (.xml) file or type in the XPDL to import it!";
+ORYX.I18N.BPMN2XPDL.file = "File";
+ORYX.I18N.BPMN2XPDL.impXPDL = "Import XPDL";
+ORYX.I18N.BPMN2XPDL.impBtn = "Import";
+ORYX.I18N.BPMN2XPDL.impProgress = "Importing...";
+ORYX.I18N.BPMN2XPDL.close = "Close";
 
 /** Resource Perspective Additions: 24 March 2009 */
 if(!ORYX.I18N.ResourcesSoDAdd) ORYX.I18N.ResourcesSoDAdd = {};
@@ -555,6 +575,22 @@ ORYX.I18N.JSONSupport = {
     }
 };
 
+ORYX.I18N.TBPMSupport = {
+		imp: {
+        name: "Import from PNG/JPEG",
+        desc: "Imports a model from a TPBM photo",
+        group: "Export",
+        selectFile: "Select an image (.png/.jpeg) file!",
+        file: "File",
+        btnImp: "Import",
+        btnClose: "Close",
+        progress: "Importing ...",
+        syntaxError: "Syntax error",
+        impFailed: "Request for import of document failed.",
+        confirm: "Confirm import of highlighted shapes!",
+    }
+};
+
 /** New Language Properties: 08.05.2009 */
 if(!ORYX.I18N.BPMN2XHTML) ORYX.I18N.BPMN2XHTML = {};
 ORYX.I18N.BPMN2XHTML.group = "Export";
@@ -564,7 +600,8 @@ ORYX.I18N.BPMN2XHTML.XHTMLExport = "Export XHTML Documentation";
 if(!ORYX.I18N.JSONImport) ORYX.I18N.JSONImport = {};
 
 ORYX.I18N.JSONImport.title = "JSON Import";
-ORYX.I18N.JSONImport.wrongSS = "The stencil set of the imported file ({0}) does not match to the loaded stencil set ({1})."
+ORYX.I18N.JSONImport.wrongSS = "The stencil set of the imported file ({0}) does not match to the loaded stencil set ({1}).";
+ORYX.I18N.JSONImport.invalidJSON = "The JSON to import is invalid.";
 
 if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
 
@@ -803,3 +840,26 @@ ORYX.I18N.Bpmn2_0Serialization.xpdlShowDesc = "Shows the XPDL 2.2 based on BPMN 
 ORYX.I18N.Bpmn2_0Serialization.xpdlDownload = "Download as XPDL 2.2";
 ORYX.I18N.Bpmn2_0Serialization.xpdlDownloadDesc = "Download the XPDL 2.2 based on BPMN 2.0 XML (by XSLT)";
 
+
+if(!ORYX.I18N.cpntoolsSupport) ORYX.I18N.cpntoolsSupport = {};
+
+ORYX.I18N.cpntoolsSupport.serverConnectionFailed = "Connection to server failed.";
+ORYX.I18N.cpntoolsSupport.importTask = "Select an CPN file (.cpn) or type in the CPN XML structure in order to import it!";
+ORYX.I18N.cpntoolsSupport.File = "File:";
+ORYX.I18N.cpntoolsSupport.cpn = "CPN";
+ORYX.I18N.cpntoolsSupport.title = "CPN Oryx";
+ORYX.I18N.cpntoolsSupport.importLable = "Import";
+ORYX.I18N.cpntoolsSupport.close = "Close";
+ORYX.I18N.cpntoolsSupport.wrongCPNFile = "Not chosen correct CPN - File.";
+ORYX.I18N.cpntoolsSupport.noPageSelection = "No page has been selected.";
+ORYX.I18N.cpntoolsSupport.group = "Export";
+ORYX.I18N.cpntoolsSupport.importProgress = "Importing ...";
+ORYX.I18N.cpntoolsSupport.exportProgress = "Exporting ...";
+ORYX.I18N.cpntoolsSupport.exportDescription = "Export to CPN Tools";
+ORYX.I18N.cpntoolsSupport.importDescription = "Import from CPN Tools";
+
+if(!ORYX.I18N.BPMN2YAWLMapper) ORYX.I18N.BPMN2YAWLMapper = {};
+
+ORYX.I18N.BPMN2YAWLMapper.group = "Export";
+ORYX.I18N.BPMN2YAWLMapper.name = 'YAWL Export';
+ORYX.I18N.BPMN2YAWLMapper.desc = 'Map this diagram to YAWL and export it, please ensure "BPMN Subset for mapping to YAWL" is loaded';

@@ -30,7 +30,7 @@ import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.model.AdHocOrdering;
 import de.hpi.bpmn2_0.model.BaseElement;
-import de.hpi.bpmn2_0.model.Expression;
+import de.hpi.bpmn2_0.model.FormalExpression;
 import de.hpi.bpmn2_0.model.activity.Activity;
 import de.hpi.bpmn2_0.model.activity.AdHocSubProcess;
 import de.hpi.bpmn2_0.model.activity.CallActivity;
@@ -87,6 +87,7 @@ public class SubprocessFactory extends AbstractActivityFactory {
 	@Property(name = "callacitivity", value = "true")
 	protected CallActivity createCallActivity(Shape shape) {
 		CallActivity callAct = new CallActivity();
+		this.setStandardAttributes(callAct, shape);
 		return callAct;
 	}
 	
@@ -100,14 +101,19 @@ public class SubprocessFactory extends AbstractActivityFactory {
 	@Property(name = "isadhoc", value = "true")
 	protected AdHocSubProcess createAdhocSubprocess(Shape shape) {
 		AdHocSubProcess adhocSub = new AdHocSubProcess();
-		
 		/* Mapping of properties */
 		String condition = shape.getProperty("adhoccompletioncondition");
-		if(condition != null) 
-			adhocSub.setCompletionCondition(new Expression(condition));
+		if(condition != null && ! condition.isEmpty()) 
+			adhocSub.setCompletionCondition(new FormalExpression(condition));
 		
-		adhocSub.setOrdering(AdHocOrdering.fromValue(shape.getProperty("adhocordering")));
-		adhocSub.setCancelRemainingInstances(!shape.getProperty("adhoccancelremaininginstances").equalsIgnoreCase("false"));
+		String ordering = shape.getProperty("adhocordering");
+		if(ordering != null) {
+			adhocSub.setOrdering(AdHocOrdering.fromValue(shape.getProperty("adhocordering")));
+		}
+		
+		String cancelRemIns = shape.getProperty("adhoccancelremaininginstances");
+		if(cancelRemIns != null)
+			adhocSub.setCancelRemainingInstances(!cancelRemIns.equalsIgnoreCase("false"));
 		
 		return adhocSub;
 	}
@@ -116,6 +122,7 @@ public class SubprocessFactory extends AbstractActivityFactory {
 		Activity subprocess = null;
 		try {
 			subprocess = (Activity) this.invokeCreatorMethodAfterProperty(shape);
+			this.createLoopCharacteristics(subprocess, shape);
 		} catch (Exception e) {
 //			throw new BpmnConverterException("Error creating subprocess elements.", e);
 		} 

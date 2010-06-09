@@ -117,11 +117,19 @@ public class DataObjectFactory extends AbstractBpmnFactory {
 		if(dataObject == null)
 			throw new BpmnConverterException("Error while creating DataObject: null value");
 		
+		this.setCommonAttributes(dataObject, shape);
 		dataObject.setId(shape.getResourceId());		
 		
 		return dataObject;
 	}
 	
+	/**
+	 * This methods set the common properties of a data object based on its shape
+	 * data.
+	 * 
+	 * @param dataObject
+	 * @param shape
+	 */
 	private void setDataObjectAttributes(DataObject dataObject, Shape shape) {
 		dataObject.setName(shape.getProperty("name"));
 		
@@ -138,6 +146,36 @@ public class DataObjectFactory extends AbstractBpmnFactory {
 			DataState dataState = new DataState(dataStateName);
 			dataObject.setDataState(dataState);
 		}
+		
+//		/* Determine requirements of data input and output */
+//		this.setRequiredForStartCompletionAttributes(dataObject, shape);
 	}
+	
+	/**
+	 * Checks for the required for start and completion attributes to determine
+	 * whether a data object is necessary to start or complete an activity.
+	 * 
+	 * A further post process step is needed to setup the IOSpecifications of the
+	 * related activity.
+	 * 
+	 * @param dataObject
+	 * @param shape
+	 */
+//	private void setRequiredForStartCompletionAttributes(DataObject dataObject, Shape shape) {
+//		
+//		/* Handle required for start property */
+////		String reqStartString = shape.getProperty("requiredforstart");
+////		if(reqStartString != null && reqStartString.equalsIgnoreCase("true"))
+////			dataObject.setIsRequiredForStart(true);
+////		else
+////			dataObject.setIsRequiredForStart(false);
+////		
+////		/* Handle required for completion */
+////		String reqCompletionString = shape.getProperty("producedatcompletion");
+////		if(reqCompletionString != null && reqCompletionString.equalsIgnoreCase("true"))
+////			dataObject.setIsCollection(true);
+////		else
+////			dataObject.setIsRequiredForCompletion(false);
+//	}
 
 }

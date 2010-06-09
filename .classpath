@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
+	<classpathentry excluding="**/.svn/|**/CVS/" kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/org.json/1.0.0.001-SNAPSHOT/org.json-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/org.json/1.0.0.001-SNAPSHOT/org.json-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/de.hpi.bpt/1.0.0.001-SNAPSHOT/de.hpi.bpt-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/de.hpi.bpt/1.0.0.001-SNAPSHOT/de.hpi.bpt-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/org.apache.commons.collections/1.0.0.001-SNAPSHOT/org.apache.commons.collections-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/org.apache.commons.collections/1.0.0.001-SNAPSHOT/org.apache.commons.collections-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/org.apache.commons.configuration/1.0.0.001-SNAPSHOT/org.apache.commons.configuration-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/org.apache.commons.configuration/1.0.0.001-SNAPSHOT/org.apache.commons.configuration-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/org.jdom/1.0.0.001-SNAPSHOT/org.jdom-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/org.jdom/1.0.0.001-SNAPSHOT/org.jdom-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/org.apache.velocity/1.0.0.001-SNAPSHOT/org.apache.velocity-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/org.apache.velocity/1.0.0.001-SNAPSHOT/org.apache.velocity-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/org.supercsv/1.0.0.001-SNAPSHOT/org.supercsv-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/org.supercsv/1.0.0.001-SNAPSHOT/org.supercsv-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/org.apache.xmlgraphics.fop/1.0.0.001-SNAPSHOT/org.apache.xmlgraphics.fop-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/org.apache.xmlgraphics.fop/1.0.0.001-SNAPSHOT/org.apache.xmlgraphics.fop-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/com.sun.xml.bind/1.0.0.001-SNAPSHOT/com.sun.xml.bind-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/com.sun.xml.bind/1.0.0.001-SNAPSHOT/com.sun.xml.bind-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/com.sun.xml.bind.jaxb1/1.0.0.001-SNAPSHOT/com.sun.xml.bind.jaxb1-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/com.sun.xml.bind.jaxb1/1.0.0.001-SNAPSHOT/com.sun.xml.bind.jaxb1-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/de.hpi.bpt.epc/1.0.0.001-SNAPSHOT/de.hpi.bpt.epc-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/de.hpi.bpt.epc/1.0.0.001-SNAPSHOT/de.hpi.bpt.epc-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit/com.thoughtworks.xstream/1.0.0.001-SNAPSHOT/com.thoughtworks.xstream-1.0.0.001-SNAPSHOT.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit/com.thoughtworks.xstream/1.0.0.001-SNAPSHOT/com.thoughtworks.xstream-1.0.0.001-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/javax.servlet/2.5.0.v200910301333/javax.servlet-2.5.0.v200910301333.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/javax.servlet/2.5.0.v200910301333/javax.servlet-2.5.0.v200910301333-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.commons.httpclient/3.1.0.v20080605-1935/org.apache.commons.httpclient-3.1.0.v20080605-1935.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.commons.httpclient/3.1.0.v20080605-1935/org.apache.commons.httpclient-3.1.0.v20080605-1935-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.commons.fileupload/1.2.0.v20080604-1500/org.apache.commons.fileupload-1.2.0.v20080604-1500.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.commons.fileupload/1.2.0.v20080604-1500/org.apache.commons.fileupload-1.2.0.v20080604-1500-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.commons.lang/2.4.0.v20081016-1030/org.apache.commons.lang-2.4.0.v20081016-1030.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.commons.lang/2.4.0.v20081016-1030/org.apache.commons.lang-2.4.0.v20081016-1030-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/log4j.over.slf4j/1.5.11/log4j.over.slf4j-1.5.11.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/log4j.over.slf4j/1.5.11/log4j.over.slf4j-1.5.11-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/org.mozilla.javascript/1.7.2.v200909291707/org.mozilla.javascript-1.7.2.v200909291707.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/org.mozilla.javascript/1.7.2.v200909291707/org.mozilla.javascript-1.7.2.v200909291707-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/javax.mail.glassfish/1.4.1.v200808130215/javax.mail.glassfish-1.4.1.v200808130215.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/javax.mail.glassfish/1.4.1.v200808130215/javax.mail.glassfish-1.4.1.v200808130215-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.batik.transcoder/1.7.0.v200903091627/org.apache.batik.transcoder-1.7.0.v200903091627.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.batik.transcoder/1.7.0.v200903091627/org.apache.batik.transcoder-1.7.0.v200903091627-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.xalan/2.7.1.v200905122109/org.apache.xalan-2.7.1.v200905122109.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.xalan/2.7.1.v200905122109/org.apache.xalan-2.7.1.v200905122109-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.xerces/2.9.0.v200909240008/org.apache.xerces-2.9.0.v200909240008.jar" sourcepath="M2_REPO/com/intalio/cloud/orbit-prefetched/org.apache.xerces/2.9.0.v200909240008/org.apache.xerces-2.9.0.v200909240008-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
-		<accessrules>
-			<accessrule kind="accessible" pattern="sun/misc/*"/>
-		</accessrules>
-	</classpathentry>
-	<classpathentry kind="output" path="target/classes/"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.xmappr"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

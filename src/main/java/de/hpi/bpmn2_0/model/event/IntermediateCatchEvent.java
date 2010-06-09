@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -53,6 +54,25 @@ import javax.xml.bind.annotation.XmlType;
 public class IntermediateCatchEvent
     extends CatchEvent
 {
+	@XmlTransient
+	protected String cancelActivity;
 
+	/**
+	 * Avoid null values.
+	 * 
+	 * @return the cancelActivity
+	 */
+	public String getCancelActivity() {
+		if(cancelActivity == null)
+			return "";
+		return cancelActivity;
+	}
+
+	/**
+	 * @param cancelActivity the cancelActivity to set
+	 */
+	public void setCancelActivity(String cancelActivity) {
+		this.cancelActivity = cancelActivity;
+	}
 
 }

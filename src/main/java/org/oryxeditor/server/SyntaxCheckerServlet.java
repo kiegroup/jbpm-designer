@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +28,7 @@ import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.rdf.BPMN11RDFImporter;
 import de.hpi.bpmn.rdf.BPMNRDFImporter;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
+import de.hpi.bpmn2_0.factory.AbstractBpmnFactory;
 import de.hpi.bpmn2_0.factory.BPMNElement;
 import de.hpi.bpmn2_0.model.Definitions;
 import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
@@ -41,6 +43,7 @@ import de.hpi.interactionnet.serialization.InteractionNetRDFImporter;
 import de.hpi.petrinet.PetriNet;
 import de.hpi.petrinet.serialization.erdf.PetriNeteRDFParser;
 import de.hpi.petrinet.verification.PetriNetSyntaxChecker;
+import de.hpi.util.reflection.ClassFinder;
 
 /**
  * Copyright (c) 2008 Gero Decker
@@ -82,7 +85,11 @@ public class SyntaxCheckerServlet extends HttpServlet {
 			if(isJson.equals("true")) {
 				String json = req.getParameter("data");
 				
-				processDocument(json, res.getWriter());
+				List<Class<? extends AbstractBpmnFactory>> factoryClasses = ClassFinder
+				.getClassesByPackageName(AbstractBpmnFactory.class,
+						"de.hpi.bpmn2_0.factory", this.getServletContext());
+				
+				processDocument(json, res.getWriter(), factoryClasses);
 			} else {
 				String rdf = req.getParameter("data");
 				
@@ -104,6 +111,9 @@ public class SyntaxCheckerServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BpmnConverterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -145,7 +155,7 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		}
 	}
 	
-	protected void processDocument(String jsonDocument, PrintWriter writer) throws JSONException, BpmnConverterException {
+	protected void processDocument(String jsonDocument, PrintWriter writer, List<Class<? extends AbstractBpmnFactory>> factoryClasses) throws JSONException, BpmnConverterException {
 		Diagram diagram = DiagramBuilder.parseJson(jsonDocument);
 		
 		//TODO: validate edges that are not in the java object model
@@ -157,7 +167,7 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		if(type != null && (type.equals("http://b3mn.org/stencilset/bpmn2.0#") ||
 				type.equals("http://b3mn.org/stencilset/bpmn2.0choreography#") ||
 				type.equals("http://b3mn.org/stencilset/bpmn2.0conversation#"))) {
-			checker = getCheckerBPMN2(diagram);
+			checker = getCheckerBPMN2(diagram, factoryClasses);
 		}
 		
 		if (checker == null) {
@@ -205,8 +215,8 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		}
 	}
 	
-	protected SyntaxChecker getCheckerBPMN2(Diagram diagram) throws BpmnConverterException {
-		Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram);
+	protected SyntaxChecker getCheckerBPMN2(Diagram diagram, List<Class<? extends AbstractBpmnFactory>> factoryClasses) throws BpmnConverterException {
+		Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram, factoryClasses);
 		
 		Definitions defs = converter.getDefinitionsFromDiagram();
 		return defs.getSyntaxChecker();

@@ -444,7 +444,7 @@ Ext.MessageBox.buttonText.ok = "Ок";
 //
 //ORYX.I18N.JSONImport.title = "JSON Import";
 //ORYX.I18N.JSONImport.wrongSS = "The stencil set of the imported file ({0}) does not match to the loaded stencil set ({1})."
-//
+//ORYX.I18N.JSONImport.invalidJSON = "The JSON to import is invalid.";
 
 if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
 ORYX.I18N.Feedback.name = "Отзыв";

@@ -45,6 +45,7 @@ public class BPMN2Migrator {
 
 	private Diagram diagram;
 	private String path;
+	private MigrationHelper helper;
 	
 	private HashSet<Shape> activityShapes 					= new HashSet<Shape>();
 	private HashSet<Shape> gatewayShapes  					= new HashSet<Shape>();
@@ -207,7 +208,7 @@ public class BPMN2Migrator {
 				return JSONBuilder.parseModeltoString(diagram);
 			
 			/* Convert the Namespace and URL */
-			StencilSet ss = new StencilSet("/designer/stencilsets/bpmn2.0/bpmn2.0.json", "http://b3mn.org/stencilset/bpmn2.0#");
+			StencilSet ss = new StencilSet("/oryx/stencilsets/bpmn2.0/bpmn2.0.json", "http://b3mn.org/stencilset/bpmn2.0#");
 			diagram.setStencilset(ss);
 				
 			migrateActivities();
@@ -488,9 +489,10 @@ public class BPMN2Migrator {
 	 * @throws MigrationHelperException 
 	 */
 	private void updateProperties(Shape shape) throws MigrationHelperException {
-		MigrationHelper helper = new MigrationHelper(path);
+		if (this.helper == null)
+			this.helper = new MigrationHelper(path);
 		
-		HashMap<String, String> properties = helper.getProperties(shape.getStencilId());
+		HashMap<String, String> properties = this.helper.getProperties(shape.getStencilId());
 		
 		/* find the properties and add them */
 		for(String property : properties.keySet()) {

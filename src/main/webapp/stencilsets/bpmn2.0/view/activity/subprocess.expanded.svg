@@ -35,7 +35,8 @@
 		</radialGradient>
 	</defs>
 	
-    <rect id="bg_frame" oryx:anchors="bottom top right left" x="0" y="0" width="200" height="160" rx="10" ry="10" stroke="black" stroke-width="1" fill="url(#background) white" />
+    <rect id="text_frame" oryx:anchors="bottom top right left" x="0" y="0" width="190" height="160" rx="10" ry="10" stroke="none" stroke-width="0" fill="none" />
+	<rect id="bg_frame" oryx:anchors="bottom top right left" x="0" y="0" width="200" height="160" rx="10" ry="10" stroke="black" stroke-width="1" fill="url(#background) white" />
 	<rect id="callActivity" oryx:anchors="bottom top right left" oryx:resize="vertical horizontal" x="0" y="0" width="200" height="160" rx="10" ry="10" stroke="black" stroke-width="4" fill="none" />
     <rect id="border" oryx:anchors="top bottom left right" oryx:resize="vertical horizontal" x="2.5" y="2.5" width="195" height="155" rx="8" ry="8" stroke="black" stroke-width="1" fill="none" />
     	<text 
@@ -44,7 +45,7 @@
 			x="8" 
 			y="10" 
 			oryx:align="top left"
-			oryx:fittoelem="bg_frame"
+			oryx:fittoelem="text_frame"
 			oryx:anchors="left top" 
 			stroke="black"></text>
     	

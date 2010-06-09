@@ -293,7 +293,9 @@ public class DiagramBuilder {
 			Shape current) throws JSONException {
 		if (modelJSON.has("target")) {
 			JSONObject targetObject = modelJSON.getJSONObject("target");
-			current.setTarget(getShapeWithId(targetObject.getString("resourceId"),shapes));
+			if (targetObject.has("resourceId")) {
+				current.setTarget(getShapeWithId(targetObject.getString("resourceId"),shapes));
+			}
 		}
 	}
 

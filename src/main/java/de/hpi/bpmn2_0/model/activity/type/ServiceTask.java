@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import de.hpi.bpmn2_0.model.activity.Task;
+import de.hpi.bpmn2_0.model.activity.misc.ServiceImplementation;
 
 
 /**
@@ -59,33 +60,26 @@ public class ServiceTask
 {
 
     @XmlAttribute
-    protected QName messageRef;
+    protected ServiceImplementation implementation;
+	
     @XmlAttribute
     protected QName operationRef;
 
-    /**
-     * Gets the value of the messageRef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getMessageRef() {
-        return messageRef;
-    }
-
-    /**
-     * Sets the value of the messageRef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setMessageRef(QName value) {
-        this.messageRef = value;
-    }
+	/* Getter & Setter */
+	
+	/**
+	 * @return the implementation
+	 */
+	public ServiceImplementation getImplementation() {
+		return implementation;
+	}
+	
+	/**
+	 * @param implementation the implementation to set
+	 */
+	public void setImplementation(ServiceImplementation implementation) {
+		this.implementation = implementation;
+	}
 
     /**
      * Gets the value of the operationRef property.

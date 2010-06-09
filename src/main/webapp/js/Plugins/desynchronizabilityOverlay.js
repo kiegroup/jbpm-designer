@@ -62,7 +62,7 @@ ORYX.Plugins.DesynchronizabilityOverlay = ORYX.Plugins.AbstractPlugin.extend({
 			
 
 		try {
-			var serialized_rdf =this.getRDFFromDom();
+			var serialized_rdf =this.getRDFFromDOM();
 //			serialized_rdf = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf;
 			
 			// Send the request to the server.

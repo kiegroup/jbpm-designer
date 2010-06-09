@@ -29,6 +29,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
+import org.oryxeditor.server.diagram.Shape;
+import org.oryxeditor.server.diagram.StencilType;
+
 import de.hpi.bpmn2_0.model.FlowNode;
 
 
@@ -52,9 +55,9 @@ import de.hpi.bpmn2_0.model.FlowNode;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tGateway")
 @XmlSeeAlso({
-//    TComplexGateway.class,
-//    TInclusiveGateway.class,
-//    TEventBasedGateway.class,
+    ComplexGateway.class,
+    InclusiveGateway.class,
+    EventBasedGateway.class,
     ParallelGateway.class,
     ExclusiveGateway.class
 })
@@ -65,6 +68,21 @@ public class Gateway
     @XmlAttribute
     protected GatewayDirection gatewayDirection;
     
+    /**
+	 * Basic method to convert a gateway to its shape representation.
+	 * 
+	 * @param shape
+	 * 		The resource shape object containing graphical information only.
+	 */
+    public void toShape(Shape shape) {
+    	super.toShape(shape);
+    	
+    	shape.setStencil(new StencilType("Exclusive_Databased_Gateway"));
+    	shape.getProperties().put("markervisible", "false");
+    }
+    
+    
+    /* Getter & Setter */
     
     /**
      * Gets the value of the gatewayDirection property.

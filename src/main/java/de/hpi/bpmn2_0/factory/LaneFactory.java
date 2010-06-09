@@ -122,20 +122,51 @@ public class LaneFactory extends AbstractBpmnFactory {
 
 		if (shape.getStencilId().equals("CollapsedPool")) {
 			Participant participant = new Participant();
-			participant.setName(shape.getProperty("name"));
+			
+			/* Set name attribute */
+			String name = shape.getProperty("name");
+			if(name != null && !name.isEmpty())
+				participant.setName(name);
+			
 			participant.setId(shape.getResourceId());
+			this.setCommonAttributes(participant, shape);
 			return participant;
 		}
 
 		if (shape.getStencilId().equals("Pool")) {
 			LaneSet poolLaneSet = new LaneSet();
+			this.setCommonAttributes(poolLaneSet, shape);
 			poolLaneSet.setId(shape.getResourceId());
+			
+			/* Name */
+			String name = shape.getProperty("name");
+			if(name != null && !name.isEmpty()) {
+				poolLaneSet.setName(name);
+			}
+			
+			/* Process type */
+			String processType = shape.getProperty("processtype");
+			if(processType != null && !processType.isEmpty()) {
+				poolLaneSet._processType = processType;
+			}
+			
+			/* Process isClosed */
+			String isClosed = shape.getProperty("isclosed");
+			if(isClosed != null && !isClosed.isEmpty())
+				poolLaneSet._isClosed = isClosed;
+	
 			return poolLaneSet;
 		}
 
 		Lane lane = new Lane();
+		this.setCommonAttributes(lane, shape);
 		lane.setId(shape.getResourceId());
-		lane.setName(shape.getProperty("name"));
+		
+		/* Set name attribute */
+		String name = shape.getProperty("name");
+		if(name != null && !name.isEmpty())
+			lane.setName(name);
+		
 		lane.setLane(lane);
 
 		if (this.hasChildLanes(shape)) {

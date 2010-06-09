@@ -24,9 +24,9 @@
 		id="caption"
 		oryx:anchors="left top bottom"
 		x="0"
-		y="0"
+		y="1"
 		width="30"
-		height="250"
+		height="248"
 		stroke="black"
 		stroke-width="0"
 		fill="white"
@@ -60,6 +60,7 @@
 		id="text_name" 
 		oryx:align="middle center" 
 		oryx:anchors="left"
+		oryx:fittoelem="caption"
 		fill="black" 
 		stroke="black">
 	</text>

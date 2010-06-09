@@ -261,18 +261,23 @@ ORYX.Plugins.BPELSupport = ORYX.Plugins.AbstractPlugin.extend({
 						loadMask.show();
 												
 						form.form.submit({
+							// TODO according to http://www.extjs.com/deploy/dev/docs/output/Ext.form.BasicForm.html
+							//      modification of the accept header should work like that. In practice, however, it doesn't
+							headers: {
+								accept: "application/json, text/plain, text/html"
+							},
 				      		url: ORYX.PATH + '/bpelimporter',
+				      		timeout: 6,
 				      		success: function(f,a){
 								
 								dialog.hide();
-								// Get the erdf string					
-								var erdf = a.result;
-								erdf = erdf.startsWith('<?xml') ? erdf : '<?xml version="1.0" encoding="utf-8"?><div>'+erdf+'</div>';	
+								// Get the json string					
+								var json = a.result;
 								
-								//alert(erdf);
+								//alert(json);
 								
-								// Load the eRDF to the editor
-								this.loadERDF(erdf);
+								// Load the json to the editor
+								this.facade.importJSON(json.content,true);
 								
 								// update the canvas
 								this.facade.getCanvas().update();
@@ -290,7 +295,7 @@ ORYX.Plugins.BPELSupport = ORYX.Plugins.AbstractPlugin.extend({
 		           					buttons: Ext.MessageBox.OK,
 		           					icon: Ext.MessageBox.ERROR
 		       					});
-				      		}
+				      		}.bind(this)
 				  		});
 					}.bind(this)
 				},{

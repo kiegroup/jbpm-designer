@@ -71,6 +71,7 @@ public class ITSystemFactory extends AbstractBpmnFactory {
 	protected BaseElement createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		ITSystem system = new ITSystem();
+		this.setCommonAttributes(system, shape);
 		
 		system.setName(shape.getProperty("name"));
 		system.setId(shape.getResourceId());

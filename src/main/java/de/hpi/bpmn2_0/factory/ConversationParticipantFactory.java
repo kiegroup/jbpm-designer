@@ -70,6 +70,7 @@ public class ConversationParticipantFactory extends AbstractBpmnFactory {
 	protected Participant createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		Participant participant = new Participant();
+		this.setCommonAttributes(participant, shape);
 		participant.setId(shape.getResourceId());
 		participant.setName(shape.getProperty("name"));
 		//TODO: handle participants multiplicity

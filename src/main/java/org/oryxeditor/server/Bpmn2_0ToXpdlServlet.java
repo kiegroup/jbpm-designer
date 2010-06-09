@@ -27,7 +27,9 @@ package org.oryxeditor.server;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,9 +51,11 @@ import org.oryxeditor.server.diagram.DiagramBuilder;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
+import de.hpi.bpmn2_0.factory.AbstractBpmnFactory;
 import de.hpi.bpmn2_0.model.Definitions;
 import de.hpi.bpmn2_0.transformation.BPMNPrefixMapper;
 import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
+import de.hpi.util.reflection.ClassFinder;
 
 /**
  * This servlet provides an XPDL2.1 Export of BPMN 2.0 using the XSLT Style
@@ -73,7 +77,11 @@ public class Bpmn2_0ToXpdlServlet extends HttpServlet {
 
 		/* Transform and return from DI */
 		try {
-			StringWriter output = this.performTransformationToDi(json);
+			List<Class<? extends AbstractBpmnFactory>> factoryClasses = ClassFinder
+			.getClassesByPackageName(AbstractBpmnFactory.class,
+					"de.hpi.bpmn2_0.factory", this.getServletContext());
+			
+			StringWriter output = this.performTransformationToDi(json, factoryClasses);
 
 			StringReader reader = new StringReader(output.toString());
 
@@ -118,7 +126,7 @@ public class Bpmn2_0ToXpdlServlet extends HttpServlet {
 	 * @throws Exception
 	 *             Exception occurred while processing
 	 */
-	protected StringWriter performTransformationToDi(String json)
+	protected StringWriter performTransformationToDi(String json, List<Class<? extends AbstractBpmnFactory>> factoryClasses)
 			throws Exception {
 		StringWriter writer = new StringWriter();
 
@@ -127,7 +135,7 @@ public class Bpmn2_0ToXpdlServlet extends HttpServlet {
 		Diagram diagram = DiagramBuilder.parseJson(json);
 
 		/* Build up BPMN 2.0 model */
-		Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram);
+		Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram, factoryClasses);
 		Definitions bpmnDefinitions = converter.getDefinitionsFromDiagram();
 
 		/* Perform XML creation */

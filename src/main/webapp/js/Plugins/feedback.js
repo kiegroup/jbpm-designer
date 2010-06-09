@@ -29,7 +29,7 @@ ORYX.Config.Feedback = {
 	VISIBLE_STATE: "visible",
 	HIDDEN_STATE: "hidden",
 	INFO: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, set eiusmod tempor incidunt et labore et dolore magna aliquam. Ut enim ad minim veniam, quis nostrud exerc. Irure dolor in reprehend incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse molestaie cillum. Tia non ob ea soluad incommod quae egen ium improb fugiend. Officia",
-	CSS_FILE: "/oryx/css/feedback.css"
+	CSS_FILE: ORYX.PATH + "/css/feedback.css"
 }
 
 ORYX.Plugins.Feedback = ORYX.Plugins.AbstractPlugin.extend({

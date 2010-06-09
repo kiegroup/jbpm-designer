@@ -25,10 +25,12 @@ package de.hpi.bpmn2_0.model.activity.type;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.activity.Task;
+import de.hpi.bpmn2_0.model.activity.misc.BusinessRuleTaskImplementation;
 
 
 /**
@@ -53,6 +55,23 @@ import de.hpi.bpmn2_0.model.activity.Task;
 public class BusinessRuleTask
     extends Task
 {
+	@XmlAttribute
+	BusinessRuleTaskImplementation implementation;
 
+	/* Getter & Setter */
+	
+	/**
+	 * @return the implementation
+	 */
+	public BusinessRuleTaskImplementation getImplementation() {
+		return implementation;
+	}
+
+	/**
+	 * @param implementation the implementation to set
+	 */
+	public void setImplementation(BusinessRuleTaskImplementation implementation) {
+		this.implementation = implementation;
+	}
 
 }

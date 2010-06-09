@@ -8,6 +8,7 @@ package org.oryxeditor.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,8 @@ public class RdfJsonTransformation {
 	private static Map<String,String> parents; // resourceId -> parent's resourceId
 	
 	private static String hostUrl;
+	
+	private static Logger log = Logger.getLogger("org.oryxeditor.server.RdfJsonTransformation");
 
 	public static JSONObject toJson(Document rdfDoc, String requestUrl) {
 		
@@ -145,6 +148,9 @@ public class RdfJsonTransformation {
 							properties.put(child.getNodeName(), jsonObj);
 						} catch (JSONException e) {
 							// non-JSON content
+							log.fine("conversion error");
+							log.fine(content);
+							log.fine(e.toString());
 							properties.put(child.getNodeName(), content);
 						}
 					}

@@ -28,6 +28,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.oryxeditor.server.diagram.Shape;
+import org.oryxeditor.server.diagram.StencilType;
+
 
 /**
  * <p>Java class for tIntermediateThrowEvent complex type.
@@ -51,6 +54,13 @@ import javax.xml.bind.annotation.XmlType;
 public class IntermediateThrowEvent
     extends ThrowEvent
 {
+	/**
+	 * Transforming an intermediate event to its JSON-based shape representation.
+	 */
+	public void toShape(Shape shape) {
+		super.toShape(shape);
 
+		shape.setStencil(new StencilType("IntermediateEvent"));
+	}
 
 }

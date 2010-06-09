@@ -1,26 +1,14 @@
 package org.oryxeditor.bpel4chor;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 /**
  * Copyright (c) 2009-2010 
@@ -48,10 +36,6 @@ import org.xml.sax.SAXException;
 
 
 /**
- * !!!!!!Attention!!!!!!
- * Now this files works isolated from the other files, which outside of this directory.
- * But it should be added into oryx as a plugin in the further.
- * 
  * It will be used for the Transformation of the BPEL4Chor to BPEL.
  * 
  * It was designed for the Diplom Arbeit of Changhua Li(student of uni. stuttgart), 
@@ -61,26 +45,99 @@ import org.xml.sax.SAXException;
 
 public class BPEL4Chor2BPELWSDLCreate extends BPEL4Chor2BPELPBDConversion{
 	
-	protected Document currentDocument;
-	protected Set<String> nsprefixSet;
+	public Document currentDocument;
+
+	final static String EMPTY = "";
+	public Set<String> messageLinkSet = new HashSet<String>();
+
+	// 3.20: fportTypeMC()
+	public HashMap<String, QName> ml2ptMap = new HashMap<String, QName>();
+
+	// 3.21: foperationMC()
+	public HashMap<String, String> ml2opMap = new HashMap<String, String>();
+
+	// 3.22: partnerLink Set
+	public Set<String> plSet = new HashSet<String>();
+
+	// 3.23: messageConstruct --> partnerLink Mapping
+	public HashMap<String, PartnerLink> mc2plMap = new HashMap<String, PartnerLink>();
+
+	// 3.24: scope --> partnerLinkSet Mapping
+	public HashMap<String, Set<PartnerLink>> sc2plMap = new HashMap<String, Set<PartnerLink>>();
+
+	// 3.25: partnerLinkType Set
+	public Set<String> plTypeSet = new HashSet<String>();
+
+	// 3.26: partnerLink --> partnerLinkType
+	public HashMap<String, String> pl2plTypeMap = new HashMap<String, String>();
+
+	// 3.29: communication --> partnerLinkType
+	public HashMap<Comm, String> comm2pltMap = new HashMap<Comm, String>();
+
+	// 3.30: partnerLink --> myRole 
+	public HashMap<String, String> pl2myRoleMap = new HashMap<String, String>();
+
+	// 3.31: partnerLink --> partnerRole
+	public HashMap<String, String> pl2partnerRoleMap = new HashMap<String, String>();
+
+	// for function 3.11 fscopePa
+	public HashMap<String, Object> pa2scopeMap = new HashMap<String, Object>();
+
+	// used by 3.34
+	public HashMap<String, String> corrPropName2propertyMap = new HashMap<String, String>();
+
+	// used by 3.35
+	public HashMap<String, String> property2nsprefixOfPropMap = new HashMap<String, String>();
+
+	// used by 3.36
+	public Set<String> namespaceSet = new HashSet<String>();
+
+	// 3.2: record all name space prefixes of QName
+	public Set<String> namespacePrefixSet = new HashSet<String>();
+	public HashMap<String, String> ns2prefixMap = new HashMap<String, String>();
+	public String topologyNS;					// it will be used in conversion of PBD
+
+	// 3.4: participant types set
+	public Set<String> paTypeSet = new HashSet<String>();
+
+	// for the function 3.6 fprocessPaType
+	public HashMap<String, String> paType2processMap = new HashMap<String, String>();
+
+
+	// for function 3.9 ftypePa
+	public HashMap<String, String> pa2paTypeMap = new HashMap<String, String>();
+
+	public HashMap<String, Object> ml2mcMap = new HashMap<String, Object>();
+
+	public HashMap<String, Object> ml2paMap = new HashMap<String, Object>();
+	
+	// for declaration of prefix of "portType" in grounding
+	public Set<QName> ptSet = new HashSet<QName>();
+	private Set<String> ptPrefixSet = new HashSet<String>();		// a list of name space prefixes referencing to the name
+																	// spaces of the WSDL definitions of port types used by
+	// to store the actual name of PBD
+	public String processName = EMPTY;
+
 	/**************************create a matched WSDL file to current PBD***************************/
 	/** 
 	 * Algorithm 3.19 Procedure declarePartnerLinkTypes
+	 * to declare the partnerLinkTypes
 	 * 
 	 * @param {Element} definitions  The Tag <wsdl:definitions>
 	 */
-	private void declarePartnerLinkTypes(Element definitions){
+	public void declarePartnerLinkTypes(Element definitions){
 		// the input definitions points on the <wsdl:definitions> tag of the newly created WSDL file
 		// remove the first Child of currentDocument
-		currentDocument.removeChild(definitions);
+		if (currentDocument.hasChildNodes()){
+			currentDocument.removeChild(definitions);
+		}
 		
 		String plt;												// partnerLinkType, inherits of NCName
 		Element partnerLinkType, role;							// single BPEL constructs
 		Set<Object> aSet = new HashSet<Object>();				// a list of participant references
 		String b;												// a participant, inherits of NCName
-		String c,d;												// portType, inherits of QName
-		Set<String> nsprefixSet = this.nsprefixSet;				// a list of name space prefixes referencing to the name
-																// spaces of the WSDL definitions of port types used by
+		QName c,d;												// portType, inherits of QName
+		
 		// create a new child node of currentDocument
 		definitions = currentDocument.createElement("wsdl:definitions");
 		currentDocument.appendChild(definitions);
@@ -97,47 +154,61 @@ public class BPEL4Chor2BPELWSDLCreate extends BPEL4Chor2BPELPBDConversion{
 		definitions.setAttribute("xmlns:plnk", plnkNS);
 		
 		// add a partner link type declaration for each element of PLType
-		System.out.println("plTypeSet is: " + plTypeSet);
 		if(!plTypeSet.isEmpty()){
 			Iterator<String> it = plTypeSet.iterator();
 			while(it.hasNext()){
 				// create a new <plnk:partnerLinkType> construct
 				plt = (String)it.next();
-				partnerLinkType = currentDocument.createElement("plnk:partnerLinkType");
-				// add a name attribute to the new partner link type declaration
-				partnerLinkType.setAttribute("name", plt);
-				// get the element of the relation Comm of the current partner link type
-				Comm comm = fpltCommReverse(plt);
-				aSet = comm.getPa1();
-				c 	 = comm.getPt1();
-				b	 = comm.getPa2();
-				d	 = comm.getPt2();
-				System.out.println(comm.getElement());
-				// create the first role element and add it to the partner link type declaration
-				role = declareNewRole(b,d);											// algorithm 3.20
-				partnerLinkType.appendChild(role);
-				// the second role must not be declared if we have c = EMPTY
-				if(!c.equals(EMPTY)){
-					role = declareNewRole(aSet.iterator().next().toString(), c);	// algorithm 3.20
-					// in this case, A includes only one participant reference
+				/**
+				 * wsdl files should just include the corresponding partnerLinkType declarations. 
+				 * for example, p1.wsdl should includes the "p1-px-plt" or "px-p1-plt".
+				 * 
+				 * Because all "plts" in wsdl are coming from "pltSet" during the transformation.
+				 * "pltSet" is created in grounding analysis and limited to the "commSet", which is created as a 
+				 * public set in the topology analysis. So it is now difficult from the transformation intern to 
+				 * make a mapping between "plt" and its process, which it belongs to. i adopts here the method 
+				 * to decide whether the name of "plt" contains the process name to declare the partnerLinkType 
+				 * in accordingly wsdl.
+				 */
+				if(plt.contains(processName)){	// if the content of partnerLinkType include the
+												// processName of PBD, then it will be declared
+												// in its wsdl file.
+					partnerLinkType = currentDocument.createElement("plnk:partnerLinkType");
+					// add a name attribute to the new partner link type declaration
+					partnerLinkType.setAttribute("name", plt);
+					// get the element of the relation Comm of the current partner link type
+					Comm comm = fpltCommReverse(plt);
+					aSet = comm.getPa1();
+					c 	 = comm.getPt1();
+					b	 = comm.getPa2();
+					d	 = comm.getPt2();
+					// create the first role element and add it to the partner link type declaration
+					role = declareNewRole(b,d);											// algorithm 3.20
 					partnerLinkType.appendChild(role);
+					// the second role must not be declared if we have c = EMPTY
+					if(!c.toString().equals(EMPTY)){
+						role = declareNewRole(aSet.iterator().next().toString(), c);	// algorithm 3.20
+						// in this case, A includes only one participant reference
+						partnerLinkType.appendChild(role);
+					}
+					// add the partner link type declaration to the <definitions> construct
+					definitions.appendChild(partnerLinkType);
 				}
-				// add the partner link type declaration to the <definitions> construct
-				definitions.appendChild(partnerLinkType);
 			}
 		}
 		// add the declarations of the name spaces of the port type definitions
-		declareNameSpaces(definitions, nsprefixSet);								// algorithm 3.8
+		declarePTNameSpaces(definitions, ptPrefixSet);
 	}
 	
 	/**
 	 * Algorithm 3.20 Function declareNewRole
+	 * to declare the new <role> in <partnerLinkType> 
 	 * 
 	 * @param  {String} pa           The participant of this role
-	 * @param  {String} pt           The portType of this role
+	 * @param  {QName} pt            The portType of this role
 	 * @return {Element} role        The tag <plnk:role>
 	 */
-	private Element declareNewRole(String pa, String pt){
+	private Element declareNewRole(String pa, QName pt){
 		// the input pa is the participant reference which may be interpreted as the new role, the input pt is the port
 		// type of this role
 		// this function returns the new <plnk:role> construct
@@ -147,102 +218,82 @@ public class BPEL4Chor2BPELWSDLCreate extends BPEL4Chor2BPELPBDConversion{
 		// add the name attribute to the role
 		role.setAttribute("name", pa);									// pa is an NCName
 		// add the portType attribute to the role
-		role.setAttribute("portType", pt);								// pt is a QName
+		role.setAttribute("portType", pt.toString());					// pt is a QName
 		
 		// add the name space prefix of pt to the global list nsprefixList if it has not been added before
-		if(!nsprefixSet.contains(pt_nsprefix) && !pt_nsprefix.equals(EMPTY)){
-			nsprefixSet.add(pt_nsprefix);
+		if(!ptPrefixSet.contains(pt_nsprefix) && !pt_nsprefix.equals(EMPTY)){
+			ptPrefixSet.add(pt_nsprefix);
 		}
 		
 		// return the new <plnk:role> construct
 		return role;
 	}
+
+	/**
+	 * function 3.18: nsprefixPT: PT -> NSPrefix
+	 * return the prefix of portType
+	 * 
+	 * @param {QName} portType     The port type
+	 * @return {String} nsprefix    The name space prefix
+	 */
+	private String fnsprefixPT(QName portType){
+		if(!portType.toString().equals(EMPTY)){
+			return portType.getLocalPart().split(":")[0];
+		}
+		return EMPTY;
+	}
+
+	/**
+	 * function 3.29: pltComm: Comm -> PLType
+	 * according to "Comm" output the <partnerLinkType>
+	 * assumption: comm2pltMap is not empty.
+	 * 
+	 * @param {Comm}    comm            The communication((A,c),(b,d))
+	 * @return {String} partnerLinkType The partner link type
+	 */
+	private String fpltComm(Comm comm){
+		if(comm2pltMap.containsKey(comm)){
+			return comm2pltMap.get(comm);
+		}
+		return EMPTY;
+	}
 	
-	/**************************main*******************************/
-	public static void main(String argv[]) throws ParserConfigurationException, 
-										SAXException, IOException, TransformerFactoryConfigurationError, TransformerException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
-		factory.setIgnoringComments(true);
-		factory.setIgnoringElementContentWhitespace(true);
-		DocumentBuilder docBuilder = factory.newDocumentBuilder();
-		if(docBuilder.isNamespaceAware()){
-			Document docGround = docBuilder.parse("/home/eysler/work/DiplomArbeit/oryx-editor/editor/server/src/org/oryxeditor/bpel4chor/testFiles/groundingSA.bpel");
-			Document docTopo = docBuilder.parse("/home/eysler/work/DiplomArbeit/oryx-editor/editor/server/src/org/oryxeditor/bpel4chor/testFiles/topologySA.xml");
-			Document docPBD = docBuilder.parse("/home/eysler/work/DiplomArbeit/oryx-editor/editor/server/src/org/oryxeditor/bpel4chor/testFiles/processSA.bpel");
-			
-			BPEL4Chor2BPELTopologyAnalyze topoAnaly = new BPEL4Chor2BPELTopologyAnalyze();
-			BPEL4Chor2BPELGroundingAnalyze grouAnaly = new BPEL4Chor2BPELGroundingAnalyze();
-			BPEL4Chor2BPELPBDConversion pbdCon = new BPEL4Chor2BPELPBDConversion();
-			BPEL4Chor2BPELWSDLCreate wsdlCreate = new BPEL4Chor2BPELWSDLCreate();
-
-			//topology analyze
-			topoAnaly.nsAnalyze(docTopo);
-			topoAnaly.paTypeAnalyze(docTopo);
-			topoAnaly.paAnalyze(docTopo);
-			topoAnaly.mlAnalyze(docTopo);
-			topoAnaly.getMl2BindSenderToMap(((Element)docTopo.getFirstChild()));
-			
-			grouAnaly.namespacePrefixSet = topoAnaly.namespacePrefixSet;    // will be used in grounding nsAnalyze
-			grouAnaly.namespaceSet = topoAnaly.namespaceSet;				// will be used in grounding nsAnalyze
-			grouAnaly.ns2prefixMap = topoAnaly.ns2prefixMap;				// will be used in grounding nsAnalyze
-			grouAnaly.messageConstructsSet = topoAnaly.messageConstructsSet;
-			grouAnaly.messageLinkSet = topoAnaly.messageLinkSet;
-			grouAnaly.ml2mcMap = topoAnaly.ml2mcMap;
-			grouAnaly.ml2paMap = topoAnaly.ml2paMap; 						// will be used in fparefsML() and in Alg. 3.4
-			grouAnaly.ml2bindSenderToMap = topoAnaly.ml2bindSenderToMap; 	// will be used in mlAnalyze
-			grouAnaly.pa2scopeMap = topoAnaly.pa2scopeMap; 					// will be used in Alg. 3.4 createPartnerLinkDeclarations
-			grouAnaly.paTypeSet = topoAnaly.paTypeSet;                      // will be used in Alg. 3.4 createPartnerLinkDeclarations
-			grouAnaly.pa2paTypeMap = topoAnaly.pa2paTypeMap;              	// will be used in Alg. 3.4 createPartnerLinkDeclarations
-			grouAnaly.paType2processMap = topoAnaly.paType2processMap;      // will be used in Alg. 3.4 createPartnerLinkDeclarations
-			
-			//grounding analyze
-			grouAnaly.nsAnalyze(docGround);
-			grouAnaly.mlAnalyze(docGround);
-			grouAnaly.propertyAnalyze(docGround);
-			
-			pbdCon.scopeSet = topoAnaly.scopeSet;							// will be used in Conversion of PBD
-			pbdCon.processSet = topoAnaly.processSet;						// will be used in Conversion of PBD
-			pbdCon.topologyNS = topoAnaly.topologyNS;						// will be used in Conversion of PBD
-			pbdCon.forEach2setMap = topoAnaly.forEach2setMap;				// will be used in Conversion of PBD
-			pbdCon.paSet = topoAnaly.paSet;									// will be used in Conversion of PBD
-			pbdCon.pa2scopeMap = topoAnaly.pa2scopeMap; 					// will be used in Conversion of PBD
-			pbdCon.ns2prefixMap = grouAnaly.ns2prefixMap;					// will be used in Conversion of PBD
-			pbdCon.namespacePrefixSet = grouAnaly.namespacePrefixSet;		// will be used in Conversion of PBD
-			pbdCon.plSet = grouAnaly.plSet;									// will be used in Conversion of PBD
-			pbdCon.sc2plMap = grouAnaly.sc2plMap;							// will be used in Conversion of PBD
-			pbdCon.pl2plTypeMap = grouAnaly.pl2plTypeMap;					// will be used in Conversion of PBD
-			pbdCon.pl2myRoleMap = grouAnaly.pl2myRoleMap;					// will be used in Conversion of PBD
-			pbdCon.pl2partnerRoleMap = grouAnaly.pl2partnerRoleMap;			// will be used in Conversion of PBD
-			pbdCon.messageConstructsSet = grouAnaly.messageConstructsSet;	// will be used in Conversion of PBD
-			pbdCon.mc2plMap = grouAnaly.mc2plMap;							// will be used in Conversion of PBD
-			pbdCon.ml2mcMap = grouAnaly.ml2mcMap;							// will be used in Conversion of PBD
-			pbdCon.messageLinkSet = grouAnaly.messageLinkSet;				// will be used in Conversion of PBD
-			pbdCon.ml2ptMap = grouAnaly.ml2ptMap;							// will be used in Conversion of PBD
-			pbdCon.ml2opMap = grouAnaly.ml2opMap;							// will be used in Conversion of PBD
-			pbdCon.corrPropName2propertyMap = grouAnaly.corrPropName2propertyMap;  // will be used in Conversion of PBD
-			pbdCon.property2nsprefixOfPropMap = grouAnaly.property2nsprefixOfPropMap; // will be used in Conversion of PBD
-			
-			//PBD conversion
-			pbdCon.currentDocument = docPBD;
-			pbdCon.convertPBD((Element)docPBD.getFirstChild());
-			
-			//WSDL creation
-			wsdlCreate.currentDocument = docPBD;
-			wsdlCreate.topologyNS = topoAnaly.topologyNS;
-			wsdlCreate.plTypeSet = grouAnaly.plTypeSet;
-			wsdlCreate.comm2pltMap = grouAnaly.comm2pltMap;
-			wsdlCreate.nsprefixSet = pbdCon.namespacePrefixSet;
-			wsdlCreate.declarePartnerLinkTypes((Element)docPBD.getFirstChild());
-
-			/**************************output of the converted PBD******************************/
-			Source sourceWSDL = new DOMSource(docPBD);
-			File wsdlFile = new File("/home/eysler/work/DiplomArbeit/oryx-editor/editor/server/src/org/oryxeditor/bpel4chor/testFiles/PBDConvertion.wsdl");
-			Result resultWSDL = new StreamResult(wsdlFile);
-			 
-			// Write the converted docPBD to the file
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			xformer.transform(sourceWSDL, resultWSDL);
+	/**
+	 * function pltCommReverse: 
+	 * according the input partnerLinkType of comm2pltMap to output the "comm"
+	 * assumption: comm2pltMap is not empty.
+	 * 
+	 * @param {String} plt       The partner link type
+	 * @return {Comm}  comm      The communication
+	 */
+	private Comm fpltCommReverse(String plt){
+		if(comm2pltMap.containsValue(plt)){
+			Set<Comm> ks = comm2pltMap.keySet();
+			Iterator<Comm> it = ks.iterator();
+			while(it.hasNext()){
+				Comm comm = (Comm)it.next();
+				if(fpltComm(comm).equals(plt)){
+					return comm;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * declarePTNameSpaces
+	 * to declare the name space of portType
+	 * assumption: ptSet and ns2prefixMap is not empty.
+	 * 
+	 * @param {Element} construct     The tag of the current BPEL construct
+	 * @param {Set}     ptPrefixSet   Prefix set of the portType
+	 */
+	private void declarePTNameSpaces(Element construct, Set<String> ptPrefixSet){
+		if (!ptSet.isEmpty()) {
+			for (QName qNamePortType : ptSet){
+				String prefix = qNamePortType.getLocalPart().split(":")[0];
+				construct.setAttribute("xmlns:" + prefix, ns2prefixMap.get(prefix));
+			}
 		}
 	}
 }

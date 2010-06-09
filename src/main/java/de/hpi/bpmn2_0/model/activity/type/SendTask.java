@@ -26,11 +26,14 @@ package de.hpi.bpmn2_0.model.activity.type;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.namespace.QName;
 
 import de.hpi.bpmn2_0.model.activity.Task;
+import de.hpi.bpmn2_0.model.activity.misc.Operation;
+import de.hpi.bpmn2_0.model.activity.misc.ServiceImplementation;
+import de.hpi.bpmn2_0.model.data_object.Message;
 
 
 /**
@@ -57,21 +60,27 @@ import de.hpi.bpmn2_0.model.activity.Task;
 public class SendTask
     extends Task
 {
-
+	@XmlIDREF
     @XmlAttribute
-    protected QName messageRef;
+    protected Message messageRef;
+	@XmlIDREF
+	@XmlAttribute
+    protected Operation operationRef;
+    
     @XmlAttribute
-    protected QName operationRef;
+    protected ServiceImplementation implementation;
 
+    /* Getter & Setter */
+    
     /**
      * Gets the value of the messageRef property.
      * 
      * @return
      *     possible object is
-     *     {@link QName }
+     *     {@link Message }
      *     
      */
-    public QName getMessageRef() {
+    public Message getMessageRef() {
         return messageRef;
     }
 
@@ -80,10 +89,10 @@ public class SendTask
      * 
      * @param value
      *     allowed object is
-     *     {@link QName }
+     *     {@link Message }
      *     
      */
-    public void setMessageRef(QName value) {
+    public void setMessageRef(Message value) {
         this.messageRef = value;
     }
 
@@ -92,10 +101,10 @@ public class SendTask
      * 
      * @return
      *     possible object is
-     *     {@link QName }
+     *     {@link Operation }
      *     
      */
-    public QName getOperationRef() {
+    public Operation getOperationRef() {
         return operationRef;
     }
 
@@ -104,11 +113,25 @@ public class SendTask
      * 
      * @param value
      *     allowed object is
-     *     {@link QName }
+     *     {@link Operation }
      *     
      */
-    public void setOperationRef(QName value) {
+    public void setOperationRef(Operation value) {
         this.operationRef = value;
     }
+
+	/**
+	 * @return the implementation
+	 */
+	public ServiceImplementation getImplementation() {
+		return implementation;
+	}
+
+	/**
+	 * @param implementation the implementation to set
+	 */
+	public void setImplementation(ServiceImplementation implementation) {
+		this.implementation = implementation;
+	}
 
 }

@@ -1,0 +1,681 @@
+
+<Package Language="English" Id="oryx-canvas123">
+  <ConformanceClass GraphConformance="NON-BLOCKED" BPMNModelPortabilityConformance="STANDARD" />
+  <Artifacts>
+    <Artifact ArtifactType="Group" Id="oryx_AC84ECD2-1A50-448A-9203-4C22A6D8C4F0">
+      <NodeGraphicsInfos>
+        <NodeGraphicsInfo Height="90.0" Width="120.0" BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="14.0" YCoordinate="407.0" />
+        </NodeGraphicsInfo>
+      </NodeGraphicsInfos>
+    </Artifact>
+    <Artifact ArtifactType="Annotation" Id="oryx_3714CF1B-55B0-489D-98A4-195B760F7271">
+      <NodeGraphicsInfos>
+        <NodeGraphicsInfo Height="50.0" Width="100.0" BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="0.0" YCoordinate="514.0" />
+        </NodeGraphicsInfo>
+      </NodeGraphicsInfos>
+    </Artifact>
+    <Artifact ArtifactType="DataObject" Id="oryx_C78A8E36-03CE-4B20-AFC0-0627997317B8">
+      <DataObject ProducedAtCompletion="true" RequiredForStart="true" />
+      <NodeGraphicsInfos>
+        <NodeGraphicsInfo FillColor="#ffffff" Height="97.0" Width="88.0" BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="158.0" YCoordinate="379.5" />
+        </NodeGraphicsInfo>
+      </NodeGraphicsInfos>
+    </Artifact>
+  </Artifacts>
+  <Associations>
+    <Association Direction="None" Id="oryx_ED524DF5-4833-4C3F-B0C3-23A780E6DC93">
+      <ConnectorGraphicsInfos>
+        <ConnectorGraphicsInfo BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="80.0" YCoordinate="917.0" />
+          <Coordinates XCoordinate="280.0" YCoordinate="919.0" />
+        </ConnectorGraphicsInfo>
+      </ConnectorGraphicsInfos>
+    </Association>
+    <Association Direction="To" Id="oryx_0578255A-0874-43F2-BF29-04BE05CBBEBF">
+      <ConnectorGraphicsInfos>
+        <ConnectorGraphicsInfo BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="27.0" YCoordinate="1010.0" />
+          <Coordinates XCoordinate="227.0" YCoordinate="1012.0" />
+        </ConnectorGraphicsInfo>
+      </ConnectorGraphicsInfos>
+    </Association>
+  </Associations>
+  <MessageFlows>
+    <MessageFlow Id="oryx_99CBD166-0B90-4715-BFFB-3DA738096E02">
+      <ConnectorGraphicsInfos>
+        <ConnectorGraphicsInfo BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="76.0" YCoordinate="977.0" />
+          <Coordinates XCoordinate="276.0" YCoordinate="979.0" />
+        </ConnectorGraphicsInfo>
+      </ConnectorGraphicsInfos>
+    </MessageFlow>
+  </MessageFlows>
+  <Pools>
+    <Pool BoundaryVisible="false" MainPool="true" Process="MainPool-process" Orientation="HORIZONTAL" Id="MainPool" Name="Main Pool">
+      <NodeGraphicsInfos>
+        <NodeGraphicsInfo FillColor="#ffffff" Height="0.0" Width="0.0" BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="0.0" YCoordinate="0.0" />
+        </NodeGraphicsInfo>
+      </NodeGraphicsInfos>
+    </Pool>
+    <Pool BoundaryVisible="true" MainPool="false" Process="asdf-process" Orientation="HORIZONTAL" Id="" Name="asdf">
+      <Lanes>
+        <Lane ParentLane="sdfg" ParentPool="asdf" Id="sdfg" Name="dsfg">
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo Height="250.0" Width="600.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="0.0" YCoordinate="47.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="sdfg-object">
+            <Categories>
+              <Category Id="sdfg-category">
+                sdfg
+              </Category>
+            </Categories>
+            <Documentation>
+              sfdg
+            </Documentation>
+          </Object>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="showcaption" Value="true" />
+          </ExtendedAttributes>
+        </Lane>
+      </Lanes>
+      <NodeGraphicsInfos>
+        <NodeGraphicsInfo Height="250.0" Width="600.0" BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="345.0" YCoordinate="16.0" />
+        </NodeGraphicsInfo>
+      </NodeGraphicsInfos>
+      <Object>
+        <Categories>
+          <Category>
+            asdf
+          </Category>
+        </Categories>
+        <Documentation>
+          asdf
+        </Documentation>
+      </Object>
+    </Pool>
+    <Pool BoundaryVisible="true" MainPool="false" Process="oryx_4658E7AF-1964-4FC5-8AFD-04F397E26163-process" Orientation="HORIZONTAL" Id="oryx_4658E7AF-1964-4FC5-8AFD-04F397E26163">
+      <NodeGraphicsInfos>
+        <NodeGraphicsInfo FillColor="#ffffff" Height="60.0" Width="500.0" BorderColor="#0,0,0" ToolId="Oryx">
+          <Coordinates XCoordinate="330.0" YCoordinate="286.0" />
+        </NodeGraphicsInfo>
+      </NodeGraphicsInfos>
+    </Pool>
+  </Pools>
+  <WorkflowProcesses>
+    <WorkflowProcess AdhocOrdering="Sequential" ProcessType="None" Status="None" SuppressJoinFailure="true" Id="MainPool-process" Name="MainProcess">
+      <ActivitySets>
+        <ActivitySet AdHocOrdering="Sequential" Id="oryx_B6B34A95-933A-4956-9559-F68ED3B5FAD3-activitySet" />
+        <ActivitySet AdHoc="true" AdHocOrdering="Sequential" Id="oryx_14C1BE63-348A-40E2-842F-8721308718C8-activitySet" />
+      </ActivitySets>
+      <Activities>
+        <Activity CompletionQuantity="1" IsForCompensation="true" StartQuantity="1" Status="Aborted" Id="a" Name="asd">
+          <Implementation>
+            <Task>
+              <TaskScript />
+            </Task>
+          </Implementation>
+          <Loop Type="MultiInstance">
+            <MultiInstance MI_Condition="asd" LoopCounter="1" MI_Ordering="Sequential" MI_FlowCondition="All" ComplexMI_FlowCondition="asd" />
+          </Loop>
+          <Documentation>
+            asd
+          </Documentation>
+          <Assignments>
+            <Assignment AssignTime="End" />
+          </Assignments>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffcc" Height="80.0" Width="100.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="46.0" YCoordinate="19.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="a-object">
+            <Categories>
+              <Category Id="a-category">
+                a
+              </Category>
+            </Categories>
+          </Object>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="inputsets" Value="asd" />
+            <ExtendedAttribute Name="performers" Value="asd" />
+            <ExtendedAttribute Name="outputsets" Value="asd" />
+            <ExtendedAttribute Name="activitytype" Value="Task" />
+            <ExtendedAttribute Name="outputs" Value="asd" />
+            <ExtendedAttribute Name="messageref" Value="asd" />
+            <ExtendedAttribute Name="script" Value="asd" />
+            <ExtendedAttribute Name="assignmentTo" Value="asd" />
+            <ExtendedAttribute Name="assignmentFrom" Value="asd" />
+            <ExtendedAttribute Name="inputs" Value="asd" />
+            <ExtendedAttribute Name="iorules" Value="asd" />
+            <ExtendedAttribute Name="outmessage" Value="asd" />
+            <ExtendedAttribute Name="inmessage" Value="asd" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity CompletionQuantity="1" StartQuantity="1" Status="None" Id="oryx_B6B34A95-933A-4956-9559-F68ED3B5FAD3">
+          <BlockActivity ActivitySetId="oryx_B6B34A95-933A-4956-9559-F68ED3B5FAD3-activitySet" View="COLLAPSED" />
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffcc" Height="83.0" Width="103.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="43.5" YCoordinate="99.5" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="activitytype" Value="Sub-Process" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity CompletionQuantity="1" IsATransaction="true" IsForCompensation="false" StartQuantity="1" Status="None" Id="oryx_14C1BE63-348A-40E2-842F-8721308718C8" Name="asf">
+          <BlockActivity ActivitySetId="oryx_14C1BE63-348A-40E2-842F-8721308718C8-activitySet" View="EXTENDED" />
+          <Documentation>
+            asd
+          </Documentation>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="white" Height="163.0" Width="203.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="0.0" YCoordinate="210.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="activitytype" Value="Sub-Process" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="dfgh" Name="dfgh">
+          <Route ExclusiveType="Data" GatewayType="Exclusive" MarkerVisible="false" />
+          <Documentation>
+            dfgh
+          </Documentation>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="40.0" Width="40.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="249.0" YCoordinate="33.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="dfgh-object">
+            <Categories>
+              <Category Id="dfgh-category">
+                dfgh
+              </Category>
+            </Categories>
+          </Object>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="defaultgate" Value="dgfh" />
+            <ExtendedAttribute Name="gates" Value="dgfh" />
+            <ExtendedAttribute Name="gate_assignments" Value="dfgh" />
+            <ExtendedAttribute Name="gates_assignments" Value="dgfh" />
+            <ExtendedAttribute Name="gate_outgoingsequenceflow" Value="dfgh" />
+            <ExtendedAttribute Name="gates_outgoingsequenceflow" Value="dgfh" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="dfgh" Name="dfgh">
+          <Route GatewayType="Parallel" />
+          <Documentation>
+            dgfh
+          </Documentation>
+          <Assignments>
+            <Assignment AssignTime="Start" />
+          </Assignments>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="40.0" Width="40.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="251.0" YCoordinate="165.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="dfgh-object">
+            <Categories>
+              <Category Id="dfgh-category">
+                dfgh
+              </Category>
+            </Categories>
+          </Object>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="gates" Value="dfgh" />
+            <ExtendedAttribute Name="assignmentTo" Value="dfgh" />
+            <ExtendedAttribute Name="assignmentFrom" Value="dfgh" />
+            <ExtendedAttribute Name="gates_assignments" Value="ddfgh" />
+            <ExtendedAttribute Name="gates_outgoingsequenceflow" Value="dfgh" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="dfgh" Name="dfgh">
+          <Route GatewayType="Inclusive" />
+          <Documentation>
+            dfgh
+          </Documentation>
+          <Assignments>
+            <Assignment AssignTime="Start" />
+          </Assignments>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="40.0" Width="40.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="256.0" YCoordinate="232.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="dfgh-object">
+            <Categories>
+              <Category Id="dfgh-category">
+                dfgh
+              </Category>
+            </Categories>
+          </Object>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="defaultgate" Value="dfgh" />
+            <ExtendedAttribute Name="gates" Value="dfgh" />
+            <ExtendedAttribute Name="assignmentTo" Value="fgh" />
+            <ExtendedAttribute Name="assignmentFrom" Value="" />
+            <ExtendedAttribute Name="gate_assignments" Value="dfgh" />
+            <ExtendedAttribute Name="gates_assignments" Value="dfgh" />
+            <ExtendedAttribute Name="gate_outgoingsequenceflow" Value="dfgh" />
+            <ExtendedAttribute Name="gates_outgoingsequenceflow" Value="dfgh" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="oryx_436385B8-690C-41DA-A92E-F1277C06E33E">
+          <Route GatewayType="Complex" />
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="40.0" Width="40.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="252.0" YCoordinate="296.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="fgh" Name="dfgh">
+          <Route ExclusiveType="Event" GatewayType="Exclusive" Instantiate="true" />
+          <Documentation>
+            fgh
+          </Documentation>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="40.0" Width="40.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="241.0" YCoordinate="96.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="fgh-object">
+            <Categories>
+              <Category Id="fgh-category">
+                fgh
+              </Category>
+            </Categories>
+          </Object>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="gates" Value="fgh" />
+            <ExtendedAttribute Name="gates_assignments" Value="fgh" />
+            <ExtendedAttribute Name="gates_outgoingsequenceflow" Value="fgh" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="oryx_38D4E1F6-95F8-4906-B075-94DEDF4EDB8A">
+          <Event>
+            <StartEvent Trigger="None" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="405.0" YCoordinate="437.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="oryx_38D4E1F6-95F8-4906-B075-94DEDF4EDB8A-object">
+            <Categories>
+              <Category Id="oryx_38D4E1F6-95F8-4906-B075-94DEDF4EDB8A-category">
+                sdf
+              </Category>
+            </Categories>
+          </Object>
+        </Activity>
+        <Activity Id="oryx_88AD6F72-7973-4FD4-878E-AEC02A027553">
+          <Event>
+            <StartEvent Trigger="Message" Implementation="Unspecified">
+              <TriggerResultMessage>
+                <Message>
+                  asdf
+                </Message>
+              </TriggerResultMessage>
+            </StartEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="357.0" YCoordinate="429.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="oryx_88AD6F72-7973-4FD4-878E-AEC02A027553-object">
+            <Categories>
+              <Category Id="oryx_88AD6F72-7973-4FD4-878E-AEC02A027553-category">
+                adf
+              </Category>
+            </Categories>
+          </Object>
+        </Activity>
+        <Activity Id="oryx_9F5F1480-8B37-4C6C-9A54-EB00E91070F2">
+          <Event>
+            <StartEvent Trigger="Timer">
+              <TriggerTimer TimerCycle="asdf" TimerDate="2010-08-24T00:00:00" />
+            </StartEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="319.0" YCoordinate="470.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <Object Id="oryx_9F5F1480-8B37-4C6C-9A54-EB00E91070F2-object">
+            <Categories>
+              <Category Id="oryx_9F5F1480-8B37-4C6C-9A54-EB00E91070F2-category">
+                asdf
+              </Category>
+            </Categories>
+          </Object>
+        </Activity>
+        <Activity Id="oryx_6D5AFED9-73AF-4E5D-85AB-1A9A37A5854C">
+          <Event>
+            <StartEvent Trigger="Conditional">
+              <TriggerConditional />
+            </StartEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="295.0" YCoordinate="415.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_0325B806-EA4D-4D1C-B4AE-807292734EF2">
+          <Event>
+            <StartEvent Trigger="Signal">
+              <TriggerResultSignal>
+                asdf
+              </TriggerResultSignal>
+            </StartEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="277.0" YCoordinate="473.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="triggers" Value="asdf" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="oryx_41868F3C-2869-45B5-8C7B-BBC3EDC035D0">
+          <Event>
+            <StartEvent Trigger="Multiple" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="241.0" YCoordinate="523.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_8053C890-BCE7-4D82-9789-C7AC72EC75E7">
+          <Event>
+            <IntermediateEvent Trigger="None" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="595.0" YCoordinate="429.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_F7755179-1BE1-4533-94F4-ADFC1BBFF910">
+          <Event>
+            <IntermediateEvent Trigger="Message" Implementation="Web Service">
+              <TriggerResultMessage CatchThrow="CATCH" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="559.0" YCoordinate="470.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_C009E603-8780-413B-A197-CB00D5568A88">
+          <Event>
+            <IntermediateEvent Trigger="Timer">
+              <TriggerTimer TimerCycle="asdf" TimerDate="20/04/09" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="537.0" YCoordinate="405.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_E08DA364-4F0E-41FE-97A5-00F22BB44A87">
+          <Event>
+            <IntermediateEvent Trigger="Error">
+              <ResultError ErrorCode="asdfasdf" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="596.0" YCoordinate="358.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_1A28E3D7-5E88-4A1F-A8A4-D984CA74E4C1">
+          <Event>
+            <IntermediateEvent Trigger="Cancel" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="489.0" YCoordinate="366.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="target" Value="asdf" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="oryx_37E2092C-D461-46FE-B351-FEF207214AF8">
+          <Event>
+            <IntermediateEvent Trigger="Compensation">
+              <TriggerResultCompensation AttributeId="asdf" CatchThrow="CATCH" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="633.0" YCoordinate="380.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_5362F0C4-24FE-47B8-B8F0-DEFA7FDE6F7B">
+          <Event>
+            <IntermediateEvent Trigger="Conditional" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="513.0" YCoordinate="446.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_EF0471F4-55E4-4660-8860-E1C14A24C05E">
+          <Event>
+            <IntermediateEvent Trigger="Signal">
+              <TriggerResultSignal CatchThrow="CATCH">
+                asdf
+              </TriggerResultSignal>
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="496.0" YCoordinate="495.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_840E0D12-B2B4-4A01-8FBB-5F3686C45561">
+          <Event>
+            <IntermediateEvent Trigger="Link">
+              <TriggerResultLink CatchThrow="CATCH" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="694.0" YCoordinate="428.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="processref" Value="f" />
+          </ExtendedAttributes>
+        </Activity>
+        <Activity Id="oryx_7FDFE9A7-B4B5-4AC2-8927-66A6C125B5AF">
+          <Event>
+            <IntermediateEvent Trigger="Message" Implementation="Other">
+              <TriggerResultMessage CatchThrow="THROW" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="85.0" YCoordinate="808.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_E8C920D0-9339-4284-8AEF-EAB25AB043DB">
+          <Event>
+            <IntermediateEvent Trigger="Compensation">
+              <TriggerResultCompensation CatchThrow="THROW" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="34.0" YCoordinate="748.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_CA6978AD-A5B6-4D3F-98F5-69B80E7BDE40">
+          <Event>
+            <IntermediateEvent Trigger="Signal">
+              <TriggerResultSignal CatchThrow="THROW" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="148.0" YCoordinate="741.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_52880450-90E2-481A-9319-E7A8BD443DC0">
+          <Event>
+            <IntermediateEvent Trigger="Multiple" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="39.0" YCoordinate="789.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_322D7F14-5271-42BB-939D-3E9530B97F70">
+          <Event>
+            <IntermediateEvent Trigger="Link">
+              <TriggerResultLink CatchThrow="THROW" />
+            </IntermediateEvent>
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="30.0" Width="30.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="130.0" YCoordinate="820.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_E018672A-AE59-419F-B3D4-45BAC5714E50">
+          <Event>
+            <EndEvent Result="None" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="482.0" YCoordinate="779.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_B2562EA5-33B7-4CD3-96AB-E9622CD92260">
+          <Event>
+            <EndEvent Result="Message" Implementation="Web Service" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="551.0" YCoordinate="816.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_1C52C80B-1CDE-46DE-81C0-109C021A84C5">
+          <Event>
+            <EndEvent Result="Error" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="484.0" YCoordinate="815.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_552FFA08-C964-4181-8954-72E153C2AC68">
+          <Event>
+            <EndEvent Result="Cancel" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="451.0" YCoordinate="777.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_8B2029E9-DC45-4C5D-B60B-B9FD3F8D1729">
+          <Event>
+            <EndEvent Result="Compensation" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="463.0" YCoordinate="708.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_9BDDAC25-E21A-4EBE-8CC3-AA53694EFCF5">
+          <Event>
+            <EndEvent Result="Signal" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="547.0" YCoordinate="729.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_2B5C845E-365C-456C-BA01-C7B2501D4914">
+          <Event>
+            <EndEvent Result="Multiple" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="658.0" YCoordinate="749.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+        <Activity Id="oryx_40352512-5AE5-4DD2-9221-1B7526C24411">
+          <Event>
+            <EndEvent Result="Terminate" />
+          </Event>
+          <NodeGraphicsInfos>
+            <NodeGraphicsInfo FillColor="#ffffff" Height="28.0" Width="28.0" BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="426.0" YCoordinate="690.0" />
+            </NodeGraphicsInfo>
+          </NodeGraphicsInfos>
+        </Activity>
+      </Activities>
+      <Transitions>
+        <Transition Quantity="1" Id="oryx_7944CB3E-E158-495F-A553-7424476B3EC0">
+          <ConnectorGraphicsInfos>
+            <ConnectorGraphicsInfo BorderColor="#0,0,0" ToolId="Oryx">
+              <Coordinates XCoordinate="76.0" YCoordinate="946.0" />
+              <Coordinates XCoordinate="276.0" YCoordinate="948.0" />
+            </ConnectorGraphicsInfo>
+          </ConnectorGraphicsInfos>
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="showdiamondmarker" Value="false" />
+          </ExtendedAttributes>
+        </Transition>
+      </Transitions>
+    </WorkflowProcess>
+    <WorkflowProcess Adhoc="true" AdhocOrdering="Sequential" AdhocCompletionCondition="" EnableInstanceCompensation="false" ProcessType="Abstract" Status="Cancelled" SuppressJoinFailure="true" Id="asdf-process" Name="asdf">
+      <Object>
+        <Categories>
+          <Category>
+            asdf
+          </Category>
+        </Categories>
+        <Documentation>
+          asdf
+        </Documentation>
+      </Object>
+      <ExtendedAttributes>
+        <ExtendedAttribute Name="processref" Value="asfd" />
+        <ExtendedAttribute Name="participantref" Value="asdf" />
+      </ExtendedAttributes>
+    </WorkflowProcess>
+    <WorkflowProcess AdhocOrdering="Parallel" ProcessType="None" Status="None" Id="oryx_4658E7AF-1964-4FC5-8AFD-04F397E26163-process" />
+  </WorkflowProcesses>
+</Package>

@@ -14,6 +14,7 @@ import org.w3c.dom.Text;
 
 import de.hpi.bpmn.ANDGateway;
 import de.hpi.bpmn.Activity;
+import de.hpi.bpmn.Assignment;
 import de.hpi.bpmn.Association;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.BPMNFactory;
@@ -47,6 +48,7 @@ import de.hpi.bpmn.Lane;
 import de.hpi.bpmn.MessageFlow;
 import de.hpi.bpmn.ORGateway;
 import de.hpi.bpmn.Pool;
+import de.hpi.bpmn.Property;
 import de.hpi.bpmn.SequenceFlow;
 import de.hpi.bpmn.StartConditionalEvent;
 import de.hpi.bpmn.StartLinkEvent;
@@ -341,8 +343,9 @@ public class BPMN11RDFImporter {
 					c.diagram.setTitle(getContent(n));
 				} else if (attribute.equals("id")) {
 					c.diagram.setId(getContent(n));
-					// } else {
-					// handleStandardAttributes(attribute, n, pool, c, "Name");
+				//BPMN Extension for YAWL: the datatypedefinition attribute
+				} else if (attribute.equals("datatypedefinition")) {
+					c.diagram.setDataTypeDefinition(getContent(n));
 				}
 			}
 		}
@@ -414,7 +417,13 @@ public class BPMN11RDFImporter {
 				// if (attribute.equals("poolid")) {
 				// pool.setId(getContent(n));
 				// } else {
-				handleStandardAttributes(attribute, n, lane, c, "Name");
+				
+				//BPMN Extension for YAWL: the resourcingType attribute
+				if (attribute.equals("type")) {
+					lane.setResourcingType(getContent(n));
+				} else {
+					handleStandardAttributes(attribute, n, lane, c, "Name");
+				}
 				// }
 			}
 		}
@@ -481,6 +490,65 @@ public class BPMN11RDFImporter {
 						activity.setMiFlowCondition(MIFlowCondition.Complex);
 					} else if (miflowconditionValue != null && miflowconditionValue.equalsIgnoreCase("none")) {
 						activity.setMiFlowCondition(MIFlowCondition.None);
+					}
+				//BPMN Extension for YAWL: the assignments attributes
+				} else if (attribute.equals("assignments")) {
+					String assignmentValue = getContent(n);
+					ArrayList<Assignment> assignmentList = handleAssignments(assignmentValue);
+					activity.getAssignments().addAll(assignmentList);
+					
+				//BPMN Extension for YAWL: the properties attributes
+				} else if (attribute.equals("properties")) {
+					String propertiesValue = getContent(n);
+				
+					//if the activity has properties
+					if (propertiesValue != null) {
+						String propertiesItems = propertiesValue.substring(propertiesValue.indexOf("[") + 1, propertiesValue.indexOf("]"));
+					
+						//split the properties string for each entry
+						String[] propertiesAsText = propertiesItems.split("}");
+					
+						for(String seperateProperty : propertiesAsText){
+							String name = "";
+							String type = "";
+							String value = "";
+							Boolean correlation = false;
+						
+							if(seperateProperty.startsWith(",")){
+								seperateProperty = seperateProperty.substring(1);
+							}
+							seperateProperty = seperateProperty.trim();
+							seperateProperty = seperateProperty.substring(1);
+							String[] propertyComponents = seperateProperty.split(",");
+						
+							for(String propertyComponent : propertyComponents){
+								String propertyLine = propertyComponent.replace("\"", "");
+								if(propertyLine.startsWith("name")){
+									String rawValue = propertyLine.split(":")[1];
+									name = rawValue.trim();
+								}
+								else if(propertyLine.startsWith("type")){
+									String rawValue = propertyLine.split(":")[1];
+									type = rawValue.trim();
+								}
+								else if(propertyLine.startsWith("value")){
+									String rawValue = propertyLine.split(":")[1];
+									value = rawValue.trim();
+								}
+								else if(propertyLine.startsWith("correlation")){
+									String rawValue = propertyLine.split(":")[1];
+									String correlationValue = rawValue.trim();
+								
+									if(correlationValue.equalsIgnoreCase("true")){
+										correlation = true;
+									}else{
+										correlation = false;
+									}
+								}	
+							}
+							Property property = new Property(name, type, value, correlation);
+							activity.getProperties().add(property);
+						}
 					}
 				}
 			}
@@ -562,6 +630,23 @@ public class BPMN11RDFImporter {
 					task.setPortType(getContent(n));
 
 				}
+				
+				
+				/* BPMN Extension for YAWL
+				 * Set yawl_offeredBy attribute */
+				else if (attribute.equals("yawl_offeredby"))
+					task.setYawl_offeredBy(getContent(n));
+				
+				/* BPMN Extension for YAWL
+				 * Set yawl_allocatedBy attribute */
+				else if (attribute.equals("yawl_allocatedby"))
+					task.setYawl_allocatedBy(getContent(n));
+				
+				/* BPMN Extension for YAWL
+				 * Set yawl_startedBy attribute */
+				else if (attribute.equals("yawl_startedby"))
+					task.setYawl_startedBy(getContent(n));
+				
 				else {
 					handleStandardAttributes(attribute, n, task, c, "name");
 				}
@@ -717,7 +802,7 @@ public class BPMN11RDFImporter {
 				if (n instanceof Text)
 					continue;
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
-
+				//BUG FIXED
 				if (attribute.equals("timedate")) {
 					String timeDateValue = getContent(n);
 					if (timeDateValue != null)
@@ -726,7 +811,7 @@ public class BPMN11RDFImporter {
 				if (attribute.equals("timecycle")) {
 					String timeCycleValue = getContent(n);
 					if (timeCycleValue != null)
-						event.setTimeDate(timeCycleValue);
+						event.setTimeCycle(timeCycleValue);
 				}
 			}
 		}
@@ -767,6 +852,7 @@ public class BPMN11RDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(n.getNodeName().indexOf(':') + 1);
 
+				//BUG FIXED
 				if (attribute.equals("timedate")) {
 					String timeDateValue = getContent(n);
 					if (timeDateValue != null)
@@ -775,7 +861,7 @@ public class BPMN11RDFImporter {
 				if (attribute.equals("timecycle")) {
 					String timeCycleValue = getContent(n);
 					if (timeCycleValue != null)
-						event.setTimeDate(timeCycleValue);
+						event.setTimeCycle(timeCycleValue);
 				}
 			}
 		}
@@ -889,6 +975,13 @@ public class BPMN11RDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(
 						n.getNodeName().indexOf(':') + 1);
+				
+				//BPMN Extension for YAWL
+				if (attribute.equals("assignments")) {
+					String assignmentValue = getContent(n);
+					ArrayList<Assignment> assignmentList = handleAssignments(assignmentValue);
+					event.getAssignments().addAll(assignmentList);
+				}
 
 				handleStandardAttributes(attribute, n, event, c, label);
 			}
@@ -950,6 +1043,14 @@ public class BPMN11RDFImporter {
 					continue;
 				String attribute = n.getNodeName().substring(
 						n.getNodeName().indexOf(':') + 1);
+				
+				//BPMN Extension for YAWL
+				if (attribute.equals("assignments")) {
+					String assignmentValue = getContent(n);
+					ArrayList<Assignment> assignmentList = handleAssignments(assignmentValue);
+					gateway.getAssignments().addAll(assignmentList);
+				}
+				
 				handleStandardAttributes(attribute, n, gateway, c,
 						"Documentation");
 			}
@@ -974,6 +1075,12 @@ public class BPMN11RDFImporter {
 				// TODO: add further attributes...
 				if (attribute.equals("state")) {
 					obj.setState(getContent(n)); }
+				//BPMN Extension for YAWL: the datatype attribute
+				else if (attribute.equals("datatype"))
+					obj.setDataType(getContent(n));	
+				//BPMN Extension for YAWL: the value attribute
+				else if (attribute.equals("value"))
+					obj.setValue(getContent(n));
 				
 				/* Set the target parameter of a copy task. Used by BPMN2BPEL */
 				else if (attribute.equals("targetofcopy")) {
@@ -1164,6 +1271,61 @@ public class BPMN11RDFImporter {
 		if (node == null || !node.getNodeName().equals("rdf:RDF"))
 			return null;
 		return node;
+	}
+	
+	/**
+	 * parses assignment attribute string
+	 * @param rawAssignment assignment attribute string
+	 * @return list of Assignment objects
+	 */
+	protected ArrayList<Assignment> handleAssignments(String rawAssignment){
+		ArrayList<Assignment> assignments = new ArrayList<Assignment>();
+		
+		if (rawAssignment != null) {
+			String assignmentItems = rawAssignment.substring(rawAssignment.indexOf("[") + 1, rawAssignment.indexOf("]"));
+			
+			//split the properties string for each entry
+			String[] assignmentsAsText = assignmentItems.split("}");
+			
+			for(String seperateAssignment : assignmentsAsText){
+				String to = "";
+				String from = "";
+				Assignment.AssignTime assignTime = Assignment.AssignTime.Start;
+				
+				if(seperateAssignment.startsWith(",")){
+					seperateAssignment = seperateAssignment.substring(1);
+				}
+				seperateAssignment = seperateAssignment.trim();
+				seperateAssignment = seperateAssignment.substring(1);
+				
+				String[] assignmentComponents = seperateAssignment.split(", ");
+				
+				for(String assignmentComponent : assignmentComponents){
+					String assignmentLine = assignmentComponent.replace("\"", "");
+					if(assignmentLine.startsWith("to")){
+						String rawValue = assignmentLine.split(":")[1];
+						to = rawValue.trim();
+					}
+					else if(assignmentLine.startsWith("from")){
+						String rawValue = assignmentLine.split(":")[1];
+						from = rawValue.trim();
+					}
+					else if(assignmentLine.startsWith("assigntime")){
+						String rawValue = assignmentLine.split(":")[1];
+						String assignTimeValue = rawValue.trim();
+						
+						if(assignTimeValue.equalsIgnoreCase("Start"))
+							assignTime = Assignment.AssignTime.Start;
+						
+						else if (assignTimeValue.equalsIgnoreCase("End"))
+							assignTime = Assignment.AssignTime.End;
+					}	
+				}
+				Assignment assignment = new Assignment(to, from, assignTime);
+				assignments.add(assignment);
+			}
+		}
+		return assignments;
 	}
 
 }

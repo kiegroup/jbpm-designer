@@ -59,7 +59,7 @@ function init() {
     else {
         //HACK for distinguishing between different backends
 		// Backend of 2008 uses /self URL ending
-	    var modelUrl = window.location.href;
+	    var modelUrl = window.location.href.replace(/#.*/g, "");
 		if(modelUrl.endsWith("/self")) {
 			modelUrl = modelUrl.replace("/self","/json");
 		} else {
@@ -117,18 +117,13 @@ ORYX.Editor = {
 			model = config.model;
 		}
 		
-		
-		if (config.uuid) {
-			this.id = config.uuid;
-		} else {
-			this.id = model.resourceId;
+		this.id = model.resourceId;
+        if(!this.id) {
+        	this.id = model.id;
         	if(!this.id) {
-        		this.id = model.id;
-        		if(!this.id) {
-        			this.id = ORYX.Editor.provideId();
-        		}
+        		this.id = ORYX.Editor.provideId();
         	}
-		}
+        }
         
         // Defines if the editor should be fullscreen or not
 		this.fullscreen = model.fullscreen || true;
@@ -873,6 +868,10 @@ ORYX.Editor = {
         }     
 		//check, if the imported json model can be loaded in this editor
 		// (stencil set has to fit)
+        if (!jsonObject.stencilset) {
+        	Ext.Msg.alert(ORYX.I18N.JSONImport.title, ORYX.I18N.JSONImport.invalidJSON);
+        	return null;
+        }
 		if(jsonObject.stencilset.namespace && jsonObject.stencilset.namespace !== this.getCanvas().getStencil().stencilSet().namespace()) {
 			Ext.Msg.alert(ORYX.I18N.JSONImport.title, String.format(ORYX.I18N.JSONImport.wrongSS, jsonObject.stencilset.namespace, this.getCanvas().getStencil().stencilSet().namespace()));
 			return null;
@@ -1110,10 +1109,10 @@ ORYX.Editor = {
     loadSerialized: function( model ){
         var canvas  = this.getCanvas();
       
-		if(model.uuid) {
-			
-			
-			//load the model from the repository from its uuid
+        if(model.uuid) {
+
+
+     		//load the model from the repository from its uuid
 			//use the guvnorAPI for that:
 			new Ajax.Request("/enterprise-repository/org.drools.guvnor.Guvnor/guvnorAPI?action=load&uuid=" + model.uuid, {
 	            asynchronous: false,
@@ -1124,15 +1123,14 @@ ORYX.Editor = {
 				},
 	            onFailure: function(transport) {
 		            alert(transport.responseText);
-					alert(transport);
-		            alert("Could not load the model for uuid " + model.uuid);
-		        }
+	  		        alert(transport);
+				    alert("Could not load the model for uuid " + model.uuid);
+				}
 	        });
 		}
         // Bugfix (cf. http://code.google.com/p/oryx-editor/issues/detail?id=240)
         // Deserialize the canvas' stencil set extensions properties first!
         this.loadSSExtensions(model.ssextensions);
-		
         var shapes = this.getCanvas().addShapeObjects(model.childShapes, this.handleEvents.bind(this));
         
         if(model.properties) {
@@ -1869,6 +1867,15 @@ ORYX.Editor.createByUrl = function(modelUrl, config){
         var editorConfig = Ext.decode(transport.responseText);
         editorConfig = Ext.applyIf(editorConfig, config);
         new ORYX.Editor(editorConfig);
+      
+        if ("function" == typeof(config.onSuccess)) {
+		  	config.onSuccess(transport);
+	    }
+      }.bind(this),
+      onFailure: function(transport) {
+    	if ("function" == typeof(config.onFailure)) {
+    	  config.onFailure(transport);
+    	}
       }.bind(this)
     });
 }

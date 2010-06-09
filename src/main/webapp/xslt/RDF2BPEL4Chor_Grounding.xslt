@@ -16,7 +16,7 @@
 
 		<xsl:if test="$type='worksheet'">
 			<!-- root element -->
-			<grounding>
+			<grounding xmlns="urn:HPI_IAAS:choreography:schemas:choreography:grounding:2006/12">
 				<xsl:variable name="name" select="./oryx:name" />
 				<xsl:if test="$name!=''">
 					<xsl:attribute name="topology">

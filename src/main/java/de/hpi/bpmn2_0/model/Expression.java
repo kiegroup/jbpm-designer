@@ -26,6 +26,7 @@ package de.hpi.bpmn2_0.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.diagram.OryxUUID;
@@ -48,6 +49,9 @@ import de.hpi.diagram.OryxUUID;
  * 
  */
 @XmlRootElement(/*name = "conditionExpression"*/)
+@XmlSeeAlso({
+	FormalExpression.class
+})
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tExpression")
 public class Expression

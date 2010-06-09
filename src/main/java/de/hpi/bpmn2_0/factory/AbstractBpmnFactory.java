@@ -33,6 +33,7 @@ import de.hpi.bpmn2_0.annotations.Property;
 import de.hpi.bpmn2_0.annotations.StencilId;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.model.BaseElement;
+import de.hpi.bpmn2_0.model.Documentation;
 import de.hpi.bpmn2_0.model.diagram.BpmnNode;
 
 /**
@@ -67,8 +68,23 @@ public abstract class AbstractBpmnFactory {
 	 *            The resource shape.
 	 * @return The constructed BPMN element.
 	 */
-	public abstract BPMNElement createBpmnElement(Shape shape, BPMNElement parent)
-			throws BpmnConverterException;
+	public abstract BPMNElement createBpmnElement(Shape shape,
+			BPMNElement parent) throws BpmnConverterException;
+
+	/**
+	 * Sets attributes of a {@link BaseElement} that are common for all
+	 * elements.
+	 * 
+	 * @param element
+	 *            The BPMN 2.0 element
+	 * @param shape
+	 *            The resource shape
+	 */
+	protected void setCommonAttributes(BaseElement element, Shape shape) {
+		String documentation = shape.getProperty("documentation");
+		if (documentation != null && !documentation.isEmpty())
+			element.getDocumentation().add(new Documentation(documentation));
+	}
 
 	/**
 	 * Sets the fields for the visual representation e.g. x and y coordinates,
@@ -98,29 +114,45 @@ public abstract class AbstractBpmnFactory {
 		for (Method method : Arrays
 				.asList(this.getClass().getDeclaredMethods())) {
 			StencilId stencilIdA = method.getAnnotation(StencilId.class);
-			if (stencilIdA != null && Arrays.asList(stencilIdA.value())
-					.contains(shape.getStencilId())) {
+			if (stencilIdA != null
+					&& Arrays.asList(stencilIdA.value()).contains(
+							shape.getStencilId())) {
 				/* Create element with appropriate method */
-				return (BaseElement) method.invoke(this, shape);
+				BaseElement createdElement = (BaseElement) method.invoke(this,
+						shape);
+				/* Invoke generalized method to set common element attributes */
+				this.setCommonAttributes(createdElement, shape);
+				
+				return createdElement;
 			}
 		}
 
 		throw new BpmnConverterException("Creator method for shape with id "
 				+ shape.getStencilId() + " not found");
 	}
-	
-	protected BaseElement invokeCreatorMethodAfterProperty(Shape shape) 
-			throws BpmnConverterException, IllegalArgumentException, 
+
+	protected BaseElement invokeCreatorMethodAfterProperty(Shape shape)
+			throws BpmnConverterException, IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException {
-		
-		for(Method method : Arrays.asList(this.getClass().getDeclaredMethods())) {
+
+		for (Method method : Arrays
+				.asList(this.getClass().getMethods())) {
 			Property property = method.getAnnotation(Property.class);
-					
-			if(property != null && Arrays.asList(property.value()).contains(shape.getProperty(property.name()))) {
-				return (BaseElement) method.invoke(this, shape);
+
+			if (property != null
+					&& Arrays.asList(property.value()).contains(
+							shape.getProperty(property.name()))) {
+				
+				/* Create element */
+				BaseElement createdElement = (BaseElement) method.invoke(this,
+						shape);
+				/* Invoke generalized method to set common element attributes */
+				this.setCommonAttributes(createdElement, shape);
+				
+				return createdElement;
 			}
 		}
-		
+
 		throw new BpmnConverterException("Creator method for shape with id "
 				+ shape.getStencilId() + " not found");
 	}

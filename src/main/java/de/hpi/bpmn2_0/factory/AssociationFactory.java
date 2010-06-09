@@ -71,6 +71,9 @@ public class AssociationFactory extends AbstractBpmnFactory {
 		AssociationConnector associationShape = this
 				.createDiagramElement(shape);
 		Edge association = this.createProcessElement(shape);
+		
+		/* Set common attributes */
+		this.setCommonAttributes(association, shape);
 
 		/* Set references */
 		if (associationShape instanceof DataAssociationConnector)

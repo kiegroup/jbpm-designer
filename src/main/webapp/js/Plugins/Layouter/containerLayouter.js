@@ -30,7 +30,7 @@
 	
 
 /**
- * This plugin provides methodes to layout elements that typically contains 
+ * This plugin provides methods to layout elements that typically contain 
  * a bunch of child elements, such as subprocesses or lanes.
  * 
  * @class ORYX.Plugins.ContainerLayouter
@@ -126,9 +126,9 @@ ORYX.Plugins.ContainerLayouter = {
 	 * @param {Object} shape
 	 * 		The container.
 	 * @param {Object} childsBounds
-	 * 		The bounds including all childs
+	 * 		The bounds including all children
 	 * @param {Object} ulChildAbsBounds
-	 * 		The absolute bounds including all childs
+	 * 		The absolute bounds including all children
 	 */
 	ensureContainersMinimumSize: function(shape, childsBounds, ulChildAbsBounds, ignoreList, options) {
 		var bounds = shape.bounds;
@@ -142,7 +142,7 @@ ORYX.Plugins.ContainerLayouter = {
 		}
 		
 		if(!shape.isResized) {
-			/* Childs movement after widen the conatiner */
+			/* Childs movement after widening the conatiner */
 			var yMovement = 0;
 			var xMovement = 0;
 			var changeBounds = false;
@@ -188,7 +188,7 @@ ORYX.Plugins.ContainerLayouter = {
 			
 			this.moveChildsBy(shape, {x: xMovement, y: yMovement}, ignoreList);
 			
-			/* Signals that child are already move to correct position */
+			/* Signals that children are already move to correct position */
 			return true;
 		}
 		
@@ -382,7 +382,7 @@ ORYX.Plugins.ContainerLayouter = {
 	},
 	
 	/**
-	 * Returns the direct child shapes that are not on the irgnore list.
+	 * Returns the direct child shapes that are not on the ignore list.
 	 */
 	getChildShapesWithout: function(shape, ignoreList) {
 		var childs = shape.getChildShapes(false);

@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -51,7 +50,6 @@ import de.hpi.bpmn2_0.model.activity.type.ScriptTask;
 import de.hpi.bpmn2_0.model.activity.type.SendTask;
 import de.hpi.bpmn2_0.model.activity.type.ServiceTask;
 import de.hpi.bpmn2_0.model.activity.type.UserTask;
-import de.hpi.bpmn2_0.model.artifacts.TextAnnotation;
 import de.hpi.bpmn2_0.model.choreography.ChoreographyActivity;
 import de.hpi.bpmn2_0.model.choreography.ChoreographySubProcess;
 import de.hpi.bpmn2_0.model.choreography.ChoreographyTask;
@@ -71,8 +69,8 @@ import de.hpi.bpmn2_0.model.gateway.EventBasedGateway;
 import de.hpi.bpmn2_0.model.gateway.ExclusiveGateway;
 import de.hpi.bpmn2_0.model.gateway.InclusiveGateway;
 import de.hpi.bpmn2_0.model.gateway.ParallelGateway;
+import de.hpi.bpmn2_0.model.misc.ProcessType;
 import de.hpi.bpmn2_0.model.participant.LaneSet;
-import de.hpi.bpmn2_0.model.participant.Participant;
 
 
 /**
@@ -121,47 +119,49 @@ public class Process
 //    protected TAuditing auditing;
 //    protected TMonitoring monitoring;
 //    protected List<TProperty> property;
-	@XmlElementRefs({
-		/* Events */
-		@XmlElementRef(type = StartEvent.class),
-		@XmlElementRef(type = EndEvent.class),
-		@XmlElementRef(type = IntermediateThrowEvent.class),
-		@XmlElementRef(type = IntermediateCatchEvent.class),
-		
-		/* Activities */
-		@XmlElementRef(type = Task.class),
-		@XmlElementRef(type = ReceiveTask.class),
-		@XmlElementRef(type = ManualTask.class),
-		@XmlElementRef(type = ScriptTask.class),
-		@XmlElementRef(type = SendTask.class),
-		@XmlElementRef(type = ServiceTask.class),
-		@XmlElementRef(type = UserTask.class),
-		@XmlElementRef(type = BusinessRuleTask.class),
-		@XmlElementRef(type = SubProcess.class),
-		
-		/* Gateways */
-		@XmlElementRef(type = ExclusiveGateway.class),
-		@XmlElementRef(type = ParallelGateway.class),
-		@XmlElementRef(type = ComplexGateway.class),
-		@XmlElementRef(type = EventBasedGateway.class),
-		@XmlElementRef(type = InclusiveGateway.class),
-		
-		/* Edges */
-		@XmlElementRef(type = SequenceFlow.class),
-		
-		/* Artifacts / Data elements */
-		@XmlElementRef(type = DataObject.class),
-		@XmlElementRef(type = TextAnnotation.class),
-		
-		/* Partner */
-		@XmlElementRef(type = Participant.class)
-	})
+//	@XmlElementRefs({
+//		/* Events */
+//		@XmlElementRef(type = StartEvent.class),
+//		@XmlElementRef(type = EndEvent.class),
+//		@XmlElementRef(type = IntermediateThrowEvent.class),
+//		@XmlElementRef(type = IntermediateCatchEvent.class),
+//		
+//		/* Activities */
+//		@XmlElementRef(type = Task.class),
+//		@XmlElementRef(type = ReceiveTask.class),
+//		@XmlElementRef(type = ManualTask.class),
+//		@XmlElementRef(type = ScriptTask.class),
+//		@XmlElementRef(type = SendTask.class),
+//		@XmlElementRef(type = ServiceTask.class),
+//		@XmlElementRef(type = UserTask.class),
+//		@XmlElementRef(type = BusinessRuleTask.class),
+//		@XmlElementRef(type = SubProcess.class),
+//		
+//		/* Gateways */
+//		@XmlElementRef(type = ExclusiveGateway.class),
+//		@XmlElementRef(type = ParallelGateway.class),
+//		@XmlElementRef(type = ComplexGateway.class),
+//		@XmlElementRef(type = EventBasedGateway.class),
+//		@XmlElementRef(type = InclusiveGateway.class),
+//		
+//		/* Edges */
+//		@XmlElementRef(type = SequenceFlow.class),
+//		
+//		/* Artifacts / Data elements */
+//		@XmlElementRef(type = DataObject.class),
+//		@XmlElementRef(type = TextAnnotation.class),
+//		@XmlElementRef(type = ITSystem.class),
+//		
+//		/* Partner */
+//		@XmlElementRef(type = Participant.class)
+//	})
+	@XmlElementRef
     protected List<FlowElement> flowElement;
 //    @XmlElementRef(name = "artifact", namespace = "http://www.omg.org/bpmn20", type = JAXBElement.class)
 //    protected List<JAXBElement<? extends Artifact>> artifact;
     protected List<QName> supports;
-//    @XmlAttribute
-//    protected TProcessType processType;
+    @XmlAttribute
+    protected ProcessType processType;
     @XmlAttribute
     protected Boolean isClosed;
     @XmlAttribute
@@ -570,6 +570,24 @@ public class Process
 	 */
 	public SubProcess getSubprocessRef() {
 		return subprocessRef;
+	}
+
+	/**
+	 * @return the processType
+	 */
+	public ProcessType getProcessType() {
+		/* None as default value */
+		if(this.processType == null)
+			this.processType = ProcessType.NONE;
+		
+		return processType;
+	}
+
+	/**
+	 * @param processType the processType to set
+	 */
+	public void setProcessType(ProcessType processType) {
+		this.processType = processType;
 	}
 
 }

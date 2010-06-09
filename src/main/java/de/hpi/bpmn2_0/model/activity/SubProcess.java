@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.annotations.ChildElements;
+import de.hpi.bpmn2_0.model.BaseElement;
 import de.hpi.bpmn2_0.model.FlowElement;
 import de.hpi.bpmn2_0.model.activity.type.BusinessRuleTask;
 import de.hpi.bpmn2_0.model.activity.type.ManualTask;
@@ -46,7 +47,13 @@ import de.hpi.bpmn2_0.model.activity.type.SendTask;
 import de.hpi.bpmn2_0.model.activity.type.ServiceTask;
 import de.hpi.bpmn2_0.model.activity.type.UserTask;
 import de.hpi.bpmn2_0.model.artifacts.Artifact;
+import de.hpi.bpmn2_0.model.artifacts.TextAnnotation;
+import de.hpi.bpmn2_0.model.choreography.ChoreographySubProcess;
+import de.hpi.bpmn2_0.model.choreography.ChoreographyTask;
+import de.hpi.bpmn2_0.model.connector.Association;
+import de.hpi.bpmn2_0.model.data_object.DataObject;
 import de.hpi.bpmn2_0.model.data_object.DataStore;
+import de.hpi.bpmn2_0.model.gateway.ParallelGateway;
 
 
 /**
@@ -77,7 +84,8 @@ import de.hpi.bpmn2_0.model.data_object.DataStore;
     "artifact"
 })
 @XmlSeeAlso({
-//    AdHocSubProcess.class
+    AdHocSubProcess.class,
+    Transaction.class
 })
 public class SubProcess
     extends Activity
@@ -92,6 +100,17 @@ public class SubProcess
     @XmlAttribute
     protected Boolean triggeredByEvent;
 
+    /**
+     * Adds the child to the list of {@link FlowElement} of the subprocess.
+     */
+    public void addChild(BaseElement child) {
+    	if(child instanceof FlowElement) {
+    		this.getFlowElement().add((FlowElement) child);
+    	}
+    }
+    
+    /* Getter & Setter */
+    
     /**
      * Gets the value of the flowElement property.
      * 

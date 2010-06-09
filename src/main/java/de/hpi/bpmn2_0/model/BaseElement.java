@@ -134,6 +134,34 @@ public abstract class BaseElement {
     
 	@XmlTransient
     private Process processRef;
+	
+	/**
+	 * Default constructor
+	 */
+	public BaseElement() {
+		
+	}
+	
+	/**
+	 * Copy constructor
+	 * 
+	 * @param base
+	 * 		The {@link BaseElement} to copy.
+	 */
+	public BaseElement(BaseElement base) {
+		if(base.getDocumentation().size() > 0)
+			this.getDocumentation().addAll(base.getDocumentation());
+		
+		if(base.getAny().size() > 0)
+			this.getAny().addAll(base.getAny());
+		
+		if(base.getOtherAttributes().size() > 0)
+			this.getOtherAttributes().putAll(base.getOtherAttributes());
+		
+		this.setId(base.getId());
+		this.setLane(base.getLane());
+		this.setProcessRef(base.getProcessRef());
+	}
     
 	/**
 	 * Adds a child element to the current BPMN element if possible. This method

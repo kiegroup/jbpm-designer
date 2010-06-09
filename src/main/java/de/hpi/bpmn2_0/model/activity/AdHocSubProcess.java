@@ -26,10 +26,11 @@ package de.hpi.bpmn2_0.model.activity;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.hpi.bpmn2_0.model.AdHocOrdering;
-import de.hpi.bpmn2_0.model.Expression;
+import de.hpi.bpmn2_0.model.FormalExpression;
 
 
 /**
@@ -53,6 +54,7 @@ import de.hpi.bpmn2_0.model.Expression;
  * 
  * 
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tAdHocSubProcess", propOrder = {
     "completionCondition"
@@ -61,7 +63,7 @@ public class AdHocSubProcess
     extends SubProcess
 {
 
-    protected Expression completionCondition;
+    protected FormalExpression completionCondition;
     @XmlAttribute
     protected Boolean cancelRemainingInstances;
     @XmlAttribute
@@ -72,10 +74,10 @@ public class AdHocSubProcess
      * 
      * @return
      *     possible object is
-     *     {@link Expression }
+     *     {@link FormalExpression }
      *     
      */
-    public Expression getCompletionCondition() {
+    public FormalExpression getCompletionCondition() {
         return completionCondition;
     }
 
@@ -84,10 +86,10 @@ public class AdHocSubProcess
      * 
      * @param value
      *     allowed object is
-     *     {@link Expression }
+     *     {@link FormalExpression }
      *     
      */
-    public void setCompletionCondition(Expression value) {
+    public void setCompletionCondition(FormalExpression value) {
         this.completionCondition = value;
     }
 

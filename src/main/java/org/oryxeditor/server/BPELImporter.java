@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -58,11 +61,12 @@ public class BPELImporter extends HttpServlet {
 	
 	private BPELImportPreprocessor preprocessor = new BPELImportPreprocessor();
 	
+	private Logger log = Logger.getLogger("org.oryxeditor.server.BPELImporter");
+	
     /**
      * The POST request.
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
-    	
     	// No isMultipartContent => Error
     	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
     	if (!isMultipartContent){
@@ -115,8 +119,8 @@ public class BPELImporter extends HttpServlet {
     	//      6. transform the value of attribute "opaque" from "yes" to "true"
     	final String newContent = preprocessSource (res, fileContent);
     	
-    	System.out.println("***********************");
-    	System.out.println(newContent);
+    	log.fine("newContent:");
+    	log.fine(newContent);
     	
     	// Get the input stream	
     	final InputStream inputStream = new ByteArrayInputStream(newContent.getBytes());
@@ -139,6 +143,7 @@ public class BPELImporter extends HttpServlet {
     	String resultString = null;
     	try {
     		Transformer transformer = transformerFactory.newTransformer(bpel2eRDFxsltSource);
+    		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
     		StringWriter writer = new StringWriter();
     		transformer.transform(bpelSource, new StreamResult(writer));
     		resultString = writer.toString();
@@ -146,15 +151,21 @@ public class BPELImporter extends HttpServlet {
     		handleException(res, e); 
     		return;
     	}
+    	
+    	log.fine("reslut-XML");
+    	log.fine(resultString);
 
-    	if (resultString != null){
-    		try {
-    		       printResponse (res, resultString);
-    		       return;
-    		} catch (Exception e){
-    		       handleException(res, e); 
-    		}
+    	if (resultString == null) {
+    		printResponse(res, "transformation error");
     	}
+    	
+		Repository rep = new Repository("");
+		resultString = rep.erdfToJson(resultString, getServletContext());
+
+    	log.fine("reslut-json");
+    	log.fine(resultString);
+    	
+    	printResponse(res, resultString);
     }
     
    private String preprocessSource (HttpServletResponse res, String oldString){
@@ -190,9 +201,10 @@ public class BPELImporter extends HttpServlet {
 private void printResponse(HttpServletResponse res, String text){
     	if (res != null){
  
-        	// Get the PrintWriter
-        	res.setContentType("text/plain");
+        	res.setContentType("text/html"); // as required by http://www.extjs.com/deploy/dev/docs/output/Ext.form.BasicForm.html
+        	res.setStatus(HttpServletResponse.SC_OK);
         	
+        	// Get the PrintWriter
         	PrintWriter out = null;
         	try {
         	    out = res.getWriter();
@@ -200,7 +212,7 @@ private void printResponse(HttpServletResponse res, String text){
         	    e.printStackTrace();
         	}
         	
-    		out.print(text);
+    		out.print("{success:true, content:'"+text+"'}");
     	}
     }
     
@@ -209,7 +221,8 @@ private void printResponse(HttpServletResponse res, String text){
     	if (res != null){
  
         	// Get the PrintWriter
-        	res.setContentType("text/html");
+        	res.setContentType("text/html"); // as required by http://www.extjs.com/deploy/dev/docs/output/Ext.form.BasicForm.html
+        	res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         	
         	PrintWriter out = null;
         	try {
@@ -218,7 +231,7 @@ private void printResponse(HttpServletResponse res, String text){
         	    e.printStackTrace();
         	}
         	
-    		out.print("{success:false, content:'"+err+"'}");
+        	out.print("{success:false, content:'"+err+"'}");
     	}
     }
     

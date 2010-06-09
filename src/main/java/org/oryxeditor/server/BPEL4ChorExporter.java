@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -33,9 +34,8 @@ import org.w3c.dom.NodeList;
 
 
 /**
- * Copyright (c) 2008-2009 
- * 
- * Zhen Peng
+ * Copyright (c) 2008-2009 	Zhen Peng
+ * 				 2010		Changhua Li
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -81,6 +81,25 @@ public class BPEL4ChorExporter extends HttpServlet {
 	// use a array list to record all processes with process-paticipantRef relationships
 	private ArrayList<String> nonSingleProcessSet = new ArrayList<String>();
 
+	// extension by changhua Li 
+	// define a Set to store process name (participant name)  
+	private	Set<String> processNameSet = new HashSet<String>();
+	
+	// use a hash map to record processId 
+	private HashMap<String, String> processIdMapForTopology = new HashMap<String, String>();
+	
+	// use a hash map to record crossPartnerScopes and elementNameList
+	private HashMap<String, Set<String>> cps2elNameListMap = new HashMap<String, Set<String>>();
+	
+	// use a hash map to record elementName and elementId
+	private HashMap<String, String> elName2elIdMap = new HashMap<String, String>();
+	
+	// use a set to store the crossPartnerScopes
+	private Set<String> crossPartnerScopeSet = new HashSet<String>();
+	
+	// use a has map to record process and its children
+	private HashMap<String, String>	child2processMap = new HashMap<String, String>();
+	// extension end
 
 	/**
      * The POST request.
@@ -195,7 +214,15 @@ public class BPEL4ChorExporter extends HttpServlet {
 				"topology", false);
 		
 		if (topology != null){
-
+			
+			// extended by Changhua Li
+			// init the mapping and set for crossPartnerScope
+			crossPartnerScopeSet.clear();
+			cps2elNameListMap.clear();
+			elName2elIdMap.clear();
+			child2processMap.clear();
+			// extended end
+			
 			// record necessary informations
 			NodeList childrenList = topology.getChildNodes();
 			for (int i = 0; i < childrenList.getLength(); i++){
@@ -211,7 +238,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 					}
 				}
 			}
-
+			
 			// handle each child elements
 			childrenList = topology.getChildNodes();
 			for (int i = 0; i < childrenList.getLength(); i++){
@@ -230,12 +257,73 @@ public class BPEL4ChorExporter extends HttpServlet {
 					if (childElement.getNodeName().equals("messageLinks")){
 						handleMessageLinksElement(childElement);
 					}
+					
+					// extended by Changhua Li
+					// handle the crossPartnerScope elements
+					if (childElement.getNodeName().equals("crossPartnerScopeInfo")){
+						handleCrossPartnerScopeElement(childElement);
+					}
+					// extended end
 				}
 			}
 
 			// delete all useless attributes and elements
 			cleanUp(topology);
 			
+			// extension by changhua Li
+			// set the xmlns:processes attribute of element topology
+			if (!processNameSet.isEmpty()){
+				for(String processName : processNameSet){
+					topology.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:" + processName, 
+							topology.getAttribute("targetNamespace") + ":" + processName);
+				}
+			}
+			
+			// create the <crossPartnerScope> element
+			if (cps2elNameListMap != null && crossPartnerScopeSet != null) {
+				Iterator<String> it = crossPartnerScopeSet.iterator();
+				while (it.hasNext()) {
+					String cpsName = (String)it.next();
+					Element elCPS = oldDocument.createElement("crossPartnerScope");
+					Element elActivities = oldDocument.createElement("activities");
+					
+					elCPS.setAttribute("name", cpsName);
+					if (cps2elNameListMap.get(cpsName).size() > 0) {
+						Set<String> valueList =  cps2elNameListMap.get(cpsName);
+						Iterator<String> listIt = valueList.iterator();
+						while (listIt.hasNext()) {
+							String activityName = (String)listIt.next();
+							String participantName = "";
+							String elId = elName2elIdMap.get(activityName);
+							if (child2processMap.containsKey(elId)){
+								participantName = child2processMap.get(elId);
+							}
+							
+							// create <activity> element
+							Element elActivity = oldDocument.createElement("activity");
+							elActivity.setAttribute("name", activityName);
+							elActivity.setAttribute("participant", participantName);
+							
+							elActivities.appendChild(elActivity);
+						}
+					}
+					
+					// create <wsp:Policy> element
+					Element elPolicy = oldDocument.createElementNS("uri:wsp", "wsp:Policy");
+					Element elAll = oldDocument.createElementNS("uri:wsp", "wsp:All");
+					Element elPolicyCPS = oldDocument.createElement("crossPartnerScope");
+					elPolicyCPS.setAttribute("name", cpsName);
+					
+					elAll.appendChild(elPolicyCPS);
+					elPolicy.appendChild(elAll);
+					
+					// append the elements on topology
+					elCPS.appendChild(elActivities);
+					elCPS.appendChild(elPolicy);
+					topology.appendChild(elCPS);
+				}
+			}
+			// extension end
 		}
 		return oldDocument;
 	}
@@ -249,6 +337,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 				Element childElement = (Element)child;
 				
 				String id = childElement.getAttribute("id");
+				String name = childElement.getAttribute("name");
 				
 				if (childElement.getNodeName().equals("participantSet")
 					|| childElement.getNodeName().equals("associationEdge")
@@ -258,6 +347,23 @@ public class BPEL4ChorExporter extends HttpServlet {
 					
 					nodeMapForTopology.put(id, new Object[]{childElement.getNodeName(), childElement});
 				}
+				// extended by Changhua Li
+				// to store the process and its children
+				if (childElement.getNodeName().equals("process")){
+					processIdMapForTopology.put(id, "process");
+					if (childElement.hasChildNodes()){
+						NodeList childrenListOfProcess = childElement.getChildNodes();
+						for (int j = 0; j < childrenListOfProcess.getLength(); j++) {
+							Node childOfProcess = childrenListOfProcess.item(j);
+							if (childOfProcess instanceof Element){
+								Element childElementOfProcess = (Element)childOfProcess;
+								String childId = childElementOfProcess.getAttribute("childId");
+								child2processMap.put(childId, name);
+							}
+						}
+					}
+				}
+				// extended end
 				
 				if (childElement.getNodeName().equals("sendOrReceiveActivity")){
 					recordSendActivityOfMessageLink(childElement);
@@ -338,6 +444,10 @@ public class BPEL4ChorExporter extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * FIXME: This method is NOT namespace aware. Incoming element has NO namespace information
+	 * @param participantTypes
+	 */
 	private void handleParticipantTypesElement(Element participantTypes) {
 		
 		ArrayList<String> typeRecorder = new ArrayList<String>();
@@ -351,26 +461,25 @@ public class BPEL4ChorExporter extends HttpServlet {
 				
 				Element childElement = (Element)child;
 				
-				// record type
-				String type = childElement.getAttribute("name");
-				if (typeRecorder.contains(type)){
+				String pbd = childElement
+					.getAttribute("participantBehaviorDescription");
+				if (pbd == "") {
 					uselessChildren.add(childElement);
 				} else {
+					// record type only if BPD is existed
+					String type = childElement.getAttribute("name");
 					typeRecorder.add(type);
-				}
-				
-				String processName = childElement
-							.getAttribute("participantBehaviorDescription");
-				if (processName != null){
+
 					String namespace = childElement.getAttribute("processNamespace");
 					String prefix = childElement.lookupPrefix(namespace);
-					
-					if (prefix != null){
-						childElement.setAttribute("participantBehaviorDescription", 
-								prefix + ":" + processName);
+					if (prefix == null) {
+						//prefix = "ns" + pbd;
+						prefix = pbd;
 					}
+					childElement.setAttribute("participantBehaviorDescription",
+							prefix + ":" + pbd);
+					childElement.setAttribute("xmlns:" + prefix, namespace);
 				}
-				
 			}
 		}
 		
@@ -381,7 +490,6 @@ public class BPEL4ChorExporter extends HttpServlet {
 			participantTypes.removeChild(movingChild);
 		}
 	}
-
 
 
 	private void handleParticipantsElement(Element participants) {
@@ -506,17 +614,17 @@ public class BPEL4ChorExporter extends HttpServlet {
 			String currentSenders = messageLink.getAttribute("senders");
 			String currentSendActivities = messageLink.getAttribute("sendActivities");
 			String currentReceivers = messageLink.getAttribute("receivers");
-			String currentReveiveActivities = messageLink.getAttribute("reveiveActivities");
-			
+			String currentreceiveActivities = messageLink.getAttribute("receiveActivities");
+
 			String newSenders = addItemInString(sender, currentSenders);
 			String newSendActivities = addItemInString(sendActivity, currentSendActivities);
 			String newReceivers = addItemInString(receiver, currentReceivers);
-			String newReveiveActivities = addItemInString(receiveActivity, currentReveiveActivities);
+			String newreceiveActivities = addItemInString(receiveActivity, currentreceiveActivities);
 			
 			messageLink.setAttribute("senders", newSenders);
 			messageLink.setAttribute("sendActivities", newSendActivities);
 			messageLink.setAttribute("receivers", newReceivers);
-			messageLink.setAttribute("reveiveActivities", newReveiveActivities);
+			messageLink.setAttribute("receiveActivities", newreceiveActivities);
 		}
 		
 		Iterator<Element> movingList = uselessLinks.iterator();
@@ -536,7 +644,7 @@ public class BPEL4ChorExporter extends HttpServlet {
 				String currentSenders = messageLink.getAttribute("senders");
 				String currentReceivers = messageLink.getAttribute("receivers");
 				String currentSendActivities = messageLink.getAttribute("sendActivities");
-				String currentReveiveActivities = messageLink.getAttribute("reveiveActivities");
+				String currentreceiveActivities = messageLink.getAttribute("receiveActivities");
 				
 				if (currentSenders != null && !currentSenders.contains(" ")){
 					messageLink.setAttribute("sender", currentSenders);
@@ -553,9 +661,9 @@ public class BPEL4ChorExporter extends HttpServlet {
 					messageLink.removeAttribute("sendActivities");
 				}
 				
-				if (currentReveiveActivities != null && !currentReveiveActivities.contains(" ")){
-					messageLink.setAttribute("reveiveActivity", currentReveiveActivities);
-					messageLink.removeAttribute("reveiveActivities");
+				if (currentreceiveActivities != null && !currentreceiveActivities.contains(" ")){
+					messageLink.setAttribute("receiveActivity", currentreceiveActivities);
+					messageLink.removeAttribute("receiveActivities");
 				}
 			}
 		}
@@ -582,6 +690,43 @@ public class BPEL4ChorExporter extends HttpServlet {
 		return result;
 	}
 
+	// extended by Changhua Li
+	// to handle the crossPartnerScope element
+	private void handleCrossPartnerScopeElement(Element currentElement) {
+		String nameOfCrossPartnerScope = "";
+		String elementName = "";
+		String elementId = "";
+
+		if (currentElement.hasAttribute("elementName")){
+			elementName = currentElement.getAttribute("elementName");
+		}
+		
+		// create the mapping between cpsName and elementNames
+		if (currentElement.hasAttribute("name")){
+			nameOfCrossPartnerScope = currentElement.getAttribute("name");
+			crossPartnerScopeSet.add(nameOfCrossPartnerScope);
+			
+			if (cps2elNameListMap.containsKey(nameOfCrossPartnerScope)){
+				Set<String> valueElementNameSet = new HashSet<String>();
+				valueElementNameSet = cps2elNameListMap.get(nameOfCrossPartnerScope);
+				valueElementNameSet.add(elementName);
+				cps2elNameListMap.put(nameOfCrossPartnerScope, valueElementNameSet);
+			}
+			else {
+				Set<String> elNameSet = new HashSet<String>();
+				elNameSet.add(elementName);
+				cps2elNameListMap.put(nameOfCrossPartnerScope, elNameSet);
+			}
+		}
+		
+		// create the mapping between elementName and elementId
+		if (currentElement.hasAttribute("elementId")){
+			elementId = currentElement.getAttribute("elementId");
+			elName2elIdMap.put(elementName, elementId);
+		}
+	}
+	// extended end
+	
 	private void cleanUp(Node currentNode) {
 
 		if (!(currentNode instanceof Element)) {
@@ -601,7 +746,8 @@ public class BPEL4ChorExporter extends HttpServlet {
 			if (child instanceof Element){
 				if (child.getNodeName().equals("outgoingLink")
 						|| child.getNodeName().equals("nodeInfoSet")
-						|| child.getNodeName().equals("associationEdgeInfoSet")){
+						|| child.getNodeName().equals("associationEdgeInfoSet")
+						|| child.getNodeName().equals("crossPartnerScopeInfo")){
 					uselessChildren.add(child);
 				} else {
 					cleanUp(child);
@@ -765,7 +911,13 @@ public class BPEL4ChorExporter extends HttpServlet {
     
 	private void handleException(PrintWriter out, String type, Exception e) {
 		e.printStackTrace();
-		printError(out, type, e.getLocalizedMessage());
+		out.print("{\"type\":\"" + type+ "\",");
+		out.print("\"success\":false,");
+		out.print("\"content\":\"");
+		// TODO: check whether the exception has to be escaped. If yes, the exception should be output using a stringbuffer etc...
+		e.printStackTrace(out);
+		out.print(escapeJSON(e.getLocalizedMessage()));
+		out.print("\"}");
 	}
     
 }

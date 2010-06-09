@@ -86,8 +86,14 @@ public class LaneCompartment
     	@XmlElementRef(type = CalledSubprocessShape.class),
     	
     	@XmlElementRef(type = GatewayShape.class),
+    	
     	@XmlElementRef(type = DataObjectShape.class),
     	@XmlElementRef(type = DataStoreShape.class),
+    	@XmlElementRef(type = DataInputShape.class),
+    	@XmlElementRef(type = DataOutputShape.class),
+    	@XmlElementRef(type = ITSystemShape.class),
+    	@XmlElementRef(type = ProcessParticipantShape.class),
+
     	@XmlElementRef(type = TextAnnotationShape.class)
     })
     protected List<BpmnNode> bpmnShape;

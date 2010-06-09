@@ -98,6 +98,12 @@ public class StartEventFactory extends AbstractBpmnFactory {
 		}
 		event.setId(shape.getResourceId());
 		event.setName(shape.getProperty("name"));
+		
+		/* Interrupting property */
+		String interrupting = shape.getProperty("isinterrupting");
+		if(interrupting != null)
+			event.setIsInterrupting(!interrupting.equalsIgnoreCase("false"));
+		
 		return event;
 	}
 	

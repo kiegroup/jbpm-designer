@@ -47,7 +47,8 @@
 					
 					<!-- bpel4chor editor -->
 					<xsl:if test="$existsAbstractProcessProfileElement=0">
-						<process>
+						<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/abstract">
+							<xsl:attribute name="abstractProcessProfile">urn:HPI_IAAS:choreography:profile:2006/12</xsl:attribute>
 							<xsl:call-template name="add-children-of-process-element"/>
 							<xsl:call-template name="record-link-nodes"/>
 						</process>

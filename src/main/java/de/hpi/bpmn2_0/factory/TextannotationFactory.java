@@ -71,6 +71,7 @@ public class TextannotationFactory extends AbstractBpmnFactory {
 	protected TextAnnotation createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		TextAnnotation text = new TextAnnotation();
+		this.setCommonAttributes(text, shape);
 		text.setId(shape.getResourceId());
 		text.setText(shape.getProperty("text"));
 		

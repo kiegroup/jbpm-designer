@@ -680,6 +680,22 @@
 					"fill":true,
 					"stroke":false
 				}
+				//{
+				//	"id":"crosspartnerscopes",
+				//	"prefix":"oryx",
+				//	"type": "String",
+				//	"title": "crossPartnerScopes",
+				//	"title_de": "crossPartnerScopes",
+				//	"value": "",
+				//	"description":"",
+				//	"tooltip":"",
+				//	"readonly":false,
+				//	"optional":false,
+					//"refToView":"text",
+				//	"refToView":"",
+				//	"length":undefined,
+				//	"wrapLines":false
+				//}
 			]
 		},
 		{
@@ -1004,6 +1020,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -1250,6 +1282,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -1543,6 +1591,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -1720,6 +1784,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},	
@@ -2043,6 +2123,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -2190,6 +2286,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -2408,6 +2520,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -2729,6 +2857,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}				
 			]
 		},
@@ -2918,6 +3062,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -3230,6 +3390,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}				
 			]
 		},
@@ -3407,6 +3583,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}				
 			]
 		},
@@ -4624,6 +4816,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -4684,6 +4892,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -4859,7 +5083,6 @@
 					"fill":true,
 					"stroke":false
 				}
-				
 			]
 		},
 		{
@@ -4872,7 +5095,7 @@
 			"groups":["Event Handling"],
 			"view":"scope/node.handler.onEvent.svg",
 			"icon":"onEvent.png",
-			"roles": [],
+			"roles": ["receiveActivity"],
 			/*"layout":function(shape) {		
 				var raiseEvent = shape._delegateEvent.bind(shape);
 				raiseEvent({type:ORYX.CONFIG.EVENT_LAYOUT_BPEL_SINGLECHILD,shape:shape});
@@ -5147,6 +5370,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},	
@@ -5207,6 +5446,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -5267,6 +5522,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -5603,6 +5874,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -5732,6 +6019,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -5862,6 +6165,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -6007,6 +6326,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -6137,6 +6472,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -6340,6 +6691,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 				
 			]
@@ -6486,6 +6853,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -6615,6 +6998,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -6745,6 +7144,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},
@@ -6890,6 +7305,22 @@
 					"refToView":"mainBody",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"crosspartnerscopes",
+					"prefix":"oryx",
+					"type": "String",
+					"title": "crossPartnerScopes",
+					"title_de": "crossPartnerScopes",
+					"value": "",
+					"description":"",
+					"tooltip":"",
+					"readonly":false,
+					"optional":false,
+					//"refToView":"text",
+					"refToView":"",
+					"length":undefined,
+					"wrapLines":false
 				}
 			]
 		},

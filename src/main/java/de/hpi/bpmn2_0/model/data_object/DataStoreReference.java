@@ -41,12 +41,9 @@ import de.hpi.bpmn2_0.model.Process;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tDataStoreReference", propOrder = {
-  "dataState"
-})
+@XmlType(name = "tDataStoreReference")
 public class DataStoreReference extends AbstractDataObject {
 	
-	protected DataState dataState;
 	
 	@XmlAttribute
     @XmlIDREF
@@ -86,28 +83,5 @@ public class DataStoreReference extends AbstractDataObject {
 		this.dataStoreRef = dataStoreRef;
 	}
 
-	/**
-     * Gets the value of the dataState property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataState }
-     *     
-     */
-    public DataState getDataState() {
-        return dataState;
-    }
-
-    /**
-     * Sets the value of the dataState property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataState }
-     *     
-     */
-    public void setDataState(DataState value) {
-        this.dataState = value;
-    }
 	
 }

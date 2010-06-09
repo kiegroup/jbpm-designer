@@ -280,6 +280,22 @@ ORYX.I18N.jPDLSupport.impBtn = "Importieren";
 ORYX.I18N.jPDLSupport.impProgress = "Importiere...";
 ORYX.I18N.jPDLSupport.close = "Schließen";
 
+if(!ORYX.I18N.cpntoolsSupport) ORYX.I18N.cpntoolsSupport = {};
+
+ORYX.I18N.cpntoolsSupport.serverConnectionFailed = "Anfrage an den Oryx Server ist fehlgeschlagen.";
+ORYX.I18N.cpntoolsSupport.importTask = "Wähle eine CPN Datei (.cpn) aus oder tippe die CPN XML Struktur ein  um es zu importieren!";
+ORYX.I18N.cpntoolsSupport.file = "Datei:";
+ORYX.I18N.cpntoolsSupport.cpn = "CPN";
+ORYX.I18N.cpntoolsSupport.title = "CPN Oryx";
+ORYX.I18N.cpntoolsSupport.importLable = "Importieren";
+ORYX.I18N.cpntoolsSupport.close = "Schließen";
+ORYX.I18N.cpntoolsSupport.wrongCPNFile = "Keine richtige CPN - Datei ausgewählt.";
+ORYX.I18N.cpntoolsSupport.noPageSelection = "Es wurde kein Netze ausgewählt.";
+ORYX.I18N.cpntoolsSupport.importProgress = "Importieren ...";
+ORYX.I18N.cpntoolsSupport.exportProgress = "Exportieren ...";
+ORYX.I18N.cpntoolsSupport.exportDescription = "Exportieren nach CPN Tools";
+ORYX.I18N.cpntoolsSupport.importDescription = "Importieren von CPN Tools";
+
 if(!ORYX.I18N.Bpmn2Bpel) ORYX.I18N.Bpmn2Bpel = {};
 
 ORYX.I18N.Bpmn2Bpel.group = "ExecBPMN";
@@ -538,6 +554,7 @@ if(!ORYX.I18N.JSONImport) ORYX.I18N.JSONImport = {};
 
 ORYX.I18N.JSONImport.title = "JSON Import";
 ORYX.I18N.JSONImport.wrongSS = "Das Stencil Set der importierten Datei ({0}) entspricht nicht dem geladenen Stencil Set ({1})."
+ORYX.I18N.JSONImport.invalidJSON = "Das zu importierende JSON ist ungültig.";
 
 if(!ORYX.I18N.Feedback) ORYX.I18N.Feedback = {};
 

@@ -39,6 +39,7 @@ ORYX.Plugins.BPEL4ChorSupport = ORYX.Plugins.AbstractPlugin.extend({
 			'name':ORYX.I18N.BPEL4ChorSupport.exp,
 			'functionality': this.exportProcess.bind(this),
 			'group': ORYX.I18N.JSONSupport.exp.group,
+			dropDownGroupIcon: ORYX.PATH + "images/export2.png",
 			'icon':  ORYX.PATH + "images/bpel4chor_export_icon.png",
 			'description': ORYX.I18N.BPEL4ChorSupport.expDesc,
 			'index': 0,
@@ -50,6 +51,7 @@ ORYX.Plugins.BPEL4ChorSupport = ORYX.Plugins.AbstractPlugin.extend({
 			'name':ORYX.I18N.BPEL4ChorSupport.imp,
 			'functionality': this.importProcess.bind(this),
 			'group': ORYX.I18N.JSONSupport.imp.group,
+			dropDownGroupIcon: ORYX.PATH + "images/import.png",
 			'icon':  ORYX.PATH + "images/bpel4chor_import_icon.png",
 			'description': ORYX.I18N.BPEL4ChorSupport.impDesc,
 			'index': 1,
@@ -133,7 +135,8 @@ ORYX.Plugins.BPEL4ChorSupport = ORYX.Plugins.AbstractPlugin.extend({
 		
 		var counter = 1;
 		
-		if (grounding.indexOf("operation")>0){
+		//if (grounding.indexOf("operation")>0){
+		if (grounding.indexOf("grounding")>0){
 			data[1]= ["grounding", grounding, this.dialogSupport.getResultInfo(grounding)];
 			counter++;
 		};

@@ -1,0 +1,29 @@
+XPDL-Problems:
+
+- XPDL hat eine sinnfreie Aufteilung der Entities:
+	* Gateway, Event, Activity ist eine Entität
+	* Subprocesses heißen Activity Sets
+	* Transitions
+	* Pools, Processes und Subprocesses haben Kinder, Lanes nicht auch keine Referenzen // implizit durch nodegraphic und bei flows durch verbundene objekte
+- Package/activity Documentation ist ein extra tag, sonst in Object
+
+Oryx-Problems:
+
+- der letter case von keys ist nicht konsistent (z.B. totalCount in assignments aber processdocumentation)
+- Groups haben keine Containment-Angaben
+- Flows setzen source nicht korrekt
+- Pools, Lanes Properties werden nicht gesetzt
+- In Artifacts werden assignments im JSON ohne oberkey assignments serialisiert
+- In Artifacts sind laut XPDL keine Assignments vorgesehen (aber in BPMN?)
+- In task kann man mi und standards gleichzeitig setzen , darf nicht gehen
+- Die ganzen ref attribute sind überflüssig, da man da beliebige werte reinschreiben kann (sollte eine liste von vorhandenen entitäten enthalten)
+- in Activities können Inputs/Outputs/Performers/Inmessage/Outmessage/InputSet/OutputSet/IoRules beliebig definiert werden
+- conditionref im StartConditionalEvent sollte condition heißen
+- StartSignalEvent hat als Trigger Multiple sollte eigentlich Signal sein
+- Multiples in Events lassen sich nicht abbilden, da die Triggers beliebig beschrieben können und man somit nicht auf die kinder des tags schließen kann wo intermediate/throwing drinnen stehen würde
+- Activities MÜSSEN bei mehreren outgoings eigentlich ein splittag haben (TransitionRestrictions) mit einer Reihenfolge der Pfade, wie sie ausgewertet werden -> wie von Oryx übersetzen?
+- Transaction lässt sich auch nicht abbilden -> erwartet strukturierte Information in einer Activity //awesome
+
+Regex:
+
+[\s]*<evils>\n[\s]*\w[^\n]*\n[\s]*</evils>

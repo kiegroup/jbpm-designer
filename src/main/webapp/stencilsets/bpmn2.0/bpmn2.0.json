@@ -6,17 +6,6 @@
  		{
  			"name":"baseAttributes",
  			"properties": [
- 				{
-					"id":"id",
-					"type":"String",
-					"title":"Id",
-					"value":"",
-					"description":"This attribute is used to uniquely identify BPMN elements.",
-					"description_de":"Definiert eine eindeutige ID, um einzelne BPMN-Elemente technisch unterscheiden zu können.",
-					"readonly":false,
-					"optional":false,
-					"length":"50"
-				},
 				{
 					"id":"name",
 					"type":"String",
@@ -103,6 +92,22 @@
 					"readonly":false,
 					"optional":false,
 					"popular":true
+				}
+			]
+		},
+		{
+			"name":"boundaryevent",
+			"properties":[
+				{
+					"id":"boundarycancelactivity",
+					"type":"Boolean",
+					"title":"CancelActivity",
+					"title_de":"Aktivität abbrechen",
+					"value":"",
+					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_de":"Kennzeichnet ob eine Aktivität abgebrochen werden soll.",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -478,6 +483,162 @@
 			]
 		},
 		{
+			"name":"properties",
+			"properties": [
+				{
+					"id":"properties",
+					"type":"Complex",
+					"title":"Properties",
+					"title_de":"Eigenschaften",
+					"value":"",
+					"description":"Modeler-defined properties MAY be added to an Activity. These properties are local to the Activity. (e.g., Add Customer.Customer Name).",
+					"description_de":"Lokale Eigenschaften können der Aktivität hinzugefügt werden. Diese werden ausschließlich während der Abarbeitung der Aktivität angewendet.",
+					"readonly": 	false,
+					"optional": 	false,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"datastate",
+							"name":"DataState",
+							"name_de":"DatenStatus",
+							"type":"String",
+							"value":"",
+							"width":80,
+							"optional":true
+						},
+						{
+							"id":"itemkind",
+							"name":"ItemKind",
+							"name_de":"Elementart",
+							"type":"Choice",
+							"value":"Information",
+							"items" : [
+					           {
+					        	   "id":"information",
+					        	   "title":"Information",
+					        	   "value":"Information"
+					           },
+					           {
+					        	   "id":"physical",
+					        	   "title":"Physical",
+					        	   "value":"Physical"
+					           }
+							           
+							],
+							"width":80,
+							"optional":true
+						},
+						{
+							"id":"structure",
+							"name":"Structure",
+							"name_de":"Struktur",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true
+						},
+						{
+							"id":"iscollection",
+							"name":"isCollection",
+							"name_de":"isKollektion",
+							"type":"Boolean",
+							"value":false,
+							"width":50,
+							"optional":true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name" : "iospecification",
+			"properties" : [
+				{
+					"id":"datainputset",
+					"type":"Complex",
+					"title":"DataInputSet",
+					"title_de":"Dateneingabesatz",
+					"value":"",
+					"description":"An InputSet is a collection of DataInput elements that together define a valid set of data inputs.",
+					"description_de":"Ein Eingabesatz ist eine Zusammenstellung von Eingabe-Datenobjekten, die zusammen einen gültigen Satz von Dataeingaben definieren.",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"optional",
+							"name":"Optional",
+							"type":"Boolean",
+							"value":false,
+							"width":50,
+							"optional":true
+						},
+						{
+							"id":"whileexecuting",
+							"name":"WhileExecuting",
+							"name_de":"Während der Ausführung",
+							"type":"Boolean",
+							"value":false,
+							"width":80,
+							"optional":true
+						}
+					]
+				},            
+				{
+					"id":"dataoutputset",
+					"type":"Complex",
+					"title":"DataOutputSet",
+					"title_de":"Datenausgabesatz",
+					"value":"",
+					"description":"An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.",
+					"description_de":"Ein Ausgabesatz ist eine Zusammenstellung von Ausgabe-Datenobjekten, die zusammen als Ausgabe einer Aktivität oder eines Ereignisses produziert werden.",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"name",
+							"name":"Name",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"optional",
+							"name":"Optional",
+							"type":"Boolean",
+							"value":false,
+							"width":50,
+							"optional":true
+						},
+						{
+							"id":"whileexecuting",
+							"name":"WhileExecuting",
+							"name_de":"Während der Ausführung",
+							"type":"Boolean",
+							"value":false,
+							"width":80,
+							"optional":true
+						}
+					]
+				}
+			]
+		},
+		{
 			"name" : "activity",
 			"properties": [
 				{
@@ -504,265 +665,6 @@
 					"optional":false,
 					"refToView":"",
 					"min":"1"
-				},
-				{	
-					"id":"status",
-					"type":"Choice",
-					"title":"Status",
-					"value":"None",
-					"description":"The Status of an activity is determined when the activity is being executed by a process engine.",
-					"description_de":"Der Status einer Aktivität wird bestimmt, wenn die Aktivität von einer Prozessengine ausgeführt wird.",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"None",
-							"value":"None"
-						},
-						{
-							"id":"c2",
-							"title":"Ready",
-							"value":"Ready"
-						},
-						{
-							"id":"c3",
-							"title":"Active",
-							"value":"Active"
-						},
-						{
-							"id":"c4",
-							"title":"Cancelled",
-							"value":"Cancelled"
-						},
-						{
-							"id":"c5",
-							"title":"Aborting",
-							"value":"Aborting"
-						},
-						{
-							"id":"c6",
-							"title":"Aborted",
-							"value":"Aborted"
-						},
-						{
-							"id":"c7",
-							"title":"Completing",
-							"value":"Completing"
-						},
-						{
-							"id":"c8",
-							"title":"Completed",
-							"value":"Completed"
-						}
-					]
-				},
-				{
-					"id":"performers",
-					"type":"String",
-					"title":"Performers",
-					"title_de":"Ausführende",
-					"value":"",
-					"description":"The Performer attribute defines the resource that will perform or will be responsible for the activity.",
-					"description_de":"Das Ausführende Attribut bestimmt die Ressource, welche die Aktivität ausführen wird oder für sie verantwortlich ist.",
-					"readonly": 	false,
-					"optional": 	true,
-					"length":"",
-					"warpLines" : true
-				},
-				{
-					"id":"properties",
-					"type":"Complex",
-					"title":"Properties",
-					"title_de":"Eigenschaften",
-					"value":"",
-					"description":"Local Properties may be added to the activity. These Properties only apply within the processing of the activity.",
-					"description_de":"Lokale Eigenschaften können der Aktivität hinzugefügt werden. Diese werden ausschließlich während der Abarbeitung der Aktivität angewendet.",
-					"readonly": 	false,
-					"optional": 	false,
-					"complexItems": [
-						{
-							"id":"name",
-							"name":"Name",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"type",
-							"name":"Type",
-							"name_de":"Typ",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false
-						},
-						{
-							"id":"value",
-							"name":"Value",
-							"name_de":"Wert",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false
-						},
-						{
-							"id":"correlation",
-							"name":"Correlation",
-							"name_de":"Korrelation",
-							"type":"Boolean",
-							"value":"false",
-							"width":100,
-							"optional":true
-						}
-					]
-				},
-				{
-					"id":"inputsets",
-					"type":"String",
-					"title":"InputSets",
-					"title_de":"Eingabe-Mengen",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"inputs",
-					"type":"String",
-					"title":"Inputs",
-					"title_de":"Eingaben",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"outputsets",
-					"type":"String",
-					"title":"OutputSets",
-					"title_de":"Ausgabe-Mengen",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"outputs",
-					"type":"String",
-					"title":"Outputs",
-					"title_de":"Ausgaben",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"iorules",
-					"type":"String",
-					"title":"IORules",
-					"title_de":"EA Regeln",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"testtime",
-					"type":"Choice",
-					"title":"TestTime",
-					"title_de":"Testzeitpunkt",
-					"value":"After",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"Before",
-							"title_de":"Vorher",
-							"value":"Before",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"After",
-							"title_de":"Hinterher",
-							"value":"After",
-							"refToView":""
-						}
-					]
-				},
-				{
-					"id":"mi_condition",
-					"type":"String",
-					"title":"MI Condition",
-					"title_de":"Mehrfachinstanz-Bedingung",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"mi_flowcondition",
-					"type":"Choice",
-					"title":"MI Flowcondition",
-					"title_de":"Mehrfachinstanz-Flussbedingung",
-					"value":"All",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"None",
-							"title_de":"Keine",
-							"value":"None",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"One",
-							"title_de":"Eine",
-							"value":"One",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"All",
-							"title_de":"Alle",
-							"value":"All",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"Complex",
-							"title_de":"Komplexe Bedingung",
-							"value":"Complex",
-							"refToView":""
-						}
-					]
 				},
 				{
 					"id":"isforcompensation",
@@ -831,25 +733,221 @@
 					]
 				},
 				{
-					"id":"pool",
-					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
+					"id":"callacitivity",
+					"type":"Boolean",
+					"title":"is a Call Activity",
+					"title_de":"ist eine Call Activity",
+					"value":false,
+					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
 					"readonly":false,
-					"optional":false,
-					"length":""
+					"optional":"true",
+					"refToView":"callActivity"
+				}
+			]
+		},
+		{
+			"name":"operation",
+			"properties": [
+				{
+					"id":"operationname",
+					"type":"String",
+					"title":"OperationName",
+					"title_de":"Operationsname",
+					"value":"",
+					"description":"The descriptive name for the operation element.",
+					"description_de":"Bezeichnung der Operation", 
+					"readonly":false,
+					"optional":"true"
 				},
 				{
-					"id":"lanes",
+					"id":"inmessagename",
 					"type":"String",
-					"title":"Lanes",
+					"title":"InMessageName",
+					"title_de":"Eingangs-Nachricht-Name",
 					"value":"",
-					"description":"",
+					"description":"The descriptive name for the InMessage element",
+					"description_de":"Bezeichnung der Eingangs-Nachricht", 
+					"readonly":false,
+					"optional":"true"
+				},
+				{
+					"id":"inmsgitemkind",
+					"type":"Choice",
+					"title":"InMessageItemKind",
+					"title_de":"Eingangs-Nachricht-Typ",
+					"value":"Information",
+					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_de":"Beim Typ der Nachricht kann zwischen Physisch und Information unterschieden werden.",
 					"readonly":false,
 					"optional":true,
-					"length":""
+					"items": [
+						{
+							"id":"c1",
+							"title":"Physical",
+							"value":"Physical"
+						},
+						{
+							"id":"c2",
+							"title":"Information",
+							"value":"Information"
+						}
+					]
 				},
+				{
+					"id":"inmsgstructure",
+					"type":"String",
+					"title":"InMessageStructure",
+					"title_de":"Eingangs-Nachricht-Struktur",
+					"value":"",
+					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_de":"Beim Typ der Nachricht kann zwischen Physisch und Information unterschieden werden.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"inmsgimport",
+					"type":"Complex",
+					"title":"InMessageImport",
+					"title_de":"Eingangs-Nachricht-Import",
+					"value":"",
+					"description":"Identifies the location of the data structure and its format. If the importType attribute is left unspecified, the typeLanguage specified in the Definitions is assumed.",
+					"description_de":"Definiert den Ort der Datenstruktur und ihr Format.",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+				        	"id":"c1",
+				        	"type":"String",
+				        	"width":200,
+				        	"value":"",
+				        	"name":"ImportType",
+				        	"name_de":"Importtyp"
+				        },
+						{
+				        	"id":"c2",
+				        	"type":"String",
+				        	"width":100,
+				        	"value":"",
+				        	"name":"Location"
+				        },
+						{
+				        	"id":"c3",
+				        	"type":"String",
+				        	"width":200,
+				        	"value":"",
+				        	"name":"Namespace",
+				        	"name_de":"Namensraum"
+				        }
+					]
+				},
+				{
+					"id":"inmsgiscollection",
+					"type":"Boolean",
+					"title":"InMessageIsCollection",
+					"title_de":"Eingangs-Nachricht-Ist-Liste",
+					"value":false,
+					"description":"Setting this flag to true indicates that the actual data type is a collection.",
+					"description_de":"Ture signalisiert, dass der Datentyp eine Liste ist.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"outmessagename",
+					"type":"String",
+					"title":"OutMessageName",
+					"title_de":"Ausgangs-Nachricht-Name",
+					"value":"",
+					"description":"The descriptive name for the OutMessage element",
+					"description_de":"Bezeichnung der Ausgangs-Nachricht", 
+					"readonly":false,
+					"optional":"true"
+				},
+				{
+					"id":"outmsgitemkind",
+					"type":"Choice",
+					"title":"OutMessageItemKind",
+					"title_de":"Ausgangs-Nachricht-Typ",
+					"value":"Information",
+					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_de":"Beim Typ der Nachricht kann zwischen Physisch und Information unterschieden werden.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id":"c1",
+							"title":"Physical",
+							"value":"Physical"
+						},
+						{
+							"id":"c2",
+							"title":"Information",
+							"value":"Information"
+						}
+					]
+				},
+				{
+					"id":"outmsgstructure",
+					"type":"String",
+					"title":"OutMessageStructure",
+					"title_de":"Ausgangs-Nachricht-Struktur",
+					"value":"",
+					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_de":"Beim Typ der Nachricht kann zwischen Physisch und Information unterschieden werden.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"outmsgimport",
+					"type":"Complex",
+					"title":"OutMessageImport",
+					"title_de":"Ausgangs-Nachricht-Import",
+					"value":"",
+					"description":"Identifies the location of the data structure and its format. If the importType attribute is left unspecified, the typeLanguage specified in the Definitions is assumed.",
+					"description_de":"Definiert den Ort der Datenstruktur und ihr Format.",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+				        	"id":"c1",
+				        	"type":"String",
+				        	"width":200,
+				        	"value":"",
+				        	"name":"ImportType",
+				        	"name_de":"Importtyp"
+				        },
+						{
+				        	"id":"c2",
+				        	"type":"String",
+				        	"width":100,
+				        	"value":"",
+				        	"name":"Location"
+				        },
+						{
+				        	"id":"c3",
+				        	"type":"String",
+				        	"width":200,
+				        	"value":"",
+				        	"name":"Namespace",
+				        	"name_de":"Namensraum"
+				        }
+					]
+				},
+				{
+					"id":"outmsgiscollection",
+					"type":"Boolean",
+					"title":"OutMessageIsCollection",
+					"title_de":"Ausgangs-Nachricht-Ist-Liste",
+					"value":false,
+					"description":"Setting this flag to true indicates that the actual data type is a collection.",
+					"description_de":"Ture signalisiert, dass der Datentyp eine Liste ist.",
+					"readonly":false,
+					"optional":true
+				}
+			]
+		},
+		{
+			"name" : "loopcharacteristics",
+			"properties" : [
 				{
 					"id":"looptype",
 					"type":"Choice",
@@ -895,6 +993,15 @@
 					]
 				},
 				{
+					"id":"testbefore",
+					"type":"Boolean",
+					"title":"TestBefore",
+					"title_de":"",
+					"value":false,
+					"description":"Flag that controls whether the loop condition is evaluated at the beginning (testBefore = true) or at the end (testBefore = false)of the loop iteration.",
+					"description_de":"Gibt an ob die Schleifen-Bedingung vor (true) oder nach (false) dem Schleifendurchlauf überprüft wird."
+				},
+				{
 					"id":"loopcondition",
 					"type":"String",
 					"title":"LoopCondition",
@@ -902,28 +1009,13 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"loopcounter",
-					"type":"Integer",
-					"title":"LoopCounter",
-					"title_de":"Schleifenzähler",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"min":"0"
+					"optional":false
 				},
 				{
 					"id":"loopmaximum",
 					"type":"Integer",
 					"title":"LoopMaximum",
 					"title_de":"Schleifenmaximum",
-					"value":1,
 					"description":"",
 					"readonly":false,
 					"optional":true,
@@ -931,33 +1023,270 @@
 					"min":"0"
 				},
 				{
-					"id":"callacitivity",
-					"type":"Boolean",
-					"title":"is a Call Activity",
-					"title_de":"ist eine Call Activity",
-					"value":0,
-					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"id":"loopcardinality",
+					"type":"String",
+					"title":"LoopCardinality",
+					"title_de":"Anzahl Schleifen",
+					"value":"",
+					"description":"A numeric Expression that controls the number of Activity instances that will be created. This Expression MUST evaluate to an integer.",
 					"readonly":false,
-					"optional":"true",
-					"refToView":"callActivity"
-				}
+					"optional":true
+				},
+				{
+					"id":"loopdatainput",
+					"type":"String",
+					"title":"LoopDataInput",
+					"title_de":"Schleifen-Datan-Eingabe",
+					"value":"",
+					"description":"A reference to a DataInput which is part of the Activity’s InputOutputSpecification. This DataInput is used to determine the number of Activity instances, one Activity instance per item in the collection of data stored in that DataInput element.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"loopdataoutput",
+					"type":"String",
+					"title":"LoopDataInput",
+					"title_de":"Schleifen-Datan-Ausgabe",
+					"value":"",
+					"description":"A reference to a DataOutput which is part of the Activity’s InputOutputSpecification.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"inputdataitem",
+					"type":"String",
+					"title":"InputDataItem",
+					"title_de":"Eingabe-Daten-Element",
+					"value":"",
+					"description":"A Property, representing for every Activity instance the single item of the collection stored in the loopDataInput.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"outputdataitem",
+					"type":"String",
+					"title":"InputDataItem",
+					"title_de":"Ausgabe-Daten-Element",
+					"value":"",
+					"description":"A Property, representing for every Activity instance the single item of the collection stored in the loopDataOutput.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"behavior",
+					"type":"Choice",
+					"title":"Behavior",
+					"title_de":"Schleifen-Verhalten",
+					"description":"The attribute behavior acts as a shortcut for specifying when events shall be thrown from an Activity instance that is about to complete. It can assume values of none, one, all, and complex.",
+					"description_de":"Das Schleifen-Verhalten definiert das Auslöseverhalten von Ereignissen, wenn die Instanz einer Aktivität beendet wird. Mögliche Werte sind none, one, all und complex.",
+					"value":"all",
+					"items": [
+				        {
+				        	"id":"cnone",
+				        	"value":"None",
+				        	"title":"None"
+				        },
+				        {
+				        	"id":"cone",
+				        	"value":"One",
+				        	"title":"One"
+				        },
+				        {
+				        	"id":"call",
+				        	"value":"All",
+				        	"title":"All"
+				        },
+				        {
+				        	"id":"ccomplex",
+				        	"value":"Complex",
+				        	"title":"Complex"
+				        }
+					]
+				},
+				{
+					"id":"complexbehaviordefinition",
+					"type":"Complex",
+					"title":"ComplexBehaviorDefinition:",
+					"title_de":"Komplexe Verhaltensdefinition",
+					"description":"Controls when and which Events are thrown in case behavior is set to complex.",
+					"description_de":"Kontrolliert wann und welche Ereignisse ausgelöst werden, wenn das Verhalten complex ausgewählt ist.",
+					"value":"",
+					"optional":true,
+					"readonly":false,
+					"complexItems": [
+				        {
+				        	"id":"cexpression",
+				        	"type":"String",
+				        	"width":200,
+				        	"value":"",
+				        	"name":"Condition",
+				        	"name_de":"Bedingung"
+				        },
+				        {
+				        	"id":"ceventdefinition",
+				        	"type":"Choice",
+				        	"value":"signal",
+				        	"width":100,
+				        	"name":"EventDefinition",
+				        	"name_de":"Ereignis-Definition",
+				        	"items":[
+			        	        {
+			        	        	"id":"cnone",
+			        	        	"value":"None",
+			        	        	"title":"None"
+			        	        },
+			        	        {
+			        	        	"id":"cmessage",
+			        	        	"value":"Message",
+			        	        	"title":"Message"
+			        	        },
+			        	        {
+			        	        	"id":"cescalation",
+			        	        	"value":"Escalation",
+			        	        	"title":"Escalation"
+			        	        },
+			        	        {
+			        	        	"id":"cerror",
+			        	        	"value":"Error",
+			        	        	"title":"Error"
+			        	        },
+			        	        {
+			        	        	"id":"ccancel",
+			        	        	"value":"Cancel",
+			        	        	"title":"Cancel"
+			        	        },
+			        	        {
+			        	        	"id":"ccompensation",
+			        	        	"value":"Compensation",
+			        	        	"title":"Compensation"
+			        	        },
+			        	        {
+			        	        	"id":"csignal",
+			        	        	"value":"Signal",
+			        	        	"title":"Signal"
+			        	        },
+			        	        {
+			        	        	"id":"cterminate",
+			        	        	"value":"Terminate",
+			        	        	"title":"Terminate"
+			        	        }
+				        	]
+				        }
+					]
+				},
+				{
+					"id":"completioncondition",
+					"type":"String",
+					"title":"CompletionCondition:",
+					"title_de":"Beendigungsbedingung",
+					"description":"This attribute defines a Boolean Expression that when evaluated to true, cancels the remaining Activity instances and produces a token.",
+					"description_de":"Alle verbleibenden Aktivitätsinstanzen werden abgebrochen, falls die hier definierte Bedingung wahr wird.",
+					"value":""
+				},
+				{
+		        	"id":"onebehavioreventref:",
+		        	"type":"Choice",
+		        	"value":"signal",
+		        	"title":"OneBehaviorEventRef",
+		        	"title_de":"Einzel-Verhalten-Ereignis",
+		        	"description":"The EventDefinition which is thrown when behavior is set to one and the first internal Activity instance has completed.",
+		        	"items":[
+	        	        {
+	        	        	"id":"cnone",
+	        	        	"value":"None",
+	        	        	"title":"None"
+	        	        },
+	        	        {
+	        	        	"id":"cmessage",
+	        	        	"value":"Message",
+	        	        	"title":"Message"
+	        	        },
+	        	        {
+	        	        	"id":"cescalation",
+	        	        	"value":"Escalation",
+	        	        	"title":"Escalation"
+	        	        },
+	        	        {
+	        	        	"id":"cerror",
+	        	        	"value":"Error",
+	        	        	"title":"Error"
+	        	        },
+	        	        {
+	        	        	"id":"ccancel",
+	        	        	"value":"Cancel",
+	        	        	"title":"Cancel"
+	        	        },
+	        	        {
+	        	        	"id":"ccompensation",
+	        	        	"value":"Compensation",
+	        	        	"title":"Compensation"
+	        	        },
+	        	        {
+	        	        	"id":"csignal",
+	        	        	"value":"Signal",
+	        	        	"title":"Signal"
+	        	        },
+	        	        {
+	        	        	"id":"cterminate",
+	        	        	"value":"Terminate",
+	        	        	"title":"Terminate"
+	        	        }
+		        	]
+		        },
+		        {
+		        	"id":"nonebehavioreventref",
+		        	"type":"Choice",
+		        	"value":"signal",
+		        	"title":"NoneBehaviorEventRef",
+		        	"title_de":"Ohne-Verhalten-Ereignis",
+		        	"items":[
+	        	        {
+	        	        	"id":"cnone",
+	        	        	"value":"None",
+	        	        	"title":"None"
+	        	        },
+	        	        {
+	        	        	"id":"cmessage",
+	        	        	"value":"Message",
+	        	        	"title":"Message"
+	        	        },
+	        	        {
+	        	        	"id":"cescalation",
+	        	        	"value":"Escalation",
+	        	        	"title":"Escalation"
+	        	        },
+	        	        {
+	        	        	"id":"cerror",
+	        	        	"value":"Error",
+	        	        	"title":"Error"
+	        	        },
+	        	        {
+	        	        	"id":"ccancel",
+	        	        	"value":"Cancel",
+	        	        	"title":"Cancel"
+	        	        },
+	        	        {
+	        	        	"id":"ccompensation",
+	        	        	"value":"Compensation",
+	        	        	"title":"Compensation"
+	        	        },
+	        	        {
+	        	        	"id":"csignal",
+	        	        	"value":"Signal",
+	        	        	"title":"Signal"
+	        	        },
+	        	        {
+	        	        	"id":"cterminate",
+	        	        	"value":"Terminate",
+	        	        	"title":"Terminate"
+	        	        }
+		        	]
+		        }
 			]
 		},
 		{
 			"name" : "task",
 			"properties" : [
-				{
-					"id":"activitytype",
-					"type":"String",
-					"title":"ActivityType",
-					"title_de":"Aktivitätstyp",
-					"value":"Task",
-					"description":"The Type of Activity.",
-					"description":"Typ der Aktivität",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
 				{
 					"id":"tasktype",
 					"type":"Choice",
@@ -1035,30 +1364,6 @@
 					]
 				},
 				{
-					"id":"inmessage",
-					"type":"String",
-					"title":"InMessage",
-					"title_de":"Eingangsnachricht",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"outmessage",
-					"type":"String",
-					"title":"OutMessage",
-					"title_de":"Ausgangsnachricht",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50"
-				},
-				{
 					"id":"implementation",
 					"type":"Choice",
 					"title":"Implementation",
@@ -1073,6 +1378,12 @@
 							"id":"c1",
 							"title":"HumanTaskWebService",
 							"value":"humanTaskWebService",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"BuisnessRuleWebService",
+							"value":"BuisnessRuleWebService",
 							"refToView":""
 						},
 						{
@@ -1172,18 +1483,6 @@
 						}
 					]
 				},
-				{				
-					"id":"complexmi_condition",
-					"type":"String",
-					"title":"Complex MI condition",
-					"title_de":"Komplexe MI-Bedingung",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
 				{
 					"id":"messageref",
 					"type":"String",
@@ -1202,23 +1501,11 @@
 					"title":"OperationRef",
 					"title_de":"Operations-Referenz",
 					"value":"",
-					"description":"",
+					"description":"ID-Reference to an operation definition.",
+					"description_de":"ID-Referenz zur Definition einer Operation.",
 					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"50"
+					"optional":true
 				},
-				{
-					"id":"taskref",
-					"type":"String",
-					"title":"TaskRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},	
 				{
 					"id":"instantiate",
 					"type":"Boolean",
@@ -1256,6 +1543,7 @@
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
 					"value":"#b1c2d6",
+					"gradient":true,
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -1604,6 +1892,55 @@
 			]
 		},
 		{
+			"name":"process",
+			"properties":[
+				{
+					"id":"processtype",
+					"type":"Choice",
+					"title":"ProcessType",
+					"title_de":"Prozesstyp",
+					"value":"None",
+					"description":"The processType attribute Provides additional information about the level of abstraction modeled by this Process.",
+					"description_de":"Beschreibt den Abstraktionsgrad des beinhaltenden Prozesses.",
+					"readonly":false,
+					"optional":false,
+					"popular" : true,
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"value":"None"
+						},
+						{
+							"id":"c2",
+							"title":"Executable",
+							"value":"Executable"
+						},
+						{
+							"id":"c3",
+							"title":"Non-Executable",
+							"value":"Non-Executable"
+						},
+						{
+							"id":"c4",
+							"title":"Public",
+							"value":"Public"
+						}
+					]
+				},
+				{
+					"id":"isclosed",
+					"type":"Boolean",
+					"title":"isClosed",
+					"title_de":"IstGeschlossen",
+					"value":false,
+					"description":"A Boolean value specifying whether interactions, such as sending and receiving Messages and Events, not modeled in the Process can occur when the Process is executed or performed. If the value is true, they MAY NOT occur. If the value is false, they MAY occur.",
+					"readonly":false,
+					"optional":false
+				}
+			]
+		},
+		{
 			"name" : "pool",
 			"properties" : [
 				{
@@ -1619,29 +1956,6 @@
 					"refToView" : "multiInstance"
 				},
 				{
-					"id":"participantref",
-					"type":"String",
-					"title":"ParticipantRef",
-					"title_de":"Teilnehmer-Referenz",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"lanes",
-					"type":"String",
-					"title":"Lanes",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"length":"50",
-					"wrapLines":true
-				},
-				{
 					"id":"boundaryvisible",
 					"type":"Boolean",
 					"title":"BoundaryVisible",
@@ -1655,28 +1969,6 @@
 					"visible":false
 				},
 				{
-					"id":"mainpool",
-					"type":"Boolean",
-					"title":"is main pool",
-					"title_de":"ist Hauptpool",
-					"value":false,
-					"description":"Defines if the current Pool is the main Pool of the diagram.",
-					"description_de":"Gibt an, ob der Pool Hauptpool des Diagramms ist.",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"processref",
-					"type":"String",
-					"title":"ProcessRef",
-					"title_de":"Prozess-Referenz",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":"30"
-				},
-				{
 					"id":"processname",
 					"type":"String",
 					"title":"ProcessName",
@@ -1687,43 +1979,6 @@
 					"optional":false,
 					"refToView":"",
 					"length":"30"
-				},
-				{
-					"id":"processtype",
-					"type":"Choice",
-					"title":"ProcessType",
-					"title_de":"Prozesstyp",
-					"value":"None",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"popular" : true,
-					"items": [
-						{
-							"id":"c1",
-							"title":"None",
-							"title_de":"Keiner",
-							"value":"None"
-						},
-						{
-							"id":"c2",
-							"title":"Private",
-							"title_de":"Privat",
-							"value":"Private"
-						},
-						{
-							"id":"c3",
-							"title":"Abstract",
-							"title_de":"Abstrakt",
-							"value":"Abstract"
-						},
-						{
-							"id":"c4",
-							"title":"Collaboration",
-							"title_de":"Kollaboration",
-							"value":"Collaboration"
-						}
-					]
 				},
 				{
 					"id":"status",
@@ -1956,7 +2211,10 @@
 				"baseAttributes",
 				"flowElement",
 				"activity",
-				"task"
+				"task",
+				"loopcharacteristics",
+				"properties",
+				"iospecification"
 			],
 			"roles" : 			[
 				"all",
@@ -1987,7 +2245,10 @@
 				"flowElement",
 				"activity",
 				"subprocess",
-				"bgColor"
+				"loopcharacteristics",
+				"bgColor",
+				"properties",
+				"iospecification"
 			],
 			"properties" :		[
 				{
@@ -2009,6 +2270,7 @@
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
 					"value":"#b1c2d6",
+					"gradient":true,
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -2024,6 +2286,7 @@
 				"messageflow_start",
 				"messageflow_end",
 				"to_task_event",
+				"from_task_event",
 				"fromtoall",
 				"ActivitiesMorph"
 			]
@@ -2057,7 +2320,10 @@
 				"baseAttributes",
 				"flowElement",
 				"activity",
-				"subprocess"
+				"subprocess",
+				"loopcharacteristics",
+				"properties",
+				"iospecification"
 			],
 			"properties" :		[
 				{
@@ -2116,7 +2382,10 @@
 				"flowElement",
 				"activity",
 				"subprocess",
-				"interrupting"
+				"interrupting",
+				"loopcharacteristics",
+				"properties",
+				"iospecification"
 			],
 			"properties" :		[
 				{
@@ -2253,7 +2522,10 @@
 				"baseAttributes",
 				"flowElement",
 				"activity",
-				"subprocess"
+				"subprocess",
+				"loopcharacteristics",
+				"properties",
+				"iospecification"
 			],
 			"properties" :		[
 				{
@@ -2683,6 +2955,7 @@
 			"propertyPackages": [
 				"baseAttributes",
 				"pool",
+				"process",
 				"bgColor"
 			],
 			"roles" : 			[
@@ -2708,6 +2981,7 @@
 			"propertyPackages": [
 				"baseAttributes",
 				"pool",
+				"process",
 				"bgColor"
 			],
 			"properties" : 		[
@@ -2934,6 +3208,7 @@
 			"propertyPackages":	[
 				"baseAttributes",
 				"flowElement",
+				"properties",
 				"bgColor"
 			],
 			"properties" :		[
@@ -2948,51 +3223,6 @@
 					"readonly":false,
 					"optional":true,
 					"directlyEditable":false
-				},
-				{
-					"id":"properties",
-					"type":"Complex",
-					"title":"Properties",
-					"title_de":"Eigenschaften",
-					"value":"",
-					"description":"Modeler-defined Properties may be added to a Data Object",
-					"description_de":"Der Modellierer kann weitere Eigenschaften einem Datenobjekt zuweisen.",
-					"readonly": 	false,
-					"optional": 	false,
-					"complexItems": [
-					{
-						"id":"name",
-						"name":"Name",
-						"type":"String",
-						"value":"",
-						"width":100,
-						"optional":false 
-					},
-					{
-						"id":"type",
-						"name":"Type",
-						"type":"String",
-						"value":"",
-						"width":100,
-						"optional":false
-					},
-					{
-						"id":"value",
-						"name":"Value",
-						"type":"String",
-						"value":"",
-						"width":100,
-						"optional":false
-					},
-					{
-						"id":"correlation",
-						"name":"Correlation",
-						"type":"Boolean",
-						"value":"false",
-						"width":100,
-						"optional":true
-					}
-					]
 				},
 				{
 					"id":"input_output",
@@ -3026,26 +3256,6 @@
 							"refToView":"output"
 						}
 					]
-				},
-				{
-					"id":"requiredforstart",
-					"type":"Boolean",
-					"title":"Required for start",
-					"title_de":"Erforderlich für Start",
-					"value":true,
-					"description":"",
-					"readonly":false,
-					"optional":false
-				},
-				{
-					"id":"producedatcompletion",
-					"type":"Boolean",
-					"title":"is produced at completion",
-					"title_de":"wird produziert bei Fertigstellung",
-					"value":true,
-					"description":"",
-					"readonly":false,
-					"optional":false
 				},		
 				{
 					"id" : "iscollection",
@@ -3073,8 +3283,8 @@
 			"id" :				"ITSystem",
 			"title" :			"IT System",
 			"title_de" :		"IT-System",
-			"groups" :			["Data Objects"],
-			"groups_de":		["Datenobjekte"],
+			"groups" :			["Artifacts"],
+			"groups_de" :		["Artefakte"],
 			"description" : 	"An IT System can be associated with an activity. It is a system or application used while fulfilling the activity.",
 			"description_de" : 	"Ein IT-System kann mittels Assoziation mit einer Aktivität verbunden werden. Es handelt sich um ein System oder eine Software-Applikation die im Laufe der Aktivität verwendet wird.",
 			"view" :			"dataobject/it.system.svg",
@@ -3111,8 +3321,8 @@
 			"id" :				"DataStore",
 			"title" :			"Data Store",
 			"title_de" :		"Datenspeicher",
-			"groups" : 			["Data Objects"],
-			"groups_de" :		["Datenobjekte"],
+			"groups" :			["Data Objects"],
+			"groups_de":		["Datenobjekte"],
 			"description" :		"A Data Store is a place where the process can read or wirte date, e.g. a database or a filling cabinet. It persists beyond the lifetime of the process instance.",
 			"description_de" :	"Ein Datenspeicher ist ein Ort wo der Prozess Daten lesen oder schreiben kann, z.B. eine Datenbank oder ein Aktenschrank. Er existiert unabhängig von der Lebensdauer der Prozessinstanz.",
 			"view" :			"dataobject/data.store.svg",
@@ -3657,6 +3867,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"interrupting",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -3702,6 +3913,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"interrupting",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -3749,6 +3961,7 @@
 				"baseAttributes",
 				"catchEventAttributes",
 				"interrupting",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -3792,6 +4005,7 @@
 				"baseAttributes",
 				"catchEventAttributes",
 				"interrupting",
+				"boundaryevent",
 				"condition",
 				"bgColor"
 			],
@@ -3859,6 +4073,7 @@
                     "value":"",
                     "description":"",
                     "readonly":false,
+					"refToView" : "diagramLink",
                     "optional":false
                 },
 				{
@@ -3889,6 +4104,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -3930,6 +4146,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -3971,8 +4188,9 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
-				"bgColor",
-				"compensation"
+				"boundaryevent",
+				"compensation",
+				"bgColor"
 			],
 			"roles":[
 				"all",
@@ -4013,6 +4231,7 @@
 				"baseAttributes",
 				"catchEventAttributes",
 				"interrupting",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -4059,6 +4278,7 @@
 				"baseAttributes",
 				"catchEventAttributes",
 				"interrupting",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -4106,6 +4326,7 @@
 				"baseAttributes",
 				"catchEventAttributes",
 				"interrupting",
+				"boundaryevent",
 				"bgColor"
 			],
 			"roles":[
@@ -4293,6 +4514,7 @@
                     "title_de":"Diagram Link",
                     "value":"",
                     "description":"",
+					"refToView": "diagramLink",
                     "readonly":false,
                     "optional":false
                 },
@@ -4881,22 +5103,56 @@
 			"roles": [
 				"all",
 				"ConnectingObjectsMorph"
+			],			
+			"propertyPackages" : [
+			    "dataAssociation"
 			],
 			"properties" : [
-                {
-                    "id":"name",
-                    "type":"String",
-                    "title":"Name",
-                    "title_de":"Name",
-                    "value":"",
-                    "description":"",
-                    "readonly":false,
-                    "optional":true,
-                    "length":"",
-                    "refToView":"text",
-                    "wrapLines":true
-                }
-			]
+				{
+					"id":"type",
+					"type":"Choice",
+					"title":"Responsibilities",
+					"title_de":"Verantwortlichkeiten",
+					"value":"none",
+					"description":"Describes the type of the responsibility according to RACI.",
+					"description_de":"Beschreibt die Verantwortlichkeiten nach dem RACI-Modell.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"name",
+					"items": [
+						{
+							"id":"c1",
+							"title":"",
+							"title_de":"",
+							"value":"none"
+						},
+						{
+							"id":"c2",
+							"title":"responsible",
+							"title_de":"führt durch",
+							"value":"performs"
+						},
+						{
+							"id":"c3",
+							"title":"accountable",
+							"title_de":"erteilt Freigabe",
+							"value":"approves"
+						},
+						{
+							"id":"c4",
+							"title":"consulted",
+							"title_de":"wird konsultiert",
+							"value":"consulted"
+						},
+						{
+							"id":"c5",
+							"title":"informed",
+							"title_de":"wird informiert",
+							"value":"isNotified"
+						}
+					]
+				}
+           ]
 		},
 		{
 			"type": "edge",
@@ -4921,15 +5177,16 @@
                 {
                     "id":"text",
                     "type":"String",
-                    "title":"text",
-                    "title_de":"text",
+                    "title":"Name",
+                    "title_de":"Name",
                     "value":"",
                     "description":"",
                     "readonly":false,
                     "optional":true,
                     "length":"",
                     "refToView":"name",
-                    "wrapLines":true
+                    "wrapLines":true,
+					"popular":true
                 }
            ]
 		},
@@ -4948,7 +5205,26 @@
 				"all",
 				"ConnectingObjectsMorph",
 				"Directed_Association"
-			]
+			],			
+			"propertyPackages" : [
+			    "dataAssociation"
+			],
+			"properties" : [
+                {
+                    "id":"text",
+                    "type":"String",
+                    "title":"Name",
+                    "title_de":"Name",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "length":"",
+                    "refToView":"name",
+                    "wrapLines":true,
+					"popular":true
+                }
+           ]
 		},
 		{
 			"type": "edge",
@@ -5124,6 +5400,22 @@
 					{
 						"from" : "MessageFlow",
 						"to" : ["DataObject"]
+					},
+					{
+						"from" : "ITSystem",
+						"to" : ["to_task_event"]
+					},
+					{
+						"from" : "from_task_event",
+						"to" : ["ITSystem"]
+					},
+					{
+						"from" : "DataStore",
+						"to" : ["to_task_event"]
+					},
+					{
+						"from" : "from_task_event",
+						"to" : ["DataStore"]
 					},
 					{
 						"from" : "fromtoall",

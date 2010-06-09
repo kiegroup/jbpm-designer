@@ -69,6 +69,23 @@ import de.hpi.bpmn2_0.model.gateway.Gateway;
 // ChoreographyActivity.class,
 		Gateway.class, Activity.class })
 public abstract class FlowNode extends FlowElement {
+	
+	/**
+	 * Default constructor
+	 */
+	public FlowNode() {
+		
+	}
+	
+	/**
+	 * Copy constructor
+	 * 
+	 * @param flowNode
+	 * 		The {@link FlowNode} to copy
+	 */
+	public FlowNode(FlowNode flowNode) {
+		super(flowNode);
+	}
 
 	/**
 	 * Convenience method to retrieve all incoming {@link SequenceFlow}

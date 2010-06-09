@@ -650,6 +650,25 @@ ORYX.Plugins.PropertyWindow = {
 							break;
 						// extended by Kerstin (end)
 						
+						// extended by Gerardo (Start)
+						case "CPNString":
+							var editorInput = new Ext.form.TextField(
+									{
+										allowBlank: pair.optional(),
+										msgTarget:'title', 
+										maxLength:pair.length(), 
+										enableKeyEvents: true
+									});
+							
+							editorInput.on('keyup', function(input, event) {
+								this.editDirectly(key, input.getValue());
+								console.log(input.getValue());
+								alert("huhu");
+							}.bind(this));
+							
+							editorGrid = new Ext.Editor(editorInput);							
+							break;
+						// extended by Gerardo (End)
 						
 						default:
 							var editorInput = new Ext.form.TextField({ allowBlank: pair.optional(),  msgTarget:'title', maxLength:pair.length(), enableKeyEvents: true});
@@ -1093,6 +1112,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 		
 			// Basic Dialog
 			this.dialog = new Ext.Window({ 
+				autoScroll: true,
 				autoCreate: true, 
 				title: ORYX.I18N.PropertyWindow.complex, 
 				height: 350, 

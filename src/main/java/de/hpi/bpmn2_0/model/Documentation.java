@@ -23,9 +23,13 @@
 
 package de.hpi.bpmn2_0.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -75,8 +79,9 @@ public class Documentation extends BaseElement {
 		this.setId(OryxUUID.generate());
 	}
 	
-	@XmlElement
-    protected String text;
+	@XmlAnyElement
+	@XmlMixed
+    protected List<String> text;
     
     /* Getter & Setter */
     
@@ -84,14 +89,21 @@ public class Documentation extends BaseElement {
 	 * @return the text
 	 */
 	public String getText() {
-		return text;
+		if(this.text == null)
+			return "";
+		if(text.size() > 0)
+			return text.get(0);
+		
+		return "";
 	}
 
 	/**
 	 * @param text the text to set
 	 */
 	public void setText(String text) {
-		this.text = text;
+		
+		this.text = new ArrayList<String>();
+		this.text.add(text);
 	}
     
 //	@XmlMixed

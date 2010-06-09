@@ -26,11 +26,12 @@ package de.hpi.bpmn2_0.model.data_object;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.namespace.QName;
 
 import de.hpi.bpmn2_0.model.FlowNode;
+import de.hpi.bpmn2_0.model.misc.ItemDefinition;
 
 
 /**
@@ -62,7 +63,8 @@ public class Message
     protected String name;
     
     @XmlAttribute
-    protected QName structureRef;
+    @XmlIDREF
+    protected ItemDefinition structureRef;
     
     @XmlAttribute
     private boolean isInitiating;
@@ -98,10 +100,10 @@ public class Message
      * 
      * @return
      *     possible object is
-     *     {@link QName }
+     *     {@link ItemDefinition }
      *     
      */
-    public QName getStructureRef() {
+    public ItemDefinition getStructureRef() {
         return structureRef;
     }
 
@@ -110,10 +112,10 @@ public class Message
      * 
      * @param value
      *     allowed object is
-     *     {@link QName }
+     *     {@link ItemDefinition }
      *     
      */
-    public void setStructureRef(QName value) {
+    public void setStructureRef(ItemDefinition value) {
         this.structureRef = value;
     }
 

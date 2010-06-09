@@ -109,22 +109,16 @@ public class Repository {
 	}
 	
 	public static String getOryxUrl(HttpServletRequest req) {
-		return getBaseUrl(req) + "designer/";
+		return getBaseUrl(req) + "oryx/";
 	}
 	
 	public String getOryxUrl() {
-		return baseUrl + "designer/";
+		return baseUrl + "oryx/";
 	}
 	
 	public static String getOryxPath() {
-		String serverPath = System.getProperty("catalina.home");
-	    if (serverPath == null) {
-	        serverPath = System.getProperty("jetty.home");
-	    }
-	    if (serverPath == null) {
-	        throw new IllegalArgumentException("Could not identify the server path!");
-	    }
-		return serverPath + "/webapps/designer/";
+		// TODO: make this more platform independant
+		return System.getProperty("catalina.home") + "/webapps/oryx/";
 	}
 	
 	public String getModel(String path) {

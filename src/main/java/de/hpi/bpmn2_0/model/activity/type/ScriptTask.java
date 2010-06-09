@@ -62,6 +62,24 @@ import de.hpi.bpmn2_0.model.activity.Task;
 public class ScriptTask
     extends Task
 {
+	/**
+	 * Default constructor
+	 */
+	public ScriptTask() {
+		
+	}
+	
+	/**
+	 * Copy constructor
+	 * 
+	 * @param scriptTask
+	 * 		The {@link ScriptTask} to copy.
+	 */
+	public ScriptTask(ScriptTask scriptTask) {
+		super(scriptTask);
+		this.setScript(scriptTask.getScript());
+		this.setScriptLanguage(scriptTask.getScriptLanguage());
+	}
 	
 	@XmlElement
     protected String script;

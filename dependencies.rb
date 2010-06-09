@@ -4,8 +4,8 @@ YUICOMPRESSOR = "com.yahoo.platform.yui:yuicompressor:jar:2.3.6"
 ORBIT_SOURCES	= group("org.json", "de.hpi.bpt", "org.apache.commons.collections", "org.apache.commons.configuration",
     "org.apache.commons.collections", "org.jdom", 
     "org.apache.velocity", "org.supercsv",  "org.apache.xmlgraphics.fop", "com.sun.xml.bind", 
-    "com.sun.xml.bind.jaxb1", "de.hpi.bpt.epc",
-                           :under=>"com.intalio.cloud.orbit", :version=>"1.0.0.001-SNAPSHOT")
+    "com.sun.xml.bind.jaxb1", "de.hpi.bpt.epc", "com.thoughtworks.xstream", "org.xmappr",
+                           :under=>"com.intalio.cloud.orbit", :version=>"1.0.0.010")
                            
 ORBIT_BINARIES	= ["com.intalio.cloud.orbit-prefetched:javax.servlet:jar:2.5.0.v200910301333", 
    "com.intalio.cloud.orbit-prefetched:org.apache.commons.httpclient:jar:3.1.0.v20080605-1935", 

@@ -39,7 +39,7 @@ import de.hpi.bpmn2_0.model.FlowNode;
  * @author Sven Wagner-Boysen
  *
  */
-public class Edge extends FlowElement {
+public abstract class Edge extends FlowElement {
 	
 	@XmlAttribute(required = true)
 	@XmlIDREF

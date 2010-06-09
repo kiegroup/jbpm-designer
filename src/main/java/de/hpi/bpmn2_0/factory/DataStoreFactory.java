@@ -77,6 +77,7 @@ public class DataStoreFactory extends AbstractBpmnFactory {
 	protected BaseElement createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		DataStoreReference dataStoreRef = new DataStoreReference();
+		this.setCommonAttributes(dataStoreRef, shape);
 		dataStoreRef.setDataStoreRef(new DataStore());
 		this.setDataStoreRefAttributes(dataStoreRef, shape);
 		

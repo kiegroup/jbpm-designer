@@ -144,6 +144,20 @@ ORYX.Core.SVG.Label = Clazz.extend({
 			this.edgePosition = this.edgePosition.toLowerCase();
 		}
 		
+		
+		//get offset top
+		this.offsetTop = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'offsetTop') || ORYX.CONFIG.OFFSET_EDGE_LABEL_TOP;
+		if(this.offsetTop) {
+			this.offsetTop = parseInt(this.offsetTop);
+		}
+		
+		//get offset top
+		this.offsetBottom = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'offsetBottom') || ORYX.CONFIG.OFFSET_EDGE_LABEL_BOTTOM;
+		if(this.offsetBottom) {
+			this.offsetBottom = parseInt(this.offsetBottom);
+		}
+		
+				
 		//set rotation
 		var rotateValue = this.node.getAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'rotate');
 		if(rotateValue) {
@@ -308,7 +322,14 @@ ORYX.Core.SVG.Label = Clazz.extend({
 						
 						var textLength = this._getRenderedTextLength(tspan, undefined, undefined, fontSize);
 						
-						if (textLength > refbb.width) {
+						/* Depending on the rotation of the text element, take
+						 * the width or height as reference respectively. */
+						var refBoxLength = (this._rotate != 0 
+								&& this._rotate % 180 != 0 
+								&& this._rotate % 90 == 0 ? 
+										refbb.height : refbb.width);
+						
+						if (textLength > refBoxLength) {
 						
 							var startIndex = 0;
 							var lastSeperatorIndex = 0;
@@ -317,7 +338,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 							for (var i = 0; i < numOfChars; i++) {
 								var sslength = this._getRenderedTextLength(tspan, startIndex, i-startIndex, fontSize);
 								
-								if (sslength > refbb.width - 2) {
+								if (sslength > refBoxLength - 3) {
 									var newtspan = this.node.ownerDocument.createElementNS(ORYX.CONFIG.NAMESPACE_SVG, 'tspan');
 									if (lastSeperatorIndex <= startIndex) {
 										lastSeperatorIndex = (i == 0) ? i : i-1;
@@ -663,6 +684,27 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		} while (oldLength > text.length);
 
 		return text.length;
+	},
+	
+	/**
+	 * Returns the offset from
+	 * edge to the label which is 
+	 * positioned under the edge
+	 * @return {int}
+	 */
+	getOffsetBottom: function(){
+		return this.offsetBottom;
+	},
+	
+		
+	/**
+	 * Returns the offset from
+	 * edge to the label which is 
+	 * positioned over the edge
+	 * @return {int}
+	 */
+	getOffsetTop: function(){
+		return this.offsetTop;
 	},
 	
 	toString: function() { return "Label " + this.id }

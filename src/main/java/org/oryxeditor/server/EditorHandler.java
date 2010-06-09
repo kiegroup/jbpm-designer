@@ -119,30 +119,25 @@ public class EditorHandler extends HttpServlet {
 	        "  " + dev_flag + "\n" +
 	        "  ORYX.CONFIG.PLUGINS_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".xml';\n" +
 	        "  ORYX.CONFIG.PROFILE_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".conf';\n" +
-	        "  ORYX.CONFIG.PROFILE_NAME = '"+profiles.get(0)+"';\n" +
-	        "  ORYX.CONFIG.SSET='"+sset+"';\n"+ // sets the default stencil set depending on profile
-	        "  ORYX.CONFIG.SSEXTS="+extString+";\n"+
-	        "  if ('function' != typeof(onOryxResourcesLoaded)) {\n" +
-	        "		window.onOryxResourcesLoaded = function() {" +
-	        "			if (!(location.hash.slice(1).length == 0 || location.hash.slice(1).indexOf('new')!=-1)) {" +
-	        "				Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.Oryx.noBackendDefined);\n" +
-	        "			}" +
-	        "			var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;" +
-	        "           var uuid =  ORYX.Utils.getParamFromUrl('uuid');" + 
-	        "           var params = {" +
-            "               id: 'oryx-canvas123'," +
-            "               stencilset: {" +
-            "                   url: \"" + oryx_path + "\" + stencilset" +
-            "               }" +
-            "           };" +
-            "           if (uuid) {" +
-            "               params.uuid = uuid;" +
-            "           };" +
-	        "			var editor = new ORYX.Editor(params);" +
-	        "           ORYX.EDITOR= editor;" +
-	        "  };\n" +
-	        "  ORYX.Log.warn('Not Implemented: onOryxResourcesLoaded OR body-script loaded before plugins');\n" +
-	        "  }" +
+		    "  ORYX.CONFIG.SSET='" + sset +"';" +
+	        "  ORYX.CONFIG.SSEXTS=" + extString + ";"+
+	        "  if ('undefined' == typeof(window.onOryxResourcesLoaded)) { " +
+	        "  ORYX.Log.warn('No adapter to repository specified, default used. You need a function window.onOryxResourcesLoaded that obtains model-JSON from your repository');" +
+	        "  window.onOryxResourcesLoaded = function() {" +
+	        "     if (location.hash.slice(1).length == 0 || location.hash.slice(1).indexOf('new')!=-1){" +
+	        "        var stencilset=ORYX.Utils.getParamFromUrl('stencilset')?ORYX.Utils.getParamFromUrl('stencilset'):'"+sset+"';"+
+	        "        new ORYX.Editor({"+
+	        "          id: 'oryx-canvas123',"+
+	        "          stencilset: {"+
+	        "          url: '"+oryx_path+"'+stencilset" +
+	        "          }" +
+	        "    })}"+
+	        "    else{" +
+	        "       ORYX.Editor.createByUrl('" + getRelativeServerPath(request) + "'+location.hash.slice(1)+'/json', {"+
+	        "       id: 'oryx-canvas123'" +
+	        "    });" +
+	        " };" +
+	        "}}" +
           	"</script>";
 		response.setContentType("application/xhtml+xml");
 		
@@ -323,6 +318,9 @@ public class EditorHandler extends HttpServlet {
     protected String getLanguageCode(HttpServletRequest req) {
     	return (String) req.getSession().getAttribute("languagecode");
     }
+    protected String getRelativeServerPath(HttpServletRequest req){
+   		return "/backend/poem"; //+ req.getServletPath();
+   	}
 	public Collection<String> getAvailableProfileNames() {
 		Collection<String> profilNames = new ArrayList<String>();
 

@@ -14,6 +14,7 @@ import de.hpi.bpel4chor.model.artifacts.ParticipantSetDataObject;
 import de.hpi.bpel4chor.model.artifacts.VariableDataObject;
 import de.hpi.bpel4chor.model.connections.Association;
 import de.hpi.bpel4chor.model.connections.MessageFlow;
+
 import de.hpi.bpmn.validation.BPMNSyntaxChecker;
 
 /**
@@ -25,6 +26,9 @@ public class BPMNDiagram implements Container {
 	
 	protected String title;
 	protected String id;
+	//BPMN extension for YAWL
+	protected String dataTypeDefinition;
+	
 	protected List<Node> childNodes;
 	protected List<DataObject> dataObjects;
 	protected List<Edge> edges;
@@ -40,6 +44,22 @@ public class BPMNDiagram implements Container {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	/**
+	 * the dataTypeDefinition getter
+	 * @return dataTypeDefinition
+	 */
+	public String getDataTypeDefinition() {
+		return dataTypeDefinition;
+	}
+
+	/**
+	 * the dataTypeDefinition setter
+	 * @param dataTypeDefinition
+	 */
+	public void setDataTypeDefinition(String dataTypeDefinition) {
+		this.dataTypeDefinition = dataTypeDefinition;
 	}
 
 	public List<DataObject> getDataObjects() {
@@ -154,8 +174,7 @@ public class BPMNDiagram implements Container {
 	public void setId(String id) {
 		this.id = id;
 	}
-
-
+	
 	/**
 	 * @return The query language of the diagram.
 	 */
@@ -409,5 +428,4 @@ public class BPMNDiagram implements Container {
 		}
 		return null;
 	}
-
 }

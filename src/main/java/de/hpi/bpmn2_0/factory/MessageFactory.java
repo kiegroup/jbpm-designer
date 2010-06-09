@@ -68,6 +68,7 @@ public class MessageFactory extends AbstractBpmnFactory {
 	protected Message createProcessElement(Shape shape)
 			throws BpmnConverterException {
 		Message msg = new Message();
+		this.setCommonAttributes(msg, shape);
 		msg.setId(shape.getResourceId());
 		msg.setName(shape.getProperty("name"));
 		msg.setInitiating(shape.getProperty("initiating").equalsIgnoreCase("true"));

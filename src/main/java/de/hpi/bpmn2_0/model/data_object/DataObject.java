@@ -54,42 +54,16 @@ import javax.xml.namespace.QName;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tDataObject", propOrder = {
-    "dataState"
-})
+@XmlType(name = "tDataObject")
 public class DataObject
     extends AbstractDataObject
 {
 
-    protected DataState dataState;
     @XmlAttribute
     protected QName itemSubjectRef;
-    @XmlAttribute
-    protected Boolean isCollection;
+    
 
-    /**
-     * Gets the value of the dataState property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataState }
-     *     
-     */
-    public DataState getDataState() {
-        return dataState;
-    }
-
-    /**
-     * Sets the value of the dataState property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataState }
-     *     
-     */
-    public void setDataState(DataState value) {
-        this.dataState = value;
-    }
+    
 
     /**
      * Gets the value of the itemSubjectRef property.
@@ -115,32 +89,6 @@ public class DataObject
         this.itemSubjectRef = value;
     }
 
-    /**
-     * Gets the value of the isCollection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public boolean isIsCollection() {
-        if (isCollection == null) {
-            return false;
-        } else {
-            return isCollection;
-        }
-    }
-
-    /**
-     * Sets the value of the isCollection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsCollection(Boolean value) {
-        this.isCollection = value;
-    }
+    
 
 }
