@@ -38,19 +38,19 @@ public class BPEL4Chor2BPELCommandLine {
 		
 		
 		File file = new File(".");
-		File[] topology = file.listFiles(new FilenameFilter() {@Override public boolean accept(File dir, String name) {return name.endsWith("topology.xml");}});
+		File[] topology = file.listFiles(new FilenameFilter() {public boolean accept(File dir, String name) {return name.endsWith("topology.xml");}});
 		if (topology.length != 1) {
 			throw new Exception("topology error");
 		}
 		Document docTopo = docBuilder.parse(topology[0]);
 
-		File[] grounding = file.listFiles(new FilenameFilter() {@Override public boolean accept(File dir, String name) {return name.endsWith("grounding.bpel");}});
+		File[] grounding = file.listFiles(new FilenameFilter() {public boolean accept(File dir, String name) {return name.endsWith("grounding.bpel");}});
 		if (grounding.length != 1) {
 			throw new Exception("grounding error");
 		}
 		Document docGround = docBuilder.parse(grounding[0]);
 		
-		File[] pbds = file.listFiles(new FilenameFilter() {@Override public boolean accept(File dir, String name) {
+		File[] pbds = file.listFiles(new FilenameFilter() {public boolean accept(File dir, String name) {
 			if (!name.equals("grounding.bpel")){ return name.endsWith(".bpel");}
 			else return false ;
 		}});

@@ -39,7 +39,6 @@ public class DistributionSet implements FileWritingForYAWL {
 	/**
 	 * @see de.hpi.yawl.FileWritingForYAWL#writeToYAWL()
 	 */
-	@Override
 	public String writeToYAWL() {
 		String s = "";
 		s += "\t\t<distributionSet>\n";

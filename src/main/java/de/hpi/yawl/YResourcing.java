@@ -121,7 +121,6 @@ public class YResourcing implements FileWritingForYAWL {
 	/**
 	 * @see de.hpi.yawl.FileWritingForYAWL#writeToYAWL()
 	 */
-	@Override
 	public String writeToYAWL() {
 		String s = "";
 		

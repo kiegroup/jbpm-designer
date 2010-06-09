@@ -32,7 +32,7 @@ define "designer" do
   project.version = VERSION_NUMBER
   project.group = "com.intalio.bpms.web" 
   
-  compile.with ORBIT_SOURCES, ORBIT_BINARIES
+  compile.with ORBIT_SOURCES, ORBIT_BINARIES, "junit:junit:jar:4.0"
   compile.options.source = "1.5"
   compile.options.target = "1.5"
   
