@@ -6,7 +6,6 @@
 
 	<display-name>Process Designer</display-name>
 
-	<!-- we don't need this servlet to show files.
 	<servlet>
 		<display-name>Default Servlet for Directory Listings</display-name>
 		<servlet-name>DirectoryListingServlet</servlet-name>
@@ -27,7 +26,6 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	-->
 
 	<!--<servlet>
 		<display-name>Oryx Process Repository</display-name>
