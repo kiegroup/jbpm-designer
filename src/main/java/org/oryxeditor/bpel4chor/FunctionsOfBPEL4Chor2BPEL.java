@@ -1,7 +1,7 @@
 package org.oryxeditor.bpel4chor;
 
 /**
- * Copyright (c) 2009-2010 
+ * Copyright (c) 2009-2010
  * 
  * Changhua Li
  * 
@@ -24,7 +24,6 @@ package org.oryxeditor.bpel4chor;
  * SOFTWARE.
  */
 
-
 public class FunctionsOfBPEL4Chor2BPEL {
-	//no useful anymore
+    // no useful anymore
 }

@@ -34,188 +34,177 @@ import de.hpi.layouting.model.LayoutingElement;
 import de.hpi.layouting.model.LayoutingElementImpl;
 
 public abstract class TopologicalSorter {
-	
-	protected LinkedList<LayoutingElement> sortetElements;
-	protected Map<String, SortableLayoutingElement> elementsToSort;
-	protected LayoutingDiagram diagram;
-	protected List<BackwardsEdge> backwardsEdges;
 
-	public TopologicalSorter(LayoutingDiagram diagram, LayoutingElement parent) {
-		this.diagram = diagram;
-		// First step to find loops and backpatch backwards edges
-		prepareDataAndSort(parent, true);
-		// Second step to get the real sorting
-		prepareDataAndSort(parent, false);
-	}
+    protected LinkedList<LayoutingElement> sortetElements;
+    protected Map<String, SortableLayoutingElement> elementsToSort;
+    protected LayoutingDiagram diagram;
+    protected List<BackwardsEdge> backwardsEdges;
 
-	protected void prepareDataAndSort(LayoutingElement parent, boolean shouldBackpatch) {
-		sortetElements = new LinkedList<LayoutingElement>();
-		elementsToSort = new HashMap<String, SortableLayoutingElement>();
-		backwardsEdges = new LinkedList<BackwardsEdge>();
+    public TopologicalSorter(LayoutingDiagram diagram, LayoutingElement parent) {
+        this.diagram = diagram;
+        // First step to find loops and backpatch backwards edges
+        prepareDataAndSort(parent, true);
+        // Second step to get the real sorting
+        prepareDataAndSort(parent, false);
+    }
 
-		// create global start
-		LayoutingElement globalStartDummyElement = new LayoutingElementImpl();
-		globalStartDummyElement.setId("#####Global-Start#####");
-		
-		// cache start events
-		List<LayoutingElement> startEvents = new ArrayList<LayoutingElement>();
-		for (LayoutingElement startElement : this.diagram.getStartEvents()) {
-			globalStartDummyElement.addOutgoingLink(startElement);
-			startElement.addIncomingLink(globalStartDummyElement);
-			startEvents.add(startElement);
-		}
-		elementsToSort.put(globalStartDummyElement.getId(),
-				new SortableLayoutingElement(globalStartDummyElement));
+    protected void prepareDataAndSort(LayoutingElement parent, boolean shouldBackpatch) {
+        sortetElements = new LinkedList<LayoutingElement>();
+        elementsToSort = new HashMap<String, SortableLayoutingElement>();
+        backwardsEdges = new LinkedList<BackwardsEdge>();
 
-		addAllChilds(parent);
+        // create global start
+        LayoutingElement globalStartDummyElement = new LayoutingElementImpl();
+        globalStartDummyElement.setId("#####Global-Start#####");
 
-		topologicalSort();
+        // cache start events
+        List<LayoutingElement> startEvents = new ArrayList<LayoutingElement>();
+        for (LayoutingElement startElement : this.diagram.getStartEvents()) {
+            globalStartDummyElement.addOutgoingLink(startElement);
+            startElement.addIncomingLink(globalStartDummyElement);
+            startEvents.add(startElement);
+        }
+        elementsToSort.put(globalStartDummyElement.getId(), new SortableLayoutingElement(globalStartDummyElement));
 
-		if (shouldBackpatch) {
-			backpatchBackwardsEdges();
-		}
-		// write backwards edges in diagram
-		reverseBackwardsEdges();
-		// remove global start
-		for (LayoutingElement startElement : startEvents) {
-			globalStartDummyElement.removeOutgoingLink(startElement);
-			startElement.removeIncomingLink(globalStartDummyElement);
-		}
-		this.sortetElements.remove(globalStartDummyElement);
-	}
+        addAllChilds(parent);
 
-	protected void addAllChilds(LayoutingElement parent) {
-		for (LayoutingElement element : diagram.getChildElementsOf(parent)) {
-			elementsToSort.put(element.getId(), new SortableLayoutingElement(
-						element));
-		}
-	}
+        topologicalSort();
 
-	public Queue<LayoutingElement> getSortedElements() {
-		return this.sortetElements;
-	}
+        if (shouldBackpatch) {
+            backpatchBackwardsEdges();
+        }
+        // write backwards edges in diagram
+        reverseBackwardsEdges();
+        // remove global start
+        for (LayoutingElement startElement : startEvents) {
+            globalStartDummyElement.removeOutgoingLink(startElement);
+            startElement.removeIncomingLink(globalStartDummyElement);
+        }
+        this.sortetElements.remove(globalStartDummyElement);
+    }
 
-	protected void topologicalSort() {
-		while (!elementsToSort.isEmpty()) {
-			List<SortableLayoutingElement> freeElements = getFreeElements();
-			if (freeElements.size() > 0) {
-				for (SortableLayoutingElement freeElement : freeElements) {
-					sortetElements.add((LayoutingElement)freeElement.getLayoutingElement());
-					freeElementsFrom(freeElement);
-					elementsToSort.remove(freeElement.getId());
-				}
-			} else { // loops
-				SortableLayoutingElement entry = getLoopEntryPoint();
-				for (String backId : entry.getIncomingLinks().toArray(
-						new String[0])) {
-					entry.reverseIncomingLinkFrom(backId);
-					SortableLayoutingElement e = elementsToSort.get(backId);
-					e.reverseOutgoingLinkTo(entry.getId());
-					backwardsEdges
-							.add(new BackwardsEdge(backId, entry.getId()));
-				}
-			}
-		}
-	}
+    protected void addAllChilds(LayoutingElement parent) {
+        for (LayoutingElement element : diagram.getChildElementsOf(parent)) {
+            elementsToSort.put(element.getId(), new SortableLayoutingElement(element));
+        }
+    }
 
-	protected SortableLayoutingElement getLoopEntryPoint()
-			throws IllegalStateException {
-		for (SortableLayoutingElement candidate : elementsToSort.values()) {
-			if (candidate.isJoin()
-					&& candidate.getOldInCount() > candidate.getIncomingLinks()
-							.size()) {
-				return candidate;
-			}
-		}
-		/*for (LayoutingElement e : this.sortetElements) {
-			System.out.println(e.getId());
-		}*/
-		throw new IllegalStateException(
-				"Could not find a valid loop entry point");
-	}
+    public Queue<LayoutingElement> getSortedElements() {
+        return this.sortetElements;
+    }
 
-	protected void freeElementsFrom(SortableLayoutingElement freeElement) {
-		for (String id : freeElement.getOutgoingLinks()) {
-			SortableLayoutingElement element = elementsToSort.get(id);
-			if (element != null) {
-				element.removeIncomingLinkFrom(freeElement.getId());
-			}
-		}
+    protected void topologicalSort() {
+        while (!elementsToSort.isEmpty()) {
+            List<SortableLayoutingElement> freeElements = getFreeElements();
+            if (freeElements.size() > 0) {
+                for (SortableLayoutingElement freeElement : freeElements) {
+                    sortetElements.add((LayoutingElement) freeElement.getLayoutingElement());
+                    freeElementsFrom(freeElement);
+                    elementsToSort.remove(freeElement.getId());
+                }
+            } else { // loops
+                SortableLayoutingElement entry = getLoopEntryPoint();
+                for (String backId : entry.getIncomingLinks().toArray(new String[0])) {
+                    entry.reverseIncomingLinkFrom(backId);
+                    SortableLayoutingElement e = elementsToSort.get(backId);
+                    e.reverseOutgoingLinkTo(entry.getId());
+                    backwardsEdges.add(new BackwardsEdge(backId, entry.getId()));
+                }
+            }
+        }
+    }
 
-	}
+    protected SortableLayoutingElement getLoopEntryPoint() throws IllegalStateException {
+        for (SortableLayoutingElement candidate : elementsToSort.values()) {
+            if (candidate.isJoin() && candidate.getOldInCount() > candidate.getIncomingLinks().size()) {
+                return candidate;
+            }
+        }
+        /*
+         * for (LayoutingElement e : this.sortetElements) {
+         * System.out.println(e.getId()); }
+         */
+        throw new IllegalStateException("Could not find a valid loop entry point");
+    }
 
-	protected List<SortableLayoutingElement> getFreeElements() {
-		List<SortableLayoutingElement> freeElements = new LinkedList<SortableLayoutingElement>();
+    protected void freeElementsFrom(SortableLayoutingElement freeElement) {
+        for (String id : freeElement.getOutgoingLinks()) {
+            SortableLayoutingElement element = elementsToSort.get(id);
+            if (element != null) {
+                element.removeIncomingLinkFrom(freeElement.getId());
+            }
+        }
 
-		for (String id : elementsToSort.keySet()) {
-			SortableLayoutingElement sortableLayoutingElement = elementsToSort.get(id);
-			if (sortableLayoutingElement.isFree()) {
-				freeElements.add(sortableLayoutingElement);
-			}
-		}
+    }
 
-		return freeElements;
-	}
+    protected List<SortableLayoutingElement> getFreeElements() {
+        List<SortableLayoutingElement> freeElements = new LinkedList<SortableLayoutingElement>();
 
-	protected void reverseBackwardsEdges() {
-		List<LayoutingElement> edges = this.diagram.getConnectingElements();
-		for (BackwardsEdge backwardsEdge : this.backwardsEdges) {
-			String sourceId = backwardsEdge.getSource();
-			String targetId = backwardsEdge.getTarget();
-			LayoutingElement sourceElement = (LayoutingElement) this.diagram.getElement(sourceId);
-			LayoutingElement targetElement = (LayoutingElement) this.diagram.getElement(targetId);
+        for (String id : elementsToSort.keySet()) {
+            SortableLayoutingElement sortableLayoutingElement = elementsToSort.get(id);
+            if (sortableLayoutingElement.isFree()) {
+                freeElements.add(sortableLayoutingElement);
+            }
+        }
 
-			LayoutingElement edge = getEdge(edges, sourceElement, targetElement);
+        return freeElements;
+    }
 
-			backwardsEdge.setEdge(edge);
+    protected void reverseBackwardsEdges() {
+        List<LayoutingElement> edges = this.diagram.getConnectingElements();
+        for (BackwardsEdge backwardsEdge : this.backwardsEdges) {
+            String sourceId = backwardsEdge.getSource();
+            String targetId = backwardsEdge.getTarget();
+            LayoutingElement sourceElement = (LayoutingElement) this.diagram.getElement(sourceId);
+            LayoutingElement targetElement = (LayoutingElement) this.diagram.getElement(targetId);
 
-			// remove edge
-			sourceElement.removeOutgoingLink(edge);
-			targetElement.removeIncomingLink(edge);
+            LayoutingElement edge = getEdge(edges, sourceElement, targetElement);
 
-			// add direct back link
-			targetElement.addOutgoingLink(sourceElement);
-			sourceElement.addIncomingLink(targetElement);
-		}
+            backwardsEdge.setEdge(edge);
 
-	}
+            // remove edge
+            sourceElement.removeOutgoingLink(edge);
+            targetElement.removeIncomingLink(edge);
 
-	protected void backpatchBackwardsEdges() {
-		List<BackwardsEdge> newBackwardsEdges = new LinkedList<BackwardsEdge>();
-		newBackwardsEdges.addAll(this.backwardsEdges);
+            // add direct back link
+            targetElement.addOutgoingLink(sourceElement);
+            sourceElement.addIncomingLink(targetElement);
+        }
 
-		for (BackwardsEdge edge : this.backwardsEdges) {
-			String sourceId = edge.getSource();
-			String targetId = edge.getTarget();
+    }
 
-			LayoutingElement sourceElement = this.diagram.getElement(sourceId);
-			while (!(sourceElement.isJoin() || sourceElement.isSplit())) {
-				// should be not null and should be only one, because its
-				// a path back
-				LayoutingElement newSourceElement = (LayoutingElement) sourceElement
-						.getPrecedingElements().get(0);
-				targetId = newSourceElement.getId();
-				newBackwardsEdges.add(new BackwardsEdge(targetId, sourceId));
+    protected void backpatchBackwardsEdges() {
+        List<BackwardsEdge> newBackwardsEdges = new LinkedList<BackwardsEdge>();
+        newBackwardsEdges.addAll(this.backwardsEdges);
 
-				sourceElement = newSourceElement;
-				sourceId = targetId;
-			}
-		}
+        for (BackwardsEdge edge : this.backwardsEdges) {
+            String sourceId = edge.getSource();
+            String targetId = edge.getTarget();
 
-		this.backwardsEdges = newBackwardsEdges;
+            LayoutingElement sourceElement = this.diagram.getElement(sourceId);
+            while (!(sourceElement.isJoin() || sourceElement.isSplit())) {
+                // should be not null and should be only one, because its
+                // a path back
+                LayoutingElement newSourceElement = (LayoutingElement) sourceElement.getPrecedingElements().get(0);
+                targetId = newSourceElement.getId();
+                newBackwardsEdges.add(new BackwardsEdge(targetId, sourceId));
 
-	}
+                sourceElement = newSourceElement;
+                sourceId = targetId;
+            }
+        }
 
-	protected static LayoutingElement getEdge(List<LayoutingElement> edges,
-			LayoutingElement sourceElement, LayoutingElement targetElement) {
-		for (LayoutingElement edge : edges) {
-			if (edge.getIncomingLinks().contains(sourceElement)
-					&& edge.getOutgoingLinks().contains(targetElement)) {
-				return edge;
-			}
-		}
-		return null;
-	}
+        this.backwardsEdges = newBackwardsEdges;
 
+    }
+
+    protected static LayoutingElement getEdge(List<LayoutingElement> edges, LayoutingElement sourceElement, LayoutingElement targetElement) {
+        for (LayoutingElement edge : edges) {
+            if (edge.getIncomingLinks().contains(sourceElement) && edge.getOutgoingLinks().contains(targetElement)) {
+                return edge;
+            }
+        }
+        return null;
+    }
 
 }

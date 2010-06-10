@@ -45,288 +45,307 @@ package de.hpi.yawl;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class YTask extends YNode{
-	
-	private SplitJoinType joinType = SplitJoinType.XOR;
-	private SplitJoinType splitType = SplitJoinType.AND;
-	private YDecomposition decomposesTo = null;
-	private String xsiType = "";
-	private YMultiInstanceParam miParam = null;
+public class YTask extends YNode {
 
-	private boolean isMultipleTask = false;
-	private ArrayList<YNode> cancellationSet;
-	private ArrayList<YVariableMapping> startingMappings = new ArrayList<YVariableMapping>();
-	private ArrayList<YVariableMapping> completedMappings = new ArrayList<YVariableMapping>();
-	private YTimer timer = null;
-	private YResourcing resourcing = null;
-	
-	public YTimer getTimer() {
-		return timer;
-	}
+    private SplitJoinType joinType = SplitJoinType.XOR;
+    private SplitJoinType splitType = SplitJoinType.AND;
+    private YDecomposition decomposesTo = null;
+    private String xsiType = "";
+    private YMultiInstanceParam miParam = null;
 
-	public void setTimer(YTimer timer) {
-		this.timer = timer;
-	}
+    private boolean isMultipleTask = false;
+    private ArrayList<YNode> cancellationSet;
+    private ArrayList<YVariableMapping> startingMappings = new ArrayList<YVariableMapping>();
+    private ArrayList<YVariableMapping> completedMappings = new ArrayList<YVariableMapping>();
+    private YTimer timer = null;
+    private YResourcing resourcing = null;
 
-	public YTask(String ID)
-	{
-		super(ID, "");
-	}
-	
-	/**
-	 * constructor of class 
-	 */
-	public YTask(String ID, String name)
-	{
-		super(ID, name);
-	}
-	
-	/**
-	 * constructor of class 
-	 */
-	public YTask(String ID, String name, SplitJoinType join, SplitJoinType split){
-		super(ID, name);
-		
-		setJoinType(join);
-		setSplitType(split);
-	}
-	
-	public SplitJoinType getJoinType(){
-		return this.joinType;
-	}
-	
-	public void setJoinType(SplitJoinType join){
-		this.joinType = join;
-	}
-	
-	public SplitJoinType getSplitType(){
-		return this.splitType;
-	}
-	
-	public void setSplitType(SplitJoinType split){
-		this.splitType = split;
-	}
-	
-	public YDecomposition getDecomposesTo() {
-		return this.decomposesTo;
-	}
-	
-	public void setDecomposesTo(YDecomposition decomposesTo) {
-		this.decomposesTo = decomposesTo;
-	}
-	
-	public void setXsiType(String xsiType) {
-		this.xsiType = xsiType;
-	}
+    public YTimer getTimer() {
+        return timer;
+    }
 
-	public String getXsiType() {
-		return xsiType;
-	}
+    public void setTimer(YTimer timer) {
+        this.timer = timer;
+    }
 
-	public void setMiParam(YMultiInstanceParam miParam) {
-		this.miParam = miParam;
-	}
+    public YTask(String ID) {
+        super(ID, "");
+    }
 
-	public YMultiInstanceParam getMiParam() {
-		return miParam;
-	}
-	
-	public boolean isMultipleTask(){
-		return this.isMultipleTask;
-	}
-	
-	public void setIsMultipleTask(boolean multiple){
-		this.isMultipleTask = multiple;
-	}
-	
-	/**
-	 * the cancellationSet getter
-	 * @return cancellation set
-	 */
-	public ArrayList<YNode> getCancellationSet(){
-		if (cancellationSet == null)
-			cancellationSet = new ArrayList<YNode>();
-		return cancellationSet;
-	}
-	
-	/**
-	 * the startingMappings getter
-	 * @return starting mappings
-	 */
-	public ArrayList<YVariableMapping> getStartingMappings(){
-		if (startingMappings == null)
-			startingMappings = new ArrayList<YVariableMapping>();
-		return startingMappings;
-	}
-	
-	/**
-	 * the completedMappings getter
-	 * @return completed mappings
-	 */
-	public ArrayList<YVariableMapping> getCompletedMappings(){
-		if (completedMappings == null)
-			completedMappings = new ArrayList<YVariableMapping>();
-		return completedMappings;
-	}
+    /**
+     * constructor of class
+     */
+    public YTask(String ID, String name) {
+        super(ID, name);
+    }
 
-	public void setResourcing(YResourcing resourcing) {
-		this.resourcing = resourcing;
-	}
+    /**
+     * constructor of class
+     */
+    public YTask(String ID, String name, SplitJoinType join, SplitJoinType split) {
+        super(ID, name);
 
-	public YResourcing getResourcing() {
-		return resourcing;
-	}
+        setJoinType(join);
+        setSplitType(split);
+    }
 
-	/**
-	 * serializes the outgoing edges to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeOutgoingEdgesToYAWL(String s) {
-		for(YEdge edge: this.getOutgoingEdges())
-			s += edge.writeToYAWL(this.splitType);
+    public SplitJoinType getJoinType() {
+        return this.joinType;
+    }
 
-		return s;
-	}
+    public void setJoinType(SplitJoinType join) {
+        this.joinType = join;
+    }
 
-	/**
-	 * serializes the completed mappings to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeCompletedMappingsToYAWL(String s) {
-		if (getCompletedMappings().size() > 0){
-			s += "\t\t\t\t\t<completedMappings>\n";
-			for(YVariableMapping mapping : getCompletedMappings()){
-				s += mapping.writeToYAWL();
-			}
-			s += "\t\t\t\t\t</completedMappings>\n";
-		}
-		return s;
-	}
+    public SplitJoinType getSplitType() {
+        return this.splitType;
+    }
 
-	/**
-	 * serializes the starting mappings to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeStartingMappingsToYAWL(String s) {
-		if (getStartingMappings().size() > 0){
-			s += "\t\t\t\t\t<startingMappings>\n";
-			for(YVariableMapping mapping : getStartingMappings()){
-				s += mapping.writeToYAWL();
-			}
-			s += "\t\t\t\t\t</startingMappings>\n";
-		}
-		return s;
-	}
+    public void setSplitType(SplitJoinType split) {
+        this.splitType = split;
+    }
 
-	/**
-	 * serializes the cancellation set to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeCancellationSetToYAWL(String s) {
-		if (getCancellationSet().size() > 0){
-			for(YNode removeNode: getCancellationSet()){
-				s += "\t\t\t\t\t<removesTokens id=\"" + removeNode.getID() + "\"/>\n";
-			}
-		}
-		return s;
-	}
-	
-	/**
-	 * serializes the multiple instance parameters to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeMiParamToYAWL(String s) {
-		if (isMultipleTask()) {
+    public YDecomposition getDecomposesTo() {
+        return this.decomposesTo;
+    }
+
+    public void setDecomposesTo(YDecomposition decomposesTo) {
+        this.decomposesTo = decomposesTo;
+    }
+
+    public void setXsiType(String xsiType) {
+        this.xsiType = xsiType;
+    }
+
+    public String getXsiType() {
+        return xsiType;
+    }
+
+    public void setMiParam(YMultiInstanceParam miParam) {
+        this.miParam = miParam;
+    }
+
+    public YMultiInstanceParam getMiParam() {
+        return miParam;
+    }
+
+    public boolean isMultipleTask() {
+        return this.isMultipleTask;
+    }
+
+    public void setIsMultipleTask(boolean multiple) {
+        this.isMultipleTask = multiple;
+    }
+
+    /**
+     * the cancellationSet getter
+     * 
+     * @return cancellation set
+     */
+    public ArrayList<YNode> getCancellationSet() {
+        if (cancellationSet == null)
+            cancellationSet = new ArrayList<YNode>();
+        return cancellationSet;
+    }
+
+    /**
+     * the startingMappings getter
+     * 
+     * @return starting mappings
+     */
+    public ArrayList<YVariableMapping> getStartingMappings() {
+        if (startingMappings == null)
+            startingMappings = new ArrayList<YVariableMapping>();
+        return startingMappings;
+    }
+
+    /**
+     * the completedMappings getter
+     * 
+     * @return completed mappings
+     */
+    public ArrayList<YVariableMapping> getCompletedMappings() {
+        if (completedMappings == null)
+            completedMappings = new ArrayList<YVariableMapping>();
+        return completedMappings;
+    }
+
+    public void setResourcing(YResourcing resourcing) {
+        this.resourcing = resourcing;
+    }
+
+    public YResourcing getResourcing() {
+        return resourcing;
+    }
+
+    /**
+     * serializes the outgoing edges to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeOutgoingEdgesToYAWL(String s) {
+        for (YEdge edge : this.getOutgoingEdges())
+            s += edge.writeToYAWL(this.splitType);
+
+        return s;
+    }
+
+    /**
+     * serializes the completed mappings to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeCompletedMappingsToYAWL(String s) {
+        if (getCompletedMappings().size() > 0) {
+            s += "\t\t\t\t\t<completedMappings>\n";
+            for (YVariableMapping mapping : getCompletedMappings()) {
+                s += mapping.writeToYAWL();
+            }
+            s += "\t\t\t\t\t</completedMappings>\n";
+        }
+        return s;
+    }
+
+    /**
+     * serializes the starting mappings to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeStartingMappingsToYAWL(String s) {
+        if (getStartingMappings().size() > 0) {
+            s += "\t\t\t\t\t<startingMappings>\n";
+            for (YVariableMapping mapping : getStartingMappings()) {
+                s += mapping.writeToYAWL();
+            }
+            s += "\t\t\t\t\t</startingMappings>\n";
+        }
+        return s;
+    }
+
+    /**
+     * serializes the cancellation set to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeCancellationSetToYAWL(String s) {
+        if (getCancellationSet().size() > 0) {
+            for (YNode removeNode : getCancellationSet()) {
+                s += "\t\t\t\t\t<removesTokens id=\"" + removeNode.getID() + "\"/>\n";
+            }
+        }
+        return s;
+    }
+
+    /**
+     * serializes the multiple instance parameters to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeMiParamToYAWL(String s) {
+        if (isMultipleTask()) {
             s += getMiParam().writeToYAWL();
         }
-		return s;
-	}
+        return s;
+    }
 
-	/**
-	 * serializes the decomposesTo to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeDecomposesToToYAWL(String s) {
-		if (decomposesTo != null) {
+    /**
+     * serializes the decomposesTo to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeDecomposesToToYAWL(String s) {
+        if (decomposesTo != null) {
             s += String.format("\t\t\t\t\t<decomposesTo id=\"%s\"/>\n", getDecomposesTo().getID());
         }
-		return s;
-	}
+        return s;
+    }
 
-	/**
-	 * serializes the timer to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeTimerToYAWL(String s) {
-		if (timer != null){
-			s += timer.writeToYAWL();
-		}
-		return s;
-	}
-	
-	/**
-	 * serializes resourcing to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeResourcingToYAWL(String s) {
-		if (resourcing != null){
-			s += resourcing.writeToYAWL();
-		}
-		return s;
-	}
+    /**
+     * serializes the timer to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeTimerToYAWL(String s) {
+        if (timer != null) {
+            s += timer.writeToYAWL();
+        }
+        return s;
+    }
 
-	/**
-	 * serializes the split and join type to XML
-	 * @param s XML String
-	 * @return XML String
-	 */
-	private String writeSplitJoinTypeToYAWL(String s) {
-		s += String.format("\t\t\t\t\t<join code=\"%s\"/>\n", getJoinType().toString().toLowerCase(Locale.ENGLISH));
-		s += String.format("\t\t\t\t\t<split code=\"%s\"/>\n", getSplitType().toString().toLowerCase(Locale.ENGLISH));
-		return s;
-	}
-	
-	/**
-	 * @see de.hpi.yawl.YNode#writeToYAWL()
-	 */
-	public String writeToYAWL() {
-		String s = "";
-			
-		if(!getXsiType().isEmpty())
-			s += String.format("\t\t\t\t<task id=\"%s\" xsi:type=\"%s\">\n", getID(), getXsiType());
-		else
-			s += String.format("\t\t\t\t<task id=\"%s\">\n", getID());
+    /**
+     * serializes resourcing to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeResourcingToYAWL(String s) {
+        if (resourcing != null) {
+            s += resourcing.writeToYAWL();
+        }
+        return s;
+    }
 
-		s += String.format("\t\t\t\t\t<name>%s</name>\n", getName());
+    /**
+     * serializes the split and join type to XML
+     * 
+     * @param s
+     *            XML String
+     * @return XML String
+     */
+    private String writeSplitJoinTypeToYAWL(String s) {
+        s += String.format("\t\t\t\t\t<join code=\"%s\"/>\n", getJoinType().toString().toLowerCase(Locale.ENGLISH));
+        s += String.format("\t\t\t\t\t<split code=\"%s\"/>\n", getSplitType().toString().toLowerCase(Locale.ENGLISH));
+        return s;
+    }
 
-		// First, normal edges
-		s = writeOutgoingEdgesToYAWL(s);
+    /**
+     * @see de.hpi.yawl.YNode#writeToYAWL()
+     */
+    public String writeToYAWL() {
+        String s = "";
 
-		// Second, join and split type
-		s = writeSplitJoinTypeToYAWL(s);
+        if (!getXsiType().isEmpty())
+            s += String.format("\t\t\t\t<task id=\"%s\" xsi:type=\"%s\">\n", getID(), getXsiType());
+        else
+            s += String.format("\t\t\t\t<task id=\"%s\">\n", getID());
 
-		// Third, reset set
-		s = writeCancellationSetToYAWL(s);
-			
-		s = writeStartingMappingsToYAWL(s);
-			
-		s = writeCompletedMappingsToYAWL(s);
-			
-		s = writeTimerToYAWL(s);
-		s = writeResourcingToYAWL(s);
-			
+        s += String.format("\t\t\t\t\t<name>%s</name>\n", getName());
+
+        // First, normal edges
+        s = writeOutgoingEdgesToYAWL(s);
+
+        // Second, join and split type
+        s = writeSplitJoinTypeToYAWL(s);
+
+        // Third, reset set
+        s = writeCancellationSetToYAWL(s);
+
+        s = writeStartingMappingsToYAWL(s);
+
+        s = writeCompletedMappingsToYAWL(s);
+
+        s = writeTimerToYAWL(s);
+        s = writeResourcingToYAWL(s);
+
         s = writeDecomposesToToYAWL(s);
         s = writeMiParamToYAWL(s);
-            
-		s +="\t\t\t\t</task>\n";
-		return s;
-	}
+
+        s += "\t\t\t\t</task>\n";
+        return s;
+    }
 }

@@ -37,44 +37,43 @@ import de.hpi.petrinet.PetriNetFactory;
 import de.hpi.petrinet.Place;
 
 /**
- * Converts an EPC into a PT net. 
+ * Converts an EPC into a PT net.
  * 
  * The EPC must NOT contain any OR connectors!!!
  * 
  * Main method: convert()
  * 
  * @author matthias.weidlich
- *
+ * 
  */
 public class PTNetConverter extends PetriNetConverter {
 
-	public PTNetConverter(
-			IEPC<ControlFlow, FlowObject, Event, Function, Connector, ProcessInterface, Connection, Node, NonFlowObject> epc,
-			PetriNetFactory pnfactory) {
-		super(epc, pnfactory);
+    public PTNetConverter(IEPC<ControlFlow, FlowObject, Event, Function, Connector, ProcessInterface, Connection, Node, NonFlowObject> epc,
+            PetriNetFactory pnfactory) {
+        super(epc, pnfactory);
 
-	}
-	
-	/**
-	 * Convert the EPC into a PT net. This is based on the 
-	 * EPC to Petri net conversion.
-	 */
-	@Override
-	public PTNet convert() {
-		return (PTNet) super.convert();
-	}
-	
-	/**
-	 * We add the initial marking to the generated Petri net.
-	 */
-	@Override
-	protected void handleEvent(PetriNet net, Event event, ConversionContext c) {
-		super.handleEvent(net, event, c);
-		if (this.epc.getPredecessors(event).isEmpty()) {
-			de.hpi.petrinet.Node n = c.getConversionMapIn().get(event);
-			if (n instanceof Place)
-				((PTNet)net).getInitialMarking().addToken((Place)n);
-		}
-	}
+    }
+
+    /**
+     * Convert the EPC into a PT net. This is based on the EPC to Petri net
+     * conversion.
+     */
+    @Override
+    public PTNet convert() {
+        return (PTNet) super.convert();
+    }
+
+    /**
+     * We add the initial marking to the generated Petri net.
+     */
+    @Override
+    protected void handleEvent(PetriNet net, Event event, ConversionContext c) {
+        super.handleEvent(net, event, c);
+        if (this.epc.getPredecessors(event).isEmpty()) {
+            de.hpi.petrinet.Node n = c.getConversionMapIn().get(event);
+            if (n instanceof Place)
+                ((PTNet) net).getInitialMarking().addToken((Place) n);
+        }
+    }
 
 }

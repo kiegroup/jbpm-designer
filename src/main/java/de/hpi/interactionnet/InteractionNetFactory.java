@@ -3,38 +3,37 @@ package de.hpi.interactionnet;
 import de.hpi.PTnet.PTNet;
 import de.hpi.PTnet.PTNetFactory;
 
-
 public class InteractionNetFactory extends PTNetFactory {
-	
-	public static InteractionNetFactory eINSTANCE = new InteractionNetFactory();
 
-	public InteractionNet createInteractionNet() {
-		return new InteractionNet();
-	}
+    public static InteractionNetFactory eINSTANCE = new InteractionNetFactory();
 
-	public Role createRole() {
-		return new Role();
-	}
+    public InteractionNet createInteractionNet() {
+        return new InteractionNet();
+    }
 
-	public InteractionTransition createLabeledTransition() {
-		return new InteractionTransition();
-	}
+    public Role createRole() {
+        return new Role();
+    }
 
-	public static InteractionNetFactory init() {
-		return new InteractionNetFactory();
-	}
+    public InteractionTransition createLabeledTransition() {
+        return new InteractionTransition();
+    }
 
-	public ActionTransition createActionTransition() {
-		return new ActionTransition();
-	}
+    public static InteractionNetFactory init() {
+        return new InteractionNetFactory();
+    }
 
-	public InteractionTransition createInteractionTransition() {
-		return new InteractionTransition();
-	}
+    public ActionTransition createActionTransition() {
+        return new ActionTransition();
+    }
 
-	@Override
-	public PTNet createPetriNet() {
-		return createInteractionNet();
-	}
+    public InteractionTransition createInteractionTransition() {
+        return new InteractionTransition();
+    }
+
+    @Override
+    public PTNet createPetriNet() {
+        return createInteractionNet();
+    }
 
 }

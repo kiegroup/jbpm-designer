@@ -10,14 +10,12 @@ import de.hpi.bpmn.ORGateway;
  */
 public class OwnedORGateway extends ORGateway implements OwnedNode {
 
-	protected List<Pool> owners;
+    protected List<Pool> owners;
 
-	public List<Pool> getOwners() {
-		if (owners == null)
-			owners = new ArrayList<Pool>();
-		return owners;
-	}
+    public List<Pool> getOwners() {
+        if (owners == null)
+            owners = new ArrayList<Pool>();
+        return owners;
+    }
 
 }
-
-

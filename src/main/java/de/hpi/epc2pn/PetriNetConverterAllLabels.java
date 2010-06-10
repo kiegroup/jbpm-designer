@@ -36,40 +36,42 @@ import de.hpi.petrinet.PetriNetFactory;
 import de.hpi.petrinet.Place;
 
 public class PetriNetConverterAllLabels extends PetriNetConverter {
-	
-	public PetriNetConverterAllLabels(IEPC<ControlFlow, FlowObject, Event, Function, Connector, ProcessInterface, Connection, de.hpi.bpt.process.epc.Node, NonFlowObject> epc, PetriNetFactory pnfactory) {
-		super(epc, pnfactory);
-	}
-	
-	@Override
-	/**
-	 * In order to keep the label of the event, the event is not mapped to
-	 * a single place, but to a transition with one input and one output place.
-	 * 
-	 * 
-	 * @param net
-	 * @param event
-	 * @param conversion context capturing the relation between Petri net and EPC elements
-	 */
-	protected void handleEvent(PetriNet net, Event event, ConversionContext c) {
-		LabeledTransition t = this.pnfactory.createLabeledTransition();
-		t.setId(event.getId());
-		t.setLabel(event.getName());
-		net.getTransitions().add(t);
-		
-		Place p_in = this.pnfactory.createPlace();
-		p_in.setId(event.getId() + "_in");
-		net.getPlaces().add(p_in);
-		
-		Place p_out = this.pnfactory.createPlace();
-		p_out.setId(event.getId() + "_out");
-		net.getPlaces().add(p_out);
-		
-		c.addToConversionMapIn(event, p_in);
-		c.addToConversionMapOut(event, p_out);
-		
-		super.createFlowRelationship(net, p_in, t);
-		super.createFlowRelationship(net, t, p_out);
-	}
+
+    public PetriNetConverterAllLabels(
+            IEPC<ControlFlow, FlowObject, Event, Function, Connector, ProcessInterface, Connection, de.hpi.bpt.process.epc.Node, NonFlowObject> epc,
+            PetriNetFactory pnfactory) {
+        super(epc, pnfactory);
+    }
+
+    @Override
+    /**
+     * In order to keep the label of the event, the event is not mapped to
+     * a single place, but to a transition with one input and one output place.
+     * 
+     * 
+     * @param net
+     * @param event
+     * @param conversion context capturing the relation between Petri net and EPC elements
+     */
+    protected void handleEvent(PetriNet net, Event event, ConversionContext c) {
+        LabeledTransition t = this.pnfactory.createLabeledTransition();
+        t.setId(event.getId());
+        t.setLabel(event.getName());
+        net.getTransitions().add(t);
+
+        Place p_in = this.pnfactory.createPlace();
+        p_in.setId(event.getId() + "_in");
+        net.getPlaces().add(p_in);
+
+        Place p_out = this.pnfactory.createPlace();
+        p_out.setId(event.getId() + "_out");
+        net.getPlaces().add(p_out);
+
+        c.addToConversionMapIn(event, p_in);
+        c.addToConversionMapOut(event, p_out);
+
+        super.createFlowRelationship(net, p_in, t);
+        super.createFlowRelationship(net, t, p_out);
+    }
 
 }

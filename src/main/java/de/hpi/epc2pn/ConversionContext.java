@@ -28,61 +28,63 @@ import de.hpi.bpt.process.epc.IFlowObject;
 import de.hpi.petrinet.Node;
 
 /**
- * Conversion context for the EPC to PTNet transformation. Basically captures the relation
- * between EPC model elements and the corresponding Petri net nodes. 
+ * Conversion context for the EPC to PTNet transformation. Basically captures
+ * the relation between EPC model elements and the corresponding Petri net
+ * nodes.
  * 
  * @author matthias.weidlich
- *
+ * 
  */
 public class ConversionContext {
 
-	protected Map<IFlowObject, Node> conversionMapIn = new HashMap<IFlowObject, Node>();
-	protected Map<IFlowObject, Node> conversionMapOut = new HashMap<IFlowObject, Node>();
+    protected Map<IFlowObject, Node> conversionMapIn = new HashMap<IFlowObject, Node>();
+    protected Map<IFlowObject, Node> conversionMapOut = new HashMap<IFlowObject, Node>();
 
-	protected int id = 0;
-	
-	public ConversionContext() {
-		this.conversionMapIn = new HashMap<IFlowObject, Node>();
-		this.conversionMapOut = new HashMap<IFlowObject, Node>();
-	}
+    protected int id = 0;
 
-	/**
-	 * Might be used to generate a fresh ID during the transformation. Of course,
-	 * a prefix has to be applied in addition in order to avoid conflicting ID assignments.
-	 * 
-	 * @return
-	 */
-	public int getId() {
-		return this.id++;
-	}
-	
-	public Map<IFlowObject, Node> getConversionMapIn() {
-		return conversionMapIn;
-	}
+    public ConversionContext() {
+        this.conversionMapIn = new HashMap<IFlowObject, Node>();
+        this.conversionMapOut = new HashMap<IFlowObject, Node>();
+    }
 
-	public void setConversionMapIn(Map<IFlowObject, Node> conversionMapIn) {
-		this.conversionMapIn = conversionMapIn;
-	}
+    /**
+     * Might be used to generate a fresh ID during the transformation. Of
+     * course, a prefix has to be applied in addition in order to avoid
+     * conflicting ID assignments.
+     * 
+     * @return
+     */
+    public int getId() {
+        return this.id++;
+    }
 
-	public Map<IFlowObject, Node> getConversionMapOut() {
-		return conversionMapOut;
-	}
+    public Map<IFlowObject, Node> getConversionMapIn() {
+        return conversionMapIn;
+    }
 
-	public void setConversionMapOut(Map<IFlowObject, Node> conversionMapOut) {
-		this.conversionMapOut = conversionMapOut;
-	}
-	
-	public void setAllConversionMaps(IFlowObject object, Node node) {
-		this.addToConversionMapIn(object, node);
-		this.addToConversionMapOut(object, node);
-	}
-	
-	public void addToConversionMapIn(IFlowObject object, Node node) {
-		this.conversionMapIn.put(object, node);
-	}
+    public void setConversionMapIn(Map<IFlowObject, Node> conversionMapIn) {
+        this.conversionMapIn = conversionMapIn;
+    }
 
-	public void addToConversionMapOut(IFlowObject object, Node node) {
-		this.conversionMapOut.put(object, node);
-	}
-	
+    public Map<IFlowObject, Node> getConversionMapOut() {
+        return conversionMapOut;
+    }
+
+    public void setConversionMapOut(Map<IFlowObject, Node> conversionMapOut) {
+        this.conversionMapOut = conversionMapOut;
+    }
+
+    public void setAllConversionMaps(IFlowObject object, Node node) {
+        this.addToConversionMapIn(object, node);
+        this.addToConversionMapOut(object, node);
+    }
+
+    public void addToConversionMapIn(IFlowObject object, Node node) {
+        this.conversionMapIn.put(object, node);
+    }
+
+    public void addToConversionMapOut(IFlowObject object, Node node) {
+        this.conversionMapOut.put(object, node);
+    }
+
 }

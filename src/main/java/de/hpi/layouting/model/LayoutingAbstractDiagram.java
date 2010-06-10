@@ -35,78 +35,77 @@ import java.util.Map;
  * @author Team Royal Fawn
  * 
  */
-public abstract class  LayoutingAbstractDiagram<T extends LayoutingElement> implements LayoutingDiagram {
-	Map<String, T> elements = new HashMap<String, T>();
+public abstract class LayoutingAbstractDiagram<T extends LayoutingElement> implements LayoutingDiagram {
+    Map<String, T> elements = new HashMap<String, T>();
 
-	@SuppressWarnings("unchecked")
-	public Map<String, LayoutingElement> getElements() {
-		return Collections.unmodifiableMap((Map<String, LayoutingElement>) elements);
-	}
+    @SuppressWarnings("unchecked")
+    public Map<String, LayoutingElement> getElements() {
+        return Collections.unmodifiableMap((Map<String, LayoutingElement>) elements);
+    }
 
-	public List<LayoutingElement> getChildElementsOf(LayoutingElement parent) {
-		return getChildElementsOf(Collections.singletonList(parent));
-	}
+    public List<LayoutingElement> getChildElementsOf(LayoutingElement parent) {
+        return getChildElementsOf(Collections.singletonList(parent));
+    }
 
-	public List<LayoutingElement> getChildElementsOf(List<LayoutingElement> parents) {
-		List<LayoutingElement> result = new LinkedList<LayoutingElement>();
-		for (String key : getElements().keySet()) {
-			LayoutingElement element = getElements().get(key);
-			if (parents.contains(element.getParent())) {
-				result.add(element);
-			}
-		}
-		return result;
+    public List<LayoutingElement> getChildElementsOf(List<LayoutingElement> parents) {
+        List<LayoutingElement> result = new LinkedList<LayoutingElement>();
+        for (String key : getElements().keySet()) {
+            LayoutingElement element = getElements().get(key);
+            if (parents.contains(element.getParent())) {
+                result.add(element);
+            }
+        }
+        return result;
 
-	}
+    }
 
-	public List<LayoutingElement> getElementsOfType(String type) {
-		List<LayoutingElement> resultList = new LinkedList<LayoutingElement>();
+    public List<LayoutingElement> getElementsOfType(String type) {
+        List<LayoutingElement> resultList = new LinkedList<LayoutingElement>();
 
-		for (String key : getElements().keySet()) {
-			LayoutingElement element = getElements().get(key);
-			if (element.getType().equals(type)) {
-				resultList.add(element);
-			}
-		}
+        for (String key : getElements().keySet()) {
+            LayoutingElement element = getElements().get(key);
+            if (element.getType().equals(type)) {
+                resultList.add(element);
+            }
+        }
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	public List<LayoutingElement> getElementsWithoutType(String type) {
-		List<LayoutingElement> resultList = new LinkedList<LayoutingElement>();
+    public List<LayoutingElement> getElementsWithoutType(String type) {
+        List<LayoutingElement> resultList = new LinkedList<LayoutingElement>();
 
-		for (String key : getElements().keySet()) {
-			LayoutingElement element = getElements().get(key);
-			if (!element.getType().equals(type)) {
-				resultList.add(element);
-			}
-		}
+        for (String key : getElements().keySet()) {
+            LayoutingElement element = getElements().get(key);
+            if (!element.getType().equals(type)) {
+                resultList.add(element);
+            }
+        }
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	public T getElement(String id) {
-		T element = this.elements.get(id);
-		if (element == null) {
-			element = this.newElement();
-			element.setId(id);
-			this.elements.put(id, element);
-		}
-		return element;
-	}
+    public T getElement(String id) {
+        T element = this.elements.get(id);
+        if (element == null) {
+            element = this.newElement();
+            element.setId(id);
+            this.elements.put(id, element);
+        }
+        return element;
+    }
 
-	protected abstract T newElement();
+    protected abstract T newElement();
 
-
-	@Override
-	public String toString() {
-		String out = "Diagramm: \n";
-		out += getElements().size() + " Elements:\n";
-		for (String key : getElements().keySet()) {
-			LayoutingElement element = getElements().get(key);
-			out += element.toString() + "\n";
-		}
-		return out;
-	}
+    @Override
+    public String toString() {
+        String out = "Diagramm: \n";
+        out += getElements().size() + " Elements:\n";
+        for (String key : getElements().keySet()) {
+            LayoutingElement element = getElements().get(key);
+            out += element.toString() + "\n";
+        }
+        return out;
+    }
 
 }

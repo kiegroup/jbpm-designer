@@ -4,22 +4,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WireObjectGroup {
-	
-	protected String name;
-	
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    protected String name;
 
-	public String toJpdl() {
-		return "";
-	}
+    public String getName() {
+        return name;
+    }
 
-	public JSONObject toJson() throws JSONException {
-		return new JSONObject();
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String toJpdl() {
+        return "";
+    }
+
+    public JSONObject toJson() throws JSONException {
+        return new JSONObject();
+    }
 }

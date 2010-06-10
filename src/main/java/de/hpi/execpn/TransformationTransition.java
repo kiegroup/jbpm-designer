@@ -1,25 +1,24 @@
 package de.hpi.execpn;
 
-
 public class TransformationTransition extends ExecLabeledTransition {
 
-	protected String xsltURL;
-	protected boolean triggerManually;
-	
-	public String getXsltURL() {
-		return xsltURL;
-	}
+    protected String xsltURL;
+    protected boolean triggerManually;
 
-	public void setXsltURL(String url) {
-		xsltURL = url;		
-	}
+    public String getXsltURL() {
+        return xsltURL;
+    }
 
-	public String getLabel() {
-		return label;
-	}
+    public void setXsltURL(String url) {
+        xsltURL = url;
+    }
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
 }

@@ -8,81 +8,75 @@ import org.json.JSONObject;
 
 public class Hql extends Sql {
 
-	public Hql(JSONObject hql) {
-		super(hql);
-	}
-	
-	public Hql(org.w3c.dom.Node hql) {
-		super(hql);
-	}
+    public Hql(JSONObject hql) {
+        super(hql);
+    }
 
-	@Override
-	public String toJpdl() throws InvalidModelException {
-		StringWriter jpdl = new StringWriter();
-		jpdl.write("<hql");
+    public Hql(org.w3c.dom.Node hql) {
+        super(hql);
+    }
 
-		jpdl.write(JsonToJpdl.transformAttribute("name", name));
-		jpdl.write(JsonToJpdl.transformAttribute("var", var));
-		if (unique != null)
-			jpdl.write(JsonToJpdl.transformAttribute("unique", unique
-					.toString()));
+    @Override
+    public String toJpdl() throws InvalidModelException {
+        StringWriter jpdl = new StringWriter();
+        jpdl.write("<hql");
 
-		if (bounds != null) {
-			jpdl.write(bounds.toJpdl());
-		} else {
-			throw new InvalidModelException(
-					"Invalid HQL activity. Bounds is missing.");
-		}
+        jpdl.write(JsonToJpdl.transformAttribute("name", name));
+        jpdl.write(JsonToJpdl.transformAttribute("var", var));
+        if (unique != null)
+            jpdl.write(JsonToJpdl.transformAttribute("unique", unique.toString()));
 
-		jpdl.write(" >\n");
+        if (bounds != null) {
+            jpdl.write(bounds.toJpdl());
+        } else {
+            throw new InvalidModelException("Invalid HQL activity. Bounds is missing.");
+        }
 
-		if (query != null) {
-			jpdl.write("<query>\n");
-			jpdl.write(query);
-			jpdl.write("\n</query>\n");
-		} else {
-			throw new InvalidModelException(
-					"Invalid HQL activity. Query is missing.");
-		}
+        jpdl.write(" >\n");
 
-		if (parameters != null) {
-			jpdl.write(parameters.toJpdl());
-		}
+        if (query != null) {
+            jpdl.write("<query>\n");
+            jpdl.write(query);
+            jpdl.write("\n</query>\n");
+        } else {
+            throw new InvalidModelException("Invalid HQL activity. Query is missing.");
+        }
 
-		for (Transition t : outgoings) {
-			jpdl.write(t.toJpdl());
-		}
+        if (parameters != null) {
+            jpdl.write(parameters.toJpdl());
+        }
 
-		jpdl.write("</hql>\n");
-		return jpdl.toString();
-	}
-	
-	
-	
-	@Override
-	public JSONObject toJson() throws JSONException {
-		JSONObject stencil = new JSONObject();
-		stencil.put("id", "hql");
+        for (Transition t : outgoings) {
+            jpdl.write(t.toJpdl());
+        }
 
-		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
+        jpdl.write("</hql>\n");
+        return jpdl.toString();
+    }
 
-		JSONObject properties = new JSONObject();
-		properties.put("bgcolor", "#ffffcc");
-		if (name != null)
-			properties.put("name", name);
-		if (var != null)
-			properties.put("var", var);
-		if (unique != null)
-			properties.put("unique", unique.toString());
-		if (query != null)
-			properties.put("query", query);
-		if(parameters != null)
-			properties.put("parameters", parameters.toJson());
+    @Override
+    public JSONObject toJson() throws JSONException {
+        JSONObject stencil = new JSONObject();
+        stencil.put("id", "hql");
 
-		JSONArray childShapes = new JSONArray();
+        JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
-		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
-				childShapes, bounds.toJson());
-	}
+        JSONObject properties = new JSONObject();
+        properties.put("bgcolor", "#ffffcc");
+        if (name != null)
+            properties.put("name", name);
+        if (var != null)
+            properties.put("var", var);
+        if (unique != null)
+            properties.put("unique", unique.toString());
+        if (query != null)
+            properties.put("query", query);
+        if (parameters != null)
+            properties.put("parameters", parameters.toJson());
+
+        JSONArray childShapes = new JSONArray();
+
+        return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties, childShapes, bounds.toJson());
+    }
 
 }

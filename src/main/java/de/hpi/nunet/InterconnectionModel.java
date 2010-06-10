@@ -11,12 +11,12 @@ import java.util.List;
 
 public class InterconnectionModel extends NuNet {
 
-	private List<ProcessModel> processModels;
+    private List<ProcessModel> processModels;
 
-	public List getProcessModels() {
-		if (processModels == null)
-			processModels = new ArrayList();
-		return processModels;
-	}
+    public List getProcessModels() {
+        if (processModels == null)
+            processModels = new ArrayList();
+        return processModels;
+    }
 
 } // InterconnectionModel

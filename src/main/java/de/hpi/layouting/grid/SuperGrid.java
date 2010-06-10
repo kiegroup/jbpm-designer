@@ -46,191 +46,191 @@ import de.hpi.layouting.grid.Grid.Row;
  */
 public class SuperGrid<T> implements Iterable<Row<T>> {
 
-	private static class RowIterator<T> implements Iterator<Row<T>> {
+    private static class RowIterator<T> implements Iterator<Row<T>> {
 
-		private Queue<Iterator<Row<T>>> queue;
+        private Queue<Iterator<Row<T>>> queue;
 
-		/**
-		 * @param queue
-		 */
-		public RowIterator(List<Grid<T>> grids) {
-			super();
-			this.queue = new LinkedList<Iterator<Row<T>>>();
-			for (Grid<T> grid : grids) {
-				Iterator<Row<T>> iterator = grid.iterator();
-				queue.add(iterator);
-			}
-		}
+        /**
+         * @param queue
+         */
+        public RowIterator(List<Grid<T>> grids) {
+            super();
+            this.queue = new LinkedList<Iterator<Row<T>>>();
+            for (Grid<T> grid : grids) {
+                Iterator<Row<T>> iterator = grid.iterator();
+                queue.add(iterator);
+            }
+        }
 
-		public boolean hasNext() {
-			while (queue.peek() != null && !queue.peek().hasNext()) {
-				queue.poll();
-			}
-			return !queue.isEmpty();
-		}
+        public boolean hasNext() {
+            while (queue.peek() != null && !queue.peek().hasNext()) {
+                queue.poll();
+            }
+            return !queue.isEmpty();
+        }
 
-		public Row<T> next() {
-			while (!queue.peek().hasNext()) {
-				queue.poll();
-			}
-			Row<T> result = queue.peek().next();
-			return result;
-		}
+        public Row<T> next() {
+            while (!queue.peek().hasNext()) {
+                queue.poll();
+            }
+            Row<T> result = queue.peek().next();
+            return result;
+        }
 
-		public void remove() {
-			queue.peek().remove();
-		}
+        public void remove() {
+            queue.peek().remove();
+        }
 
-	}
+    }
 
-	private List<Grid<T>> grids;
-	private int width = -1;
+    private List<Grid<T>> grids;
+    private int width = -1;
 
-	/**
+    /**
 	 *
 	 **/
-	public SuperGrid() {
-		super();
-		this.grids = new LinkedList<Grid<T>>();
-	}
+    public SuperGrid() {
+        super();
+        this.grids = new LinkedList<Grid<T>>();
+    }
 
-	/**
-	 * @return the subGrids
-	 */
-	public List<Grid<T>> getGrids() {
-		return Collections.unmodifiableList(grids);
-	}
+    /**
+     * @return the subGrids
+     */
+    public List<Grid<T>> getGrids() {
+        return Collections.unmodifiableList(grids);
+    }
 
-	/**
-	 * @param e
-	 * @return
-	 * @see java.util.List#add(java.lang.Object)
-	 */
-	public boolean add(Grid<T> e) {
-		this.add(grids.size(), e);
-		return true;
-	}
+    /**
+     * @param e
+     * @return
+     * @see java.util.List#add(java.lang.Object)
+     */
+    public boolean add(Grid<T> e) {
+        this.add(grids.size(), e);
+        return true;
+    }
 
-	/**
-	 * @param index
-	 * @param element
-	 * @see java.util.List#add(int, java.lang.Object)
-	 */
-	public void add(int index, Grid<T> element) {
+    /**
+     * @param index
+     * @param element
+     * @see java.util.List#add(int, java.lang.Object)
+     */
+    public void add(int index, Grid<T> element) {
 
-		element.setParent(null); // remove from other SuperGrid if nessesary
-		element._setParent(this);
-		grids.add(index, element);
+        element.setParent(null); // remove from other SuperGrid if nessesary
+        element._setParent(this);
+        grids.add(index, element);
 
-		width = Math.max(element.getWidth(), width);
-		for (Grid<T> grid : grids) {
-			while (grid.getWidth() < width) {
-				grid.addLastColumn();
-			}
-		}
-	}
+        width = Math.max(element.getWidth(), width);
+        for (Grid<T> grid : grids) {
+            while (grid.getWidth() < width) {
+                grid.addLastColumn();
+            }
+        }
+    }
 
-	/**
-	 * @param index
-	 * @return
-	 * @see java.util.List#get(int)
-	 */
-	public Grid<T> get(int index) {
-		return grids.get(index);
-	}
+    /**
+     * @param index
+     * @return
+     * @see java.util.List#get(int)
+     */
+    public Grid<T> get(int index) {
+        return grids.get(index);
+    }
 
-	/**
-	 * @param index
-	 * @return
-	 * @see java.util.List#remove(int)
-	 */
-	public Grid<T> remove(int index) {
-		Grid<T> removed = grids.remove(index);
-		removed._setParent(null);
-		return removed;
-	}
+    /**
+     * @param index
+     * @return
+     * @see java.util.List#remove(int)
+     */
+    public Grid<T> remove(int index) {
+        Grid<T> removed = grids.remove(index);
+        removed._setParent(null);
+        return removed;
+    }
 
-	/**
-	 * @param o
-	 * @return
-	 * @see java.util.List#remove(java.lang.Object)
-	 */
-	public boolean remove(Object o) {
-		int pos = grids.indexOf(o);
-		if (pos >= 0) {
-			this.remove(pos);
-			return true;
-		}
-		return false;
-	}
+    /**
+     * @param o
+     * @return
+     * @see java.util.List#remove(java.lang.Object)
+     */
+    public boolean remove(Object o) {
+        int pos = grids.indexOf(o);
+        if (pos >= 0) {
+            this.remove(pos);
+            return true;
+        }
+        return false;
+    }
 
-	void _insertColumnBefore(int col, int width) {
-		if (width > this.width) {
-			this.width++;
-			for (Grid<T> grid : grids) {
-				if (grid.getWidth() < width) {
-					grid.insertColumnBefore(col);
-				}
-			}
-		}
-	}
+    void _insertColumnBefore(int col, int width) {
+        if (width > this.width) {
+            this.width++;
+            for (Grid<T> grid : grids) {
+                if (grid.getWidth() < width) {
+                    grid.insertColumnBefore(col);
+                }
+            }
+        }
+    }
 
-	public void pack() {
-		for (Grid<T> grid : grids) {
-			grid.pack();
-		}
-	}
+    public void pack() {
+        for (Grid<T> grid : grids) {
+            grid.pack();
+        }
+    }
 
-	public int getHeight() {
-		int height = 0;
-		for (Grid<T> grid : grids) {
-			height += grid.getHeight();
-		}
-		return height;
-	}
+    public int getHeight() {
+        int height = 0;
+        for (Grid<T> grid : grids) {
+            height += grid.getHeight();
+        }
+        return height;
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public int findRow(Row<T> row) {
-		int pos = 0;
-		for (Grid<T> grid : grids) {
-			if (row.getParent() == grid) {
-				return pos + grid.find(row);
-			} else {
-				pos += grid.getHeight();
-			}
-		}
-		return -1;
-	}
+    public int findRow(Row<T> row) {
+        int pos = 0;
+        for (Grid<T> grid : grids) {
+            if (row.getParent() == grid) {
+                return pos + grid.find(row);
+            } else {
+                pos += grid.getHeight();
+            }
+        }
+        return -1;
+    }
 
-	public Row<T> getRow(int i) {
-		for (Grid<T> grid : grids) {
-			if (i < grid.getHeight()) {
-				return grid.get(i);
-			} else {
-				i -= grid.getHeight();
-			}
-		}
-		return null;
-	}
+    public Row<T> getRow(int i) {
+        for (Grid<T> grid : grids) {
+            if (i < grid.getHeight()) {
+                return grid.get(i);
+            } else {
+                i -= grid.getHeight();
+            }
+        }
+        return null;
+    }
 
-	public Iterator<Row<T>> iterator() {
-		return new RowIterator<T>(grids);
-	}
+    public Iterator<Row<T>> iterator() {
+        return new RowIterator<T>(grids);
+    }
 
-	public Cell<T> getCellOfItem(T item) {
-		Cell<T> result = null;
-		Iterator<Grid<T>> it = this.getGrids().iterator();
-		while (result == null && it.hasNext()) {
-			result = it.next().getCellOfItem(item);
-		}
-		return result;
-	}
+    public Cell<T> getCellOfItem(T item) {
+        Cell<T> result = null;
+        Iterator<Grid<T>> it = this.getGrids().iterator();
+        while (result == null && it.hasNext()) {
+            result = it.next().getCellOfItem(item);
+        }
+        return result;
+    }
 
-	public void setCellOfItem(T item, Cell<T> cell) {
-		cell.getParent().getParent().setCellOfItem(item, cell);
-	}
+    public void setCellOfItem(T item, Cell<T> cell) {
+        cell.getParent().getParent().setCellOfItem(item, cell);
+    }
 
 }

@@ -24,7 +24,6 @@ package de.hpi.layouting.topologicalsort;
 
 import de.hpi.layouting.model.LayoutingElement;
 
-
 /**
  * This class represents a found backwards edge in the
  * <code>TopologicalSorter</code>
@@ -34,40 +33,40 @@ import de.hpi.layouting.model.LayoutingElement;
  */
 public class BackwardsEdge {
 
-	private String source;
-	private String target;
-	private LayoutingElement edge = null;
+    private String source;
+    private String target;
+    private LayoutingElement edge = null;
 
-	public BackwardsEdge(String source, String target) {
-		this.source = source;
-		this.target = target;
-	}
+    public BackwardsEdge(String source, String target) {
+        this.source = source;
+        this.target = target;
+    }
 
-	public LayoutingElement getEdge() {
-		return edge;
-	}
+    public LayoutingElement getEdge() {
+        return edge;
+    }
 
-	public void setEdge(LayoutingElement edge) {
-		this.edge = edge;
-	}
+    public void setEdge(LayoutingElement edge) {
+        this.edge = edge;
+    }
 
-	public String getSource() {
-		return source;
-	}
+    public String getSource() {
+        return source;
+    }
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public String getTarget() {
-		return target;
-	}
+    public String getTarget() {
+        return target;
+    }
 
-	public void setTarget(String target) {
-		this.target = target;
-	}
+    public void setTarget(String target) {
+        this.target = target;
+    }
 
-	public String toString() {
-		return source + " -> " + target;
-	}
+    public String toString() {
+        return source + " -> " + target;
+    }
 }

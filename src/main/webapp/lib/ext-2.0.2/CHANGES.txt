@@ -90,7 +90,7 @@ src/locale/
        - Various updates
        
     Norwegian (-no)
-       - Split into 2 files, Bokmål (-no-NB) and Nynorsk (-no-NN)
+       - Split into 2 files, Bokmï¿½l (-no-NB) and Nynorsk (-no-NN)
 
 src/state/
     Provider

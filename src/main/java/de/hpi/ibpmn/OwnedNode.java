@@ -6,9 +6,7 @@ import java.util.List;
  * @author Gero.Decker
  */
 public interface OwnedNode {
-	
-	public List<Pool> getOwners();
-	
+
+    public List<Pool> getOwners();
+
 }
-
-

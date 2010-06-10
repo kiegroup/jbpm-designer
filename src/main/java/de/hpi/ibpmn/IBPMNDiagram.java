@@ -6,9 +6,9 @@ import de.hpi.ibpmn.validation.IBPMNSyntaxChecker;
 
 public class IBPMNDiagram extends BPMNDiagram {
 
-	@Override
-	public BPMNSyntaxChecker getSyntaxChecker() {
-		return new IBPMNSyntaxChecker(this);
-	}
+    @Override
+    public BPMNSyntaxChecker getSyntaxChecker() {
+        return new IBPMNSyntaxChecker(this);
+    }
 
 }

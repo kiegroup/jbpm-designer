@@ -7,30 +7,29 @@ import de.hpi.petrinet.LabeledTransition;
 import de.hpi.petrinet.SilentTransition;
 
 public class HighPetriNetFactory extends PTNetFactory {
-	@Override
-	public PTNetInterpreter createInterpreter() {
-		return new HighPNInterpreter();
-	}
+    @Override
+    public PTNetInterpreter createInterpreter() {
+        return new HighPNInterpreter();
+    }
 
-	@Override
-	public HighPetriNet createPetriNet() {
-		return new HighPetriNet();
-	}
-	
-	@Override
-	public HighFlowRelationship createFlowRelationship() {
-		return new HighFlowRelationship();
-	}
+    @Override
+    public HighPetriNet createPetriNet() {
+        return new HighPetriNet();
+    }
 
-	@Override
-	public LabeledTransition createLabeledTransition() {
-		return new HighLabeledTransition();
-	}
+    @Override
+    public HighFlowRelationship createFlowRelationship() {
+        return new HighFlowRelationship();
+    }
 
-	@Override
-	public SilentTransition createSilentTransition() {
-		return new HighSilentTransition();
-	}
-	
-	
+    @Override
+    public LabeledTransition createLabeledTransition() {
+        return new HighLabeledTransition();
+    }
+
+    @Override
+    public SilentTransition createSilentTransition() {
+        return new HighSilentTransition();
+    }
+
 }

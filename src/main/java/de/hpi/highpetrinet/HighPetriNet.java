@@ -5,9 +5,9 @@ import de.hpi.highpetrinet.verification.HighPNInterpreter;
 
 public class HighPetriNet extends PTNet {
 
-	@Override
-	public HighPNInterpreter getInterpreter() {
-		return new HighPNInterpreter();
-	}
+    @Override
+    public HighPNInterpreter getInterpreter() {
+        return new HighPNInterpreter();
+    }
 
 }

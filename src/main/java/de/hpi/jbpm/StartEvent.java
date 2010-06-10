@@ -10,65 +10,63 @@ import org.w3c.dom.NamedNodeMap;
 
 public class StartEvent extends Node {
 
-	public StartEvent(JSONObject startEvent) {
+    public StartEvent(JSONObject startEvent) {
 
-		this.name = JsonToJpdl.getAttribute(startEvent, "name");
-		this.bounds = JsonToJpdl.getBounds(startEvent);
-		this.outgoings = JsonToJpdl.getOutgoings(startEvent);
+        this.name = JsonToJpdl.getAttribute(startEvent, "name");
+        this.bounds = JsonToJpdl.getBounds(startEvent);
+        this.outgoings = JsonToJpdl.getOutgoings(startEvent);
 
-	}
-	
-	public StartEvent(org.w3c.dom.Node startEvent) {
-		this.uuid = "oryx_" + UUID.randomUUID().toString();
-		NamedNodeMap attributes = startEvent.getAttributes();
-		this.name = JpdlToJson.getAttribute(attributes, "name");
-		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
-		this.bounds.setWidth(30);
-		this.bounds.setHeight(30);
-	}
+    }
 
-	@Override
-	public String toJpdl() throws InvalidModelException {
-		StringWriter jpdl = new StringWriter();
-		jpdl.write("<start");
-		jpdl.write(JsonToJpdl.transformAttribute("name", name));
+    public StartEvent(org.w3c.dom.Node startEvent) {
+        this.uuid = "oryx_" + UUID.randomUUID().toString();
+        NamedNodeMap attributes = startEvent.getAttributes();
+        this.name = JpdlToJson.getAttribute(attributes, "name");
+        this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+        this.bounds.setWidth(30);
+        this.bounds.setHeight(30);
+    }
 
-		if (bounds != null) {
-			jpdl.write(bounds.toJpdl());
-		} else {
-			throw new InvalidModelException(
-					"Invalid Start Event. Bounds is missing.");
-		}
+    @Override
+    public String toJpdl() throws InvalidModelException {
+        StringWriter jpdl = new StringWriter();
+        jpdl.write("<start");
+        jpdl.write(JsonToJpdl.transformAttribute("name", name));
 
-		if (outgoings.size() > 0) {
-			jpdl.write(" >\n");
-			for (Transition t : outgoings) {
-				jpdl.write(t.toJpdl());
-			}
-			jpdl.write("</start>\n");
-		} else {
-			jpdl.write(" />\n");
-		}
+        if (bounds != null) {
+            jpdl.write(bounds.toJpdl());
+        } else {
+            throw new InvalidModelException("Invalid Start Event. Bounds is missing.");
+        }
 
-		return jpdl.toString();
-	}
+        if (outgoings.size() > 0) {
+            jpdl.write(" >\n");
+            for (Transition t : outgoings) {
+                jpdl.write(t.toJpdl());
+            }
+            jpdl.write("</start>\n");
+        } else {
+            jpdl.write(" />\n");
+        }
 
-	@Override
-	public JSONObject toJson() throws JSONException {
+        return jpdl.toString();
+    }
 
-		JSONObject stencil = new JSONObject();
-		stencil.put("id", "StartEvent");
+    @Override
+    public JSONObject toJson() throws JSONException {
 
-		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
+        JSONObject stencil = new JSONObject();
+        stencil.put("id", "StartEvent");
 
-		JSONObject properties = new JSONObject();
-		properties.put("bgcolor", "#ffffff");
-		if (name != null)
-			properties.put("name", name);
+        JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
-		JSONArray childShapes = new JSONArray();
+        JSONObject properties = new JSONObject();
+        properties.put("bgcolor", "#ffffff");
+        if (name != null)
+            properties.put("name", name);
 
-		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
-				childShapes, bounds.toJson());
-	}
+        JSONArray childShapes = new JSONArray();
+
+        return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties, childShapes, bounds.toJson());
+    }
 }

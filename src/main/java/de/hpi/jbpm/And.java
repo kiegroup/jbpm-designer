@@ -10,72 +10,70 @@ import org.w3c.dom.NamedNodeMap;
 
 public class And extends Node {
 
-	public And(JSONObject and) {
+    public And(JSONObject and) {
 
-		this.name = JsonToJpdl.getAttribute(and, "name");
-		this.bounds = JsonToJpdl.getBounds(and);
-		this.outgoings = JsonToJpdl.getOutgoings(and);
+        this.name = JsonToJpdl.getAttribute(and, "name");
+        this.bounds = JsonToJpdl.getBounds(and);
+        this.outgoings = JsonToJpdl.getOutgoings(and);
 
-	}
-	
-	public And(org.w3c.dom.Node and) {
-		this.uuid = "oryx_" + UUID.randomUUID().toString();
-		NamedNodeMap attributes = and.getAttributes();
-		this.name = JpdlToJson.getAttribute(attributes, "name");
-		this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
-		this.bounds.setWidth(40);
-		this.bounds.setHeight(40);
-	}
+    }
 
-	@Override
-	public String toJpdl() throws InvalidModelException {
-		StringWriter jpdl = new StringWriter();
-		String type = "";
-		if (outgoings.size() <= 1)
-			type = "join";
-		else
-			type = "fork";
+    public And(org.w3c.dom.Node and) {
+        this.uuid = "oryx_" + UUID.randomUUID().toString();
+        NamedNodeMap attributes = and.getAttributes();
+        this.name = JpdlToJson.getAttribute(attributes, "name");
+        this.bounds = JpdlToJson.getBounds(attributes.getNamedItem("g"));
+        this.bounds.setWidth(40);
+        this.bounds.setHeight(40);
+    }
 
-		jpdl.write("<" + type);
+    @Override
+    public String toJpdl() throws InvalidModelException {
+        StringWriter jpdl = new StringWriter();
+        String type = "";
+        if (outgoings.size() <= 1)
+            type = "join";
+        else
+            type = "fork";
 
-		jpdl.write(JsonToJpdl.transformAttribute("name", name));
+        jpdl.write("<" + type);
 
-		if (bounds != null) {
-			jpdl.write(bounds.toJpdl());
-		} else {
-			throw new InvalidModelException(
-					"Invalid Wait activity. Bounds is missing.");
-		}
+        jpdl.write(JsonToJpdl.transformAttribute("name", name));
 
-		if (outgoings.size() > 0) {
-			jpdl.write(" >\n");
-			for (Transition t : outgoings) {
-				jpdl.write(t.toJpdl());
-			}
-			jpdl.write("</" + type + ">\n");
-		} else {
-			jpdl.write(" />\n");
-		}
+        if (bounds != null) {
+            jpdl.write(bounds.toJpdl());
+        } else {
+            throw new InvalidModelException("Invalid Wait activity. Bounds is missing.");
+        }
 
-		return jpdl.toString();
-	}
+        if (outgoings.size() > 0) {
+            jpdl.write(" >\n");
+            for (Transition t : outgoings) {
+                jpdl.write(t.toJpdl());
+            }
+            jpdl.write("</" + type + ">\n");
+        } else {
+            jpdl.write(" />\n");
+        }
 
-	@Override
-	public JSONObject toJson() throws JSONException {
-		JSONObject stencil = new JSONObject();
-		stencil.put("id", "AND_Gateway");
+        return jpdl.toString();
+    }
 
-		JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
+    @Override
+    public JSONObject toJson() throws JSONException {
+        JSONObject stencil = new JSONObject();
+        stencil.put("id", "AND_Gateway");
 
-		JSONObject properties = new JSONObject();
-		properties.put("bgcolor", "#ffffff");
-		if (name != null)
-			properties.put("name", name);
+        JSONArray outgoing = JpdlToJson.getTransitions(outgoings);
 
-		JSONArray childShapes = new JSONArray();
+        JSONObject properties = new JSONObject();
+        properties.put("bgcolor", "#ffffff");
+        if (name != null)
+            properties.put("name", name);
 
-		return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties,
-				childShapes, bounds.toJson());
-	}
+        JSONArray childShapes = new JSONArray();
+
+        return JpdlToJson.createJsonObject(uuid, stencil, outgoing, properties, childShapes, bounds.toJson());
+    }
 
 }
