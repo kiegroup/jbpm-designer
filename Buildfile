@@ -43,21 +43,21 @@ define "designer" do
   package(:war).include(_("src/main/webapp/js/Plugins/profiles.xml"), :path => ".")
   package(:war).include(_("src/main/webapp"), :as => '.')
   
-  package(:war).libs = ORBIT_SOURCES, ORBIT_BINARIES
+  package(:war).libs = WAR_LIBS
    
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
   read_m["Jetty-WarFolderPath"] = webContent
   read_m["Bundle-Version"] = project.version
   package(:bundle).with :manifest => read_m
   
-  task :compress do
+  compress = task :compress do
     #concatenate those files:
     files = JSON.parse(File.read(_("src/main/webapp/js/js_files.json")))["files"]
     files.collect! {|f| _("src/main/webapp/js/#{f}")}
     compress(files, _('target/oryx.uncompressed.js'), _('target/oryx.js'))
   end
   
-  package(:bundle).enhance [:compress] do |package_bundle|
+  package(:bundle).enhance [compress] do |package_bundle|
     package_bundle.include(_('target/oryx.uncompressed.js'), :path => webContent)
     package_bundle.include(_('target/oryx.js'), :path => webContent)
     
@@ -68,7 +68,7 @@ define "designer" do
     package_bundle.include(_('target/default.js'), :path => "#{webContent}/profiles")    
   end
   
-  package(:war).enhance [:compress]
+  package(:war).enhance [compress]
   package(:war).enhance do |package_war|
     #webContent is '.' then
     webContent = '.'

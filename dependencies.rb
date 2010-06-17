@@ -1,8 +1,7 @@
 
 YUICOMPRESSOR = "com.yahoo.platform.yui:yuicompressor:jar:2.3.6"
 
-ORBIT_SOURCES	= group("org.json", "de.hpi.bpt", "org.apache.commons.collections", "org.apache.commons.configuration",
-    "org.apache.commons.collections", "org.jdom", 
+ORBIT_SOURCES	= group("org.json", "de.hpi.bpt", "org.apache.commons.collections", "org.apache.commons.configuration", "org.jdom", 
     "org.apache.velocity", "org.supercsv",  "org.apache.xmlgraphics.fop", "com.sun.xml.bind", 
     "com.sun.xml.bind.jaxb1", "de.hpi.bpt.epc", "com.thoughtworks.xstream", "org.xmappr",
                            :under=>"com.intalio.cloud.orbit", :version=>"1.0.0.010")
@@ -17,3 +16,13 @@ ORBIT_BINARIES	= ["com.intalio.cloud.orbit-prefetched:javax.servlet:jar:2.5.0.v2
    "com.intalio.cloud.orbit-prefetched:org.apache.batik.transcoder:jar:1.7.0.v200903091627",
    "com.intalio.cloud.orbit-prefetched:org.apache.xalan:jar:2.7.1.v200905122109",
    "com.intalio.cloud.orbit-prefetched:org.apache.xerces:jar:2.9.0.v200909240008"]
+   
+WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
+  "commons-configuration:commons-configuration:jar:1.6", "org.jdom:jdom:jar:1.1", "org.apache.velocity:velocity:jar:1.6.4",
+  "org.supercsv:SuperCSV:jar:1.52", "org.apache.xmlgraphics:fop:jar:0.95", "com.sun.xml.bind:jaxb-impl:jar:2.2",
+  "com.sun.xml.bind:jaxb1-impl:jar:2.2", "de.hpi:atlas:jar:1.0.0", "com.thoughtworks.xstream:xstream:jar:1.3.1",
+  "org.xmappr:xmappr:jar:0.9.3",
+  "javax.servlet:servlet-api:jar:2.5", "commons-httpclient:commons-httpclient:jar:3.1", 
+  "commons-fileupload:commons-fileupload:jar:1.2.1", "commons-lang:commons-lang:jar:2.5",
+  "org.slf4j:log4j-over-slf4j:jar:1.6.0", "rhino:js:jar:1.7R2", "javax.mail:mail:jar:1.4.1",
+  "batik:batik-transcoder:jar:1.6", "xalan:xalan:jar:2.7.1", "xerces:xercesImpl:jar:2.9.1"]
