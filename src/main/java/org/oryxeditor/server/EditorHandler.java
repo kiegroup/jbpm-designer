@@ -271,7 +271,8 @@ public class EditorHandler extends HttpServlet {
       	  	+ "<script src=\"" + oryx_path + "lib/ext-2.0.2/color-field.js\" type=\"text/javascript\" />\n"
       	  	+ "<style media=\"screen\" type=\"text/css\">\n"
       	  	+ "@import url(\"" + oryx_path + "lib/ext-2.0.2/resources/css/ext-all.css\");\n"
-      	  	+ "@import url(\"" + oryx_path + "lib/ext-2.0.2/resources/css/xtheme-gray.css\");\n"
+      	  	// blue theme is best
+      	  	//+ "@import url(\"" + oryx_path + "lib/ext-2.0.2/resources/css/xtheme-gray.css\");\n"
       	  	+ "</style>\n"
 
       	  	+ "<!-- oryx editor -->\n"
