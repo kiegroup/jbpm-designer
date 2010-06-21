@@ -10,6 +10,9 @@ ORYX.CONFIG.ROOT_PATH =        "/designer/";
 ORYX.CONFIG.WEB_URL = "http://localhost";
 
 ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Z-Order" : 3, "Undo" : 4, "Docker" : 5, "Help" : "ZZZZZZ"};
+
+//ORYX.CONFIG.UUID_URL = function(uuid) {"/enterprise-repository/org.drools.guvnor.Guvnor/guvnorAPI?action=load&uuid=" + uuid};
+ORYX.CONFIG.UUID_URL = function(uuid) {"http://localhost:8082/default/businessprocess/"+ uuid + "/crmUpload"};
 	
 ORYX.CONFIG.VERSION_URL =				ORYX.CONFIG.ROOT_PATH + "VERSION";
 ORYX.CONFIG.LICENSE_URL =				ORYX.CONFIG.ROOT_PATH + "LICENSE";
@@ -25,7 +28,7 @@ ORYX.CONFIG.MODE_FULLSCREEN =			"fullscreen";
 		
 	/* Show grid line while dragging */
 ORYX.CONFIG.SHOW_GRIDLINE = true;
-ORYX.CONFIG.DISABLE_GRADIENT = true;
+ORYX.CONFIG.DISABLE_GRADIENT = false;
 
 	/* Plugins */
 ORYX.CONFIG.PLUGINS_ENABLED =			true;
