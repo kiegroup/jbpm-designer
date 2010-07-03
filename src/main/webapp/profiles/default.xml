@@ -6,6 +6,7 @@
 		<plugin source="toolbar.js" name="ORYX.Plugins.Toolbar" core="true" />
 		<plugin name="ORYX.Plugins.UUIDRepositorySave" source="uuidRepository.js"/>
 		<plugin name="ORYX.Plugins.SelectStencilSetPerspective" source="selectssperspective.js" />
+		<plugin name="ORYX.Plugins.ShapeMenuPlugin" source="shapemenu.js"/>
 		<plugin name="ORYX.Plugins.ShapeRepository" source="shaperepository.js"/>
 		<plugin name="ORYX.Plugins.PropertyWindow" source="propertywindow.js"/>
 		<plugin name="ORYX.Plugins.CanvasResize" source="canvasResize.js"/>
