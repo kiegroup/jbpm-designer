@@ -4,7 +4,7 @@
 	<!-- name default is reserved for the standard profile -->
 	<profile name="default" stencilset="stencilsets/bpmn2.0/bpmn2.0.json">
 		<plugin source="toolbar.js" name="ORYX.Plugins.Toolbar" core="true" />
-		<plugin name="ORYX.Plugins.File" source="file.js"/>
+		<plugin name="ORYX.Plugins.UUIDRepositorySave" source="uuidRepository.js"/>
 		<plugin name="ORYX.Plugins.SelectStencilSetPerspective" source="selectssperspective.js" />
 		<plugin name="ORYX.Plugins.ShapeRepository" source="shaperepository.js"/>
 		<plugin name="ORYX.Plugins.PropertyWindow" source="propertywindow.js"/>

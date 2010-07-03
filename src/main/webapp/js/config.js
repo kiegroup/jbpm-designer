@@ -11,8 +11,13 @@ ORYX.CONFIG.WEB_URL = "http://localhost";
 
 ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Z-Order" : 3, "Undo" : 4, "Docker" : 5, "Help" : "ZZZZZZ"};
 
-//ORYX.CONFIG.UUID_URL = function(uuid) {"/enterprise-repository/org.drools.guvnor.Guvnor/guvnorAPI?action=load&uuid=" + uuid};
-ORYX.CONFIG.UUID_URL = function(uuid) {"http://localhost:8082/default/businessprocess/"+ uuid + "/crmUpload"};
+ORYX.CONFIG.UUID_URL = function(uuid) {
+  if (uuid === undefined) {
+    uuid = ORYX.CONFIG.UUID;
+  }
+  return "/designer/uuidRepository?uuid="+ uuid;
+  
+};
 	
 ORYX.CONFIG.VERSION_URL =				ORYX.CONFIG.ROOT_PATH + "VERSION";
 ORYX.CONFIG.LICENSE_URL =				ORYX.CONFIG.ROOT_PATH + "LICENSE";

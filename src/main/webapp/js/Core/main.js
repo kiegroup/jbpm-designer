@@ -589,7 +589,6 @@ ORYX.Editor = {
 		// If there is an Array where all plugins are described, than only take those
 		// (that comes from the usage of oryx with a mashup api)
 		if( ORYX.MashupAPI && ORYX.MashupAPI.loadablePlugins && ORYX.MashupAPI.loadablePlugins instanceof Array ){
-		
 			// Get the plugins from the available plugins (those who are in the plugins.xml)
 			ORYX.availablePlugins = $A(ORYX.availablePlugins).findAll(function(value){
 										return ORYX.MashupAPI.loadablePlugins.include( value.name )
@@ -602,7 +601,6 @@ ORYX.Editor = {
 				}
 			})
 		}
-		
 		
 		ORYX.availablePlugins.each(function(value) {
 			ORYX.Log.debug("Initializing plugin '%0'", value.name);
@@ -1109,26 +1107,7 @@ ORYX.Editor = {
     loadSerialized: function( model ){
         var canvas  = this.getCanvas();
       
-        if(model.uuid) {
-
-
-     		//load the model from the repository from its uuid
-			//use the guvnorAPI for that:
-			new Ajax.Request(ORYX.CONFIG.UUID_URL(model.uuid), {
-	            asynchronous: false,
-	            method: 'post',
-	            onSuccess: function(transport) {
-					response = transport.responseText;
-					ORYX.CONFIG.UUID = uuid; // this instance of the editor is bound to this UUID.
-					model = response.evalJSON();
-				},
-	            onFailure: function(transport) {
-		            alert(transport.responseText);
-	  		        alert(transport);
-				    alert("Could not load the model for uuid " + model.uuid);
-				}
-	        });
-		}
+        
         // Bugfix (cf. http://code.google.com/p/oryx-editor/issues/detail?id=240)
         // Deserialize the canvas' stencil set extensions properties first!
         this.loadSSExtensions(model.ssextensions);

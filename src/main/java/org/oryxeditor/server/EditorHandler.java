@@ -1,6 +1,7 @@
 /***************************************
- * Copyright (c) 2008
+ * Copyright (c) 2008-2010
  * Philipp Berger 2009
+ * Intalio, Inc 2010
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -112,11 +113,16 @@ public class EditorHandler extends HttpServlet {
 		if(exts==null)
 			exts=new JSONArray();
 		extString=exts.toString();
+		String uuid_flag = "";
+		if (request.getParameter("uuid") != null) {
+		    uuid_flag = "ORYX.CONFIG.UUID = \"" + request.getParameter("uuid") + "\"";
+		}
 		String content = 
 	        "<script type='text/javascript'>" +
 	        "  if(!ORYX) var ORYX = {};\n" +
 	        "  if(!ORYX.CONFIG) ORYX.CONFIG = {};\n" +
 	        "  " + dev_flag + "\n" +
+	        "  " + uuid_flag + "\n" +
 	        "  ORYX.CONFIG.PLUGINS_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".xml';\n" +
 	        "  ORYX.CONFIG.PROFILE_CONFIG = ORYX.CONFIG.PROFILE_PATH + '"+profiles.get(0)+".conf';\n" +
 		    "  ORYX.CONFIG.SSET='" + sset +"';" +

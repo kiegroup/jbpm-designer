@@ -60,7 +60,7 @@
 		</plugin>
 		<plugin source="file.js" name="ORYX.Plugins.File"/>
 		<plugin source="file.js" name="ORYX.Plugins.Save"/>
-		
+		<plugin source="uuidRepository.js" name="ORYX.Plugins.UUIDRepository"/>
 		<plugin source="view.js" name="ORYX.Plugins.View">
 			<property zoomLevel="2" maxFitToScreenLevel="1.24" />
 		</plugin>
