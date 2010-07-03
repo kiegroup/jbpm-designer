@@ -62,7 +62,7 @@ define "designer" do
     package_bundle.include(_('target/oryx.js'), :path => webContent)
     
     default = File.read(_("src/main/webapp/profiles/default.xml"))
-    files = default.scan(/source=\"(.*)\"/).to_a.flatten
+    files = default.scan(/source=\"(.*?)\"/).to_a.flatten
     files.collect! {|f| _("src/main/webapp/js/Plugins/#{f}")}
     compress(files, _("target/default.uncompressed.js"), _("target/default.js"))
     package_bundle.include(_('target/default.js'), :path => "#{webContent}/profiles")    
@@ -76,7 +76,7 @@ define "designer" do
     package_war.include(_('target/oryx.js'), :path => webContent)
     
     default = File.read(_("src/main/webapp/profiles/default.xml"))
-    files = default.scan(/source=\"(.*)\"/).to_a.flatten
+    files = default.scan(/source=\"(.*?)\"/).to_a.flatten
     files.collect! {|f| _("src/main/webapp/js/Plugins/#{f}")}
     compress(files, _("target/default.uncompressed.js"), _("target/default.js"))
     package_war.include(_('target/default.js'), :path => "#{webContent}/profiles")
