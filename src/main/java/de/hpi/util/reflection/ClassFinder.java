@@ -1,13 +1,8 @@
 package de.hpi.util.reflection;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-
-import org.osgi.framework.BundleReference;
 
 public class ClassFinder {
 
