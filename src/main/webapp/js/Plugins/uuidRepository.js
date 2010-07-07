@@ -69,7 +69,7 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
                 method: 'POST',
                 asynchronous: false,
-                parameters: { data: serializedDOM, svg: svgDOM },
+                postBody: Ext.encode({data: serializedDOM, svg : svgDOM, uuid: ORYX.CONFIG.UUID}),
 			onSuccess: (function(transport) {
 				//show saved status
 				this.facade.raiseEvent({
@@ -112,29 +112,36 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
  */
 window.onOryxResourcesLoaded = function() {
 	var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
-	
-	if(ORYX.CONFIG.UUID) {
+	var editor_parameters = {
+		id: ORYX.CONFIG.UUID,
+		stencilset: {
+			url: ORYX.PATH + stencilset
+		}
+	};
+	if(!(ORYX.CONFIG.UUID === undefined)) {
+		
  		//load the model from the repository from its uuid
 		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
             asynchronous: false,
             method: 'get',
             onSuccess: function(transport) {
 				response = transport.responseText;
-				console.log(response);
-				model = response.evalJSON();
-				console.log("MODEL");
-				console.log(model);
-				new ORYX.Editor({
-					id: ORYX.CONFIG.UUID,
-					stencilset: {
-						url: ORYX.PATH + stencilset
-					},
-					model: model
-				});
+				
+				if (response.length != 0) {
+				    try {
+					    model = response.evalJSON();
+					    editor_parameters.model = model;
+				    } catch(err) {
+				    	ORYX.LOG.error(err);
+				    }
+				}
+				
 			},
             onFailure: function(transport) {
             	ORYX.LOG.error("Could not load the model for uuid " + ORYX.CONFIG.UUID);
 			}
         });
 	}
+	// finally open the editor:
+	new ORYX.Editor(editor_parameters);
 };

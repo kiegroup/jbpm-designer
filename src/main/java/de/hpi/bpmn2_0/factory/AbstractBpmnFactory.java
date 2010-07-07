@@ -25,7 +25,9 @@ package de.hpi.bpmn2_0.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.oryxeditor.server.diagram.Shape;
 
@@ -155,5 +157,35 @@ public abstract class AbstractBpmnFactory {
 
 		throw new BpmnConverterException("Creator method for shape with id "
 				+ shape.getStencilId() + " not found");
+	}
+	
+	enum Factory {
+	    SUBPROCESS(SubprocessFactory.class), TASK(TaskFactory.class), CONVERSATION_LINK(ConversationLinkFactory.class),
+	    MESSAGE_FLOW(MessageFlowFactory.class), SEQUENCE(SequenceFlowFactory.class), ASSOCIATION(AssociationFactory.class),
+	    CHOREOGRAPHY_ACTIVITY(ChoreographyActivityFactory.class), CHOREOGRAPHY_PARTICIPANT(ChoreographyParticipantFactory.class),
+	    CONVERSATION(ConversationFactory.class), CONVERSATION_PARTICIPANT(ConversationParticipantFactory.class),
+	    DATA_OBJECT(DataObjectFactory.class), DATA_STORE(DataStoreFactory.class), END_EVENT(EndEventFactory.class),
+	    GATEWAY(GatewayFactory.class), GROUP(GroupFactory.class), INTERMEDIATE_CATCH_EVENT(IntermediateCatchEventFactory.class),
+	    INTERMEDIATE_THROW_EVENT(IntermediateThrowEventFactory.class), IT_SYSTEM(ITSystemFactory.class),
+	    LANE(LaneFactory.class), MESSAGE(MessageFactory.class), PARTICIPANT(ParticipantFactory.class), 
+	    PROCESS_PARTICIPANT(ProcessParticipantFactory.class), START_EVENT(StartEventFactory.class), TEXT_ANNOTATION(TextannotationFactory.class);
+	    
+	    Class<? extends AbstractBpmnFactory> factoryClass;
+	    
+	    private Factory(Class<? extends AbstractBpmnFactory> c) {
+	        factoryClass = c;
+	    }
+	    
+	}
+	
+	/**
+	 * @return the list of factories that implement AbstractBpmnFactory and may be used for serializing to json.
+	 */
+	public static List<Class<? extends AbstractBpmnFactory>> getFactories() {
+	    List<Class<? extends AbstractBpmnFactory>> list = new ArrayList<Class<? extends AbstractBpmnFactory>>();
+	    for (Factory f : Factory.values()) {
+	        list.add(f.factoryClass);
+	    }
+	    return list;
 	}
 }

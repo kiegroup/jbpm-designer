@@ -21,13 +21,16 @@
 ****************************************/
 package org.oryxeditor.server;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -37,19 +40,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.oryxeditor.server.diagram.Diagram;
 import org.oryxeditor.server.diagram.DiagramBuilder;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
+import de.hpi.bpmn2_0.ExportValidationEventCollector;
 import de.hpi.bpmn2_0.exceptions.BpmnConverterException;
 import de.hpi.bpmn2_0.factory.AbstractBpmnFactory;
 import de.hpi.bpmn2_0.model.Definitions;
 import de.hpi.bpmn2_0.transformation.BPMNPrefixMapper;
 import de.hpi.bpmn2_0.transformation.Diagram2BpmnConverter;
-import de.hpi.util.reflection.ClassFinder;
 
 /**
  * @author Antoine Toulme
@@ -59,6 +67,8 @@ import de.hpi.util.reflection.ClassFinder;
 public class UUIDBasedRepositoryServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Logger _logger = Logger.getLogger(UUIDBasedRepositoryServlet.class);
     
     /**
      * the path to the repository inside the servlet.
@@ -90,51 +100,138 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String uuid = req.getParameter("uuid");
-        if (uuid == null) {
-            throw new ServletException("uuid parameter required");
+        BufferedReader reader = req.getReader();
+        StringWriter reqWriter = new StringWriter();
+        char[] buffer = new char[4096];
+        int read;
+        while ((read = reader.read(buffer)) != -1) {
+            reqWriter.write(buffer, 0, read);
         }
-        String json = req.getParameter("data");
-        String svg = req.getParameter("svg");
-        // this is using JAXB and JSON to recreate the model and save.
+        String data = reqWriter.toString();
         try {
-        try {
-            Diagram diagram = DiagramBuilder.parseJson(json);
-            List<Class<? extends AbstractBpmnFactory>> factoryClasses = ClassFinder.getClassesByPackageName(AbstractBpmnFactory.class,
-                "de.hpi.bpmn2_0.factory", this.getServletContext());
-            Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram, factoryClasses);
-            Definitions def = converter.getDefinitionsFromDiagram();
-            JAXBContext context = JAXBContext.newInstance(Definitions.class);
-            Marshaller m = context.createMarshaller();
+            JSONObject jsonObject = new JSONObject(data);
+            
 
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            NamespacePrefixMapper nsp = new BPMNPrefixMapper();
-            m.setProperty("com.sun.xml.bind.namespacePrefixMapper", nsp);
-            m.marshal(def, new File(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".bpmn")));
-        } catch (ClassNotFoundException e1) {
+            String json = (String) jsonObject.get("data");
+            String svg = (String) jsonObject.get("svg");
+            String uuid = (String) jsonObject.get("uuid");
+            BufferedWriter writer = null;
+
+            try {
+                try {
+                    StringWriter bpmnWriter = performTransformationToDi(json, true, AbstractBpmnFactory.getFactories());
+                    writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".bpmn")));
+                    writer.write(bpmnWriter.toString());
+                } catch (JSONException e2) {
+                    throw new ServletException(e2);
+                } catch (BpmnConverterException e) {
+                    throw new ServletException(e);
+                } catch (JAXBException e) {
+                    throw new ServletException(e);
+                }
+            } catch (Exception e) {
+                // whatever was thrown, for now, we catch it and log it.
+                _logger.error(e.getMessage(), e);
+            } finally {
+                if (writer != null) { try { writer.close();} catch(Exception e) {} }
+            }
+
+
+            try {
+                writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".json")));
+                writer.write(json);
+            } finally {
+                if (writer != null) { try { writer.close();} catch(Exception e) {} }
+            }
+            try {
+                writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".svg")));
+                writer.write(svg);
+            } finally {
+                if (writer != null) { try { writer.close();} catch(Exception e) {} }
+            }
+        } catch (JSONException e1) {
             throw new ServletException(e1);
-        } catch (JSONException e2) {
-            throw new ServletException(e2);
-        } catch (BpmnConverterException e) {
-            throw new ServletException(e);
-        } catch (JAXBException e) {
-            throw new ServletException(e);
         }
-        } catch (Exception e) {
+    }
+    
+    /**
+     * Copied from the Bpmn2_0Servlet class.
+     * 
+     * Triggers the transformation from Diagram to BPMN model and writes the 
+     * resulting BPMN XML on success.
+     * 
+     * @param json
+     *      The diagram in JSON format
+     * @param writer
+     *      The HTTP-response writer
+     * @throws Exception
+     *      Exception occurred while processing
+     */
+    protected StringWriter performTransformationToDi(String json, boolean asXML, List<Class<? extends AbstractBpmnFactory>> factoryClasses) throws Exception {
+        StringWriter writer = new StringWriter();
+        JSONObject result = new JSONObject();
+        
+        /* Retrieve diagram model from JSON */
+    
+        Diagram diagram = DiagramBuilder.parseJson(json);
+            
+        /* Build up BPMN 2.0 model */
+        Diagram2BpmnConverter converter = new Diagram2BpmnConverter(diagram, factoryClasses);
+        Definitions bpmnDefinitions = converter.getDefinitionsFromDiagram();
+        
+        /* Perform XML creation */
+        JAXBContext context = JAXBContext.newInstance(Definitions.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        
+        NamespacePrefixMapper nsp = new BPMNPrefixMapper();
+        marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", nsp);
+        
+        /* Set Schema validation properties */
+        SchemaFactory sf = SchemaFactory
+                .newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        
+        String xsdPath = this.getServletContext().getRealPath("/WEB-INF/lib/bpmn20/BPMN20.xsd");
+        
+        Schema schema = sf.newSchema(new File(xsdPath));
+        marshaller.setSchema(schema);
+        
+        ExportValidationEventCollector vec = new ExportValidationEventCollector();
+        marshaller.setEventHandler(vec);
+        
+        /* Marshal BPMN 2.0 XML */
+        marshaller.marshal(bpmnDefinitions, writer);
+        
+        if(asXML) {
+            return writer;
         }
         
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".json")));
-            writer.write(json);
-        } finally {
-            if (writer != null) { try { writer.close();} catch(Exception e) {} }
+        result.put("xml", writer.toString());
+        
+        /* Append XML Schema validation results */
+        if(vec.hasEvents()) {
+            ValidationEvent[] events = vec.getEvents();
+            StringBuilder builder = new StringBuilder();
+            builder.append("Validation Errors: <br /><br />");
+            
+            for(ValidationEvent event : Arrays.asList(events)) {
+                
+                builder.append("Line: ");
+                builder.append(event.getLocator().getLineNumber());
+                builder.append(" Column: ");
+                builder.append(event.getLocator().getColumnNumber());
+                
+                builder.append("<br />Error: ");
+                builder.append(event.getMessage());
+                builder.append("<br /><br />");
+            }
+            result.put("validationEvents", builder.toString());
         }
-        try {
-            writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".svg")));
-            writer.write(svg);
-        } finally {
-            if (writer != null) { try { writer.close();} catch(Exception e) {} }
-        }
+        
+        /* Prepare output */
+        writer = new StringWriter();
+        writer.write(result.toString());
+        
+        return writer;      
     }
 }
