@@ -1,6 +1,7 @@
 /**
- * Copyright (c) 2009
+ * Copyright (c) 2009-2010
  * Sven Wagner-Boysen
+ * Antoine Toulme, Intalio, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -346,13 +347,13 @@ ORYX.Plugins.ContainerLayouter = {
 			.flatten()
 			// Get every edge only once
 			.uniq()
-			// Get all dockers
+			/*// Do not grab dockers if we are using the edge layouter - which we most certainly are.
 			.map(function(edge){
 				return edge.dockers.length > 2 ? 
 						edge.dockers.slice(1, edge.dockers.length-1) : 
 						[];
 			})
-			// Flatten the dockers lists
+			// Flatten the dockers lists*/
 			.flatten()
 			.each(function(docker){
 				docker.bounds.moveBy(offset);

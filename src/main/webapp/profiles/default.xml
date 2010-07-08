@@ -27,7 +27,10 @@
 		<plugin source="bpmn2.0/bpmn2conversation.js" name="ORYX.Plugins.BPMN2CONVERSATION"/>
 		<plugin source="bpmn2.0/bpmn2.0choreography.js" name="ORYX.Plugins.Bpmn2_0Choreography"/>
 		<plugin source="bpmn2.0/bpmn2.0serialization.js" name="ORYX.Plugins.BPMN2_0Serialization"/>
-		
-		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>
+		<!-- to have edges with orthogonal layout -->
+		<plugin source="Layouter/edgeLayouter.js" name="ORYX.Plugins.Layouter.EdgeLayouter"/>
+		<!-- to have a better container layout ? -->
+		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
+		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#"/>
 	</profile>
 </profiles>
