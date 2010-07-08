@@ -272,7 +272,7 @@ ORYX.Editor = {
 					collapsible	: true,
 					width	: ORYX.CONFIG.PANEL_RIGHT_WIDTH || 200,
 					split	: true,
-					title	: "East"
+					title	: ""
 				}),
 				
 				
@@ -296,7 +296,7 @@ ORYX.Editor = {
 					autoScroll:true,
 					cmargins: {left:0, right:0},
 					split	: true,
-					title	: "West"
+					title	: ""
 				}),
 				
 				
