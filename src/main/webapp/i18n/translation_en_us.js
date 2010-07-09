@@ -314,7 +314,9 @@ if(!ORYX.I18N.Save) ORYX.I18N.Save = {};
 
 ORYX.I18N.Save.group = "File";
 ORYX.I18N.Save.save = "Save";
+ORYX.I18N.Save.autosave = "Autosave";
 ORYX.I18N.Save.saveDesc = "Save";
+ORYX.I18N.Save.autosaveDesc = "Autosave";
 ORYX.I18N.Save.saveAs = "Save As...";
 ORYX.I18N.Save.saveAsDesc = "Save As...";
 ORYX.I18N.Save.unsavedData = "There are unsaved data, please save before you leave, otherwise your changes get lost!";

@@ -34,6 +34,7 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
     facade: undefined,
 	
     construct: function(facade){
+	
 		this.facade = facade;
 		this.facade.offer({
 			'name': ORYX.I18N.Save.save,
@@ -46,6 +47,16 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 			'maxShape': 0
 		});
 		
+		this.facade.offer({
+			'name': ORYX.I18N.Save.autosave,
+			'functionality': this.setautosave.bind(this, false),
+			'group': ORYX.I18N.Save.group,
+			'icon': ORYX.PATH + "images/disk_multi.png",
+			'description': ORYX.I18N.Save.autosaveDesc,
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0
+		});
 
 		// ask before closing the window
 		this.changeDifference = 0;		
@@ -58,10 +69,25 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 				return ORYX.I18N.Save.unsavedData;
 			}
 		}.bind(this);
+		
+		this.setautosave(this);
+	},
+	
+	setautosave: function(savePlugin) {
+		value = !this.autosaving;
+		if (value) {
+			savePlugin.icon = ORYX.PATH+ "images/disk_multi.png";
+			savePlugin.tooltip = "Auto Save is on";
+			this.autosaveInternalId = self.setInterval(function() { if (/*savePlugin.changeDifference != 0*/true) { savePlugin.save(); }}, 30000);
+		} else {
+			savePlugin.icon = ORYX.PATH+ "images/cross.png";
+			savePlugin.tooltip = "Auto Save is off";
+			self.clearInterval(this.autosaveInternalId);
+		}
+		this.autosaving = value;
 	},
 	
 	save: function() {
-
 		var svgDOM = DataManager.serialize(this.facade.getCanvas().getSVGRepresentation(true));
 		var serializedDOM = Ext.encode(this.facade.getJSON());
 		
