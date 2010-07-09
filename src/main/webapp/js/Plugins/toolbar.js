@@ -45,8 +45,6 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 		  this.groupIndex = ORYX.CONFIG.MENU_INDEX
 		}
 		
-		console.log(this.groupIndex);
-		
 		Ext.QuickTips.init();
 
 		this.buttons = [];
