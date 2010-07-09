@@ -74,10 +74,74 @@ public class EditorHandler extends HttpServlet {
 		String sset=null;
 		List<String> profiles= new ArrayList<String>();
 		String dev_flag = "";
+		String bootstrapLibs = "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n";
+		String extString="";
+		
 		if (System.getProperty(DEV_MODE) != null) {
 			dev_flag = "ORYX.CONFIG.DEV = true;\nvar ORYX_LOGLEVEL = 3;\n";
 			profiles.add("default"); // will be ignored.
 			conf = new JSONObject(); // we can do a better job at configuring the conf object later on.
+			String jsFolder = this.getServletContext().getRealPath("/") + File.separator + "js" + File.separator;
+			// we place ourselves in dev mode, we will load the files from the file js_files.json
+			try {
+			    // first, read the JSON files to know what core libs to include
+			    JSONObject dev = readJSONObjectFromFile(jsFolder +  "js_files.json");
+
+			    JSONArray array = dev.getJSONArray("files");
+			    StringBuilder builder = new StringBuilder();
+			    for (int i = 0 ; i < array.length() ; i++) {
+			        String filename = String.valueOf(array.get(i));
+			        builder.append("<script src=\"" + oryx_path + "js/" + filename + "\" type=\"text/javascript\" />\n");
+			    }
+			    bootstrapLibs = builder.toString();
+			    // then append the plugins, using their source attribute.
+			    InputStream fileStream = null;
+			    try {
+			        fileStream = new FileInputStream(this.getServletContext().getRealPath("/") + File.separator + "profiles" 
+			                + File.separator + "default.xml");
+			        XMLInputFactory factory = XMLInputFactory.newInstance();
+			        XMLStreamReader reader = factory.createXMLStreamReader(fileStream);
+			        JSONArray ssextensions = new JSONArray();
+			        
+			        while(reader.hasNext()) {
+			            if (reader.next() == XMLStreamReader.START_ELEMENT) {
+			                if ("plugin".equals(reader.getLocalName())) {
+			                    for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+			                        if ("source".equals(reader.getAttributeLocalName(i))) {
+			                            builder.append("<script src=\"" + oryx_path + "js/Plugins/" 
+			                                    + reader.getAttributeValue(i) + "\" type=\"text/javascript\" />\n");
+			                        }
+			                    }
+			                } else if ("profile".equals(reader.getLocalName())) {
+			                    for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+                                    if ("stencilset".equals(reader.getAttributeLocalName(i))) {
+                                        sset = reader.getAttributeValue(i);
+                                    }
+                                }
+			                } else if ("stencilsetextension".equals(reader.getLocalName())) {
+			                    JSONObject obj = new JSONObject();
+			                    for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+			                        obj.append(reader.getAttributeLocalName(i), reader.getAttributeValue(i));
+                                }
+			                    ssextensions.put(obj);
+			                }
+			            }
+			        }
+			        extString = ssextensions.toString();
+			    } catch (XMLStreamException e) {
+			        _logger.error(e.getMessage(), e);
+			        throw new IllegalArgumentException("Could not read default.xml", e);
+			    } catch (FactoryConfigurationError e) {
+			        _logger.error(e.getMessage(), e);
+			    } finally {
+			        if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
+			    }
+			    bootstrapLibs = builder.toString();
+			} catch (JSONException e) {
+			    _logger.error(e.getMessage(), e);
+			} catch (IOException e) {
+			    _logger.error(e.getMessage(), e);
+			}
 		} else {
 			String[] urlSplitted=request.getRequestURI().split(";");
 			
@@ -103,16 +167,17 @@ public class EditorHandler extends HttpServlet {
 			} catch (JSONException e) {
 				_logger.error(e.getMessage(), e);
 			}
+			sset=conf.optString("stencilset");
+			JSONArray exts = conf.optJSONArray("stencilsetextension");
+	        if(exts==null)
+	            exts=new JSONArray();
+	        extString=exts.toString();
 		}
 		
-		sset=conf.optString("stencilset");
+		
 		if(sset==null || "".equals(sset))
 			sset=defaultSS;
-		String extString="";
-		JSONArray exts= conf.optJSONArray("stencilsetextension");
-		if(exts==null)
-			exts=new JSONArray();
-		extString=exts.toString();
+		
 		String uuid_flag = "";
 		if (request.getParameter("uuid") != null) {
 		    uuid_flag = "ORYX.CONFIG.UUID = \"" + request.getParameter("uuid") + "\"";
@@ -149,7 +214,7 @@ public class EditorHandler extends HttpServlet {
 		
 		response.getWriter().println(this.getOryxModel("Process Designer", 
 				content, this.getLanguageCode(request), 
-				this.getCountryCode(request), profiles));
+				this.getCountryCode(request), profiles, bootstrapLibs));
 		response.setStatus(200);
 	}
 	
@@ -179,13 +244,13 @@ public class EditorHandler extends HttpServlet {
 	}
 	
 	protected String getOryxModel(String title, String content, 
-    		String languageCode, String countryCode, List<String> profiles) {
+    		String languageCode, String countryCode, List<String> profiles, String bootstrapLibs) {
     	
-    	return getOryxModel(title, content, languageCode, countryCode, "", profiles);
+    	return getOryxModel(title, content, languageCode, countryCode, "", profiles, bootstrapLibs);
     }
     
     protected String getOryxModel(String title, String content, 
-    		String languageCode, String countryCode, String headExtentions, List<String> profiles) {
+    		String languageCode, String countryCode, String headExtentions, List<String> profiles, String bootstrapLibs) {
     	
     	String languageFiles = "";
     	
@@ -208,56 +273,6 @@ public class EditorHandler extends HttpServlet {
     	String analytics = getServletContext().getInitParameter("ANALYTICS_SNIPPET");
     	if (null == analytics) {
     		analytics = "";
-    	}
-    	
-    	String bootstrapLibs = "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n";
-    	if (System.getProperty(DEV_MODE) != null) {
-    		String jsFolder = this.getServletContext().getRealPath("/") + File.separator + "js" + File.separator;
-    		// we place ourselves in dev mode, we will load the files from the file js_files.json
-    		try {
-    			// first, read the JSON files to know what core libs to include
-    			JSONObject dev = readJSONObjectFromFile(jsFolder +  "js_files.json");
-
-    			JSONArray array = dev.getJSONArray("files");
-    			StringBuilder builder = new StringBuilder();
-    			for (int i = 0 ; i < array.length() ; i++) {
-    				String filename = String.valueOf(array.get(i));
-    				builder.append("<script src=\"" + oryx_path + "js/" + filename + "\" type=\"text/javascript\" />\n");
-    			}
-    			bootstrapLibs = builder.toString();
-    			// then append the plugins, using their source attribute.
-    			InputStream fileStream = null;
-    			try {
-    				fileStream = new FileInputStream(this.getServletContext().getRealPath("/") + File.separator + "profiles" 
-    						+ File.separator + "default.xml");
-    				XMLInputFactory factory = XMLInputFactory.newInstance();
-    				XMLStreamReader reader = factory.createXMLStreamReader(fileStream);
-    				while(reader.hasNext()) {
-    					if (reader.next() == XMLStreamReader.START_ELEMENT) {
-    						if ("plugin".equals(reader.getLocalName())) {
-    							for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
-    								if ("source".equals(reader.getAttributeLocalName(i))) {
-    									builder.append("<script src=\"" + oryx_path + "js/Plugins/" 
-    											+ reader.getAttributeValue(i) + "\" type=\"text/javascript\" />\n");
-    								}
-    							}
-    						}
-    					}
-    				}
-    			} catch (XMLStreamException e) {
-    				_logger.error(e.getMessage(), e);
-    				throw new IllegalArgumentException("Could not read default.xml", e);
-				} catch (FactoryConfigurationError e) {
-					_logger.error(e.getMessage(), e);
-				} finally {
-    				if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
-    			}
-				bootstrapLibs = builder.toString();
-    		} catch (JSONException e) {
-    			_logger.error(e.getMessage(), e);
-    		} catch (IOException e) {
-    			_logger.error(e.getMessage(), e);
-    		}
     	}
     	
       	return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
@@ -314,6 +329,7 @@ public class EditorHandler extends HttpServlet {
       	  	+ "</body>\n"
       	  	+ "</html>";
     }
+    
     protected String getOryxRootDirectory() {
     	String realPath = this.getServletContext().getRealPath("");
     	File backendDir = new File(realPath);
