@@ -7,7 +7,11 @@ Bundle-Name: cloud.designer
 Bundle-Version: 4.0.0.qualifier
 Web-ContextPath: /designer
 Jetty-WarFolderPath: src/main/webapp
-Import-Package: com.sun.xml.bind.marshaller,
+Import-Package: com.sun.xml.bind.marshaller;version="2.1.12",
+ com.thoughtworks.xstream,
+ com.thoughtworks.xstream.converters,
+ com.thoughtworks.xstream.io,
+ com.thoughtworks.xstream.io.xml,
  de.hpi.bpt.epc,
  de.hpi.bpt.epc.aml.util,
  de.hpi.bpt.graph.abs,
@@ -39,6 +43,9 @@ Import-Package: com.sun.xml.bind.marshaller,
  org.apache.xml.serialize,
  org.apache.xml.serializer,
  org.apache.xpath,
+ org.codehaus.jackson,
+ org.eclipse.bpmn2,
+ org.eclipse.bpmn2.di,
  org.jdom,
  org.jdom.input,
  org.jdom.output,
@@ -47,10 +54,13 @@ Import-Package: com.sun.xml.bind.marshaller,
  org.mozilla.javascript,
  org.slf4j,
  org.supercsv.io,
- org.supercsv.prefs
+ org.supercsv.prefs,
+ org.xmappr
 Bundle-Vendor: Intalio Inc
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Eclipse-BundleShape: dir
+Require-Bundle: org.eclipse.emf.ecore,
+ org.eclipse.bpmn2
