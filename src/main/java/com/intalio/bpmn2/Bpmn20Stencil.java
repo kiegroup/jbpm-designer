@@ -31,9 +31,20 @@ import org.eclipse.emf.ecore.EClass;
  */
 public enum Bpmn20Stencil {
 
-    Task(Bpmn2Package.eINSTANCE.getTask()), BPMNDiagram(Bpmn2Package.eINSTANCE.getDefinitions()),
-    Pool(Bpmn2Package.eINSTANCE.getProcess()), Lane(Bpmn2Package.eINSTANCE.getLane()),
-    SequenceFlow(Bpmn2Package.eINSTANCE.getSequenceFlow());
+    Task(Bpmn2Package.eINSTANCE.getTask()), 
+    BPMNDiagram(Bpmn2Package.eINSTANCE.getDefinitions()),
+    Pool(Bpmn2Package.eINSTANCE.getProcess()), 
+    Lane(Bpmn2Package.eINSTANCE.getLane()),
+    SequenceFlow(Bpmn2Package.eINSTANCE.getSequenceFlow()),
+    Task_None(Bpmn2Package.eINSTANCE.getTask()), 
+    Task_Script(Bpmn2Package.eINSTANCE.getScriptTask()),
+    Task_User(Bpmn2Package.eINSTANCE.getUserTask()),
+    Task_Business_Rule(Bpmn2Package.eINSTANCE.getBusinessRuleTask()),
+    Task_Manual(Bpmn2Package.eINSTANCE.getManualTask()),
+    Task_Service(Bpmn2Package.eINSTANCE.getServiceTask()),
+    Task_Send(Bpmn2Package.eINSTANCE.getSendTask()),
+    Task_Receive(Bpmn2Package.eINSTANCE.getReceiveTask()),
+    Exclusive_Databased_Gateway(Bpmn2Package.eINSTANCE.getExclusiveGateway());
     
     public String id;
     public EClass className;
@@ -41,8 +52,8 @@ public enum Bpmn20Stencil {
         this.className = className;
     }
     
-    public static final EClass getClass(String stencilId) {
-        Bpmn20Stencil stencil = Bpmn20Stencil.valueOf(stencilId);
+    public static final EClass getClass(String stencilId, String taskType) {
+        Bpmn20Stencil stencil = Bpmn20Stencil.valueOf(taskType == null ? stencilId : stencilId + "_" + taskType.replaceAll(" ", "_"));
         if (stencil == null) {
             throw new IllegalArgumentException("unregistered stencil id: " + stencilId);
         }

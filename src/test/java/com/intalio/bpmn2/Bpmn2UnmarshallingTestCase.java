@@ -29,7 +29,12 @@ import java.net.URL;
 import java.util.Collections;
 
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.ExclusiveGateway;
+import org.eclipse.bpmn2.GlobalBusinessRuleTask;
+import org.eclipse.bpmn2.GlobalManualTask;
+import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
+import org.eclipse.bpmn2.GlobalUserTask;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.ProcessType;
@@ -131,6 +136,59 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("seqFlow", flow.getName());
         assertEquals(task, flow.getSourceRef());
         assertEquals(task2, flow.getTargetRef());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testScriptTaskUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("scriptTask.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        GlobalScriptTask task = (GlobalScriptTask) definitions.getRootElements().get(0);
+        assertEquals("my script", task.getName());
+        assertEquals("git status | grep modified | awk '{print $3}' | xargs echo | xargs git add", task.getScript());
+        assertEquals("bash", task.getScriptLanguage());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testUserTaskUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("userTask.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        GlobalUserTask task = (GlobalUserTask) definitions.getRootElements().get(0);
+        assertEquals("ask user", task.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testBusinessRuleTaskUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("businessRuleTask.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        GlobalBusinessRuleTask task = (GlobalBusinessRuleTask) definitions.getRootElements().get(0);
+        assertEquals("call business rule", task.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testManualTaskUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("manualTask.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        GlobalManualTask task = (GlobalManualTask) definitions.getRootElements().get(0);
+        assertEquals("pull a lever", task.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testGatewayUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("gateway.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ExclusiveGateway g = (ExclusiveGateway) process.getFlowElements().get(0);
+        assertEquals("xor gateway", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 }
