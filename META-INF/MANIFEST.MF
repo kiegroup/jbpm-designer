@@ -7,7 +7,7 @@ Bundle-Name: cloud.designer
 Bundle-Version: 4.0.0.qualifier
 Web-ContextPath: /designer
 Jetty-WarFolderPath: src/main/webapp
-Import-Package: com.sun.xml.bind.marshaller;version="2.1.12",
+Import-Package: com.sun.xml.bind.marshaller,
  com.thoughtworks.xstream,
  com.thoughtworks.xstream.converters,
  com.thoughtworks.xstream.io,
