@@ -112,4 +112,18 @@ define "designer" do
     
     
   end
+  
+  package(:feature).tap do |f|
+    f.plugins.<<(project, :unjarred => true)
+    f.feature_id = "cloud.designer.feature"
+    f.label = "Intalio|Process Designer Feature"
+    f.provider = "Intalio, Inc"
+    f.copyright = <<-COPYRIGHT
+Copyright (C) 1999-2010, Intalio Inc. All rights reserved.
+The program(s) herein may be used and/or copied only with the
+written permission of Intalio Inc. or in accordance with the terms
+and conditions stipulated in the agreement/contract under which
+the program(s) have been supplied.
+COPYRIGHT
+  end
 end
