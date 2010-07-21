@@ -58,6 +58,7 @@ import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.UserTask;
+import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.bpmn2.util.Bpmn2ResourceImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -94,7 +95,9 @@ public class Bpmn2JsonUnmarshaller {
     private Definitions unmarshall(JsonParser parser) throws JsonParseException, IOException {
         parser.nextToken(); // open the object
         ResourceSet rSet = new ResourceSetImpl();
-        Resource bpmn2 = new Bpmn2ResourceImpl(URI.createURI("virtual.bpmn2"));
+        rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
+                new Bpmn2ResourceFactoryImpl());
+        Resource bpmn2 = rSet.createResource(URI.createURI("virtual.bpmn2"));
         rSet.getResources().add(bpmn2);
         Definitions def = (Definitions) unmarshallItem(parser);
         bpmn2.getContents().add(def);
