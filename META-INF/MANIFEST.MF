@@ -46,6 +46,14 @@ Import-Package: com.sun.xml.bind.marshaller,
  org.codehaus.jackson,
  org.eclipse.bpmn2,
  org.eclipse.bpmn2.di,
+ org.eclipse.bpmn2.util,
+ org.eclipse.emf.common.notify,
+ org.eclipse.emf.common.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.resource.impl,
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.emf.ecore.xmi.impl,
  org.jdom,
  org.jdom.input,
  org.jdom.output,
@@ -62,5 +70,3 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Eclipse-BundleShape: dir
-Require-Bundle: org.eclipse.emf.ecore,
- org.eclipse.bpmn2
