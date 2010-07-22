@@ -47,16 +47,17 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 			'maxShape': 0
 		});
 		
-		this.facade.offer({
-			'name': ORYX.I18N.Save.autosave,
-			'functionality': this.setautosave.bind(this, false),
-			'group': ORYX.I18N.Save.group,
-			'icon': ORYX.PATH + "images/disk_multi.png",
-			'description': ORYX.I18N.Save.autosaveDesc,
-			'index': 2,
-			'minShape': 0,
-			'maxShape': 0
-		});
+		//capability to set autosave on or off
+//		this.facade.offer({
+//			'name': ORYX.I18N.Save.autosave,
+//			'group': ORYX.I18N.Save.group,
+//			'icon': ORYX.PATH + "images/ajax-loader.gif",
+//			'description': ORYX.I18N.Save.autosaveDesc,
+//			'index': 2,
+//			'minShape': 0,
+//			'maxShape': 0,
+//			'hidden': true
+//		});
 
 		// ask before closing the window
 		this.changeDifference = 0;		
@@ -70,31 +71,45 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 			}
 		}.bind(this);
 		
-		this.setautosave(this);
+		// let's set autosave on.
+//		this.setautosave(this);
 	},
 	
+	/**
+	 * Switches autosave on or off.
+	 * @param savePlugin the button.
+	 */
 	setautosave: function(savePlugin) {
+		console.log(savePlugin);
 		value = !this.autosaving;
 		if (value) {
-			savePlugin.icon = ORYX.PATH+ "images/disk_multi.png";
-			savePlugin.tooltip = "Auto Save is on";
-			this.autosaveInternalId = self.setInterval(function() { if (/*savePlugin.changeDifference != 0*/true) { savePlugin.save(); }}, 30000);
+			this.autosaveInternalId = self.setInterval(function() { if (/*savePlugin.changeDifference != 0*/true) { savePlugin._save(savePlugin, true); }}, 10000);
 		} else {
-			savePlugin.icon = ORYX.PATH+ "images/cross.png";
-			savePlugin.tooltip = "Auto Save is off";
 			self.clearInterval(this.autosaveInternalId);
 		}
 		this.autosaving = value;
 	},
 	
-	save: function() {
+	/**
+	 * Saves the current model.
+	 */
+	save: function(savePlugin) {
+		this._save(savePlugin, false);
+	},
+	
+	/**
+	 * Saves data by calling the backend.
+	 * @param asynchronous whether saving should occur asynchronously
+	 */
+	_save: function(savePlugin, asynchronous) {
+		this.showSaveStatus(savePlugin, asynchronous);
 		var svgDOM = DataManager.serialize(this.facade.getCanvas().getSVGRepresentation(true));
 		var serializedDOM = Ext.encode(this.facade.getJSON());
 		
 		// Send the request to the server.
 		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
                 method: 'POST',
-                asynchronous: false,
+                asynchronous: asynchronous,
                 postBody: Ext.encode({data: serializedDOM, svg : svgDOM, uuid: ORYX.CONFIG.UUID}),
 			onSuccess: (function(transport) {
 				//show saved status
@@ -128,7 +143,37 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 		});
 		
 		return true;
+	},
 	
+	/**
+	 * Shows the saving status
+	 * @param asynchronous whether the save is synchronous or asynchronous.
+	 */
+	showSaveStatus: function(savePlugin, asynchronous) {
+		if (asynchronous) {
+			console.log("WOIWIOW");
+			console.log(savePlugin);
+			//show an icon and a message in the toolbar
+			savePlugin.hidden = false;
+			this.facade.raiseEvent({
+	            type: ORYX.CONFIG.EVENT_BUTTON_UPDATE
+	        });
+		}
+	},
+	
+	/**
+	 * Shows the saving status
+	 * @param asynchronous whether the save is synchronous or asynchronous.
+	 */
+	hideSaveStatus: function(asynchronous) {
+		if (asynchronous) {
+			//show an icon and a message in the toolbar
+			this.hidden = true;
+			this.facade.raiseEvent({
+	            type: ORYX.CONFIG.EVENT_BUTTON_UPDATE
+	        });
+		}
+		
 	}
 });
 
