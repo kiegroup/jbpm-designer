@@ -21,7 +21,12 @@
 ****************************************/
 package com.intalio.bpmn2;
 
+import org.eclipse.bpmn2.BaseElement;
+import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Bpmn2Package;
+import org.eclipse.bpmn2.CatchEvent;
+import org.eclipse.bpmn2.EventDefinition;
+import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.emf.ecore.EClass;
 
 /**
@@ -44,19 +49,50 @@ public enum Bpmn20Stencil {
     Task_Service(Bpmn2Package.eINSTANCE.getServiceTask()),
     Task_Send(Bpmn2Package.eINSTANCE.getSendTask()),
     Task_Receive(Bpmn2Package.eINSTANCE.getReceiveTask()),
-    Exclusive_Databased_Gateway(Bpmn2Package.eINSTANCE.getExclusiveGateway());
+    Exclusive_Databased_Gateway(Bpmn2Package.eINSTANCE.getExclusiveGateway()),
+    ParallelGateway(Bpmn2Package.eINSTANCE.getParallelGateway()),
+    EventBasedGateway(Bpmn2Package.eINSTANCE.getEventBasedGateway()),
+    InclusiveGateway(Bpmn2Package.eINSTANCE.getInclusiveGateway()),
+    StartNoneEvent(Bpmn2Package.eINSTANCE.getStartEvent()),
+    StartMessageEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getMessageEventDefinition()),
+    StartEscalationEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getEscalationEventDefinition()),
+    StartCompensationEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition()),
+    StartSignalEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getSignalEventDefinition()),
+    StartMultipleEvent(Bpmn2Package.eINSTANCE.getStartEvent()),
+    StartParallelMultipleEvent(Bpmn2Package.eINSTANCE.getStartEvent()),
+    StartTimerEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getTimerEventDefinition()),
+    TextAnnotation(Bpmn2Package.eINSTANCE.getTextAnnotation()),
+    Group(Bpmn2Package.eINSTANCE.getGroup());
     
     public String id;
     public EClass className;
+    public EClass eventType;
+    
     private Bpmn20Stencil(EClass className) {
         this.className = className;
     }
     
-    public static final EClass getClass(String stencilId, String taskType) {
+    private Bpmn20Stencil(EClass className, EClass eventType) {
+        this.className = className;
+        this.eventType = eventType;
+    }
+    
+    
+    public static BaseElement createElement(String stencilId, String taskType ) {
         Bpmn20Stencil stencil = Bpmn20Stencil.valueOf(taskType == null ? stencilId : stencilId + "_" + taskType.replaceAll(" ", "_"));
         if (stencil == null) {
             throw new IllegalArgumentException("unregistered stencil id: " + stencilId);
         }
-        return stencil.className;
+        BaseElement elt = (BaseElement) Bpmn2Factory.eINSTANCE.create(stencil.className);
+        if (stencil.eventType != null) {
+            if (elt instanceof CatchEvent) {
+                ((CatchEvent) elt).getEventDefinitions().add((EventDefinition) Bpmn2Factory.eINSTANCE.create(stencil.eventType));
+            } else if (elt instanceof ThrowEvent) {
+                ((ThrowEvent) elt).getEventDefinitions().add((EventDefinition) Bpmn2Factory.eINSTANCE.create(stencil.eventType));
+            } else {
+                throw new IllegalArgumentException("Cannot set eventType on " + elt);
+            }
+        }
+        return elt;
     }
 }

@@ -36,12 +36,14 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
+import org.eclipse.bpmn2.Artifact;
 import org.eclipse.bpmn2.Auditing;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
+import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.Expression;
 import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.Gateway;
@@ -59,9 +61,7 @@ import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
-import org.eclipse.bpmn2.util.Bpmn2ResourceImpl;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -181,8 +181,7 @@ public class Bpmn2JsonUnmarshaller {
                 // parser.nextToken(); // }, closing the object
             }
         }
-        EClass objclass = Bpmn20Stencil.getClass(stencil, properties.get("tasktype"));
-        BaseElement baseElt = (BaseElement) Bpmn2Factory.eINSTANCE.create(objclass);
+        BaseElement baseElt = Bpmn20Stencil.createElement(stencil, properties.get("tasktype"));
 
         // register the sequence flow targets.
         if (baseElt instanceof SequenceFlow) {
@@ -244,7 +243,7 @@ public class Bpmn2JsonUnmarshaller {
                     ((Definitions) baseElt).getRootElements().add(task);
                     continue;
                 } else {
-                    if (child instanceof Task || child instanceof SequenceFlow || child instanceof Gateway) {
+                    if (child instanceof Task || child instanceof SequenceFlow || child instanceof Gateway || child instanceof Event || child instanceof Artifact) {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
                             rootLevelProcess.setName(((Definitions) baseElt).getName());
@@ -261,6 +260,10 @@ public class Bpmn2JsonUnmarshaller {
                         rootLevelProcess.getFlowElements().add((SequenceFlow) child);
                     } else if (child instanceof Gateway) {
                         rootLevelProcess.getFlowElements().add((Gateway) child);
+                    } else if (child instanceof Event) {
+                        rootLevelProcess.getFlowElements().add((Event) child);
+                    } else if (child instanceof Artifact) {
+                        rootLevelProcess.getArtifacts().add((Artifact) child);
                     }
                 }
             }
@@ -271,6 +274,8 @@ public class Bpmn2JsonUnmarshaller {
                         ((Process) baseElt).getLaneSets().add(Bpmn2Factory.eINSTANCE.createLaneSet());
                     }
                     ((Process) baseElt).getLaneSets().get(0).getLanes().add((Lane) child);
+                } else if (child instanceof Artifact) {
+                    ((Process) baseElt).getArtifacts().add((Artifact) child);
                 }
             }
         }
@@ -302,6 +307,23 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (baseElement instanceof Gateway) {
             applyGatewayProperties((Gateway) baseElement, properties);
+        }
+        if (baseElement instanceof Event) {
+            applyEventProperties((Event) baseElement, properties);
+        }
+    }
+
+    private void applyEventProperties(Event event, Map<String, String> properties) {
+        event.setName(properties.get("name"));
+        if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
+            Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
+            audit.getDocumentation().add(createDocumentation(properties.get("auditing")));
+            event.setAuditing(audit);
+        }
+        if (properties.get("monitoring") != null && !"".equals(properties.get("monitoring"))) {
+            Monitoring monitoring = Bpmn2Factory.eINSTANCE.createMonitoring();
+            monitoring.getDocumentation().add(createDocumentation(properties.get("monitoring")));
+            event.setMonitoring(monitoring);
         }
     }
 

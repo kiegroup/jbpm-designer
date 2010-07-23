@@ -3278,44 +3278,44 @@
 				"DataObjectMorph"
 			]
 		},
-		{
-			"type" : 			"node",
-			"id" :				"ITSystem",
-			"title" :			"IT System",
-			"title_de" :		"IT-System",
-			"groups" :			["Artifacts"],
-			"groups_de" :		["Artefakte"],
-			"description" : 	"An IT System can be associated with an activity. It is a system or application used while fulfilling the activity.",
-			"description_de" : 	"Ein IT-System kann mittels Assoziation mit einer Aktivität verbunden werden. Es handelt sich um ein System oder eine Software-Applikation die im Laufe der Aktivität verwendet wird.",
-			"view" :			"dataobject/it.system.svg",
-			"icon" : 			"dataobject/it.system.png",
-			"propertyPackages" : [
-				"baseAttributes",
-				"flowElement"				
-			],
-			"properties" : [
-				{
-					"id":"bgcolor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"title_de":"Hintergrundfarbe",
-					"value":"#e1e1e1",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"fill_el",
-					"fill":true,
-					"stroke":false
-				}
-			],
-			"roles" :			[
-			    "all",
-			    "from_task_event",
-			    "to_task_event",
-			    "fromtoall",
-			    "DataObjectMorph"
-			]
-		},
+//		{
+//			"type" : 			"node",
+//			"id" :				"ITSystem",
+//			"title" :			"IT System",
+//			"title_de" :		"IT-System",
+//			"groups" :			["Artifacts"],
+//			"groups_de" :		["Artefakte"],
+//			"description" : 	"An IT System can be associated with an activity. It is a system or application used while fulfilling the activity.",
+//			"description_de" : 	"Ein IT-System kann mittels Assoziation mit einer Aktivität verbunden werden. Es handelt sich um ein System oder eine Software-Applikation die im Laufe der Aktivität verwendet wird.",
+//			"view" :			"dataobject/it.system.svg",
+//			"icon" : 			"dataobject/it.system.png",
+//			"propertyPackages" : [
+//				"baseAttributes",
+//				"flowElement"				
+//			],
+//			"properties" : [
+//				{
+//					"id":"bgcolor",
+//					"type":"Color",
+//					"title":"BackgroundColor",
+//					"title_de":"Hintergrundfarbe",
+//					"value":"#e1e1e1",
+//					"description":"",
+//					"readonly":false,
+//					"optional":false,
+//					"refToView":"fill_el",
+//					"fill":true,
+//					"stroke":false
+//				}
+//			],
+//			"roles" :			[
+//			    "all",
+//			    "from_task_event",
+//			    "to_task_event",
+//			    "fromtoall",
+//			    "DataObjectMorph"
+//			]
+//		},
 		{
 			"type" : 			"node",
 			"id" :				"DataStore",
