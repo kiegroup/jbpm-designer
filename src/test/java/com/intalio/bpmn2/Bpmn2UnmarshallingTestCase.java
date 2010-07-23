@@ -49,6 +49,7 @@ import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
+import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.junit.Test;
 
@@ -343,6 +344,16 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = (Process) definitions.getRootElements().get(0);
         assertTrue(process.getArtifacts().iterator().next() instanceof Group);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testTextAnnotationUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("textAnnotation.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        assertTrue(process.getArtifacts().iterator().next() instanceof TextAnnotation);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 }
