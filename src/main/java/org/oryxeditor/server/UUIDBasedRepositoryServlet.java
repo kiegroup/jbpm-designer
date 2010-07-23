@@ -39,12 +39,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.intalio.bpmn2.Bpmn2JsonUnmarshaller;
-
-import de.hpi.bpmn2_0.factory.AbstractBpmnFactory;
 
 
 /**
@@ -109,7 +108,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 Definitions def = unmarshaller.unmarshall(json);
                 outputStream = new FileOutputStream(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".bpmn"));
-                def.eResource().save(outputStream, Collections.emptyMap());
+                def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
             } catch (Exception e) {
                 // whatever was thrown, for now, we catch it and log it.
                 _logger.error(e.getMessage(), e);
