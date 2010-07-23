@@ -62,7 +62,18 @@ public enum Bpmn20Stencil {
     StartParallelMultipleEvent(Bpmn2Package.eINSTANCE.getStartEvent()),
     StartTimerEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getTimerEventDefinition()),
     TextAnnotation(Bpmn2Package.eINSTANCE.getTextAnnotation()),
-    Group(Bpmn2Package.eINSTANCE.getGroup());
+    Group(Bpmn2Package.eINSTANCE.getGroup()),
+    DataObject(Bpmn2Package.eINSTANCE.getDataObject()),
+    DataStore(Bpmn2Package.eINSTANCE.getDataStore()),
+    Message(Bpmn2Package.eINSTANCE.getMessage()),
+    EndNoneEvent(Bpmn2Package.eINSTANCE.getEndEvent()),
+    EndMessageEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getMessageEventDefinition()),
+    EndEscalationEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getEscalationEventDefinition()),
+    EndErrorEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getErrorEventDefinition()),
+    EndSignalEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getSignalEventDefinition()),
+    EndTerminateEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getTerminateEventDefinition()),
+    EndMultipleEvent(Bpmn2Package.eINSTANCE.getEndEvent()),
+    EndCompensationEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition());
     
     public String id;
     public EClass className;

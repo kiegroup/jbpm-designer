@@ -41,16 +41,21 @@ import org.eclipse.bpmn2.Auditing;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.BusinessRuleTask;
+import org.eclipse.bpmn2.DataObject;
+import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.Expression;
+import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.ManualTask;
+import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.Monitoring;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.ProcessType;
@@ -59,9 +64,11 @@ import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.Task;
+import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -76,7 +83,9 @@ public class Bpmn2JsonUnmarshaller {
 
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
-    private Map<Object, String> _idMap = new HashMap<Object, String>();
+    private Map<Object, String> _objMap = new HashMap<Object, String>();
+    
+    private Map<String, Object> _idMap = new HashMap<String, Object>();
 
     // the collection of outgoing ids.
     // we reconnect the edges with the shapes as a last step of the construction
@@ -92,6 +101,13 @@ public class Bpmn2JsonUnmarshaller {
         return unmarshall(new JsonFactory().createJsonParser(file));
     }
 
+    /**
+     * Start unmarshalling using the parser.
+     * @param parser
+     * @return the root element of a bpmn2 document.
+     * @throws JsonParseException
+     * @throws IOException
+     */
     private Definitions unmarshall(JsonParser parser) throws JsonParseException, IOException {
         parser.nextToken(); // open the object
         ResourceSet rSet = new ResourceSetImpl();
@@ -105,20 +121,20 @@ public class Bpmn2JsonUnmarshaller {
         return def;
     }
 
+    /**
+     * Reconnect the sequence flows and the flow nodes.
+     * Done after the initial pass so that we have all the target information.
+     */
     private void reconnectFlows() {
         // create the reverse id map:
-        Map<String, Object> idToObjectMap = new HashMap<String, Object>();
-        for (Entry<Object, String> entry : _idMap.entrySet()) {
-            idToObjectMap.put(entry.getValue(), entry.getKey());
-        }
 
         for (Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
 
             for (String flowId : entry.getValue()) {
-                if (entry.getKey() instanceof SequenceFlow) {
-                    ((SequenceFlow) entry.getKey()).setTargetRef((FlowNode) idToObjectMap.get(flowId));
-                } else {
-                    ((FlowNode) entry.getKey()).getOutgoing().add((SequenceFlow) idToObjectMap.get(flowId));
+                if (entry.getKey() instanceof SequenceFlow) { // if it is a sequence flow, we can tell its targets
+                    ((SequenceFlow) entry.getKey()).setTargetRef((FlowNode) _idMap.get(flowId));
+                } else { // if it is a node, we can map it to its outgoing sequence flows
+                    ((FlowNode) entry.getKey()).getOutgoing().add((SequenceFlow) _idMap.get(flowId));
                 }
 
             }
@@ -188,8 +204,8 @@ public class Bpmn2JsonUnmarshaller {
             _sequenceFlowTargets.addAll(outgoing);
         }
         _outgoingFlows.put(baseElt, outgoing);
-        _idMap.put(baseElt, resourceId); // keep the object around to do
-                                         // connections.
+        _objMap.put(baseElt, resourceId); // keep the object around to do connections
+        _idMap.put(resourceId, baseElt);
         // baseElt.setId(resourceId); commented out as bpmn2 seems to create
         // duplicate ids right now.
 
@@ -207,24 +223,17 @@ public class Bpmn2JsonUnmarshaller {
                 // global tasks.
                 // if a task has sequence edges it is considered a task,
                 // otherwise it is considered a global task.
-                if (child instanceof Task && _outgoingFlows.get(child).isEmpty() && !_sequenceFlowTargets.contains(_idMap.get(child))) {
+                if (child instanceof Task && _outgoingFlows.get(child).isEmpty() && !_sequenceFlowTargets.contains(_objMap.get(child))) {
                     // no edges on a task at the top level! We replace it with a
                     // global task.
                     GlobalTask task = null;
                     if (child instanceof ScriptTask) {
                         task = Bpmn2Factory.eINSTANCE.createGlobalScriptTask();
                         ((GlobalScriptTask) task).setScript(((ScriptTask) child).getScript());
-                        ((GlobalScriptTask) task).setScriptLanguage(((ScriptTask) child).getScriptFormat()); // TODO
-                                                                                                             // scriptLanguage
-                                                                                                             // missing
-                                                                                                             // on
-                                                                                                             // scriptTask
+                        ((GlobalScriptTask) task).setScriptLanguage(((ScriptTask) child).getScriptFormat()); 
+                        // TODO scriptLanguage missing on scriptTask
                     } else if (child instanceof UserTask) {
                         task = Bpmn2Factory.eINSTANCE.createGlobalUserTask();
-                    } else if (child instanceof ServiceTask) {
-                        // we don't have a global service task! Fallback on a
-                        // normal global task
-                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
                     } else if (child instanceof ServiceTask) {
                         // we don't have a global service task! Fallback on a
                         // normal global task
@@ -243,7 +252,27 @@ public class Bpmn2JsonUnmarshaller {
                     ((Definitions) baseElt).getRootElements().add(task);
                     continue;
                 } else {
-                    if (child instanceof Task || child instanceof SequenceFlow || child instanceof Gateway || child instanceof Event || child instanceof Artifact) {
+                    if (child instanceof SequenceFlow) {
+                        // for some reason sequence flows are placed as root elements.
+                        // find if the target has a container, and if we can use it:
+                        List<String> ids = _outgoingFlows.get(child);
+                        FlowElementsContainer container = null;
+                        for (String id : ids) { // yes, we iterate, but we'll take the first in the list that will work.
+                            Object obj = _idMap.get(id);
+                            if (obj instanceof EObject && ((EObject) obj).eContainer() instanceof FlowElementsContainer) {
+                                container = (FlowElementsContainer) ((EObject) obj).eContainer();
+                                break;
+                            }
+                        }
+                        if (container != null) {
+                            container.getFlowElements().add((SequenceFlow) child);
+                            continue;
+                        }
+                        
+                    }
+                    if (child instanceof Task || child instanceof SequenceFlow 
+                            || child instanceof Gateway || child instanceof Event 
+                            || child instanceof Artifact || child instanceof DataObject) {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
                             rootLevelProcess.setName(((Definitions) baseElt).getName());
@@ -259,11 +288,19 @@ public class Bpmn2JsonUnmarshaller {
                         // find the special process for root level tasks:
                         rootLevelProcess.getFlowElements().add((SequenceFlow) child);
                     } else if (child instanceof Gateway) {
+                     // find the special process for root level tasks:
                         rootLevelProcess.getFlowElements().add((Gateway) child);
                     } else if (child instanceof Event) {
+                     // find the special process for root level tasks:
                         rootLevelProcess.getFlowElements().add((Event) child);
                     } else if (child instanceof Artifact) {
+                     // find the special process for root level tasks:
                         rootLevelProcess.getArtifacts().add((Artifact) child);
+                    } else if (child instanceof DataObject) {
+                     // find the special process for root level tasks:
+                        rootLevelProcess.getFlowElements().add((DataObject) child);
+                    } else {
+                        throw new IllegalArgumentException("Don't know what to do of " + child);
                     }
                 }
             }
@@ -274,9 +311,23 @@ public class Bpmn2JsonUnmarshaller {
                         ((Process) baseElt).getLaneSets().add(Bpmn2Factory.eINSTANCE.createLaneSet());
                     }
                     ((Process) baseElt).getLaneSets().get(0).getLanes().add((Lane) child);
+                    ((Process) baseElt).getFlowElements().addAll(((Lane) child).getFlowNodeRefs());
                 } else if (child instanceof Artifact) {
                     ((Process) baseElt).getArtifacts().add((Artifact) child);
+                } else {
+                    throw new IllegalArgumentException("Don't know what to do of " + child);
                 }
+            }
+        } else if (baseElt instanceof Lane) {
+            for (BaseElement child : childElements) {
+                if (child instanceof FlowElement) {
+                    ((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
+                }
+                
+            }
+        } else {
+            if (!childElements.isEmpty()) {
+                throw new IllegalArgumentException("Don't know what to do of " + childElements + " with " + baseElt);
             }
         }
         return baseElt;
@@ -311,6 +362,35 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof Event) {
             applyEventProperties((Event) baseElement, properties);
         }
+        if (baseElement instanceof TextAnnotation) {
+            applyTextAnnotationProperties((TextAnnotation) baseElement, properties);
+        }
+        if (baseElement instanceof DataObject) {
+            applyDataObjectProperties((DataObject) baseElement, properties);
+        }
+        if (baseElement instanceof DataStore) {
+            applyDataStoreProperties((DataStore) baseElement, properties);
+        }
+        if (baseElement instanceof Message) {
+            applyMessageProperties((Message) baseElement, properties);
+        }
+        
+    }
+
+    private void applyMessageProperties(Message msg, Map<String, String> properties) {
+        msg.setName(properties.get("name"));
+    }
+
+    private void applyDataStoreProperties(DataStore da, Map<String, String> properties) {
+        da.setName(properties.get("name"));
+    }
+
+    private void applyDataObjectProperties(DataObject da, Map<String, String> properties) {
+        da.setName(properties.get("name"));
+    }
+
+    private void applyTextAnnotationProperties(TextAnnotation ta, Map<String, String> properties) {
+        ta.setText(properties.get("text"));
     }
 
     private void applyEventProperties(Event event, Map<String, String> properties) {
