@@ -4692,7 +4692,7 @@
 		{
 			"type": "node",
 			"id":"EndMessageEvent",
-			"title":"End Message Event",
+			"title":"Message End Event",
 			"title_de":"Nachrichten-Endereignis",
 			"groups":["End Events"],
 			"groups_de":["End-Ereignisse"],
@@ -4731,7 +4731,7 @@
 		{
 			"type": "node",
 			"id":"EndEscalationEvent",
-			"title":"End Escalation Event",
+			"title":"Escalation End Event",
 			"title_de":"Eskalations-Endereignis",
 			"groups":["End Events"],
 			"groups_de":["End-Ereignisse"],
@@ -4767,7 +4767,7 @@
 		{
 			"type": "node",
 			"id":"EndErrorEvent",
-			"title":"End Error Event",
+			"title":"Error End Event",
 			"title_de":"Fehler-Endereignis",
 			"groups":["End Events"],
 			"groups_de":["End-Ereignisse"],
@@ -4843,7 +4843,7 @@
 		{
 			"type": "node",
 			"id":"EndCompensationEvent",
-			"title":"End Compensation Event",
+			"title":"Compensation End Event",
 			"title_de":"Kompensations-Endereignis",
 			"groups":["End Events"],
 			"groups_de":["End-Ereignisse"],
@@ -4883,7 +4883,7 @@
 		{
 			"type": "node",
 			"id":"EndSignalEvent",
-			"title":"End Signal Event",
+			"title":"Signal End Event",
 			"title_de":"Signal-Endereignis",
 			"groups":["End Events"],
 			"groups_de":["End-Ereignisse"],
@@ -4921,7 +4921,7 @@
 		{
 			"type": "node",
 			"id":"EndMultipleEvent",
-			"title":"End Multiple Event",
+			"title":"Multiple End Event",
 			"title_de":"Mehrfach-Endereignis",
 			"groups":["End Events"],
 			"groups_de":["End-Ereignisse"],
