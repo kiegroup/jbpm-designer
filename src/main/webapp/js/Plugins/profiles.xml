@@ -31,10 +31,6 @@
 		<plugin name="ORYX.Plugins.RowLayouting"/>	
 		<plugin name="ORYX.Plugins.AutoLayout"/>	
 		<plugin name="ORYX.Plugins.PluginLoader"/>	
-		<plugin name="ORYX.Plugins.BPMN2_0"/>
-		<plugin name="ORYX.Plugins.BPMN2_0Serialization"/>
-		<plugin name="ORYX.Plugins.BPMN2CONVERSATION"/>
-		<plugin name="ORYX.Plugins.Bpmn2_0Choreography"/>
 		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts#"/>
 	</profile>
 	<profile name="save" depends="default">
