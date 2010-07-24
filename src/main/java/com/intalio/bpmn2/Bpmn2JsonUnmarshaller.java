@@ -37,6 +37,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.eclipse.bpmn2.Artifact;
+import org.eclipse.bpmn2.Association;
 import org.eclipse.bpmn2.Auditing;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
@@ -133,8 +134,14 @@ public class Bpmn2JsonUnmarshaller {
             for (String flowId : entry.getValue()) {
                 if (entry.getKey() instanceof SequenceFlow) { // if it is a sequence flow, we can tell its targets
                     ((SequenceFlow) entry.getKey()).setTargetRef((FlowNode) _idMap.get(flowId));
+                } else if (entry.getKey() instanceof Association) {
+                    ((Association) entry.getKey()).setTargetRef((BaseElement) _idMap.get(flowId));
                 } else { // if it is a node, we can map it to its outgoing sequence flows
-                    ((FlowNode) entry.getKey()).getOutgoing().add((SequenceFlow) _idMap.get(flowId));
+                    if (_idMap.get(flowId) instanceof SequenceFlow) {
+                        ((FlowNode) entry.getKey()).getOutgoing().add((SequenceFlow) _idMap.get(flowId));
+                    } else if (_idMap.get(flowId) instanceof Association) {
+                        ((Association) _idMap.get(flowId)).setSourceRef((BaseElement) entry.getKey());
+                    }
                 }
 
             }

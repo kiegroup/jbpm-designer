@@ -28,6 +28,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.Collections;
 
+import org.eclipse.bpmn2.Association;
 import org.eclipse.bpmn2.CancelEventDefinition;
 import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.CompensateEventDefinition;
@@ -707,6 +708,21 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = (Process) definitions.getRootElements().get(0);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw multiple event", g.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testAssociationUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("association.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        Task g = (Task) process.getFlowElements().get(0);
+        assertEquals("task", g.getName());
+        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
+        Association association = (Association) process.getArtifacts().get(1);
+        assertEquals(g, association.getSourceRef());
+        assertEquals(textA, association.getTargetRef());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 }

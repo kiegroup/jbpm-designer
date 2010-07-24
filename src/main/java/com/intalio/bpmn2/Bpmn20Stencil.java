@@ -21,6 +21,8 @@
 ****************************************/
 package com.intalio.bpmn2;
 
+import org.eclipse.bpmn2.Association;
+import org.eclipse.bpmn2.AssociationDirection;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Bpmn2Package;
@@ -90,16 +92,23 @@ public enum Bpmn20Stencil {
     IntermediateLinkEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getLinkEventDefinition()),
     IntermediateCompensationEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition()),
     IntermediateSignalEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getSignalEventDefinition()),
-    IntermediateMultipleEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent());
+    IntermediateMultipleEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent()),
+    Association_Undirected(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.NONE);
     
     
     
     public String id;
     public EClass className;
     public EClass eventType;
+    public AssociationDirection associationDirection;
     
     private Bpmn20Stencil(EClass className) {
         this.className = className;
+    }
+    
+    private Bpmn20Stencil(EClass className, AssociationDirection assocDir) {
+        this.className = className;
+        this.associationDirection = assocDir;
     }
     
     private Bpmn20Stencil(EClass className, EClass eventType) {
@@ -122,6 +131,9 @@ public enum Bpmn20Stencil {
             } else {
                 throw new IllegalArgumentException("Cannot set eventType on " + elt);
             }
+        }
+        if (stencil.associationDirection != null) {
+            ((Association) elt).setAssociationDirection(stencil.associationDirection);
         }
         return elt;
     }
