@@ -28,7 +28,10 @@ import java.io.File;
 import java.net.URL;
 import java.util.Collections;
 
+import org.eclipse.bpmn2.CancelEventDefinition;
+import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.CompensateEventDefinition;
+import org.eclipse.bpmn2.ConditionalEventDefinition;
 import org.eclipse.bpmn2.DataObject;
 import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
@@ -45,6 +48,7 @@ import org.eclipse.bpmn2.GlobalUserTask;
 import org.eclipse.bpmn2.Group;
 import org.eclipse.bpmn2.InclusiveGateway;
 import org.eclipse.bpmn2.Lane;
+import org.eclipse.bpmn2.LinkEventDefinition;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.ParallelGateway;
@@ -56,6 +60,7 @@ import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TerminateEventDefinition;
 import org.eclipse.bpmn2.TextAnnotation;
+import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.junit.Test;
 
@@ -505,5 +510,203 @@ public class Bpmn2UnmarshallingTestCase {
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
+    @Test
+    public void testIntermediateCatchMessageEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchMessageEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch message event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
     
+    @Test
+    public void testIntermediateCatchTimerEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchTimerEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch timer event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof TimerEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchEscalationEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchEscalationEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch escalation event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchConditionalEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchConditionalEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch conditional event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof ConditionalEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchLinkEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchLinkEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch link event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof LinkEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchErrorEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchErrorEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch error event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof ErrorEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchCancelEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchCancelEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch cancel event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof CancelEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchCompensationEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchCompensationEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch compensation event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchMultipleEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchMultipleEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch multiple event", g.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateCatchParallelMultipleEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchParallelMultipleEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
+        assertEquals("catch parallel multiple event", g.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateThrowEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
+        assertEquals("throw event", g.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateThrowMessageEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowMessageEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
+        assertEquals("throw message event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateThrowEscalationEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowEscalationEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
+        assertEquals("throw escalation event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateThrowLinkEventUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowLinkEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
+        assertEquals("throw link event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof LinkEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateThrowCompensationUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowCompensationEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
+        assertEquals("throw compensation event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateThrowSignalUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowSignalEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
+        assertEquals("throw signal event", g.getName());
+        assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testIntermediateThrowMultipleUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowMultipleEvent.json"));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = (Process) definitions.getRootElements().get(0);
+        ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
+        assertEquals("throw multiple event", g.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
 }

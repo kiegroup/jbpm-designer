@@ -73,7 +73,26 @@ public enum Bpmn20Stencil {
     EndSignalEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getSignalEventDefinition()),
     EndTerminateEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getTerminateEventDefinition()),
     EndMultipleEvent(Bpmn2Package.eINSTANCE.getEndEvent()),
-    EndCompensationEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition());
+    EndCompensationEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition()),
+    IntermediateMessageEventCatching(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getMessageEventDefinition()),
+    IntermediateTimerEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getTimerEventDefinition()),
+    IntermediateEscalationEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getEscalationEventDefinition()),
+    IntermediateConditionalEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getConditionalEventDefinition()),
+    IntermediateLinkEventCatching(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getLinkEventDefinition()),
+    IntermediateErrorEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getErrorEventDefinition()),
+    IntermediateCancelEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getCancelEventDefinition()),
+    IntermediateCompensationEventCatching(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition()),
+    IntermediateMultipleEventCatching(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent()),
+    IntermediateParallelMultipleEventCatching(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent()),
+    IntermediateEvent(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent()),
+    IntermediateMessageEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getMessageEventDefinition()),
+    IntermediateEscalationEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getEscalationEventDefinition()),
+    IntermediateLinkEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getLinkEventDefinition()),
+    IntermediateCompensationEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition()),
+    IntermediateSignalEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getSignalEventDefinition()),
+    IntermediateMultipleEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent());
+    
+    
     
     public String id;
     public EClass className;
