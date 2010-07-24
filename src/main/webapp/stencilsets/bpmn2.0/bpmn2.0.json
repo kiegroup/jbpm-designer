@@ -3856,7 +3856,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateMessageEventCatching",
-			"title":"Intermediate Message Event",
+			"title":"Message Intermediate Event",
 			"title_de":"Nachrichten-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -3902,7 +3902,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateTimerEvent",
-			"title":"Intermediate Timer Event",
+			"title":"Timer Intermediate Event",
 			"title_de":"Zeit-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -3949,7 +3949,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateEscalationEvent",
-			"title":"Intermediate Escalation Event",
+			"title":"Escalation Intermediate Event",
 			"title_de":"Eskalations-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -3993,7 +3993,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateConditionalEvent",
-			"title":"Intermediate Conditional Event",
+			"title":"Conditional Intermediate Event",
 			"title_de":"Bedingungs-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4042,7 +4042,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateLinkEventCatching",
-			"title":"Intermediate Link Event",
+			"title":"Link Intermediate Event",
 			"title_de":"Link-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4093,7 +4093,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateErrorEvent",
-			"title":"Intermediate Error Event",
+			"title":"Error Intermediate Event",
 			"title_de":"Fehler-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4135,7 +4135,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateCancelEvent",
-			"title":"Intermediate Cancel Event",
+			"title":"Cancel Intermediate Event",
 			"title_de":"Abbruch-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4177,7 +4177,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateCompensationEventCatching",
-			"title":"Intermediate Compensation Event",
+			"title":"Compensation Intermediate Event",
 			"title_de":"Kompensations-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4219,7 +4219,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventCatching",
-			"title":"Intermediate Signal Event",
+			"title":"Signal Intermediate Event",
 			"title_de":"Signal-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4266,7 +4266,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateMultipleEventCatching",
-			"title":"Intermediate Multiple Event",
+			"title":"Multiple Intermediate Event",
 			"title_de":"Mehrfach-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4314,7 +4314,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateParallelMultipleEventCatching",
-			"title":"Intermediate Parallel Multiple Event",
+			"title":"Parallel Multiple Intermediate Event",
 			"title_de":"Mehrfach/Parallel-Zwischenereignis",
 			"groups":["Catching Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (eintretend)"],
@@ -4406,7 +4406,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateMessageEventThrowing",
-			"title":"Intermediate Message Event",
+			"title":"Message Intermediate Event",
 			"title_de":"Nachrichten-Zwischenereignis",
 			"groups":["Throwing Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (auslösend)"],
@@ -4445,7 +4445,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateEscalationEventThrowing",
-			"title":"Intermediate Escalation Event",
+			"title":"Escalation Intermediate Event",
 			"title_de":"Eskalations-Zwischenereignis",
 			"groups":["Throwing Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (auslösend)"],
@@ -4484,7 +4484,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateLinkEventThrowing",
-			"title":"Intermediate Link Event",
+			"title":"Link Intermediate Event",
 			"title_de":"Link-Zwischenereignis",
 			"groups":["Throwing Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (auslösend)"],
@@ -4533,7 +4533,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateCompensationEventThrowing",
-			"title":"Intermediate Compensation Event",
+			"title":"Compensation Intermediate Event",
 			"title_de":"Kompensations-Zwischenereignis",
 			"groups":["Throwing Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (auslösend)"],
@@ -4573,7 +4573,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventThrowing",
-			"title":"Intermediate Signal Event",
+			"title":"Signal Intermediate Event",
 			"title_de":"Signal-Zwischenereignis",
 			"groups":["Throwing Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (auslösend)"],
@@ -4611,7 +4611,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateMultipleEventThrowing",
-			"title":"Intermediate Multiple Event",
+			"title":"Multiple Intermediate Event",
 			"title_de":"Mehrfach-Zwischenereignis",
 			"groups":["Throwing Intermediate Events"],
 			"groups_de":["Zwischen-Ereignisse (auslösend)"],
