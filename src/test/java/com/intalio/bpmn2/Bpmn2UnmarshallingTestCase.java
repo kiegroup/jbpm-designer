@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.Collections;
 
 import org.eclipse.bpmn2.Association;
+import org.eclipse.bpmn2.AssociationDirection;
 import org.eclipse.bpmn2.CancelEventDefinition;
 import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.CompensateEventDefinition;
@@ -723,6 +724,37 @@ public class Bpmn2UnmarshallingTestCase {
         Association association = (Association) process.getArtifacts().get(1);
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
+        assertEquals(AssociationDirection.NONE, association.getAssociationDirection());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testAssociationUnidirectionalUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("associationOne.json"));
+        Process process = (Process) definitions.getRootElements().get(0);
+        Task g = (Task) process.getFlowElements().get(0);
+        assertEquals("task", g.getName());
+        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
+        Association association = (Association) process.getArtifacts().get(1);
+        assertEquals(g, association.getSourceRef());
+        assertEquals(textA, association.getTargetRef());
+        assertEquals(AssociationDirection.ONE, association.getAssociationDirection());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    @Test
+    public void testAssociationBidirectionalUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("associationBoth.json"));
+        Process process = (Process) definitions.getRootElements().get(0);
+        Task g = (Task) process.getFlowElements().get(0);
+        assertEquals("task", g.getName());
+        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
+        Association association = (Association) process.getArtifacts().get(1);
+        assertEquals(g, association.getSourceRef());
+        assertEquals(textA, association.getTargetRef());
+        assertEquals(AssociationDirection.BOTH, association.getAssociationDirection());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 }

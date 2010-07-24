@@ -93,7 +93,9 @@ public enum Bpmn20Stencil {
     IntermediateCompensationEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition()),
     IntermediateSignalEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent(), Bpmn2Package.eINSTANCE.getSignalEventDefinition()),
     IntermediateMultipleEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent()),
-    Association_Undirected(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.NONE);
+    Association_Undirected(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.NONE),
+    Association_Unidirectional(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.ONE),
+    Association_Bidirectional(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.BOTH);
     
     
     
