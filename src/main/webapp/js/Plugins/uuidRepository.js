@@ -29,16 +29,25 @@ if (!ORYX.Config) {
 	ORYX.Config = {};
 } 
 
+// needed to change icons dynamically:
+Ext.override(Ext.Button, {
+	setIcon: function(url){
+		if (this.rendered){
+			var btnEl = this.getEl().child(this.buttonSelector);
+			btnEl.setStyle('background-image', 'url(' +url+')');
+		}
+ 	}
+});
+
 ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 	
     facade: undefined,
 	
     construct: function(facade){
-	
 		this.facade = facade;
 		this.facade.offer({
 			'name': ORYX.I18N.Save.save,
-			'functionality': this.save.bind(this, false),
+			'functionality': this.save.bind(this),
 			'group': ORYX.I18N.Save.group,
 			'icon': ORYX.PATH + "images/disk.png",
 			'description': ORYX.I18N.Save.saveDesc,
@@ -48,16 +57,26 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 		});
 		
 		//capability to set autosave on or off
-//		this.facade.offer({
-//			'name': ORYX.I18N.Save.autosave,
-//			'group': ORYX.I18N.Save.group,
-//			'icon': ORYX.PATH + "images/ajax-loader.gif",
-//			'description': ORYX.I18N.Save.autosaveDesc,
-//			'index': 2,
-//			'minShape': 0,
-//			'maxShape': 0,
-//			'hidden': true
-//		});
+		autosavecfg = {
+			'name': ORYX.I18N.Save.autosave,
+			'group': ORYX.I18N.Save.group,
+			'functionality': function(context) {
+			   this.setautosave();
+			   if (this.autosaving) {
+				   context.setIcon(ORYX.PATH + "images/disk_multiple.png"); 
+			   } else {
+				   context.setIcon(ORYX.PATH + "images/disk_multiple_disabled.png");
+			   }
+			   context.hide();
+			   context.show();
+		    }.bind(this),
+			'icon': ORYX.PATH + "images/disk_multiple.png",
+			'description': ORYX.I18N.Save.autosaveDesc,
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0
+		};
+		this.facade.offer(autosavecfg);
 
 		// ask before closing the window
 		this.changeDifference = 0;		
@@ -72,18 +91,18 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 		}.bind(this);
 		
 		// let's set autosave on.
-//		this.setautosave(this);
+		this.autosaveFunction = function() { if (/*savePlugin.changeDifference != 0*/true) { this._save(this, true); }}.bind(this, autosavecfg);
+		this.setautosave();
 	},
 	
 	/**
 	 * Switches autosave on or off.
 	 * @param savePlugin the button.
 	 */
-	setautosave: function(savePlugin) {
-		console.log(savePlugin);
+	setautosave: function() {
 		value = !this.autosaving;
 		if (value) {
-			this.autosaveInternalId = self.setInterval(function() { if (/*savePlugin.changeDifference != 0*/true) { savePlugin._save(savePlugin, true); }}, 10000);
+			this.autosaveInternalId = self.setInterval(this.autosaveFunction, ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL);
 		} else {
 			self.clearInterval(this.autosaveInternalId);
 		}
@@ -93,8 +112,8 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 	/**
 	 * Saves the current model.
 	 */
-	save: function(savePlugin) {
-		this._save(savePlugin, false);
+	save: function() {
+		this._save(this, false);
 	},
 	
 	/**
@@ -141,7 +160,7 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 				ORYX.log.warn("Saving failed: " + transport.responseText);
 			}).bind(this)
 		});
-		
+		this.hideSaveStatus(savePlugin, asynchronous);
 		return true;
 	},
 	
@@ -151,13 +170,8 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 	 */
 	showSaveStatus: function(savePlugin, asynchronous) {
 		if (asynchronous) {
-			console.log("WOIWIOW");
-			console.log(savePlugin);
 			//show an icon and a message in the toolbar
-			savePlugin.hidden = false;
-			this.facade.raiseEvent({
-	            type: ORYX.CONFIG.EVENT_BUTTON_UPDATE
-	        });
+			autosavecfg.buttonInstance.setIcon("images/ajax-loader.gif");
 		}
 	},
 	
@@ -168,12 +182,8 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 	hideSaveStatus: function(asynchronous) {
 		if (asynchronous) {
 			//show an icon and a message in the toolbar
-			this.hidden = true;
-			this.facade.raiseEvent({
-	            type: ORYX.CONFIG.EVENT_BUTTON_UPDATE
-	        });
+			autosavecfg.buttonInstance.setIcon("images/disk_multiple.png");
 		}
-		
 	}
 });
 
