@@ -78,7 +78,7 @@ public class EditorHandler extends HttpServlet {
 		String extString="";
 		
 		if (System.getProperty(DEV_MODE) != null) {
-			dev_flag = "ORYX.CONFIG.DEV = true;\nvar ORYX_LOGLEVEL = 3;\n";
+			dev_flag = "ORYX.CONFIG.DEV = true;\nvar ORYX_LOGLEVEL = 4;\n";
 			profiles.add("default"); // will be ignored.
 			conf = new JSONObject(); // we can do a better job at configuring the conf object later on.
 			String jsFolder = this.getServletContext().getRealPath("/") + File.separator + "js" + File.separator;
