@@ -165,7 +165,7 @@
 		</servlet-class>
 	</servlet>
 	
-	<servlet>
+	<!--servlet>
 		<display-name>
 			Oryx syntax checker
 		</display-name>
@@ -173,7 +173,7 @@
 		<servlet-class>
 			org.oryxeditor.server.SyntaxCheckerServlet
 		</servlet-class>
-	</servlet>
+	</servlet-->
 	<!-- Added by Ahmed Awad
     Removed by Antoine: we don't have the sources of
     the dependencies for this servlet
@@ -364,37 +364,37 @@
 	</servlet>
 	
 	
-	<servlet>
+	<!--servlet>
 		<display-name>BPMN 2 Exporter</display-name>
 		<servlet-name>Bpmn2_0Servlet</servlet-name>
 		<servlet-class>
 			org.oryxeditor.server.Bpmn2_0Servlet
 		</servlet-class>
-	</servlet>
+	</servlet-->
 	
-	<servlet>
+	<!--servlet>
 		<display-name>BPMN 2 XPDL Exporter</display-name>
 		<servlet-name>Bpmn2_0ToXpdlServlet</servlet-name>
 		<servlet-class>
 			org.oryxeditor.server.Bpmn2_0ToXpdlServlet
 		</servlet-class>
-	</servlet>
+	</servlet-->
 	
-	<servlet>
+	<!--servlet>
 		<display-name>BPMN 2 Importer</display-name>
 		<servlet-name>Bpmn2_0Importer</servlet-name>
 		<servlet-class>
 			org.oryxeditor.server.BPMN2_0Importer
 		</servlet-class>
-	</servlet>
+	</servlet-->
 
-	<servlet>
+	<!--servlet>
 		<display-name>BPMN 1.1 to BPMN 2.0 Migration</display-name>
 		<servlet-name>BPMN2MigrationServlet</servlet-name>
 		<servlet-class>
 			org.oryxeditor.server.BPMN2MigrationServlet
 		</servlet-class>
-	</servlet>
+	</servlet-->
 	
 	<servlet>
 	   <display-name>UUID Based Repository</display-name>
@@ -479,10 +479,10 @@
 		<url-pattern>/ibpmn2bpmn</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping>
+	<!--<servlet-mapping>
 		<servlet-name>SyntaxChecker</servlet-name>
 		<url-pattern>/syntaxchecker</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 	
 	<servlet-mapping>
 		<servlet-name>Validator</servlet-name>
@@ -619,7 +619,7 @@
 		<url-pattern>/epclayouter</url-pattern>
 	</servlet-mapping>
 	
-	
+	<!--
 	<servlet-mapping>
 		<servlet-name>Bpmn2_0Servlet</servlet-name>
 		<url-pattern>/bpmn2_0serialization</url-pattern>
@@ -638,7 +638,7 @@
 	<servlet-mapping>
 		<servlet-name>BPMN2MigrationServlet</servlet-name>
 		<url-pattern>/bpmn2migration</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 	
 	<servlet-mapping>
         <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
