@@ -6,3 +6,4 @@ reports
 target
 src/main/webapp/repository
 .settings
+.externalToolBuilders
