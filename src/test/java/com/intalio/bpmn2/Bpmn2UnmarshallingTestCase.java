@@ -503,7 +503,7 @@ public class Bpmn2UnmarshallingTestCase {
     @Test
     public void testSimpleChainUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("startEvent-task-EndEvent.json"));
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("startEvent-task-endEvent.json"));
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = (Process) definitions.getRootElements().get(0);
         assertTrue(process.getFlowElements().size() == 5);
