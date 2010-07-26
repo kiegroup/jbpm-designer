@@ -39,6 +39,17 @@ Ext.override(Ext.Button, {
  	}
 });
 
+// needed to change tooltips dynamically
+Ext.Button.override({
+    setTooltip: function(qtipText) {
+        var btnEl = this.getEl().child(this.buttonSelector)
+        Ext.QuickTips.register({
+            target: btnEl.id,
+            text: qtipText
+        });             
+    }
+});
+
 ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 	
     facade: undefined,
@@ -64,14 +75,16 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 			   this.setautosave();
 			   if (this.autosaving) {
 				   context.setIcon(ORYX.PATH + "images/disk_multiple.png"); 
+				   context.setTooltip(ORYX.I18N.Save.autosaveDesc_on);
 			   } else {
 				   context.setIcon(ORYX.PATH + "images/disk_multiple_disabled.png");
+				   context.setTooltip(ORYX.I18N.Save.autosaveDesc_off);
 			   }
 			   context.hide();
 			   context.show();
 		    }.bind(this),
 			'icon': ORYX.PATH + "images/disk_multiple.png",
-			'description': ORYX.I18N.Save.autosaveDesc,
+			'description': ORYX.I18N.Save.autosaveDesc_on,
 			'index': 2,
 			'minShape': 0,
 			'maxShape': 0
