@@ -311,7 +311,7 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 			 return null;
 			 }*/
 			var domParser = new DOMParser();
-			var xmlObject = domParser.parseFromString(this.getSerializedDOM(), "text/xml");
+			var xmlObject = domParser.parseFromString(this.getSerializedDOM().replace("onebehavioreventref:", "onebehavioreventref"), "text/xml");
 			var xslObject = domParser.parseFromString(xsl, "text/xml");
 			var xsltProcessor = new XSLTProcessor();
 			xsltProcessor.importStylesheet(xslObject);
