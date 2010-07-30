@@ -50,7 +50,7 @@ Ext.Button.override({
     }
 });
 
-ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
+ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 	
     facade: undefined,
 	
@@ -137,12 +137,13 @@ ORYX.Plugins.UUIDRepositorySave = Clazz.extend({
 		this.showSaveStatus(savePlugin, asynchronous);
 		var svgDOM = DataManager.serialize(this.facade.getCanvas().getSVGRepresentation(true));
 		var serializedDOM = Ext.encode(this.facade.getJSON());
+		var rdf = this.getRDFFromDOM();
 		
 		// Send the request to the server.
 		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
                 method: 'POST',
                 asynchronous: asynchronous,
-                postBody: Ext.encode({data: serializedDOM, svg : svgDOM, uuid: ORYX.CONFIG.UUID}),
+                postBody: Ext.encode({data: serializedDOM, svg : svgDOM, uuid: ORYX.CONFIG.UUID, rdf: rdf}),
 			onSuccess: (function(transport) {
 				//show saved status
 				this.facade.raiseEvent({

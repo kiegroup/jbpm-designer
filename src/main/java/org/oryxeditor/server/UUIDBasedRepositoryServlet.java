@@ -102,6 +102,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             String json = (String) jsonObject.get("data");
             String svg = (String) jsonObject.get("svg");
             String uuid = (String) jsonObject.get("uuid");
+            String rdf = (String) jsonObject.get("rdf");
             FileOutputStream outputStream = null;
             
             try {
@@ -126,6 +127,12 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             try {
                 writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".svg")));
                 writer.write(svg);
+            } finally {
+                if (writer != null) { try { writer.close();} catch(Exception e) {} }
+            }
+            try {
+                writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".rdf")));
+                writer.write(rdf);
             } finally {
                 if (writer != null) { try { writer.close();} catch(Exception e) {} }
             }
