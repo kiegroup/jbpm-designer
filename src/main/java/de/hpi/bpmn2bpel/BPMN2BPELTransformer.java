@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 
 
 import de.hpi.bpel4chor.util.Output;
+import de.hpi.bpel4chor.util.OutputElement;
 import de.hpi.bpmn.BPMNDiagram;
 import de.hpi.bpmn.Container;
 import de.hpi.bpmn.Node;
@@ -68,7 +69,15 @@ public class BPMN2BPELTransformer {
 		if (it.hasNext()) {
 			Output processOutput = new Output();
 			process = factory.transformProcess(it.next(), processOutput);
-			results.add(new TransformationResult(Type.PROCESS, process));
+			if(processOutput.isEmpty()) {
+				results.add(new TransformationResult(Type.PROCESS, process));
+			}
+			else {
+				Iterator<OutputElement> errorIt = processOutput.iterator();
+				while(errorIt.hasNext()) {
+					System.err.println(errorIt.next().getMsg());
+				}
+			}
 		}
 		
 		
@@ -100,7 +109,7 @@ public class BPMN2BPELTransformer {
 		List<TransformationResult> deploymentElements = 
 			deploymentFactory.buildDeployProcessData(results.get(0), wsdlUrls);
 		
-		deploymentFactory.deployProcessOnApacheOde();
+	//	deploymentFactory.deployProcessOnApacheOde();
 		
 		/* Append Apache ODE Deployment Descriptor and Process WSDL */
 		results.addAll(deploymentElements);
