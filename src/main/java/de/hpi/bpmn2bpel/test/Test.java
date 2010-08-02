@@ -1,6 +1,7 @@
 package de.hpi.bpmn2bpel.test;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,13 +23,14 @@ public class Test {
 	
 	static StringBuilder response;
 
+	static String path = "src/main/webapp/repository/";
+
 	/**
 	 * @param args
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) {
 //		String path = "C:\\Users\\sven.wagner-boysen\\workspace\\oryx\\editor\\server\\src\\de\\hpi\\bpmn2bpel\\test\\";
-		String path = "src/main/webapp/repository/";
 //		File file = new File(path + "AndGatewayTest-Oryx.xml");
 //		File file = new File(path + "bpel_trivial1.xml");
 //		File file = new File(path + "bpel_trivial2.xml");
@@ -61,15 +63,20 @@ public class Test {
 			
 			response = new StringBuilder();
 			
+			File processDir = null;
+			String processName = null;
 			for(TransformationResult result : results) {
 				if(result.getType().equals(TransformationResult.Type.PROCESS)) {
-					appendResult("process", result.getDocument());
+					processName =((org.w3c.dom.Element) result.getDocument().getElementsByTagName("process").item(0)).getAttribute("id");
+					processDir = new File(path, processName + File.separator + processName + ".ode");
+					processDir.mkdirs();
+					appendResult("process", result.getDocument(),new File(processDir, processName + ".bpel"));
 				}
 				if(result.getType().equals(TransformationResult.Type.DEPLOYMENT_DESCRIPTOR)) {
-					appendResult("deploy", result.getDocument());
+					appendResult("deploy", result.getDocument(), new File(processDir, "deploy.xml"));
 				}
 				if(result.getType().equals(TransformationResult.Type.PROCESS_WSDL)) {
-					appendResult("process_wsdl", result.getDocument());
+					appendResult("process_wsdl", result.getDocument(), new File(processDir, "Invoke" + processName.substring(0,1).toUpperCase() + processName.substring(1) + ".wsdl"));
 				}
 			}
 			
@@ -93,7 +100,7 @@ public class Test {
 		}
 	}
 	
-	private static void appendResult(String param, Document doc) {
+	private static void appendResult(String param, Document doc, File  file) {
 //		String xmlString = null;
 //		try {
 //			Transformer transformer =TransformerFactory.newInstance().newTransformer();
@@ -114,7 +121,7 @@ public class Test {
 		
 		XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
 		try {
-			out.output(jdomDoc, System.out);
+			out.output(jdomDoc, new FileOutputStream(file));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
