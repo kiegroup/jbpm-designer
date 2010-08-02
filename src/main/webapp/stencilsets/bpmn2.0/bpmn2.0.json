@@ -1616,13 +1616,13 @@
 					"optional":true
 				},
 				{
-					"id":"wsdlurl",
+					"id":"wsdlUrl",
 					"type":"String",
-					"title":"wsdlurl",
-					"title_de":"wsdlurl",
+					"title":"wsdlUrl",
+					"title_de":"wsdlUrl",
 					"value":"",
-					"description":"wsdlurl",
-					"description_de":"wsdlurl",
+					"description":"wsdlUrl",
+					"description_de":"wsdlUrl",
 					"readonly":false,
 					"optional":true
 				},
