@@ -28,7 +28,7 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 //		String path = "C:\\Users\\sven.wagner-boysen\\workspace\\oryx\\editor\\server\\src\\de\\hpi\\bpmn2bpel\\test\\";
-		String path = "C:\\Dokumente und Einstellungen\\Sven\\workspace\\oryx2\\editor\\server\\src\\de\\hpi\\bpmn2bpel\\test\\";
+		String path = "src/main/webapp/repository/";
 //		File file = new File(path + "AndGatewayTest-Oryx.xml");
 //		File file = new File(path + "bpel_trivial1.xml");
 //		File file = new File(path + "bpel_trivial2.xml");
@@ -38,7 +38,7 @@ public class Test {
 //		File file = new File(path + "bpel_calculator2_test.xml");
 //		File file = new File(path + "bpel_calculator_with_dataobject_test.xml");
 //		File file = new File(path + "bpel_uplink_signal_test.xml");
-		File file = new File(path + "odeTestBPEL.xml");
+		File file = new File(path + "a.rdf");
 		
 		
 		try {
@@ -56,7 +56,8 @@ public class Test {
 			normalizer.normalize();
 			
 			BPMN2BPELTransformer transformer = new BPMN2BPELTransformer();
-			List<TransformationResult> results = transformer.transform(diagram);
+//			List<TransformationResult> results = transformer.transform(diagram);
+			List<TransformationResult> results = transformer.transformAndDeployProcessOnOde(diagram, "http://localhost:8080/ode");
 			
 			response = new StringBuilder();
 			
