@@ -310,6 +310,17 @@
 			"name" : "diagram",
 			"properties" : [
 				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"title_de":"id",
+					"value":"",
+					"description":"id",
+					"description_de":"id",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"version",
 					"type":"String",
 					"title":"Version",
@@ -1534,6 +1545,84 @@
 					"title_de":"Skript Sprache",
 					"value":"",
 					"description":"Defines the script language. The script language MUST be provided if a script is provided.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"inmessagetype",
+					"type":"String",
+					"title":"In Message",
+					"title_de":"In Message",
+					"value":"",
+					"description":"Type of input message",
+					"description_de":"Type of input message",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"outmessagetype",
+					"type":"String",
+					"title":"Out Message",
+					"title_de":"Out Message",
+					"value":"",
+					"description":"Type of output message",
+					"description_de":"Type of output message",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"servicename",
+					"type":"String",
+					"title":"servicename",
+					"title_de":"servicename",
+					"value":"",
+					"description":"name of service",
+					"description_de":"name of service",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"namespace",
+					"type":"String",
+					"title":"Namespace",
+					"title_de":"Namensraum",
+					"value":"",
+					"description":"Defines the XML namespace of the elements inside the document.",
+					"description_de":"Definiert den XML-Namensraum, der für die Elemente im Dokument verwendet wird.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"operation",
+					"type":"String",
+					"title":"operation",
+					"title_de":"operation",
+					"value":"",
+					"description":"operation",
+					"description_de":"operation",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"porttype",
+					"type":"String",
+					"title":"porttype",
+					"title_de":"porttype",
+					"value":"",
+					"description":"porttype",
+					"description_de":"porttype",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"wsdlurl",
+					"type":"String",
+					"title":"wsdlurl",
+					"title_de":"wsdlurl",
+					"value":"",
+					"description":"wsdlurl",
+					"description_de":"wsdlurl",
 					"readonly":false,
 					"optional":true
 				},
