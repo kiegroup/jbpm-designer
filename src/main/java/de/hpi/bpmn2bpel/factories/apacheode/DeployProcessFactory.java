@@ -604,8 +604,9 @@ public class DeployProcessFactory {
 	        }
 			
 			Document wsdlDocument = createDocumentFromString(responseText);
-			Element defElement = (Element) wsdlDocument.getElementsByTagName("definitions").item(0);
-			String serviceName = defElement.getAttribute("name");
+			Element defElement = (Element) wsdlDocument.getElementsByTagNameNS("http://schemas.xmlsoap.org/wsdl/", "definitions").item(0);
+			Element sElement = (Element) defElement.getElementsByTagNameNS("http://schemas.xmlsoap.org/wsdl/", "service").item(0);
+			String serviceName = sElement.getAttribute("name");
 			this.wsdls.put(serviceName, responseText);
 			return wsdlDocument;
 		} catch (Exception e) {
