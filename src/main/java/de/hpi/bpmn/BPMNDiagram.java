@@ -419,7 +419,7 @@ public class BPMNDiagram implements Container {
 	 * @return
 	 * 		The {@link Pool} if existing
 	 */
-	private Pool getPoolOfProcess(Container process) {
+	public Pool getPoolOfProcess(Container process) {
 		for(Iterator<Node> it = process.getChildNodes().iterator(); it.hasNext();) {
 			Node current = it.next();
 			if (current instanceof Pool) {
