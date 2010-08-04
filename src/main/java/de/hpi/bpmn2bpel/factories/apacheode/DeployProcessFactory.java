@@ -334,13 +334,13 @@ public class DeployProcessFactory {
 			}
 		}
 		else{
-			bpelServiceNodeList = wsdl.getElementsByTagName("service");
+			bpelServiceNodeList = wsdl.getElementsByTagNameNS("http://schemas.xmlsoap.org/wsdl/", "service");
 			
 			for(int bpelServiceNodeListNr = 0; bpelServiceNodeListNr < bpelServiceNodeList.getLength(); bpelServiceNodeListNr++){
 				Element bpelServiceNode = (Element) bpelServiceNodeList.item(bpelServiceNodeListNr);
 				String bpelServiceName = bpelServiceNode.getAttribute("name");
 				if(bpelServiceName.equals(serviceName)){
-					Element portTag = (Element) bpelServiceNode.getElementsByTagName("port").item(0);
+					Element portTag = (Element) bpelServiceNode.getElementsByTagNameNS("http://schemas.xmlsoap.org/wsdl/", "port").item(0);
 					port = portTag.getAttribute("name");
 				}
 			}
