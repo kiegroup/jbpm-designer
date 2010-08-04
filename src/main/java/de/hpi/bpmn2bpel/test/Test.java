@@ -41,6 +41,7 @@ public class Test {
 //		File file = new File(path + "bpel_calculator_with_dataobject_test.xml");
 //		File file = new File(path + "bpel_uplink_signal_test.xml");
 		File file = new File(path + "a.rdf");
+//		file = new File("src/main/java/de/hpi/bpmn2bpel/test", "odeTestBPEL.xml");
 		
 		
 		try {
