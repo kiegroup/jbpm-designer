@@ -129,7 +129,7 @@ public class BPMN2BPELTransformer {
 	private Set<String> getSetOfWsdlUrls(BPMNDiagram diagram) {
 		HashSet<String> wsdlUrls = new HashSet<String>();
 		
-		for(Node node : diagram.getChildNodes()) {
+		for(Node node : diagram.getProcesses().iterator().next().getChildNodes()) {
 			if(node instanceof Task) {
 				wsdlUrls.add(((Task) node).getWsdlUrl());
 			}
