@@ -710,7 +710,7 @@ public class SupportingFactory {
 		/* The import of the process's service description */
 		Element processWSDLimport = this.document.createElement("import");
 		processWSDLimport.setAttribute("location", "InvokeProcess.wsdl");
-		processWSDLimport.setAttribute("namespace", ProcessFactory.targetNamespace);
+		processWSDLimport.setAttribute("namespace",  "http://" + diagram.getPoolOfProcess(process).getLabel());
 		processWSDLimport.setAttribute("importType", "http://schemas.xmlsoap.org/wsdl/");
 		imports.add(processWSDLimport);
 		
