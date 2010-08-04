@@ -719,7 +719,8 @@ public class SupportingFactory {
 			
 			/* Create import */
 			Element importElement = this.document.createElement("import");
-			importElement.setAttribute("location", task.getServiceName() + ".wsdl");
+//			importElement.setAttribute("location", task.getServiceName() + ".wsdl");
+			importElement.setAttribute("location", task.getWsdlUrl());
 			importElement.setAttribute("namespace", task.getNamespace());
 			importElement.setAttribute("importType", "http://schemas.xmlsoap.org/wsdl/");
 			imports.add(importElement);
