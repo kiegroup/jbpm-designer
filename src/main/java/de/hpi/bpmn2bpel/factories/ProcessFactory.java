@@ -28,7 +28,7 @@ import de.hpi.bpmn2bpel.model.Container4BPEL;
 public class ProcessFactory {
 	
 	/* The default target namespace of the BPEL process */
-	static final String targetNamespace = "http://sesastra.com/goldeneye/";
+//	static final String targetNamespace = "http://sesastra.com/goldeneye/";
 	
 	BPMNDiagram diagram = null;
 	
@@ -52,7 +52,7 @@ public class ProcessFactory {
 		String name = pool.getLabel().trim();
 		
 		processElement.setAttribute("name", name);
-		processElement.setAttribute("targetNamespace", targetNamespace);
+		processElement.setAttribute("targetNamespace", "http://" + pool.getLabel());
 		processElement.setAttribute("id", "process");
 		
 //		if (pool.getProcess().getQueryLanguage() != null) {
@@ -82,7 +82,7 @@ public class ProcessFactory {
 //		processElement.setAttribute("abstractProcessProfile", "urn:HPI_IAAS:choreography:profile:2006/12");
 //		processElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 //		processElement.setAttribute("xmlns:wsu","http://schemas.xmlsoap.org/ws/2002/07/utility/");
-		processElement.setAttribute("xmlns:tns", targetNamespace);
+		processElement.setAttribute("xmlns:tns",  "http://" + pool.getLabel());
 				
 //		if (pool.getImports() != null) {
 //			for (Iterator<Import> it = pool.getImports().iterator(); it.hasNext();) {
