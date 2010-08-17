@@ -36,7 +36,9 @@ new function(){
 		/**
 		 * Layout only Edges
 		 */
-		layouted : [	"http://b3mn.org/stencilset/bpmn1.1#SequenceFlow", 
+		layouted : [],
+		
+		edgesIds : [	"http://b3mn.org/stencilset/bpmn1.1#SequenceFlow", 
 						"http://b3mn.org/stencilset/bpmn1.1#MessageFlow",
 						"http://b3mn.org/stencilset/bpmn2.0#MessageFlow",
 						"http://b3mn.org/stencilset/bpmn2.0#SequenceFlow", 
@@ -44,15 +46,55 @@ new function(){
 						"http://b3mn.org/stencilset/epc#ControlFlow",
 						"http://www.signavio.com/stencilsets/processmap#ProcessLink",
 						"http://www.signavio.com/stencilsets/organigram#connection"],
-		
+
+		/**
+		 * Finds all the edges related to shapes inside a shape
+		 */
+		findRelatedEdges: function(shape, ignoreList) {
+			edges = new Array();
+			if (this.isIncludedInEdgeIds(shape)) {
+				edges.push(shape);
+			} else {
+				this.getChildShapesWithout(shape, ignoreList).each(function(child) {
+					edges = edges.concat(child.outgoing).concat(child.incoming).concat(this.findRelatedEdges(child, ignoreList));
+				}.bind(this));
+			}
+			
+			return edges;
+	    },
+	    
+	    isIncludedInEdgeIds: function(shape){
+			if (!(this.edgesIds instanceof Array)){
+				this.edgesIds = [this.edgesIds].compact();
+			}
+			
+			// If there are no elements
+			if (this.edgesIds.length <= 0) {
+				// Return TRUE
+				return true;
+			}
+			
+			// Return TRUE if there is any correlation between 
+			// the 'layouted' attribute and the shape themselve.
+			return this.edgesIds.any(function(s){
+				if (typeof s == "string") {
+					return shape.getStencil().id().include(s);
+				} else {
+					return shape instanceof s;
+				}
+			});
+		},
+						
 		/**
 		 * Layout a set on edges
 		 * @param {Object} edges
 		 */
-		layout: function(edges){
-			edges.each(function(edge){
-				this.doLayout(edge)
-			}.bind(this))
+		layout: function(shapes){
+			shapes.each(function(shape){
+				this.findRelatedEdges(shape, []).each(function(edge){
+					this.doLayout(edge);
+				}.bind(this));
+			}.bind(this));
 		},
 		
 		/**

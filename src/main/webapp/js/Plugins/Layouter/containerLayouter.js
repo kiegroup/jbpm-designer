@@ -274,6 +274,18 @@ ORYX.Plugins.ContainerLayouter = {
 	},
 	
 	/**
+	 * Finds all the edges related to shapes inside a shape
+	 */
+	findRelatedEdges: function(shape, ignoreList) {
+		edges = new Array();
+		this.getChildShapesWithout(shape, ignoreList).each(function(child) {
+			edges = edges.concat(child.outgoing).concat(child.incoming).concat(this.findRelatedEdges(child, ignoreList));
+			
+		}.bind(this));
+		return edges;
+	},
+	
+	/**
 	 * Moves all child shapes and related dockers of the container shape by the 
 	 * relative move point.
 	 * 
@@ -286,12 +298,7 @@ ORYX.Plugins.ContainerLayouter = {
 		if(!shape || !relativeMovePoint) {
 			return;
 		}
-		
-		/* Move child shapes */
-		this.getChildShapesWithout(shape, ignoreList).each(function(child) {
-			child.bounds.moveBy(relativeMovePoint);
-		});
-		
+
 		/* Move related dockers */
 		//this.moveChildDockers(shape, relativeMovePoint);
 	},

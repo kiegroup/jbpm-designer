@@ -94,5 +94,15 @@ ORYX.Plugins.AbstractLayouter = ORYX.Plugins.AbstractPlugin.extend({
 	 */
 	layout: function(shapes){
 		throw new Error("Layouter has to implement the layout function.")
+	},
+	
+	/**
+	 * Returns the direct child shapes that are not on the ignore list.
+	 */
+	getChildShapesWithout: function(shape, ignoreList) {
+		var childs = shape.getChildShapes(false);
+		return childs.findAll(function(child) {
+			return !ignoreList.member(child.getStencil().id());				
+		});
 	}
 });
