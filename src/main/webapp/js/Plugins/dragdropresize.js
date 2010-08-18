@@ -74,6 +74,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		this.resizerSE.registerOnResizeEnd(this.onResizeEnd.bind(this)); // register the resize end callback
 		this.resizerSE.registerOnResizeStart(this.onResizeStart.bind(this)); // register the resize start callback
 		
+		
 		// Create the northwestern button for resizing
 		this.resizerNW = new ORYX.Plugins.Resizer(containerNode, "northwest", this.facade);
 		this.resizerNW.registerOnResize(this.onResize.bind(this)); // register the resize callback
@@ -281,7 +282,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 			
 		}
 
-			
+		
 		// Calculate the new position
 		var position = {
 			x: Event.pointerX(event) - this.offSetPosition.x,
@@ -315,14 +316,19 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		position.x = Math.min( c.bounds.width() - this.dragBounds.width(), 		position.x)
 		position.y = Math.min( c.bounds.height() - this.dragBounds.height(), 	position.y)	
 						
-
-		// Drag this bounds
-		this.dragBounds.moveTo(position);
+		offset = {x: position.x - this.dragBounds.upperLeft().x , y : position.y - this.dragBounds.upperLeft().y};
+		this.facade.raiseEvent({
+			type		: ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG,
+			shapes		: this.currentShapes,
+			offset      : offset
+		});
+		this.dragBounds.moveBy(offset);
+		
 
 		// Update all selected shapes and the selection rectangle
 		//this.refreshSelectedShapes();
+		
 		this.resizeRectangle(this.dragBounds);
-
 		this.isAttachingAllowed = false;
 
 		//check, if a node can be added to the underlying node
@@ -498,7 +504,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 			y: upL.y - oldUpL.y };
 
 		// Instanciate the dragCommand
-		var commands = [new ORYX.Core.Command.Move(this.toMoveShapes, offset, this.containmentParentNode, this.currentShapes, this)];
+		var commands = [new ORYX.Core.Command.Move(this.toMoveShapes, offset, null, this.containmentParentNode, this.currentShapes, this, true)];
 		// If the undocked edges command is setted, add this command
 		if( this._undockedEdgesCommand instanceof ORYX.Core.Command ){
 			commands.unshift( this._undockedEdgesCommand );
@@ -713,6 +719,9 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 	 *
 	 */
 	onSelectionChanged: function(event) {
+		this.resizerSE.onSelectionChanged(event);
+		this.resizerNW.onSelectionChanged(event);
+		
 		var elements = event.elements;
 		
 		// Reset the drag-variables
@@ -1119,6 +1128,24 @@ ORYX.Plugins.Resizer = Clazz.extend({
 
 
 	},
+	
+	/**
+	 * On the Selection-Changed
+	 *
+	 */
+	onSelectionChanged: function(event) {
+		var elements = event.elements;
+		
+		// If there is no elements
+		if(!elements || elements.length == 0) {
+			// Hide all things and reset all variables
+			this.currentShapes = [];
+		} else {
+
+			// Set the current Shapes
+			this.currentShapes = elements;
+		}
+	},
 
 	handleMouseDown: function(event) {
 		this.dragEnable = true;
@@ -1167,7 +1194,7 @@ ORYX.Plugins.Resizer = Clazz.extend({
 		var offset = {
 			x: position.x - this.position.x,
 			y: position.y - this.position.y
-		}
+		};
 		
 		if(this.aspectRatio) {
 			// fixed aspect ratio
@@ -1231,7 +1258,12 @@ ORYX.Plugins.Resizer = Clazz.extend({
 		} else { // defaults to southeast
 			this.bounds.extend(offset);
 		}
-
+		
+		this.facade.raiseEvent({
+			type		: ORYX.CONFIG.EVENT_DRAG_TRACKER_RESIZE,
+			shapes		: this.currentShapes,
+			bounds      : this.bounds
+		});
 		this.update();
 
 		this.resizeCallbacks.each((function(value) {
@@ -1341,11 +1373,13 @@ ORYX.Plugins.Resizer = Clazz.extend({
  * 
  */ 
 ORYX.Core.Command.Move = ORYX.Core.Command.extend({
-	construct: function(moveShapes, offset, parent, selectedShapes, plugin){
+	construct: function(moveShapes, offset, newLocation, parent, selectedShapes, plugin, doLayout){
 		this.moveShapes = moveShapes;
 		this.selectedShapes = selectedShapes;
 		this.offset 	= offset;
+		this.newLocation = newLocation;
 		this.plugin		= plugin;
+		this.doLayout = doLayout;
 		// Defines the old/new parents for the particular shape
 		this.newParents	= moveShapes.collect(function(t){ return parent || t.parent });
 		this.oldParents	= moveShapes.collect(function(shape){ return shape.parent });
@@ -1354,7 +1388,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 	execute: function(){
 		this.dockAllShapes()				
 		// Moves by the offset
-		this.move( this.offset);
+		this.move( this.offset, this.newLocation, this.doLayout);
 		// Addes to the new parents
 		this.addShapeToParent( this.newParents ); 
 		// Set the selection to the current selection
@@ -1376,17 +1410,22 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		this.plugin.facade.updateSelection();
 		
 	},
-	move:function(offset, doLayout){
+	move:function(offset, newLocation, doLayout){
 		
 		// Move all Shapes by these offset
 		for(var i=0; i<this.moveShapes.length ;i++){
-			var value = this.moveShapes[i];					
-			value.bounds.moveBy(offset);
-			
+			var value = this.moveShapes[i];		
+			if (offset) {
+				value.bounds.moveBy(offset);
+			} else {
+				value.bounds.moveTo(newLocation);
+			}
 			if (value instanceof ORYX.Core.Node) {
 				
 				(value.dockers||[]).each(function(d){
-					d.bounds.moveBy(offset);
+					if (offset) {
+						d.bounds.moveBy(offset);
+					}
 				})
 				
 				// Update all Dockers of Child shapes
@@ -1448,7 +1487,9 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 			}
 		}
 		
-		this.plugin.doLayout(this.moveShapes);
+		if (doLayout) {
+			this.plugin.doLayout(this.moveShapes);
+		}
 	},
 	dockAllShapes: function(shouldDocked){
 		// Undock all Nodes
