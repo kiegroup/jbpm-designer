@@ -53,7 +53,7 @@ new function(){
 		 */
 		resize : function(shapes, bounds) {
 			shape = shapes.first(); //FIXME better do some more computation on the min to move.
-			bounds.set(0, bounds.upperLeft().y, shape.getParentShape().bounds.width(), bounds.lowerRight().y);
+			bounds.set(shape.getParentShape().bounds.upperLeft().x + 30, bounds.upperLeft().y, shape.getParentShape().bounds.lowerRight().x, bounds.lowerRight().y);
 		}
 	});
 	
