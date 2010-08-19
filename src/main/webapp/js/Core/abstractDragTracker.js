@@ -31,43 +31,31 @@ ORYX.Plugins.AbstractDragTracker = ORYX.Plugins.AbstractPlugin.extend({
 	construct: function( facade ){
 		arguments.callee.$.construct.apply(this, arguments);
 		
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG, this.dragEvent.bind(this));
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAG_TRACKER_RESIZE, this.resizeEvent.bind(this));
-	},
-	
-	dragEvent: function(event) {
-		included = false;
-		event.shapes.each(function(shape) {
-			if (this.isIncludedInShapes(shape)) {
-				included = true;
-				return;
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG, function(event) {
+			if (this.isIncludedInShapes(event.shapes)) {
+				this.drag(event.shapes, event.offset);
 			}
 		}.bind(this));
-		if (included) {
-			this.drag(event.shapes, event.offset);
-		}
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAG_TRACKER_RESIZE, function(event) {
+			if (this.isIncludedInShapes(event.shapes)) {
+				this.resize(event.shapes, event.bounds);
+			}
+		}.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_END, function(event) {
+			if (this.isIncludedInShapes(event.shapes)) {
+				this.resizeEnd(event.shapes);
+			}
+		}.bind(this));
 	},
+	
 	/**
 	 * Implementation of dragging a set on shapes
 	 * @param {Object} shapes Given shapes
      * @memberOf ORYX.Plugins.AbstractDragTracker.prototype
 	 */
 	drag: function(shapes, offset){
-		throw new Error("Drag Tracker has to implement the drag function.")
 	},
 	
-	resizeEvent: function(event) {
-		included = false;
-		event.shapes.each(function(shape) {
-			if (this.isIncludedInShapes(shape)) {
-				included = true;
-				return;
-			}
-		}.bind(this));
-		if (included) {
-			this.resize(event.shapes, event.bounds);
-		}
-	},
 	
 	/**
 	 * Implementation of resizing a set on shapes
@@ -75,7 +63,14 @@ ORYX.Plugins.AbstractDragTracker = ORYX.Plugins.AbstractPlugin.extend({
      * @memberOf ORYX.Plugins.AbstractDragTracker.prototype
 	 */
 	resize: function(shapes, offset){
-		throw new Error("Drag Tracker has to implement the resize function.")
+	},
+	
+	/**
+	 * Implementation of resizing a set on shapes
+	 * @param {Object} shapes Given shapes
+     * @memberOf ORYX.Plugins.AbstractDragTracker.prototype
+	 */
+	resizeEnd: function(shapes){
 	},
 	
 	/**
@@ -83,6 +78,17 @@ ORYX.Plugins.AbstractDragTracker = ORYX.Plugins.AbstractPlugin.extend({
 	 * @param {Object} shape
 	 */
 	isIncludedInShapes: function(shape){
+		if (shape instanceof Array) {
+			included = false;
+			shape.each(function(s) {
+				if (this.isIncludedInShapes(s)) {
+					included = true;
+					return;
+				}
+			}.bind(this));
+			return included;
+		}
+		
 		if (!(this.shapes instanceof Array)){
 			this.shapes = [this.shapes].compact();
 		}

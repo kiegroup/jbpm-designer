@@ -29,6 +29,7 @@
 		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
 		<!-- lane layouter -->
 		<plugin source="dragTracker/laneDragTracker.js" name="ORYX.Plugins.DragTracker.LaneDragTracker" />
+		<plugin source="dragTracker/poolDragTracker.js" name="ORYX.Plugins.DragTracker.PoolDragTracker" />
 		<stencilsetextension namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#"/>
 	</profile>
 </profiles>

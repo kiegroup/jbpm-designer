@@ -590,6 +590,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 			});
 			
 			var bounds = this.dragBounds.clone();
+			// FIXME are we only resizing one element ?
 			var shape = this.currentShapes[0];
 			
 			if(shape.parent) {
@@ -603,7 +604,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 			
 			this.isResizing = false;
 			
-			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_RESIZE_END});
+			this.facade.raiseEvent({type:ORYX.CONFIG.EVENT_RESIZE_END, shapes:[shape]});
 		}
 	},
 	
