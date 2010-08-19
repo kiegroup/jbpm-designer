@@ -42,7 +42,6 @@ new function(){
 		 * @param offset
 		 */
 		drag : function(shapes, offset) {
-			offset.x = 0;
 		},
 		
 		resizeEnd : function(shapes) {
@@ -85,13 +84,18 @@ new function(){
 			});
 			
 			commands = [];
-			shapes.each(function(shape) {
-				var width = shape.bounds.width();
-				shape.getChildShapes().each(function(child) {
+			shapes.each(function(parent) {
+				var width = parent.bounds.width();
+				parent.getChildShapes().each(function(child) {
 					if (child.getStencil().id().include("http://b3mn.org/stencilset/bpmn2.0#Lane")) {
 						// now resize the lanes to take all the room:
 						newBounds = child.bounds.clone();
-						newBounds.set(30, child.bounds.upperLeft().y, width, child.bounds.lowerRight().y);
+						//force lanes height to be resized if the pool cannot contain them.
+						var lowerRightY = child.bounds.lowerRight().y;
+						if (child.bounds.lowerRight().y > parent.bounds.height()) {
+							lowerRightY = parent.bounds.height();
+						}
+						newBounds.set(30, child.bounds.upperLeft().y, parent.bounds.width(), lowerRightY);
 						var command = new commandClass(child, newBounds, this);
 						commands.push(command);
 					}
@@ -104,9 +108,45 @@ new function(){
 		 * Callback to change the size delta depending on the positions.
 		 * @param shape
 		 * @param parent
-		 * @param offset
 		 */
 		resize : function(shapes, bounds) {
+			//forbid resizing more than the content, without shapes.
+			var findOccupiedArea = function(shape, ignoreList) {
+				var childsBounds = undefined;
+				shape.getChildShapes(true).findAll(function(child) {
+					return !ignoreList.member(child.getStencil().id());				
+				}).each(function(childShape, i) {
+					if(i == 0) {
+						/* Initialize bounds that include all direct child shapes of the shape */
+						childsBounds = childShape.absoluteBounds();
+						return;
+					}
+
+					/* Include other child elements */
+					childsBounds.include(childShape.absoluteBounds());			
+				});
+
+				return childsBounds;
+			};
+			
+			// TODO add artifacts to the ignored shapes ?
+			var ignoreList = ["http://b3mn.org/stencilset/bpmn2.0#Lane"]
+			
+			shapes.each(function(shape) {
+				occupiedArea = findOccupiedArea(shape, ignoreList);
+				if (occupiedArea !== undefined) {
+					//make the occupiedArea absolute and add some margins.
+					occupiedArea.moveBy(20, 20);
+					if (bounds.lowerRight().y < occupiedArea.lowerRight().y) {
+						bounds.set(bounds.upperLeft().x, bounds.upperLeft().y, bounds.lowerRight().x, occupiedArea.lowerRight().y);
+					} 
+					if (bounds.lowerRight().x < occupiedArea.lowerRight().x) {
+						bounds.set(bounds.upperLeft().x, bounds.upperLeft().y, occupiedArea.lowerRight().x, bounds.lowerRight().y);
+					}
+				}
+			});
+			
+
 			/*var lanes = [];
 			shapes.each(function(shape) {
 				shape.getChildShapes().each(function(child) {
