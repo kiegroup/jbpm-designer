@@ -33,7 +33,7 @@ ORYX.Plugins.AbstractDragTracker = ORYX.Plugins.AbstractPlugin.extend({
 		
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG, function(event) {
 			if (this.isIncludedInShapes(event.shapes)) {
-				this.drag(event.shapes, event.offset);
+				this.drag(event.shapes, event.bounds);
 			}
 		}.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAG_TRACKER_RESIZE, function(event) {
@@ -46,6 +46,12 @@ ORYX.Plugins.AbstractDragTracker = ORYX.Plugins.AbstractPlugin.extend({
 				this.resizeEnd(event.shapes);
 			}
 		}.bind(this));
+		
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DROP_SHAPE, function(event) {
+			if (this.isIncludedInShapes(event.shape)) {
+				this.newShape(event.shape);
+			}
+		}.bind(this));
 	},
 	
 	/**
@@ -53,24 +59,32 @@ ORYX.Plugins.AbstractDragTracker = ORYX.Plugins.AbstractPlugin.extend({
 	 * @param {Object} shapes Given shapes
      * @memberOf ORYX.Plugins.AbstractDragTracker.prototype
 	 */
-	drag: function(shapes, offset){
+	drag: function(shapes, bounds){
 	},
 	
 	
 	/**
-	 * Implementation of resizing a set on shapes
+	 * Hook to intervene in the resize, during the resizing effort.
 	 * @param {Object} shapes Given shapes
      * @memberOf ORYX.Plugins.AbstractDragTracker.prototype
 	 */
-	resize: function(shapes, offset){
+	resize: function(shapes, bounds){
 	},
 	
 	/**
-	 * Implementation of resizing a set on shapes
+	 * Hook to complement the resize of a shape (after the resize)
 	 * @param {Object} shapes Given shapes
      * @memberOf ORYX.Plugins.AbstractDragTracker.prototype
 	 */
 	resizeEnd: function(shapes){
+	},
+	
+	/**
+	 * Hook to intervene after a new shape has been created.
+	 * @param shape
+	 * @returns
+	 */
+	newShape: function(shape) {
 	},
 	
 	/**

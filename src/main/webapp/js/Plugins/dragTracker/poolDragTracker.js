@@ -35,15 +35,6 @@ new function(){
 		
 		shapes : [	"http://b3mn.org/stencilset/bpmn2.0#Pool"],
 
-		/**
-		 * Callback to change the offset depending on the positions.
-		 * @param shape
-		 * @param parent
-		 * @param offset
-		 */
-		drag : function(shapes, offset) {
-		},
-		
 		resizeEnd : function(shapes) {
 			var lanes = [];
 			
@@ -145,25 +136,8 @@ new function(){
 					}
 				}
 			});
-			
-
-			/*var lanes = [];
-			shapes.each(function(shape) {
-				shape.getChildShapes().each(function(child) {
-					if (child.getStencil().id().include("http://b3mn.org/stencilset/bpmn2.0#Lane")) {
-						lanes.push(child);
-					}
-				});
-				
-			});
-			newShapes = shapes.concat(lanes).uniq();
-			shapes.clear();
-			newShapes.each(function(s) {
-				shapes.push(s);
-			});
-			
-			console.log(shapes);*/
 		}
+		
 	});
 	
 	

@@ -224,6 +224,7 @@ ORYX.CONFIG.EVENT_DOCKERDRAG = 				"dragTheDocker";
 ORYX.CONFIG.EVENT_SHOW_PROPERTYWINDOW =		"propertywindow.show";
 ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG =       "dragTracker.drag";
 ORYX.CONFIG.EVENT_DRAG_TRACKER_RESIZE =     "dragTracker.resize";
+ORYX.CONFIG.EVENT_DROP_SHAPE =				"drop.shape";
 	
 	/* Selection Shapes Highlights */
 ORYX.CONFIG.SELECTION_HIGHLIGHT_SIZE =				5;

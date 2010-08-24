@@ -317,12 +317,14 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		position.y = Math.min( c.bounds.height() - this.dragBounds.height(), 	position.y)	
 						
 		offset = {x: position.x - this.dragBounds.upperLeft().x , y : position.y - this.dragBounds.upperLeft().y};
+		this.dragBounds.moveBy(offset);
+		
 		this.facade.raiseEvent({
 			type		: ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG,
 			shapes		: this.currentShapes,
-			offset      : offset
+			bounds      : this.dragBounds
 		});
-		this.dragBounds.moveBy(offset);
+		
 		
 
 		// Update all selected shapes and the selection rectangle

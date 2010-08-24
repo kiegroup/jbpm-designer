@@ -41,19 +41,92 @@ new function(){
 		 * @param parent
 		 * @param offset
 		 */
-		drag : function(shapes, offset) {
-			offset.x = 0;
+		drag : function(shapes, bounds) {
+			console.log(bounds.upperLeft().y)
+			shape = shapes.first();
+			
+			var righty = bounds.lowerRight().y;
+			var lefty = bounds.upperLeft().y;
+			if (righty > shape.parent.bounds.lowerRight().y) {
+				righty = shape.parent.bounds.lowerRight().y;
+				lefty = righty - shape.bounds.height();
+			} else if (lefty < shape.getParentShape().bounds.upperLeft().y) {
+				lefty = shape.getParentShape().bounds.upperLeft().y;
+				righty = lefty + shape.bounds.height();
+			}
+			bounds.set(shape.getParentShape().bounds.upperLeft().x + 30, lefty, shape.getParentShape().bounds.lowerRight().x, righty);
+			
 		},
 	
 		/**
 		 * Callback to change the size delta depending on the positions.
-		 * @param shape
-		 * @param parent
-		 * @param offset
+		 * @param shapes the shapes being resized
+		 * @param bounds the absolute bounds of the new position
 		 */
 		resize : function(shapes, bounds) {
-			shape = shapes.first(); //FIXME better do some more computation on the min to move.
-			bounds.set(shape.getParentShape().bounds.upperLeft().x + 30, bounds.upperLeft().y, shape.getParentShape().bounds.lowerRight().x, bounds.lowerRight().y);
+			shape = shapes.first();
+			var righty = bounds.lowerRight().y;
+			if (righty > shape.parent.bounds.lowerRight().y) {
+				righty = shape.parent.bounds.lowerRight().y;
+			}
+			var lefty = bounds.upperLeft().y;
+			if (lefty < shape.getParentShape().bounds.upperLeft().y) {
+				lefty = shape.getParentShape().bounds.upperLeft().y;
+			}
+			bounds.set(shape.getParentShape().bounds.upperLeft().x + 30, lefty, shape.getParentShape().bounds.lowerRight().x, righty);
+		},
+		
+		newShape: function(shape) {
+			//we create our own command for resizing. It's a bit awkward to recreate commands
+			//for such things, and that begs for a nice framework.
+			var commandClass = ORYX.Core.Command.extend({
+				construct: function(shape, newBounds, plugin){
+					this.shape = shape;
+					this.oldBounds = shape.bounds.clone();
+					this.newBounds = newBounds;
+					this.plugin = plugin;
+				},			
+				execute: function(){
+					this.shape.bounds.set(this.newBounds.a, this.newBounds.b);
+					this.update(this.getOffset(this.oldBounds, this.newBounds));
+					
+				},
+				rollback: function(){
+					this.shape.bounds.set(this.oldBounds.a, this.oldBounds.b);
+					this.update(this.getOffset(this.newBounds, this.oldBounds))
+				},
+				
+				getOffset:function(b1, b2){
+					return {
+						x: b2.a.x - b1.a.x,
+						y: b2.a.y - b1.a.y,
+						xs: b2.width()/b1.width(),
+						ys: b2.height()/b1.height()
+					}
+				},
+				update:function(offset){
+					this.shape.getLabels().each(function(label) {
+						label.changed();
+					});
+
+					this.plugin.facade.getCanvas().update();
+					this.plugin.facade.updateSelection();
+				}
+			});
+			
+			
+			var righty = shape.bounds.lowerRight().y;
+			if (righty > shape.parent.bounds.height()) {
+				righty = shape.parent.bounds.height();
+			}
+			var lefty = shape.bounds.upperLeft().y;
+			if (lefty < 0) {
+				lefty = 0;
+			}
+			var newBounds = new ORYX.Core.Bounds(30, lefty, shape.parent.bounds.width(), righty);
+			var command = new commandClass(shape, newBounds, this);
+			this.facade.executeCommands([command]);
+			this.doLayout([shape]);
 		}
 	});
 	
