@@ -76,11 +76,12 @@ public class EditorHandler extends HttpServlet {
 		String dev_flag = "";
 		String bootstrapLibs = "<script src=\"" + oryx_path + "oryx.js\" type=\"text/javascript\" />\n";
 		String extString="";
-		
+		String title = null;
 		if (System.getProperty(DEV_MODE) != null) {
 			dev_flag = "ORYX.CONFIG.DEV = true;\nvar ORYX_LOGLEVEL = 4;\n";
 			profiles.add("default"); // will be ignored.
 			conf = new JSONObject(); // we can do a better job at configuring the conf object later on.
+			title = "Intalio|Process Designer (dev)";
 			String jsFolder = this.getServletContext().getRealPath("/") + File.separator + "js" + File.separator;
 			// we place ourselves in dev mode, we will load the files from the file js_files.json
 			try {
@@ -164,6 +165,7 @@ public class EditorHandler extends HttpServlet {
 				conf = readJSONObjectFromFile(this.getServletContext().
 						getRealPath("/profiles") + File.separator + profiles.get(0)
 						+ ".conf");
+				title = conf.getString("title");
 			} catch (JSONException e) {
 				_logger.error(e.getMessage(), e);
 			}
@@ -212,7 +214,7 @@ public class EditorHandler extends HttpServlet {
           	"</script>";
 		response.setContentType("application/xhtml+xml");
 		
-		response.getWriter().println(this.getOryxModel("Process Designer", 
+		response.getWriter().println(this.getOryxModel(title, 
 				content, this.getLanguageCode(request), 
 				this.getCountryCode(request), profiles, bootstrapLibs));
 		response.setStatus(200);
@@ -283,6 +285,7 @@ public class EditorHandler extends HttpServlet {
       	  	+ "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"
       	  	+ "xmlns:atom=\"http://b3mn.org/2007/atom+xhtml\">\n"
       	  	+ "<head profile=\"http://purl.org/NET/erdf/profile\">\n"
+      	  	+ "<link rel='icon' href='favicon.ico'/>"
       	  	+ "<title>" + title + "</title>\n"
       	  	+ "<!-- libraries -->\n"
       	  	+ "<script src=\"" + oryx_path + "lib/prototype-1.5.1.js\" type=\"text/javascript\" />\n"
