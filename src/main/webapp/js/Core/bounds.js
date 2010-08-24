@@ -167,7 +167,6 @@ ORYX.Core.Bounds = {
 	 */
 	moveTo: function() {
 		var currentPosition = this.upperLeft();
-		console.log(currentPosition.y);
 		switch (arguments.length) {
 			case 1:
 				this.moveBy({
@@ -184,7 +183,6 @@ ORYX.Core.Bounds = {
 			default:
 				//TODO error
 		}
-		console.log(this.upperLeft().y);
 	},
 	
 	/**
