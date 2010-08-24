@@ -22,16 +22,13 @@
 package org.oryxeditor.server;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Collections;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.intalio.bpmn2.Bpmn2JsonUnmarshaller;
+import com.intalio.web.repository.IUUIDBasedRepository;
+import com.intalio.web.repository.impl.UUIDBasedFileRepository;
 
 
 /**
@@ -57,10 +56,25 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     
     private static final Logger _logger = Logger.getLogger(UUIDBasedRepositoryServlet.class);
     
-    /**
-     * the path to the repository inside the servlet.
-     */
-    private final static String REPOSITORY_PATH = "repository";
+    public static Class<? extends IUUIDBasedRepository> _repositoryClass;
+    
+    static {
+        _repositoryClass = UUIDBasedFileRepository.class;
+    }
+    
+    private IUUIDBasedRepository _repository;
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        try {
+            _repository = _repositoryClass.newInstance();
+            _repository.configure(this);
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+        
+    }
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -68,20 +82,14 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
-        String filename = this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".json");
-        if (!new File(filename).exists()) {
-           return; // then return nothing. 
-        }
-        InputStream input = null;
-        try {
-            input = new FileInputStream(filename);
-            byte[] buffer = new byte[4096];
-            int read;
-            while ((read = input.read(buffer)) != -1) {
-                resp.getOutputStream().write(buffer, 0, read);
-            }
-        } finally {
-            if (input != null) { try { input.close();} catch(Exception e) {} }
+        
+        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(uuid));
+        byte[] buffer = new byte[4096];
+        int read;
+
+        while ((read = input.read(buffer)) != -1) {
+            System.err.println("spinnging");
+            resp.getOutputStream().write(buffer, 0, read);
         }
     }
 
@@ -102,40 +110,22 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             String json = (String) jsonObject.get("data");
             String svg = (String) jsonObject.get("svg");
             String uuid = (String) jsonObject.get("uuid");
-            String rdf = (String) jsonObject.get("rdf");
-            FileOutputStream outputStream = null;
+            String bpmn = "";
             
             try {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 Definitions def = unmarshaller.unmarshall(json);
-                outputStream = new FileOutputStream(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".bpmn"));
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
+                bpmn = outputStream.toString();
+                
             } catch (Exception e) {
                 // whatever was thrown, for now, we catch it and log it.
                 _logger.error(e.getMessage(), e);
-            } finally {
-                if (outputStream != null) { try { outputStream.close();} catch(Exception e) {} }
             }
+            
+            _repository.save(uuid, json, svg, bpmn);
 
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".json")));
-                writer.write(json);
-            } finally {
-                if (writer != null) { try { writer.close();} catch(Exception e) {} }
-            }
-            try {
-                writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".svg")));
-                writer.write(svg);
-            } finally {
-                if (writer != null) { try { writer.close();} catch(Exception e) {} }
-            }
-            try {
-                writer = new BufferedWriter(new FileWriter(this.getServletContext().getRealPath("/" + REPOSITORY_PATH + "/" + uuid + ".rdf")));
-                writer.write(rdf);
-            } finally {
-                if (writer != null) { try { writer.close();} catch(Exception e) {} }
-            }
         } catch (JSONException e1) {
             throw new ServletException(e1);
         }
