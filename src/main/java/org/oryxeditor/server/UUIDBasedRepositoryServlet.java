@@ -88,7 +88,6 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         int read;
 
         while ((read = input.read(buffer)) != -1) {
-            System.err.println("spinnging");
             resp.getOutputStream().write(buffer, 0, read);
         }
     }
