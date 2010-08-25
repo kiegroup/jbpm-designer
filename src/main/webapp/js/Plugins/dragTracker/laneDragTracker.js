@@ -42,19 +42,18 @@ new function(){
 		 * @param offset
 		 */
 		drag : function(shapes, bounds) {
-			console.log(bounds.upperLeft().y)
 			shape = shapes.first();
 			
 			var righty = bounds.lowerRight().y;
 			var lefty = bounds.upperLeft().y;
-			if (righty > shape.parent.bounds.lowerRight().y) {
-				righty = shape.parent.bounds.lowerRight().y;
+			if (righty > shape.parent.absoluteBounds().lowerRight().y) {
+				righty = shape.parent.absoluteBounds().lowerRight().y;
 				lefty = righty - shape.bounds.height();
-			} else if (lefty < shape.getParentShape().bounds.upperLeft().y) {
-				lefty = shape.getParentShape().bounds.upperLeft().y;
+			} else if (lefty < shape.parent.absoluteBounds().upperLeft().y) {
+				lefty = shape.parent.absoluteBounds().upperLeft().y;
 				righty = lefty + shape.bounds.height();
 			}
-			bounds.set(shape.getParentShape().bounds.upperLeft().x + 30, lefty, shape.getParentShape().bounds.lowerRight().x, righty);
+			bounds.set(shape.parent.absoluteBounds().upperLeft().x + 30, lefty, shape.parent.absoluteBounds().lowerRight().x, righty);
 			
 		},
 	
@@ -66,14 +65,14 @@ new function(){
 		resize : function(shapes, bounds) {
 			shape = shapes.first();
 			var righty = bounds.lowerRight().y;
-			if (righty > shape.parent.bounds.lowerRight().y) {
-				righty = shape.parent.bounds.lowerRight().y;
+			if (righty > shape.parent.absoluteBounds().lowerRight().y) {
+				righty = shape.parent.absoluteBounds().lowerRight().y;
 			}
 			var lefty = bounds.upperLeft().y;
-			if (lefty < shape.getParentShape().bounds.upperLeft().y) {
-				lefty = shape.getParentShape().bounds.upperLeft().y;
+			if (lefty < shape.parent.absoluteBounds().upperLeft().y) {
+				lefty = shape.parent.absoluteBounds().upperLeft().y;
 			}
-			bounds.set(shape.getParentShape().bounds.upperLeft().x + 30, lefty, shape.getParentShape().bounds.lowerRight().x, righty);
+			bounds.set(shape.parent.absoluteBounds().upperLeft().x + 30, lefty, shape.parent.absoluteBounds().lowerRight().x, righty);
 		},
 		
 		newShape: function(shape) {
@@ -116,8 +115,8 @@ new function(){
 			
 			
 			var righty = shape.bounds.lowerRight().y;
-			if (righty > shape.parent.bounds.height()) {
-				righty = shape.parent.bounds.height();
+			if (righty > shape.parent.absoluteBounds().height()) {
+				righty = shape.parent.absoluteBounds().height();
 			}
 			var lefty = shape.bounds.upperLeft().y;
 			if (lefty < 0) {
