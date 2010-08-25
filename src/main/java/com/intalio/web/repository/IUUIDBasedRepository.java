@@ -26,15 +26,30 @@ import javax.servlet.http.HttpServlet;
 /**
  * @author Antoine Toulme
  * 
- * This interface defines the way the models should be retrieved, depending on their uuids.
+ * This interface defines the way the models should be saved and loaded.
  *
  */
 public interface IUUIDBasedRepository {
     
+    /**
+     * Configure the repository in the context of the servlet
+     * @param servlet the servlet which will use this repository.
+     */
     public void configure(HttpServlet servlet);
     
+    /**
+     * @param uuid the id of the model.
+     * @return the model as a set of bytes.
+     */
     public byte[] load(String uuid);
     
+    /**
+     * Saves the model inside the repository.
+     * @param uuid the id of the model
+     * @param json the json model
+     * @param svg the svg representation of the model
+     * @param bpmn the bpmn model
+     */
     public void save(String uuid, String json, String svg, String bpmn);
 
 }
