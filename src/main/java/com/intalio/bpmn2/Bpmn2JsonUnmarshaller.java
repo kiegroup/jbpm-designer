@@ -318,7 +318,7 @@ public class Bpmn2JsonUnmarshaller {
                         ((Process) baseElt).getLaneSets().add(Bpmn2Factory.eINSTANCE.createLaneSet());
                     }
                     ((Process) baseElt).getLaneSets().get(0).getLanes().add((Lane) child);
-                    ((Process) baseElt).getFlowElements().addAll(((Lane) child).getFlowNodeRefs());
+                    addLaneFlowNodes((Process) baseElt, (Lane) child);
                 } else if (child instanceof Artifact) {
                     ((Process) baseElt).getArtifacts().add((Artifact) child);
                 } else {
@@ -327,10 +327,16 @@ public class Bpmn2JsonUnmarshaller {
             }
         } else if (baseElt instanceof Lane) {
             for (BaseElement child : childElements) {
-                if (child instanceof FlowElement) {
+                if (child instanceof FlowNode) {
                     ((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
+                } else if (child instanceof Lane) {
+                    if (((Lane) baseElt).getChildLaneSet() == null) {
+                        ((Lane) baseElt).setChildLaneSet(Bpmn2Factory.eINSTANCE.createLaneSet());
+                    }
+                    ((Lane) baseElt).getChildLaneSet().getLanes().add((Lane) child);
+                } else {
+                    throw new IllegalArgumentException("Don't know what to do of " + child);
                 }
-                
             }
         } else {
             if (!childElements.isEmpty()) {
@@ -338,6 +344,15 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         return baseElt;
+    }
+
+    private void addLaneFlowNodes(Process process, Lane lane) {
+        process.getFlowElements().addAll(lane.getFlowNodeRefs());
+        if (lane.getChildLaneSet() != null) {
+            for (Lane l : lane.getChildLaneSet().getLanes()) {
+                addLaneFlowNodes(process, l);
+            }
+        }
     }
 
     private void applyProperties(BaseElement baseElement, Map<String, String> properties) {
