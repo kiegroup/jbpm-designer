@@ -60,6 +60,8 @@ Import-Package: com.sun.xml.bind.marshaller,
  org.jdom.transform,
  org.json,
  org.mozilla.javascript,
+ org.osgi.framework,
+ org.osgi.util.tracker,
  org.slf4j,
  org.supercsv.io,
  org.supercsv.prefs,
@@ -70,3 +72,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Eclipse-BundleShape: dir
+Export-Package: com.intalio.web,
+ com.intalio.web.repository
+Bundle-Activator: com.intalio.web.Activator

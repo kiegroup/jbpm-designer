@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +58,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         _repositoryPath = servlet.getServletContext().getRealPath("/" + REPOSITORY_PATH);
     }
     
-    public byte[] load(String uuid) {
+    public byte[] load(HttpServletRequest req, String uuid) {
         
         String filename = _repositoryPath + "/" + uuid + ".json";
         if (!new File(filename).exists()) {
@@ -88,7 +89,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         return output.toByteArray();
     }
 
-    public void save(String uuid, String json, String svg, String bpmn) {
+    public void save(HttpServletRequest req, String uuid, String json, String svg, String bpmn) {
         writeFile(bpmn, _repositoryPath + "/" + uuid + ".bpmn");
         writeFile(json, _repositoryPath + "/" + uuid + ".json");
         writeFile(svg, _repositoryPath + "/" + uuid + ".svg");

@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package org.oryxeditor.server;
+package com.intalio.web.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -42,6 +42,7 @@ import org.json.JSONObject;
 
 import com.intalio.bpmn2.Bpmn2JsonUnmarshaller;
 import com.intalio.web.repository.IUUIDBasedRepository;
+import com.intalio.web.repository.IUUIDBasedRepositoryService;
 import com.intalio.web.repository.impl.UUIDBasedFileRepository;
 
 
@@ -56,11 +57,13 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     
     private static final Logger _logger = Logger.getLogger(UUIDBasedRepositoryServlet.class);
     
-    public static Class<? extends IUUIDBasedRepository> _repositoryClass;
-    
-    static {
-        _repositoryClass = UUIDBasedFileRepository.class;
-    }
+    public static IUUIDBasedRepositoryService _factory = new IUUIDBasedRepositoryService() {
+
+        public IUUIDBasedRepository createRepository() {
+            return new UUIDBasedFileRepository();
+        }
+        
+    };
     
     private IUUIDBasedRepository _repository;
     
@@ -68,7 +71,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         try {
-            _repository = _repositoryClass.newInstance();
+            _repository = _factory.createRepository();
             _repository.configure(this);
         } catch (Exception e) {
             throw new ServletException(e);
@@ -83,7 +86,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             throw new ServletException("uuid parameter required");
         }
         
-        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(uuid));
+        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid));
         byte[] buffer = new byte[4096];
         int read;
 
@@ -123,7 +126,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
                 _logger.error(e.getMessage(), e);
             }
             
-            _repository.save(uuid, json, svg, bpmn);
+            _repository.save(req, uuid, json, svg, bpmn);
 
         } catch (JSONException e1) {
             throw new ServletException(e1);

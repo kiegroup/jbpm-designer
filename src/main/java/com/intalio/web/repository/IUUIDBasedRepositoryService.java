@@ -21,38 +21,17 @@
 ****************************************/
 package com.intalio.web.repository;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @author Antoine Toulme
  * 
- * This interface defines the way the models should be saved and loaded.
+ * A factory to create IUUIDBasedRepository objects.
  *
  */
-public interface IUUIDBasedRepository {
+public interface IUUIDBasedRepositoryService {
     
     /**
-     * Configure the repository in the context of the servlet
-     * @param servlet the servlet which will use this repository.
+     * @return a repository object.
      */
-    public void configure(HttpServlet servlet);
-    
-    /**
-     * @param req the request from the user.
-     * @param uuid the id of the model.
-     * @return the model as a set of bytes.
-     */
-    public byte[] load(HttpServletRequest req, String uuid);
-    
-    /**
-     * Saves the model inside the repository.
-     * @param req the request from the user.
-     * @param uuid the id of the model
-     * @param json the json model
-     * @param svg the svg representation of the model
-     * @param bpmn the bpmn model
-     */
-    public void save(HttpServletRequest req, String uuid, String json, String svg, String bpmn);
+    public IUUIDBasedRepository createRepository();
 
 }
