@@ -100,7 +100,7 @@ designer:
   - com.intalio.cloud.orbit:org.xmappr:jar:1.0.0.012
   - com.intalio.cloud.orbit:org.xmlpull:jar:1.0.0.012
   - com.intalio.cloud.orbit:spiffy:jar:1.0.0.012
-  - org.eclipse:org.eclipse.bpmn2:jar:0.7.0.20100723232018
+  - org.eclipse:org.eclipse.bpmn2:jar:0.7.0.20100826212238
   - org.eclipse:org.eclipse.emf.common:jar:2.6.0.v20100614-1136
   - org.eclipse:org.eclipse.emf.ecore.xmi:jar:2.5.0.v20100521-1846
   - org.eclipse:org.eclipse.emf.ecore:jar:2.6.0.v20100614-1136
