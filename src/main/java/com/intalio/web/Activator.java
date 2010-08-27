@@ -27,6 +27,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
+import com.intalio.web.filter.IFilterFactory;
+import com.intalio.web.filter.impl.PluggableFilter;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
 import com.intalio.web.server.UUIDBasedRepositoryServlet;
 
@@ -40,33 +42,66 @@ import com.intalio.web.server.UUIDBasedRepositoryServlet;
 public class Activator implements BundleActivator {
 
     public void start(final BundleContext context) throws Exception {
-        ServiceReference sRef =
-            context.getServiceReference(IUUIDBasedRepositoryService.class.getName());
-        if (sRef != null) {
-            IUUIDBasedRepositoryService service = (IUUIDBasedRepositoryService) context.getService(sRef);
-            UUIDBasedRepositoryServlet._factory = service;
-        } else {
-            //use a service tracker to be called back when the IUUIDBasedRepositoryFactory is ready:
-            ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+        {
+            ServiceReference sRef =
+                context.getServiceReference(IUUIDBasedRepositoryService.class.getName());
+            if (sRef != null) {
+                IUUIDBasedRepositoryService service = (IUUIDBasedRepositoryService) context.getService(sRef);
+                UUIDBasedRepositoryServlet._factory = service;
+            } else {
+                //use a service tracker to be called back when the IUUIDBasedRepositoryFactory is ready:
+                ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
 
-                public void removedService(ServiceReference reference, Object service) {
-                    //special servlet shutdown
-                }
+                    public void removedService(ServiceReference reference, Object service) {
+                        //special servlet shutdown
+                    }
 
-                public void modifiedService(ServiceReference reference, Object service) {
-                    //reload?
-                }
+                    public void modifiedService(ServiceReference reference, Object service) {
+                        //reload?
+                    }
 
-                public Object addingService(ServiceReference reference) {
-                    IUUIDBasedRepositoryService service = (IUUIDBasedRepositoryService) context.getService(reference);
-                    UUIDBasedRepositoryServlet._factory = service;
-                    return service;
-                }
-            };
-            ServiceTracker tracker = new ServiceTracker(context,
-                    IUUIDBasedRepositoryService.class.getName(), cust);
-            tracker.open();
+                    public Object addingService(ServiceReference reference) {
+                        IUUIDBasedRepositoryService service = (IUUIDBasedRepositoryService) context.getService(reference);
+                        UUIDBasedRepositoryServlet._factory = service;
+                        return service;
+                    }
+                };
+                ServiceTracker tracker = new ServiceTracker(context,
+                        IUUIDBasedRepositoryService.class.getName(), cust);
+                tracker.open();
 
+            }
+        }
+
+        {
+            ServiceReference sRef =
+                context.getServiceReference(IFilterFactory.class.getName());
+            if (sRef != null) {
+                IFilterFactory service = (IFilterFactory) context.getService(sRef);
+                PluggableFilter.registerFilter(service);
+            } else {
+                //use a service tracker to be called back when the IFilterFactory is ready:
+                ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+
+                    public void removedService(ServiceReference reference, Object service) {
+                        //special servlet shutdown
+                    }
+
+                    public void modifiedService(ServiceReference reference, Object service) {
+                        //reload?
+                    }
+
+                    public Object addingService(ServiceReference reference) {
+                        IFilterFactory service = (IFilterFactory) context.getService(reference);
+                        PluggableFilter.registerFilter(service);
+                        return service;
+                    }
+                };
+                ServiceTracker tracker = new ServiceTracker(context,
+                        IFilterFactory.class.getName(), cust);
+                tracker.open();
+
+            }
         }
     }
 

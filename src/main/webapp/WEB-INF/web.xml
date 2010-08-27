@@ -733,7 +733,17 @@
 	<!--<welcome-file-list>
 		<welcome-file>/server</welcome-file>
 	</welcome-file-list>-->
-    
+	
+	<!-- Pluggable filter -->
+	<filter>
+		<filter-name>Pluggable Filter</filter-name>
+		<filter-class>com.intalio.web.filter.impl.PluggableFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+    	<filter-name>Pluggable Filter</filter-name>
+    	<url-pattern>/*</url-pattern>
+    </filter-mapping>
     
     <!-- Postmaster Config -->
     <!-- example config for googlemail account -->
