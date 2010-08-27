@@ -47,7 +47,6 @@ public class FilterChainImpl implements FilterChain {
         _chain = chain;
     }
 
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
         if (!_filters.isEmpty()) {
             // remove the first element from the chain and pass itself to the filter.
