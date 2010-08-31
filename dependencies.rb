@@ -17,6 +17,11 @@ ORBIT_BINARIES	= ["com.intalio.cloud.orbit-prefetched:javax.servlet:jar:2.5.0.v2
    "com.intalio.cloud.orbit-prefetched:org.apache.xalan:jar:2.7.1.v200905122109",
    "com.intalio.cloud.orbit-prefetched:org.apache.xerces:jar:2.9.0.v200909240008"]
    
+BPMN2_LIBS = ["org.eclipse:org.eclipse.bpmn2:jar:0.7.0.20100826221953",
+     "org.eclipse:org.eclipse.emf.common:jar:2.6.0.v20100614-1136",
+     "org.eclipse:org.eclipse.emf.ecore.xmi:jar:2.5.0.v20100521-1846",
+     "org.eclipse:org.eclipse.emf.ecore:jar:2.6.0.v20100614-1136"]
+   
 WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
   "commons-configuration:commons-configuration:jar:1.6", "org.jdom:jdom:jar:1.1", "org.apache.velocity:velocity:jar:1.6.4",
   "org.supercsv:SuperCSV:jar:1.52", "org.apache.xmlgraphics:fop:jar:0.95", "com.sun.xml.bind:jaxb-impl:jar:2.2",
@@ -25,4 +30,6 @@ WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collec
   "javax.servlet:servlet-api:jar:2.5", "commons-httpclient:commons-httpclient:jar:3.1", 
   "commons-fileupload:commons-fileupload:jar:1.2.1", "commons-lang:commons-lang:jar:2.5",
   "org.slf4j:log4j-over-slf4j:jar:1.6.0", "rhino:js:jar:1.7R2", "javax.mail:mail:jar:1.4.1",
-  "batik:batik-transcoder:jar:1.6", "xalan:xalan:jar:2.7.1", "xerces:xercesImpl:jar:2.9.1"]
+  "batik:batik-transcoder:jar:1.6", "xalan:xalan:jar:2.7.1", "xerces:xercesImpl:jar:2.9.1",
+  "org.codehaus.jackson:jackson-core-asl:jar:1.5.6", "org.codehaus.jackson:jackson-mapper-asl:jar:1.5.6",
+  "org.eclipse:osgi:jar:3.5.0.v20090520"] | BPMN2_LIBS
