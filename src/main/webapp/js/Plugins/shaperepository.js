@@ -85,9 +85,9 @@ ORYX.Plugins.ShapeRepository = {
 			
 			var typeTitle = sset.title();
 			var extensions = sset.extensions();
-			if (extensions && extensions.size() > 0) {
-				typeTitle += " / " + ORYX.Core.StencilSet.getTranslation(extensions.values()[0], "title");
-			} 
+//			if (extensions && extensions.size() > 0) {
+//				typeTitle += " / " + ORYX.Core.StencilSet.getTranslation(extensions.values()[0], "title");
+//			} 
 			
 			this.shapeList.appendChild(stencilSetNode = new Ext.tree.TreeNode({
 				text:typeTitle, 			// Stencilset Name
