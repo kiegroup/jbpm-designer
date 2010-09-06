@@ -594,6 +594,10 @@
             <servlet-name>EditorHandler</servlet-name>
             <url-pattern>/editor</url-pattern>
     </servlet-mapping>
+     <servlet-mapping>
+            <servlet-name>EditorHandler</servlet-name>
+            <url-pattern>/editor/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
             <servlet-name>FeedbackServlet</servlet-name>
             <url-pattern>/feedback</url-pattern>
