@@ -35,14 +35,16 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 		this.facade = facade;
 		
 		this.groupIndex = new Hash();
-		ownPluginData.properties.each((function(value){
-			if(value.group && value.index != undefined) {
-				this.groupIndex[value.group] = value.index
-			}
-		}).bind(this));
+		
 		
 		if (ORYX.CONFIG.MENU_INDEX) {
-		  this.groupIndex = ORYX.CONFIG.MENU_INDEX
+		  this.groupIndex = ORYX.CONFIG.MENU_INDEX;
+		} else {
+		  ownPluginData.properties.each((function(value){
+		    if(value.group && value.index != undefined) {
+			  this.groupIndex[value.group] = value.index;
+			}
+		  }).bind(this));
 		}
 		
 		Ext.QuickTips.init();

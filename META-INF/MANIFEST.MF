@@ -67,12 +67,15 @@ Import-Package: com.sun.xml.bind.marshaller,
  org.supercsv.prefs,
  org.xmappr
 Bundle-Vendor: Intalio Inc
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
- JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Eclipse-BundleShape: dir
-Export-Package: com.intalio.web,
- com.intalio.web.filter,
- com.intalio.web.repository
+Export-Package: com.intalio.bpmn2;version="1.0.0",
+ com.intalio.web;version="1.0.0",
+ com.intalio.web.filter;version="1.0.0",
+ com.intalio.web.plugin;version="1.0.0",
+ com.intalio.web.profile;version="1.0.0",
+ com.intalio.web.repository;version="1.0.0",
+ com.intalio.web.stencilset;version="1.0.0"
 Bundle-Activator: com.intalio.web.Activator

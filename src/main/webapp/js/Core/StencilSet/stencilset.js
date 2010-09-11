@@ -52,7 +52,6 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         if (!source) {
             throw "ORYX.Core.StencilSet.StencilSet(construct): Parameter 'source' is not defined.";
         }
-        
         if (source.endsWith("/")) {
             source = source.substr(0, source.length - 1);
         }
@@ -60,32 +59,19 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 		this._extensions = new Hash();
         
         this._source = source;
-        this._baseUrl = source.substring(0, source.lastIndexOf("/") + 1);
-        
+        this._baseUrl = "/designer/stencilset/" + source + "/"
         this._jsonObject = {};
         
         this._stencils = new Hash();
 		this._availableStencils = new Hash();
-        
-		if(ORYX.CONFIG.BACKEND_SWITCH) {
-			//get the url of the stencil set json file
-			new Ajax.Request(source, {
-	            asynchronous: false,
-	            method: 'get',
-	            onSuccess: this._getJSONURL.bind(this),
-	            onFailure: this._cancelInit.bind(this)
-	        });
-		} else {
-			new Ajax.Request(source, {
-	            asynchronous: false,
-	            method: 'get',
-	            onSuccess: this._init.bind(this),
-	            onFailure: this._cancelInit.bind(this)
-	        });
-		}
-        
-        if (this.errornous) 
-            throw "Loading stencil set " + source + " failed.";
+		new Ajax.Request("/designer/stencilset/" + source, {
+            asynchronous: false,
+            method: 'get',
+            onSuccess: this._init.bind(this),
+            onFailure: function() {
+			  throw "Loading stencil set " + source + " failed.";
+		    }.bind(source)
+        });
     },
     
     /**
@@ -219,29 +205,14 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 		return this._extensions;
 	},
 	
-	addExtension: function(url) {
-		
-		new Ajax.Request(url, {
-            method: 'GET',
-            asynchronous: false,
-			onSuccess: (function(transport) {
-				this.addExtensionDirectly(transport.responseText);
-			}).bind(this),
-			onFailure: (function(transport) {
-				ORYX.Log.debug("Loading stencil set extension file failed. The request returned an error." + transport);
-			}).bind(this),
-			onException: (function(transport) {
-				ORYX.Log.debug("Loading stencil set extension file failed. The request returned an error." + transport);
-			}).bind(this)
-		
-		});
+	addExtension: function(extension) {
+		console.log(extension)
+		this.addExtensionDirectly(extension); 
 	},
 	
-	addExtensionDirectly: function(str){
-
+	addExtensionDirectly: function(jsonExtension){
+        console.log(jsonExtension)
 		try {
-			eval("var jsonExtension = " + str);
-
 			if(!(jsonExtension["extends"].endsWith("#")))
 					jsonExtension["extends"] += "#";
 					
@@ -425,7 +396,6 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
      * 			stencil set specification.
      */
     _init: function(response){
-    
         // init and check consistency.
         this.__handleStencilset(response);
 		
@@ -439,21 +409,16 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 		}
 		
 		var defaultPosition = 0;
-		
         // init each stencil
         $A(this._jsonObject.stencils).each((function(stencil){
         	defaultPosition++;
-        	
             // instantiate normally.
             var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, pps, defaultPosition);      
-			this._stencils[oStencil.id()] = oStencil;
+        	
+        	this._stencils[oStencil.id()] = oStencil;
 			this._availableStencils[oStencil.id()] = oStencil;
             
         }).bind(this));
-    },
-    
-    _cancelInit: function(response){
-        this.errornous = true;
     },
     
     toString: function(){

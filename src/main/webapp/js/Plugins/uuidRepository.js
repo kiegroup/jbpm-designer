@@ -210,7 +210,7 @@ window.onOryxResourcesLoaded = function() {
 	var editor_parameters = {
 		id: ORYX.CONFIG.UUID,
 		stencilset: {
-			url: ORYX.PATH + stencilset
+			url: stencilset
 		}
 	};
 	if(!(ORYX.CONFIG.UUID === undefined)) {

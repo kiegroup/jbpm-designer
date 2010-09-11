@@ -354,6 +354,9 @@
 		<plugin source="bpmn2xpdl20.js" name="ORYX.Plugins.BPMN2XPDL20" >
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
 		</plugin>
+		<plugin name="ORYX.Plugins.UUIDRepositorySave" source="uuidRepository.js"/>
+		<plugin source="dragTracker/laneDragTracker.js" name="ORYX.Plugins.DragTracker.LaneDragTracker" />
+		<plugin source="dragTracker/poolDragTracker.js" name="ORYX.Plugins.DragTracker.PoolDragTracker" />
 			
 	</plugins>
 	

@@ -40,36 +40,8 @@ function init() {
 
 	// Hack for WebKit to set the SVGElement-Classes
 	ORYX.Editor.setMissingClasses();
-    
-    // If someone wants to create the editor instance himself
-    if (window.onOryxResourcesLoaded) {
-        window.onOryxResourcesLoaded();
-    } 
-    // Else if this is a newly created model
-    else if(window.location.pathname.include(ORYX.CONFIG.ORYX_NEW_URL)){
-        new ORYX.Editor({
-            id: 'oryx-canvas123',
-            fullscreen: true,
-            stencilset: {
-                url: ORYX.PATH + ORYX.Utils.getParamFromUrl("stencilset")
-            }
-        });
-    } 
-    // Else fetch the model from server and display editor
-    else {
-        //HACK for distinguishing between different backends
-		// Backend of 2008 uses /self URL ending
-	    var modelUrl = window.location.href.replace(/#.*/g, "");
-		if(modelUrl.endsWith("/self")) {
-			modelUrl = modelUrl.replace("/self","/json");
-		} else {
-			modelUrl += "&data";
-		}
-
-        ORYX.Editor.createByUrl(modelUrl, {
-            id: modelUrl
-        });
-    }
+    // use this hook to get initialized through the plugin in charge of loading the model
+    window.onOryxResourcesLoaded();
 }
 
 /**
@@ -141,13 +113,10 @@ ORYX.Editor = {
 		}
 		
         
-        //TODO load ealier and asynchronous??
-        this._loadStencilSetExtensionConfig();
-        
-        //Load predefined StencilSetExtensions
+        //load the extensions
         if(!!ORYX.CONFIG.SSEXTS){
         	ORYX.CONFIG.SSEXTS.each(function(ssext){
-                this.loadSSExtension(ssext.namespace);
+                this.loadSSExtension(ssext);
             }.bind(this));
         }
 
@@ -650,24 +619,6 @@ ORYX.Editor = {
 		
 	},
 
-    /**
-     * Loads the stencil set extension file, defined in ORYX.CONFIG.SS_EXTENSIONS_CONFIG
-     */
-    _loadStencilSetExtensionConfig: function(){
-        // load ss extensions
-        new Ajax.Request(ORYX.CONFIG.SS_EXTENSIONS_CONFIG, {
-            method: 'GET',
-            asynchronous: false,
-            onSuccess: (function(transport) {
-                var jsonObject = Ext.decode(transport.responseText);
-                this.ss_extensions_def = jsonObject;
-            }).bind(this),
-            onFailure: (function(transport) {
-                ORYX.Log.error("Editor._loadStencilSetExtensionConfig: Loading stencil set extension configuration file failed." + transport);
-            }).bind(this)
-        });
-    },
-
 	/**
 	 * Creates the Canvas
 	 * @param {String} [stencilType] The stencil type used for creating the canvas. If not given, a stencil with myBeRoot = true from current stencil set is taken.
@@ -1145,31 +1096,25 @@ ORYX.Editor = {
 	* The stencil set extensions definiton file must already
 	* be loaded when the editor is initialized.
 	*/
-	loadSSExtension: function(ss_extension_namespace) {				
-		
-		if (this.ss_extensions_def) {
-			var extension = this.ss_extensions_def.extensions.find(function(ex){
-				return (ex.namespace == ss_extension_namespace);
-			});
-			
-			if (!extension) {
-				return;
-			}
-			
-			var stencilset = this.getStencilSets()[extension["extends"]];
-			
-			if (!stencilset) {
-				return;
-			}
-			
-			stencilset.addExtension(ORYX.CONFIG.SS_EXTENSIONS_FOLDER + extension["definition"])
-			//stencilset.addExtension("/oryx/build/stencilsets/extensions/" + extension["definition"])
-			this.getRules().initializeRules(stencilset);
-			
-			this._getPluginFacade().raiseEvent({
-				type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED
-			});
-		}
+	loadSSExtension: function(extension) {				
+    	if (!extension) {
+    		return;
+    	}
+
+    	var stencilset = this.getStencilSets()[extension["extends"]];
+
+    	if (!stencilset) {
+    		return;
+    	}
+    	console.log(extension)
+    	console.log(stencilset.addExtension)
+    	stencilset.addExtension(extension)
+    	//stencilset.addExtension("/oryx/build/stencilsets/extensions/" + extension["definition"])
+    	this.getRules().initializeRules(stencilset);
+
+    	this._getPluginFacade().raiseEvent({
+    		type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED
+    	});
 		
 	},
 

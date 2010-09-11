@@ -403,6 +403,38 @@
 	       com.intalio.web.server.UUIDBasedRepositoryServlet
 	   </servlet-class>
 	</servlet>
+	
+	<servlet>
+	   <display-name>Plugin Service Servlet</display-name>
+	   <servlet-name>PluginServiceServlet</servlet-name>
+	   <servlet-class>
+	       com.intalio.web.plugin.impl.PluginServiceServlet
+	   </servlet-class>
+	</servlet>
+	
+	<servlet>
+	   <display-name>Profile Service Servlet</display-name>
+	   <servlet-name>ProfileServiceServlet</servlet-name>
+	   <servlet-class>
+	       com.intalio.web.profile.impl.ProfileServiceServlet
+	   </servlet-class>
+	</servlet>
+	
+	<servlet>
+	   <display-name>StencilSet Service Servlet</display-name>
+	   <servlet-name>StencilSetServiceServlet</servlet-name>
+	   <servlet-class>
+	       com.intalio.web.stencilset.impl.StencilSetServiceServlet
+	   </servlet-class>
+	</servlet>
+	
+	<servlet>
+		<display-name>Process Designer Environment Servlet</display-name>
+		<servlet-name>ProcessDesignerEnvironmentServlet</servlet-name>
+		<servlet-class>
+			com.intalio.web.server.ProcessDesignerEnvironmentServlet
+		</servlet-class>
+	</servlet>
 
     <!-- Servlet Mappings -->
 <!--	
@@ -549,8 +581,7 @@
         <servlet-name>BPMN2XFormsServlet</servlet-name>
         <url-pattern>/bpmn2xforms</url-pattern>
     </servlet-mapping>
-
-
+    
 	<!-- Generated XForms are rendered by Orbeon (see below: filter mappings) -->
 <!--
 	<servlet-mapping>
@@ -648,14 +679,38 @@
         <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
         <url-pattern>/uuidRepository</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>PluginServiceServlet</servlet-name>
+    	<url-pattern>/plugins</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>PluginServiceServlet</servlet-name>
+    	<url-pattern>/plugin</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>PluginServiceServlet</servlet-name>
+    	<url-pattern>/plugin/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>ProfileServiceServlet</servlet-name>
+    	<url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>ProcessDesignerEnvironmentServlet</servlet-name>
+    	<url-pattern>/env</url-pattern>
+    </servlet-mapping>
+    
+    
+	<servlet-mapping>
+    	<servlet-name>StencilSetServiceServlet</servlet-name>
+    	<url-pattern>/stencilset/*</url-pattern>
+    </servlet-mapping>
 	
-	<jsp-config>
-		<taglib>
-			<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
-			<taglib-location>/WEB-INF/c.tld</taglib-location>
-		</taglib>
-	</jsp-config>
-
 	<!-- the number within the session-timout element must be expressed in
 		minutes. it is now 24 hours. -->
 	<session-config>
@@ -674,7 +729,7 @@
 	</mime-mapping>
 	<mime-mapping>
 		<extension>json</extension>
-		<mime-type>text/plain</mime-type>
+		<mime-type>application/json</mime-type>
 	</mime-mapping>
 	<mime-mapping>
 		<extension>css</extension>
@@ -687,57 +742,6 @@
 	    <mime-type>image/x-icon</mime-type>
 	</mime-mapping>
 
-
-	<!-- Declare and configure the Orbeon Forms XForms filter -->
-<!--	
-	<filter>
-		<filter-name>orbeon-xforms-filter</filter-name>
-		<filter-class>org.orbeon.oxf.servlet.OPSXFormsFilter</filter-class>
-		<init-param>
-			<param-name>oxf.xforms.renderer.context</param-name>
-			<param-value>/orbeon</param-value>
-		</init-param>
-	</filter>
--->
-	<!--
-		Any web resource under /xformsexport-orbeon is processed by the Orbeon XForms engine
-	-->
-<!--
-	<filter-mapping>
-		<filter-name>orbeon-xforms-filter</filter-name>
-		<url-pattern>/xformsexport-orbeon</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
--->
-	<!--
-		Any web resource under /bpmn2xforms-orbeon is processed by the Orbeon XForms engine
-	-->
-<!--
-	<filter-mapping>
-		<filter-name>orbeon-xforms-filter</filter-name>
-		<url-pattern>/bpmn2xforms-orbeon</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
--->
-	<!--
-		This is necessary so that XForms engine resources can be served
-		appropriately
-	-->
-<!--
-	<filter-mapping>
-		<filter-name>orbeon-xforms-filter</filter-name>
-		<url-pattern>/orbeon/*</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
--->
-
-	<!--<welcome-file-list>
-		<welcome-file>/server</welcome-file>
-	</welcome-file-list>-->
-	
 	<!-- Pluggable filter -->
 	<filter>
 		<filter-name>Pluggable Filter</filter-name>
@@ -746,47 +750,11 @@
 	
 	<filter-mapping>
     	<filter-name>Pluggable Filter</filter-name>
-    	<url-pattern>/*</url-pattern>
+    	<url-pattern>/editor</url-pattern>
     </filter-mapping>
     
-    <!-- Postmaster Config -->
-    <!-- example config for googlemail account -->
-    <context-param>
-        <description>The SMTP server to connect to</description>
-        <param-name>SMTP_HOST_NAME</param-name><param-value>smtp.gmail.com</param-value>
-    </context-param>
-    <context-param>
-        <description>The default from email address</description>
-        <param-name>SMTP_EMAIL</param-name><param-value>mymail@googlemail.com</param-value>
-    </context-param>
-    <context-param>
-        <description>Default user name for SMTP</description>
-        <param-name>SMTP_AUTH_USER</param-name><param-value>mymail@googlemail.com</param-value>
-    </context-param>
-    <context-param>
-        <description>Default password for SMTP</description>
-        <param-name>SMTP_AUTH_PWD</param-name><param-value>mypassword</param-value>
-    </context-param>
-    <context-param>
-        <description>Default port for SMTP</description>
-        <param-name>SMTP_PORT</param-name><param-value>465</param-value>
-    </context-param>
-    <context-param>
-        <description>Enables debug mode</description>
-        <param-name>SMTP_DEBUG</param-name><param-value>true</param-value>
-    </context-param>
-    
-    <context-param>
-        <description>Recipient for feedback servlet</description>
-        <param-name>FEEDBACK_RECIPIENT_EMAIL</param-name><param-value>mymail@googlemail.com</param-value>
-    </context-param>
-   <!--  
-    <context-param>
-    	<description>Analytics Snippet</description>
-    	<param-name>ANALYTICS_SNIPPET</param-name>
-    	<param-value><![CDATA[
-		  ... 	
-    	]]></param-value>
-    </context-param>
-    -->
+    <filter-mapping>
+    	<filter-name>Pluggable Filter</filter-name>
+    	<url-pattern>/editor/</url-pattern>
+    </filter-mapping>
 </web-app>
