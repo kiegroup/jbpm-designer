@@ -40,7 +40,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.intalio.bpmn2.Bpmn2JsonUnmarshaller;
+import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import com.intalio.web.repository.IUUIDBasedRepository;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
 import com.intalio.web.repository.impl.UUIDBasedFileRepository;

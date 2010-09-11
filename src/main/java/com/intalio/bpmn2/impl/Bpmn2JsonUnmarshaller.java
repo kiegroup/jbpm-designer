@@ -20,7 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************/
 
-package com.intalio.bpmn2;
+package com.intalio.bpmn2.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +48,6 @@ import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.Expression;
-import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.Gateway;
@@ -73,6 +72,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleReference;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+
+import com.intalio.bpmn2.BpmnMarshallerHelper;
 
 /**
  * @author Antoine Toulme
@@ -93,6 +98,27 @@ public class Bpmn2JsonUnmarshaller {
     // of our graph from json, as we miss elements before.
     private Map<Object, List<String>> _outgoingFlows = new HashMap<Object, List<String>>();
     private Set<String> _sequenceFlowTargets = new HashSet<String>();
+
+    private List<BpmnMarshallerHelper> _helpers;
+    
+    public Bpmn2JsonUnmarshaller() {
+        _helpers = new ArrayList<BpmnMarshallerHelper>();
+        // load the helpers to place them in field
+        if (getClass().getClassLoader() instanceof BundleReference) {
+            BundleContext context = ((BundleReference) getClass().getClassLoader()).
+                getBundle().getBundleContext();
+            try {
+                ServiceReference[] refs = context.getAllServiceReferences(
+                        BpmnMarshallerHelper.class.getName(), null);
+                for (ServiceReference ref : refs) {
+                    BpmnMarshallerHelper helper = (BpmnMarshallerHelper) context.getService(ref);
+                    _helpers.add(helper);
+                }
+            } catch (InvalidSyntaxException e) {
+            }
+            
+        }
+    }
 
     public Definitions unmarshall(String json) throws JsonParseException, IOException {
         return unmarshall(new JsonFactory().createJsonParser(json));
@@ -397,6 +423,10 @@ public class Bpmn2JsonUnmarshaller {
             applyMessageProperties((Message) baseElement, properties);
         }
         
+        // finally, apply properties from helpers:
+        for (BpmnMarshallerHelper helper : _helpers) {
+            helper.applyProperties(baseElement, properties);
+        }
     }
 
     private void applyMessageProperties(Message msg, Map<String, String> properties) {

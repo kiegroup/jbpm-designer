@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.bpmn2;
+package com.intalio.bpmn2.impl;
 
 import org.eclipse.bpmn2.Association;
 import org.eclipse.bpmn2.AssociationDirection;

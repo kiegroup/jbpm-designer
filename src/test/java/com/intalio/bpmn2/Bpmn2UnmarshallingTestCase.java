@@ -66,6 +66,8 @@ import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.junit.Test;
 
+import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
+
 
 /**
  * @author Antoine Toulme Intalio, Inc.
