@@ -71,7 +71,9 @@ public class PluggableFilter implements Filter {
             }
         }
         new FilterChainImpl(_filters, chain).doFilter(request, response);
-        chain.doFilter(request, response);
+        if (!response.isCommitted()) {
+            chain.doFilter(request, response);
+        }
     }
 
     public void destroy() {
