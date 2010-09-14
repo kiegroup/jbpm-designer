@@ -230,6 +230,7 @@ public class Bpmn2JsonUnmarshaller {
                 // parser.nextToken(); // }, closing the object
             }
         }
+        properties.put("resourceId", resourceId);
         BaseElement baseElt = Bpmn20Stencil.createElement(stencil, properties.get("tasktype"));
 
         // register the sequence flow targets.
@@ -471,6 +472,7 @@ public class Bpmn2JsonUnmarshaller {
         if (properties.get("documentation") != null && !"".equals(properties.get("documentation"))) {
             baseElement.getDocumentation().add(createDocumentation(properties.get("documentation")));
         }
+        baseElement.setId(properties.get("resourceId"));
     }
 
     private void applyDefinitionProperties(Definitions def, Map<String, String> properties) {
