@@ -49,9 +49,7 @@ if(!ORYX) var ORYX = {};
 
 ORYX = Object.extend(ORYX, {
 
-	//set the path in the config.js file!!!!
 	PATH: ORYX.CONFIG.ROOT_PATH,
-	//CONFIGURATION: "config.js",
 
 	alreadyLoaded: [],
 

@@ -26,6 +26,12 @@ if(!ORYX.Plugins) {
 	ORYX.Plugins = new Object();
 }
 
+if (!ORYX.FieldEditors) {
+	ORYX.FieldEditors = [];
+}
+
+
+
 ORYX.Plugins.PropertyWindow = {
 
 	facade: undefined,
@@ -303,7 +309,7 @@ ORYX.Plugins.PropertyWindow = {
 		// extended by Kerstin (end)
 	},
 	
-	// Cahnges made in the property window will be shown directly
+	// Changes made in the property window will be shown directly
 	editDirectly:function(key, value){
 		
 		this.shapeSelection.shapes.each(function(shape){
@@ -501,8 +507,17 @@ ORYX.Plugins.PropertyWindow = {
 				
 				var refToViewFlag = false;
 
-				if(!pair.readonly()){
-					switch(pair.type()) {
+				var editorClass = ORYX.FieldEditors.detect(function (elt) { 
+					return pair.type() == elt.id;
+				});
+				if (editorClass !== undefined) {
+					editorGrid = editorClass.init.bind(this, key, pair, icons)();
+					// Register Event to enable KeyDown
+					editorGrid.on('beforehide', this.facade.enableEvent.bind(this, ORYX.CONFIG.EVENT_KEYDOWN));
+					editorGrid.on('specialkey', this.specialKeyDown.bind(this));
+				} else {
+					if(!pair.readonly()){
+						switch(pair.type()) {
 						case ORYX.CONFIG.TYPE_STRING:
 							// If the Text is MultiLine
 							if(pair.wrapLines()) {
@@ -511,7 +526,7 @@ ORYX.Plugins.PropertyWindow = {
 								editorTextArea.on('keyup', function(textArea, event) {
 									this.editDirectly(key, textArea.getValue());
 								}.bind(this));								
-								
+
 								editorGrid = new Ext.Editor(editorTextArea);
 							} else {
 								// If not, set the Editor as InputField
@@ -519,18 +534,18 @@ ORYX.Plugins.PropertyWindow = {
 								editorInput.on('keyup', function(input, event) {
 									this.editDirectly(key, input.getValue());
 								}.bind(this));
-								
+
 								// reverts the shape if the editor field is invalid
 								editorInput.on('blur', function(input) {
 									if(!input.isValid(false))
 										this.updateAfterInvalid(key);
 								}.bind(this));
-								
+
 								editorInput.on("specialkey", function(input, e) {
 									if(!input.isValid(false))
 										this.updateAfterInvalid(key);
 								}.bind(this));
-								
+
 								editorGrid = new Ext.Editor(editorInput);
 							}
 							break;
@@ -540,7 +555,7 @@ ORYX.Plugins.PropertyWindow = {
 							editorCheckbox.on('check', function(c,checked) {
 								this.editDirectly(key, checked);
 							}.bind(this));
-							
+
 							editorGrid = new Ext.Editor(editorCheckbox);
 							break;
 						case ORYX.CONFIG.TYPE_INTEGER:
@@ -549,7 +564,7 @@ ORYX.Plugins.PropertyWindow = {
 							numberField.on('keyup', function(input, event) {
 								this.editDirectly(key, input.getValue());
 							}.bind(this));							
-							
+
 							editorGrid = new Ext.Editor(numberField);
 							break;
 						case ORYX.CONFIG.TYPE_FLOAT:
@@ -558,7 +573,7 @@ ORYX.Plugins.PropertyWindow = {
 							numberField.on('keyup', function(input, event) {
 								this.editDirectly(key, input.getValue());
 							}.bind(this));
-							
+
 							editorGrid = new Ext.Editor(numberField);
 
 							break;
@@ -567,57 +582,57 @@ ORYX.Plugins.PropertyWindow = {
 							// Ext1.0 editorGrid = new gEdit(new form.ColorField({ allowBlank: pair.optional(),  msgTarget:'title' }));
 
 							var editorPicker = new Ext.ux.ColorField({ allowBlank: pair.optional(),  msgTarget:'title', facade: this.facade });
-							
+
 							/*this.facade.registerOnEvent(ORYX.CONFIG.EVENT_COLOR_CHANGE, function(option) {
 								this.editDirectly(key, option.value);
 							}.bind(this));*/
-							
+
 							editorGrid = new Ext.Editor(editorPicker);
 
 							break;
 						case ORYX.CONFIG.TYPE_CHOICE:
 							var items = pair.items();
-													
+
 							var options = [];
 							items.each(function(value) {
 								if(value.value() == attribute)
 									attribute = value.title();
-									
+
 								if(value.refToView()[0])
 									refToViewFlag = true;
-																
+
 								options.push([value.icon(), value.title(), value.value()]);
-															
+
 								icons.push({
 									name: value.title(),
 									icon: value.icon()
 								});
 							});
-							
+
 							var store = new Ext.data.SimpleStore({
-						        fields: [{name: 'icon'},
-									{name: 'title'},
-									{name: 'value'}	],
-						        data : options // from states.js
-						    });
-							
+								fields: [{name: 'icon'},
+								         {name: 'title'},
+								         {name: 'value'}	],
+								         data : options // from states.js
+							});
+
 							// Set the grid Editor
 
-						    var editorCombo = new Ext.form.ComboBox({
+							var editorCombo = new Ext.form.ComboBox({
 								tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
-						        store: store,
-						        displayField:'title',
+								store: store,
+								displayField:'title',
 								valueField: 'value',
-						        typeAhead: true,
-						        mode: 'local',
-						        triggerAction: 'all',
-						        selectOnFocus:true
-						    });
-								
+								typeAhead: true,
+								mode: 'local',
+								triggerAction: 'all',
+								selectOnFocus:true
+							});
+
 							editorCombo.on('select', function(combo, record, index) {
 								this.editDirectly(key, combo.getValue());
 							}.bind(this))
-							
+
 							editorGrid = new Ext.Editor(editorCombo);
 
 							break;
@@ -625,11 +640,11 @@ ORYX.Plugins.PropertyWindow = {
 							var currFormat = ORYX.I18N.PropertyWindow.dateFormat
 							if(!(attribute instanceof Date))
 								attribute = Date.parseDate(attribute, currFormat)
-							editorGrid = new Ext.Editor(new Ext.form.DateField({ allowBlank: pair.optional(), format:currFormat,  msgTarget:'title'}));
+								editorGrid = new Ext.Editor(new Ext.form.DateField({ allowBlank: pair.optional(), format:currFormat,  msgTarget:'title'}));
 							break;
 
 						case ORYX.CONFIG.TYPE_TEXT:
-							
+
 							var cf = new Ext.form.ComplexTextField({
 								allowBlank: pair.optional(),
 								dataSource:this.dataSource,
@@ -640,17 +655,17 @@ ORYX.Plugins.PropertyWindow = {
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
 							break;
-							
-						// extended by Kerstin (start)
+
+							// extended by Kerstin (start)
 						case ORYX.CONFIG.TYPE_COMPLEX:
-							
+
 							var cf = new Ext.form.ComplexListField({ allowBlank: pair.optional()}, pair.complexItems(), key, this.facade);
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
 							break;
-						// extended by Kerstin (end)
-						
-						// extended by Gerardo (Start)
+							// extended by Kerstin (end)
+
+							// extended by Gerardo (Start)
 						case "CPNString":
 							var editorInput = new Ext.form.TextField(
 									{
@@ -659,32 +674,33 @@ ORYX.Plugins.PropertyWindow = {
 										maxLength:pair.length(), 
 										enableKeyEvents: true
 									});
-							
+
 							editorInput.on('keyup', function(input, event) {
 								this.editDirectly(key, input.getValue());
 							}.bind(this));
-							
+
 							editorGrid = new Ext.Editor(editorInput);							
 							break;
-						// extended by Gerardo (End)
-						
+							// extended by Gerardo (End)
+
 						default:
 							var editorInput = new Ext.form.TextField({ allowBlank: pair.optional(),  msgTarget:'title', maxLength:pair.length(), enableKeyEvents: true});
-							editorInput.on('keyup', function(input, event) {
-								this.editDirectly(key, input.getValue());
-							}.bind(this));
-							
-							editorGrid = new Ext.Editor(editorInput);
+						editorInput.on('keyup', function(input, event) {
+							this.editDirectly(key, input.getValue());
+						}.bind(this));
+
+						editorGrid = new Ext.Editor(editorInput);
+						}
+
+
+						// Register Event to enable KeyDown
+						editorGrid.on('beforehide', this.facade.enableEvent.bind(this, ORYX.CONFIG.EVENT_KEYDOWN));
+						editorGrid.on('specialkey', this.specialKeyDown.bind(this));
+
+					} else if(pair.type() === ORYX.CONFIG.TYPE_URL || pair.type() === ORYX.CONFIG.TYPE_DIAGRAM_LINK){
+						attribute = String(attribute).search("http") !== 0 ? ("http://" + attribute) : attribute;
+						attribute = "<a href='" + attribute + "' target='_blank'>" + attribute.split("://")[1] + "</a>"
 					}
-
-
-					// Register Event to enable KeyDown
-					editorGrid.on('beforehide', this.facade.enableEvent.bind(this, ORYX.CONFIG.EVENT_KEYDOWN));
-					editorGrid.on('specialkey', this.specialKeyDown.bind(this));
-
-				} else if(pair.type() === ORYX.CONFIG.TYPE_URL || pair.type() === ORYX.CONFIG.TYPE_DIAGRAM_LINK){
-					attribute = String(attribute).search("http") !== 0 ? ("http://" + attribute) : attribute;
-					attribute = "<a href='" + attribute + "' target='_blank'>" + attribute.split("://")[1] + "</a>"
 				}
 				
 				// Push to the properties-array

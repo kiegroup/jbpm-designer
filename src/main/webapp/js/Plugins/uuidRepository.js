@@ -138,12 +138,11 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 		var svgDOM = DataManager.serialize(this.facade.getCanvas().getSVGRepresentation(true));
 		var serializedDOM = Ext.encode(this.facade.getJSON());
 		var rdf = this.getRDFFromDOM();
-		
 		// Send the request to the server.
 		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
                 method: 'POST',
                 asynchronous: asynchronous,
-                postBody: Ext.encode({data: serializedDOM, svg : svgDOM, uuid: ORYX.CONFIG.UUID, rdf: rdf}),
+                postBody: Ext.encode({data: serializedDOM, svg : svgDOM, uuid: ORYX.UUID, rdf: rdf}),
 			onSuccess: (function(transport) {
 				//show saved status
 				this.facade.raiseEvent({
@@ -185,7 +184,7 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 	showSaveStatus: function(savePlugin, asynchronous) {
 		if (asynchronous) {
 			//show an icon and a message in the toolbar
-			autosavecfg.buttonInstance.setIcon("images/ajax-loader.gif");
+			autosavecfg.buttonInstance.setIcon(ORYX.PATH + "images/ajax-loader.gif");
 		}
 	},
 	
@@ -196,7 +195,7 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 	hideSaveStatus: function(asynchronous) {
 		if (asynchronous) {
 			//show an icon and a message in the toolbar
-			autosavecfg.buttonInstance.setIcon("images/disk_multiple.png");
+			autosavecfg.buttonInstance.setIcon(ORYX.PATH + "images/disk_multiple.png");
 		}
 	}
 });
@@ -208,12 +207,12 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 window.onOryxResourcesLoaded = function() {
 	var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
 	var editor_parameters = {
-		id: ORYX.CONFIG.UUID,
+		id: ORYX.UUID,
 		stencilset: {
 			url: stencilset
 		}
 	};
-	if(!(ORYX.CONFIG.UUID === undefined)) {
+	if(!(ORYX.UUID === undefined)) {
 		
  		//load the model from the repository from its uuid
 		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
@@ -233,7 +232,7 @@ window.onOryxResourcesLoaded = function() {
 				
 			},
             onFailure: function(transport) {
-            	ORYX.LOG.error("Could not load the model for uuid " + ORYX.CONFIG.UUID);
+            	ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
 			}
         });
 	}

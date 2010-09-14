@@ -29,8 +29,17 @@ if (params['profile'] === undefined) {
 
 ORYX = {};
 ORYX.CONFIG = {};
+ORYX.UUID = params['uuid'];
 
-ORYX.CONFIG.UUID = params['uuid'];
+var segments = window.location.pathname.split("/").without("");
+
+ORYX.CONFIG.ROOT_PATH = "/" + segments.first() + "/";
+ORYX.PATH = ORYX.CONFIG.ROOT_PATH;
+console.log(ORYX.PATH);
+
+if (ORYX.UUID === undefined) {
+	ORYX.UUID = segments.pop();
+}
 
 ORYX.CONFIG.DEV = document.cookie.indexOf("designer.dev") != -1;
 
@@ -73,13 +82,13 @@ var addScriptSequential = function(urls, prefix, finalCallback) {
 };
 
 function loadLanguageFiles() {
-	addScript("/designer/i18n/translation_en_us.js");
+	addScript(ORYX.PATH + "i18n/translation_en_us.js");
 }
 
 function loadProfile(nextStep) {
 	// get the profile, ask for its info, load the files.
 
-	new Ajax.Request("/designer/profile?name=" + params['profile'], {
+	new Ajax.Request(ORYX.PATH + "profile?name=" + params['profile'], {
 		asynchronous: false,
 		method: 'get',
 		contentType: 'application/json',
@@ -95,7 +104,7 @@ function loadProfile(nextStep) {
 			// for each of the extensions, we get the extension file and return its contents.
 			var contents = null;
 			
-			new Ajax.Request("/designer/stencilset/" + ssext, {
+			new Ajax.Request(ORYX.PATH + "stencilset/" + ssext, {
 				asynchronous: false,
 				method: 'get',
 				contentType: 'application/json',
@@ -103,7 +112,7 @@ function loadProfile(nextStep) {
 				  contents = result.responseText.evalJSON();
 			    },
 			    onFailure: function(result) {
-			    	alert("DUNNO HOW TO FAIL")
+			    	alert("Could not load Process Designer"); //TODO even better logging ?
 			    }
 			});
 			return contents;
@@ -113,30 +122,30 @@ function loadProfile(nextStep) {
 		ORYX.availablePlugins = profile.plugins.clone();
 		// now load the files as requested:
 		addScriptSequential(profile.plugins.map(function(p) { return p.name + ".js"; }), 
-				'/designer/plugin/', nextStep);
+				ORYX.PATH + 'plugin/', nextStep);
 		
 	},
 	onFailure: function(result) {
-		alert("ERROR HANDLING TODO");
+		alert("Could not load Process Designer"); //TODO even better logging ?
 	}
 	});
 
 }
 
 //get the core files to load:
-new Ajax.Request("/designer/env", {
+new Ajax.Request(ORYX.PATH + "env", {
 	asynchronous: false,
 	method: 'get',
 	contentType: 'application/json',
 	onSuccess: function(result) {
-	  addScriptSequential(result.responseText.evalJSON().files, '/designer/', function() { 
+	  addScriptSequential(result.responseText.evalJSON().files, ORYX.PATH, function() { 
 		  loadLanguageFiles();
 		  loadProfile(ORYX.load);
 		  
 	  });
     },
     onFailure: function(result) {
-	  alert("FAIL SHAMELESSLY");
+	  alert("Could not load Process Designer"); //TODO even better logging ?
     }
 });
 

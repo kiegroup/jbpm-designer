@@ -30,8 +30,6 @@ if(!ORYX) var ORYX = {};
 
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
-//This is usually the name of the war file!
-ORYX.CONFIG.ROOT_PATH =        "/designer/";
 ORYX.CONFIG.WEB_URL = "http://localhost";
 
 
@@ -40,9 +38,10 @@ ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Z-Order" : 3, "Undo" : 4, "Do
 
 ORYX.CONFIG.UUID_URL = function(uuid) {
   if (uuid === undefined) {
-    uuid = ORYX.CONFIG.UUID;
+    uuid = ORYX.UUID;
+    
   }
-  return ORYX.CONFIG.ROOT_PATH + "uuidRepository?uuid="+ uuid;
+  return ORYX.PATH + "uuidRepository?uuid="+ uuid;
 };
 
 ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = 120000;

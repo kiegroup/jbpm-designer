@@ -1106,9 +1106,7 @@ ORYX.Editor = {
     	if (!stencilset) {
     		return;
     	}
-    	console.log(extension)
-    	console.log(stencilset.addExtension)
-    	stencilset.addExtension(extension)
+    	stencilset.addExtension(extension);
     	//stencilset.addExtension("/oryx/build/stencilsets/extensions/" + extension["definition"])
     	this.getRules().initializeRules(stencilset);
 
