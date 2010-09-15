@@ -339,13 +339,16 @@ public class Bpmn2JsonUnmarshaller {
                      // find the special process for root level tasks:
                         rootLevelProcess.getFlowElements().add((DataObject) child);
                         ItemDefinition def = ((DataObject) child).getItemSubjectRef();
-                        if (def.eResource() == null) {
-                           ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(def);
+                        if (def != null) {
+                            if (def.eResource() == null) {
+                                ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(def);
+                            }
+                            Import imported = def.getImport();
+                            if (imported != null && imported.eResource() == null) {
+                                ((Definitions) rootLevelProcess.eContainer()).getImports().add(imported);
+                            }
                         }
-                        Import imported = ((DataObject) child).getItemSubjectRef().getImport();
-                        if (imported.eResource() == null) {
-                            ((Definitions) rootLevelProcess.eContainer()).getImports().add(imported);
-                        }
+                        
                     } else {
                         throw new IllegalArgumentException("Don't know what to do of " + child);
                     }
@@ -390,11 +393,15 @@ public class Bpmn2JsonUnmarshaller {
         process.getFlowElements().addAll(lane.getFlowNodeRefs());
         for (FlowNode node : lane.getFlowNodeRefs()) {
             if (node instanceof DataObject) {
-                if (((DataObject) node).getItemSubjectRef().eResource() == null) {
-                    ((Definitions) process.eContainer()).getRootElements().add(((DataObject) node).getItemSubjectRef());
-                }
-                if (((DataObject) node).getItemSubjectRef().getImport().eResource() == null) {
-                    ((Definitions) process.eContainer()).getImports().add(((DataObject) node).getItemSubjectRef().getImport());
+                ItemDefinition def = ((DataObject) node).getItemSubjectRef();
+                if (def != null) {
+                    if (def.eResource() == null) {
+                        ((Definitions) process.eContainer()).getRootElements().add(((DataObject) node).getItemSubjectRef());
+                    }
+                    Import imported = def.getImport();
+                    if (imported != null && imported.eResource() == null) {
+                        ((Definitions) process.eContainer()).getImports().add(((DataObject) node).getItemSubjectRef().getImport());
+                    }
                 }
             }
         }
