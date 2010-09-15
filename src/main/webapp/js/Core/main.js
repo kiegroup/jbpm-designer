@@ -1884,7 +1884,7 @@ ORYX.Editor.provideId = function() {
 
 	res[8] = res[13] = res[18] = res[23] = '-';
 
-	return "oryx_" + res.join('');
+	return "_" + res.join('');
 };
 
 /**
