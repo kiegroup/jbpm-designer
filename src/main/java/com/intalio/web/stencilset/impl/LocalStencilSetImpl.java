@@ -39,12 +39,12 @@ public class LocalStencilSetImpl extends LocalResource implements StencilSet {
     private String _basePath;
 
     public LocalStencilSetImpl(String name, String path) {
-        super(name, path  + File.separator + name + ".json");
+        super(name, path  + "/" + name + ".json");
         _basePath = path;
     }
 
     public InputStream getResourceContents(String path) {
-        File file = new File(_basePath + File.separator + path);
+        File file = new File(_basePath + "/" + path);
         try {
             return new FileInputStream(file);
         } catch (FileNotFoundException e) {

@@ -21,14 +21,11 @@
 ****************************************/
 package com.intalio.web.plugin.impl;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
-
-import org.oryxeditor.server.EditorHandler;
 
 /**
  * @author Antoine Toulme
@@ -42,10 +39,7 @@ public class LocalResource {
     public LocalResource(String name, String path, ServletContext context) {
         this._name = name;
         StringBuilder localPath = new StringBuilder();
-        if (System.getProperty(EditorHandler.DEV_MODE) != null) {
-            localPath.append("js").append(File.separator);
-        }
-        localPath.append("Plugins").append(File.separator).append(path);
+        localPath.append("js").append("/").append("Plugins").append("/").append(path);
         this._path = context.getRealPath(localPath.toString());
     }
     
