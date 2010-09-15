@@ -53,6 +53,8 @@ import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
+import org.eclipse.bpmn2.Import;
+import org.eclipse.bpmn2.ItemDefinition;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.Message;
@@ -100,6 +102,8 @@ public class Bpmn2JsonUnmarshaller {
     private Set<String> _sequenceFlowTargets = new HashSet<String>();
 
     private List<BpmnMarshallerHelper> _helpers;
+
+    private Resource _currentResource;
     
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
@@ -142,8 +146,9 @@ public class Bpmn2JsonUnmarshaller {
                 new Bpmn2ResourceFactoryImpl());
         Resource bpmn2 = rSet.createResource(URI.createURI("virtual.bpmn2"));
         rSet.getResources().add(bpmn2);
+        _currentResource = bpmn2;
+        // do the unmarshalling now:
         Definitions def = (Definitions) unmarshallItem(parser);
-        bpmn2.getContents().add(def);
         reconnectFlows();
         return def;
     }
@@ -333,6 +338,14 @@ public class Bpmn2JsonUnmarshaller {
                     } else if (child instanceof DataObject) {
                      // find the special process for root level tasks:
                         rootLevelProcess.getFlowElements().add((DataObject) child);
+                        ItemDefinition def = ((DataObject) child).getItemSubjectRef();
+                        if (def.eResource() == null) {
+                           ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(def);
+                        }
+                        Import imported = ((DataObject) child).getItemSubjectRef().getImport();
+                        if (imported.eResource() == null) {
+                            ((Definitions) rootLevelProcess.eContainer()).getImports().add(imported);
+                        }
                     } else {
                         throw new IllegalArgumentException("Don't know what to do of " + child);
                     }
@@ -375,6 +388,16 @@ public class Bpmn2JsonUnmarshaller {
 
     private void addLaneFlowNodes(Process process, Lane lane) {
         process.getFlowElements().addAll(lane.getFlowNodeRefs());
+        for (FlowNode node : lane.getFlowNodeRefs()) {
+            if (node instanceof DataObject) {
+                if (((DataObject) node).getItemSubjectRef().eResource() == null) {
+                    ((Definitions) process.eContainer()).getRootElements().add(((DataObject) node).getItemSubjectRef());
+                }
+                if (((DataObject) node).getItemSubjectRef().getImport().eResource() == null) {
+                    ((Definitions) process.eContainer()).getImports().add(((DataObject) node).getItemSubjectRef().getImport());
+                }
+            }
+        }
         if (lane.getChildLaneSet() != null) {
             for (Lane l : lane.getChildLaneSet().getLanes()) {
                 addLaneFlowNodes(process, l);
@@ -480,6 +503,7 @@ public class Bpmn2JsonUnmarshaller {
         def.setTargetNamespace(properties.get("targetnamespace"));
         def.setExpressionLanguage(properties.get("expressionlanguage"));
         def.setName(properties.get("name"));
+        _currentResource.getContents().add(def);// hook the definitions object to the resource early.
     }
 
     private void applyProcessProperties(Process process, Map<String, String> properties) {
