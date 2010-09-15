@@ -21,13 +21,10 @@
 ****************************************/
 package com.intalio.web.plugin.impl;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
-
-import org.oryxeditor.server.EditorHandler;
 
 import com.intalio.web.plugin.Plugin;
 
@@ -43,10 +40,8 @@ public class LocalPluginImpl extends LocalResource implements Plugin {
     public LocalPluginImpl(String name, String path, ServletContext context, boolean core, Map<String, Object> props) {
         super(name, path, context);
         StringBuilder localPath = new StringBuilder();
-        if (System.getProperty(EditorHandler.DEV_MODE) != null) {
-            localPath.append("js").append(File.separator);
-        }
-        localPath.append("Plugins").append(File.separator).append(path);
+        localPath.append("js").append("/");
+        localPath.append("Plugins").append("/").append(path);
         this._core = core;
         this._properties.putAll(props);
     }

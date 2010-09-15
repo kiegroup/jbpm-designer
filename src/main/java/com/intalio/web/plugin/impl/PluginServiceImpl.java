@@ -88,8 +88,8 @@ public class PluginServiceImpl implements PluginService {
         FileInputStream fileStream = null;
         try {
             try {
-                fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append(File.separator).
-                        append("js").append(File.separator).append("Plugins").append(File.separator).
+                fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
+                        append("js").append("/").append("Plugins").append("/").
                         append("plugins.xml").toString());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);

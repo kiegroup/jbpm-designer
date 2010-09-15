@@ -21,16 +21,13 @@
 ****************************************/
 package com.intalio.web.profile.impl;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLInputFactory;
@@ -84,8 +81,8 @@ public class DefaultProfileImpl implements Profile {
         FileInputStream fileStream = null;
         try {
             try {
-                fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append(File.separator).
-                        append(File.separator).append("profiles").append(File.separator).append("default.xml").toString());
+                fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
+                        append("/").append("profiles").append("/").append("default.xml").toString());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
