@@ -91,6 +91,9 @@ public class PluginServiceServlet extends HttpServlet {
             throw new IllegalArgumentException("No plugin by the name of " + name);
         }
         InputStream input = plugin.getContents();
+        if (input == null) {
+            throw new IllegalArgumentException("Plugin contents could not be found");
+        }
         try {
             byte[] buffer = new byte[4096];
             int read;
