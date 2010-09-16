@@ -35,7 +35,6 @@ var segments = window.location.pathname.split("/").without("");
 
 ORYX.CONFIG.ROOT_PATH = "/" + segments.first() + "/";
 ORYX.PATH = ORYX.CONFIG.ROOT_PATH;
-console.log(ORYX.PATH);
 
 if (ORYX.UUID === undefined) {
 	ORYX.UUID = segments.pop();
