@@ -341,11 +341,11 @@ public class Bpmn2JsonUnmarshaller {
                         ItemDefinition def = ((DataObject) child).getItemSubjectRef();
                         if (def != null) {
                             if (def.eResource() == null) {
-                                ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(def);
+                                ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(0, def);
                             }
                             Import imported = def.getImport();
                             if (imported != null && imported.eResource() == null) {
-                                ((Definitions) rootLevelProcess.eContainer()).getImports().add(imported);
+                                ((Definitions) rootLevelProcess.eContainer()).getImports().add(0, imported);
                             }
                         }
                         
@@ -396,11 +396,11 @@ public class Bpmn2JsonUnmarshaller {
                 ItemDefinition def = ((DataObject) node).getItemSubjectRef();
                 if (def != null) {
                     if (def.eResource() == null) {
-                        ((Definitions) process.eContainer()).getRootElements().add(((DataObject) node).getItemSubjectRef());
+                        ((Definitions) process.eContainer()).getRootElements().add(0, ((DataObject) node).getItemSubjectRef());
                     }
                     Import imported = def.getImport();
                     if (imported != null && imported.eResource() == null) {
-                        ((Definitions) process.eContainer()).getImports().add(((DataObject) node).getItemSubjectRef().getImport());
+                        ((Definitions) process.eContainer()).getImports().add(0, ((DataObject) node).getItemSubjectRef().getImport());
                     }
                 }
             }

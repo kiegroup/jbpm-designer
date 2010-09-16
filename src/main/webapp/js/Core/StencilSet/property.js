@@ -72,7 +72,9 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         jsonProp.readonly = jsonProp.readonly || false;
         if(jsonProp.optional != false)
         	jsonProp.optional = true;
-        
+        if (!jsonProp.labelProvider) {
+        	jsonProp.labelProvider = "DirectLabelProvider";
+        }
         //init refToView
         if (this._jsonProp.refToView) {
             if (!(this._jsonProp.refToView instanceof Array)) {
