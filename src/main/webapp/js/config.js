@@ -36,12 +36,14 @@ ORYX.CONFIG.WEB_URL = "http://localhost";
 
 ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Z-Order" : 3, "Undo" : 4, "Docker" : 5, "Help" : "ZZZZZZ"};
 
-ORYX.CONFIG.UUID_URL = function(uuid) {
+ORYX.CONFIG.UUID_URL = function(uuid, profile) {
   if (uuid === undefined) {
     uuid = ORYX.UUID;
-    
   }
-  return ORYX.PATH + "uuidRepository?uuid="+ uuid;
+  if (profile === undefined) {
+    profile = ORYX.PROFILE;
+  }
+  return ORYX.PATH + "uuidRepository?uuid="+ uuid + "&profile=" + profile;
 };
 
 ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = 120000;

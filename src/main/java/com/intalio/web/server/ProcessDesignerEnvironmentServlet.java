@@ -45,22 +45,19 @@ public class ProcessDesignerEnvironmentServlet extends HttpServlet {
     private static final Logger _logger = Logger.getLogger(ProcessDesignerEnvironmentServlet.class);
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (System.getProperty(EditorHandler.DEV_MODE) != null) {
-            FileInputStream input = new FileInputStream(getServletContext().getRealPath("/js/js_files.json"));
-            try {
-                byte[] buffer = new byte[4096];
-                int read;
-                while ((read = input.read(buffer)) != -1) {
-                    resp.getOutputStream().write(buffer, 0, read);
-                }
-                resp.setContentType("application/json");
-            } catch (IOException e) {
-                _logger.error(e.getMessage(), e);
-            } finally {
-                if (input != null) { try { input.close(); } catch(IOException e) {}};
+        //TODO implement compressed strategy for production.
+        FileInputStream input = new FileInputStream(getServletContext().getRealPath("/js/js_files.json"));
+        try {
+            byte[] buffer = new byte[4096];
+            int read;
+            while ((read = input.read(buffer)) != -1) {
+                resp.getOutputStream().write(buffer, 0, read);
             }
-        } else {
-            
+            resp.setContentType("application/json");
+        } catch (IOException e) {
+            _logger.error(e.getMessage(), e);
+        } finally {
+            if (input != null) { try { input.close(); } catch(IOException e) {}};
         }
     }
 }

@@ -41,9 +41,10 @@ public interface IUUIDBasedRepository {
     /**
      * @param req the request from the user.
      * @param uuid the id of the model.
+     * @param ext the file extension to apply to the model.
      * @return the model as a set of bytes.
      */
-    public byte[] load(HttpServletRequest req, String uuid);
+    public byte[] load(HttpServletRequest req, String uuid, String ext);
     
     /**
      * Saves the model inside the repository.
@@ -51,8 +52,9 @@ public interface IUUIDBasedRepository {
      * @param uuid the id of the model
      * @param json the json model
      * @param svg the svg representation of the model
-     * @param bpmn the bpmn model
+     * @param model the model
+     * @param ext the file extension to apply to the model.
      */
-    public void save(HttpServletRequest req, String uuid, String json, String svg, String bpmn);
+    public void save(HttpServletRequest req, String uuid, String json, String svg, String model, String ext);
 
 }

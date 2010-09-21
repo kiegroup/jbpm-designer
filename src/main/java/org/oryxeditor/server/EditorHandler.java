@@ -24,33 +24,20 @@
 
 package org.oryxeditor.server;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class EditorHandler extends HttpServlet {
 
-	/**
-	 * A special flag to set when running in development mode to use the disassembled resources,
-	 * loaded from js_files.json
-	 */
-	public static final String DEV_MODE = "designer.dev";
-	
+    private static final long serialVersionUID = -7439613152623067053L;
+
     private static final Logger _logger = Logger.getLogger(EditorHandler.class);
     
     /**
@@ -59,12 +46,8 @@ public class EditorHandler extends HttpServlet {
      * or 
      */
 	public static final String oryx_path = "/designer/";
-	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    if (System.getProperty(DEV_MODE) != null) {
-	        response.addCookie(new Cookie("designer.dev", ""));
-	    }
 	    FileInputStream input = new FileInputStream(getServletContext().getRealPath("/editor.html"));
         try {
             byte[] buffer = new byte[4096];

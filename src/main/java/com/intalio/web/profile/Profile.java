@@ -24,7 +24,6 @@ package com.intalio.web.profile;
 import java.util.Collection;
 
 import com.intalio.web.plugin.Plugin;
-import com.intalio.web.stencilset.StencilSet;
 
 /**
  * A profile for the editor to choose which stencilset and which plugins should be loaded.
@@ -53,8 +52,16 @@ public interface Profile {
      */
     public Collection<String> getStencilSetExtensions();
     
+    public String getSerializedModelExtension();
+    
     /**
      * @return the plugins to load for the profile.
      */
     public Collection<Plugin> getPlugins();
+    
+    /**
+     * @param jsonModel the model from Process Designer.
+     * @return the string representation of the serialized model.
+     */
+    public String parseModel(String jsonModel);
 }

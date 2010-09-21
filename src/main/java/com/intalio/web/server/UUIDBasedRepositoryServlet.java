@@ -23,10 +23,8 @@ package com.intalio.web.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Collections;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -35,12 +33,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleReference;
+import org.osgi.framework.ServiceReference;
 
-import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import com.intalio.web.profile.Profile;
+import com.intalio.web.profile.ProfileService;
+import com.intalio.web.profile.impl.DefaultProfileImpl;
 import com.intalio.web.repository.IUUIDBasedRepository;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
 import com.intalio.web.repository.impl.UUIDBasedFileRepository;
@@ -85,8 +86,8 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
-        
-        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid));
+        Profile profile = getProfile(req.getParameter("profile"));
+        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile.getSerializedModelExtension()));
         byte[] buffer = new byte[4096];
         int read;
 
@@ -97,6 +98,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        
         BufferedReader reader = req.getReader();
         StringWriter reqWriter = new StringWriter();
         char[] buffer = new char[4096];
@@ -104,6 +106,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         while ((read = reader.read(buffer)) != -1) {
             reqWriter.write(buffer, 0, read);
         }
+        
         String data = reqWriter.toString();
         try {
             JSONObject jsonObject = new JSONObject(data);
@@ -112,24 +115,38 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             String json = (String) jsonObject.get("data");
             String svg = (String) jsonObject.get("svg");
             String uuid = (String) jsonObject.get("uuid");
-            String bpmn = "";
+            String profileName = (String) jsonObject.get("profile");
+            String model = "";
+            
+            Profile profile = getProfile(profileName);
             
             try {
-                Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-                Definitions def = unmarshaller.unmarshall(json);
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
-                bpmn = outputStream.toString();
-                
+                model = profile.parseModel(json);
             } catch (Exception e) {
                 // whatever was thrown, for now, we catch it and log it.
                 _logger.error(e.getMessage(), e);
             }
             
-            _repository.save(req, uuid, json, svg, bpmn);
+            _repository.save(req, uuid, json, svg, model, profile.getSerializedModelExtension());
 
         } catch (JSONException e1) {
             throw new ServletException(e1);
         }
+    }
+    
+    private Profile getProfile(String profileName) {
+        Profile profile = null;
+        // get the profile, either through the OSGi DS or by using the default one:
+        if (getClass().getClassLoader() instanceof BundleReference) {
+            final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
+            ServiceReference ref = bundleContext.getServiceReference(ProfileService.class.getName());
+            ProfileService service = (ProfileService) bundleContext.getService(ref);
+            profile = service.findProfile(profileName);
+        } else if ("default".equals(profileName)) {
+            profile = new DefaultProfileImpl(getServletContext(), false);
+        } else {
+            throw new IllegalArgumentException("Cannot determine the profile to use for interpreting models");
+        }
+        return profile;
     }
 }

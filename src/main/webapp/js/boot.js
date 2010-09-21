@@ -30,6 +30,7 @@ if (params['profile'] === undefined) {
 ORYX = {};
 ORYX.CONFIG = {};
 ORYX.UUID = params['uuid'];
+ORYX.PROFILE = params['profile'];
 
 var segments = window.location.pathname.split("/").without("");
 
@@ -39,10 +40,6 @@ ORYX.PATH = ORYX.CONFIG.ROOT_PATH;
 if (ORYX.UUID === undefined) {
 	ORYX.UUID = segments.pop();
 }
-
-ORYX.CONFIG.DEV = document.cookie.indexOf("designer.dev") != -1;
-
-
 
 var addScript = function(url, urls, prefix, finalCallback){
 

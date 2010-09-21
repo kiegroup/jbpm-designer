@@ -21,6 +21,7 @@
 ****************************************/
 package com.intalio.web.profile.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,9 +35,13 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.codehaus.jackson.JsonParseException;
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import com.intalio.web.plugin.Plugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.Profile;
@@ -56,7 +61,13 @@ public class DefaultProfileImpl implements Profile {
     private String _stencilSet;
     
     public DefaultProfileImpl(ServletContext servletContext) {
-        initializeLocalPlugins(servletContext);
+        this(servletContext, true);
+    }
+    
+    public DefaultProfileImpl(ServletContext servletContext, boolean initializeLocalPlugins) {
+        if (initializeLocalPlugins) {
+            initializeLocalPlugins(servletContext);
+        }
     }
 
     public String getTitle() {
@@ -117,6 +128,27 @@ public class DefaultProfileImpl implements Profile {
 
     public String getName() {
         return "default";
+    }
+
+    public String getSerializedModelExtension() {
+        return "bpmn";
+    }
+
+    public String parseModel(String jsonModel) {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions def;
+        try {
+            def = unmarshaller.unmarshall(jsonModel);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
+            return outputStream.toString();
+        } catch (JsonParseException e) {
+            _logger.error(e.getMessage(), e);
+        } catch (IOException e) {
+            _logger.error(e.getMessage(), e);
+        }
+
+        return "";
     }
 
 }

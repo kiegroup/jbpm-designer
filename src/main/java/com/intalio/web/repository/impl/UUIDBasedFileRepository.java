@@ -58,7 +58,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         _repositoryPath = servlet.getServletContext().getRealPath("/" + REPOSITORY_PATH);
     }
     
-    public byte[] load(HttpServletRequest req, String uuid) {
+    public byte[] load(HttpServletRequest req, String uuid, String extension) {
         
         String filename = _repositoryPath + "/" + uuid + ".json";
         if (!new File(filename).exists()) {
@@ -89,8 +89,8 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         return output.toByteArray();
     }
 
-    public void save(HttpServletRequest req, String uuid, String json, String svg, String bpmn) {
-        writeFile(bpmn, _repositoryPath + "/" + uuid + ".bpmn");
+    public void save(HttpServletRequest req, String uuid, String json, String svg, String model, String ext) {
+        writeFile(model, _repositoryPath + "/" + uuid + "." + ext);
         writeFile(json, _repositoryPath + "/" + uuid + ".json");
         writeFile(svg, _repositoryPath + "/" + uuid + ".svg");
     }
