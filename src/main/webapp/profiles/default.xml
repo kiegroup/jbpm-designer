@@ -2,7 +2,7 @@
 
 <profiles>
 	<!-- name default is reserved for the standard profile -->
-	<profile name="default" stencilset="treeGraph">
+	<profile name="default" stencilset="bpmn2.0">
 		<plugin name="ORYX.Plugins.Toolbar"/>
 		<plugin name="ORYX.Plugins.UUIDRepositorySave"/>
 		<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
