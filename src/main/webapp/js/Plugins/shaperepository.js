@@ -113,6 +113,9 @@ ORYX.Plugins.ShapeRepository = {
 					this.createStencilTreeNode(stencilSetNode, value);	
 					return;					
 				}
+				if (value.hidden()) {
+					return;
+				}
 				
 				// Get the groups name
 				var groups = value.groups();

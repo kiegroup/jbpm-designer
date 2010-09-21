@@ -257,7 +257,11 @@ ORYX.Core.StencilSet.Stencil = {
 	view: function() {
 		return this._view.cloneNode(true) || this._view;
 	},
-
+	
+	hidden: function() {
+		return this._jsonStencil.hide;
+	},
+	
 	icon: function() {
 		return this._jsonStencil.icon;
 	},
