@@ -140,6 +140,9 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         if (getClass().getClassLoader() instanceof BundleReference) {
             final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
             ServiceReference ref = bundleContext.getServiceReference(ProfileService.class.getName());
+            if (ref == null) {
+                throw new IllegalArgumentException(profileName + " is not registered");
+            }
             ProfileService service = (ProfileService) bundleContext.getService(ref);
             profile = service.findProfile(profileName);
         } else if ("default".equals(profileName)) {
