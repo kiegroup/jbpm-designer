@@ -60,8 +60,21 @@ public interface Profile {
     public Collection<Plugin> getPlugins();
     
     /**
-     * @param jsonModel the model from Process Designer.
-     * @return the string representation of the serialized model.
+     * @return a marshaller to transform the json into the final model.
      */
-    public String parseModel(String jsonModel);
+    public Marshaller createMarshaller();
+    
+    /**
+     * Parser to produce the final model to be saved.
+     * @author Antoine Toulme
+     *
+     */
+    public interface Marshaller {
+        
+        /**
+         * @param jsonModel the model
+         * @return the string representation of the serialized model.
+         */
+        public String parseModel(String jsonModel);
+    }
 }

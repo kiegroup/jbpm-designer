@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import com.intalio.web.profile.Profile;
+import com.intalio.web.profile.Profile.Marshaller;
 import com.intalio.web.repository.IUUIDBasedRepository;
 
 /**
@@ -89,7 +91,15 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         return output.toByteArray();
     }
 
-    public void save(HttpServletRequest req, String uuid, String json, String svg, String model, String ext) {
+    public void save(HttpServletRequest req, String uuid, String json, String svg, Profile profile) {
+        String ext = profile.getSerializedModelExtension();
+        String model = "";
+        try {
+            Marshaller marshaller = profile.createMarshaller();
+            model = marshaller.parseModel(json);
+        } catch(Exception e) {
+            _logger.error(e.getMessage(), e);
+        }
         writeFile(model, _repositoryPath + "/" + uuid + "." + ext);
         writeFile(json, _repositoryPath + "/" + uuid + ".json");
         writeFile(svg, _repositoryPath + "/" + uuid + ".svg");
@@ -106,6 +116,4 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
             if (writer != null) { try { writer.close();} catch(Exception e) {} }
         }
     }
-
-    
 }

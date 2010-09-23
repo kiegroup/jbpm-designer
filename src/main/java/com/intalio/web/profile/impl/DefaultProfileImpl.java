@@ -133,22 +133,25 @@ public class DefaultProfileImpl implements Profile {
     public String getSerializedModelExtension() {
         return "bpmn";
     }
+    
+    public Marshaller createMarshaller() {
+        return new Marshaller() {
+            public String parseModel(String jsonModel) {
+                Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+                Definitions def;
+                try {
+                    def = unmarshaller.unmarshall(jsonModel);
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
+                    return outputStream.toString();
+                } catch (JsonParseException e) {
+                    _logger.error(e.getMessage(), e);
+                } catch (IOException e) {
+                    _logger.error(e.getMessage(), e);
+                }
 
-    public String parseModel(String jsonModel) {
-        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions def;
-        try {
-            def = unmarshaller.unmarshall(jsonModel);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
-            return outputStream.toString();
-        } catch (JsonParseException e) {
-            _logger.error(e.getMessage(), e);
-        } catch (IOException e) {
-            _logger.error(e.getMessage(), e);
-        }
-
-        return "";
+                return "";
+            }
+        };
     }
-
 }

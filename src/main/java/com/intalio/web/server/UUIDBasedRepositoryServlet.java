@@ -120,14 +120,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             
             Profile profile = getProfile(profileName);
             
-            try {
-                model = profile.parseModel(json);
-            } catch (Exception e) {
-                // whatever was thrown, for now, we catch it and log it.
-                _logger.error(e.getMessage(), e);
-            }
-            
-            _repository.save(req, uuid, json, svg, model, profile.getSerializedModelExtension());
+            _repository.save(req, uuid, json, svg, profile);
 
         } catch (JSONException e1) {
             throw new ServletException(e1);
