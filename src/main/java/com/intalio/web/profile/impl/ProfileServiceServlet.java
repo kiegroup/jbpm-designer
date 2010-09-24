@@ -59,8 +59,9 @@ public class ProfileServiceServlet extends HttpServlet {
         }
         
         Profile p = _profileService.findProfile(name);
-        JSONObject profile = new JSONObject();
+        
         try {
+            JSONObject profile = new JSONObject();
             profile.put("name", p.getName());
             profile.put("title", p.getTitle());
             JSONArray plugins = new JSONArray();
@@ -74,10 +75,12 @@ public class ProfileServiceServlet extends HttpServlet {
             profile.put("plugins", plugins);
             profile.put("stencilset", p.getStencilSet());
             profile.put("ssexts", p.getStencilSetExtensions());
+            resp.getWriter().append(profile.toString());
         } catch (JSONException e) {
             throw new ServletException(e);
         }
-        resp.getWriter().append(profile.toString());
+        
+        
         
     }
 }
