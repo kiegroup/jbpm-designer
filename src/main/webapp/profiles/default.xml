@@ -5,7 +5,6 @@
 	<profile name="default" stencilset="bpmn2.0">
 		<plugin name="ORYX.Plugins.Toolbar"/>
 		<plugin name="ORYX.Plugins.UUIDRepositorySave"/>
-		<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
 		<plugin name="ORYX.Plugins.ShapeMenuPlugin"/>
 		<plugin name="ORYX.Plugins.ShapeRepository"/>
 		<plugin name="ORYX.Plugins.PropertyWindow"/>
@@ -13,7 +12,6 @@
 		<plugin name="ORYX.Plugins.View"/>
 		<plugin name="ORYX.Plugins.DragDropResize"/>
 		<plugin name="ORYX.Plugins.RenameShapes" />
-		<plugin name="ORYX.Plugins.JSONSupport"/>
 		<plugin name="ORYX.Plugins.Undo"/>		
 		<plugin name="ORYX.Plugins.Arrangement"/>
 		<plugin name="ORYX.Plugins.Grouping"/>	
