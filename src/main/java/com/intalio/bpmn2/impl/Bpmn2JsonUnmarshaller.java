@@ -140,17 +140,21 @@ public class Bpmn2JsonUnmarshaller {
      * @throws IOException
      */
     private Definitions unmarshall(JsonParser parser) throws JsonParseException, IOException {
-        parser.nextToken(); // open the object
-        ResourceSet rSet = new ResourceSetImpl();
-        rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
-                new Bpmn2ResourceFactoryImpl());
-        Resource bpmn2 = rSet.createResource(URI.createURI("virtual.bpmn2"));
-        rSet.getResources().add(bpmn2);
-        _currentResource = bpmn2;
-        // do the unmarshalling now:
-        Definitions def = (Definitions) unmarshallItem(parser);
-        reconnectFlows();
-        return def;
+        try {
+            parser.nextToken(); // open the object
+            ResourceSet rSet = new ResourceSetImpl();
+            rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
+                    new Bpmn2ResourceFactoryImpl());
+            Resource bpmn2 = rSet.createResource(URI.createURI("virtual.bpmn2"));
+            rSet.getResources().add(bpmn2);
+            _currentResource = bpmn2;
+            // do the unmarshalling now:
+            Definitions def = (Definitions) unmarshallItem(parser);
+            reconnectFlows();
+            return def;
+        } finally {
+            parser.close();
+        }
     }
 
     /**
