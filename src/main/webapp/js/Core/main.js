@@ -241,7 +241,6 @@ ORYX.Editor = {
 					split	: true,
 					animate: true,
 					collapsible : true,
-					collapsed : true,
 					titleCollapse: true,
 					title: "Properties"
 				}),
@@ -267,7 +266,6 @@ ORYX.Editor = {
 					split	: true,
 					animate: true,
 					collapsible : true,
-					collapsed : true,
 					titleCollapse: true,
 					title: "Shape Repository"
 				}),
