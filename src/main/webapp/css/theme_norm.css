@@ -123,9 +123,7 @@ table-layout:fixed;
 .ORYX_Editor {
 	/*background:url(../images/controls/background.bmp);*/
 	background: #EEF1FE;
-	width:1200px;
-	height:600px;
-	border:5px double #99BBE8;
+	border:0px double #99BBE8;
 }
 
 .x-layout-panel-center {

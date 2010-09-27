@@ -237,11 +237,13 @@ ORYX.Editor = {
 	                },*/
 					autoEl	: 'div',
 					border	:false,
-					cmargins: {left:0, right:0},
-					collapsible	: true,
 					width	: ORYX.CONFIG.PANEL_RIGHT_WIDTH || 200,
 					split	: true,
-					title	: ""
+					animate: true,
+					collapsible : true,
+					collapsed : true,
+					titleCollapse: true,
+					title: "Properties"
 				}),
 				
 				
@@ -260,12 +262,14 @@ ORYX.Editor = {
 					layout	: 'anchor',
 					autoEl	: 'div',
 					cls		: 'x-panel-editor-west',
-					collapsible	: true,
 					width	: ORYX.CONFIG.PANEL_LEFT_WIDTH || 200,
 					autoScroll:true,
-					cmargins: {left:0, right:0},
 					split	: true,
-					title	: ""
+					animate: true,
+					collapsible : true,
+					collapsed : true,
+					titleCollapse: true,
+					title: "Shape Repository"
 				}),
 				
 				
@@ -274,6 +278,10 @@ ORYX.Editor = {
 					region	: 'center',
 					cls		: 'x-panel-editor-center',
 					autoScroll: true,
+					cmargins: {left:0, right:0},
+					border: false,
+					width: "auto",
+					height : "auto",
 					items	: {
 						layout	: "fit",
 						autoHeight: true,
@@ -320,8 +328,8 @@ ORYX.Editor = {
 	 	canvasParent.parentNode.setAttributeNS(null, 'align', 'center');
 	 	canvasParent.setAttributeNS(null, 'align', 'left');
 		this.getCanvas().setSize({
-			width	: ORYX.CONFIG.CANVAS_WIDTH,
-			height	: ORYX.CONFIG.CANVAS_HEIGHT
+			width	: "100%",
+			height	: "100%"
 		});		
 						
 	},

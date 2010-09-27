@@ -492,23 +492,28 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
         return shapes.pluck("object");
     },
     
+    absoluteBounds: function() {
+    	return new ORYX.Core.Bounds(0, 0,
+    			this.getHTMLContainer().parentNode.offsetWidth,
+    			this.getHTMLContainer().parentNode.offsetHeight);
+    },
+    
     /**
      * Updates the size of the canvas, regarding to the containg shapes.
      */
     updateSize: function(){
-        // Check the size for the canvas
-        var maxWidth    = 0;
-        var maxHeight   = 0;
-        var offset      = 100;
-        this.getChildShapes(true, function(shape){
-            var b = shape.bounds;
-            maxWidth    = Math.max( maxWidth, b.lowerRight().x + offset)
-            maxHeight   = Math.max( maxHeight, b.lowerRight().y + offset)
-        }); 
-        
-        if( this.bounds.width() < maxWidth || this.bounds.height() < maxHeight ){
-            this.setSize({width: Math.max(this.bounds.width(), maxWidth), height: Math.max(this.bounds.height(), maxHeight)})
-        }
+    	// Check the size for the canvas
+    	var maxWidth    = 0;
+    	var maxHeight   = 0;
+    	var offset      = 100;
+    	this.getChildShapes(true, function(shape){
+    		var b = shape.bounds;
+    		maxWidth    = Math.max( maxWidth, b.lowerRight().x + offset)
+    		maxHeight   = Math.max( maxHeight, b.lowerRight().y + offset)
+    	}); 
+    	if( this.bounds.width() < maxWidth || this.bounds.height() < maxHeight ){
+    		this.setSize({width: Math.max(this.bounds.width(), maxWidth), height: Math.max(this.bounds.height(), maxHeight)})
+    	}
     },
 
 	getRootNode: function() {
@@ -546,20 +551,7 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
 	},
 
 	setSize: function(size, dontSetBounds) {
-		if(!size || !size.width || !size.height){return}
-		
-		if(this.rootNode.parentNode){
-			this.rootNode.parentNode.style.width = size.width + 'px';
-			this.rootNode.parentNode.style.height = size.height + 'px';
-		}
-		
-		this.rootNode.setAttributeNS(null, 'width', size.width);
-		this.rootNode.setAttributeNS(null, 'height', size.height);
-
-		//this._htmlContainer.style.top = "-" + (size.height + 4) + 'px';		
-		if( !dontSetBounds ){
-			this.bounds.set({a:{x:0,y:0},b:{x:size.width/this.zoomLevel,y:size.height/this.zoomLevel}})		
-		}
+		//size is dynamic, so never set. It is set as 100% on both axis.
 	},
 	
 	/**
