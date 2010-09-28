@@ -512,6 +512,9 @@ ORYX.Plugins.PropertyWindow = {
 				});
 				if (editorClass !== undefined) {
 					editorGrid = editorClass.init.bind(this, key, pair, icons)();
+					if (editorGrid == null) {
+						return; // don't insist, the editor won't be created this time around.
+					}
 					// Register Event to enable KeyDown
 					editorGrid.on('beforehide', this.facade.enableEvent.bind(this, ORYX.CONFIG.EVENT_KEYDOWN));
 					editorGrid.on('specialkey', this.specialKeyDown.bind(this));
