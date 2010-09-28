@@ -130,7 +130,7 @@ ORYX.Core.StencilSet.Stencil = {
 		
 		//TODO does not work correctly, if the url does not exist
 		//How to guarantee that the view is loaded correctly before leaving the constructor???
-		if (source.charAt(0) == '/') { // the source is an absolute URL
+		if (jsonStencil.view.charAt(0) == '/') { // the source is an absolute URL
 			var url = jsonStencil.view;
 		} else {
 			var url = source + "view/" + jsonStencil.view;
