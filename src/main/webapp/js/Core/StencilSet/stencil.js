@@ -184,8 +184,15 @@ ORYX.Core.StencilSet.Stencil = {
 	postProcessProperties: function() {
 
 		// add image path to icon
-		if(this._jsonStencil.icon && this._jsonStencil.icon.indexOf("://") === -1) {
-			this._jsonStencil.icon = this._source + "icons/" + this._jsonStencil.icon;
+		if(this._jsonStencil.icon) {
+
+			if (this._jsonStencil.icon.charAt(0) === '/') { 
+				// then do nothing
+			} else if (this._jsonStencil.icon.indexOf("://") === -1) {
+				this._jsonStencil.icon = this._source + "icons/" + this._jsonStencil.icon;
+			} else {//secure against xss otherwise ? not sure.
+				this._jsonStencil.icon = "";
+			}
 		} else {
 			this._jsonStencil.icon = "";
 		}
