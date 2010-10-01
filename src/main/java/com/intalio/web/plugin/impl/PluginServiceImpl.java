@@ -123,7 +123,8 @@ public class PluginServiceImpl implements PluginService {
                                             value = reader.getAttributeValue(i);
                                         }
                                     }
-                                    props.put(key, value);
+                                    if(key != null & value != null)
+                                        props.put(key, value);
                                 }
                             } else if (ev == XMLStreamReader.END_ELEMENT) {
                                 if ("plugin".equals(reader.getLocalName())) {
