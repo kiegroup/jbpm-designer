@@ -19,62 +19,33 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.web.profile;
+package com.intalio.web.stencilset;
 
-import java.util.Collection;
-
-import com.intalio.web.plugin.Plugin;
+import java.io.InputStream;
 
 /**
- * A profile for the editor to choose which stencilset and which plugins should be loaded.
+ * An interface to define a stencilset in the editor
  * 
  * @author Antoine Toulme
  *
  */
-public interface Profile {
+public interface IDiagramStencilSet {
     
     /**
-     * @return the name of the profile - it will be passed by the user when opening the editor.
+     * @return the name of the stencilset
      */
     public String getName();
+    
     /**
-     * @return the title of the profile.
+     * @return the contents of the stencilset file.
      */
-    public String getTitle();
+    public InputStream getContents();
 
     /**
-     * @return the stencil set used by the profile.
+     * Finds and returns the contents of a resource located under the stencilset.
+     * @param path the path of the resource
+     * @return the contents of the resouce.
      */
-    public String getStencilSet();
-    
-    /**
-     * @return the stencil set extensions used by the profile
-     */
-    public Collection<String> getStencilSetExtensions();
-    
-    public String getSerializedModelExtension();
-    
-    /**
-     * @return the plugins to load for the profile.
-     */
-    public Collection<String> getPlugins();
-    
-    /**
-     * @return a marshaller to transform the json into the final model.
-     */
-    public Marshaller createMarshaller();
-    
-    /**
-     * Parser to produce the final model to be saved.
-     * @author Antoine Toulme
-     *
-     */
-    public interface Marshaller {
-        
-        /**
-         * @param jsonModel the model
-         * @return the string representation of the serialized model.
-         */
-        public String parseModel(String jsonModel);
-    }
+    public InputStream getResourceContents(String path);
+
 }

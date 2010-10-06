@@ -39,8 +39,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.ServiceReference;
 
-import com.intalio.web.profile.Profile;
-import com.intalio.web.profile.ProfileService;
+import com.intalio.web.profile.IDiagramProfile;
+import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.DefaultProfileImpl;
 import com.intalio.web.repository.IUUIDBasedRepository;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
@@ -86,7 +86,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
-        Profile profile = getProfile(req.getParameter("profile"));
+        IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
         ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile.getSerializedModelExtension()));
         byte[] buffer = new byte[4096];
         int read;
@@ -118,7 +118,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             String profileName = (String) jsonObject.get("profile");
             String model = "";
             
-            Profile profile = getProfile(profileName);
+            IDiagramProfile profile = getProfile(req, profileName);
             
             _repository.save(req, uuid, json, svg, profile);
 
@@ -127,17 +127,17 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         }
     }
     
-    private Profile getProfile(String profileName) {
-        Profile profile = null;
+    private IDiagramProfile getProfile(HttpServletRequest req, String profileName) {
+        IDiagramProfile profile = null;
         // get the profile, either through the OSGi DS or by using the default one:
         if (getClass().getClassLoader() instanceof BundleReference) {
             final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
-            ServiceReference ref = bundleContext.getServiceReference(ProfileService.class.getName());
+            ServiceReference ref = bundleContext.getServiceReference(IDiagramProfileService.class.getName());
             if (ref == null) {
                 throw new IllegalArgumentException(profileName + " is not registered");
             }
-            ProfileService service = (ProfileService) bundleContext.getService(ref);
-            profile = service.findProfile(profileName);
+            IDiagramProfileService service = (IDiagramProfileService) bundleContext.getService(ref);
+            profile = service.findProfile(req, profileName);
         } else if ("default".equals(profileName)) {
             profile = new DefaultProfileImpl(getServletContext(), false);
         } else {

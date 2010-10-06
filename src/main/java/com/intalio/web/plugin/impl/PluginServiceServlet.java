@@ -37,7 +37,7 @@ import org.oryxeditor.server.EditorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.intalio.web.plugin.Plugin;
+import com.intalio.web.plugin.IDiagramPlugin;
 
 /**
  * This servlet exposes the plugins registered against the platforms.
@@ -86,7 +86,7 @@ public class PluginServiceServlet extends HttpServlet {
         if (name == null) {
             throw new IllegalArgumentException("No name provided");
         }
-        Plugin plugin = _pluginService.findPlugin(name);
+        IDiagramPlugin plugin = _pluginService.findPlugin(req, name);
         if (plugin == null) {
             throw new IllegalArgumentException("No plugin by the name of " + name);
         }
@@ -111,7 +111,7 @@ public class PluginServiceServlet extends HttpServlet {
 
     private void listAllPlugins(HttpServletRequest req, HttpServletResponse resp) throws IOException, JSONException {
         JSONArray plugins = new JSONArray();
-        for (Plugin p : _pluginService.getRegisteredPlugins()) {
+        for (IDiagramPlugin p : _pluginService.getRegisteredPlugins(req)) {
             JSONObject obj = new JSONObject();
             obj.put("name", p.getName());
             obj.put("core", p.isCore());

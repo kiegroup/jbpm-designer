@@ -19,26 +19,29 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.web.plugin;
+package com.intalio.web.profile;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
- * A service to access the registered plugins and find plugins.
- * 
+ * The profile service gives access to profiles.
  * @author Antoine Toulme
  *
  */
-public interface PluginService {
+public interface IDiagramProfileService {
 
     /**
-     * @return a unmodifiable collection of the registered plugins.
+     * @param request the context
+     * @param name the name of the profile
+     * @return the profile with the name in the context of that request
      */
-    public Collection<Plugin> getRegisteredPlugins();
+    public IDiagramProfile findProfile(HttpServletRequest request, String name);
     
     /**
-     * @param name the name of the plugin to find
-     * @return the plugin object or null
+     * @param request the context
+     * @return the profiles for the given context.
      */
-    public Plugin findPlugin(String name);
+    public Collection<IDiagramProfile> getProfiles(HttpServletRequest request);
 }

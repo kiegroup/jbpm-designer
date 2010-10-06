@@ -24,7 +24,7 @@ package com.intalio.web.repository;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import com.intalio.web.profile.Profile;
+import com.intalio.web.profile.IDiagramProfile;
 
 /**
  * @author Antoine Toulme
@@ -56,6 +56,6 @@ public interface IUUIDBasedRepository {
      * @param svg the svg representation of the model
      * @param profile the profile
      */
-    public void save(HttpServletRequest req, String uuid, String json, String svg, Profile profile);
+    public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile);
 
 }

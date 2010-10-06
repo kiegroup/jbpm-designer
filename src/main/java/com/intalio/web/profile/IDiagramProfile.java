@@ -19,28 +19,62 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.web.stencilset;
+package com.intalio.web.profile;
 
 import java.util.Collection;
 
+import com.intalio.web.plugin.IDiagramPlugin;
+
 /**
- * A service to access registered StencilSets.
+ * A profile for the editor to choose which stencilset and which plugins should be loaded.
  * 
  * @author Antoine Toulme
  *
  */
-public interface StencilSetService {
+public interface IDiagramProfile {
     
     /**
-     * @return the registered stencilsets.
+     * @return the name of the profile - it will be passed by the user when opening the editor.
      */
-    public Collection<StencilSet> getRegisteredStencilSets();
-    
+    public String getName();
     /**
-     * Finds a stencilset by name
-     * @param name the name of a stencilset
-     * @return the stencilset
+     * @return the title of the profile.
      */
-    public StencilSet findStencilSet(String name);
+    public String getTitle();
 
+    /**
+     * @return the stencil set used by the profile.
+     */
+    public String getStencilSet();
+    
+    /**
+     * @return the stencil set extensions used by the profile
+     */
+    public Collection<String> getStencilSetExtensions();
+    
+    public String getSerializedModelExtension();
+    
+    /**
+     * @return the plugins to load for the profile.
+     */
+    public Collection<String> getPlugins();
+    
+    /**
+     * @return a marshaller to transform the json into the final model.
+     */
+    public Marshaller createMarshaller();
+    
+    /**
+     * Parser to produce the final model to be saved.
+     * @author Antoine Toulme
+     *
+     */
+    public interface Marshaller {
+        
+        /**
+         * @param jsonModel the model
+         * @return the string representation of the serialized model.
+         */
+        public String parseModel(String jsonModel);
+    }
 }

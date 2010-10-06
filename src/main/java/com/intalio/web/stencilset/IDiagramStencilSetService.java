@@ -19,40 +19,32 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.web.plugin;
+package com.intalio.web.stencilset;
 
-import java.io.InputStream;
-import java.util.Map;
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * The interface defining a plugin.
+ * A service to access registered StencilSets.
  * 
  * @author Antoine Toulme
+ *
  */
-public interface Plugin {
+public interface IDiagramStencilSetService {
+    
+    /**
+     * @param request the request as context.
+     * @return the registered stencilsets.
+     */
+    public Collection<IDiagramStencilSet> getRegisteredStencilSets(HttpServletRequest request);
+    
+    /**
+     * Finds a stencilset by name in the context of the request.
+     * @param request the request as context.
+     * @param name the name of a stencilset
+     * @return the stencilset
+     */
+    public IDiagramStencilSet findStencilSet(HttpServletRequest request, String name);
 
-    /**
-     * @return the name of the plugin.
-     * The name of the plugin should be unique amongst all plugins, so you should make sure to qualify it.
-     * 
-     */
-    public String getName();
-    
-    /**
-     * @return the contents of a plugin.
-     * The contents of the plugin file.
-     * 
-     * The object returned by this method MUST be closed explicitely.
-     */
-    public InputStream getContents();
-    
-    /**
-     * @return true if the plugin should be considered a core plugin and loaded for all profiles.
-     */
-    public boolean isCore();
-    
-    /**
-     * @return the properties of the plugin
-     */
-    public Map<String, Object> getProperties();
 }

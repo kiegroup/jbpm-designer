@@ -35,8 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
-import com.intalio.web.profile.Profile;
-import com.intalio.web.profile.Profile.Marshaller;
+import com.intalio.web.profile.IDiagramProfile;
+import com.intalio.web.profile.IDiagramProfile.Marshaller;
 import com.intalio.web.repository.IUUIDBasedRepository;
 
 /**
@@ -91,7 +91,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         return output.toByteArray();
     }
 
-    public void save(HttpServletRequest req, String uuid, String json, String svg, Profile profile) {
+    public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile) {
         String ext = profile.getSerializedModelExtension();
         String model = "";
         try {

@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.intalio.web.stencilset.StencilSet;
-import com.intalio.web.stencilset.StencilSetService;
+import com.intalio.web.stencilset.IDiagramStencilSet;
+import com.intalio.web.stencilset.IDiagramStencilSetService;
 
 /**
  * A servlet to serve stencilsets from the StencilSetService.
@@ -47,7 +47,7 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
     
     private static final long serialVersionUID = -2024110864538877629L;
     
-    private StencilSetService _pluginService;
+    private IDiagramStencilSetService _pluginService;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -64,7 +64,7 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         }
         String name = segments[3];
         
-        StencilSet stencilset = _pluginService.findStencilSet(name);
+        IDiagramStencilSet stencilset = _pluginService.findStencilSet(req, name);
         if (stencilset == null) {
             throw new IllegalArgumentException("No stencilset by the name of " + name);
         }

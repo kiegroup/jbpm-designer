@@ -19,21 +19,40 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.web.profile;
+package com.intalio.web.plugin;
 
-import java.util.Set;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
- * An interface for other bundles to grab and register profiles.
+ * The interface defining a plugin.
  * 
  * @author Antoine Toulme
- *
  */
-public interface ProfileFactory {
+public interface IDiagramPlugin {
 
     /**
-     * @return a set of created profiles.
+     * @return the name of the plugin.
+     * The name of the plugin should be unique amongst all plugins, so you should make sure to qualify it.
+     * 
      */
-    public Set<Profile> createProfiles();
-
+    public String getName();
+    
+    /**
+     * @return the contents of a plugin.
+     * The contents of the plugin file.
+     * 
+     * The object returned by this method MUST be closed explicitely.
+     */
+    public InputStream getContents();
+    
+    /**
+     * @return true if the plugin should be considered a core plugin and loaded for all profiles.
+     */
+    public boolean isCore();
+    
+    /**
+     * @return the properties of the plugin
+     */
+    public Map<String, Object> getProperties();
 }

@@ -21,17 +21,19 @@
 ****************************************/
 package com.intalio.web.plugin.impl;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -45,23 +47,23 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.intalio.web.plugin.Plugin;
-import com.intalio.web.plugin.PluginFactory;
-import com.intalio.web.plugin.PluginService;
+import com.intalio.web.plugin.IDiagramPlugin;
+import com.intalio.web.plugin.IDiagramPluginFactory;
+import com.intalio.web.plugin.IDiagramPluginService;
 
 /**
  * A service to manage plugins in the platform.
  * 
  * @author Antoine Toulme
  */
-public class PluginServiceImpl implements PluginService {
+public class PluginServiceImpl implements IDiagramPluginService {
     
     /**
      * The default local plugins, available to the webapp so that the default profile
      * can provision its plugins. Consumers through OSGi should use the service tracker
      * to get the plugins they need.
      */
-    private static Map<String, Plugin> LOCAL = null;
+    private static Map<String, IDiagramPlugin> LOCAL = null;
     
     /**
      * an object to lock over the local plugins registry.
@@ -71,7 +73,7 @@ public class PluginServiceImpl implements PluginService {
      */
     private static Object lock = new Object();
     
-    public static Map<String, Plugin> getLocalPluginsRegistry(ServletContext context) {
+    public static Map<String, IDiagramPlugin> getLocalPluginsRegistry(ServletContext context) {
         synchronized(lock) {
             if (LOCAL == null) {
                 LOCAL = initializeLocalPlugins(context);
@@ -82,8 +84,8 @@ public class PluginServiceImpl implements PluginService {
 
     private static Logger _logger = LoggerFactory.getLogger(PluginServiceImpl.class);
     
-    private static Map<String, Plugin> initializeLocalPlugins(ServletContext context) {
-        Map<String, Plugin> local = new HashMap<String, Plugin>();
+    private static Map<String, IDiagramPlugin> initializeLocalPlugins(ServletContext context) {
+        Map<String, IDiagramPlugin> local = new HashMap<String, IDiagramPlugin>();
         //we read the plugins.xml file and make sense of it.
         FileInputStream fileStream = null;
         try {
@@ -145,7 +147,8 @@ public class PluginServiceImpl implements PluginService {
         return local;
     }
     
-    private Map<String, Plugin> _registry = new HashMap<String, Plugin>();
+    private Map<String, IDiagramPlugin> _registry = new HashMap<String, IDiagramPlugin>();
+    private Set<IDiagramPluginFactory> _factories = new HashSet<IDiagramPluginFactory>();
 
     public PluginServiceImpl(ServletContext context) {
         _registry.putAll(getLocalPluginsRegistry(context));
@@ -154,15 +157,13 @@ public class PluginServiceImpl implements PluginService {
             final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
             ServiceReference[] sRefs = null;
             try {
-                sRefs = bundleContext.getServiceReferences(PluginFactory.class.getName(), null);
+                sRefs = bundleContext.getServiceReferences(IDiagramPluginFactory.class.getName(), null);
             } catch (InvalidSyntaxException e) {
             }
             if (sRefs != null) {
                 for (ServiceReference sRef : sRefs) {
-                    PluginFactory service = (PluginFactory) bundleContext.getService(sRef);
-                    for (Plugin p : service.createPlugins()) {
-                        _registry.put(p.getName(), p);
-                    }
+                    IDiagramPluginFactory service = (IDiagramPluginFactory) bundleContext.getService(sRef);
+                    _factories.add(service);
                 }
             } else {
                 ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
@@ -174,29 +175,37 @@ public class PluginServiceImpl implements PluginService {
                     }
 
                     public Object addingService(ServiceReference reference) {
-                        PluginFactory service = (PluginFactory) bundleContext.getService(reference);
-                        for (Plugin p : service.createPlugins()) {
-                            _registry.put(p.getName(), p);
-                        }
+                        IDiagramPluginFactory service = (IDiagramPluginFactory) bundleContext.getService(reference);
+                        _factories.add(service);
                         return service;
                     }
                 };
                 ServiceTracker tracker = new ServiceTracker(bundleContext,
-                        PluginFactory.class.getName(), cust);
+                        IDiagramPluginFactory.class.getName(), cust);
                 tracker.open();
                 //make the service available to consumers as well.
-                bundleContext.registerService(PluginService.class.getName(), this, 
+                bundleContext.registerService(IDiagramPluginService.class.getName(), this, 
                         new Hashtable());
             }
         }
     }
+    
+    private Map<String, IDiagramPlugin> assemblePlugins(HttpServletRequest request) {
+        Map<String, IDiagramPlugin> plugins = new HashMap<String, IDiagramPlugin>(_registry);
+        for (IDiagramPluginFactory factory : _factories) {
+            for (IDiagramPlugin  p : factory.getPlugins(request)) {
+                plugins.put(p.getName(), p);
+            }
+        }
+        return plugins;
+    }
 
     
-    public Collection<Plugin> getRegisteredPlugins() {
-        return Collections.unmodifiableCollection(_registry.values());
+    public Collection<IDiagramPlugin> getRegisteredPlugins(HttpServletRequest request) {
+        return assemblePlugins(request).values();
     }
     
-    public Plugin findPlugin(String name) {
-        return _registry.get(name);
+    public IDiagramPlugin findPlugin(HttpServletRequest request, String name) {
+        return assemblePlugins(request).get(name);
     }
 }

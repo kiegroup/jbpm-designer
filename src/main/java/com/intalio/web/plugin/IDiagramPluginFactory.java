@@ -19,33 +19,24 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.web.stencilset;
+package com.intalio.web.plugin;
 
-import java.io.InputStream;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * An interface to define a stencilset in the editor
+ * An interface for other bundles to grab and register plugins.
  * 
  * @author Antoine Toulme
  *
  */
-public interface StencilSet {
-    
-    /**
-     * @return the name of the stencilset
-     */
-    public String getName();
-    
-    /**
-     * @return the contents of the stencilset file.
-     */
-    public InputStream getContents();
+public interface IDiagramPluginFactory {
 
     /**
-     * Finds and returns the contents of a resource located under the stencilset.
-     * @param path the path of the resource
-     * @return the contents of the resouce.
+     * @param the context: the current servlet request.
+     * @return a set of created plugins.
      */
-    public InputStream getResourceContents(String path);
+    public Set<IDiagramPlugin> getPlugins(HttpServletRequest request);
 
 }

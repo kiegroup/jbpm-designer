@@ -27,14 +27,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import com.intalio.web.plugin.impl.LocalResource;
-import com.intalio.web.stencilset.StencilSet;
+import com.intalio.web.stencilset.IDiagramStencilSet;
 
 /**
  * A local implementation of the stencilset for stencilsets defined inside the platform.
  * @author Antoine Toulme
  *
  */
-public class LocalStencilSetImpl extends LocalResource implements StencilSet {
+public class LocalStencilSetImpl extends LocalResource implements IDiagramStencilSet {
 
     private String _basePath;
 

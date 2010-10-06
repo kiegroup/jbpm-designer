@@ -23,12 +23,14 @@ package com.intalio.web.stencilset.impl;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
@@ -39,9 +41,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.intalio.web.stencilset.StencilSet;
-import com.intalio.web.stencilset.StencilSetFactory;
-import com.intalio.web.stencilset.StencilSetService;
+import com.intalio.web.stencilset.IDiagramStencilSet;
+import com.intalio.web.stencilset.IDiagramStencilSetFactory;
+import com.intalio.web.stencilset.IDiagramStencilSetService;
 
 /**
  * A service to serve stencilsets.
@@ -49,11 +51,12 @@ import com.intalio.web.stencilset.StencilSetService;
  * @author Antoine Toulme
  *
  */
-public class StencilSetServiceImpl implements StencilSetService {
+public class StencilSetServiceImpl implements IDiagramStencilSetService {
 
     private static Logger _logger = LoggerFactory.getLogger(StencilSetServiceImpl.class);
     
-    private Map<String, StencilSet> _registry = new HashMap<String, StencilSet>();
+    private Map<String, IDiagramStencilSet> _registry = new HashMap<String, IDiagramStencilSet>();
+    private Set<IDiagramStencilSetFactory> _factories = new HashSet<IDiagramStencilSetFactory>();
 
     public StencilSetServiceImpl(ServletContext context) {
         initializeLocalStencilSets(context);
@@ -63,15 +66,13 @@ public class StencilSetServiceImpl implements StencilSetService {
             final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
             ServiceReference[] sRefs = null;
             try {
-                sRefs = bundleContext.getServiceReferences(StencilSet.class.getName(), null);
+                sRefs = bundleContext.getServiceReferences(IDiagramStencilSet.class.getName(), null);
             } catch (InvalidSyntaxException e) {
             }
             if (sRefs != null) {
                 for (ServiceReference sRef : sRefs) {
-                    StencilSetFactory service = (StencilSetFactory) bundleContext.getService(sRef);
-                    for (StencilSet p : service.createStencilSets()) {
-                        _registry.put(p.getName(), p);
-                    }
+                    IDiagramStencilSetFactory service = (IDiagramStencilSetFactory) bundleContext.getService(sRef);
+                    _factories.add(service);
                 }
             } else {
                 ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
@@ -83,19 +84,17 @@ public class StencilSetServiceImpl implements StencilSetService {
                     }
 
                     public Object addingService(ServiceReference reference) {
-                        StencilSetFactory service = (StencilSetFactory) bundleContext.getService(reference);
-                        for (StencilSet p : service.createStencilSets()) {
-                            _registry.put(p.getName(), p);
-                        }
+                        IDiagramStencilSetFactory service = (IDiagramStencilSetFactory) bundleContext.getService(reference);
+                        _factories.add(service);
                         return service;
                     }
                 };
                 ServiceTracker tracker = new ServiceTracker(bundleContext,
-                        StencilSetFactory.class.getName(), cust);
+                        IDiagramStencilSetFactory.class.getName(), cust);
                 tracker.open();
             }
             //also register yourself to allow the construction of profiles by remote services:
-            bundleContext.registerService(StencilSetService.class.getName(), this, new Hashtable());
+            bundleContext.registerService(IDiagramStencilSetService.class.getName(), this, new Hashtable());
         }
     }
 
@@ -108,12 +107,22 @@ public class StencilSetServiceImpl implements StencilSetService {
         }
     }
     
-    
-    public Collection<StencilSet> getRegisteredStencilSets() {
-        return Collections.unmodifiableCollection(_registry.values());
+    private Map<String, IDiagramStencilSet> assemblePlugins(HttpServletRequest request) {
+        Map<String, IDiagramStencilSet> plugins = new HashMap<String, IDiagramStencilSet>(_registry);
+        for (IDiagramStencilSetFactory factory : _factories) {
+            for (IDiagramStencilSet  p : factory.getStencilSets(request)) {
+                plugins.put(p.getName(), p);
+            }
+        }
+        return plugins;
     }
     
-    public StencilSet findStencilSet(String name) {
-        return _registry.get(name);
+    
+    public Collection<IDiagramStencilSet> getRegisteredStencilSets(HttpServletRequest request) {
+        return assemblePlugins(request).values();
+    }
+    
+    public IDiagramStencilSet findStencilSet(HttpServletRequest request, String name) {
+        return assemblePlugins(request).get(name);
     }
 }

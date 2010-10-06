@@ -19,19 +19,30 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ****************************************/
-package com.intalio.web.stencilset;
+package com.intalio.web.plugin;
 
-import java.util.Set;
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * A factory to plug and add stencilsets.
+ * A service to access the registered plugins and find plugins.
+ * 
  * @author Antoine Toulme
  *
  */
-public interface StencilSetFactory {
+public interface IDiagramPluginService {
 
     /**
-     * @return the stencilsets created.
+     * @param request the context in which the plugins are requested.
+     * @return a unmodifiable collection of the registered plugins.
      */
-    public Set<StencilSet> createStencilSets();
+    public Collection<IDiagramPlugin> getRegisteredPlugins(HttpServletRequest request);
+    
+    /**
+     * @param request the context in which the plugin is requested
+     * @param name the name of the plugin to find
+     * @return the plugin object or null
+     */
+    public IDiagramPlugin findPlugin(HttpServletRequest request, String name);
 }

@@ -33,9 +33,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.intalio.web.plugin.Plugin;
-import com.intalio.web.plugin.PluginService;
-import com.intalio.web.profile.Profile;
+import com.intalio.web.plugin.IDiagramPlugin;
+import com.intalio.web.plugin.IDiagramPluginService;
+import com.intalio.web.profile.IDiagramProfile;
 
 /**
  * The profile service servlet, to make profiles available to the editor.
@@ -59,7 +59,7 @@ public class ProfileServiceServlet extends HttpServlet {
             throw new IllegalArgumentException("Name parameter required");
         }
         
-        Profile p = _profileService.findProfile(name);
+        IDiagramProfile p = _profileService.findProfile(req, name);
         
         try {
             JSONObject profile = new JSONObject();

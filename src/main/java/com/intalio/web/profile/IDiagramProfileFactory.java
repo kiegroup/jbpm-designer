@@ -21,16 +21,21 @@
 ****************************************/
 package com.intalio.web.profile;
 
-import java.util.Collection;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * The profile service gives access to profiles.
+ * An interface for other bundles to grab and register profiles.
+ * 
  * @author Antoine Toulme
  *
  */
-public interface ProfileService {
+public interface IDiagramProfileFactory {
 
-    public Profile findProfile(String name);
-    
-    public Collection<Profile> getProfiles();
+    /**
+     * @return a set of created profiles.
+     */
+    public Set<IDiagramProfile> getProfiles(HttpServletRequest request);
+
 }

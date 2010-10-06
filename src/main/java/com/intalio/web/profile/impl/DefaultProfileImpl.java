@@ -42,20 +42,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
-import com.intalio.web.plugin.Plugin;
+import com.intalio.web.plugin.IDiagramPlugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
-import com.intalio.web.profile.Profile;
+import com.intalio.web.profile.IDiagramProfile;
 
 /**
  * The implementation of the default profile for Process Designer.
  * @author Antoine Toulme
  */
-public class DefaultProfileImpl implements Profile {
+public class DefaultProfileImpl implements IDiagramProfile {
     
     private static Logger _logger = LoggerFactory.getLogger(DefaultProfileImpl.class);
     
 
-    private Map<String, Plugin> _plugins = new LinkedHashMap<String, Plugin>();
+    private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
 
     private String _stencilSet;
@@ -87,7 +87,7 @@ public class DefaultProfileImpl implements Profile {
     }
     
     private void initializeLocalPlugins(ServletContext context) {
-        Map<String, Plugin> registry = PluginServiceImpl.getLocalPluginsRegistry(context);
+        Map<String, IDiagramPlugin> registry = PluginServiceImpl.getLocalPluginsRegistry(context);
         //we read the default.xml file and make sense of it.
         FileInputStream fileStream = null;
         try {

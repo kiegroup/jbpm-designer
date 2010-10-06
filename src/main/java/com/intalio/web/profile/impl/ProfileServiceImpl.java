@@ -23,10 +23,13 @@ package com.intalio.web.profile.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
@@ -35,9 +38,9 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-import com.intalio.web.profile.Profile;
-import com.intalio.web.profile.ProfileFactory;
-import com.intalio.web.profile.ProfileService;
+import com.intalio.web.profile.IDiagramProfile;
+import com.intalio.web.profile.IDiagramProfileFactory;
+import com.intalio.web.profile.IDiagramProfileService;
 
 /**
  * a service to register profiles.
@@ -45,9 +48,10 @@ import com.intalio.web.profile.ProfileService;
  * @author Antoine Toulme
  * 
  */
-public class ProfileServiceImpl implements ProfileService {
+public class ProfileServiceImpl implements IDiagramProfileService {
 
-    private Map<String, Profile> _registry = new HashMap<String, Profile>();
+    private Map<String, IDiagramProfile> _registry = new HashMap<String, IDiagramProfile>();
+    private Set<IDiagramProfileFactory> _factories = new HashSet<IDiagramProfileFactory>();
     
     public ProfileServiceImpl(ServletContext context) {
         _registry.put("default", new DefaultProfileImpl(context));
@@ -57,15 +61,13 @@ public class ProfileServiceImpl implements ProfileService {
             final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
             ServiceReference[] sRefs = null;
             try {
-                sRefs = bundleContext.getServiceReferences(ProfileFactory.class.getName(), null);
+                sRefs = bundleContext.getServiceReferences(IDiagramProfileFactory.class.getName(), null);
             } catch (InvalidSyntaxException e) {
             }
             if (sRefs != null) {
                 for (ServiceReference sRef : sRefs) {
-                    ProfileFactory service = (ProfileFactory) bundleContext.getService(sRef);
-                    for (Profile p : service.createProfiles()) {
-                        _registry.put(p.getName(), p);
-                    }
+                    IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(sRef);
+                    _factories.add(service);
                 }
             }
             ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
@@ -77,27 +79,35 @@ public class ProfileServiceImpl implements ProfileService {
                 }
 
                 public Object addingService(ServiceReference reference) {
-                    ProfileFactory service = (ProfileFactory) bundleContext.getService(reference);
-                    for (Profile p : service.createProfiles()) {
-                        _registry.put(p.getName(), p);
-                    }
+                    IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(reference);
+                    _factories.add(service);
                     return service;
                 }
             };
             ServiceTracker tracker = new ServiceTracker(bundleContext,
-                    ProfileFactory.class.getName(), cust);
+                    IDiagramProfileFactory.class.getName(), cust);
             tracker.open();
             // register self to make the default profile available to the world:
-            bundleContext.registerService(ProfileService.class.getName(), this, new Hashtable());
+            bundleContext.registerService(IDiagramProfileService.class.getName(), this, new Hashtable());
         }
     }
     
-    public Profile findProfile(String name) {
-        return _registry.get(name);
+    private Map<String, IDiagramProfile> assemblePlugins(HttpServletRequest request) {
+        Map<String, IDiagramProfile> plugins = new HashMap<String, IDiagramProfile>(_registry);
+        for (IDiagramProfileFactory factory : _factories) {
+            for (IDiagramProfile  p : factory.getProfiles(request)) {
+                plugins.put(p.getName(), p);
+            }
+        }
+        return plugins;
+    }
+    
+    public IDiagramProfile findProfile(HttpServletRequest request, String name) {
+        return assemblePlugins(request).get(name);
     }
 
-    public Collection<Profile> getProfiles() {
-        return _registry.values();
+    public Collection<IDiagramProfile> getProfiles(HttpServletRequest request) {
+        return assemblePlugins(request).values();
     }
 
     
