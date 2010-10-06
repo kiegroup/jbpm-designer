@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.intalio.web.plugin.Plugin;
+import com.intalio.web.plugin.PluginService;
 import com.intalio.web.profile.Profile;
 
 /**
@@ -64,15 +65,7 @@ public class ProfileServiceServlet extends HttpServlet {
             JSONObject profile = new JSONObject();
             profile.put("name", p.getName());
             profile.put("title", p.getTitle());
-            JSONArray plugins = new JSONArray();
-            for (Plugin plugin : p.getPlugins()) {
-                JSONObject obj = new JSONObject();
-                obj.put("name", plugin.getName());
-                obj.put("core", plugin.isCore());
-                obj.put("properties", plugin.getProperties());
-                plugins.put(obj);
-            }
-            profile.put("plugins", plugins);
+            profile.put("plugins", p.getPlugins());
             profile.put("stencilset", p.getStencilSet());
             profile.put("ssexts", p.getStencilSetExtensions());
             resp.getWriter().append(profile.toString());

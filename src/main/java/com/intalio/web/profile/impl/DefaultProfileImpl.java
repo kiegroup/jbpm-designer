@@ -82,8 +82,8 @@ public class DefaultProfileImpl implements Profile {
         return Collections.emptyList();
     }
 
-    public Collection<Plugin> getPlugins() {
-        return Collections.unmodifiableCollection(_plugins.values());
+    public Collection<String> getPlugins() {
+        return Collections.unmodifiableCollection(_plugins.keySet());
     }
     
     private void initializeLocalPlugins(ServletContext context) {

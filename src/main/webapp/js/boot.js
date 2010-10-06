@@ -113,12 +113,42 @@ function loadProfile(nextStep) {
 			});
 			return contents;
 		});
+		//get the complete plugin info:
+		new Ajax.Request(ORYX.PATH + "plugins", {
+			asynchronous: false,
+			method: 'get',
+			contentType: 'application/json',
+			onSuccess: function(result) {
+			try {
+			console.log(result.responseText)
+			console.log(result.responseText.evalJSON())
+			var allPlugins = {};
+			result.responseText.evalJSON().each(function (p) {
+				console.log(p)
+				allPlugins[p.name] = p;
+			}.bind(allPlugins));
+			console.log(allPlugins);
+			// install the current plugins
+			ORYX.availablePlugins = [];
+			profile.plugins.each(function(pluginName) {
+				
+				ORYX.availablePlugins.push(allPlugins[pluginName])
+			}.bind(allPlugins));
+			
+			// now load the files as requested:
+			addScriptSequential(profile.plugins.map(function(pluginName) { return pluginName + ".js"; }), 
+					ORYX.PATH + 'plugin/', nextStep);
+			} catch(e) {
+				console.log(e)
+			}
+		},
+	    onFailure: function(result) {
+	    	alert("Could not load Process Designer"); //TODO even better logging ?
+	    }
+			
+		});
 		
-		// install the current plugins
-		ORYX.availablePlugins = profile.plugins.clone();
-		// now load the files as requested:
-		addScriptSequential(profile.plugins.map(function(p) { return p.name + ".js"; }), 
-				ORYX.PATH + 'plugin/', nextStep);
+		
 		
 	},
 	onFailure: function(result) {

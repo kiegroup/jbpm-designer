@@ -57,7 +57,7 @@ public interface Profile {
     /**
      * @return the plugins to load for the profile.
      */
-    public Collection<Plugin> getPlugins();
+    public Collection<String> getPlugins();
     
     /**
      * @return a marshaller to transform the json into the final model.
