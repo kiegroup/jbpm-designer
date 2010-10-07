@@ -62,14 +62,14 @@ public interface IDiagramProfile {
     /**
      * @return a marshaller to transform the json into the final model.
      */
-    public Marshaller createMarshaller();
+    public IDiagramMarshaller createMarshaller();
     
     /**
      * Parser to produce the final model to be saved.
      * @author Antoine Toulme
      *
      */
-    public interface Marshaller {
+    public interface IDiagramMarshaller {
         
         /**
          * @param jsonModel the model

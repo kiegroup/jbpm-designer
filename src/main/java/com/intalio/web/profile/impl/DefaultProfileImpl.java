@@ -134,8 +134,8 @@ public class DefaultProfileImpl implements IDiagramProfile {
         return "bpmn";
     }
     
-    public Marshaller createMarshaller() {
-        return new Marshaller() {
+    public IDiagramMarshaller createMarshaller() {
+        return new IDiagramMarshaller() {
             public String parseModel(String jsonModel) {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 Definitions def;

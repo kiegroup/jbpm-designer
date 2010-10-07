@@ -94,11 +94,14 @@ public class ProfileServiceImpl implements IDiagramProfileService {
     
     private Map<String, IDiagramProfile> assemblePlugins(HttpServletRequest request) {
         Map<String, IDiagramProfile> plugins = new HashMap<String, IDiagramProfile>(_registry);
-        for (IDiagramProfileFactory factory : _factories) {
-            for (IDiagramProfile  p : factory.getProfiles(request)) {
-                plugins.put(p.getName(), p);
+        if (request != null) {
+            for (IDiagramProfileFactory factory : _factories) {
+                for (IDiagramProfile  p : factory.getProfiles(request)) {
+                    plugins.put(p.getName(), p);
+                }
             }
         }
+        System.err.println(plugins.keySet());
         return plugins;
     }
     

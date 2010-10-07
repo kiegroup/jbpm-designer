@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import com.intalio.web.profile.IDiagramProfile;
-import com.intalio.web.profile.IDiagramProfile.Marshaller;
+import com.intalio.web.profile.IDiagramProfile.IDiagramMarshaller;
 import com.intalio.web.repository.IUUIDBasedRepository;
 
 /**
@@ -95,7 +95,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         String ext = profile.getSerializedModelExtension();
         String model = "";
         try {
-            Marshaller marshaller = profile.createMarshaller();
+            IDiagramMarshaller marshaller = profile.createMarshaller();
             model = marshaller.parseModel(json);
         } catch(Exception e) {
             _logger.error(e.getMessage(), e);
