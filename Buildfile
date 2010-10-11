@@ -47,7 +47,7 @@ define "designer" do
   compile.options.source = "1.5"
   compile.options.target = "1.5"
   
-  webContent = "WebContent"
+  webContent = "WebContent/"
 
   package(:bundle).include(_("src/main/webapp"), :as => webContent)
   package(:war).include(_("src/main/webapp"), :as => '.')
