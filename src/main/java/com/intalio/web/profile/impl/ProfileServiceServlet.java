@@ -60,7 +60,9 @@ public class ProfileServiceServlet extends HttpServlet {
         }
         
         IDiagramProfile p = _profileService.findProfile(req, name);
-        
+        if (p == null) {
+            throw new IllegalArgumentException("No profile by the name of " + name);
+        }
         try {
             JSONObject profile = new JSONObject();
             profile.put("name", p.getName());
