@@ -25,6 +25,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;
 
@@ -776,4 +777,24 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(g, secondLane.getFlowNodeRefs().get(0));
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
+    
+    
+    @Test
+    public void testUserTaskDataPassing() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("userTaskDataPassing.json"));
+        Process process = (Process) definitions.getRootElements().get(0);
+        Task g = (Task) process.getFlowElements().get(0);
+        assertEquals("task", g.getName());
+        assertTrue(process.getLaneSets().size() == 1);
+        assertTrue(process.getLaneSets().get(0).getLanes().size() == 1);
+        Lane firstLane = process.getLaneSets().get(0).getLanes().get(0);
+        assertEquals("First lane", firstLane.getName());
+        Lane secondLane = firstLane.getChildLaneSet().getLanes().get(0);
+        assertEquals("Second lane", secondLane.getName());
+        assertEquals(g, secondLane.getFlowNodeRefs().get(0));
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+    
+    
 }
