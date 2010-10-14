@@ -33,8 +33,8 @@ new function(){
 	 */
 	ORYX.Plugins.DragTracker.PoolDragTracker = ORYX.Plugins.AbstractDragTracker.extend({
 		
-		shapes : [	"http://b3mn.org/stencilset/bpmn2.0#Pool"],
-
+		shapes : [ "Pool"],
+		
 		resizeEnd : function(shapes) {
 			var lanes = [];
 			
@@ -78,7 +78,7 @@ new function(){
 			shapes.each(function(parent) {
 				var width = parent.bounds.width();
 				parent.getChildShapes().each(function(child) {
-					if (child.getStencil().id().include("http://b3mn.org/stencilset/bpmn2.0#Lane")) {
+					if (child.getStencil().id().include("Lane")) {
 						// now resize the lanes to take all the room:
 						newBounds = child.bounds.clone();
 						//force lanes height to be resized if the pool cannot contain them.
@@ -105,7 +105,7 @@ new function(){
 			var findOccupiedArea = function(shape, ignoreList) {
 				var childsBounds = undefined;
 				shape.getChildShapes(true).findAll(function(child) {
-					return !ignoreList.member(child.getStencil().id());				
+					return !ignoreList.detect(function(ignored) { child.getStencil().id().include(ignored) }.bind(child));				
 				}).each(function(childShape, i) {
 					if(i == 0) {
 						/* Initialize bounds that include all direct child shapes of the shape */
@@ -121,7 +121,7 @@ new function(){
 			};
 			
 			// TODO add artifacts to the ignored shapes ?
-			var ignoreList = ["http://b3mn.org/stencilset/bpmn2.0#Lane"]
+			var ignoreList = ["Lane"]
 			
 			shapes.each(function(shape) {
 				occupiedArea = findOccupiedArea(shape, ignoreList);

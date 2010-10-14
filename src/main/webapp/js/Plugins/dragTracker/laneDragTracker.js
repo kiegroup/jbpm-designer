@@ -33,7 +33,7 @@ new function(){
 	 */
 	ORYX.Plugins.DragTracker.LaneDragTracker = ORYX.Plugins.AbstractDragTracker.extend({
 		
-		shapes : [	"http://b3mn.org/stencilset/bpmn2.0#Lane"],
+		shapes : ["Lane"],
 
 		/**
 		 * Callback to change the offset depending on the positions.

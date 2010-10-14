@@ -584,10 +584,11 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 						.findAll(function(r){ return r instanceof ORYX.Core.Edge }.bind(this))
 												
 					this.plugin.layoutEdges(this.shape, allEdges, offset);
-
+					this.plugin.doLayout([this.shape]);
 					this.plugin.facade.setSelection([this.shape]);
 					this.plugin.facade.getCanvas().update();
 					this.plugin.facade.updateSelection();
+					
 				}
 			});
 			
