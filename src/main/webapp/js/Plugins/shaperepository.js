@@ -96,7 +96,6 @@ ORYX.Plugins.ShapeRepository = {
 				iconCls:'headerShapeRepImg',
 	            cls:'headerShapeRep',
 				singleClickExpand:true}));
-			
 			stencilSetNode.render();
 			stencilSetNode.expand();				
 			// Get Stencils from Stencilset
@@ -133,7 +132,6 @@ ORYX.Plugins.ShapeRepository = {
 							iconCls:'headerShapeRepImg', // Css-Class for Icon
 				            cls:'headerShapeRepChild',  // CSS-Class for Stencil-Group
 							singleClickExpand:true});
-						
 						// Add the Group to the ShapeRepository
 						stencilSetNode.appendChild(treeGroups[group]);
 						treeGroups[group].render();	
@@ -144,12 +142,16 @@ ORYX.Plugins.ShapeRepository = {
 					
 				}).bind(this));
 				
-				
 				// If there is no group
 				if(groups.length == 0) {
 					// Create the Stencil-Tree-Node
 					this.createStencilTreeNode(stencilSetNode, value);						
 				}
+
+				// sort the groups
+				stencilSetNode.sort(function(a, b) {
+					return a.text > b.text ? 1 : a.text < b.text ? -1 : 0;
+				});
 	
 			}).bind(this));
 		}).bind(this));

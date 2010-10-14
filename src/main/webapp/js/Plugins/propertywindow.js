@@ -111,7 +111,7 @@ ORYX.Plugins.PropertyWindow = {
 		        direction = direction || 'ASC';
 		        var st = this.fields.get(f).sortType;
 		        var fn = function(r1, r2){
-		            var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
+		            var v1 = st(r1.data['name']), v2 = st(r2.data['name']);
 					var p1 = r1.data['popular'], p2  = r2.data['popular'];
 		            return p1 && !p2 ? -1 : (!p1 && p2 ? 1 : (v1 > v2 ? 1 : (v1 < v2 ? -1 : 0)));
 		        };
