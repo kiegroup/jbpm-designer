@@ -37,15 +37,6 @@ new function(){
 		 * Layout only Edges
 		 */
 		layouted : [],
-		
-		edgesIds : [	"http://b3mn.org/stencilset/bpmn1.1#SequenceFlow", 
-						"http://b3mn.org/stencilset/bpmn1.1#MessageFlow",
-						"http://b3mn.org/stencilset/bpmn2.0#MessageFlow",
-						"http://b3mn.org/stencilset/bpmn2.0#SequenceFlow", 
-						"http://b3mn.org/stencilset/bpmn2.0conversation#ConversationLink",
-						"http://b3mn.org/stencilset/epc#ControlFlow",
-						"http://www.signavio.com/stencilsets/processmap#ProcessLink",
-						"http://www.signavio.com/stencilsets/organigram#connection"],
 
 		/**
 		 * Finds all the edges related to shapes inside a shape
@@ -64,25 +55,7 @@ new function(){
 	    },
 	    
 	    isIncludedInEdgeIds: function(shape){
-			if (!(this.edgesIds instanceof Array)){
-				this.edgesIds = [this.edgesIds].compact();
-			}
-			
-			// If there are no elements
-			if (this.edgesIds.length <= 0) {
-				// Return TRUE
-				return true;
-			}
-			
-			// Return TRUE if there is any correlation between 
-			// the 'layouted' attribute and the shape themselve.
-			return this.edgesIds.any(function(s){
-				if (typeof s == "string") {
-					return shape.getStencil().id().include(s);
-				} else {
-					return shape instanceof s;
-				}
-			});
+	    	return shape.getStencil().type() == "edge";
 		},
 						
 		/**
