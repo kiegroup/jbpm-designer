@@ -130,10 +130,14 @@ ORYX.Core.StencilSet.Stencil = {
 		
 		//TODO does not work correctly, if the url does not exist
 		//How to guarantee that the view is loaded correctly before leaving the constructor???
-		if (jsonStencil.view.charAt(0) == '/') { // the source is an absolute URL
-			var url = jsonStencil.view;
+		if (jsonStencil.view === undefined) {
+		    //maybe there's no view for this stencil as it is invisible.
 		} else {
-			var url = source + "view/" + jsonStencil.view;
+		    if (jsonStencil.view.charAt(0) == '/') { // the source is an absolute URL
+		        var url = jsonStencil.view;
+		    } else {
+		        var url = source + "view/" + jsonStencil.view;
+		    }
 		}
 		
 		// override content type when this is webkit.
@@ -151,33 +155,35 @@ ORYX.Core.StencilSet.Stencil = {
 		} else
 		*/
 		
-		if(this._jsonStencil.view.trim().match(/</)) {
-			var parser	= new DOMParser();		
-			var xml 	= parser.parseFromString( this._jsonStencil.view ,"text/xml");
-			
-			//check if result is a SVG document
-			if( ORYX.Editor.checkClassType( xml.documentElement, SVGSVGElement )) {
-	
-				this._view = xml.documentElement;
-				
-				//updating link to images
-				var imageElems = this._view.getElementsByTagNameNS("http://www.w3.org/2000/svg", "image");
-				$A(imageElems).each((function(imageElem) {
-					var link = imageElem.getAttributeNodeNS("http://www.w3.org/1999/xlink", "href");
-					if(link && link.value.indexOf("://") == -1) {
-						link.textContent = this._source + "view/" + link.value;
-					}
-				}).bind(this));
-			} else {
-				throw "ORYX.Core.StencilSet.Stencil(_loadSVGOnSuccess): The response is not a SVG document."
-			}
-		} else {
-			new Ajax.Request(
-				url, {
-					asynchronous:false, method:'get',
-					onSuccess:this._loadSVGOnSuccess.bind(this),
-					onFailure:this._loadSVGOnFailure.bind(this)
-			});
+		if(this._jsonStencil.view) {
+		    if (this._jsonStencil.view.trim().match(/</)) {
+		        var parser	= new DOMParser();		
+		        var xml 	= parser.parseFromString( this._jsonStencil.view ,"text/xml");
+
+		        //check if result is a SVG document
+		        if( ORYX.Editor.checkClassType( xml.documentElement, SVGSVGElement )) {
+
+		            this._view = xml.documentElement;
+
+		            //updating link to images
+		            var imageElems = this._view.getElementsByTagNameNS("http://www.w3.org/2000/svg", "image");
+		            $A(imageElems).each((function(imageElem) {
+		                var link = imageElem.getAttributeNodeNS("http://www.w3.org/1999/xlink", "href");
+		                if(link && link.value.indexOf("://") == -1) {
+		                    link.textContent = this._source + "view/" + link.value;
+		                }
+		            }).bind(this));
+		        } else {
+		            throw "ORYX.Core.StencilSet.Stencil(_loadSVGOnSuccess): The response is not a SVG document."
+		        }
+		    } else {
+		        new Ajax.Request(
+		                url, {
+		                    asynchronous:false, method:'get',
+		                    onSuccess:this._loadSVGOnSuccess.bind(this),
+		                    onFailure:this._loadSVGOnFailure.bind(this)
+		                });
+		    }
 		}
 	},
 
