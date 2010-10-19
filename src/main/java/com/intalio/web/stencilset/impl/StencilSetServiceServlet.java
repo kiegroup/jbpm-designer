@@ -70,7 +70,7 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         }
         InputStream input = null;
         if (segments.length > 4) { //looking for a resource under the stencilset.
-            String path = requestURI.substring(requestURI.indexOf(segments[4]) + segments[4].length() + 1);
+            String path = requestURI.substring(requestURI.indexOf(segments[3]) + segments[3].length() + 1);
             input = stencilset.getResourceContents(path);
         } else {
             input = stencilset.getContents();
