@@ -411,10 +411,21 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         $A(this._jsonObject.stencils).each((function(stencil){
         	defaultPosition++;
             // instantiate normally.
-            var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, pps, defaultPosition);      
+        	try {
+        	    var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, pps, defaultPosition);      
+        	    this._stencils[oStencil.id()] = oStencil;
+        	    this._availableStencils[oStencil.id()] = oStencil;
+        	} catch(e) {
+        	    ORYX.Log.error("Problems instantiating a stencil:");
+        	    if (console !== undefined) {
+        	        console.log(e);
+        	        if (e.stack !== undefined) {
+        	            console.log(e.stack);
+        	        }
+        	    }
+        	}
         	
-        	this._stencils[oStencil.id()] = oStencil;
-			this._availableStencils[oStencil.id()] = oStencil;
+        	
             
         }).bind(this));
     },
