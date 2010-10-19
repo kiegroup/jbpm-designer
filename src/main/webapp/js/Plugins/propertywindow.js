@@ -27,7 +27,7 @@ if(!ORYX.Plugins) {
 }
 
 if (!ORYX.FieldEditors) {
-	ORYX.FieldEditors = [];
+	ORYX.FieldEditors = {};
 }
 
 
@@ -507,11 +507,10 @@ ORYX.Plugins.PropertyWindow = {
 				
 				var refToViewFlag = false;
 
-				var editorClass = ORYX.FieldEditors.detect(function (elt) { 
-					return pair.type() == elt.id;
-				});
+				var editorClass = ORYX.FieldEditors[pair.type()];
+				 
 				if (editorClass !== undefined) {
-					editorGrid = editorClass.init.bind(this, key, pair, icons)();
+					editorGrid = editorClass.init.bind(this, key, pair, icons, index)();
 					if (editorGrid == null) {
 						return; // don't insist, the editor won't be created this time around.
 					}
