@@ -23,6 +23,7 @@ package com.intalio.web.plugin.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -115,7 +116,15 @@ public class PluginServiceServlet extends HttpServlet {
             JSONObject obj = new JSONObject();
             obj.put("name", p.getName());
             obj.put("core", p.isCore());
-            obj.put("properties", p.getProperties());
+            JSONArray properties = new JSONArray();
+            if (p.getProperties() != null) {
+                for (Entry<String, Object> entry : p.getProperties().entrySet()) {
+                    JSONObject propObj = new JSONObject();
+                    propObj.put(entry.getKey(), entry.getValue());
+                    properties.put(propObj);
+                }
+            }
+            obj.put("properties", properties);
             plugins.put(obj);
         }
         resp.setContentType("application/json");
