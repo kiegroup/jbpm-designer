@@ -107,22 +107,22 @@ public class StencilSetServiceImpl implements IDiagramStencilSetService {
         }
     }
     
-    private Map<String, IDiagramStencilSet> assemblePlugins(HttpServletRequest request) {
-        Map<String, IDiagramStencilSet> plugins = new HashMap<String, IDiagramStencilSet>(_registry);
+    private Map<String, IDiagramStencilSet> assembleStencilSets(HttpServletRequest request) {
+        Map<String, IDiagramStencilSet> stencilsets = new HashMap<String, IDiagramStencilSet>(_registry);
         for (IDiagramStencilSetFactory factory : _factories) {
             for (IDiagramStencilSet  p : factory.getStencilSets(request)) {
-                plugins.put(p.getName(), p);
+                stencilsets.put(p.getName(), p);
             }
         }
-        return plugins;
+        return stencilsets;
     }
     
     
     public Collection<IDiagramStencilSet> getRegisteredStencilSets(HttpServletRequest request) {
-        return assemblePlugins(request).values();
+        return assembleStencilSets(request).values();
     }
     
     public IDiagramStencilSet findStencilSet(HttpServletRequest request, String name) {
-        return assemblePlugins(request).get(name);
+        return assembleStencilSets(request).get(name);
     }
 }
