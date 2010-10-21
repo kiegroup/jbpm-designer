@@ -23,10 +23,9 @@ package com.intalio.web.profile;
 
 import java.util.Collection;
 
-import com.intalio.web.plugin.IDiagramPlugin;
-
 /**
- * A profile for the editor to choose which stencilset and which plugins should be loaded.
+ * A profile for the editor to choose which stencilset 
+ * and which plugins should be loaded.
  * 
  * @author Antoine Toulme
  *
@@ -34,7 +33,8 @@ import com.intalio.web.plugin.IDiagramPlugin;
 public interface IDiagramProfile {
     
     /**
-     * @return the name of the profile - it will be passed by the user when opening the editor.
+     * @return the name of the profile
+     * it will be passed by the user when opening the editor.
      */
     public String getName();
     /**
