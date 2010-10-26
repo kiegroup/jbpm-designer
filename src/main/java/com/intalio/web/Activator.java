@@ -21,14 +21,20 @@
 ****************************************/
 package com.intalio.web;
 
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 import com.intalio.web.filter.IFilterFactory;
 import com.intalio.web.filter.impl.PluggableFilter;
+import com.intalio.web.profile.IDiagramProfileFactory;
+import com.intalio.web.profile.IDiagramProfileService;
+import com.intalio.web.profile.impl.ProfileServiceImpl;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
 import com.intalio.web.server.UUIDBasedRepositoryServlet;
 
@@ -102,6 +108,40 @@ public class Activator implements BundleActivator {
                 tracker.open();
 
             }
+        }
+        
+        {
+        	ProfileServiceImpl profileServiceImpl = ProfileServiceImpl.INSTANCE;
+        	ServiceReference[] sRefs = null;
+	        try {
+	            sRefs = context.getServiceReferences(IDiagramProfileFactory.class.getName(), null);
+	        } catch (InvalidSyntaxException e) {
+	        }
+	        if (sRefs != null) {
+	            for (ServiceReference sRef : sRefs) {
+	                IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(sRef);
+	                ProfileServiceImpl.INSTANCE.getFactories().add(service);
+	            }
+	        }
+	        ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+	
+	            public void removedService(ServiceReference reference, Object service) {
+	            }
+	
+	            public void modifiedService(ServiceReference reference, Object service) {
+	            }
+	
+	            public Object addingService(ServiceReference reference) {
+	                IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(reference);
+	                ProfileServiceImpl.INSTANCE.getFactories().add(service);
+	                return service;
+	            }
+	        };
+	        ServiceTracker tracker = new ServiceTracker(context,
+	                IDiagramProfileFactory.class.getName(), cust);
+	        tracker.open();
+	        // register self to make the default profile available to the world:
+	        context.registerService(IDiagramProfileService.class.getName(), ProfileServiceImpl.INSTANCE, new Hashtable());
         }
     }
 

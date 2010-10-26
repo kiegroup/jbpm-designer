@@ -29,12 +29,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.intalio.web.plugin.IDiagramPlugin;
-import com.intalio.web.plugin.IDiagramPluginService;
 import com.intalio.web.profile.IDiagramProfile;
 
 /**
@@ -50,7 +47,8 @@ public class ProfileServiceServlet extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        _profileService = new ProfileServiceImpl(config.getServletContext());
+        _profileService = ProfileServiceImpl.INSTANCE;
+        _profileService.setServletContext(config.getServletContext());
     }
     
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

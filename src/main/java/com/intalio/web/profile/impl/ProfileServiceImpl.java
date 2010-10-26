@@ -49,49 +49,23 @@ import com.intalio.web.profile.IDiagramProfileService;
  * 
  */
 public class ProfileServiceImpl implements IDiagramProfileService {
+	
+	public static ProfileServiceImpl INSTANCE = new ProfileServiceImpl();
 
     private Map<String, IDiagramProfile> _registry = new HashMap<String, IDiagramProfile>();
     private Set<IDiagramProfileFactory> _factories = new HashSet<IDiagramProfileFactory>();
     
-    public ProfileServiceImpl(ServletContext context) {
-        _registry.put("default", new DefaultProfileImpl(context));
-        
-        // if we are in the OSGi world:
-        if (getClass().getClassLoader() instanceof BundleReference) {
-            final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
-            ServiceReference[] sRefs = null;
-            try {
-                sRefs = bundleContext.getServiceReferences(IDiagramProfileFactory.class.getName(), null);
-            } catch (InvalidSyntaxException e) {
-            }
-            if (sRefs != null) {
-                for (ServiceReference sRef : sRefs) {
-                    IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(sRef);
-                    _factories.add(service);
-                }
-            }
-            ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
-
-                public void removedService(ServiceReference reference, Object service) {
-                }
-
-                public void modifiedService(ServiceReference reference, Object service) {
-                }
-
-                public Object addingService(ServiceReference reference) {
-                    IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(reference);
-                    _factories.add(service);
-                    return service;
-                }
-            };
-            ServiceTracker tracker = new ServiceTracker(bundleContext,
-                    IDiagramProfileFactory.class.getName(), cust);
-            tracker.open();
-            // register self to make the default profile available to the world:
-            bundleContext.registerService(IDiagramProfileService.class.getName(), this, new Hashtable());
-        }
+    private ProfileServiceImpl() {
     }
     
+    public void setServletContext(ServletContext context) {
+        _registry.put("default", new DefaultProfileImpl(context));
+    }
+    
+    public Set<IDiagramProfileFactory> getFactories() {
+    	return _factories;
+    }
+        
     private Map<String, IDiagramProfile> assemblePlugins(HttpServletRequest request) {
         Map<String, IDiagramProfile> plugins = new HashMap<String, IDiagramProfile>(_registry);
         if (request != null) {
