@@ -3,6 +3,7 @@
  * @namespace Oryx name space for different utility methods
  * @name ORYX.Utils
 */
+
 ORYX.Utils = {
     /**
      * General helper method for parsing a param out of current location url

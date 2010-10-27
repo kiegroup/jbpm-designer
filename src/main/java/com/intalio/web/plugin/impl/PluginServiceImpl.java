@@ -83,7 +83,7 @@ public class PluginServiceImpl implements IDiagramPluginService {
     }
 
     private static Logger _logger = LoggerFactory.getLogger(PluginServiceImpl.class);
-    
+
     private static Map<String, IDiagramPlugin> initializeLocalPlugins(ServletContext context) {
         Map<String, IDiagramPlugin> local = new HashMap<String, IDiagramPlugin>();
         //we read the plugins.xml file and make sense of it.

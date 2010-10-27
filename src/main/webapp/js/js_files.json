@@ -1,8 +1,8 @@
-{ "files" : ["js/utils.js", "js/kickstart.js", "js/erdfparser.js", "js/datamanager.js", "js/clazz.js", "js/config.js", "js/oryx.js", "js/Core/SVG/editpathhandler.js", 
+{ "files" : ["js/kickstart.js", "js/config.js", "js/oryx.js", "js/clazz.js", "js/Core/main.js", "js/utils.js", "js/erdfparser.js", "js/datamanager.js", "js/Core/SVG/editpathhandler.js", 
 "js/Core/SVG/minmaxpathhandler.js", "js/Core/SVG/pointspathhandler.js", "js/Core/SVG/svgmarker.js", "js/Core/SVG/svgshape.js", 
 "js/Core/SVG/label.js", "js/Core/Math/math.js", "js/Core/StencilSet/stencil.js", "js/Core/StencilSet/property.js", "js/Core/StencilSet/propertyitem.js", 
 "js/Core/StencilSet/complexpropertyitem.js", "js/Core/StencilSet/rules.js", "js/Core/StencilSet/stencilset.js", "js/Core/StencilSet/stencilsets.js", 
-"js/Core/command.js", "js/Core/bounds.js", "js/Core/uiobject.js", "js/Core/abstractshape.js", "js/Core/canvas.js", "js/Core/main.js", "js/Core/svgDrag.js", 
+"js/Core/command.js", "js/Core/bounds.js", "js/Core/uiobject.js", "js/Core/abstractshape.js", "js/Core/canvas.js", "js/Core/svgDrag.js", 
 "js/Core/shape.js", "js/Core/Controls/control.js", "js/Core/Controls/magnet.js", "js/Core/Controls/docker.js", "js/Core/node.js", "js/Core/edge.js", 
 "js/Core/abstractPlugin.js", "js/Core/abstractLayouter.js", "js/Core/abstractDragTracker.js"]
 
