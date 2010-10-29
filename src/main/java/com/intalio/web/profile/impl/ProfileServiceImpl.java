@@ -50,67 +50,97 @@ import com.intalio.web.profile.IDiagramProfileService;
  */
 public class ProfileServiceImpl implements IDiagramProfileService {
 
-    private Map<String, IDiagramProfile> _registry = new HashMap<String, IDiagramProfile>();
-    private Set<IDiagramProfileFactory> _factories = new HashSet<IDiagramProfileFactory>();
+    /**
+     * the singleton instance
+     */
+    private static IDiagramProfileService _instance;
     
-    public ProfileServiceImpl(ServletContext context) {
+    public static IDiagramProfileService getInstance(
+                                    ServletContext context) {
+        if (_instance == null) {
+            _instance = new ProfileServiceImpl(context);
+        }
+        return _instance;
+    }
+    
+    private Map<String, IDiagramProfile> _registry = 
+        new HashMap<String, IDiagramProfile>();
+    private Set<IDiagramProfileFactory> _factories = 
+        new HashSet<IDiagramProfileFactory>();
+    
+    /**
+     * Default constructor, private.
+     * @param context the servlet context to initialize the profile.
+     */
+    private ProfileServiceImpl(ServletContext context) {
         _registry.put("default", new DefaultProfileImpl(context));
         
         // if we are in the OSGi world:
         if (getClass().getClassLoader() instanceof BundleReference) {
-            final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
-            ServiceReference[] sRefs = null;
-            try {
-                sRefs = bundleContext.getServiceReferences(IDiagramProfileFactory.class.getName(), null);
-            } catch (InvalidSyntaxException e) {
-            }
-            if (sRefs != null) {
-                for (ServiceReference sRef : sRefs) {
-                    IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(sRef);
-                    _factories.add(service);
-                }
-            }
-            ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
-
-                public void removedService(ServiceReference reference, Object service) {
-                }
-
-                public void modifiedService(ServiceReference reference, Object service) {
-                }
-
-                public Object addingService(ServiceReference reference) {
-                    IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(reference);
-                    _factories.add(service);
-                    return service;
-                }
-            };
-            ServiceTracker tracker = new ServiceTracker(bundleContext,
-                    IDiagramProfileFactory.class.getName(), cust);
-            tracker.open();
-            // register self to make the default profile available to the world:
-            bundleContext.registerService(IDiagramProfileService.class.getName(), this, new Hashtable());
+            registerWithOSGiContext();
         }
     }
     
-    private Map<String, IDiagramProfile> assemblePlugins(HttpServletRequest request) {
-        Map<String, IDiagramProfile> plugins = new HashMap<String, IDiagramProfile>(_registry);
+    /**
+     * register the profile and look for 
+     * factories in an OSGi context.
+     */
+    private void registerWithOSGiContext() {
+        BundleReference ref = (BundleReference) 
+            getClass().getClassLoader();
+        final BundleContext bundleContext = 
+            ref.getBundle().getBundleContext();
+        ServiceReference[] sRefs = null;
+        try {
+            sRefs = bundleContext.getServiceReferences(
+                    IDiagramProfileFactory.class.getName(), null);
+        } catch (InvalidSyntaxException e) {
+        }
+        if (sRefs != null) {
+            for (ServiceReference sRef : sRefs) {
+                IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(sRef);
+                _factories.add(service);
+            }
+        }
+        ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+
+            public void removedService(ServiceReference reference, Object service) {
+            }
+
+            public void modifiedService(ServiceReference reference, Object service) {
+            }
+
+            public Object addingService(ServiceReference reference) {
+                IDiagramProfileFactory service = (IDiagramProfileFactory) bundleContext.getService(reference);
+                _factories.add(service);
+                return service;
+            }
+        };
+        ServiceTracker tracker = new ServiceTracker(bundleContext,
+                IDiagramProfileFactory.class.getName(), cust);
+        tracker.open();
+        // register self to make the default profile available to the world:
+        bundleContext.registerService(IDiagramProfileService.class.getName(), this, new Hashtable());
+    }
+    
+    private Map<String, IDiagramProfile> assembleProfiles(HttpServletRequest request) {
+        Map<String, IDiagramProfile> profiles = new HashMap<String, IDiagramProfile>(_registry);
         if (request != null) {
             for (IDiagramProfileFactory factory : _factories) {
                 for (IDiagramProfile  p : factory.getProfiles(request)) {
-                    plugins.put(p.getName(), p);
+                    profiles.put(p.getName(), p);
                 }
             }
         }
-        System.err.println(plugins.keySet());
-        return plugins;
+        return profiles;
     }
     
     public IDiagramProfile findProfile(HttpServletRequest request, String name) {
-        return assemblePlugins(request).get(name);
+        return assembleProfiles(request).get(name);
     }
 
     public Collection<IDiagramProfile> getProfiles(HttpServletRequest request) {
-        return assemblePlugins(request).values();
+        return assembleProfiles(request).values();
     }
 
     
