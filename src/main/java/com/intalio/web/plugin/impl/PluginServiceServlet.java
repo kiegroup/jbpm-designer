@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.intalio.web.plugin.IDiagramPlugin;
+import com.intalio.web.plugin.IDiagramPluginService;
 
 /**
  * This servlet exposes the plugins registered against the platforms.
@@ -53,18 +54,22 @@ import com.intalio.web.plugin.IDiagramPlugin;
  */
 public class PluginServiceServlet extends HttpServlet {
     
-    private static final Logger _logger = LoggerFactory.getLogger(PluginServiceServlet.class);
+    private static final Logger _logger = LoggerFactory.getLogger(
+            PluginServiceServlet.class);
     
     private static final long serialVersionUID = -2024110864538877629L;
     
-    private PluginServiceImpl _pluginService;
+    private IDiagramPluginService _pluginService;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        _pluginService = new PluginServiceImpl(config.getServletContext());
+        _pluginService = PluginServiceImpl.getInstance(
+                config.getServletContext());
     }
     
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, 
+            HttpServletResponse resp) 
+    throws ServletException, IOException {
         try {
         if ((EditorHandler.oryx_path +  "plugins").equals(req.getRequestURI())) {
             listAllPlugins(req, resp);
@@ -76,10 +81,12 @@ public class PluginServiceServlet extends HttpServlet {
         }
     }
 
-    private void retrievePluginContents(HttpServletRequest req, HttpServletResponse resp) {
+    private void retrievePluginContents(HttpServletRequest req, 
+            HttpServletResponse resp) {
         String name = req.getParameter("name");
         if (name == null) {
-            name = req.getRequestURI().substring(req.getRequestURI().lastIndexOf("/")+1);
+            name = req.getRequestURI().substring(
+                    req.getRequestURI().lastIndexOf("/")+1);
             if (name.endsWith(".js")) {
                 name = name.substring(0, name.length() - ".js".length());
             }
@@ -89,11 +96,13 @@ public class PluginServiceServlet extends HttpServlet {
         }
         IDiagramPlugin plugin = _pluginService.findPlugin(req, name);
         if (plugin == null) {
-            throw new IllegalArgumentException("No plugin by the name of " + name);
+            throw new IllegalArgumentException(
+                    "No plugin by the name of " + name);
         }
         InputStream input = plugin.getContents();
         if (input == null) {
-            throw new IllegalArgumentException("Plugin contents could not be found");
+            throw new IllegalArgumentException(
+                    "Plugin contents could not be found");
         }
         try {
             byte[] buffer = new byte[4096];
@@ -105,20 +114,26 @@ public class PluginServiceServlet extends HttpServlet {
         } catch (IOException e) {
             _logger.error(e.getMessage(), e);
         } finally {
-            if (input != null) { try { input.close(); } catch(IOException e) {}};
+            if (input != null) { 
+                try { input.close(); } catch(IOException e) {}
+            }
         }
         
     }
 
-    private void listAllPlugins(HttpServletRequest req, HttpServletResponse resp) throws IOException, JSONException {
+    private void listAllPlugins(HttpServletRequest req, 
+            HttpServletResponse resp) 
+            throws IOException, JSONException {
         JSONArray plugins = new JSONArray();
-        for (IDiagramPlugin p : _pluginService.getRegisteredPlugins(req)) {
+        for (IDiagramPlugin p : 
+                _pluginService.getRegisteredPlugins(req)) {
             JSONObject obj = new JSONObject();
             obj.put("name", p.getName());
             obj.put("core", p.isCore());
             JSONArray properties = new JSONArray();
             if (p.getProperties() != null) {
-                for (Entry<String, Object> entry : p.getProperties().entrySet()) {
+                for (Entry<String, Object> entry : 
+                        p.getProperties().entrySet()) {
                     JSONObject propObj = new JSONObject();
                     propObj.put(entry.getKey(), entry.getValue());
                     properties.put(propObj);

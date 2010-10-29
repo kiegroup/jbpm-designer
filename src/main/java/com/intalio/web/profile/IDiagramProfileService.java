@@ -23,6 +23,7 @@ package com.intalio.web.profile;
 
 import java.util.Collection;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -44,4 +45,10 @@ public interface IDiagramProfileService {
      * @return the profiles for the given context.
      */
     public Collection<IDiagramProfile> getProfiles(HttpServletRequest request);
+
+    /**
+     * Initialize the service with a particular context
+     * @param servletContext
+     */
+    public void init(ServletContext servletContext);
 }

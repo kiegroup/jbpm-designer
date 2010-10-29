@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -58,32 +57,44 @@ import com.intalio.web.plugin.IDiagramPluginService;
  */
 public class PluginServiceImpl implements IDiagramPluginService {
     
+    private static PluginServiceImpl _instance = null;
+    
     /**
-     * The default local plugins, available to the webapp so that the default profile
-     * can provision its plugins. Consumers through OSGi should use the service tracker
+     * @param context the context needed for initialization
+     * @return the singleton of PluginServiceImpl
+     */
+    public static IDiagramPluginService getInstance(
+                                    ServletContext context) {
+        if (_instance == null) {
+            _instance = new PluginServiceImpl(context);
+        }
+        return _instance;
+    }
+    
+    /**
+     * The default local plugins, available to the webapp 
+     * so that the default profile can provision its plugins. 
+     * Consumers through OSGi should use the service tracker
      * to get the plugins they need.
      */
     private static Map<String, IDiagramPlugin> LOCAL = null;
     
     /**
-     * an object to lock over the local plugins registry.
-     * Several servlets will have interest over the local plugin registry,
-     * which requires the servlet context to initialize itself.
-     * To avoid double initialization, we lock over this object.
+     * Initialize the local plugins registry
+     * @param context the servlet context necessary to grab
+     * the files inside the servlet.
+     * @return the set of local plugins organized by name
      */
-    private static Object lock = new Object();
-    
-    public static Map<String, IDiagramPlugin> getLocalPluginsRegistry(ServletContext context) {
-        synchronized(lock) {
-            if (LOCAL == null) {
-                LOCAL = initializeLocalPlugins(context);
-            }
+    public static Map<String, IDiagramPlugin> 
+        getLocalPluginsRegistry(ServletContext context) {
+        if (LOCAL == null) {
+            LOCAL = initializeLocalPlugins(context);
         }
         return LOCAL;
     }
 
     private static Logger _logger = LoggerFactory.getLogger(PluginServiceImpl.class);
-    
+
     private static Map<String, IDiagramPlugin> initializeLocalPlugins(ServletContext context) {
         Map<String, IDiagramPlugin> local = new HashMap<String, IDiagramPlugin>();
         //we read the plugins.xml file and make sense of it.
@@ -150,7 +161,12 @@ public class PluginServiceImpl implements IDiagramPluginService {
     private Map<String, IDiagramPlugin> _registry = new HashMap<String, IDiagramPlugin>();
     private Set<IDiagramPluginFactory> _factories = new HashSet<IDiagramPluginFactory>();
 
-    public PluginServiceImpl(ServletContext context) {
+    /**
+     * Private constructor to make sure we respect the singleton
+     * pattern.
+     * @param context the servlet context
+     */
+    private PluginServiceImpl(ServletContext context) {
         _registry.putAll(getLocalPluginsRegistry(context));
         // if we are in the OSGi world:
         if (getClass().getClassLoader() instanceof BundleReference) {

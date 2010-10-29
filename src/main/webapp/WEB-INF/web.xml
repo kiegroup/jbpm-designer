@@ -413,14 +413,6 @@
 	</servlet>
 	
 	<servlet>
-	   <display-name>Profile Service Servlet</display-name>
-	   <servlet-name>ProfileServiceServlet</servlet-name>
-	   <servlet-class>
-	       com.intalio.web.profile.impl.ProfileServiceServlet
-	   </servlet-class>
-	</servlet>
-	
-	<servlet>
 	   <display-name>StencilSet Service Servlet</display-name>
 	   <servlet-name>StencilSetServiceServlet</servlet-name>
 	   <servlet-class>
@@ -428,14 +420,6 @@
 	   </servlet-class>
 	</servlet>
 	
-	<servlet>
-		<display-name>Process Designer Environment Servlet</display-name>
-		<servlet-name>ProcessDesignerEnvironmentServlet</servlet-name>
-		<servlet-class>
-			com.intalio.web.server.ProcessDesignerEnvironmentServlet
-		</servlet-class>
-	</servlet>
-
     <!-- Servlet Mappings -->
 <!--	
 	<servlet-mapping>
@@ -694,17 +678,6 @@
     	<servlet-name>PluginServiceServlet</servlet-name>
     	<url-pattern>/plugin/*</url-pattern>
     </servlet-mapping>
-    
-    <servlet-mapping>
-    	<servlet-name>ProfileServiceServlet</servlet-name>
-    	<url-pattern>/profile</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-    	<servlet-name>ProcessDesignerEnvironmentServlet</servlet-name>
-    	<url-pattern>/env</url-pattern>
-    </servlet-mapping>
-    
     
 	<servlet-mapping>
     	<servlet-name>StencilSetServiceServlet</servlet-name>

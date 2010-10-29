@@ -47,6 +47,7 @@ import com.intalio.web.server.UUIDBasedRepositoryServlet;
  */
 public class Activator implements BundleActivator {
 
+    @SuppressWarnings("rawtypes")
     public void start(final BundleContext context) throws Exception {
         {
             ServiceReference sRef =
@@ -111,7 +112,6 @@ public class Activator implements BundleActivator {
         }
         
         {
-        	ProfileServiceImpl profileServiceImpl = ProfileServiceImpl.INSTANCE;
         	ServiceReference[] sRefs = null;
 	        try {
 	            sRefs = context.getServiceReferences(IDiagramProfileFactory.class.getName(), null);
