@@ -58,7 +58,6 @@
       ORYX.CONFIG.SSEXTS= [@ssextensions@].map(function(ssext) {
         // for each of the extensions, we get the extension file and return its contents.
         var contents = null;
-      
         new Ajax.Request(ORYX.PATH + "stencilset/" + ssext, {
           asynchronous: false,
           method: 'get',
@@ -96,6 +95,13 @@
     </script>    
   </head>
   <body style="overflow:hidden;">
+	<script type="text/javascript" src="/designer/js/CFInstall.min.js"></script>
+	<div id="prompt"></div>
+     <script>
+    	window.attachEvent("onload", function() {
+    		CFInstall.check({mode: "popup",node: "prompt"});
+     	});
+     </script>
     <div class='processdata' style='display:none'>
     </div>
   </body>
