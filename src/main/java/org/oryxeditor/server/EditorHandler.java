@@ -169,7 +169,9 @@ public class EditorHandler extends HttpServlet {
 	    }
 
 	    // send the updated editor.html to client 
-	    response.setContentType("application/xhtml+xml");
+	    if(!isIE(request)){
+	    	response.setContentType("application/xhtml+xml");
+	    }
 	    XMLOutputter outputter = new XMLOutputter();
 	    Format format = Format.getPrettyFormat();
 	    format.setExpandEmptyElements(true);
@@ -310,5 +312,14 @@ public class EditorHandler extends HttpServlet {
                 _logger.error(e.getMessage(), e);
             }
         }
+	}
+	
+	/**
+	 * Determine whether the IE browser 
+	 * @param request
+	 * @return true or false(true: IE browser false: others browser)
+	 */
+	public boolean isIE(HttpServletRequest request){
+		return request.getHeader("USER-AGENT").toLowerCase().indexOf("msie") > 0 ? true : false;
 	}
 }
