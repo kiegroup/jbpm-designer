@@ -315,11 +315,12 @@ public class EditorHandler extends HttpServlet {
 	}
 	
 	/**
-	 * Determine whether the IE browser 
+	 * Determine whether the browser is IE
 	 * @param request
-	 * @return true or false(true: IE browser false: others browser)
+	 * @return true: IE browser false: others browsers
 	 */
-	public boolean isIE(HttpServletRequest request){
-		return request.getHeader("USER-AGENT").toLowerCase().indexOf("msie") > 0 ? true : false;
+	private static boolean isIE(HttpServletRequest request){
+		return request.getHeader("USER-AGENT").
+		    toLowerCase().indexOf("msie") > 0;
 	}
 }

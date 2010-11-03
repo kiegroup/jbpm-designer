@@ -6,7 +6,7 @@
     <title>@title@</title>
     
     <!-- libraries -->
-
+    
     <script src="/designer/lib/prototype-1.5.1.js" type="text/javascript">
     </script>
     <script src="/designer/lib/path_parser.js" type="text/javascript">
@@ -21,6 +21,8 @@
         @import url("/designer/lib/ext-2.0.2/resources/css/ext-all.css");
     </style>
     
+    <!-- Chrome Frame -->
+    <script type="text/javascript" src="/designer/js/CFInstall.min.js"></script>
     <!-- process designer -->
     
     <!-- erdf schemas -->
@@ -95,9 +97,9 @@
     </script>    
   </head>
   <body style="overflow:hidden;">
-	<script type="text/javascript" src="/designer/js/CFInstall.min.js"></script>
+	
 	<div id="prompt"></div>
-     <script>
+     <script type="text/javascript">
     	window.attachEvent("onload", function() {
     		CFInstall.check({mode: "popup",node: "prompt"});
      	});
