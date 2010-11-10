@@ -143,12 +143,10 @@ table-layout:fixed;
 	background:transparent url("../lib/ext-2.0.2/resources/images/default/form/color-trigger.gif") no-repeat 0 0;
 }
 
-/* extended by Kerstin (start)*/
 .x-form-field-wrap .x-form-complex-trigger {
-	background:transparent url("../images/complex-trigger.gif") no-repeat 0 0;
+	background:transparent url("../images/textfield.png") no-repeat 0 0;
     cursor:pointer; 
 }
-/* extended by Kerstin (end)*/
 
 .x-dd-drag-ghost {
 	opacity:1.0;
