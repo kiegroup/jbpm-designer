@@ -97,16 +97,15 @@
           alert("Could not load Process Designer"); //TODO even better logging ?
         }
     });
+    
+    checkChromeFrame = function() {
+        CFInstall.check({mode: "popup",node: "prompt"});
+    };
     </script>    
   </head>
-  <body style="overflow:hidden;">
+  <body style="overflow:hidden;" onLoad="checkChromeFrame()">
 	
 	<div id="prompt"></div>
-     <script type="text/javascript">
-    	window.attachEvent("onload", function() {
-    		CFInstall.check({mode: "popup",node: "prompt"});
-     	});
-     </script>
     <div class='processdata' style='display:none'>
     </div>
   </body>

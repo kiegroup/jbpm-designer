@@ -137,30 +137,25 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 			jsonProp.popular = false;
 		}
         
+        if (jsonProp.complexItems && jsonProp.complexItems instanceof Array) {
+            jsonProp.complexItems.each((function(jsonComplexItem){
+                this._complexItems[jsonComplexItem.id] = new ORYX.Core.StencilSet.ComplexPropertyItem(jsonComplexItem, namespace, this);
+            }).bind(this));
+        }
+
         if (jsonProp.type === ORYX.CONFIG.TYPE_CHOICE) {
             if (jsonProp.items && jsonProp.items instanceof Array) {
                 jsonProp.items.each((function(jsonItem){
                 	// why is the item's value used as the key???
                     this._items[jsonItem.value] = new ORYX.Core.StencilSet.PropertyItem(jsonItem, namespace, this);
                 }).bind(this));
-            }
-            else {
+            } else {
                 throw "ORYX.Core.StencilSet.Property(construct): No property items defined."
             }
-            // extended by Kerstin (start)
         }
-        else 
-            if (jsonProp.type === ORYX.CONFIG.TYPE_COMPLEX) {
-                if (jsonProp.complexItems && jsonProp.complexItems instanceof Array) {
-                    jsonProp.complexItems.each((function(jsonComplexItem){
-                        this._complexItems[jsonComplexItem.id] = new ORYX.Core.StencilSet.ComplexPropertyItem(jsonComplexItem, namespace, this);
-                    }).bind(this));
-                }
-                else {
-                    throw "ORYX.Core.StencilSet.Property(construct): No complex property items defined."
-                }
-            }
-        // extended by Kerstin (end)
+        if (jsonProp.type === ORYX.CONFIG.TYPE_COMPLEX && jsonProp.complexItems === undefined) {
+            throw "ORYX.Core.StencilSet.Property(construct): No complex property items defined."
+        }    
     },
     
     /**
