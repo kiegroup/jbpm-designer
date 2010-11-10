@@ -111,16 +111,16 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         try {
             JSONObject jsonObject = new JSONObject(data);
             
-
             String json = (String) jsonObject.get("data");
             String svg = (String) jsonObject.get("svg");
             String uuid = (String) jsonObject.get("uuid");
             String profileName = (String) jsonObject.get("profile");
+            Boolean autosave = (Boolean) jsonObject.get("savetype");
             String model = "";
             
             IDiagramProfile profile = getProfile(req, profileName);
             
-            _repository.save(req, uuid, json, svg, profile);
+            _repository.save(req, uuid, json, svg, profile, autosave);
 
         } catch (JSONException e1) {
             throw new ServletException(e1);

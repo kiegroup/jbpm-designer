@@ -56,6 +56,6 @@ public interface IUUIDBasedRepository {
      * @param svg the svg representation of the model
      * @param profile the profile
      */
-    public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile);
+    public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile, Boolean autosave);
 
 }

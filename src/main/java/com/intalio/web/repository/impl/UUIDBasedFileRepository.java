@@ -91,7 +91,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         return output.toByteArray();
     }
 
-    public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile) {
+    public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile, Boolean autosave) {
         String ext = profile.getSerializedModelExtension();
         String model = "";
         try {
@@ -102,7 +102,9 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         }
         writeFile(model, _repositoryPath + "/" + uuid + "." + ext);
         writeFile(json, _repositoryPath + "/" + uuid + ".json");
-        writeFile(svg, _repositoryPath + "/" + uuid + ".svg");
+        if (!autosave) {
+        	writeFile(svg, _repositoryPath + "/" + uuid + ".svg");
+        }
     }
     
     private static void writeFile(String contents, String filename) {

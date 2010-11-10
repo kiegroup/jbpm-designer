@@ -64,7 +64,8 @@ Import-Package: com.thoughtworks.xstream,
  org.slf4j,
  org.supercsv.io,
  org.supercsv.prefs,
- org.xmappr
+ org.xmappr,
+ com.yahoo.platform.yui.compressor
 Bundle-Vendor: Intalio Inc
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
