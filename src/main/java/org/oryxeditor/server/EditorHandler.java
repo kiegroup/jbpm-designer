@@ -248,7 +248,9 @@ public class EditorHandler extends HttpServlet {
         }
         
 	    // send the updated editor.html to client 
-	    response.setContentType("application/xhtml+xml");
+	    if(!isIE(request)){
+	    	response.setContentType("application/xhtml+xml");
+	    }
 	    XMLOutputter outputter = new XMLOutputter();
 	    Format format = Format.getPrettyFormat();
 	    format.setExpandEmptyElements(true);
@@ -476,5 +478,15 @@ public class EditorHandler extends HttpServlet {
 		}
 		
 		return local;
+	}
+	
+	/**
+	 * Determine whether the browser is IE
+	 * @param request
+	 * @return true: IE browser false: others browsers
+	 */
+	private static boolean isIE(HttpServletRequest request){
+		return request.getHeader("USER-AGENT").
+		    toLowerCase().indexOf("msie") > 0;
 	}
 }
