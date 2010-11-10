@@ -272,6 +272,12 @@ public class EditorHandler extends HttpServlet {
 	        } else if ("debug".equals(elt)) {
 	            resultHtml.append(System.getProperty(DEV) != null);
 	            replacementMade = true;
+	        } else if ("autosaveinterval".equals(elt)) {
+	        	resultHtml.append(120000);
+	        	replacementMade = true;
+	        } else if ("autosavedefault".equals(elt)) {
+	        	resultHtml.append(true);
+		        replacementMade = true;	
 	        } else if ("profileplugins".equals(elt)) {
 	            StringBuilder plugins = new StringBuilder();
 	            boolean commaNeeded = false;
