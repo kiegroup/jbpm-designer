@@ -181,7 +181,7 @@ public class EditorHandler extends HttpServlet {
             StringWriter sw = new StringWriter();
             for (String file : _envFiles) {
                 sw.append("/* ").append(file).append(" */\n");
-                InputStream input = getServletContext().getResourceAsStream(file);
+                InputStream input = new FileInputStream(new File(getServletContext().getRealPath(file)));
                 try {
                     JavaScriptCompressor compressor = new JavaScriptCompressor(
                             new InputStreamReader(input), null);
