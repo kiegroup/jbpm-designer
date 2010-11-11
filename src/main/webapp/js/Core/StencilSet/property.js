@@ -72,9 +72,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         jsonProp.readonly = jsonProp.readonly || false;
         if(jsonProp.optional != false)
         	jsonProp.optional = true;
-        if (!jsonProp.labelProvider) {
-        	jsonProp.labelProvider = "DirectLabelProvider";
-        }
+        
         //init refToView
         if (this._jsonProp.refToView) {
             if (!(this._jsonProp.refToView instanceof Array)) {
@@ -156,6 +154,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         if (jsonProp.type === ORYX.CONFIG.TYPE_COMPLEX && jsonProp.complexItems === undefined) {
             throw "ORYX.Core.StencilSet.Property(construct): No complex property items defined."
         }    
+        
+        if (jsonProp.labelProvider) {
+            this._labelProvider = jsonProp.labelProvider.transform;
+        }
     },
     
     /**
@@ -366,5 +368,9 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
     
     complexAttributeToView: function(){
         return this._jsonProp.complexAttributeToView || "";
+    },
+    
+    labelProvider: function() {
+        return this._labelProvider;
     }
 });

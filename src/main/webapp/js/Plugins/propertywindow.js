@@ -30,6 +30,10 @@ if (!ORYX.FieldEditors) {
 	ORYX.FieldEditors = {};
 }
 
+if (!ORYX.LabelProviders) {
+    ORYX.LabelProviders = {};
+}
+
 
 
 ORYX.Plugins.PropertyWindow = {
@@ -193,6 +197,12 @@ ORYX.Plugins.PropertyWindow = {
 	renderer: function(value, p, record) {
 		
 		this.tooltipRenderer(value, p, record);
+		
+		if (record.data.gridProperties.labelProvider) {
+		    // there is a label provider to render the value.
+		    // we pass it the value
+		    return record.data.gridProperties.labelProvider(value);
+		}
 				
 		if(value instanceof Date) {
 			// TODO: Date-Schema is not generic
@@ -712,13 +722,15 @@ ORYX.Plugins.PropertyWindow = {
 						pair.setPopular();
 					} 
 					
+					
 					if(pair.popular()) {
 						this.popularProperties.push([pair.popular(), name, attribute, icons, {
 							editor: editorGrid,
 							propId: key,
 							type: pair.type(),
 							tooltip: pair.description(),
-							renderer: editorRenderer
+							renderer: editorRenderer,
+							labelProvider: this.getLabelProvider(pair)
 						}]);
 					}
 					else {					
@@ -727,7 +739,8 @@ ORYX.Plugins.PropertyWindow = {
 							propId: key,
 							type: pair.type(),
 							tooltip: pair.description(),
-							renderer: editorRenderer
+							renderer: editorRenderer,
+							labelProvider: this.getLabelProvider(pair)
 						}]);
 					}
 				}
@@ -737,6 +750,18 @@ ORYX.Plugins.PropertyWindow = {
 
 		this.setProperties();
 	},
+	
+	/**
+	 * Gets a label provider from the registered label providers
+	 * according to the id of the label provider registered on the stencil.
+	 */
+    getLabelProvider: function(stencil) {
+       lp = ORYX.LabelProviders[stencil.labelProvider()];
+       if (lp) {
+           return lp(stencil);
+       }
+       return null;
+    },
 	
 	hideMoreAttrs: function(panel) {
 		// TODO: Implement the case that the canvas has no attributes

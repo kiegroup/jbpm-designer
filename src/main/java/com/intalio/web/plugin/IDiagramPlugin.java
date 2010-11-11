@@ -55,4 +55,9 @@ public interface IDiagramPlugin {
      * @return the properties of the plugin
      */
     public Map<String, Object> getProperties();
+
+    /**
+     * @return true if the contents of the plugin can be compressed.
+     */
+    public boolean isCompressable();
 }

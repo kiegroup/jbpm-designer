@@ -37,7 +37,8 @@ public class LocalPluginImpl extends LocalResource implements IDiagramPlugin {
     private boolean _core;
     private Map<String, Object> _properties = new HashMap<String, Object>();
 
-    public LocalPluginImpl(String name, String path, ServletContext context, boolean core, Map<String, Object> props) {
+    public LocalPluginImpl(String name, String path, ServletContext context, 
+            boolean core, Map<String, Object> props) {
         super(name, path, context);
         StringBuilder localPath = new StringBuilder();
         localPath.append("js").append("/");
@@ -52,5 +53,9 @@ public class LocalPluginImpl extends LocalResource implements IDiagramPlugin {
 
     public Map<String, Object> getProperties() {
         return _properties;
+    }
+
+    public boolean isCompressable() {
+        return true;
     }
 }
