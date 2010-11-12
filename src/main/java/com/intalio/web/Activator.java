@@ -23,6 +23,7 @@ package com.intalio.web;
 
 import java.util.Hashtable;
 
+import org.oryxeditor.server.EditorHandler;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -32,6 +33,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 import com.intalio.web.filter.IFilterFactory;
 import com.intalio.web.filter.impl.PluggableFilter;
+import com.intalio.web.preference.IDiagramPreferenceService;
 import com.intalio.web.profile.IDiagramProfileFactory;
 import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
@@ -75,6 +77,37 @@ public class Activator implements BundleActivator {
                 };
                 ServiceTracker tracker = new ServiceTracker(context,
                         IUUIDBasedRepositoryService.class.getName(), cust);
+                tracker.open();
+
+            }
+        }
+        
+        {
+            ServiceReference sRef =
+                context.getServiceReference(IDiagramPreferenceService.class.getName());
+            if (sRef != null) {
+            	IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(sRef);
+                EditorHandler._factory = service;
+            } else {
+                //use a service tracker to be called back when the IUUIDBasedRepositoryFactory is ready:
+                ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+
+                    public void removedService(ServiceReference reference, Object service) {
+                        //special servlet shutdown
+                    }
+
+                    public void modifiedService(ServiceReference reference, Object service) {
+                        //reload?
+                    }
+
+                    public Object addingService(ServiceReference reference) {
+                    	IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(reference);
+                        EditorHandler._factory = service;
+                        return service;
+                    }
+                };
+                ServiceTracker tracker = new ServiceTracker(context,
+                		IDiagramPreferenceService.class.getName(), cust);
                 tracker.open();
 
             }

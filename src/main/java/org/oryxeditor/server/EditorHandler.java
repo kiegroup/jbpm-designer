@@ -34,6 +34,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -65,6 +66,11 @@ import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
+import com.intalio.web.preference.IDiagramPreference;
+import com.intalio.web.preference.IDiagramPreferenceService;
+import com.intalio.web.repository.IUUIDBasedRepository;
+import com.intalio.web.repository.IUUIDBasedRepositoryService;
+import com.intalio.web.repository.impl.UUIDBasedFileRepository;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 /**
@@ -79,6 +85,29 @@ public class EditorHandler extends HttpServlet {
      */
     private static final Logger _logger = 
         Logger.getLogger(EditorHandler.class);
+    
+    public static IDiagramPreferenceService _factory = new IDiagramPreferenceService() {
+
+        public IDiagramPreference createPreference() {
+        	return new IDiagramPreference() {
+
+        		public void configure(HttpServlet servlet) {
+        		}
+
+        		public String loadPreference(HttpServletRequest req) {
+        			return null;
+        		}
+
+        		public void savePreference(HttpServletRequest req,
+        				String preference) {
+        		}
+        	};
+
+        }
+        
+    };
+    
+    private IDiagramPreference _preference;
     
     /**
      * The base path under which the application will be made available at runtime.
@@ -106,7 +135,7 @@ public class EditorHandler extends HttpServlet {
     private List<String> _envFiles = new ArrayList<String>();
     
     private Map<String, List<IDiagramPlugin>> _pluginfiles = 
-        new WeakHashMap<String, List<IDiagramPlugin>>();
+        new HashMap<String, List<IDiagramPlugin>>();
     
     private Map<String, List<IDiagramPlugin>> _uncompressedPlugins = 
         new WeakHashMap<String, List<IDiagramPlugin>>();
@@ -122,6 +151,13 @@ public class EditorHandler extends HttpServlet {
         _profileService.init(config.getServletContext());
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
+        
+        try {
+            _preference = _factory.createPreference();
+            _preference.configure(this);
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
         
         String editor_file = config.
             getServletContext().getRealPath("/editor.html");
@@ -301,6 +337,19 @@ public class EditorHandler extends HttpServlet {
         StringBuilder resultHtml = new StringBuilder();
         boolean tokenFound = false;
         boolean replacementMade = false;
+      
+        int autoSaveInt = 0;
+        boolean autoSaveOn = false;
+        
+        try {
+        	JSONObject jsonObject = new JSONObject(_preference.loadPreference(request));
+        	autoSaveInt = jsonObject.getInt("autosave_interval");
+        	autoSaveOn = jsonObject.getBoolean("autosave_onoff");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
         while(tokenizer.hasMoreTokens()) {
             String elt = tokenizer.nextToken();
             if ("title".equals(elt)) {
@@ -313,10 +362,10 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(System.getProperty(DEV) != null);
                 replacementMade = true;
             } else if ("autosaveinterval".equals(elt)) {
-                resultHtml.append(120000);
+                resultHtml.append(autoSaveInt);
                 replacementMade = true;
             } else if ("autosavedefault".equals(elt)) {
-                resultHtml.append(true);
+                resultHtml.append(autoSaveOn);
                 replacementMade = true;    
             } else if ("profileplugins".equals(elt)) {
                 StringBuilder plugins = new StringBuilder();

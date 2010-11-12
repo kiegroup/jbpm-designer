@@ -115,7 +115,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             String svg = (String) jsonObject.get("svg");
             String uuid = (String) jsonObject.get("uuid");
             String profileName = (String) jsonObject.get("profile");
-            Boolean autosave = (Boolean) jsonObject.get("savetype");
+            boolean autosave = jsonObject.getBoolean("savetype");
             String model = "";
             
             IDiagramProfile profile = getProfile(req, profileName);

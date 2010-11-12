@@ -7,10 +7,12 @@ Bundle-Name: cloud.designer
 Bundle-Version: 4.0.0.qualifier
 Web-ContextPath: /designer
 Jetty-WarFolderPath: src/main/webapp
-Import-Package: com.thoughtworks.xstream,
+Import-Package: com.intalio.xrm,
+ com.thoughtworks.xstream,
  com.thoughtworks.xstream.converters,
  com.thoughtworks.xstream.io,
  com.thoughtworks.xstream.io.xml,
+ com.yahoo.platform.yui.compressor,
  de.hpi.bpt.epc,
  de.hpi.bpt.epc.aml.util,
  de.hpi.bpt.graph.abs,
@@ -65,7 +67,7 @@ Import-Package: com.thoughtworks.xstream,
  org.supercsv.io,
  org.supercsv.prefs,
  org.xmappr,
- com.yahoo.platform.yui.compressor
+ xsharp.lang
 Bundle-Vendor: Intalio Inc
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
@@ -75,6 +77,7 @@ Export-Package: com.intalio.bpmn2;version="1.0.0",
  com.intalio.web;version="1.0.0",
  com.intalio.web.filter;version="1.0.0",
  com.intalio.web.plugin;version="1.0.0",
+ com.intalio.web.preference,
  com.intalio.web.profile;version="1.0.0",
  com.intalio.web.repository;version="1.0.0",
  com.intalio.web.stencilset;version="1.0.0"
