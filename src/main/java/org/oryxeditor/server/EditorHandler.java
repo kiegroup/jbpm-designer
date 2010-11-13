@@ -68,9 +68,6 @@ import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
 import com.intalio.web.preference.IDiagramPreference;
 import com.intalio.web.preference.IDiagramPreferenceService;
-import com.intalio.web.repository.IUUIDBasedRepository;
-import com.intalio.web.repository.IUUIDBasedRepositoryService;
-import com.intalio.web.repository.impl.UUIDBasedFileRepository;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 /**
@@ -89,25 +86,14 @@ public class EditorHandler extends HttpServlet {
     public static IDiagramPreferenceService _factory = new IDiagramPreferenceService() {
 
         public IDiagramPreference createPreference() {
-        	return new IDiagramPreference() {
+            return new IDiagramPreference() {
 
-        		public void configure(HttpServlet servlet) {
-        		}
-
-        		public String loadPreference(HttpServletRequest req) {
-        			return null;
-        		}
-
-        		public void savePreference(HttpServletRequest req,
-        				String preference) {
-        		}
-        	};
-
+                public String loadPreference(HttpServletRequest req) {
+                    return null;
+                }
+            };
         }
-        
     };
-    
-    private IDiagramPreference _preference;
     
     /**
      * The base path under which the application will be made available at runtime.
@@ -143,7 +129,10 @@ public class EditorHandler extends HttpServlet {
     /**
      * editor.html document.
      */
-    private Document _doc = null;        
+    private Document _doc = null;  
+    
+    private IDiagramPreference _preference;
+    
     
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -152,12 +141,7 @@ public class EditorHandler extends HttpServlet {
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
         
-        try {
-            _preference = _factory.createPreference();
-            _preference.configure(this);
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
+        _preference = _factory.createPreference();
         
         String editor_file = config.
             getServletContext().getRealPath("/editor.html");
@@ -342,13 +326,13 @@ public class EditorHandler extends HttpServlet {
         boolean autoSaveOn = false;
         
         try {
-        	JSONObject jsonObject = new JSONObject(_preference.loadPreference(request));
-        	autoSaveInt = jsonObject.getInt("autosave_interval");
-        	autoSaveOn = jsonObject.getBoolean("autosave_onoff");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            JSONObject jsonObject = new JSONObject(
+                    _preference.loadPreference(request));
+            autoSaveInt = jsonObject.getInt("autosave_interval");
+            autoSaveOn = jsonObject.getBoolean("autosave_onoff");
+        } catch (JSONException e) {
+            _logger.error("Error while reading the configuration object", e);
+        }
 
         while(tokenizer.hasMoreTokens()) {
             String elt = tokenizer.nextToken();
