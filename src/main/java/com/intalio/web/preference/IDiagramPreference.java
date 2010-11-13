@@ -21,14 +21,16 @@
 ****************************************/
 package com.intalio.web.preference;
 
-import javax.servlet.http.HttpServletRequest;
 
 public interface IDiagramPreference {
+
     /**
-     * @param req the request from the user.
-     * @param uuid the id of the model.
-     * @param ext the file extension to apply to the model.
-     * @return the model as a set of bytes.
+     * @return true if autosave is enabled.
      */
-    public String loadPreference(HttpServletRequest req);
+    public boolean isAutoSaveEnabled();
+    
+    /**
+     * @return the preferred autosave interval.
+     */
+    public int getAutosaveInterval();
 }

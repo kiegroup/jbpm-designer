@@ -83,13 +83,18 @@ public class EditorHandler extends HttpServlet {
     private static final Logger _logger = 
         Logger.getLogger(EditorHandler.class);
     
-    public static IDiagramPreferenceService _factory = new IDiagramPreferenceService() {
+    public static IDiagramPreferenceService PREFERENCE_FACTORY = new IDiagramPreferenceService() {
 
-        public IDiagramPreference createPreference() {
+        public IDiagramPreference createPreference(HttpServletRequest req) {
+            //later we could read the parameters from the URL as well.
             return new IDiagramPreference() {
 
-                public String loadPreference(HttpServletRequest req) {
-                    return null;
+                public boolean isAutoSaveEnabled() {
+                    return true;
+                }
+
+                public int getAutosaveInterval() {
+                    return 120000;
                 }
             };
         }
@@ -131,17 +136,12 @@ public class EditorHandler extends HttpServlet {
      */
     private Document _doc = null;  
     
-    private IDiagramPreference _preference;
-    
-    
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         _profileService = ProfileServiceImpl.INSTANCE;
         _profileService.init(config.getServletContext());
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
-        
-        _preference = _factory.createPreference();
         
         String editor_file = config.
             getServletContext().getRealPath("/editor.html");
@@ -322,17 +322,9 @@ public class EditorHandler extends HttpServlet {
         boolean tokenFound = false;
         boolean replacementMade = false;
       
-        int autoSaveInt = 0;
-        boolean autoSaveOn = false;
-        
-        try {
-            JSONObject jsonObject = new JSONObject(
-                    _preference.loadPreference(request));
-            autoSaveInt = jsonObject.getInt("autosave_interval");
-            autoSaveOn = jsonObject.getBoolean("autosave_onoff");
-        } catch (JSONException e) {
-            _logger.error("Error while reading the configuration object", e);
-        }
+        IDiagramPreference pref = PREFERENCE_FACTORY.createPreference(request);
+        int autoSaveInt = pref.getAutosaveInterval();
+        boolean autoSaveOn = pref.isAutoSaveEnabled();
 
         while(tokenizer.hasMoreTokens()) {
             String elt = tokenizer.nextToken();

@@ -21,9 +21,20 @@
 ****************************************/
 package com.intalio.web.preference;
 
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * @author Xu
+ * @author Antoine Toulme
+ * 
+ * A service for diagram preferences.
+ * Creates a preference according to the request object.
+ */
 public interface IDiagramPreferenceService {
+    
     /**
-     * @return a preference object.
+     * @param the current request for the editor
+     * @return a preference object
      */
-    public IDiagramPreference createPreference();
+    public IDiagramPreference createPreference(HttpServletRequest req);
 }
