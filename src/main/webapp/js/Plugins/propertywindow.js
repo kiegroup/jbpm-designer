@@ -993,6 +993,9 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 					{ typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});			
 			} else if (type == ORYX.CONFIG.TYPE_BOOLEAN) {
 				editor = new Ext.form.Checkbox( { width : width } );
+			} else if (type == "xpath") {
+				//TODO set the xpath type as string, same editor as string.
+				editor = new Ext.form.TextField({ allowBlank : this.items[i].optional(), width : width});
 			}
 					
 			cols.push({
