@@ -74,25 +74,24 @@ public class StencilSetServiceImpl implements IDiagramStencilSetService {
                     IDiagramStencilSetFactory service = (IDiagramStencilSetFactory) bundleContext.getService(sRef);
                     _factories.add(service);
                 }
-            } else {
-                ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
-
-                    public void removedService(ServiceReference reference, Object service) {
-                    }
-
-                    public void modifiedService(ServiceReference reference, Object service) {
-                    }
-
-                    public Object addingService(ServiceReference reference) {
-                        IDiagramStencilSetFactory service = (IDiagramStencilSetFactory) bundleContext.getService(reference);
-                        _factories.add(service);
-                        return service;
-                    }
-                };
-                ServiceTracker tracker = new ServiceTracker(bundleContext,
-                        IDiagramStencilSetFactory.class.getName(), cust);
-                tracker.open();
             }
+            ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+
+                public void removedService(ServiceReference reference, Object service) {
+                }
+
+                public void modifiedService(ServiceReference reference, Object service) {
+                }
+
+                public Object addingService(ServiceReference reference) {
+                    IDiagramStencilSetFactory service = (IDiagramStencilSetFactory) bundleContext.getService(reference);
+                    _factories.add(service);
+                    return service;
+                }
+            };
+            ServiceTracker tracker = new ServiceTracker(bundleContext,
+                    IDiagramStencilSetFactory.class.getName(), cust);
+            tracker.open();
             //also register yourself to allow the construction of profiles by remote services:
             bundleContext.registerService(IDiagramStencilSetService.class.getName(), this, new Hashtable());
         }

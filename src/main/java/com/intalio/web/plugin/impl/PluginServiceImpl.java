@@ -181,28 +181,27 @@ public class PluginServiceImpl implements IDiagramPluginService {
                     IDiagramPluginFactory service = (IDiagramPluginFactory) bundleContext.getService(sRef);
                     _factories.add(service);
                 }
-            } else {
-                ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+            } 
+            ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
 
-                    public void removedService(ServiceReference reference, Object service) {
-                    }
+                public void removedService(ServiceReference reference, Object service) {
+                }
 
-                    public void modifiedService(ServiceReference reference, Object service) {
-                    }
+                public void modifiedService(ServiceReference reference, Object service) {
+                }
 
-                    public Object addingService(ServiceReference reference) {
-                        IDiagramPluginFactory service = (IDiagramPluginFactory) bundleContext.getService(reference);
-                        _factories.add(service);
-                        return service;
-                    }
-                };
-                ServiceTracker tracker = new ServiceTracker(bundleContext,
-                        IDiagramPluginFactory.class.getName(), cust);
-                tracker.open();
-                //make the service available to consumers as well.
-                bundleContext.registerService(IDiagramPluginService.class.getName(), this, 
-                        new Hashtable());
-            }
+                public Object addingService(ServiceReference reference) {
+                    IDiagramPluginFactory service = (IDiagramPluginFactory) bundleContext.getService(reference);
+                    _factories.add(service);
+                    return service;
+                }
+            };
+            ServiceTracker tracker = new ServiceTracker(bundleContext,
+                    IDiagramPluginFactory.class.getName(), cust);
+            tracker.open();
+            //make the service available to consumers as well.
+            bundleContext.registerService(IDiagramPluginService.class.getName(), this, 
+                    new Hashtable());
         }
     }
     

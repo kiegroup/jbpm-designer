@@ -89,7 +89,12 @@
           // install the current plugins
           ORYX.availablePlugins = [];
           [@profileplugins@].each(function(pluginName) {
-            ORYX.availablePlugins.push(allPlugins[pluginName]);
+            p = allPlugins[pluginName];
+            if (p) {
+              ORYX.availablePlugins.push(p);
+            } else {
+              ORYX.Log.error("missing plugin " + pluginName);
+            }
           }.bind(allPlugins));
       
         },
