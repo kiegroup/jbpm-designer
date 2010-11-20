@@ -137,7 +137,12 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         
         if (jsonProp.complexItems && jsonProp.complexItems instanceof Array) {
             jsonProp.complexItems.each((function(jsonComplexItem){
-                this._complexItems[jsonComplexItem.id] = new ORYX.Core.StencilSet.ComplexPropertyItem(jsonComplexItem, namespace, this);
+               try {
+                    this._complexItems[jsonComplexItem.id] = new ORYX.Core.StencilSet.ComplexPropertyItem(jsonComplexItem, namespace, this);
+                } catch(e) {
+                    ORYX.Log.error("error while initializing complex items for " + jsonProp.title);
+                    ORYX.Log.error(e);
+                }
             }).bind(this));
         }
 
