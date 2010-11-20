@@ -218,7 +218,7 @@ public class EditorHandler extends HttpServlet {
             }
             try {
                 FileWriter w = new FileWriter(
-                        context.getRealPath("js/env_combined.js"));
+                        context.getRealPath("jsc/env_combined.js"));
                 w.write(sw.toString());
                 w.close();
             } catch (IOException e) {
@@ -248,7 +248,7 @@ public class EditorHandler extends HttpServlet {
                 addScript(doc, oryx_path + jsFile, true);
             }
         } else {
-            addScript(doc, oryx_path + "js/env_combined.js", true);
+            addScript(doc, oryx_path + "jsc/env_combined.js", true);
         }
         
         // generate script tags for plugins.
@@ -280,7 +280,7 @@ public class EditorHandler extends HttpServlet {
                         getServletContext());
                 try {
                     FileWriter w = new FileWriter(getServletContext().
-                            getRealPath("js/Plugins/plugins_" + profileName 
+                            getRealPath("jsc/plugins_" + profileName 
                                     + ".js"));
                     w.write(rs.toString());
                     w.close();
@@ -297,7 +297,7 @@ public class EditorHandler extends HttpServlet {
             }
         } else {
             addScript(doc, 
-                    oryx_path + "js/Plugins/plugins_" + profileName + ".js", 
+                    oryx_path + "jsc/plugins_" + profileName + ".js", 
                     false);
         }
         
