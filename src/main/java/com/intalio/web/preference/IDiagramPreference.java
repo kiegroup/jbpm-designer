@@ -21,7 +21,16 @@
 ****************************************/
 package com.intalio.web.preference;
 
-
+/**
+ * 
+ * @author xu
+ * @author Antoine Toulme
+ * 
+ * A IDiagramPreference object contains the information about the preferences
+ * for the diagram editor, as stored in the platform or extracted from the URL
+ * of the editor.
+ *
+ */
 public interface IDiagramPreference {
 
     /**

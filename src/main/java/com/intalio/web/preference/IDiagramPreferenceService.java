@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface IDiagramPreferenceService {
     
     /**
+     * Creates a IDiagramPreference object according to the request.
      * @param the current request for the editor
      * @return a preference object
      */

@@ -224,6 +224,12 @@ public class EditorHandler extends HttpServlet {
             } catch (IOException e) {
                 _logger.error(e.getMessage(), e);
             }
+        } else {
+            if (_logger.isInfoEnabled()) {
+                _logger.info(
+                    "The diagram editor is running in development mode. " +
+                    "Javascript will be served uncompressed");
+            }
         }
     }
 
