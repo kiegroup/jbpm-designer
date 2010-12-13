@@ -17,10 +17,10 @@ ORBIT_BINARIES	= ["com.intalio.cloud.orbit-prefetched:javax.servlet:jar:2.5.0.v2
    "com.intalio.cloud.orbit-prefetched:org.apache.xalan:jar:2.7.1.v200905122109",
    "com.intalio.cloud.orbit-prefetched:org.apache.xerces:jar:2.9.0.v200909240008"]
    
-BPMN2_LIBS = ["org.eclipse:org.eclipse.bpmn2:jar:0.7.0.201009165159",
-     "org.eclipse:org.eclipse.emf.common:jar:2.6.0.v20100614-1136",
-     "org.eclipse:org.eclipse.emf.ecore.xmi:jar:2.5.0.v20100521-1846",
-     "org.eclipse:org.eclipse.emf.ecore:jar:2.6.0.v20100614-1136"]
+BPMN2_LIBS = ["org.eclipse:org.eclipse.bpmn2:jar:0.7.0.20100826221953",
+              "org.eclipse:org.eclipse.emf.common:jar:2.6.0.v20100427-1455",
+              "org.eclipse:org.eclipse.emf.ecore.xmi:jar:2.5.0.v20100317-1336",
+              "org.eclipse:org.eclipse.emf.ecore:jar:2.6.0.v20100427-1455"]
    
 WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
   "commons-configuration:commons-configuration:jar:1.6", "org.jdom:jdom:jar:1.1", "org.apache.velocity:velocity:jar:1.6.4",
