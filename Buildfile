@@ -52,7 +52,7 @@ define "designer" do
   package(:bundle).include(_("src/main/webapp"), :as => webContent)
   package(:war).include(_("src/main/webapp"), :as => '.')
   
-  package(:war).libs = WAR_LIBS
+  package(:war).libs = WAR_LIBS_PACKAGE_JBOSS
    
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
   read_m["Jetty-WarFolderPath"] = webContent
