@@ -61,6 +61,7 @@ ORYX = Object.extend(ORYX, {
 	
 		__appenders: [
 			{ append: function(message) {
+				if(typeof(console) !== 'undefined')
 				console.log(message); }}
 		],
 	
