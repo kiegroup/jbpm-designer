@@ -51,12 +51,12 @@ define "designer" do
 
   package(:bundle).include(_("src/main/webapp"), :as => webContent).exclude('WEB-INF/tomcat_web.xml')
   package(:war).include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml')
-  package(:war, :classifier => "jboss42").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml')
+  package(:war, :classifier => "jboss").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml')
 
   package(:war).libs = WAR_LIBS
-  package(:war, :classifier => "jboss42").libs = WAR_LIBS_JBOSS42
+  package(:war, :classifier => "jboss").libs = WAR_LIBS_JBOSS
   
-  package(:war, :classifier => "jboss42").include(_('src/main/webapp/WEB-INF/tomcat_web.xml'), :as=>'WEB-INF/web.xml')
+  package(:war, :classifier => "jboss").include(_('src/main/webapp/WEB-INF/tomcat_web.xml'), :as=>'WEB-INF/web.xml')
 
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
   read_m["Jetty-WarFolderPath"] = webContent

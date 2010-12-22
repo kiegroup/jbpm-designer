@@ -34,7 +34,7 @@ WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collec
   "org.codehaus.jackson:jackson-core-asl:jar:1.5.6", "org.codehaus.jackson:jackson-mapper-asl:jar:1.5.6",
   "org.eclipse:osgi:jar:3.5.0.v20090520", YUICOMPRESSOR] | BPMN2_LIBS
 
-WAR_LIBS_JBOSS42 = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
+WAR_LIBS_JBOSS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
   "commons-configuration:commons-configuration:jar:1.6", "org.jdom:jdom:jar:1.1", "org.apache.velocity:velocity:jar:1.6.4",
   "org.supercsv:SuperCSV:jar:1.52", "org.apache.xmlgraphics:fop:jar:0.95", "com.sun.xml.bind:jaxb-impl:jar:2.2",
   "com.sun.xml.bind:jaxb1-impl:jar:2.2", "de.hpi:atlas:jar:1.0.0", "com.thoughtworks.xstream:xstream:jar:1.3.1",
