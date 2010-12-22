@@ -42,6 +42,7 @@ import org.osgi.framework.ServiceReference;
 import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.DefaultProfileImpl;
+import com.intalio.web.profile.impl.ProfileServiceImpl;
 import com.intalio.web.repository.IUUIDBasedRepository;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
 import com.intalio.web.repository.impl.UUIDBasedFileRepository;
@@ -141,7 +142,13 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         } else if ("default".equals(profileName)) {
             profile = new DefaultProfileImpl(getServletContext(), false);
         } else {
-            throw new IllegalArgumentException("Cannot determine the profile to use for interpreting models");
+            // check w/o BundleReference
+            IDiagramProfileService service = new ProfileServiceImpl();
+            service.init(getServletContext());
+            profile = service.findProfile(req, profileName);
+            if(profile == null) {
+                throw new IllegalArgumentException("Cannot determine the profile to use for interpreting models");
+            }
         }
         return profile;
     }
