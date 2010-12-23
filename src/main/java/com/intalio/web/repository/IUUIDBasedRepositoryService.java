@@ -21,6 +21,8 @@
 ****************************************/
 package com.intalio.web.repository;
 
+import javax.servlet.ServletConfig;
+
 /**
  * @author Antoine Toulme
  * 
@@ -32,6 +34,9 @@ public interface IUUIDBasedRepositoryService {
     /**
      * @return a repository object.
      */
+    public void init();
     public IUUIDBasedRepository createRepository();
+    public IUUIDBasedRepository createRepository(ServletConfig config);
+    public IUUIDBasedRepository lookupRepository(String name);
 
 }

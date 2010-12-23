@@ -25,6 +25,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -45,6 +47,7 @@ import com.intalio.web.profile.impl.DefaultProfileImpl;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
 import com.intalio.web.repository.IUUIDBasedRepository;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
+import com.intalio.web.repository.impl.UUIDBasedDroolsRepository;
 import com.intalio.web.repository.impl.UUIDBasedFileRepository;
 
 
@@ -61,10 +64,31 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     
     public static IUUIDBasedRepositoryService _factory = new IUUIDBasedRepositoryService() {
 
+        private Map<String, IUUIDBasedRepository> factories = new HashMap<String, IUUIDBasedRepository>();
+        private boolean _init = false;
+        
+        public void init() {
+            factories.put("default", new UUIDBasedFileRepository());
+            factories.put("drools", new UUIDBasedDroolsRepository());
+            _init = true;
+        }
+        
+        public IUUIDBasedRepository createRepository(ServletConfig config) {
+            if(!_init) init();     
+            return lookupRepository(config.getInitParameter("factoryName"));
+        }
+        
         public IUUIDBasedRepository createRepository() {
             return new UUIDBasedFileRepository();
         }
         
+        public IUUIDBasedRepository lookupRepository(String name) {
+            if(name == null || !factories.containsKey(name)) {
+                return factories.get("default");
+            } else {
+                return factories.get(name);
+            }
+        }     
     };
     
     private IUUIDBasedRepository _repository;
@@ -73,7 +97,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         try {
-            _repository = _factory.createRepository();
+            _repository = _factory.createRepository(config);
             _repository.configure(this);
         } catch (Exception e) {
             throw new ServletException(e);
@@ -117,7 +141,6 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             String uuid = (String) jsonObject.get("uuid");
             String profileName = (String) jsonObject.get("profile");
             boolean autosave = jsonObject.getBoolean("savetype");
-            String model = "";
             
             IDiagramProfile profile = getProfile(req, profileName);
             
