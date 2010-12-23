@@ -41,7 +41,8 @@ function init() {
 	// Hack for WebKit to set the SVGElement-Classes
 	ORYX.Editor.setMissingClasses();
     // use this hook to get initialized through the plugin in charge of loading the model
-    window.onOryxResourcesLoaded();
+	window.onOryxResourcesLoaded();
+
 }
 
 /**
