@@ -44,9 +44,10 @@ public interface IUUIDBasedRepository {
      * @param req the request from the user.
      * @param uuid the id of the model.
      * @param ext the file extension to apply to the model.
+     * @param loadExt the external url to load from
      * @return the model as a set of bytes.
      */
-    public byte[] load(HttpServletRequest req, String uuid, String ext);
+    public byte[] load(HttpServletRequest req, String uuid, String ext, String loadExt);
     
     /**
      * Saves the model inside the repository.

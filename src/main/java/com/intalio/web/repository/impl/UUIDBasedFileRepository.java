@@ -60,7 +60,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         _repositoryPath = servlet.getServletContext().getRealPath("/" + REPOSITORY_PATH);
     }
     
-    public byte[] load(HttpServletRequest req, String uuid, String extension) {
+    public byte[] load(HttpServletRequest req, String uuid, String extension, String loadExt) {
         
         String filename = _repositoryPath + "/" + uuid + ".json";
         if (!new File(filename).exists()) {

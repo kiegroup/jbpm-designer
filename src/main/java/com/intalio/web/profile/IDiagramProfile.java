@@ -65,6 +65,11 @@ public interface IDiagramProfile {
     public IDiagramMarshaller createMarshaller();
     
     /**
+     * @return the load url for external resource loading.
+     */
+    public String getExternalLoadURL();
+    
+    /**
      * Parser to produce the final model to be saved.
      * @author Antoine Toulme
      *

@@ -25,6 +25,7 @@ import com.intalio.web.plugin.IDiagramPlugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.IDiagramProfile;
 
+
 /**
  * The implementation of the drools profile for Process Designer.
  * @author Tihomir Surdilovic
@@ -38,6 +39,7 @@ public class DroolsProfileImpl implements IDiagramProfile {
 
 
     private String _stencilSet;
+    private String _externalLoadURL;
     
     public DroolsProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -94,6 +96,13 @@ public class DroolsProfileImpl implements IDiagramProfile {
                             }
                         }
                         _plugins.put(name, registry.get(name));
+                    } else if ("externalloadurl".equals(reader.getLocalName())) {
+                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+                            if ("name".equals(reader.getAttributeLocalName(i))) {
+                                _externalLoadURL = reader.getAttributeValue(i);
+                                System.out.println("*** Gunvor external url: " + _externalLoadURL);
+                            }
+                        }
                     }
                 }
             }
@@ -112,7 +121,11 @@ public class DroolsProfileImpl implements IDiagramProfile {
     public String getSerializedModelExtension() {
         return "bpmn";
     }
-    
+      
+    public String getExternalLoadURL() {
+        return _externalLoadURL;
+    }
+
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel) {

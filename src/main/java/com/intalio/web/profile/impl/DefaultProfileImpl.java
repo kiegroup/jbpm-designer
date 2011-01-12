@@ -46,6 +46,7 @@ import com.intalio.web.plugin.IDiagramPlugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.IDiagramProfile;
 
+
 /**
  * The implementation of the default profile for Process Designer.
  * @author Antoine Toulme
@@ -59,6 +60,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
 
     private String _stencilSet;
+    private String _externalLoadURL;
     
     public DefaultProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -132,6 +134,10 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
     public String getSerializedModelExtension() {
         return "bpmn";
+    }
+    
+    public String getExternalLoadURL() {
+        return _externalLoadURL;
     }
     
     public IDiagramMarshaller createMarshaller() {

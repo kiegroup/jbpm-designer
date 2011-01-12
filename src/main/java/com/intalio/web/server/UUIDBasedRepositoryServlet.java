@@ -112,7 +112,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             throw new ServletException("uuid parameter required");
         }
         IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
-        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile.getSerializedModelExtension()));
+        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile.getSerializedModelExtension(), profile.getExternalLoadURL()));
         byte[] buffer = new byte[4096];
         int read;
 
