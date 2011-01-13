@@ -34,13 +34,22 @@ import org.eclipse.bpmn2.CallableElement;
 import org.eclipse.bpmn2.Choreography;
 import org.eclipse.bpmn2.Conversation;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.GlobalBusinessRuleTask;
 import org.eclipse.bpmn2.GlobalChoreographyTask;
 import org.eclipse.bpmn2.GlobalManualTask;
 import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.GlobalUserTask;
+import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.StartEvent;
+import org.eclipse.bpmn2.di.BPMNDiagram;
+import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.bpmn2.di.BPMNShape;
+import org.eclipse.dd.dc.Bounds;
+import org.eclipse.dd.di.DiagramElement;
+import org.eclipse.dd.di.Shape;
 
 /**
  * @author Antoine Toulme
@@ -55,6 +64,7 @@ public class Bpmn2JsonMarshaller {
         JsonFactory f = new JsonFactory();
         JsonGenerator generator = f.createJsonGenerator(writer);
         marshallDefinitions(def, generator);
+        generator.close();
         return writer.toString();
     }
 
@@ -81,29 +91,32 @@ public class Bpmn2JsonMarshaller {
                }
          */
         Map<String, Object> props = new LinkedHashMap<String, Object>();
-        props.put("id", def.getId());
         props.put("namespaces", "");
         props.put("targetnamespace", def.getTargetNamespace());
         props.put("typelanguage", def.getTypeLanguage());
         marshallProperties(props, generator);
         marshallStencil("BPMNDiagram", generator);
         
-        
-        generator.writeArrayFieldStart("childShapes");
         for (RootElement rootElement : def.getRootElements()) {
-            if (rootElement instanceof CallableElement) {
-                marshallCallableElement((CallableElement) rootElement, generator);
+            if (rootElement instanceof Process) {
+                marshallProcess((Process) rootElement, def, generator);
             } else {
                 throw new UnsupportedOperationException("TODO"); //TODO!
             }
         }
-        generator.writeEndArray();
         
+        generator.writeObjectFieldStart("stencilset");
+        generator.writeObjectField("url", "/designer/stencilsets/bpmn2.0/bpmn2.0.json");
+        generator.writeObjectField("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
+        generator.writeEndObject();
+        generator.writeArrayFieldStart("ssextensions");
+        generator.writeObject("http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#");
+        generator.writeEndArray();
         
         generator.writeEndObject();
     }
 
-    private void marshallCallableElement(CallableElement callableElement, JsonGenerator generator) throws JsonGenerationException, IOException {
+    private void marshallCallableElement(CallableElement callableElement, Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
         generator.writeStartObject();
         generator.writeObjectField("resourceId", callableElement.getId());
         
@@ -116,14 +129,79 @@ public class Bpmn2JsonMarshaller {
         } else if (callableElement instanceof GlobalTask) {
             marshallGlobalTask((GlobalTask) callableElement, generator);
         } else if (callableElement instanceof Process) {
-            marshallProcess((Process) callableElement, generator);
+            marshallProcess((Process) callableElement, def, generator);
         } else {
             throw new UnsupportedOperationException("TODO"); //TODO!
         }
+        generator.writeEndObject();
     }
 
-    private void marshallProcess(Process process, JsonGenerator generator) {
-        throw new UnsupportedOperationException("TODO"); //TODO!        
+    private void marshallProcess(Process process, Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
+    	BPMNPlane plane = null;
+    	for (BPMNDiagram d: def.getDiagrams()) {
+    		if (d != null) {
+    			BPMNPlane p = d.getPlane();
+    			if (p != null) {
+    				if (p.getBpmnElement() == process) {
+    					plane = p;
+    					break;
+    				}
+    			}
+    		}
+    	}
+    	if (plane == null) {
+    		throw new IllegalArgumentException("Could not find BPMNDI information");
+    	}
+        generator.writeArrayFieldStart("childShapes");
+        for (FlowElement flowElement: process.getFlowElements()) {
+        	marshallFlowElement(flowElement, plane, generator);
+        }
+        generator.writeEndArray();
+    }
+    
+    private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator) throws JsonGenerationException, IOException {
+    	generator.writeStartObject();
+    	generator.writeObjectField("resourceId", flowElement.getId());
+    	if (flowElement instanceof StartEvent) {
+    		marshallStartEvent((StartEvent) flowElement, plane, generator);
+    	}
+    	generator.writeEndObject();
+    }
+    
+    private void marshallStartEvent(StartEvent startEvent, BPMNPlane plane, JsonGenerator generator) throws JsonGenerationException, IOException {
+    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    	properties.put("name", startEvent.getName());
+        marshallProperties(properties, generator);
+        generator.writeObjectFieldStart("stencil");
+        generator.writeObjectField("id", "StartNoneEvent");
+        generator.writeEndObject();
+        generator.writeArrayFieldStart("childShapes");
+        generator.writeEndArray();
+        generator.writeArrayFieldStart("outgoing");
+        generator.writeEndArray();
+        
+        Bounds bounds = null;
+        for (DiagramElement element: plane.getPlaneElement()) {
+        	if (element instanceof BPMNShape && ((BPMNShape) element).getBpmnElement() == startEvent) {
+        		bounds = ((Shape) element).getBounds();
+        		break;
+        	}
+        }
+        if (bounds == null) {
+    		throw new IllegalArgumentException(
+				"Could not find BPMNDI information for " + startEvent.getId());
+    	}
+        generator.writeObjectFieldStart("bounds");
+        generator.writeObjectFieldStart("lowerRight");
+        generator.writeObjectField("x", bounds.getX() + bounds.getHeight());
+        generator.writeObjectField("y", bounds.getY() + bounds.getWidth());
+        generator.writeEndObject();
+        generator.writeObjectFieldStart("upperLeft");
+        generator.writeObjectField("x", bounds.getX());
+        generator.writeObjectField("y", bounds.getY());
+        generator.writeEndObject();
+        generator.writeEndObject();
+        
     }
 
     private void marshallGlobalTask(GlobalTask globalTask, JsonGenerator generator) {
