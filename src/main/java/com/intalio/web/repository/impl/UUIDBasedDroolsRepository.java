@@ -35,13 +35,13 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
     }
 
     @Override
-    public byte[] load(HttpServletRequest req, String uuid, String ext, String loadExt) {
+    public byte[] load(HttpServletRequest req, String uuid, String ext, String loadExt, String usr, String pwd) {
         String inputLine;
         String processjson = "";
         
         try {
             // check with Guvnor to see what it has for this uuid for us
-            processjson = doHttpUrlConnectionAction(loadExt + "?uuid=" + uuid);
+            processjson = doHttpUrlConnectionAction(loadExt + "?uuid=" + uuid + "&usr=" + usr + "&pwd=" + pwd);
             System.out.println("***** json from guvnor: " + processjson);
             if(processjson.length() > 0) {
                 return displayProcess(processjson);
@@ -58,6 +58,7 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
     public void save(HttpServletRequest req, String uuid, String json,
             String svg, IDiagramProfile profile, Boolean autosave) {
         fileRep.save(req, uuid, json, svg, profile, autosave);
+        System.out.println("UUIDBasedDroolsRepository.save().");
     }
     
     private byte[] displayDefaultProcess() throws Exception {

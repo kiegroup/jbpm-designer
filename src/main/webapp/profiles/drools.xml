@@ -2,7 +2,7 @@
 
 <profiles>
   <profile name="drools" stencilset="bpmn2.0">
-    <!--  <plugin name="ORYX.Plugins.Toolbar" /> -->
+    <plugin name="ORYX.Plugins.Toolbar" />
     <plugin name="ORYX.Plugins.UUIDRepositorySave" />
     <plugin name="ORYX.Plugins.ShapeMenuPlugin" />
     <plugin name="ORYX.Plugins.ShapeRepository" />
@@ -29,6 +29,6 @@
     <plugin name="ORYX.Plugins.DragTracker.PoolDragTracker" />
     <stencilsetextension
       namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#" />
-    <externalloadurl name="http://127.0.0.1:8888/org.drools.guvnor.Guvnor/oryxeditor/" />
+    <externalloadurl name="http://localhost:8080/drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor/" usr="admin" pwd="admin"/>
   </profile>
 </profiles>

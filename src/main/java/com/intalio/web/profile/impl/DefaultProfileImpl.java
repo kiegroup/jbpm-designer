@@ -61,6 +61,8 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
     private String _stencilSet;
     private String _externalLoadURL;
+    private String _usr;
+    private String _pwd;
     
     public DefaultProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -140,6 +142,14 @@ public class DefaultProfileImpl implements IDiagramProfile {
         return _externalLoadURL;
     }
     
+    public String getUsr() {
+        return _usr;
+    }
+
+    public String getPwd() {
+        return _pwd;
+    }
+
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel) {

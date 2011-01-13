@@ -40,6 +40,8 @@ public class DroolsProfileImpl implements IDiagramProfile {
 
     private String _stencilSet;
     private String _externalLoadURL;
+    private String _usr;
+    private String _pwd;
     
     public DroolsProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -100,7 +102,12 @@ public class DroolsProfileImpl implements IDiagramProfile {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
                             if ("name".equals(reader.getAttributeLocalName(i))) {
                                 _externalLoadURL = reader.getAttributeValue(i);
-                                System.out.println("*** Gunvor external url: " + _externalLoadURL);
+                            }
+                            if ("usr".equals(reader.getAttributeLocalName(i))) {
+                                _usr = reader.getAttributeValue(i);
+                            }
+                            if ("pwd".equals(reader.getAttributeLocalName(i))) {
+                                _pwd = reader.getAttributeValue(i);
                             }
                         }
                     }
@@ -124,6 +131,14 @@ public class DroolsProfileImpl implements IDiagramProfile {
       
     public String getExternalLoadURL() {
         return _externalLoadURL;
+    }
+    
+    public String getUsr() {
+        return _usr;
+    }
+
+    public String getPwd() {
+        return _pwd;
     }
 
     public IDiagramMarshaller createMarshaller() {

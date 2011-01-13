@@ -70,6 +70,16 @@ public interface IDiagramProfile {
     public String getExternalLoadURL();
     
     /**
+     * @return the user for external resource.
+     */
+    public String getUsr();
+    
+    /**
+     * @return the pwd for external resource.
+     */
+    public String getPwd();
+    
+    /**
      * Parser to produce the final model to be saved.
      * @author Antoine Toulme
      *
