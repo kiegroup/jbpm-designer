@@ -254,5 +254,6 @@ window.onOryxResourcesLoaded = function() {
         });
 	}
 	// finally open the editor:
-	new ORYX.Editor(editor_parameters);
+	var editor = new ORYX.Editor(editor_parameters);
+    ORYX.EDITOR = editor;
 };

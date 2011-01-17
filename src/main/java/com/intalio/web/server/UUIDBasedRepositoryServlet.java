@@ -84,9 +84,11 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         
         public IUUIDBasedRepository lookupRepository(String name) {
             if(name == null || !factories.containsKey(name)) {
-                return factories.get("default");
+                IUUIDBasedRepository repo =  factories.get("default");
+                return repo;
             } else {
-                return factories.get(name);
+                IUUIDBasedRepository repo =  factories.get(name);
+                return repo;
             }
         }     
     };
@@ -153,25 +155,12 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     
     private IDiagramProfile getProfile(HttpServletRequest req, String profileName) {
         IDiagramProfile profile = null;
-        // get the profile, either through the OSGi DS or by using the default one:
-        if (getClass().getClassLoader() instanceof BundleReference) {
-            final BundleContext bundleContext = ((BundleReference) getClass().getClassLoader()).getBundle().getBundleContext();
-            ServiceReference ref = bundleContext.getServiceReference(IDiagramProfileService.class.getName());
-            if (ref == null) {
-                throw new IllegalArgumentException(profileName + " is not registered");
-            }
-            IDiagramProfileService service = (IDiagramProfileService) bundleContext.getService(ref);
-            profile = service.findProfile(req, profileName);
-        } else if ("default".equals(profileName)) {
-            profile = new DefaultProfileImpl(getServletContext(), false);
-        } else {
-            // check w/o BundleReference
-            IDiagramProfileService service = new ProfileServiceImpl();
-            service.init(getServletContext());
-            profile = service.findProfile(req, profileName);
-            if(profile == null) {
-                throw new IllegalArgumentException("Cannot determine the profile to use for interpreting models");
-            }
+        
+        IDiagramProfileService service = new ProfileServiceImpl();
+        service.init(getServletContext());
+        profile = service.findProfile(req, profileName);
+        if(profile == null) {
+            throw new IllegalArgumentException("Cannot determine the profile to use for interpreting models");
         }
         return profile;
     }

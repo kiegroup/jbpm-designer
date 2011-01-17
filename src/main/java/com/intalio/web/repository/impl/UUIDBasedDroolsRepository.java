@@ -36,7 +36,6 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
 
     @Override
     public byte[] load(HttpServletRequest req, String uuid, String ext, String loadExt, String usr, String pwd) {
-        String inputLine;
         String processjson = "";
         
         try {
@@ -135,7 +134,7 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         }
         return stringBuilder.toString();
       } catch (Exception e) {
-          _logger.error(e.getMessage(), e);
+          _logger.error("Unable to connect to Gunvor. Is it running? [" + e.getMessage() + "]");
           // don't blow up, we will just show the default process
           return "";
       } finally {
@@ -143,8 +142,8 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
           try {
             reader.close();
           } catch (IOException ioe) {
-              _logger.error(ioe.getMessage(), ioe);
-           // don't blow up, we will just show the default process
+              _logger.error("Unable to read from Gunvor. [" + ioe.getMessage() + "]");
+              // don't blow up, we will just show the default process
               return "";
           }
         }

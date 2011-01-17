@@ -773,7 +773,7 @@ ORYX.Editor = {
      * Serializes a call to toJSON().
      * @return {String} Returns JSON representation as string.
      */
-    getSerializedJSON: function(){
+    getSerializedJSON: function() {
         return Ext.encode(this.getJSON());
     },
 	
@@ -1797,7 +1797,7 @@ ORYX.Editor.createByUrl = function(modelUrl, config){
         var editorConfig = Ext.decode(transport.responseText);
         editorConfig = Ext.applyIf(editorConfig, config);
         new ORYX.Editor(editorConfig);
-      
+        
         if ("function" == typeof(config.onSuccess)) {
 		  	config.onSuccess(transport);
 	    }
@@ -1998,6 +1998,7 @@ ORYX.Editor.checkClassType = function( classInst, classType ) {
 		return classInst == classType
 	}
 };
+
 ORYX.Editor.makeExtModalWindowKeysave = function(facade) {
 	Ext.override(Ext.Window,{
 		beforeShow : function(){
