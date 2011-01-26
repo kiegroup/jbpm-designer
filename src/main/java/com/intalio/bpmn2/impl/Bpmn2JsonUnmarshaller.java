@@ -70,12 +70,14 @@ import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNDiagram;
+import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.BpmnDiFactory;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
+import org.eclipse.dd.dc.Point;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -107,7 +109,7 @@ public class Bpmn2JsonUnmarshaller {
     // of our graph from json, as we miss elements before.
     private Map<Object, List<String>> _outgoingFlows = new HashMap<Object, List<String>>();
     private Set<String> _sequenceFlowTargets = new HashSet<String>();
-    private Map<String, Bounds> bounds = new HashMap<String, Bounds>();
+    private Map<String, Bounds> _bounds = new HashMap<String, Bounds>();
 
     private List<BpmnMarshallerHelper> _helpers;
 
@@ -163,6 +165,12 @@ public class Bpmn2JsonUnmarshaller {
             return def;
         } finally {
             parser.close();
+            _objMap.clear();
+            _idMap.clear();
+            _outgoingFlows.clear();
+            _sequenceFlowTargets.clear();
+            _bounds.clear();
+            _currentResource = null;
         }
     }
 
@@ -201,15 +209,32 @@ public class Bpmn2JsonUnmarshaller {
         		BPMNPlane plane = factory.createBPMNPlane();
         		plane.setBpmnElement(process);
         		diagram.setPlane(plane);
+    			// first process flowNodes
         		for (FlowElement flowElement: process.getFlowElements()) {
         			if (flowElement instanceof FlowNode) {
-        				Bounds b = bounds.get(flowElement.getId());
+        				Bounds b = _bounds.get(flowElement.getId());
         				if (b != null) {
         					BPMNShape shape = factory.createBPMNShape();
         					shape.setBpmnElement(flowElement);
         					shape.setBounds(b);
         					plane.getPlaneElement().add(shape);
         				}
+        			} else if (flowElement instanceof SequenceFlow) {
+        				SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
+        				BPMNEdge edge = factory.createBPMNEdge();
+    					edge.setBpmnElement(flowElement);
+    					DcFactory dcFactory = DcFactory.eINSTANCE;
+    					Point point = dcFactory.createPoint();
+    					Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
+    					point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+    					point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+    					edge.getWaypoint().add(point);
+    					point = dcFactory.createPoint();
+    					Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
+    					point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+    					point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+    					edge.getWaypoint().add(point);
+    					plane.getPlaneElement().add(edge);
         			}
         		}
         		def.getDiagrams().add(diagram);
@@ -218,7 +243,6 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     private BaseElement unmarshallItem(JsonParser parser) throws JsonParseException, IOException {
-
         String resourceId = null;
         Map<String, String> properties = null;
         String stencil = null;
@@ -271,7 +295,7 @@ public class Bpmn2JsonUnmarshaller {
                 b.setY(y1);
                 b.setWidth(x2 - x1);
                 b.setHeight(y2 - y1);
-                this.bounds.put(resourceId, b);
+                this._bounds.put(resourceId, b);
             } else if ("dockers".equals(fieldname)) {
                 // pass on this
                 parser.skipChildren();
