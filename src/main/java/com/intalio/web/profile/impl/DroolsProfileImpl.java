@@ -1,9 +1,11 @@
 package com.intalio.web.profile.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -16,14 +18,23 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.intalio.bpmn2.impl.Bpmn2JsonMarshaller;
 import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import com.intalio.web.plugin.IDiagramPlugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.IDiagramProfile;
+
+import org.eclipse.bpmn2.DocumentRoot;
+import org.eclipse.bpmn2.Bpmn2Package;
+import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
 
 /**
@@ -140,7 +151,7 @@ public class DroolsProfileImpl implements IDiagramProfile {
     public String getPwd() {
         return _pwd;
     }
-
+    
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel) {
@@ -161,5 +172,38 @@ public class DroolsProfileImpl implements IDiagramProfile {
             }
         };
     }
+
+    public IDiagramUnmarshaller createUnmarshaller() {
+        return new IDiagramUnmarshaller() {
+            public String parseModel(String xmlModel) {
+                Bpmn2JsonMarshaller marshaller = new Bpmn2JsonMarshaller();
+                try {
+                    return marshaller.marshall(getDefinitions(xmlModel));
+                } catch (Exception e) {
+                    _logger.error(e.getMessage(), e);
+                }
+                return "";
+            }
+        };
+    }
+    
+    private Definitions getDefinitions(String xml) {
+        try {
+            
+            ResourceSet resourceSet = new ResourceSetImpl();
+            resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+                .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new Bpmn2ResourceFactoryImpl());
+            resourceSet.getPackageRegistry().put("http://www.omg.org/spec/BPMN/20100524/MODEL", Bpmn2Package.eINSTANCE);
+            Resource resource = resourceSet.createResource(URI.createURI("inputStream://dummyUriWithValidSuffix.xml"));
+            InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+            resource.load(is, Collections.EMPTY_MAP);
+            resource.load(Collections.EMPTY_MAP);
+            return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return null;
+        }
+    }
+    
 }
 

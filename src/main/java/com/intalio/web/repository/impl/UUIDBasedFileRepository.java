@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +61,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         _repositoryPath = servlet.getServletContext().getRealPath("/" + REPOSITORY_PATH);
     }
     
-    public byte[] load(HttpServletRequest req, String uuid, String extension, String loadExt, String usr, String pwd) {
+    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) {
         
         String filename = _repositoryPath + "/" + uuid + ".json";
         if (!new File(filename).exists()) {
@@ -118,4 +119,10 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
             if (writer != null) { try { writer.close();} catch(Exception e) {} }
         }
     }
+
+    public String toXML(String json, IDiagramProfile profile) {
+        return profile.createMarshaller().parseModel(json);
+    }
+    
+    
 }

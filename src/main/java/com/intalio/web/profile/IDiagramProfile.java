@@ -65,6 +65,11 @@ public interface IDiagramProfile {
     public IDiagramMarshaller createMarshaller();
     
     /**
+     * @return a unmarshaller to transform the final model into json.
+     */
+    public IDiagramUnmarshaller createUnmarshaller();
+    
+    /**
      * @return the load url for external resource loading.
      */
     public String getExternalLoadURL();
@@ -91,5 +96,19 @@ public interface IDiagramProfile {
          * @return the string representation of the serialized model.
          */
         public String parseModel(String jsonModel);
+    }
+    
+    /**
+     * Parser to produce the final model to be saved.
+     * @author Tihomir Surdilovic
+     *
+     */
+    public interface IDiagramUnmarshaller {
+        
+        /**
+         * @param bpmn2 xml model
+         * @return the json model
+         */
+        public String parseModel(String xmlModel);
     }
 }

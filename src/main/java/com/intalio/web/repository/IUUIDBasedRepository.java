@@ -47,7 +47,7 @@ public interface IUUIDBasedRepository {
      * @param loadExt the external url to load from
      * @return the model as a set of bytes.
      */
-    public byte[] load(HttpServletRequest req, String uuid, String ext, String loadExt, String usr, String pwd);
+    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile);
     
     /**
      * Saves the model inside the repository.
@@ -58,5 +58,12 @@ public interface IUUIDBasedRepository {
      * @param profile the profile
      */
     public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile, Boolean autosave);
+    
+    /**
+     * Transforms given json to bpmn2 xml
+     * @param json
+     * @return bpmn2 xml
+     */
+    public String toXML(String json, IDiagramProfile profile);
 
 }

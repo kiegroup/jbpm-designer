@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -26,23 +27,21 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
   
     
     private String _defaultsPath;
-    private UUIDBasedFileRepository fileRep = new UUIDBasedFileRepository();
     
     @Override
     public void configure(HttpServlet servlet) {
         _defaultsPath = servlet.getServletContext().getRealPath("/" + DEFAULTS_PATH);
-        fileRep.configure(servlet);
     }
 
     @Override
-    public byte[] load(HttpServletRequest req, String uuid, String ext, String loadExt, String usr, String pwd) {
+    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) {
         String processjson = "";
         
         try {
             // check with Guvnor to see what it has for this uuid for us
-            processjson = doHttpUrlConnectionAction(loadExt + "?uuid=" + uuid + "&usr=" + usr + "&pwd=" + pwd);
-            System.out.println("***** json from guvnor: " + processjson);
-            if(processjson.length() > 0) {
+            String processxml = doHttpUrlConnectionAction(profile.getExternalLoadURL() + "?uuid=" + uuid + "&usr=" + profile.getUsr() + "&pwd=" + profile.getPwd());
+            if(processxml.length() > 0) {
+                processjson = profile.createUnmarshaller().parseModel(processxml);
                 return displayProcess(processjson);
             } else {
                 return displayDefaultProcess();
@@ -56,8 +55,7 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
     @Override
     public void save(HttpServletRequest req, String uuid, String json,
             String svg, IDiagramProfile profile, Boolean autosave) {
-        fileRep.save(req, uuid, json, svg, profile, autosave);
-        System.out.println("UUIDBasedDroolsRepository.save().");
+        // Guvnor is responsible for saving 
     }
     
     private byte[] displayDefaultProcess() throws Exception {
@@ -86,6 +84,11 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         return output.toByteArray();
     }
     
+    
+    public String toXML(String json, IDiagramProfile profile) {
+        return profile.createMarshaller().parseModel(json);
+    }
+
     private byte[] displayProcess(String json) throws Exception {
         InputStream input = null;
         ByteArrayOutputStream output = new ByteArrayOutputStream();

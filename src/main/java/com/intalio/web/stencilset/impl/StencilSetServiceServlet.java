@@ -63,14 +63,26 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
             throw new IllegalArgumentException("No name provided");
         }
         String name = segments[3];
+        if(name.length() < 1) {
+            // default
+            name = "bpmn2.0";
+        }
         
         IDiagramStencilSet stencilset = _pluginService.findStencilSet(req, name);
+        
         if (stencilset == null) {
             throw new IllegalArgumentException("No stencilset by the name of " + name);
         }
         InputStream input = null;
         if (segments.length > 4) { //looking for a resource under the stencilset.
             String path = requestURI.substring(requestURI.indexOf(segments[3]) + segments[3].length() + 1);
+            // this is a bad temp hack..but gets stuff working for nows
+            if(path.indexOf("designer/stencilset//designer/stencilsets/bpmn2.0/") >= 0) {
+                path = path.substring("designer/stencilset//designer/stencilsets/bpmn2.0/".length(), path.length());
+            }
+            if(path.indexOf("bpmn2.0.json/") >= 0) {
+                path = path.substring("bpmn2.0.json".length(), path.length());
+            }
             input = stencilset.getResourceContents(path);
         } else {
             input = stencilset.getContents();

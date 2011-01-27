@@ -114,7 +114,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             throw new ServletException("uuid parameter required");
         }
         IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
-        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile.getSerializedModelExtension(), profile.getExternalLoadURL(), profile.getUsr(), profile.getPwd()));
+        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile));
         byte[] buffer = new byte[4096];
         int read;
 
@@ -125,31 +125,42 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String actionParam = req.getParameter("action");
+        if(actionParam != null && actionParam.equals("toXML")) {
+            IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
+            String json = req.getParameter("data");
+            String xml = _repository.toXML(json, profile);
+            StringWriter output = new StringWriter();
+            output.write(xml);
+            resp.setContentType("application/xml");
+            resp.setStatus(200);
+            resp.getWriter().print(output.toString());
+        } else {
+            BufferedReader reader = req.getReader();
+            StringWriter reqWriter = new StringWriter();
+            char[] buffer = new char[4096];
+            int read;
+            while ((read = reader.read(buffer)) != -1) {
+                reqWriter.write(buffer, 0, read);
+            }
         
-        BufferedReader reader = req.getReader();
-        StringWriter reqWriter = new StringWriter();
-        char[] buffer = new char[4096];
-        int read;
-        while ((read = reader.read(buffer)) != -1) {
-            reqWriter.write(buffer, 0, read);
-        }
-        
-        String data = reqWriter.toString();
-        try {
-            JSONObject jsonObject = new JSONObject(data);
+            String data = reqWriter.toString();
+            try {
+                JSONObject jsonObject = new JSONObject(data);
             
-            String json = (String) jsonObject.get("data");
-            String svg = (String) jsonObject.get("svg");
-            String uuid = (String) jsonObject.get("uuid");
-            String profileName = (String) jsonObject.get("profile");
-            boolean autosave = jsonObject.getBoolean("savetype");
+                String json = (String) jsonObject.get("data");
+                String svg = (String) jsonObject.get("svg");
+                String uuid = (String) jsonObject.get("uuid");
+                String profileName = (String) jsonObject.get("profile");
+                boolean autosave = jsonObject.getBoolean("savetype");
             
-            IDiagramProfile profile = getProfile(req, profileName);
+                IDiagramProfile profile = getProfile(req, profileName);
             
-            _repository.save(req, uuid, json, svg, profile, autosave);
+                _repository.save(req, uuid, json, svg, profile, autosave);
 
-        } catch (JSONException e1) {
-            throw new ServletException(e1);
+            } catch (JSONException e1) {
+                throw new ServletException(e1);
+            }
         }
     }
     
