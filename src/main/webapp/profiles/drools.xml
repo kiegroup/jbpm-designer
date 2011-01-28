@@ -2,8 +2,8 @@
 
 <profiles>
   <profile name="drools" stencilset="bpmn2.0">
-    <!-- <plugin name="ORYX.Plugins.Toolbar" /> -->
-    <plugin name="ORYX.Plugins.UUIDRepositorySave" />
+    <plugin name="ORYX.Plugins.Toolbar" />
+    <plugin name="ORYX.Plugins.UUIDRepositoryDummySave" />
     <plugin name="ORYX.Plugins.ShapeMenuPlugin" />
     <plugin name="ORYX.Plugins.ShapeRepository" />
     <plugin name="ORYX.Plugins.PropertyWindow" />

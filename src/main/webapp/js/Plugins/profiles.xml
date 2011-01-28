@@ -9,6 +9,7 @@
 		<plugin name="ORYX.Plugins.CanvasResize"/>
 		<plugin name="ORYX.Plugins.ShapeMenuPlugin"/>
 		<plugin name="ORYX.Plugins.UUIDRepositorySave"/>
+        <plugin name="ORYX.Plugins.UUIDRepositoryDummySave"/>
 		<plugin name="ORYX.Plugins.PluginLoader"/>
 		<plugin name="ORYX.Plugins.View"/>
 		<plugin name="ORYX.Plugins.DragDropResize"/>
