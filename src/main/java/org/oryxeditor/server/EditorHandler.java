@@ -107,10 +107,14 @@ public class EditorHandler extends HttpServlet {
     public static final String oryx_path = "/designer/";
     
     /**
-     * The designer DEV flag.
-     * When set, the logging will be enabled at the javascript level
+     * The designer DEV flag looked up from system properties.
      */
     public static final String DEV = "designer.dev";
+    
+    /**
+     * The designer dev mode setting.
+     */
+    private boolean _devMode;
     
     /**
      * The profile service, a global registry to get the
@@ -143,6 +147,8 @@ public class EditorHandler extends HttpServlet {
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
         
+        _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
+        System.out.println("***** DEV MODE: " + _devMode);
         String editor_file = config.
             getServletContext().getRealPath("/editor.html");
         try {
@@ -168,7 +174,7 @@ public class EditorHandler extends HttpServlet {
         
         
         try {
-            initEnvFiles(getServletContext());
+            initEnvFiles(getServletContext(), config);
         } catch (IOException e) {
             throw new ServletException(e);
         }            
@@ -179,7 +185,7 @@ public class EditorHandler extends HttpServlet {
      * @param context
      * @throws IOException
      */
-    private void initEnvFiles(ServletContext context) throws IOException {
+    private void initEnvFiles(ServletContext context, ServletConfig config) throws IOException {
         // only do it the first time the servlet starts
         try {
             JSONObject obj = new JSONObject(readEnvFiles(context));
@@ -197,7 +203,7 @@ public class EditorHandler extends HttpServlet {
     
         // generate script to setup the languages
         _envFiles.add("i18n/translation_en_us.js");
-        if (System.getProperty(DEV) == null) {
+        if (!_devMode) {
             StringWriter sw = new StringWriter();
             for (String file : _envFiles) {
                 sw.append("/* ").append(file).append(" */\n");
@@ -249,7 +255,7 @@ public class EditorHandler extends HttpServlet {
         }
 
         //output env javascript files
-        if (System.getProperty(DEV) != null) {
+        if (_devMode) {
             for (String jsFile : _envFiles) {
                 addScript(doc, oryx_path + jsFile, true);
             }
@@ -280,7 +286,7 @@ public class EditorHandler extends HttpServlet {
                 }
             }
             
-            if (System.getProperty(DEV) == null) {
+            if (!_devMode) {
                 // let's call the compression routine
                 String rs = compressJS(_pluginfiles.get(profileName), 
                         getServletContext());
@@ -296,7 +302,7 @@ public class EditorHandler extends HttpServlet {
             }
         }
         
-        if (System.getProperty(DEV) != null) {
+        if (_devMode) {
             for (IDiagramPlugin jsFile : _pluginfiles.get(profileName)) {
                 addScript(doc, oryx_path + "plugin/" + jsFile.getName() 
                         + ".js", true);
@@ -341,7 +347,7 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(profile.getStencilSet());
                 replacementMade = true;
             } else if ("debug".equals(elt)) {
-                resultHtml.append(System.getProperty(DEV) != null);
+                resultHtml.append(_devMode);
                 replacementMade = true;
             } else if ("autosaveinterval".equals(elt)) {
                 resultHtml.append(autoSaveInt);
