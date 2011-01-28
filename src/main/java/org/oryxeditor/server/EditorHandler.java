@@ -148,7 +148,6 @@ public class EditorHandler extends HttpServlet {
                 config.getServletContext());
         
         _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
-        System.out.println("***** DEV MODE: " + _devMode);
         String editor_file = config.
             getServletContext().getRealPath("/editor.html");
         try {
