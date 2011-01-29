@@ -47,11 +47,12 @@ import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.Event;
-import org.eclipse.bpmn2.Expression;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
+import org.eclipse.bpmn2.FormalExpression;
 import org.eclipse.bpmn2.Gateway;
+import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.Import;
@@ -110,6 +111,7 @@ public class Bpmn2JsonUnmarshaller {
     private Map<Object, List<String>> _outgoingFlows = new HashMap<Object, List<String>>();
     private Set<String> _sequenceFlowTargets = new HashSet<String>();
     private Map<String, Bounds> _bounds = new HashMap<String, Bounds>();
+    private Map<String, List<Point>> _dockers = new HashMap<String, List<Point>>();
 
     private List<BpmnMarshallerHelper> _helpers;
 
@@ -229,6 +231,10 @@ public class Bpmn2JsonUnmarshaller {
     					point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
     					point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
     					edge.getWaypoint().add(point);
+    					List<Point> dockers = _dockers.get(sequenceFlow.getId());
+    					for (int i = 1; i < dockers.size() - 1; i++) {
+    						edge.getWaypoint().add(dockers.get(i));
+    					}
     					point = dcFactory.createPoint();
     					Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
     					point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
@@ -297,8 +303,26 @@ public class Bpmn2JsonUnmarshaller {
                 b.setHeight(y2 - y1);
                 this._bounds.put(resourceId, b);
             } else if ("dockers".equals(fieldname)) {
-                // pass on this
-                parser.skipChildren();
+                // "dockers":[{"x":50,"y":40},{"x":353.5,"y":115},{"x":353.5,"y":152},{"x":50,"y":40}],
+            	List<Point> dockers = new ArrayList<Point>();
+            	JsonToken nextToken = parser.nextToken();
+            	boolean end = JsonToken.END_ARRAY.equals(nextToken);
+            	while (!end) {
+            		nextToken = parser.nextToken();
+            		nextToken = parser.nextToken();
+            		Integer x = parser.getIntValue();
+                    parser.nextToken();
+                    parser.nextToken();
+                    Integer y = parser.getIntValue();
+                    Point point = DcFactory.eINSTANCE.createPoint();
+                    point.setX(x);
+                    point.setY(y);
+                    dockers.add(point);
+                    parser.nextToken();
+                    nextToken = parser.nextToken();
+                    end = JsonToken.END_ARRAY.equals(nextToken);
+            	}
+            	this._dockers.put(resourceId, dockers);
             } else if ("outgoing".equals(fieldname)) {
                 while (parser.nextToken() != JsonToken.END_ARRAY) {
                     // {resourceId: oryx_1AAA8C9A-39A5-42FC-8ED1-507A7F3728EA}
@@ -628,6 +652,17 @@ public class Bpmn2JsonUnmarshaller {
     
     private void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
         gateway.setName(properties.get("name"));
+        int incoming = gateway.getIncoming() != null ? 0 : gateway.getIncoming().size();
+        int outgoing = gateway.getOutgoing() != null ? 0 : gateway.getOutgoing().size();
+        if (incoming <= 1 && outgoing > 1) {
+        	gateway.setGatewayDirection(GatewayDirection.DIVERGING);
+        } else if (incoming > 1 && outgoing <= 1) {
+        	gateway.setGatewayDirection(GatewayDirection.CONVERGING);
+        } else if (incoming > 1 && outgoing > 1) {
+        	gateway.setGatewayDirection(GatewayDirection.MIXED);
+        } else {
+        	gateway.setGatewayDirection(GatewayDirection.DIVERGING);
+        }
     }
 
     private void applySequenceFlowProperties(SequenceFlow sequenceFlow, Map<String, String> properties) {
@@ -638,8 +673,8 @@ public class Bpmn2JsonUnmarshaller {
             sequenceFlow.setAuditing(audit);
         }
         if (properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-            Expression expr = Bpmn2Factory.eINSTANCE.createExpression();
-            expr.getDocumentation().add(createDocumentation(properties.get("conditionexpression")));
+            FormalExpression expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
+            expr.setBody(properties.get("conditionexpression"));
             sequenceFlow.setConditionExpression(expr);
         }
         if (properties.get("monitoring") != null && !"".equals(properties.get("monitoring"))) {
