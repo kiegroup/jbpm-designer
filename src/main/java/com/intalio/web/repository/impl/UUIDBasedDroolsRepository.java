@@ -40,7 +40,7 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         try {
             // check with Guvnor to see what it has for this uuid for us
             String processxml = doHttpUrlConnectionAction(profile.getExternalLoadURL() + "?uuid=" + uuid + "&usr=" + profile.getUsr() + "&pwd=" + profile.getPwd());
-            if(processxml.length() > 0) {
+            if(processxml != null && processxml.length() > 0) {
                 processjson = profile.createUnmarshaller().parseModel(processxml);
                 return displayProcess(processjson);
             } else {
