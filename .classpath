@@ -11,5 +11,8 @@
 			<attribute name="hide" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/eclipse/org.eclipse.bpmn2/0.7.0.000-SNAPSHOT/org.eclipse.bpmn2-0.7.0.000-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.6.0/jackson-core-asl-1.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.6.0/jackson-mapper-asl-1.6.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

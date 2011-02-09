@@ -55,6 +55,21 @@ public interface IDiagramProfile {
     public String getSerializedModelExtension();
     
     /**
+     * @return the stencil url used by the profile.
+     */
+    public String getStencilSetURL();
+    
+    /**
+     * @return stencil namespace url.
+     */
+    public String getStencilSetNamespaceURL();
+    
+    /**
+     * @return stencil set extension url used by the profile.
+     */
+    public String getStencilSetExtensionURL();
+    
+    /**
      * @return the plugins to load for the profile.
      */
     public Collection<String> getPlugins();
@@ -107,8 +122,9 @@ public interface IDiagramProfile {
         
         /**
          * @param bpmn2 xml model
+         * @param profile process profile.
          * @return the json model
          */
-        public String parseModel(String xmlModel);
+        public String parseModel(String xmlModel, IDiagramProfile profile);
     }
 }

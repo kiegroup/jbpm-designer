@@ -41,10 +41,11 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
             // check with Guvnor to see what it has for this uuid for us
             String processxml = doHttpUrlConnectionAction(profile.getExternalLoadURL() + "?uuid=" + uuid + "&usr=" + profile.getUsr() + "&pwd=" + profile.getPwd());
             if(processxml != null && processxml.length() > 0) {
-                processjson = profile.createUnmarshaller().parseModel(processxml);
+                processjson = profile.createUnmarshaller().parseModel(processxml, profile);
                 return displayProcess(processjson);
             } else {
                 return displayDefaultProcess();
+                //return new byte[0];
             }
         } catch (Exception e) {
             _logger.error(e.getMessage(), e);

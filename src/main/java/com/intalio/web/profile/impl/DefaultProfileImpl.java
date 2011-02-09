@@ -185,8 +185,9 @@ public class DefaultProfileImpl implements IDiagramProfile {
     
     public IDiagramUnmarshaller createUnmarshaller() {
         return new IDiagramUnmarshaller() {
-            public String parseModel(String xmlModel) {
+            public String parseModel(String xmlModel, IDiagramProfile profile) {
                 Bpmn2JsonMarshaller marshaller = new Bpmn2JsonMarshaller();
+                marshaller.setProfile(profile);
                 try {
                     return marshaller.marshall(getDefinitions(xmlModel));
                 } catch (Exception e) {
@@ -213,4 +214,17 @@ public class DefaultProfileImpl implements IDiagramProfile {
             return null;
         }
     }
+    
+    public String getStencilSetURL() {
+        return "/designer/stencilsets/bpmn2.0/bpmn2.0.json";
+    }
+
+    public String getStencilSetNamespaceURL() {
+        return "http://b3mn.org/stencilset/bpmn2.0#";
+    }
+
+    public String getStencilSetExtensionURL() {
+        return "http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#";
+    }
+
 }

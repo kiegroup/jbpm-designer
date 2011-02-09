@@ -95,6 +95,7 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 
+import com.intalio.web.profile.IDiagramProfile;
 import com.thoughtworks.xstream.io.binary.Token.EndNode;
 import com.thoughtworks.xstream.io.binary.Token.StartNode;
 
@@ -110,6 +111,12 @@ import de.hpi.bpmn.sese.Split;
 public class Bpmn2JsonMarshaller {
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
+	
+	private IDiagramProfile profile;
+	
+	public void setProfile(IDiagramProfile profile) {
+	    this.profile = profile;
+	}
 
     public String marshall(Definitions def) throws IOException {
         StringWriter writer = new StringWriter();
@@ -204,11 +211,11 @@ public class Bpmn2JsonMarshaller {
 	        }
 	        
 	        generator.writeObjectFieldStart("stencilset");
-	        generator.writeObjectField("url", "/designer/stencilsets/bpmn2.0/bpmn2.0.json");
-	        generator.writeObjectField("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
+	        generator.writeObjectField("url", this.profile.getStencilSetURL());
+	        generator.writeObjectField("namespace", this.profile.getStencilSetNamespaceURL());
 	        generator.writeEndObject();
 	        generator.writeArrayFieldStart("ssextensions");
-	        generator.writeObject("http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#");
+	        generator.writeObject(this.profile.getStencilSetExtensionURL());
 	        generator.writeEndArray();
 	        
 	        generator.writeEndObject();
