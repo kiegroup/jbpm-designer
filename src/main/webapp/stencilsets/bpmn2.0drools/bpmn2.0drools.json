@@ -310,6 +310,17 @@
 			"name" : "diagram",
 			"properties" : [
 				{
+					"id":"executable",
+					"type":"Boolean",
+					"title":"executable",
+					"title_de":"executable",
+					"value":true,
+					"description":"executable",
+					"description_de":"executable",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"package",
 					"type":"String",
 					"title":"package",

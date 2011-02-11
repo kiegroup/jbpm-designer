@@ -24,9 +24,11 @@ package com.intalio.bpmn2.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -47,6 +49,9 @@ import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.Event;
+import org.eclipse.bpmn2.ExtensionAttributeDefinition;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
+import org.eclipse.bpmn2.ExtensionDefinition;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
@@ -79,8 +84,25 @@ import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -90,6 +112,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.intalio.bpmn2.BpmnMarshallerHelper;
+import com.sun.xml.internal.bind.AnyTypeAdapter;
 
 /**
  * @author Antoine Toulme
@@ -175,6 +198,34 @@ public class Bpmn2JsonUnmarshaller {
             _currentResource = null;
         }
     }
+    
+    //private void something() {
+        /********/
+//        EAttribute pnameAttribute = EcoreFactory.eINSTANCE.createEAttribute();
+//        pnameAttribute.setName("packageName");
+//        pnameAttribute.setEType(EcorePackage.eINSTANCE.getEString());
+//
+//        EClass pnameClass = EcoreFactory.eINSTANCE.createEClass();
+//        pnameClass.setName("PackageName");
+//        pnameClass.getEStructuralFeatures().add(pnameAttribute);
+//
+//        EPackage pack = EcoreFactory.eINSTANCE.createEPackage();
+//        pack.setName("pack");
+//        pack.getEClassifiers().add(pnameClass);
+//
+//        EFactory factory = pack.getEFactoryInstance();
+//        EObject pnameObj = factory.create(pnameClass);
+//        pnameObj.eSet(pnameAttribute, "com.sample");
+        
+//        ExtensionAttributeDefinition ead = Bpmn2Factory.eINSTANCE.createExtensionAttributeDefinition();
+//        ead.setName("packageName");
+//        ead.setType("EObject");
+//        
+//        ExtensionAttributeValue eav = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+//        eav.setValueRef(pnameObj);
+//        eav.setExtensionAttributeDefinition(ead);
+//        process.getExtensionValues().add(eav);
+    //}
 
     /**
      * Reconnect the sequence flows and the flow nodes.
@@ -426,6 +477,7 @@ public class Bpmn2JsonUnmarshaller {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
                             rootLevelProcess.setName(((Definitions) baseElt).getName());
+                            applyProcessProperties(rootLevelProcess, properties);
                             ((Definitions) baseElt).getRootElements().add(rootLevelProcess);
                         }
                     }
@@ -626,6 +678,7 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     private void applyProcessProperties(Process process, Map<String, String> properties) {
+        Iterator<String> iter = properties.keySet().iterator();
         process.setName(properties.get("name"));
         if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
             Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
@@ -633,7 +686,8 @@ public class Bpmn2JsonUnmarshaller {
             process.setAuditing(audit);
         }
         process.setProcessType(ProcessType.getByName(properties.get("processtype")));
-        process.setIsClosed(Boolean.parseBoolean(properties.get("isclosed")));
+        process.setIsClosed(Boolean.parseBoolean(properties.get("isclosed")));  
+        process.setIsExecutable(Boolean.parseBoolean(properties.get("executable")));
     }
 
     private void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {

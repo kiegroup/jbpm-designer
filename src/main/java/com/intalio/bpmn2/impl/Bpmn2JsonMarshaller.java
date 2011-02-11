@@ -166,33 +166,42 @@ public class Bpmn2JsonMarshaller {
         try{
         	generator.writeStartObject();
 	        generator.writeObjectField("resourceId", def.getId());
-	        
-	        /*
-	         *  "properties":{"id":"",
-	               "name":"",
-	               "documentation":"",
-	               "auditing":"",
-	               "monitoring":"",
-	               "version":"",
-	               "author":"",
-	               "language":"English",
-	               "namespaces":"",
-	               "targetnamespace":"http://www.omg.org/bpmn20",
-	               "expressionlanguage":"http://www.w3.org/1999/XPath",
-	               "typelanguage":"http://www.w3.org/2001/XMLSchema",
-	               "creationdate":"",
-	               "modificationdate":""
-	               }
+	        /**
+	         * "properties":{"name":"",
+	         * "documentation":"",
+	         * "auditing":"",
+	         * "monitoring":"",
+	         * "executable":"true",
+	         * "package":"com.sample",
+	         * "id":"",
+	         * "version":"",
+	         * "author":"",
+	         * "language":"",
+	         * "namespaces":"",
+	         * "targetnamespace":"",
+	         * "expressionlanguage":"",
+	         * "typelanguage":"",
+	         * "creationdate":"",
+	         * "modificationdate":""
+	         * }
 	         */
 	        Map<String, Object> props = new LinkedHashMap<String, Object>();
 	        props.put("namespaces", "");
 	        props.put("targetnamespace", def.getTargetNamespace());
 	        props.put("typelanguage", def.getTypeLanguage());
-	        marshallProperties(props, generator);
-	        marshallStencil("BPMNDiagram", generator);
+	        props.put("name",def.getName());
+	        props.put("documentation", def.getDocumentation());
+	        props.put("id", def.getId());
+	        props.put("expressionlanguage", def.getExpressionLanguage());
+	        //marshallProperties(props, generator);
+	        //marshallStencil("BPMNDiagram", generator);
 	        
 	        for (RootElement rootElement : def.getRootElements()) {
 	            if (rootElement instanceof Process) {
+	                // have to wait for process node to finish properties and stencil marshalling
+	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
+	                marshallProperties(props, generator);
+	                marshallStencil("BPMNDiagram", generator);
 	            	linkSequenceFlows(((Process) rootElement).getFlowElements());
 	                marshallProcess((Process) rootElement, def, generator);
 	            } else if (rootElement instanceof Interface) {
