@@ -193,8 +193,6 @@ public class Bpmn2JsonMarshaller {
 	        props.put("documentation", def.getDocumentation());
 	        props.put("id", def.getId());
 	        props.put("expressionlanguage", def.getExpressionLanguage());
-	        //marshallProperties(props, generator);
-	        //marshallStencil("BPMNDiagram", generator);
 	        
 	        for (RootElement rootElement : def.getRootElements()) {
 	            if (rootElement instanceof Process) {
