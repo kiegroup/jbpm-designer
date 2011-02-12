@@ -122,7 +122,8 @@ table-layout:fixed;
 
 .ORYX_Editor {
 	/*background:url(../images/controls/background.bmp);*/
-	background: #EEF1FE;
+	/*background: #EEF1FE;*/
+	background: #FFFFFF;
 	border:0px double #99BBE8;
 }
 
