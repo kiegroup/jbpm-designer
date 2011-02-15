@@ -665,7 +665,7 @@ public class Bpmn2JsonUnmarshaller {
         process.setIsClosed(Boolean.parseBoolean(properties.get("isclosed")));  
         process.setIsExecutable(Boolean.parseBoolean(properties.get("executable")));
         
-        // get the drools-specific extension attribute to Process if defined
+        // get the drools-specific extension packageName attribute to Process if defined
         if(properties.get("package") != null && properties.get("package").length() > 0) {
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
