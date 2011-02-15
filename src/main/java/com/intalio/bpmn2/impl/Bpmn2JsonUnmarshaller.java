@@ -49,6 +49,7 @@ import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.Event;
+import org.eclipse.bpmn2.Extension;
 import org.eclipse.bpmn2.ExtensionAttributeDefinition;
 import org.eclipse.bpmn2.ExtensionAttributeValue;
 import org.eclipse.bpmn2.ExtensionDefinition;
@@ -103,9 +104,12 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.impl.EAttributeImpl;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
@@ -199,8 +203,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    //private void something() {
-        /********/
+//    private EObject getPackageNameEObject() {
 //        EAttribute pnameAttribute = EcoreFactory.eINSTANCE.createEAttribute();
 //        pnameAttribute.setName("packageName");
 //        pnameAttribute.setEType(EcorePackage.eINSTANCE.getEString());
@@ -216,16 +219,8 @@ public class Bpmn2JsonUnmarshaller {
 //        EFactory factory = pack.getEFactoryInstance();
 //        EObject pnameObj = factory.create(pnameClass);
 //        pnameObj.eSet(pnameAttribute, "com.sample");
-        
-//        ExtensionAttributeDefinition ead = Bpmn2Factory.eINSTANCE.createExtensionAttributeDefinition();
-//        ead.setName("packageName");
-//        ead.setType("EObject");
-//        
-//        ExtensionAttributeValue eav = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-//        eav.setValueRef(pnameObj);
-//        eav.setExtensionAttributeDefinition(ead);
-//        process.getExtensionValues().add(eav);
-    //}
+//        return pnameObj;
+//    }
 
     /**
      * Reconnect the sequence flows and the flow nodes.
@@ -688,6 +683,15 @@ public class Bpmn2JsonUnmarshaller {
         process.setProcessType(ProcessType.getByName(properties.get("processtype")));
         process.setIsClosed(Boolean.parseBoolean(properties.get("isclosed")));  
         process.setIsExecutable(Boolean.parseBoolean(properties.get("executable")));
+        
+        if(properties.get("package") != null && properties.get("package").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "packageName", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("package"));
+            process.getAnyAttribute().add(extensionEntry);
+        }
     }
 
     private void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {

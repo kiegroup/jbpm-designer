@@ -24,6 +24,7 @@ package com.intalio.bpmn2.impl;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,8 @@ import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
+import org.eclipse.emf.ecore.util.FeatureMap;
 
 import com.intalio.web.profile.IDiagramProfile;
 import com.thoughtworks.xstream.io.binary.Token.EndNode;
@@ -198,6 +201,13 @@ public class Bpmn2JsonMarshaller {
 	            if (rootElement instanceof Process) {
 	                // have to wait for process node to finish properties and stencil marshalling
 	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
+	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();
+	                while(iter.hasNext()) {
+	                    FeatureMap.Entry entry = iter.next();
+	                    if(entry.getEStructuralFeature().getName().equals("packageName")) {
+	                        props.put("package", entry.getValue());
+	                    }
+	                }
 	                marshallProperties(props, generator);
 	                marshallStencil("BPMNDiagram", generator);
 	            	linkSequenceFlows(((Process) rootElement).getFlowElements());

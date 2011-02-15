@@ -230,7 +230,7 @@ ORYX.Plugins.UML =
 		if (size < 40) size = 40;
 		shape._markers.values()[0].element.lastElementChild.setAttribute("width", size+5);
 		shape._markers.values()[0].element.setAttributeNS(null, "markerWidth", size+5)
-	},
+	}
 };
 
 ORYX.Plugins.UML = Clazz.extend(ORYX.Plugins.UML);

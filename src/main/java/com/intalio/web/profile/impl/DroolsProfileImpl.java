@@ -45,9 +45,7 @@ public class DroolsProfileImpl implements IDiagramProfile {
     
     private static Logger _logger = LoggerFactory.getLogger(DroolsProfileImpl.class);
     
-
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
-
 
     private String _stencilSet;
     private String _externalLoadURL;

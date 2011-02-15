@@ -48,7 +48,7 @@ ORYX.Plugins.Workflownets = {
 				  });
 		
 		event.result = data;
-	},
+	}
 };
 
 ORYX.Plugins.Workflownets = Clazz.extend(ORYX.Plugins.Workflownets);

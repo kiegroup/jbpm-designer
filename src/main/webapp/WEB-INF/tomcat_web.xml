@@ -416,6 +416,10 @@
 	   <servlet-class>
 	       com.intalio.web.plugin.impl.PluginServiceServlet
 	   </servlet-class>
+       <init-param>
+          <param-name>factoryName</param-name> 
+          <param-value>drools</param-value>
+       </init-param>
 	</servlet>
 	
 	<servlet>
@@ -424,6 +428,10 @@
 	   <servlet-class>
 	       com.intalio.web.stencilset.impl.StencilSetServiceServlet
 	   </servlet-class>
+       <init-param>
+          <param-name>defaultName</param-name> 
+          <param-value>bpmn2.0drools</param-value>
+       </init-param>
 	</servlet>
 	
     <!-- Servlet Mappings -->

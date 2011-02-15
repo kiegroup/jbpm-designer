@@ -591,7 +591,7 @@ ORYX.I18N.TBPMSupport = {
         progress: "Importing ...",
         syntaxError: "Syntax error",
         impFailed: "Request for import of document failed.",
-        confirm: "Confirm import of highlighted shapes!",
+        confirm: "Confirm import of highlighted shapes!"
     }
 };
 

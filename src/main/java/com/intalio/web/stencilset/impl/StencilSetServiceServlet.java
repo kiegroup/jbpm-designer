@@ -46,11 +46,13 @@ public class StencilSetServiceServlet extends HttpServlet {
 private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceServlet.class);
     
     private static final long serialVersionUID = -2024110864538877629L;
+    private String defaultName;
     
     private IDiagramStencilSetService _pluginService;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        defaultName = config.getInitParameter("defaultName");
         _pluginService = new StencilSetServiceImpl(config.getServletContext());
     }
     
@@ -65,7 +67,7 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         String name = segments[3];
         String profile = req.getParameter("profile");
         if(name.length() < 1) {
-            name = "bpmn2.0drools";
+            name = defaultName;
         }
         
         IDiagramStencilSet stencilset = _pluginService.findStencilSet(req, name);

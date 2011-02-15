@@ -11,8 +11,10 @@
 			<attribute name="hide" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/eclipse/org.eclipse.bpmn2/0.7.0.000-SNAPSHOT/org.eclipse.bpmn2-0.7.0.000-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.6.0/jackson-core-asl-1.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.6.0/jackson-core-asl-1.6.0.jar" sourcepath="/Users/tihomir/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.6.0/jackson-core-asl-1.6.0-sources.jar"/>
 	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.6.0/jackson-mapper-asl-1.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/eclipse/org.eclipse.bpmn2/0.7.0.000-JBOSS-SNAPSHOT/org.eclipse.bpmn2-0.7.0.000-JBOSS-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/eclipse/org.eclipse.emf.common/2.6.0.v20100427-1455/org.eclipse.emf.common-2.6.0.v20100427-1455.jar"/>
+	<classpathentry kind="lib" path="/Users/tihomir/.m2/repository/org/eclipse/org.eclipse.emf.ecore/2.6.0.v20100427-1455/org.eclipse.emf.ecore-2.6.0.v20100427-1455.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

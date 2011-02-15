@@ -25,7 +25,6 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
     private static final Logger _logger = Logger.getLogger(UUIDBasedDroolsRepository.class);
     private final static String DEFAULTS_PATH = "defaults";
   
-    
     private String _defaultsPath;
     
     @Override
