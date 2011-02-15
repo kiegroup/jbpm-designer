@@ -208,6 +208,7 @@ public class Bpmn2JsonMarshaller {
 	                    FeatureMap.Entry entry = iter.next();
 	                    if(entry.getEStructuralFeature().getName().equals("packageName")) {
 	                        props.put("package", entry.getValue());
+	                        break;
 	                    }
 	                }
 	                marshallProperties(props, generator);
