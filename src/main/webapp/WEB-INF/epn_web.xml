@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+  id="oryx" version="2.4">
+
+  <display-name>Process Designer</display-name>
+
+  <servlet>
+    <display-name>Default Servlet for Directory Listings</display-name>
+    <servlet-name>DirectoryListingServlet</servlet-name>
+    <!-- <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class> -->
+    <!-- For Tomcat -->
+    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>0</param-value>
+    </init-param>
+    <init-param>
+      <!-- <param-name>dirAllowed</param-name> -->
+      <!-- for Tomcat -->
+      <param-name>listings</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <!--<servlet>
+    <display-name>Oryx Process Repository</display-name>
+    <servlet-name>Repository</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.RepositoryProvider
+    </servlet-class>
+  </servlet>-->
+  
+  <!--  <servlet>
+    <servlet-name>EngineProxy</servlet-name>
+    <servlet-class>org.oryxeditor.server.EngineProxy</servlet-class>
+  </servlet> -->
+  
+  <servlet>
+    <display-name>Resource List</display-name>
+    <servlet-name>ResourceList</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.ResourceList
+    </servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>ResourceList</servlet-name>
+    <url-pattern>/resourceList</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <display-name>Oryx Legacy File Download Servlet</display-name>
+    <servlet-name>DownloadServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.MultiDownloader
+    </servlet-class>
+  </servlet>
+    
+    <servlet>
+        <display-name>Feedback Servlet</display-name>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.FeedbackServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet>
+        <display-name>RDF 2 JSON Servlet</display-name>
+        <servlet-name>RDF2JSONServlet</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.RDF2JSONServlet
+        </servlet-class>
+    </servlet>
+    
+  <servlet>
+    <display-name>Oryx BPMN to PNML Export</display-name>
+    <servlet-name>ExportServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.ExportServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>
+      Oryx BPMN to PNML Export - unexecutable
+    </display-name>
+    <servlet-name>SimplePNMLExporter</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.SimplePNMLExporter
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>Oryx BPEL IMPORTER</display-name>
+    <servlet-name>BPELImporter</servlet-name>
+    <servlet-class>org.oryxeditor.server.BPELImporter</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>Oryx BPEL EXPORTER</display-name>
+    <servlet-name>BPELExporter</servlet-name>
+    <servlet-class>org.oryxeditor.server.BPELExporter</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>Oryx BPEL4CHOR IMPORTER</display-name>
+    <servlet-name>BPEL4ChorImporter</servlet-name>
+    <servlet-class>org.oryxeditor.server.BPEL4ChorImporter</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>Oryx BPEL4CHOR EXPORTER</display-name>
+    <servlet-name>BPEL4ChorExporter</servlet-name>
+    <servlet-class>org.oryxeditor.server.BPEL4ChorExporter</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>Oryx XPDL4Chor to BPEL4Chor Servlet</display-name>
+    <servlet-name>XPDL4Chor2BPEL4ChorServlet</servlet-name>
+    <servlet-class>org.oryxeditor.server.XPDL4Chor2BPEL4ChorServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>
+      Oryx Desynchronizability Checker
+    </display-name>
+    <servlet-name>DesynchronizabilityServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.DesynchronizabilityServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>
+      BPEL 2 BPMN Transformation
+    </display-name>
+    <servlet-name>BPEL2BPMNServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.BPEL2BPMNServlet
+    </servlet-class>
+  </servlet>
+
+  <servlet>
+    <display-name>
+      Oryx IBPMN 2 BPMN Converter
+    </display-name>
+    <servlet-name>IBPMN2BPMNServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.IBPMN2BPMNServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>
+      Oryx Editor Handler
+    </display-name>
+    <servlet-name>EditorHandler</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.EditorHandler
+    </servlet-class>
+        <init-param>
+          <param-name>designer.dev</param-name> 
+          <param-value>true</param-value>
+        </init-param>
+  </servlet>
+  
+  <!--servlet>
+    <display-name>
+      Oryx syntax checker
+    </display-name>
+    <servlet-name>SyntaxChecker</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.SyntaxCheckerServlet
+    </servlet-class>
+  </servlet-->
+  <!-- Added by Ahmed Awad
+    Removed by Antoine: we don't have the sources of
+    the dependencies for this servlet
+  <servlet>
+    <display-name>
+      Oryx query evaluator servlet
+    </display-name>
+    <servlet-name>QueryEvaluator</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.QueryEvalServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QueryEvaluator</servlet-name>
+    <url-pattern>/query</url-pattern>
+  </servlet-mapping> -->
+  <!-- End of Added by Ahmed Awad -->
+  
+  <servlet>
+    <display-name>
+      Oryx Validator
+    </display-name>
+    <servlet-name>Validator</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.ValidatorServlet
+    </servlet-class>
+  </servlet>
+    
+    <servlet>
+        <display-name>
+            Oryx Petri Net Soundness Checker
+        </display-name>
+        <servlet-name>PetriNetSoundnessChecker</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.PetriNetSoundnessCheckerServlet
+        </servlet-class>
+    </servlet>
+  
+  <!--<servlet>
+    <display-name>Oryx Simple Storage Servlet</display-name>
+    <servlet-name>SimpleStorageServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.SimpleStorageServlet
+    </servlet-class>
+  </servlet>-->
+  
+  <servlet>
+    <display-name>Alternatives Renderer</display-name>
+    <servlet-name>AlternativesRenderer</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.AlternativesRenderer
+    </servlet-class>
+  </servlet>
+    
+    <servlet>
+        <display-name>BPMN to Petri Net Converter</display-name>
+        <servlet-name>BPMN2PNServlet</servlet-name>
+        <servlet-class>
+            org.oryxeditor.server.BPMN2PNServlet
+        </servlet-class>
+    </servlet>
+  
+<!--<servlet>
+    <display-name>Worklist</display-name>
+    <servlet-name>Worklist</servlet-name>
+    <servlet-class>org.oryxeditor.server.Worklist</servlet-class>
+  </servlet>
+-->
+
+  <servlet>
+    <display-name>Oryx EPC Upload Servlet</display-name>
+    <servlet-name>EPCUpload</servlet-name>
+    <servlet-class>org.oryxeditor.server.EPCUpload</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>Step Through</display-name>
+    <servlet-name>StepThrough</servlet-name>
+    <servlet-class>
+      de.hpi.diagram.stepthrough.StepThroughServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>XForms Export</display-name>
+    <servlet-name>XFormsExportServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.XFormsExportServlet
+    </servlet-class>
+  </servlet>
+  
+<!--  
+  <servlet>
+    <display-name>XForms Export Orbeon</display-name>
+    <servlet-name>XFormsExportOrbeonServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.XFormsExportOrbeonServlet
+    </servlet-class>
+  </servlet>
+-->
+  
+  <servlet>
+    <display-name>WSDL2XForms Transformation</display-name>
+    <servlet-name>WSDL2XFormsServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.WSDL2XFormsServlet
+    </servlet-class>
+  </servlet> 
+
+    <servlet>
+        <display-name>BPMN2XForms Servlet</display-name>
+        <servlet-name>BPMN2XFormsServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.BPMN2XFormsServlet
+        </servlet-class>
+    </servlet>
+  
+  <servlet>
+    <display-name>XForms Import</display-name>
+    <servlet-name>XFormsImportServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.XFormsImportServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>StencilSet JSONP</display-name>
+    <servlet-name>StencilSetJSONPServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.StencilSetJSONPServlet
+    </servlet-class>
+  </servlet>
+
+<!--
+    <servlet>
+        <display-name>Stencilset Extension Generator Servlet</display-name>
+        <servlet-name>StencilSetExtensionGeneratorServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.StencilSetExtensionGeneratorServlet
+        </servlet-class>
+    </servlet>
+-->
+
+<!--
+    <servlet>
+        <display-name>Service Composer Servlet</display-name>
+        <servlet-name>ServiceComposerServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.ServiceComposerServlet
+        </servlet-class>
+    </servlet>
+-->
+  
+<!--  
+  <servlet>
+        <display-name>GoldenEye Servlet</display-name>
+        <servlet-name>GoldenEyeServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.GoldenEyeStencilSetExtensionGeneratorServlet
+        </servlet-class>
+    </servlet>
+-->
+
+  
+  <servlet>
+        <display-name>BPMN2BPEL Servlet</display-name>
+        <servlet-name>BPMN2BPELServlet</servlet-name>
+        <servlet-class>
+             org.oryxeditor.server.BPMN2BPELServlet
+        </servlet-class>
+    </servlet>
+
+
+  <servlet>
+    <display-name>BPMN Layouter</display-name>
+    <servlet-name>BPMNLayouterServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.BPMNLayouterServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <display-name>EPC Layouter</display-name>
+    <servlet-name>EPCLayouterServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.EPCLayoutServlet
+    </servlet-class>
+  </servlet>
+  
+  
+  <!--servlet>
+    <display-name>BPMN 2 Exporter</display-name>
+    <servlet-name>Bpmn2_0Servlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.Bpmn2_0Servlet
+    </servlet-class>
+  </servlet-->
+  
+  <!--servlet>
+    <display-name>BPMN 2 XPDL Exporter</display-name>
+    <servlet-name>Bpmn2_0ToXpdlServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.Bpmn2_0ToXpdlServlet
+    </servlet-class>
+  </servlet-->
+  
+  <!--servlet>
+    <display-name>BPMN 2 Importer</display-name>
+    <servlet-name>Bpmn2_0Importer</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.BPMN2_0Importer
+    </servlet-class>
+  </servlet-->
+
+  <!--servlet>
+    <display-name>BPMN 1.1 to BPMN 2.0 Migration</display-name>
+    <servlet-name>BPMN2MigrationServlet</servlet-name>
+    <servlet-class>
+      org.oryxeditor.server.BPMN2MigrationServlet
+    </servlet-class>
+  </servlet-->
+  
+  <servlet>
+     <display-name>UUID Based Repository</display-name>
+     <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
+     <servlet-class>
+         com.intalio.web.server.UUIDBasedRepositoryServlet
+     </servlet-class>
+       <init-param>
+          <param-name>factoryName</param-name> 
+          <param-value>epn</param-value>
+       </init-param>
+  </servlet>
+  
+  <servlet>
+     <display-name>Plugin Service Servlet</display-name>
+     <servlet-name>PluginServiceServlet</servlet-name>
+     <servlet-class>
+         com.intalio.web.plugin.impl.PluginServiceServlet
+     </servlet-class>
+  </servlet>
+  
+  <servlet>
+     <display-name>StencilSet Service Servlet</display-name>
+     <servlet-name>StencilSetServiceServlet</servlet-name>
+     <servlet-class>
+         com.intalio.web.stencilset.impl.StencilSetServiceServlet
+     </servlet-class>
+     <init-param>
+          <param-name>defaultName</param-name> 
+          <param-value>epn</param-value>
+       </init-param>
+  </servlet>
+  
+    <!-- Servlet Mappings -->
+<!--  
+  <servlet-mapping>
+    <servlet-name>Repository</servlet-name>
+    <url-pattern>/repository</url-pattern>
+  </servlet-mapping>
+-->
+
+<!--
+    <servlet-mapping>
+    <servlet-name>EngineProxy</servlet-name>
+    <url-pattern>/engineproxy</url-pattern>
+  </servlet-mapping>
+-->
+  
+  <servlet-mapping>
+    <servlet-name>ExportServlet</servlet-name>
+    <url-pattern>/pnml</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>SimplePNMLExporter</servlet-name>
+    <url-pattern>/simplepnmlexporter</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>BPELImporter</servlet-name>
+    <url-pattern>/bpelimporter</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>BPELExporter</servlet-name>
+    <url-pattern>/bpelexporter</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>BPEL4ChorImporter</servlet-name>
+    <url-pattern>/bpel4chorimporter</url-pattern>
+  </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PetriNetSoundnessChecker</servlet-name>
+        <url-pattern>/checksoundness</url-pattern>
+    </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>BPEL4ChorExporter</servlet-name>
+    <url-pattern>/bpel4chorexporter</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>XPDL4Chor2BPEL4ChorServlet</servlet-name>
+    <url-pattern>/xpdl4chor2bpel4chor</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>DesynchronizabilityServlet</servlet-name>
+    <url-pattern>/desynchronizability</url-pattern>
+  </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RDF2JSONServlet</servlet-name>
+        <url-pattern>/rdf2json</url-pattern>
+    </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>BPEL2BPMNServlet</servlet-name>
+    <url-pattern>/bpel2bpmn</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>IBPMN2BPMNServlet</servlet-name>
+    <url-pattern>/ibpmn2bpmn</url-pattern>
+  </servlet-mapping>
+
+  <!--<servlet-mapping>
+    <servlet-name>SyntaxChecker</servlet-name>
+    <url-pattern>/syntaxchecker</url-pattern>
+  </servlet-mapping>-->
+  
+  <servlet-mapping>
+    <servlet-name>Validator</servlet-name>
+    <url-pattern>/validator</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>DownloadServlet</servlet-name>
+    <url-pattern>/download</url-pattern>
+  </servlet-mapping>
+
+  <!--<servlet-mapping>
+    <servlet-name>SimpleStorageServlet</servlet-name>
+    <url-pattern>/server</url-pattern>
+  </servlet-mapping>-->
+
+  <servlet-mapping>
+    <servlet-name>AlternativesRenderer</servlet-name>
+    <url-pattern>/pdf</url-pattern>
+  </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>BPMN2PNServlet</servlet-name>
+        <url-pattern>/bpmn2pn</url-pattern>
+    </servlet-mapping>
+    
+<!--
+  <servlet-mapping>
+    <servlet-name>Worklist</servlet-name>
+    <url-pattern>/worklist</url-pattern>
+  </servlet-mapping>
+-->
+
+  <servlet-mapping>
+    <servlet-name>EPCUpload</servlet-name>
+    <url-pattern>/epc-upload</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>StepThrough</servlet-name>
+    <url-pattern>/stepthrough</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>XFormsExportServlet</servlet-name>
+    <url-pattern>/xformsexport</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Exported XForms are rendered by Orbeon (see below: filter mappings) -->
+    <!-- crossContext="true" is required for using Orbeon. Configure this in editor/etc/context.xml -->
+<!--  
+  <servlet-mapping>
+    <servlet-name>XFormsExportOrbeonServlet</servlet-name>
+    <url-pattern>/xformsexport-orbeon</url-pattern>
+  </servlet-mapping>
+-->
+  
+  <servlet-mapping>
+    <servlet-name>WSDL2XFormsServlet</servlet-name>
+    <url-pattern>/wsdl2xforms</url-pattern>
+  </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>BPMN2XFormsServlet</servlet-name>
+        <url-pattern>/bpmn2xforms</url-pattern>
+    </servlet-mapping>
+    
+  <!-- Generated XForms are rendered by Orbeon (see below: filter mappings) -->
+<!--
+  <servlet-mapping>
+        <servlet-name>BPMN2XFormsServlet</servlet-name>
+    <url-pattern>/bpmn2xforms-orbeon</url-pattern>
+  </servlet-mapping>
+-->
+  
+  <servlet-mapping>
+    <servlet-name>XFormsImportServlet</servlet-name>
+    <url-pattern>/xformsimport</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>StencilSetJSONPServlet</servlet-name>
+    <url-pattern>/jsonp</url-pattern>
+  </servlet-mapping>
+
+<!--
+    <servlet-mapping>
+            <servlet-name>StencilSetExtensionGeneratorServlet</servlet-name>
+            <url-pattern>/stencilset-extension-generator</url-pattern>
+    </servlet-mapping>
+-->
+
+
+<!--  
+    <servlet-mapping>
+            <servlet-name>ServiceComposerServlet</servlet-name>
+            <url-pattern>/servicecomposer</url-pattern>
+    </servlet-mapping>
+-->
+
+<!--  
+  <servlet-mapping>
+            <servlet-name>GoldenEyeServlet</servlet-name>
+            <url-pattern>/goldeneye</url-pattern>
+    </servlet-mapping>
+-->
+   <servlet-mapping>
+            <servlet-name>EditorHandler</servlet-name>
+            <url-pattern>/editor</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+            <servlet-name>EditorHandler</servlet-name>
+            <url-pattern>/editor/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+            <servlet-name>FeedbackServlet</servlet-name>
+            <url-pattern>/feedback</url-pattern>
+    </servlet-mapping>
+  
+  <servlet-mapping>
+            <servlet-name>BPMN2BPELServlet</servlet-name>
+            <url-pattern>/bpmn2bpel</url-pattern>
+    </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>DirectoryListingServlet</servlet-name>
+    <url-pattern>/generated-uis/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>BPMNLayouterServlet</servlet-name>
+    <url-pattern>/bpmnlayouter</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>EPCLayouterServlet</servlet-name>
+    <url-pattern>/epclayouter</url-pattern>
+  </servlet-mapping>
+  
+  <!--
+  <servlet-mapping>
+    <servlet-name>Bpmn2_0Servlet</servlet-name>
+    <url-pattern>/bpmn2_0serialization</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>Bpmn2_0ToXpdlServlet</servlet-name>
+    <url-pattern>/bpmn2xpdlserialization</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>Bpmn2_0Importer</servlet-name>
+    <url-pattern>/bpmn2_0deserialization</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>BPMN2MigrationServlet</servlet-name>
+    <url-pattern>/bpmn2migration</url-pattern>
+  </servlet-mapping>-->
+  
+  <servlet-mapping>
+        <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
+        <url-pattern>/uuidRepository</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+      <servlet-name>PluginServiceServlet</servlet-name>
+      <url-pattern>/plugins</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+      <servlet-name>PluginServiceServlet</servlet-name>
+      <url-pattern>/plugin</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+      <servlet-name>PluginServiceServlet</servlet-name>
+      <url-pattern>/plugin/*</url-pattern>
+    </servlet-mapping>
+    
+  <servlet-mapping>
+      <servlet-name>StencilSetServiceServlet</servlet-name>
+      <url-pattern>/stencilset/*</url-pattern>
+    </servlet-mapping>
+  
+  <!-- the number within the session-timout element must be expressed in
+    minutes. it is now 24 hours. -->
+  <session-config>
+    <session-timeout>1440</session-timeout>
+  </session-config>
+  
+  <!--
+    jBoss' default mapping is to "image/svg", which causes the client not to
+    parse the SVG content as XML. However, the Oryx Editor client relies on
+    that behaviour. The mimetype as per W3C specification must be
+    "image/svg+xml". See http://www.w3.org/TR/SVG/intro.html#MIMEType.
+  -->
+  <mime-mapping>
+    <extension>svg</extension>
+    <mime-type>image/svg+xml</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>json</extension>
+    <mime-type>application/json</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>css</extension>
+    <mime-type>text/css</mime-type>
+  </mime-mapping>
+  
+  <!-- Set Favourites Icon MIME-Type --> 
+  <mime-mapping>
+      <extension>ico</extension>
+      <mime-type>image/x-icon</mime-type>
+  </mime-mapping>
+
+  <!-- Pluggable filter -->
+  <filter>
+    <filter-name>Pluggable Filter</filter-name>
+    <filter-class>com.intalio.web.filter.impl.PluggableFilter</filter-class>
+  </filter>
+  
+  <filter-mapping>
+      <filter-name>Pluggable Filter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>

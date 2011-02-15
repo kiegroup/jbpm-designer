@@ -1,0 +1,660 @@
+{
+	"title":"EPN",
+	"namespace":"http://b3mn.org/stencilset/epn#",
+	"description":"This is the EPN stencil set specification.",
+ 	"propertyPackages": [
+ 		{
+ 			"name":"baseAttributes",
+ 			"properties": [
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"The descriptive name of the EPN element.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name"	
+				},
+				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"value":"",
+					"description":"This attribute is used to annotate the EPN element, such as descriptions and other documentation.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular" : true
+				}
+ 			]
+ 		},
+ 		{
+			"name" : "diagram",
+			"properties" : [
+				{
+					"id":"executable",
+					"type":"Boolean",
+					"title":"executable",
+					"title_de":"executable",
+					"value":true,
+					"description":"executable",
+					"description_de":"executable",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"package",
+					"type":"String",
+					"title":"package",
+					"title_de":"package",
+					"value":"",
+					"description":"package",
+					"description_de":"package",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"id",
+					"type":"String",
+					"title":"id",
+					"title_de":"id",
+					"value":"",
+					"description":"id",
+					"description_de":"id",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"version",
+					"type":"String",
+					"title":"Version",
+					"value":"",
+					"description":"This defines the Version number of the Diagram.",
+					"description_de":"Setzt die Versionsnummer des Diagramms.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"author",
+					"type":"String",
+					"title":"Author",
+					"title_de":"Autor",
+					"value":"",
+					"description":"This holds the name of the author of the Diagram.",
+					"description_de": "Name des Autors des Diagramms.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"language",
+					"type":"String",
+					"title":"Language",
+					"title_de":"Sprache",
+					"value":"English",
+					"value_de":"Deutsch",
+					"description":"This holds the name of the language in which text is written.",
+					"description_de":"Sprache, in welcher der Text geschrieben ist.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{	
+					"id":"namespaces",
+					"type":"Complex",
+					"title":"Namespaces",
+					"value":"",
+					"description":"Additional namespaces and theire prefixes used in the diagram., ",
+					"description_de":"Optionale Namespaces, die im Diagramm genutzt werden.",
+					"readonly":false,
+					"optional":true,
+					"complexItems": [
+						{
+							"id":"prefix",
+							"name":"Prefix",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"url",
+							"name":"URL",
+							"type":"String",
+							"value":"",
+							"width":200,
+							"optional":false 
+						}
+					]
+				},
+				{
+					"id":"targetnamespace",
+					"type":"String",
+					"title":"Target Namespace",
+					"title_de":"Ziel-Namensraum",
+					"value":"http://www.omg.org/bpmn20",
+					"description":"Defines the XML namespace of the elements inside the document.",
+					"description_de":"Definiert den XML-Namensraum, der für die Elemente im Dokument verwendet wird.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"expressionlanguage",
+					"type":"String",
+					"title":"ExpressionLanguage",
+					"title_de":"Ausdruckssprache",
+					"value":"http://www.w3.org/1999/XPath",
+					"description":"A Language may be provided so that the syntax of expressions used in the Diagram can be understood.",
+					"description_de":"Sprache, mit welcher im Diagramm verwendete Ausdrücke beschrieben sind.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"typelanguage",
+					"type":"String",
+					"title":"TypeLanguage",
+					"title_de":"Typsprache",
+					"value":"http://www.w3.org/2001/XMLSchema",
+					"description":"This attribute identifies the type system used by the elements of this Definition.",
+					"description_de":"Definiert das Typsystem der Elemente dieses Diagramms.",
+					"readonly":false,
+					"optional":true,
+					"length":"50"
+				},
+				{
+					"id":"creationdate",
+					"type":"Date",
+					"title":"CreationDate",
+					"title_de":"Erstellt am",
+					"value":"",
+					"description":"This defines the date on which the Diagram was created.",
+					"description_de":"Datum an dem das Diagramm erstellt wurde.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				},
+				{
+					"id":"modificationdate",
+					"type":"Date",
+					"title":"ModificationDate",
+					"title_de":"Geändert am",
+					"value":"",
+					"description":"This defines the date on which the Diagram was last modified.",
+					"description_de":"Datum der letzten Änderung.",
+					"readonly":false,
+					"optional":true,
+					"dateFormat":"j/m/y"
+				}
+			]
+		},
+		{
+			"name" : "bgColor",
+			"properties" : [
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "fill_el",
+					"fill":true,
+					"stroke":false
+				}
+			]
+		},
+ 		{
+ 			"name":"producerAttributes",
+ 			"properties":[
+ 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"Event Producer Name",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+ 			]
+ 		},
+ 		{
+ 			"name":"agentAttributes",
+ 			"properties":[
+ 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"Event Agent Name",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+ 			]
+ 		},
+ 		{
+ 			"name":"consumerAttributes",
+ 			"properties":[
+ 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"Event Consumer Name",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+ 			]
+ 		},
+ 		{
+ 			"name":"channelAttributes",
+ 			"properties":[
+ 				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"",
+					"description":"Event Channel Name",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				}
+ 			]
+ 		},
+ 		{
+			"name" : "dataAssociation",
+			"properties" : [
+			    {
+					"id":"assignments",
+					"type":"Complex",
+					"title":"Assignments",
+					"title_de":"Zuweisungen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"popular":true,
+					"complexItems": [
+						{
+							"id":"to",
+							"name":"To",
+							"name_de":"Auf",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false 
+						},
+						{
+							"id":"from",
+							"name":"From",
+							"name_de":"Aus",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":false
+						},
+						{
+							"id":"language",
+							"name":"Language",
+							"name_de":"Sprache",
+							"type":"String",
+							"value":"",
+							"width":100,
+							"optional":true
+						}
+					]
+			    },
+			    {
+					"id":"transformation",
+					"title":"Transformation",
+					"type":"String",
+					"value":"",
+					"optional":true,
+					"popular":true
+				}
+			]
+		}
+	],
+	"stencils" : [
+ 		{
+			"type":				"node",
+			"id":				"EPNDiagram",
+			"title":			"EPN-Diagram",
+			"groups":			["Diagram"],
+			"description":		"EPN Diagram.",
+			"view":				"diagram.svg",
+			"icon":				"diagram.png",
+			"mayBeRoot":		true,
+			"hide":				true,
+			"propertyPackages" : ["baseAttributes","diagram"],
+			"roles":			["canContainArtifacts"]
+		},
+		
+		{
+			"type" : 			"node",
+			"id": 				"eventProducer",
+			"title" : 			"Event Producer",
+			"title_de" : 		"Event Producer",
+			"groups" : 			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" : 	"Event Producer",
+			"view" : 			"producer.svg",
+			"icon" : 			"producer.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"producerAttributes"
+			],
+			"roles" : 			[
+				"all"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id": 				"eventConsumer",
+			"title" : 			"Event Consumer",
+			"title_de" : 		"Event Consumer",
+			"groups" : 			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" : 	"Event Consumer",
+			"view" : 			"consumer.svg",
+			"icon" : 			"consumer.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"consumerAttributes"
+			],
+			"roles" : 			[
+				"all"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id": 				"eventAgent",
+			"title" : 			"Event Agent",
+			"title_de" : 		"Event Agent",
+			"groups" : 			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" : 	"Event Agent",
+			"view" : 			"agent.svg",
+			"icon" : 			"agent.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"agentAttributes"
+			],
+			"roles" : 			[
+				"all"
+			]
+		},
+		{
+			"type" : 			"node",
+			"id": 				"eventChannel",
+			"title" : 			"Event Channel",
+			"title_de" : 		"Event Channel",
+			"groups" : 			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" : 	"Event Channel",
+			"view" : 			"channel.svg",
+			"icon" : 			"channel.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"channelAttributes"
+			],
+			"roles" : 			[
+				"all"
+			]
+		},
+		{
+			"type": "edge",
+			"id":"SequenceFlow",
+			"title":"Sequence Flow",
+			"title_de":"Sequenzfluss",
+			"description":"Sequence Flow defines the execution order of activities.",
+			"description_de":"Ein Sequenzfluss definiert die Reihenfolge der Ausführung von Aktivitäten.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"sequenceflow.svg",
+			"icon":"sequenceflow.png",
+			"propertyPackages":[
+				"baseAttributes"
+			],
+			"roles": [
+				"all"
+			],
+			"properties":[
+				{
+					"id":"ConditionType",
+					"type":"Choice",
+					"title":"ConditionType",
+					"title_de":"Bedingungstyp",
+					"value":"None",
+					"description":"Determine the typ of the flow object.",
+					"description_de":"Legt den Typ des Flussobjekts fest.",
+					"readonly":false,
+					"optional":false,
+					"items": [
+						{
+							"id":"none",
+							"title":"Standard",
+							"title_de":"Standard",
+							"value":"None"
+						},
+						{
+							"id":"expression",
+							"title":"Conditional Flow",
+							"title_de":"Bedingter Fluss",
+							"value":"Expression",
+							"icon" : "connector/list/type.expression.png",
+							"refToView":""
+						},
+						{
+							"id":"default",
+							"title":"Default Flow",
+							"title_de":"Standardfluss",
+							"value":"Default",
+							"icon" : "connector/list/type.default.png",
+							"refToView":"default"
+						}
+					]
+				},
+				{
+					"id":"conditionexpression",
+					"type":"String",
+					"title":"Condition Expression",
+					"title_de":"Bedingungsausdruck",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"refToView":"condition",
+					"wrapLines":true
+				},
+				{
+					"id":"isimmediate",
+					"type":"Boolean",
+					"title":"isImmediate",
+					"title_de":"Sofortige Ausführung",
+					"value":"",
+					"description":"An optional Boolean value specifying whether Activities or Choreography Activities not in the model containing the Sequence Flow can occur between the elements connected by the Sequence Flow. If the value is true, they MAY NOT occur. If the value is false, they MAY occur. Also see the isClosed attribute on Process, Choreography, and Collaboration.",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"showdiamondmarker",
+					"type":"Boolean",
+					"title":"is conditional flow",
+					"title_de":"ist bedingter Fluss",
+					"value":false,
+					"description":"System intern variable to set the Diamond invisible, if sourceShape is a gateway and ConditionType is set to Expression",
+					"readonly":true,
+					"optional":false,
+					"visible":false,
+					"refToView":"conditional"
+				}
+			]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Undirected",
+			"title":"Association (undirected)",
+			"title_de":"Ungerichtete Assoziation",
+			"description":"Attaching a data object with an Undirected Association to a sequence flow indicates hand-over of information between the activities involved.",
+			"description_de":"Die Zuordnung eines Datenobjekts zu einem Sequenzfluss über eine ungerichtete Assoziation weist auf eine Informationsübergabe zwischen den Aktivitäten hin.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"association.undirected.svg",
+			"icon":"association.undirected.png",
+			"roles": [
+				"all",
+				"ConnectingObjectsMorph"
+			],			
+			"propertyPackages" : [
+			    "dataAssociation"
+			],
+			"properties" : [
+				{
+					"id":"type",
+					"type":"Choice",
+					"title":"Responsibilities",
+					"title_de":"Verantwortlichkeiten",
+					"value":"none",
+					"description":"Describes the type of the responsibility according to RACI.",
+					"description_de":"Beschreibt die Verantwortlichkeiten nach dem RACI-Modell.",
+					"readonly":false,
+					"optional":true,
+					"refToView":"name",
+					"items": [
+						{
+							"id":"c1",
+							"title":"",
+							"title_de":"",
+							"value":"none"
+						},
+						{
+							"id":"c2",
+							"title":"responsible",
+							"title_de":"führt durch",
+							"value":"performs"
+						},
+						{
+							"id":"c3",
+							"title":"accountable",
+							"title_de":"erteilt Freigabe",
+							"value":"approves"
+						},
+						{
+							"id":"c4",
+							"title":"consulted",
+							"title_de":"wird konsultiert",
+							"value":"consulted"
+						},
+						{
+							"id":"c5",
+							"title":"informed",
+							"title_de":"wird informiert",
+							"value":"isNotified"
+						}
+					]
+				}
+           ]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Unidirectional",
+			"title":"Association (unidirectional)",
+			"title_de":"Gerichtete Assoziation",
+			"description":"A Directed Association indicates information flow. A data object can be read at the start of an activity or written upon completion.",
+			"description_de":"Eine gerichtete Assoziation zeigt den Informationsfluss. Ausgehende Kanten zeigen Schreiben, eingehende zeigen Lesen an.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"association.unidirectional.svg",
+			"icon":"association.unidirectional.png",
+			"roles": [
+				"all"
+			],
+			"propertyPackages" : [
+			    "dataAssociation"
+			],
+			"properties" : [
+                {
+                    "id":"text",
+                    "type":"String",
+                    "title":"Name",
+                    "title_de":"Name",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "length":"",
+                    "refToView":"name",
+                    "wrapLines":true,
+					"popular":true
+                }
+           ]
+		},
+		{
+			"type": "edge",
+			"id":"Association_Bidirectional",
+			"title":"Association (bidirectional)",
+			"title_de":"Beidseitige Assoziation",
+			"description":"A Bidirected Association indicates that the data object is modified, i.e. read and written during the execution of an actvity.",
+			"description_de":"Eine beidseitig gericEhtete Assoziation zeigt, dass das Datenobjekt während der Ausführung einer Aktivität verändert, d.h. gelesen und geschrieben wird.",
+			"groups":["Connecting Objects"],
+			"groups_de":["Konnektoren"],
+			"view":"association.bidirectional.svg",
+			"icon":"association.bidirectional.png",
+			"roles": [
+				"all"
+			],			
+			"propertyPackages" : [
+			    "dataAssociation"
+			],
+			"properties" : [
+                {
+                    "id":"text",
+                    "type":"String",
+                    "title":"Name",
+                    "title_de":"Name",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "length":"",
+                    "refToView":"name",
+                    "wrapLines":true,
+					"popular":true
+                }
+           ]
+		}
+	],
+	
+	"rules" : {
+		"cardinalityRules": [
+		],
+		"connectionRules": [
+		],
+		"containmentRules" : [
+			{
+				"role" : "EPNDiagram",
+				"contains" : ["all"]
+			}
+		],
+		"morphingRules": [
+		],
+		"layoutRules" : [
+		]
+	}
+}
