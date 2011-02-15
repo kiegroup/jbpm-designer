@@ -202,25 +202,6 @@ public class Bpmn2JsonUnmarshaller {
             _currentResource = null;
         }
     }
-    
-//    private EObject getPackageNameEObject() {
-//        EAttribute pnameAttribute = EcoreFactory.eINSTANCE.createEAttribute();
-//        pnameAttribute.setName("packageName");
-//        pnameAttribute.setEType(EcorePackage.eINSTANCE.getEString());
-//
-//        EClass pnameClass = EcoreFactory.eINSTANCE.createEClass();
-//        pnameClass.setName("PackageName");
-//        pnameClass.getEStructuralFeatures().add(pnameAttribute);
-//
-//        EPackage pack = EcoreFactory.eINSTANCE.createEPackage();
-//        pack.setName("pack");
-//        pack.getEClassifiers().add(pnameClass);
-//
-//        EFactory factory = pack.getEFactoryInstance();
-//        EObject pnameObj = factory.create(pnameClass);
-//        pnameObj.eSet(pnameAttribute, "com.sample");
-//        return pnameObj;
-//    }
 
     /**
      * Reconnect the sequence flows and the flow nodes.
