@@ -43,6 +43,7 @@ import org.eclipse.bpmn2.Association;
 import org.eclipse.bpmn2.Auditing;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
+import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.DataObject;
 import org.eclipse.bpmn2.DataStore;
@@ -182,6 +183,7 @@ public class Bpmn2JsonUnmarshaller {
      */
     private Definitions unmarshall(JsonParser parser) throws JsonParseException, IOException {
         try {
+            Bpmn2Package.eINSTANCE.setNsURI("http://www.omg.org/spec/BPMN/20100501/BPMN20.xsd");
             parser.nextToken(); // open the object
             ResourceSet rSet = new ResourceSetImpl();
             rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
