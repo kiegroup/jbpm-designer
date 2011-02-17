@@ -48,6 +48,7 @@ import org.eclipse.bpmn2.DataObject;
 import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
+import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.Extension;
 import org.eclipse.bpmn2.ExtensionAttributeDefinition;
@@ -73,6 +74,7 @@ import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.ServiceTask;
+import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.UserTask;
@@ -592,6 +594,13 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof Message) {
             applyMessageProperties((Message) baseElement, properties);
         }
+        if (baseElement instanceof StartEvent) {
+            applyStartEventProperties((StartEvent) baseElement, properties);
+        }
+        
+        if (baseElement instanceof EndEvent) {
+            applyEndEventProperties((EndEvent) baseElement, properties);
+        }
         
         // finally, apply properties from helpers:
         for (BpmnMarshallerHelper helper : _helpers) {
@@ -599,6 +608,15 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
+    private void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
+        ee.setId(properties.get("resourceId"));
+        ee.setName(properties.get("name"));
+    }
+    
+    private void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
+        se.setName(properties.get("name"));
+    }
+    
     private void applyMessageProperties(Message msg, Map<String, String> properties) {
         msg.setName(properties.get("name"));
     }
@@ -664,7 +682,6 @@ public class Bpmn2JsonUnmarshaller {
         process.setProcessType(ProcessType.getByName(properties.get("processtype")));
         process.setIsClosed(Boolean.parseBoolean(properties.get("isclosed")));  
         process.setIsExecutable(Boolean.parseBoolean(properties.get("executable")));
-        
         // get the drools-specific extension packageName attribute to Process if defined
         if(properties.get("package") != null && properties.get("package").length() > 0) {
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -673,6 +690,18 @@ public class Bpmn2JsonUnmarshaller {
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
                 properties.get("package"));
             process.getAnyAttribute().add(extensionEntry);
+        }
+        
+        if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
+            Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
+            audit.getDocumentation().add(createDocumentation(properties.get("auditing")));
+            process.setAuditing(audit);
+        }
+        
+        if (properties.get("monitoring") != null && !"".equals(properties.get("monitoring"))) {
+            Monitoring monitoring = Bpmn2Factory.eINSTANCE.createMonitoring();
+            monitoring.getDocumentation().add(createDocumentation(properties.get("monitoring")));
+            process.setMonitoring(monitoring);
         }
     }
 

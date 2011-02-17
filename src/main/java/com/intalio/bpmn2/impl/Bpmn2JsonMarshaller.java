@@ -99,8 +99,6 @@ import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.util.FeatureMap;
 
 import com.intalio.web.profile.IDiagramProfile;
-import com.thoughtworks.xstream.io.binary.Token.EndNode;
-import com.thoughtworks.xstream.io.binary.Token.StartNode;
 
 import de.hpi.bpmn.sese.Join;
 import de.hpi.bpmn.sese.Split;
@@ -193,9 +191,11 @@ public class Bpmn2JsonMarshaller {
 	        props.put("targetnamespace", def.getTargetNamespace());
 	        props.put("typelanguage", def.getTypeLanguage());
 	        props.put("name",def.getName());
-	        props.put("documentation", def.getDocumentation());
 	        props.put("id", def.getId());
 	        props.put("expressionlanguage", def.getExpressionLanguage());
+	        if( def.getDocumentation() != null && def.getDocumentation().size() > 0 ) {
+	            props.put("documentation", def.getDocumentation().get(0).getText());
+	        }
 	        
 	        for (RootElement rootElement : def.getRootElements()) {
 	            if (rootElement instanceof Process) {
@@ -493,6 +493,9 @@ public class Bpmn2JsonMarshaller {
     	if (properties == null) {
     		properties = new LinkedHashMap<String, Object>();
     	}
+        if(node.getDocumentation() != null && node.getDocumentation().size() > 0) {
+            properties.put("documentation", node.getDocumentation().get(0).getText());
+        }
     	properties.put("name", node.getName());
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");

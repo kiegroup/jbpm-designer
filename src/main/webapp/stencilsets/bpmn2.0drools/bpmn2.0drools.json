@@ -32,32 +32,6 @@
 					"length":"",
 					"wrapLines":true,
 					"popular" : true
-				},
-				{
-					"id":"auditing",
-					"type":"Text",
-					"title":"Auditing",
-					"title_de":"Prüfung",
-					"value":"",
-					"description":"A hook for specifying audit related properties. Auditing can only be defined for a Process.",
-					"description_de":"",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"wrapLines":true
-				},
-				{
-					"id":"monitoring",
-					"type":"Text",
-					"title":"Monitoring",
-					"title_de":"Überwachung",
-					"value":"",
-					"description":"A hook for specifying monitoring related properties. Monitoring can only be defined for a Process.",
-					"description_de":"",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"wrapLines":true
 				}
  			]
  		},
