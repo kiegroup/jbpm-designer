@@ -48,6 +48,7 @@ import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.DataObject;
 import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.Event;
@@ -84,6 +85,8 @@ import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.BpmnDiFactory;
+import org.eclipse.bpmn2.di.BpmnDiPackage;
+import org.eclipse.bpmn2.impl.DocumentRootImpl;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
@@ -102,7 +105,6 @@ import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
@@ -183,7 +185,6 @@ public class Bpmn2JsonUnmarshaller {
      */
     private Definitions unmarshall(JsonParser parser) throws JsonParseException, IOException {
         try {
-            Bpmn2Package.eINSTANCE.setNsURI("http://www.omg.org/spec/BPMN/20100501/BPMN20.xsd");
             parser.nextToken(); // open the object
             ResourceSet rSet = new ResourceSetImpl();
             rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
@@ -670,6 +671,14 @@ public class Bpmn2JsonUnmarshaller {
         def.setTargetNamespace(properties.get("targetnamespace"));
         def.setExpressionLanguage(properties.get("expressionlanguage"));
         def.setName(properties.get("name"));
+        
+        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "xsi", "schemaLocation", false, false);
+        EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+            "http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd");
+        def.getAnyAttribute().add(extensionEntry);
+        
         _currentResource.getContents().add(def);// hook the definitions object to the resource early.
     }
 
