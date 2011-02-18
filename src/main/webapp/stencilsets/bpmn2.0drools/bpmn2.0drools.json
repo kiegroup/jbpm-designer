@@ -2312,6 +2312,18 @@
 				"messageflow_end",
 				"fromtoall",
 				"ActivitiesMorph"
+			],
+			"properties": [
+				{
+					"id":"ruleFlowGroup",
+					"type":"String",
+					"title":"Ruleflow Group",
+					"title_de":"Ruleflow Gruppe",
+					"value":"",
+					"description":"ruleFlowGroup",
+					"readonly":false,
+					"optional":true
+				}
 			]
 		},
 		{

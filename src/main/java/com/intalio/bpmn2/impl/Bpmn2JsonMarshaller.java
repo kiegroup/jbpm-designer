@@ -456,8 +456,19 @@ public class Bpmn2JsonMarshaller {
     		taskType = "Send";
     	} else if (task instanceof ReceiveTask) {
     		taskType = "Receive";
-    	}	
+    	}
+    	
     	properties.put("tasktype", taskType);
+    	// get out the droolsjbpm-specific attribute "ruleflowGroup"
+    	Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
+                properties.put("ruleflowgroup", entry.getValue());
+                break;
+            }
+        }
+        
     	marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
     }
     

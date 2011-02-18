@@ -421,6 +421,7 @@ public class Bpmn2JsonUnmarshaller {
                         // normal global task
                         task = Bpmn2Factory.eINSTANCE.createGlobalTask();
                     } else if (child instanceof BusinessRuleTask) {
+                        System.out.println("**** Created business rule task!");
                         task = Bpmn2Factory.eINSTANCE.createGlobalBusinessRuleTask();
                     } else if (child instanceof ManualTask) {
                         task = Bpmn2Factory.eINSTANCE.createGlobalManualTask();
@@ -576,6 +577,9 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof Task) {
             applyTaskProperties((Task) baseElement, properties);
         }
+        if (baseElement instanceof BusinessRuleTask) {
+            applyBusinessRuleTaskProperties((BusinessRuleTask) baseElement, properties);
+        }
         if (baseElement instanceof ScriptTask) {
             applyScriptTaskProperties((ScriptTask) baseElement, properties);
         }
@@ -716,6 +720,19 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
+    private void applyBusinessRuleTaskProperties(BusinessRuleTask task, Map<String, String> properties) {
+        task.setName(properties.get("name"));
+        if(properties.get("ruleflowgroup") != null &&  properties.get("ruleflowgroup").length() > 0) {
+            // add droolsjbpm-specific attribute "ruleFlowGroup"
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "ruleFlowGroup", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("ruleflowgroup"));
+            task.getAnyAttribute().add(extensionEntry);
+        }
+    }
+    
     private void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {
         scriptTask.setName(properties.get("name"));
         scriptTask.setScript(properties.get("script"));
