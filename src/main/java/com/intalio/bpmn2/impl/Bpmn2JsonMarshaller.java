@@ -201,6 +201,8 @@ public class Bpmn2JsonMarshaller {
 	            if (rootElement instanceof Process) {
 	                // have to wait for process node to finish properties and stencil marshalling
 	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
+	                System.out.println("Setting id to : " + ((Process) rootElement).getId());
+	                props.put("id", ((Process) rootElement).getId());
 	                
 	                // packageName is a jbpm-specific extension attribute
 	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();

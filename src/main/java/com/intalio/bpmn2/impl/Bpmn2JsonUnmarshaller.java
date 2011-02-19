@@ -421,7 +421,6 @@ public class Bpmn2JsonUnmarshaller {
                         // normal global task
                         task = Bpmn2Factory.eINSTANCE.createGlobalTask();
                     } else if (child instanceof BusinessRuleTask) {
-                        System.out.println("**** Created business rule task!");
                         task = Bpmn2Factory.eINSTANCE.createGlobalBusinessRuleTask();
                     } else if (child instanceof ManualTask) {
                         task = Bpmn2Factory.eINSTANCE.createGlobalManualTask();
@@ -459,6 +458,7 @@ public class Bpmn2JsonUnmarshaller {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
                             rootLevelProcess.setName(((Definitions) baseElt).getName());
+                            rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess, properties);
                             ((Definitions) baseElt).getRootElements().add(rootLevelProcess);
                         }
@@ -667,7 +667,9 @@ public class Bpmn2JsonUnmarshaller {
         if (properties.get("documentation") != null && !"".equals(properties.get("documentation"))) {
             baseElement.getDocumentation().add(createDocumentation(properties.get("documentation")));
         }
-        baseElement.setId(properties.get("resourceId"));
+        if(baseElement.getId() == null || baseElement.getId().length() < 1) {
+            baseElement.setId(properties.get("resourceId"));
+        }
     }
 
     private void applyDefinitionProperties(Definitions def, Map<String, String> properties) {
@@ -705,12 +707,6 @@ public class Bpmn2JsonUnmarshaller {
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
                 properties.get("package"));
             process.getAnyAttribute().add(extensionEntry);
-        }
-        
-        if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
-            Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
-            audit.getDocumentation().add(createDocumentation(properties.get("auditing")));
-            process.setAuditing(audit);
         }
         
         if (properties.get("monitoring") != null && !"".equals(properties.get("monitoring"))) {

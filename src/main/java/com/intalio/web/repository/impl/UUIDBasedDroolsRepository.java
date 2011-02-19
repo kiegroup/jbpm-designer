@@ -43,8 +43,8 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
                 processjson = profile.createUnmarshaller().parseModel(processxml, profile);
                 return displayProcess(processjson);
             } else {
-                return displayDefaultProcess();
-                //return new byte[0];
+                //return displayDefaultProcess();
+                return new byte[0];
             }
         } catch (Exception e) {
             _logger.error(e.getMessage(), e);
