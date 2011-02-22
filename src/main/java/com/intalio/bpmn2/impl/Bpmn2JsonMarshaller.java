@@ -203,15 +203,19 @@ public class Bpmn2JsonMarshaller {
 	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
 	                props.put("id", ((Process) rootElement).getId());
 	                
-	                // packageName is a jbpm-specific extension attribute
+	                // packageName and version are jbpm-specific extension attribute
 	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();
 	                while(iter.hasNext()) {
 	                    FeatureMap.Entry entry = iter.next();
 	                    if(entry.getEStructuralFeature().getName().equals("packageName")) {
 	                        props.put("package", entry.getValue());
-	                        break;
 	                    }
+	                    
+	                    if(entry.getEStructuralFeature().getName().equals("version")) {
+                            props.put("version", entry.getValue());
+                        }
 	                }
+	                
 	                marshallProperties(props, generator);
 	                marshallStencil("BPMNDiagram", generator);
 	            	linkSequenceFlows(((Process) rootElement).getFlowElements());
@@ -460,12 +464,15 @@ public class Bpmn2JsonMarshaller {
     	}
     	
     	properties.put("tasktype", taskType);
-    	// get out the droolsjbpm-specific attribute "ruleflowGroup"
+    	// get out the droolsjbpm-specific attributes "ruleflowGroup" and "taskName"
     	Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
                 properties.put("ruleflowgroup", entry.getValue());
+            }
+            if(entry.getEStructuralFeature().getName().equals("taskName")) {
+                properties.put("taskname", entry.getValue());
                 break;
             }
         }

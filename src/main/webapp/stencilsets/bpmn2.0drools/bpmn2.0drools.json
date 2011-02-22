@@ -2323,6 +2323,16 @@
 					"description":"ruleFlowGroup",
 					"readonly":false,
 					"optional":true
+				},
+				{
+					"id":"taskName",
+					"type":"String",
+					"title":"Task Name",
+					"title_de":"Task Name",
+					"value":"",
+					"description":"Task Name",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},

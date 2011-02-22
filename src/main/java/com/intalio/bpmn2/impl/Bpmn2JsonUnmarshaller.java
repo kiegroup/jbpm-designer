@@ -709,6 +709,16 @@ public class Bpmn2JsonUnmarshaller {
             process.getAnyAttribute().add(extensionEntry);
         }
         
+        // add version attrbute to process
+        if(properties.get("version") != null && properties.get("version").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "version", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("version"));
+            process.getAnyAttribute().add(extensionEntry);
+        }
+        
         if (properties.get("monitoring") != null && !"".equals(properties.get("monitoring"))) {
             Monitoring monitoring = Bpmn2Factory.eINSTANCE.createMonitoring();
             monitoring.getDocumentation().add(createDocumentation(properties.get("monitoring")));
@@ -741,6 +751,16 @@ public class Bpmn2JsonUnmarshaller {
 
     private void applyTaskProperties(Task task, Map<String, String> properties) {
         task.setName(properties.get("name"));
+        
+        if(properties.get("taskname") != null &&  properties.get("taskname").length() > 0) {
+            // add droolsjbpm-specific attribute "taskName"
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "taskName", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("taskname"));
+            task.getAnyAttribute().add(extensionEntry);
+        }
     }
     
     private void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
