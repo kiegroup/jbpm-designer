@@ -473,7 +473,6 @@ public class Bpmn2JsonMarshaller {
             }
             if(entry.getEStructuralFeature().getName().equals("taskName")) {
                 properties.put("taskname", entry.getValue());
-                break;
             }
         }
         
