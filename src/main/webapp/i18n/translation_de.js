@@ -431,6 +431,8 @@ ORYX.I18N.View.zoomStandard = "Originalgröße";
 ORYX.I18N.View.zoomStandardDesc = "Originalgröße";
 ORYX.I18N.View.zoomFitToModel = "Modelgröße";
 ORYX.I18N.View.zoomFitToModelDesc = "Modelgröße";
+ORYX.I18N.View.showInPopout = "Popout";
+ORYX.I18N.View.showInPopoutDesc = "Zeige in popup";
 
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};

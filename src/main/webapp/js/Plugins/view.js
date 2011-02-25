@@ -109,6 +109,27 @@ ORYX.Plugins.View = {
 			'minShape': 0,
 			'maxShape': 0
 		});
+		
+		/* Register popout to model */
+		this.facade.offer({
+			'name':ORYX.I18N.View.showInPopout,
+			'functionality': this.showInPopout.bind(this),
+			'group': ORYX.I18N.View.group,
+			'icon': ORYX.PATH + "images/popup.gif",
+			'description': ORYX.I18N.View.showInPopoutDesc,
+			'index': 5,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "drools";
+			}.bind(this)
+		});
 	},
 	
 	/**
@@ -121,6 +142,21 @@ ORYX.Plugins.View = {
 		this.zoomLevel = zoomLevel;
 		this._checkZoomLevelRange();
 		this.zoom(1);
+	},
+	
+	/**
+	 * Shows the canvas in bigger popout window.
+	 * 
+	 */
+	showInPopout : function() {
+		uuidParamName = "uuid";
+        uuidParamName = uuidParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        regexS = "[\\?&]"+uuidParamName+"=([^&#]*)";
+        regex = new RegExp( regexS );
+        uuidParams = regex.exec( window.location.href );
+
+        uuidParamValue = uuidParams[1]; 
+        window.open ("http://" + window.location.host + "/drools-guvnor/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs=" + uuidParamValue + "&client=oryx" , "Process Editor","status=0,toolbar=0,menubar=0,resizable=0,location=no,width=1600,height=1000");
 	},
 	
 	/**
