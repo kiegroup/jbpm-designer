@@ -196,6 +196,7 @@ public class Bpmn2JsonUnmarshaller {
             Definitions def = (Definitions) unmarshallItem(parser);
             reconnectFlows();
             createDiagram(def);
+            revisitGateways(def);
             return def;
         } finally {
             parser.close();
@@ -205,6 +206,36 @@ public class Bpmn2JsonUnmarshaller {
             _sequenceFlowTargets.clear();
             _bounds.clear();
             _currentResource = null;
+        }
+    }
+    
+    /**
+     * Updates the gatewayDirection attributes of all gateways.
+     * @param def
+     */
+    private void revisitGateways(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                List<FlowElement> flowElements =  process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                    if(fe instanceof Gateway) {
+                        Gateway gateway = (Gateway) fe;
+                        int incoming = gateway.getIncoming() == null ? 0 : gateway.getIncoming().size();
+                        int outgoing = gateway.getOutgoing() == null ? 0 : gateway.getOutgoing().size();
+                        if (incoming <= 1 && outgoing > 1) {
+                            gateway.setGatewayDirection(GatewayDirection.DIVERGING);
+                        } else if (incoming > 1 && outgoing <= 1) {
+                            gateway.setGatewayDirection(GatewayDirection.CONVERGING);
+                        } else if (incoming > 1 && outgoing > 1) {
+                            gateway.setGatewayDirection(GatewayDirection.MIXED);
+                        } else {
+                            gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -765,17 +796,6 @@ public class Bpmn2JsonUnmarshaller {
     
     private void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
         gateway.setName(properties.get("name"));
-        int incoming = gateway.getIncoming() != null ? 0 : gateway.getIncoming().size();
-        int outgoing = gateway.getOutgoing() != null ? 0 : gateway.getOutgoing().size();
-        if (incoming <= 1 && outgoing > 1) {
-        	gateway.setGatewayDirection(GatewayDirection.DIVERGING);
-        } else if (incoming > 1 && outgoing <= 1) {
-        	gateway.setGatewayDirection(GatewayDirection.CONVERGING);
-        } else if (incoming > 1 && outgoing > 1) {
-        	gateway.setGatewayDirection(GatewayDirection.MIXED);
-        } else {
-        	gateway.setGatewayDirection(GatewayDirection.DIVERGING);
-        }
     }
 
     private void applySequenceFlowProperties(SequenceFlow sequenceFlow, Map<String, String> properties) {
