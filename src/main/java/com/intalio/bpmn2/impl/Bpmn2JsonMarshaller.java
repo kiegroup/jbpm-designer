@@ -74,6 +74,7 @@ import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.Property;
 import org.eclipse.bpmn2.ReceiveTask;
 import org.eclipse.bpmn2.Resource;
 import org.eclipse.bpmn2.RootElement;
@@ -174,6 +175,7 @@ public class Bpmn2JsonMarshaller {
 	         * "monitoring":"",
 	         * "executable":"true",
 	         * "package":"com.sample",
+	         * "vardefs":"a,b,c,d",
 	         * "id":"",
 	         * "version":"",
 	         * "author":"",
@@ -202,6 +204,19 @@ public class Bpmn2JsonMarshaller {
 	                // have to wait for process node to finish properties and stencil marshalling
 	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
 	                props.put("id", ((Process) rootElement).getId());
+	                
+	                List<Property> processProperties = ((Process) rootElement).getProperties();
+	                if(processProperties != null && processProperties.size() > 0) {
+	                    String propVal = "";
+	                    for(int i=0; i<processProperties.size(); i++) {
+	                        Property p = processProperties.get(i);
+	                        propVal += p.getId();
+	                        if(i != processProperties.size()-1) {
+	                            propVal += ",";
+	                        }
+	                    }
+	                    props.put("vardefs", propVal);
+	                }
 	                
 	                // packageName and version are jbpm-specific extension attribute
 	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();

@@ -306,6 +306,17 @@
 					"optional":true
 				},
 				{
+					"id":"vardefs",
+					"type":"String",
+					"title":"Variable Definitions",
+					"title_de":"Variable Definitions",
+					"value":"",
+					"description":"Comma-separated variable definitions",
+					"description_de":"Comma-separated variable definitions",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"id",
 					"type":"String",
 					"title":"id",

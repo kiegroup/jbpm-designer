@@ -72,6 +72,7 @@ import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.Monitoring;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.ProcessType;
+import org.eclipse.bpmn2.Property;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SequenceFlow;
@@ -121,6 +122,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.intalio.bpmn2.BpmnMarshallerHelper;
+import com.sun.tools.javac.parser.Parser.Factory;
 import com.sun.xml.internal.bind.AnyTypeAdapter;
 
 /**
@@ -488,6 +490,20 @@ public class Bpmn2JsonUnmarshaller {
                             || child instanceof Artifact || child instanceof DataObject) {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
+                            // set the properties and item definitions first
+                            if(properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
+                                //comma-separated!
+                                String[] vardefs = properties.get("vardefs").split( ",\\s*" );
+                                for(String vardef : vardefs) {
+                                    Property prop = Bpmn2Factory.eINSTANCE.createProperty();
+                                    prop.setId(vardef);
+                                    ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                                    itemdef.setId("_" + prop.getId() + "Item");
+                                    prop.setItemSubjectRef(itemdef);
+                                    rootLevelProcess.getProperties().add(prop);
+                                    ((Definitions) baseElt).getRootElements().add(itemdef);
+                                }
+                            }
                             rootLevelProcess.setName(((Definitions) baseElt).getName());
                             rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess, properties);
