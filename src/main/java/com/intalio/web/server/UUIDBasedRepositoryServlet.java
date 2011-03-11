@@ -122,16 +122,6 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         String response = new String(_repository.load(req, uuid, profile), Charset.forName("UTF-8"));
         
         resp.getWriter().write(response);
-        //resp.getOutputStream().write(_repository.load(req, uuid, profile));
-        
-        
-//        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile));
-//        byte[] buffer = new byte[4096];
-//        int read;
-//
-//        while ((read = input.read(buffer)) != -1) {
-//            resp.getOutputStream().write(buffer, 0, read);
-//        }
     }
 
     @Override
