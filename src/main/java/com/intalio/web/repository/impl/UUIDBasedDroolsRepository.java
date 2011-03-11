@@ -41,7 +41,7 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
             String processxml = doHttpUrlConnectionAction(profile.getExternalLoadURL() + "?uuid=" + uuid + "&usr=" + profile.getUsr() + "&pwd=" + profile.getPwd());
             if(processxml != null && processxml.length() > 0) {
                 processjson = profile.createUnmarshaller().parseModel(processxml, profile);
-                return displayProcess(processjson);
+                return processjson.getBytes("UTF-8");
             } else {
                 //return displayDefaultProcess();
                 return new byte[0];
@@ -89,31 +89,33 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         return profile.createMarshaller().parseModel(json);
     }
 
-    private byte[] displayProcess(String json) throws Exception {
-        InputStream input = null;
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        
-        try {
-            input = new ByteArrayInputStream(json.getBytes("UTF-8"));
-            byte[] buffer = new byte[4096];
-            int read;
-           
-            while ((read = input.read(buffer)) != -1) {
-                output.write(buffer, 0, read);
-            }
-        } catch (FileNotFoundException e) {
-            //unlikely since we just checked.
-            _logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-            
-        } catch (IOException e) {
-            _logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        } finally {
-            if (input != null) { try { input.close();} catch(Exception e) {} }
-        }
-        return output.toByteArray();       
-    }
+   // private byte[] displayProcess(String json) throws Exception {
+   //     System.out.println("******* id displayProcess and json is: " + json);
+   //     return json.getBytes("UTF-8");
+        //InputStream input = null;
+//        ByteArrayOutputStream output = new ByteArrayOutputStream();
+//        
+//        try {
+//            input = new ByteArrayInputStream(json.getBytes("UTF-8"));
+//            byte[] buffer = new byte[4096];
+//            int read;
+//           
+//            while ((read = input.read(buffer)) != -1) {
+//                output.write(buffer, 0, read);
+//            }
+//        } catch (FileNotFoundException e) {
+//            //unlikely since we just checked.
+//            _logger.error(e.getMessage(), e);
+//            throw new RuntimeException(e);
+//            
+//        } catch (IOException e) {
+//            _logger.error(e.getMessage(), e);
+//            throw new RuntimeException(e);
+//        } finally {
+//            if (input != null) { try { input.close();} catch(Exception e) {} }
+//        }
+//        return output.toByteArray();       
+ //   }
     private String doHttpUrlConnectionAction(String desiredUrl) throws Exception {
       URL url = null;
       BufferedReader reader = null;
@@ -124,11 +126,12 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         
         connection.setRequestMethod("GET");
-        
+        connection.setRequestProperty("Content-Type", "application/xml"); 
+        connection.setRequestProperty("charset", "UTF-8");
         connection.setReadTimeout(5*1000);
         connection.connect();
 
-        reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         stringBuilder = new StringBuilder();
 
         String line = null;

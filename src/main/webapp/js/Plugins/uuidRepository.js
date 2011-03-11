@@ -402,10 +402,10 @@ window.onOryxResourcesLoaded = function() {
  		//load the model from the repository from its uuid
 		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
             asynchronous: false,
+            encoding: 'UTF-8',
             method: 'get',
             onSuccess: function(transport) {
 				response = transport.responseText;
-				
 				if (response.length != 0) {
 				    try {
 					    model = response.evalJSON();

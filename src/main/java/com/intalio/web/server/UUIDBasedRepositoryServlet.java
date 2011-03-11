@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,18 +112,26 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
         String uuid = req.getParameter("uuid");
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
         IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
-        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile));
-        byte[] buffer = new byte[4096];
-        int read;
-
-        while ((read = input.read(buffer)) != -1) {
-            resp.getOutputStream().write(buffer, 0, read);
-        }
+        String response = new String(_repository.load(req, uuid, profile), Charset.forName("UTF-8"));
+        
+        resp.getWriter().write(response);
+        //resp.getOutputStream().write(_repository.load(req, uuid, profile));
+        
+        
+//        ByteArrayInputStream input = new ByteArrayInputStream(_repository.load(req, uuid, profile));
+//        byte[] buffer = new byte[4096];
+//        int read;
+//
+//        while ((read = input.read(buffer)) != -1) {
+//            resp.getOutputStream().write(buffer, 0, read);
+//        }
     }
 
     @Override
@@ -135,6 +144,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             StringWriter output = new StringWriter();
             output.write(xml);
             resp.setContentType("application/xml");
+            resp.setCharacterEncoding("UTF-8");
             resp.setStatus(200);
             resp.getWriter().print(output.toString());
         } else {

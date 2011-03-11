@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -188,15 +189,17 @@ public class DroolsProfileImpl implements IDiagramProfile {
     
     private Definitions getDefinitions(String xml) {
         try {
-            
             ResourceSet resourceSet = new ResourceSetImpl();
             resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
                 .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new Bpmn2ResourceFactoryImpl());
             resourceSet.getPackageRegistry().put("http://www.omg.org/spec/BPMN/20100524/MODEL", Bpmn2Package.eINSTANCE);
-            Resource resource = resourceSet.createResource(URI.createURI("inputStream://dummyUriWithValidSuffix.xml"));
+            XMLResource resource = (XMLResource) resourceSet.createResource(URI.createURI("inputStream://dummyUriWithValidSuffix.xml"));
+            resource.getDefaultLoadOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
+            resource.setEncoding("UTF-8");
+            Map<String, Object> options = new HashMap<String, Object>();
+            options.put( XMLResource.OPTION_ENCODING, "UTF-8" );
             InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-            resource.load(is, Collections.EMPTY_MAP);
-            resource.load(Collections.EMPTY_MAP);
+            resource.load(is, options);
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
         } catch (Throwable t) {
             t.printStackTrace();

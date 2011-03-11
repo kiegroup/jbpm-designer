@@ -21,6 +21,7 @@
 ****************************************/
 package com.intalio.bpmn2.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
@@ -121,12 +123,13 @@ public class Bpmn2JsonMarshaller {
 	}
 
     public String marshall(Definitions def) throws IOException {
-        StringWriter writer = new StringWriter();
+        //StringWriter writer = new StringWriter();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JsonFactory f = new JsonFactory();
-        JsonGenerator generator = f.createJsonGenerator(writer);
+        JsonGenerator generator = f.createJsonGenerator(baos, JsonEncoding.UTF8);
         marshallDefinitions(def, generator);
         generator.close();
-        return writer.toString();
+        return baos.toString("UTF-8");
     }
     
     private void linkSequenceFlows(List<FlowElement> flowElements) {

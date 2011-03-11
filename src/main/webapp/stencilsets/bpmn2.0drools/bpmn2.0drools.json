@@ -312,7 +312,7 @@
 					"title_de":"Variable Definitions",
 					"value":"",
 					"description":"Comma-separated variable definitions",
-					"description_de":"Comma-separated variable definitions",
+					"description_de":"Durch Komma getrennte Variablendeklarationen",
 					"readonly":false,
 					"optional":true
 				},
