@@ -85,9 +85,19 @@ public interface IDiagramProfile {
     public IDiagramUnmarshaller createUnmarshaller();
     
     /**
-     * @return the load url for external resource loading.
+     * @return the load url protocol for external resource loading.
      */
-    public String getExternalLoadURL();
+    public String getExternalLoadURLProtocol();
+    
+    /**
+     * @return the load url hostname for external resource loading.
+     */
+    public String getExternalLoadURLHostname();
+    
+    /**
+     * @return the load url subdomain for external resource loading.
+     */
+    public String getExternalLoadURLSubdomain();
     
     /**
      * @return the user for external resource.

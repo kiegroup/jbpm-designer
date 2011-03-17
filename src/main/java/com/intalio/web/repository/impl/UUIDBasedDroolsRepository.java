@@ -23,8 +23,11 @@ import com.intalio.web.repository.IUUIDBasedRepository;
 public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
 
     private static final Logger _logger = Logger.getLogger(UUIDBasedDroolsRepository.class);
+    private static final String EXTERNAL_PROTOCOL = "oryx.external.protocol";
+    private static final String EXTERNAL_HOST = "oryx.external.host";
+    
     private final static String DEFAULTS_PATH = "defaults";
-  
+    
     private String _defaultsPath;
     
     @Override
@@ -38,7 +41,7 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         
         try {
             // check with Guvnor to see what it has for this uuid for us
-            String processxml = doHttpUrlConnectionAction(profile.getExternalLoadURL() + "?uuid=" + uuid + "&usr=" + profile.getUsr() + "&pwd=" + profile.getPwd());
+            String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid));
             if(processxml != null && processxml.length() > 0) {
                 processjson = profile.createUnmarshaller().parseModel(processxml, profile);
                 return processjson.getBytes("UTF-8");
@@ -58,32 +61,38 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         // Guvnor is responsible for saving 
     }
     
-    private byte[] displayDefaultProcess() throws Exception {
-        String  filename = _defaultsPath + "/BPMN2-DefaultProcess.json";
-        InputStream input = null;
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try {
-            input = new FileInputStream(filename);
-            byte[] buffer = new byte[4096];
-            int read;
-           
-            while ((read = input.read(buffer)) != -1) {
-                output.write(buffer, 0, read);
-            }
-        } catch (FileNotFoundException e) {
-            //unlikely since we just checked.
-            _logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-            
-        } catch (IOException e) {
-            _logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        } finally {
-            if (input != null) { try { input.close();} catch(Exception e) {} }
+    private String buildExternalLoadURL(IDiagramProfile profile, String uuid) {
+        StringBuffer buff = new StringBuffer();
+        //check override system prop
+        if(!isEmpty(System.getProperty(EXTERNAL_PROTOCOL))) {
+            buff.append(System.getProperty(EXTERNAL_PROTOCOL));
+        } else {
+            buff.append(profile.getExternalLoadURLProtocol());
         }
-        return output.toByteArray();
+        
+        buff.append("://");
+        
+        String externalHostSysProp = System.getProperty(EXTERNAL_HOST);
+        if(!isEmpty(externalHostSysProp)) {
+            if(externalHostSysProp.startsWith("/")){
+                externalHostSysProp = externalHostSysProp.substring(1);
+            }
+            if(externalHostSysProp.endsWith("/")) {
+                externalHostSysProp = externalHostSysProp.substring(0,externalHostSysProp.length() - 1);
+            }
+            buff.append(externalHostSysProp);
+        } else {
+            buff.append(profile.getExternalLoadURLHostname());
+        }
+        
+        buff.append("/");
+        buff.append(profile.getExternalLoadURLSubdomain());
+        buff.append("?uuid=").append(uuid);
+        buff.append("&usr=").append(profile.getUsr());
+        buff.append("&pwd=").append(profile.getPwd());
+        
+        return buff.toString();
     }
-    
     
     public String toXML(String json, IDiagramProfile profile) {
         return profile.createMarshaller().parseModel(json);
@@ -129,4 +138,35 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
       }
     }
 
+    /**
+     * <p>Checks if a String is empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isEmpty(null)      = true
+     * StringUtils.isEmpty("")        = true
+     * StringUtils.isEmpty(" ")       = false
+     * StringUtils.isEmpty("bob")     = false
+     * StringUtils.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * <p>NOTE: This method changed in Lang version 2.0.
+     * It no longer trims the String.
+     * That functionality is available in isBlank().</p>
+     *
+     * @param str  the String to check, may be null
+     * @return <code>true</code> if the String is empty or null
+     */
+    private boolean isEmpty(final CharSequence str) {
+        if ( str == null || str.length() == 0 ) {
+            return true;
+        }
+        
+        for ( int i = 0, length = str.length(); i < length; i++ ){
+            if ( str.charAt( i ) != ' ' )  {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 }

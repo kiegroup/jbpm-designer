@@ -49,7 +49,9 @@ public class DroolsProfileImpl implements IDiagramProfile {
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
     private String _stencilSet;
-    private String _externalLoadURL;
+    private String _externalLoadHost;
+    private String _externalLoadProtocol;
+    private String _externalLoadSubdomain;
     private String _usr;
     private String _pwd;
     
@@ -110,8 +112,14 @@ public class DroolsProfileImpl implements IDiagramProfile {
                         _plugins.put(name, registry.get(name));
                     } else if ("externalloadurl".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
-                            if ("name".equals(reader.getAttributeLocalName(i))) {
-                                _externalLoadURL = reader.getAttributeValue(i);
+                            if ("protocol".equals(reader.getAttributeLocalName(i))) {
+                                _externalLoadProtocol = reader.getAttributeValue(i);
+                            }
+                            if ("host".equals(reader.getAttributeLocalName(i))) {
+                                _externalLoadHost = reader.getAttributeValue(i);
+                            }
+                            if ("subdomain".equals(reader.getAttributeLocalName(i))) {
+                                _externalLoadSubdomain = reader.getAttributeValue(i);
                             }
                             if ("usr".equals(reader.getAttributeLocalName(i))) {
                                 _usr = reader.getAttributeValue(i);
@@ -139,10 +147,18 @@ public class DroolsProfileImpl implements IDiagramProfile {
         return "bpmn";
     }
       
-    public String getExternalLoadURL() {
-        return _externalLoadURL;
+    public String getExternalLoadURLProtocol() {
+        return _externalLoadProtocol;
     }
-    
+
+    public String getExternalLoadURLHostname() {
+        return _externalLoadHost;
+    }
+
+    public String getExternalLoadURLSubdomain() {
+        return _externalLoadSubdomain;
+    }
+
     public String getUsr() {
         return _usr;
     }

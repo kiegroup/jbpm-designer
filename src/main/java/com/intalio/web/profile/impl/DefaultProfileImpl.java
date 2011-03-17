@@ -72,7 +72,9 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
 
     private String _stencilSet;
-    private String _externalLoadURL;
+    private String _externalLoadHost;
+    private String _externalLoadProtocol;
+    private String _externalLoadSubdomain;
     private String _usr;
     private String _pwd;
     
@@ -150,8 +152,16 @@ public class DefaultProfileImpl implements IDiagramProfile {
         return "bpmn";
     }
     
-    public String getExternalLoadURL() {
-        return _externalLoadURL;
+    public String getExternalLoadURLProtocol() {
+        return _externalLoadProtocol;
+    }
+
+    public String getExternalLoadURLHostname() {
+        return _externalLoadHost;
+    }
+
+    public String getExternalLoadURLSubdomain() {
+        return _externalLoadSubdomain;
     }
     
     public String getUsr() {
