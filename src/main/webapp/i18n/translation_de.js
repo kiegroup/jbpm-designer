@@ -433,6 +433,8 @@ ORYX.I18N.View.zoomFitToModel = "Modelgröße";
 ORYX.I18N.View.zoomFitToModelDesc = "Modelgröße";
 ORYX.I18N.View.showInPopout = "Popout";
 ORYX.I18N.View.showInPopoutDesc = "Zeige in popup";
+ORYX.I18N.View.convertToPDF = "PDF";
+ORYX.I18N.View.convertToPDFDesc = "PDF";
 
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};

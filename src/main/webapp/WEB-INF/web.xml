@@ -405,6 +405,12 @@
           <param-value>default</param-value>
        </init-param>
 	</servlet>
+  
+    <servlet>
+      <display-name>Transformer</display-name>
+      <servlet-name>TransformerServlet</servlet-name>
+      <servlet-class>com.intalio.web.server.TransformerServlet</servlet-class>
+    </servlet>
 	
 	<servlet>
 	   <display-name>Plugin Service Servlet</display-name>
@@ -672,6 +678,11 @@
 	<servlet-mapping>
         <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
         <url-pattern>/uuidRepository</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+      <servlet-name>TransformerServlet</servlet-name>
+      <url-pattern>/transformer</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
