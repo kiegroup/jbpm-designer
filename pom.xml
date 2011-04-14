@@ -4,7 +4,7 @@
   <groupId>org.jboss.drools</groupId>
   <artifactId>process-designer</artifactId>
   <version>1.0.0.091-SNAPSHOT</version>
-    
+  <packaging>war</packaging>
   <dependencies>
     <!-- These dependencies make Wapama work -->
     <!--
