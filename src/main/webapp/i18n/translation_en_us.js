@@ -442,6 +442,8 @@ ORYX.I18N.View.showInPopout = "Popout";
 ORYX.I18N.View.showInPopoutDesc = "Show in pop out window";
 ORYX.I18N.View.convertToPDF = "PDF";
 ORYX.I18N.View.convertToPDFDesc = "Convert to PDF";
+ORYX.I18N.View.convertToPNG = "PNG";
+ORYX.I18N.View.convertToPNGDesc = "Convert to PNG";
 
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};

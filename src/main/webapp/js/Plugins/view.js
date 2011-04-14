@@ -151,6 +151,27 @@ ORYX.Plugins.View = {
 				return profileParamValue == "drools";
 			}.bind(this)
 		});
+		
+		/* Register pngview to model */
+		this.facade.offer({
+			'name':ORYX.I18N.View.convertToPNG,
+			'functionality': this.showAsPNG.bind(this),
+			'group': ORYX.I18N.View.group,
+			'icon': ORYX.PATH + "images/png.gif",
+			'description': ORYX.I18N.View.convertToPNGDesc,
+			'index': 7,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "drools";
+			}.bind(this)
+		});
 	},
 	
 	/**
@@ -177,7 +198,7 @@ ORYX.Plugins.View = {
         uuidParams = regex.exec( window.location.href );
 
         uuidParamValue = uuidParams[1]; 
-        window.open ("http://" + window.location.host + "/drools-guvnor/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs=" + uuidParamValue + "&client=oryx" , "Process Editor","status=0,toolbar=0,menubar=0,resizable=0,location=no,width=1600,height=1000");
+        window.open ("http://" + window.location.host + "/drools-guvnor/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs=" + uuidParamValue + "&client=oryx" , "Process Editor","status=0,toolbar=0,menubar=0,resizable=0,location=no,width=1400,height=1000");
 	},
 	
 	/**
@@ -186,6 +207,49 @@ ORYX.Plugins.View = {
 	 */
 	showAsPDF : function() {
 		var transformval = 'pdf';
+		var svgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
+		
+		var method ="post";
+		var form = document.createElement("form");
+		form.setAttribute("name", "transformerform");
+		form.setAttribute("method", method);
+		form.setAttribute("action", ORYX.CONFIG.TRANSFORMER_URL());
+		form.setAttribute("target", "_blank");
+		
+		var hfSVG = document.createElement("input");
+		hfSVG.setAttribute("type", "hidden");
+		hfSVG.setAttribute("name", "svg");
+		hfSVG.setAttribute("value", svgDOM);
+        form.appendChild(hfSVG);
+        
+        var hfUUID = document.createElement("input");
+        hfUUID.setAttribute("type", "hidden");
+        hfUUID.setAttribute("name", "uuid");
+        hfUUID.setAttribute("value", ORYX.UUID);
+        form.appendChild(hfUUID);
+        
+        var hfPROFILE = document.createElement("input");
+        hfPROFILE.setAttribute("type", "hidden");
+        hfPROFILE.setAttribute("name", "profile");
+        hfPROFILE.setAttribute("value", ORYX.PROFILE);
+        form.appendChild(hfPROFILE);
+        
+        var hfTRANSFORMTO = document.createElement("input");
+        hfTRANSFORMTO.setAttribute("type", "hidden");
+        hfTRANSFORMTO.setAttribute("name", "transformto");
+        hfTRANSFORMTO.setAttribute("value", transformval);
+        form.appendChild(hfTRANSFORMTO);
+        
+        document.body.appendChild(form);
+        form.submit();	 
+	},
+	
+	/**
+	 * Converts the process to png format.
+	 * 
+	 */
+	showAsPNG : function() {
+		var transformval = 'png';
 		var svgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
 		
 		var method ="post";

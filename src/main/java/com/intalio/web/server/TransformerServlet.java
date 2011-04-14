@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.fop.svg.PDFTranscoder;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -51,6 +52,7 @@ public class TransformerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger _logger = Logger.getLogger(TransformerServlet.class);
     private static final String TO_PDF = "pdf";
+    private static final String TO_PNG = "png";
     
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -76,6 +78,17 @@ public class TransformerServlet extends HttpServlet {
                 resp.sendError(500, e.getMessage());
             }
             resp.getOutputStream().flush();
+        } else if(transformto != null && transformto.equals(TO_PNG)) {
+            resp.setContentType("image/png");
+            resp.setHeader("Content-Disposition", "attachment; filename=\"" +uuid + ".png\"");
+            try {
+                PNGTranscoder t = new PNGTranscoder();
+                TranscoderInput input = new TranscoderInput(new StringReader(svg));
+                TranscoderOutput output = new TranscoderOutput(resp.getOutputStream());
+                t.transcode(input, output);
+            } catch (TranscoderException e) {
+                resp.sendError(500, e.getMessage());
+            }
         }
     }
 }
