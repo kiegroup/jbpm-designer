@@ -1,14 +1,8 @@
 package com.intalio.web.repository.impl;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -30,12 +24,10 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
     
     private String _defaultsPath;
     
-    @Override
     public void configure(HttpServlet servlet) {
         _defaultsPath = servlet.getServletContext().getRealPath("/" + DEFAULTS_PATH);
     }
 
-    @Override
     public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) {
         String processjson = "";
         
@@ -55,7 +47,6 @@ public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
         }
     }
 
-    @Override
     public void save(HttpServletRequest req, String uuid, String json,
             String svg, IDiagramProfile profile, Boolean autosave) {
         // Guvnor is responsible for saving 

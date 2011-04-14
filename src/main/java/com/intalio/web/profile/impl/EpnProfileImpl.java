@@ -108,52 +108,42 @@ public class EpnProfileImpl implements IDiagramProfile {
         }
     }
     
-    @Override
     public String getName() {
         return "epn";
     }
 
-    @Override
     public String getTitle() {
         return "EPN Designer";
     }
 
-    @Override
     public String getStencilSet() {
         return _stencilSet;
     }
 
-    @Override
     public Collection<String> getStencilSetExtensions() {
         return Collections.emptyList();
     }
 
-    @Override
     public String getSerializedModelExtension() {
         return "epn";
     }
 
-    @Override
     public String getStencilSetURL() {
         return "/designer/stencilsets/epn/epn.json";
     }
 
-    @Override
     public String getStencilSetNamespaceURL() {
         return "http://b3mn.org/stencilset/epn#";
     }
 
-    @Override
     public String getStencilSetExtensionURL() {
         return "http://oryx-editor.org/stencilsets/extensions/epn#";
     }
 
-    @Override
     public Collection<String> getPlugins() {
         return Collections.unmodifiableCollection(_plugins.keySet());
     }
 
-    @Override
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel) {
@@ -175,7 +165,6 @@ public class EpnProfileImpl implements IDiagramProfile {
         };
     }
 
-    @Override
     public IDiagramUnmarshaller createUnmarshaller() {
         return new IDiagramUnmarshaller() {
             public String parseModel(String xmlModel, IDiagramProfile profile) {
