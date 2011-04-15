@@ -75,10 +75,12 @@ import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.ParallelGateway;
+import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.Property;
 import org.eclipse.bpmn2.ReceiveTask;
 import org.eclipse.bpmn2.Resource;
+import org.eclipse.bpmn2.ResourceRole;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SendTask;
@@ -475,6 +477,21 @@ public class Bpmn2JsonMarshaller {
     		taskType = "Manual";
     	} else if (task instanceof UserTask) {
     		taskType = "User";
+    		// get the user task actors
+    		List<ResourceRole> roles = task.getResources();
+    		StringBuilder sb = new StringBuilder();
+    		for(ResourceRole role : roles) {
+    		    if(role instanceof PotentialOwner) {
+    		        FormalExpression fe = (FormalExpression) ( (PotentialOwner)role).getResourceAssignmentExpression().getExpression();
+    		        sb.append(fe.getBody());
+    		        sb.append(",");
+    		    }
+    		}
+    		if(sb.length() > 0) {
+    		    //get rid of annoying last comma
+    		    sb.setLength(sb.length() - 1);
+    		}
+    		properties.put("actors", sb.toString());
     	} else if (task instanceof SendTask) {
     		taskType = "Send";
     	} else if (task instanceof ReceiveTask) {

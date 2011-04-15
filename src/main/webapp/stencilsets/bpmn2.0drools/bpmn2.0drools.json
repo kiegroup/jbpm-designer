@@ -1083,7 +1083,7 @@
 				{
 					"id":"outputdataitem",
 					"type":"String",
-					"title":"InputDataItem",
+					"title":"OutputDataItem",
 					"title_de":"Ausgabe-Daten-Element",
 					"value":"",
 					"description":"A Property, representing for every Activity instance the single item of the collection stored in the loopDataOutput.",
@@ -2342,6 +2342,16 @@
 					"title_de":"Task Name",
 					"value":"",
 					"description":"Task Name",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"actors",
+					"type":"String",
+					"title":"Actors",
+					"title_de":"Actors",
+					"value":"",
+					"description":"Comma-separated list of actors",
 					"readonly":false,
 					"optional":true
 				}

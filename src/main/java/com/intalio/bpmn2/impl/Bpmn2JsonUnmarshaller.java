@@ -64,15 +64,18 @@ import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
+import org.eclipse.bpmn2.GlobalUserTask;
 import org.eclipse.bpmn2.Import;
 import org.eclipse.bpmn2.ItemDefinition;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.Monitoring;
+import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.ProcessType;
 import org.eclipse.bpmn2.Property;
+import org.eclipse.bpmn2.ResourceAssignmentExpression;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SequenceFlow;
@@ -621,6 +624,9 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof SequenceFlow) {
             applySequenceFlowProperties((SequenceFlow) baseElement, properties);
         }
+        if (baseElement instanceof UserTask) {
+            applyUserTaskProperties((UserTask) baseElement, properties);
+        }    
         if (baseElement instanceof Task) {
             applyTaskProperties((Task) baseElement, properties);
         }
@@ -798,8 +804,7 @@ public class Bpmn2JsonUnmarshaller {
 
     private void applyTaskProperties(Task task, Map<String, String> properties) {
         task.setName(properties.get("name"));
-        
-        if(properties.get("taskname") != null &&  properties.get("taskname").length() > 0) {
+        if(properties.get("taskname") != null && properties.get("taskname").length() > 0) {
             // add droolsjbpm-specific attribute "taskName"
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -807,6 +812,22 @@ public class Bpmn2JsonUnmarshaller {
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
                     properties.get("taskname"));
             task.getAnyAttribute().add(extensionEntry);
+        }
+    }
+    
+    private void applyUserTaskProperties(UserTask task, Map<String, String> properties) {
+        applyTaskProperties(task, properties);
+        if(properties.get("actors") != null && properties.get("actors").length() > 0) {
+            String[] allActors = properties.get("actors").split( ",\\s*" );
+            for(String actor : allActors) {
+                PotentialOwner po = Bpmn2Factory.eINSTANCE.createPotentialOwner();
+                ResourceAssignmentExpression rae = Bpmn2Factory.eINSTANCE.createResourceAssignmentExpression();
+                FormalExpression fe = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                fe.setBody(actor);
+                rae.setExpression(fe);
+                po.setResourceAssignmentExpression(rae);
+                task.getResources().add(po);
+            }
         }
     }
     
