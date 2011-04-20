@@ -116,7 +116,7 @@
 				},
 				{
 					"id":"dataoutputassociations",
-					"type":"String",
+					"type":"Text",
 					"title":"DataOutputAssociations",
 					"title_de":"Daten Ausgangs-Assoziation",
 					"value":"",
@@ -129,7 +129,7 @@
 				},
 				{
 					"id":"dataoutput",
-					"type":"String",
+					"type":"Text",
 					"title":"DataOutput",
 					"title_de":"Daten-Ausgang",
 					"value":"",
@@ -142,7 +142,7 @@
 				},
 				{
 					"id":"outputset",
-					"type":"String",
+					"type":"Text",
 					"title":"OutputSet",
 					"title_de":"Ausgabe-Menge",
 					"value":"",
@@ -580,7 +580,7 @@
 			"properties" : [
 				{
 					"id":"datainputset",
-					"type":"Complex",
+					"type":"Text",
 					"title":"DataInputSet",
 					"title_de":"Dateneingabesatz",
 					"value":"",
@@ -588,7 +588,7 @@
 					"description_de":"Ein Eingabesatz ist eine Zusammenstellung von Eingabe-Datenobjekten, die zusammen einen gültigen Satz von Dataeingaben definieren.",
 					"readonly":false,
 					"optional":true,
-					"complexItems": [
+					/** "complexItems": [
 						{
 							"id":"name",
 							"name":"Name",
@@ -614,11 +614,11 @@
 							"width":80,
 							"optional":true
 						}
-					]
+					] **/
 				},            
 				{
 					"id":"dataoutputset",
-					"type":"Complex",
+					"type":"Text",
 					"title":"DataOutputSet",
 					"title_de":"Datenausgabesatz",
 					"value":"",
@@ -626,7 +626,7 @@
 					"description_de":"Ein Ausgabesatz ist eine Zusammenstellung von Ausgabe-Datenobjekten, die zusammen als Ausgabe einer Aktivität oder eines Ereignisses produziert werden.",
 					"readonly":false,
 					"optional":true,
-					"complexItems": [
+					/** "complexItems": [
 						{
 							"id":"name",
 							"name":"Name",
@@ -652,7 +652,7 @@
 							"width":80,
 							"optional":true
 						}
-					]
+					] **/
 				}
 			]
 		},
@@ -698,14 +698,14 @@
 				},
 				{
 					"id":"assignments",
-					"type":"Complex",
+					"type":"Text",
 					"title":"Assignments",
 					"title_de":"Zuweisungen",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"complexItems": [
+					/** "complexItems": [
 						{
 							"id":"to",
 							"name":"To",
@@ -748,7 +748,7 @@
 								}
 							]
 						}
-					]
+					] **/
 				},
 				{
 					"id":"callacitivity",
@@ -2332,6 +2332,26 @@
 					"title_de":"Ruleflow Gruppe",
 					"value":"",
 					"description":"ruleFlowGroup",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"onEntryActions",
+					"type":"Text",
+					"title":"On Entry Actions",
+					"title_de":"On Entry Actions",
+					"value":"",
+					"description":"on entry actions",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"onExitActions",
+					"type":"Text",
+					"title":"On Exit Actions",
+					"title_de":"On Exit Actions",
+					"value":"",
+					"description":"on exit actions",
 					"readonly":false,
 					"optional":true
 				},

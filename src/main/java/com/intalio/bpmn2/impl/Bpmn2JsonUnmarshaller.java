@@ -24,11 +24,9 @@ package com.intalio.bpmn2.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,23 +37,24 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.eclipse.bpmn2.Artifact;
+import org.eclipse.bpmn2.Assignment;
 import org.eclipse.bpmn2.Association;
 import org.eclipse.bpmn2.Auditing;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
-import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.BusinessRuleTask;
+import org.eclipse.bpmn2.CatchEvent;
+import org.eclipse.bpmn2.DataInput;
+import org.eclipse.bpmn2.DataInputAssociation;
 import org.eclipse.bpmn2.DataObject;
+import org.eclipse.bpmn2.DataOutput;
+import org.eclipse.bpmn2.DataOutputAssociation;
 import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.Event;
-import org.eclipse.bpmn2.Extension;
-import org.eclipse.bpmn2.ExtensionAttributeDefinition;
-import org.eclipse.bpmn2.ExtensionAttributeValue;
-import org.eclipse.bpmn2.ExtensionDefinition;
+import org.eclipse.bpmn2.EventDefinition;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
@@ -64,13 +63,16 @@ import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
-import org.eclipse.bpmn2.GlobalUserTask;
 import org.eclipse.bpmn2.Import;
+import org.eclipse.bpmn2.InputOutputSpecification;
+import org.eclipse.bpmn2.InputSet;
+import org.eclipse.bpmn2.ItemAwareElement;
 import org.eclipse.bpmn2.ItemDefinition;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.Monitoring;
+import org.eclipse.bpmn2.OutputSet;
 import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.ProcessType;
@@ -89,30 +91,12 @@ import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.BpmnDiFactory;
-import org.eclipse.bpmn2.di.BpmnDiPackage;
-import org.eclipse.bpmn2.impl.DocumentRootImpl;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAnnotation;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EFactory;
-import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -125,8 +109,6 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.intalio.bpmn2.BpmnMarshallerHelper;
-import com.sun.tools.javac.parser.Parser.Factory;
-import com.sun.xml.internal.bind.AnyTypeAdapter;
 
 /**
  * @author Antoine Toulme
@@ -322,7 +304,6 @@ public class Bpmn2JsonUnmarshaller {
         String stencil = null;
         List<BaseElement> childElements = new ArrayList<BaseElement>();
         List<String> outgoing = new ArrayList<String>();
-        Map<String, Float> bounds = new HashMap<String, Float>();
         while (parser.nextToken() != JsonToken.END_OBJECT) {
             String fieldname = parser.getCurrentName();
             parser.nextToken();
@@ -426,9 +407,7 @@ public class Bpmn2JsonUnmarshaller {
         _idMap.put(resourceId, baseElt);
         // baseElt.setId(resourceId); commented out as bpmn2 seems to create
         // duplicate ids right now.
-
         applyProperties(baseElt, properties);
-
         if (baseElt instanceof Definitions) {
             Process rootLevelProcess = null;
             for (BaseElement child : childElements) {
@@ -495,7 +474,6 @@ public class Bpmn2JsonUnmarshaller {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
                             // set the properties and item definitions first
                             if(properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
-                                //comma-separated!
                                 String[] vardefs = properties.get("vardefs").split( ",\\s*" );
                                 for(String vardef : vardefs) {
                                     Property prop = Bpmn2Factory.eINSTANCE.createProperty();
@@ -624,12 +602,12 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof SequenceFlow) {
             applySequenceFlowProperties((SequenceFlow) baseElement, properties);
         }
-        if (baseElement instanceof UserTask) {
-            applyUserTaskProperties((UserTask) baseElement, properties);
-        }    
         if (baseElement instanceof Task) {
             applyTaskProperties((Task) baseElement, properties);
         }
+        if (baseElement instanceof UserTask) {
+            applyUserTaskProperties((UserTask) baseElement, properties);
+        }  
         if (baseElement instanceof BusinessRuleTask) {
             applyBusinessRuleTaskProperties((BusinessRuleTask) baseElement, properties);
         }
@@ -641,6 +619,9 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (baseElement instanceof Event) {
             applyEventProperties((Event) baseElement, properties);
+        }
+        if (baseElement instanceof CatchEvent) {
+            applyCatchEventProperties((CatchEvent) baseElement, properties);
         }
         if (baseElement instanceof TextAnnotation) {
             applyTextAnnotationProperties((TextAnnotation) baseElement, properties);
@@ -707,13 +688,63 @@ public class Bpmn2JsonUnmarshaller {
         }
         
     }
+    
+    private void applyCatchEventProperties(CatchEvent event, Map<String, String> properties) {
+        // catch events are events so "name" has already been set
+        if (properties.get("dataoutput") != null && !"".equals(properties.get("dataoutput"))) {
+            String[] allDataOutputs = properties.get("dataoutput").split( ",\\s*" );
+            OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
+            for(String dataOutput : allDataOutputs) {
+                DataOutput dataout = Bpmn2Factory.eINSTANCE.createDataOutput();
+                // we follow jbpm here to set the id
+                dataout.setId(event.getId() + "_" + dataOutput);
+                dataout.setName(dataOutput);
+                event.getDataOutputs().add(dataout);
+                // add to output set as well
+                outSet.getDataOutputRefs().add(dataout);
+                
+            }
+            event.setOutputSet(outSet);
+        }
+        
+        // data output associations
+        if (properties.get("dataoutputassociations") != null && !"".equals(properties.get("dataoutputassociations"))) {
+            String[] allAssociations = properties.get("dataoutputassociations").split( ",\\s*" );
+            for(String association : allAssociations) {
+                // data outputs are uni-directional
+                String[] associationParts = association.split( "->\\s*" );
+                DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                // for source refs we loop through already defined data outputs
+                List<DataOutput> dataOutputs = event.getDataOutputs();
+                if(dataOutputs != null) {
+                    for(DataOutput ddo : dataOutputs) {
+                        if(ddo.getId().equals(event.getId() + "_" + associationParts[0])) {
+                            doa.getSourceRef().add(ddo);
+                        }
+                    }
+                }
+                // since we dont have the process vars defined yet..need to improvise
+                ItemAwareElement e = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                e.setId(associationParts[1]);
+                doa.setTargetRef(e);
+                event.getDataOutputAssociation().add(doa);
+            }
+        }
+        
+        // now event definitions
+        // eventdefinitions
+        // TODO
+        if (properties.get("eventdefinitions") != null && !"".equals(properties.get("eventdefinitions"))) {
+            List<EventDefinition> eventDefinitions = event.getEventDefinitions();
+            if(eventDefinitions != null) {
+                
+            }
+        }
+        
+    }
 
     private void applyGlobalTaskProperties(GlobalTask globalTask, Map<String, String> properties) {
         globalTask.setName(properties.get("name"));
-        // InputOutputSpecification ioSpec =
-        // Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
-        // ioSpec.get
-        // globalTask.setIoSpecification(value)
     }
 
     private void applyBaseElementProperties(BaseElement baseElement, Map<String, String> properties) {
@@ -742,7 +773,6 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     private void applyProcessProperties(Process process, Map<String, String> properties) {
-        Iterator<String> iter = properties.keySet().iterator();
         process.setName(properties.get("name"));
         if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
             Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
@@ -804,6 +834,7 @@ public class Bpmn2JsonUnmarshaller {
 
     private void applyTaskProperties(Task task, Map<String, String> properties) {
         task.setName(properties.get("name"));
+        DataInput taskNameDataInput = null;
         if(properties.get("taskname") != null && properties.get("taskname").length() > 0) {
             // add droolsjbpm-specific attribute "taskName"
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -812,11 +843,130 @@ public class Bpmn2JsonUnmarshaller {
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
                     properties.get("taskname"));
             task.getAnyAttribute().add(extensionEntry);
+            
+            // map the taskName to iospecification
+            taskNameDataInput = Bpmn2Factory.eINSTANCE.createDataInput();
+            taskNameDataInput.setId(task.getId() + "_TaskNameInput");
+            taskNameDataInput.setName("TaskName");
+            
+            if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+            task.getIoSpecification().getDataInputs().add(taskNameDataInput);
+            // taskName also needs to be in dataInputAssociation
+            DataInputAssociation taskNameDataInputAssociation = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+            taskNameDataInputAssociation.setTargetRef(taskNameDataInput);
+        
+            Assignment taskNameAssignment = Bpmn2Factory.eINSTANCE.createAssignment();
+            FormalExpression fromExp = Bpmn2Factory.eINSTANCE.createFormalExpression();
+            fromExp.setBody(properties.get("taskname"));
+            taskNameAssignment.setFrom(fromExp);
+            FormalExpression toExp = Bpmn2Factory.eINSTANCE.createFormalExpression();
+            toExp.setBody(task.getId() + "_TaskNameInput");
+            taskNameAssignment.setTo(toExp);
+            taskNameDataInputAssociation.getAssignment().add(taskNameAssignment);
+        
+            task.getDataInputAssociations().add(taskNameDataInputAssociation);
+        }
+        
+        //process data input set
+        if(properties.get("datainputset") != null && properties.get("datainputset").length() > 0) {
+            String[] allDataInputs = properties.get("datainputset").split( ",\\s*" );
+            if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+            InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+            for(String dataInput : allDataInputs) {
+                DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
+                nextInput.setId(task.getId() + "_" + dataInput + "Input");
+                nextInput.setName(dataInput);
+                task.getIoSpecification().getDataInputs().add(nextInput);
+                
+                inset.getDataInputRefs().add(nextInput);
+            }
+            // add the taskName as well if it was defined
+            if(taskNameDataInput != null) {
+                inset.getDataInputRefs().add(taskNameDataInput);
+            }
+            task.getIoSpecification().getInputSets().add(inset);
+        }
+        //process data output set
+        if(properties.get("dataoutputset") != null && properties.get("dataoutputset").length() > 0) {
+            String[] allDataOutputs = properties.get("dataoutputset").split( ",\\s*" );
+            if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+            
+            OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+            for(String dataOutput : allDataOutputs) {
+                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
+                nextOut.setId(task.getId() + "_" + dataOutput + "Output");
+                nextOut.setName(dataOutput);
+                task.getIoSpecification().getDataOutputs().add(nextOut);
+                
+                outset.getDataOutputRefs().add(nextOut);
+            }
+            task.getIoSpecification().getOutputSets().add(outset);
+        }
+        //process assignments
+        if(properties.get("assignments") != null && properties.get("assignments").length() > 0) {
+            String[] allAssignments = properties.get("assignments").split( ",\\s*" );
+            for(String assignment : allAssignments) {
+                if(assignment.contains("<->")) {
+                    String[] assignmentParts = assignment.split( "<->\\s*" );
+                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                    DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                    
+                    ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                    ie.setId(assignmentParts[0]);
+                    dia.getSourceRef().add(ie);
+                    doa.setTargetRef(ie);
+                    
+                    List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+                    for(DataInput di : dataInputs) {
+                        if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + "Input")) {
+                            dia.setTargetRef(di);
+                            break;
+                        }
+                    }
+                    List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
+                    for(DataOutput dout : dataOutputs) {
+                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[1] + "Output")) {
+                            doa.getSourceRef().add(dout);
+                            break;
+                        }
+                    }
+                    
+                    task.getDataInputAssociations().add(dia);
+                    task.getDataOutputAssociations().add(doa);
+                } else if(assignment.contains("->")) {
+                    String[] assignmentParts = assignment.split( "->\\s*" );
+                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                    // association from process var to dataInput var
+                    ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                    ie.setId(assignmentParts[0]);
+                    dia.getSourceRef().add(ie);
+
+                    List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+                    for(DataInput di : dataInputs) {
+                        if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + "Input")) {
+                            dia.setTargetRef(di);
+                            break;
+                        }
+                    }
+                
+                    task.getDataInputAssociations().add(dia);
+                } else {
+                    // TODO throw exception here?
+                }
+            }
         }
     }
     
     private void applyUserTaskProperties(UserTask task, Map<String, String> properties) {
-        applyTaskProperties(task, properties);
         if(properties.get("actors") != null && properties.get("actors").length() > 0) {
             String[] allActors = properties.get("actors").split( ",\\s*" );
             for(String actor : allActors) {
@@ -828,6 +978,24 @@ public class Bpmn2JsonUnmarshaller {
                 po.setResourceAssignmentExpression(rae);
                 task.getResources().add(po);
             }
+        }
+        
+        if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl onEntryElement = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "onEntry-script", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(onEntryElement,
+                    properties.get("onentryactions"));
+            task.getAnyAttribute().add(extensionEntry);
+        }
+        
+        if(properties.get("onexitactions") != null && properties.get("onexitactions").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl onExitElement = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "onExit-script", false   , false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(onExitElement,
+                    properties.get("onexitactions"));
+            task.getAnyAttribute().add(extensionEntry);
         }
     }
     
@@ -864,6 +1032,8 @@ public class Bpmn2JsonUnmarshaller {
         }
         return properties;
     }
+
+
 
     private Documentation createDocumentation(String text) {
         Documentation doc = Bpmn2Factory.eINSTANCE.createDocumentation();
